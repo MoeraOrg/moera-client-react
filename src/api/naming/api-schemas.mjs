@@ -1,6 +1,7 @@
 // This file is for schema compiler only, do not use directly
 
 export const NAMING_API_SCHEMAS = {
+    $id: "naming",
     definitions: {
         ObjectResult: {
             type: "object",

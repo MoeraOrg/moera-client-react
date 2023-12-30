@@ -1,6 +1,7 @@
 // This file is generated for schema compiler only, do not use directly
 
 export const NODE_API_SCHEMAS = {
+    $id: "node",
     definitions: {
 
         CommentOperations: {
@@ -432,7 +433,7 @@ export const NODE_API_SCHEMAS = {
         AvatarInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/AvatarInfo"
+                $ref: "node#/definitions/AvatarInfo"
             }
         },
 
@@ -456,7 +457,7 @@ export const NODE_API_SCHEMAS = {
         AvatarOrdinalArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/AvatarOrdinal"
+                $ref: "node#/definitions/AvatarOrdinal"
             }
         },
 
@@ -504,7 +505,7 @@ export const NODE_API_SCHEMAS = {
         BlockedInstantInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/BlockedInstantInfo"
+                $ref: "node#/definitions/BlockedInstantInfo"
             }
         },
 
@@ -584,7 +585,7 @@ export const NODE_API_SCHEMAS = {
                 "cartes": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/CarteInfo"
+                        $ref: "node#/definitions/CarteInfo"
                     }
                 },
                 "createdAt": {
@@ -651,7 +652,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "avatar": {
-                    $ref: "#/definitions/AvatarImage",
+                    $ref: "node#/definitions/AvatarImage",
                     type: "object",
                     nullable: true
                 },
@@ -683,17 +684,17 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "#/definitions/ContactOperations",
+                    $ref: "node#/definitions/ContactOperations",
                     type: "object",
                     nullable: true
                 },
                 "ownerOperations": {
-                    $ref: "#/definitions/ContactOperations",
+                    $ref: "node#/definitions/ContactOperations",
                     type: "object",
                     nullable: true
                 },
                 "adminOperations": {
-                    $ref: "#/definitions/ContactOperations",
+                    $ref: "node#/definitions/ContactOperations",
                     type: "object",
                     nullable: true
                 },
@@ -708,7 +709,7 @@ export const NODE_API_SCHEMAS = {
         ContactInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/ContactInfo"
+                $ref: "node#/definitions/ContactInfo"
             }
         },
 
@@ -762,7 +763,7 @@ export const NODE_API_SCHEMAS = {
         DomainInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/DomainInfo"
+                $ref: "node#/definitions/DomainInfo"
             }
         },
 
@@ -799,7 +800,7 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "operations": {
-                    $ref: "#/definitions/StoryOperations",
+                    $ref: "node#/definitions/StoryOperations",
                     type: "object",
                     nullable: true
                 },
@@ -885,7 +886,7 @@ export const NODE_API_SCHEMAS = {
                     type: "integer"
                 },
                 "operations": {
-                    $ref: "#/definitions/FriendOperations",
+                    $ref: "node#/definitions/FriendOperations",
                     type: "object",
                     nullable: true
                 },
@@ -911,7 +912,7 @@ export const NODE_API_SCHEMAS = {
                     type: "integer"
                 },
                 "operations": {
-                    $ref: "#/definitions/FriendGroupOperations",
+                    $ref: "node#/definitions/FriendGroupOperations",
                     type: "object",
                     nullable: true
                 },
@@ -926,7 +927,7 @@ export const NODE_API_SCHEMAS = {
         FriendGroupInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/FriendGroupInfo"
+                $ref: "node#/definitions/FriendGroupInfo"
             }
         },
 
@@ -936,13 +937,13 @@ export const NODE_API_SCHEMAS = {
                 "available": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/FriendGroupInfo"
+                        $ref: "node#/definitions/FriendGroupInfo"
                     }
                 },
                 "memberOf": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/FriendGroupDetails"
+                        $ref: "node#/definitions/FriendGroupDetails"
                     },
                     nullable: true
                 },
@@ -960,14 +961,14 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "contact": {
-                    $ref: "#/definitions/ContactInfo",
+                    $ref: "node#/definitions/ContactInfo",
                     type: "object",
                     nullable: true
                 },
                 "groups": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/FriendGroupDetails"
+                        $ref: "node#/definitions/FriendGroupDetails"
                     },
                     nullable: true
                 },
@@ -981,7 +982,7 @@ export const NODE_API_SCHEMAS = {
         FriendInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/FriendInfo"
+                $ref: "node#/definitions/FriendInfo"
             }
         },
 
@@ -992,14 +993,14 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "contact": {
-                    $ref: "#/definitions/ContactInfo",
+                    $ref: "node#/definitions/ContactInfo",
                     type: "object",
                     nullable: true
                 },
                 "groups": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/FriendGroupDetails"
+                        $ref: "node#/definitions/FriendGroupDetails"
                     },
                     nullable: true
                 },
@@ -1013,7 +1014,7 @@ export const NODE_API_SCHEMAS = {
         FriendOfInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/FriendOfInfo"
+                $ref: "node#/definitions/FriendOfInfo"
             }
         },
 
@@ -1145,7 +1146,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "#/definitions/NodeNameOperations",
+                    $ref: "node#/definitions/NodeNameOperations",
                     type: "object",
                     nullable: true
                 },
@@ -1186,7 +1187,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "#/definitions/PeopleOperations",
+                    $ref: "node#/definitions/PeopleOperations",
                     type: "object",
                     nullable: true
                 },
@@ -1248,7 +1249,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "avatar": {
-                    $ref: "#/definitions/AvatarImage",
+                    $ref: "node#/definitions/AvatarImage",
                     type: "object",
                     nullable: true
                 },
@@ -1308,12 +1309,12 @@ export const NODE_API_SCHEMAS = {
                 "previews": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/MediaFilePreviewInfo"
+                        $ref: "node#/definitions/MediaFilePreviewInfo"
                     },
                     nullable: true
                 },
                 "operations": {
-                    $ref: "#/definitions/PrivateMediaFileOperations",
+                    $ref: "node#/definitions/PrivateMediaFileOperations",
                     type: "object",
                     nullable: true
                 },
@@ -1363,19 +1364,19 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "avatar": {
-                    $ref: "#/definitions/AvatarInfo",
+                    $ref: "node#/definitions/AvatarInfo",
                     type: "object",
                     nullable: true
                 },
                 "fundraisers": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/FundraiserInfo"
+                        $ref: "node#/definitions/FundraiserInfo"
                     },
                     nullable: true
                 },
                 "operations": {
-                    $ref: "#/definitions/ProfileOperations",
+                    $ref: "node#/definitions/ProfileOperations",
                     type: "object",
                     nullable: true
                 },
@@ -1435,7 +1436,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "ownerAvatar": {
-                    $ref: "#/definitions/AvatarImage",
+                    $ref: "node#/definitions/AvatarImage",
                     type: "object",
                     nullable: true
                 },
@@ -1484,22 +1485,22 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "#/definitions/ReactionOperations",
+                    $ref: "node#/definitions/ReactionOperations",
                     type: "object",
                     nullable: true
                 },
                 "ownerOperations": {
-                    $ref: "#/definitions/ReactionOperations",
+                    $ref: "node#/definitions/ReactionOperations",
                     type: "object",
                     nullable: true
                 },
                 "seniorOperations": {
-                    $ref: "#/definitions/ReactionOperations",
+                    $ref: "node#/definitions/ReactionOperations",
                     type: "object",
                     nullable: true
                 },
                 "majorOperations": {
-                    $ref: "#/definitions/ReactionOperations",
+                    $ref: "node#/definitions/ReactionOperations",
                     type: "object",
                     nullable: true
                 },
@@ -1510,7 +1511,7 @@ export const NODE_API_SCHEMAS = {
         ReactionInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/ReactionInfo"
+                $ref: "node#/definitions/ReactionInfo"
             }
         },
 
@@ -1529,7 +1530,7 @@ export const NODE_API_SCHEMAS = {
                 "reactions": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/ReactionInfo"
+                        $ref: "node#/definitions/ReactionInfo"
                     }
                 },
             },
@@ -1574,14 +1575,14 @@ export const NODE_API_SCHEMAS = {
                 "positive": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/ReactionTotalInfo"
+                        $ref: "node#/definitions/ReactionTotalInfo"
                     },
                     default: []
                 },
                 "negative": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/ReactionTotalInfo"
+                        $ref: "node#/definitions/ReactionTotalInfo"
                     },
                     default: []
                 },
@@ -1597,7 +1598,7 @@ export const NODE_API_SCHEMAS = {
         ReactionTotalsInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/ReactionTotalsInfo"
+                $ref: "node#/definitions/ReactionTotalsInfo"
             }
         },
 
@@ -1744,7 +1745,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "avatar": {
-                    $ref: "#/definitions/AvatarImage",
+                    $ref: "node#/definitions/AvatarImage",
                     type: "object",
                     nullable: true
                 },
@@ -1815,7 +1816,7 @@ export const NODE_API_SCHEMAS = {
         SettingInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/SettingInfo"
+                $ref: "node#/definitions/SettingInfo"
             }
         },
 
@@ -1970,7 +1971,7 @@ export const NODE_API_SCHEMAS = {
                 "groups": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/SheriffComplainGroupInfo"
+                        $ref: "node#/definitions/SheriffComplainGroupInfo"
                     }
                 },
                 "total": {
@@ -2012,7 +2013,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "group": {
-                    $ref: "#/definitions/SheriffComplainGroupInfo",
+                    $ref: "node#/definitions/SheriffComplainGroupInfo",
                     type: "object",
                     nullable: true
                 },
@@ -2043,7 +2044,7 @@ export const NODE_API_SCHEMAS = {
         SheriffComplainInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/SheriffComplainInfo"
+                $ref: "node#/definitions/SheriffComplainInfo"
             }
         },
 
@@ -2220,7 +2221,7 @@ export const NODE_API_SCHEMAS = {
                 "sheriffMarks": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/SheriffMark"
+                        $ref: "node#/definitions/SheriffMark"
                     },
                     nullable: true
                 },
@@ -2312,7 +2313,7 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "contact": {
-                    $ref: "#/definitions/ContactInfo",
+                    $ref: "node#/definitions/ContactInfo",
                     type: "object",
                     nullable: true
                 },
@@ -2320,17 +2321,17 @@ export const NODE_API_SCHEMAS = {
                     type: "integer"
                 },
                 "operations": {
-                    $ref: "#/definitions/SubscriberOperations",
+                    $ref: "node#/definitions/SubscriberOperations",
                     type: "object",
                     nullable: true
                 },
                 "ownerOperations": {
-                    $ref: "#/definitions/SubscriberOperations",
+                    $ref: "node#/definitions/SubscriberOperations",
                     type: "object",
                     nullable: true
                 },
                 "adminOperations": {
-                    $ref: "#/definitions/SubscriberOperations",
+                    $ref: "node#/definitions/SubscriberOperations",
                     type: "object",
                     nullable: true
                 },
@@ -2347,7 +2348,7 @@ export const NODE_API_SCHEMAS = {
         SubscriberInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/SubscriberInfo"
+                $ref: "node#/definitions/SubscriberInfo"
             }
         },
 
@@ -2368,7 +2369,7 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "contact": {
-                    $ref: "#/definitions/ContactInfo",
+                    $ref: "node#/definitions/ContactInfo",
                     type: "object",
                     nullable: true
                 },
@@ -2387,7 +2388,7 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "operations": {
-                    $ref: "#/definitions/SubscriptionOperations",
+                    $ref: "node#/definitions/SubscriptionOperations",
                     type: "object",
                     nullable: true
                 },
@@ -2405,7 +2406,7 @@ export const NODE_API_SCHEMAS = {
         SubscriptionInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/SubscriptionInfo"
+                $ref: "node#/definitions/SubscriptionInfo"
             }
         },
 
@@ -2465,7 +2466,7 @@ export const NODE_API_SCHEMAS = {
         TokenInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/TokenInfo"
+                $ref: "node#/definitions/TokenInfo"
             }
         },
 
@@ -2537,7 +2538,7 @@ export const NODE_API_SCHEMAS = {
                 "items": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/UserListItemInfo"
+                        $ref: "node#/definitions/UserListItemInfo"
                     }
                 },
                 "total": {
@@ -2586,7 +2587,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "avatar": {
-                    $ref: "#/definitions/AvatarImage",
+                    $ref: "node#/definitions/AvatarImage",
                     type: "object",
                     nullable: true
                 },
@@ -2605,7 +2606,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "remoteAvatar": {
-                    $ref: "#/definitions/AvatarImage",
+                    $ref: "node#/definitions/AvatarImage",
                     type: "object",
                     nullable: true
                 },
@@ -2635,7 +2636,7 @@ export const NODE_API_SCHEMAS = {
         ActivityReactionInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/ActivityReactionInfo"
+                $ref: "node#/definitions/ActivityReactionInfo"
             }
         },
 
@@ -2649,7 +2650,7 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "contact": {
-                    $ref: "#/definitions/ContactInfo",
+                    $ref: "node#/definitions/ContactInfo",
                     type: "object",
                     nullable: true
                 },
@@ -2684,7 +2685,7 @@ export const NODE_API_SCHEMAS = {
         BlockedByUserInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/BlockedByUserInfo"
+                $ref: "node#/definitions/BlockedByUserInfo"
             }
         },
 
@@ -2701,7 +2702,7 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "contact": {
-                    $ref: "#/definitions/ContactInfo",
+                    $ref: "node#/definitions/ContactInfo",
                     type: "object",
                     nullable: true
                 },
@@ -2749,7 +2750,7 @@ export const NODE_API_SCHEMAS = {
         BlockedUserInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/BlockedUserInfo"
+                $ref: "node#/definitions/BlockedUserInfo"
             }
         },
 
@@ -2767,7 +2768,7 @@ export const NODE_API_SCHEMAS = {
                 "linkPreviews": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/LinkPreview"
+                        $ref: "node#/definitions/LinkPreview"
                     },
                     nullable: true
                 },
@@ -2829,12 +2830,12 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "clientReaction": {
-                    $ref: "#/definitions/ClientReactionInfo",
+                    $ref: "node#/definitions/ClientReactionInfo",
                     type: "object",
                     nullable: true
                 },
                 "reactions": {
-                    $ref: "#/definitions/ReactionTotalsInfo",
+                    $ref: "node#/definitions/ReactionTotalsInfo",
                     type: "object",
                     nullable: true
                 },
@@ -2853,7 +2854,7 @@ export const NODE_API_SCHEMAS = {
         CommentRevisionInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/CommentRevisionInfo"
+                $ref: "node#/definitions/CommentRevisionInfo"
             }
         },
 
@@ -2861,7 +2862,7 @@ export const NODE_API_SCHEMAS = {
             type: "object",
             properties: {
                 "posting": {
-                    $ref: "#/definitions/PostingFeatures"
+                    $ref: "node#/definitions/PostingFeatures"
                 },
                 "plugins": {
                     type: "array",
@@ -2874,7 +2875,7 @@ export const NODE_API_SCHEMAS = {
                     type: "integer"
                 },
                 "friendGroups": {
-                    $ref: "#/definitions/FriendGroupsFeatures",
+                    $ref: "node#/definitions/FriendGroupsFeatures",
                     type: "object",
                     nullable: true
                 },
@@ -2919,7 +2920,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "#/definitions/FeedOperations",
+                    $ref: "node#/definitions/FeedOperations",
                     type: "object",
                     nullable: true
                 },
@@ -2933,7 +2934,7 @@ export const NODE_API_SCHEMAS = {
                 "sheriffMarks": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/SheriffMark"
+                        $ref: "node#/definitions/SheriffMark"
                     },
                     nullable: true
                 },
@@ -2948,7 +2949,7 @@ export const NODE_API_SCHEMAS = {
         FeedInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/FeedInfo"
+                $ref: "node#/definitions/FeedInfo"
             }
         },
 
@@ -2956,12 +2957,12 @@ export const NODE_API_SCHEMAS = {
             type: "object",
             properties: {
                 "media": {
-                    $ref: "#/definitions/PrivateMediaFileInfo",
+                    $ref: "node#/definitions/PrivateMediaFileInfo",
                     type: "object",
                     nullable: true
                 },
                 "remoteMedia": {
-                    $ref: "#/definitions/RemoteMediaInfo",
+                    $ref: "node#/definitions/RemoteMediaInfo",
                     type: "object",
                     nullable: true
                 },
@@ -3004,7 +3005,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "receiverAvatar": {
-                    $ref: "#/definitions/AvatarImage",
+                    $ref: "node#/definitions/AvatarImage",
                     type: "object",
                     nullable: true
                 },
@@ -3028,7 +3029,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "ownerAvatar": {
-                    $ref: "#/definitions/AvatarImage",
+                    $ref: "node#/definitions/AvatarImage",
                     type: "object",
                     nullable: true
                 },
@@ -3057,7 +3058,7 @@ export const NODE_API_SCHEMAS = {
                 "media": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/MediaAttachment"
+                        $ref: "node#/definitions/MediaAttachment"
                     },
                     nullable: true
                 },
@@ -3065,7 +3066,7 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "updateInfo": {
-                    $ref: "#/definitions/UpdateInfo",
+                    $ref: "node#/definitions/UpdateInfo",
                     type: "object",
                     nullable: true
                 },
@@ -3118,39 +3119,39 @@ export const NODE_API_SCHEMAS = {
                 "feedReferences": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/FeedReference"
+                        $ref: "node#/definitions/FeedReference"
                     },
                     nullable: true
                 },
                 "blockedInstants": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/BlockedPostingInstantInfo"
+                        $ref: "node#/definitions/BlockedPostingInstantInfo"
                     },
                     nullable: true
                 },
                 "operations": {
-                    $ref: "#/definitions/PostingOperations",
+                    $ref: "node#/definitions/PostingOperations",
                     type: "object",
                     nullable: true
                 },
                 "receiverOperations": {
-                    $ref: "#/definitions/PostingOperations",
+                    $ref: "node#/definitions/PostingOperations",
                     type: "object",
                     nullable: true
                 },
                 "commentOperations": {
-                    $ref: "#/definitions/CommentOperations",
+                    $ref: "node#/definitions/CommentOperations",
                     type: "object",
                     nullable: true
                 },
                 "reactionOperations": {
-                    $ref: "#/definitions/ReactionOperations",
+                    $ref: "node#/definitions/ReactionOperations",
                     type: "object",
                     nullable: true
                 },
                 "commentReactionOperations": {
-                    $ref: "#/definitions/ReactionOperations",
+                    $ref: "node#/definitions/ReactionOperations",
                     type: "object",
                     nullable: true
                 },
@@ -3178,29 +3179,29 @@ export const NODE_API_SCHEMAS = {
                 "sheriffMarks": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/SheriffMark"
+                        $ref: "node#/definitions/SheriffMark"
                     },
                     nullable: true
                 },
                 "acceptedReactions": {
-                    $ref: "#/definitions/AcceptedReactions",
+                    $ref: "node#/definitions/AcceptedReactions",
                     type: "object",
                     nullable: true
                 },
                 "clientReaction": {
-                    $ref: "#/definitions/ClientReactionInfo",
+                    $ref: "node#/definitions/ClientReactionInfo",
                     type: "object",
                     nullable: true
                 },
                 "reactions": {
-                    $ref: "#/definitions/ReactionTotalsInfo",
+                    $ref: "node#/definitions/ReactionTotalsInfo",
                     type: "object",
                     nullable: true
                 },
                 "sources": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/PostingSourceInfo"
+                        $ref: "node#/definitions/PostingSourceInfo"
                     },
                     nullable: true
                 },
@@ -3226,7 +3227,7 @@ export const NODE_API_SCHEMAS = {
         PostingInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/PostingInfo"
+                $ref: "node#/definitions/PostingInfo"
             }
         },
 
@@ -3261,7 +3262,7 @@ export const NODE_API_SCHEMAS = {
                 "media": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/MediaAttachment"
+                        $ref: "node#/definitions/MediaAttachment"
                     },
                     nullable: true
                 },
@@ -3269,7 +3270,7 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "updateInfo": {
-                    $ref: "#/definitions/UpdateInfo",
+                    $ref: "node#/definitions/UpdateInfo",
                     type: "object",
                     nullable: true
                 },
@@ -3301,12 +3302,12 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "clientReaction": {
-                    $ref: "#/definitions/ClientReactionInfo",
+                    $ref: "node#/definitions/ClientReactionInfo",
                     type: "object",
                     nullable: true
                 },
                 "reactions": {
-                    $ref: "#/definitions/ReactionTotalsInfo",
+                    $ref: "node#/definitions/ReactionTotalsInfo",
                     type: "object",
                     nullable: true
                 },
@@ -3324,7 +3325,7 @@ export const NODE_API_SCHEMAS = {
         PostingRevisionInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/PostingRevisionInfo"
+                $ref: "node#/definitions/PostingRevisionInfo"
             }
         },
 
@@ -3332,12 +3333,12 @@ export const NODE_API_SCHEMAS = {
             type: "object",
             properties: {
                 "reaction": {
-                    $ref: "#/definitions/ReactionInfo",
+                    $ref: "node#/definitions/ReactionInfo",
                     type: "object",
                     nullable: true
                 },
                 "totals": {
-                    $ref: "#/definitions/ReactionTotalsInfo"
+                    $ref: "node#/definitions/ReactionTotalsInfo"
                 },
             },
             required: [
@@ -3367,7 +3368,7 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "modifiers": {
-                    $ref: "#/definitions/SettingTypeModifiers",
+                    $ref: "node#/definitions/SettingTypeModifiers",
                     type: "object",
                     nullable: true
                 },
@@ -3383,7 +3384,7 @@ export const NODE_API_SCHEMAS = {
         SettingMetaInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/SettingMetaInfo"
+                $ref: "node#/definitions/SettingMetaInfo"
             }
         },
 
@@ -3391,24 +3392,24 @@ export const NODE_API_SCHEMAS = {
             type: "object",
             properties: {
                 "node": {
-                    $ref: "#/definitions/StorySummaryNode",
+                    $ref: "node#/definitions/StorySummaryNode",
                     type: "object",
                     nullable: true
                 },
                 "posting": {
-                    $ref: "#/definitions/StorySummaryEntry",
+                    $ref: "node#/definitions/StorySummaryEntry",
                     type: "object",
                     nullable: true
                 },
                 "comment": {
-                    $ref: "#/definitions/StorySummaryEntry",
+                    $ref: "node#/definitions/StorySummaryEntry",
                     type: "object",
                     nullable: true
                 },
                 "comments": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/StorySummaryEntry"
+                        $ref: "node#/definitions/StorySummaryEntry"
                     },
                     nullable: true
                 },
@@ -3417,24 +3418,24 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "repliedTo": {
-                    $ref: "#/definitions/StorySummaryEntry",
+                    $ref: "node#/definitions/StorySummaryEntry",
                     type: "object",
                     nullable: true
                 },
                 "parentPosting": {
-                    $ref: "#/definitions/StorySummaryEntry",
+                    $ref: "node#/definitions/StorySummaryEntry",
                     type: "object",
                     nullable: true
                 },
                 "reaction": {
-                    $ref: "#/definitions/StorySummaryReaction",
+                    $ref: "node#/definitions/StorySummaryReaction",
                     type: "object",
                     nullable: true
                 },
                 "reactions": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/StorySummaryReaction"
+                        $ref: "node#/definitions/StorySummaryReaction"
                     },
                     nullable: true
                 },
@@ -3451,17 +3452,17 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "friendGroup": {
-                    $ref: "#/definitions/StorySummaryFriendGroup",
+                    $ref: "node#/definitions/StorySummaryFriendGroup",
                     type: "object",
                     nullable: true
                 },
                 "blocked": {
-                    $ref: "#/definitions/StorySummaryBlocked",
+                    $ref: "node#/definitions/StorySummaryBlocked",
                     type: "object",
                     nullable: true
                 },
                 "sheriff": {
-                    $ref: "#/definitions/StorySummarySheriff",
+                    $ref: "node#/definitions/StorySummarySheriff",
                     type: "object",
                     nullable: true
                 },
@@ -3491,7 +3492,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "ownerAvatar": {
-                    $ref: "#/definitions/AvatarImage",
+                    $ref: "node#/definitions/AvatarImage",
                     type: "object",
                     nullable: true
                 },
@@ -3532,7 +3533,7 @@ export const NODE_API_SCHEMAS = {
                 "media": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/MediaAttachment"
+                        $ref: "node#/definitions/MediaAttachment"
                     },
                     nullable: true
                 },
@@ -3540,7 +3541,7 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "repliedTo": {
-                    $ref: "#/definitions/RepliedTo",
+                    $ref: "node#/definitions/RepliedTo",
                     type: "object",
                     nullable: true
                 },
@@ -3578,22 +3579,22 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "#/definitions/CommentOperations",
+                    $ref: "node#/definitions/CommentOperations",
                     type: "object",
                     nullable: true
                 },
                 "reactionOperations": {
-                    $ref: "#/definitions/ReactionOperations",
+                    $ref: "node#/definitions/ReactionOperations",
                     type: "object",
                     nullable: true
                 },
                 "ownerOperations": {
-                    $ref: "#/definitions/CommentOperations",
+                    $ref: "node#/definitions/CommentOperations",
                     type: "object",
                     nullable: true
                 },
                 "seniorOperations": {
-                    $ref: "#/definitions/CommentOperations",
+                    $ref: "node#/definitions/CommentOperations",
                     type: "object",
                     nullable: true
                 },
@@ -3607,27 +3608,27 @@ export const NODE_API_SCHEMAS = {
                 "sheriffMarks": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/SheriffMark"
+                        $ref: "node#/definitions/SheriffMark"
                     },
                     nullable: true
                 },
                 "acceptedReactions": {
-                    $ref: "#/definitions/AcceptedReactions",
+                    $ref: "node#/definitions/AcceptedReactions",
                     type: "object",
                     nullable: true
                 },
                 "clientReaction": {
-                    $ref: "#/definitions/ClientReactionInfo",
+                    $ref: "node#/definitions/ClientReactionInfo",
                     type: "object",
                     nullable: true
                 },
                 "seniorReaction": {
-                    $ref: "#/definitions/ClientReactionInfo",
+                    $ref: "node#/definitions/ClientReactionInfo",
                     type: "object",
                     nullable: true
                 },
                 "reactions": {
-                    $ref: "#/definitions/ReactionTotalsInfo",
+                    $ref: "node#/definitions/ReactionTotalsInfo",
                     type: "object",
                     nullable: true
                 },
@@ -3661,7 +3662,7 @@ export const NODE_API_SCHEMAS = {
                 "comments": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/CommentInfo"
+                        $ref: "node#/definitions/CommentInfo"
                     }
                 },
                 "total": {
@@ -3725,12 +3726,12 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "ownerAvatar": {
-                    $ref: "#/definitions/AvatarImage",
+                    $ref: "node#/definitions/AvatarImage",
                     type: "object",
                     nullable: true
                 },
                 "acceptedReactions": {
-                    $ref: "#/definitions/AcceptedReactions",
+                    $ref: "node#/definitions/AcceptedReactions",
                     type: "object",
                     nullable: true
                 },
@@ -3752,7 +3753,7 @@ export const NODE_API_SCHEMAS = {
                 "media": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/MediaAttachment"
+                        $ref: "node#/definitions/MediaAttachment"
                     },
                     nullable: true
                 },
@@ -3764,17 +3765,17 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "updateInfo": {
-                    $ref: "#/definitions/UpdateInfo",
+                    $ref: "node#/definitions/UpdateInfo",
                     type: "object",
                     nullable: true
                 },
                 "operations": {
-                    $ref: "#/definitions/PostingOperations",
+                    $ref: "node#/definitions/PostingOperations",
                     type: "object",
                     nullable: true
                 },
                 "commentOperations": {
-                    $ref: "#/definitions/CommentOperations",
+                    $ref: "node#/definitions/CommentOperations",
                     type: "object",
                     nullable: true
                 },
@@ -3793,7 +3794,7 @@ export const NODE_API_SCHEMAS = {
         DraftInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/DraftInfo"
+                $ref: "node#/definitions/DraftInfo"
             }
         },
 
@@ -3801,12 +3802,12 @@ export const NODE_API_SCHEMAS = {
             type: "object",
             properties: {
                 "posting": {
-                    $ref: "#/definitions/PostingInfo",
+                    $ref: "node#/definitions/PostingInfo",
                     type: "object",
                     nullable: true
                 },
                 "comment": {
-                    $ref: "#/definitions/CommentInfo",
+                    $ref: "node#/definitions/CommentInfo",
                     type: "object",
                     nullable: true
                 },
@@ -3817,7 +3818,7 @@ export const NODE_API_SCHEMAS = {
         EntryInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/EntryInfo"
+                $ref: "node#/definitions/EntryInfo"
             }
         },
 
@@ -3855,7 +3856,7 @@ export const NODE_API_SCHEMAS = {
                 "settings": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/SettingMetaInfo"
+                        $ref: "node#/definitions/SettingMetaInfo"
                     },
                     nullable: true
                 },
@@ -3875,7 +3876,7 @@ export const NODE_API_SCHEMAS = {
         PluginInfoArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/PluginInfo"
+                $ref: "node#/definitions/PluginInfo"
             }
         },
 
@@ -3925,7 +3926,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "summaryAvatar": {
-                    $ref: "#/definitions/AvatarImage",
+                    $ref: "node#/definitions/AvatarImage",
                     type: "object",
                     nullable: true
                 },
@@ -3934,7 +3935,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "summaryData": {
-                    $ref: "#/definitions/StorySummaryData",
+                    $ref: "node#/definitions/StorySummaryData",
                     type: "object",
                     nullable: true
                 },
@@ -3943,7 +3944,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "posting": {
-                    $ref: "#/definitions/PostingInfo",
+                    $ref: "node#/definitions/PostingInfo",
                     type: "object",
                     nullable: true
                 },
@@ -3952,7 +3953,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "comment": {
-                    $ref: "#/definitions/CommentInfo",
+                    $ref: "node#/definitions/CommentInfo",
                     type: "object",
                     nullable: true
                 },
@@ -3981,7 +3982,7 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "#/definitions/StoryOperations",
+                    $ref: "node#/definitions/StoryOperations",
                     type: "object",
                     nullable: true
                 },
@@ -4001,7 +4002,7 @@ export const NODE_API_SCHEMAS = {
             type: "object",
             properties: {
                 "comment": {
-                    $ref: "#/definitions/CommentInfo"
+                    $ref: "node#/definitions/CommentInfo"
                 },
                 "total": {
                     type: "integer"
@@ -4026,7 +4027,7 @@ export const NODE_API_SCHEMAS = {
                 "stories": {
                     type: "array",
                     items: {
-                        $ref: "#/definitions/StoryInfo"
+                        $ref: "node#/definitions/StoryInfo"
                     }
                 },
                 "totalInPast": {
@@ -4057,12 +4058,12 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "story": {
-                    $ref: "#/definitions/StoryInfo",
+                    $ref: "node#/definitions/StoryInfo",
                     type: "object",
                     nullable: true
                 },
                 "feedStatus": {
-                    $ref: "#/definitions/FeedWithStatus",
+                    $ref: "node#/definitions/FeedWithStatus",
                     type: "object",
                     nullable: true
                 },
@@ -4076,7 +4077,7 @@ export const NODE_API_SCHEMAS = {
         PushContentArray: {
             type: "array",
             items: {
-                $ref: "#/definitions/PushContent"
+                $ref: "node#/definitions/PushContent"
             }
         },
 

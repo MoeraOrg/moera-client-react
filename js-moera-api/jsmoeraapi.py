@@ -40,7 +40,7 @@ def schema_type(sfile: TextIO, indent: int, a_type: str, struct: bool = False, n
                 default: Any = None, min: float | None = None, max: float | None = None) -> None:
     sfile.write('{\n')
     if struct:
-        sfile.write(ind(indent + 1) + f'$ref: "#/definitions/{a_type}"')
+        sfile.write(ind(indent + 1) + f'$ref: "node#/definitions/{a_type}"')
         if nullable:
             sfile.write(',\n')
             sfile.write(ind(indent + 1) + 'type: "object",\n')
@@ -505,6 +505,7 @@ export type PrincipalValue = "none" | "private" | "admin" | "owner" | "secret" |
 PREAMBLE_SCHEMAS = '''// This file is generated for schema compiler only, do not use directly
 
 export const NODE_API_SCHEMAS = {
+    $id: "node",
     definitions: {
 '''
 

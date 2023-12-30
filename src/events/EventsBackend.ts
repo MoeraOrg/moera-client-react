@@ -4,7 +4,8 @@ import { addMinutes, isBefore } from 'date-fns';
 
 import { formatSchemaErrors } from "api/error";
 import { eventAction, EventSource } from "api/events";
-import { ALLOWED_SELF_EVENTS, EVENT_SCHEMAS, EventPacket } from "api/events/api-schemas";
+import { EVENT_VALIDATORS } from "api/events/api-validators";
+import { ALLOWED_SELF_EVENTS } from "api/events/self-events";
 import { ActionWithoutPayload } from "state/action-types";
 import { wakeUp } from "state/navigation/actions";
 import { now } from "util/misc";
@@ -41,11 +42,16 @@ export default class EventsBackend {
 
     private onMessage = (message: IMessage) => {
         const packet = JSON.parse(message.body);
-        if (!EventPacket(packet)) {
-            console.error("Incorrect event packet received", formatSchemaErrors(EventPacket.errors));
+        const packetSchema = EVENT_VALIDATORS["EVENT_PACKET"];
+        if (packetSchema == null) {
+            console.error("Undefined schema for EventPacket");
             return;
         }
-        const eventSchema = EVENT_SCHEMAS[packet.event.type];
+        if (!packetSchema(packet)) {
+            console.error("Incorrect event packet received", formatSchemaErrors(packetSchema.errors));
+            return;
+        }
+        const eventSchema = EVENT_VALIDATORS[packet.event.type];
         if (eventSchema == null) {
             console.error("Unknown event type: " + packet.event.type);
             return;
