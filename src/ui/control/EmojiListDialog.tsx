@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import * as immutable from 'object-path-immutable';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCertificate } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import {
@@ -15,7 +16,7 @@ import { Button, EmojiProps, EmojiSelector, ModalDialog } from "ui/control";
 import EmojiList from "util/emoji-list";
 import "./EmojiListDialog.css";
 
-const StarMarker = () => <span className="marker"><FontAwesomeIcon icon="certificate"/></span>;
+const StarMarker = () => <span className="marker"><FontAwesomeIcon icon={faCertificate}/></span>;
 
 interface Props {
     negative: boolean;

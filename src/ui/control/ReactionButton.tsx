@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { IconName } from '@fortawesome/free-regular-svg-icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { createSelector } from 'reselect';
 
 import {
@@ -15,7 +15,7 @@ import { DelayedPopover, EmojiProps, EmojiSelector, ReactionEmojiButton } from "
 import EmojiList from "util/emoji-list";
 
 interface Props {
-    icon: IconName,
+    icon: IconProp,
     emoji: number | null;
     caption?: string;
     className?: string;

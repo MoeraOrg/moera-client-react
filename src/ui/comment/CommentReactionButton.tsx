@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IconName } from '@fortawesome/free-regular-svg-icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { commentReact, commentReactionDelete } from "state/detailedposting/actions";
 import { getCommentsReceiverPostingId } from "state/detailedposting/selectors";
@@ -8,7 +8,7 @@ import { ReactionButton } from "ui/control";
 import "./CommentButton.css";
 
 interface Props {
-    icon: IconName;
+    icon: IconProp;
     caption: string;
     invisible: boolean;
     id: string;

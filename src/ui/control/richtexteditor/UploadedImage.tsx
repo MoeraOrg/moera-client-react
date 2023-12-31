@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronCircleDown, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
@@ -53,8 +54,8 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
                     }
                 ]}>
                     <span className="fa-layers fa-fw">
-                        <FontAwesomeIcon icon="chevron-down" color="white"/>
-                        <FontAwesomeIcon icon="chevron-circle-down"/>
+                        <FontAwesomeIcon icon={faChevronDown} color="white"/>
+                        <FontAwesomeIcon icon={faChevronCircleDown}/>
                     </span>
                 </DropdownMenu>
             }

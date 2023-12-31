@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { createSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
 
@@ -99,7 +100,7 @@ export default function PeopleSelectedButton() {
             }
         ]}>
             {t("count-selected", {count: totalSelected}) + " "}
-            <FontAwesomeIcon icon="chevron-down"/>
+            <FontAwesomeIcon icon={faChevronDown}/>
         </DropdownMenu>
     )
 }

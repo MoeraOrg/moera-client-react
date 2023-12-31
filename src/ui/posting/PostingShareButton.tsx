@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { getOwnerName } from "state/node/selectors";
@@ -23,7 +24,7 @@ export default function PostingShareButton({postingId, postingReceiverName, post
     const href = ut`/post/${id}`;
     return (
         <button className="posting-button" onClick={() => dispatch(shareDialogPrepare(nodeName, href))}>
-            <FontAwesomeIcon icon="share-alt"/>
+            <FontAwesomeIcon icon={faShareAlt}/>
             <span className="caption">{t("share")}</span>
         </button>
     );

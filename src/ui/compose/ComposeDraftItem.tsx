@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 // @ts-ignore
 import LinesEllipsis from 'react-lines-ellipsis';
@@ -44,7 +45,7 @@ export default function ComposeDraftItem({draft, current, onSelect, onDelete}: P
                 </time>
             </div>
             <div className="draft-delete" title={t("delete-draft")} onClick={handleDelete}>
-                <FontAwesomeIcon icon="trash-can"/>
+                <FontAwesomeIcon icon={faTrashCan}/>
             </div>
         </div>
     );

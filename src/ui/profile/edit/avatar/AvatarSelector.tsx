@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
     DndContext,
     DragEndEvent,
@@ -68,7 +69,7 @@ export default function AvatarSelector({
                         <>
                             <div className="item">
                                 <div className="create" onClick={onNew}>
-                                    <FontAwesomeIcon icon="plus"/><br/>New
+                                    <FontAwesomeIcon icon={faPlus}/><br/>New
                                 </div>
                             </div>
                             {avatars.map(avatar =>

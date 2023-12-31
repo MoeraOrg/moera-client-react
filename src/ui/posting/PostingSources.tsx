@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShareSquare, faStar } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +26,7 @@ export default function PostingSources({posting}: Props) {
             {list.map((line, index) =>
                 <div className="source" key={index}>
                 <span className={cx("icon", {"original": line.original})}>
-                    <FontAwesomeIcon icon={line.original ? "star" : "share-square"}/>
+                    <FontAwesomeIcon icon={line.original ? faStar : faShareSquare}/>
                 </span>
                     <Jump nodeName={line.nodeName} href={`/post/${line.postingId}`}>
                         <NodeName name={line.nodeName} fullName={line.fullName} linked={false} popup={false}/>

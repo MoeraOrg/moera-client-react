@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -16,7 +17,7 @@ export default function OwnerName() {
     return (
         <>
             {atHome &&
-                <span className="home navbar-text" title={t("you-at-home")}><FontAwesomeIcon icon="home"/></span>
+                <span className="home navbar-text" title={t("you-at-home")}><FontAwesomeIcon icon={faHome}/></span>
             }
             {name ?
                 <span id="owner-name"><NodeName name={name} linked={false} popup={false} {...props}/></span>

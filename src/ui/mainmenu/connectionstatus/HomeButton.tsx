@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
@@ -17,7 +18,7 @@ export default function HomeButton() {
     return (
         <Jump nodeName=":" href="/" className={cx("connection-button", "home-button", {"active": atHomeTimeline})}
               title={t("your-timeline")}>
-            <FontAwesomeIcon icon="home"/>
+            <FontAwesomeIcon icon={faHome}/>
         </Jump>
     );
 }

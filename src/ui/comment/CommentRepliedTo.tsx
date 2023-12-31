@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faReply } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ExtRepliedTo } from "state/detailedposting/state";
@@ -24,7 +25,7 @@ export default function CommentRepliedTo({repliedTo, previousId}: Props) {
     if (repliedTo.id === previousId) {
         return (
             <div className="replied-to-previous" title={t("reply-prev-comment")}>
-                <FontAwesomeIcon icon="reply"/>
+                <FontAwesomeIcon icon={faReply}/>
             </div>
         );
     }

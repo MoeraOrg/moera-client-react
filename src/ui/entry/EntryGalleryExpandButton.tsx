@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faTh } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
@@ -18,7 +19,7 @@ export default function EntryGalleryExpandButton({collapse = false, onClick}: Pr
     return (
         <button className="gallery-expand" title={collapse ? t("view-images-grid") : t("view-images-list")}
                 onClick={buttonClick}>
-            <FontAwesomeIcon icon={collapse ? "th" : "bars"}/>
+            <FontAwesomeIcon icon={collapse ? faTh : faBars}/>
         </button>
     );
 }

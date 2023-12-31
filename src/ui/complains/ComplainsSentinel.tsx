@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 
 import { Loading } from "ui/control";
 import "./ComplainsSentinel.css";
@@ -26,7 +27,7 @@ export default function ComplainsSentinel({visible, loading, title, total, onCli
     const fullTitle = total > 0 ? `${title} (${total})` : title;
     return (
         <button className="btn btn-link complains-sentinel" onClick={onClick}>
-            <FontAwesomeIcon className="icon" icon="sync-alt"/>&nbsp;&nbsp;{fullTitle}
+            <FontAwesomeIcon className="icon" icon={faSyncAlt}/>&nbsp;&nbsp;{fullTitle}
         </button>
     );
 }

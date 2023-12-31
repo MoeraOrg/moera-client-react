@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import Jump from "ui/navigation/Jump";
@@ -22,7 +23,7 @@ export default function PostingComments({postingId, totalComments}: Props) {
     return (
         <div className="posting-comments">
             <Jump className="total-comments" href={`/post/${postingId}#comments`}>
-                <FontAwesomeIcon icon="comment"/>{" "}&nbsp;{commentsText}
+                <FontAwesomeIcon icon={faComment}/>{" "}&nbsp;{commentsText}
             </Jump>
         </div>
     );

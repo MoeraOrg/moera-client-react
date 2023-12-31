@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashCan, faUndoAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -33,13 +34,13 @@ export default function ComposeResetButton() {
         return (
             <Button variant="danger" className="reset-button" title={t("delete-draft")} disabled={!ready}
                     onClick={onClick}>
-                <FontAwesomeIcon icon="trash-can"/>
+                <FontAwesomeIcon icon={faTrashCan}/>
             </Button>
         );
     } else {
         return (
             <Button variant="info" className="reset-button" disabled={!ready} onClick={onClick}>
-                <FontAwesomeIcon icon="undo-alt"/>
+                <FontAwesomeIcon icon={faUndoAlt}/>
                 {" " + t("undo")}
             </Button>
         );

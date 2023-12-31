@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope, faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons';
 import { formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
@@ -81,7 +82,7 @@ export default function InstantStory({story, lastNew, hide}: Props) {
             <div className="sidebar">
                 <span className="envelope" title={story.read ? t("mark-unread") : t("mark-read")}
                       onClick={onEnvelope}>
-                    <FontAwesomeIcon icon={["far", story.read ? "envelope-open" : "envelope"]}/>
+                    <FontAwesomeIcon icon={story.read ? faEnvelopeOpen : faEnvelope}/>
                 </span>
             </div>
         </div>

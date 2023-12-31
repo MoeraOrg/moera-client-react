@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFormikContext } from 'formik';
+import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import ComposeIconButton from "ui/compose/ComposeIconButton";
@@ -15,5 +16,5 @@ export default function ComposeReactionsButton() {
         || values.reactionsNegative !== values.reactionsNegativeDefault
         || values.reactionsVisible !== values.reactionsVisibleDefault
         || values.reactionTotalsVisible !== values.reactionTotalsVisibleDefault;
-    return <ComposeIconButton icon="thumbs-up" name="reactions" tooltip={t("reactions")} changed={changed}/>;
+    return <ComposeIconButton icon={faThumbsUp} name="reactions" tooltip={t("reactions")} changed={changed}/>;
 };

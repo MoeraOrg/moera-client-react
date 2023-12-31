@@ -1,6 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCertificate } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { REACTION_EMOJIS } from "api";
@@ -28,7 +29,7 @@ export function EmojiChoice({negative, emoji, invisible, dimmed, marked, onClick
     return (
         <div className={cx("choice", {invisible, dimmed})} onClick={() => onClick(negative, emoji)}>
             <Twemoji key={emoji} code={emoji} title={re ? t(re.title) : ""}/>
-            {marked && <div className="marker"><FontAwesomeIcon icon="certificate"/></div>}
+            {marked && <div className="marker"><FontAwesomeIcon icon={faCertificate}/></div>}
         </div>
     );
 }

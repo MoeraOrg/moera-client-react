@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFrown } from '@fortawesome/free-solid-svg-icons';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
@@ -71,7 +72,7 @@ export default function DetailedPostingPage() {
                 }
                 {!postingReady && !loading &&
                     <div className="posting-not-found">
-                        <FontAwesomeIcon className="icon" icon="frown" size="3x"/>
+                        <FontAwesomeIcon className="icon" icon={faFrown} size="3x"/>
                         <div className="message">
                             {posting == null || posting.parentMediaId != null
                                 ? t("posting-not-found")

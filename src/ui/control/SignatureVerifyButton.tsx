@@ -1,5 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserCheck, faUserClock, faUserTimes } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { VerificationStatus } from "state/state-types";
@@ -18,25 +20,25 @@ export function SignatureVerifyButton({status, onVerify}: Props) {
         case "none":
             return (
                 <span className="signature-verify" title={t("verify-signature")} onClick={onVerify}>
-                    <FontAwesomeIcon icon={["far", "user"]} size="sm"/>
+                    <FontAwesomeIcon icon={faUser} size="sm"/>
                 </span>
             );
         case "running":
             return (
                 <span className="signature-verify-running" title={t("signature-verification-in-progress")}>
-                    <FontAwesomeIcon icon="user-clock" size="sm"/>
+                    <FontAwesomeIcon icon={faUserClock} size="sm"/>
                 </span>
             );
         case "correct":
             return (
                 <span className="signature-verify-correct" title={t("signature-correct")}>
-                    <FontAwesomeIcon icon="user-check" size="sm"/>
+                    <FontAwesomeIcon icon={faUserCheck} size="sm"/>
                 </span>
             );
         case "incorrect":
             return (
                 <span className="signature-verify-incorrect" title={t("signature-incorrect")}>
-                    <FontAwesomeIcon icon="user-times" size="sm"/>
+                    <FontAwesomeIcon icon={faUserTimes} size="sm"/>
                 </span>
             );
     }

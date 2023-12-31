@@ -1,6 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import cx from 'classnames';
+import {
+    faAt,
+    faBold,
+    faCaretSquareDown,
+    faExclamationCircle,
+    faImage,
+    faItalic,
+    faLink,
+    faQuoteLeft,
+    faStrikethrough
+} from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { NodeName, PostingFeatures, PrivateMediaFileInfo, SourceFormat } from "api";
@@ -357,22 +368,22 @@ export default function RichTextEditorPanel({
     return (
         <div className={cx("rich-text-editor-panel", {"hiding": hiding})} ref={panel}>
             <div className="group">
-                <RichTextEditorButton icon="bold" title={t("bold")} letter="B" onClick={onBold}/>
-                <RichTextEditorButton icon="italic" title={t("italic")} letter="I" onClick={onItalic}/>
-                <RichTextEditorButton icon="strikethrough" title={t("strikeout")} letter="R"
+                <RichTextEditorButton icon={faBold} title={t("bold")} letter="B" onClick={onBold}/>
+                <RichTextEditorButton icon={faItalic} title={t("italic")} letter="I" onClick={onItalic}/>
+                <RichTextEditorButton icon={faStrikethrough} title={t("strikeout")} letter="R"
                                       onClick={onStrike}/>
             </div>
             <div className="group">
-                <RichTextEditorButton icon="exclamation-circle" title={t("spoiler")} onClick={onSpoiler}/>
-                <RichTextEditorButton icon="caret-square-down" title={t("fold")} onClick={onFold}/>
+                <RichTextEditorButton icon={faExclamationCircle} title={t("spoiler")} onClick={onSpoiler}/>
+                <RichTextEditorButton icon={faCaretSquareDown} title={t("fold")} onClick={onFold}/>
             </div>
             <div className="group">
-                <RichTextEditorButton icon="at" title={t("mention")} className="mention" onClick={onMention}/>
-                <RichTextEditorButton icon="quote-left" title={t("quote")} letter="Q" onClick={onQuote}/>
+                <RichTextEditorButton icon={faAt} title={t("mention")} className="mention" onClick={onMention}/>
+                <RichTextEditorButton icon={faQuoteLeft} title={t("quote")} letter="Q" onClick={onQuote}/>
             </div>
             <div className="group">
-                <RichTextEditorButton icon="link" title={t("link")} letter="L" onClick={onLink}/>
-                <RichTextEditorButton icon="image" title={t("image")} letter="M" onClick={onImage}/>
+                <RichTextEditorButton icon={faLink} title={t("link")} letter="L" onClick={onLink}/>
+                <RichTextEditorButton icon={faImage} title={t("image")} letter="M" onClick={onImage}/>
             </div>
             {spoilerDialog && <RichTextSpoilerDialog onSubmit={onSpoilerSubmit}/>}
             {foldDialog && <RichTextFoldDialog onSubmit={onFoldSubmit}/>}

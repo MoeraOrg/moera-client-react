@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { createSelector } from 'reselect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInbox } from '@fortawesome/free-solid-svg-icons';
 
 import { ClientState } from "state/state";
 import { complainsInboxSet, complainsPastSliceLoad } from "state/complains/actions";
@@ -38,7 +39,7 @@ export default function ComplainsListPage() {
                         <div className="total">{`${t("total-colon")} ${total}`}</div>
                         <Button variant={inboxOnly ? "primary" : "outline-secondary"} size="sm" title={t("only-new")}
                                 onClick={onInboxToggle}>
-                            <FontAwesomeIcon icon="inbox"/>
+                            <FontAwesomeIcon icon={faInbox}/>
                         </Button>
                     </div>
                     {complainGroups.map(group =>

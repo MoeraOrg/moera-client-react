@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { isAtComposePage } from "state/navigation/selectors";
@@ -17,7 +18,7 @@ export default function NewPostButton() {
 
     return (
         <Jump nodeName=":" href="/compose" className="btn btn-success btn-sm new-post-button">
-            <FontAwesomeIcon icon="pen-alt"/>
+            <FontAwesomeIcon icon={faPenAlt}/>
             &nbsp;&nbsp;{t("new-post-button")}
         </Jump>
     );

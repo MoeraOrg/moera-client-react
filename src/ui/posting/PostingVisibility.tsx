@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
@@ -45,7 +46,7 @@ export default function PostingVisibility({posting, editable}: Props) {
                 :
                     <span className="principal text-danger opacity-75"
                           title={t("original-deleted", {date: deletionDate})}>
-                        <FontAwesomeIcon icon="trash-can"/>
+                        <FontAwesomeIcon icon={faTrashCan}/>
                     </span>
                 )
             }

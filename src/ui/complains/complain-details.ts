@@ -1,5 +1,6 @@
 import { TFunction } from 'i18next';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faBan, faCheck, faSyncAlt, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import { SheriffComplainStatus } from "api";
 import { ExtComplainGroupInfo } from "state/complains/state";
@@ -21,7 +22,7 @@ export function getComplainStatusDetails(status: SheriffComplainStatus | null | 
 
     switch (status) {
         case "posted":
-            details.icon = "sync-alt";
+            details.icon = faSyncAlt;
             details.className = "processing";
             details.unread = true;
             break;
@@ -33,15 +34,15 @@ export function getComplainStatusDetails(status: SheriffComplainStatus | null | 
         case "invalid-target":
         case "not-original":
         case "not-sheriff":
-            details.icon = "ban";
+            details.icon = faBan;
             details.className = "wrong";
             break;
         case "approved":
-            details.icon = "check";
+            details.icon = faCheck;
             details.className = "good";
             break;
         case "rejected":
-            details.icon = "times";
+            details.icon = faTimes;
             details.className = "wrong";
             break;
     }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { shareDialogPrepare } from "state/sharedialog/actions";
@@ -31,7 +32,7 @@ export default function EntryGalleryShareButton({
 
     return (
         <button className="posting-button" onClick={onClick}>
-            <FontAwesomeIcon icon="share-alt"/>
+            <FontAwesomeIcon icon={faShareAlt}/>
             <span className="caption">{t("share")}</span>
         </button>
     );

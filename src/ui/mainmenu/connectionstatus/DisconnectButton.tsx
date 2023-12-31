@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { Storage } from "storage";
@@ -26,7 +27,7 @@ export default function DisconnectButton() {
 
     return (
         <span className="connection-button" title={t("disconnect")} onClick={onClick}>
-            <FontAwesomeIcon icon="sign-out-alt"/>
+            <FontAwesomeIcon icon={faSignOutAlt}/>
         </span>
     );
 }

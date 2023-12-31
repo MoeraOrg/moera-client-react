@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useField } from 'formik';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faCircle } from '@fortawesome/free-regular-svg-icons';
 import cx from 'classnames';
 
 import { isComposeReady } from "state/compose/selectors";
@@ -31,7 +32,7 @@ export default function ComposeIconButton({icon, name, changed = false, tooltip 
         <button className={cx("composer-icon", {"composer-icon-active": value === name})} title={tooltip ?? undefined}
                 onClick={onClick}>
             <FontAwesomeIcon icon={icon}/>
-            {changed && <div className="changed"><FontAwesomeIcon icon="circle"/></div>}
+            {changed && <div className="changed"><FontAwesomeIcon icon={faCircle}/></div>}
         </button>
     );
 }

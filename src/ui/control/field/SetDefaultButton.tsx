@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useField } from 'formik';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { CLIENT_SETTINGS_PREFIX, SettingTypes, SettingValue } from "api";
@@ -37,6 +38,6 @@ export default function SetDefaultButton({name, setting}: Props) {
         }]));
     };
 
-    return <LabelButton icon="star" title={t("set-as-default")} className="form-label-button-default"
+    return <LabelButton icon={faStar} title={t("set-as-default")} className="form-label-button-default"
                         onClick={onSetDefault}/>
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -99,7 +100,7 @@ export default function LightBoxShareButton({mediaNodeName, mediaHref, mediaUrl}
         <DropdownMenu className="lightbox-button lightbox-share" content={
             <LightBoxShareItems mediaNodeName={mediaNodeName} mediaHref={mediaHref} mediaUrl={mediaUrl}/>
         }>
-            <FontAwesomeIcon icon="share-alt" title={t("share")}/>
+            <FontAwesomeIcon icon={faShareAlt} title={t("share")}/>
         </DropdownMenu>
     );
 }

@@ -1,4 +1,15 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import {
+    faBan,
+    faEye,
+    faGlobe,
+    faHatCowboy,
+    faLock,
+    faShieldHalved,
+    faUserGroup,
+    faUsers,
+    faUserSecret
+} from '@fortawesome/free-solid-svg-icons';
 import { TFunction } from 'i18next';
 
 import { FriendGroupInfo, PrincipalValue } from "api";
@@ -11,7 +22,7 @@ export interface PrincipalDisplay {
 export function getPrincipalDisplay(principal: PrincipalValue | null | undefined, friendGroups: FriendGroupInfo[],
                                     t: TFunction): PrincipalDisplay {
     const display: PrincipalDisplay = {
-        icon: "globe",
+        icon: faGlobe,
         title: t("principal-title.public")
     };
     switch (principal) {
@@ -20,43 +31,43 @@ export function getPrincipalDisplay(principal: PrincipalValue | null | undefined
             break;
 
         case "signed":
-            display.icon = "shield-halved";
+            display.icon = faShieldHalved;
             display.title = t("principal-title.signed");
             break;
 
         case "subscribed":
-            display.icon = "eye";
+            display.icon = faEye;
             display.title = t("principal-title.subscribed");
             break;
 
         case "private":
         case "owner":
-            display.icon = "lock";
+            display.icon = faLock;
             display.title = t("principal-title.only-me");
             break;
 
         case "secret":
         case "senior":
-            display.icon = "user-secret";
+            display.icon = faUserSecret;
             display.title = t("principal-title.author");
             break;
 
         case "enigma":
         case "major":
         case "admin":
-            display.icon = "hat-cowboy";
+            display.icon = faHatCowboy;
             display.title = t("principal-title.admin");
             break;
 
         case "none":
-            display.icon = "ban";
+            display.icon = faBan;
             display.title = t("principal-title.nobody");
             break;
 
         default:
             if (principal.startsWith("f:")) {
                 const title = friendGroups.find(fg => fg.id === principal.substring(2))?.title;
-                display.icon = title === "t:friends" ? "users" : "user-group";
+                display.icon = title === "t:friends" ? faUsers : faUserGroup;
                 display.title = getFriendGroupTitle(title, t) || t("friend-groups.friends");
             }
     }

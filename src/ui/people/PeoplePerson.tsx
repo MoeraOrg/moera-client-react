@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faBan, faCheck, faHandcuffs } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
@@ -36,7 +37,7 @@ export default function PeoplePerson({contact}: Props) {
         }
     }
 
-    const blockingIcon: IconProp | null = tab === "blocked" ? "ban" : tab === "blocked-by" ? "handcuffs" : null;
+    const blockingIcon: IconProp | null = tab === "blocked" ? faBan : tab === "blocked-by" ? faHandcuffs : null;
 
     return (
         <div className="person">
@@ -45,7 +46,7 @@ export default function PeoplePerson({contact}: Props) {
                     <div className="avatar-selector" onClick={onSelectClick}>
                         <Avatar ownerName={contact.contact.nodeName} avatar={contact.contact.avatar} size={48}/>
                         <button className={cx("selection", {"selected": selected})}>
-                            {selected && <FontAwesomeIcon icon="check"/>}
+                            {selected && <FontAwesomeIcon icon={faCheck}/>}
                         </button>
                     </div>
                 :

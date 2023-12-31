@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faReply } from '@fortawesome/free-solid-svg-icons';
 
 import { ClientState } from "state/state";
 import { glanceComment } from "state/detailedposting/actions";
@@ -52,7 +53,7 @@ export default function RepliedTo({
                             disabled={!popperEnabled} element={
                 ref =>
                     <Jump href={`/post/${postingId}?comment=${commentId}`} ref={ref}>
-                        <span className="icon"><FontAwesomeIcon icon="reply"/></span>
+                        <span className="icon"><FontAwesomeIcon icon={faReply}/></span>
                         <NodeName name={ownerName} fullName={ownerFullName} linked={false}/>
                         <span className="heading" dangerouslySetInnerHTML={{__html: headingHtml}}/>
                     </Jump>

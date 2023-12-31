@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormikContext } from 'formik';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { composeDraftSelect } from "state/compose/actions";
@@ -22,7 +23,7 @@ export default function ComposeNewPost() {
     }
     return (
         <div className="dropdown-item new-post" onClick={onClick}>
-            <FontAwesomeIcon icon="pen-alt"/>
+            <FontAwesomeIcon icon={faPenAlt}/>
             &nbsp;&nbsp;{t("new-post-item")}
         </div>
     );

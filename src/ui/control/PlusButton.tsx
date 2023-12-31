@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 
 import { Button } from "ui/control/Button";
@@ -12,6 +13,6 @@ interface Props {
 
 export const PlusButton = ({title, visible = true, onClick}: Props) => (
     <Button variant="light" size="sm" className={cx("me-1", {"d-none": !visible})} onClick={onClick}>
-        <FontAwesomeIcon icon="plus"/> {title}
+        <FontAwesomeIcon icon={faPlus}/> {title}
     </Button>
 );

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { settingsPluginsDelete } from "state/settings/actions";
@@ -25,7 +26,7 @@ export default function SettingsPluginControls({plugin}: Props) {
 
     return (
         <button className="delete" title={t("delete")} onClick={onDelete}>
-            <FontAwesomeIcon icon="trash-can"/>
+            <FontAwesomeIcon icon={faTrashCan}/>
         </button>
     );
 }

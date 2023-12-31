@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 import { peopleSetSearchPrefix } from "state/people/actions";
 
@@ -22,7 +23,7 @@ export default function PeopleSearch() {
             <div className="ms-auto col-md-3 col-6">
                 <div className="input-group input-group-sm">
                     <span className="input-group-text" id="inputGroup-sizing-sm">
-                        <FontAwesomeIcon icon="magnifying-glass"/>
+                        <FontAwesomeIcon icon={faMagnifyingGlass}/>
                     </span>
                     <input type="text" className="form-control" onKeyDown={onKeyDown} onChange={onChange}/>
                 </div>

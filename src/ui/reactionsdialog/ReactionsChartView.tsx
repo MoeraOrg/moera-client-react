@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faList } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -28,7 +29,7 @@ export default function ReactionsChartView({itemsRef, onSwitchView}: Props) {
                 <div className="topright">
                     {onSwitchView &&
                         <div className="switch-view" title={t("view-as-list")} onClick={onSwitchView}>
-                            <FontAwesomeIcon icon="list"/>
+                            <FontAwesomeIcon icon={faList}/>
                         </div>
                     }
                     <CloseButton onClick={() => dispatch(closeReactionsDialog())}/>

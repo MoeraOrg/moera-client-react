@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { Storage } from "storage";
@@ -68,7 +69,7 @@ export default function Connections() {
                         </div>
                         <div className="connection-buttons">
                             <div className="disconnect" title={t("disconnect")} onClick={onDisconnectActive}>
-                                <FontAwesomeIcon icon="sign-out-alt"/>
+                                <FontAwesomeIcon icon={faSignOutAlt}/>
                             </div>
                         </div>
                     </div>
@@ -78,7 +79,7 @@ export default function Connections() {
                                     onDisconnect={onDisconnect(root.url)}/>
             ))}
             <div className="connection-add" onClick={onAddClick}>
-                <FontAwesomeIcon icon="plus"/> {t("add-connection")}
+                <FontAwesomeIcon icon={faPlus}/> {t("add-connection")}
             </div>
             <div className="connection-sign-up">
                 <Button variant="outline-secondary" size="sm" onClick={onSignUpClick}>

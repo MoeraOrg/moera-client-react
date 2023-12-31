@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBackspace } from '@fortawesome/free-solid-svg-icons';
 
 import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
@@ -22,7 +23,7 @@ export default function ComposeFullName() {
                 <input type="text" className="form-control col-6 col-md-4" {...field} maxLength={96} ref={inputRef}
                        onKeyDown={onKeyDown}/>
                 <button title="Reset to default" onClick={onReset}>
-                    <FontAwesomeIcon icon="backspace"/>
+                    <FontAwesomeIcon icon={faBackspace}/>
                 </button>
             </div>
         :

@@ -9,6 +9,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
  * Graphics licensed under CC-BY 4.0: https://creativecommons.org/licenses/by/4.0/
  */
 
+import { faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+
 import { ReactComponent as Twemoji23f3 } from "./23f3.svg";
 import { ReactComponent as Twemoji2694 } from "./2694.svg";
 import { ReactComponent as Twemoji2708 } from "./2708.svg";
@@ -103,9 +105,9 @@ export default function Twemoji({code, title = ""}: Props) {
     let emoji = typeof(code) === "string" ? code : Number(code).toString(16);
     switch (emoji) {
         case "1f44d":
-            return <FontAwesomeIcon icon="thumbs-up" color="#2078f4" title={title}/>;
+            return <FontAwesomeIcon icon={faThumbsUp} color="#2078f4" title={title}/>;
         case "1f44e":
-            return <FontAwesomeIcon icon="thumbs-down" color="#2078f4" title={title}/>;
+            return <FontAwesomeIcon icon={faThumbsDown} color="#2078f4" title={title}/>;
         case "1f620":
             emoji = "1f92c";
     }

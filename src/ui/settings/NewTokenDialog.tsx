@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -32,7 +33,7 @@ export default function NewTokenDialog() {
                 <div className="input-group">
                     <input type="text" className="form-control" value={newToken.token} onChange={() => {}}/>
                     <Button variant="secondary" title={t("copy")} onClick={onCopy}>
-                        <FontAwesomeIcon icon="copy"/>
+                        <FontAwesomeIcon icon={faCopy}/>
                     </Button>
                 </div>
             </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
@@ -46,7 +47,7 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
             <button className={cx("principal-select", className, {long})} ref={setButtonRef} aria-label={t("select")}
                     onClick={onToggle} disabled={disabled ?? undefined}>
                 <Principal value={value} long={long} icons={icons} titles={titles}/>
-                <FontAwesomeIcon icon="chevron-down" className="chevron"/>
+                <FontAwesomeIcon icon={faChevronDown} className="chevron"/>
             </button>
             {visible &&
                 <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
@@ -54,7 +55,7 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
                     {caption && <div className="caption">{caption}</div>}
                     {principalValues.map(({value: v, icon, title}) =>
                         <div key={v} className="dropdown-item" onClick={onClick(v)}>
-                            <FontAwesomeIcon icon="check" className={cx({"invisible": v !== value})}/>{" "}
+                            <FontAwesomeIcon icon={faCheck} className={cx({"invisible": v !== value})}/>{" "}
                             <FontAwesomeIcon icon={icons?.[v] ?? icon} fixedWidth/>&nbsp;&nbsp;{titles?.[v] ?? title}
                         </div>
                     )}

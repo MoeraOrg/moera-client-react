@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { faThumbsDown, faThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ClientReactionInfo, CommentInfo } from "api";
@@ -39,10 +40,10 @@ export default function CommentButtons({nodeName, postingId, comment}: Props) {
     const hideNegative = hideAll || !reactionsNegativeEnabled || (cr.emoji != null && !cr.negative);
     return (
         <div className="comment-buttons">
-            <CommentReactionButton icon="thumbs-up" caption={t("support")} invisible={hidePositive} id={comment.id}
+            <CommentReactionButton icon={faThumbsUp} caption={t("support")} invisible={hidePositive} id={comment.id}
                                    negative={false} emoji={!cr.negative ? cr.emoji : null}
                                    accepted={comment.acceptedReactions?.positive ?? ""}/>
-            <CommentReactionButton icon="thumbs-down" caption={t("oppose")} invisible={hideNegative} id={comment.id}
+            <CommentReactionButton icon={faThumbsDown} caption={t("oppose")} invisible={hideNegative} id={comment.id}
                                    negative={true} emoji={cr.negative ? cr.emoji : null}
                                    accepted={comment.acceptedReactions?.negative ?? ""}/>
             <CommentReplyButton id={comment.id} ownerName={comment.ownerName}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -24,7 +25,7 @@ export default function FundraiserButton({index, fundraiser, dragged, onClick}: 
         <button className={cx("fundraiser", {"dragged": dragged})} onClick={onClick} ref={sortable.setNodeRef}
                 style={sortableStyle}{...sortable.attributes} {...sortable.listeners}>
             {fundraiser.title}
-            <FontAwesomeIcon className="icon" icon="pen"/>
+            <FontAwesomeIcon className="icon" icon={faPen}/>
         </button>
     );
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { faThumbsDown, faThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ClientReactionInfo, PostingInfo } from "api";
@@ -24,11 +25,11 @@ export default function EntryGalleryButtons({posting, mediaId}: Props) {
     const hide = posting.ownerName === homeOwnerName && !enableSelf && !cr.emoji;
     return (
         <div className="gallery-buttons">
-            <PostingReactionButton icon="thumbs-up" caption={t("support")}
+            <PostingReactionButton icon={faThumbsUp} caption={t("support")}
                                    invisible={hide || (cr.emoji != null && cr.negative)} id={posting.id}
                                    negative={false} emoji={!cr.negative ? cr.emoji : null}
                                    accepted={posting.acceptedReactions?.positive ?? ""}/>
-            <PostingReactionButton icon="thumbs-down" caption={t("oppose")}
+            <PostingReactionButton icon={faThumbsDown} caption={t("oppose")}
                                    invisible={hide || (cr.emoji != null && !cr.negative)} id={posting.id}
                                    negative={true} emoji={cr.negative ? cr.emoji : null}
                                    accepted={posting.acceptedReactions?.negative ?? ""}/>

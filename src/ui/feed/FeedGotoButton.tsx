@@ -1,6 +1,7 @@
 import React, { Suspense, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { endOfDay, fromUnixTime, getUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
@@ -57,7 +58,7 @@ export default function FeedGotoButton({feedName, atBottom}: Props) {
                                 dateFormat="dd-MM-yyyy"
                                 withPortal={Browser.isTinyScreen()}/>
                     <Button variant="outline-info" size="sm" className="ms-2" invisible={atBottom} onClick={toBottom}>
-                        <FontAwesomeIcon icon="arrow-down"/>&nbsp;{t("bottom")}
+                        <FontAwesomeIcon icon={faArrowDown}/>&nbsp;{t("bottom")}
                     </Button>
                 </Suspense>
             }

@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBackspace } from '@fortawesome/free-solid-svg-icons';
 import { format, formatISO } from 'date-fns';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -43,7 +44,7 @@ export default function ComposePublishAt() {
                                 onKeyDown={onKeyDown}
                                 autoFocus/>
                     <button title={t("reset-to-default")} onClick={onReset}>
-                        <FontAwesomeIcon icon="backspace"/>
+                        <FontAwesomeIcon icon={faBackspace}/>
                     </button>
                 </Suspense>
             </div>

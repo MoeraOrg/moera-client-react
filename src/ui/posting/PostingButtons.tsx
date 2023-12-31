@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { faThumbsDown, faThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
@@ -52,11 +53,11 @@ export default function PostingButtons({posting, story, menu = false}: Props) {
         <div className={cx("posting-buttons", {"with-menu": menu})}>
             {(connectedToHome && posting.receiverDeletedAt == null) &&
                 <>
-                    <PostingReactionButton icon="thumbs-up" caption={t("support")}
+                    <PostingReactionButton icon={faThumbsUp} caption={t("support")}
                                            invisible={hidePositive} id={posting.id} negative={false}
                                            emoji={!cr.negative ? cr.emoji : null}
                                            accepted={posting.acceptedReactions?.positive ?? ""}/>
-                    <PostingReactionButton icon="thumbs-down" caption={t("oppose")}
+                    <PostingReactionButton icon={faThumbsDown} caption={t("oppose")}
                                            invisible={hideNegative} id={posting.id} negative={true}
                                            emoji={cr.negative ? cr.emoji : null}
                                            accepted={posting.acceptedReactions?.negative ?? ""}/>

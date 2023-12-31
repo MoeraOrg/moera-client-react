@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { ClientState } from "state/state";
 import { getNodeFriendGroups, isAtHomeNode } from "state/node/selectors";
@@ -86,7 +87,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
             }
             {atHome &&
                 <Button variant="outline-info" size="sm" onClick={() => dispatch(openFriendGroupAddDialog())}>
-                    <FontAwesomeIcon icon="plus"/>{" "}{t("add-friend-group")}
+                    <FontAwesomeIcon icon={faPlus}/>{" "}{t("add-friend-group")}
                 </Button>
             }
         </ul>

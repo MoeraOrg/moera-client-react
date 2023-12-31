@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExternalLinkAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { Browser } from "ui/browser";
@@ -27,10 +28,10 @@ export default function ConnectionItem({name, url, onClick, onDisconnect}: Props
             </div>
             <div className="connection-buttons">
                 <a className="link" title={t("open")} href={Browser.passedLocation(url)}>
-                    <FontAwesomeIcon icon="external-link-alt"/>
+                    <FontAwesomeIcon icon={faExternalLinkAlt}/>
                 </a>
                 <div className="disconnect" title={t("disconnect")} onClick={onDisconnect}>
-                    <FontAwesomeIcon icon="sign-out-alt"/>
+                    <FontAwesomeIcon icon={faSignOutAlt}/>
                 </div>
             </div>
         </div>

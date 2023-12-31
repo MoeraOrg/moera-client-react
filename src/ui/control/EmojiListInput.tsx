@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 
 import { EmojiListDialog } from "ui/control";
@@ -40,7 +41,7 @@ export function EmojiListInput({className, negative, value, advanced, disabled, 
             </div>
             {!disabled &&
                 <div className="button" onClick={edit}>
-                    <FontAwesomeIcon icon="pen"/>
+                    <FontAwesomeIcon icon={faPen}/>
                 </div>
             }
             {editing &&

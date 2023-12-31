@@ -1,15 +1,17 @@
 import React from 'react';
 import { useField } from 'formik';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faCode, faFileAlt, faRemoveFormat } from '@fortawesome/free-solid-svg-icons';
+import { faMarkdown } from '@fortawesome/free-brands-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { SourceFormat } from "api";
 import ComposeIconButton from "ui/compose/ComposeIconButton";
 
 const BODY_FORMAT_ICONS: Record<SourceFormat, IconProp | null> = {
-    "plain-text": "remove-format",
-    "html": "code",
-    "markdown": ["fab", "markdown"],
+    "plain-text": faRemoveFormat,
+    "html": faCode,
+    "markdown": faMarkdown,
     "application": null
 };
 
@@ -21,7 +23,7 @@ export default function ComposeBodyFormatButton({sourceFormats}: Props) {
     const [, {value, initialValue}] = useField<SourceFormat>("bodyFormat");
     const {t} = useTranslation();
 
-    const icon = BODY_FORMAT_ICONS[value] ?? "file-alt";
+    const icon = BODY_FORMAT_ICONS[value] ?? faFileAlt;
     return <ComposeIconButton icon={icon} name="format" changed={value !== initialValue}
                               tooltip={sourceFormats.includes(value) ? t(`source-format.${value}`) : null}/>
 };

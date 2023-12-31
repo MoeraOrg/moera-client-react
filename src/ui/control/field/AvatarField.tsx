@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useField } from 'formik';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -53,7 +54,7 @@ export function AvatarField({name, size, disabled}: Props) {
     return (
         <div className={cx("avatar-field", {"disabled": !value && !avatarDefault})}>
             <div ref={setButtonRef} aria-label={t("select")} onClick={onClick}>
-                <div className="icon"><FontAwesomeIcon icon="chevron-down"/></div>
+                <div className="icon"><FontAwesomeIcon icon={faChevronDown}/></div>
                 <Avatar avatar={value} ownerName={homeOwnerName} size={size}/>
             </div>
             {visible &&

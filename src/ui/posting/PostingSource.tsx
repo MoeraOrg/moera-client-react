@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRetweet } from '@fortawesome/free-solid-svg-icons';
 
 import { PostingInfo } from "api";
 import Jump from "ui/navigation/Jump";
@@ -17,7 +18,7 @@ const PostingSource = ({posting}: Props) => (
             ref =>
                 <Jump ref={ref} className="posting-source" nodeName={posting.receiverName}
                       href={`/post/${posting.receiverPostingId}`}>
-                    <FontAwesomeIcon icon="retweet"/>
+                    <FontAwesomeIcon icon={faRetweet}/>
                 </Jump>
         }>
             <PostingSources posting={posting}/>

@@ -9,7 +9,6 @@ import "i18n";
 import { Storage } from "storage";
 import store from "state/store";
 import { initFromLocation } from "state/navigation/actions";
-import initIconLibrary from "./icons";
 import { Browser } from "ui/browser";
 import App from "ui/App";
 import * as serviceWorker from "serviceWorker";
@@ -22,7 +21,6 @@ function sendInitAction(): void {
 }
 
 Browser.init();
-initIconLibrary();
 const rootElement = document.getElementById("app-root");
 if (rootElement != null) {
     createRoot(rootElement).render(

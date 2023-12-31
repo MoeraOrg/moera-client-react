@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDesktop, faGlobeEurope, faMobileAlt } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 import { useField } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -17,16 +18,16 @@ export default function RichTextImageDialogTabs() {
                     <span className={cx("nav-link", {"active": value === "device"})}
                           onClick={() => setValue("device")}>
                         {Browser.isTinyScreen() ?
-                            <><FontAwesomeIcon icon="mobile-alt"/> {t("from-device")}</>
+                            <><FontAwesomeIcon icon={faMobileAlt}/> {t("from-device")}</>
                         :
-                            <><FontAwesomeIcon icon="desktop"/> {t("from-computer")}</>
+                            <><FontAwesomeIcon icon={faDesktop}/> {t("from-computer")}</>
                         }
                     </span>
             </li>
             <li className="nav-item">
                     <span className={cx("nav-link", {"active": value === "internet"})}
                           onClick={() => setValue("internet")}>
-                        <FontAwesomeIcon icon="globe-europe"/> {t("from-internet")}
+                        <FontAwesomeIcon icon={faGlobeEurope}/> {t("from-internet")}
                     </span>
             </li>
         </ul>

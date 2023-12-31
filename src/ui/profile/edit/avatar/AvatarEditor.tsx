@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { useField } from 'formik';
 
 import { AvatarInfo } from "api";
@@ -69,7 +70,7 @@ export default function AvatarEditor({name}: Props) {
         <>
             <div className="avatar-editor">
                 <div ref={setButtonRef} onClick={onEdit}>
-                    <div className="icon"><FontAwesomeIcon icon="pen"/></div>
+                    <div className="icon"><FontAwesomeIcon icon={faPen}/></div>
                     <Avatar avatar={value} ownerName={nodeName} size={200}/>
                 </div>
                 {visible &&

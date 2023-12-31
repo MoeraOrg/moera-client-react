@@ -2,6 +2,17 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import {
+    faArrowRightArrowLeft,
+    faArrowsToEye,
+    faBan,
+    faChevronDown,
+    faEye,
+    faHandcuffs,
+    faPeopleArrows, faPerson,
+    faPersonWalkingArrowRight
+} from '@fortawesome/free-solid-svg-icons';
+import { faBell } from '@fortawesome/free-regular-svg-icons';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
@@ -37,8 +48,8 @@ export function SubscribeButton({small, nodeName, feedName, onDialogOpened}: Pro
     const {t} = useTranslation();
 
     const subscriptionIcon: IconProp | null = subscribed
-        ? (subscribedToMe ? "arrow-right-arrow-left" : "eye")
-        : (subscribedToMe ? "arrows-to-eye" : null)
+        ? (subscribedToMe ? faArrowRightArrowLeft : faEye)
+        : (subscribedToMe ? faArrowsToEye : null)
     const subscriptionCaption = subscribed
         ? (subscribedToMe ? t("mutually-subscribed") : t("subscribed", {"gender": tGender(homeGender)}))
         : (subscribedToMe ? t("subscribed-to-me", {"gender": tGender(subscriber?.contact?.gender)}) : null);
@@ -46,8 +57,8 @@ export function SubscribeButton({small, nodeName, feedName, onDialogOpened}: Pro
     const friend = friendGroups != null && friendGroups.length > 0;
     const friendOf = remoteFriendGroups != null && remoteFriendGroups.length > 0;
     const friendIcon: IconProp | null = friend
-        ? (friendOf ? "people-arrows" : "person")
-        : (friendOf ? "person-walking-arrow-right" : null)
+        ? (friendOf ? faPeopleArrows : faPerson)
+        : (friendOf ? faPersonWalkingArrowRight : null)
     const friendCaption = friend
         ? (friendOf ? t("mutual-friends") : t("friend"))
         : (friendOf ? t("in-friends") : null)
@@ -55,8 +66,8 @@ export function SubscribeButton({small, nodeName, feedName, onDialogOpened}: Pro
     const blocked = blockedList != null && blockedList.length > 0;
     const blockedBy = blockedByList != null && blockedByList.length > 0;
     const blockedIcon: IconProp | null = blocked
-        ? "ban"
-        : (blockedBy ? "handcuffs" : null)
+        ? faBan
+        : (blockedBy ? faHandcuffs : null)
     const blockedCaption = blocked
         ? t("blocked")
         : (blockedBy ? t("in-blocked") : null)
@@ -69,12 +80,12 @@ export function SubscribeButton({small, nodeName, feedName, onDialogOpened}: Pro
             <SubscribeButtonMenu nodeName={nodeName} feedName={feedName}/>
         } onDialogOpened={onDialogOpened}>
             {small ?
-                <FontAwesomeIcon icon={blockedIcon ?? friendIcon ?? subscriptionIcon ?? ["far", "bell"]}/>
+                <FontAwesomeIcon icon={blockedIcon ?? friendIcon ?? subscriptionIcon ?? faBell}/>
             :
                 blockedCaption ?? friendCaption ?? subscriptionCaption ?? t("subscribe")
             }
             &nbsp;&nbsp;
-            <FontAwesomeIcon icon="chevron-down"/>
+            <FontAwesomeIcon icon={faChevronDown}/>
         </DropdownMenu>
     );
 }

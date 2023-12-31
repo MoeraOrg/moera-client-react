@@ -1,5 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
+import { faLock } from '@fortawesome/free-solid-svg-icons';
 
 import { PrincipalValue } from "api";
 import { PeopleTab } from "state/people/state";
@@ -22,7 +23,7 @@ const PeopleTabsItem = ({name, title, principal, principalTitles, total, loaded,
             <span className="title">
                 {title}
                 {principal &&
-                    <>{" "}<Principal value={principal} defaultValue="public" icons={{"admin": "lock"}}
+                    <>{" "}<Principal value={principal} defaultValue="public" icons={{"admin": faLock}}
                                       titles={principalTitles}/></>
                 }
             </span>

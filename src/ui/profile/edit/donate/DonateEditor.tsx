@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import * as immutable from 'object-path-immutable';
 import {
     DndContext,
@@ -118,7 +119,7 @@ export default function DonateEditor({value, setValue}: Props) {
                 )}
             </DndContext>
             <button className="new-fundraiser" onClick={onClick(null)}>
-                <FontAwesomeIcon className="icon" icon="plus"/>
+                <FontAwesomeIcon className="icon" icon={faPlus}/>
                 {t("add-donation-button")}
             </button>
             {showDialog &&

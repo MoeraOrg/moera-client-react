@@ -1,6 +1,7 @@
 import React, { MouseEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuoteLeft } from '@fortawesome/free-solid-svg-icons';
 import clipboardCopy from 'clipboard-copy';
 import { useTranslation } from 'react-i18next';
 
@@ -42,7 +43,7 @@ export default function CopyQuoteButton({url, title, mode}: Props) {
 
     return (
         <button className="copy-quote" title={t("copy-quote")} onClick={onClick}>
-            <FontAwesomeIcon icon="quote-left"/>
+            <FontAwesomeIcon icon={faQuoteLeft}/>
         </button>
     );
 }

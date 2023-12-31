@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowDownAZ, faArrowPointer } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -36,14 +37,14 @@ export default function PeopleSelectionPanel() {
         <div className="people-panel">
             <div className="d-flex">
                 <Button variant="outline-primary" size="sm" active={selecting} onClick={onSelectClick}>
-                    <FontAwesomeIcon icon="arrow-pointer"/>
+                    <FontAwesomeIcon icon={faArrowPointer}/>
                     {" "}
                     {!selecting ? t("select") : t("clear-selection")}
                 </Button>
                 <PeopleSelectedButton/>
                 <Button variant="outline-secondary" size="sm" className="ms-auto" active={sortAlpha}
                         onClick={onSortClick}>
-                    <FontAwesomeIcon icon="arrow-down-a-z"/>
+                    <FontAwesomeIcon icon={faArrowDownAZ}/>
                 </Button>
             </div>
             <PeopleSearch/>

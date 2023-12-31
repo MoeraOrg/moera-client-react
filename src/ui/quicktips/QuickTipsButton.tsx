@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { openQuickTips } from "state/quicktips/actions";
@@ -13,7 +14,7 @@ export default function QuickTipsButton() {
 
     return (
         <span className="connection-button" title={t("help")} onClick={onClick}>
-            <FontAwesomeIcon icon="question-circle"/>
+            <FontAwesomeIcon icon={faQuestionCircle}/>
         </span>
     );
 }

@@ -1,5 +1,15 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import {
+    faArrowRightArrowLeft,
+    faArrowsToEye,
+    faBan,
+    faEye,
+    faHandcuffs,
+    faPeopleArrows,
+    faPerson,
+    faPersonWalkingArrowRight
+} from '@fortawesome/free-solid-svg-icons';
 
 import { getHomeOwnerGender } from "state/home/selectors";
 import { ContactState } from "state/people/state";
@@ -33,32 +43,32 @@ export default function PeopleContactIcons({contact}: Props) {
                         <div className="icons">
                             <PeopleIconSet icons={[
                                 {
-                                    icon: "arrow-right-arrow-left",
+                                    icon: faArrowRightArrowLeft,
                                     title: "mutually-subscribed",
                                     visible: hasSubscription
                                 },
                                 {
-                                    icon: "person",
+                                    icon: faPerson,
                                     title: "friend",
                                     visible: hasFriend && !hasFriendOf
                                 },
                                 {
-                                    icon: "person-walking-arrow-right",
+                                    icon: faPersonWalkingArrowRight,
                                     title: "in-friends",
                                     visible: !hasFriend && hasFriendOf
                                 },
                                 {
-                                    icon: "people-arrows",
+                                    icon: faPeopleArrows,
                                     title: "mutual-friends",
                                     visible: hasFriend && hasFriendOf
                                 },
                                 {
-                                    icon: "ban",
+                                    icon: faBan,
                                     title: "blocked",
                                     visible: hasBlock
                                 },
                                 {
-                                    icon: "handcuffs",
+                                    icon: faHandcuffs,
                                     title: "in-blocked",
                                     visible: !hasBlock && hasBlockBy
                                 }
@@ -76,32 +86,32 @@ export default function PeopleContactIcons({contact}: Props) {
                         <div className="icons">
                             <PeopleIconSet icons={[
                                 {
-                                    icon: "arrow-right-arrow-left",
+                                    icon: faArrowRightArrowLeft,
                                     title: "mutually-subscribed",
                                     visible: hasSubscriber
                                 },
                                 {
-                                    icon: "person",
+                                    icon: faPerson,
                                     title: "friend",
                                     visible: hasFriend && !hasFriendOf
                                 },
                                 {
-                                    icon: "person-walking-arrow-right",
+                                    icon: faPersonWalkingArrowRight,
                                     title: "in-friends",
                                     visible: !hasFriend && hasFriendOf
                                 },
                                 {
-                                    icon: "people-arrows",
+                                    icon: faPeopleArrows,
                                     title: "mutual-friends",
                                     visible: hasFriend && hasFriendOf
                                 },
                                 {
-                                    icon: "ban",
+                                    icon: faBan,
                                     title: "blocked",
                                     visible: hasBlock
                                 },
                                 {
-                                    icon: "handcuffs",
+                                    icon: faHandcuffs,
                                     title: "in-blocked",
                                     visible: !hasBlock && hasBlockBy
                                 }
@@ -117,34 +127,34 @@ export default function PeopleContactIcons({contact}: Props) {
                     <div className="icons">
                         <PeopleIconSet icons={[
                             {
-                                icon: "eye",
+                                icon: faEye,
                                 title: "subscribed",
                                 gender: homeOwnerGender,
                                 visible: !hasSubscriber && hasSubscription
                             },
                             {
-                                icon: "arrows-to-eye",
+                                icon: faArrowsToEye,
                                 title: "subscribed-to-me",
                                 gender: contact.contact.gender,
                                 visible: hasSubscriber && !hasSubscription
                             },
                             {
-                                icon: "arrow-right-arrow-left",
+                                icon: faArrowRightArrowLeft,
                                 title: "mutually-subscribed",
                                 visible: hasSubscriber && hasSubscription
                             },
                             {
-                                icon: "people-arrows",
+                                icon: faPeopleArrows,
                                 title: "mutual-friends",
                                 visible: hasFriend
                             },
                             {
-                                icon: "ban",
+                                icon: faBan,
                                 title: "blocked",
                                 visible: hasBlock
                             },
                             {
-                                icon: "handcuffs",
+                                icon: faHandcuffs,
                                 title: "in-blocked",
                                 visible: !hasBlock && hasBlockBy
                             }
@@ -159,34 +169,34 @@ export default function PeopleContactIcons({contact}: Props) {
                     <div className="icons">
                         <PeopleIconSet icons={[
                             {
-                                icon: "eye",
+                                icon: faEye,
                                 title: "subscribed",
                                 gender: homeOwnerGender,
                                 visible: !hasSubscriber && hasSubscription
                             },
                             {
-                                icon: "arrows-to-eye",
+                                icon: faArrowsToEye,
                                 title: "subscribed-to-me",
                                 gender: contact.contact.gender,
                                 visible: hasSubscriber && !hasSubscription
                             },
                             {
-                                icon: "arrow-right-arrow-left",
+                                icon: faArrowRightArrowLeft,
                                 title: "mutually-subscribed",
                                 visible: hasSubscriber && hasSubscription
                             },
                             {
-                                icon: "person",
+                                icon: faPerson,
                                 title: "friend",
                                 visible: hasFriend && !hasFriendOf
                             },
                             {
-                                icon: "person-walking-arrow-right",
+                                icon: faPersonWalkingArrowRight,
                                 title: "in-friends",
                                 visible: !hasFriend && hasFriendOf
                             },
                             {
-                                icon: "people-arrows",
+                                icon: faPeopleArrows,
                                 title: "mutual-friends",
                                 visible: hasFriend && hasFriendOf
                             }
@@ -201,39 +211,39 @@ export default function PeopleContactIcons({contact}: Props) {
                     <div className="icons">
                         <PeopleIconSet icons={[
                             {
-                                icon: "eye",
+                                icon: faEye,
                                 title: "subscribed",
                                 gender: homeOwnerGender,
                                 visible: !hasSubscriber && hasSubscription
                             },
                             {
-                                icon: "arrows-to-eye",
+                                icon: faArrowsToEye,
                                 title: "subscribed-to-me",
                                 gender: contact.contact.gender,
                                 visible: hasSubscriber && !hasSubscription
                             },
                             {
-                                icon: "arrow-right-arrow-left",
+                                icon: faArrowRightArrowLeft,
                                 title: "mutually-subscribed",
                                 visible: hasSubscriber && hasSubscription
                             },
                             {
-                                icon: "person",
+                                icon: faPerson,
                                 title: "friend",
                                 visible: hasFriend && !hasFriendOf
                             },
                             {
-                                icon: "person-walking-arrow-right",
+                                icon: faPersonWalkingArrowRight,
                                 title: "in-friends",
                                 visible: !hasFriend && hasFriendOf
                             },
                             {
-                                icon: "people-arrows",
+                                icon: faPeopleArrows,
                                 title: "mutual-friends",
                                 visible: hasFriend && hasFriendOf
                             },
                             {
-                                icon: "ban",
+                                icon: faBan,
                                 title: "blocked",
                                 visible: hasBlock
                             }
@@ -251,34 +261,34 @@ export default function PeopleContactIcons({contact}: Props) {
                         <div className="icons">
                             <PeopleIconSet icons={[
                                 {
-                                    icon: "eye",
+                                    icon: faEye,
                                     title: "subscribed",
                                     gender: homeOwnerGender,
                                     visible: !hasSubscriber && hasSubscription
                                 },
                                 {
-                                    icon: "arrows-to-eye",
+                                    icon: faArrowsToEye,
                                     title: "subscribed-to-me",
                                     gender: contact.contact.gender,
                                     visible: hasSubscriber && !hasSubscription
                                 },
                                 {
-                                    icon: "arrow-right-arrow-left",
+                                    icon: faArrowRightArrowLeft,
                                     title: "mutually-subscribed",
                                     visible: hasSubscriber && hasSubscription
                                 },
                                 {
-                                    icon: "people-arrows",
+                                    icon: faPeopleArrows,
                                     title: "mutual-friends",
                                     visible: hasFriendOf
                                 },
                                 {
-                                    icon: "ban",
+                                    icon: faBan,
                                     title: "blocked",
                                     visible: hasBlock
                                 },
                                 {
-                                    icon: "handcuffs",
+                                    icon: faHandcuffs,
                                     title: "in-blocked",
                                     visible: !hasBlock && hasBlockBy
                                 }

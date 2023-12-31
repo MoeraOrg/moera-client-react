@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -40,13 +41,13 @@ export default function PageShareButton({href}: Props) {
                     show: true
                 }
             ]}>
-                <FontAwesomeIcon icon="share-alt"/>
+                <FontAwesomeIcon icon={faShareAlt}/>
             </DropdownMenu>
         );
     } else {
         return (
             <button className="page-share" title={t("share-page")} onClick={onShare}>
-                <FontAwesomeIcon icon="share-alt"/>
+                <FontAwesomeIcon icon={faShareAlt}/>
             </button>
         );
     }

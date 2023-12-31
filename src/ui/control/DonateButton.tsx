@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHandHoldingHeart } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
@@ -42,7 +43,7 @@ export function DonateButton({name, fullName, fundraisers, styles = "large", cla
                 title={styles === "icon" ? t("donate") : undefined}
                 className={cx(className, {"border-0": styles === "icon"})}
                 onClick={onClick}>
-            <FontAwesomeIcon icon="hand-holding-heart"/>
+            <FontAwesomeIcon icon={faHandHoldingHeart}/>
             {styles !== "icon" ? " " + t("donate") : ""}
         </Button>
     );

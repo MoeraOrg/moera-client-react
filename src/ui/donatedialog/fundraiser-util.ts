@@ -1,4 +1,6 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faBolt } from '@fortawesome/free-solid-svg-icons';
+import { faBitcoin, faEthereum, faPatreon, faPaypal } from '@fortawesome/free-brands-svg-icons';
 
 import { FundraiserInfo } from "api";
 import { hasSchemeOrDomain } from "util/url";
@@ -15,27 +17,27 @@ interface FundraiserIconInfo {
 const FUNDRAISER_ICONS: FundraiserIconInfo[] = [
     {
         prefix: "bitcoin:",
-        icon: ["fab", "bitcoin"]
+        icon: faBitcoin
     },
     {
         prefix: "lightning:",
-        icon: "bolt"
+        icon: faBolt
     },
     {
         prefix: "ethereum:",
-        icon: ["fab", "ethereum"]
+        icon: faEthereum
     },
     {
         prefix: "patreon.com",
-        icon: ["fab", "patreon"]
+        icon: faPatreon
     },
     {
         prefix: "paypal.com",
-        icon: ["fab", "paypal"]
+        icon: faPaypal
     },
     {
         prefix: "paypal.me",
-        icon: ["fab", "paypal"]
+        icon: faPaypal
     }
 ];
 

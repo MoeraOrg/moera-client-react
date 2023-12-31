@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBell, faChevronDown, faCog, faHome, faNewspaper, faPenAlt } from '@fortawesome/free-solid-svg-icons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { CLIENT_SETTINGS_PREFIX } from "api";
@@ -62,13 +63,13 @@ export default function QuickTips() {
                     <li className="blog">
                         {t(`quick-tips.blog-buttons-${variant}`)}
                         <p>
-                            <button><FontAwesomeIcon icon="newspaper"/></button>
+                            <button><FontAwesomeIcon icon={faNewspaper}/></button>
                             {" "}&mdash; {t("quick-tips.your-news")}<br/>
-                            <button><FontAwesomeIcon icon="bell"/></button>
+                            <button><FontAwesomeIcon icon={faBell}/></button>
                             {" "}&mdash; {t("quick-tips.your-notifications")}<br/>
-                            <button><FontAwesomeIcon icon="cog"/></button>
+                            <button><FontAwesomeIcon icon={faCog}/></button>
                             {" "}&mdash; {t("quick-tips.your-settings")}<br/>
-                            <button><FontAwesomeIcon icon="home"/></button>
+                            <button><FontAwesomeIcon icon={faHome}/></button>
                             {" "}&mdash; {t("quick-tips.your-timeline")}
                         </p>
                     </li>
@@ -91,7 +92,7 @@ function NewPostButton() {
 
     return (
         <Button variant="success" size="sm">
-            <FontAwesomeIcon icon="pen-alt"/>&nbsp;&nbsp;{t("new-post-button")}
+            <FontAwesomeIcon icon={faPenAlt}/>&nbsp;&nbsp;{t("new-post-button")}
         </Button>
     );
 }
@@ -103,7 +104,7 @@ function SubscribeButton() {
         <Button variant="outline-primary" size="sm" aria-label={t("subscribe")}>
             {t("subscribe")}
             &nbsp;&nbsp;
-            <FontAwesomeIcon icon="chevron-down"/>
+            <FontAwesomeIcon icon={faChevronDown}/>
         </Button>
     );
 }

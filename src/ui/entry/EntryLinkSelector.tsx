@@ -2,6 +2,7 @@ import React from 'react';
 // @ts-ignore
 import shortenUrl from 'shorten-url';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { useButtonPopper } from "ui/hook";
@@ -45,7 +46,7 @@ export default function EntryLinkSelector({urls, onSelect, disabled}: Props) {
                          className="fade dropdown-menu popover shadow-sm show">
                         {uniqueUrls.map(url =>
                             <div key={url} className="item" onClick={onClick(url)}>
-                                <FontAwesomeIcon icon="link"/>
+                                <FontAwesomeIcon icon={faLink}/>
                                 {" " + shortenUrl(url, 75)}
                             </div>
                         )}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faKey, faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { format, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
@@ -54,15 +55,15 @@ export default function SettingsItemTokens() {
             <br/>
             {tokens.map(tk =>
                 <div className="token-info" key={tk.id}>
-                    <FontAwesomeIcon icon="key" className="icon"/>
+                    <FontAwesomeIcon icon={faKey} className="icon"/>
                     <Button variant="link" onClick={onClick(tk.id)}>{getName(tk)}</Button>
                     {!isHomeToken(tk, homeToken) ?
                         <>
                             <button className="token-button" title={t("rename")} onClick={onEdit(tk)}>
-                                <FontAwesomeIcon icon="pen"/>
+                                <FontAwesomeIcon icon={faPen}/>
                             </button>
                             <button className="token-button red" title={t("delete")} onClick={onDelete(tk)}>
-                                <FontAwesomeIcon icon="trash-can"/>
+                                <FontAwesomeIcon icon={faTrashCan}/>
                             </button>
                         </>
                     :

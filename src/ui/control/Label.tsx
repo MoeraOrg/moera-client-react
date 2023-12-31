@@ -1,5 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
+import { faBackspace, faUndoAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { LabelButton, Wrapper } from "ui/control";
@@ -49,10 +50,10 @@ export function Label({
             }
             <Wrapper className={cx({"ms-2 align-self-center": (undo || reset || setting) && horizontal && children})}>
                 {undo &&
-                    <LabelButton icon="undo-alt" className="form-label-button-undo" title={t("undo")} onClick={onUndo}/>
+                    <LabelButton icon={faUndoAlt} className="form-label-button-undo" title={t("undo")} onClick={onUndo}/>
                 }
                 {reset &&
-                    <LabelButton icon="backspace" className="form-label-button-reset" title={t("reset-to-default")}
+                    <LabelButton icon={faBackspace} className="form-label-button-reset" title={t("reset-to-default")}
                                  onClick={onReset}/>
                 }
                 {(name && setting != null) &&

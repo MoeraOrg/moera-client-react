@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
@@ -34,7 +35,7 @@ export function DropdownMenu({content, items, className, disabled, onDialogOpene
             <button className={cx("menu", className)} disabled={disabled} ref={setButtonRef} aria-label={t("menu")}
                     onClick={onToggle}>
                 {children ??
-                    <FontAwesomeIcon icon="chevron-down" className="chevron"/>
+                    <FontAwesomeIcon icon={faChevronDown} className="chevron"/>
                 }
             </button>
             {visible &&

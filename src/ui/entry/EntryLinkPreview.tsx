@@ -2,6 +2,8 @@ import React, { MouseEventHandler, useState } from 'react';
 import * as URI from 'uri-js';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { faCircle } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
@@ -127,8 +129,8 @@ export const EditButton = ({onClick}: EditButtonProps) => {
     return (
         <div className="edit-button" title={t("edit")} onClick={onClick}>
         <span className="fa-layers fa-fw">
-            <FontAwesomeIcon icon="circle"/>
-            <span className="pen"><FontAwesomeIcon icon="pen" color="white"/></span>
+            <FontAwesomeIcon icon={faCircle}/>
+            <span className="pen"><FontAwesomeIcon icon={faPen} color="white"/></span>
         </span>
         </div>
     );

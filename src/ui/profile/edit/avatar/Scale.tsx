@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from "ui/control";
@@ -33,12 +34,12 @@ export default function Scale({max = 1, value, onChange}: Props) {
     return (
         <div className="scale">
             <Button variant="light" size="sm" title={t("zoom-out")} onClick={onClick(-1)} disabled={value === 1}>
-                <FontAwesomeIcon icon="minus"/>
+                <FontAwesomeIcon icon={faMinus}/>
             </Button>
             <input type="range" className="form-control-range" min={1} max={max} step="any" value={value}
                    onChange={onScaleChange}/>
             <Button variant="light" size="sm" title={t("zoom-in")} onClick={onClick(1)} disabled={value === max}>
-                <FontAwesomeIcon icon="plus"/>
+                <FontAwesomeIcon icon={faPlus}/>
             </Button>
         </div>
     );

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { nodeCardCopyMention } from "state/nodecards/actions";
@@ -19,7 +20,7 @@ export default function CopyMentionButton({nodeName, fullName}: Props) {
 
     return (
         <Button variant="outline-info" size="sm" onClick={onClick}>
-            <FontAwesomeIcon icon="at"/> {t("mention")}
+            <FontAwesomeIcon icon={faAt}/> {t("mention")}
         </Button>
     );
 }

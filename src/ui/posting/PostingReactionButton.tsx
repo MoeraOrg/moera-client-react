@@ -1,13 +1,13 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { IconName } from '@fortawesome/free-regular-svg-icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { postingReact, postingReactionDelete } from "state/postings/actions";
 import { ReactionButton } from "ui/control";
 import "./PostingButton.css";
 
 interface Props {
-    icon: IconName;
+    icon: IconProp;
     caption: string;
     invisible: boolean;
     id: string;

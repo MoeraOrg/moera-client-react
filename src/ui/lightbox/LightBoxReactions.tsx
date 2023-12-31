@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { faThumbsDown, faThumbsUp } from '@fortawesome/free-regular-svg-icons';
 
 import { ClientReactionInfo } from "api";
 import { ClientState } from "state/state";
@@ -35,14 +36,14 @@ export default function LightBoxReactions() {
             <PostingReactions postingId={posting.id} postingReceiverName={posting.receiverName}
                               reactions={posting.reactions}/>
             {!hide &&
-                <ReactionButton icon="thumbs-up" className="lightbox-reaction-button positive"
+                <ReactionButton icon={faThumbsUp} className="lightbox-reaction-button positive"
                                 invisible={cr.emoji != null && cr.negative} negative={false}
                                 emoji={!cr.negative ? cr.emoji : null}
                                 accepted={posting.acceptedReactions?.positive ?? ""}
                                 onReactionAdd={onReactionAdd} onReactionDelete={onReactionDelete}/>
             }
             {!hide &&
-                <ReactionButton icon="thumbs-down" className="lightbox-reaction-button negative"
+                <ReactionButton icon={faThumbsDown} className="lightbox-reaction-button negative"
                                 invisible={cr.emoji != null && !cr.negative} negative={true}
                                 emoji={cr.negative ? cr.emoji : null}
                                 accepted={posting.acceptedReactions?.negative ?? ""}
