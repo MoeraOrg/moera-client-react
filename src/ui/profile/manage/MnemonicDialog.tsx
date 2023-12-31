@@ -1,12 +1,11 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { mnemonicClose } from "state/nodename/actions";
 import { Button, ModalDialog } from "ui/control";
-import { CheckboxField } from "ui/control/field";
 import store from "state/store";
 
 interface ColumnProps {
@@ -32,6 +31,7 @@ type Props = FormikProps<Values>;
 function MnemonicDialog({values: {confirmed}}: Props) {
     const name = useSelector((state: ClientState) => state.nodeName.mnemonicName);
     const mnemonic = useSelector((state: ClientState) => state.nodeName.mnemonic);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     if (!mnemonic) {
@@ -39,7 +39,7 @@ function MnemonicDialog({values: {confirmed}}: Props) {
     }
 
     return (
-        <ModalDialog title={t("registered-name-secret")}>
+        <ModalDialog title={t("registered-name-secret")} onClose={() => dispatch(mnemonicClose())}>
             <Form>
                 <div className="modal-body">
                     <p dangerouslySetInnerHTML={{__html: t("write-down-words", {name})}}/>
@@ -48,10 +48,9 @@ function MnemonicDialog({values: {confirmed}}: Props) {
                         <Column mnemonic={mnemonic} start={8} end={16}/>
                         <Column mnemonic={mnemonic} start={16} end={24}/>
                     </div>
-                    <CheckboxField name="confirmed" title={t("written-down-words")}/>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="primary" type="submit" disabled={!confirmed}>{t("close")}</Button>
+                    <Button variant="primary" type="submit">{t("close")}</Button>
                 </div>
             </Form>
         </ModalDialog>
