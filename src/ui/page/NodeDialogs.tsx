@@ -14,10 +14,8 @@ const ImageEditDialog = React.lazy(() => import("ui/imageeditdialog/ImageEditDia
 const DonateDialog = React.lazy(() => import("ui/donatedialog/DonateDialog"));
 const PeopleHideDialog = React.lazy(() => import("ui/peoplehidedialog/PeopleHideDialog"));
 const FriendGroupsDialog = React.lazy(() => import("ui/friendgroupsdialog/FriendGroupsDialog"));
-const AskDialog = React.lazy(() => import("ui/askdialog/AskDialog"));
 const BlockDialog = React.lazy(() => import("ui/blockdialog/BlockDialog"));
-const SheriffOrderDialog = React.lazy(() => import("ui/sherifforderdialog/SheriffOrderDialog"));
-const SheriffOrderDetailsDialog = React.lazy(() => import("ui/sherifforderdetailsdialog/SheriffOrderDetailsDialog"));
+const SheriffDialogs = React.lazy(() => import("ui/page/SheriffDialogs"));
 
 export default function NodeDialogs() {
     const showReactionsDialog = useSelector((state: ClientState) => state.reactionsDialog.show);
@@ -29,9 +27,10 @@ export default function NodeDialogs() {
     const showEntryCopyTextDialog = useSelector((state: ClientState) => state.entryCopyTextDialog.show);
     const showPeopleHideDialog = useSelector((state: ClientState) => state.peopleHideDialog.show);
     const showFriendGroupsDialog = useSelector((state: ClientState) => state.friendGroupsDialog.show);
-    const showAskDialog = useSelector((state: ClientState) => state.askDialog.show);
     const showBlockDialog = useSelector((state: ClientState) => state.blockDialog.show);
     const showBlockingDetailsDialog = useSelector((state: ClientState) => state.blockingDetailsDialog.show);
+
+    const showAskDialog = useSelector((state: ClientState) => state.askDialog.show);
     const showSheriffOrderDialog = useSelector((state: ClientState) => state.sheriffOrderDialog.show);
     const showSheriffOrderDetailsDialog = useSelector((state: ClientState) => state.sheriffOrderDetailsDialog.show);
 
@@ -59,17 +58,13 @@ export default function NodeDialogs() {
                 {showFriendGroupsDialog && <FriendGroupsDialog/>}
             </Suspense>
             <Suspense fallback={null}>
-                {showAskDialog && <AskDialog/>}
-            </Suspense>
-            <Suspense fallback={null}>
                 {showBlockDialog && <BlockDialog/>}
             </Suspense>
             {showBlockingDetailsDialog && <BlockingDetailsDialog/>}
             <Suspense fallback={null}>
-                {showSheriffOrderDialog && <SheriffOrderDialog/>}
-            </Suspense>
-            <Suspense fallback={null}>
-                {showSheriffOrderDetailsDialog && <SheriffOrderDetailsDialog/>}
+                {(showAskDialog || showSheriffOrderDialog || showSheriffOrderDetailsDialog) &&
+                    <SheriffDialogs/>
+                }
             </Suspense>
         </>
     );

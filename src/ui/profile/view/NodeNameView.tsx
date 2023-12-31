@@ -8,10 +8,10 @@ import { nodeNameUpdateDialog, registerNameDialog } from "state/nodename/actions
 import { ClientState } from "state/state";
 import ManagementMenu from "ui/profile/view/ManagementMenu";
 import OperationStatus from "ui/profile/view/OperationStatus";
+import RegisterNameDialog from "ui/profile/manage/RegisterNameDialog";
 import { mentionName } from "util/names";
 import "./NodeNameView.css";
 
-const RegisterNameDialog = React.lazy(() => import("ui/profile/manage/RegisterNameDialog"));
 const NodeNameUpdateDialog = React.lazy(() => import("ui/profile/manage/NodeNameUpdateDialog"));
 
 export default function NodeNameView() {
@@ -50,11 +50,7 @@ export default function NodeNameView() {
                 }
                 {loading && <Loading/>}
             </div>
-            {showRegisterNameDialog &&
-                <Suspense fallback={null}>
-                    <RegisterNameDialog/>
-                </Suspense>
-            }
+            {showRegisterNameDialog && <RegisterNameDialog/>}
             {showNodeNameUpdateDialog &&
                 <Suspense fallback={null}>
                     <NodeNameUpdateDialog/>

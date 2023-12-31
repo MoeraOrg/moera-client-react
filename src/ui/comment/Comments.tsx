@@ -24,12 +24,12 @@ import {
     isDetailedPostingGalleryFocused
 } from "state/detailedposting/selectors";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
+import CommentComposeLine from "ui/comment/CommentComposeLine";
 import CommentsSentinelLine from "ui/comment/CommentsSentinelLine";
 import Comment from "ui/comment/Comment";
 import { getPageHeaderHeight, isElementCompletelyVisible } from "util/ui";
 import "./Comments.css";
 
-const CommentComposeLine = React.lazy(() => import("ui/comment/CommentComposeLine"));
 const CommentDialog = React.lazy(() => import("ui/comment/CommentDialog"));
 
 export default function Comments() {
@@ -147,9 +147,7 @@ export default function Comments() {
                     </>
                 }
             </div>
-            <Suspense fallback={null}>
-                <CommentComposeLine/>
-            </Suspense>
+            <CommentComposeLine/>
             {showCommentDialog &&
                 <Suspense fallback={null}>
                     <CommentDialog/>
