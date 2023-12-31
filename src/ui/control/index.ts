@@ -34,8 +34,6 @@ export { PrincipalSelect } from "ui/control/PrincipalSelect";
 export { ReactionButton } from "ui/control/ReactionButton";
 export { ReactionEmojiButton } from "ui/control/ReactionEmojiButton";
 export { ReactionTotals } from "ui/control/ReactionTotals";
-export { RichTextEditor } from "ui/control/richtexteditor/RichTextEditor";
-export { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 export { SheriffInvisible } from "ui/control/SheriffInvisible";
 export { SignatureVerifyButton } from "ui/control/SignatureVerifyButton";
 export { SubscribeButton } from "ui/control/subscribebutton/SubscribeButton";

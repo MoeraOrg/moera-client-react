@@ -11,8 +11,7 @@ import {
     VerifiedMediaFile
 } from "api";
 import { commentPost } from "state/detailedposting/actions";
-import { RichTextValue } from "ui/control";
-import { bodyToLinkPreviews, RichTextLinkPreviewsValue } from "ui/control/richtexteditor/RichTextLinkPreviews";
+import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
 import { replaceSmileys } from "util/text";
 import { toAvatarDescription } from "util/avatar";
 import store from "state/store";

@@ -11,8 +11,9 @@ import { getSetting } from "state/settings/selectors";
 import { closeSheriffOrderDialog, sheriffOrderDialogSubmit } from "state/sherifforderdialog/actions";
 import { SheriffOrderTarget } from "state/sherifforderdialog/state";
 import { NameDisplayMode } from "ui/types";
-import { Button, ModalDialog, RichTextValue } from "ui/control";
-import { CheckboxField, RichTextField, SelectField, SelectFieldChoice } from "ui/control/field";
+import { Button, ModalDialog } from "ui/control";
+import { CheckboxField, SelectField, SelectFieldChoice } from "ui/control/field";
+import { RichTextField, RichTextValue } from "ui/control/richtexteditor";
 import { formatFullName } from "util/names";
 import store from "state/store";
 

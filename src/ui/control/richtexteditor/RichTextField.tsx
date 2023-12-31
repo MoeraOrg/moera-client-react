@@ -4,7 +4,8 @@ import { useFormikContext } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { PostingFeatures, SourceFormat } from "api";
-import { FormGroup, RichTextEditor, RichTextValue } from "ui/control";
+import { FormGroup } from "ui/control";
+import { RichTextEditor, RichTextValue } from "ui/control/richtexteditor";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import FieldError from "ui/control/field/FieldError";
 

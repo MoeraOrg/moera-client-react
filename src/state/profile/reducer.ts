@@ -1,10 +1,10 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
-import { arrayMove } from '@dnd-kit/sortable';
 
 import { AvatarInfo } from "api";
 import { ProfileState } from "state/profile/state";
 import { ClientAction } from "state/action";
+import { arrayMove } from "util/misc";
 
 const emptyProfileInfo = {
     fullName: null,

@@ -16,8 +16,8 @@ import {
     isCommentComposerReady
 } from "state/detailedposting/selectors";
 import { Browser } from "ui/browser";
-import { AvatarField, RichTextField } from "ui/control/field";
-import RichTextLinkPreviews from "ui/control/richtexteditor/RichTextLinkPreviews";
+import { AvatarField } from "ui/control/field";
+import { RichTextField, RichTextLinkPreviews } from "ui/control/richtexteditor";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
 import {
     areValuesEmpty,

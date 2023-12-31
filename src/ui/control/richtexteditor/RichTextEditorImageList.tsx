@@ -13,7 +13,7 @@ import {
 import { SortableContext } from '@dnd-kit/sortable';
 
 import { PrivateMediaFileInfo, VerifiedMediaFile } from "api";
-import { RichTextValue } from "ui/control";
+import { RichTextValue } from "ui/control/richtexteditor";
 import UploadedImage from "ui/control/richtexteditor/UploadedImage";
 import AttachedImage from "ui/control/richtexteditor/AttachedImage";
 import { mediaHashesExtract } from "util/media-images";

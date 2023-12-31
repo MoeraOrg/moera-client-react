@@ -1,12 +1,12 @@
 import React, { useCallback, useRef, useState } from 'react';
 import cx from 'classnames';
-import { arrayMove } from '@dnd-kit/sortable';
 
 import { PostingFeatures, PrivateMediaFileInfo, VerifiedMediaFile } from "api";
 import RichTextArea, { RichTextAreaProps } from "ui/control/richtexteditor/RichTextArea";
 import RichTextEditorPanel from "ui/control/richtexteditor/RichTextEditorPanel";
 import RichTextEditorDropzone from "ui/control/richtexteditor/RichTextEditorDropzone";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
+import { arrayMove } from "util/misc";
 import "./RichTextEditor.css";
 
 type Props = {

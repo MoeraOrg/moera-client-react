@@ -8,8 +8,9 @@ import { SHERIFF_ORDER_REASON_CODES, SheriffComplainDecisionText, SheriffOrderRe
 import { ClientState } from "state/state";
 import { complainsDecisionPost } from "state/complains/actions";
 import { ExtComplainGroupInfo } from "state/complains/state";
-import { Button, RichTextValue } from "ui/control";
-import { CheckboxField, RichTextField, SelectField, SelectFieldChoice } from "ui/control/field";
+import { Button } from "ui/control";
+import { CheckboxField, SelectField, SelectFieldChoice } from "ui/control/field";
+import { RichTextValue, RichTextField } from "ui/control/richtexteditor";
 import store from "state/store";
 import "./ComplainDecisionEditor.css";
 

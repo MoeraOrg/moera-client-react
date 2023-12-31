@@ -17,8 +17,7 @@ import {
 import { composePost } from "state/compose/actions";
 import { DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import { settingsUpdate } from "state/settings/actions";
-import { RichTextValue } from "ui/control";
-import { bodyToLinkPreviews, RichTextLinkPreviewsValue } from "ui/control/richtexteditor/RichTextLinkPreviews";
+import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
 import store from "state/store";

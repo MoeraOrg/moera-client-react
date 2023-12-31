@@ -61,3 +61,10 @@ export function commaSeparatedFlags(flags: Partial<Record<string, boolean>>): st
     const names = Object.entries(flags).filter(([_, value]) => value).map(([name]) => name);
     return names.length > 0 ? names.join(',') : null;
 }
+
+// Taken from @dnd-kit/sortable to use without dependency on the whole @dnd-kit
+export function arrayMove<T>(array: T[], from: number, to: number): T[] {
+    const newArray = array.slice();
+    newArray.splice(to < 0 ? newArray.length + to : to, 0, newArray.splice(from, 1)[0]);
+    return newArray;
+}

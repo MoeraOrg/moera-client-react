@@ -18,7 +18,8 @@ import {
     ComposePageValues
 } from "ui/compose/posting-compose";
 import { ConflictWarning, Loading } from "ui/control";
-import { AvatarField, InputField, RichTextField } from "ui/control/field";
+import { AvatarField, InputField } from "ui/control/field";
+import { RichTextField, RichTextLinkPreviews } from "ui/control/richtexteditor";
 import { Page } from "ui/page/Page";
 import PageHeader from "ui/page/PageHeader";
 import Jump from "ui/navigation/Jump";
@@ -26,7 +27,6 @@ import ComposeFullName from "ui/compose/ComposeFullName";
 import ComposePublishAt from "ui/compose/ComposePublishAt";
 import ComposeViewPrincipal from "ui/compose/ComposeViewPrincipal";
 import ComposeFormattingHelp from "ui/compose/ComposeFormattingHelp";
-import RichTextLinkPreviews from "ui/control/richtexteditor/RichTextLinkPreviews";
 import ComposeBodyFormatButton from "ui/compose/ComposeBodyFormatButton";
 import ComposeCommentsButton from "ui/compose/ComposeCommentsButton";
 import ComposeReactionsButton from "ui/compose/ComposeReactionsButton";
