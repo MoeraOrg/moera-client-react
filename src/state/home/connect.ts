@@ -51,7 +51,7 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
         if (assign) {
             yield* call(Node.createCredentials, action, location, {login, password}, ["credentials.already-created"]);
         } else if (oldPassword || resetToken) {
-            yield* call(Node.updateCredentials, action, location, {resetToken, oldPassword, login, password},
+            yield* call(Node.updateCredentials, action, location, {token: resetToken, oldPassword, login, password},
                 ["credentials.wrong-reset-token", "credentials.reset-token-expired", "credentials.login-incorrect"]);
         }
         info = yield* call(Node.createToken, action, location, {login, password},
