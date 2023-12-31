@@ -17,14 +17,16 @@ import {
     commentsPastSliceLoad,
     commentsReceiverFeaturesLoad,
     commentsReceiverSwitch,
-    commentsScrollToAnchor, CommentsScrollToAnchorAction,
+    commentsScrollToAnchor,
+    CommentsScrollToAnchorAction,
     commentsUnset,
     commentsUpdate,
     detailedPostingLoad,
     detailedPostingLoadAttached,
     DetailedPostingLoadedAction,
     focusComment,
-    focusedCommentLoad, FocusedCommentLoadedAction,
+    focusedCommentLoad,
+    FocusedCommentLoadedAction,
     glanceCommentLoad
 } from "state/detailedposting/actions";
 import {
