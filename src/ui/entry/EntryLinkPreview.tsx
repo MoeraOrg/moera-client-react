@@ -2,8 +2,7 @@ import React, { MouseEventHandler, useState } from 'react';
 import * as URI from 'uri-js';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
-import { faCircle } from '@fortawesome/free-regular-svg-icons';
+import { faCircle, faPen } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
