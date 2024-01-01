@@ -160,7 +160,7 @@ export default class EventsBackend {
     }
 
     public wakeUp() {
-        if (!navigator.onLine || this.lastEventSentAt == null || this.wakingUp == null) {
+        if (!navigator.onLine || this.lastEventSentAt == null || !this.wakingUp) {
             return;
         }
 
