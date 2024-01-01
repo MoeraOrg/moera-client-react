@@ -178,9 +178,13 @@ export function isCommentComposerFocused(state: ClientState): boolean {
 }
 
 export function isCommentComposeDraftToBeLoaded(state: ClientState): boolean {
+    const ownerName = getOwnerName(state);
     const posting = getDetailedPosting(state);
-    return posting != null && isConnectedToHome(state) && !state.detailedPosting.compose.loadedDraft
-        && !state.detailedPosting.compose.loadingDraft;
+    if (ownerName == null || posting == null) {
+        return false;
+    }
+    return isConnectedToHome(state) && !isCommentsReceiverToBeSwitched(state)
+        && !state.detailedPosting.compose.loadedDraft && !state.detailedPosting.compose.loadingDraft;
 }
 
 export function isCommentComposerReady(state: ClientState): boolean {
