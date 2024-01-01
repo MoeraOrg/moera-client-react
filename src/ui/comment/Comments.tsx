@@ -92,7 +92,7 @@ export default function Comments() {
 
     const topmostMoment = getTopmostMoment();
     useEffect(() => {
-        if (anchor == null) {
+        if (anchor == null && topmostMoment != null) {
             scrollTo(topmostMoment);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -161,7 +161,7 @@ function commentMoment(comment: HTMLElement): number {
     return comment.dataset.moment != null ? parseInt(comment.dataset.moment) : 0;
 }
 
-function getTopmostMoment(): number {
+function getTopmostMoment(): number | null {
     const top = getPageHeaderHeight();
     const comments = document.getElementsByClassName("comment");
     for (let i = 0; i < comments.length; i++) {
@@ -173,7 +173,7 @@ function getTopmostMoment(): number {
             return commentMoment(comment);
         }
     }
-    return Number.MAX_SAFE_INTEGER;
+    return null;
 }
 
 function getCommentAt(moment: number): HTMLElement | null {
