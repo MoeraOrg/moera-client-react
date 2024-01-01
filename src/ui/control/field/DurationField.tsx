@@ -1,5 +1,5 @@
 import React from 'react';
-import { NumberPicker } from 'react-widgets';
+import NumberPicker from 'react-widgets/NumberPicker';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { NumberPicker } from 'react-widgets';
+import NumberPicker from 'react-widgets/NumberPicker';
 
 import { FormGroup } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useField } from 'formik';
-import { Combobox } from 'react-widgets';
+import Combobox from 'react-widgets/Combobox';
 import { TextAccessor } from 'react-widgets/cjs/Accessors';
 
 import { FormGroup, Wrapper } from "ui/control";
