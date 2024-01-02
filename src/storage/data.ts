@@ -35,8 +35,8 @@ export interface ClientData {
 export function getStorageItem(key: "currentRoot"): string | null;
 export function getStorageItem(key: "roots"): RootInfo[] | null;
 export function getStorageItem(key: "clientData", index: string): ClientData | null;
-export function getStorageItem(key: "names"): NameDetails[] | null;
-export function getStorageItem(key: StorageKey, index?: string): any {
+export function getStorageItem(key: "names", index: string | null): NameDetails[] | null;
+export function getStorageItem(key: StorageKey, index?: string | null): any {
     const fullKey = index != null ? `${key};${index}` : key;
     const value = window.localStorage.getItem(fullKey);
     try {
@@ -49,7 +49,7 @@ export function getStorageItem(key: StorageKey, index?: string): any {
 export function setStorageItem(key: "currentRoot", index: null, value: string): void;
 export function setStorageItem(key: "roots", index: null, value: RootInfo[]): void;
 export function setStorageItem(key: "clientData", index: string, value: ClientData): void;
-export function setStorageItem(key: "names", index: null, value: NameDetails[]): void;
+export function setStorageItem(key: "names", index: string | null, value: NameDetails[]): void;
 export function setStorageItem(key: StorageKey, index: string | null, value: null): void;
 export function setStorageItem(key: StorageKey, index: string | null, value: any): void {
     const fullKey = index != null ? `${key};${index}` : key;
@@ -78,10 +78,10 @@ export function setRoot(roots: RootInfo[], location: string, nodeName: string | 
     return roots;
 }
 
-export function getNames(): NameDetails[] {
-    return getStorageItem("names") ?? [];
+export function getNames(serverUrl: string | null): NameDetails[] {
+    return getStorageItem("names", serverUrl) ?? [];
 }
 
-export function clearNames(): void {
-    removeStorageItem("names");
+export function clearNames(serverUrl: string | null): void {
+    removeStorageItem("names", serverUrl);
 }

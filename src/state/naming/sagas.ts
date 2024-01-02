@@ -1,28 +1,29 @@
 import { call, put, select } from 'typed-redux-saga';
-import { CallEffect, PutEffect, SelectEffect } from 'redux-saga/effects';
 
 import { Naming, NodeName } from "api";
 import { Storage } from "storage";
+import { executor } from "state/executor";
+import { namingInitialized } from "state/init-selectors";
+import { ClientAction } from "state/action";
+import { ClientState } from "state/state";
 import { getComments, getDetailedPosting } from "state/detailedposting/selectors";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
+import { getOwnerName } from "state/node/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
+import { getSetting } from "state/settings/selectors";
 import {
     namingNameLoad,
     NamingNameLoadAction,
     namingNameLoaded,
-    namingNameLoadFailed, NamingNamesMaintenanceAction,
+    namingNameLoadFailed,
+    NamingNamesMaintenanceAction,
     namingNamesPurge,
     namingNamesUsed,
     NamingNamesUsedAction
 } from "state/naming/actions";
 import { getNamingNameDetails, getNamingNamesToBeLoaded } from "state/naming/selectors";
-import { getOwnerName } from "state/node/selectors";
 import { getReactionsDialogItems } from "state/reactionsdialog/selectors";
-import { executor } from "state/executor";
-import { ClientState } from "state/state";
-import { namingInitialized } from "state/init-selectors";
 import { now } from "util/misc";
-import { ClientAction } from "state/action";
 
 const NAME_USAGE_UPDATE_PERIOD = 60;
 const MAX_NAMES_SIZE = 500;
@@ -49,7 +50,7 @@ function* namingNameLoadSaga(action: NamingNameLoadAction) {
     yield* call(fetchName, action, action.payload.name, false);
 }
 
-export function* getNodeUri(caller: ClientAction | null, nodeName: string): Generator<CallEffect, string | null> {
+export function* getNodeUri(caller: ClientAction | null, nodeName: string) {
     return (yield* call(getNameDetails, caller, nodeName)).nodeUri;
 }
 
@@ -62,47 +63,64 @@ export interface NameInfo {
     nodeUri: string | null;
 }
 
-type NameInfoGenerator = Generator<CallEffect | PutEffect | SelectEffect, NameInfo>;
-
-export function* getNameDetails(
-    caller: ClientAction | null, nodeName: string, includeSimilar: boolean = false
-): NameInfoGenerator {
-    const details = yield* select(state => getNamingNameDetails(state, nodeName));
+export function* getNameDetails(caller: ClientAction | null, nodeName: string, includeSimilar: boolean = false) {
+    const {serverUrl, details} = yield* select((state: ClientState) => ({
+        serverUrl: getSetting(state, "naming.location") as string,
+        details: getNamingNameDetails(state, nodeName)
+    }));
     if (details.loaded) {
         if (details.nodeUri != null && now() - details.accessed >= NAME_USAGE_UPDATE_PERIOD) {
-            Storage.storeName(nodeName, details.nodeUri, details.updated);
+            Storage.storeName(serverUrl, nodeName, details.nodeUri, details.updated);
             yield* put(namingNamesUsed([nodeName]).causedBy(caller));
         }
-        return details;
+        return {nodeName, ...details};
     }
     return yield* call(fetchName, caller, nodeName, includeSimilar);
 }
 
-function* fetchName(caller: ClientAction | null, nodeName: string, includeSimilar: boolean): NameInfoGenerator {
+type PromiseResolver = (value: NameInfo | PromiseLike<NameInfo>) => void;
+const fetching = new Map<string, PromiseResolver[]>();
+
+function* fetchName(caller: ClientAction | null, nodeName: string, includeSimilar: boolean) {
+    if (!includeSimilar && fetching.has(nodeName)) {
+        const promise = new Promise<NameInfo>(resolve => fetching.get(nodeName)!.push(resolve));
+        return yield* call(() => promise);
+    }
+
     let nodeNameFound: string = nodeName;
     let nodeUri: string | null = null;
     try {
         const {name, generation} = NodeName.parse(nodeName);
         if (name != null && generation != null) {
+            if (!includeSimilar) {
+                fetching.set(nodeName, []);
+            }
             const current = yield* call(Naming.getCurrent, caller, name, generation);
             if (current?.nodeUri != null) {
                 nodeUri = current.nodeUri;
             } else if (includeSimilar) {
                 const similar = yield* call(Naming.getSimilar, caller, name);
                 if (similar?.nodeUri != null) {
-                    nodeNameFound = similar.name;
+                    nodeNameFound = `${similar.name}_${similar.generation}`;
                     nodeUri = similar.nodeUri;
                 }
             }
             if (nodeUri) {
-                Storage.storeName(nodeNameFound, nodeUri, now());
+                const serverUrl = (yield* select(state => getSetting(state, "naming.location"))) as string;
+                Storage.storeName(serverUrl, nodeNameFound, nodeUri, now());
                 yield* put(namingNameLoaded(nodeNameFound, nodeUri, now()).causedBy(caller));
             }
         }
     } catch (e) {
         yield* put(namingNameLoadFailed(nodeName).causedBy(caller));
     }
-    return {nodeName: nodeNameFound, accessed: 0, updated: 0, loading: false, loaded: true, nodeUri};
+
+    const info = {nodeName: nodeNameFound, accessed: 0, updated: 0, loading: false, loaded: true, nodeUri};
+    if (fetching.has(info.nodeName)) {
+        fetching.get(info.nodeName)?.forEach(resolve => resolve(info));
+        fetching.delete(info.nodeName);
+    }
+    return info;
 }
 
 function* namingNamesMaintenanceSaga(action: NamingNamesMaintenanceAction) {
@@ -124,7 +142,7 @@ function* namingNamesMaintenanceSaga(action: NamingNamesMaintenanceAction) {
     yield* put(namingNamesPurge(unused.splice(0, purgeSize)).causedBy(action));
 }
 
-function* getUsedNames(): Generator<SelectEffect, Set<string>> {
+function* getUsedNames() {
     let used = new Set<string>();
 
     const {feedNames, postings} = yield* select((state: ClientState) => ({

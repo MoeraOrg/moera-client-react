@@ -31,7 +31,7 @@ if (rootElement != null) {
         </Provider>
     )
 }
-sendInitAction();
 Storage.loadData();
+sendInitAction();
 
 serviceWorker.unregister();

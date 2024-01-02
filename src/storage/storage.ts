@@ -14,7 +14,7 @@ import { namingNamesPopulate } from "state/naming/actions";
 import { settingsClientValuesSet } from "state/settings/actions";
 import * as Access from "./access"
 
-function loadedData(data: Access.StoredData) {
+function loadedData(data: Access.StoredData): void {
     if (!data) {
         return;
     }
@@ -119,6 +119,6 @@ export function switchData(location: string): void {
     loadedData(Access.switchData(location))
 }
 
-export function storeName(name: string, nodeUri: string, updated: number) {
-    Access.storeName(name, nodeUri, updated);
+export function storeName(serverUrl: string, name: string, nodeUri: string, updated: number) {
+    Access.storeName(serverUrl, name, nodeUri, updated);
 }

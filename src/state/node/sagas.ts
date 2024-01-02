@@ -1,7 +1,7 @@
 import { call, put, select } from 'typed-redux-saga';
 import * as URI from 'uri-js';
 
-import { Naming, Node, NodeName } from "api";
+import { Node } from "api";
 import { errorThrown } from "state/error/actions";
 import { executor } from "state/executor";
 import {
@@ -18,7 +18,7 @@ import {
 import { getNodeRootPage, getOwnerName } from "state/node/selectors";
 import { initFromLocation } from "state/navigation/actions";
 import { homeIntroduced, namingInitialized } from "state/init-selectors";
-import { getNodeUri } from "state/naming/sagas";
+import { getNameDetails, getNodeUri } from "state/naming/sagas";
 import { normalizeUrl, rootUrl } from "util/url";
 import { WithContext } from "state/action-types";
 
@@ -50,7 +50,7 @@ function* ownerVerifySaga(action: OwnerVerifyAction) {
     }
     try {
         const nodeUri = normalizeUrl(yield* call(getNodeUri, action, ownerName));
-        const correct = rootPage === nodeUri;
+        const correct = normalizeUrl(nodeUri) === rootPage;
         yield* put(ownerVerified(ownerName, correct).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
@@ -64,17 +64,12 @@ function* ownerSwitchSaga(action: WithContext<OwnerSwitchAction>) {
     }
 
     try {
-        const {name, generation} = NodeName.parse(action.payload.name);
-        let info = name != null && generation != null ? yield* call(Naming.getCurrent, action, name, generation) : null;
-        if ((!info || !info.nodeUri) && name != null) {
-            info = yield* call(Naming.getSimilar, action, name);
-        }
-        if (info && info.nodeUri) {
+        const info = yield* call(getNameDetails, action, action.payload.name, true);
+        if (info && info.nodeName && info.nodeUri) {
             const {scheme, host, port, path = null} = URI.parse(info.nodeUri);
             if (scheme != null && host != null) {
-                const nodeName = `${info.name}_${info.generation}`;
                 const rootLocation = rootUrl(scheme, host, port);
-                yield* put(initFromLocation(nodeName, rootLocation, path, null, null).causedBy(action));
+                yield* put(initFromLocation(info.nodeName, rootLocation, path, null, null).causedBy(action));
             }
         } else {
             yield* put(ownerSwitchFailed().causedBy(action));

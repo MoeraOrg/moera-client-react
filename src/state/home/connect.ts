@@ -1,15 +1,18 @@
 import { call, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
-import { Naming, Node, NodeApiError, NodeName, selectApi } from "api";
+import { Node, NodeApiError, selectApi } from "api";
 import { Storage } from "storage";
+import { ClientState } from "state/state";
+import { getNodeUri } from "state/naming/sagas";
 import { messageBox } from "state/messagebox/actions";
 import {
     connectedToHome,
     connectionToHomeFailed,
     ConnectToHomeAction,
     homeOwnerSet,
-    homeOwnerVerified, HomeOwnerVerifyAction
+    homeOwnerVerified,
+    HomeOwnerVerifyAction
 } from "state/home/actions";
 import { errorThrown } from "state/error/actions";
 import { getHomeConnectionData, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
@@ -83,7 +86,13 @@ function* homeOwnerVerifySaga(action: HomeOwnerVerifyAction) {
             yield* call(Node.whoAmI, action, ":");
         yield* put(homeOwnerSet(nodeName, nodeNameChanging ?? false, fullName, avatar).causedBy(action));
 
-        const {location, login, token, permissions} = yield* select(getHomeConnectionData);
+        const {
+            connection: {location, login, token, permissions},
+            homeRootPage
+        } = yield* select((state: ClientState) => ({
+            connection: getHomeConnectionData(state),
+            homeRootPage: getHomeRootPage(state)
+        }));
         if (location != null) {
             Storage.storeConnectionData(location, nodeName, fullName, avatar, login, token, permissions);
         }
@@ -91,13 +100,8 @@ function* homeOwnerVerifySaga(action: HomeOwnerVerifyAction) {
         if (nodeName == null) {
             return;
         }
-        const {name, generation} = NodeName.parse(nodeName);
-        if (name == null) {
-            return;
-        }
-        const ndata = yield* call(Naming.getCurrent, action, name, generation);
-        const rootPage = yield* select(getHomeRootPage);
-        const correct = ndata != null && normalizeUrl(ndata.nodeUri) === rootPage;
+        const nodeUri = normalizeUrl(yield* call(getNodeUri, action, nodeName));
+        const correct = normalizeUrl(nodeUri) === homeRootPage;
         yield* put(homeOwnerVerified(nodeName, correct).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));

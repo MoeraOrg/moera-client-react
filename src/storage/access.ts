@@ -5,6 +5,7 @@ import { now } from "util/misc";
 import * as Data from "./data"
 
 const MAX_NAMES_SIZE = 500;
+const DEFAULT_NAMING_SERVER = "https://naming.moera.org/moera-naming";
 
 export interface StoredData {
     home?: Data.ClientHomeData & {
@@ -38,6 +39,17 @@ function buildData(currentRoot?: string | null, clientData?: Data.ClientData, ro
     return data;
 }
 
+function findNameServerUrl(clientData: Data.ClientData): string | null {
+    if (clientData.settings == null) {
+        return null;
+    }
+    const serverUrl = clientData.settings.find(([name]) => name === "naming.location")?.[1];
+    if (serverUrl === DEFAULT_NAMING_SERVER) {
+        return null;
+    }
+    return serverUrl ?? null;
+}
+
 export function loadData(): StoredData {
     const homeRoot = Data.getStorageItem("currentRoot");
     const roots = Data.getStorageItem("roots") ?? [];
@@ -46,7 +58,8 @@ export function loadData(): StoredData {
     }
     const clientData = Data.getStorageItem("clientData", homeRoot) ?? {};
     ObjectPath.set(clientData, "home.nodeName", Data.findRootName(roots, homeRoot));
-    return buildData(homeRoot, clientData, roots, Data.getNames());
+    const names = Data.getNames(findNameServerUrl(clientData));
+    return buildData(homeRoot, clientData, roots, names);
 }
 
 export function storeData(data: StoredData): Data.RootInfo[] {
@@ -95,7 +108,6 @@ export function deleteData(location: string | null): StoredData {
 
     let nodeName;
     if (location === homeRoot || homeRoot == null) {
-        Data.clearNames();
         if (roots.length === 0) {
             Data.removeStorageItem("currentRoot");
             return buildData(homeRoot, {}, roots);
@@ -108,7 +120,8 @@ export function deleteData(location: string | null): StoredData {
     }
     const clientData = Data.getStorageItem("clientData", homeRoot) ?? {};
     ObjectPath.set(clientData, "home.nodeName", nodeName);
-    return buildData(homeRoot, clientData, roots);
+    const names = Data.getNames(findNameServerUrl(clientData));
+    return buildData(homeRoot, clientData, roots, names);
 }
 
 export function switchData(location: string): StoredData {
@@ -120,15 +133,18 @@ export function switchData(location: string): StoredData {
         return buildData();
     }
     Data.setStorageItem("currentRoot", null, location);
-    Data.clearNames();
 
     const clientData = Data.getStorageItem("clientData", location) ?? {};
     ObjectPath.set(clientData, "home.nodeName", root.name);
-    return buildData(location, clientData, roots);
+    const names = Data.getNames(findNameServerUrl(clientData));
+    return buildData(location, clientData, roots, names);
 }
 
-export function storeName(name: string, nodeUri: string, updated: number): void {
-    let names = Data.getStorageItem("names") ?? [];
+export function storeName(serverUrl: string | null, name: string, nodeUri: string, updated: number): void {
+    if (serverUrl === DEFAULT_NAMING_SERVER) {
+        serverUrl = null;
+    }
+    let names = Data.getStorageItem("names", serverUrl) ?? [];
     names = names.filter(info => info.name !== name);
     updated ??= now();
     names.push({name, nodeUri, updated});
@@ -136,5 +152,5 @@ export function storeName(name: string, nodeUri: string, updated: number): void 
     if (names.length > MAX_NAMES_SIZE) {
         names.splice(0, names.length - MAX_NAMES_SIZE);
     }
-    Data.setStorageItem("names", null, names);
+    Data.setStorageItem("names", serverUrl, names);
 }
