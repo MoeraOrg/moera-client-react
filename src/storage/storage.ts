@@ -1,16 +1,17 @@
 import { AvatarImage, BlockedUserInfo, CarteInfo, CLIENT_SETTINGS_PREFIX } from "api";
 import store from "state/store";
+import { ClientAction } from "state/action";
 import { cartesSet } from "state/cartes/actions";
 import { getCartesListTtl } from "state/cartes/selectors";
 import {
     connectedToHome,
     connectionsSet,
     disconnectedFromHome,
-    homeReady,
-    homeInvisibleUsersLoaded
+    homeInvisibleUsersLoaded,
+    homeReady
 } from "state/home/actions";
 import { getHomeConnectionData } from "state/home/selectors";
-import { namingNamesPopulate } from "state/naming/actions";
+import { namingNamesPopulate, namingNamesSwitchServer } from "state/naming/actions";
 import { settingsClientValuesSet } from "state/settings/actions";
 import * as Access from "./access"
 
@@ -19,9 +20,6 @@ function loadedData(data: Access.StoredData): void {
         return;
     }
 
-    if (data.names != null) {
-        store.dispatch(namingNamesPopulate(data.names));
-    }
     if (data.roots != null) {
         store.dispatch(connectionsSet(data.roots));
     }
@@ -29,6 +27,12 @@ function loadedData(data: Access.StoredData): void {
     if (data.settings != null) {
         store.dispatch(settingsClientValuesSet(
             data.settings.map(([name, value]) => ({name: CLIENT_SETTINGS_PREFIX + name, value}))));
+    }
+
+    if (data.names != null) {
+        const serverUrl = Access.findNameServerUrl(data.settings) ?? Access.DEFAULT_NAMING_SERVER;
+        store.dispatch(namingNamesSwitchServer(serverUrl));
+        store.dispatch(namingNamesPopulate(serverUrl, data.names));
     }
 
     if (data.invisibleUsers != null) {
@@ -83,8 +87,8 @@ export function loadData(): void {
 }
 
 export function storeConnectionData(location: string, nodeName: string | null, fullName: string | null,
-    avatar: AvatarImage | null, login: string | null, token: string | null,
-    permissions: string[] | null): void {
+    avatar: AvatarImage | null, login: string | null, token: string | null, permissions: string[] | null
+): void {
     if (window.Android) {
         window.Android.connectedToHome(location + "/moera", token, nodeName);
     }
@@ -121,4 +125,10 @@ export function switchData(location: string): void {
 
 export function storeName(serverUrl: string, name: string, nodeUri: string, updated: number) {
     Access.storeName(serverUrl, name, nodeUri, updated);
+}
+
+export function reloadNames(cause: ClientAction | null, serverUrl: string) {
+    const names = Access.loadNames(serverUrl);
+    store.dispatch(namingNamesSwitchServer(serverUrl).causedBy(cause));
+    store.dispatch(namingNamesPopulate(serverUrl, names).causedBy(cause));
 }

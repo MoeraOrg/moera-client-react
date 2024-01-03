@@ -7,5 +7,6 @@ export interface NameState {
 }
 
 export interface NamingState {
+    serverUrl: string | null;
     names: Partial<Record<string, NameState>>;
 }

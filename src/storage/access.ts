@@ -5,7 +5,7 @@ import { now } from "util/misc";
 import * as Data from "./data"
 
 const MAX_NAMES_SIZE = 500;
-const DEFAULT_NAMING_SERVER = "https://naming.moera.org/moera-naming";
+export const DEFAULT_NAMING_SERVER = "https://naming.moera.org/moera-naming";
 
 export interface StoredData {
     home?: Data.ClientHomeData & {
@@ -39,11 +39,11 @@ function buildData(currentRoot?: string | null, clientData?: Data.ClientData, ro
     return data;
 }
 
-function findNameServerUrl(clientData: Data.ClientData): string | null {
-    if (clientData.settings == null) {
+export function findNameServerUrl(settings: [string, string | null][] | null | undefined): string | null {
+    if (settings == null) {
         return null;
     }
-    const serverUrl = clientData.settings.find(([name]) => name === "naming.location")?.[1];
+    const serverUrl = settings.find(([name]) => name === "naming.location")?.[1];
     if (serverUrl === DEFAULT_NAMING_SERVER) {
         return null;
     }
@@ -58,7 +58,7 @@ export function loadData(): StoredData {
     }
     const clientData = Data.getStorageItem("clientData", homeRoot) ?? {};
     ObjectPath.set(clientData, "home.nodeName", Data.findRootName(roots, homeRoot));
-    const names = Data.getNames(findNameServerUrl(clientData));
+    const names = Data.getNames(findNameServerUrl(clientData.settings));
     return buildData(homeRoot, clientData, roots, names);
 }
 
@@ -120,7 +120,7 @@ export function deleteData(location: string | null): StoredData {
     }
     const clientData = Data.getStorageItem("clientData", homeRoot) ?? {};
     ObjectPath.set(clientData, "home.nodeName", nodeName);
-    const names = Data.getNames(findNameServerUrl(clientData));
+    const names = Data.getNames(findNameServerUrl(clientData.settings));
     return buildData(homeRoot, clientData, roots, names);
 }
 
@@ -136,7 +136,7 @@ export function switchData(location: string): StoredData {
 
     const clientData = Data.getStorageItem("clientData", location) ?? {};
     ObjectPath.set(clientData, "home.nodeName", root.name);
-    const names = Data.getNames(findNameServerUrl(clientData));
+    const names = Data.getNames(findNameServerUrl(clientData.settings));
     return buildData(location, clientData, roots, names);
 }
 
@@ -153,4 +153,11 @@ export function storeName(serverUrl: string | null, name: string, nodeUri: strin
         names.splice(0, names.length - MAX_NAMES_SIZE);
     }
     Data.setStorageItem("names", serverUrl, names);
+}
+
+export function loadNames(serverUrl: string | null): Data.NameDetails[] {
+    if (serverUrl === DEFAULT_NAMING_SERVER) {
+        serverUrl = null;
+    }
+    return Data.getNames(serverUrl);
 }

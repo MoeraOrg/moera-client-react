@@ -18,6 +18,7 @@ import {
     namingNameLoadFailed,
     NamingNamesMaintenanceAction,
     namingNamesPurge,
+    NamingNamesReloadAction,
     namingNamesUsed,
     NamingNamesUsedAction
 } from "state/naming/actions";
@@ -31,7 +32,8 @@ const MAX_NAMES_SIZE = 500;
 export default [
     executor("NAMING_NAMES_USED", null, namingNamesUsedSaga, namingInitialized),
     executor("NAMING_NAME_LOAD", payload => payload.name, namingNameLoadSaga, namingInitialized),
-    executor("NAMING_NAMES_MAINTENANCE", "", namingNamesMaintenanceSaga)
+    executor("NAMING_NAMES_MAINTENANCE", "", namingNamesMaintenanceSaga),
+    executor("NAMING_NAMES_RELOAD", "", namingNamesReloadSaga)
 ];
 
 function* namingNamesUsedSaga(action: NamingNamesUsedAction) {
@@ -97,6 +99,7 @@ function* fetchName(caller: ClientAction | null, nodeName: string, includeSimila
             }
             const current = yield* call(Naming.getCurrent, caller, name, generation);
             if (current?.nodeUri != null) {
+                nodeNameFound = `${current.name}_${current.generation}`;
                 nodeUri = current.nodeUri;
             } else if (includeSimilar) {
                 const similar = yield* call(Naming.getSimilar, caller, name);
@@ -108,7 +111,7 @@ function* fetchName(caller: ClientAction | null, nodeName: string, includeSimila
             if (nodeUri) {
                 const serverUrl = (yield* select(state => getSetting(state, "naming.location"))) as string;
                 Storage.storeName(serverUrl, nodeNameFound, nodeUri, now());
-                yield* put(namingNameLoaded(nodeNameFound, nodeUri, now()).causedBy(caller));
+                yield* put(namingNameLoaded(serverUrl, nodeNameFound, nodeUri, now()).causedBy(caller));
             }
         }
     } catch (e) {
@@ -190,4 +193,14 @@ function* getUsedNames() {
     }
 
     return used;
+}
+
+function* namingNamesReloadSaga(action: NamingNamesReloadAction) {
+    const {namingLocation, serverUrl} = yield* select((state: ClientState) => ({
+        namingLocation: getSetting(state, "naming.location") as string,
+        serverUrl: state.naming.serverUrl
+    }));
+    if (namingLocation !== serverUrl) {
+        Storage.reloadNames(action, namingLocation);
+    }
 }

@@ -1,15 +1,17 @@
 import * as immutable from 'object-path-immutable';
 
-import { NamingState } from "state/naming/state";
+import { NameState, NamingState } from "state/naming/state";
 import { ClientAction } from "state/action";
 import { now } from "util/misc";
 
-const initialState = {
+const initialState: NamingState = {
+    serverUrl: null,
     names: {}
 };
 
-const emptyDetails = {
+const emptyDetails: NameState = {
     accessed: 0,
+    updated: 0,
     loading: false,
     loaded: false,
     nodeUri: null
@@ -41,14 +43,22 @@ export default (state: NamingState = initialState, action: ClientAction) => {
         case "NAMING_NAME_LOAD":
             return immutable.set(state, ["names", action.payload.name, "loading"], true);
 
-        case "NAMING_NAME_LOADED":
-            return immutable.assign(state, ["names", action.payload.name], {
+        case "NAMING_NAME_LOADED": {
+            const istate = immutable.wrap(state);
+            if (state.serverUrl == null) {
+                istate.set("serverUrl", action.payload.serverUrl);
+            } else if (state.serverUrl !== action.payload.serverUrl) {
+                return state;
+            }
+            istate.assign(["names", action.payload.name], {
                 accessed: now(),
                 loading: false,
                 loaded: true,
                 nodeUri: action.payload.nodeUri,
                 updated: action.payload.updated
             });
+            return istate.value();
+        }
 
         case "NAMING_NAME_LOAD_FAILED":
             return immutable.set(state, ["names", action.payload.name, "loading"], false);
@@ -67,6 +77,11 @@ export default (state: NamingState = initialState, action: ClientAction) => {
 
         case "NAMING_NAMES_POPULATE": {
             const istate = immutable.wrap(state);
+            if (state.serverUrl == null) {
+                istate.set("serverUrl", action.payload.serverUrl);
+            } else if (state.serverUrl !== action.payload.serverUrl) {
+                return state;
+            }
             action.payload.names
                 .filter(info => state.names[info.name] == null)
                 .forEach(info => {
@@ -79,6 +94,15 @@ export default (state: NamingState = initialState, action: ClientAction) => {
                 });
             return istate.value();
         }
+
+        case "NAMING_NAMES_SWITCH_SERVER":
+            if (state.serverUrl === action.payload.serverUrl) {
+                return state;
+            }
+            return immutable.assign(state, "", {
+                serverUrl: action.payload.serverUrl,
+                names: []
+            });
 
         default:
             return state;
