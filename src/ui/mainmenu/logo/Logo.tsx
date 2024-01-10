@@ -17,7 +17,7 @@ export default function Logo() {
     return (
         <div id="logo" className="navbar-brand">
             <Jump nodeName={nodeName} href={href}>
-                <img id="logo-image" src="pics/logo-o-32.png" alt="Moera"/>
+                <img id="logo-image" src="/pics/logo-o-32.png" alt="Moera"/>
             </Jump>
         </div>
     );

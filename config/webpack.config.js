@@ -219,8 +219,8 @@ module.exports = function (webpackEnv) {
       // webpack uses `publicPath` to determine where the app is being served from.
       // It requires a trailing slash, or the file assets will get an incorrect path.
       // We inferred the "public path" (such as / or /my-project) from homepage.
-      // Changed to 'auto' to solve the issue: https://github.com/facebook/create-react-app/issues/12503
-      publicPath: 'auto',
+      // Before changing, note this issue: https://github.com/facebook/create-react-app/issues/12503
+      publicPath: '/',
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: isEnvProduction
         ? info =>

@@ -2,7 +2,7 @@
   "name": "moera-client-react",
   "version": "0.15.0-SNAPSHOT",
   "private": true,
-  "homepage": ".",
+  "homepage": "/",
   "dependencies": {
     "@babel/core": "^7.23.3",
     "@babel/plugin-syntax-flow": "^7.23.3",
