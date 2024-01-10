@@ -9,7 +9,7 @@ import {
     updateLocation
 } from "state/navigation/actions";
 import { isLightBoxMediaPostingToBeLoaded, isLightBoxShown, isLightBoxToBeLoaded } from "state/lightbox/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 
 export default [
     trigger(

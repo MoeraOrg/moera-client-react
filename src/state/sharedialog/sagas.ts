@@ -13,7 +13,7 @@ import { executor } from "state/executor";
 import { getNodeUri } from "state/naming/sagas";
 import { messageBox } from "state/messagebox/actions";
 import { flashBox } from "state/flashbox/actions";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { normalizeUrl } from "util/url";
 import { getWindowSelectionHtml, hasWindowSelection } from "util/ui";
 import { quoteHtml } from "util/html";

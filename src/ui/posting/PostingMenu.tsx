@@ -33,7 +33,7 @@ import { hasInvisibleComments, isCommentsShowInvisible } from "state/detailedpos
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
 import { MinimalStoryInfo } from "ui/types";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import "ui/entry/EntryMenu.css";
 
 interface Props {

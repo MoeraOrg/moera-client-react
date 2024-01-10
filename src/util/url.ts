@@ -1,5 +1,6 @@
 import * as URI from 'uri-js';
-import { Browser } from "ui/browser";
+
+import * as Browser from "ui/browser";
 
 export function normalizeUrl(url: null | undefined): null;
 export function normalizeUrl(url: string): string;

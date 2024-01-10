@@ -13,7 +13,7 @@ import { getHomeOwnerName, getHomeRootLocation, isConnectedToHome } from "state/
 import { NodeCardState } from "state/nodecards/state";
 import { getNodeCard } from "state/nodecards/selectors";
 import { isNodeNameOperationFinished } from "state/nodename/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 
 const EMPTY_ARRAY: any[] = [];
 

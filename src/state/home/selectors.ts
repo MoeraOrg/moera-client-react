@@ -3,7 +3,7 @@ import { ClientState } from "state/state";
 import { getToken } from "state/node/selectors";
 import { NodeCardState } from "state/nodecards/state";
 import { getNodeCard } from "state/nodecards/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 
 const EMPTY_ARRAY: any[] = [];

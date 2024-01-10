@@ -12,7 +12,7 @@ import { getSetting } from "state/settings/selectors";
 import { Button, ModalDialog } from "ui/control";
 import FundraiserIcon from "ui/donatedialog/FundraiserIcon";
 import { getFundraiserAutoHref } from "ui/donatedialog/fundraiser-util";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { getSchemeOrDomain, hasSchemeOrDomain } from "util/url";
 import "./DonateDialog.css";
 

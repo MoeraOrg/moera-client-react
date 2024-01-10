@@ -3,7 +3,7 @@ import { useField } from 'formik';
 
 import { FormGroup, Wrapper } from "ui/control";
 import FieldError from "ui/control/field/FieldError";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import "./DateTimeField.css";
 
 const DatePicker = React.lazy(() => import('react-datepicker'));

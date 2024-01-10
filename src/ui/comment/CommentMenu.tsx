@@ -25,7 +25,7 @@ import { shareDialogPrepare } from "state/sharedialog/actions";
 import { openBlockDialog } from "state/blockdialog/actions";
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 
 interface Props {
     nodeName: string;

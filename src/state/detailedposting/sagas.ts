@@ -99,7 +99,7 @@ import { getPosting, isPostingCached } from "state/postings/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { postingGetLink } from "state/postings/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { toAvatarDescription } from "util/avatar";
 import { quoteHtml } from "util/html";
 import { mentionName } from "util/names";

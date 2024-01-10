@@ -5,7 +5,7 @@ import { CLIENT_SETTINGS_PREFIX, ClientSettingMetaInfo, SettingMetaInfo, Setting
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { getNodeFeatures } from "state/node/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { deserializeSheriffs } from "util/sheriff";
 
 export function isAtSettingsNodeTab(state: ClientState): boolean {

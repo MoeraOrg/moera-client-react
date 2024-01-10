@@ -7,7 +7,7 @@ import { getInstantCount } from "state/feeds/selectors";
 import { getNodeRootLocation, getNodeRootPage } from "state/node/selectors";
 import { closeMessageBox } from "state/messagebox/actions";
 import { closeConfirmBox } from "state/confirmbox/actions";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 
 export default function Navigation() {
     const rootLocation = useSelector(getNodeRootLocation);

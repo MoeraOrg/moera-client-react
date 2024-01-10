@@ -7,7 +7,7 @@ import { ClientState } from "state/state";
 import { glanceComment } from "state/detailedposting/actions";
 import { isGlanceCommentByIdToBeLoaded } from "state/detailedposting/selectors";
 import { getSetting } from "state/settings/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import NodeName from "ui/nodename/NodeName";
 import Jump from "ui/navigation/Jump";
 import { DelayedPopover } from "ui/control";

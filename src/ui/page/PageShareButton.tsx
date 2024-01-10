@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { shareDialogPrepare, sharePageCopyLink } from "state/sharedialog/actions";
 import { getOwnerName } from "state/node/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { DropdownMenu } from "ui/control";
 import "./PageShareButton.css";
 

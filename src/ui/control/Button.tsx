@@ -2,7 +2,7 @@ import React, { ForwardedRef, forwardRef, useEffect, useRef } from 'react';
 import composeRefs from '@seznam/compose-react-refs';
 import cx from 'classnames';
 
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { LoadingInline } from "ui/control";
 
 type Props = {

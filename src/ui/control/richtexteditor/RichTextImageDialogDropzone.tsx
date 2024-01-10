@@ -14,7 +14,7 @@ import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { Button, DeleteButton } from "ui/control";
 import RichTextCopyImageDialog, { RichTextCopyImageValues } from "ui/control/richtexteditor/RichTextCopyImageDialog";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import { urlWithParameters } from "util/url";
 import "./RichTextImageDialogDropzone.css";

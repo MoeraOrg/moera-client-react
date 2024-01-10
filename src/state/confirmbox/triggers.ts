@@ -1,6 +1,6 @@
 import { trigger } from "state/trigger";
 import { bodyScrollUpdate, swipeRefreshUpdate } from "state/navigation/actions";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 
 export default [
     trigger(["CONFIRM_BOX", "CLOSE_CONFIRM_BOX"], Browser.isAndroidApp(), swipeRefreshUpdate),

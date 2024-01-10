@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import cx from 'classnames';
 
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { getFeedHeaderHeight } from "util/ui";
 import "./PageHeader.css";
 

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { getFeedAtTimestamp } from "state/feeds/selectors";
 import { feedScrollToAnchor } from "state/feeds/actions";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { Button, CloseButton, Loading } from "ui/control";
 
 const DatePicker = React.lazy(() => import('react-datepicker'));

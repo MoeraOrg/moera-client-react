@@ -15,7 +15,7 @@ import {
     LightBoxMediaSetAction
 } from "state/lightbox/actions";
 import { getLightBoxMediaPostingId, getLightBoxNodeName } from "state/lightbox/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 
 export default [
     executor("LIGHT_BOX_MEDIA_POSTING_LOAD", null, lightBoxMediaPostingLoadSaga),

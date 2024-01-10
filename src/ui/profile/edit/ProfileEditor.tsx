@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { AvatarInfo, FundraiserInfo, PrincipalValue, ProfileInfo } from "api";
 import { ClientState } from "state/state";
 import { profileEditCancel, profileEditConflictClose, profileUpdate } from "state/profile/actions";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { Button, ConflictWarning, Loading } from "ui/control";
 import { ComboboxField, InputField, PrincipalField } from "ui/control/field";
 import { RichTextField, RichTextValue } from "ui/control/richtexteditor";

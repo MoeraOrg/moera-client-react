@@ -19,7 +19,7 @@ import {
     UpdateLocationAction
 } from "state/navigation/actions";
 import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
 import { ClientState } from "state/state";
 

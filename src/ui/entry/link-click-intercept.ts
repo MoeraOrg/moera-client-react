@@ -2,7 +2,7 @@ import React from 'react';
 import * as URI from 'uri-js';
 
 import { goToLocation, initFromLocation, newLocation } from "state/navigation/actions";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
 import store from "state/store";
 

@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { useField } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import "./RichTextImageDialogTabs.css";
 
 export default function RichTextImageDialogTabs() {

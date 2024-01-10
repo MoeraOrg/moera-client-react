@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { FundraiserInfo } from "api";
 import { openDonateDialog } from "state/donatedialog/actions";
 import { Button, usePopover } from "ui/control";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 
 interface Props {
     name: string | null;

@@ -7,7 +7,7 @@ import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
 import { bodyScrollUpdate, swipeRefreshUpdate } from "state/navigation/actions";
 import { usePopover } from "ui/control";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
 import { BUILD_NUMBER } from "build-number";

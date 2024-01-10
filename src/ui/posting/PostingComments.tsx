@@ -4,7 +4,7 @@ import { faComment } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import Jump from "ui/navigation/Jump";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import "./PostingComments.css";
 
 interface Props {

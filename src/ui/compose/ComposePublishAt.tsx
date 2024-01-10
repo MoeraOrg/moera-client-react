@@ -7,7 +7,7 @@ import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { Loading } from "ui/control";
 import useComposeTextEditable from "ui/compose/compose-text-editable";
 import ComposeTextEditableIcon from "ui/compose/ComposeTextEditableIcon";

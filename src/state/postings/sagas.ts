@@ -53,7 +53,7 @@ import { fillSubscription } from "state/subscriptions/sagas";
 import { isConnectedToHome } from "state/home/selectors";
 import { homeIntroduced } from "state/init-selectors";
 import { executor } from "state/executor";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { toAvatarDescription } from "util/avatar";
 
 export default [

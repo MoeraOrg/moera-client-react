@@ -17,7 +17,7 @@ import { getNodeRootLocation, getToken } from "state/node/selectors";
 import { getCurrentAllCarte } from "state/cartes/selectors";
 import { getHomeRootLocation, isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { peek } from "util/saga-effects";
 import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/url";
 

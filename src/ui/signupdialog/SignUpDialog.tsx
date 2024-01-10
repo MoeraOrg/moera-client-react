@@ -22,7 +22,7 @@ import {
 } from "state/signupdialog/actions";
 import { SignUpStage } from "state/signupdialog/state";
 import { findPreferredLanguage } from "i18n";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { useDebounce } from "ui/hook";
 import { Button, ModalDialog, NameHelp } from "ui/control";
 import { CheckboxField, InputField, SelectField, SelectFieldChoice } from "ui/control/field";

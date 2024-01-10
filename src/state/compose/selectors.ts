@@ -2,7 +2,7 @@ import { PostingFeatures } from "api";
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { getNodeFeatures } from "state/node/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 
 export function isComposePostingToBeLoaded(state: ClientState): boolean {
     return state.compose.postingId != null && state.compose.posting == null && !state.compose.loadingPosting;

@@ -7,7 +7,7 @@ import {
     updateLocation
 } from "state/navigation/actions";
 import { isAtNode } from "state/node/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 
 export default [
     trigger("GO_TO_PAGE", true, newLocation),

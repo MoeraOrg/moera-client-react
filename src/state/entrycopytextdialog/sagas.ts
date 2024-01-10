@@ -9,7 +9,7 @@ import { flashBox } from "state/flashbox/actions";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { clearHtml, containsTags, htmlEntities, quoteHtml } from "util/html";
 import { mediaImagePreview } from "util/media-images";
 import { urlWithParameters } from "util/url";

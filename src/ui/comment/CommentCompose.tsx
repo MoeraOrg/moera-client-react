@@ -15,7 +15,7 @@ import {
     getCommentsReceiverPostingId,
     isCommentComposerReady
 } from "state/detailedposting/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { AvatarField } from "ui/control/field";
 import { RichTextField, RichTextLinkPreviews } from "ui/control/richtexteditor";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";

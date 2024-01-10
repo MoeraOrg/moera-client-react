@@ -12,7 +12,7 @@ import CopyMentionButton from "ui/nodename/CopyMentionButton";
 import { Avatar, DonateButton, Loading, SubscribeButton, usePopover } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import { mentionName, shortGender } from "util/names";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import "./NodeCard.css";
 
 interface Props {

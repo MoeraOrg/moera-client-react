@@ -9,7 +9,7 @@ import { getHomeOwnerName, getHomeToken } from "state/home/selectors";
 import { getNodeToken, getOwnerName, getToken } from "state/node/selectors";
 import { getCurrentAllCarte } from "state/cartes/selectors";
 import { getReceiverNodeName, getReceiverNodeUri } from "state/receiver/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { nodeUrlToEvents, nodeUrlToLocation } from "util/url";
 
 const NODE_OR_RECEIVER: EventSource[] = ["NODE" as const, "RECEIVER" as const];

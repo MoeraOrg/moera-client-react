@@ -13,7 +13,7 @@ import { Button } from "ui/control";
 import { RichTextValue } from "ui/control/richtexteditor";
 import RichTextEditorImageList from "ui/control/richtexteditor/RichTextEditorImageList";
 import RichTextCopyImageDialog, { RichTextCopyImageValues } from "ui/control/richtexteditor/RichTextCopyImageDialog";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import "./RichTextEditorDropzone.css";
 
 type UploadStatus = "loading" | "success" | "failure";

@@ -16,7 +16,7 @@ import { ExtCommentInfo } from "state/detailedposting/state";
 import { getComment } from "state/detailedposting/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import LightBoxCaption from "ui/lightbox/LightBoxCaption";
 import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import LightBoxShareButton from "ui/lightbox/LightBoxShareButton";

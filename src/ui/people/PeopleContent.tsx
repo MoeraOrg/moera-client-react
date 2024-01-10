@@ -10,7 +10,7 @@ import {
     getPeopleContactsTotal
 } from "state/people/selectors";
 import { ContactState } from "state/people/state";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import PeopleSelectionPanel from "ui/people/PeopleSelectionPanel";
 import PeoplePerson from "ui/people/PeoplePerson";
 import PeoplePageTitle from "ui/people/PeoplePageTitle";

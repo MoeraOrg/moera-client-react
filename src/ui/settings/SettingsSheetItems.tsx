@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { CLIENT_SETTINGS_PREFIX, ClientSettingMetaInfo, SettingMetaInfo } from "api";
 import { Item } from "ui/settings/settings-menu";
 import SettingsField from "ui/settings/SettingsField";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 
 export function toFieldName(name: string): string {
     return name.replace(/\./g, "_");

@@ -21,7 +21,7 @@ import {
 } from "state/detailedposting/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { getPostingFeatures } from "state/compose/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import NodeName from "ui/nodename/NodeName";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
 import { AvatarField } from "ui/control/field";

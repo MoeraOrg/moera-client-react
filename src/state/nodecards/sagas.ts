@@ -44,7 +44,7 @@ import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import { flashBox } from "state/flashbox/actions";
 import { getNodeCard } from "state/nodecards/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { mentionName } from "util/names";
 
 export default [

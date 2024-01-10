@@ -14,6 +14,7 @@ import {
 import { Storage } from "storage";
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
+import { ClientAction } from "state/action";
 import { homeIntroduced } from "state/init-selectors";
 import {
     settingsChangedPassword,
@@ -62,10 +63,9 @@ import { executor } from "state/executor";
 import { getSetting, getSettingNode, getSettingsClient, getSettingsClientMeta } from "state/settings/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { confirmBox } from "state/confirmbox/actions";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { deserializeSheriffs, serializeSheriffs } from "util/sheriff";
 import { now } from "util/misc";
-import { ClientAction } from "state/action";
 
 export default [
     executor("SETTINGS_NODE_VALUES_LOAD", "", settingsNodeValuesLoadSaga, homeIntroduced),

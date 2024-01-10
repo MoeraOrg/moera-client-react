@@ -1,5 +1,5 @@
 import { PrincipalFlag, SettingType } from "api/node/api-types";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 
 export const PREFIX = "client.mercy.";
 export const PLUGIN_PREFIX = "plugin.";

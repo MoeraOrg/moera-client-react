@@ -8,7 +8,7 @@ import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import PreloadedImage from "ui/posting/PreloadedImage";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { Loading } from 'ui/control';
 import { mediaImagePreview, mediaImageSize, mediaSizes, mediaSources } from "util/media-images";
 import { urlWithParameters } from "util/url";

@@ -6,7 +6,7 @@ import clipboardCopy from 'clipboard-copy';
 import { useTranslation } from 'react-i18next';
 
 import { ShareTextMode } from "ui/sharedialog/share-text-mode";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { closeShareDialog } from "state/sharedialog/actions";
 import { flashBox } from "state/flashbox/actions";
 import { htmlEntities } from "util/html";

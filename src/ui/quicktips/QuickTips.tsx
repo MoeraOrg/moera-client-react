@@ -10,7 +10,7 @@ import { getOwnerName } from "state/node/selectors";
 import { closeQuickTips } from "state/quicktips/actions";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { Button, ModalDialog } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 import Jump, { JumpCallback } from "ui/navigation/Jump";

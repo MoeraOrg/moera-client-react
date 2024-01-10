@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import NodeName from "ui/nodename/NodeName";
 
 interface Props {

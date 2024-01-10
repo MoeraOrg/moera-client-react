@@ -10,7 +10,7 @@ import PageShareButton from "ui/page/PageShareButton";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import FeedGotoButton from "ui/feed/FeedGotoButton";
 import FeedTopButton from "ui/feed/FeedTopButton";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { getPageHeaderHeight } from "util/ui";
 
 interface Props {

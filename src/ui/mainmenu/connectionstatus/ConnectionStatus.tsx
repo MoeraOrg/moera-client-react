@@ -7,7 +7,7 @@ import { isConnectedToHome } from "state/home/selectors";
 import { isAtNode } from "state/node/selectors";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
-import { Browser } from "ui/browser";
+import * as Browser from "ui/browser";
 import { Button, Loading } from "ui/control";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
 import QuickTipsButton from "ui/quicktips/QuickTipsButton";
