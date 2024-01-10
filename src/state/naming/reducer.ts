@@ -101,7 +101,7 @@ export default (state: NamingState = initialState, action: ClientAction) => {
             }
             return immutable.assign(state, "", {
                 serverUrl: action.payload.serverUrl,
-                names: []
+                names: {}
             });
 
         default:
