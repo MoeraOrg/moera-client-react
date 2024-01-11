@@ -1,6 +1,6 @@
 import { call, put, select } from 'typed-redux-saga';
 
-import { Naming, NodeName } from "api";
+import { Naming, NodeName, RegisteredName } from "api";
 import { Storage } from "storage";
 import { executor } from "state/executor";
 import { namingInitialized } from "state/init-selectors";
@@ -84,6 +84,7 @@ type PromiseResolver = (value: NameInfo | PromiseLike<NameInfo>) => void;
 const fetching = new Map<string, PromiseResolver[]>();
 
 function* fetchName(caller: ClientAction | null, nodeName: string, includeSimilar: boolean) {
+    nodeName = NodeName.expand(nodeName);
     if (!includeSimilar && fetching.has(nodeName)) {
         const promise = new Promise<NameInfo>(resolve => fetching.get(nodeName)!.push(resolve));
         return yield* call(() => promise);
@@ -99,12 +100,12 @@ function* fetchName(caller: ClientAction | null, nodeName: string, includeSimila
             }
             const current = yield* call(Naming.getCurrent, caller, name, generation);
             if (current?.nodeUri != null) {
-                nodeNameFound = `${current.name}_${current.generation}`;
+                nodeNameFound = new RegisteredName(current.name, current.generation).format();
                 nodeUri = current.nodeUri;
             } else if (includeSimilar) {
                 const similar = yield* call(Naming.getSimilar, caller, name);
                 if (similar?.nodeUri != null) {
-                    nodeNameFound = `${similar.name}_${similar.generation}`;
+                    nodeNameFound = new RegisteredName(similar.name, similar.generation).format();
                     nodeUri = similar.nodeUri;
                 }
             }

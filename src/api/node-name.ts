@@ -22,6 +22,16 @@ export class NodeName {
         return nodeName.generation === 0 ? nodeName.name : qName
     }
 
+    static expand(qName: string): string;
+    static expand(qName: null): null;
+    static expand(qName: string | null): string | null;
+    static expand(qName: string | null): string | null {
+        if (!qName) {
+            return qName;
+        }
+        return qName ? NodeName.parse(qName).format() : qName;
+    }
+
 }
 
 export class RegisteredName<NT extends string | null = string | null> {

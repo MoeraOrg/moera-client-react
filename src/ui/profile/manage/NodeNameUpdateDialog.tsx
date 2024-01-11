@@ -119,7 +119,7 @@ const nodeNameUpdateDialogLogic = {
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         store.dispatch(nodeNameUpdate(
-            NodeName.parse(values.name.trim()).format(),
+            NodeName.expand(values.name.trim()),
             values.mnemonic.map(v => v.trim().toLowerCase())));
         formik.setSubmitting(false);
     }
