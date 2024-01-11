@@ -1,7 +1,5 @@
 import * as URI from 'uri-js';
 
-import * as Browser from "ui/browser";
-
 export function normalizeUrl(url: null | undefined): null;
 export function normalizeUrl(url: string): string;
 export function normalizeUrl(url: string | null | undefined): string | null;
@@ -67,16 +65,6 @@ export function nodeUrlToLocation(url: string | null): string | null {
 
 export function nodeUrlToEvents(url: string | null): string | null {
     return url != null ? toWsUrl(normalizeUrl(url) + "/api/events") : null;
-}
-
-export function redirectUrl(wrapped: boolean, redirectPage: string, nodeName: string | null,
-                            nodeRootPage: string | null, location: string, trackingId?: string | null): string {
-    if (nodeRootPage && !trackingId) {
-        return wrapped ? Browser.passedLocation(nodeRootPage + location) : nodeRootPage + location;
-    }
-    const client = wrapped ? Browser.getRootLocation() : null;
-    return urlWithParameters(redirectPage + "/gotoname",
-        {client, name: nodeName, location: location, trackingId});
 }
 
 export function hasSchemeOrDomain(url: string, prefix: string): boolean {

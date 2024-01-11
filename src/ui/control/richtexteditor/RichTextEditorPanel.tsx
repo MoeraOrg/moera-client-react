@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import cx from 'classnames';
 import {
     faAt,
@@ -15,7 +14,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { NodeName, PostingFeatures, PrivateMediaFileInfo, SourceFormat } from "api";
-import { getNodeRootPage } from "state/node/selectors";
+import * as Browser from "ui/browser";
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
 import RichTextSpoilerDialog, { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
 import RichTextFoldDialog, { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
@@ -28,7 +27,6 @@ import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDial
 import { htmlEntities } from "util/html";
 import { getTextSelection, insertText, wrapSelection, wrapSelectionLines } from "util/ui";
 import { mentionName } from "util/names";
-import { redirectUrl } from "util/url";
 import { NameListItem } from "util/names-list";
 import "./RichTextEditorPanel.css";
 
@@ -53,8 +51,6 @@ export default function RichTextEditorPanel({
     textArea, panel, hiding, format, features, noMedia, nodeName, forceImageCompress, selectedImage, selectImage,
     onImageAdded, onImageDeleted, externalImage, uploadingExternalImage
 }: Props) {
-    const nodeRootPage = useSelector(getNodeRootPage);
-
     const [spoilerDialog, setSpoilerDialog] = useState<boolean>(false);
     const [foldDialog, setFoldDialog] = useState<boolean>(false);
     const [linkDialog, setLinkDialog] = useState<boolean>(false);
@@ -265,11 +261,11 @@ export default function RichTextEditorPanel({
         }
 
         if (ok) {
-            if (isMarkdown() || nodeRootPage == null) {
+            if (isMarkdown()) {
                 insertText(textArea.current, mentionName(nodeName, fullName))
             } else {
                 const text = (fullName || NodeName.shorten(nodeName)) ?? nodeName ?? "";
-                const href = redirectUrl(false, nodeRootPage, nodeName, null, "/", null);
+                const href = Browser.universalLocation(nodeName, null, "/");
                 insertText(textArea.current,
                     `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(nodeName ?? "")}" data-href="/">`
                     + `${htmlEntities(text)}</a>`);

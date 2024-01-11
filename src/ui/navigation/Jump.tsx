@@ -7,7 +7,8 @@ import { getNamingNameDetails } from "state/naming/selectors";
 import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
 import { getNodeRootPage, getOwnerName } from "state/node/selectors";
 import { goToLocation, initFromLocation, initFromNodeLocation } from "state/navigation/actions";
-import { redirectUrl, rootUrl } from "util/url";
+import * as Browser from "ui/browser";
+import { rootUrl } from "util/url";
 
 export type JumpCallback = (href: string, callback: () => void) => void | null;
 
@@ -83,11 +84,10 @@ function Jump(
         e.preventDefault();
     }
 
-    const redirectPage = homeRootPage ?? rootPage ?? "unknown";
     const nodeOwnerName = nodeName ? (nodeName === ":" ? homeOwnerName : nodeName) : ownerName;
     if (nodeOwnerName === ownerName) {
         const nodeLocation = rootPage ?? nodeUri ?? "unknown";
-        const url = redirectUrl(true, redirectPage, ownerName, nodeLocation, href, trackingId);
+        const url = Browser.universalLocation(ownerName, nodeLocation, href, trackingId);
         return <a href={url} className={className} style={style} title={title} data-nodename={nodeOwnerName}
                   data-href={href} ref={ref} onClick={onNearClick} suppressHydrationWarning>{children}</a>;
     } else {
@@ -100,7 +100,7 @@ function Jump(
             nodeLocation = nodeUri;
         }
         nodeLocation ??= null;
-        const url = redirectUrl(true, redirectPage, nodeOwnerName, nodeLocation, href, trackingId);
+        const url = Browser.universalLocation(nodeOwnerName, nodeLocation, href, trackingId);
         return <a href={url} className={className} style={style} title={title} data-nodename={nodeOwnerName}
                   data-href={href} ref={ref} onClick={onFarClick(url, nodeLocation, nodeOwnerName)}
                   suppressHydrationWarning>{children}</a>;

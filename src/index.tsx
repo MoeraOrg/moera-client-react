@@ -14,7 +14,7 @@ import App from "ui/App";
 import * as serviceWorker from "serviceWorker";
 
 function sendInitAction(): void {
-    const {name, rootLocation, path = null, query = null, hash = null} = Browser.getDocumentPassedLocation();
+    const {name, rootLocation, path = null, query = null, hash = null} = Browser.parseDocumentLocation();
     if (rootLocation != null) {
         store.dispatch(initFromLocation(name ?? null, rootLocation, path, query, hash));
     } else if (name != null) {

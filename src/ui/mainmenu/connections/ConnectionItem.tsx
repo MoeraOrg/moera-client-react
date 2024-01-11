@@ -27,7 +27,7 @@ export default function ConnectionItem({name, url, onClick, onDisconnect}: Props
                 {url}
             </div>
             <div className="connection-buttons">
-                <a className="link" title={t("open")} href={Browser.passedLocation(url)}>
+                <a className="link" title={t("open")} href={Browser.universalLocation(name, url, "/")}>
                     <FontAwesomeIcon icon={faExternalLinkAlt}/>
                 </a>
                 <div className="disconnect" title={t("disconnect")} onClick={onDisconnect}>

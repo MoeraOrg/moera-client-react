@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ClientState } from "state/state";
 import { dialogClosed, goToLocation, initFromLocation, swipeRefreshUpdate } from "state/navigation/actions";
 import { getInstantCount } from "state/feeds/selectors";
-import { getNodeRootLocation, getNodeRootPage } from "state/node/selectors";
+import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
 import { closeMessageBox } from "state/messagebox/actions";
 import { closeConfirmBox } from "state/confirmbox/actions";
 import * as Browser from "ui/browser";
 
 export default function Navigation() {
+    const nodeName = useSelector(getOwnerName);
     const rootLocation = useSelector(getNodeRootLocation);
-    const rootPage = useSelector(getNodeRootPage);
     const location = useSelector((state: ClientState) => state.navigation.location);
     const title = useSelector((state: ClientState) => state.navigation.title);
     const update = useSelector((state: ClientState) => state.navigation.update);
@@ -24,16 +24,17 @@ export default function Navigation() {
     const confirmBoxOnNo = useSelector((state: ClientState) => state.confirmBox.onNo);
     const dispatch = useDispatch();
 
-    const currentRootPage = useRef<string | null>(null);
+    const currentNodeName = useRef<string | null>(null);
+    const currentRootLocation = useRef<string | null>(null);
     const currentLocation = useRef<string | null>(null);
 
     const popState = useCallback((event: PopStateEvent) => {
-        const {rootLocation: root, path = null, query = null, hash = null} = Browser.getDocumentPassedLocation();
+        const {name, rootLocation: root, path = null, query = null, hash = null} = Browser.parseDocumentLocation();
         if (root === rootLocation) {
             dispatch(goToLocation(path, query, hash));
         } else {
             if (root != null) {
-                dispatch(initFromLocation(null, root, path, query, hash));
+                dispatch(initFromLocation(name ?? null, root, path, query, hash));
             }
         }
         event.preventDefault();
@@ -106,11 +107,13 @@ export default function Navigation() {
 
     useEffect(() => {
         if (!locked
-            && (rootPage !== currentRootPage.current || location !== currentLocation.current)
-            && rootPage != null && location != null
+            && (nodeName !== currentNodeName.current
+                || rootLocation !== currentRootLocation.current
+                || location !== currentLocation.current)
+            && rootLocation != null && location != null
         ) {
-            const data = {location: rootPage + location};
-            const url = Browser.passedLocation(rootPage + location);
+            const url = Browser.universalLocation(nodeName, rootLocation, location);
+            const data = {location: url};
             if (update) {
                 window.history.pushState(data, "", url);
             } else {
@@ -120,10 +123,10 @@ export default function Navigation() {
                 window.Android.locationChanged(url, location);
                 dispatch(swipeRefreshUpdate());
             }
-            currentRootPage.current = rootPage;
+            currentRootLocation.current = rootLocation;
             currentLocation.current = location;
         }
-    }, [dispatch, location, locked, rootPage, update]);
+    }, [dispatch, location, locked, nodeName, rootLocation, update]);
 
     useEffect(() => {
         const counter = count > 0 ? `(${count}) ` : "";

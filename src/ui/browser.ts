@@ -1,5 +1,7 @@
 import * as URI from 'uri-js';
-import { rootUrl } from "util/url";
+
+import { NodeName } from "api";
+import { rootUrl, urlWithParameters } from "util/url";
 import { randomId } from "util/ui";
 
 type UserAgent = "firefox" | "chrome" | "opera" | "yandex" | "brave" | "vivaldi" | "dolphin" | "unknown";
@@ -130,21 +132,21 @@ export function getLocation(
     return {name, rootLocation, path, query, hash};
 }
 
-export function getDocumentPassedLocation(): DocumentLocation {
+export function parseDocumentLocation(): DocumentLocation {
     let components: DocumentLocation | null = null;
 
     const search = window.location.search;
     if (search && search.includes("href=")) {
-        components = getPassedLocation(search.substring(1));
+        components = parsePassedLocation(search.substring(1));
     }
     if (components == null) {
-        components = getUniversalLocation();
+        components = parseUniversalLocation();
     }
 
     return components ?? {};
 }
 
-function getPassedLocation(query: string): DocumentLocation | null {
+function parsePassedLocation(query: string): DocumentLocation | null {
     if (!query) {
         return null;
     }
@@ -167,7 +169,7 @@ function getPassedLocation(query: string): DocumentLocation | null {
     return components;
 }
 
-function getUniversalLocation(): DocumentLocation | null {
+function parseUniversalLocation(): DocumentLocation | null {
     let path = window.location.pathname;
     if (path.startsWith('/')) {
         path = path.substring(1);
@@ -224,6 +226,33 @@ function getUniversalLocation(): DocumentLocation | null {
     return components;
 }
 
-export function passedLocation(location: string): string {
-    return getRootLocation() + "/?href=" + encodeURIComponent(location);
+export function universalLocation(
+    nodeName: string | null | undefined, nodeRoot: string | null | undefined, location: string,
+    trackingId?: string | null
+): string {
+    let url = getRootLocation() + "/~";
+    if (nodeName != null) {
+        url += encodeURIComponent(NodeName.shorten(nodeName));
+    }
+    url += "/";
+    if (nodeRoot != null) {
+        const {scheme, host, port} = URI.parse(nodeRoot);
+        if (scheme && scheme !== "https") {
+            url += scheme + ":";
+        }
+        url += host;
+        if (port && port !== 443 && port !== "443") {
+            url += ":" + port;
+        }
+    } else {
+        url += "~";
+    }
+    if (location.startsWith("/moera")) {
+        location = location.substring(6);
+    }
+    url += location;
+    if (trackingId) {
+        url = urlWithParameters(url, {trackingId});
+    }
+    return url;
 }
