@@ -63,7 +63,8 @@ function Jump(
             if (nodeOwnerName == null) {
                 return;
             } else if (nodeLocation == null) {
-                dispatch(initFromNodeLocation(nodeOwnerName, href, url));
+                const {path = null, query = null, fragment = null} = URI.parse(href);
+                dispatch(initFromNodeLocation(nodeOwnerName, path, query, fragment, url));
             } else {
                 const {scheme, host, port} = URI.parse(nodeLocation);
                 if (scheme != null && host != null) {

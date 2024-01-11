@@ -3,7 +3,7 @@ import * as URI from 'uri-js';
 
 import { locationBuild, LocationInfo, locationTransform } from "location";
 import { executor } from "state/executor";
-import { getNodeUri } from "state/naming/sagas";
+import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import {
     GoHomeAction,
@@ -18,10 +18,13 @@ import {
     NewLocationAction,
     UpdateLocationAction
 } from "state/navigation/actions";
+import { homeIntroduced } from "state/init-selectors";
+import { nodeReady } from "state/node/actions";
+import { isAtNode } from "state/node/selectors";
 import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
+import { getNodeUri } from "state/naming/sagas";
 import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
-import { ClientState } from "state/state";
 
 export default [
     executor("INIT_FROM_NODE_LOCATION", "", initFromNodeLocationSaga),
@@ -30,7 +33,7 @@ export default [
     executor("UPDATE_LOCATION", null, updateLocationSaga),
     executor("GO_TO_LOCATION", payload => `${payload.path}:${payload.query}:${payload.hash}`, goToLocationSaga),
     executor("GO_HOME", "", goHomeSaga),
-    executor("GO_HOME_NEWS", "", goHomeNewsSaga),
+    executor("GO_HOME_NEWS", "", goHomeNewsSaga, homeIntroduced),
     executor("SWIPE_REFRESH_UPDATE", "", swipeRefreshUpdateSaga),
     executor("BODY_SCROLL_UPDATE", "", bodyScrollUpdateSaga)
 ];
@@ -51,21 +54,28 @@ function* transformation(caller: ClientAction,
 }
 
 function* initFromNodeLocationSaga(action: InitFromNodeLocationAction) {
-    const {nodeName, location, fallbackUrl} = action.payload;
+    const {nodeName, path, query, hash, fallbackUrl} = action.payload;
 
     const nodeLocation = yield* call(getNodeUri, action, nodeName);
     if (nodeLocation == null) {
-        window.location.href = fallbackUrl;
+        if (fallbackUrl != null) {
+            window.location.href = fallbackUrl;
+        } else {
+            yield* put(nodeReady());
+        }
         return;
     }
     const {scheme, host, port} = URI.parse(nodeLocation);
     if (scheme == null || host == null) {
-        window.location.href = fallbackUrl;
+        if (fallbackUrl != null) {
+            window.location.href = fallbackUrl;
+        } else {
+            yield* put(nodeReady());
+        }
         return;
     }
     const rootLocation = rootUrl(scheme, host, port);
-    const {path = null, query = null, fragment = null} = URI.parse(location);
-    yield* put(initFromLocation(nodeName, rootLocation, path, query, fragment).causedBy(action));
+    yield* put(initFromLocation(nodeName, rootLocation, path, query, hash).causedBy(action));
 }
 
 function* initFromLocationSaga(action: InitFromLocationAction) {
@@ -109,17 +119,20 @@ function* goHomeSaga(action: GoHomeAction) {
 }
 
 function* goHomeNewsSaga(action: GoHomeNewsAction) {
-    const {homeOwnerName, homeRootPage} = yield* select((state: ClientState) => ({
+    const {atNode, homeOwnerName, homeRootPage} = yield* select((state: ClientState) => ({
+        atNode: isAtNode(state),
         homeOwnerName: getHomeOwnerName(state),
         homeRootPage: getHomeRootPage(state)
     }));
-    if (homeRootPage == null) {
+    if (atNode || homeRootPage == null) {
         return;
     }
     const {scheme, host, port, path} = URI.parse(homeRootPage);
     if (scheme != null && host != null) {
         const rootLocation = rootUrl(scheme, host, port);
         yield* put(initFromLocation(homeOwnerName, rootLocation, path + "/news", null, null).causedBy(action));
+    } else {
+        yield* put(nodeReady());
     }
 }
 

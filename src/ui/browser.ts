@@ -131,18 +131,24 @@ export function getLocation(
 }
 
 export function getDocumentPassedLocation(): DocumentLocation {
+    let components: DocumentLocation | null = null;
+
     const search = window.location.search;
-    if (!search) {
-        return {};
+    if (search && search.includes("href=")) {
+        components = getPassedLocation(search.substring(1));
     }
-    return getPassedLocation(search.substring(1));
+    if (components == null) {
+        components = getUniversalLocation();
+    }
+
+    return components ?? {};
 }
 
-export function getPassedLocation(query: string): DocumentLocation {
+function getPassedLocation(query: string): DocumentLocation | null {
     if (!query) {
-        return {};
+        return null;
     }
-    let components = {};
+    let components: DocumentLocation | null = null;
     query
         .split("&")
         .map(s => s.split("="))
@@ -158,6 +164,63 @@ export function getPassedLocation(query: string): DocumentLocation {
             }
             components = {rootLocation, path, query, hash: fragment};
     });
+    return components;
+}
+
+function getUniversalLocation(): DocumentLocation | null {
+    let path = window.location.pathname;
+    if (path.startsWith('/')) {
+        path = path.substring(1);
+    }
+    if (path.endsWith('/')) {
+        path = path.substring(0, path.length - 1);
+    }
+    if (path === '') {
+        return null;
+    }
+
+    const dirs = path.split('/');
+    if (!dirs[0].startsWith('~')) {
+        return null;
+    }
+
+    const components: DocumentLocation = {};
+
+    if (dirs[0].length > 1) {
+        components.name = dirs[0].substring(1);
+    }
+
+    let scheme: string | undefined = undefined;
+    let host: string | undefined = undefined;
+    let port: number | string | undefined = undefined;
+
+    if (dirs.length > 1 && dirs[1] !== '~') {
+        const parts = dirs[1].split(':');
+        let i = 0;
+        if (!parts[i].includes('.')) {
+            scheme = parts[i++];
+        }
+        if (i < parts.length) {
+            host = parts[i++];
+        }
+        if (i < parts.length) {
+            port = parts[i++];
+        }
+    }
+
+    if (host) {
+        components.rootLocation = rootUrl(scheme ?? "https", host, port);
+    }
+
+    path = dirs.slice(2).join('/');
+    if (path === '') {
+        path = '/';
+    }
+    components.path = path;
+
+    components.query = window.location.search;
+    components.hash = window.location.hash;
+
     return components;
 }
 

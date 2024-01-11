@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 
-import { inv, trigger } from "state/trigger";
+import { conj, inv, trigger } from "state/trigger";
 import { EventAction, NodeNameChangedEvent } from "api/events";
 import { InitFromLocationAction, newLocation, updateLocation } from "state/navigation/actions";
 import { nodeFeaturesLoad, nodeReady, ownerLoad, ownerSet, ownerVerify } from "state/node/actions";
@@ -10,14 +10,14 @@ import { messageBox } from "state/messagebox/actions";
 import { ClientState } from "state/state";
 
 export default [
-    trigger("INIT_FROM_LOCATION", isAtNode, ownerLoad),
+    trigger("INIT_FROM_LOCATION", conj(isAtNode, inv(isOwnerNameSet)), ownerLoad),
     trigger(
         "INIT_FROM_LOCATION",
-        (state: ClientState, signal: InitFromLocationAction) => signal.payload.nodeName != null,
+        (_: ClientState, signal: InitFromLocationAction) => signal.payload.nodeName != null,
         nodeReady
     ),
     trigger("OWNER_SET", true, nodeReady),
-    trigger("NODE_READY", isOwnerNameRecentlyChanged, ownerVerify),
+    trigger("NODE_READY", conj(isAtNode, isOwnerNameRecentlyChanged), ownerVerify),
     trigger("NODE_READY", true, newLocation),
     trigger("NODE_READY", isAtNode, nodeFeaturesLoad),
     trigger(

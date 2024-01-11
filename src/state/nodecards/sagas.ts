@@ -48,7 +48,7 @@ import * as Browser from "ui/browser";
 import { mentionName } from "util/names";
 
 export default [
-    executor("NODE_CARD_PREPARE_OWNERS", "", nodeCardPrepareOwners, mutuallyIntroduced),
+    executor("NODE_CARD_PREPARE_OWNERS", "", nodeCardPrepareOwnersSaga, mutuallyIntroduced),
     executor("NODE_CARD_PREPARE", payload => payload.nodeName, nodeCardPrepareSaga, mutuallyIntroduced),
     executor("NODE_CARD_DETAILS_LOAD", payload => payload.nodeName, nodeCardDetailsLoadSaga, mutuallyIntroduced),
     executor("NODE_CARD_PEOPLE_LOAD", payload => payload.nodeName, nodeCardPeopleLoadSaga, mutuallyIntroduced),
@@ -72,7 +72,7 @@ export default [
     executor("SHERIFF_LIST_DELETE", payload => payload.nodeName, sheriffListDeleteSaga)
 ];
 
-function* nodeCardPrepareOwners(action: WithContext<NodeCardPrepareOwnersAction>) {
+function* nodeCardPrepareOwnersSaga(action: WithContext<NodeCardPrepareOwnersAction>) {
     const {ownerNameOrUrl, homeOwnerNameOrUrl} = action.context;
     if (ownerNameOrUrl) {
         yield* put(nodeCardPrepare(ownerNameOrUrl).causedBy(action));

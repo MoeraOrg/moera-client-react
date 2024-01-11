@@ -11,10 +11,10 @@ import {
 import { isNodeCardDetailsLoaded } from "state/nodecards/selectors";
 import { ProfileSetAction } from "state/profile/actions";
 import { isHomeIntroduced } from "state/home/selectors";
-import { isNodeIntroduced } from "state/node/selectors";
+import { isAtNode, isNodeIntroduced } from "state/node/selectors";
 
 export default [
-    trigger(["NODE_READY", "HOME_READY"], true, nodeCardsClientSwitch),
+    trigger(["NODE_READY", "HOME_READY"], isAtNode, nodeCardsClientSwitch),
     trigger("PULSE_6H", true, nodeCardsRefresh),
     trigger(["NODE_READY", "HOME_READY", "WAKE_UP"], conj(isNodeIntroduced, isHomeIntroduced), nodeCardPrepareOwners),
     trigger(

@@ -13,13 +13,15 @@ import {
 
 export type InitFromNodeLocationAction = ActionWithPayload<"INIT_FROM_NODE_LOCATION", {
     nodeName: string;
-    location: string;
-    fallbackUrl: string;
+    path: string | null;
+    query: string | null;
+    hash: string | null;
+    fallbackUrl: string | null;
 }>;
 export const initFromNodeLocation = (
-    nodeName: string, location: string, fallbackUrl: string
+    nodeName: string, path: string | null, query: string | null, hash: string | null, fallbackUrl: string | null
 ): InitFromNodeLocationAction =>
-    actionWithPayload("INIT_FROM_NODE_LOCATION", {nodeName, location, fallbackUrl});
+    actionWithPayload("INIT_FROM_NODE_LOCATION", {nodeName, path, query, hash, fallbackUrl});
 
 export type InitFromLocationAction = ActionWithPayload<"INIT_FROM_LOCATION", {
     nodeName: string | null;

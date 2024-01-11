@@ -53,6 +53,7 @@ import {
 } from "state/detailedposting/selectors";
 import { PostingDeletedAction, postingSet, PostingSetAction } from "state/postings/actions";
 import { getPostingMoment } from "state/postings/selectors";
+import { isAtNode } from "state/node/selectors";
 import { CommentAddedEvent, CommentReactionsChangedEvent, CommentUpdatedEvent, EventAction } from "api/events";
 
 export default [
@@ -79,7 +80,7 @@ export default [
     ),
     trigger(
         ["GO_TO_PAGE", "POSTING_SET", "NODE_READY"],
-        conj(isAtDetailedPostingPage, isCommentsReceiverToBeSwitched),
+        conj(isAtNode, isAtDetailedPostingPage, isCommentsReceiverToBeSwitched),
         commentsReceiverSwitch
     ),
     trigger(
