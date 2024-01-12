@@ -43,7 +43,7 @@ export default function InstantStory({story, lastNew, hide}: Props) {
 
     const {nodeName, href} = getInstantTarget(story);
     const buttons = getInstantTypeDetails(story.storyType)?.buttons;
-    const trackingId = story.read ? null : story.trackingId;
+    const readId = story.read ? null : story.id;
 
     const publishDate = fromUnixTime(story.publishedAt);
 
@@ -54,7 +54,7 @@ export default function InstantStory({story, lastNew, hide}: Props) {
                     {profileLink &&
                         <Jump nodeName={story.summaryNodeName} href="/profile" className="outer cells-avatar"/>
                     }
-                    <Jump nodeName={nodeName} href={href} trackingId={trackingId} onNear={onJump} onFar={onJump}
+                    <Jump nodeName={nodeName} href={href} readId={readId} onNear={onJump} onFar={onJump}
                           className={cx("outer", {"cells-summary": profileLink, "cells-all": !profileLink})}/>
                     <div className="summary-avatar">
                         <Avatar avatar={story.summaryAvatar} ownerName={story.summaryNodeName} nodeName=":" size={36}/>

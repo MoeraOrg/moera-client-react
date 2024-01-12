@@ -1,6 +1,7 @@
 import { call, put } from 'typed-redux-saga';
 
 import { Node } from "api";
+import { homeIntroduced } from "state/init-selectors";
 import { errorThrown } from "state/error/actions";
 import {
     StoryPinningUpdateAction,
@@ -12,7 +13,7 @@ import { executor } from "state/executor";
 
 export default [
     executor("STORY_PINNING_UPDATE", null, storyPinningUpdateSaga),
-    executor("STORY_READING_UPDATE", null, storyReadingUpdateSaga),
+    executor("STORY_READING_UPDATE", null, storyReadingUpdateSaga, homeIntroduced),
     executor("STORY_SATISFY", null, storySatisfySaga)
 ];
 

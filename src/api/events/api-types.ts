@@ -180,7 +180,6 @@ export interface StoryEvent<T> extends BaseEvent<T> {
     summaryAvatar?: AvatarImage | null,
     summary?: string | null;
     summaryData?: StorySummaryData | null;
-    trackingId?: string | null;
     remoteNodeName?: string | null;
     remoteFullName?: string | null;
     remotePostingId?: string | null;

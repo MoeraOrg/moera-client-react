@@ -3939,10 +3939,6 @@ export const NODE_API_SCHEMAS = {
                     type: "object",
                     nullable: true
                 },
-                "trackingId": {
-                    type: "string",
-                    nullable: true
-                },
                 "posting": {
                     $ref: "node#/definitions/PostingInfo",
                     type: "object",

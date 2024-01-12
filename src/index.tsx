@@ -9,6 +9,7 @@ import "i18n";
 import { Storage } from "storage";
 import store from "state/store";
 import { goHomeNews, initFromLocation, initFromNodeLocation } from "state/navigation/actions";
+import { storyReadingUpdate } from "state/stories/actions";
 import * as Browser from "ui/browser";
 import App from "ui/App";
 import * as serviceWorker from "serviceWorker";
@@ -21,6 +22,10 @@ function sendInitAction(): void {
         store.dispatch(initFromNodeLocation(name, path, query, hash, null));
     } else {
         store.dispatch(goHomeNews());
+    }
+    const readId = Browser.parameters.get("read");
+    if (readId) {
+        store.dispatch(storyReadingUpdate(":instant", readId, true));
     }
 }
 

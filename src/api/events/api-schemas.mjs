@@ -517,10 +517,6 @@ export const EVENT_SCHEMAS = {
                     type: "object",
                     nullable: true
                 },
-                "trackingId": {
-                    type: "string",
-                    nullable: true
-                },
                 "remoteNodeName": {
                     type: "string",
                     nullable: true
@@ -644,10 +640,6 @@ export const EVENT_SCHEMAS = {
                 "summaryData": {
                     $ref: "node#/definitions/StorySummaryData",
                     type: "object",
-                    nullable: true
-                },
-                "trackingId": {
-                    type: "string",
                     nullable: true
                 },
                 "remoteNodeName": {

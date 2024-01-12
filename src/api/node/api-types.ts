@@ -1480,7 +1480,6 @@ export interface StoryInfoBase<B> {
     summaryAvatar?: AvatarImage | null;
     summary?: string | null;
     summaryData?: StorySummaryData | null;
-    trackingId?: string | null;
     posting?: PostingInfoBase<B> | null;
     postingId?: string | null;
     comment?: CommentInfoBase<B> | null;

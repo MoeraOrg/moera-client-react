@@ -18,6 +18,7 @@ interface DocumentLocation {
 export const clientId: string = randomId();
 export const [userAgent, userAgentOs] = initUserAgent();
 export const androidAppFlavor: AndroidAppFlavor | null = initAndroidAppFlavor();
+export const parameters: Map<string, string> = initParameters();
 
 function initUserAgent(): [UserAgent, UserAgentOs] {
     let userAgent: UserAgent = "unknown";
@@ -59,6 +60,19 @@ function initAndroidAppFlavor(): AndroidAppFlavor | null {
         }
     }
     return null;
+}
+
+function initParameters(): Map<string, string> {
+    const parameters = new Map<string, string>();
+    if (!window.location.search) {
+        return parameters;
+    }
+    window.location.search
+        .substring(1)
+        .split("&")
+        .map(s => s.split("="))
+        .forEach(([name, value]) => parameters.set(name, value));
+    return parameters;
 }
 
 export const isDevMode = (): boolean =>
@@ -133,40 +147,22 @@ export function getLocation(
 }
 
 export function parseDocumentLocation(): DocumentLocation {
-    let components: DocumentLocation | null = null;
-
-    const search = window.location.search;
-    if (search && search.includes("href=")) {
-        components = parsePassedLocation(search.substring(1));
+    if (parameters.has("href")) {
+        return parsePassedLocation(parameters.get("href")!);
     }
-    if (components == null) {
-        components = parseUniversalLocation();
-    }
-
-    return components ?? {};
+    return parseUniversalLocation() ?? {};
 }
 
-function parsePassedLocation(query: string): DocumentLocation | null {
-    if (!query) {
-        return null;
+function parsePassedLocation(href: string): DocumentLocation {
+    let {scheme, host, port, path, query, fragment} = URI.parse(decodeURIComponent(href));
+    const rootLocation = rootUrl(scheme ?? "https", host ?? "", port);
+    if (query) {
+        query = `?${query}`;
     }
-    let components: DocumentLocation | null = null;
-    query
-        .split("&")
-        .map(s => s.split("="))
-        .filter(([name]) => name === "href")
-        .forEach(([_, value]) => {
-            let {scheme, host, port, path, query, fragment} = URI.parse(decodeURIComponent(value));
-            const rootLocation = rootUrl(scheme ?? "https", host ?? "", port);
-            if (query) {
-                query = `?${query}`;
-            }
-            if (fragment) {
-                fragment = `#${fragment}`;
-            }
-            components = {rootLocation, path, query, hash: fragment};
-    });
-    return components;
+    if (fragment) {
+        fragment = `#${fragment}`;
+    }
+    return {rootLocation, path, query, hash: fragment};
 }
 
 function parseUniversalLocation(): DocumentLocation | null {
@@ -228,7 +224,7 @@ function parseUniversalLocation(): DocumentLocation | null {
 
 export function universalLocation(
     nodeName: string | null | undefined, nodeRoot: string | null | undefined, location: string,
-    trackingId?: string | null
+    readId?: string | null
 ): string {
     let url = getRootLocation() + "/~";
     if (nodeName != null) {
@@ -251,8 +247,8 @@ export function universalLocation(
         location = location.substring(6);
     }
     url += location;
-    if (trackingId) {
-        url = urlWithParameters(url, {trackingId});
+    if (readId) {
+        url = urlWithParameters(url, {read: readId});
     }
     return url;
 }
