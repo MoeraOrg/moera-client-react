@@ -9,6 +9,30 @@ import { isNumber, parseBool } from "util/misc";
 export type SettingValue = boolean | number | Date | string | PrincipalValue;
 type SettingModifiers = SettingTypeModifiers | ClientSettingTypeModifiers;
 
+interface MemoizedSettingValue {
+    valueString: string;
+    value: SettingValue;
+}
+const memoizedValues = new Map<string, MemoizedSettingValue>();
+
+export function toValueMemoized(name: string, type: SettingType, valueString: string): SettingValue {
+    switch (type) {
+        case "Timestamp":
+        case "json": {
+            const mem = memoizedValues.get(name);
+            if (mem?.valueString === valueString) {
+                return mem.value;
+            }
+            const value = toValue(type, valueString);
+            memoizedValues.set(name, {valueString, value});
+            return value;
+        }
+
+        default:
+            return toValue(type, valueString);
+    }
+}
+
 export function toValue(type: SettingType, valueString: string): SettingValue {
     switch (type) {
         case "bool":

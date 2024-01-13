@@ -74,7 +74,7 @@ export function getSettingNode(state: ClientState, name: string): SettingValue |
         return null;
     }
     const value = state.settings.node.values.get(name);
-    return SettingTypes.toValue(meta.type, value ?? meta.defaultValue ?? "");
+    return SettingTypes.toValueMemoized(name, meta.type, value ?? meta.defaultValue ?? "");
 }
 
 export function getSettingMeta(state: ClientState, name: string): ClientSettingMetaInfo | null {
@@ -87,7 +87,7 @@ export function getSetting(state: ClientState, name: string): SettingValue | nul
         return null;
     }
     const value = state.settings.client.values.get(CLIENT_SETTINGS_PREFIX + name);
-    return SettingTypes.toValue(meta.type, value ?? meta.defaultValue ?? "");
+    return SettingTypes.toValueMemoized(CLIENT_SETTINGS_PREFIX + name, meta.type, value ?? meta.defaultValue ?? "");
 }
 
 export function getPostingBodyFontMagnitude(state: ClientState): number {
