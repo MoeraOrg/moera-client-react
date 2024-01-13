@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { shareDialogPrepare } from "state/sharedialog/actions";
-import { lightBoxCopyLink, lightBoxCopyMediaLink } from "state/lightbox/actions";
+import { lightBoxCopyLink } from "state/lightbox/actions";
 import {
     getLightBoxCommentId,
     getLightBoxMediaId,
@@ -21,12 +21,11 @@ import { urlWithParameters, ut } from "util/url";
 import './LightBoxShareButton.css';
 
 interface Props {
-    mediaNodeName: string,
-    mediaHref: string,
-    mediaUrl: string;
+    mediaNodeName: string;
+    mediaHref: string;
 }
 
-function LightBoxShareItems({mediaNodeName, mediaHref, mediaUrl}: Props) {
+function LightBoxShareItems({mediaNodeName, mediaHref}: Props) {
     const sourceNodeName = useSelector((state: ClientState) => getLightBoxNodeName(state) || getOwnerName(state));
     const posting = useSelector((state: ClientState) => getPosting(state, getLightBoxPostingId(state)));
     const comment = useSelector((state: ClientState) => {
@@ -86,19 +85,19 @@ function LightBoxShareItems({mediaNodeName, mediaHref, mediaUrl}: Props) {
                 title: t("copy-image-link"),
                 nodeName: mediaNodeName,
                 href: mediaHref,
-                onClick: () => dispatch(lightBoxCopyMediaLink(mediaUrl)),
+                onClick: () => dispatch(lightBoxCopyLink(mediaNodeName, mediaHref)),
                 show: true
             },
         ]}/>
     );
 }
 
-export default function LightBoxShareButton({mediaNodeName, mediaHref, mediaUrl}: Props) {
+export default function LightBoxShareButton({mediaNodeName, mediaHref}: Props) {
     const {t} = useTranslation();
 
     return (
         <DropdownMenu className="lightbox-button lightbox-share" content={
-            <LightBoxShareItems mediaNodeName={mediaNodeName} mediaHref={mediaHref} mediaUrl={mediaUrl}/>
+            <LightBoxShareItems mediaNodeName={mediaNodeName} mediaHref={mediaHref}/>
         }>
             <FontAwesomeIcon icon={faShareAlt} title={t("share")}/>
         </DropdownMenu>

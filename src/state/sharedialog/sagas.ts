@@ -14,14 +14,13 @@ import { getNodeUri } from "state/naming/sagas";
 import { messageBox } from "state/messagebox/actions";
 import { flashBox } from "state/flashbox/actions";
 import * as Browser from "ui/browser";
-import { normalizeUrl } from "util/url";
 import { getWindowSelectionHtml, hasWindowSelection } from "util/ui";
 import { quoteHtml } from "util/html";
 
 export default [
     executor("SHARE_DIALOG_PREPARE", "", shareDialogPrepareSaga),
     executor("SHARE_DIALOG_COPY_LINK", payload => payload.url, shareDialogCopyLinkSaga),
-    executor("SHARE_PAGE_COPY_LINK", null, sharePageCopyLink)
+    executor("SHARE_PAGE_COPY_LINK", null, sharePageCopyLinkSaga)
 ];
 
 function* share(action: ShareDialogPrepareAction, url: string, text: string) {
@@ -49,7 +48,7 @@ function* shareDialogPrepareSaga(action: ShareDialogPrepareAction) {
         yield* put(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName).causedBy(action));
         return;
     }
-    const url = normalizeUrl(nodeUri) + href;
+    const url = Browser.universalLocation(nodeName, nodeUri, href);
     yield* call(share, action, url, text);
 }
 
@@ -61,7 +60,7 @@ function* shareDialogCopyLinkSaga(action: ShareDialogCopyLinkAction) {
     }
 }
 
-function* sharePageCopyLink(action: SharePageCopyLinkAction) {
+function* sharePageCopyLinkSaga(action: SharePageCopyLinkAction) {
     const {nodeName, href} = action.payload;
 
     const nodeUri = yield* call(getNodeUri, action, nodeName);
@@ -69,7 +68,7 @@ function* sharePageCopyLink(action: SharePageCopyLinkAction) {
         yield* put(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName).causedBy(action));
         return;
     }
-    yield* call(clipboardCopy, normalizeUrl(nodeUri) + href);
+    yield* call(clipboardCopy, Browser.universalLocation(nodeName, nodeUri, href));
     if (!Browser.isAndroidBrowser()) {
         yield* put(flashBox(i18n.t("link-copied")).causedBy(action));
     }

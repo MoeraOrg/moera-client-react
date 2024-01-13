@@ -35,16 +35,9 @@ export type LightBoxCopyLinkAction = ActionWithPayload<"LIGHT_BOX_COPY_LINK", {
 export const lightBoxCopyLink = (nodeName: string, url: string): LightBoxCopyLinkAction =>
     actionWithPayload("LIGHT_BOX_COPY_LINK", {nodeName, url});
 
-export type LightBoxCopyMediaLinkAction = ActionWithPayload<"LIGHT_BOX_COPY_MEDIA_LINK", {
-    url: string;
-}>;
-export const lightBoxCopyMediaLink = (url: string): LightBoxCopyMediaLinkAction =>
-    actionWithPayload("LIGHT_BOX_COPY_MEDIA_LINK", {url});
-
 export type LightBoxAnyAction =
     OpenLightBoxAction
     | CloseLightBoxAction
     | LightBoxMediaSetAction
     | LightBoxMediaPostingLoadAction
-    | LightBoxCopyLinkAction
-    | LightBoxCopyMediaLinkAction;
+    | LightBoxCopyLinkAction;

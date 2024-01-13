@@ -99,7 +99,7 @@ export default function LightBox() {
                   onMoveNextRequest={onMoveNextRequest} nextLabel={t("next-image")}
                   reactModalStyle={{overlay: {zIndex: 1040}}}
                   toolbarButtons={[
-                      <LightBoxShareButton mediaNodeName={mediaNodeName} mediaHref={mainHref} mediaUrl={mainSrc}/>,
+                      <LightBoxShareButton mediaNodeName={mediaNodeName} mediaHref={mainHref}/>,
                       <LightBoxDownloadButton mediaUrl={mainSrc} mediaMimeType={mainMimeType}/>,
                       <LightBoxReactions/>
                   ]}

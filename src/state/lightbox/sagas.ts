@@ -8,20 +8,14 @@ import { getNodeUri } from "state/naming/sagas";
 import { postingLoad } from "state/postings/actions";
 import { flashBox } from "state/flashbox/actions";
 import { errorThrown } from "state/error/actions";
-import {
-    LightBoxCopyLinkAction,
-    LightBoxCopyMediaLinkAction,
-    LightBoxMediaPostingLoadAction,
-    LightBoxMediaSetAction
-} from "state/lightbox/actions";
+import { LightBoxCopyLinkAction, LightBoxMediaPostingLoadAction, LightBoxMediaSetAction } from "state/lightbox/actions";
 import { getLightBoxMediaPostingId, getLightBoxNodeName } from "state/lightbox/selectors";
 import * as Browser from "ui/browser";
 
 export default [
     executor("LIGHT_BOX_MEDIA_POSTING_LOAD", null, lightBoxMediaPostingLoadSaga),
     executor("LIGHT_BOX_MEDIA_SET", null, lightBoxMediaSetSaga),
-    executor("LIGHT_BOX_COPY_LINK", null, lightBoxCopyLinkSaga),
-    executor("LIGHT_BOX_COPY_MEDIA_LINK", null, lightBoxCopyMediaLinkSaga)
+    executor("LIGHT_BOX_COPY_LINK", null, lightBoxCopyLinkSaga)
 ];
 
 function* lightBoxMediaPostingLoadSaga(action: LightBoxMediaPostingLoadAction) {
@@ -49,18 +43,7 @@ function* lightBoxCopyLinkSaga(action: LightBoxCopyLinkAction) {
     const {nodeName, url} = action.payload;
     try {
         const nodeUri = yield* call(getNodeUri, action, nodeName);
-        yield* call(clipboardCopy, nodeUri + url);
-        if (!Browser.isAndroidBrowser()) {
-            yield* put(flashBox(i18n.t("link-copied")).causedBy(action));
-        }
-    } catch (e) {
-        yield* put(errorThrown(e));
-    }
-}
-
-function* lightBoxCopyMediaLinkSaga(action: LightBoxCopyMediaLinkAction) {
-    try {
-        yield* call(clipboardCopy, action.payload.url);
+        yield* call(clipboardCopy, Browser.universalLocation(nodeName, nodeUri, url));
         if (!Browser.isAndroidBrowser()) {
             yield* put(flashBox(i18n.t("link-copied")).causedBy(action));
         }
