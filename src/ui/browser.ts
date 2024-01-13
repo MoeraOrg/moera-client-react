@@ -178,7 +178,7 @@ function parseUniversalLocation(): DocumentLocation | null {
     }
 
     const dirs = path.split('/');
-    if (!dirs[0].startsWith('~')) {
+    if (!dirs[0].startsWith('@')) {
         return null;
     }
 
@@ -226,7 +226,7 @@ export function universalLocation(
     nodeName: string | null | undefined, nodeRoot: string | null | undefined, location: string,
     readId?: string | null
 ): string {
-    let url = getRootLocation() + "/~";
+    let url = getRootLocation() + "/@";
     if (nodeName != null) {
         url += encodeURIComponent(NodeName.shorten(nodeName));
     }
