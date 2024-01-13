@@ -56,13 +56,13 @@ export default function CurrentPage() {
             return <DetailedPostingPage/>;
         case PAGE_COMPOSE:
             return (
-                <Suspense fallback={<Loading/>}>
+                <Suspense fallback={<Loading overlay large/>}>
                     <ComposePage/>;
                 </Suspense>
             );
         case PAGE_SETTINGS:
             return (
-                <Suspense fallback={<Loading/>}>
+                <Suspense fallback={<Loading overlay large/>}>
                     <SettingsPage/>
                 </Suspense>
             );
@@ -70,13 +70,13 @@ export default function CurrentPage() {
             return <NewsPage/>;
         case PAGE_PEOPLE:
             return (
-                <Suspense fallback={<Loading/>}>
+                <Suspense fallback={<Loading overlay large/>}>
                     <PeoplePage/>
                 </Suspense>
             );
         case PAGE_COMPLAINS:
             return (
-                <Suspense fallback={<Loading/>}>
+                <Suspense fallback={<Loading overlay large/>}>
                     <ComplainsPage/>
                 </Suspense>
             );

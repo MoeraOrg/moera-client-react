@@ -85,9 +85,7 @@ export function ModalDialog({
                     }
                 )} style={style}>
                     <div className="modal-content" ref={modalDialog}>
-                        {loading &&
-                            <div className="loading-overlay"><Loading large/></div>
-                        }
+                        {loading && <Loading overlay large/>}
                         {title &&
                             <div className="modal-header">
                                 <h4 className="modal-title">{title}</h4>
