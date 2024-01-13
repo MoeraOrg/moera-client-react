@@ -150,7 +150,7 @@ export function parseDocumentLocation(): DocumentLocation {
     if (parameters.has("href")) {
         return parsePassedLocation(parameters.get("href")!);
     }
-    return parseUniversalLocation() ?? {};
+    return parseUniversalLocation(window.location.pathname, window.location.search, window.location.hash) ?? {};
 }
 
 function parsePassedLocation(href: string): DocumentLocation {
@@ -165,8 +165,12 @@ function parsePassedLocation(href: string): DocumentLocation {
     return {rootLocation, path, query, hash: fragment};
 }
 
-function parseUniversalLocation(): DocumentLocation | null {
-    let path = window.location.pathname;
+export function parseUniversalLocation(
+    path: string | null | undefined, query: string | null | undefined, hash: string | null | undefined
+): DocumentLocation | null {
+    if (!path) {
+        return null;
+    }
     if (path.startsWith('/')) {
         path = path.substring(1);
     }
@@ -216,8 +220,8 @@ function parseUniversalLocation(): DocumentLocation | null {
     }
     components.path = path;
 
-    components.query = window.location.search;
-    components.hash = window.location.hash;
+    components.query = query;
+    components.hash = hash;
 
     return components;
 }
