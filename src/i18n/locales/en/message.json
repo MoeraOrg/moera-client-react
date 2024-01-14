@@ -44,6 +44,7 @@
   "blocking-node" : "Blocking {name}",
   "blocking-reason" : "Reason of blocking",
   "blocking-till" : "Blocking till",
+  "blog-moved" : "It seems that blog <b>{name}</b> has moved to the new address <b>{location}</b>. Do you want to open the blog at the new location?",
   "bold" : "Bold",
   "bottom" : "Bottom",
   "cancel" : "Cancel",

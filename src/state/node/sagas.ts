@@ -1,9 +1,13 @@
 import { call, put, select } from 'typed-redux-saga';
 import * as URI from 'uri-js';
+import i18n from 'i18next';
 
-import { Node } from "api";
-import { errorThrown } from "state/error/actions";
+import { Node, NodeName } from "api";
 import { executor } from "state/executor";
+import { ClientState } from "state/state";
+import { homeIntroduced, namingInitialized } from "state/init-selectors";
+import { WithContext } from "state/action-types";
+import { errorThrown } from "state/error/actions";
 import {
     NodeFeaturesLoadAction,
     nodeFeaturesLoaded,
@@ -17,10 +21,9 @@ import {
 } from "state/node/actions";
 import { getNodeRootPage, getOwnerName } from "state/node/selectors";
 import { initFromLocation } from "state/navigation/actions";
-import { homeIntroduced, namingInitialized } from "state/init-selectors";
 import { getNameDetails, getNodeUri } from "state/naming/sagas";
+import { confirmBox } from "state/confirmbox/actions";
 import { normalizeUrl, rootUrl } from "util/url";
-import { WithContext } from "state/action-types";
 
 export default [
     executor("OWNER_LOAD", "", ownerLoadSaga),
@@ -52,6 +55,20 @@ function* ownerVerifySaga(action: OwnerVerifyAction) {
         const nodeUri = normalizeUrl(yield* call(getNodeUri, action, ownerName));
         const correct = normalizeUrl(nodeUri) === rootPage;
         yield* put(ownerVerified(ownerName, correct).causedBy(action));
+        if (nodeUri && !correct) {
+            const href = yield* select((state: ClientState) => state.navigation.location);
+            const {scheme, host, port} = URI.parse(nodeUri);
+            if (scheme != null && host != null) {
+                const rootLocation = rootUrl(scheme, host, port);
+                const {path = null, query = null, fragment = null} = URI.parse(href);
+                yield* put(confirmBox(
+                    i18n.t("blog-moved", {name: NodeName.shorten(ownerName), location: rootLocation}),
+                    i18n.t("open"),
+                    i18n.t("cancel"),
+                    initFromLocation(ownerName, rootLocation, path, query, fragment)
+                ).causedBy(action));
+            }
+        }
     } catch (e) {
         yield* put(errorThrown(e));
     }
