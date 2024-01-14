@@ -124,7 +124,11 @@ function* goHomeNewsSaga(action: GoHomeNewsAction) {
         homeOwnerName: getHomeOwnerName(state),
         homeRootPage: getHomeRootPage(state)
     }));
-    if (atNode || homeRootPage == null) {
+    if (atNode) {
+        return;
+    }
+    if (homeRootPage == null) {
+        yield* put(nodeReady());
         return;
     }
     const {scheme, host, port, path} = URI.parse(homeRootPage);
