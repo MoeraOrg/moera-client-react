@@ -227,10 +227,10 @@ export function parseUniversalLocation(
 }
 
 export function universalLocation(
-    nodeName: string | null | undefined, nodeRoot: string | null | undefined, location: string,
-    readId?: string | null
+    clientUrl: string | null, nodeName: string | null | undefined, nodeRoot: string | null | undefined,
+    location: string, readId?: string | null
 ): string {
-    let url = getRootLocation() + "/@";
+    let url = (clientUrl ?? "https://moera.page") + "/@";
     if (nodeName != null) {
         url += encodeURIComponent(NodeName.shorten(nodeName));
     }

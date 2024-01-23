@@ -265,7 +265,7 @@ export default function RichTextEditorPanel({
                 insertText(textArea.current, mentionName(nodeName, fullName))
             } else {
                 const text = (fullName || NodeName.shorten(nodeName)) ?? nodeName ?? "";
-                const href = Browser.universalLocation(nodeName, null, "/");
+                const href = Browser.universalLocation(null, nodeName, null, "/");
                 insertText(textArea.current,
                     `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(nodeName ?? "")}" data-href="/">`
                     + `${htmlEntities(text)}</a>`);

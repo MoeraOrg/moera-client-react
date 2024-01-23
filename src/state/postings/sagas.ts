@@ -218,13 +218,13 @@ export function* postingGetLink(action: ClientAction, id: string, nodeName: stri
     const targetNode = posting?.receiverName != null ? posting.receiverName : nodeName;
     if (targetNode && posting?.receiverDeletedAt == null) {
         const nodeUri = yield* call(getNodeUri, action, targetNode);
-        return Browser.universalLocation(targetNode, nodeUri, `/post/${posting?.receiverPostingId ?? id}`);
+        return Browser.universalLocation(null, targetNode, nodeUri, `/post/${posting?.receiverPostingId ?? id}`);
     } else {
         const {ownerName, rootLocation} = yield* select((state: ClientState) => ({
             ownerName: getOwnerName(state),
             rootLocation: getNodeRootLocation(state)
         }));
-        return Browser.universalLocation(ownerName, rootLocation, `/moera/post/${id}`);
+        return Browser.universalLocation(null, ownerName, rootLocation, `/moera/post/${id}`);
     }
 }
 

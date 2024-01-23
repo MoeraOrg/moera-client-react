@@ -86,8 +86,8 @@ function Jump(
 
     const nodeOwnerName = nodeName ? (nodeName === ":" ? homeOwnerName : nodeName) : ownerName;
     if (nodeOwnerName === ownerName) {
-        const nodeLocation = rootPage ?? nodeUri ?? "unknown";
-        const url = Browser.universalLocation(ownerName, nodeLocation, href, readId);
+        const nodeLocation = rootPage ?? nodeUri;
+        const url = Browser.universalLocation(null, ownerName, nodeLocation, href, readId);
         return <a href={url} className={className} style={style} title={title} data-nodename={nodeOwnerName}
                   data-href={href} ref={ref} onClick={onNearClick} suppressHydrationWarning>{children}</a>;
     } else {
@@ -100,7 +100,7 @@ function Jump(
             nodeLocation = nodeUri;
         }
         nodeLocation ??= null;
-        const url = Browser.universalLocation(nodeOwnerName, nodeLocation, href, readId);
+        const url = Browser.universalLocation(null, nodeOwnerName, nodeLocation, href, readId);
         return <a href={url} className={className} style={style} title={title} data-nodename={nodeOwnerName}
                   data-href={href} ref={ref} onClick={onFarClick(url, nodeLocation, nodeOwnerName)}
                   suppressHydrationWarning>{children}</a>;

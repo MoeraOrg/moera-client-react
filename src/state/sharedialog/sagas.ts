@@ -48,7 +48,7 @@ function* shareDialogPrepareSaga(action: ShareDialogPrepareAction) {
         yield* put(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName).causedBy(action));
         return;
     }
-    const url = Browser.universalLocation(nodeName, nodeUri, href);
+    const url = Browser.universalLocation(null, nodeName, nodeUri, href);
     yield* call(share, action, url, text);
 }
 
@@ -68,7 +68,7 @@ function* sharePageCopyLinkSaga(action: SharePageCopyLinkAction) {
         yield* put(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName).causedBy(action));
         return;
     }
-    yield* call(clipboardCopy, Browser.universalLocation(nodeName, nodeUri, href));
+    yield* call(clipboardCopy, Browser.universalLocation(null, nodeName, nodeUri, href));
     if (!Browser.isAndroidBrowser()) {
         yield* put(flashBox(i18n.t("link-copied")).causedBy(action));
     }

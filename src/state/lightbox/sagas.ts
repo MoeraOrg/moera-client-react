@@ -43,7 +43,7 @@ function* lightBoxCopyLinkSaga(action: LightBoxCopyLinkAction) {
     const {nodeName, url} = action.payload;
     try {
         const nodeUri = yield* call(getNodeUri, action, nodeName);
-        yield* call(clipboardCopy, Browser.universalLocation(nodeName, nodeUri, url));
+        yield* call(clipboardCopy, Browser.universalLocation(null, nodeName, nodeUri, url));
         if (!Browser.isAndroidBrowser()) {
             yield* put(flashBox(i18n.t("link-copied")).causedBy(action));
         }
