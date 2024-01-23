@@ -19,7 +19,7 @@ export function interceptLinkClick(event: MouseEvent | React.MouseEvent) {
         return;
     }
 
-    if (parts.host.toLowerCase() === "moera.page") {
+    if (["moera.page", window.location.host].includes(parts.host.toLowerCase())) {
         const uniParts = Browser.parseUniversalLocation(parts.path, parts.query, parts.fragment);
         if (uniParts != null) {
             const {name = null, rootLocation, path = null, query = null, hash = null} = uniParts;
