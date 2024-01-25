@@ -32,9 +32,10 @@ function nameAngle(ownerName: string | null | undefined): number {
 }
 
 function getRootPage(state: ClientState, nodeName: string | null | undefined): string | null {
-    return nodeName
+    const rootPage = nodeName
         ? (nodeName === ":" ? getHomeRootPage(state) : getNamingNameNodeUri(state, nodeName))
-        : getNodeRootPage(state);
+        : null;
+    return rootPage ?? getNodeRootPage(state);
 }
 
 interface Props {
