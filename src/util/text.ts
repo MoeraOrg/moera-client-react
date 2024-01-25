@@ -10,7 +10,15 @@ export function replaceSmileys(text: string, removeEscapes = true): string {
     }
     return text.replace(SMILEY_LIKE, (match: string, p1: string, p2: string) => {
         if (p2.startsWith("\\")) {
-            return removeEscapes ? p1 + p2.substring(1) : match;
+            if (!removeEscapes) {
+                return match;
+            }
+            for (const smiley of SMILEYS) {
+                if (smiley.regex.test(p2)) {
+                    return p1 + p2.substring(1);
+                }
+            }
+            return match;
         }
         for (const smiley of SMILEYS) {
             if (smiley.repeatGroup) {
