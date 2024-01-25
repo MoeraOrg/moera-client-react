@@ -209,9 +209,16 @@ export const EVENT_SCHEMAS = {
                     nullable: true
                 },
                 "avatar": {
-                    $ref: "node#/definitions/AvatarImage",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 }
             },
             additionalProperties: false,
@@ -504,18 +511,32 @@ export const EVENT_SCHEMAS = {
                     nullable: true
                 },
                 "summaryAvatar": {
-                    $ref: "node#/definitions/AvatarImage",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "summary": {
                     type: "string",
                     nullable: true
                 },
                 "summaryData": {
-                    $ref: "node#/definitions/StorySummaryData",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StorySummaryData",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "remoteNodeName": {
                     type: "string",
@@ -629,18 +650,32 @@ export const EVENT_SCHEMAS = {
                     nullable: true
                 },
                 "summaryAvatar": {
-                    $ref: "node#/definitions/AvatarImage",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "summary": {
                     type: "string",
                     nullable: true
                 },
                 "summaryData": {
-                    $ref: "node#/definitions/StorySummaryData",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StorySummaryData",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "remoteNodeName": {
                     type: "string",
@@ -1055,9 +1090,16 @@ export const EVENT_SCHEMAS = {
                     type: "string"
                 },
                 "avatar": {
-                    $ref: "node#/definitions/AvatarImage",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 }
             },
             additionalProperties: false,

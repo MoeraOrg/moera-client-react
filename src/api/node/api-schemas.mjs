@@ -652,9 +652,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "avatar": {
-                    $ref: "node#/definitions/AvatarImage",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "closeness": {
                     type: "number"
@@ -684,19 +691,40 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "node#/definitions/ContactOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ContactOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "ownerOperations": {
-                    $ref: "node#/definitions/ContactOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ContactOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "adminOperations": {
-                    $ref: "node#/definitions/ContactOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ContactOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             required: [
@@ -800,9 +828,16 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "operations": {
-                    $ref: "node#/definitions/StoryOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StoryOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             required: [
@@ -886,9 +921,16 @@ export const NODE_API_SCHEMAS = {
                     type: "integer"
                 },
                 "operations": {
-                    $ref: "node#/definitions/FriendOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/FriendOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             required: [
@@ -912,9 +954,16 @@ export const NODE_API_SCHEMAS = {
                     type: "integer"
                 },
                 "operations": {
-                    $ref: "node#/definitions/FriendGroupOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/FriendGroupOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             required: [
@@ -961,9 +1010,16 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "contact": {
-                    $ref: "node#/definitions/ContactInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ContactInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "groups": {
                     type: "array",
@@ -993,9 +1049,16 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "contact": {
-                    $ref: "node#/definitions/ContactInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ContactInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "groups": {
                     type: "array",
@@ -1146,9 +1209,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "node#/definitions/NodeNameOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/NodeNameOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             additionalProperties: false
@@ -1187,9 +1257,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "node#/definitions/PeopleOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/PeopleOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             additionalProperties: false
@@ -1249,9 +1326,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "avatar": {
-                    $ref: "node#/definitions/AvatarImage",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "feedName": {
                     type: "string"
@@ -1314,9 +1398,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "node#/definitions/PrivateMediaFileOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/PrivateMediaFileOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             required: [
@@ -1364,9 +1455,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "avatar": {
-                    $ref: "node#/definitions/AvatarInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "fundraisers": {
                     type: "array",
@@ -1376,9 +1474,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "node#/definitions/ProfileOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ProfileOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             additionalProperties: false
@@ -1436,9 +1541,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "ownerAvatar": {
-                    $ref: "node#/definitions/AvatarImage",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "postingId": {
                     type: "string",
@@ -1485,24 +1597,52 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "node#/definitions/ReactionOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ReactionOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "ownerOperations": {
-                    $ref: "node#/definitions/ReactionOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ReactionOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "seniorOperations": {
-                    $ref: "node#/definitions/ReactionOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ReactionOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "majorOperations": {
-                    $ref: "node#/definitions/ReactionOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ReactionOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             additionalProperties: false
@@ -1745,9 +1885,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "avatar": {
-                    $ref: "node#/definitions/AvatarImage",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "heading": {
                     type: "string",
@@ -2013,9 +2160,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "group": {
-                    $ref: "node#/definitions/SheriffComplainGroupInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/SheriffComplainGroupInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "reasonCode": {
                     type: "string"
@@ -2313,27 +2467,55 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "contact": {
-                    $ref: "node#/definitions/ContactInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ContactInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "createdAt": {
                     type: "integer"
                 },
                 "operations": {
-                    $ref: "node#/definitions/SubscriberOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/SubscriberOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "ownerOperations": {
-                    $ref: "node#/definitions/SubscriberOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/SubscriberOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "adminOperations": {
-                    $ref: "node#/definitions/SubscriberOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/SubscriberOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             required: [
@@ -2369,9 +2551,16 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "contact": {
-                    $ref: "node#/definitions/ContactInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ContactInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "remoteFeedName": {
                     type: "string",
@@ -2388,9 +2577,16 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "operations": {
-                    $ref: "node#/definitions/SubscriptionOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/SubscriptionOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             required: [
@@ -2587,9 +2783,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "avatar": {
-                    $ref: "node#/definitions/AvatarImage",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             additionalProperties: false
@@ -2606,9 +2809,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "remoteAvatar": {
-                    $ref: "node#/definitions/AvatarImage",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "remotePostingId": {
                     type: "string"
@@ -2650,9 +2860,16 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "contact": {
-                    $ref: "node#/definitions/ContactInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ContactInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "nodeName": {
                     type: "string"
@@ -2702,9 +2919,16 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "contact": {
-                    $ref: "node#/definitions/ContactInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ContactInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "entryId": {
                     type: "string",
@@ -2830,14 +3054,28 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "clientReaction": {
-                    $ref: "node#/definitions/ClientReactionInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ClientReactionInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "reactions": {
-                    $ref: "node#/definitions/ReactionTotalsInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ReactionTotalsInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             required: [
@@ -2875,9 +3113,16 @@ export const NODE_API_SCHEMAS = {
                     type: "integer"
                 },
                 "friendGroups": {
-                    $ref: "node#/definitions/FriendGroupsFeatures",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/FriendGroupsFeatures",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "ask": {
                     type: "array",
@@ -2920,9 +3165,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "node#/definitions/FeedOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/FeedOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "sheriffs": {
                     type: "array",
@@ -2957,14 +3209,28 @@ export const NODE_API_SCHEMAS = {
             type: "object",
             properties: {
                 "media": {
-                    $ref: "node#/definitions/PrivateMediaFileInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/PrivateMediaFileInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "remoteMedia": {
-                    $ref: "node#/definitions/RemoteMediaInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/RemoteMediaInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "embedded": {
                     type: "boolean"
@@ -3005,9 +3271,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "receiverAvatar": {
-                    $ref: "node#/definitions/AvatarImage",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "receiverPostingId": {
                     type: "string",
@@ -3029,9 +3302,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "ownerAvatar": {
-                    $ref: "node#/definitions/AvatarImage",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "bodyPreview": {
                     type: "string",
@@ -3066,9 +3346,16 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "updateInfo": {
-                    $ref: "node#/definitions/UpdateInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/UpdateInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "createdAt": {
                     type: "integer"
@@ -3131,29 +3418,64 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "node#/definitions/PostingOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/PostingOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "receiverOperations": {
-                    $ref: "node#/definitions/PostingOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/PostingOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "commentOperations": {
-                    $ref: "node#/definitions/CommentOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/CommentOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "reactionOperations": {
-                    $ref: "node#/definitions/ReactionOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ReactionOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "commentReactionOperations": {
-                    $ref: "node#/definitions/ReactionOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ReactionOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "blockedOperations": {
                     type: "array",
@@ -3184,19 +3506,40 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "acceptedReactions": {
-                    $ref: "node#/definitions/AcceptedReactions",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AcceptedReactions",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "clientReaction": {
-                    $ref: "node#/definitions/ClientReactionInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ClientReactionInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "reactions": {
-                    $ref: "node#/definitions/ReactionTotalsInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ReactionTotalsInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "sources": {
                     type: "array",
@@ -3270,9 +3613,16 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "updateInfo": {
-                    $ref: "node#/definitions/UpdateInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/UpdateInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "createdAt": {
                     type: "integer"
@@ -3302,14 +3652,28 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "clientReaction": {
-                    $ref: "node#/definitions/ClientReactionInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ClientReactionInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "reactions": {
-                    $ref: "node#/definitions/ReactionTotalsInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ReactionTotalsInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             required: [
@@ -3333,9 +3697,16 @@ export const NODE_API_SCHEMAS = {
             type: "object",
             properties: {
                 "reaction": {
-                    $ref: "node#/definitions/ReactionInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ReactionInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "totals": {
                     $ref: "node#/definitions/ReactionTotalsInfo"
@@ -3368,9 +3739,16 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "modifiers": {
-                    $ref: "node#/definitions/SettingTypeModifiers",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/SettingTypeModifiers",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             required: [
@@ -3392,19 +3770,40 @@ export const NODE_API_SCHEMAS = {
             type: "object",
             properties: {
                 "node": {
-                    $ref: "node#/definitions/StorySummaryNode",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StorySummaryNode",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "posting": {
-                    $ref: "node#/definitions/StorySummaryEntry",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StorySummaryEntry",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "comment": {
-                    $ref: "node#/definitions/StorySummaryEntry",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StorySummaryEntry",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "comments": {
                     type: "array",
@@ -3418,19 +3817,40 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "repliedTo": {
-                    $ref: "node#/definitions/StorySummaryEntry",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StorySummaryEntry",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "parentPosting": {
-                    $ref: "node#/definitions/StorySummaryEntry",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StorySummaryEntry",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "reaction": {
-                    $ref: "node#/definitions/StorySummaryReaction",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StorySummaryReaction",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "reactions": {
                     type: "array",
@@ -3452,19 +3872,40 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "friendGroup": {
-                    $ref: "node#/definitions/StorySummaryFriendGroup",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StorySummaryFriendGroup",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "blocked": {
-                    $ref: "node#/definitions/StorySummaryBlocked",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StorySummaryBlocked",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "sheriff": {
-                    $ref: "node#/definitions/StorySummarySheriff",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StorySummarySheriff",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "description": {
                     type: "string",
@@ -3492,9 +3933,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "ownerAvatar": {
-                    $ref: "node#/definitions/AvatarImage",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "postingId": {
                     type: "string"
@@ -3541,9 +3989,16 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "repliedTo": {
-                    $ref: "node#/definitions/RepliedTo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/RepliedTo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "moment": {
                     type: "integer"
@@ -3579,24 +4034,52 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "node#/definitions/CommentOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/CommentOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "reactionOperations": {
-                    $ref: "node#/definitions/ReactionOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ReactionOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "ownerOperations": {
-                    $ref: "node#/definitions/CommentOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/CommentOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "seniorOperations": {
-                    $ref: "node#/definitions/CommentOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/CommentOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "blockedOperations": {
                     type: "array",
@@ -3613,24 +4096,52 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "acceptedReactions": {
-                    $ref: "node#/definitions/AcceptedReactions",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AcceptedReactions",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "clientReaction": {
-                    $ref: "node#/definitions/ClientReactionInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ClientReactionInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "seniorReaction": {
-                    $ref: "node#/definitions/ClientReactionInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ClientReactionInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "reactions": {
-                    $ref: "node#/definitions/ReactionTotalsInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ReactionTotalsInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             required: [
@@ -3726,14 +4237,28 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "ownerAvatar": {
-                    $ref: "node#/definitions/AvatarImage",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "acceptedReactions": {
-                    $ref: "node#/definitions/AcceptedReactions",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AcceptedReactions",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "bodySrc": {
                     type: "string",
@@ -3765,19 +4290,40 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "updateInfo": {
-                    $ref: "node#/definitions/UpdateInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/UpdateInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "operations": {
-                    $ref: "node#/definitions/PostingOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/PostingOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "commentOperations": {
-                    $ref: "node#/definitions/CommentOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/CommentOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             required: [
@@ -3802,14 +4348,28 @@ export const NODE_API_SCHEMAS = {
             type: "object",
             properties: {
                 "posting": {
-                    $ref: "node#/definitions/PostingInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/PostingInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "comment": {
-                    $ref: "node#/definitions/CommentInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/CommentInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             additionalProperties: false
@@ -3926,32 +4486,60 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "summaryAvatar": {
-                    $ref: "node#/definitions/AvatarImage",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "summary": {
                     type: "string",
                     nullable: true
                 },
                 "summaryData": {
-                    $ref: "node#/definitions/StorySummaryData",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StorySummaryData",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "posting": {
-                    $ref: "node#/definitions/PostingInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/PostingInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "postingId": {
                     type: "string",
                     nullable: true
                 },
                 "comment": {
-                    $ref: "node#/definitions/CommentInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/CommentInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "commentId": {
                     type: "string",
@@ -3978,9 +4566,16 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    $ref: "node#/definitions/StoryOperations",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StoryOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             required: [
@@ -4054,14 +4649,28 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "story": {
-                    $ref: "node#/definitions/StoryInfo",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StoryInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "feedStatus": {
-                    $ref: "node#/definitions/FeedWithStatus",
-                    type: "object",
-                    nullable: true
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/FeedWithStatus",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             required: [

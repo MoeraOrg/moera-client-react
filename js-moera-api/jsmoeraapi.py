@@ -40,11 +40,19 @@ def schema_type(sfile: TextIO, indent: int, a_type: str, struct: bool = False, n
                 default: Any = None, min: float | None = None, max: float | None = None) -> None:
     sfile.write('{\n')
     if struct:
-        sfile.write(ind(indent + 1) + f'$ref: "node#/definitions/{a_type}"')
         if nullable:
-            sfile.write(',\n')
-            sfile.write(ind(indent + 1) + 'type: "object",\n')
-            sfile.write(ind(indent + 1) + 'nullable: true')
+            sfile.write(ind(indent + 1) + 'anyOf: [\n')
+            sfile.write(ind(indent + 2) + '{\n')
+            sfile.write(ind(indent + 3) + f'$ref: "node#/definitions/{a_type}",\n')
+            sfile.write(ind(indent + 3) + 'type: "object",\n')
+            sfile.write(ind(indent + 3) + 'nullable: true\n')
+            sfile.write(ind(indent + 2) + '},\n')
+            sfile.write(ind(indent + 2) + '{\n')
+            sfile.write(ind(indent + 3) + 'type: "null"\n')
+            sfile.write(ind(indent + 2) + '}\n')
+            sfile.write(ind(indent + 1) + ']')
+        else:
+            sfile.write(ind(indent + 1) + f'$ref: "node#/definitions/{a_type}"')
     else:
         sfile.write(ind(indent + 1) + f'type: "{a_type}"')
         if nullable:
