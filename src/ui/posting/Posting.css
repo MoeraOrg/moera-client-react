@@ -58,16 +58,12 @@
     height: auto;
 }
 
-.posting > .content IMG.preload-placeholder {
-    width: var(--width);
-}
-
-.posting > .content IMG, .posting > .content IFRAME {
+.posting > .content IMG, .posting > .content IFRAME, .posting > .content .preload-placeholder {
     max-width: min(100vw - 4rem, var(--feed-width) - 3.5rem, var(--width, 100vw));
     max-height: var(--height, 200vh);
 }
 
-.posting.preview > .content IMG, .posting.preview > .content IFRAME {
+.posting.preview > .content IMG, .posting.preview > .content IFRAME, .posting.preview > .content .preload-placeholder {
     max-height: min(35rem, var(--height, 200vh));
 }
 

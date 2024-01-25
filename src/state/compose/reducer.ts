@@ -44,7 +44,7 @@ function buildDraftInfo(draftInfo: DraftInfo): ExtDraftInfo {
         .set("subject", bodySrc?.subject != null ? bodySrc.subject.substring(0, 64) : null)
         .set("text", bodySrc?.text != null ? bodySrc.text.substring(0, 256) : null)
         .set("subjectHtml", subjectHtml(body.subject))
-        .update("body.text", text => safeHtml(text))
+        .update("body.text", text => safeHtml(text, draftInfo.media))
         .value() as ExtDraftInfo;
 }
 
@@ -68,7 +68,7 @@ function appendToDraftList(draftList: ExtDraftInfo[], draftInfo: DraftInfo): Ext
 function postingToDraftPosting(posting: PostingInfo): DraftPostingInfo {
     return immutable.wrap(posting)
         .set("subjectHtml", subjectHtml(posting.body.subject))
-        .update("body.text", text => safeHtml(text))
+        .update("body.text", text => safeHtml(text, posting.media))
         .value() as DraftPostingInfo;
 }
 

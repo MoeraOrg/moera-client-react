@@ -2,12 +2,39 @@ import sanitizeHtml, { Attributes, IOptions, Tag, Transformer } from 'sanitize-h
 import { EmojiEntity, parse as parseEmojis } from 'twemoji-parser';
 import * as HtmlEntities from 'html-entities';
 
+import { MediaAttachment, PrivateMediaFileInfo } from "api";
 import { twemojiUrl } from "util/twemoji";
+import { mediaImageSize } from "util/media-images";
+import { isNumericString } from "util/misc";
 
 let prefixIndex = 0;
 
 function addDirAuto(tagName: string, attribs: Attributes): Tag {
     return attribs["dir"] ? {tagName, attribs} : {tagName, attribs: {...attribs, dir: "auto"}};
+}
+
+function createDimensionsTransformer(media: MediaAttachment[] | null | undefined): Transformer {
+    const mediaMap: Map<string, PrivateMediaFileInfo> = new Map(
+        (media ?? [])
+            .map(ma => ma.media)
+            .filter((mf): mf is PrivateMediaFileInfo => mf != null)
+            .map(mf => [mf.hash, mf])
+    );
+
+    return (tagName: string, attribs: Attributes): Tag => {
+        const src = attribs["src"];
+        const mediaFile = src != null && src.startsWith("hash:") ? mediaMap.get(src.substring(5)) : null;
+        if (mediaFile == null) {
+            return {tagName, attribs};
+        }
+
+        const width = isNumericString(attribs["width"]) ? parseInt(attribs["width"]) : null;
+        const height = isNumericString(attribs["height"]) ? parseInt(attribs["height"]) : null;
+        const [imageWidth, imageHeight] = mediaImageSize(900, width, height, mediaFile);
+        const style = `--width: ${imageWidth}px; --height: ${imageHeight}px; --aspect-ratio: ${imageWidth / imageHeight}`;
+
+        return {tagName, attribs: {...attribs, style}};
+    }
 }
 
 function createAnchorTransformers(): { [tagName: string]: string | Transformer } {
@@ -33,7 +60,7 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
     allowedAttributes: {
         ...sanitizeHtml.defaults.allowedAttributes,
         "*": ["dir", "id"],
-        img: ["src", "srcset", "width", "height", "alt", "title"],
+        img: ["src", "srcset", "width", "height", "alt", "title", "style"],
         a: ["href", "title", "data-nodename", "data-href"],
         b: ["style"],
         p: ["style"],
@@ -78,6 +105,11 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
         iframe: {
             "width": [/^\d+px$/],
             "height": [/^\d+px$/]
+        },
+        img: {
+            "--width": [/^\d+px$/],
+            "--height": [/^\d+px$/],
+            "--aspect-ratio": [/^[\d.]+$/]
         }
     },
     transformTags: {
@@ -156,7 +188,7 @@ export function replaceEmojis(html: string | null | undefined): string {
     return current;
 }
 
-export function safePreviewHtml(html: string | null | undefined): string {
+export function safePreviewHtml(html: string | null | undefined, media: MediaAttachment[] | null | undefined): string {
     if (!html) {
         return "";
     }
@@ -164,12 +196,13 @@ export function safePreviewHtml(html: string | null | undefined): string {
         ...SAFE_PREVIEW_HTML_SETTINGS,
         transformTags: {
             ...SAFE_PREVIEW_HTML_SETTINGS.transformTags,
-            ...createAnchorTransformers()
+            ...createAnchorTransformers(),
+            img: createDimensionsTransformer(media)
         }
     });
 }
 
-export function safeHtml(html: string | null | undefined): string {
+export function safeHtml(html: string | null | undefined, media: MediaAttachment[] | null | undefined): string {
     if (!html) {
         return "";
     }
@@ -177,7 +210,8 @@ export function safeHtml(html: string | null | undefined): string {
         ...SAFE_HTML_SETTINGS,
         transformTags: {
             ...SAFE_HTML_SETTINGS.transformTags,
-            ...createAnchorTransformers()
+            ...createAnchorTransformers(),
+            img: createDimensionsTransformer(media)
         }
     });
 }

@@ -76,8 +76,13 @@ export default function EntryHtml({className, postingId, commentId, html, nodeNa
                 const height = node.getAttribute("height");
                 const alt = node.getAttribute("alt");
                 const title = node.getAttribute("title");
+                const style = node.getAttribute("style");
 
                 const span = document.createElement("span");
+                if (style != null) {
+                    span.setAttribute("style", style);
+                }
+                span.className = "preload-placeholder";
                 node.replaceWith(span);
 
                 createRoot(span).render(

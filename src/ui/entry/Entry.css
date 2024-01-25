@@ -44,3 +44,9 @@
 .entry .footnotes LI P:last-of-type {
     margin-bottom: 0;
 }
+
+.entry .preload-placeholder {
+    display: inline-block;
+    width: var(--width);
+    aspect-ratio: var(--aspect-ratio);
+}

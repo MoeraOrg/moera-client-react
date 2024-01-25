@@ -61,11 +61,7 @@
     height: auto;
 }
 
-.comment .content IMG.preload-placeholder {
-    width: var(--width);
-}
-
-.comment .content IMG, .comment .content IFRAME {
+.comment .content IMG, .comment .content IFRAME, .comment .content .preload-placeholder {
     max-width: min(100vw - 7rem, var(--feed-width) - 6.5rem, var(--width, 100vw));
     max-height: min(16rem, var(--height, 200vh));
 }

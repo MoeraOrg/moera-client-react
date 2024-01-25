@@ -130,14 +130,14 @@ function extractComment(comment: CommentInfo | ExtCommentInfo): ExtCommentInfo {
     }
     const icomment = immutable.wrap(comment as ExtCommentInfo);
     if (comment.bodyPreview == null || !comment.bodyPreview.text) {
-        icomment.set("body.previewText", safePreviewHtml(comment.body.text ?? ""));
+        icomment.set("body.previewText", safePreviewHtml(comment.body.text ?? "", comment.media));
     }
     if (comment.repliedTo && comment.repliedTo.heading) {
         icomment.set("repliedTo.headingHtml", replaceEmojis(htmlEntities(comment.repliedTo.heading)));
     }
     return icomment
-        .update("bodyPreview.text", text => safePreviewHtml(text))
-        .update("body.text", text => safeHtml(text))
+        .update("bodyPreview.text", text => safePreviewHtml(text, comment.media))
+        .update("body.text", text => safeHtml(text, comment.media))
         .set("deleting", false)
         .set("verificationStatus", "none")
         .set("singleEmoji", isSingleEmojiComment(comment))
