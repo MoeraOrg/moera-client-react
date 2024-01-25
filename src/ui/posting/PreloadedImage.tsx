@@ -25,7 +25,8 @@ export default function PreloadedImage({src, srcSet, sizes, width, height, alt, 
 
     const style: React.CSSProperties = {
         "--width": `${width}px`,
-        "--height": `${height}px`
+        "--height": `${height}px`,
+        "--aspect-ratio": `${width / height}`
     } as any;
 
     return (
