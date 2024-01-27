@@ -189,7 +189,7 @@ export function parseUniversalLocation(
     const components: DocumentLocation = {};
 
     if (dirs[0].length > 1) {
-        components.name = dirs[0].substring(1);
+        components.name = NodeName.expand(dirs[0].substring(1));
     }
 
     let scheme: string | undefined = undefined;
