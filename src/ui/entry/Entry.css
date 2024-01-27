@@ -45,7 +45,7 @@
     margin-bottom: 0;
 }
 
-.entry .preload-placeholder {
+.entry .content .preload-placeholder {
     display: inline-block;
     width: var(--width);
     aspect-ratio: var(--aspect-ratio);

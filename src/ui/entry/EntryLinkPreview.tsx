@@ -66,7 +66,7 @@ export function EntryLinkPreview({
     }
 
     return (
-        <Frame className={cx("link-preview", {"large": large}, {"small": small})} url={url}
+        <Frame className={cx("link-preview", {large, small})} url={url}
                editing={editing && !disabled} onEdit={onEdit} onDelete={onDelete}>
             <EntryLinkPreviewImage nodeName={nodeName} mediaFile={mediaFile} loading={imageUploading ?? false}/>
             <div className="details">
