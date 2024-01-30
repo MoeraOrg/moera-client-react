@@ -55,7 +55,7 @@ function createAnchorTransformers(): { [tagName: string]: string | Transformer }
 
 const BASE_SAFE_HTML_SETTINGS: IOptions = {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-        "img", "del", "ins", "sub", "details", "summary", "mr-spoiler", "iframe", "video", "audio"
+        "img", "del", "ins", "sub", "strike", "details", "summary", "mr-spoiler", "iframe", "video", "audio"
     ]),
     allowedAttributes: {
         ...sanitizeHtml.defaults.allowedAttributes,

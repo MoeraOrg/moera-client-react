@@ -162,7 +162,7 @@ export default function RichTextEditorPanel({
         if (isMarkdown()) {
             wrapSelectionLines(textArea.current, "~~");
         } else {
-            wrapSelection(textArea.current, "<strike>", "</strike>");
+            wrapSelection(textArea.current, "<s>", "</s>");
         }
         textArea.current.focus();
         event.preventDefault();
