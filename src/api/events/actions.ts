@@ -1,4 +1,7 @@
+// This file is generated
+
 import * as immutable from 'object-path-immutable';
+import { actionWithPayload, ActionWithPayload } from "state/action-types";
 import {
     AskSubjectsChangedEvent,
     AvatarAddedEvent,
@@ -46,6 +49,9 @@ import {
     RemoteFriendshipUpdatedEvent,
     RemoteNodeAvatarChangedEvent,
     RemoteNodeFullNameChangedEvent,
+    RemotePostingAddedEvent,
+    RemotePostingDeletedEvent,
+    RemotePostingUpdatedEvent,
     RemotePostingVerificationFailedEvent,
     RemotePostingVerifiedEvent,
     RemoteReactionAddedEvent,
@@ -59,19 +65,19 @@ import {
     StoryAddedEvent,
     StoryDeletedEvent,
     StoryUpdatedEvent,
+    SubscribedEvent,
     SubscriberAddedEvent,
     SubscriberDeletedEvent,
-    SubscribersTotalChangedEvent,
     SubscriberUpdatedEvent,
+    SubscribersTotalChangedEvent,
     SubscriptionAddedEvent,
     SubscriptionDeletedEvent,
-    SubscriptionsTotalChangedEvent,
     SubscriptionUpdatedEvent,
+    SubscriptionsTotalChangedEvent,
     TokenAddedEvent,
     TokenDeletedEvent,
-    TokenUpdatedEvent
+    TokenUpdatedEvent,
 } from "api/events";
-import { actionWithPayload, ActionWithPayload } from "state/action-types";
 
 export type EventSource = "HOME" | "NODE" | "RECEIVER";
 export type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
@@ -85,72 +91,76 @@ export const eventAction = <E extends BaseEvent<string>>(
     actionWithPayload(`EVENT_${source}_${event.type}` as const, immutable.del(event, "type"));
 
 export type ClientEventAction =
-    EventAction<PingEvent>
-    | EventAction<ProfileUpdatedEvent>
-    | EventAction<NodeSettingsMetaChangedEvent>
-    | EventAction<NodeSettingsChangedEvent>
-    | EventAction<ClientSettingsChangedEvent>
-    | EventAction<RegisteredNameOperationStatusEvent>
-    | EventAction<NodeNameChangedEvent>
-    | EventAction<FeedStatusUpdatedEvent>
-    | EventAction<StoriesStatusUpdatedEvent>
-    | EventAction<RemoteNodeFullNameChangedEvent>
-    | EventAction<SubscribersTotalChangedEvent>
-    | EventAction<SubscriptionsTotalChangedEvent>
-    | EventAction<RemoteNodeAvatarChangedEvent>
-    | EventAction<PostingAddedEvent>
-    | EventAction<PostingUpdatedEvent>
-    | EventAction<PostingDeletedEvent>
-    | EventAction<PostingRestoredEvent>
-    | EventAction<PostingReactionsChangedEvent>
-    | EventAction<PostingCommentsChangedEvent>
-    | EventAction<DraftAddedEvent>
-    | EventAction<DraftUpdatedEvent>
-    | EventAction<DraftDeletedEvent>
-    | EventAction<RemotePostingVerifiedEvent>
-    | EventAction<RemotePostingVerificationFailedEvent>
-    | EventAction<RemoteReactionAddedEvent>
-    | EventAction<RemoteReactionDeletedEvent>
-    | EventAction<RemoteReactionVerifiedEvent>
-    | EventAction<RemoteReactionVerificationFailedEvent>
-    | EventAction<StoryAddedEvent>
-    | EventAction<StoryDeletedEvent>
-    | EventAction<StoryUpdatedEvent>
-    | EventAction<SubscriberAddedEvent>
-    | EventAction<SubscriberUpdatedEvent>
-    | EventAction<SubscriberDeletedEvent>
-    | EventAction<SubscriptionAddedEvent>
-    | EventAction<SubscriptionUpdatedEvent>
-    | EventAction<SubscriptionDeletedEvent>
-    | EventAction<CommentAddedEvent>
-    | EventAction<CommentUpdatedEvent>
-    | EventAction<CommentDeletedEvent>
-    | EventAction<CommentReactionsChangedEvent>
-    | EventAction<RemoteCommentAddedEvent>
-    | EventAction<RemoteCommentUpdatedEvent>
-    | EventAction<RemoteCommentDeletedEvent>
-    | EventAction<RemoteCommentVerifiedEvent>
-    | EventAction<RemoteCommentVerificationFailedEvent>
+    EventAction<AskSubjectsChangedEvent>
     | EventAction<AvatarAddedEvent>
     | EventAction<AvatarDeletedEvent>
     | EventAction<AvatarOrderedEvent>
-    | EventAction<TokenAddedEvent>
-    | EventAction<TokenUpdatedEvent>
-    | EventAction<TokenDeletedEvent>
-    | EventAction<PluginsUpdatedEvent>
-    | EventAction<FriendGroupAddedEvent>
-    | EventAction<FriendGroupUpdatedEvent>
-    | EventAction<FriendGroupDeletedEvent>
-    | EventAction<FriendshipUpdatedEvent>
-    | EventAction<AskSubjectsChangedEvent>
-    | EventAction<RemoteFriendshipUpdatedEvent>
+    | EventAction<BlockedByUserAddedEvent>
+    | EventAction<BlockedByUserDeletedEvent>
     | EventAction<BlockedInstantAddedEvent>
     | EventAction<BlockedInstantDeletedEvent>
     | EventAction<BlockedUserAddedEvent>
     | EventAction<BlockedUserDeletedEvent>
-    | EventAction<BlockedByUserAddedEvent>
-    | EventAction<BlockedByUserDeletedEvent>
+    | EventAction<ClientSettingsChangedEvent>
+    | EventAction<CommentAddedEvent>
+    | EventAction<CommentDeletedEvent>
+    | EventAction<CommentReactionsChangedEvent>
+    | EventAction<CommentUpdatedEvent>
+    | EventAction<DraftAddedEvent>
+    | EventAction<DraftDeletedEvent>
+    | EventAction<DraftUpdatedEvent>
     | EventAction<FeedSheriffDataUpdatedEvent>
+    | EventAction<FeedStatusUpdatedEvent>
+    | EventAction<FriendGroupAddedEvent>
+    | EventAction<FriendGroupDeletedEvent>
+    | EventAction<FriendGroupUpdatedEvent>
+    | EventAction<FriendshipUpdatedEvent>
+    | EventAction<NodeNameChangedEvent>
+    | EventAction<NodeSettingsChangedEvent>
+    | EventAction<NodeSettingsMetaChangedEvent>
+    | EventAction<PingEvent>
+    | EventAction<PluginsUpdatedEvent>
+    | EventAction<PostingAddedEvent>
+    | EventAction<PostingCommentsChangedEvent>
+    | EventAction<PostingDeletedEvent>
+    | EventAction<PostingReactionsChangedEvent>
+    | EventAction<PostingRestoredEvent>
+    | EventAction<PostingUpdatedEvent>
+    | EventAction<ProfileUpdatedEvent>
+    | EventAction<RegisteredNameOperationStatusEvent>
+    | EventAction<RemoteCommentAddedEvent>
+    | EventAction<RemoteCommentDeletedEvent>
+    | EventAction<RemoteCommentUpdatedEvent>
+    | EventAction<RemoteCommentVerificationFailedEvent>
+    | EventAction<RemoteCommentVerifiedEvent>
+    | EventAction<RemoteFriendshipUpdatedEvent>
+    | EventAction<RemoteNodeAvatarChangedEvent>
+    | EventAction<RemoteNodeFullNameChangedEvent>
+    | EventAction<RemotePostingAddedEvent>
+    | EventAction<RemotePostingDeletedEvent>
+    | EventAction<RemotePostingUpdatedEvent>
+    | EventAction<RemotePostingVerificationFailedEvent>
+    | EventAction<RemotePostingVerifiedEvent>
+    | EventAction<RemoteReactionAddedEvent>
+    | EventAction<RemoteReactionDeletedEvent>
+    | EventAction<RemoteReactionVerificationFailedEvent>
+    | EventAction<RemoteReactionVerifiedEvent>
+    | EventAction<SheriffComplainAddedEvent>
     | EventAction<SheriffComplainGroupAddedEvent>
     | EventAction<SheriffComplainGroupUpdatedEvent>
-    | EventAction<SheriffComplainAddedEvent>;
+    | EventAction<StoriesStatusUpdatedEvent>
+    | EventAction<StoryAddedEvent>
+    | EventAction<StoryDeletedEvent>
+    | EventAction<StoryUpdatedEvent>
+    | EventAction<SubscribedEvent>
+    | EventAction<SubscriberAddedEvent>
+    | EventAction<SubscriberDeletedEvent>
+    | EventAction<SubscriberUpdatedEvent>
+    | EventAction<SubscribersTotalChangedEvent>
+    | EventAction<SubscriptionAddedEvent>
+    | EventAction<SubscriptionDeletedEvent>
+    | EventAction<SubscriptionUpdatedEvent>
+    | EventAction<SubscriptionsTotalChangedEvent>
+    | EventAction<TokenAddedEvent>
+    | EventAction<TokenDeletedEvent>
+    | EventAction<TokenUpdatedEvent>;

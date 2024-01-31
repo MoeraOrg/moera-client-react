@@ -1,4 +1,4 @@
-// This file is for schema compiler only, do not use directly
+// This file is generated for schema compiler only, do not use directly
 
 export const EVENT_SCHEMAS = {
     $id: "event",
@@ -34,48 +34,182 @@ export const EVENT_SCHEMAS = {
             required: ["queueStartedAt", "ordinal", "event"]
         },
 
-        PingEvent: {
+        AskSubjectsChangedEvent: {
             type: "object",
             properties: {
                 "type": {
                     type: "string"
-                }
+                },
             },
-            additionalProperties: false,
-            required: ["type"]
+            required: [
+                "type",
+            ],
+            additionalProperties: false
         },
 
-        ProfileUpdatedEvent: {
+        AvatarAddedEvent: {
             type: "object",
             properties: {
                 "type": {
                     type: "string"
-                }
+                },
+                "avatar": {
+                    $ref: "node#/definitions/AvatarInfo"
+                },
             },
-            additionalProperties: false,
-            required: ["type"]
+            required: [
+                "type",
+                "avatar",
+            ],
+            additionalProperties: false
         },
 
-        NodeSettingsMetaChangedEvent: {
+        AvatarDeletedEvent: {
             type: "object",
             properties: {
                 "type": {
                     type: "string"
-                }
+                },
+                "id": {
+                    type: "string"
+                },
+                "mediaId": {
+                    type: "string"
+                },
             },
-            additionalProperties: false,
-            required: ["type"]
+            required: [
+                "type",
+                "id",
+                "mediaId",
+            ],
+            additionalProperties: false
         },
 
-        NodeSettingsChangedEvent: {
+        AvatarOrderedEvent: {
             type: "object",
             properties: {
                 "type": {
                     type: "string"
-                }
+                },
+                "id": {
+                    type: "string"
+                },
+                "mediaId": {
+                    type: "string"
+                },
+                "ordinal": {
+                    type: "integer"
+                },
             },
-            additionalProperties: false,
-            required: ["type"]
+            required: [
+                "type",
+                "id",
+                "mediaId",
+                "ordinal",
+            ],
+            additionalProperties: false
+        },
+
+        BlockedByUserAddedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "blockedByUser": {
+                    $ref: "node#/definitions/BlockedByUserInfo"
+                },
+            },
+            required: [
+                "type",
+                "blockedByUser",
+            ],
+            additionalProperties: false
+        },
+
+        BlockedByUserDeletedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "blockedByUser": {
+                    $ref: "node#/definitions/BlockedByUserInfo"
+                },
+            },
+            required: [
+                "type",
+                "blockedByUser",
+            ],
+            additionalProperties: false
+        },
+
+        BlockedInstantAddedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "blockedInstant": {
+                    $ref: "node#/definitions/BlockedInstantInfo"
+                },
+            },
+            required: [
+                "type",
+                "blockedInstant",
+            ],
+            additionalProperties: false
+        },
+
+        BlockedInstantDeletedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "blockedInstant": {
+                    $ref: "node#/definitions/BlockedInstantInfo"
+                },
+            },
+            required: [
+                "type",
+                "blockedInstant",
+            ],
+            additionalProperties: false
+        },
+
+        BlockedUserAddedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "blockedUser": {
+                    $ref: "node#/definitions/BlockedUserInfo"
+                },
+            },
+            required: [
+                "type",
+                "blockedUser",
+            ],
+            additionalProperties: false
+        },
+
+        BlockedUserDeletedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "blockedUser": {
+                    $ref: "node#/definitions/BlockedUserInfo"
+                },
+            },
+            required: [
+                "type",
+                "blockedUser",
+            ],
+            additionalProperties: false
         },
 
         ClientSettingsChangedEvent: {
@@ -83,83 +217,15 @@ export const EVENT_SCHEMAS = {
             properties: {
                 "type": {
                     type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type"]
-        },
-
-        PostingAddedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
                 },
-                "id": {
-                    type: "string"
-                }
             },
-            additionalProperties: false,
-            required: ["type", "id"]
+            required: [
+                "type",
+            ],
+            additionalProperties: false
         },
 
-        PostingUpdatedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "id": {
-                    type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "id"]
-        },
-
-        PostingDeletedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "id": {
-                    type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "id"]
-        },
-
-        PostingRestoredEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "id": {
-                    type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "id"]
-        },
-
-        PostingReactionsChangedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "id": {
-                    type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "id"]
-        },
-
-        PostingCommentsChangedEvent: {
+        CommentAddedEvent: {
             type: "object",
             properties: {
                 "type": {
@@ -168,23 +234,314 @@ export const EVENT_SCHEMAS = {
                 "id": {
                     type: "string"
                 },
-                "total": {
+                "postingId": {
+                    type: "string"
+                },
+                "moment": {
                     type: "integer"
-                }
+                },
             },
-            additionalProperties: false,
-            required: ["type", "id", "total"]
+            required: [
+                "type",
+                "id",
+                "postingId",
+                "moment",
+            ],
+            additionalProperties: false
         },
 
-        RegisteredNameOperationStatusEvent: {
+        CommentDeletedEvent: {
             type: "object",
             properties: {
                 "type": {
                     type: "string"
-                }
+                },
+                "id": {
+                    type: "string"
+                },
+                "postingId": {
+                    type: "string"
+                },
+                "moment": {
+                    type: "integer"
+                },
             },
-            additionalProperties: false,
-            required: ["type"]
+            required: [
+                "type",
+                "id",
+                "postingId",
+                "moment",
+            ],
+            additionalProperties: false
+        },
+
+        CommentReactionsChangedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+                "postingId": {
+                    type: "string"
+                },
+                "moment": {
+                    type: "integer"
+                },
+            },
+            required: [
+                "type",
+                "id",
+                "postingId",
+                "moment",
+            ],
+            additionalProperties: false
+        },
+
+        CommentUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+                "postingId": {
+                    type: "string"
+                },
+                "moment": {
+                    type: "integer"
+                },
+            },
+            required: [
+                "type",
+                "id",
+                "postingId",
+                "moment",
+            ],
+            additionalProperties: false
+        },
+
+        DraftAddedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+                "draftType": {
+                    type: "string"
+                },
+                "receiverName": {
+                    type: "string"
+                },
+                "receiverPostingId": {
+                    type: "string"
+                },
+                "receiverCommentId": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "id",
+                "draftType",
+                "receiverName",
+                "receiverPostingId",
+                "receiverCommentId",
+            ],
+            additionalProperties: false
+        },
+
+        DraftDeletedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+                "draftType": {
+                    type: "string"
+                },
+                "receiverName": {
+                    type: "string"
+                },
+                "receiverPostingId": {
+                    type: "string"
+                },
+                "receiverCommentId": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "id",
+                "draftType",
+                "receiverName",
+                "receiverPostingId",
+                "receiverCommentId",
+            ],
+            additionalProperties: false
+        },
+
+        DraftUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+                "draftType": {
+                    type: "string"
+                },
+                "receiverName": {
+                    type: "string"
+                },
+                "receiverPostingId": {
+                    type: "string"
+                },
+                "receiverCommentId": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "id",
+                "draftType",
+                "receiverName",
+                "receiverPostingId",
+                "receiverCommentId",
+            ],
+            additionalProperties: false
+        },
+
+        FeedSheriffDataUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "feedName": {
+                    type: "string"
+                },
+                "sheriffs": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    },
+                    nullable: true
+                },
+                "sheriffMarks": {
+                    type: "array",
+                    items: {
+                        $ref: "node#/definitions/SheriffMark"
+                    },
+                    nullable: true
+                },
+            },
+            required: [
+                "type",
+                "feedName",
+            ],
+            additionalProperties: false
+        },
+
+        FeedStatusUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "feedName": {
+                    type: "string"
+                },
+                "status": {
+                    $ref: "node#/definitions/FeedStatus"
+                },
+            },
+            required: [
+                "type",
+                "feedName",
+                "status",
+            ],
+            additionalProperties: false
+        },
+
+        FriendGroupAddedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "friendGroup": {
+                    $ref: "node#/definitions/FriendGroupInfo"
+                },
+            },
+            required: [
+                "type",
+                "friendGroup",
+            ],
+            additionalProperties: false
+        },
+
+        FriendGroupDeletedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "friendGroupId": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "friendGroupId",
+            ],
+            additionalProperties: false
+        },
+
+        FriendGroupUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "friendGroup": {
+                    $ref: "node#/definitions/FriendGroupInfo"
+                },
+            },
+            required: [
+                "type",
+                "friendGroup",
+            ],
+            additionalProperties: false
+        },
+
+        FriendshipUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "friend": {
+                    $ref: "node#/definitions/FriendInfo"
+                },
+            },
+            required: [
+                "type",
+                "friend",
+            ],
+            additionalProperties: false
         },
 
         NodeNameChangedEvent: {
@@ -219,13 +576,275 @@ export const EVENT_SCHEMAS = {
                             type: "null"
                         }
                     ]
-                }
+                },
             },
-            additionalProperties: false,
-            required: ["type", "name"]
+            required: [
+                "type",
+                "name",
+            ],
+            additionalProperties: false
         },
 
-        RemotePostingVerifiedEvent: {
+        NodeSettingsChangedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+            ],
+            additionalProperties: false
+        },
+
+        NodeSettingsMetaChangedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+            ],
+            additionalProperties: false
+        },
+
+        PingEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+            ],
+            additionalProperties: false
+        },
+
+        PluginsUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+            ],
+            additionalProperties: false
+        },
+
+        PostingAddedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "id",
+            ],
+            additionalProperties: false
+        },
+
+        PostingCommentsChangedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+                "total": {
+                    type: "integer"
+                },
+            },
+            required: [
+                "type",
+                "id",
+                "total",
+            ],
+            additionalProperties: false
+        },
+
+        PostingDeletedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "id",
+            ],
+            additionalProperties: false
+        },
+
+        PostingReactionsChangedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "id",
+            ],
+            additionalProperties: false
+        },
+
+        PostingRestoredEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "id",
+            ],
+            additionalProperties: false
+        },
+
+        PostingUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "id",
+            ],
+            additionalProperties: false
+        },
+
+        ProfileUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+            ],
+            additionalProperties: false
+        },
+
+        RegisteredNameOperationStatusEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+            ],
+            additionalProperties: false
+        },
+
+        RemoteCommentAddedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "remoteNodeName": {
+                    type: "string"
+                },
+                "remotePostingId": {
+                    type: "string"
+                },
+                "remoteCommentId": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "remoteNodeName",
+                "remotePostingId",
+                "remoteCommentId",
+            ],
+            additionalProperties: false
+        },
+
+        RemoteCommentDeletedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "remoteNodeName": {
+                    type: "string"
+                },
+                "remotePostingId": {
+                    type: "string"
+                },
+                "remoteCommentId": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "remoteNodeName",
+                "remotePostingId",
+                "remoteCommentId",
+            ],
+            additionalProperties: false
+        },
+
+        RemoteCommentUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "remoteNodeName": {
+                    type: "string"
+                },
+                "remotePostingId": {
+                    type: "string"
+                },
+                "remoteCommentId": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "remoteNodeName",
+                "remotePostingId",
+                "remoteCommentId",
+            ],
+            additionalProperties: false
+        },
+
+        RemoteCommentVerificationFailedEvent: {
             type: "object",
             properties: {
                 "type": {
@@ -237,21 +856,192 @@ export const EVENT_SCHEMAS = {
                 "nodeName": {
                     type: "string"
                 },
-                "receiverName": {
+                "postingId": {
+                    type: "string"
+                },
+                "commentId": {
+                    type: "string"
+                },
+                "errorCode": {
+                    type: "string"
+                },
+                "errorMessage": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "id",
+                "nodeName",
+                "postingId",
+                "commentId",
+                "errorCode",
+                "errorMessage",
+            ],
+            additionalProperties: false
+        },
+
+        RemoteCommentVerifiedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+                "nodeName": {
                     type: "string"
                 },
                 "postingId": {
                     type: "string"
                 },
-                "revisionId": {
+                "commentId": {
                     type: "string"
                 },
                 "correct": {
                     type: "boolean"
-                }
+                },
             },
-            additionalProperties: false,
-            required: ["type", "id", "nodeName", "receiverName", "postingId", "revisionId", "correct"]
+            required: [
+                "type",
+                "id",
+                "nodeName",
+                "postingId",
+                "commentId",
+                "correct",
+            ],
+            additionalProperties: false
+        },
+
+        RemoteFriendshipUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "friendOf": {
+                    $ref: "node#/definitions/FriendOfInfo"
+                },
+            },
+            required: [
+                "type",
+                "friendOf",
+            ],
+            additionalProperties: false
+        },
+
+        RemoteNodeAvatarChangedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "name": {
+                    type: "string"
+                },
+                "avatar": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+            },
+            required: [
+                "type",
+                "name",
+            ],
+            additionalProperties: false
+        },
+
+        RemoteNodeFullNameChangedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "name": {
+                    type: "string"
+                },
+                "fullName": {
+                    type: "string",
+                    nullable: true
+                },
+            },
+            required: [
+                "type",
+                "name",
+            ],
+            additionalProperties: false
+        },
+
+        RemotePostingAddedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "remoteNodeName": {
+                    type: "string"
+                },
+                "remotePostingId": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "remoteNodeName",
+                "remotePostingId",
+            ],
+            additionalProperties: false
+        },
+
+        RemotePostingDeletedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "remoteNodeName": {
+                    type: "string"
+                },
+                "remotePostingId": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "remoteNodeName",
+                "remotePostingId",
+            ],
+            additionalProperties: false
+        },
+
+        RemotePostingUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "remoteNodeName": {
+                    type: "string"
+                },
+                "remotePostingId": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "remoteNodeName",
+                "remotePostingId",
+            ],
+            additionalProperties: false
         },
 
         RemotePostingVerificationFailedEvent: {
@@ -280,10 +1070,56 @@ export const EVENT_SCHEMAS = {
                 },
                 "errorMessage": {
                     type: "string"
-                }
+                },
             },
-            additionalProperties: false,
-            required: ["type", "id", "nodeName", "receiverName", "postingId", "revisionId", "errorCode", "errorMessage"]
+            required: [
+                "type",
+                "id",
+                "nodeName",
+                "receiverName",
+                "postingId",
+                "revisionId",
+                "errorCode",
+                "errorMessage",
+            ],
+            additionalProperties: false
+        },
+
+        RemotePostingVerifiedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+                "nodeName": {
+                    type: "string"
+                },
+                "receiverName": {
+                    type: "string"
+                },
+                "postingId": {
+                    type: "string"
+                },
+                "revisionId": {
+                    type: "string"
+                },
+                "correct": {
+                    type: "boolean"
+                },
+            },
+            required: [
+                "type",
+                "id",
+                "nodeName",
+                "receiverName",
+                "postingId",
+                "revisionId",
+                "correct",
+            ],
+            additionalProperties: false
         },
 
         RemoteReactionAddedEvent: {
@@ -306,10 +1142,17 @@ export const EVENT_SCHEMAS = {
                 },
                 "createdAt": {
                     type: "integer"
-                }
+                },
             },
-            additionalProperties: false,
-            required: ["type", "remoteNodeName", "remotePostingId", "negative", "emoji", "createdAt"]
+            required: [
+                "type",
+                "remoteNodeName",
+                "remotePostingId",
+                "negative",
+                "emoji",
+                "createdAt",
+            ],
+            additionalProperties: false
         },
 
         RemoteReactionDeletedEvent: {
@@ -323,36 +1166,14 @@ export const EVENT_SCHEMAS = {
                 },
                 "remotePostingId": {
                     type: "string"
-                }
+                },
             },
-            additionalProperties: false,
-            required: ["type", "remoteNodeName", "remotePostingId"]
-        },
-
-        RemoteReactionVerifiedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "id": {
-                    type: "string"
-                },
-                "nodeName": {
-                    type: "string"
-                },
-                "postingId": {
-                    type: "string"
-                },
-                "reactionOwnerName": {
-                    type: "string"
-                },
-                "correct": {
-                    type: "boolean"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "id", "nodeName", "postingId", "reactionOwnerName", "correct"]
+            required: [
+                "type",
+                "remoteNodeName",
+                "remotePostingId",
+            ],
+            additionalProperties: false
         },
 
         RemoteReactionVerificationFailedEvent: {
@@ -370,6 +1191,9 @@ export const EVENT_SCHEMAS = {
                 "postingId": {
                     type: "string"
                 },
+                "commentId": {
+                    type: "string"
+                },
                 "reactionOwnerName": {
                     type: "string"
                 },
@@ -378,13 +1202,22 @@ export const EVENT_SCHEMAS = {
                 },
                 "errorMessage": {
                     type: "string"
-                }
+                },
             },
-            additionalProperties: false,
-            required: ["type", "id", "nodeName", "postingId", "reactionOwnerName", "errorCode", "errorMessage"]
+            required: [
+                "type",
+                "id",
+                "nodeName",
+                "postingId",
+                "commentId",
+                "reactionOwnerName",
+                "errorCode",
+                "errorMessage",
+            ],
+            additionalProperties: false
         },
 
-        DraftAddedEvent: {
+        RemoteReactionVerifiedEvent: {
             type: "object",
             properties: {
                 "type": {
@@ -393,73 +1226,116 @@ export const EVENT_SCHEMAS = {
                 "id": {
                     type: "string"
                 },
-                "draftType": {
+                "nodeName": {
                     type: "string"
                 },
-                "receiverName": {
+                "postingId": {
                     type: "string"
                 },
-                "receiverPostingId": {
+                "commentId": {
                     type: "string"
                 },
-                "receiverCommentId": {
+                "reactionOwnerName": {
                     type: "string"
-                }
+                },
+                "correct": {
+                    type: "boolean"
+                },
             },
-            additionalProperties: false,
-            required: ["type", "id", "draftType", "receiverName", "receiverPostingId", "receiverCommentId"]
+            required: [
+                "type",
+                "id",
+                "nodeName",
+                "postingId",
+                "commentId",
+                "reactionOwnerName",
+                "correct",
+            ],
+            additionalProperties: false
         },
 
-        DraftUpdatedEvent: {
+        SheriffComplainAddedEvent: {
             type: "object",
             properties: {
                 "type": {
                     type: "string"
                 },
-                "id": {
+                "complain": {
+                    $ref: "node#/definitions/SheriffComplainInfo"
+                },
+                "groupId": {
                     type: "string"
                 },
-                "draftType": {
-                    type: "string"
-                },
-                "receiverName": {
-                    type: "string"
-                },
-                "receiverPostingId": {
-                    type: "string"
-                },
-                "receiverCommentId": {
-                    type: "string"
-                }
             },
-            additionalProperties: false,
-            required: ["type", "id", "draftType", "receiverName", "receiverPostingId", "receiverCommentId"]
+            required: [
+                "type",
+                "complain",
+                "groupId",
+            ],
+            additionalProperties: false
         },
 
-        DraftDeletedEvent: {
+        SheriffComplainGroupAddedEvent: {
             type: "object",
             properties: {
                 "type": {
                     type: "string"
                 },
-                "id": {
-                    type: "string"
+                "group": {
+                    $ref: "node#/definitions/SheriffComplainGroupInfo"
                 },
-                "draftType": {
-                    type: "string"
-                },
-                "receiverName": {
-                    type: "string"
-                },
-                "receiverPostingId": {
-                    type: "string"
-                },
-                "receiverCommentId": {
-                    type: "string"
-                }
             },
-            additionalProperties: false,
-            required: ["type", "id", "draftType", "receiverName", "receiverPostingId", "receiverCommentId"]
+            required: [
+                "type",
+                "group",
+            ],
+            additionalProperties: false
+        },
+
+        SheriffComplainGroupUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "group": {
+                    $ref: "node#/definitions/SheriffComplainGroupInfo"
+                },
+            },
+            required: [
+                "type",
+                "group",
+            ],
+            additionalProperties: false
+        },
+
+        StoriesStatusUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "feedName": {
+                    type: "string"
+                },
+                "viewed": {
+                    type: "boolean",
+                    nullable: true
+                },
+                "read": {
+                    type: "boolean",
+                    nullable: true
+                },
+                "before": {
+                    type: "integer"
+                },
+            },
+            required: [
+                "type",
+                "feedName",
+                "before",
+            ],
+            additionalProperties: false
         },
 
         StoryAddedEvent: {
@@ -555,23 +1431,28 @@ export const EVENT_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    type: "object",
-                    properties: {
-                        "edit": {
-                            type: "string",
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StoryOperations",
+                            type: "object",
                             nullable: true
                         },
-                        "delete": {
-                            type: "string",
-                            nullable: true
+                        {
+                            type: "null"
                         }
-                    },
-                    nullable: true,
-                    additionalProperties: false
-                }
+                    ]
+                },
             },
-            additionalProperties: false,
-            required: ["type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment"]
+            required: [
+                "type",
+                "id",
+                "storyType",
+                "feedName",
+                "publishedAt",
+                "pinned",
+                "moment",
+            ],
+            additionalProperties: false
         },
 
         StoryDeletedEvent: {
@@ -595,10 +1476,16 @@ export const EVENT_SCHEMAS = {
                 "postingId": {
                     type: "string",
                     nullable: true
-                }
+                },
             },
-            additionalProperties: false,
-            required: ["type", "id", "storyType", "feedName", "moment"]
+            required: [
+                "type",
+                "id",
+                "storyType",
+                "feedName",
+                "moment",
+            ],
+            additionalProperties: false
         },
 
         StoryUpdatedEvent: {
@@ -694,65 +1581,45 @@ export const EVENT_SCHEMAS = {
                     nullable: true
                 },
                 "operations": {
-                    type: "object",
-                    properties: {
-                        "edit": {
-                            type: "string",
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/StoryOperations",
+                            type: "object",
                             nullable: true
                         },
-                        "delete": {
-                            type: "string",
-                            nullable: true
+                        {
+                            type: "null"
                         }
-                    },
-                    nullable: true,
-                    additionalProperties: false
-                }
+                    ]
+                },
             },
-            additionalProperties: false,
-            required: ["type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment"]
+            required: [
+                "type",
+                "id",
+                "storyType",
+                "feedName",
+                "publishedAt",
+                "pinned",
+                "moment",
+            ],
+            additionalProperties: false
         },
 
-        FeedStatusUpdatedEvent: {
+        SubscribedEvent: {
             type: "object",
             properties: {
                 "type": {
                     type: "string"
                 },
-                "feedName": {
+                "sessionId": {
                     type: "string"
                 },
-                "status": {
-                    $ref: "node#/definitions/FeedStatus"
-                }
             },
-            additionalProperties: false,
-            required: ["type", "feedName", "status"]
-        },
-
-        StoriesStatusUpdatedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "feedName": {
-                    type: "string"
-                },
-                "viewed": {
-                    type: "boolean",
-                    nullable: true
-                },
-                "read": {
-                    type: "boolean",
-                    nullable: true
-                },
-                "before": {
-                    type: "integer"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "feedName", "before"]
+            required: [
+                "type",
+                "sessionId",
+            ],
+            additionalProperties: false
         },
 
         SubscriberAddedEvent: {
@@ -763,24 +1630,13 @@ export const EVENT_SCHEMAS = {
                 },
                 "subscriber": {
                     $ref: "node#/definitions/SubscriberInfo"
-                }
-            },
-            additionalProperties: false,
-            required: ["subscriber"]
-        },
-
-        SubscriberUpdatedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
                 },
-                "subscriber": {
-                    $ref: "node#/definitions/SubscriberInfo"
-                }
             },
-            additionalProperties: false,
-            required: ["subscriber"]
+            required: [
+                "type",
+                "subscriber",
+            ],
+            additionalProperties: false
         },
 
         SubscriberDeletedEvent: {
@@ -791,265 +1647,30 @@ export const EVENT_SCHEMAS = {
                 },
                 "subscriber": {
                     $ref: "node#/definitions/SubscriberInfo"
-                }
+                },
             },
-            additionalProperties: false,
-            required: ["subscriber"]
+            required: [
+                "type",
+                "subscriber",
+            ],
+            additionalProperties: false
         },
 
-        SubscriptionAddedEvent: {
+        SubscriberUpdatedEvent: {
             type: "object",
             properties: {
                 "type": {
                     type: "string"
                 },
-                "subscription": {
-                    $ref: "node#/definitions/SubscriptionInfo"
-                }
+                "subscriber": {
+                    $ref: "node#/definitions/SubscriberInfo"
+                },
             },
-            additionalProperties: false,
-            required: ["subscription"]
-        },
-
-        SubscriptionUpdatedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "subscription": {
-                    $ref: "node#/definitions/SubscriptionInfo"
-                }
-            },
-            additionalProperties: false,
-            required: ["subscription"]
-        },
-
-        SubscriptionDeletedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "subscription": {
-                    $ref: "node#/definitions/SubscriptionInfo"
-                }
-            },
-            additionalProperties: false,
-            required: ["subscription"]
-        },
-
-        CommentAddedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "id": {
-                    type: "string"
-                },
-                "postingId": {
-                    type: "string"
-                },
-                "moment": {
-                    type: "integer"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "id", "postingId", "moment"]
-        },
-
-        CommentUpdatedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "id": {
-                    type: "string"
-                },
-                "postingId": {
-                    type: "string"
-                },
-                "moment": {
-                    type: "integer"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "id", "postingId", "moment"]
-        },
-
-        CommentDeletedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "id": {
-                    type: "string"
-                },
-                "postingId": {
-                    type: "string"
-                },
-                "moment": {
-                    type: "integer"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "id", "postingId", "moment"]
-        },
-
-        CommentReactionsChangedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "id": {
-                    type: "string"
-                },
-                "postingId": {
-                    type: "string"
-                },
-                "moment": {
-                    type: "integer"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "id", "postingId", "moment"]
-        },
-
-        RemoteCommentAddedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "remoteNodeName": {
-                    type: "string"
-                },
-                "remotePostingId": {
-                    type: "string"
-                },
-                "remoteCommentId": {
-                    type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "remoteNodeName", "remotePostingId", "remoteCommentId"]
-        },
-
-        RemoteCommentUpdatedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "remoteNodeName": {
-                    type: "string"
-                },
-                "remotePostingId": {
-                    type: "string"
-                },
-                "remoteCommentId": {
-                    type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "remoteNodeName", "remotePostingId", "remoteCommentId"]
-        },
-
-        RemoteCommentDeletedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "remoteNodeName": {
-                    type: "string"
-                },
-                "remotePostingId": {
-                    type: "string"
-                },
-                "remoteCommentId": {
-                    type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "remoteNodeName", "remotePostingId", "remoteCommentId"]
-        },
-
-        RemoteCommentVerifiedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "id": {
-                    type: "string"
-                },
-                "nodeName": {
-                    type: "string"
-                },
-                "postingId": {
-                    type: "string"
-                },
-                "commentId": {
-                    type: "string"
-                },
-                "correct": {
-                    type: "boolean"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "id", "nodeName", "postingId", "commentId", "correct"]
-        },
-
-        RemoteCommentVerificationFailedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "id": {
-                    type: "string"
-                },
-                "nodeName": {
-                    type: "string"
-                },
-                "postingId": {
-                    type: "string"
-                },
-                "commentId": {
-                    type: "string"
-                },
-                "errorCode": {
-                    type: "string"
-                },
-                "errorMessage": {
-                    type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "id", "nodeName", "postingId", "commentId", "errorCode", "errorMessage"]
-        },
-
-        RemoteNodeFullNameChangedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "name": {
-                    type: "string"
-                },
-                "fullName": {
-                    type: "string",
-                    nullable: true
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "name"]
+            required: [
+                "type",
+                "subscriber",
+            ],
+            additionalProperties: false
         },
 
         SubscribersTotalChangedEvent: {
@@ -1060,10 +1681,64 @@ export const EVENT_SCHEMAS = {
                 },
                 "feedSubscribersTotal": {
                     type: "integer"
-                }
+                },
             },
-            additionalProperties: false,
-            required: ["type", "feedSubscribersTotal"]
+            required: [
+                "type",
+                "feedSubscribersTotal",
+            ],
+            additionalProperties: false
+        },
+
+        SubscriptionAddedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "subscription": {
+                    $ref: "node#/definitions/SubscriptionInfo"
+                },
+            },
+            required: [
+                "type",
+                "subscription",
+            ],
+            additionalProperties: false
+        },
+
+        SubscriptionDeletedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "subscription": {
+                    $ref: "node#/definitions/SubscriptionInfo"
+                },
+            },
+            required: [
+                "type",
+                "subscription",
+            ],
+            additionalProperties: false
+        },
+
+        SubscriptionUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "subscription": {
+                    $ref: "node#/definitions/SubscriptionInfo"
+                },
+            },
+            required: [
+                "type",
+                "subscription",
+            ],
+            additionalProperties: false
         },
 
         SubscriptionsTotalChangedEvent: {
@@ -1074,138 +1749,13 @@ export const EVENT_SCHEMAS = {
                 },
                 "feedSubscriptionsTotal": {
                     type: "integer"
-                }
+                },
             },
-            additionalProperties: false,
-            required: ["type", "feedSubscriptionsTotal"]
-        },
-
-        RemoteNodeAvatarChangedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "name": {
-                    type: "string"
-                },
-                "avatar": {
-                    anyOf: [
-                        {
-                            $ref: "node#/definitions/AvatarImage",
-                            type: "object",
-                            nullable: true
-                        },
-                        {
-                            type: "null"
-                        }
-                    ]
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "name"]
-        },
-
-        AvatarAddedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "avatar": {
-                    $ref: "node#/definitions/AvatarInfo"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "avatar"]
-        },
-
-        AvatarDeletedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "id": {
-                    type: "string"
-                },
-                "mediaId": {
-                    type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "id", "mediaId"]
-        },
-
-        AvatarOrderedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "id": {
-                    type: "string"
-                },
-                "mediaId": {
-                    type: "string"
-                },
-                "ordinal": {
-                    type: "integer"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "id", "mediaId", "ordinal"]
-        },
-
-        RemotePostingAddedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "remoteNodeName": {
-                    type: "string"
-                },
-                "remotePostingId": {
-                    type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "remoteNodeName", "remotePostingId"]
-        },
-
-        RemotePostingUpdatedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "remoteNodeName": {
-                    type: "string"
-                },
-                "remotePostingId": {
-                    type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "remoteNodeName", "remotePostingId"]
-        },
-
-        RemotePostingDeletedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "remoteNodeName": {
-                    type: "string"
-                },
-                "remotePostingId": {
-                    type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "remoteNodeName", "remotePostingId"]
+            required: [
+                "type",
+                "feedSubscriptionsTotal",
+            ],
+            additionalProperties: false
         },
 
         TokenAddedEvent: {
@@ -1216,24 +1766,13 @@ export const EVENT_SCHEMAS = {
                 },
                 "token": {
                     $ref: "node#/definitions/TokenInfo"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "token"]
-        },
-
-        TokenUpdatedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
                 },
-                "token": {
-                    $ref: "node#/definitions/TokenInfo"
-                }
             },
-            additionalProperties: false,
-            required: ["type", "token"]
+            required: [
+                "type",
+                "token",
+            ],
+            additionalProperties: false
         },
 
         TokenDeletedEvent: {
@@ -1244,259 +1783,31 @@ export const EVENT_SCHEMAS = {
                 },
                 "id": {
                     type: "string"
-                }
+                },
             },
-            additionalProperties: false,
-            required: ["type", "id"]
+            required: [
+                "type",
+                "id",
+            ],
+            additionalProperties: false
         },
 
-        PluginsUpdatedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type"]
-        },
-
-        FriendGroupAddedEvent: {
+        TokenUpdatedEvent: {
             type: "object",
             properties: {
                 "type": {
                     type: "string"
                 },
-                "friendGroup": {
-                    $ref: "node#/definitions/FriendGroupInfo"
-                }
+                "token": {
+                    $ref: "node#/definitions/TokenInfo"
+                },
             },
-            additionalProperties: false,
-            required: ["type", "friendGroup"]
+            required: [
+                "type",
+                "token",
+            ],
+            additionalProperties: false
         },
 
-        FriendGroupUpdatedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "friendGroup": {
-                    $ref: "node#/definitions/FriendGroupInfo"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "friendGroup"]
-        },
-
-        FriendGroupDeletedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "friendGroupId": {
-                    type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "friendGroupId"]
-        },
-
-        FriendshipUpdatedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "friend": {
-                    $ref: "node#/definitions/FriendInfo"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "friend"]
-        },
-
-        AskSubjectsChangedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type"]
-        },
-
-        RemoteFriendshipUpdatedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "friendOf": {
-                    $ref: "node#/definitions/FriendOfInfo"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "friendOf"]
-        },
-
-        BlockedInstantAddedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "blockedInstant": {
-                    $ref: "node#/definitions/BlockedInstantInfo"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "blockedInstant"]
-        },
-
-        BlockedInstantDeletedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "blockedInstant": {
-                    $ref: "node#/definitions/BlockedInstantInfo"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "blockedInstant"]
-        },
-
-        BlockedUserAddedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "blockedUser": {
-                    $ref: "node#/definitions/BlockedUserInfo"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "blockedUser"]
-        },
-
-        BlockedUserDeletedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "blockedUser": {
-                    $ref: "node#/definitions/BlockedUserInfo"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "blockedUser"]
-        },
-
-        BlockedByUserAddedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "blockedByUser": {
-                    $ref: "node#/definitions/BlockedByUserInfo"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "blockedByUser"]
-        },
-
-        BlockedByUserDeletedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "blockedByUser": {
-                    $ref: "node#/definitions/BlockedByUserInfo"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "blockedByUser"]
-        },
-
-        FeedSheriffDataUpdatedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "feedName": {
-                    type: "string"
-                },
-                "sheriffs": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
-                },
-                "sheriffMarks": {
-                    type: "array",
-                    items: {
-                        $ref: "node#/definitions/SheriffMark"
-                    },
-                    nullable: true
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "feedName"]
-        },
-
-        SheriffComplainGroupAddedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "group": {
-                    $ref: "node#/definitions/SheriffComplainGroupInfo"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "group"]
-        },
-
-        SheriffComplainGroupUpdatedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "group": {
-                    $ref: "node#/definitions/SheriffComplainGroupInfo"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "group"]
-        },
-
-        SheriffComplainAddedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-                "complain": {
-                    $ref: "node#/definitions/SheriffComplainInfo"
-                },
-                "groupId": {
-                    type: "string"
-                }
-            },
-            additionalProperties: false,
-            required: ["type", "complain", "groupId"]
-        }
     }
-};
+}

@@ -30,7 +30,6 @@ import {
     StoriesStatusUpdatedEvent,
     StoryAddedEvent,
     StoryDeletedEvent,
-    StoryEvent,
     StoryUpdatedEvent,
     SubscriberUpdatedEvent,
     SubscriptionAddedEvent,
@@ -44,7 +43,9 @@ import { postingSubscriptionSet, remotePostingSubscriptionSet } from "state/post
 import { WithContext } from "state/action-types";
 import { now } from "util/misc";
 
-function toStory(eventPayload: Omit<StoryEvent<any> | StoryDeletedEvent, "type">, isHome: boolean): StoryInfo {
+function toStory(
+    eventPayload: Omit<StoryAddedEvent | StoryUpdatedEvent | StoryDeletedEvent, "type">, isHome: boolean
+): StoryInfo {
     const story: StoryInfo = {
         publishedAt: 0,
         ...eventPayload,

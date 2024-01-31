@@ -6,6 +6,7 @@ from enum import Enum
 from typing import Any, TextIO
 
 import yaml
+from camel_converter import to_pascal
 
 
 def ind(n: int) -> str:
@@ -163,59 +164,26 @@ SCHEMA_TYPES = {
 }
 
 
-class Structure:
+class Interface:
     data: Any
-    generated: bool = False
-    depends: list[str]
-    uses_body: bool = False
-    output: bool = False
     output_array: bool = False
 
     def __init__(self, data: Any) -> None:
         self.data = data
-        self.depends = [field['struct'] for field in data['fields'] if 'struct' in field]
 
-    @property
-    def generic(self) -> bool:
-        return self.uses_body and self.output
+    def get_name(self) -> str:
+        raise NotImplementedError
 
-    def generate_class(self, tfile: TextIO, structs: dict[str, Structure]) -> None:
-        if self.generic:
-            tfile.write(f'\nexport interface {self.data["name"]}Base<B> {{\n')
-        else:
-            tfile.write(f'\nexport interface {self.data["name"]} {{\n')
-        for field in self.data['fields']:
-            if field.get('optional', False) and 'js-default' not in field:
-                tmpl = '    %s?: %s | null;\n'
-            else:
-                tmpl = '    %s: %s;\n'
-            if 'struct' in field:
-                if field['struct'] == 'Body':
-                    t = 'B' if self.generic else 'string'
-                else:
-                    t = field['struct']
-                    if self.generic and field['struct'] in structs and structs[field['struct']].generic:
-                        t += 'Base<B>'
-            elif 'enum' in field:
-                t = field['enum']
-            else:
-                if field['type'] == 'any':
-                    continue
-                t = to_js_type(field['type'])
-            if field.get('array', False):
-                t += '[]'
-            tfile.write(tmpl % (field['name'], t))
-        tfile.write('}\n')
-        if self.generic:
-            tfile.write('\nexport type Encoded{name} = {name}Base<string>;\n'.format(name=self.data['name']))
-            tfile.write('export type {name} = {name}Base<Body>;\n'.format(name=self.data['name']))
+    def get_schema_fields(self) -> list[Any]:
+        return self.data.get('fields', [])
 
     def generate_schema(self, sfile: TextIO) -> None:
-        sfile.write(f'\n{ind(2)}{self.data["name"]}: {{\n')
+        class_name = self.get_name()
+        sfile.write(f'\n{ind(2)}{class_name}: {{\n')
         sfile.write(f'{ind(3)}type: "object",\n')
         sfile.write(f'{ind(3)}properties: {{\n')
         required: list[str] = []
-        for field in self.data['fields']:
+        for field in self.get_schema_fields():
             if field.get('type') == 'any':
                 continue
 
@@ -261,9 +229,58 @@ class Structure:
         sfile.write(f'{ind(2)}}},\n')
 
         if self.output_array:
-            sfile.write(f'\n{ind(2)}{self.data["name"]}Array: ')
-            schema_array(sfile, 2, self.data['name'], struct=True)
+            sfile.write(f'\n{ind(2)}{class_name}Array: ')
+            schema_array(sfile, 2, class_name, struct=True)
             sfile.write(',\n')
+
+
+class Structure(Interface):
+    generated: bool = False
+    depends: list[str]
+    uses_body: bool = False
+    output: bool = False
+
+    def __init__(self, data: Any) -> None:
+        super().__init__(data)
+        self.depends = [field['struct'] for field in data['fields'] if 'struct' in field]
+
+    def get_name(self) -> str:
+        return self.data["name"]
+
+    @property
+    def generic(self) -> bool:
+        return self.uses_body and self.output
+
+    def generate_class(self, tfile: TextIO, structs: dict[str, Structure]) -> None:
+        if self.generic:
+            tfile.write(f'\nexport interface {self.data["name"]}Base<B> {{\n')
+        else:
+            tfile.write(f'\nexport interface {self.data["name"]} {{\n')
+        for field in self.data['fields']:
+            if field.get('optional', False) and 'js-default' not in field:
+                tmpl = '    %s?: %s | null;\n'
+            else:
+                tmpl = '    %s: %s;\n'
+            if 'struct' in field:
+                if field['struct'] == 'Body':
+                    t = 'B' if self.generic else 'string'
+                else:
+                    t = field['struct']
+                    if self.generic and field['struct'] in structs and structs[field['struct']].generic:
+                        t += 'Base<B>'
+            elif 'enum' in field:
+                t = field['enum']
+            else:
+                if field['type'] == 'any':
+                    continue
+                t = to_js_type(field['type'])
+            if field.get('array', False):
+                t += '[]'
+            tfile.write(tmpl % (field['name'], t))
+        tfile.write('}\n')
+        if self.generic:
+            tfile.write('\nexport type Encoded{name} = {name}Base<string>;\n'.format(name=self.data['name']))
+            tfile.write('export type {name} = {name}Base<Body>;\n'.format(name=self.data['name']))
 
     def generate(self, tfile: TextIO, sfile: TextIO, structs: dict[str, Structure]) -> None:
         self.generate_class(tfile, structs)
@@ -531,8 +548,8 @@ import { commaSeparatedFlags } from "util/misc";
 def generate_types(api: Any, outdir: str) -> None:
     structs = scan_structures(api)
 
-    with open(outdir + '/api-types.ts', 'w+') as tfile:
-        with open(outdir + '/api-schemas.mjs', 'w+') as sfile:
+    with open(outdir + '/node/api-types.ts', 'w+') as tfile:
+        with open(outdir + '/node/api-schemas.mjs', 'w+') as sfile:
             tfile.write(PREAMBLE_TYPES)
             sfile.write(PREAMBLE_SCHEMAS)
             for enum in api['enums']:
@@ -543,15 +560,210 @@ def generate_types(api: Any, outdir: str) -> None:
             sfile.write('\n    }\n')
             sfile.write('}\n')
 
-    with open(outdir + '/api-sagas.ts', 'w+') as afile:
+    with open(outdir + '/node/api-sagas.ts', 'w+') as afile:
         afile.write(PREAMBLE_SAGAS)
         generate_sagas(api, structs, afile)
 
 
-if len(sys.argv) < 2 or sys.argv[1] == '':
-    print("Usage: js-moera-api <node_api.yml file path> <output directory>")
+class Event(Interface):
+    def get_name(self) -> str:
+        return to_pascal(self.data['type']) + 'Event'
+
+    def get_schema_fields(self) -> list[Any]:
+        fields = super().get_schema_fields()
+        fields.insert(0, {
+            'type': 'String',
+            'name': 'type'
+        })
+        return fields
+
+    def generate_type(self, tfile: TextIO) -> None:
+        type = self.data['type']
+        name = self.get_name()
+        if 'fields' not in self.data:
+            tfile.write(f'\nexport type {name} = BaseEvent<"{type}">;\n')
+        else:
+            tfile.write(f'\nexport interface {name} extends BaseEvent<"{type}"> {{\n')
+            for field in self.data['fields']:
+                if field.get('optional', False):
+                    tmpl = '    %s?: %s | null;\n'
+                else:
+                    tmpl = '    %s: %s;\n'
+                if 'struct' in field:
+                    t = field['struct']
+                elif 'enum' in field:
+                    t = field['enum']
+                else:
+                    t = to_js_type(field['type'])
+                if field.get('array', False):
+                    t += '[]'
+                tfile.write(tmpl % (field['name'], t))
+            tfile.write('}\n')
+
+    def generate(self, tfile: TextIO, sfile: TextIO) -> None:
+        self.generate_type(tfile)
+        self.generate_schema(sfile)
+
+
+def scan_events(api: Any) -> dict[str, Event]:
+    events: dict[str, Event] = {event['type']: Event(event) for event in api['events']}
+    return events
+
+
+PREAMBLE_EVENT_TYPES = '''// This file is generated
+
+'''
+
+DECLARATIONS_EVENT_TYPES = '''
+export interface EventPacket {
+    queueStartedAt: number;
+    ordinal: number;
+    sentAt?: number | null;
+    cid?: string | null;
+    event: {
+        type: string;
+    }
+}
+
+export interface BaseEvent<T> {
+    type: T;
+}
+'''
+
+PREAMBLE_EVENT_SCHEMAS = '''// This file is generated for schema compiler only, do not use directly
+
+export const EVENT_SCHEMAS = {
+    $id: "event",
+    definitions: {
+        EventPacket: {
+            type: "object",
+            properties: {
+                "queueStartedAt": {
+                    type: "integer"
+                },
+                "ordinal": {
+                    type: "integer"
+                },
+                "sentAt": {
+                    type: "integer",
+                    nullable: true
+                },
+                "cid": {
+                    type: "string",
+                    nullable: true
+                },
+                "event": {
+                    type: "object",
+                    properties: {
+                        "type": {
+                            type: "string"
+                        }
+                    },
+                    required: ["type"]
+                }
+            },
+            additionalProperties: false,
+            required: ["queueStartedAt", "ordinal", "event"]
+        },
+'''
+
+PREAMBLE_EVENT_ACTIONS = '''// This file is generated
+
+import * as immutable from 'object-path-immutable';
+import { actionWithPayload, ActionWithPayload } from "state/action-types";
+'''
+
+DECLARATIONS_EVENT_ACTIONS = '''
+export type EventSource = "HOME" | "NODE" | "RECEIVER";
+export type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
+
+export type EventAction<E extends BaseEvent<string>> =
+    ActionWithPayload<EventActionType<E["type"]>, Omit<E, "type"> & {sourceNode: string | null}>;
+
+export const eventAction = <E extends BaseEvent<string>>(
+    event: E & {sourceNode: string | null}, source: EventSource
+): EventAction<E> =>
+    actionWithPayload(`EVENT_${source}_${event.type}` as const, immutable.del(event, "type"));
+
+export type ClientEventAction =
+'''
+
+
+def generate_event_types_imports(api: Any, tfile: TextIO) -> None:
+    structs = set()
+    for event in api['events']:
+        if 'fields' not in event:
+            continue
+        for field in event['fields']:
+            if 'struct' in field:
+                structs.add(field['struct'])
+            if 'enum' in field:
+                structs.add(field['enum'])
+    imports = sorted(list(structs))
+    tfile.write('import {\n')
+    for name in imports:
+        tfile.write(f'{ind(1)}{name},\n')
+    tfile.write('} from "api/node/api-types";\n')
+
+
+def generate_event_types(events: dict[str, Event], tfile: TextIO, sfile: TextIO) -> None:
+    for event in events.values():
+        event.generate(tfile, sfile)
+
+
+def generate_event_actions_imports(events: dict[str, Event], afile: TextIO) -> None:
+    afile.write('import {\n')
+    names = sorted([event.get_name() for event in events.values()] + ['BaseEvent'])
+    for name in names:
+        afile.write(f'{ind(1)}{name},\n')
+    afile.write('} from "api/events";\n')
+
+
+def generate_event_actions(events: dict[str, Event], afile: TextIO) -> None:
+    first = True
+    for event in events.values():
+        if not first:
+            afile.write('\n')
+        afile.write(ind(1))
+        if first:
+            first = False
+        else:
+            afile.write('| ')
+        afile.write(f'EventAction<{event.get_name()}>')
+    afile.write(';\n')
+
+
+def generate_events(api: Any, outdir: str) -> None:
+    events = scan_events(api)
+
+    with open(outdir + '/events/api-types.ts', 'w+') as tfile:
+        with open(outdir + '/events/api-schemas.mjs', 'w+') as sfile:
+            tfile.write(PREAMBLE_EVENT_TYPES)
+            generate_event_types_imports(api, tfile)
+            tfile.write(DECLARATIONS_EVENT_TYPES)
+            sfile.write(PREAMBLE_EVENT_SCHEMAS)
+            generate_event_types(events, tfile, sfile)
+            sfile.write('\n    }\n')
+            sfile.write('}\n')
+
+    with open(outdir + '/events/actions.ts', 'w+') as afile:
+        afile.write(PREAMBLE_EVENT_ACTIONS)
+        generate_event_actions_imports(events, afile)
+        afile.write(DECLARATIONS_EVENT_ACTIONS)
+        generate_event_actions(events, afile)
+
+
+def generate_code(outdir: str) -> None:
+    node_api = read_api(sys.argv[1])
+    generate_types(node_api, outdir)
+
+    events_api = read_api(sys.argv[2])
+    generate_events(events_api, outdir)
+
+
+if len(sys.argv) < 3 or sys.argv[1] == '':
+    print("Usage: js-moera-api <node_api.yml file path> <events.yml file path> <output directory>")
     exit(1)
 
-api = read_api(sys.argv[1])
-outdir = sys.argv[2] if len(sys.argv) >= 3 else '.'
-generate_types(api, outdir)
+outdir = sys.argv[3] if len(sys.argv) >= 4 else '.'
+generate_code(outdir)

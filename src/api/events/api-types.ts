@@ -1,3 +1,5 @@
+// This file is generated
+
 import {
     AvatarImage,
     AvatarInfo,
@@ -9,15 +11,15 @@ import {
     FriendGroupInfo,
     FriendInfo,
     FriendOfInfo,
-    PrincipalValue,
     SheriffComplainGroupInfo,
     SheriffComplainInfo,
     SheriffMark,
+    StoryOperations,
     StorySummaryData,
     StoryType,
     SubscriberInfo,
     SubscriptionInfo,
-    TokenInfo
+    TokenInfo,
 } from "api/node/api-types";
 
 export interface EventPacket {
@@ -34,236 +36,7 @@ export interface BaseEvent<T> {
     type: T;
 }
 
-export type PingEvent = BaseEvent<"PING">;
-
-export type ProfileUpdatedEvent = BaseEvent<"PROFILE_UPDATED">;
-
-export type NodeSettingsMetaChangedEvent = BaseEvent<"NODE_SETTINGS_META_CHANGED">;
-
-export type NodeSettingsChangedEvent = BaseEvent<"NODE_SETTINGS_CHANGED">;
-
-export type ClientSettingsChangedEvent = BaseEvent<"CLIENT_SETTINGS_CHANGED">;
-
-interface PostingEvent<T> extends BaseEvent<T> {
-    id: string;
-}
-
-export type RegisteredNameOperationStatusEvent = BaseEvent<"REGISTERED_NAME_OPERATION_STATUS">;
-
-export interface NodeNameChangedEvent extends BaseEvent<"NODE_NAME_CHANGED"> {
-    name: string;
-    fullName?: string | null;
-    gender?: string | null;
-    title?: string | null;
-    avatar?: AvatarImage | null;
-}
-
-export interface FeedStatusUpdatedEvent extends BaseEvent<"FEED_STATUS_UPDATED"> {
-    feedName: string;
-    status: FeedStatus;
-}
-
-export interface StoriesStatusUpdatedEvent extends BaseEvent<"STORIES_STATUS_UPDATED"> {
-    feedName: string;
-    viewed?: boolean | null;
-    read?: boolean | null;
-    before: number;
-}
-
-export interface RemoteNodeFullNameChangedEvent extends BaseEvent<"REMOTE_NODE_FULL_NAME_CHANGED"> {
-    name: string;
-    fullName?: string | null;
-}
-
-export interface SubscribersTotalChangedEvent extends BaseEvent<"SUBSCRIBERS_TOTAL_CHANGED"> {
-    feedSubscribersTotal: number;
-}
-
-export interface SubscriptionsTotalChangedEvent extends BaseEvent<"SUBSCRIPTIONS_TOTAL_CHANGED"> {
-    feedSubscriptionsTotal: number;
-}
-
-export interface RemoteNodeAvatarChangedEvent extends BaseEvent<"REMOTE_NODE_AVATAR_CHANGED"> {
-    name: string;
-    avatar?: AvatarImage | null;
-}
-
-export type PostingAddedEvent = PostingEvent<"POSTING_ADDED">;
-
-export type PostingUpdatedEvent = PostingEvent<"POSTING_UPDATED">;
-
-export type PostingDeletedEvent = PostingEvent<"POSTING_DELETED">;
-
-export type PostingRestoredEvent = PostingEvent<"POSTING_RESTORED">;
-
-export type PostingReactionsChangedEvent = PostingEvent<"POSTING_REACTIONS_CHANGED">;
-
-export interface PostingCommentsChangedEvent extends PostingEvent<"POSTING_COMMENTS_CHANGED"> {
-    total: number;
-}
-
-interface DraftEvent<T> extends BaseEvent<T> {
-    id: string;
-    draftType: DraftType;
-    receiverName: string;
-    receiverPostingId: string;
-    receiverCommentId: string;
-}
-
-export type DraftAddedEvent = DraftEvent<"DRAFT_ADDED">;
-
-export type DraftUpdatedEvent = DraftEvent<"DRAFT_UPDATED">;
-
-export type DraftDeletedEvent = DraftEvent<"DRAFT_DELETED">;
-
-interface RemotePostingVerificationEvent<T> extends BaseEvent<T> {
-    id: string;
-    nodeName: string;
-    receiverName: string;
-    postingId: string;
-    revisionId: string;
-}
-
-export interface RemotePostingVerifiedEvent extends RemotePostingVerificationEvent<"REMOTE_POSTING_VERIFIED"> {
-    correct: boolean;
-}
-
-export interface RemotePostingVerificationFailedEvent
-                    extends RemotePostingVerificationEvent<"REMOTE_POSTING_VERIFICATION_FAILED"> {
-    errorCode: string;
-    errorMessage: string;
-}
-
-interface RemoteReactionEvent<T> extends BaseEvent<T> {
-    remoteNodeName: string;
-    remotePostingId: string;
-}
-
-export interface RemoteReactionAddedEvent extends RemoteReactionEvent<"REMOTE_REACTION_ADDED"> {
-    negative: boolean;
-    emoji: number;
-    createdAt: number;
-}
-
-export type RemoteReactionDeletedEvent = RemoteReactionEvent<"REMOTE_REACTION_DELETED">;
-
-interface RemoteReactionVerificationEvent<T> extends BaseEvent<T> {
-    id: string;
-    nodeName: string;
-    postingId: string;
-    reactionOwnerName: string;
-}
-
-export interface RemoteReactionVerifiedEvent extends RemoteReactionVerificationEvent<"REMOTE_REACTION_VERIFIED"> {
-    correct: boolean;
-}
-
-export interface RemoteReactionVerificationFailedEvent
-                    extends RemoteReactionVerificationEvent<"REMOTE_REACTION_VERIFICATION_FAILED"> {
-    errorCode: string;
-    errorMessage: string;
-}
-
-export interface StoryEvent<T> extends BaseEvent<T> {
-    id: string;
-    storyType: StoryType;
-    feedName: string;
-    publishedAt: number;
-    pinned: boolean;
-    moment: number;
-    postingId?: string | null;
-    viewed?: boolean | null;
-    read?: boolean | null;
-    satisfied?: boolean | null;
-    summaryNodeName?: string | null;
-    summaryFullName?: string | null;
-    summaryAvatar?: AvatarImage | null,
-    summary?: string | null;
-    summaryData?: StorySummaryData | null;
-    remoteNodeName?: string | null;
-    remoteFullName?: string | null;
-    remotePostingId?: string | null;
-    remoteCommentId?: string | null;
-    operations?: {
-        edit?: PrincipalValue | null;
-        delete?: PrincipalValue | null;
-    } | null;
-}
-
-export type StoryAddedEvent = StoryEvent<"STORY_ADDED">;
-
-export type StoryUpdatedEvent = StoryEvent<"STORY_UPDATED">;
-
-export interface StoryDeletedEvent extends BaseEvent<"STORY_DELETED"> {
-    id: string;
-    storyType: StoryType;
-    feedName: string;
-    moment: number;
-    postingId?: string | null;
-}
-
-interface SubscriberEvent<T> extends BaseEvent<T> {
-    subscriber: SubscriberInfo;
-}
-
-export type SubscriberAddedEvent = SubscriberEvent<"SUBSCRIBER_ADDED">;
-
-export type SubscriberUpdatedEvent = SubscriberEvent<"SUBSCRIBER_UPDATED">;
-
-export type SubscriberDeletedEvent = SubscriberEvent<"SUBSCRIBER_DELETED">;
-
-interface SubscriptionEvent<T> extends BaseEvent<T> {
-    subscription: SubscriptionInfo;
-}
-
-export type SubscriptionAddedEvent = SubscriptionEvent<"SUBSCRIPTION_ADDED">;
-
-export type SubscriptionUpdatedEvent = SubscriptionEvent<"SUBSCRIPTION_UPDATED">;
-
-export type SubscriptionDeletedEvent = SubscriptionEvent<"SUBSCRIPTION_DELETED">;
-
-interface CommentEvent<T> extends BaseEvent<T> {
-    id: string;
-    postingId: string;
-    moment: number;
-}
-
-export type CommentAddedEvent = CommentEvent<"COMMENT_ADDED">;
-
-export type CommentUpdatedEvent = CommentEvent<"COMMENT_UPDATED">;
-
-export type CommentDeletedEvent = CommentEvent<"COMMENT_DELETED">;
-
-export type CommentReactionsChangedEvent = CommentEvent<"COMMENT_REACTIONS_CHANGED">;
-
-interface RemoteCommentEvent<T> extends BaseEvent<T> {
-    remoteNodeName: string;
-    remotePostingId: string;
-    remoteCommentId: string;
-}
-
-export type RemoteCommentAddedEvent = RemoteCommentEvent<"REMOTE_COMMENT_ADDED">;
-
-export type RemoteCommentUpdatedEvent = RemoteCommentEvent<"REMOTE_COMMENT_UPDATED">;
-
-export type RemoteCommentDeletedEvent = RemoteCommentEvent<"REMOTE_COMMENT_DELETED">;
-
-interface RemoteCommentVerificationEvent<T> extends BaseEvent<T> {
-    id: string;
-    nodeName: string;
-    postingId: string;
-    commentId: string;
-}
-
-export interface RemoteCommentVerifiedEvent extends RemoteCommentVerificationEvent<"REMOTE_COMMENT_VERIFIED"> {
-    correct: boolean;
-}
-
-export interface RemoteCommentVerificationFailedEvent
-                    extends RemoteCommentVerificationEvent<"REMOTE_COMMENT_VERIFICATION_FAILED"> {
-    errorCode: string;
-    errorMessage: string;
-}
+export type AskSubjectsChangedEvent = BaseEvent<"ASK_SUBJECTS_CHANGED">;
 
 export interface AvatarAddedEvent extends BaseEvent<"AVATAR_ADDED"> {
     avatar: AvatarInfo;
@@ -280,76 +53,79 @@ export interface AvatarOrderedEvent extends BaseEvent<"AVATAR_ORDERED"> {
     ordinal: number;
 }
 
-interface RemotePostingEvent<T> extends BaseEvent<T> {
-    remoteNodeName: string;
-    remotePostingId: string;
-}
-
-export type RemotePostingAddedEvent = RemotePostingEvent<"REMOTE_POSTING_ADDED">;
-
-export type RemotePostingUpdatedEvent = RemotePostingEvent<"REMOTE_POSTING_UPDATED">;
-
-export type RemotePostingDeletedEvent = RemotePostingEvent<"REMOTE_POSTING_DELETED">;
-
-export interface TokenAddedEvent extends BaseEvent<"TOKEN_ADDED"> {
-    token: TokenInfo;
-}
-
-export interface TokenUpdatedEvent extends BaseEvent<"TOKEN_UPDATED"> {
-    token: TokenInfo;
-}
-
-export interface TokenDeletedEvent extends BaseEvent<"TOKEN_DELETED"> {
-    id: string;
-}
-
-export type PluginsUpdatedEvent = BaseEvent<"PLUGINS_UPDATED">;
-
-interface FriendGroupEvent<T> extends BaseEvent<T> {
-    friendGroup: FriendGroupInfo;
-}
-
-export type FriendGroupAddedEvent = FriendGroupEvent<"FRIEND_GROUP_ADDED">;
-
-export type FriendGroupUpdatedEvent = FriendGroupEvent<"FRIEND_GROUP_UPDATED">;
-
-export interface FriendGroupDeletedEvent extends BaseEvent<"FRIEND_GROUP_DELETED"> {
-    friendGroupId: string;
-}
-
-export interface FriendshipUpdatedEvent extends BaseEvent<"FRIENDSHIP_UPDATED"> {
-    friend: FriendInfo;
-}
-
-export type AskSubjectsChangedEvent = BaseEvent<"ASK_SUBJECTS_CHANGED">;
-
-export interface RemoteFriendshipUpdatedEvent extends BaseEvent<"REMOTE_FRIENDSHIP_UPDATED"> {
-    friendOf: FriendOfInfo;
-}
-
-interface BlockedInstantEvent<T> extends BaseEvent<T> {
-    blockedInstant: BlockedInstantInfo;
-}
-
-export type BlockedInstantAddedEvent = BlockedInstantEvent<"BLOCKED_INSTANT_ADDED">
-
-export type BlockedInstantDeletedEvent = BlockedInstantEvent<"BLOCKED_INSTANT_DELETED">
-
-interface BlockedUserEvent<T> extends BaseEvent<T> {
-    blockedUser: BlockedUserInfo;
-}
-
-export type BlockedUserAddedEvent = BlockedUserEvent<"BLOCKED_USER_ADDED">
-
-export type BlockedUserDeletedEvent = BlockedUserEvent<"BLOCKED_USER_DELETED">
-
-interface BlockedByUserEvent<T> extends BaseEvent<T> {
+export interface BlockedByUserAddedEvent extends BaseEvent<"BLOCKED_BY_USER_ADDED"> {
     blockedByUser: BlockedByUserInfo;
 }
 
-export type BlockedByUserAddedEvent = BlockedByUserEvent<"BLOCKED_BY_USER_ADDED">
+export interface BlockedByUserDeletedEvent extends BaseEvent<"BLOCKED_BY_USER_DELETED"> {
+    blockedByUser: BlockedByUserInfo;
+}
 
-export type BlockedByUserDeletedEvent = BlockedByUserEvent<"BLOCKED_BY_USER_DELETED">
+export interface BlockedInstantAddedEvent extends BaseEvent<"BLOCKED_INSTANT_ADDED"> {
+    blockedInstant: BlockedInstantInfo;
+}
+
+export interface BlockedInstantDeletedEvent extends BaseEvent<"BLOCKED_INSTANT_DELETED"> {
+    blockedInstant: BlockedInstantInfo;
+}
+
+export interface BlockedUserAddedEvent extends BaseEvent<"BLOCKED_USER_ADDED"> {
+    blockedUser: BlockedUserInfo;
+}
+
+export interface BlockedUserDeletedEvent extends BaseEvent<"BLOCKED_USER_DELETED"> {
+    blockedUser: BlockedUserInfo;
+}
+
+export type ClientSettingsChangedEvent = BaseEvent<"CLIENT_SETTINGS_CHANGED">;
+
+export interface CommentAddedEvent extends BaseEvent<"COMMENT_ADDED"> {
+    id: string;
+    postingId: string;
+    moment: number;
+}
+
+export interface CommentDeletedEvent extends BaseEvent<"COMMENT_DELETED"> {
+    id: string;
+    postingId: string;
+    moment: number;
+}
+
+export interface CommentReactionsChangedEvent extends BaseEvent<"COMMENT_REACTIONS_CHANGED"> {
+    id: string;
+    postingId: string;
+    moment: number;
+}
+
+export interface CommentUpdatedEvent extends BaseEvent<"COMMENT_UPDATED"> {
+    id: string;
+    postingId: string;
+    moment: number;
+}
+
+export interface DraftAddedEvent extends BaseEvent<"DRAFT_ADDED"> {
+    id: string;
+    draftType: DraftType;
+    receiverName: string;
+    receiverPostingId: string;
+    receiverCommentId: string;
+}
+
+export interface DraftDeletedEvent extends BaseEvent<"DRAFT_DELETED"> {
+    id: string;
+    draftType: DraftType;
+    receiverName: string;
+    receiverPostingId: string;
+    receiverCommentId: string;
+}
+
+export interface DraftUpdatedEvent extends BaseEvent<"DRAFT_UPDATED"> {
+    id: string;
+    draftType: DraftType;
+    receiverName: string;
+    receiverPostingId: string;
+    receiverCommentId: string;
+}
 
 export interface FeedSheriffDataUpdatedEvent extends BaseEvent<"FEED_SHERIFF_DATA_UPDATED"> {
     feedName: string;
@@ -357,15 +133,305 @@ export interface FeedSheriffDataUpdatedEvent extends BaseEvent<"FEED_SHERIFF_DAT
     sheriffMarks?: SheriffMark[] | null;
 }
 
-interface SheriffComplainGroupEvent<T> extends BaseEvent<T> {
-    group: SheriffComplainGroupInfo;
+export interface FeedStatusUpdatedEvent extends BaseEvent<"FEED_STATUS_UPDATED"> {
+    feedName: string;
+    status: FeedStatus;
 }
 
-export type SheriffComplainGroupAddedEvent = SheriffComplainGroupEvent<"SHERIFF_COMPLAIN_GROUP_ADDED">
+export interface FriendGroupAddedEvent extends BaseEvent<"FRIEND_GROUP_ADDED"> {
+    friendGroup: FriendGroupInfo;
+}
 
-export type SheriffComplainGroupUpdatedEvent = SheriffComplainGroupEvent<"SHERIFF_COMPLAIN_GROUP_UPDATED">
+export interface FriendGroupDeletedEvent extends BaseEvent<"FRIEND_GROUP_DELETED"> {
+    friendGroupId: string;
+}
+
+export interface FriendGroupUpdatedEvent extends BaseEvent<"FRIEND_GROUP_UPDATED"> {
+    friendGroup: FriendGroupInfo;
+}
+
+export interface FriendshipUpdatedEvent extends BaseEvent<"FRIENDSHIP_UPDATED"> {
+    friend: FriendInfo;
+}
+
+export interface NodeNameChangedEvent extends BaseEvent<"NODE_NAME_CHANGED"> {
+    name: string;
+    fullName?: string | null;
+    gender?: string | null;
+    title?: string | null;
+    avatar?: AvatarImage | null;
+}
+
+export type NodeSettingsChangedEvent = BaseEvent<"NODE_SETTINGS_CHANGED">;
+
+export type NodeSettingsMetaChangedEvent = BaseEvent<"NODE_SETTINGS_META_CHANGED">;
+
+export type PingEvent = BaseEvent<"PING">;
+
+export type PluginsUpdatedEvent = BaseEvent<"PLUGINS_UPDATED">;
+
+export interface PostingAddedEvent extends BaseEvent<"POSTING_ADDED"> {
+    id: string;
+}
+
+export interface PostingCommentsChangedEvent extends BaseEvent<"POSTING_COMMENTS_CHANGED"> {
+    id: string;
+    total: number;
+}
+
+export interface PostingDeletedEvent extends BaseEvent<"POSTING_DELETED"> {
+    id: string;
+}
+
+export interface PostingReactionsChangedEvent extends BaseEvent<"POSTING_REACTIONS_CHANGED"> {
+    id: string;
+}
+
+export interface PostingRestoredEvent extends BaseEvent<"POSTING_RESTORED"> {
+    id: string;
+}
+
+export interface PostingUpdatedEvent extends BaseEvent<"POSTING_UPDATED"> {
+    id: string;
+}
+
+export type ProfileUpdatedEvent = BaseEvent<"PROFILE_UPDATED">;
+
+export type RegisteredNameOperationStatusEvent = BaseEvent<"REGISTERED_NAME_OPERATION_STATUS">;
+
+export interface RemoteCommentAddedEvent extends BaseEvent<"REMOTE_COMMENT_ADDED"> {
+    remoteNodeName: string;
+    remotePostingId: string;
+    remoteCommentId: string;
+}
+
+export interface RemoteCommentDeletedEvent extends BaseEvent<"REMOTE_COMMENT_DELETED"> {
+    remoteNodeName: string;
+    remotePostingId: string;
+    remoteCommentId: string;
+}
+
+export interface RemoteCommentUpdatedEvent extends BaseEvent<"REMOTE_COMMENT_UPDATED"> {
+    remoteNodeName: string;
+    remotePostingId: string;
+    remoteCommentId: string;
+}
+
+export interface RemoteCommentVerificationFailedEvent extends BaseEvent<"REMOTE_COMMENT_VERIFICATION_FAILED"> {
+    id: string;
+    nodeName: string;
+    postingId: string;
+    commentId: string;
+    errorCode: string;
+    errorMessage: string;
+}
+
+export interface RemoteCommentVerifiedEvent extends BaseEvent<"REMOTE_COMMENT_VERIFIED"> {
+    id: string;
+    nodeName: string;
+    postingId: string;
+    commentId: string;
+    correct: boolean;
+}
+
+export interface RemoteFriendshipUpdatedEvent extends BaseEvent<"REMOTE_FRIENDSHIP_UPDATED"> {
+    friendOf: FriendOfInfo;
+}
+
+export interface RemoteNodeAvatarChangedEvent extends BaseEvent<"REMOTE_NODE_AVATAR_CHANGED"> {
+    name: string;
+    avatar?: AvatarImage | null;
+}
+
+export interface RemoteNodeFullNameChangedEvent extends BaseEvent<"REMOTE_NODE_FULL_NAME_CHANGED"> {
+    name: string;
+    fullName?: string | null;
+}
+
+export interface RemotePostingAddedEvent extends BaseEvent<"REMOTE_POSTING_ADDED"> {
+    remoteNodeName: string;
+    remotePostingId: string;
+}
+
+export interface RemotePostingDeletedEvent extends BaseEvent<"REMOTE_POSTING_DELETED"> {
+    remoteNodeName: string;
+    remotePostingId: string;
+}
+
+export interface RemotePostingUpdatedEvent extends BaseEvent<"REMOTE_POSTING_UPDATED"> {
+    remoteNodeName: string;
+    remotePostingId: string;
+}
+
+export interface RemotePostingVerificationFailedEvent extends BaseEvent<"REMOTE_POSTING_VERIFICATION_FAILED"> {
+    id: string;
+    nodeName: string;
+    receiverName: string;
+    postingId: string;
+    revisionId: string;
+    errorCode: string;
+    errorMessage: string;
+}
+
+export interface RemotePostingVerifiedEvent extends BaseEvent<"REMOTE_POSTING_VERIFIED"> {
+    id: string;
+    nodeName: string;
+    receiverName: string;
+    postingId: string;
+    revisionId: string;
+    correct: boolean;
+}
+
+export interface RemoteReactionAddedEvent extends BaseEvent<"REMOTE_REACTION_ADDED"> {
+    remoteNodeName: string;
+    remotePostingId: string;
+    negative: boolean;
+    emoji: number;
+    createdAt: number;
+}
+
+export interface RemoteReactionDeletedEvent extends BaseEvent<"REMOTE_REACTION_DELETED"> {
+    remoteNodeName: string;
+    remotePostingId: string;
+}
+
+export interface RemoteReactionVerificationFailedEvent extends BaseEvent<"REMOTE_REACTION_VERIFICATION_FAILED"> {
+    id: string;
+    nodeName: string;
+    postingId: string;
+    commentId: string;
+    reactionOwnerName: string;
+    errorCode: string;
+    errorMessage: string;
+}
+
+export interface RemoteReactionVerifiedEvent extends BaseEvent<"REMOTE_REACTION_VERIFIED"> {
+    id: string;
+    nodeName: string;
+    postingId: string;
+    commentId: string;
+    reactionOwnerName: string;
+    correct: boolean;
+}
 
 export interface SheriffComplainAddedEvent extends BaseEvent<"SHERIFF_COMPLAIN_ADDED"> {
     complain: SheriffComplainInfo;
     groupId: string;
+}
+
+export interface SheriffComplainGroupAddedEvent extends BaseEvent<"SHERIFF_COMPLAIN_GROUP_ADDED"> {
+    group: SheriffComplainGroupInfo;
+}
+
+export interface SheriffComplainGroupUpdatedEvent extends BaseEvent<"SHERIFF_COMPLAIN_GROUP_UPDATED"> {
+    group: SheriffComplainGroupInfo;
+}
+
+export interface StoriesStatusUpdatedEvent extends BaseEvent<"STORIES_STATUS_UPDATED"> {
+    feedName: string;
+    viewed?: boolean | null;
+    read?: boolean | null;
+    before: number;
+}
+
+export interface StoryAddedEvent extends BaseEvent<"STORY_ADDED"> {
+    id: string;
+    storyType: StoryType;
+    feedName: string;
+    publishedAt: number;
+    pinned: boolean;
+    moment: number;
+    postingId?: string | null;
+    viewed?: boolean | null;
+    read?: boolean | null;
+    satisfied?: boolean | null;
+    summaryNodeName?: string | null;
+    summaryFullName?: string | null;
+    summaryAvatar?: AvatarImage | null;
+    summary?: string | null;
+    summaryData?: StorySummaryData | null;
+    remoteNodeName?: string | null;
+    remoteFullName?: string | null;
+    remotePostingId?: string | null;
+    remoteCommentId?: string | null;
+    operations?: StoryOperations | null;
+}
+
+export interface StoryDeletedEvent extends BaseEvent<"STORY_DELETED"> {
+    id: string;
+    storyType: StoryType;
+    feedName: string;
+    moment: number;
+    postingId?: string | null;
+}
+
+export interface StoryUpdatedEvent extends BaseEvent<"STORY_UPDATED"> {
+    id: string;
+    storyType: StoryType;
+    feedName: string;
+    publishedAt: number;
+    pinned: boolean;
+    moment: number;
+    postingId?: string | null;
+    viewed?: boolean | null;
+    read?: boolean | null;
+    satisfied?: boolean | null;
+    summaryNodeName?: string | null;
+    summaryFullName?: string | null;
+    summaryAvatar?: AvatarImage | null;
+    summary?: string | null;
+    summaryData?: StorySummaryData | null;
+    remoteNodeName?: string | null;
+    remoteFullName?: string | null;
+    remotePostingId?: string | null;
+    remoteCommentId?: string | null;
+    operations?: StoryOperations | null;
+}
+
+export interface SubscribedEvent extends BaseEvent<"SUBSCRIBED"> {
+    sessionId: string;
+}
+
+export interface SubscriberAddedEvent extends BaseEvent<"SUBSCRIBER_ADDED"> {
+    subscriber: SubscriberInfo;
+}
+
+export interface SubscriberDeletedEvent extends BaseEvent<"SUBSCRIBER_DELETED"> {
+    subscriber: SubscriberInfo;
+}
+
+export interface SubscriberUpdatedEvent extends BaseEvent<"SUBSCRIBER_UPDATED"> {
+    subscriber: SubscriberInfo;
+}
+
+export interface SubscribersTotalChangedEvent extends BaseEvent<"SUBSCRIBERS_TOTAL_CHANGED"> {
+    feedSubscribersTotal: number;
+}
+
+export interface SubscriptionAddedEvent extends BaseEvent<"SUBSCRIPTION_ADDED"> {
+    subscription: SubscriptionInfo;
+}
+
+export interface SubscriptionDeletedEvent extends BaseEvent<"SUBSCRIPTION_DELETED"> {
+    subscription: SubscriptionInfo;
+}
+
+export interface SubscriptionUpdatedEvent extends BaseEvent<"SUBSCRIPTION_UPDATED"> {
+    subscription: SubscriptionInfo;
+}
+
+export interface SubscriptionsTotalChangedEvent extends BaseEvent<"SUBSCRIPTIONS_TOTAL_CHANGED"> {
+    feedSubscriptionsTotal: number;
+}
+
+export interface TokenAddedEvent extends BaseEvent<"TOKEN_ADDED"> {
+    token: TokenInfo;
+}
+
+export interface TokenDeletedEvent extends BaseEvent<"TOKEN_DELETED"> {
+    id: string;
+}
+
+export interface TokenUpdatedEvent extends BaseEvent<"TOKEN_UPDATED"> {
+    token: TokenInfo;
 }
