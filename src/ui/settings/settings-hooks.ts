@@ -4,8 +4,8 @@ import { Property } from 'csstype';
 import { FormikProps, FormikValues, WithFormikConfig } from 'formik';
 
 import { ClientSettingMetaInfo, SettingMetaInfo } from "api";
+import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
-import { mapIsEmpty } from "util/map";
 
 export function useSettingsSheetResize(): Property.MaxHeight {
     const [sheetMaxHeight, setSheetMaxHeight] = useState<Property.MaxHeight>("none");
@@ -30,19 +30,18 @@ interface SettingsResetFormProps {
 export function useSettingsResetForm<Props extends SettingsResetFormProps, Values extends FormikValues>(
     logic: WithFormikConfig<Props, Values>, props: Props & FormikProps<Values>
 ): void {
-    const {valuesMap, metaMap, resetForm} = props;
+    const {resetForm} = props;
 
     const homeOwnerName = useSelector(getHomeOwnerName);
+    const formId = useSelector((state: ClientState) => state.settings.formId);
 
-    const valuesEmpty = mapIsEmpty(valuesMap);
-    const metaEmpty = mapIsEmpty(metaMap);
     useEffect(() => {
         if (logic.mapPropsToValues) {
             const values = logic.mapPropsToValues(props);
             resetForm({values});
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [valuesEmpty, metaEmpty, homeOwnerName, resetForm]); // 'props' are missing on purpose
+    }, [homeOwnerName, resetForm, formId]); // 'props' are missing on purpose
 }
 
 function calcListMaxHeight() {

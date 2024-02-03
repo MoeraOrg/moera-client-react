@@ -21,6 +21,7 @@ export interface SettingsState {
         values: Map<string, string | null>;
         meta: Map<string, ClientSettingMetaInfo>;
     },
+    formId: number;
     updating: boolean;
     changePasswordDialogShow: boolean;
     changingPassword: boolean;

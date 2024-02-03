@@ -44,10 +44,11 @@ const emptySettings = {
     }
 };
 
-const initialState = {
+const initialState: SettingsState = {
     tab: "client" as const,
     sheet: "appearance",
-    ...emptySettings
+    ...emptySettings,
+    formId: 0
 };
 
 export default (state: SettingsState = initialState, action: ClientAction): SettingsState => {
@@ -59,6 +60,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 .set("node.conflict", false)
                 .set("client.conflict", false)
                 .set("plugins.conflict", false)
+                .update("formId", formId => formId + 1)
                 .value();
 
         case "SETTINGS_GO_TO_SHEET":
@@ -85,6 +87,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 .set("node.loadingValues", false)
                 .set("node.loadedValues", true)
                 .set("node.values", values)
+                .update("formId", formId => formId + 1)
                 .value();
         }
 
@@ -97,6 +100,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 .set("node.loadedValues", false)
                 .set("node.conflict", false)
                 .set("node.values", new Map())
+                .update("formId", formId => formId + 1)
                 .value();
 
         case "SETTINGS_NODE_CONFLICT":
@@ -115,6 +119,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 .set("node.loadingMeta", false)
                 .set("node.loadedMeta", true)
                 .set("node.meta", metadata)
+                .update("formId", formId => formId + 1)
                 .value();
         }
 
@@ -126,6 +131,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 .set("node.loadingMeta", false)
                 .set("node.loadedMeta", false)
                 .set("node.meta", new Map())
+                .update("formId", formId => formId + 1)
                 .value();
 
         case "SETTINGS_CLIENT_VALUES_LOAD":
@@ -138,6 +144,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 .set("client.loadingValues", false)
                 .set("client.loadedValues", true)
                 .set("client.values", values)
+                .update("formId", formId => formId + 1)
                 .value();
         }
 
@@ -156,6 +163,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 .set("client.loadedValues", false)
                 .set("client.conflict", false)
                 .set("client.values", new Map())
+                .update("formId", formId => formId + 1)
                 .value();
 
         case "SETTINGS_CLIENT_CONFLICT":
@@ -201,6 +209,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 .set("node.values", nodeValues)
                 .set("client.values", clientValues)
                 .set("updating", false)
+                .update("formId", formId => formId + 1)
                 .value();
 
         case "SETTINGS_UPDATE_FAILED":
