@@ -4,6 +4,7 @@ import cx from 'classnames';
 
 import * as Browser from "ui/browser";
 import { LoadingInline } from "ui/control";
+import "./Button.css";
 
 type Props = {
     variant: string;
@@ -33,13 +34,15 @@ function ButtonImpl(
 
     const klass = cx(
         "btn",
-        `btn-${variant}`, {
+        `btn-${variant}`,
+        {
             "btn-sm": size === "sm",
             "btn-lg": size === "lg",
             "flex-fill": block,
             "border-0": borderless,
-            "invisible": invisible,
-            "active": active
+            invisible,
+            active,
+            "btn-loading": loading
         },
         className
     );
