@@ -882,7 +882,7 @@
   "welcome" : "Welcome!",
   "where-from" : "Where it comes from?",
   "where-go" : "Where do you want to go?",
-  "why-delete-blog" : "Why do you delete the blog? (optional)",
+  "why-delete-blog" : "Why are you deleting the blog? (optional)",
   "width" : "Width",
   "write-anything" : "Write anything...",
   "write-comment-here" : "Write a comment to {mention} here...",
