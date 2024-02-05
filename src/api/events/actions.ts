@@ -19,6 +19,7 @@ import {
     CommentDeletedEvent,
     CommentReactionsChangedEvent,
     CommentUpdatedEvent,
+    DeleteNodeStatusUpdatedEvent,
     DraftAddedEvent,
     DraftDeletedEvent,
     DraftUpdatedEvent,
@@ -106,6 +107,7 @@ export type ClientEventAction =
     | EventAction<CommentDeletedEvent>
     | EventAction<CommentReactionsChangedEvent>
     | EventAction<CommentUpdatedEvent>
+    | EventAction<DeleteNodeStatusUpdatedEvent>
     | EventAction<DraftAddedEvent>
     | EventAction<DraftDeletedEvent>
     | EventAction<DraftUpdatedEvent>

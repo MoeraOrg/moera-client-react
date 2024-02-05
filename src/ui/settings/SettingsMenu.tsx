@@ -19,12 +19,12 @@ export default function SettingsMenu() {
         <ul className="nav nav-pills flex-md-column col-md-2 settings-menu">{
             getSheets(tab).map(sh =>
                 <li className="nav-item" key={sh.name}>
-                    <span className={cx("nav-link", {"active": sh.name === sheetName})}
+                    <span className={cx("nav-link", {"active": sh.name === sheetName}, sh.navClass)}
                           onClick={() => dispatch(settingsGoToSheet(sh.name))}>{
                         sh.name === sheetName ?
                             t(`setting.sheet.${sh.name}`)
                         :
-                            <Jump href={`/settings/${tab}#${sh}`}>{t(`setting.sheet.${sh.name}`)}</Jump>
+                            <Jump href={`/settings/${tab}#${sh.name}`}>{t(`setting.sheet.${sh.name}`)}</Jump>
                     }</span>
                 </li>
             )

@@ -41,6 +41,12 @@ const emptySettings = {
         loaded: false,
         conflict: false,
         plugins: []
+    },
+    deleteNode: {
+        loading: false,
+        loaded: false,
+        requested: false,
+        updating: false
     }
 };
 
@@ -357,6 +363,38 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
 
         case "SETTINGS_PLUGINS_CONFLICT_CLOSE":
             return immutable.set(state, "plugins.conflict", false);
+
+        case "SETTINGS_DELETE_NODE_REQUEST_LOAD":
+            return immutable.set(state, "deleteNode.loading", true);
+
+        case "SETTINGS_DELETE_NODE_REQUEST_LOADED":
+            return immutable.assign(state, "deleteNode", {
+                loading: false,
+                loaded: true,
+                requested: action.payload.requested
+            });
+
+        case "SETTINGS_DELETE_NODE_REQUEST_LOAD_FAILED":
+            return immutable.set(state, "deleteNode.loading", false);
+
+        case "SETTINGS_DELETE_NODE_REQUEST_SEND":
+        case "SETTINGS_DELETE_NODE_REQUEST_CANCEL":
+            return immutable.set(state, "deleteNode.updating", true);
+
+        case "SETTINGS_DELETE_NODE_REQUEST_UPDATE_FAILED":
+            return immutable.set(state, "deleteNode.updating", false);
+
+        case "SETTINGS_DELETE_NODE_REQUEST_STATUS_SET":
+            return immutable.assign(state, "deleteNode", {
+                updating: false,
+                requested: action.payload.requested
+            });
+
+        case "SETTINGS_DELETE_NODE_REQUEST_UNSET":
+            return immutable.set(state, "deleteNode.loaded", false);
+
+        case "EVENT_HOME_DELETE_NODE_STATUS_UPDATED":
+            return immutable.set(state, "deleteNode.requested", action.payload.requested);
 
         default:
             return state;

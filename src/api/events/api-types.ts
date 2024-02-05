@@ -103,6 +103,10 @@ export interface CommentUpdatedEvent extends BaseEvent<"COMMENT_UPDATED"> {
     moment: number;
 }
 
+export interface DeleteNodeStatusUpdatedEvent extends BaseEvent<"DELETE_NODE_STATUS_UPDATED"> {
+    requested: boolean;
+}
+
 export interface DraftAddedEvent extends BaseEvent<"DRAFT_ADDED"> {
     id: string;
     draftType: DraftType;

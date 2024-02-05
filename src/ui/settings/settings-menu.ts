@@ -9,6 +9,7 @@ interface Sheet {
     type: "sheet";
     name: string;
     children: Item[];
+    navClass: string | undefined;
 }
 
 interface Chapter {
@@ -43,8 +44,8 @@ interface Text {
 
 export type Item = Chapter | Option | Component | Text;
 
-function sheet(name: string, children: Item[] = []): Sheet {
-    return {type: "sheet", name, children};
+function sheet(name: string, children: Item[] = [], navClass?: string): Sheet {
+    return {type: "sheet", name, children, navClass};
 }
 
 function chapter<CP extends {}>(name: string, description: string | null, children: (Option | Component | Text)[],
@@ -124,7 +125,8 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             option("webmaster.email")
         ]),
         sheet("addons"),
-        sheet("other")
+        sheet("other"),
+        sheet("removal", undefined, "nav-danger mt-md-4")
     ],
     "client": [
         sheet("appearance", [

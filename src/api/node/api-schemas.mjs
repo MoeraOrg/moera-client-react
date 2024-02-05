@@ -754,6 +754,19 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
+        DeleteNodeStatus: {
+            type: "object",
+            properties: {
+                "requested": {
+                    type: "boolean"
+                },
+            },
+            required: [
+                "requested",
+            ],
+            additionalProperties: false
+        },
+
         DomainAvailable: {
             type: "object",
             properties: {

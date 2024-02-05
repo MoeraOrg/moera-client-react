@@ -25,6 +25,13 @@ import {
     SettingsClientValuesLoadedAction,
     settingsClientValuesLoadFailed,
     SettingsClientValuesSetAction,
+    SettingsDeleteNodeRequestCancelAction,
+    SettingsDeleteNodeRequestLoadAction,
+    settingsDeleteNodeRequestLoaded,
+    settingsDeleteNodeRequestLoadFailed,
+    SettingsDeleteNodeRequestSendAction,
+    settingsDeleteNodeRequestStatusSet,
+    settingsDeleteNodeRequestUpdateFailed,
     settingsLanguageChanged,
     SettingsNodeMetaLoadAction,
     settingsNodeMetaLoaded,
@@ -84,7 +91,10 @@ export default [
     executor("SETTINGS_PLUGINS_LOAD", "", settingsPluginsLoadSaga, homeIntroduced),
     executor("SETTINGS_PLUGINS_DELETE", payload => payload.name, settingsPluginsDeleteSaga),
     executor("SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY", "", settingsRemindSetSheriffGooglePlaySaga),
-    executor("SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE", "", settingsRemindSetSheriffGooglePlayChoiceSaga)
+    executor("SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE", "", settingsRemindSetSheriffGooglePlayChoiceSaga),
+    executor("SETTINGS_DELETE_NODE_REQUEST_LOAD", "", settingsDeleteNodeRequestLoadSaga),
+    executor("SETTINGS_DELETE_NODE_REQUEST_SEND", "", settingsDeleteNodeRequestSendSaga),
+    executor("SETTINGS_DELETE_NODE_REQUEST_CANCEL", "", settingsDeleteNodeRequestCancelSaga)
 ];
 
 function* settingsNodeValuesLoadSaga(action: SettingsNodeValuesLoadAction) {
@@ -334,4 +344,34 @@ function* settingsRemindSetSheriffGooglePlayChoiceSaga(action: SettingsRemindSet
         );
     }
     yield* put(settingsUpdate(updates).causedBy(action));
+}
+
+function* settingsDeleteNodeRequestLoadSaga(action: SettingsDeleteNodeRequestLoadAction) {
+    try {
+        const status = yield* call(Node.getDeleteNodeRequestStatus, action, ":");
+        yield* put(settingsDeleteNodeRequestLoaded(status.requested).causedBy(action));
+    } catch (e) {
+        yield* put(settingsDeleteNodeRequestLoadFailed().causedBy(action));
+        yield* put(errorThrown(e));
+    }
+}
+
+function* settingsDeleteNodeRequestSendSaga(action: SettingsDeleteNodeRequestSendAction) {
+    try {
+        const status = yield* call(Node.sendDeleteNodeRequest, action, ":", {message: action.payload.message});
+        yield* put(settingsDeleteNodeRequestStatusSet(status.requested).causedBy(action));
+    } catch (e) {
+        yield* put(settingsDeleteNodeRequestUpdateFailed().causedBy(action));
+        yield* put(errorThrown(e));
+    }
+}
+
+function* settingsDeleteNodeRequestCancelSaga(action: SettingsDeleteNodeRequestCancelAction) {
+    try {
+        const status = yield* call(Node.cancelDeleteNodeRequest, action, ":");
+        yield* put(settingsDeleteNodeRequestStatusSet(status.requested).causedBy(action));
+    } catch (e) {
+        yield* put(settingsDeleteNodeRequestUpdateFailed().causedBy(action));
+        yield* put(errorThrown(e));
+    }
 }

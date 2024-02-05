@@ -7,8 +7,10 @@ import {
     isAtSettingsNodeTab,
     isRemindToSetSheriffGooglePlay,
     isSettingsAtAddonsSheet,
+    isSettingsAtRemovalSheet,
     isSettingsAtSecuritySheet,
     isSettingsClientValuesToBeLoaded,
+    isSettingsDeleteNodeRequestToBeLoaded,
     isSettingsNodeMetaToBeLoaded,
     isSettingsNodeValuesToBeLoaded,
     isSettingsPluginsLoaded,
@@ -20,6 +22,8 @@ import {
     settingsClientConflict,
     settingsClientValuesLoad,
     settingsClientValuesUnset,
+    settingsDeleteNodeRequestLoad,
+    settingsDeleteNodeRequestUnset,
     settingsNodeConflict,
     settingsNodeMetaLoad,
     settingsNodeMetaUnset,
@@ -78,5 +82,11 @@ export default [
     trigger("SETTINGS_TOKENS_DIALOG_CLOSE", true, dialogClosed),
     trigger("SETTINGS_TOKENS_CREATED", true, dialogClosed),
     trigger("SETTINGS_TOKENS_UPDATED", true, dialogClosed),
-    trigger("POST_INIT_DELAYED", isRemindToSetSheriffGooglePlay, settingsRemindSetSheriffGooglePlay)
+    trigger("POST_INIT_DELAYED", isRemindToSetSheriffGooglePlay, settingsRemindSetSheriffGooglePlay),
+    trigger(
+        ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_SHEET"],
+        conj(isConnectedToHome, isAtSettingsPage, isSettingsAtRemovalSheet, isSettingsDeleteNodeRequestToBeLoaded),
+        settingsDeleteNodeRequestLoad
+    ),
+    trigger("HOME_READY", inv(isConnectedToHome), settingsDeleteNodeRequestUnset)
 ];

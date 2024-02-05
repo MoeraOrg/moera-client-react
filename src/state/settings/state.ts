@@ -41,5 +41,11 @@ export interface SettingsState {
         loaded: boolean;
         conflict: boolean;
         plugins: PluginInfo[];
+    },
+    deleteNode: {
+        loading: boolean;
+        loaded: boolean;
+        requested: boolean;
+        updating: boolean;
     }
 }

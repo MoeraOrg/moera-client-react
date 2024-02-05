@@ -325,6 +325,23 @@ export const EVENT_SCHEMAS = {
             additionalProperties: false
         },
 
+        DeleteNodeStatusUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "requested": {
+                    type: "boolean"
+                },
+            },
+            required: [
+                "type",
+                "requested",
+            ],
+            additionalProperties: false
+        },
+
         DraftAddedEvent: {
             type: "object",
             properties: {

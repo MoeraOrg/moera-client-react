@@ -275,6 +275,46 @@ export const settingsRemindSetSheriffGooglePlayChoice = (
 ): SettingsRemindSetSheriffGooglePlayChoiceAction =>
     actionWithPayload("SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE", {allow});
 
+export type SettingsDeleteNodeRequestLoadAction = ActionWithoutPayload<"SETTINGS_DELETE_NODE_REQUEST_LOAD">;
+export const settingsDeleteNodeRequestLoad = (): SettingsDeleteNodeRequestLoadAction =>
+    actionWithoutPayload("SETTINGS_DELETE_NODE_REQUEST_LOAD");
+
+export type SettingsDeleteNodeRequestLoadedAction = ActionWithPayload<"SETTINGS_DELETE_NODE_REQUEST_LOADED", {
+    requested: boolean;
+}>;
+export const settingsDeleteNodeRequestLoaded = (requested: boolean): SettingsDeleteNodeRequestLoadedAction =>
+    actionWithPayload("SETTINGS_DELETE_NODE_REQUEST_LOADED", {requested});
+
+export type SettingsDeleteNodeRequestLoadFailedAction =
+    ActionWithoutPayload<"SETTINGS_DELETE_NODE_REQUEST_LOAD_FAILED">;
+export const settingsDeleteNodeRequestLoadFailed = (): SettingsDeleteNodeRequestLoadFailedAction =>
+    actionWithoutPayload("SETTINGS_DELETE_NODE_REQUEST_LOAD_FAILED");
+
+export type SettingsDeleteNodeRequestSendAction = ActionWithPayload<"SETTINGS_DELETE_NODE_REQUEST_SEND", {
+    message: string | null;
+}>;
+export const settingsDeleteNodeRequestSend = (message: string | null): SettingsDeleteNodeRequestSendAction =>
+    actionWithPayload("SETTINGS_DELETE_NODE_REQUEST_SEND", {message});
+
+export type SettingsDeleteNodeRequestCancelAction = ActionWithoutPayload<"SETTINGS_DELETE_NODE_REQUEST_CANCEL">;
+export const settingsDeleteNodeRequestCancel = (): SettingsDeleteNodeRequestCancelAction =>
+    actionWithoutPayload("SETTINGS_DELETE_NODE_REQUEST_CANCEL");
+
+export type SettingsDeleteNodeRequestUpdateFailedAction =
+    ActionWithoutPayload<"SETTINGS_DELETE_NODE_REQUEST_UPDATE_FAILED">;
+export const settingsDeleteNodeRequestUpdateFailed = (): SettingsDeleteNodeRequestUpdateFailedAction =>
+    actionWithoutPayload("SETTINGS_DELETE_NODE_REQUEST_UPDATE_FAILED");
+
+export type SettingsDeleteNodeRequestStatusSetAction = ActionWithPayload<"SETTINGS_DELETE_NODE_REQUEST_STATUS_SET", {
+    requested: boolean;
+}>;
+export const settingsDeleteNodeRequestStatusSet = (requested: boolean): SettingsDeleteNodeRequestStatusSetAction =>
+    actionWithPayload("SETTINGS_DELETE_NODE_REQUEST_STATUS_SET", {requested});
+
+export type SettingsDeleteNodeRequestUnsetAction = ActionWithoutPayload<"SETTINGS_DELETE_NODE_REQUEST_UNSET">;
+export const settingsDeleteNodeRequestUnset = (): SettingsDeleteNodeRequestUnsetAction =>
+    actionWithoutPayload("SETTINGS_DELETE_NODE_REQUEST_UNSET");
+
 export type SettingsAnyAction =
     SettingsGoToTabAction
     | SettingsGoToSheetAction
@@ -329,4 +369,12 @@ export type SettingsAnyAction =
     | SettingsPluginsConflictCloseAction
     | SettingsLanguageChangedAction
     | SettingsRemindSetSheriffGooglePlayAction
-    | SettingsRemindSetSheriffGooglePlayChoiceAction;
+    | SettingsRemindSetSheriffGooglePlayChoiceAction
+    | SettingsDeleteNodeRequestLoadAction
+    | SettingsDeleteNodeRequestLoadedAction
+    | SettingsDeleteNodeRequestLoadFailedAction
+    | SettingsDeleteNodeRequestSendAction
+    | SettingsDeleteNodeRequestCancelAction
+    | SettingsDeleteNodeRequestUpdateFailedAction
+    | SettingsDeleteNodeRequestStatusSetAction
+    | SettingsDeleteNodeRequestUnsetAction;

@@ -16,6 +16,7 @@ import SettingsSheet from "ui/settings/SettingsSheet";
 import SettingsItemAddonsEmpty from "ui/settings/SettingsItemAddonsEmpty";
 import SettingsPluginControls from "ui/settings/SettingsPluginControls";
 import SettingsModerationSheet from "ui/settings/SettingsModerationSheet";
+import SettingsRemovalSheet from "ui/settings/SettingsRemovalSheet";
 
 interface Props {
     tab: SettingsTabId;
@@ -44,6 +45,8 @@ export default function SettingsTabContent({tab}: Props) {
             break;
         case "moderation":
             return <SettingsModerationSheet valuesMap={clientValues}/>;
+        case "removal":
+            return <SettingsRemovalSheet/>;
         default:
             items = sheet.children;
             break;

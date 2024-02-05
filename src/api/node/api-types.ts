@@ -330,6 +330,14 @@ export interface CredentialsCreated {
     created: boolean;
 }
 
+export interface DeleteNodeStatus {
+    requested: boolean;
+}
+
+export interface DeleteNodeText {
+    message?: string | null;
+}
+
 export interface DomainAttributes {
     name?: string | null;
     nodeId?: string | null;

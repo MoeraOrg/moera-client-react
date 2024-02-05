@@ -3,3 +3,15 @@
         margin-bottom: 1.5rem;
     }
 }
+
+.nav.nav-pills .nav-link.nav-danger A {
+    color: var(--bs-danger);
+}
+
+.nav.nav-pills .nav-link.nav-danger:hover {
+    background-color: var(--highlight-red);
+}
+
+.nav.nav-pills .nav-link.nav-danger.active {
+    background-color: var(--bs-danger);
+}

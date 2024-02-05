@@ -1276,6 +1276,40 @@ export function* updateProfile(
     });
 }
 
+export function* getDeleteNodeRequestStatus(
+    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false,
+    auth: true | string = true
+): CallApiResult<API.DeleteNodeStatus> {
+
+    const location = "/provider/delete-node";
+    return yield* callApi<API.DeleteNodeStatus>({
+        caller, nodeName, method: "GET", location, auth, schema: "DeleteNodeStatus", errorFilter
+    });
+}
+
+export function* sendDeleteNodeRequest(
+    caller: ClientAction | null, nodeName: string | null, deleteNodeText: API.DeleteNodeText,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): CallApiResult<API.DeleteNodeStatus> {
+
+    const location = "/provider/delete-node";
+    return yield* callApi<API.DeleteNodeStatus>({
+        caller, nodeName, method: "POST", location, body: deleteNodeText, auth, schema: "DeleteNodeStatus",
+        errorFilter
+    });
+}
+
+export function* cancelDeleteNodeRequest(
+    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false,
+    auth: true | string = true
+): CallApiResult<API.DeleteNodeStatus> {
+
+    const location = "/provider/delete-node";
+    return yield* callApi<API.DeleteNodeStatus>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "DeleteNodeStatus", errorFilter
+    });
+}
+
 export function* proxyMedia(
     caller: ClientAction | null, nodeName: string | null, url: string, errorFilter: ErrorFilter = false,
     auth: true | string = true
