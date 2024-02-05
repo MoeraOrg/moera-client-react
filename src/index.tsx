@@ -8,7 +8,7 @@ import 'react-datepicker/dist/react-datepicker.min.css';
 import "i18n";
 import { Storage } from "storage";
 import store from "state/store";
-import { goHomeNews, initFromLocation, initFromNodeLocation } from "state/navigation/actions";
+import { goHomeLocation, initFromLocation, initFromNodeLocation } from "state/navigation/actions";
 import { storyReadingUpdate } from "state/stories/actions";
 import * as Browser from "ui/browser";
 import App from "ui/App";
@@ -20,8 +20,10 @@ function sendInitAction(): void {
         store.dispatch(initFromLocation(name ?? null, rootLocation, path, query, hash));
     } else if (name != null) {
         store.dispatch(initFromNodeLocation(name, path, query, hash, null));
+    } else if (path && path !== "/") {
+        store.dispatch(goHomeLocation(path, query, hash));
     } else {
-        store.dispatch(goHomeNews());
+        store.dispatch(goHomeLocation("/news", null, null));
     }
     const readId = Browser.parameters.get("read");
     if (readId) {

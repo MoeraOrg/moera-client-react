@@ -7,7 +7,7 @@ import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import {
     GoHomeAction,
-    GoHomeNewsAction,
+    GoHomeLocationAction,
     GoToLocationAction,
     initFromLocation,
     InitFromLocationAction,
@@ -33,7 +33,7 @@ export default [
     executor("UPDATE_LOCATION", null, updateLocationSaga),
     executor("GO_TO_LOCATION", payload => `${payload.path}:${payload.query}:${payload.hash}`, goToLocationSaga),
     executor("GO_HOME", "", goHomeSaga),
-    executor("GO_HOME_NEWS", "", goHomeNewsSaga, homeIntroduced),
+    executor("GO_HOME_LOCATION", "", goHomeLocationSaga, homeIntroduced),
     executor("SWIPE_REFRESH_UPDATE", "", swipeRefreshUpdateSaga),
     executor("BODY_SCROLL_UPDATE", "", bodyScrollUpdateSaga)
 ];
@@ -118,7 +118,8 @@ function* goHomeSaga(action: GoHomeAction) {
     }
 }
 
-function* goHomeNewsSaga(action: GoHomeNewsAction) {
+function* goHomeLocationSaga(action: GoHomeLocationAction) {
+    const {path, query, hash} = action.payload;
     const {atNode, homeOwnerName, homeRootPage} = yield* select((state: ClientState) => ({
         atNode: isAtNode(state),
         homeOwnerName: getHomeOwnerName(state),
@@ -131,10 +132,10 @@ function* goHomeNewsSaga(action: GoHomeNewsAction) {
         yield* put(nodeReady());
         return;
     }
-    const {scheme, host, port, path} = URI.parse(homeRootPage);
+    const {scheme, host, port} = URI.parse(homeRootPage);
     if (scheme != null && host != null) {
         const rootLocation = rootUrl(scheme, host, port);
-        yield* put(initFromLocation(homeOwnerName, rootLocation, path + "/news", null, null).causedBy(action));
+        yield* put(initFromLocation(homeOwnerName, rootLocation, path, query, hash).causedBy(action));
     } else {
         yield* put(nodeReady());
     }

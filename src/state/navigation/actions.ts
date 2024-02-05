@@ -137,9 +137,13 @@ export type GoHomeAction = ActionWithoutPayload<"GO_HOME">;
 export const goHome = (): GoHomeAction =>
     actionWithoutPayload("GO_HOME");
 
-export type GoHomeNewsAction = ActionWithoutPayload<"GO_HOME_NEWS">;
-export const goHomeNews = (): GoHomeNewsAction =>
-    actionWithoutPayload("GO_HOME_NEWS");
+export type GoHomeLocationAction = ActionWithPayload<"GO_HOME_LOCATION", {
+    path: string | null;
+    query: string | null;
+    hash: string | null;
+}>;
+export const goHomeLocation = (path: string | null, query: string | null, hash: string | null): GoHomeLocationAction =>
+    actionWithPayload("GO_HOME_LOCATION", {path, query, hash});
 
 export type BottomMenuHideAction = ActionWithoutPayload<"BOTTOM_MENU_HIDE">;
 export const bottomMenuHide = (): BottomMenuHideAction =>
@@ -179,7 +183,7 @@ export type NavigationAnyAction =
     | LocationUnlockAction
     | GoToLocationAction
     | GoHomeAction
-    | GoHomeNewsAction
+    | GoHomeLocationAction
     | BottomMenuHideAction
     | BottomMenuShowAction
     | DialogOpenedAction
