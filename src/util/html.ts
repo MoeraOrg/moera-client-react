@@ -225,6 +225,7 @@ export function safeImportHtml(html: string | null | undefined): string {
         .replace(/<div(\s[^>]*)?>/gi, "\n")
         .replace(/<\/div>/gi, "")
         .replace(/\n\s*\n/g, "\n\n")
+        .replace(/<a[^>]*>(#\S+)<\/a>/g, "$1") // Facebook tag
         .replace("<a></a>", "") // Facebook post cutting mark
         .trim();
 }
