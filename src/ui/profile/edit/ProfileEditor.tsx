@@ -119,7 +119,7 @@ const profileEditorLogic = {
         }
         if (values.email.length > 63) {
             errors.email = "too-long";
-        } else if (!isEmail(values.email)) {
+        } else if (values.email && !isEmail(values.email)) {
             errors.email = "not-valid-e-mail";
         }
         if (values.bioSrc.text.length > 4096) {
