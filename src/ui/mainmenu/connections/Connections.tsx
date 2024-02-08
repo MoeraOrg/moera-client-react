@@ -9,8 +9,7 @@ import { ClientState } from "state/state";
 import { getHomeRootLocation } from "state/home/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
-import { openSignUpDialog } from "state/signupdialog/actions";
-import { Button, usePopover } from "ui/control";
+import { usePopover } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 import ConnectionItem from "ui/mainmenu/connections/ConnectionItem";
 import "./Connections.css";
@@ -27,11 +26,6 @@ export default function Connections() {
 
     const onAddClick = () => {
         dispatch(openConnectDialog());
-        hide();
-    };
-
-    const onSignUpClick = () => {
-        dispatch(openSignUpDialog());
         hide();
     };
 
@@ -80,11 +74,6 @@ export default function Connections() {
             ))}
             <div className="connection-add" onClick={onAddClick}>
                 <FontAwesomeIcon icon={faPlus}/> {t("add-connection")}
-            </div>
-            <div className="connection-sign-up">
-                <Button variant="outline-secondary" size="sm" onClick={onSignUpClick}>
-                    {t("create-another-blog")}
-                </Button>
             </div>
         </div>
     );

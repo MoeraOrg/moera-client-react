@@ -4,6 +4,7 @@ import { Form } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { cancelConnectDialog } from "state/connectdialog/actions";
+import { openSignUpDialog } from "state/signupdialog/actions";
 import { Button, ModalDialog } from "ui/control";
 import "./ConnectDialogModal.css";
 
@@ -18,6 +19,11 @@ export default function ConnectDialogModal({title, buttonCaption, loading, child
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
+    const onSignUp = () => {
+        dispatch(cancelConnectDialog());
+        dispatch(openSignUpDialog());
+    };
+
     const onClose = () => dispatch(cancelConnectDialog());
 
     return (
@@ -27,6 +33,7 @@ export default function ConnectDialogModal({title, buttonCaption, loading, child
                     {children}
                 </div>
                 <div className="modal-footer">
+                    <Button variant="success" className="me-auto" onClick={onSignUp}>{t("sign-up")}</Button>
                     <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
                     <Button variant="primary" type="submit" loading={loading}>{buttonCaption}</Button>
                 </div>

@@ -182,7 +182,7 @@ function SignUpDialogInner({stage, values, setFieldValue, touched, setFieldTouch
     const onClose = () => dispatch(cancelSignUpDialog());
 
     return (
-        <ModalDialog title={t("create-blog")} onClose={onClose}>
+        <ModalDialog title={t("sign-up")} onClose={onClose}>
             <Form>
                 <div className="modal-body sign-up-dialog">
                     <SelectField name="language" title={t("language")} choices={languageChoices} anyValue
