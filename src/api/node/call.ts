@@ -123,11 +123,11 @@ export function* callApi<T>({
                 throw exception("Server returned error status");
             }
             if (data.errorCode === "authentication.invalid") {
-                yield* put(errorAuthInvalid());
+                yield* put(errorAuthInvalid().causedBy(caller));
                 throw new NodeApiError(data.errorCode, data.message, caller);
             }
             if (data.errorCode === "authentication.blocked") {
-                yield* put(messageBox(i18n.t("sorry-you-banned")));
+                yield* put(messageBox(i18n.t("sorry-you-banned")).causedBy(caller));
                 throw new NodeApiError(data.errorCode, data.message, caller);
             }
             if (data.errorCode.startsWith("carte.") && !cartesRenewed) {
