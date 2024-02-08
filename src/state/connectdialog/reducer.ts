@@ -1,5 +1,6 @@
-import { ConnectDialogState } from "state/connectdialog/state";
+import { NodeName } from "api";
 import { ClientAction } from "state/action";
+import { ConnectDialogState } from "state/connectdialog/state";
 
 const initialState = {
     show: false,
@@ -38,8 +39,18 @@ export default (state: ConnectDialogState = initialState, action: ClientAction):
             return {
                 ...state,
                 show: false,
-                location: action.payload.location,
+                location: NodeName.shorten(action.payload.name) ?? action.payload.location,
                 login: action.payload.login ?? ""
+            }
+
+        case "HOME_OWNER_SET":
+            if (action.payload.name != null) {
+                return {
+                    ...state,
+                    location: NodeName.shorten(action.payload.name)
+                }
+            } else {
+                return state;
             }
 
         case "CONNECT_DIALOG_SET_FORM":

@@ -108,7 +108,7 @@ export function getOwnerName(state: ClientState): string | null {
 }
 
 export function getOwnerNameOrUrl(state: ClientState): string {
-    return getOwnerName(state) ?? state.node.root.location ?? "";
+    return getOwnerName(state) ?? getNodeRootLocation(state) ?? "";
 }
 
 export function getOwnerCard(state: ClientState): NodeCardState | null {

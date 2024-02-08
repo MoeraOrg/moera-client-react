@@ -13,8 +13,11 @@ export class NodeName {
 
     static shorten(qName: string): string;
     static shorten(qName: null): null;
+    static shorten(qName: undefined): undefined;
     static shorten(qName: string | null): string | null;
-    static shorten(qName: string | null): string | null {
+    static shorten(qName: string | undefined): string | undefined;
+    static shorten(qName: string | null | undefined): string | null | undefined;
+    static shorten(qName: string | null | undefined): string | null | undefined {
         if (!qName) {
             return qName;
         }
