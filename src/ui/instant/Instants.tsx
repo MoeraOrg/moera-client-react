@@ -5,9 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
-import { bodyScrollUpdate, swipeRefreshUpdate } from "state/navigation/actions";
+import { bodyScrollUpdate } from "state/navigation/actions";
 import { usePopover } from "ui/control";
-import * as Browser from "ui/browser";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
 import { BUILD_NUMBER } from "build-number";
@@ -30,16 +29,10 @@ export default function Instants({instantBorder}: Props) {
 
     useEffect(() => {
         window.closeLightDialog = hide;
-        if (Browser.isAndroidApp()) {
-            dispatch(swipeRefreshUpdate());
-        }
         dispatch(bodyScrollUpdate());
 
         return () => {
             window.closeLightDialog = null;
-            if (Browser.isAndroidApp()) {
-                dispatch(swipeRefreshUpdate());
-            }
             dispatch(bodyScrollUpdate());
         }
     }, [hide, dispatch]);

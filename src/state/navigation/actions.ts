@@ -169,10 +169,6 @@ export type DialogClosedAction = ActionWithoutPayload<"DIALOG_CLOSED">;
 export const dialogClosed = (): DialogClosedAction =>
     actionWithoutPayload("DIALOG_CLOSED");
 
-export type SwipeRefreshUpdateAction = ActionWithoutPayload<"SWIPE_REFRESH_UPDATE">;
-export const swipeRefreshUpdate = (): SwipeRefreshUpdateAction =>
-    actionWithoutPayload("SWIPE_REFRESH_UPDATE");
-
 export type BodyScrollUpdateAction = ActionWithoutPayload<"BODY_SCROLL_UPDATE">;
 export const bodyScrollUpdate = (): BodyScrollUpdateAction =>
     actionWithoutPayload("BODY_SCROLL_UPDATE");
@@ -194,5 +190,4 @@ export type NavigationAnyAction =
     | BottomMenuShowAction
     | DialogOpenedAction
     | DialogClosedAction
-    | SwipeRefreshUpdateAction
     | BodyScrollUpdateAction;

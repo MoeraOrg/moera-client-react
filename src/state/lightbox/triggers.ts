@@ -1,15 +1,8 @@
 import { conj, trigger } from "state/trigger";
 import { closeLightBox, lightBoxMediaPostingLoad, OpenLightBoxAction } from "state/lightbox/actions";
 import { postingLoad } from "state/postings/actions";
-import {
-    bodyScrollUpdate,
-    dialogClosed,
-    dialogOpened,
-    swipeRefreshUpdate,
-    updateLocation
-} from "state/navigation/actions";
+import { bodyScrollUpdate, dialogClosed, dialogOpened, updateLocation } from "state/navigation/actions";
 import { isLightBoxMediaPostingToBeLoaded, isLightBoxShown, isLightBoxToBeLoaded } from "state/lightbox/selectors";
-import * as Browser from "ui/browser";
 
 export default [
     trigger(
@@ -26,6 +19,5 @@ export default [
         conj(isLightBoxShown, isLightBoxMediaPostingToBeLoaded),
         lightBoxMediaPostingLoad
     ),
-    trigger(["OPEN_LIGHT_BOX", "CLOSE_LIGHT_BOX"], Browser.isAndroidApp(), swipeRefreshUpdate),
     trigger(["OPEN_LIGHT_BOX", "CLOSE_LIGHT_BOX"], true, bodyScrollUpdate)
 ];

@@ -34,7 +34,6 @@ export default [
     executor("GO_TO_LOCATION", payload => `${payload.path}:${payload.query}:${payload.hash}`, goToLocationSaga),
     executor("GO_HOME", "", goHomeSaga),
     executor("GO_HOME_LOCATION", "", goHomeLocationSaga, homeIntroduced),
-    executor("SWIPE_REFRESH_UPDATE", "", swipeRefreshUpdateSaga),
     executor("BODY_SCROLL_UPDATE", "", bodyScrollUpdateSaga)
 ];
 
@@ -139,31 +138,6 @@ function* goHomeLocationSaga(action: GoHomeLocationAction) {
     } else {
         yield* put(nodeReady());
     }
-}
-
-function* swipeRefreshUpdateSaga() {
-    if (!window.Android || !window.Android.setSwipeRefreshEnabled) {
-        return;
-    }
-
-    const {location, messageBoxShow, confirmBoxShow, lightBoxShow, closeDialogAction} = yield* select(state => ({
-        location: state.navigation.location,
-        messageBoxShow: state.messageBox.show,
-        confirmBoxShow: state.confirmBox.show,
-        lightBoxShow: state.lightBox.show,
-        closeDialogAction: state.navigation.closeDialogAction,
-    }));
-
-    const enabled = !location.startsWith("/compose")
-        && !location.startsWith("/profile")
-        && !location.startsWith("/settings")
-        && !messageBoxShow
-        && !confirmBoxShow
-        && closeDialogAction == null
-        && !lightBoxShow
-        && !window.closeLightDialog;
-
-    window.Android.setSwipeRefreshEnabled(enabled);
 }
 
 function* bodyScrollUpdateSaga() {

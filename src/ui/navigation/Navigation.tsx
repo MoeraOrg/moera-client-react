@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
-import { dialogClosed, goToLocation, initFromLocation, swipeRefreshUpdate } from "state/navigation/actions";
+import { dialogClosed, goToLocation, initFromLocation } from "state/navigation/actions";
 import { getInstantCount } from "state/feeds/selectors";
 import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
 import { closeMessageBox } from "state/messagebox/actions";
@@ -121,7 +121,6 @@ export default function Navigation() {
             }
             if (window.Android) {
                 window.Android.locationChanged(url, location);
-                dispatch(swipeRefreshUpdate());
             }
             currentRootLocation.current = rootLocation;
             currentLocation.current = location;
