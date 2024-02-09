@@ -7,6 +7,7 @@ import {
     PAGE_NEWS,
     PAGE_PEOPLE,
     PAGE_PROFILE,
+    PAGE_REMOVAL,
     PAGE_SETTINGS,
     PAGE_TIMELINE
 } from "state/navigation/pages";
@@ -91,6 +92,10 @@ export type GoToComplainsAction = GoToPageAction<typeof PAGE_COMPLAINS, {}>;
 export const goToComplains = (): GoToComplainsAction =>
     goToPage(PAGE_COMPLAINS, {});
 
+export type GoToRemovalAction = GoToPageAction<typeof PAGE_REMOVAL, {}>;
+export const goToRemoval = (): GoToRemovalAction =>
+    goToPage(PAGE_REMOVAL, {});
+
 export type GoToPageAnyAction =
     GoToProfileAction
     | GoToTimelineAction
@@ -99,7 +104,8 @@ export type GoToPageAnyAction =
     | GoToSettingsAction
     | GoToNewsAction
     | GoToPeopleAction
-    | GoToComplainsAction;
+    | GoToComplainsAction
+    | GoToRemovalAction;
 
 export type NewLocationAction = ActionWithoutPayload<"NEW_LOCATION">;
 export const newLocation = (): NewLocationAction =>

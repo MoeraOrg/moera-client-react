@@ -6,6 +6,7 @@ export const PAGE_SETTINGS = "settings" as const;
 export const PAGE_NEWS = "news" as const;
 export const PAGE_PEOPLE = "people" as const;
 export const PAGE_COMPLAINS = "complains" as const;
+export const PAGE_REMOVAL = "removal" as const;
 
 export type Page =
     typeof PAGE_TIMELINE
@@ -15,4 +16,5 @@ export type Page =
     | typeof PAGE_SETTINGS
     | typeof PAGE_NEWS
     | typeof PAGE_PEOPLE
-    | typeof PAGE_COMPLAINS;
+    | typeof PAGE_COMPLAINS
+    | typeof PAGE_REMOVAL;

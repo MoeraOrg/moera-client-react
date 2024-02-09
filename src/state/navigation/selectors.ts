@@ -5,6 +5,7 @@ import {
     PAGE_NEWS,
     PAGE_PEOPLE,
     PAGE_PROFILE,
+    PAGE_REMOVAL,
     PAGE_SETTINGS,
     PAGE_TIMELINE
 } from "state/navigation/pages";
@@ -41,6 +42,10 @@ export function isAtPeoplePage(state: ClientState): boolean {
 
 export function isAtComplainsPage(state: ClientState): boolean {
     return isAtNode(state) && state.navigation.page === PAGE_COMPLAINS;
+}
+
+export function isAtRemovalPage(state: ClientState): boolean {
+    return state.navigation.page === PAGE_REMOVAL;
 }
 
 export function isBottomMenuVisible(state: ClientState): boolean {

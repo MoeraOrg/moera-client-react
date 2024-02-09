@@ -73,6 +73,7 @@ import { confirmBox } from "state/confirmbox/actions";
 import * as Browser from "ui/browser";
 import { deserializeSheriffs, serializeSheriffs } from "util/sheriff";
 import { now } from "util/misc";
+import { messageBox } from "state/messagebox/actions";
 
 export default [
     executor("SETTINGS_NODE_VALUES_LOAD", "", settingsNodeValuesLoadSaga, homeIntroduced),
@@ -358,11 +359,16 @@ function* settingsDeleteNodeRequestLoadSaga(action: SettingsDeleteNodeRequestLoa
 
 function* settingsDeleteNodeRequestSendSaga(action: SettingsDeleteNodeRequestSendAction) {
     try {
-        const status = yield* call(Node.sendDeleteNodeRequest, action, ":", {message: action.payload.message});
+        const status = yield* call(Node.sendDeleteNodeRequest, action, ":", {message: action.payload.message},
+            ["delete-node.no-email"]);
         yield* put(settingsDeleteNodeRequestStatusSet(status.requested).causedBy(action));
     } catch (e) {
         yield* put(settingsDeleteNodeRequestUpdateFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        if (e instanceof NodeApiError) {
+            yield* put(messageBox(i18n.t("set-email-provider-contact")));
+        } else {
+            yield* put(errorThrown(e));
+        }
     }
 }
 

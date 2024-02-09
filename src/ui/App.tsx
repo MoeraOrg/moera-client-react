@@ -1,7 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { ClientState } from "state/state";
 import { isAtNode, isNodeIntroduced } from "state/node/selectors";
+import { PAGE_REMOVAL } from "state/navigation/pages";
 import { getFeedWidth } from "state/settings/selectors";
 import EventsFrontend from "ui/events/EventsFrontend";
 import Navigation from "ui/navigation/Navigation";
@@ -16,10 +18,13 @@ import "./colors.css";
 import "./zindex.css";
 import "./App.css";
 
+const RemovalPage = React.lazy(() => import("ui/settings/RemovalPage"));
+
 export default function App() {
     const atNode = useSelector(isAtNode);
     const feedWidth = useSelector(getFeedWidth);
     const nodeIntroduced = useSelector(isNodeIntroduced);
+    const atRemovalPage = useSelector((state: ClientState) => state.navigation.page === PAGE_REMOVAL);
     return (
         // FIXME React.CSSProperties does not include CSS variables
         <div style={{"--feed-width": feedWidth + "px"} as any}>
@@ -27,13 +32,17 @@ export default function App() {
             <Navigation/>
             <ErrorPane/>
             <MainMenu/>
-            {atNode ?
-                <>
-                    <CurrentPage/>
-                    <NodeDialogs/>
-                </>
+            {atRemovalPage ?
+                <RemovalPage/>
             :
-                nodeIntroduced && <WelcomePage/>
+                (atNode ?
+                    <>
+                        <CurrentPage/>
+                        <NodeDialogs/>
+                    </>
+                :
+                    nodeIntroduced && <WelcomePage/>
+                )
             }
             <BottomMenu/>
             <GlobalDialogs/>

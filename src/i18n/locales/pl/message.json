@@ -130,6 +130,7 @@
   "decision-upon-complain" : "Decyzja została podjęta po <0>skardze</0> złożonej przez innego użytkownika.",
   "delete" : "Usuń",
   "delete-blog" : "Usuń mój blog",
+  "delete-blog-need-log-in" : "Aby usunąć swój blog, musisz się autoryzować",
   "delete-comment" : "Czy na pewno chcesz usunąć komentarz \"{heading}\"?",
   "delete-draft" : "Usuń szkic",
   "delete-post" : "Czy na pewno chcesz usunąć post \"{heading}\"?",
@@ -568,6 +569,7 @@
   "set-as-default" : "Ustaw jako domyślne",
   "set-by-admin" : "ustawione przez administratora",
   "set-by-post-owner" : "ustawione przez autora posta",
+  "set-email-provider-contact" : "Aby dostawca mógł się z Tobą skontaktować, musisz podać adres e-mail w swoim profilu. Przejdź do strony swojego profilu, naciśnij przycisk Edytuj i wypełnij pole E-mail.",
   "set-home-password" : "Ustaw hasło domowe",
   "set-password-and-connect" : "Ustaw hasło i zaloguj się",
   "setting" : {

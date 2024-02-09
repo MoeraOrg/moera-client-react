@@ -6,6 +6,7 @@ import {
     isAtNewsPage,
     isAtPeoplePage,
     isAtProfilePage,
+    isAtRemovalPage,
     isAtSettingsPage,
     isAtTimelinePage
 } from "state/navigation/selectors";
@@ -15,6 +16,7 @@ import { build as newsBuild, transform as newsTransform } from "location/news";
 import { build as peopleBuild, transform as peopleTransform } from "location/people";
 import { build as postBuild, transform as postTransform } from "location/post";
 import { build as profileBuild, transform as profileTransform } from "location/profile";
+import { build as removalBuild, transform as removalTransform } from "location/removal";
 import { build as settingsBuild, transform as settingsTransform } from "location/settings";
 import { build as timelineBuild, transform as timelineTransform } from "location/timeline";
 import { build as mediaBuild } from "location/media";
@@ -51,6 +53,9 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (dstInfo.directories[0] === "complains") {
         return complainsTransform(srcInfo, dstInfo);
     }
+    if (dstInfo.directories[0] === "removal") {
+        return removalTransform(srcInfo, dstInfo);
+    }
     return [];
 }
 
@@ -81,6 +86,9 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     }
     if (isAtComplainsPage(state)) {
         return complainsBuild(state, info);
+    }
+    if (isAtRemovalPage(state)) {
+        return removalBuild(state, info);
     }
     return info;
 }

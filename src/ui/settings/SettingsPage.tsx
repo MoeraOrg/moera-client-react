@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { isConnectedToHome } from "state/home/selectors";
 import { Page } from "ui/page/Page";
 import PageHeader from "ui/page/PageHeader";
 import SettingsConflicts from "ui/settings/SettingsConflicts";
@@ -12,8 +13,11 @@ import SettingsTabContent from "ui/settings/SettingsTabContent";
 import "./SettingsPage.css";
 
 export default function SettingsPage() {
+    const connectedToHome = useSelector(isConnectedToHome);
     const tab = useSelector((state: ClientState) => state.settings.tab);
     const {t} = useTranslation();
+
+    const visible = connectedToHome || tab !== "node";
 
     return (
         <>
@@ -24,10 +28,14 @@ export default function SettingsPage() {
                 <SettingsConflicts/>
                 <SettingsTabs/>
                 <div className="row settings-notebook">
-                    <SettingsMenu/>
-                    <div className="col-md-10">
-                        <SettingsTabContent tab={tab}/>
-                    </div>
+                    {visible &&
+                        <>
+                            <SettingsMenu/>
+                            <div className="col-md-10">
+                                <SettingsTabContent tab={tab}/>
+                            </div>
+                        </>
+                    }
                 </div>
             </Page>
         </>

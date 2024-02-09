@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 
-import { conj, inv, trigger } from "state/trigger";
-import { isAtSettingsPage } from "state/navigation/selectors";
+import { conj, disj, inv, trigger } from "state/trigger";
+import { isAtRemovalPage, isAtSettingsPage } from "state/navigation/selectors";
 import {
     isAtSettingsClientTab,
     isAtSettingsNodeTab,
@@ -24,6 +24,7 @@ import {
     settingsClientValuesUnset,
     settingsDeleteNodeRequestLoad,
     settingsDeleteNodeRequestUnset,
+    settingsGoToTab,
     settingsNodeConflict,
     settingsNodeMetaLoad,
     settingsNodeMetaUnset,
@@ -40,17 +41,23 @@ import {
 import { isConnectedToHome } from "state/home/selectors";
 import { dialogClosed, dialogOpened, newLocation, updateLocation } from "state/navigation/actions";
 import { flashBox } from "state/flashbox/actions";
+import { openConnectDialog } from "state/connectdialog/actions";
 
 export default [
-    trigger("SETTINGS_GO_TO_TAB", isSettingsNodeValuesToBeLoaded, settingsNodeValuesLoad),
-    trigger("SETTINGS_GO_TO_TAB", isSettingsNodeMetaToBeLoaded, settingsNodeMetaLoad),
+    trigger("SETTINGS_GO_TO_TAB", conj(isConnectedToHome, isSettingsNodeValuesToBeLoaded), settingsNodeValuesLoad),
+    trigger("SETTINGS_GO_TO_TAB", conj(isConnectedToHome, isSettingsNodeMetaToBeLoaded), settingsNodeMetaLoad),
     trigger(["HOME_READY", "WAKE_UP"], isConnectedToHome, settingsNodeValuesLoad),
     trigger(["HOME_READY", "EVENT_HOME_NODE_SETTINGS_META_CHANGED"], isConnectedToHome, settingsNodeMetaLoad),
     trigger(["HOME_READY", "WAKE_UP"], inv(isConnectedToHome), settingsNodeValuesUnset),
     trigger(["HOME_READY", "WAKE_UP"], inv(isConnectedToHome), settingsNodeMetaUnset),
-    trigger("SETTINGS_GO_TO_TAB", isSettingsClientValuesToBeLoaded, settingsClientValuesLoad),
+    trigger("SETTINGS_GO_TO_TAB", conj(isConnectedToHome, isSettingsClientValuesToBeLoaded), settingsClientValuesLoad),
     trigger(["HOME_READY", "WAKE_UP"], isConnectedToHome, settingsClientValuesLoad),
     trigger(["HOME_READY", "WAKE_UP"], inv(isConnectedToHome), settingsClientValuesUnset),
+    trigger(
+        "HOME_READY",
+        conj(isAtSettingsPage, isAtSettingsNodeTab, inv(isConnectedToHome)),
+        settingsGoToTab("client")
+    ),
     trigger("SETTINGS_GO_TO_TAB", true, newLocation),
     trigger("SETTINGS_GO_TO_SHEET", true, updateLocation),
     trigger("SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN", true, dialogOpened(settingsChangePasswordDialogClose())),
@@ -85,8 +92,13 @@ export default [
     trigger("POST_INIT_DELAYED", isRemindToSetSheriffGooglePlay, settingsRemindSetSheriffGooglePlay),
     trigger(
         ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_SHEET"],
-        conj(isConnectedToHome, isAtSettingsPage, isSettingsAtRemovalSheet, isSettingsDeleteNodeRequestToBeLoaded),
+        conj(
+            isConnectedToHome,
+            disj(conj(isAtSettingsPage, isSettingsAtRemovalSheet), isAtRemovalPage),
+            isSettingsDeleteNodeRequestToBeLoaded
+        ),
         settingsDeleteNodeRequestLoad
     ),
+    trigger(["HOME_READY", "GO_TO_PAGE"], conj(inv(isConnectedToHome), isAtRemovalPage), openConnectDialog),
     trigger("HOME_READY", inv(isConnectedToHome), settingsDeleteNodeRequestUnset)
 ];

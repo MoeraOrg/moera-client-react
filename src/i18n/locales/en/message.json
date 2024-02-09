@@ -130,6 +130,7 @@
   "decision-upon-complain" : "The decision was made upon <0>a complaint</0> by another user.",
   "delete" : "Delete",
   "delete-blog" : "Delete my blog",
+  "delete-blog-need-log-in" : "To delete your blog, you need to authorize",
   "delete-comment" : "Do you really want to delete the comment \"{heading}\"?",
   "delete-draft" : "Delete draft",
   "delete-post" : "Do you really want to delete the post \"{heading}\"?",
@@ -568,6 +569,7 @@
   "set-as-default" : "Set as default",
   "set-by-admin" : "set by admin",
   "set-by-post-owner" : "set by post author",
+  "set-email-provider-contact" : "You need to set an E-mail address in your profile, so the provider will be able to contact you if needed. Please, go to your Profile page, press Edit and fill the E-mail field.",
   "set-home-password" : "Set Home Password",
   "set-password-and-connect" : "Set Password & Log In",
   "setting" : {

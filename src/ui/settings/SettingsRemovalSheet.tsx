@@ -1,27 +1,26 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, FormikBag, FormikProps, withFormik } from 'formik';
+import { Form, FormikBag, withFormik } from 'formik';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { settingsDeleteNodeRequestCancel, settingsDeleteNodeRequestSend } from "state/settings/actions";
 import { Button, Loading } from "ui/control";
+import { TextField } from "ui/control/field";
 import { useSettingsSheetResize } from "ui/settings/settings-hooks";
 import store from "state/store";
-import { TextField } from "ui/control/field";
 
 interface Values {
     message: string;
 }
 
-type Props = FormikProps<Values>;
-
-function SettingsRemovalSheet(props: Props) {
+function SettingsRemovalSheet() {
     const {t} = useTranslation();
 
     const sheetMaxHeight = useSettingsSheetResize();
     const connectedToHome = useSelector(isConnectedToHome);
+    const connectingToHome = useSelector((state: ClientState) => state.home.connecting);
     const loaded = useSelector((state: ClientState) => state.settings.deleteNode.loaded);
     const loading = useSelector((state: ClientState) => state.settings.deleteNode.loading);
     const requested = useSelector((state: ClientState) => state.settings.deleteNode.requested);
@@ -32,10 +31,15 @@ function SettingsRemovalSheet(props: Props) {
 
     return (
         <div className="settings-sheet" style={{maxHeight: sheetMaxHeight}}>
-            {(connectedToHome && loaded) &&
+            {(!connectedToHome && !connectingToHome) &&
+                <div className="alert alert-warning show" role="alert">
+                    {t("delete-blog-need-log-in")}
+                </div>
+            }
+            {loaded &&
                 (requested ?
-                    <>
-                        <p className="text-danger mt-3">
+                        <>
+                            <p className="text-danger mt-3">
                             {t("send-request-delete-blog")}
                         </p>
                         <Button variant="success" loading={updating} onClick={onCancelRequest}>
@@ -58,7 +62,9 @@ function SettingsRemovalSheet(props: Props) {
                     </Form>
                 )
             }
-            {loading && <Loading/>}
+            {(loading || connectingToHome) &&
+                <Loading/>
+            }
         </div>
     );
 }
