@@ -5,6 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
+import { openConnectDialog } from "state/connectdialog/actions";
 import { settingsDeleteNodeRequestCancel, settingsDeleteNodeRequestSend } from "state/settings/actions";
 import { Button, Loading } from "ui/control";
 import { TextField } from "ui/control/field";
@@ -27,16 +28,13 @@ function SettingsRemovalSheet() {
     const updating = useSelector((state: ClientState) => state.settings.deleteNode.updating);
     const dispatch = useDispatch();
 
+    const onConnect = () => dispatch(openConnectDialog());
+
     const onCancelRequest = () => dispatch(settingsDeleteNodeRequestCancel());
 
     return (
         <div className="settings-sheet" style={{maxHeight: sheetMaxHeight}}>
-            {(!connectedToHome && !connectingToHome) &&
-                <div className="alert alert-warning show" role="alert">
-                    {t("delete-blog-need-log-in")}
-                </div>
-            }
-            {loaded &&
+            {(loaded || !connectedToHome) &&
                 (requested ?
                         <>
                             <p className="text-danger mt-3">
@@ -56,15 +54,23 @@ function SettingsRemovalSheet() {
                         </p>
                         <TextField name="message" title={t("why-delete-blog")} maxHeight="5em" maxLength={1024}
                                    anyValue/>
-                        <Button variant="danger" type="submit" loading={updating}>
-                            {t("delete-blog")}
-                        </Button>
+                        {connectedToHome ?
+                            <Button variant="danger" type="submit" loading={updating}>
+                                {t("delete-blog")}
+                            </Button>
+                        :
+                            <div className="alert alert-warning show" role="alert">
+                                {t("delete-account-need-log-in")}
+                                <Button variant="success" size="sm" className="ms-3" onClick={onConnect}
+                                        loading={connectingToHome}>
+                                    {t("connect")}
+                                </Button>
+                            </div>
+                        }
                     </Form>
                 )
             }
-            {(loading || connectingToHome) &&
-                <Loading/>
-            }
+            {loading && <Loading/>}
         </div>
     );
 }

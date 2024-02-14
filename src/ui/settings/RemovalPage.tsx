@@ -11,7 +11,7 @@ export default function RemovalPage() {
     return (
         <>
             <PageHeader>
-                <h2>{t("delete-blog")}</h2>
+                <h2>{t("delete-account-moera")}</h2>
             </PageHeader>
             <Page>
                 <div className="row content-panel">

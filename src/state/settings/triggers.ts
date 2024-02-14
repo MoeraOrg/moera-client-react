@@ -41,7 +41,6 @@ import {
 import { isConnectedToHome } from "state/home/selectors";
 import { dialogClosed, dialogOpened, newLocation, updateLocation } from "state/navigation/actions";
 import { flashBox } from "state/flashbox/actions";
-import { openConnectDialog } from "state/connectdialog/actions";
 
 export default [
     trigger("SETTINGS_GO_TO_TAB", conj(isConnectedToHome, isSettingsNodeValuesToBeLoaded), settingsNodeValuesLoad),
@@ -99,6 +98,5 @@ export default [
         ),
         settingsDeleteNodeRequestLoad
     ),
-    trigger(["HOME_READY", "GO_TO_PAGE"], conj(inv(isConnectedToHome), isAtRemovalPage), openConnectDialog),
     trigger("HOME_READY", inv(isConnectedToHome), settingsDeleteNodeRequestUnset)
 ];
