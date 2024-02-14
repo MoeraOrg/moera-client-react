@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { isAtNode } from "state/node/selectors";
-import { isAtRemovalPage } from "state/navigation/selectors";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import * as Browser from "ui/browser";
@@ -23,7 +22,6 @@ const ConnectDialog = React.lazy(() => import("ui/connectdialog/ConnectDialog"))
 
 function ConnectionButtons() {
     const atNode = useSelector(isAtNode);
-    const atRemovalPage = useSelector(isAtRemovalPage);
     const connecting = useSelector((state: ClientState) => state.home.connecting);
     const connected = useSelector(isConnectedToHome);
     const showNavigator = useSelector((state: ClientState) => state.node.owner.showNavigator);
@@ -37,7 +35,7 @@ function ConnectionButtons() {
         return <>{t("connecting")} <Loading/></>;
     }
     if (!connected) {
-        if (!atNode && !atRemovalPage) {
+        if (!atNode) {
             return null;
         }
         return (
