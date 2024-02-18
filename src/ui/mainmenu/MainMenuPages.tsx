@@ -1,7 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { PAGE_PEOPLE, PAGE_PROFILE } from "state/navigation/pages";
 import MainMenuTimelineLink from "ui/mainmenu/MainMenuTimelineLink";
 import MainMenuLink from "ui/mainmenu/MainMenuLink";
 import MainMenuNewsLink from "ui/mainmenu/MainMenuNewsLink";
@@ -13,8 +11,8 @@ export default function MainMenuPages() {
     return (
         <ul className="navbar-nav">
             <MainMenuTimelineLink/>
-            <MainMenuLink page={PAGE_PROFILE} href="/profile">{t("profile")}</MainMenuLink>
-            <MainMenuLink page={PAGE_PEOPLE} href="/people">{t("people")}</MainMenuLink>
+            <MainMenuLink page="profile" href="/profile">{t("profile")}</MainMenuLink>
+            <MainMenuLink page="people" href="/people">{t("people")}</MainMenuLink>
             <MainMenuNewsLink/>
             <MainMenuComplainsLink/>
         </ul>

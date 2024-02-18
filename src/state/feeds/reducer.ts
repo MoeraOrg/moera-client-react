@@ -6,7 +6,7 @@ import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { emptyFeed, emptyInfo } from "state/feeds/empty";
 import { ExtStoryInfo, FeedSlice, FeedsState, FeedState } from "state/feeds/state";
-import { Page, PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
+import { Page } from "state/navigation/pages";
 import { getInstantSummary, getInstantTypeDetails } from "ui/instant/instant-types";
 import { replaceEmojis } from "util/html";
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
@@ -26,8 +26,8 @@ function getFeed(state: FeedsState, feedName: string): {istate: WrappedObject<Fe
 }
 
 const PAGE_FEEDS = new Map<Page, string>([
-    [PAGE_TIMELINE, "timeline"],
-    [PAGE_NEWS, "news"]
+    ["timeline", "timeline"],
+    ["news", "news"]
 ]);
 
 function extractStory(story: StoryInfo, homeOwnerName: string | null): ExtStoryInfo {

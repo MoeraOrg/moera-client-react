@@ -5,7 +5,6 @@ import { parse as parseEmojis } from 'twemoji-parser';
 import { BlockedUserInfo, CommentInfo } from "api";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
-import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
 import {
     CommentComposeState,
     CommentDialogState,
@@ -165,7 +164,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return cloneDeep(initialState);
 
         case "GO_TO_PAGE": {
-            if (action.payload.page === PAGE_DETAILED_POSTING) {
+            if (action.payload.page === "detailedposting") {
                 const {details: {id, commentId, galleryExpanded}} = action.payload;
 
                 const istate = immutable.wrap(state);

@@ -1,7 +1,6 @@
 import * as immutable from 'object-path-immutable';
 
 import { DraftInfo, PostingInfo } from "api";
-import { PAGE_COMPOSE } from "state/navigation/pages";
 import { ComposePostingState, ComposeState, DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import { ClientAction } from "state/action";
 import { htmlEntities, replaceEmojis, safeHtml } from "util/html";
@@ -75,7 +74,7 @@ function postingToDraftPosting(posting: PostingInfo): DraftPostingInfo {
 export default (state: ComposeState = initialState, action: ClientAction): ComposeState => {
     switch (action.type) {
         case "GO_TO_PAGE":
-            if (action.payload.page === PAGE_COMPOSE) {
+            if (action.payload.page === "compose") {
                 return {
                     ...state,
                     ...emptyPosting,

@@ -1,16 +1,5 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
-import {
-    Page,
-    PAGE_COMPLAINS,
-    PAGE_COMPOSE,
-    PAGE_DETAILED_POSTING,
-    PAGE_NEWS,
-    PAGE_PEOPLE,
-    PAGE_PROFILE,
-    PAGE_REMOVAL,
-    PAGE_SETTINGS,
-    PAGE_TIMELINE
-} from "state/navigation/pages";
+import { Page } from "state/navigation/pages";
 
 export type InitFromNodeLocationAction = ActionWithPayload<"INIT_FROM_NODE_LOCATION", {
     nodeName: string;
@@ -47,17 +36,17 @@ export type GoToPageAction<P extends Page, D> = ActionWithPayload<"GO_TO_PAGE", 
 export const goToPage = <P extends Page, D>(page: P, details: D): GoToPageAction<P, D> =>
     actionWithPayload("GO_TO_PAGE", {page, details: {at: null, ...details}});
 
-export type GoToProfileAction = GoToPageAction<typeof PAGE_PROFILE, {}>;
+export type GoToProfileAction = GoToPageAction<"profile", {}>;
 export const goToProfile = (): GoToProfileAction =>
-    goToPage(PAGE_PROFILE, {});
+    goToPage("profile", {});
 
-export type GoToTimelineAction = GoToPageAction<typeof PAGE_TIMELINE, {
+export type GoToTimelineAction = GoToPageAction<"timeline", {
     at: number | null;
 }>;
 export const goToTimeline = (at: number | null = null): GoToTimelineAction =>
-    goToPage(PAGE_TIMELINE, {at});
+    goToPage("timeline", {at});
 
-export type GoToPostingAction = GoToPageAction<typeof PAGE_DETAILED_POSTING, {
+export type GoToPostingAction = GoToPageAction<"detailedposting", {
     id: string;
     commentId: string | null;
     galleryExpanded: boolean;
@@ -65,36 +54,36 @@ export type GoToPostingAction = GoToPageAction<typeof PAGE_DETAILED_POSTING, {
 export const goToPosting = (
     id: string, commentId: string | null = null, galleryExpanded: boolean = false
 ): GoToPostingAction =>
-    goToPage(PAGE_DETAILED_POSTING, {id, commentId, galleryExpanded});
+    goToPage("detailedposting", {id, commentId, galleryExpanded});
 
-export type GoToComposeAction = GoToPageAction<typeof PAGE_COMPOSE, {
+export type GoToComposeAction = GoToPageAction<"compose", {
     id: string | null;
     draftId: string | null;
 }>;
 export const goToCompose = (id: string | null = null, draftId: string | null = null): GoToComposeAction =>
-    goToPage(PAGE_COMPOSE, {id, draftId});
+    goToPage("compose", {id, draftId});
 
-export type GoToSettingsAction = GoToPageAction<typeof PAGE_SETTINGS, {}>;
+export type GoToSettingsAction = GoToPageAction<"settings", {}>;
 export const goToSettings = (): GoToSettingsAction =>
-    goToPage(PAGE_SETTINGS, {});
+    goToPage("settings", {});
 
-export type GoToNewsAction = GoToPageAction<typeof PAGE_NEWS, {
+export type GoToNewsAction = GoToPageAction<"news", {
     at: number | null;
 }>;
 export const goToNews = (at: number | null = null): GoToNewsAction =>
-    goToPage(PAGE_NEWS, {at});
+    goToPage("news", {at});
 
-export type GoToPeopleAction = GoToPageAction<typeof PAGE_PEOPLE, {}>;
+export type GoToPeopleAction = GoToPageAction<"people", {}>;
 export const goToPeople = (): GoToPeopleAction =>
-    goToPage(PAGE_PEOPLE, {});
+    goToPage("people", {});
 
-export type GoToComplainsAction = GoToPageAction<typeof PAGE_COMPLAINS, {}>;
+export type GoToComplainsAction = GoToPageAction<"complains", {}>;
 export const goToComplains = (): GoToComplainsAction =>
-    goToPage(PAGE_COMPLAINS, {});
+    goToPage("complains", {});
 
-export type GoToRemovalAction = GoToPageAction<typeof PAGE_REMOVAL, {}>;
+export type GoToRemovalAction = GoToPageAction<"removal", {}>;
 export const goToRemoval = (): GoToRemovalAction =>
-    goToPage(PAGE_REMOVAL, {});
+    goToPage("removal", {});
 
 export type GoToPageAnyAction =
     GoToProfileAction

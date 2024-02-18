@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { getFeedState } from "state/feeds/selectors";
-import { PAGE_NEWS } from "state/navigation/pages";
 import MainMenuLink from "ui/mainmenu/MainMenuLink";
 import { getFeedTitle } from "ui/feed/feeds";
 
@@ -13,5 +12,5 @@ export default function MainMenuNewsLink() {
     const {t} = useTranslation();
 
     const href = anchor != null ? `/news?before=${anchor}` :"/news";
-    return <MainMenuLink page={PAGE_NEWS} href={href}>{getFeedTitle("news", t)}</MainMenuLink>
+    return <MainMenuLink page="news" href={href}>{getFeedTitle("news", t)}</MainMenuLink>
 }

@@ -1,51 +1,40 @@
-import {
-    PAGE_COMPLAINS,
-    PAGE_COMPOSE,
-    PAGE_DETAILED_POSTING,
-    PAGE_NEWS,
-    PAGE_PEOPLE,
-    PAGE_PROFILE,
-    PAGE_REMOVAL,
-    PAGE_SETTINGS,
-    PAGE_TIMELINE
-} from "state/navigation/pages";
 import { isAtNode } from "state/node/selectors";
 import { ClientState } from "state/state";
 
 export function isAtTimelinePage(state: ClientState): boolean {
-    return isAtNode(state) && state.navigation.page === PAGE_TIMELINE;
+    return isAtNode(state) && state.navigation.page === "timeline";
 }
 
 export function isAtProfilePage(state: ClientState): boolean {
-    return isAtNode(state) && state.navigation.page === PAGE_PROFILE;
+    return isAtNode(state) && state.navigation.page === "profile";
 }
 
 export function isAtDetailedPostingPage(state: ClientState): boolean {
-    return isAtNode(state) && state.navigation.page === PAGE_DETAILED_POSTING;
+    return isAtNode(state) && state.navigation.page === "detailedposting";
 }
 
 export function isAtComposePage(state: ClientState): boolean {
-    return isAtNode(state) && state.navigation.page === PAGE_COMPOSE;
+    return isAtNode(state) && state.navigation.page === "compose";
 }
 
 export function isAtSettingsPage(state: ClientState): boolean {
-    return isAtNode(state) && state.navigation.page === PAGE_SETTINGS;
+    return isAtNode(state) && state.navigation.page === "settings";
 }
 
 export function isAtNewsPage(state: ClientState): boolean {
-    return isAtNode(state) && state.navigation.page === PAGE_NEWS;
+    return isAtNode(state) && state.navigation.page === "news";
 }
 
 export function isAtPeoplePage(state: ClientState): boolean {
-    return isAtNode(state) && state.navigation.page === PAGE_PEOPLE;
+    return isAtNode(state) && state.navigation.page === "people";
 }
 
 export function isAtComplainsPage(state: ClientState): boolean {
-    return isAtNode(state) && state.navigation.page === PAGE_COMPLAINS;
+    return isAtNode(state) && state.navigation.page === "complains";
 }
 
 export function isAtRemovalPage(state: ClientState): boolean {
-    return state.navigation.page === PAGE_REMOVAL;
+    return state.navigation.page === "removal";
 }
 
 export function isBottomMenuVisible(state: ClientState): boolean {

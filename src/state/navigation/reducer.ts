@@ -1,9 +1,8 @@
-import { PAGE_TIMELINE } from "state/navigation/pages";
 import { NavigationState } from "state/navigation/state";
 import { ClientAction } from "state/action";
 
 const initialState: NavigationState = {
-    page: PAGE_TIMELINE,
+    page: "timeline",
     location: "",
     title: "",
     update: false,

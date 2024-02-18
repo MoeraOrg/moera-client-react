@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
-import { PAGE_COMPLAINS } from "state/navigation/pages";
 import { getOwnerName } from "state/node/selectors";
 import MainMenuLink from "ui/mainmenu/MainMenuLink";
 
@@ -15,5 +14,5 @@ export default function MainMenuComplainsLink() {
         return null;
     }
 
-    return <MainMenuLink page={PAGE_COMPLAINS} href="/complains">{t("complains")}</MainMenuLink>
+    return <MainMenuLink page="complains" href="/complains">{t("complains")}</MainMenuLink>
 }

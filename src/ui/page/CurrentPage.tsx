@@ -3,16 +3,6 @@ import { useSelector } from 'react-redux';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
-import {
-    PAGE_COMPLAINS,
-    PAGE_COMPOSE,
-    PAGE_DETAILED_POSTING,
-    PAGE_NEWS,
-    PAGE_PEOPLE,
-    PAGE_PROFILE,
-    PAGE_SETTINGS,
-    PAGE_TIMELINE
-} from "state/navigation/pages";
 import { isDetailedPostingPositioned } from "state/detailedposting/selectors";
 import { isGooglePlayHiding } from "state/node/selectors";
 import { isFeedGeneralReady, isFeedSheriffProhibited } from "state/feeds/selectors";
@@ -38,7 +28,7 @@ export default function CurrentPage() {
     );
 
     useEffect(() => {
-        if (page !== PAGE_TIMELINE && page !== PAGE_NEWS && (page !== PAGE_DETAILED_POSTING || !positioned)) {
+        if (page !== "timeline" && page !== "news" && (page !== "detailedposting" || !positioned)) {
             setTimeout(() => window.scrollTo(0, 0));
         }
     }, [page, positioned]);
@@ -48,33 +38,33 @@ export default function CurrentPage() {
     }
 
     switch (page) {
-        case PAGE_TIMELINE:
+        case "timeline":
             return <TimelinePage/>;
-        case PAGE_PROFILE:
+        case "profile":
             return <ProfilePage/>;
-        case PAGE_DETAILED_POSTING:
+        case "detailedposting":
             return <DetailedPostingPage/>;
-        case PAGE_COMPOSE:
+        case "compose":
             return (
                 <Suspense fallback={<Loading overlay large/>}>
                     <ComposePage/>;
                 </Suspense>
             );
-        case PAGE_SETTINGS:
+        case "settings":
             return (
                 <Suspense fallback={<Loading overlay large/>}>
                     <SettingsPage/>
                 </Suspense>
             );
-        case PAGE_NEWS:
+        case "news":
             return <NewsPage/>;
-        case PAGE_PEOPLE:
+        case "people":
             return (
                 <Suspense fallback={<Loading overlay large/>}>
                     <PeoplePage/>
                 </Suspense>
             );
-        case PAGE_COMPLAINS:
+        case "complains":
             return (
                 <Suspense fallback={<Loading overlay large/>}>
                     <ComplainsPage/>

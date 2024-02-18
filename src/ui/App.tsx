@@ -1,9 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { ClientState } from "state/state";
 import { isAtNode, isNodeIntroduced } from "state/node/selectors";
-import { PAGE_REMOVAL } from "state/navigation/pages";
+import { isAtRemovalPage } from "state/navigation/selectors";
 import { getFeedWidth } from "state/settings/selectors";
 import EventsFrontend from "ui/events/EventsFrontend";
 import Navigation from "ui/navigation/Navigation";
@@ -24,7 +23,7 @@ export default function App() {
     const atNode = useSelector(isAtNode);
     const feedWidth = useSelector(getFeedWidth);
     const nodeIntroduced = useSelector(isNodeIntroduced);
-    const atRemovalPage = useSelector((state: ClientState) => state.navigation.page === PAGE_REMOVAL);
+    const atRemovalPage = useSelector(isAtRemovalPage);
     return (
         // FIXME React.CSSProperties does not include CSS variables
         <div style={{"--feed-width": feedWidth + "px"} as any}>
