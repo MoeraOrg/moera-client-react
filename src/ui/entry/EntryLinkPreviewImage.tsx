@@ -39,7 +39,7 @@ export default function EntryLinkPreviewImage({nodeName, mediaFile, loading}: Pr
     const src = mediaImagePreview(mediaLocation, 800);
     const srcSet = mediaSources(mediaLocation, mediaFile.previews);
     const sizes = mediaSizes(mediaFile.previews ?? []);
-    const [imageWidth, imageHeight] = mediaImageSize(800, null, null, mediaFile);
+    const [imageWidth, imageHeight] = mediaImageSize(800, null, null, mediaFile, false);
     const vertical = Browser.isTinyScreen() ? imageHeight > imageWidth * 0.55 : imageHeight > imageWidth;
 
     return (

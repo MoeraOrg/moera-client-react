@@ -48,7 +48,8 @@ export function mediaSizes(previews: MediaFilePreviewInfo[] | null | undefined):
 export function mediaImageSize(targetWidth: number,
                                width: number | string | null | undefined,
                                height: number | string | null | undefined,
-                               mediaFile: PrivateMediaFileInfo): number[] {
+                               mediaFile: PrivateMediaFileInfo,
+                               enlarge: boolean = true): number[] {
     const iwidth = toInt(width);
     const iheight = toInt(height);
     const preview = mediaImageFindLargerPreview(mediaFile.previews, targetWidth);
@@ -61,6 +62,9 @@ export function mediaImageSize(targetWidth: number,
         const scaleX = iwidth !== 0 ? iwidth / sizeX : 1;
         const scaleY = iheight !== 0 ? iheight / sizeY : 1;
         scale = Math.min(scaleX, scaleY);
+    }
+    if (!enlarge && scale > 1) {
+        scale = 1;
     }
 
     return [Math.round(scale * sizeX), Math.round(scale * sizeY)];

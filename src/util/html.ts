@@ -30,7 +30,7 @@ function createDimensionsTransformer(media: MediaAttachment[] | null | undefined
 
         const width = isNumericString(attribs["width"]) ? parseInt(attribs["width"]) : null;
         const height = isNumericString(attribs["height"]) ? parseInt(attribs["height"]) : null;
-        const [imageWidth, imageHeight] = mediaImageSize(900, width, height, mediaFile);
+        const [imageWidth, imageHeight] = mediaImageSize(900, width, height, mediaFile, false);
         const style = `--width: ${imageWidth}px; --height: ${imageHeight}px; --aspect-ratio: ${imageWidth / imageHeight}`;
 
         return {tagName, attribs: {...attribs, style}};

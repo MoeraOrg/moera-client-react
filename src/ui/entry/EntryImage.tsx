@@ -41,7 +41,7 @@ export default function EntryImage({
     const src = mediaImagePreview(mediaLocation, 900);
     const srcSet = mediaSources(mediaLocation, mediaFile.previews);
     const sizes = mediaSizes(mediaFile.previews ?? []);
-    const [imageWidth, imageHeight] = mediaImageSize(900, width, height, mediaFile);
+    const [imageWidth, imageHeight] = mediaImageSize(900, width, height, mediaFile, false);
 
     const onNear = () => {
         if (postingId != null) {
