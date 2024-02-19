@@ -63,9 +63,7 @@ export default function Navigation() {
             dispatch(closeDialogAction);
             dispatch(dialogClosed());
         } else {
-            if (window.Android) {
-                window.Android.back();
-            }
+            window.Android?.back();
         }
     }, [closeDialogAction, confirmBoxOnNo, confirmBoxShow, dispatch, executeOnClose, messageBoxOnClose, messageBoxShow]);
 
@@ -119,9 +117,7 @@ export default function Navigation() {
             } else {
                 window.history.replaceState(data, "", url);
             }
-            if (window.Android) {
-                window.Android.locationChanged(url, location);
-            }
+            window.Android?.locationChanged(url, location);
             currentRootLocation.current = rootLocation;
             currentLocation.current = location;
         }

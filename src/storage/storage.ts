@@ -89,9 +89,7 @@ export function loadData(): void {
 export function storeConnectionData(location: string, nodeName: string | null, fullName: string | null,
     avatar: AvatarImage | null, login: string | null, token: string | null, permissions: string[] | null
 ): void {
-    if (window.Android) {
-        window.Android.connectedToHome(location + "/moera", token, nodeName);
-    }
+    window.Android?.connectedToHome(location + "/moera", token, nodeName);
     const roots = Access.storeData({home: {location, nodeName, fullName, avatar, login, token, permissions}});
     store.dispatch(connectionsSet(roots));
 }

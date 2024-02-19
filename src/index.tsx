@@ -33,9 +33,7 @@ function sendInitAction(): void {
     }
 }
 
-if (window.Android && !!window.Android.setSwipeRefreshEnabled) {
-    window.Android.setSwipeRefreshEnabled(false);
-}
+window.Android?.setSwipeRefreshEnabled(false);
 
 const rootElement = document.getElementById("app-root");
 if (rootElement != null) {
