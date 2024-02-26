@@ -1,21 +1,9 @@
 import { TFunction } from 'i18next';
 
-import { NodeName, StorySummaryData, StorySummaryEntry, StorySummaryNode, StorySummaryReaction } from "api";
+import { StorySummaryData, StorySummaryEntry, StorySummaryNode, StorySummaryReaction } from "api";
+import { formatHeading, formatNodeName } from "ui/instant/instant-elements";
 import { getFeedTitle } from "ui/feed/feeds";
-import { htmlEntities } from "util/html";
 import { tGender } from "i18n";
-
-function spanNodeName(nodeName: string, text: string): string {
-    return `<span class="node-name" data-nodename="${htmlEntities(nodeName)}">${text}</span>`;
-}
-
-function formatNodeName(node: StorySummaryNode | StorySummaryEntry | StorySummaryReaction | null | undefined): string {
-    const {ownerName, ownerFullName} = node ?? {};
-    if (ownerName == null) {
-        return "&lt;unknown&gt;";
-    }
-    return spanNodeName(ownerName, ownerFullName != null ? ownerFullName : NodeName.shorten(ownerName));
-}
 
 function formatReaction(reaction: StorySummaryReaction | null | undefined): string {
     let emoji = reaction?.emoji ?? 0x1f44d;
@@ -23,10 +11,6 @@ function formatReaction(reaction: StorySummaryReaction | null | undefined): stri
         emoji = 0x1f92c;
     }
     return String.fromCodePoint(emoji) + " " + formatNodeName(reaction);
-}
-
-function formatHeading(entry: StorySummaryEntry | null | undefined): string {
-    return "\"" + (htmlEntities(entry?.heading) ?? "") + "\"";
 }
 
 function formatList<T>(entries: T[] | null | undefined, total: number | null | undefined,
