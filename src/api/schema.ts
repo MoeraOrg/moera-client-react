@@ -1,4 +1,4 @@
-import type { DataValidationCxt, ErrorObject } from 'ajv/lib/types';
+import type { DataValidationCxt, ErrorObject } from 'ajv/dist/types';
 
 export interface BasicValidateFunction<T> {
     (this: any, data: any, dataCxt?: DataValidationCxt): data is T;
