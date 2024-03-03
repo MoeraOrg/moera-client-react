@@ -89,8 +89,24 @@ interface AndroidJsInterface {
     setSwipeRefreshEnabled(enabled: boolean): void;
     isDonationsEnabled(): boolean; // deprecated
     getFlavor(): AndroidAppFlavor;
+    getApiVersion(): number;
+    changeLanguage(lang: string | null): void;
     log(text: string): void;
 }
+
+interface AndroidMessageBack {
+    source: string;
+    action: "back";
+}
+
+interface AndroidMessageCallReturn {
+    source: string;
+    action: "call-return";
+    callId: number;
+    value: string | number | null;
+}
+
+type AndroidMessage = AndroidMessageBack | AndroidMessageCallReturn;
 
 interface Window {
     Android?: AndroidJsInterface;

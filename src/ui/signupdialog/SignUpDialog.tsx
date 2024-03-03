@@ -84,7 +84,7 @@ function SignUpDialogInner({stage, values, setFieldValue, touched, setFieldTouch
                 lang = findPreferredLanguage();
             }
             if (lang !== i18n.language) {
-                i18n.changeLanguage(lang);
+                Browser.changeLanguage(lang);
             }
         }
     }, [connectedToHome]);

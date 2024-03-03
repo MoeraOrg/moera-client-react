@@ -161,7 +161,7 @@ function* settingsClientValuesLoadedSaga(action: SettingsClientValuesLoadedActio
         lang = findPreferredLanguage();
     }
     if (lang !== i18n.language) {
-        yield* call(i18n.changeLanguage, lang);
+        yield* call(Browser.changeLanguage, lang);
         yield* put(settingsLanguageChanged().causedBy(action));
     }
     yield* call(storeSettings);
@@ -174,7 +174,7 @@ function* updateLanguage(action: ClientAction, settings: SettingInfo[]) {
             lang = findPreferredLanguage();
         }
         if (lang !== i18n.language) {
-            yield* call(i18n.changeLanguage, lang);
+            yield* call(Browser.changeLanguage, lang);
             yield* put(settingsLanguageChanged().causedBy(action));
         }
     }

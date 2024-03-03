@@ -8,6 +8,7 @@ import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
 import { closeMessageBox } from "state/messagebox/actions";
 import { closeConfirmBox } from "state/confirmbox/actions";
 import * as Browser from "ui/browser";
+import { asyncReturn } from "util/async-calls";
 
 export default function Navigation() {
     const nodeName = useSelector(getOwnerName);
@@ -68,11 +69,11 @@ export default function Navigation() {
     }, [closeDialogAction, confirmBoxOnNo, confirmBoxShow, dispatch, executeOnClose, messageBoxOnClose, messageBoxShow]);
 
     const messageReceived = useCallback((event: MessageEvent) => {
-        let message = event.data;
-        if (message === null || typeof message !== "string") {
+        const data = event.data;
+        if (data === null || typeof data !== "string") {
             return;
         }
-        message = JSON.parse(message);
+        const message = JSON.parse(data) as AndroidMessage;
 
         // Only accept messages that we know are ours
         if (message.source !== "moera-android") {
@@ -82,6 +83,10 @@ export default function Navigation() {
         switch (message.action) {
             case "back":
                 back();
+                return;
+
+            case "call-return":
+                asyncReturn(message.callId, message.value);
                 return;
 
             default:

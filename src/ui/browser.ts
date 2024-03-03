@@ -1,4 +1,5 @@
 import * as URI from 'uri-js';
+import i18n from 'i18next';
 
 import { NodeName } from "api";
 import { rootUrl, urlWithParameters } from "util/url";
@@ -95,6 +96,13 @@ export const isAndroidBrowser = (): boolean =>
 
 export const isAndroidGooglePlay = (): boolean =>
     androidAppFlavor === "google-play";
+
+export function changeLanguage(lang: string | null | undefined) {
+    if (window.Android && window.Android.getApiVersion() >= 2) {
+        return window.Android.changeLanguage(lang ?? null);
+    }
+    i18n.changeLanguage(lang ?? undefined);
+}
 
 export function disableBodyScroll(): void {
     document.body.classList.add("no-scroll");

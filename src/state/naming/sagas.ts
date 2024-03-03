@@ -24,7 +24,7 @@ import {
 } from "state/naming/actions";
 import { getNamingNameDetails, getNamingNamesToBeLoaded } from "state/naming/selectors";
 import { getReactionsDialogItems } from "state/reactionsdialog/selectors";
-import { now } from "util/misc";
+import { now, PromiseResolver } from "util/misc";
 
 const NAME_USAGE_UPDATE_PERIOD = 60;
 const MAX_NAMES_SIZE = 500;
@@ -80,8 +80,7 @@ export function* getNameDetails(caller: ClientAction | null, nodeName: string, i
     return yield* call(fetchName, caller, nodeName, includeSimilar);
 }
 
-type PromiseResolver = (value: NameInfo | PromiseLike<NameInfo>) => void;
-const fetching = new Map<string, PromiseResolver[]>();
+const fetching = new Map<string, PromiseResolver<NameInfo>[]>();
 
 function* fetchName(caller: ClientAction | null, nodeName: string, includeSimilar: boolean) {
     nodeName = NodeName.expand(nodeName);

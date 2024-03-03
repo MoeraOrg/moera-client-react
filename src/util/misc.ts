@@ -4,6 +4,8 @@ import charCategory from 'general-category';
 const DIGITS = /^\d+$/;
 const EMAIL = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
+export type PromiseResolver<T> = (value: T | PromiseLike<T>) => void;
+
 export function range(length: number): number[] {
     return [...Array(length).keys()];
 }
