@@ -388,12 +388,8 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
     }
 };
 
-function isStoryInfo(story: StoryInfo | ExtStoryInfo): story is StoryInfo {
-    return "posting" in story;
-}
-
 function getStoryPostingId(story: StoryInfo | ExtStoryInfo): string | null | undefined {
-    return isStoryInfo(story) ? story.posting?.id : story.postingId;
+    return ("posting" in story ? story.posting?.id : null) ?? story.postingId;
 }
 
 export function getInstantTypeDetails(storyType: StoryType): InstantTypeDetails | null {
