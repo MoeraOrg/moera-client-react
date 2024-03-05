@@ -2,6 +2,7 @@ import * as URI from 'uri-js';
 import i18n from 'i18next';
 
 import { NodeName } from "api";
+import { findPreferredLanguage } from "i18n";
 import { rootUrl, urlWithParameters } from "util/url";
 import { randomId } from "util/ui";
 
@@ -99,7 +100,7 @@ export const isAndroidGooglePlay = (): boolean =>
 
 export function changeLanguage(lang: string | null | undefined) {
     if (window.Android && window.Android.getApiVersion() >= 2) {
-        return window.Android.changeLanguage(lang ?? null);
+        window.Android.changeLanguage(lang ?? findPreferredLanguage());
     }
     i18n.changeLanguage(lang ?? undefined);
 }
