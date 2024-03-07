@@ -113,7 +113,7 @@ export default function Navigation() {
             && (nodeName !== currentNodeName.current
                 || rootLocation !== currentRootLocation.current
                 || location !== currentLocation.current)
-            && rootLocation != null && location != null
+            && nodeName && rootLocation != null && location != null
         ) {
             const url = Browser.universalLocation(Browser.getRootLocation(), nodeName, rootLocation, location);
             const data = {location: url};
