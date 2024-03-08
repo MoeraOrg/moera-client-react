@@ -106,7 +106,15 @@ interface AndroidMessageCallReturn {
     value: string | number | null;
 }
 
-type AndroidMessage = AndroidMessageBack | AndroidMessageCallReturn;
+interface AndroidMessageNetworkChanged {
+    source: string;
+    action: "network-changed";
+}
+
+type AndroidMessage =
+    AndroidMessageBack
+    | AndroidMessageCallReturn
+    | AndroidMessageNetworkChanged;
 
 interface Window {
     Android?: AndroidJsInterface;

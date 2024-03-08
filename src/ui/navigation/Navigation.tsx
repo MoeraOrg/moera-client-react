@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
 import { dialogClosed, goToLocation, initFromLocation } from "state/navigation/actions";
+import { cartesLoad } from "state/cartes/actions";
 import { getInstantCount } from "state/feeds/selectors";
 import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
 import { closeMessageBox } from "state/messagebox/actions";
@@ -89,10 +90,14 @@ export default function Navigation() {
                 asyncReturn(message.callId, message.value);
                 return;
 
+            case "network-changed":
+                dispatch(cartesLoad());
+                return;
+
             default:
                 return;
         }
-    }, [back]);
+    }, [back, dispatch]);
 
     useEffect(() => {
         window.addEventListener("popstate", popState);

@@ -4,7 +4,6 @@ import i18n from 'i18next';
 import { Node, NodeApiError } from "api";
 import { Storage } from "storage";
 import { executor } from "state/executor";
-import { errorThrown } from "state/error/actions";
 import { CartesLoadAction, cartesLoaded, cartesSet, ClockOffsetWarnAction } from "state/cartes/actions";
 import { messageBox } from "state/messagebox/actions";
 import { now } from "util/misc";
@@ -22,8 +21,6 @@ function* cartesLoadSaga(action: CartesLoadAction) {
     } catch (e) {
         if (e instanceof NodeApiError) {
             yield* put(cartesSet(null, [], 0).causedBy(action));
-        } else {
-            yield* put(errorThrown(e));
         }
     }
     yield* put(cartesLoaded().causedBy(action));
