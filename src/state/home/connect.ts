@@ -16,6 +16,8 @@ import {
 } from "state/home/actions";
 import { errorThrown } from "state/error/actions";
 import { getHomeConnectionData, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
+import { isAtNode } from "state/node/selectors";
+import { goHomeLocation } from "state/navigation/actions";
 import { executor } from "state/executor";
 import { connectDialogSetForm } from "state/connectdialog/actions";
 import { normalizeUrl } from "util/url";
@@ -78,6 +80,11 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
         permissions: info.permissions,
         connectionSwitch: homeLocation != null && nodeUrl !== homeLocation
     }).causedBy(action));
+
+    const atNode = yield* select(isAtNode);
+    if (!atNode) {
+        yield* put(goHomeLocation("/news", null, null));
+    }
 }
 
 function* homeOwnerVerifySaga(action: HomeOwnerVerifyAction) {
