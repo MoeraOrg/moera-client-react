@@ -30,21 +30,24 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit}: Props) {
     const dispatch = useDispatch();
 
     const [selectedIndex, setSelectedIndex] = useState(-1);
+    const selectedName = useRef<string | null>(null);
     const [names, setNames] = useState<NameListItem[]>([]);
     const [query, setQuery] = useState<string | null>(null);
+    const [searchList, setSearchList] = useState<NameListItem[]>([]);
 
     const inputDom = useRef<HTMLInputElement>(null);
     const listDom = useRef<HTMLDivElement>(null);
 
     const selectIndex = useCallback((index: number) => {
         setSelectedIndex(index);
+        selectedName.current = searchList[index]?.nodeName;
         if (listDom.current != null && index >= 0) {
             const item = listDom.current.querySelector(`.item[data-index="${index}"]`);
             if (item != null) {
                 setTimeout(() => scrollIntoView(item, {scrollMode: "if-needed", block: "nearest"}));
             }
         }
-    }, [listDom])
+    }, [listDom, searchList])
 
     const [queryToLoad] = useDebounce(query, 500);
     useEffect(() => {
@@ -57,23 +60,32 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit}: Props) {
             inputDom.current.select();
         }
         setQuery(defaultQuery);
-    }, [defaultQuery, inputDom, selectIndex]);
+    }, [defaultQuery, inputDom]);
 
     useEffect(() => {
-        selectIndex(-1);
         setNames(names => {
             const newNames = namesListQuery(contactNames, query);
             return deepEqual(names, newNames) ? names : newNames;
-        })
+        });
         if (onChange) {
             onChange(query);
         }
-    }, [contactNames, onChange, query, selectIndex]);
+    }, [contactNames, onChange, query]);
+
+    useEffect(() =>
+        setSearchList(reorderNames(names, query)),
+        [names, query]
+    );
+
+    useEffect(() =>
+        selectIndex(searchList.findIndex(item => item.nodeName === selectedName.current)),
+        [searchList, selectIndex]
+    );
 
     const handleSubmit = (success: boolean, index: number) => {
         if (onSubmit) {
-            if (index >= 0 && index < names.length) {
-                onSubmit(success, names[index]);
+            if (index >= 0 && index < searchList.length) {
+                onSubmit(success, searchList[index]);
             } else {
                 onSubmit(success, {nodeName: query, fullName: null});
             }
@@ -92,7 +104,7 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit}: Props) {
                 selectIndex(Math.max(0, selectedIndex - 1));
                 break;
             case "ArrowDown":
-                selectIndex(Math.min(selectedIndex + 1, names.length - 1));
+                selectIndex(Math.min(selectedIndex + 1, searchList.length - 1));
                 break;
             case "Enter":
                 handleSubmit(true, selectedIndex);
@@ -106,8 +118,6 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit}: Props) {
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setQuery(trimQuery(event.target.value));
 
     const handleClick = (index: number) => () => handleSubmit(true, index);
-
-    const searchList = reorderNames(names, query);
 
     return (
         <>
