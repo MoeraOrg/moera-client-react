@@ -1,11 +1,10 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Provider, useSelector } from 'react-redux';
+import { Provider } from 'react-redux';
 import 'katex/dist/katex.min.css';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
 import store from "state/store";
-import { getPostingBodyFontMagnitude } from "state/settings/selectors";
 import NodeNameMention from "ui/nodename/NodeNameMention";
 import Jump from "ui/navigation/Jump";
 import EntryImage from "ui/entry/EntryImage";
@@ -27,8 +26,6 @@ interface Props {
 }
 
 export default function EntryHtml({className, postingId, commentId, html, nodeName, media, onClick}: Props) {
-    const fontMagnitude = useSelector(getPostingBodyFontMagnitude);
-
     const dom = useRef<HTMLDivElement>(null);
     const mediaMap: Map<string, PrivateMediaFileInfo> = new Map(
         (media ?? [])
@@ -157,6 +154,6 @@ export default function EntryHtml({className, postingId, commentId, html, nodeNa
         }
     }, [html]);
 
-    return <div ref={dom} className={className} style={{fontSize: `${fontMagnitude}%`}} onClick={onClick}
+    return <div ref={dom} className={className} style={{fontSize: "var(--posting-font-magnitude)"}} onClick={onClick}
                 dangerouslySetInnerHTML={{__html: html ?? ""}}/>
 }

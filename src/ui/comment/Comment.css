@@ -79,6 +79,7 @@
 
 .comment .content .read-more {
     width: 100%;
+    font-size: var(--posting-font-magnitude);
     text-align: left;
     padding-left: 0;
     padding-top: 0;

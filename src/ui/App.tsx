@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { isAtNode, isNodeIntroduced } from "state/node/selectors";
 import { isAtRemovalPage } from "state/navigation/selectors";
-import { getFeedWidth } from "state/settings/selectors";
+import { getFeedWidth, getPostingBodyFontMagnitude } from "state/settings/selectors";
 import EventsFrontend from "ui/events/EventsFrontend";
 import Navigation from "ui/navigation/Navigation";
 import ErrorPane from "ui/error/ErrorPane";
@@ -22,11 +22,15 @@ const RemovalPage = React.lazy(() => import("ui/settings/RemovalPage"));
 export default function App() {
     const atNode = useSelector(isAtNode);
     const feedWidth = useSelector(getFeedWidth);
+    const postingFontMagnitude = useSelector(getPostingBodyFontMagnitude);
     const nodeIntroduced = useSelector(isNodeIntroduced);
     const atRemovalPage = useSelector(isAtRemovalPage);
     return (
         // FIXME React.CSSProperties does not include CSS variables
-        <div style={{"--feed-width": feedWidth + "px"} as any}>
+        <div style={{
+            "--feed-width": `${feedWidth}px`,
+            "--posting-font-magnitude": `${[postingFontMagnitude]}%`
+        } as any}>
             <EventsFrontend/>
             <Navigation/>
             <ErrorPane/>
