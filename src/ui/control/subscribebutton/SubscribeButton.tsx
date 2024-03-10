@@ -72,6 +72,10 @@ export function SubscribeButton({small, nodeName, feedName, onDialogOpened}: Pro
         ? t("blocked")
         : (blockedBy ? t("in-blocked") : null)
 
+    const icon = blockedIcon ?? friendIcon ?? subscriptionIcon ?? faBell;
+    const caption = blockedCaption ?? friendCaption ?? subscriptionCaption;
+    const showIcon = small && caption != null;
+
     return (
         <DropdownMenu className={cx(
             ["btn", "btn-sm", "subscribe-button"],
@@ -79,10 +83,10 @@ export function SubscribeButton({small, nodeName, feedName, onDialogOpened}: Pro
         )} content={
             <SubscribeButtonMenu nodeName={nodeName} feedName={feedName}/>
         } onDialogOpened={onDialogOpened}>
-            {small ?
-                <FontAwesomeIcon icon={blockedIcon ?? friendIcon ?? subscriptionIcon ?? faBell}/>
+            {showIcon ?
+                <FontAwesomeIcon icon={icon}/>
             :
-                blockedCaption ?? friendCaption ?? subscriptionCaption ?? t("subscribe")
+                caption ?? t("subscribe")
             }
             &nbsp;&nbsp;
             <FontAwesomeIcon icon={faChevronDown}/>
