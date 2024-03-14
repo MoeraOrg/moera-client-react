@@ -1332,6 +1332,17 @@ export function* proxyLinkPreview(
     });
 }
 
+export function* registerAtPushRelay(
+    caller: ClientAction | null, nodeName: string | null, attributes: API.PushRelayClientAttributes,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): CallApiResult<API.Result> {
+
+    const location = "/push-relay";
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "POST", location, body: attributes, auth, schema: "Result", errorFilter
+    });
+}
+
 export function* askRemoteNode(
     caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, details: API.AskDescription,
     errorFilter: ErrorFilter = false, auth: true | string = true

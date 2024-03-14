@@ -20,6 +20,8 @@ export type PrincipalFlag = "none" | "private" | "admin" | "owner" | "secret" | 
 
 export type PushContentType = "story-added" | "story-deleted" | "feed-updated";
 
+export type PushRelayType = "fcm";
+
 export type SettingType = "bool" | "int" | "string" | "json" | "Duration" | "PrivateKey" | "PublicKey" | "Timestamp"
     | "UUID" | "Principal";
 
@@ -579,6 +581,12 @@ export interface PublicMediaFileInfo {
     height: number;
     orientation: number;
     size: number;
+}
+
+export interface PushRelayClientAttributes {
+    type: PushRelayType;
+    clientId: string;
+    lang?: string | null;
 }
 
 export interface ReactionAttributes {
