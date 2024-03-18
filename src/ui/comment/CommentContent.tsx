@@ -10,7 +10,7 @@ import { hasWindowSelection } from "util/ui";
 interface Props {
     comment: ExtCommentInfo;
     previousId: string | null;
-    receiverName: string | null;
+    receiverName: string;
 }
 
 export default function CommentContent({comment, previousId, receiverName}: Props) {

@@ -5,10 +5,11 @@ import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 import { getDateFnsLocale } from "i18n";
 import { ClientState } from "state/state";
 import Jump from "ui/navigation/Jump";
+import { RelNodeName } from "util/rel-node-name";
 import "./CommentDate.css"
 
 interface Props {
-    nodeName?: string | null;
+    nodeName?: RelNodeName | string;
     postingId: string;
     commentId: string;
     createdAt: number;

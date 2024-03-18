@@ -28,6 +28,7 @@ import {
 import CommentComposeButtons from "ui/comment/CommentComposeButtons";
 import { insertText } from "util/ui";
 import { mentionName } from "util/names";
+import { REL_CURRENT } from "util/rel-node-name";
 import "./CommentCompose.css";
 
 type Props = CommentComposeProps & FormikProps<CommentComposeValues>;
@@ -92,13 +93,14 @@ function CommentCompose(props: Props) {
                 <div className="content">
                     <CommentComposeRepliedTo disabled={!ready || beingPosted}/>
                     <RichTextField name="body" rows={1} maxHeight="max(100vh - 26rem, 7.5em)" features={features}
-                                   nodeName={receiverName} forceImageCompress anyValue
+                                   nodeName={receiverName ?? REL_CURRENT} forceImageCompress anyValue
                                    placeholder={t("write-comment-here", {mention})} disabled={!ready || beingPosted}
                                    smileysEnabled={smileysEnabled}
                                    hidingPanel={areValuesEmpty(values)} format={sourceFormatDefault}
                                    onKeyDown={onKeyDown} urlsField="bodyUrls"/>
-                    <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" nodeName={receiverName}
-                                          features={features} small disabled={!ready || beingPosted}/>
+                    <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls"
+                                          nodeName={receiverName ?? REL_CURRENT} features={features} small
+                                          disabled={!ready || beingPosted}/>
                 </div>
                 <CommentComposeButtons/>
             </Form>

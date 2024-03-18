@@ -63,7 +63,9 @@ export default function EntryHtml({
                 const html = node.innerHTML;
                 createRoot(span).render(
                     <Provider store={store}>
-                        <Jump nodeName={name} href={href}><span dangerouslySetInnerHTML={{__html: html}}/></Jump>
+                        <Jump nodeName={name ?? undefined} href={href}>
+                            <span dangerouslySetInnerHTML={{__html: html}}/>
+                        </Jump>
                     </Provider>
                 );
             }

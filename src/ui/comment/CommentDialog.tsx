@@ -14,8 +14,8 @@ import {
 } from "state/detailedposting/actions";
 import {
     getCommentDialogComment,
+    getCommentsReceiverName,
     getCommentsReceiverPostingId,
-    getCommentsState,
     isCommentDialogConflict,
     isCommentDialogReady
 } from "state/detailedposting/selectors";
@@ -30,6 +30,7 @@ import { commentComposeLogic, CommentComposeProps, CommentComposeValues } from "
 import CommentDraftSaver from "ui/comment/CommentDraftSaver";
 import { insertText } from "util/ui";
 import "./CommentDialog.css";
+import { REL_CURRENT } from "util/rel-node-name";
 
 type Props = CommentComposeProps & FormikProps<CommentComposeValues>;
 
@@ -41,7 +42,7 @@ function CommentDialogInner(props: Props) {
     const commentId = comment?.id ?? null;
 
     const ready = useSelector(isCommentDialogReady);
-    const receiverName = useSelector((state: ClientState) => getCommentsState(state).receiverName);
+    const receiverName = useSelector(getCommentsReceiverName);
     const conflict = useSelector(isCommentDialogConflict);
     const loading = useSelector((state: ClientState) =>
         state.detailedPosting.commentDialog.loading || state.detailedPosting.commentDialog.loadingDraft);
@@ -94,11 +95,13 @@ function CommentDialogInner(props: Props) {
                         <AvatarField name="avatar" size={36} disabled={!ready || beingPosted}/>
                         <NodeName name={ownerName} fullName={ownerFullName} linked={false} popup={false}/>
                     </div>
-                    <RichTextField name="body" rows={5} features={features} nodeName={receiverName} forceImageCompress
-                                   anyValue autoFocus disabled={!ready || beingPosted} smileysEnabled={smileysEnabled}
-                                   format={sourceFormatDefault} onKeyDown={onKeyDown} urlsField="bodyUrls"/>
-                    <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" nodeName={receiverName}
-                                          features={features} small disabled={!ready || beingPosted}/>
+                    <RichTextField name="body" rows={5} features={features} nodeName={receiverName ?? REL_CURRENT}
+                                   forceImageCompress anyValue autoFocus disabled={!ready || beingPosted}
+                                   smileysEnabled={smileysEnabled} format={sourceFormatDefault} onKeyDown={onKeyDown}
+                                   urlsField="bodyUrls"/>
+                    <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls"
+                                          nodeName={receiverName ?? REL_CURRENT} features={features} small
+                                          disabled={!ready || beingPosted}/>
                 </div>
                 <div className="modal-footer">
                     {ready && <CommentDraftSaver commentId={commentId}/>}
