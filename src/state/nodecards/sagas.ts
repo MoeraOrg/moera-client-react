@@ -46,6 +46,7 @@ import { flashBox } from "state/flashbox/actions";
 import { getNodeCard } from "state/nodecards/selectors";
 import * as Browser from "ui/browser";
 import { mentionName } from "util/names";
+import { REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("NODE_CARD_PREPARE_OWNERS", "", nodeCardPrepareOwnersSaga, mutuallyIntroduced),
@@ -111,7 +112,7 @@ function* nodeCardPrepareSaga(action: WithContext<NodeCardPrepareAction>) {
     }
 }
 
-function* nodeCardDetailsLoadSaga(action: NodeCardDetailsLoadAction) {
+function* nodeCardDetailsLoadSaga(action: WithContext<NodeCardDetailsLoadAction>) {
     const {nodeName} = action.payload;
     try {
         const profile = yield* call(Node.getProfile, action, nodeName);
@@ -124,7 +125,7 @@ function* nodeCardDetailsLoadSaga(action: NodeCardDetailsLoadAction) {
     }
 }
 
-function* nodeCardPeopleLoadSaga(action: NodeCardPeopleLoadAction) {
+function* nodeCardPeopleLoadSaga(action: WithContext<NodeCardPeopleLoadAction>) {
     const {nodeName} = action.payload;
     try {
         const info = yield* call(Node.getPeopleGeneral, action, nodeName);
@@ -139,7 +140,7 @@ function* nodeCardPeopleLoadSaga(action: NodeCardPeopleLoadAction) {
     }
 }
 
-function* nodeCardStoriesLoadSaga(action: NodeCardStoriesLoadAction) {
+function* nodeCardStoriesLoadSaga(action: WithContext<NodeCardStoriesLoadAction>) {
     const {nodeName} = action.payload;
     try {
         const {total, lastCreatedAt = null} = yield* call(Node.getFeedGeneral, action, nodeName, "timeline");
@@ -154,11 +155,10 @@ function* nodeCardStoriesLoadSaga(action: NodeCardStoriesLoadAction) {
 
 function* nodeCardSubscriptionLoadSaga(action: WithContext<NodeCardSubscriptionLoadAction>) {
     const {nodeName} = action.payload;
-    const {homeOwnerName} = action.context;
     try {
         const {subscriber, subscription} = yield* all({
-            subscriber: call(loadSubscriber, action, nodeName, homeOwnerName),
-            subscription: call(loadSubscription, action, nodeName, homeOwnerName)
+            subscriber: call(loadSubscriber, action, nodeName),
+            subscription: call(loadSubscription, action, nodeName)
         });
         yield* put(nodeCardSubscriptionSet(nodeName, subscriber ?? null, subscription ?? null).causedBy(action));
     } catch (e) {
@@ -169,31 +169,32 @@ function* nodeCardSubscriptionLoadSaga(action: WithContext<NodeCardSubscriptionL
     }
 }
 
-function* loadSubscriber(action: NodeCardSubscriptionLoadAction, nodeName: string, homeOwnerName: string | null) {
+function* loadSubscriber(action: WithContext<NodeCardSubscriptionLoadAction>, nodeName: string) {
+    const {homeOwnerName} = action.context;
     if (homeOwnerName == null || nodeName === homeOwnerName) {
         return null;
     }
-    const subscribers = yield* call(Node.getSubscribers, action, ":", nodeName, "feed" as const, null, null,
+    const subscribers = yield* call(Node.getSubscribers, action, REL_HOME, nodeName, "feed" as const, null, null,
         ["authentication.required"]);
     return subscribers?.[0];
 }
 
-function* loadSubscription(action: NodeCardSubscriptionLoadAction, nodeName: string, homeOwnerName: string | null) {
+function* loadSubscription(action: WithContext<NodeCardSubscriptionLoadAction>, nodeName: string) {
+    const {homeOwnerName} = action.context;
     if (homeOwnerName == null || nodeName === homeOwnerName) {
         return null;
     }
-    const subscriptions = yield* call(Node.getSubscriptions, action, ":", nodeName, "feed" as const,
+    const subscriptions = yield* call(Node.getSubscriptions, action, REL_HOME, nodeName, "feed" as const,
         ["authentication.required"]);
     return subscriptions?.[0];
 }
 
 function* nodeCardFriendshipLoadSaga(action: WithContext<NodeCardFriendshipLoadAction>) {
     const {nodeName} = action.payload;
-    const {homeOwnerName} = action.context;
     try {
         const {groups, remoteGroups} = yield* all({
-            groups: call(loadFriendGroups, action, nodeName, homeOwnerName),
-            remoteGroups: call(loadRemoteFriendGroups, action, nodeName, homeOwnerName)
+            groups: call(loadFriendGroups, action, nodeName),
+            remoteGroups: call(loadRemoteFriendGroups, action, nodeName)
         });
         yield* put(nodeCardFriendshipSet(nodeName, groups ?? null, remoteGroups ?? null).causedBy(action));
     } catch (e) {
@@ -204,16 +205,18 @@ function* nodeCardFriendshipLoadSaga(action: WithContext<NodeCardFriendshipLoadA
     }
 }
 
-function* loadFriendGroups(action: NodeCardFriendshipLoadAction, nodeName: string, homeOwnerName: string | null) {
-    if (!homeOwnerName || !nodeName || nodeName === homeOwnerName || nodeName.includes(":")) {
+function* loadFriendGroups(action: WithContext<NodeCardFriendshipLoadAction>, nodeName: string) {
+    const {homeOwnerName} = action.context;
+    if (!homeOwnerName || !nodeName || nodeName === homeOwnerName) {
         return null;
     }
-    const {groups} = yield* call(Node.getFriend, action, ":", nodeName);
+    const {groups} = yield* call(Node.getFriend, action, REL_HOME, nodeName);
     return groups;
 }
 
-function* loadRemoteFriendGroups(action: NodeCardFriendshipLoadAction, nodeName: string, homeOwnerName: string | null) {
-    if (!homeOwnerName || !nodeName || nodeName === homeOwnerName || homeOwnerName.includes(":")) {
+function* loadRemoteFriendGroups(action: WithContext<NodeCardFriendshipLoadAction>, nodeName: string) {
+    const {homeOwnerName} = action.context;
+    if (!homeOwnerName || !nodeName || nodeName === homeOwnerName) {
         return null;
     }
     const {groups} = yield* call(Node.getFriend, action, nodeName, homeOwnerName);
@@ -222,11 +225,10 @@ function* loadRemoteFriendGroups(action: NodeCardFriendshipLoadAction, nodeName:
 
 function* nodeCardBlockingLoadSaga(action: WithContext<NodeCardBlockingLoadAction>) {
     const {nodeName} = action.payload;
-    const {homeOwnerName} = action.context;
     try {
         const {blocked, blockedBy} = yield* all({
-            blocked: call(loadBlocked, action, nodeName, homeOwnerName),
-            blockedBy: call(loadBlockedBy, action, nodeName, homeOwnerName)
+            blocked: call(loadBlocked, action, nodeName),
+            blockedBy: call(loadBlockedBy, action, nodeName)
         });
         yield* put(nodeCardBlockingSet(nodeName, blocked ?? null, blockedBy ?? null).causedBy(action));
     } catch (e) {
@@ -237,21 +239,23 @@ function* nodeCardBlockingLoadSaga(action: WithContext<NodeCardBlockingLoadActio
     }
 }
 
-function* loadBlocked(action: NodeCardBlockingLoadAction, nodeName: string, homeOwnerName: string | null) {
-    if (homeOwnerName == null || nodeName === homeOwnerName || nodeName.includes(":")) {
+function* loadBlocked(action: WithContext<NodeCardBlockingLoadAction>, nodeName: string) {
+    const {homeOwnerName} = action.context;
+    if (homeOwnerName == null || nodeName === homeOwnerName) {
         return null;
     }
-    return yield* call(Node.searchBlockedUsers, action, ":", {
+    return yield* call(Node.searchBlockedUsers, action, REL_HOME, {
         nodeName,
         blockedOperations: ["comment" as const, "reaction" as const, "visibility" as const]
     });
 }
 
-function* loadBlockedBy(action: NodeCardBlockingLoadAction, nodeName: string, homeOwnerName: string | null) {
-    if (homeOwnerName == null || nodeName === homeOwnerName || homeOwnerName.includes(":")) {
+function* loadBlockedBy(action: WithContext<NodeCardBlockingLoadAction>, nodeName: string) {
+    const {homeOwnerName} = action.context;
+    if (homeOwnerName == null || nodeName === homeOwnerName) {
         return null;
     }
-    return yield* call(Node.searchBlockedByUsers, action, ":", {postings: [{nodeName}]});
+    return yield* call(Node.searchBlockedByUsers, action, REL_HOME, {postings: [{nodeName}]});
 }
 
 function* nodeCardSheriffListLoadSaga(action: WithContext<NodeCardSheriffListLoadAction>) {
@@ -264,7 +268,8 @@ function* nodeCardSheriffListLoadSaga(action: WithContext<NodeCardSheriffListLoa
     }
 
     try {
-        yield* call(Node.getUserListItem, action, ":", SHERIFF_USER_LIST_HIDE, nodeName, ["user-list-item.not-found"]);
+        yield* call(Node.getUserListItem, action, REL_HOME, SHERIFF_USER_LIST_HIDE, nodeName,
+            ["user-list-item.not-found"]);
         yield* put(nodeCardSheriffListSet(nodeName, true).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError && e.errorCode === "user-list-item.not-found") {
@@ -285,10 +290,10 @@ function* nodeCardCopyMention(action: NodeCardCopyMentionAction) {
     }
 }
 
-function* sheriffListAddSaga(action: SheriffListAddAction) {
+function* sheriffListAddSaga(action: WithContext<SheriffListAddAction>) {
     const {nodeName} = action.payload;
     try {
-        yield* call(Node.createUserListItem, action, ":", SHERIFF_USER_LIST_HIDE, {nodeName});
+        yield* call(Node.createUserListItem, action, REL_HOME, SHERIFF_USER_LIST_HIDE, {nodeName});
         yield* put(nodeCardSheriffListSet(nodeName, true).causedBy(action));
         yield* put(flashBox(i18n.t("content-hidden-in-google-play")).causedBy(action));
     } catch (e) {
@@ -296,10 +301,10 @@ function* sheriffListAddSaga(action: SheriffListAddAction) {
     }
 }
 
-function* sheriffListDeleteSaga(action: SheriffListDeleteAction) {
+function* sheriffListDeleteSaga(action: WithContext<SheriffListDeleteAction>) {
     const {nodeName} = action.payload;
     try {
-        yield* call(Node.deleteUserListItem, action, ":", SHERIFF_USER_LIST_HIDE, nodeName);
+        yield* call(Node.deleteUserListItem, action, REL_HOME, SHERIFF_USER_LIST_HIDE, nodeName);
         yield* put(nodeCardSheriffListSet(nodeName, false).causedBy(action));
         yield* put(flashBox(i18n.t("content-unhidden-in-google-play")).causedBy(action));
     } catch (e) {

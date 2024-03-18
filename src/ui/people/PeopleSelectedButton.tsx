@@ -16,6 +16,7 @@ import {
     peopleSelectedUnsubscribe
 } from "state/people/actions";
 import { DropdownMenu } from "ui/control";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export default function PeopleSelectedButton() {
     const totalSelected = useSelector(getTotalSelected);
@@ -45,14 +46,14 @@ export default function PeopleSelectedButton() {
         <DropdownMenu className="btn btn-sm btn-primary ms-1" items={[
             {
                 title: t("subscribe"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: "/people",
                 onClick: onSubscribe,
                 show: summary.notSubscribed
             },
             {
                 title: t("unsubscribe"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: "/people",
                 onClick: onUnsubscribe,
                 show: summary.subscribed
@@ -62,21 +63,21 @@ export default function PeopleSelectedButton() {
             },
             {
                 title: t("add-friend"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: "/people",
                 onClick: onAddFriend,
                 show: summary.notFriends
             },
             {
                 title: t("friend-groups"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: "/people",
                 onClick: onFriendGroups,
                 show: summary.friends
             },
             {
                 title: t("unfriend"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: "/people",
                 onClick: onUnfriend,
                 show: summary.friends
@@ -86,14 +87,14 @@ export default function PeopleSelectedButton() {
             },
             {
                 title: t("ask-ellipsis"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: "/people",
                 onClick: onAskDialog,
                 show: summary.notSubscribedToMe || summary.notFriendOfs
             },
             {
                 title: t("hide-ellipsis"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: "/people",
                 onClick: onHideDialog,
                 show: summary.subscribed || summary.subscribedToMe || summary.friends

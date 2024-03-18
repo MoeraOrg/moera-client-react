@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { PrivateMediaFileInfo } from "api";
 import { ClientState } from "state/state";
-import { getNamingNameNodeUri } from "state/naming/selectors";
-import { getNodeRootPage } from "state/node/selectors";
+import { getNamingNameRoot } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import PreloadedImage from "ui/posting/PreloadedImage";
 import * as Browser from "ui/browser";
@@ -13,16 +12,16 @@ import { Loading } from 'ui/control';
 import { mediaImagePreview, mediaImageSize, mediaSizes, mediaSources } from "util/media-images";
 import { urlWithParameters } from "util/url";
 import "./EntryLinkPreviewImage.css";
+import { RelNodeName } from "util/rel-node-name";
 
 interface Props {
-    nodeName: string | null;
+    nodeName: RelNodeName | string;
     mediaFile?: PrivateMediaFileInfo | null;
     loading: boolean;
 }
 
 export default function EntryLinkPreviewImage({nodeName, mediaFile, loading}: Props) {
-    const rootPage = useSelector((state: ClientState) =>
-        nodeName ? getNamingNameNodeUri(state, nodeName) : getNodeRootPage(state));
+    const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, nodeName));
     const carte = useSelector(getCurrentViewMediaCarte);
     const {t} = useTranslation();
 

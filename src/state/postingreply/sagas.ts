@@ -1,6 +1,7 @@
 import { call, put, select } from 'typed-redux-saga';
 
 import { DraftText, Node, PostingInfo, PrincipalValue } from "api";
+import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import { PostingReplyAction, postingReplyFailed } from "state/postingreply/actions";
 import { getPosting } from "state/postings/selectors";
@@ -13,19 +14,20 @@ import { executor } from "state/executor";
 import { getWindowSelectionHtml } from "util/ui";
 import { mentionName } from "util/names";
 import { quoteHtml } from "util/html";
+import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("POSTING_REPLY", "", postingReplySaga)
 ];
 
-function* postingReplySaga(action: PostingReplyAction) {
+function* postingReplySaga(action: WithContext<PostingReplyAction>) {
     const {
         posting, nodeRootPage, homeOwnerName, homeRootPage, homeRootLocation, subjectPrefix, preambleTemplate, quoteAll,
         visibilityDefault, commentsVisibilityDefault, commentAdditionDefault, reactionsEnabledDefault,
         reactionsNegativeEnabledDefault, reactionsPositiveDefault, reactionsNegativeDefault, reactionsVisibleDefault,
         reactionTotalsVisibleDefault
     } = yield* select(state => ({
-            posting: getPosting(state, state.postingReply.postingId),
+            posting: getPosting(state, state.postingReply.postingId, REL_CURRENT),
             nodeRootPage: getNodeRootPage(state),
             homeOwnerName: getHomeOwnerName(state),
             homeRootPage: getHomeRootPage(state),
@@ -83,7 +85,7 @@ function* postingReplySaga(action: PostingReplyAction) {
                 addNegativeReaction: reactionsNegativeEnabledDefault ? "public" : "none"
             }
         };
-        const draft = yield* call(Node.createDraft, action, ":", draftText);
+        const draft = yield* call(Node.createDraft, action, REL_HOME, draftText);
         if (nodeRootPage !== homeRootPage) {
             if (homeRootLocation != null) {
                 yield* put(initFromLocation(

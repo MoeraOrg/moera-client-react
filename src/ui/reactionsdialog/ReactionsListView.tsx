@@ -50,10 +50,10 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
                 {reactions.map(r =>
                     <div className="item" key={r.moment}>
                         <AvatarWithPopup ownerName={r.ownerName!} ownerFullName={r.ownerFullName} avatar={r.ownerAvatar}
-                                         nodeName={reactionsNodeName ?? undefined} size={32}/>
+                                         nodeName={reactionsNodeName} size={32}/>
                         <div className="owner-name">
                             <NodeName name={r.ownerName} fullName={r.ownerFullName} avatar={r.ownerAvatar}
-                                      avatarNodeName={reactionsNodeName ?? undefined}/>
+                                      avatarNodeName={reactionsNodeName}/>
                             {" "}
                             {r.ownerName != null && r.signature != null && postingId != null &&
                                 <ReactionVerifyButton postingId={postingId} commentId={commentId}

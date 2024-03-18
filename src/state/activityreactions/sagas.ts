@@ -2,10 +2,12 @@ import { call, select } from 'typed-redux-saga';
 
 import { Node, PostingInfo, StoryInfo } from "api";
 import { ClientAction } from "state/action";
+import { WithContext } from "state/action-types";
 import { isAtHomeNode } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
+import { REL_HOME } from "util/rel-node-name";
 
-export function* fillActivityReactionsInStories(caller: ClientAction | null, stories: StoryInfo[]) {
+export function* fillActivityReactionsInStories(caller: WithContext<ClientAction> | null, stories: StoryInfo[]) {
     const postings: PostingInfo[] = stories
         .map(t => t.posting)
         .filter((p): p is PostingInfo => p != null)
@@ -13,7 +15,7 @@ export function* fillActivityReactionsInStories(caller: ClientAction | null, sto
     yield* call(fillActivityReactionsInPostings, caller, postings);
 }
 
-export function* fillActivityReactionsInPostings(caller: ClientAction | null, postings: PostingInfo[]) {
+export function* fillActivityReactionsInPostings(caller: WithContext<ClientAction> | null, postings: PostingInfo[]) {
     if (postings.length === 0) {
         return;
     }
@@ -22,7 +24,7 @@ export function* fillActivityReactionsInPostings(caller: ClientAction | null, po
         return;
     }
     const remotePostings = postings.map(p => ({nodeName: p.receiverName!, postingId: p.receiverPostingId!}));
-    const reactions = yield* call(Node.searchActivityReactions, caller, ":", {postings: remotePostings});
+    const reactions = yield* call(Node.searchActivityReactions, caller, REL_HOME, {postings: remotePostings});
     const reactionMap = new Map(reactions.map(r => [`${r.remoteNodeName} ${r.remotePostingId}`, r]));
     postings.forEach(p => {
         const key = `${p.receiverName} ${p.receiverPostingId}`;
@@ -37,7 +39,7 @@ export function* fillActivityReactionsInPostings(caller: ClientAction | null, po
     });
 }
 
-export function* fillActivityReaction(caller: ClientAction | null, posting: PostingInfo) {
+export function* fillActivityReaction(caller: WithContext<ClientAction> | null, posting: PostingInfo) {
     if (posting.receiverName == null || posting.receiverPostingId == null) {
         return;
     }
@@ -46,7 +48,7 @@ export function* fillActivityReaction(caller: ClientAction | null, posting: Post
         return;
     }
     const remotePostings = [{nodeName: posting.receiverName, postingId: posting.receiverPostingId}];
-    const reactions = yield* call(Node.searchActivityReactions, caller, ":", {postings: remotePostings});
+    const reactions = yield* call(Node.searchActivityReactions, caller, REL_HOME, {postings: remotePostings});
     if (reactions.length > 0) {
         posting.clientReaction = {
             negative: reactions[0].negative,

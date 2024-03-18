@@ -12,19 +12,25 @@ interface Props {
     posting: PostingInfo;
 }
 
-const PostingSource = ({posting}: Props) => (
-    posting.receiverName != null ?
+export default function PostingSource({posting}: Props) {
+    if (posting.receiverName == null) {
+        return null;
+    }
+    return (
         <DelayedPopover placement="bottom-start" arrow element={
-            ref =>
-                <Jump ref={ref} className="posting-source" nodeName={posting.receiverName}
-                      href={`/post/${posting.receiverPostingId}`}>
-                    <FontAwesomeIcon icon={faRetweet}/>
-                </Jump>
+            ref => {
+                if (posting.receiverName == null) {
+                    return null;
+                }
+                return (
+                    <Jump ref={ref} className="posting-source" nodeName={posting.receiverName}
+                          href={`/post/${posting.receiverPostingId}`}>
+                        <FontAwesomeIcon icon={faRetweet}/>
+                    </Jump>
+                );
+            }
         }>
             <PostingSources posting={posting}/>
         </DelayedPopover>
-    :
-        null
-);
-
-export default PostingSource;
+    );
+}

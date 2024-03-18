@@ -15,19 +15,21 @@ import {
     HomeOwnerVerifyAction
 } from "state/home/actions";
 import { errorThrown } from "state/error/actions";
+import { WithContext } from "state/action-types";
 import { getHomeConnectionData, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
 import { isAtNode } from "state/node/selectors";
 import { goHomeLocation } from "state/navigation/actions";
 import { executor } from "state/executor";
 import { connectDialogSetForm } from "state/connectdialog/actions";
 import { normalizeUrl } from "util/url";
+import { REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("CONNECT_TO_HOME", null, connectToHomeSaga),
     executor("HOME_OWNER_VERIFY", null, homeOwnerVerifySaga)
 ];
 
-function* connectToHomeFailure(action: ConnectToHomeAction, error: any) {
+function* connectToHomeFailure(action: WithContext<ConnectToHomeAction>, error: any) {
     const {location, login} = action.payload;
 
     yield* put(connectionToHomeFailed().causedBy(action));
@@ -48,7 +50,7 @@ function* connectToHomeFailure(action: ConnectToHomeAction, error: any) {
     yield* put(messageBox(message).causedBy(action));
 }
 
-function* connectToHomeSaga(action: ConnectToHomeAction) {
+function* connectToHomeSaga(action: WithContext<ConnectToHomeAction>) {
     const {location, assign, login, password, oldPassword, resetToken} = action.payload;
 
     let info;
@@ -87,10 +89,10 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
     }
 }
 
-function* homeOwnerVerifySaga(action: HomeOwnerVerifyAction) {
+function* homeOwnerVerifySaga(action: WithContext<HomeOwnerVerifyAction>) {
     try {
         const {nodeName = null, nodeNameChanging, fullName = null, avatar = null} =
-            yield* call(Node.whoAmI, action, ":");
+            yield* call(Node.whoAmI, action, REL_HOME);
         yield* put(homeOwnerSet(nodeName, nodeNameChanging ?? false, fullName, avatar).causedBy(action));
 
         const {

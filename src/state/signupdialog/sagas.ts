@@ -5,6 +5,7 @@ import PROVIDERS, { Provider } from "providers";
 import { CLIENT_SETTINGS_PREFIX, Naming, Node, NodeApiError, SettingInfo } from "api";
 import { Storage } from "storage";
 import { errorThrown } from "state/error/actions";
+import { WithContext } from "state/action-types";
 import { connectedToHome, homeOwnerSet } from "state/home/actions";
 import { registerNameSucceeded } from "state/nodename/actions";
 import {
@@ -24,6 +25,7 @@ import { getHomeRootLocation } from "state/home/selectors";
 import { executor } from "state/executor";
 import { serializeSheriffs } from "util/sheriff";
 import { rootUrl } from "util/url";
+import { REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("SIGN_UP", "", signUpSaga),
@@ -40,7 +42,7 @@ function getProvider(name: string): Provider {
     return provider;
 }
 
-function* signUpSaga(action: SignUpAction) {
+function* signUpSaga(action: WithContext<SignUpAction>) {
     const {
         language, provider: providerName, name, domain, password, email, googlePlayAllowed, onError
     } = action.payload;
@@ -148,7 +150,7 @@ function* signUpSaga(action: SignUpAction) {
                 yield* put(signUpFailed(SIGN_UP_STAGE_NAME).causedBy(action));
                 return;
             }
-            const secret = yield* call(Node.createNodeName, action, ":", {name});
+            const secret = yield* call(Node.createNodeName, action, REL_HOME, {name});
             yield* put(homeOwnerSet(null, true, null, null).causedBy(action));
             yield* put(signedUp().causedBy(action));
             yield* put(registerNameSucceeded(secret.name, secret.mnemonic!).causedBy(action));
@@ -170,7 +172,7 @@ function* signUpNameVerifySaga(action: SignUpNameVerifyAction) {
     }
 }
 
-function* signUpFindDomainSaga(action: SignUpFindDomainAction) {
+function* signUpFindDomainSaga(action: WithContext<SignUpFindDomainAction>) {
     const {provider, name, onFound} = action.payload;
 
     try {
@@ -181,7 +183,7 @@ function* signUpFindDomainSaga(action: SignUpFindDomainAction) {
     }
 }
 
-function* signUpDomainVerifySaga(action: SignUpDomainVerifyAction) {
+function* signUpDomainVerifySaga(action: WithContext<SignUpDomainVerifyAction>) {
     const {provider: providerName, name, onVerify} = action.payload;
 
     const provider = getProvider(providerName);

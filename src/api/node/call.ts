@@ -10,14 +10,21 @@ import { ProgressHandler } from "api/fetcher";
 import { CausedError } from "api/error";
 import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
+import { WithContext } from "state/action-types";
 import { errorAuthInvalid } from "state/error/actions";
 import { messageBox } from "state/messagebox/actions";
 import { cartesLoad } from "state/cartes/actions";
-import { getNodeRootLocation, getToken } from "state/node/selectors";
+import { getNodeRootLocation, getOwnerNameOrUrl, getToken } from "state/node/selectors";
 import { getCurrentAllCarte } from "state/cartes/selectors";
-import { getHomeRootLocation, isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
+import {
+    getHomeOwnerNameOrUrl,
+    getHomeRootLocation,
+    isConnectedToHome,
+    isHomeOwnerNameSet
+} from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
 import * as Browser from "ui/browser";
+import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { peek } from "util/saga-effects";
 import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/url";
 
@@ -28,9 +35,9 @@ export type ErrorFilter = boolean | string[] | ((code: string) => boolean);
 type CallException = (e: any, details?: string | null) => NodeError;
 
 export interface CallApiParams {
-    caller: ClientAction | null;
+    caller: WithContext<ClientAction> | null;
     location: string;
-    nodeName?: string | null;
+    nodeName: RelNodeName | string;
     method?: HttpMethod;
     auth?: boolean | string;
     body?: any;
@@ -45,7 +52,7 @@ export type CallApiResult<T> = Generator<CallEffect | PutEffect<any> | SelectEff
 export function* callApi<T>({
     caller,
     location,
-    nodeName = "",
+    nodeName = REL_CURRENT,
     method = "GET" as const,
     auth = false,
     body = null,
@@ -162,55 +169,65 @@ interface ApiSelection {
 }
 
 export function* selectApi(
-    caller: ClientAction | null, nodeName: string | null | undefined
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string
 ): Generator<CallEffect | SelectEffect, ApiSelection> {
+    let ownerNameOrUrl: string, homeOwnerNameOrUrl: string;
+    if (caller != null) {
+        ({ownerNameOrUrl, homeOwnerNameOrUrl} = caller.context);
+    } else {
+        ({ownerNameOrUrl, homeOwnerNameOrUrl} = yield* select((state: ClientState) => ({
+            ownerNameOrUrl: getOwnerNameOrUrl(state),
+            homeOwnerNameOrUrl: getHomeOwnerNameOrUrl(state)
+        })));
+    }
+    if (nodeName instanceof RelNodeName) {
+        const isHome = nodeName.isHomeNode();
+        nodeName = nodeName.absolute(ownerNameOrUrl, homeOwnerNameOrUrl);
+        if (nodeName === "" && isHome) {
+            throw new HomeNotConnectedError(caller);
+        }
+    }
+
     let root;
     let errorTitle = "";
-    switch (nodeName) {
-        case null:
-        case undefined:
-        case "":
-            root = yield* select(state => ({
-                location: getNodeRootLocation(state),
-                api: state.node.root.api
-            }));
-            errorTitle = "Node access error";
-            break;
-
-        case ":":
-            root = yield* select(state => ({
-                connected: isConnectedToHome(state),
-                location: getHomeRootLocation(state),
-                api: state.home.root.api
-            }));
-            if (!root.connected) {
-                throw new HomeNotConnectedError(caller);
-            }
+    if (nodeName === ownerNameOrUrl) {
+        root = yield* select(state => ({
+            location: getNodeRootLocation(state),
+            api: state.node.root.api
+        }));
+        errorTitle = "Node access error";
+    } else if (nodeName === homeOwnerNameOrUrl) {
+        root = yield* select(state => ({
+            connected: isConnectedToHome(state),
+            location: getHomeRootLocation(state),
+            api: state.home.root.api
+        }));
+        if (!root.connected) {
+            throw new HomeNotConnectedError(caller);
+        }
+        errorTitle = "Home access error";
+    } else {
+        if (nodeName.match(/^https?:/i)) {
+            const location = normalizeUrl(nodeName);
+            root = {
+                location,
+                api: location + "/moera/api"
+            };
             errorTitle = "Home access error";
-            break;
-
-        default:
-            if (nodeName.match(/^https?:/i)) {
-                const location = normalizeUrl(nodeName);
-                root = {
-                    location,
-                    api: location + "/moera/api"
-                };
-                errorTitle = "Home access error";
-            } else {
-                const nodeUri = yield* call(getNodeUri, caller, nodeName);
-                root = nodeUri != null ?
-                    {
-                        location: nodeUrlToLocation(nodeUri),
-                        api: nodeUri + "/api"
-                    }
-                :
-                    {
-                        location: "",
-                        api: ""
-                    }
-                errorTitle = "Node access error";
-            }
+        } else {
+            const nodeUri = yield* call(getNodeUri, caller, nodeName);
+            root = nodeUri != null ?
+                {
+                    location: nodeUrlToLocation(nodeUri),
+                    api: nodeUri + "/api"
+                }
+            :
+                {
+                    location: "",
+                    api: ""
+                }
+            errorTitle = "Node access error";
+        }
     }
 
     return {rootLocation: root.location, rootApi: root.api, errorTitle};

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { Avatar } from "ui/control";
 import Jump from "ui/navigation/Jump";
+import { REL_HOME } from "util/rel-node-name";
 import "./HomeAvatar.css";
 
 export default function HomeAvatar() {
@@ -13,8 +14,8 @@ export default function HomeAvatar() {
     const {t} = useTranslation();
 
     return (
-        <Jump nodeName=":" href="/profile" title={t("your-profile")}>
-            <Avatar avatar={avatar} ownerName={ownerName} size={32} nodeName=":" className="home-avatar"/>
+        <Jump nodeName={REL_HOME} href="/profile" title={t("your-profile")}>
+            <Avatar avatar={avatar} ownerName={ownerName} size={32} nodeName={REL_HOME} className="home-avatar"/>
         </Jump>
     );
 }

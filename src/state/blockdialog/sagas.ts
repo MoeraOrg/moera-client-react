@@ -21,6 +21,7 @@ import { feedUnsubscribe } from "state/feeds/actions";
 import { friendshipUpdate } from "state/people/actions";
 import { settingsUpdate } from "state/settings/actions";
 import { confirmBox } from "state/confirmbox/actions";
+import { REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("BLOCK_DIALOG_SUBMIT", "", blockDialogSubmitSaga),
@@ -41,7 +42,7 @@ function* blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>) {
     try {
         yield* all(prevBlockedUsers.map(blockedUser => call(deleteBlockedUserIfExists, action, blockedUser.id)));
         const blockedUsers = yield* all(
-            blockedOperations.map(blockedOperation => call(Node.blockUser, action, ":", {
+            blockedOperations.map(blockedOperation => call(Node.blockUser, action, REL_HOME, {
                 blockedOperation,
                 nodeName,
                 entryId: ownEntryId,
@@ -65,9 +66,9 @@ function* blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>) {
     }
 }
 
-function* deleteBlockedUserIfExists(action: BlockDialogSubmitAction, id: string) {
+function* deleteBlockedUserIfExists(action: WithContext<BlockDialogSubmitAction>, id: string) {
     try {
-        return yield* call(Node.unblockUser, action, ":", id, ["blocked-user.not-found"]);
+        return yield* call(Node.unblockUser, action, REL_HOME, id, ["blocked-user.not-found"]);
     } catch (e) {
         if (!(e instanceof NodeApiError)) {
             throw e;
@@ -76,10 +77,10 @@ function* deleteBlockedUserIfExists(action: BlockDialogSubmitAction, id: string)
     }
 }
 
-function* blockedUserUnfriendSaga(action: BlockedUserUnfriendAction) {
+function* blockedUserUnfriendSaga(action: WithContext<BlockedUserUnfriendAction>) {
     const {nodeName, formattedName} = action.payload;
 
-    const {groups} = yield* call(Node.getFriend, action, ":", nodeName);
+    const {groups} = yield* call(Node.getFriend, action, REL_HOME, nodeName);
     if (groups?.find(g => g.title === "t:friends") == null) {
         return;
     }
@@ -122,10 +123,10 @@ function* blockedUserUnfriendSaga(action: BlockedUserUnfriendAction) {
     }
 }
 
-function* blockedUserUnsubscribeSaga(action: BlockedUserUnsubscribeAction) {
+function* blockedUserUnsubscribeSaga(action: WithContext<BlockedUserUnsubscribeAction>) {
     const {nodeName, formattedName} = action.payload;
 
-    const subscriptions = yield* call(Node.getSubscriptions, action, ":", nodeName, "feed" as const,
+    const subscriptions = yield* call(Node.getSubscriptions, action, REL_HOME, nodeName, "feed" as const,
         ["authentication.required"]);
     const subscriptionId = subscriptions.find(s => s.remoteFeedName === "timeline")?.id;
     if (subscriptionId == null) {

@@ -7,6 +7,7 @@ import { findPostingIdsByRemote } from "state/postings/selectors";
 import { ExtPostingInfo, PostingsState } from "state/postings/state";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
 import { ellipsize } from "util/text";
+import { absoluteNodeName } from "util/rel-node-name";
 
 const MAX_SHORT_TITLE = 120;
 
@@ -69,10 +70,11 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         case "FEED_FUTURE_SLICE_SET":
         case "FEED_SLICE_UPDATE": {
             const istate = immutable.wrap(state);
+            const nodeName = action.context.ownerNameOrUrl;
             action.payload.stories
                 .map(s => outsideIn(s))
                 .filter((p): p is PostingInfo => p != null)
-                .forEach(p => istate.assign(["", p.id], {
+                .forEach(p => istate.assign([nodeName, p.id], {
                     posting: safeguard(p),
                     deleting: false,
                     verificationStatus: "none",
@@ -85,8 +87,9 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
 
         case "POSTINGS_SET": {
             const istate = immutable.wrap(state);
+            const nodeName = action.context.ownerNameOrUrl;
             action.payload.postings
-                .forEach(p => istate.assign(["", p.id], {
+                .forEach(p => istate.assign([nodeName, p.id], {
                     posting: safeguard(p),
                     deleting: false,
                     verificationStatus: "none",
@@ -100,12 +103,13 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         case "STORY_ADDED":
         case "STORY_UPDATED": {
             const {id, posting} = action.payload.story;
+            const nodeName = action.context.ownerNameOrUrl;
             if (posting) {
-                const postingState = state[""]?.[posting.id];
+                const postingState = state[nodeName]?.[posting.id];
                 if (postingState != null) {
                     const refs = (postingState.posting.feedReferences ?? []).filter(r => r.storyId !== id);
                     refs.push(toFeedReference(action.payload.story));
-                    return immutable.set(state, ["", posting.id, "posting", "feedReferences"], refs);
+                    return immutable.set(state, [nodeName, posting.id, "posting", "feedReferences"], refs);
                 }
             }
             return state;
@@ -113,18 +117,20 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
 
         case "STORY_DELETED": {
             const {id, posting} = action.payload.story;
+            const nodeName = action.context.ownerNameOrUrl;
             if (posting) {
-                const postingState = state[""]?.[posting.id];
+                const postingState = state[nodeName]?.[posting.id];
                 if (postingState != null) {
                     const refs = (postingState.posting.feedReferences ?? []).filter(r => r.storyId !== id);
-                    return immutable.set(state, ["", posting.id, "posting", "feedReferences"], refs);
+                    return immutable.set(state, [nodeName, posting.id, "posting", "feedReferences"], refs);
                 }
             }
             return state;
         }
 
         case "POSTING_SET": {
-            const {posting, nodeName} = action.payload;
+            let {posting, nodeName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
             return immutable.wrap(state).assign([nodeName, posting.id], {
                 posting: safeguard(posting),
                 deleting: false,
@@ -136,43 +142,60 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         }
 
         case "POSTING_DELETE":
-            return immutable.set(state, [action.payload.nodeName, action.payload.id, "deleting"], true);
+            return immutable.set(
+                state,
+                [absoluteNodeName(action.payload.nodeName, action.context), action.payload.id, "deleting"],
+                true
+            );
 
         case "POSTING_DELETED":
-            return immutable.del(state, [action.payload.nodeName, action.payload.id]);
+            return immutable.del(
+                state,
+                [absoluteNodeName(action.payload.nodeName, action.context), action.payload.id]
+            );
 
         case "POSTING_VERIFY":
-            return immutable.set(state, [action.payload.nodeName, action.payload.id, "verificationStatus"], "running");
+            return immutable.set(
+                state,
+                [absoluteNodeName(action.payload.nodeName, action.context), action.payload.id, "verificationStatus"],
+                "running"
+            );
 
         case "POSTING_VERIFY_FAILED":
-            return immutable.set(state, [action.payload.nodeName, action.payload.id, "verificationStatus"], "none");
+            return immutable.set(
+                state,
+                [absoluteNodeName(action.payload.nodeName, action.context), action.payload.id, "verificationStatus"],
+                "none"
+            );
 
         case "POSTING_OPERATIONS_UPDATED": {
-            const {id, nodeName, operations} = action.payload;
+            let {id, nodeName, operations} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
             return immutable.set(state, [nodeName, id, "posting", "operations"], operations);
         }
 
         case "EVENT_HOME_REMOTE_POSTING_VERIFIED": {
-            const nodeName = action.payload.nodeName === action.context.ownerName ? "" : action.payload.nodeName;
-            const posting = state[nodeName]?.[action.payload.postingId]?.posting;
-            if (posting && (!action.payload.revisionId || posting.revisionId === action.payload.revisionId)) {
-                const status = action.payload.correct ? "correct" : "incorrect";
-                return immutable.set(state, [nodeName, action.payload.postingId, "verificationStatus"], status);
+            const {nodeName, postingId, revisionId, correct} = action.payload;
+            const posting = state[nodeName]?.[postingId]?.posting;
+            if (posting && (!revisionId || posting.revisionId === revisionId)) {
+                const status = correct ? "correct" : "incorrect";
+                return immutable.set(state, [nodeName, postingId, "verificationStatus"], status);
             }
             return state;
         }
 
         case "EVENT_HOME_REMOTE_POSTING_VERIFICATION_FAILED": {
-            const nodeName = action.payload.nodeName === action.context.ownerName ? "" : action.payload.nodeName;
-            const posting = state[nodeName]?.[action.payload.postingId]?.posting;
-            if (posting && (!action.payload.revisionId || posting.revisionId === action.payload.revisionId)) {
-                return immutable.set(state, [nodeName, action.payload.postingId, "verificationStatus"], "none");
+            const {nodeName, postingId, revisionId} = action.payload;
+            const posting = state[nodeName]?.[postingId]?.posting;
+            if (posting && (!revisionId || posting.revisionId === revisionId)) {
+                return immutable.set(state, [nodeName, postingId, "verificationStatus"], "none");
             }
             return state;
         }
 
         case "POSTING_REACT": {
-            const {id, negative, emoji, nodeName} = action.payload;
+            let {id, negative, emoji, nodeName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
             if (state[nodeName]?.[id]) {
                 return immutable.set(state, [nodeName, id, "posting", "clientReaction"], {negative, emoji});
             }
@@ -180,7 +203,8 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         }
 
         case "POSTING_REACTION_DELETE": {
-            const {id, nodeName} = action.payload;
+            let {id, nodeName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
             if (state[nodeName]?.[id]) {
                 return immutable.del(state, [nodeName, id, "posting", "clientReaction"]);
             }
@@ -188,7 +212,8 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         }
 
         case "POSTING_REACTION_SET": {
-            const {id, reaction, totals, nodeName} = action.payload;
+            let {id, reaction, totals, nodeName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
             const postingState = state[nodeName]?.[id];
             if (postingState) {
                 const istate = immutable.wrap(state).set([nodeName, id, "posting", "reactions"], totals);
@@ -218,7 +243,8 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         }
 
         case "POSTING_COMMENTS_SET": {
-            const {id, total, nodeName} = action.payload;
+            let {id, total, nodeName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
             if (state[nodeName]?.[id]) {
                 return immutable.set(state, [nodeName, id, "posting", "totalComments"], total);
             }
@@ -268,7 +294,8 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         }
 
         case "POSTING_COMMENTS_SUBSCRIBED": {
-            const {id, subscriptionId, nodeName} = action.payload;
+            let {id, subscriptionId, nodeName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
             if (state[nodeName]?.[id]) {
                 return immutable.set(state, [nodeName, id, "subscriptions", "comments"], subscriptionId);
             }
@@ -276,7 +303,8 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         }
 
         case "POSTING_COMMENTS_UNSUBSCRIBED": {
-            const {id, nodeName} = action.payload;
+            let {id, nodeName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
             if (state[nodeName]?.[id]) {
                 return immutable.set(state, [nodeName, id, "subscriptions", "comments"], null);
             }
@@ -284,8 +312,9 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         }
 
         case "POSTING_COMMENT_ADDED_BLOCKED": {
-            const {id, blockedInstantId, nodeName} = action.payload;
+            let {id, blockedInstantId, nodeName} = action.payload;
 
+            nodeName = absoluteNodeName(nodeName, action.context);
             const postingState = state[nodeName]?.[id];
             if (postingState != null) {
                 const blockedInstants = [
@@ -298,8 +327,9 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         }
 
         case "POSTING_COMMENT_ADDED_UNBLOCKED": {
-            const {id, nodeName} = action.payload;
+            let {id, nodeName} = action.payload;
 
+            nodeName = absoluteNodeName(nodeName, action.context);
             const postingState = state[nodeName]?.[id];
             if (postingState?.posting.blockedInstants != null) {
                 const blockedInstants = postingState.posting.blockedInstants
@@ -311,9 +341,8 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
 
         case "EVENT_HOME_BLOCKED_INSTANT_ADDED": {
             const {blockedInstant: {id, storyType, entryId}} = action.payload;
-            const {ownerName, homeOwnerName} = action.context;
+            const {homeOwnerName: nodeName} = action.context;
 
-            const nodeName = ownerName === homeOwnerName ? "" : homeOwnerName;
             if (nodeName == null || entryId == null) {
                 return state;
             }
@@ -328,9 +357,8 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
 
         case "EVENT_HOME_BLOCKED_INSTANT_DELETED": {
             const {blockedInstant: {id, entryId}} = action.payload;
-            const {ownerName, homeOwnerName} = action.context;
+            const {homeOwnerName: nodeName} = action.context;
 
-            const nodeName = ownerName === homeOwnerName ? "" : homeOwnerName;
             if (nodeName == null || entryId == null) {
                 return state;
             }
@@ -345,9 +373,8 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
 
         case "EVENT_HOME_BLOCKED_BY_USER_ADDED": {
             const {blockedByUser} = action.payload;
-            const {ownerName} = action.context;
 
-            const nodeName = blockedByUser.nodeName === ownerName ? "" : blockedByUser.nodeName;
+            const nodeName = blockedByUser.nodeName;
             if (nodeName == null) {
                 return state;
             }
@@ -371,9 +398,8 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
 
         case "EVENT_HOME_BLOCKED_BY_USER_DELETED": {
             const {blockedByUser} = action.payload;
-            const {ownerName} = action.context;
 
-            const nodeName = blockedByUser.nodeName === ownerName ? "" : blockedByUser.nodeName;
+            const nodeName = blockedByUser.nodeName;
             if (nodeName == null) {
                 return state;
             }
@@ -399,7 +425,8 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         }
 
         case "POSTING_SUBSCRIPTION_SET": {
-            const {id, type, subscriptionId, nodeName} = action.payload;
+            let {id, type, subscriptionId, nodeName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
             if (state[nodeName]?.[id]) {
                 return immutableSetSubscriptionId(state, nodeName, id, type, subscriptionId);
             }
@@ -422,9 +449,9 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             if (total == null) {
                 return state;
             }
-            const postingState = state[""]?.[postingId];
+            const postingState = state[nodeName]?.[postingId];
             const ids = postingState && postingState.posting.ownerName === nodeName
-                ? [{nodeName: "", postingId}]
+                ? [{nodeName, postingId}]
                 : findPostingIdsByRemote(state, nodeName, postingId);
             if (ids.length > 0) {
                 const istate = immutable.wrap(state);

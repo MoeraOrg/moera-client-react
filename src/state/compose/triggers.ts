@@ -34,6 +34,7 @@ import {
 import { postingSet } from "state/postings/actions";
 import { getPostingStory, hasPostingFeedReference } from "state/postings/selectors";
 import { storyAdded, storyUpdated } from "state/stories/actions";
+import { REL_CURRENT } from "util/rel-node-name";
 
 const isConnectionSwitch = (_: ClientState, action: ConnectedToHomeAction) => action.payload.connectionSwitch;
 
@@ -57,7 +58,7 @@ export default [
     trigger(
         "COMPOSE_POST_SUCCEEDED",
         true,
-        (signal: ComposePostSucceededAction) => postingSet(signal.payload.posting, "")
+        (signal: ComposePostSucceededAction) => postingSet(signal.payload.posting, REL_CURRENT)
     ),
     trigger(
         "COMPOSE_POST_SUCCEEDED",

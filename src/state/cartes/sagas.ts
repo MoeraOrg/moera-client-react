@@ -5,7 +5,9 @@ import { Node, NodeApiError } from "api";
 import { Storage } from "storage";
 import { executor } from "state/executor";
 import { CartesLoadAction, cartesLoaded, cartesSet, ClockOffsetWarnAction } from "state/cartes/actions";
+import { WithContext } from "state/action-types";
 import { messageBox } from "state/messagebox/actions";
+import { REL_HOME } from "util/rel-node-name";
 import { now } from "util/misc";
 
 export default [
@@ -13,9 +15,9 @@ export default [
     executor("CLOCK_OFFSET_WARN", "", clockOffsetWarnSaga)
 ];
 
-function* cartesLoadSaga(action: CartesLoadAction) {
+function* cartesLoadSaga(action: WithContext<CartesLoadAction>) {
     try {
-        const {cartesIp, cartes, createdAt} = yield* call(Node.getCartes, action, ":", null, ["node-name-not-set"]);
+        const {cartesIp, cartes, createdAt} = yield* call(Node.getCartes, action, REL_HOME, null, ["node-name-not-set"]);
         Storage.storeCartesData(cartesIp ?? null, cartes);
         yield* put(cartesSet(cartesIp ?? null, cartes, createdAt - now()).causedBy(action));
     } catch (e) {

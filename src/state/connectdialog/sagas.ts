@@ -3,6 +3,7 @@ import i18n from 'i18next';
 
 import { executor } from "state/executor";
 import { Node, NodeApiError } from "api";
+import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import {
     ConnectDialogResetPasswordAction,
@@ -16,7 +17,7 @@ export default [
     executor("CONNECT_DIALOG_RESET_PASSWORD", payload => payload.location, connectDialogResetPasswordSaga)
 ];
 
-function* connectDialogResetPasswordSaga(action: ConnectDialogResetPasswordAction) {
+function* connectDialogResetPasswordSaga(action: WithContext<ConnectDialogResetPasswordAction>) {
     const {location} = action.payload;
     try {
         const hint = yield* call(Node.resetCredentials, action, location, ["credentials.email-not-set"]);

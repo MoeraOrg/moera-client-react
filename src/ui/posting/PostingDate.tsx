@@ -7,6 +7,7 @@ import { getDateFnsLocale } from "i18n";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import Jump from "ui/navigation/Jump";
+import { REL_CURRENT } from "util/rel-node-name";
 import "./PostingDate.css"
 
 interface Props {
@@ -22,7 +23,7 @@ export default function PostingDate({posting, publishedAt}: Props) {
     const unixTime = posting.receiverName ? (posting.receiverCreatedAt ?? posting.createdAt) : publishedAt;
     const date = fromUnixTime(unixTime);
     const originalDeleted = posting.receiverDeletedAt != null;
-    const nodeName = originalDeleted ? "" : (posting.receiverName ?? posting.ownerName);
+    const nodeName = originalDeleted ? REL_CURRENT : (posting.receiverName ?? posting.ownerName);
     const postingId = originalDeleted ? posting.id : (posting.receiverPostingId ?? posting.id);
     return (
         <Jump className="date" nodeName={nodeName} href={`/post/${postingId}`}>{

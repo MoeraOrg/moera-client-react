@@ -10,6 +10,7 @@ import DraftOwner from "ui/draft/DraftOwner";
 import DraftSubject from "ui/draft/DraftSubject";
 import EntryHtml from "ui/entry/EntryHtml";
 import EntryGallery from "ui/entry/EntryGallery";
+import { REL_CURRENT } from "util/rel-node-name";
 import "./ComposePreviewDialog.css";
 
 export default function ComposePreviewDialog() {
@@ -30,8 +31,9 @@ export default function ComposePreviewDialog() {
                             <DraftOwner draft={draft}/>
                         </div>
                         <DraftSubject draft={draft}/>
-                        <EntryHtml className="content" html={draft.body.text} nodeName="" media={draft.media}/>
-                        <EntryGallery nodeName="" media={draft.media ?? null}/>
+                        <EntryHtml className="content" html={draft.body.text} nodeName={REL_CURRENT}
+                                   media={draft.media}/>
+                        <EntryGallery nodeName={REL_CURRENT} media={draft.media ?? null}/>
                     </div>
                 }
             </div>

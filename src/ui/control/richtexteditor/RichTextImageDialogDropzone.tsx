@@ -7,10 +7,9 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { PostingFeatures, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
-import { getNodeRootPage } from "state/node/selectors";
 import { richTextEditorImageCopy, richTextEditorImagesUpload } from "state/richtexteditor/actions";
 import { getSetting } from "state/settings/selectors";
-import { getNamingNameNodeUri } from "state/naming/selectors";
+import { getNamingNameRoot } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { Button, DeleteButton } from "ui/control";
 import RichTextCopyImageDialog, { RichTextCopyImageValues } from "ui/control/richtexteditor/RichTextCopyImageDialog";
@@ -18,10 +17,11 @@ import * as Browser from "ui/browser";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import { urlWithParameters } from "util/url";
 import "./RichTextImageDialogDropzone.css";
+import { RelNodeName } from "util/rel-node-name";
 
 interface Props {
     features: PostingFeatures | null;
-    nodeName: string | null;
+    nodeName: RelNodeName | string;
     forceCompress?: boolean;
     onAdded?: (image: VerifiedMediaFile) => void;
     onDeleted?: (id: string) => void;
@@ -32,8 +32,7 @@ interface Props {
 export default function RichTextImageDialogDropzone({
     features, nodeName, forceCompress = false, onAdded, onDeleted, externalImage, uploadingExternalImage
 }: Props) {
-    const rootPage = useSelector((state: ClientState) =>
-        nodeName ? getNamingNameNodeUri(state, nodeName) : getNodeRootPage(state));
+    const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, nodeName));
     const carte = useSelector(getCurrentViewMediaCarte);
     const compressImages = useSelector((state: ClientState) =>
         getSetting(state, "posting.media.compress.default") as boolean);

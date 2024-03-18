@@ -4,12 +4,13 @@ import { AvatarImage } from "api";
 import Jump from "ui/navigation/Jump";
 import NodeNamePopup from "ui/nodename/NodeNamePopup";
 import { Avatar } from "ui/control/Avatar";
+import { RelNodeName } from "util/rel-node-name";
 
 interface Props {
     ownerName: string;
     ownerFullName?: string | null;
     avatar?: AvatarImage | null;
-    nodeName?: string;
+    nodeName?: RelNodeName | string;
     size: number;
     className?: string;
 }

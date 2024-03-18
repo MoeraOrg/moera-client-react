@@ -6,11 +6,12 @@ import { getFeedWidth } from "state/settings/selectors";
 import EntryImage from "ui/entry/EntryImage";
 import EntryGalleryExpandButton from "ui/entry/EntryGalleryExpandButton";
 import "./EntryGallery.css";
+import { RelNodeName } from "util/rel-node-name";
 
 interface Props {
     postingId?: string;
     commentId?: string | null;
-    nodeName: string | null;
+    nodeName: RelNodeName | string;
     media: MediaAttachment[] | null;
     onCollapse?: () => void;
     onExpand?: () => void;

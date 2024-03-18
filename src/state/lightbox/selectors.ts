@@ -1,9 +1,10 @@
 import { ClientState } from "state/state";
 import { getPosting, isPostingCached } from "state/postings/selectors";
 import { getComment } from "state/detailedposting/selectors";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export function isLightBoxToBeLoaded(state: ClientState) {
-    return state.lightBox.postingId != null && !isPostingCached(state, state.lightBox.postingId);
+    return state.lightBox.postingId != null && !isPostingCached(state, state.lightBox.postingId, REL_CURRENT);
 }
 
 export function isLightBoxShown(state: ClientState) {
@@ -28,7 +29,7 @@ export function getLightBoxMediaId(state: ClientState) {
 
 export function getLightBoxMediaPostingId(state: ClientState) {
     const comment = state.lightBox.commentId != null ? getComment(state, state.lightBox.commentId) : null;
-    const posting = state.lightBox.postingId != null ? getPosting(state, state.lightBox.postingId) : null;
+    const posting = state.lightBox.postingId != null ? getPosting(state, state.lightBox.postingId, REL_CURRENT) : null;
     const media = comment != null ? comment?.media : posting?.media;
     const mediaId = getLightBoxMediaId(state);
     if (media == null || media.length === 0 || mediaId == null) {

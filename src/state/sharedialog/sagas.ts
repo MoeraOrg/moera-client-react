@@ -9,6 +9,7 @@ import {
     ShareDialogPrepareAction,
     SharePageCopyLinkAction
 } from "state/sharedialog/actions";
+import { WithContext } from "state/action-types";
 import { executor } from "state/executor";
 import { getNodeUri } from "state/naming/sagas";
 import { messageBox } from "state/messagebox/actions";
@@ -16,6 +17,7 @@ import { flashBox } from "state/flashbox/actions";
 import * as Browser from "ui/browser";
 import { getWindowSelectionHtml, hasWindowSelection } from "util/ui";
 import { quoteHtml } from "util/html";
+import { absoluteNodeName } from "util/rel-node-name";
 
 export default [
     executor("SHARE_DIALOG_PREPARE", "", shareDialogPrepareSaga),
@@ -38,9 +40,10 @@ function* share(action: ShareDialogPrepareAction, url: string, text: string) {
     yield* put(openShareDialog(text, url).causedBy(action));
 }
 
-function* shareDialogPrepareSaga(action: ShareDialogPrepareAction) {
-    const {nodeName, href} = action.payload;
+function* shareDialogPrepareSaga(action: WithContext<ShareDialogPrepareAction>) {
+    let {nodeName, href} = action.payload;
 
+    nodeName = absoluteNodeName(nodeName, action.context);
     const text = hasWindowSelection() ? (quoteHtml(getWindowSelectionHtml()) ?? "") : "";
 
     const nodeUri = yield* call(getNodeUri, action, nodeName);
@@ -60,9 +63,10 @@ function* shareDialogCopyLinkSaga(action: ShareDialogCopyLinkAction) {
     }
 }
 
-function* sharePageCopyLinkSaga(action: SharePageCopyLinkAction) {
-    const {nodeName, href} = action.payload;
+function* sharePageCopyLinkSaga(action: WithContext<SharePageCopyLinkAction>) {
+    let {nodeName, href} = action.payload;
 
+    nodeName = absoluteNodeName(nodeName, action.context);
     const nodeUri = yield* call(getNodeUri, action, nodeName);
     if (nodeUri == null) {
         yield* put(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName).causedBy(action));

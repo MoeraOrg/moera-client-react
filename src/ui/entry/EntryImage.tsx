@@ -4,20 +4,20 @@ import cx from 'classnames';
 
 import { PrivateMediaFileInfo } from "api";
 import { ClientState } from "state/state";
-import { getNodeRootPage } from "state/node/selectors";
-import { getNamingNameNodeUri } from "state/naming/selectors";
+import { getNamingNameRoot } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { openLightBox } from "state/lightbox/actions";
 import Jump from "ui/navigation/Jump";
 import PreloadedImage from "ui/posting/PreloadedImage";
 import { mediaImagePreview, mediaImageSize, mediaSizes, mediaSources } from "util/media-images";
+import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { urlWithParameters, ut } from "util/url";
 import "./EntryImage.css";
 
 interface Props {
     postingId?: string | null;
     commentId?: string | null;
-    nodeName: string | null;
+    nodeName: RelNodeName | string;
     mediaFile: PrivateMediaFileInfo;
     width?: string | null;
     height?: string | null;
@@ -30,8 +30,7 @@ interface Props {
 export default function EntryImage({
     postingId, commentId, nodeName, mediaFile, width, height, alt, title, flex, count
 }: Props) {
-    const rootPage = useSelector((state: ClientState) =>
-        nodeName ? getNamingNameNodeUri(state, nodeName) : getNodeRootPage(state));
+    const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, nodeName));
     const carte = useSelector(getCurrentViewMediaCarte);
     const dispatch = useDispatch();
 
@@ -45,7 +44,7 @@ export default function EntryImage({
 
     const onNear = () => {
         if (postingId != null) {
-            dispatch(openLightBox(nodeName ?? "", postingId, commentId ?? null, mediaFile.id));
+            dispatch(openLightBox(nodeName ?? REL_CURRENT, postingId, commentId ?? null, mediaFile.id));
         }
     }
 

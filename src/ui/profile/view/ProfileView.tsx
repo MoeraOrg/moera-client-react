@@ -15,6 +15,7 @@ import PageShareButton from "ui/page/PageShareButton";
 import NodeNameView from "ui/profile/view/NodeNameView";
 import EntryHtml from "ui/entry/EntryHtml";
 import { shortGender } from "util/names";
+import { REL_CURRENT } from "util/rel-node-name";
 import "./ProfileView.css";
 
 function EditButton() {
@@ -65,7 +66,7 @@ export default function ProfileView() {
                             <a href={`mailto:${profile.email}`}>{profile.email}</a>
                         </div>
                     }
-                    {profile?.bioHtml && <EntryHtml className="bio" html={profile.bioHtml} nodeName={ownerName}/>}
+                    {profile?.bioHtml && <EntryHtml className="bio" html={profile.bioHtml} nodeName={REL_CURRENT}/>}
                 </div>
             </Page>
         </>

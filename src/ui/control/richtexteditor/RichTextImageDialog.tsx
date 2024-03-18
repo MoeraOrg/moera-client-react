@@ -8,6 +8,7 @@ import { InputField, NumberField, SelectField, SelectFieldChoiceBase } from "ui/
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
 import RichTextImageDialogTabs from "ui/control/richtexteditor/RichTextImageDialogTabs";
 import RichTextImageDialogDropzone from "ui/control/richtexteditor/RichTextImageDialogDropzone";
+import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import "./RichTextImageDialog.css";
 
 type RichTextImageStandardSize = "full" | "large" | "medium" | "small" | "tiny" | "custom";
@@ -67,7 +68,7 @@ export interface RichTextImageValues {
 type Props = {
     features: PostingFeatures | null;
     noMedia?: boolean;
-    nodeName?: string | null;
+    nodeName?: RelNodeName | string;
     forceCompress?: boolean;
     selectedImage?: VerifiedMediaFile | null;
     onAdded?: (image: VerifiedMediaFile) => void;
@@ -90,7 +91,7 @@ const mapPropsToValues = (props: Props): RichTextImageValues => ({
 });
 
 function RichTextImageDialog({
-    features, noMedia = false, nodeName, forceCompress, onAdded, onDeleted, externalImage, uploadingExternalImage
+    features, noMedia = false, nodeName = REL_CURRENT, forceCompress, onAdded, onDeleted, externalImage, uploadingExternalImage
 }: Props) {
     const [showAlign, setShowAlign] = useState<boolean>(false);
     const [showCaption, setShowCaption] = useState<boolean>(false);
@@ -104,8 +105,8 @@ function RichTextImageDialog({
         <>
             {!noMedia && <RichTextImageDialogTabs/>}
             {source === "device" ?
-                <RichTextImageDialogDropzone features={features} nodeName={nodeName ?? null}
-                                             forceCompress={forceCompress} onAdded={onAdded} onDeleted={onDeleted}
+                <RichTextImageDialogDropzone features={features} nodeName={nodeName} forceCompress={forceCompress}
+                                             onAdded={onAdded} onDeleted={onDeleted}
                                              uploadingExternalImage={uploadingExternalImage}
                                              externalImage={externalImage}/>
             :

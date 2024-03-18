@@ -1,5 +1,6 @@
 import { ReactionInfo, ReactionTotalInfo } from "api";
 import { VerificationStatus } from "state/state-types";
+import { RelNodeName } from "util/rel-node-name";
 
 export interface ReactionsDialogTabsState {
     loading: boolean;
@@ -10,7 +11,7 @@ export interface ReactionsDialogTabsState {
 
 export interface ReactionsDialogState {
     show: boolean;
-    nodeName: string | null;
+    nodeName: RelNodeName | string;
     postingId: string | null;
     commentId: string | null;
     negative: boolean;

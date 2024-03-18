@@ -3,6 +3,7 @@ import { LocationInfo } from "location/LocationInfo";
 import { getLightBoxCommentId, getLightBoxMediaId, getLightBoxPostingId } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
 import { atOwner } from "util/names";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
     const postingId = getLightBoxPostingId(state);
@@ -17,7 +18,7 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     if (mediaId != null) {
         info = info.withParameter("media", mediaId);
     }
-    const posting = getPosting(state, postingId);
+    const posting = getPosting(state, postingId, REL_CURRENT);
     const heading = posting != null ? posting.heading : "";
     return info.withTitle(heading + atOwner(state));
 }

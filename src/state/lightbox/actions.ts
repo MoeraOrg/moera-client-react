@@ -1,13 +1,14 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
+import { RelNodeName } from "util/rel-node-name";
 
 export type OpenLightBoxAction = ActionWithPayload<"OPEN_LIGHT_BOX", {
-    nodeName: string;
+    nodeName: RelNodeName | string;
     postingId: string;
     commentId: string | null;
     mediaId: string | null;
 }>;
 export const openLightBox = (
-    nodeName: string, postingId: string, commentId: string | null, mediaId: string | null
+    nodeName: RelNodeName | string, postingId: string, commentId: string | null, mediaId: string | null
 ): OpenLightBoxAction =>
     actionWithPayload("OPEN_LIGHT_BOX", {nodeName, postingId, commentId, mediaId});
 
@@ -29,10 +30,10 @@ export const lightBoxMediaPostingLoad = (): LightBoxMediaPostingLoadAction =>
     actionWithoutPayload("LIGHT_BOX_MEDIA_POSTING_LOAD");
 
 export type LightBoxCopyLinkAction = ActionWithPayload<"LIGHT_BOX_COPY_LINK", {
-    nodeName: string;
+    nodeName: RelNodeName | string;
     url: string;
 }>;
-export const lightBoxCopyLink = (nodeName: string, url: string): LightBoxCopyLinkAction =>
+export const lightBoxCopyLink = (nodeName: RelNodeName | string, url: string): LightBoxCopyLinkAction =>
     actionWithPayload("LIGHT_BOX_COPY_LINK", {nodeName, url});
 
 export type LightBoxAnyAction =

@@ -5,6 +5,7 @@ import { openLightBox } from "state/lightbox/actions";
 import { getDetailedPosting, getDetailedPostingId, getFocusedCommentId } from "state/detailedposting/selectors";
 import { LocationInfo } from "location/LocationInfo";
 import { atOwner } from "util/names";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     const postingId = dstInfo.directories[1];
@@ -12,7 +13,7 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     const actions: ClientAction[] = [goToPosting(postingId, commentId)];
     const mediaId = dstInfo.parameters["media"];
     if (mediaId != null) {
-        actions.push(openLightBox("", postingId, commentId ?? null, mediaId));
+        actions.push(openLightBox(REL_CURRENT, postingId, commentId ?? null, mediaId));
     }
     return actions;
 }

@@ -17,10 +17,11 @@ import { RichTextValue } from "ui/control/richtexteditor";
 import UploadedImage from "ui/control/richtexteditor/UploadedImage";
 import AttachedImage from "ui/control/richtexteditor/AttachedImage";
 import { mediaHashesExtract } from "util/media-images";
+import { RelNodeName } from "util/rel-node-name";
 
 interface Props {
     value: RichTextValue;
-    nodeName: string | null;
+    nodeName: RelNodeName | string;
     selectedImage: PrivateMediaFileInfo | null;
     selectImage: (image: VerifiedMediaFile | null) => void;
     onDeleted?: (id: string) => void;

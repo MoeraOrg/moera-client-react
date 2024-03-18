@@ -15,6 +15,7 @@ import {
     sheriffOrderDialogSubmitFailed,
     sheriffOrderDialogSubmitted
 } from "state/sherifforderdialog/actions";
+import { REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("SHERIFF_ORDER_DIALOG_SUBMIT", "", sheriffOrderDialogSubmitSaga),
@@ -38,7 +39,7 @@ function* sheriffOrderDialogSubmitSaga(action: WithContext<SheriffOrderDialogSub
 
     try {
         if (isSheriff) {
-            yield* call(Node.createRemoteSheriffOrder, action, ":", nodeName, {
+            yield* call(Node.createRemoteSheriffOrder, action, REL_HOME, nodeName, {
                 delete: false, feedName, postingId, commentId, category: "visibility" as const, reasonCode,
                 reasonDetails
             });
@@ -62,7 +63,7 @@ function* sheriffOrderDeleteSaga(action: WithContext<SheriffOrderDeleteAction>) 
     const {nodeName, feedName, postingId, commentId} = action.payload.target;
 
     try {
-        yield* call(Node.createRemoteSheriffOrder, action, ":", nodeName, {
+        yield* call(Node.createRemoteSheriffOrder, action, REL_HOME, nodeName, {
             delete: true, feedName, postingId, commentId, category: "visibility" as const
         });
         yield* put(flashBox(i18n.t("sheriff-order-sent")).causedBy(action));

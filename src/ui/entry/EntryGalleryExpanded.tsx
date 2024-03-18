@@ -10,10 +10,11 @@ import EntryGallery from "ui/entry/EntryGallery";
 import EntryHtml from "ui/entry/EntryHtml";
 import PostingReactions from "ui/posting/PostingReactions";
 import EntryGalleryButtons from "ui/entry/EntryGalleryButtons";
+import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import "./EntryGalleryExpanded.css";
 
 interface Props {
-    nodeName: string | null;
+    nodeName: RelNodeName | string;
     postingId: string;
     media: MediaAttachment[] | null;
     onCollapse: () => void;
@@ -21,7 +22,7 @@ interface Props {
 
 export default function EntryGalleryExpanded({nodeName, postingId, media, onCollapse}: Props) {
     const connectedToHome = useSelector(isConnectedToHome);
-    const mediaPostings = useSelector((state: ClientState) => getMediaPostings(state, media), deepEqual);
+    const mediaPostings = useSelector((state: ClientState) => getMediaPostings(state, nodeName, media), deepEqual);
 
     return (
         <div id="posting-gallery" className="gallery-expanded">
@@ -38,7 +39,7 @@ export default function EntryGalleryExpanded({nodeName, postingId, media, onColl
                         {posting &&
                             <>
                                 <EntryHtml className="content" postingId={posting.id} html={posting.body.text}
-                                           nodeName=""/>
+                                           nodeName={REL_CURRENT}/>
                                 <div className="reactions-line">
                                     <PostingReactions postingId={posting.id} postingReceiverName={posting.receiverName}
                                                       reactions={posting.reactions}/>
@@ -53,7 +54,9 @@ export default function EntryGalleryExpanded({nodeName, postingId, media, onColl
     );
 }
 
-function getMediaPostings(state: ClientState, media: MediaAttachment[] | null): Map<string, PostingInfo> {
+function getMediaPostings(
+    state: ClientState, nodeName: RelNodeName | string, media: MediaAttachment[] | null
+): Map<string, PostingInfo> {
     if (media == null || media.length === 0) {
         return new Map();
     }
@@ -61,7 +64,7 @@ function getMediaPostings(state: ClientState, media: MediaAttachment[] | null): 
         .filter(ma => !ma.embedded)
         .map(ma => ma.media)
         .filter((m): m is PrivateMediaFileInfo => m != null)
-        .map(m => [m.id, getPosting(state, m.postingId ?? null)])
+        .map(m => [m.id, getPosting(state, m.postingId ?? null, nodeName)])
         .filter((r): r is [string, PostingInfo] => r[1] != null)
     );
 }

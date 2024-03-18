@@ -394,7 +394,7 @@ def generate_sagas(api: Any, structs: dict[str, Structure], afile: TextIO) -> No
             if 'function' not in request:
                 continue
 
-            params = '    caller: ClientAction | null, nodeName: string | null'
+            params = '    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string'
             tail_params = ''
             url_params: dict[str, str] = {}
             flag_name: str | None = None
@@ -540,6 +540,8 @@ import { callApi, CallApiResult, ErrorFilter } from "api/node/call";
 import * as API from "api/node/api-types";
 import { ProgressHandler } from 'api/fetcher';
 import { ClientAction } from "state/action";
+import { WithContext } from "state/action-types";
+import { RelNodeName } from "util/rel-node-name";
 import { urlWithParameters, ut } from "util/url";
 import { commaSeparatedFlags } from "util/misc";
 '''

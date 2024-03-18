@@ -2,6 +2,7 @@ import * as immutable from 'object-path-immutable';
 
 import { ReactionsDialogState } from "state/reactionsdialog/state";
 import { ClientAction } from "state/action";
+import { REL_CURRENT } from "util/rel-node-name";
 
 const emptyReactions = {
     loading: false,
@@ -12,7 +13,7 @@ const emptyReactions = {
 
 const initialState = {
     show: false,
-    nodeName: null,
+    nodeName: REL_CURRENT,
     postingId: null,
     commentId: null,
     negative: false,

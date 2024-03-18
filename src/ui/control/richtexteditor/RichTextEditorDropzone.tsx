@@ -15,6 +15,7 @@ import RichTextEditorImageList from "ui/control/richtexteditor/RichTextEditorIma
 import RichTextCopyImageDialog, { RichTextCopyImageValues } from "ui/control/richtexteditor/RichTextCopyImageDialog";
 import * as Browser from "ui/browser";
 import "./RichTextEditorDropzone.css";
+import { RelNodeName } from "util/rel-node-name";
 
 type UploadStatus = "loading" | "success" | "failure";
 
@@ -62,7 +63,7 @@ interface Props {
     value: RichTextValue;
     features: PostingFeatures | null;
     hiding?: boolean;
-    nodeName: string | null;
+    nodeName: RelNodeName | string;
     forceCompress?: boolean;
     selectedImage: PrivateMediaFileInfo | null;
     selectImage: (image: VerifiedMediaFile | null) => void;

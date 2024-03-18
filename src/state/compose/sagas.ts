@@ -32,6 +32,7 @@ import { executor } from "state/executor";
 import { WithContext } from "state/action-types";
 import { flashBox } from "state/flashbox/actions";
 import { mutuallyIntroduced } from "state/init-selectors";
+import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("COMPOSE_POSTING_LOAD", "", composePostingLoadSaga, mutuallyIntroduced),
@@ -54,11 +55,12 @@ function* composePostingLoadSaga(action: WithContext<ComposePostingLoadAction>) 
     }
 
     try {
-        const drafts = yield* call(Node.getDrafts, action, ":", "posting-update" as const, action.context.ownerName, id);
+        const drafts = yield* call(Node.getDrafts, action, REL_HOME, "posting-update" as const,
+            action.context.ownerName, id);
         if (drafts.length > 0) {
             yield* put(composeDraftLoaded(drafts[0]).causedBy(action));
         }
-        const posting = yield* call(Node.getPosting, action, "", id, true, ["posting.not-found"]);
+        const posting = yield* call(Node.getPosting, action, REL_CURRENT, id, true, ["posting.not-found"]);
         yield* put(composePostingLoaded(posting).causedBy(action));
     } catch (e) {
         yield* put(composePostingLoadFailed().causedBy(action));
@@ -66,22 +68,22 @@ function* composePostingLoadSaga(action: WithContext<ComposePostingLoadAction>) 
     }
 }
 
-function* composePostSaga(action: ComposePostAction) {
+function* composePostSaga(action: WithContext<ComposePostAction>) {
     const {id, postingText, prevState} = action.payload;
 
     try {
         let posting;
         if (id == null) {
-            posting = yield* call(Node.createPosting, action, "", postingText);
+            posting = yield* call(Node.createPosting, action, REL_CURRENT, postingText);
         } else {
-            posting = yield* call(Node.updatePosting, action, "", id, postingText);
+            posting = yield* call(Node.updatePosting, action, REL_CURRENT, id, postingText);
         }
         yield* put(composePostSucceeded(posting).causedBy(action));
 
         if (id != null) {
             const hideComments = postingText.commentOperations?.view === "private";
             if (hideComments !== prevState.hideComments) {
-                yield* call(Node.updateAllComments, action, "", id, {
+                yield* call(Node.updateAllComments, action, REL_CURRENT, id, {
                     seniorOperations: {
                         view: postingText.commentOperations?.view
                     }
@@ -94,7 +96,7 @@ function* composePostSaga(action: ComposePostAction) {
     }
 }
 
-function* composeDraftLoadSaga(action: ComposeDraftLoadAction) {
+function* composeDraftLoadSaga(action: WithContext<ComposeDraftLoadAction>) {
     const id = yield* select(getComposeDraftId);
     if (id == null) {
         yield* put(composeDraftLoadFailed().causedBy(action));
@@ -102,7 +104,7 @@ function* composeDraftLoadSaga(action: ComposeDraftLoadAction) {
     }
 
     try {
-        const draft = yield* call(Node.getDraft, action, ":", id, ["draft.not-found"]);
+        const draft = yield* call(Node.getDraft, action, REL_HOME, id, ["draft.not-found"]);
         yield* put(composeDraftLoaded(draft).causedBy(action));
         yield* put(composeDraftListItemSet(id, draft).causedBy(action));
     } catch (e) {
@@ -115,15 +117,15 @@ function* composeDraftLoadSaga(action: ComposeDraftLoadAction) {
     }
 }
 
-function* composeDraftSaveSaga(action: ComposeDraftSaveAction) {
+function* composeDraftSaveSaga(action: WithContext<ComposeDraftSaveAction>) {
     const {draftId, draftText} = action.payload;
 
     try {
         let draft;
         if (draftId == null) {
-            draft = yield* call(Node.createDraft, action, ":", draftText);
+            draft = yield* call(Node.createDraft, action, REL_HOME, draftText);
         } else {
-            draft = yield* call(Node.updateDraft, action, ":", draftId, draftText);
+            draft = yield* call(Node.updateDraft, action, REL_HOME, draftId, draftText);
         }
         if (draftText.receiverPostingId == null) {
             yield* put(composeDraftListItemSet(draft.id, draft).causedBy(action));
@@ -135,7 +137,7 @@ function* composeDraftSaveSaga(action: ComposeDraftSaveAction) {
     }
 }
 
-function* composeDraftDeleteSaga(action: ComposeDraftDeleteAction) {
+function* composeDraftDeleteSaga(action: WithContext<ComposeDraftDeleteAction>) {
     const {draftId, editing} = yield* select(state => ({
         draftId: getComposeDraftId(state),
         editing: isComposePostingEditing(state)
@@ -144,10 +146,10 @@ function* composeDraftDeleteSaga(action: ComposeDraftDeleteAction) {
         return;
     }
     if (!editing) {
-        yield* call(Node.deleteDraft, action, ":", draftId, ["draft.not-found"]);
+        yield* call(Node.deleteDraft, action, REL_HOME, draftId, ["draft.not-found"]);
         yield* put(composeDraftListItemDeleted(draftId, true).causedBy(action));
     } else {
-        yield* call(Node.deleteDraft, action, ":", draftId, ["draft.not-found"]);
+        yield* call(Node.deleteDraft, action, REL_HOME, draftId, ["draft.not-found"]);
     }
 
 }
@@ -159,7 +161,7 @@ function* composeDraftListLoadSaga(action: WithContext<ComposeDraftListLoadActio
     }
 
     try {
-        const drafts = yield* call(Node.getDrafts, action, ":", "new-posting" as const, action.context.ownerName);
+        const drafts = yield* call(Node.getDrafts, action, REL_HOME, "new-posting" as const, action.context.ownerName);
         yield* put(composeDraftListLoaded(drafts).causedBy(action));
     } catch (e) {
         yield* put(composeDraftListLoadFailed().causedBy(action));
@@ -167,20 +169,20 @@ function* composeDraftListLoadSaga(action: WithContext<ComposeDraftListLoadActio
     }
 }
 
-function* composeDraftListItemReloadSaga(action: ComposeDraftListItemReloadAction) {
+function* composeDraftListItemReloadSaga(action: WithContext<ComposeDraftListItemReloadAction>) {
     try {
-        const draft = yield* call(Node.getDraft, action, ":", action.payload.id, ["draft.not-found"]);
+        const draft = yield* call(Node.getDraft, action, REL_HOME, action.payload.id, ["draft.not-found"]);
         yield* put(composeDraftListItemSet(draft.id, draft).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
     }
 }
 
-function* composeDraftListItemDeleteSaga(action: ComposeDraftListItemDeleteAction) {
+function* composeDraftListItemDeleteSaga(action: WithContext<ComposeDraftListItemDeleteAction>) {
     const {id, resetForm} = action.payload;
 
     try {
-        yield* call(Node.deleteDraft, action, ":", id, ["draft.not-found"]);
+        yield* call(Node.deleteDraft, action, REL_HOME, id, ["draft.not-found"]);
         yield* put(composeDraftListItemDeleted(id, resetForm).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError) {
@@ -191,14 +193,14 @@ function* composeDraftListItemDeleteSaga(action: ComposeDraftListItemDeleteActio
     }
 }
 
-function* composeUpdateDraftDeleteSaga(action: ComposeUpdateDraftDeleteAction) {
+function* composeUpdateDraftDeleteSaga(action: WithContext<ComposeUpdateDraftDeleteAction>) {
     const id = yield* select(getComposeDraftId);
     if (id == null) {
         return;
     }
 
     try {
-        yield* call(Node.deleteDraft, action, ":", id, ["draft.not-found"]);
+        yield* call(Node.deleteDraft, action, REL_HOME, id, ["draft.not-found"]);
         yield* put(composeDraftUnset(action.payload.resetForm).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));

@@ -26,6 +26,7 @@ import { openBlockDialog } from "state/blockdialog/actions";
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
 import * as Browser from "ui/browser";
+import { REL_CURRENT } from "util/rel-node-name";
 
 interface Props {
     nodeName: string;
@@ -62,7 +63,8 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
 
     const onCopyLink = () => dispatch(commentCopyLink(comment.id, postingId));
 
-    const onCopyText = () => dispatch(entryCopyText(comment.body, "ask", receiverName ?? "", comment.media ?? null));
+    const onCopyText = () =>
+        dispatch(entryCopyText(comment.body, "ask", receiverName ?? REL_CURRENT, comment.media ?? null));
 
     const onShare = () => {
         const href = `/post/${postingId}?comment=${comment.id}`;
@@ -138,21 +140,21 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
         <DropdownMenuItems items={[
             {
                 title: t("copy-link"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onCopyLink,
                 show: true
             },
             {
                 title: t("copy-text"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onCopyText,
                 show: true
             },
             {
                 title: t("share-ellipsis"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onShare,
                 show: true
@@ -162,21 +164,21 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
             },
             {
                 title: t("edit-ellipsis"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onEdit,
                 show: commentEditable,
             },
             {
                 title: t("view-source"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onViewSource,
                 show: true
             },
             {
                 title: t("delete"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onDelete,
                 show: commentDeletable
@@ -186,21 +188,21 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
             },
             {
                 title: t("hide"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onHide,
                 show: hideable
             },
             {
                 title: t("unhide"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onShow,
                 show: !hideable && unhideable
             },
             {
                 title: t("kick-ellipsis"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onBlockDialog,
                 show: comment.ownerName !== homeOwnerName
@@ -210,21 +212,21 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
             },
             {
                 title: t("hide-in-google-play"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onHideInGooglePlay,
                 show: googlePlaySheriff && googlePlayGoverned && !googlePlayPostingProhibited && !googlePlayProhibited
             },
             {
                 title: t("unhide-in-google-play"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onUnhideInGooglePlay,
                 show: googlePlaySheriff && googlePlayGoverned && !googlePlayPostingProhibited && googlePlayProhibited
             },
             {
                 title: t("report-sheriff-ellipsis"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onHideInGooglePlay,
                 show: Browser.isAndroidGooglePlay() && !googlePlaySheriff

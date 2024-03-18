@@ -13,6 +13,7 @@ import {
     askDialogSendFailed,
     askDialogSent
 } from "state/askdialog/actions";
+import { REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("ASK_DIALOG_LOAD", payload => payload.nodeName, askDialogLoadSaga),
@@ -37,10 +38,10 @@ function* askDialogLoadSaga(action: WithContext<AskDialogLoadAction>) {
     }
 }
 
-function* askDialogSendSaga(action: AskDialogSendAction) {
+function* askDialogSendSaga(action: WithContext<AskDialogSendAction>) {
     const {nodeName, subject, friendGroupId, message} = action.payload;
     try {
-        yield* call(Node.askRemoteNode, action, ":", nodeName, {subject, friendGroupId, message});
+        yield* call(Node.askRemoteNode, action, REL_HOME, nodeName, {subject, friendGroupId, message});
         yield* put(askDialogSent(nodeName).causedBy(action));
     } catch (e) {
         yield* put(askDialogSendFailed(nodeName).causedBy(action));

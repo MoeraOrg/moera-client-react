@@ -1,5 +1,8 @@
 import { ClientState } from "state/state";
 import { NameState } from "state/naming/state";
+import { getNodeRootPage } from "state/node/selectors";
+import { getHomeRootPage } from "state/home/selectors";
+import { RelNodeName } from "util/rel-node-name";
 import { now } from "util/misc";
 
 const USED_NAME_RELOAD_PERIOD = 6 * 60 * 60;
@@ -34,4 +37,10 @@ export function getNamingNameDetails(state: ClientState, name?: string | null): 
 export function getNamingNameNodeUri(state: ClientState, name?: string | null): string | null {
     const details = getNamingNameDetails(state, name);
     return details.loaded && details.nodeUri != null ? details.nodeUri : null;
+}
+
+export function getNamingNameRoot(state: ClientState, nodeName: RelNodeName | string): string | null {
+    return nodeName instanceof RelNodeName
+        ? (nodeName.isCurrentNode() ? getNodeRootPage(state) : getHomeRootPage(state))
+        : getNamingNameNodeUri(state, nodeName);
 }

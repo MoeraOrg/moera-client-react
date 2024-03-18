@@ -11,6 +11,7 @@ import {
 } from "state/friendgroupsdialog/actions";
 import { friendGroupAdded, friendshipUpdated } from "state/people/actions";
 import { getHomeFriendsId } from "state/home/selectors";
+import { REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("NODE_CHANGE_FRIEND_GROUPS", payload => payload.nodeName, nodeChangeFriendGroupsSaga)
@@ -32,14 +33,14 @@ function* nodeChangeFriendGroupsSaga(action: WithContext<NodeChangeFriendGroupsA
             if (!addedGroupTitles[i]) {
                 continue;
             }
-            const group = yield* call(Node.createFriendGroup, action, ":",
+            const group = yield* call(Node.createFriendGroup, action, REL_HOME,
                 {title: addedGroupTitles[i], operations: {view: addedGroupView[i]}});
             added.push(group);
             if (addedGroups.includes(i)) {
                 allGroups.push({id: group.id, operations: {view}});
             }
         }
-        const friends = yield* call(Node.updateFriends, action, ":", [{nodeName, groups: allGroups}]);
+        const friends = yield* call(Node.updateFriends, action, REL_HOME, [{nodeName, groups: allGroups}]);
         yield* put(closeFriendGroupsDialog().causedBy(action));
         if (friends.length > 0) {
             yield* put(friendshipUpdated(friends[0]).causedBy(action));

@@ -6,6 +6,7 @@ import RichTextArea, { RichTextAreaProps } from "ui/control/richtexteditor/RichT
 import RichTextEditorPanel from "ui/control/richtexteditor/RichTextEditorPanel";
 import RichTextEditorDropzone from "ui/control/richtexteditor/RichTextEditorDropzone";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
+import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { arrayMove } from "util/misc";
 import "./RichTextEditor.css";
 
@@ -14,7 +15,7 @@ type Props = {
     hidingPanel?: boolean;
     value: RichTextValue;
     features: PostingFeatures | null;
-    nodeName?: string | null;
+    nodeName?: RelNodeName | string;
     forceImageCompress?: boolean;
     onChange?: (value: RichTextValue) => void;
     onUrls?: (urls: string[]) => void;
@@ -23,7 +24,7 @@ type Props = {
 
 export function RichTextEditor({
     name, value, features, rows, maxHeight, placeholder, className, autoFocus, autoComplete, disabled, smileysEnabled,
-    hidingPanel, format, nodeName, forceImageCompress, onKeyDown, onChange, onBlur, onUrls, noMedia
+    hidingPanel, format, nodeName = REL_CURRENT, forceImageCompress, onKeyDown, onChange, onBlur, onUrls, noMedia
 }: Props) {
     const panel = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);

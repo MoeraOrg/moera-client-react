@@ -11,11 +11,12 @@ import { VerifiedMediaFile } from "api";
 import { openImageEditDialog } from "state/imageeditdialog/actions";
 import { DropdownMenu } from "ui/control";
 import AttachedImage from "ui/control/richtexteditor/AttachedImage";
+import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import "./UploadedImage.css";
 
 interface Props {
     media: VerifiedMediaFile;
-    nodeName: string | null;
+    nodeName: RelNodeName | string;
     dragged?: boolean | null;
     showMenu?: boolean | null;
     onDelete?: () => void;
@@ -37,8 +38,8 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
                 <DropdownMenu items={[
                     {
                         title: t("edit-ellipsis"),
-                        nodeName: "",
-                        href: null,
+                        nodeName: REL_CURRENT,
+                        href: "/",
                         onClick: () => dispatch(openImageEditDialog(nodeName, media)),
                         show: media.postingId != null
                     },
@@ -47,8 +48,8 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
                     },
                     {
                         title: t("delete"),
-                        nodeName: "",
-                        href: null,
+                        nodeName: REL_CURRENT,
+                        href: "/",
                         onClick: onDelete!,
                         show: onDelete != null
                     }

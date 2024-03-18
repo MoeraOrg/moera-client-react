@@ -55,6 +55,7 @@ import { PostingDeletedAction, postingSet, PostingSetAction } from "state/postin
 import { getPostingMoment } from "state/postings/selectors";
 import { isAtNode } from "state/node/selectors";
 import { CommentAddedEvent, CommentReactionsChangedEvent, CommentUpdatedEvent, EventAction } from "api/events";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export default [
     trigger("GO_TO_PAGE", conj(isAtDetailedPostingPage, isDetailedPostingToBeLoaded), detailedPostingLoad),
@@ -65,7 +66,7 @@ export default [
     trigger(
         "DETAILED_POSTING_LOADED",
         true,
-        (signal: DetailedPostingLoadedAction) => postingSet(signal.payload.posting, "")
+        (signal: DetailedPostingLoadedAction) => postingSet(signal.payload.posting, REL_CURRENT)
     ),
     trigger(
         "POSTING_SET",

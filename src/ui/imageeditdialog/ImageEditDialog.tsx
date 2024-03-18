@@ -4,9 +4,8 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import { getNamingNameNodeUri } from "state/naming/selectors";
+import { getNamingNameRoot } from "state/naming/selectors";
 import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
-import { getNodeRootPage } from "state/node/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ExtPostingInfo } from "state/postings/state";
@@ -37,11 +36,7 @@ function ImageEditDialogInner(props: Props) {
     const {posting, smileysEnabled, resetForm} = props;
 
     const media = useSelector((state: ClientState) => state.imageEditDialog.media);
-    const rootPage = useSelector(
-        (state: ClientState) => state.imageEditDialog.nodeName
-            ? getNamingNameNodeUri(state, state.imageEditDialog.nodeName)
-            : getNodeRootPage(state)
-    );
+    const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, state.imageEditDialog.nodeName));
     const carte = useSelector(getCurrentViewMediaCarte);
     const loading = useSelector((state: ClientState) => state.imageEditDialog.loading);
     const saving = useSelector((state: ClientState) => state.imageEditDialog.saving);
@@ -112,7 +107,7 @@ export default function ImageEditDialog() {
     const homeOwnerName = useSelector(getHomeOwnerName);
     const homeOwnerFullName = useSelector(getHomeOwnerFullName);
     const posting = useSelector((state: ClientState) =>
-        getPosting(state, state.imageEditDialog.media?.postingId ?? null));
+        getPosting(state, state.imageEditDialog.media?.postingId ?? null, state.imageEditDialog.nodeName));
     const smileysEnabled = useSelector((state: ClientState) => getSetting(state, "posting.smileys.enabled") as boolean);
 
     return <ImageEditDialogOuter homeOwnerName={homeOwnerName} homeOwnerFullName={homeOwnerFullName} posting={posting}

@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { LinkPreview, MediaAttachment } from "api";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
 import "./EntryLinkPreviews.css";
+import { RelNodeName } from "util/rel-node-name";
 
 interface Props {
-    nodeName: string | null;
+    nodeName: RelNodeName | string;
     linkPreviews: (LinkPreview | null | undefined)[] | null | undefined;
     limit?: number;
     small?: boolean | null;

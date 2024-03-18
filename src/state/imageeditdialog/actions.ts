@@ -1,12 +1,13 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { PostingText, PrivateMediaFileInfo } from "api";
+import { RelNodeName } from "util/rel-node-name";
 
 export type OpenImageEditDialogAction = ActionWithPayload<"OPEN_IMAGE_EDIT_DIALOG", {
-    nodeName: string | null;
+    nodeName: RelNodeName | string;
     media: PrivateMediaFileInfo;
 }>;
 export const openImageEditDialog = (
-    nodeName: string | null, media: PrivateMediaFileInfo
+    nodeName: RelNodeName | string, media: PrivateMediaFileInfo
 ): OpenImageEditDialogAction =>
     actionWithPayload("OPEN_IMAGE_EDIT_DIALOG", {nodeName, media});
 

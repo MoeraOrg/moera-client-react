@@ -39,7 +39,7 @@ export default function BlockingDetailsDialog() {
         <ModalDialog title={t(!by ? "details-blocking-name" : "details-blocking-by-name", {name})} loading={loading}
                      onClose={onClose}>
             <div className="modal-body">
-                {remotePostingId != null &&
+                {(remoteNodeName != null && remotePostingId != null) &&
                     <p>
                         <strong>{t("in-post")}: </strong>
                         <Jump nodeName={remoteNodeName} href={`/post/${remotePostingId}`}>
@@ -66,7 +66,7 @@ export default function BlockingDetailsDialog() {
                         </p>
                         <strong>{t("blocking-reason")}:</strong>
                         <br/>
-                        {reason ?
+                        {(reason && nodeName != null) ?
                             <EntryHtml html={reason} nodeName={nodeName}/>
                         :
                             <p>{t("not-specified")}</p>

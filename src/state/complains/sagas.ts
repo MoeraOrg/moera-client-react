@@ -4,6 +4,7 @@ import { executor } from "state/executor";
 import { homeIntroduced } from "state/init-selectors";
 import { Node, SheriffComplainStatus } from "api";
 import { ClientState } from "state/state";
+import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import {
     ComplainsComplainsLoadAction,
@@ -11,15 +12,19 @@ import {
     complainsComplainsLoadFailed,
     ComplainsDecisionPostAction,
     complainsDecisionPosted,
-    complainsDecisionPostFailed, ComplainsFutureSliceLoadAction,
+    complainsDecisionPostFailed,
+    ComplainsFutureSliceLoadAction,
     complainsFutureSliceLoadFailed,
-    complainsFutureSliceSet, ComplainsGroupLoadAction,
+    complainsFutureSliceSet,
+    ComplainsGroupLoadAction,
     complainsGroupLoaded,
-    complainsGroupLoadFailed, ComplainsPastSliceLoadAction,
+    complainsGroupLoadFailed,
+    ComplainsPastSliceLoadAction,
     complainsPastSliceLoadFailed,
     complainsPastSliceSet
 } from "state/complains/actions";
 import { getActiveComplainGroupId } from "state/complains/selectors";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export default [
     executor("COMPLAINS_PAST_SLICE_LOAD", "", complainsPastSliceLoadSaga, homeIntroduced),
@@ -29,7 +34,7 @@ export default [
     executor("COMPLAINS_DECISION_POST", payload => payload.groupId, complainsDecisionPostSaga)
 ];
 
-function* complainsPastSliceLoadSaga(action: ComplainsPastSliceLoadAction) {
+function* complainsPastSliceLoadSaga(action: WithContext<ComplainsPastSliceLoadAction>) {
     const {after, inboxOnly} = yield* select((state: ClientState) => ({
         after: state.complains.after,
         inboxOnly: state.complains.inboxOnly
@@ -37,7 +42,7 @@ function* complainsPastSliceLoadSaga(action: ComplainsPastSliceLoadAction) {
     const status: SheriffComplainStatus | null = inboxOnly ? "prepared" : null;
 
     try {
-        const slice = yield* call(Node.getSheriffComplaintGroupsSlice, action, "", null, after, 20, status);
+        const slice = yield* call(Node.getSheriffComplaintGroupsSlice, action, REL_CURRENT, null, after, 20, status);
         yield* put(complainsPastSliceSet(slice.groups, slice.before, slice.after, slice.total, slice.totalInPast,
             slice.totalInFuture).causedBy(action));
     } catch (e) {
@@ -46,7 +51,7 @@ function* complainsPastSliceLoadSaga(action: ComplainsPastSliceLoadAction) {
     }
 }
 
-function* complainsFutureSliceLoadSaga(action: ComplainsFutureSliceLoadAction) {
+function* complainsFutureSliceLoadSaga(action: WithContext<ComplainsFutureSliceLoadAction>) {
     const {before, inboxOnly} = yield* select((state: ClientState) => ({
         before: state.complains.before,
         inboxOnly: state.complains.inboxOnly
@@ -54,7 +59,7 @@ function* complainsFutureSliceLoadSaga(action: ComplainsFutureSliceLoadAction) {
     const status: SheriffComplainStatus | null = inboxOnly ? "prepared" : null;
 
     try {
-        const slice = yield* call(Node.getSheriffComplaintGroupsSlice, action, "", before, null, 20, status);
+        const slice = yield* call(Node.getSheriffComplaintGroupsSlice, action, REL_CURRENT, before, null, 20, status);
         yield* put(complainsFutureSliceSet(
             slice.groups, slice.before, slice.after, slice.total, slice.totalInPast, slice.totalInFuture
         ).causedBy(action));
@@ -64,13 +69,13 @@ function* complainsFutureSliceLoadSaga(action: ComplainsFutureSliceLoadAction) {
     }
 }
 
-function* complainsGroupLoadSaga(action: ComplainsGroupLoadAction) {
+function* complainsGroupLoadSaga(action: WithContext<ComplainsGroupLoadAction>) {
     const id = yield* select(getActiveComplainGroupId);
     if (id == null) {
         return;
     }
     try {
-        const group = yield* call(Node.getSheriffComplaintGroup, action, "", id);
+        const group = yield* call(Node.getSheriffComplaintGroup, action, REL_CURRENT, id);
         yield* put(complainsGroupLoaded(group).causedBy(action));
     } catch (e) {
         yield* put(complainsGroupLoadFailed(id).causedBy(action));
@@ -78,13 +83,13 @@ function* complainsGroupLoadSaga(action: ComplainsGroupLoadAction) {
     }
 }
 
-function* complainsComplainsLoadSaga(action: ComplainsComplainsLoadAction) {
+function* complainsComplainsLoadSaga(action: WithContext<ComplainsComplainsLoadAction>) {
     const id = yield* select(getActiveComplainGroupId);
     if (id == null) {
         return;
     }
     try {
-        const complains = yield* call(Node.getSheriffComplaintsByGroup, action, "", id);
+        const complains = yield* call(Node.getSheriffComplaintsByGroup, action, REL_CURRENT, id);
         yield* put(complainsComplainsLoaded(id, complains).causedBy(action));
     } catch (e) {
         yield* put(complainsComplainsLoadFailed(id).causedBy(action));
@@ -92,11 +97,11 @@ function* complainsComplainsLoadSaga(action: ComplainsComplainsLoadAction) {
     }
 }
 
-function* complainsDecisionPostSaga(action: ComplainsDecisionPostAction) {
+function* complainsDecisionPostSaga(action: WithContext<ComplainsDecisionPostAction>) {
     const {groupId, decision} = action.payload;
 
     try {
-        const group = yield* call(Node.updateSheriffComplaintGroup, action, "", groupId, decision);
+        const group = yield* call(Node.updateSheriffComplaintGroup, action, REL_CURRENT, groupId, decision);
         yield* put(complainsDecisionPosted(group).causedBy(action));
     } catch (e) {
         yield* put(complainsDecisionPostFailed(groupId).causedBy(action));

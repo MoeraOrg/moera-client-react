@@ -1,9 +1,10 @@
 import { ClientAction } from "state/action";
 import { LightBoxState } from "state/lightbox/state";
+import { REL_CURRENT } from "util/rel-node-name";
 
 const initialState = {
     show: false,
-    nodeName: "",
+    nodeName: REL_CURRENT,
     postingId: null,
     commentId: null,
     mediaId: null

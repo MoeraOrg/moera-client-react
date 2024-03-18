@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { isConnectedToHome } from "state/home/selectors";
 import { useMainMenuHomeNews, useMainMenuTimeline } from "ui/mainmenu/main-menu";
 import Jump from "ui/navigation/Jump";
+import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import "./Logo.css";
 
 export default function Logo() {
@@ -11,7 +12,7 @@ export default function Logo() {
     const {href: timelineHref} = useMainMenuTimeline();
     const {href: newsHref} = useMainMenuHomeNews();
 
-    const nodeName = connectedToHome ? ":" : "";
+    const nodeName = connectedToHome ? REL_HOME : REL_CURRENT;
     const href = connectedToHome ? newsHref : timelineHref;
 
     return (

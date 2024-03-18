@@ -5,10 +5,9 @@ import { useTranslation } from 'react-i18next';
 
 import { AvatarImage } from "api";
 import { ClientState } from "state/state";
-import { getNamingNameNodeUri } from "state/naming/selectors";
-import { getHomeRootPage } from "state/home/selectors";
-import { getNodeRootPage } from "state/node/selectors";
+import { getNamingNameRoot } from "state/naming/selectors";
 import { getSetting } from "state/settings/selectors";
+import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import avatarPlaceholder from "./avatar.png";
 import "./Avatar.css";
 
@@ -31,13 +30,6 @@ function nameAngle(ownerName: string | null | undefined): number {
     return angle * 360 / 12;
 }
 
-function getRootPage(state: ClientState, nodeName: string | null | undefined): string | null {
-    const rootPage = nodeName
-        ? (nodeName === ":" ? getHomeRootPage(state) : getNamingNameNodeUri(state, nodeName))
-        : null;
-    return rootPage ?? getNodeRootPage(state);
-}
-
 interface Props {
     avatar: AvatarImage | null | undefined;
     ownerName: string | null | undefined; // Node that owns the avatar
@@ -45,15 +37,15 @@ interface Props {
     shape?: string;
     className?: string;
     draggable?: boolean;
-    nodeName?: string | null; // Node the avatar is loaded from
+    nodeName?: RelNodeName | string; // Node the avatar is loaded from
     onClick?: (event: React.MouseEvent) => void;
 }
 
 function AvatarImpl(
-    {avatar, ownerName, size, shape: shapeLocal, className, draggable = true, nodeName, onClick}: Props,
+    {avatar, ownerName, size, shape: shapeLocal, className, draggable = true, nodeName = REL_CURRENT, onClick}: Props,
     ref: ForwardedRef<HTMLImageElement>
 ) {
-    const rootPage = useSelector((state: ClientState) => getRootPage(state, nodeName));
+    const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, nodeName));
     const shapeGlobal = useSelector((state: ClientState) => getSetting(state, "avatar.shape") as string);
     const {t} = useTranslation();
 

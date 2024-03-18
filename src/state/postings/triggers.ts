@@ -19,6 +19,7 @@ import { StoryAddedAction, StoryUpdatedAction } from "state/stories/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { isCurrentNodeStory } from "state/stories/selectors";
 import { flashBox } from "state/flashbox/actions";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export default [
     trigger(
@@ -26,8 +27,8 @@ export default [
         (state, signal: (StoryAddedAction | StoryUpdatedAction)) =>
             signal.payload.story.postingId != null
             && isCurrentNodeStory(state, signal.payload.story)
-            && !isPostingCached(state, signal.payload.story.postingId),
-        signal => postingLoad(signal.payload.story.postingId!, "")
+            && !isPostingCached(state, signal.payload.story.postingId, REL_CURRENT),
+        signal => postingLoad(signal.payload.story.postingId!, REL_CURRENT)
     ),
     trigger("POSTING_COMMENTS_SUBSCRIBED", true, () => flashBox(i18n.t("following-comments"))),
     trigger("POSTING_COMMENTS_UNSUBSCRIBED", true, () => flashBox(i18n.t("not-following-comments"))),
@@ -41,19 +42,19 @@ export default [
     trigger(
         ["EVENT_NODE_POSTING_UPDATED", "EVENT_NODE_POSTING_RESTORED"],
         (state, signal: EventAction<PostingUpdatedEvent>) =>
-            isPostingCached(state, signal.payload.id),
-        signal => postingLoad(signal.payload.id, "")
+            isPostingCached(state, signal.payload.id, REL_CURRENT),
+        signal => postingLoad(signal.payload.id, REL_CURRENT)
     ),
     trigger(
         "EVENT_NODE_POSTING_REACTIONS_CHANGED",
         (state, signal: EventAction<PostingReactionsChangedEvent>) =>
-            isPostingCached(state, signal.payload.id) && isConnectedToHome(state),
-        signal => postingReactionLoad(signal.payload.id, "")
+            isPostingCached(state, signal.payload.id, REL_CURRENT) && isConnectedToHome(state),
+        signal => postingReactionLoad(signal.payload.id, REL_CURRENT)
     ),
     trigger(
         "EVENT_NODE_POSTING_COMMENTS_CHANGED",
         (state, signal: EventAction<PostingCommentsChangedEvent>) =>
-            isPostingCached(state, signal.payload.id),
-        signal => postingCommentsSet(signal.payload.id, signal.payload.total, "")
+            isPostingCached(state, signal.payload.id, REL_CURRENT),
+        signal => postingCommentsSet(signal.payload.id, signal.payload.total, REL_CURRENT)
     )
 ];

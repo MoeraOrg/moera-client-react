@@ -39,7 +39,7 @@ export default function PostingSources({posting}: Props) {
 }
 
 interface SourcesLine {
-    nodeName: string | null;
+    nodeName: string;
     fullName: string | null;
     feedTitle: string;
     postingId: string | null;
@@ -65,9 +65,9 @@ function sourcesList(posting: PostingInfo, t: TFunction): SourcesLine[] {
     const receiverFeedName = posting.sources
         .find(sr => sr.nodeName === posting.receiverName && sr.postingId === posting.receiverPostingId)
         ?.feedName;
-    if (receiverFeedName != null) {
+    if (receiverFeedName != null && posting.receiverName != null) {
         list.unshift({
-            nodeName: posting.receiverName ?? null,
+            nodeName: posting.receiverName,
             fullName: posting.receiverFullName ?? null,
             feedTitle: getFeedTitle(receiverFeedName, t),
             postingId: posting.receiverPostingId ?? null,

@@ -1,5 +1,7 @@
 import { ClientAction } from "state/action";
+import { WithContext } from "state/action-types";
 import { SafeValidationErrors } from "safe/message-types";
+import { absoluteNodeName, RelNodeName } from "util/rel-node-name";
 
 function extractMessage(messageOrError: any): string {
     if (messageOrError instanceof DOMException && messageOrError.name === "AbortError") {
@@ -84,11 +86,14 @@ export class HomeNotConnectedError extends VerboseError {
 
 export class NameResolvingError extends CausedError {
 
-    nodeName: string | null;
-
-    constructor(nodeName: string | null, cause: ClientAction | null = null) {
-        super("Name not found: " + nodeName, cause);
-        this.nodeName = nodeName;
+    constructor(nodeName: RelNodeName| string, cause: WithContext<ClientAction> | null = null) {
+        super("Name not found: " + extractNodeName(nodeName, cause), cause);
     }
 
+}
+
+function extractNodeName(nodeName: RelNodeName | string, cause: WithContext<ClientAction> | null): string {
+    const ownerNameOrUrl = cause?.context.ownerNameOrUrl ?? "unresolvable current node";
+    const homeOwnerNameOrUrl = cause?.context.homeOwnerNameOrUrl ?? "unresolvable home node";
+    return absoluteNodeName(nodeName, {ownerNameOrUrl, homeOwnerNameOrUrl});
 }

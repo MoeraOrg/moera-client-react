@@ -6,8 +6,7 @@ import { MediaAttachment, PrivateMediaFileInfo } from "api";
 import { executor } from "state/executor";
 import { EntryCopyTextAction, openEntryCopyTextDialog } from "state/entrycopytextdialog/actions";
 import { flashBox } from "state/flashbox/actions";
-import { getNamingNameNodeUri } from "state/naming/selectors";
-import { getNodeRootPage } from "state/node/selectors";
+import { getNamingNameRoot } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import * as Browser from "ui/browser";
 import { clearHtml, containsTags, htmlEntities, quoteHtml } from "util/html";
@@ -41,7 +40,7 @@ function* entryCopyTextSaga(action: EntryCopyTextAction) {
         text = clearHtml(text);
     } else {
         const {rootPage, carte} = yield* select(state => ({
-            rootPage: nodeName ? getNamingNameNodeUri(state, nodeName) : getNodeRootPage(state),
+            rootPage: getNamingNameRoot(state, nodeName),
             carte: getCurrentViewMediaCarte(state)
         }));
         if (rootPage != null) {

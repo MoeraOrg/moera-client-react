@@ -8,6 +8,7 @@ import {
     DropdownMenuContext,
     MenuItem
 } from "ui/control/dropdownmenu/dropdown-menu-types";
+import { RelNodeName } from "util/rel-node-name";
 
 function isDivider(item: MenuItem): item is DividerMenuItem {
     return "divider" in item && item.divider;
@@ -19,8 +20,8 @@ function isCaption(item: MenuItem): item is CaptionMenuItem {
 
 interface RenderedItem {
     title: string;
-    nodeName?: string | null;
-    href?: string | null;
+    nodeName?: RelNodeName | string;
+    href?: string;
     onClick?: () => void;
     opensDialog?: boolean;
     divider: boolean;
@@ -91,7 +92,7 @@ export function DropdownMenuItems({items}: Props) {
                         {item.caption ?
                             <div className="caption">{item.title}</div>
                             :
-                            <Jump className="dropdown-item" nodeName={item.nodeName} href={item.href ?? ""}
+                            <Jump className="dropdown-item" nodeName={item.nodeName} href={item.href ?? "/"}
                                   onNear={onClick(item)} onFar={onClick(item)}>
                                 {item.title}
                             </Jump>

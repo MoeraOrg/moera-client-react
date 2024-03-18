@@ -5,10 +5,11 @@ import { isPermitted } from "state/node/selectors";
 import { getPosting } from "state/postings/selectors";
 import { getComment, getCommentsReceiverFeatures, getCommentsReceiverName } from "state/detailedposting/selectors";
 import { ReactionsDialogTabsState } from "state/reactionsdialog/state";
+import { RelNodeName } from "util/rel-node-name";
 
 const EMPTY_ARRAY: any[] = [];
 
-export function getReactionsDialogNodeName(state: ClientState): string | null {
+export function getReactionsDialogNodeName(state: ClientState): RelNodeName | string {
     return state.reactionsDialog.nodeName;
 }
 
@@ -16,8 +17,12 @@ export function getReactionsDialogPostingId(state: ClientState): string | null {
     return state.reactionsDialog.postingId;
 }
 
+export function getReactionsDialogPosting(state: ClientState) {
+    return getPosting(state, state.reactionsDialog.postingId, state.reactionsDialog.nodeName);
+}
+
 export function getReactionsDialogReceiverPostingId(state: ClientState): string | null {
-    const posting = getPosting(state, state.reactionsDialog.postingId);
+    const posting = getReactionsDialogPosting(state);
     return posting != null ? (posting.receiverPostingId ?? posting.id) : null;
 }
 
@@ -70,7 +75,7 @@ export function isReactionsDialogPermitted(operation: string, defaultValue: Prin
             objectSourceFeatures: getCommentsReceiverFeatures(state)
         });
     } else {
-        const posting = getPosting(state, state.reactionsDialog.postingId);
+        const posting = getReactionsDialogPosting(state);
         return isPermitted(operation, posting, defaultValue, state, {
             objectSourceName: posting?.receiverName
         });

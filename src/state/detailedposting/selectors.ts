@@ -13,6 +13,7 @@ import {
 } from "state/postings/selectors";
 import { CommentsState, ExtCommentInfo } from "state/detailedposting/state";
 import { isSheriffMarked } from "util/sheriff";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export function getDetailedPostingId(state: ClientState): string | null {
     return state.detailedPosting.id;
@@ -27,15 +28,15 @@ export function isDetailedPostingId(state: ClientState, id: string): boolean {
 }
 
 export function isDetailedPostingCached(state: ClientState): boolean {
-    return isPostingCached(state, getDetailedPostingId(state));
+    return isPostingCached(state, getDetailedPostingId(state), REL_CURRENT);
 }
 
 export function getDetailedPosting(state: ClientState): PostingInfo | null {
-    return getPosting(state, getDetailedPostingId(state));
+    return getPosting(state, getDetailedPostingId(state), REL_CURRENT);
 }
 
 export function isDetailedPostingBeingDeleted(state: ClientState): boolean {
-    return isPostingBeingDeleted(state, getDetailedPostingId(state));
+    return isPostingBeingDeleted(state, getDetailedPostingId(state), REL_CURRENT);
 }
 
 export function isDetailedPostingToBeLoaded(state: ClientState): boolean {

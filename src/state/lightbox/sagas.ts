@@ -3,6 +3,7 @@ import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
 import { ClientState } from "state/state";
+import { WithContext } from "state/action-types";
 import { executor } from "state/executor";
 import { getNodeUri } from "state/naming/sagas";
 import { postingLoad } from "state/postings/actions";
@@ -11,6 +12,7 @@ import { errorThrown } from "state/error/actions";
 import { LightBoxCopyLinkAction, LightBoxMediaPostingLoadAction, LightBoxMediaSetAction } from "state/lightbox/actions";
 import { getLightBoxMediaPostingId, getLightBoxNodeName } from "state/lightbox/selectors";
 import * as Browser from "ui/browser";
+import { absoluteNodeName } from "util/rel-node-name";
 
 export default [
     executor("LIGHT_BOX_MEDIA_POSTING_LOAD", null, lightBoxMediaPostingLoadSaga),
@@ -39,8 +41,9 @@ function* lightBoxMediaSetSaga(action: LightBoxMediaSetAction) {
     }
 }
 
-function* lightBoxCopyLinkSaga(action: LightBoxCopyLinkAction) {
-    const {nodeName, url} = action.payload;
+function* lightBoxCopyLinkSaga(action: WithContext<LightBoxCopyLinkAction>) {
+    let {nodeName, url} = action.payload;
+    nodeName = absoluteNodeName(nodeName, action.context);
     try {
         const nodeUri = yield* call(getNodeUri, action, nodeName);
         yield* call(clipboardCopy, Browser.universalLocation(null, nodeName, nodeUri, url));

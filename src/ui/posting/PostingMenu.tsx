@@ -21,7 +21,7 @@ import { openSourceDialog } from "state/sourcedialog/actions";
 import { shareDialogPrepare } from "state/sharedialog/actions";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { getHomeOwnerName } from "state/home/selectors";
-import { getOwnerName, isPermitted } from "state/node/selectors";
+import { isPermitted } from "state/node/selectors";
 import {
     getPostingCommentAddedInstantBlockId,
     getPostingCommentsSubscriptionId,
@@ -34,6 +34,7 @@ import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdi
 import { MinimalStoryInfo } from "ui/types";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
 import * as Browser from "ui/browser";
+import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import "ui/entry/EntryMenu.css";
 
 interface Props {
@@ -43,12 +44,11 @@ interface Props {
 }
 
 function PostingMenuItems({posting, story, detailed}: Props) {
-    const nodeOwnerName = useSelector(getOwnerName);
     const homeOwnerName = useSelector(getHomeOwnerName);
     const commentsSubscriptionId = useSelector((state: ClientState) =>
-        getPostingCommentsSubscriptionId(state, posting.id));
+        getPostingCommentsSubscriptionId(state, posting.id, REL_CURRENT));
     const commentAddedInstantBlockId = useSelector((state: ClientState) =>
-        getPostingCommentAddedInstantBlockId(state, posting.id));
+        getPostingCommentAddedInstantBlockId(state, posting.id, REL_CURRENT));
     const containsInvisibleComments = useSelector((state: ClientState) =>
         (detailed ?? false) && hasInvisibleComments(state));
     const showInvisibleComments = useSelector((state: ClientState) =>
@@ -63,14 +63,14 @@ function PostingMenuItems({posting, story, detailed}: Props) {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const onCopyLink = () => dispatch(postingCopyLink(posting.id, ""));
+    const onCopyLink = () => dispatch(postingCopyLink(posting.id, REL_CURRENT));
 
     const onCopyText = () =>
-        dispatch(entryCopyText(posting.body, "ask", posting.receiverName ?? "", posting.media ?? null));
+        dispatch(entryCopyText(posting.body, "ask", posting.receiverName ?? REL_CURRENT, posting.media ?? null));
 
     const onShare = () => {
         const originalDeleted = posting.receiverDeletedAt != null;
-        const nodeName = originalDeleted ? (nodeOwnerName ?? "") : (posting.receiverName ?? posting.ownerName);
+        const nodeName = originalDeleted ? REL_CURRENT : (posting.receiverName ?? posting.ownerName);
         const postingId = originalDeleted ? posting.id : (posting.receiverPostingId ?? posting.id);
         const href = `/post/${postingId}`;
 
@@ -84,23 +84,23 @@ function PostingMenuItems({posting, story, detailed}: Props) {
 
     const onFollowComments = () => {
         if (ownPosting) {
-            dispatch(postingCommentAddedUnblock(posting.id, ""));
+            dispatch(postingCommentAddedUnblock(posting.id, REL_CURRENT));
         } else {
-            dispatch(postingCommentsSubscribe(posting.id, ""));
+            dispatch(postingCommentsSubscribe(posting.id, REL_CURRENT));
         }
     }
 
     const onUnfollowComments = () => {
         if (ownPosting) {
-            dispatch(postingCommentAddedBlock(posting.id, ""));
+            dispatch(postingCommentAddedBlock(posting.id, REL_CURRENT));
         } else {
-            dispatch(postingCommentsUnsubscribe(posting.id, ""));
+            dispatch(postingCommentsUnsubscribe(posting.id, REL_CURRENT));
         }
     }
 
     const onDelete = () => {
         dispatch(confirmBox(t("delete-post", {heading: posting.heading}), t("delete"), t("cancel"),
-            postingDelete(posting.id, ""), null, "danger"));
+            postingDelete(posting.id, REL_CURRENT), null, "danger"));
     };
 
     const onPin = () => dispatch(storyPinningUpdate(story.id, !story.pinned));
@@ -109,7 +109,7 @@ function PostingMenuItems({posting, story, detailed}: Props) {
 
     const onViewSource = () => {
         if (posting.receiverName == null) {
-            dispatch(openSourceDialog("", posting.id));
+            dispatch(openSourceDialog(REL_CURRENT, posting.id));
         } else {
             if (posting.receiverPostingId != null) {
                 dispatch(openSourceDialog(posting.receiverName, posting.receiverPostingId));
@@ -148,42 +148,42 @@ function PostingMenuItems({posting, story, detailed}: Props) {
         <DropdownMenuItems items={[
             {
                 title: t("copy-link"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onCopyLink,
                 show: true
             },
             {
                 title: t("copy-text"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onCopyText,
                 show: true
             },
             {
                 title: t("share-ellipsis"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onShare,
                 show: true
             },
             {
                 title: t("reply-ellipsis"),
-                nodeName: ":",
+                nodeName: REL_HOME,
                 href: "/compose",
                 onClick: onReply,
                 show: true
             },
             {
                 title: t("follow-comments"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onFollowComments,
                 show: !followingComments
             },
             {
                 title: t("unfollow-comments"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onUnfollowComments,
                 show: followingComments
@@ -193,20 +193,20 @@ function PostingMenuItems({posting, story, detailed}: Props) {
             },
             {
                 title: t("edit-ellipsis"),
-                nodeName: ":",
+                nodeName: REL_HOME,
                 href: `/compose?id=${postingId}`,
                 show: postingEditable
             },
             {
                 title: story != null && !story.pinned ? t("pin") : t("unpin"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onPin,
                 show: story != null && storyEditable
             },
             {
                 title: t("change-date-time-ellipsis"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onChangeDate,
                 show: posting.receiverName == null && storyEditable
@@ -216,14 +216,14 @@ function PostingMenuItems({posting, story, detailed}: Props) {
             },
             {
                 title: t("view-source"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onViewSource,
                 show: true
             },
             {
                 title: t("delete"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onDelete,
                 show: postingDeletable
@@ -233,14 +233,14 @@ function PostingMenuItems({posting, story, detailed}: Props) {
             },
             {
                 title: t("show-hidden-comments"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onShowInvisibleComments,
                 show: containsInvisibleComments && !showInvisibleComments
             },
             {
                 title: t("hide-hidden-comments"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onHideInvisibleComments,
                 show: containsInvisibleComments && showInvisibleComments
@@ -250,21 +250,21 @@ function PostingMenuItems({posting, story, detailed}: Props) {
             },
             {
                 title: t("hide-in-google-play"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onHideInGooglePlay,
                 show: googlePlaySheriff && googlePlayGoverned && !googlePlayProhibited
             },
             {
                 title: t("unhide-in-google-play"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onUnhideInGooglePlay,
                 show: googlePlaySheriff && googlePlayGoverned && googlePlayProhibited
             },
             {
                 title: t("report-sheriff-ellipsis"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onHideInGooglePlay,
                 show: Browser.isAndroidGooglePlay() && !googlePlaySheriff

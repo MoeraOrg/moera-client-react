@@ -1,10 +1,11 @@
 import { createContext } from "react";
+import { RelNodeName } from "util/rel-node-name";
 
 export interface TextMenuItem {
     show: boolean;
     title: string;
-    nodeName: string | null;
-    href: string | null;
+    nodeName: RelNodeName | string;
+    href: string;
     onClick?: () => void;
     opensDialog?: boolean;
 }

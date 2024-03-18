@@ -10,13 +10,14 @@ import Jump from "ui/navigation/Jump";
 import NodeNameText from "ui/nodename/NodeNameText";
 import NodeNamePopup from "ui/nodename/NodeNamePopup";
 import { NameDisplayMode } from "ui/types";
+import { RelNodeName } from "util/rel-node-name";
 import "./NodeName.css";
 
 interface Props {
     name?: string | null;
     fullName?: string | null;
     avatar?: AvatarImage | null;
-    avatarNodeName?: string;
+    avatarNodeName?: RelNodeName | string;
     verified?: boolean;
     correct?: boolean;
     linked?: boolean;

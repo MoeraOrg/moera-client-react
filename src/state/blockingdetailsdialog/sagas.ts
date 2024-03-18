@@ -9,18 +9,24 @@ import {
     blockingDetailsDialogLoaded,
     blockingDetailsDialogLoadFailed
 } from "state/blockingdetailsdialog/actions";
+import { WithContext } from "state/action-types";
 
 export default [
     executor("BLOCKING_DETAILS_DIALOG_LOAD", "", blockingDetailsDialogLoadSaga)
 ];
 
-function* blockingDetailsDialogLoadSaga(action: BlockingDetailsDialogLoadAction) {
+function* blockingDetailsDialogLoadSaga(action: WithContext<BlockingDetailsDialogLoadAction>) {
     const {nodeName, remoteNodeName, remotePostingId, by} = yield* select((state: ClientState) => ({
         nodeName: state.blockingDetailsDialog.nodeName,
         remoteNodeName: state.blockingDetailsDialog.remoteNodeName,
         remotePostingId: state.blockingDetailsDialog.remotePostingId,
         by: state.blockingDetailsDialog.by
     }));
+
+    if (nodeName == null) {
+        yield* put(blockingDetailsDialogLoadFailed().causedBy(action));
+        return;
+    }
 
     try {
         let blocked: (BlockedUserInfo | BlockedByUserInfo)[];

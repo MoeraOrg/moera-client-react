@@ -15,13 +15,14 @@ import { ClientState } from "state/state";
 import { executor } from "state/executor";
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { WithContext } from "state/action-types";
+import { absoluteNodeName, REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("IMAGE_EDIT_DIALOG_LOAD", "", imageEditDialogLoadSaga),
     executor("IMAGE_EDIT_DIALOG_POST", "", imageEditDialogPostSaga)
 ];
 
-function* imageEditDialogLoadSaga(action: ImageEditDialogLoadAction) {
+function* imageEditDialogLoadSaga(action: WithContext<ImageEditDialogLoadAction>) {
     const {id, nodeName} = yield* select((state: ClientState) => ({
         id: state.imageEditDialog.media?.postingId,
         nodeName: state.imageEditDialog.nodeName
@@ -35,7 +36,7 @@ function* imageEditDialogLoadSaga(action: ImageEditDialogLoadAction) {
     try {
         const posting = yield* call(Node.getPosting, action, nodeName, id, true, ["posting.not-found"]);
         yield* call(fillActivityReaction, action, posting);
-        yield* put(postingSet(posting, "").causedBy(action));
+        yield* put(postingSet(posting, REL_CURRENT).causedBy(action));
         yield* put(imageEditDialogLoaded().causedBy(action));
     } catch (e) {
         yield* put(imageEditDialogLoadFailed().causedBy(action));
@@ -60,16 +61,16 @@ function* imageEditDialogPostSaga(action: WithContext<ImageEditDialogPostAction>
         const posting = yield* call(Node.updatePosting, action, nodeName, id, postingText);
         yield* put(imageEditDialogPostSucceeded().causedBy(action));
         yield* call(fillActivityReaction, action, posting);
-        yield* put(postingSet(posting, "").causedBy(action));
+        yield* put(postingSet(posting, REL_CURRENT).causedBy(action));
 
-        const remoteNodeName = nodeName || action.context.ownerName;
+        const remoteNodeName = absoluteNodeName(nodeName, action.context);
         if (remoteNodeName != null && remoteNodeName !== postingText.ownerName) {
             const sourceText = {
                 bodySrc: postingText.bodySrc,
                 bodySrcFormat: postingText.bodySrcFormat,
                 acceptedReactions: postingText.acceptedReactions
             }
-            yield* call(Node.updateRemotePosting, action, ":", remoteNodeName, id, sourceText);
+            yield* call(Node.updateRemotePosting, action, REL_HOME, remoteNodeName, id, sourceText);
         }
     } catch (e) {
         yield* put(imageEditDialogPostFailed().causedBy(action));

@@ -9,6 +9,7 @@ import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import { isAtTimelinePage } from "state/navigation/selectors";
 import Jump from "ui/navigation/Jump";
+import { REL_HOME } from "util/rel-node-name";
 import "./HomeButton.css";
 
 export default function HomeButton() {
@@ -16,7 +17,8 @@ export default function HomeButton() {
     const {t} = useTranslation();
 
     return (
-        <Jump nodeName=":" href="/" className={cx("connection-button", "home-button", {"active": atHomeTimeline})}
+        <Jump nodeName={REL_HOME} href="/"
+              className={cx("connection-button", "home-button", {"active": atHomeTimeline})}
               title={t("your-timeline")}>
             <FontAwesomeIcon icon={faHome}/>
         </Jump>

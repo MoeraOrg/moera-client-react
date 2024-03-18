@@ -3,12 +3,13 @@ import { closeLightBox, lightBoxMediaPostingLoad, OpenLightBoxAction } from "sta
 import { postingLoad } from "state/postings/actions";
 import { bodyScrollUpdate, dialogClosed, dialogOpened, updateLocation } from "state/navigation/actions";
 import { isLightBoxMediaPostingToBeLoaded, isLightBoxShown, isLightBoxToBeLoaded } from "state/lightbox/selectors";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export default [
     trigger(
         "OPEN_LIGHT_BOX",
         conj(isLightBoxShown, isLightBoxToBeLoaded),
-        (signal: OpenLightBoxAction) => postingLoad(signal.payload.postingId, "")
+        (signal: OpenLightBoxAction) => postingLoad(signal.payload.postingId, REL_CURRENT)
     ),
     trigger("OPEN_LIGHT_BOX", true, dialogOpened(closeLightBox())),
     trigger("CLOSE_LIGHT_BOX", true, dialogClosed),

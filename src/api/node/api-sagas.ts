@@ -4,11 +4,13 @@ import { callApi, CallApiResult, ErrorFilter } from "api/node/call";
 import * as API from "api/node/api-types";
 import { ProgressHandler } from 'api/fetcher';
 import { ClientAction } from "state/action";
+import { WithContext } from "state/action-types";
+import { RelNodeName } from "util/rel-node-name";
 import { urlWithParameters, ut } from "util/url";
 import { commaSeparatedFlags } from "util/misc";
 
 export function* searchActivityReactions(
-    caller: ClientAction | null, nodeName: string | null, filter: API.ActivityReactionFilter,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.ActivityReactionFilter,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.ActivityReactionInfo[]> {
 
@@ -20,8 +22,8 @@ export function* searchActivityReactions(
 }
 
 export function* getRemotePostingVerificationStatus(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.RemotePostingVerificationInfo> {
 
     const location = ut`/async-operations/remote-posting-verification/${id}`;
@@ -31,8 +33,8 @@ export function* getRemotePostingVerificationStatus(
 }
 
 export function* getRemoteReactionVerificationStatus(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.RemoteReactionVerificationInfo> {
 
     const location = ut`/async-operations/remote-reaction-verification/${id}`;
@@ -42,7 +44,7 @@ export function* getRemoteReactionVerificationStatus(
 }
 
 export function* getAvatars(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false
 ): CallApiResult<API.AvatarInfo[]> {
 
     const location = "/avatars";
@@ -52,7 +54,7 @@ export function* getAvatars(
 }
 
 export function* createAvatar(
-    caller: ClientAction | null, nodeName: string | null, avatar: API.AvatarAttributes,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, avatar: API.AvatarAttributes,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.AvatarInfo> {
 
@@ -63,7 +65,8 @@ export function* createAvatar(
 }
 
 export function* getAvatar(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false
 ): CallApiResult<API.AvatarInfo> {
 
     const location = ut`/avatars/${id}`;
@@ -73,8 +76,8 @@ export function* getAvatar(
 }
 
 export function* deleteAvatar(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/avatars/${id}`;
@@ -84,7 +87,7 @@ export function* deleteAvatar(
 }
 
 export function* reorderAvatars(
-    caller: ClientAction | null, nodeName: string | null, order: API.AvatarsOrdered,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, order: API.AvatarsOrdered,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.AvatarOrdinal[]> {
 
@@ -96,7 +99,7 @@ export function* reorderAvatars(
 }
 
 export function* blockInstant(
-    caller: ClientAction | null, nodeName: string | null, instant: API.BlockedInstantAttributes,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, instant: API.BlockedInstantAttributes,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.BlockedInstantInfo> {
 
@@ -108,8 +111,8 @@ export function* blockInstant(
 }
 
 export function* getBlockedInstant(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.BlockedInstantInfo> {
 
     const location = ut`/blocked-instants/${id}`;
@@ -119,8 +122,8 @@ export function* getBlockedInstant(
 }
 
 export function* unblockInstant(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/blocked-instants/${id}`;
@@ -130,7 +133,7 @@ export function* unblockInstant(
 }
 
 export function* searchBlockedInstants(
-    caller: ClientAction | null, nodeName: string | null, filter: API.BlockedInstantFilter,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.BlockedInstantFilter,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.BlockedInstantInfo[]> {
 
@@ -142,7 +145,7 @@ export function* searchBlockedInstants(
 }
 
 export function* blockUser(
-    caller: ClientAction | null, nodeName: string | null, user: API.BlockedUserAttributes,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, user: API.BlockedUserAttributes,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.BlockedUserInfo> {
 
@@ -153,8 +156,8 @@ export function* blockUser(
 }
 
 export function* getBlockedUser(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.BlockedUserInfo> {
 
     const location = ut`/people/blocked-users/${id}`;
@@ -164,8 +167,8 @@ export function* getBlockedUser(
 }
 
 export function* unblockUser(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/people/blocked-users/${id}`;
@@ -175,7 +178,7 @@ export function* unblockUser(
 }
 
 export function* searchBlockedUsers(
-    caller: ClientAction | null, nodeName: string | null, filter: API.BlockedUserFilter,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.BlockedUserFilter,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.BlockedUserInfo[]> {
 
@@ -187,7 +190,7 @@ export function* searchBlockedUsers(
 }
 
 export function* getBlockedUsersChecksums(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
 ): CallApiResult<API.BlockedUsersChecksums> {
 
@@ -198,8 +201,8 @@ export function* getBlockedUsersChecksums(
 }
 
 export function* getBlockedByUser(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.BlockedByUserInfo> {
 
     const location = ut`/people/blocked-by-users/${id}`;
@@ -209,7 +212,7 @@ export function* getBlockedByUser(
 }
 
 export function* searchBlockedByUsers(
-    caller: ClientAction | null, nodeName: string | null, filter: API.BlockedByUserFilter,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.BlockedByUserFilter,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.BlockedByUserInfo[]> {
 
@@ -221,7 +224,7 @@ export function* searchBlockedByUsers(
 }
 
 export function* getCartes(
-    caller: ClientAction | null, nodeName: string | null, limit: number | null = null,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, limit: number | null = null,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.CarteSet> {
 
@@ -232,9 +235,9 @@ export function* getCartes(
 }
 
 export function* getCommentsSlice(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, after: number | null = null,
-    before: number | null = null, limit: number | null = null, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
+    after: number | null = null, before: number | null = null, limit: number | null = null,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.CommentsSliceInfo> {
 
     const location = urlWithParameters(ut`/postings/${postingId}/comments`, {after, before, limit});
@@ -245,8 +248,8 @@ export function* getCommentsSlice(
 }
 
 export function* createComment(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, comment: API.CommentText,
-    errorFilter: ErrorFilter = false, auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
+    comment: API.CommentText, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.CommentCreated> {
 
     const location = ut`/postings/${postingId}/comments`;
@@ -257,7 +260,7 @@ export function* createComment(
 }
 
 export function* getComment(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, commentId: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     withSource: boolean = false, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.CommentInfo> {
 
@@ -269,8 +272,8 @@ export function* getComment(
 }
 
 export function* updateAllComments(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, attributes: API.CommentMassAttributes,
-    errorFilter: ErrorFilter = false, auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
+    attributes: API.CommentMassAttributes, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/postings/${postingId}/comments`;
@@ -280,7 +283,7 @@ export function* updateAllComments(
 }
 
 export function* updateComment(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, commentId: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     comment: API.CommentText, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.CommentInfo> {
 
@@ -292,7 +295,7 @@ export function* updateComment(
 }
 
 export function* deleteComment(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, commentId: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.CommentTotalInfo> {
 
@@ -303,7 +306,7 @@ export function* deleteComment(
 }
 
 export function* getPostingsAttachedToComment(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, commentId: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.PostingInfo[]> {
 
@@ -315,7 +318,7 @@ export function* getPostingsAttachedToComment(
 }
 
 export function* getCommentRevisions(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, commentId: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.CommentRevisionInfo[]> {
 
@@ -327,8 +330,8 @@ export function* getCommentRevisions(
 }
 
 export function* getCommentRevision(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, commentId: string, id: string,
-    errorFilter: ErrorFilter = false, auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
+    id: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.CommentRevisionInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/revisions/${id}`;
@@ -339,7 +342,7 @@ export function* getCommentRevision(
 }
 
 export function* createCommentReaction(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, commentId: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     reaction: API.ReactionDescription, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionCreated> {
 
@@ -351,8 +354,8 @@ export function* createCommentReaction(
 }
 
 export function* updateCommentReaction(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, commentId: string, ownerName: string,
-    reaction: API.ReactionOverride, errorFilter: ErrorFilter = false, auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
+    ownerName: string, reaction: API.ReactionOverride, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`;
@@ -362,7 +365,7 @@ export function* updateCommentReaction(
 }
 
 export function* getCommentReactionsSlice(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, commentId: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     negative: boolean | null = null, emoji: number | null = null, before: number | null = null,
     limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionsSliceInfo> {
@@ -377,8 +380,8 @@ export function* getCommentReactionsSlice(
 }
 
 export function* getCommentReaction(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, commentId: string, ownerName: string,
-    errorFilter: ErrorFilter = false, auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
+    ownerName: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`;
@@ -388,7 +391,7 @@ export function* getCommentReaction(
 }
 
 export function* deleteAllCommentReactions(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, commentId: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
@@ -399,8 +402,8 @@ export function* deleteAllCommentReactions(
 }
 
 export function* deleteCommentReaction(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, commentId: string, ownerName: string,
-    errorFilter: ErrorFilter = false, auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
+    ownerName: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionTotalsInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`;
@@ -410,7 +413,7 @@ export function* deleteCommentReaction(
 }
 
 export function* getCommentReactionTotals(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, commentId: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionTotalsInfo> {
 
@@ -421,8 +424,8 @@ export function* getCommentReactionTotals(
 }
 
 export function* getContacts(
-    caller: ClientAction | null, nodeName: string | null, query: string | null = null, limit: number | null = null,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, query: string | null = null,
+    limit: number | null = null, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.ContactInfo[]> {
 
     const location = urlWithParameters(ut`/people/contacts`, {query, limit});
@@ -432,7 +435,7 @@ export function* getContacts(
 }
 
 export function* checkCredentials(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false
 ): CallApiResult<API.CredentialsCreated> {
 
     const location = "/credentials";
@@ -442,7 +445,7 @@ export function* checkCredentials(
 }
 
 export function* createCredentials(
-    caller: ClientAction | null, nodeName: string | null, credentials: API.Credentials,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, credentials: API.Credentials,
     errorFilter: ErrorFilter = false
 ): CallApiResult<API.Result> {
 
@@ -453,7 +456,7 @@ export function* createCredentials(
 }
 
 export function* updateCredentials(
-    caller: ClientAction | null, nodeName: string | null, credentials: API.CredentialsChange,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, credentials: API.CredentialsChange,
     errorFilter: ErrorFilter = false
 ): CallApiResult<API.Result> {
 
@@ -464,7 +467,7 @@ export function* updateCredentials(
 }
 
 export function* deleteCredentials(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
 ): CallApiResult<API.Result> {
 
@@ -475,7 +478,7 @@ export function* deleteCredentials(
 }
 
 export function* resetCredentials(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false
 ): CallApiResult<API.EmailHint> {
 
     const location = "/credentials/reset";
@@ -485,8 +488,8 @@ export function* resetCredentials(
 }
 
 export function* getDeletedPostings(
-    caller: ClientAction | null, nodeName: string | null, page: number | null = null, limit: number | null = null,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, page: number | null = null,
+    limit: number | null = null, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.PostingInfo[]> {
 
     const location = urlWithParameters(ut`/deleted-postings`, {page, limit});
@@ -497,8 +500,8 @@ export function* getDeletedPostings(
 }
 
 export function* getDeletedPosting(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.PostingInfo> {
 
     const location = ut`/deleted-postings/${id}`;
@@ -508,8 +511,8 @@ export function* getDeletedPosting(
 }
 
 export function* restoreDeletedPosting(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.PostingInfo> {
 
     const location = ut`/deleted-postings/${id}/restore`;
@@ -520,8 +523,8 @@ export function* restoreDeletedPosting(
 }
 
 export function* getDeletePostingRevisions(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, limit: number | null = null,
-    errorFilter: ErrorFilter = false, auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
+    limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.PostingRevisionInfo[]> {
 
     const location = urlWithParameters(ut`/deleted-postings/${postingId}/revisions`, {limit});
@@ -532,7 +535,7 @@ export function* getDeletePostingRevisions(
 }
 
 export function* getDeletedPostingRevision(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, id: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.PostingRevisionInfo> {
 
@@ -544,7 +547,7 @@ export function* getDeletedPostingRevision(
 }
 
 export function* restoreDeletedPostingRevision(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, id: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.PostingRevisionInfo> {
 
@@ -556,7 +559,7 @@ export function* restoreDeletedPostingRevision(
 }
 
 export function* getDomains(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
 ): CallApiResult<API.DomainInfo[]> {
 
@@ -567,8 +570,8 @@ export function* getDomains(
 }
 
 export function* getDomain(
-    caller: ClientAction | null, nodeName: string | null, name: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.DomainInfo> {
 
     const location = ut`/domains/${name}`;
@@ -578,7 +581,7 @@ export function* getDomain(
 }
 
 export function* createDomain(
-    caller: ClientAction | null, nodeName: string | null, domain: API.DomainAttributes,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, domain: API.DomainAttributes,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.DomainInfo> {
 
@@ -589,8 +592,8 @@ export function* createDomain(
 }
 
 export function* updateDomain(
-    caller: ClientAction | null, nodeName: string | null, name: string, domain: API.DomainAttributes,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string,
+    domain: API.DomainAttributes, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.DomainInfo> {
 
     const location = ut`/domains/${name}`;
@@ -600,8 +603,8 @@ export function* updateDomain(
 }
 
 export function* deleteDomain(
-    caller: ClientAction | null, nodeName: string | null, name: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/domains/${name}`;
@@ -611,7 +614,8 @@ export function* deleteDomain(
 }
 
 export function* isDomainAvailable(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, errorFilter: ErrorFilter = false
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    errorFilter: ErrorFilter = false
 ): CallApiResult<API.DomainAvailable> {
 
     const location = urlWithParameters(ut`/domains/available`, {nodeName: remoteNodeName});
@@ -621,8 +625,8 @@ export function* isDomainAvailable(
 }
 
 export function* getDrafts(
-    caller: ClientAction | null, nodeName: string | null, draftType: API.DraftType, remoteNodeName: string,
-    postingId: string | null = null, commentId: string | null = null, page: number | null = null,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, draftType: API.DraftType,
+    remoteNodeName: string, postingId: string | null = null, commentId: string | null = null, page: number | null = null,
     limit: number | null = null, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.DraftInfo[]> {
 
@@ -637,8 +641,8 @@ export function* getDrafts(
 }
 
 export function* createDraft(
-    caller: ClientAction | null, nodeName: string | null, draft: API.DraftText, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, draft: API.DraftText,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.DraftInfo> {
 
     const location = "/drafts";
@@ -649,8 +653,8 @@ export function* createDraft(
 }
 
 export function* getDraft(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.DraftInfo> {
 
     const location = ut`/drafts/${id}`;
@@ -660,7 +664,7 @@ export function* getDraft(
 }
 
 export function* updateDraft(
-    caller: ClientAction | null, nodeName: string | null, id: string, draft: API.DraftText,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string, draft: API.DraftText,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.DraftInfo> {
 
@@ -672,8 +676,8 @@ export function* updateDraft(
 }
 
 export function* deleteDraft(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/drafts/${id}`;
@@ -683,7 +687,7 @@ export function* deleteDraft(
 }
 
 export function* getFeatures(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: boolean | string = true
 ): CallApiResult<API.Features> {
 
@@ -694,7 +698,7 @@ export function* getFeatures(
 }
 
 export function* getFeeds(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: boolean | string = true
 ): CallApiResult<API.FeedInfo[]> {
 
@@ -705,8 +709,8 @@ export function* getFeeds(
 }
 
 export function* getFeedGeneral(
-    caller: ClientAction | null, nodeName: string | null, feedName: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, feedName: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FeedInfo> {
 
     const location = ut`/feeds/${feedName}`;
@@ -716,8 +720,8 @@ export function* getFeedGeneral(
 }
 
 export function* getFeedStatus(
-    caller: ClientAction | null, nodeName: string | null, feedName: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, feedName: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FeedStatus> {
 
     const location = ut`/feeds/${feedName}/status`;
@@ -727,8 +731,8 @@ export function* getFeedStatus(
 }
 
 export function* updateFeedStatus(
-    caller: ClientAction | null, nodeName: string | null, feedName: string, change: API.FeedStatusChange,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, feedName: string,
+    change: API.FeedStatusChange, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.FeedStatus> {
 
     const location = ut`/feeds/${feedName}/status`;
@@ -738,9 +742,9 @@ export function* updateFeedStatus(
 }
 
 export function* getFeedSlice(
-    caller: ClientAction | null, nodeName: string | null, feedName: string, after: number | null = null,
-    before: number | null = null, limit: number | null = null, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, feedName: string,
+    after: number | null = null, before: number | null = null, limit: number | null = null,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FeedSliceInfo> {
 
     const location = urlWithParameters(ut`/feeds/${feedName}/stories`, {after, before, limit});
@@ -751,7 +755,7 @@ export function* getFeedSlice(
 }
 
 export function* getFriendGroups(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: boolean | string = true
 ): CallApiResult<API.FriendGroupInfo[]> {
 
@@ -762,8 +766,8 @@ export function* getFriendGroups(
 }
 
 export function* getFriendGroup(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FriendGroupInfo> {
 
     const location = ut`/people/friends/groups/${id}`;
@@ -773,8 +777,8 @@ export function* getFriendGroup(
 }
 
 export function* createFriendGroup(
-    caller: ClientAction | null, nodeName: string | null, friendGroup: API.FriendGroupDescription,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string,
+    friendGroup: API.FriendGroupDescription, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.FriendGroupInfo> {
 
     const location = "/people/friends/groups";
@@ -785,8 +789,8 @@ export function* createFriendGroup(
 }
 
 export function* updateFriendGroup(
-    caller: ClientAction | null, nodeName: string | null, id: string, friendGroup: API.FriendGroupDescription,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    friendGroup: API.FriendGroupDescription, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.FriendGroupInfo> {
 
     const location = ut`/people/friends/groups/${id}`;
@@ -797,8 +801,8 @@ export function* updateFriendGroup(
 }
 
 export function* deleteFriendGroup(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/people/friends/groups/${id}`;
@@ -808,7 +812,7 @@ export function* deleteFriendGroup(
 }
 
 export function* getFriends(
-    caller: ClientAction | null, nodeName: string | null, groupId: string | null = null,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, groupId: string | null = null,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FriendInfo[]> {
 
@@ -819,8 +823,8 @@ export function* getFriends(
 }
 
 export function* getFriend(
-    caller: ClientAction | null, nodeName: string | null, name: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FriendInfo> {
 
     const location = ut`/people/friends/${name}`;
@@ -830,7 +834,7 @@ export function* getFriend(
 }
 
 export function* updateFriends(
-    caller: ClientAction | null, nodeName: string | null, friends: API.FriendDescription[],
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, friends: API.FriendDescription[],
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.FriendInfo[]> {
 
@@ -841,7 +845,7 @@ export function* updateFriends(
 }
 
 export function* getFriendOfs(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: boolean | string = true
 ): CallApiResult<API.FriendOfInfo[]> {
 
@@ -852,8 +856,8 @@ export function* getFriendOfs(
 }
 
 export function* getFriendOf(
-    caller: ClientAction | null, nodeName: string | null, name: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FriendOfInfo> {
 
     const location = ut`/people/friend-ofs/${name}`;
@@ -863,8 +867,8 @@ export function* getFriendOf(
 }
 
 export function* uploadPrivateMedia(
-    caller: ClientAction | null, nodeName: string | null, file: File, onProgress?: ProgressHandler,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, file: File,
+    onProgress?: ProgressHandler, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.PrivateMediaFileInfo> {
 
     const location = "/media/private";
@@ -875,8 +879,9 @@ export function* uploadPrivateMedia(
 }
 
 export function* getPrivateMedia(
-    caller: ClientAction | null, nodeName: string | null, id: string, width: number | null = null,
-    download: boolean | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    width: number | null = null, download: boolean | null = null, errorFilter: ErrorFilter = false,
+    auth: boolean | string = true
 ): CallApiResult<Blob> {
 
     const location = urlWithParameters(ut`/media/private/${id}/data`, {width, download});
@@ -886,8 +891,8 @@ export function* getPrivateMedia(
 }
 
 export function* getPrivateMediaInfo(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.PrivateMediaFileInfo> {
 
     const location = ut`/media/private/${id}/info`;
@@ -897,8 +902,8 @@ export function* getPrivateMediaInfo(
 }
 
 export function* getPrivateMediaParentEntry(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.EntryInfo[]> {
 
     const location = ut`/media/private/${id}/parent`;
@@ -909,8 +914,8 @@ export function* getPrivateMediaParentEntry(
 }
 
 export function* uploadPublicMedia(
-    caller: ClientAction | null, nodeName: string | null, file: File, onProgress?: ProgressHandler,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, file: File,
+    onProgress?: ProgressHandler, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.PublicMediaFileInfo> {
 
     const location = "/media/public";
@@ -921,8 +926,8 @@ export function* uploadPublicMedia(
 }
 
 export function* getPublicMedia(
-    caller: ClientAction | null, nodeName: string | null, id: string, width: number | null = null,
-    download: boolean | null = null, errorFilter: ErrorFilter = false
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    width: number | null = null, download: boolean | null = null, errorFilter: ErrorFilter = false
 ): CallApiResult<Blob> {
 
     const location = urlWithParameters(ut`/media/public/${id}/data`, {width, download});
@@ -932,7 +937,8 @@ export function* getPublicMedia(
 }
 
 export function* getPublicMediaInfo(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false
 ): CallApiResult<API.PublicMediaFileInfo> {
 
     const location = ut`/media/public/${id}/info`;
@@ -942,7 +948,7 @@ export function* getPublicMediaInfo(
 }
 
 export function* getNodeName(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: boolean | string = true
 ): CallApiResult<API.NodeNameInfo> {
 
@@ -953,7 +959,7 @@ export function* getNodeName(
 }
 
 export function* createNodeName(
-    caller: ClientAction | null, nodeName: string | null, nameToRegister: API.NameToRegister,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, nameToRegister: API.NameToRegister,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.RegisteredNameSecret> {
 
@@ -965,7 +971,7 @@ export function* createNodeName(
 }
 
 export function* updateNodeName(
-    caller: ClientAction | null, nodeName: string | null, secret: API.RegisteredNameSecret,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, secret: API.RegisteredNameSecret,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
@@ -976,7 +982,7 @@ export function* updateNodeName(
 }
 
 export function* deleteNodeName(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
 ): CallApiResult<API.Result> {
 
@@ -987,7 +993,7 @@ export function* deleteNodeName(
 }
 
 export function* sendNotification(
-    caller: ClientAction | null, nodeName: string | null, packet: API.NotificationPacket,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, packet: API.NotificationPacket,
     errorFilter: ErrorFilter = false
 ): CallApiResult<API.Result> {
 
@@ -998,7 +1004,7 @@ export function* sendNotification(
 }
 
 export function* getPeopleGeneral(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: boolean | string = true
 ): CallApiResult<API.PeopleGeneralInfo> {
 
@@ -1009,7 +1015,7 @@ export function* getPeopleGeneral(
 }
 
 export function* registerPlugin(
-    caller: ClientAction | null, nodeName: string | null, plugin: API.PluginDescription,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, plugin: API.PluginDescription,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.PluginInfo> {
 
@@ -1020,7 +1026,7 @@ export function* registerPlugin(
 }
 
 export function* getPlugins(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: boolean | string = true
 ): CallApiResult<API.PluginInfo[]> {
 
@@ -1031,8 +1037,8 @@ export function* getPlugins(
 }
 
 export function* getPlugin(
-    caller: ClientAction | null, nodeName: string | null, pluginName: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, pluginName: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.PluginInfo> {
 
     const location = ut`/plugins/${pluginName}`;
@@ -1042,8 +1048,8 @@ export function* getPlugin(
 }
 
 export function* unregisterPlugin(
-    caller: ClientAction | null, nodeName: string | null, pluginName: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, pluginName: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/plugins/${pluginName}`;
@@ -1053,8 +1059,8 @@ export function* unregisterPlugin(
 }
 
 export function* createPosting(
-    caller: ClientAction | null, nodeName: string | null, posting: API.PostingText, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, posting: API.PostingText,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.PostingInfo> {
 
     const location = "/postings";
@@ -1065,7 +1071,7 @@ export function* createPosting(
 }
 
 export function* updatePosting(
-    caller: ClientAction | null, nodeName: string | null, id: string, posting: API.PostingText,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string, posting: API.PostingText,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.PostingInfo> {
 
@@ -1077,8 +1083,8 @@ export function* updatePosting(
 }
 
 export function* getPosting(
-    caller: ClientAction | null, nodeName: string | null, id: string, withSource: boolean = false,
-    errorFilter: ErrorFilter = false, auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    withSource: boolean = false, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.PostingInfo> {
 
     const include = commaSeparatedFlags({"source": withSource});
@@ -1089,8 +1095,8 @@ export function* getPosting(
 }
 
 export function* deletePosting(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/postings/${id}`;
@@ -1100,8 +1106,8 @@ export function* deletePosting(
 }
 
 export function* getPostingsAttachedToPosting(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.PostingInfo[]> {
 
     const location = ut`/postings/${id}/attached`;
@@ -1112,8 +1118,8 @@ export function* getPostingsAttachedToPosting(
 }
 
 export function* getPostingRevisions(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, limit: number | null = null,
-    errorFilter: ErrorFilter = false, auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
+    limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.PostingRevisionInfo[]> {
 
     const location = urlWithParameters(ut`/postings/${postingId}/revisions`, {limit});
@@ -1124,7 +1130,7 @@ export function* getPostingRevisions(
 }
 
 export function* getPostingRevision(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, id: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.PostingRevisionInfo> {
 
@@ -1136,7 +1142,7 @@ export function* getPostingRevision(
 }
 
 export function* restorePostingRevision(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, id: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.PostingRevisionInfo> {
 
@@ -1148,8 +1154,8 @@ export function* restorePostingRevision(
 }
 
 export function* createPostingReaction(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, reaction: API.ReactionDescription,
-    errorFilter: ErrorFilter = false, auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
+    reaction: API.ReactionDescription, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionCreated> {
 
     const location = ut`/postings/${postingId}/reactions`;
@@ -1160,9 +1166,9 @@ export function* createPostingReaction(
 }
 
 export function* getPostingReactionsSlice(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, negative: boolean | null = null,
-    emoji: number | null = null, before: number | null = null, limit: number | null = null,
-    errorFilter: ErrorFilter = false, auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
+    negative: boolean | null = null, emoji: number | null = null, before: number | null = null,
+    limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionsSliceInfo> {
 
     const location = urlWithParameters(
@@ -1175,7 +1181,7 @@ export function* getPostingReactionsSlice(
 }
 
 export function* updatePostingReaction(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, ownerName: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, ownerName: string,
     reaction: API.ReactionOverride, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionInfo> {
 
@@ -1186,7 +1192,7 @@ export function* updatePostingReaction(
 }
 
 export function* getPostingReaction(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, ownerName: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, ownerName: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionInfo> {
 
@@ -1197,8 +1203,8 @@ export function* getPostingReaction(
 }
 
 export function* deleteAllPostingReactions(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/postings/${postingId}/reactions`;
@@ -1208,7 +1214,7 @@ export function* deleteAllPostingReactions(
 }
 
 export function* deletePostingReaction(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, ownerName: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, ownerName: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionTotalsInfo> {
 
@@ -1219,7 +1225,7 @@ export function* deletePostingReaction(
 }
 
 export function* searchPostingReactions(
-    caller: ClientAction | null, nodeName: string | null, filter: API.ReactionsFilter,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.ReactionsFilter,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionInfo[]> {
 
@@ -1231,8 +1237,8 @@ export function* searchPostingReactions(
 }
 
 export function* getPostingReactionTotals(
-    caller: ClientAction | null, nodeName: string | null, postingId: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionTotalsInfo> {
 
     const location = ut`/postings/${postingId}/reaction-totals`;
@@ -1242,7 +1248,7 @@ export function* getPostingReactionTotals(
 }
 
 export function* searchPostingReactionTotals(
-    caller: ClientAction | null, nodeName: string | null, filter: API.ReactionTotalsFilter,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.ReactionTotalsFilter,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionTotalsInfo[]> {
 
@@ -1254,7 +1260,7 @@ export function* searchPostingReactionTotals(
 }
 
 export function* getProfile(
-    caller: ClientAction | null, nodeName: string | null, withSource: boolean = false,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, withSource: boolean = false,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ProfileInfo> {
 
@@ -1266,7 +1272,7 @@ export function* getProfile(
 }
 
 export function* updateProfile(
-    caller: ClientAction | null, nodeName: string | null, profile: API.ProfileAttributes,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, profile: API.ProfileAttributes,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.ProfileInfo> {
 
@@ -1277,7 +1283,7 @@ export function* updateProfile(
 }
 
 export function* getDeleteNodeRequestStatus(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
 ): CallApiResult<API.DeleteNodeStatus> {
 
@@ -1288,7 +1294,7 @@ export function* getDeleteNodeRequestStatus(
 }
 
 export function* sendDeleteNodeRequest(
-    caller: ClientAction | null, nodeName: string | null, deleteNodeText: API.DeleteNodeText,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, deleteNodeText: API.DeleteNodeText,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.DeleteNodeStatus> {
 
@@ -1300,7 +1306,7 @@ export function* sendDeleteNodeRequest(
 }
 
 export function* cancelDeleteNodeRequest(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
 ): CallApiResult<API.DeleteNodeStatus> {
 
@@ -1311,8 +1317,8 @@ export function* cancelDeleteNodeRequest(
 }
 
 export function* proxyMedia(
-    caller: ClientAction | null, nodeName: string | null, url: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, url: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<Blob> {
 
     const location = urlWithParameters(ut`/proxy/media`, {url});
@@ -1322,8 +1328,8 @@ export function* proxyMedia(
 }
 
 export function* proxyLinkPreview(
-    caller: ClientAction | null, nodeName: string | null, url: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, url: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.LinkPreviewInfo> {
 
     const location = urlWithParameters(ut`/proxy/link-preview`, {url});
@@ -1333,8 +1339,8 @@ export function* proxyLinkPreview(
 }
 
 export function* registerAtPushRelay(
-    caller: ClientAction | null, nodeName: string | null, attributes: API.PushRelayClientAttributes,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string,
+    attributes: API.PushRelayClientAttributes, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = "/push-relay";
@@ -1344,8 +1350,8 @@ export function* registerAtPushRelay(
 }
 
 export function* askRemoteNode(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, details: API.AskDescription,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    details: API.AskDescription, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/ask`;
@@ -1355,8 +1361,8 @@ export function* askRemoteNode(
 }
 
 export function* createRemoteComment(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, postingId: string,
-    comment: API.CommentSourceText, errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    postingId: string, comment: API.CommentSourceText, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments`;
@@ -1366,8 +1372,9 @@ export function* createRemoteComment(
 }
 
 export function* updateRemoteComment(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, postingId: string,
-    commentId: string, comment: API.CommentSourceText, errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    postingId: string, commentId: string, comment: API.CommentSourceText, errorFilter: ErrorFilter = false,
+    auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}`;
@@ -1377,8 +1384,8 @@ export function* updateRemoteComment(
 }
 
 export function* deleteRemoteComment(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, postingId: string,
-    commentId: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    postingId: string, commentId: string, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}`;
@@ -1388,8 +1395,8 @@ export function* deleteRemoteComment(
 }
 
 export function* verifyRemoteComment(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, postingId: string,
-    commentId: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    postingId: string, commentId: string, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.AsyncOperationCreated> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/verify`;
@@ -1399,8 +1406,9 @@ export function* verifyRemoteComment(
 }
 
 export function* createRemoteCommentReaction(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, postingId: string,
-    commentId: string, reaction: API.ReactionAttributes, errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    postingId: string, commentId: string, reaction: API.ReactionAttributes, errorFilter: ErrorFilter = false,
+    auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions`;
@@ -1410,8 +1418,8 @@ export function* createRemoteCommentReaction(
 }
 
 export function* deleteRemoteCommentReaction(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, postingId: string,
-    commentId: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    postingId: string, commentId: string, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions`;
@@ -1421,8 +1429,9 @@ export function* deleteRemoteCommentReaction(
 }
 
 export function* verifyRemoteCommentReaction(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, postingId: string,
-    commentId: string, ownerName: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    postingId: string, commentId: string, ownerName: string, errorFilter: ErrorFilter = false,
+    auth: true | string = true
 ): CallApiResult<API.AsyncOperationCreated> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions/${ownerName}/verify`;
@@ -1432,8 +1441,8 @@ export function* verifyRemoteCommentReaction(
 }
 
 export function* createRemotePosting(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, posting: API.PostingSourceText,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    posting: API.PostingSourceText, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings`;
@@ -1443,8 +1452,8 @@ export function* createRemotePosting(
 }
 
 export function* updateRemotePosting(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, postingId: string,
-    posting: API.PostingSourceText, errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    postingId: string, posting: API.PostingSourceText, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}`;
@@ -1454,8 +1463,8 @@ export function* updateRemotePosting(
 }
 
 export function* deleteRemotePosting(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, postingId: string,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    postingId: string, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}`;
@@ -1465,7 +1474,7 @@ export function* deleteRemotePosting(
 }
 
 export function* verifyRemotePosting(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, id: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.AsyncOperationCreated> {
 
@@ -1476,8 +1485,8 @@ export function* verifyRemotePosting(
 }
 
 export function* verifyRemotePostingRevision(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, id: string, revisionId: string,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string, id: string,
+    revisionId: string, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.AsyncOperationCreated> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${id}/revisions/${revisionId}/verify`;
@@ -1487,8 +1496,8 @@ export function* verifyRemotePostingRevision(
 }
 
 export function* createRemotePostingReaction(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, postingId: string,
-    reaction: API.ReactionAttributes, errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    postingId: string, reaction: API.ReactionAttributes, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/reactions`;
@@ -1498,8 +1507,8 @@ export function* createRemotePostingReaction(
 }
 
 export function* deleteRemotePostingReaction(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, postingId: string,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    postingId: string, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/reactions`;
@@ -1509,8 +1518,8 @@ export function* deleteRemotePostingReaction(
 }
 
 export function* verifyRemotePostingReaction(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, postingId: string,
-    ownerName: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    postingId: string, ownerName: string, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.AsyncOperationCreated> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/reactions/${ownerName}/verify`;
@@ -1520,7 +1529,7 @@ export function* verifyRemotePostingReaction(
 }
 
 export function* createRemoteSheriffOrder(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     sheriffOrder: API.SheriffOrderAttributes, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
@@ -1531,7 +1540,7 @@ export function* createRemoteSheriffOrder(
 }
 
 export function* getRemoteSheriffOrder(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string, id: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string, id: string,
     errorFilter: ErrorFilter = false
 ): CallApiResult<API.SheriffOrderInfo> {
 
@@ -1542,7 +1551,7 @@ export function* getRemoteSheriffOrder(
 }
 
 export function* updateSettings(
-    caller: ClientAction | null, nodeName: string | null, settings: API.SettingInfo[],
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, settings: API.SettingInfo[],
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
@@ -1553,7 +1562,7 @@ export function* updateSettings(
 }
 
 export function* getClientSettings(
-    caller: ClientAction | null, nodeName: string | null, prefix: string | null = null,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, prefix: string | null = null,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.SettingInfo[]> {
 
@@ -1564,7 +1573,7 @@ export function* getClientSettings(
 }
 
 export function* getNodeSettings(
-    caller: ClientAction | null, nodeName: string | null, prefix: string | null = null,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, prefix: string | null = null,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.SettingInfo[]> {
 
@@ -1575,7 +1584,7 @@ export function* getNodeSettings(
 }
 
 export function* getNodeSettingsMetadata(
-    caller: ClientAction | null, nodeName: string | null, prefix: string | null = null,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, prefix: string | null = null,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.SettingMetaInfo[]> {
 
@@ -1586,7 +1595,7 @@ export function* getNodeSettingsMetadata(
 }
 
 export function* updateNodeSettingsMetadata(
-    caller: ClientAction | null, nodeName: string | null, metadata: API.SettingMetaAttributes[],
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, metadata: API.SettingMetaAttributes[],
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
@@ -1597,8 +1606,9 @@ export function* updateNodeSettingsMetadata(
 }
 
 export function* getSheriffComplaintGroupsSlice(
-    caller: ClientAction | null, nodeName: string | null, after: number | null = null, before: number | null = null,
-    limit: number | null = null, status: API.SheriffComplainStatus | null = null, errorFilter: ErrorFilter = false
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, after: number | null = null,
+    before: number | null = null, limit: number | null = null, status: API.SheriffComplainStatus | null = null,
+    errorFilter: ErrorFilter = false
 ): CallApiResult<API.SheriffComplainGroupsSliceInfo> {
 
     const location = urlWithParameters(ut`/sheriff/complains/groups`, {after, before, limit, status});
@@ -1608,7 +1618,8 @@ export function* getSheriffComplaintGroupsSlice(
 }
 
 export function* getSheriffComplaintGroup(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false
 ): CallApiResult<API.SheriffComplainGroupInfo> {
 
     const location = ut`/sheriff/complains/groups/${id}`;
@@ -1618,7 +1629,8 @@ export function* getSheriffComplaintGroup(
 }
 
 export function* getSheriffComplaintsByGroup(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false
 ): CallApiResult<API.SheriffComplainInfo[]> {
 
     const location = ut`/sheriff/complains/groups/${id}/complains`;
@@ -1628,8 +1640,8 @@ export function* getSheriffComplaintsByGroup(
 }
 
 export function* updateSheriffComplaintGroup(
-    caller: ClientAction | null, nodeName: string | null, id: string, decision: API.SheriffComplainDecisionText,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    decision: API.SheriffComplainDecisionText, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.SheriffComplainGroupInfo> {
 
     const location = ut`/sheriff/complains/groups/${id}`;
@@ -1640,7 +1652,7 @@ export function* updateSheriffComplaintGroup(
 }
 
 export function* createSheriffComplaint(
-    caller: ClientAction | null, nodeName: string | null, complaint: API.SheriffComplainText,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, complaint: API.SheriffComplainText,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.SheriffComplainInfo> {
 
@@ -1652,7 +1664,7 @@ export function* createSheriffComplaint(
 }
 
 export function* createSheriffOrder(
-    caller: ClientAction | null, nodeName: string | null, sheriffOrder: API.SheriffOrderDetails,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, sheriffOrder: API.SheriffOrderDetails,
     errorFilter: ErrorFilter = false
 ): CallApiResult<API.Result> {
 
@@ -1663,8 +1675,8 @@ export function* createSheriffOrder(
 }
 
 export function* getStory(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.StoryInfo> {
 
     const location = ut`/stories/${id}`;
@@ -1674,7 +1686,7 @@ export function* getStory(
 }
 
 export function* updateStory(
-    caller: ClientAction | null, nodeName: string | null, id: string, story: API.StoryAttributes,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string, story: API.StoryAttributes,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.StoryInfo> {
 
@@ -1686,7 +1698,7 @@ export function* updateStory(
 }
 
 export function* getSubscribers(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string | null = null,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string | null = null,
     type: API.SubscriptionType | null = null, feedName: string | null = null, entryId: string | null = null,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.SubscriberInfo[]> {
@@ -1701,7 +1713,7 @@ export function* getSubscribers(
 }
 
 export function* createSubscriber(
-    caller: ClientAction | null, nodeName: string | null, subscriber: API.SubscriberDescription,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, subscriber: API.SubscriberDescription,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.SubscriberInfo> {
 
@@ -1713,8 +1725,8 @@ export function* createSubscriber(
 }
 
 export function* getSubscriber(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.SubscriberInfo> {
 
     const location = ut`/people/subscribers/${id}`;
@@ -1724,8 +1736,8 @@ export function* getSubscriber(
 }
 
 export function* updateSubscriber(
-    caller: ClientAction | null, nodeName: string | null, id: string, subscriber: API.SubscriberOverride,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    subscriber: API.SubscriberOverride, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.SubscriberInfo> {
 
     const location = ut`/people/subscribers/${id}`;
@@ -1736,8 +1748,8 @@ export function* updateSubscriber(
 }
 
 export function* deleteSubscriber(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ContactInfo> {
 
     const location = ut`/people/subscribers/${id}`;
@@ -1747,7 +1759,7 @@ export function* deleteSubscriber(
 }
 
 export function* getSubscriptions(
-    caller: ClientAction | null, nodeName: string | null, remoteNodeName: string | null = null,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string | null = null,
     type: API.SubscriptionType | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.SubscriptionInfo[]> {
 
@@ -1758,8 +1770,8 @@ export function* getSubscriptions(
 }
 
 export function* createSubscription(
-    caller: ClientAction | null, nodeName: string | null, subscription: API.SubscriptionDescription,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string,
+    subscription: API.SubscriptionDescription, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.SubscriptionInfo> {
 
     const location = "/people/subscriptions";
@@ -1770,8 +1782,8 @@ export function* createSubscription(
 }
 
 export function* updateSubscription(
-    caller: ClientAction | null, nodeName: string | null, id: string, subscription: API.SubscriptionOverride,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    subscription: API.SubscriptionOverride, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.SubscriptionInfo> {
 
     const location = ut`/people/subscriptions/${id}`;
@@ -1782,8 +1794,8 @@ export function* updateSubscription(
 }
 
 export function* deleteSubscription(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.ContactInfo> {
 
     const location = ut`/people/subscriptions/${id}`;
@@ -1793,7 +1805,7 @@ export function* deleteSubscription(
 }
 
 export function* searchSubscriptions(
-    caller: ClientAction | null, nodeName: string | null, filter: API.SubscriptionFilter,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.SubscriptionFilter,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.SubscriptionInfo[]> {
 
@@ -1805,7 +1817,7 @@ export function* searchSubscriptions(
 }
 
 export function* getTokens(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
 ): CallApiResult<API.TokenInfo[]> {
 
@@ -1816,7 +1828,7 @@ export function* getTokens(
 }
 
 export function* createToken(
-    caller: ClientAction | null, nodeName: string | null, token: API.TokenAttributes,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, token: API.TokenAttributes,
     errorFilter: ErrorFilter = false
 ): CallApiResult<API.TokenInfo> {
 
@@ -1827,8 +1839,8 @@ export function* createToken(
 }
 
 export function* getTokenInfo(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.TokenInfo> {
 
     const location = ut`/tokens/${id}`;
@@ -1838,7 +1850,7 @@ export function* getTokenInfo(
 }
 
 export function* updateToken(
-    caller: ClientAction | null, nodeName: string | null, id: string, token: API.TokenName,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string, token: API.TokenName,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.TokenInfo> {
 
@@ -1849,8 +1861,8 @@ export function* updateToken(
 }
 
 export function* deleteToken(
-    caller: ClientAction | null, nodeName: string | null, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/tokens/${id}`;
@@ -1860,7 +1872,8 @@ export function* deleteToken(
 }
 
 export function* getUserListGeneral(
-    caller: ClientAction | null, nodeName: string | null, name: string, errorFilter: ErrorFilter = false
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string,
+    errorFilter: ErrorFilter = false
 ): CallApiResult<API.UserListInfo> {
 
     const location = ut`/user-lists/${name}`;
@@ -1870,8 +1883,9 @@ export function* getUserListGeneral(
 }
 
 export function* getUserListSlice(
-    caller: ClientAction | null, nodeName: string | null, name: string, after: number | null = null,
-    before: number | null = null, limit: number | null = null, errorFilter: ErrorFilter = false
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string,
+    after: number | null = null, before: number | null = null, limit: number | null = null,
+    errorFilter: ErrorFilter = false
 ): CallApiResult<API.UserListSliceInfo> {
 
     const location = urlWithParameters(ut`/user-lists/${name}/items`, {after, before, limit});
@@ -1881,7 +1895,7 @@ export function* getUserListSlice(
 }
 
 export function* getUserListItem(
-    caller: ClientAction | null, nodeName: string | null, name: string, remoteNodeName: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string, remoteNodeName: string,
     errorFilter: ErrorFilter = false
 ): CallApiResult<API.UserListItemInfo> {
 
@@ -1892,8 +1906,8 @@ export function* getUserListItem(
 }
 
 export function* createUserListItem(
-    caller: ClientAction | null, nodeName: string | null, name: string, item: API.UserListItemAttributes,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string,
+    item: API.UserListItemAttributes, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.UserListItemInfo> {
 
     const location = ut`/user-lists/${name}/items`;
@@ -1903,7 +1917,7 @@ export function* createUserListItem(
 }
 
 export function* deleteUserListItem(
-    caller: ClientAction | null, nodeName: string | null, name: string, remoteNodeName: string,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string, remoteNodeName: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.Result> {
 
@@ -1914,7 +1928,7 @@ export function* deleteUserListItem(
 }
 
 export function* whoAmI(
-    caller: ClientAction | null, nodeName: string | null, errorFilter: ErrorFilter = false
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false
 ): CallApiResult<API.WhoAmI> {
 
     const location = "/whoami";

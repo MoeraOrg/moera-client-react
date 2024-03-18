@@ -11,10 +11,11 @@ import EntryLinkPreviewImage from "ui/entry/EntryLinkPreviewImage";
 import EntryLinkPreviewEditDialog, { EntryLinkPreviewEditValues } from "ui/entry/EntryLinkPreviewEditDialog";
 import { interceptLinkClick } from "ui/entry/link-click-intercept";
 import { ellipsize } from "util/text";
+import { RelNodeName } from "util/rel-node-name";
 import "./EntryLinkPreview.css";
 
 interface Props {
-    nodeName: string | null;
+    nodeName: RelNodeName | string;
     siteName?: string | null;
     url?: string | null;
     title?: string | null;

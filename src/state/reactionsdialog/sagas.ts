@@ -14,8 +14,9 @@ import {
     reactionVerifyFailed
 } from "state/reactionsdialog/actions";
 import { errorThrown } from "state/error/actions";
-import { getPosting } from "state/postings/selectors";
 import { executor } from "state/executor";
+import { REL_HOME } from "util/rel-node-name";
+import { getReactionsDialogPosting } from "state/reactionsdialog/selectors";
 
 export default [
     executor("REACTIONS_DIALOG_PAST_REACTIONS_LOAD", "", reactionsDialogPastReactionsLoadSaga),
@@ -27,16 +28,16 @@ export default [
     )
 ];
 
-function* reactionsDialogPastReactionsLoadSaga(action: ReactionsDialogPastReactionsLoadAction) {
+function* reactionsDialogPastReactionsLoadSaga(action: WithContext<ReactionsDialogPastReactionsLoadAction>) {
     const {nodeName, posting, commentId, negative, before, emoji} = yield* select((state: ClientState) => ({
         nodeName: state.reactionsDialog.nodeName,
-        posting: getPosting(state, state.reactionsDialog.postingId),
+        posting: getReactionsDialogPosting(state),
         commentId: state.reactionsDialog.commentId,
         negative: state.reactionsDialog.negative,
         before: state.reactionsDialog.reactions[state.reactionsDialog.activeTab ?? 0]?.after,
         emoji: state.reactionsDialog.activeTab
     }));
-    if (posting == null) {
+    if (nodeName == null || posting == null) {
         return;
     }
     const postingId = posting.receiverPostingId ?? posting.id;
@@ -54,19 +55,19 @@ function* reactionsDialogPastReactionsLoadSaga(action: ReactionsDialogPastReacti
     }
 }
 
-function* reactionsDialogTotalsLoadSaga(action: ReactionsDialogTotalsLoadAction) {
+function* reactionsDialogTotalsLoadSaga(action: WithContext<ReactionsDialogTotalsLoadAction>) {
     const {nodeName, posting, commentId} = yield* select((state: ClientState) => ({
         nodeName: state.reactionsDialog.nodeName,
-        posting: getPosting(state, state.reactionsDialog.postingId),
+        posting: getReactionsDialogPosting(state),
         commentId: state.reactionsDialog.commentId
     }));
-    if (posting == null) {
+    if (nodeName == null || posting == null) {
         return;
     }
     const postingId = posting.receiverPostingId ?? posting.id;
     try {
         const totals = commentId == null
-            ? yield* call(Node.getPostingReactionTotals, action, "", posting.id)
+            ? yield* call(Node.getPostingReactionTotals, action, nodeName, posting.id)
             : yield* call(Node.getCommentReactionTotals, action, nodeName, postingId, commentId)
         yield* put(reactionsDialogTotalsLoaded(totals.positive, totals.negative).causedBy(action));
     } catch (e) {
@@ -84,9 +85,9 @@ function* reactionVerifySaga(action: WithContext<ReactionVerifyAction>) {
     }
     try {
         if (commentId == null) {
-            yield* call(Node.verifyRemotePostingReaction, action, ":", nodeName, postingId, ownerName);
+            yield* call(Node.verifyRemotePostingReaction, action, REL_HOME, nodeName, postingId, ownerName);
         } else {
-            yield* call(Node.verifyRemoteCommentReaction, action, ":", nodeName, postingId, commentId, ownerName);
+            yield* call(Node.verifyRemoteCommentReaction, action, REL_HOME, nodeName, postingId, commentId, ownerName);
         }
     } catch (e) {
         yield* put(reactionVerifyFailed(postingId, commentId, ownerName).causedBy(action));

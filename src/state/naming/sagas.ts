@@ -8,7 +8,7 @@ import { ClientAction } from "state/action";
 import { ClientState } from "state/state";
 import { getComments, getDetailedPosting } from "state/detailedposting/selectors";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
-import { getOwnerName } from "state/node/selectors";
+import { getOwnerName, getOwnerNameOrUrl } from "state/node/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import {
@@ -150,7 +150,7 @@ function* getUsedNames() {
 
     const {feedNames, postings} = yield* select((state: ClientState) => ({
         feedNames: getAllFeeds(state),
-        postings: state.postings[""] ?? {}
+        postings: state.postings[getOwnerNameOrUrl(state)] ?? {}
     }));
     for (const feedName of feedNames) {
         const stories = yield* select(state => getFeedState(state, feedName).stories)

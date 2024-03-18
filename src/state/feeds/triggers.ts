@@ -42,6 +42,7 @@ import { storyAdded, storyDeleted, storyUpdated } from "state/stories/actions";
 import { postingSubscriptionSet, remotePostingSubscriptionSet } from "state/postings/actions";
 import { WithContext } from "state/action-types";
 import { now } from "util/misc";
+import { REL_CURRENT } from "util/rel-node-name";
 
 function toStory(
     eventPayload: Omit<StoryAddedEvent | StoryUpdatedEvent | StoryDeletedEvent, "type">, isHome: boolean
@@ -196,7 +197,7 @@ export default [
             && getOwnerName(state) === signal.payload.subscription.remoteNodeName,
         (signal: EventAction<SubscriptionAddedEvent>) => postingSubscriptionSet(
             signal.payload.subscription.remotePostingId!, signal.payload.subscription.type,
-            signal.payload.subscription.id, "")
+            signal.payload.subscription.id, REL_CURRENT)
     ),
     trigger(
         "EVENT_HOME_SUBSCRIPTION_ADDED",
@@ -206,7 +207,7 @@ export default [
             && getOwnerName(state) !== signal.payload.subscription.remoteNodeName,
         (signal: EventAction<SubscriptionAddedEvent>) => remotePostingSubscriptionSet(
             signal.payload.subscription.remoteNodeName, signal.payload.subscription.remotePostingId!,
-            signal.payload.subscription.type, signal.payload.subscription.id, "")
+            signal.payload.subscription.type, signal.payload.subscription.id, REL_CURRENT)
     ),
     trigger(
         "EVENT_HOME_SUBSCRIPTION_DELETED",
@@ -215,7 +216,7 @@ export default [
             && signal.payload.subscription.remotePostingId != null
             && getOwnerName(state) === signal.payload.subscription.remoteNodeName,
         (signal: EventAction<SubscriptionDeletedEvent>) => postingSubscriptionSet(
-            signal.payload.subscription.remotePostingId!, signal.payload.subscription.type, null, "")
+            signal.payload.subscription.remotePostingId!, signal.payload.subscription.type, null, REL_CURRENT)
     ),
     trigger(
         "EVENT_HOME_SUBSCRIPTION_DELETED",
@@ -225,7 +226,7 @@ export default [
             && getOwnerName(state) !== signal.payload.subscription.remoteNodeName,
         (signal: EventAction<SubscriptionDeletedEvent>) => remotePostingSubscriptionSet(
             signal.payload.subscription.remoteNodeName, signal.payload.subscription.remotePostingId!,
-            signal.payload.subscription.type, null, "")
+            signal.payload.subscription.type, null, REL_CURRENT)
     ),
     trigger(
         "EVENT_HOME_SUBSCRIBER_UPDATED",

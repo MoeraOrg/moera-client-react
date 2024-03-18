@@ -8,6 +8,7 @@ import { FormGroup } from "ui/control";
 import { RichTextEditor, RichTextValue } from "ui/control/richtexteditor";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import FieldError from "ui/control/field/FieldError";
+import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 
 interface Props {
     name: string;
@@ -16,7 +17,7 @@ interface Props {
     maxHeight?: string | null;
     features?: PostingFeatures | null;
     noMedia?: boolean;
-    nodeName?: string | null;
+    nodeName?: RelNodeName | string;
     forceImageCompress?: boolean;
     placeholder?: string | null;
     autoFocus?: boolean;
@@ -35,9 +36,9 @@ interface Props {
 }
 
 export function RichTextField({
-    name, title, rows = 3, maxHeight, features, noMedia, nodeName, forceImageCompress, placeholder, autoFocus, anyValue,
-    className, autoComplete, noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled,
-    hidingPanel, format, onKeyDown, urlsField
+    name, title, rows = 3, maxHeight, features, noMedia, nodeName = REL_CURRENT, forceImageCompress, placeholder,
+    autoFocus, anyValue, className, autoComplete, noFeedback = false, disabled = false, initialValue, defaultValue,
+    smileysEnabled, hidingPanel, format, onKeyDown, urlsField
 }: Props) {
     const [{value, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);

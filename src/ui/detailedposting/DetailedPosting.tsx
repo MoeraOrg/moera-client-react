@@ -28,6 +28,7 @@ import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
 import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
 import { getPageHeaderHeight } from "util/ui";
+import { REL_CURRENT } from "util/rel-node-name";
 
 interface Props {
     story: MinimalStoryInfo;
@@ -87,12 +88,14 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
                 </div>
             </div>
             <PostingSubject posting={posting} preview={false}/>
-            <EntryHtml className="content" postingId={posting.id} html={posting.body.text} nodeName=""
+            <EntryHtml className="content" postingId={posting.id} html={posting.body.text} nodeName={REL_CURRENT}
                        media={posting.media}/>
-            <EntryLinkPreviews nodeName="" linkPreviews={posting.body.linkPreviews} media={posting.media ?? null}/>
+            <EntryLinkPreviews nodeName={REL_CURRENT} linkPreviews={posting.body.linkPreviews}
+                               media={posting.media ?? null}/>
             {!expanded &&
                 <div id="posting-gallery" className="gallery-collapsed">
-                    <EntryGallery postingId={posting.id} nodeName="" media={posting.media ?? null} onExpand={onExpand}/>
+                    <EntryGallery postingId={posting.id} nodeName={REL_CURRENT} media={posting.media ?? null}
+                                  onExpand={onExpand}/>
                 </div>
             }
             <div className="reactions-line">
@@ -102,7 +105,7 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
             </div>
             <PostingButtons posting={posting} story={story} menu/>
             {expanded &&
-                <EntryGalleryExpanded postingId={posting.id} nodeName="" media={posting.media ?? null}
+                <EntryGalleryExpanded postingId={posting.id} nodeName={REL_CURRENT} media={posting.media ?? null}
                                       onCollapse={onCollapse}/>
             }
             {posting.receiverDeletedAt == null &&

@@ -1,14 +1,15 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { ReactionInfo, ReactionTotalInfo } from "api";
+import { RelNodeName } from "util/rel-node-name";
 
 export type OpenReactionsDialogAction = ActionWithPayload<"OPEN_REACTIONS_DIALOG", {
-    nodeName: string;
+    nodeName: RelNodeName | string;
     postingId: string;
     commentId: string | null;
     negative: boolean;
 }>;
 export const openReactionsDialog = (
-    nodeName: string, postingId: string, commentId: string | null, negative: boolean
+    nodeName: RelNodeName | string, postingId: string, commentId: string | null, negative: boolean
 ): OpenReactionsDialogAction =>
     actionWithPayload("OPEN_REACTIONS_DIALOG", {nodeName, postingId, commentId, negative});
 

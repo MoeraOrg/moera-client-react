@@ -1,10 +1,11 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
+import { RelNodeName } from "util/rel-node-name";
 
 export type ShareDialogPrepareAction = ActionWithPayload<"SHARE_DIALOG_PREPARE", {
-    nodeName: string;
+    nodeName: RelNodeName | string;
     href: string;
 }>;
-export const shareDialogPrepare = (nodeName: string, href: string): ShareDialogPrepareAction =>
+export const shareDialogPrepare = (nodeName: RelNodeName | string, href: string): ShareDialogPrepareAction =>
     actionWithPayload("SHARE_DIALOG_PREPARE", {nodeName, href});
 
 export type OpenShareDialogAction = ActionWithPayload<"OPEN_SHARE_DIALOG", {
@@ -25,10 +26,10 @@ export const shareDialogCopyLink = (url: string): ShareDialogCopyLinkAction =>
     actionWithPayload("SHARE_DIALOG_COPY_LINK", {url});
 
 export type SharePageCopyLinkAction = ActionWithPayload<"SHARE_PAGE_COPY_LINK", {
-    nodeName: string;
+    nodeName: RelNodeName | string;
     href: string;
 }>;
-export const sharePageCopyLink = (nodeName: string, href: string): SharePageCopyLinkAction =>
+export const sharePageCopyLink = (nodeName: RelNodeName | string, href: string): SharePageCopyLinkAction =>
     actionWithPayload("SHARE_PAGE_COPY_LINK", {nodeName, href});
 
 export type ShareDialogAnyAction =

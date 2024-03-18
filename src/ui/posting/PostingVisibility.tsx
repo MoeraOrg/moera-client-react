@@ -12,6 +12,7 @@ import { postingOperationsUpdate } from "state/postings/actions";
 import { getSetting } from "state/settings/selectors";
 import { Principal, PrincipalSelect } from "ui/control";
 import "./PostingVisibility.css";
+import { REL_CURRENT } from "util/rel-node-name";
 
 interface Props {
     posting: PostingInfo;
@@ -23,7 +24,8 @@ export default function PostingVisibility({posting, editable}: Props) {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const onChange = (value: PrincipalValue) => dispatch(postingOperationsUpdate(posting.id, "", {view: value}));
+    const onChange = (value: PrincipalValue) =>
+        dispatch(postingOperationsUpdate(posting.id, REL_CURRENT, {view: value}));
 
     const value = posting.receiverOperations?.view ?? posting.operations?.view ?? "public";
     let deletionDate = "";

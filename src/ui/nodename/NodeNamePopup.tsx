@@ -5,12 +5,13 @@ import { AvatarImage } from "api";
 import { nodeCardPrepare } from "state/nodecards/actions";
 import { DelayedPopover, DelayedPopoverElement } from "ui/control";
 import NodeCard from "ui/nodename/NodeCard";
+import { RelNodeName } from "util/rel-node-name";
 
 interface Props {
     nodeName: string;
     fullName?: string | null;
     avatar?: AvatarImage | null;
-    avatarNodeName?: string;
+    avatarNodeName?: RelNodeName | string;
     disabled?: boolean;
     children: DelayedPopoverElement;
 }

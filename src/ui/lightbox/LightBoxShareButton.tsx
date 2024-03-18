@@ -17,17 +17,18 @@ import { getPosting } from "state/postings/selectors";
 import { getComment } from "state/detailedposting/selectors";
 import { getOwnerName } from "state/node/selectors";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
+import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { urlWithParameters, ut } from "util/url";
 import './LightBoxShareButton.css';
 
 interface Props {
-    mediaNodeName: string;
+    mediaNodeName: RelNodeName | string;
     mediaHref: string;
 }
 
 function LightBoxShareItems({mediaNodeName, mediaHref}: Props) {
     const sourceNodeName = useSelector((state: ClientState) => getLightBoxNodeName(state) || getOwnerName(state));
-    const posting = useSelector((state: ClientState) => getPosting(state, getLightBoxPostingId(state)));
+    const posting = useSelector((state: ClientState) => getPosting(state, getLightBoxPostingId(state), REL_CURRENT));
     const comment = useSelector((state: ClientState) => {
         const commentId = getLightBoxCommentId(state);
         return commentId != null ? getComment(state, commentId) : null;
@@ -40,7 +41,7 @@ function LightBoxShareItems({mediaNodeName, mediaHref}: Props) {
         return null;
     }
 
-    let nodeName: string;
+    let nodeName: RelNodeName | string;
     let href: string;
     if (comment == null) {
         if (posting == null) {

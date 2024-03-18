@@ -1,12 +1,12 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
-import { getOwnerName } from "state/node/selectors";
 import { shareDialogPrepare } from "state/sharedialog/actions";
 import { ut } from "util/url";
+import { REL_CURRENT } from "util/rel-node-name";
 
 interface Props {
     postingId: string;
@@ -15,11 +15,10 @@ interface Props {
 }
 
 export default function PostingShareButton({postingId, postingReceiverName, postingReceiverPostingId}: Props) {
-    const ownerName = useSelector(getOwnerName);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const nodeName = postingReceiverName ?? ownerName ?? "";
+    const nodeName = postingReceiverName ?? REL_CURRENT;
     const id = postingReceiverPostingId ?? postingId;
     const href = ut`/post/${id}`;
     return (

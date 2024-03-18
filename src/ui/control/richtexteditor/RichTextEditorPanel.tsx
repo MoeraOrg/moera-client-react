@@ -28,6 +28,7 @@ import { htmlEntities } from "util/html";
 import { getTextSelection, insertText, wrapSelection, wrapSelectionLines } from "util/ui";
 import { mentionName } from "util/names";
 import { NameListItem } from "util/names-list";
+import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import "./RichTextEditorPanel.css";
 
 interface Props {
@@ -37,7 +38,7 @@ interface Props {
     format: Exclude<SourceFormat, "plain-text">;
     features: PostingFeatures | null;
     noMedia?: boolean;
-    nodeName?: string | null;
+    nodeName?: RelNodeName | string;
     forceImageCompress?: boolean;
     selectedImage: PrivateMediaFileInfo | null;
     selectImage: (image: PrivateMediaFileInfo | null) => void;
@@ -48,8 +49,8 @@ interface Props {
 }
 
 export default function RichTextEditorPanel({
-    textArea, panel, hiding, format, features, noMedia, nodeName, forceImageCompress, selectedImage, selectImage,
-    onImageAdded, onImageDeleted, externalImage, uploadingExternalImage
+    textArea, panel, hiding, format, features, noMedia, nodeName = REL_CURRENT, forceImageCompress, selectedImage,
+    selectImage, onImageAdded, onImageDeleted, externalImage, uploadingExternalImage
 }: Props) {
     const [spoilerDialog, setSpoilerDialog] = useState<boolean>(false);
     const [foldDialog, setFoldDialog] = useState<boolean>(false);

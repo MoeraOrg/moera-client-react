@@ -11,6 +11,7 @@ import EntryImage from "ui/entry/EntryImage";
 import { interceptLinkClick } from "ui/entry/link-click-intercept";
 import MrSpoiler from "ui/entry/MrSpoiler";
 import { isNumericString } from "util/misc";
+import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 
 const InlineMath = React.lazy(() => import("ui/katex/InlineMath"));
 const BlockMath = React.lazy(() => import("ui/katex/BlockMath"));
@@ -20,12 +21,14 @@ interface Props {
     postingId?: string | null;
     commentId?: string | null;
     html: string | null | undefined;
-    nodeName?: string | null;
+    nodeName?: RelNodeName | string;
     media?: MediaAttachment[] | null;
     onClick?: (event: React.MouseEvent) => void;
 }
 
-export default function EntryHtml({className, postingId, commentId, html, nodeName, media, onClick}: Props) {
+export default function EntryHtml({
+    className, postingId, commentId, html, nodeName = REL_CURRENT, media, onClick
+}: Props) {
     const dom = useRef<HTMLDivElement>(null);
     const mediaMap: Map<string, PrivateMediaFileInfo> = new Map(
         (media ?? [])

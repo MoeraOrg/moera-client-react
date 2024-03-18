@@ -11,6 +11,7 @@ import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ReactionButton } from "ui/control";
 import PostingReactions from "ui/posting/PostingReactions";
+import { REL_CURRENT } from "util/rel-node-name";
 import "./LightBoxReactions.css";
 
 export default function LightBoxReactions() {
@@ -25,9 +26,10 @@ export default function LightBoxReactions() {
         return null;
     }
 
-    const onReactionAdd = (negative: boolean, emoji: number) => dispatch(postingReact(posting.id, negative, emoji, ""));
+    const onReactionAdd = (negative: boolean, emoji: number) =>
+        dispatch(postingReact(posting.id, negative, emoji, REL_CURRENT));
 
-    const onReactionDelete = () => dispatch(postingReactionDelete(posting.id, ""));
+    const onReactionDelete = () => dispatch(postingReactionDelete(posting.id, REL_CURRENT));
 
     const cr = posting.clientReaction || {} as ClientReactionInfo;
     const hide = posting.ownerName === homeOwnerName && !enableSelf && !cr.emoji;

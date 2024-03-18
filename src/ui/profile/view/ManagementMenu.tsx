@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { nodeNameUpdateDialog, registerNameDialog } from "state/nodename/actions";
 import { DropdownMenu } from "ui/control";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export default function ManagementMenu() {
     const dispatch = useDispatch();
@@ -13,21 +14,21 @@ export default function ManagementMenu() {
         <DropdownMenu items={[
             {
                 title: t("update-current-name"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: "/profile?edit=true",
                 onClick: () => dispatch(nodeNameUpdateDialog(false)),
                 show: true
             },
             {
                 title: t("register-different-name"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: "/profile?edit=true",
                 onClick: () => dispatch(registerNameDialog()),
                 show: true
             },
             {
                 title: t("transfer-existing-name"),
-                nodeName: "",
+                nodeName: REL_CURRENT,
                 href: "/profile?edit=true",
                 onClick: () => dispatch(nodeNameUpdateDialog(true)),
                 show: true

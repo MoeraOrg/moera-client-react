@@ -2,6 +2,7 @@ import { call, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
 import { CLIENT_SETTINGS_PREFIX, Node } from "api";
+import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import {
     ProfileAvatarCreateAction,
@@ -30,6 +31,7 @@ import { getAvatars } from "state/profile/selectors";
 import { settingsUpdate } from "state/settings/actions";
 import store from "state/store";
 import { homeIntroduced } from "state/init-selectors";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export default [
     executor("PROFILE_LOAD", "", profileLoadSaga, homeIntroduced),
@@ -41,9 +43,9 @@ export default [
     executor("PROFILE_AVATARS_REORDER", "", profileAvatarsReorderSaga)
 ];
 
-function* profileLoadSaga(action: ProfileLoadAction) {
+function* profileLoadSaga(action: WithContext<ProfileLoadAction>) {
     try {
-        const profile = yield* call(Node.getProfile, action, "", true);
+        const profile = yield* call(Node.getProfile, action, REL_CURRENT, true);
         yield* put(profileSet(profile).causedBy(action));
     } catch (e) {
         yield* put(profileLoadFailed().causedBy(action));
@@ -51,9 +53,9 @@ function* profileLoadSaga(action: ProfileLoadAction) {
     }
 }
 
-function* profileUpdateSaga(action: ProfileUpdateAction) {
+function* profileUpdateSaga(action: WithContext<ProfileUpdateAction>) {
     try {
-        const profile = yield* call(Node.updateProfile, action, "", action.payload.profile);
+        const profile = yield* call(Node.updateProfile, action, REL_CURRENT, action.payload.profile);
         yield* put(profileUpdateSucceeded().causedBy(action));
         yield* put(profileSet(profile).causedBy(action));
     } catch (e) {
@@ -62,12 +64,12 @@ function* profileUpdateSaga(action: ProfileUpdateAction) {
     }
 }
 
-function* profileImageUploadSaga(action: ProfileImageUploadAction) {
+function* profileImageUploadSaga(action: WithContext<ProfileImageUploadAction>) {
     try {
         const {id, path, width, height, orientation} = yield* call(
             Node.uploadPublicMedia,
             action,
-            "",
+            REL_CURRENT,
             action.payload.file,
             (loaded: number, total: number) => store.dispatch(profileImageUploadProgress(loaded, total))
         );
@@ -83,9 +85,9 @@ function* profileImageUploadSaga(action: ProfileImageUploadAction) {
     }
 }
 
-function* profileAvatarsLoadSaga(action: ProfileAvatarsLoadAction) {
+function* profileAvatarsLoadSaga(action: WithContext<ProfileAvatarsLoadAction>) {
     try {
-        const avatars = yield* call(Node.getAvatars, action, "");
+        const avatars = yield* call(Node.getAvatars, action, REL_CURRENT);
         yield* put(profileAvatarsLoaded(avatars).causedBy(action));
     } catch (e) {
         yield* put(profileAvatarsLoadFailed().causedBy(action));
@@ -93,9 +95,9 @@ function* profileAvatarsLoadSaga(action: ProfileAvatarsLoadAction) {
     }
 }
 
-function* profileAvatarCreateSaga(action: ProfileAvatarCreateAction) {
+function* profileAvatarCreateSaga(action: WithContext<ProfileAvatarCreateAction>) {
     try {
-        const avatar = yield* call(Node.createAvatar, action, "", action.payload.avatar);
+        const avatar = yield* call(Node.createAvatar, action, REL_CURRENT, action.payload.avatar);
         yield* put(profileAvatarCreated(avatar).causedBy(action));
         const onCreate = yield* select(state => state.profile.avatarEditDialog.onCreate);
         if (onCreate) {
@@ -111,11 +113,11 @@ function* profileAvatarCreateSaga(action: ProfileAvatarCreateAction) {
     }
 }
 
-function* profileAvatarDeleteSaga(action: ProfileAvatarDeleteAction) {
+function* profileAvatarDeleteSaga(action: WithContext<ProfileAvatarDeleteAction>) {
     const {id, onDeleted} = action.payload;
 
     try {
-        yield* call(Node.deleteAvatar, action, "", id);
+        yield* call(Node.deleteAvatar, action, REL_CURRENT, id);
         yield* put(profileAvatarDeleted(id).causedBy(action));
         if (onDeleted) {
             onDeleted(id);
@@ -125,11 +127,11 @@ function* profileAvatarDeleteSaga(action: ProfileAvatarDeleteAction) {
     }
 }
 
-function* profileAvatarsReorderSaga(action: ProfileAvatarsReorderAction) {
+function* profileAvatarsReorderSaga(action: WithContext<ProfileAvatarsReorderAction>) {
     const ids = yield* select(state => getAvatars(state).map(av => av.id));
     ids.reverse();
     try {
-        yield* call(Node.reorderAvatars, action, "", {ids});
+        yield* call(Node.reorderAvatars, action, REL_CURRENT, {ids});
     } catch (e) {
         yield* put(errorThrown(e));
     }

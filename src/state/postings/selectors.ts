@@ -1,51 +1,67 @@
 import { FeedReference, PostingInfo, StoryInfo } from "api";
 import { ClientState } from "state/state";
 import { VerificationStatus } from "state/state-types";
-import { ExtPostingInfo, PostingsState } from "state/postings/state";
+import { getOwnerNameOrUrl } from "state/node/selectors";
+import { getHomeOwnerNameOrUrl } from "state/home/selectors";
+import { ExtPostingInfo, PostingsState, PostingState } from "state/postings/state";
 import { isSheriffGoverned, isSheriffMarked } from "util/sheriff";
 import { now } from "util/misc";
+import { absoluteNodeName, RelNodeName } from "util/rel-node-name";
 
-export function getPosting(state: ClientState, id: string | null, nodeName: string = ""): ExtPostingInfo | null {
+function getPostingState(
+    state: ClientState, id: string | null, nodeName: RelNodeName | string
+): PostingState | undefined {
     if (id == null) {
-        return null;
+        return undefined;
     }
-    return state.postings[nodeName]?.[id]?.posting ?? null;
+    const ownerNameOrUrl = getOwnerNameOrUrl(state);
+    const homeOwnerNameOrUrl = getHomeOwnerNameOrUrl(state);
+    nodeName = absoluteNodeName(nodeName, {ownerNameOrUrl, homeOwnerNameOrUrl});
+    return state.postings[nodeName]?.[id];
 }
 
-export function isPostingCached(state: ClientState, id: string | null, nodeName: string = ""): boolean {
+export function getPosting(
+    state: ClientState, id: string | null, nodeName: RelNodeName | string
+): ExtPostingInfo | null {
+    return getPostingState(state, id, nodeName)?.posting ?? null;
+}
+
+export function isPostingCached(state: ClientState, id: string | null, nodeName: RelNodeName | string): boolean {
     return id != null && !!getPosting(state, id, nodeName);
 }
 
-export function isPostingBeingDeleted(state: ClientState, id: string | null, nodeName: string = ""): boolean {
-    if (id == null) {
-        return false;
-    }
-    return state.postings[nodeName]?.[id]?.deleting ?? false;
+export function isPostingBeingDeleted(state: ClientState, id: string | null, nodeName: RelNodeName | string): boolean {
+    return getPostingState(state, id, nodeName)?.deleting ?? false;
 }
 
-export function getPostingVerificationStatus(state: ClientState, id: string,
-                                             nodeName: string = ""): VerificationStatus | null {
-    return state.postings[nodeName]?.[id]?.verificationStatus ?? null;
+export function getPostingVerificationStatus(
+    state: ClientState, id: string, nodeName: RelNodeName | string
+): VerificationStatus | null {
+    return getPostingState(state, id, nodeName)?.verificationStatus ?? null;
 }
 
-export function getPostingCommentsSubscriptionId(state: ClientState, id: string,
-                                                 nodeName: string = ""): string | null {
-    return state.postings[nodeName]?.[id]?.subscriptions.comments ?? null;
+export function getPostingCommentsSubscriptionId(
+    state: ClientState, id: string, nodeName: RelNodeName | string
+): string | null {
+    return getPostingState(state, id, nodeName)?.subscriptions.comments ?? null;
 }
 
-export function getPostingFeedReference(posting: Pick<PostingInfo, "feedReferences"> | null,
-                                        feedName: string): FeedReference | null {
+export function getPostingFeedReference(
+    posting: Pick<PostingInfo, "feedReferences"> | null, feedName: string
+): FeedReference | null {
     return posting?.feedReferences?.find(r => r.feedName === feedName) ?? null;
 }
 
-export function hasPostingFeedReference(posting: Pick<PostingInfo, "feedReferences"> | null,
-                                        feedName: string): boolean {
+export function hasPostingFeedReference(
+    posting: Pick<PostingInfo, "feedReferences"> | null, feedName: string
+): boolean {
     return getPostingFeedReference(posting, feedName) != null;
 }
 
-export function getPostingCommentAddedInstantBlockId(state: ClientState, id: string,
-                                                     nodeName: string = ""): string | null {
-    return state.postings[nodeName]?.[id]?.posting.blockedInstants
+export function getPostingCommentAddedInstantBlockId(
+    state: ClientState, id: string, nodeName: RelNodeName | string
+): string | null {
+    return getPostingState(state, id, nodeName)?.posting.blockedInstants
         ?.find(bi => bi.storyType === "comment-added")?.id ?? null;
 }
 

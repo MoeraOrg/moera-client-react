@@ -14,12 +14,13 @@ import Jump from "ui/navigation/Jump";
 import { mentionName, shortGender } from "util/names";
 import * as Browser from "ui/browser";
 import "./NodeCard.css";
+import { RelNodeName } from "util/rel-node-name";
 
 interface Props {
     nodeName: string;
     fullName?: string | null;
     avatar?: AvatarImage | null;
-    avatarNodeName?: string;
+    avatarNodeName?: RelNodeName | string;
 }
 
 export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: Props) {
@@ -41,7 +42,7 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
 
     const realFullName = card.details.profile.fullName ?? (fullName || NodeName.shorten(nodeName));
     const realAvatar =  card.details.profile.avatar ?? avatar ?? null;
-    const realAvatarNodeName = card.details.profile.avatar != null ? nodeName : avatarNodeName ?? null;
+    const realAvatarNodeName = card.details.profile.avatar != null ? nodeName : avatarNodeName;
     const gender = shortGender(card.details.profile.gender ?? "male", t);
     const storiesTotal = card.stories.storiesTotal ?? "?";
     const storiesLastDate = card.stories.lastStoryCreatedAt != null

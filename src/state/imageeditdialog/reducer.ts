@@ -1,9 +1,10 @@
 import { ImageEditDialogState } from "state/imageeditdialog/state";
 import { ClientAction } from "state/action";
+import { REL_CURRENT } from "util/rel-node-name";
 
 const initialState = {
     show: false,
-    nodeName: null,
+    nodeName: REL_CURRENT,
     media: null,
     loading: false,
     saving: false

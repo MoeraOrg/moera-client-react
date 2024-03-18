@@ -65,6 +65,7 @@ import {
     settingsUpdateSucceeded,
     SettingsUpdateSucceededAction
 } from "state/settings/actions";
+import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import { executor } from "state/executor";
 import { getSetting, getSettingNode, getSettingsClient, getSettingsClientMeta } from "state/settings/selectors";
@@ -74,6 +75,7 @@ import * as Browser from "ui/browser";
 import { deserializeSheriffs, serializeSheriffs } from "util/sheriff";
 import { now } from "util/misc";
 import { messageBox } from "state/messagebox/actions";
+import { REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("SETTINGS_NODE_VALUES_LOAD", "", settingsNodeValuesLoadSaga, homeIntroduced),
@@ -98,9 +100,9 @@ export default [
     executor("SETTINGS_DELETE_NODE_REQUEST_CANCEL", "", settingsDeleteNodeRequestCancelSaga)
 ];
 
-function* settingsNodeValuesLoadSaga(action: SettingsNodeValuesLoadAction) {
+function* settingsNodeValuesLoadSaga(action: WithContext<SettingsNodeValuesLoadAction>) {
     try {
-        const settings = yield* call(Node.getNodeSettings, action, ":");
+        const settings = yield* call(Node.getNodeSettings, action, REL_HOME);
         yield* put(settingsNodeValuesLoaded(settings).causedBy(action));
     } catch (e) {
         yield* put(settingsNodeValuesLoadFailed().causedBy(action));
@@ -108,9 +110,9 @@ function* settingsNodeValuesLoadSaga(action: SettingsNodeValuesLoadAction) {
     }
 }
 
-function* settingsNodeMetaLoadSaga(action: SettingsNodeMetaLoadAction) {
+function* settingsNodeMetaLoadSaga(action: WithContext<SettingsNodeMetaLoadAction>) {
     try {
-        const metadata = yield* call(Node.getNodeSettingsMetadata, action, ":");
+        const metadata = yield* call(Node.getNodeSettingsMetadata, action, REL_HOME);
         yield* put(settingsNodeMetaLoaded(metadata).causedBy(action));
     } catch (e) {
         yield* put(settingsNodeMetaLoadFailed().causedBy(action));
@@ -130,9 +132,9 @@ function* storeSettings() {
     Storage.storeSettings(yield* select(getSettingsClient));
 }
 
-function* settingsClientValuesLoadSaga(action: SettingsClientValuesLoadAction) {
+function* settingsClientValuesLoadSaga(action: WithContext<SettingsClientValuesLoadAction>) {
     try {
-        let settings = yield* call(Node.getClientSettings, action, ":", CLIENT_SETTINGS_PREFIX);
+        let settings = yield* call(Node.getClientSettings, action, REL_HOME, CLIENT_SETTINGS_PREFIX);
         if (window.Android) {
             const mobileData = window.Android.loadSettings();
             if (mobileData != null) {
@@ -186,7 +188,7 @@ function* settingsClientValuesSetSaga(action: SettingsClientValuesSetAction) {
     yield* call(updateLanguage, action, settings);
 }
 
-function* settingsUpdateSaga(action: SettingsUpdateAction) {
+function* settingsUpdateSaga(action: WithContext<SettingsUpdateAction>) {
     const {settings, onSuccess} = action.payload;
 
     yield* call(updateLanguage, action, settings);
@@ -198,7 +200,7 @@ function* settingsUpdateSaga(action: SettingsUpdateAction) {
         .filter(t => isMobileSetting(clientMeta, t.name))
         .map(t => ({name: t.name.substring(CLIENT_SETTINGS_PREFIX.length), value: t.value}));
     try {
-        yield* call(Node.updateSettings, action, ":", toHome);
+        yield* call(Node.updateSettings, action, REL_HOME, toHome);
         if (window.Android && toMobile.length > 0) {
             window.Android.storeSettings(JSON.stringify(toMobile));
         }
@@ -216,11 +218,11 @@ function settingsUpdateSucceededSaga(action: SettingsUpdateSucceededAction) {
     }
 }
 
-function* settingsChangePasswordSaga(action: SettingsChangePasswordAction) {
+function* settingsChangePasswordSaga(action: WithContext<SettingsChangePasswordAction>) {
     const {oldPassword, password, onLoginIncorrect} = action.payload;
 
     try {
-        yield* call(Node.updateCredentials, action, ":", {oldPassword, login: "admin", password},
+        yield* call(Node.updateCredentials, action, REL_HOME, {oldPassword, login: "admin", password},
             ["credentials.wrong-reset-token", "credentials.reset-token-expired", "credentials.login-incorrect"]);
         yield* put(settingsChangedPassword().causedBy(action));
     } catch (e) {
@@ -233,9 +235,9 @@ function* settingsChangePasswordSaga(action: SettingsChangePasswordAction) {
     }
 }
 
-function* settingsTokensLoadSaga(action: SettingsTokensLoadAction) {
+function* settingsTokensLoadSaga(action: WithContext<SettingsTokensLoadAction>) {
     try {
-        const tokens = yield* call(Node.getTokens, action, ":");
+        const tokens = yield* call(Node.getTokens, action, REL_HOME);
         yield* put(settingsTokensLoaded(tokens).causedBy(action));
     } catch (e) {
         yield* put(settingsTokensLoadFailed().causedBy(action));
@@ -243,11 +245,11 @@ function* settingsTokensLoadSaga(action: SettingsTokensLoadAction) {
     }
 }
 
-function* settingsTokensCreateSaga(action: SettingsTokensCreateAction) {
+function* settingsTokensCreateSaga(action: WithContext<SettingsTokensCreateAction>) {
     const {password, name, onLoginIncorrect} = action.payload;
 
     try {
-        const token = yield* call(Node.createToken, action, ":", {login: "admin", password, name},
+        const token = yield* call(Node.createToken, action, REL_HOME, {login: "admin", password, name},
             ["credentials.login-incorrect", "credentials.not-created"]);
         yield* put(settingsTokensCreated(token).causedBy(action));
     } catch (e) {
@@ -260,11 +262,11 @@ function* settingsTokensCreateSaga(action: SettingsTokensCreateAction) {
     }
 }
 
-function* settingsTokensUpdateSaga(action: SettingsTokensUpdateAction) {
+function* settingsTokensUpdateSaga(action: WithContext<SettingsTokensUpdateAction>) {
     const {id, name} = action.payload;
 
     try {
-        const token = yield* call(Node.updateToken, action, ":", id, {name});
+        const token = yield* call(Node.updateToken, action, REL_HOME, id, {name});
         yield* put(settingsTokensUpdated(token).causedBy(action));
     } catch (e) {
         yield* put(settingsTokensUpdateFailed().causedBy(action));
@@ -272,11 +274,11 @@ function* settingsTokensUpdateSaga(action: SettingsTokensUpdateAction) {
     }
 }
 
-function* settingsTokensDeleteSaga(action: SettingsTokensDeleteAction) {
+function* settingsTokensDeleteSaga(action: WithContext<SettingsTokensDeleteAction>) {
     const {id} = action.payload;
 
     try {
-        yield* call(Node.deleteToken, action, ":", id);
+        yield* call(Node.deleteToken, action, REL_HOME, id);
         yield* put(settingsTokensDeleted(id).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
@@ -291,9 +293,9 @@ function* settingsTokensNewTokenCopySaga(action: SettingsTokensNewTokenCopyActio
     }
 }
 
-function* settingsPluginsLoadSaga(action: SettingsPluginsLoadAction) {
+function* settingsPluginsLoadSaga(action: WithContext<SettingsPluginsLoadAction>) {
     try {
-        const plugins = yield* call(Node.getPlugins, action, ":");
+        const plugins = yield* call(Node.getPlugins, action, REL_HOME);
         yield* put(settingsPluginsLoaded(plugins).causedBy(action));
     } catch (e) {
         yield* put(settingsPluginsLoadFailed().causedBy(action));
@@ -301,13 +303,13 @@ function* settingsPluginsLoadSaga(action: SettingsPluginsLoadAction) {
     }
 }
 
-function* settingsPluginsDeleteSaga(action: SettingsPluginsDeleteAction) {
+function* settingsPluginsDeleteSaga(action: WithContext<SettingsPluginsDeleteAction>) {
     const {name, tokenId} = action.payload;
 
     try {
-        yield* call(Node.deleteToken, action, ":", tokenId);
+        yield* call(Node.deleteToken, action, REL_HOME, tokenId);
         yield* put(settingsTokensDeleted(tokenId).causedBy(action));
-        yield* call(Node.unregisterPlugin, action, ":", name);
+        yield* call(Node.unregisterPlugin, action, REL_HOME, name);
         yield* put(settingsPluginsDeleted(name).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
@@ -347,9 +349,9 @@ function* settingsRemindSetSheriffGooglePlayChoiceSaga(action: SettingsRemindSet
     yield* put(settingsUpdate(updates).causedBy(action));
 }
 
-function* settingsDeleteNodeRequestLoadSaga(action: SettingsDeleteNodeRequestLoadAction) {
+function* settingsDeleteNodeRequestLoadSaga(action: WithContext<SettingsDeleteNodeRequestLoadAction>) {
     try {
-        const status = yield* call(Node.getDeleteNodeRequestStatus, action, ":");
+        const status = yield* call(Node.getDeleteNodeRequestStatus, action, REL_HOME);
         yield* put(settingsDeleteNodeRequestLoaded(status.requested).causedBy(action));
     } catch (e) {
         yield* put(settingsDeleteNodeRequestLoadFailed().causedBy(action));
@@ -357,9 +359,9 @@ function* settingsDeleteNodeRequestLoadSaga(action: SettingsDeleteNodeRequestLoa
     }
 }
 
-function* settingsDeleteNodeRequestSendSaga(action: SettingsDeleteNodeRequestSendAction) {
+function* settingsDeleteNodeRequestSendSaga(action: WithContext<SettingsDeleteNodeRequestSendAction>) {
     try {
-        const status = yield* call(Node.sendDeleteNodeRequest, action, ":", {message: action.payload.message},
+        const status = yield* call(Node.sendDeleteNodeRequest, action, REL_HOME, {message: action.payload.message},
             ["delete-node.no-email"]);
         yield* put(settingsDeleteNodeRequestStatusSet(status.requested).causedBy(action));
     } catch (e) {
@@ -372,9 +374,9 @@ function* settingsDeleteNodeRequestSendSaga(action: SettingsDeleteNodeRequestSen
     }
 }
 
-function* settingsDeleteNodeRequestCancelSaga(action: SettingsDeleteNodeRequestCancelAction) {
+function* settingsDeleteNodeRequestCancelSaga(action: WithContext<SettingsDeleteNodeRequestCancelAction>) {
     try {
-        const status = yield* call(Node.cancelDeleteNodeRequest, action, ":");
+        const status = yield* call(Node.cancelDeleteNodeRequest, action, REL_HOME);
         yield* put(settingsDeleteNodeRequestStatusSet(status.requested).causedBy(action));
     } catch (e) {
         yield* put(settingsDeleteNodeRequestUpdateFailed().causedBy(action));

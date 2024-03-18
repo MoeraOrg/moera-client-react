@@ -128,14 +128,14 @@ export default function SubscribeButtonMenu({nodeName, feedName}: Props) {
             {
                 title: !subscribedToMe ? t("subscribe") : t("subscribe-back"),
                 nodeName,
-                href: null,
+                href: "/",
                 onClick: onSubscribe,
                 show: !subscribed
             },
             {
                 title: t("unsubscribe"),
                 nodeName,
-                href: null,
+                href: "/",
                 onClick: onUnsubscribe,
                 show: subscribed && isPrincipalIn("delete", subscription, "admin", "admin")
             },
@@ -149,14 +149,14 @@ export default function SubscribeButtonMenu({nodeName, feedName}: Props) {
             {
                 title: t("add-friend"),
                 nodeName,
-                href: null,
+                href: "/",
                 onClick: onAddFriend,
                 show: !friend && !blocked
             },
             {
                 title: t("friend-groups"),
                 nodeName,
-                href: null,
+                href: "/",
                 onClick: onFriendGroups,
                 opensDialog: true,
                 show: friend
@@ -164,7 +164,7 @@ export default function SubscribeButtonMenu({nodeName, feedName}: Props) {
             {
                 title: t("unfriend"),
                 nodeName,
-                href: null,
+                href: "/",
                 onClick: onUnfriend,
                 show: friend
             },
@@ -174,7 +174,7 @@ export default function SubscribeButtonMenu({nodeName, feedName}: Props) {
             {
                 title: t("ask-ellipsis"),
                 nodeName,
-                href: null,
+                href: "/",
                 onClick: onAskDialog,
                 opensDialog: true,
                 show: !blocked && !blockedBy
@@ -182,7 +182,7 @@ export default function SubscribeButtonMenu({nodeName, feedName}: Props) {
             {
                 title: t("hide-ellipsis"),
                 nodeName,
-                href: null,
+                href: "/",
                 onClick: onHideDialog,
                 opensDialog: true,
                 show: subscribed || subscribedToMe || friend
@@ -197,7 +197,7 @@ export default function SubscribeButtonMenu({nodeName, feedName}: Props) {
             {
                 title: !blocked ? t("block-ellipsis") : t("blocking-ellipsis"),
                 nodeName,
-                href: null,
+                href: "/",
                 onClick: onBlockDialog,
                 opensDialog: true,
                 show: true
@@ -216,28 +216,28 @@ export default function SubscribeButtonMenu({nodeName, feedName}: Props) {
             {
                 title: t("hide-in-google-play"),
                 nodeName,
-                href: null,
+                href: "/",
                 onClick: onHideInGooglePlay,
                 show: nodeName === ownerName && googlePlaySheriff && googlePlayGoverned && !googlePlayProhibited
             },
             {
                 title: t("unhide-in-google-play"),
                 nodeName,
-                href: null,
+                href: "/",
                 onClick: onUnhideInGooglePlay,
                 show: nodeName === ownerName && googlePlaySheriff && googlePlayGoverned && googlePlayProhibited
             },
             {
                 title: t("hide-content-in-google-play"),
                 nodeName,
-                href: null,
+                href: "/",
                 onClick: onHideContentInGooglePlay,
                 show: nodeName === ownerName && googlePlaySheriff && card?.sheriffList.blocked === false
             },
             {
                 title: t("unhide-content-in-google-play"),
                 nodeName,
-                href: null,
+                href: "/",
                 onClick: onUnhideContentInGooglePlay,
                 show: nodeName === ownerName && googlePlaySheriff && card?.sheriffList.blocked === true
             }

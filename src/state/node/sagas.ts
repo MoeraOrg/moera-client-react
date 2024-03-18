@@ -24,6 +24,7 @@ import { initFromLocation } from "state/navigation/actions";
 import { getNameDetails, getNodeUri } from "state/naming/sagas";
 import { confirmBox } from "state/confirmbox/actions";
 import { normalizeUrl, rootUrl } from "util/url";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export default [
     executor("OWNER_LOAD", "", ownerLoadSaga),
@@ -32,11 +33,11 @@ export default [
     executor("NODE_FEATURES_LOAD", "", nodeFeaturesLoadSaga, homeIntroduced)
 ];
 
-function* ownerLoadSaga(action: OwnerLoadAction) {
+function* ownerLoadSaga(action: WithContext<OwnerLoadAction>) {
     try {
         const {
             nodeName = null, nodeNameChanging = false, fullName = null, gender = null, title = null, avatar = null
-        } = yield* call(Node.whoAmI, action, "");
+        } = yield* call(Node.whoAmI, action, REL_CURRENT);
         yield* put(ownerSet(nodeName, nodeNameChanging, fullName, gender, title, avatar).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
@@ -97,9 +98,9 @@ function* ownerSwitchSaga(action: WithContext<OwnerSwitchAction>) {
     }
 }
 
-function* nodeFeaturesLoadSaga(action: NodeFeaturesLoadAction) {
+function* nodeFeaturesLoadSaga(action: WithContext<NodeFeaturesLoadAction>) {
     try {
-        const features = yield* call(Node.getFeatures, action, "");
+        const features = yield* call(Node.getFeatures, action, REL_CURRENT);
         yield* put(nodeFeaturesLoaded(features).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));

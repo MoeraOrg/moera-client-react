@@ -28,6 +28,7 @@ import PostingReactions from "ui/posting/PostingReactions";
 import PostingComments from "ui/posting/PostingComments";
 import PostingButtons from "ui/posting/PostingButtons";
 import Jump from "ui/navigation/Jump";
+import { REL_CURRENT } from "util/rel-node-name";
 import "ui/posting/Posting.css";
 import "ui/entry/Entry.css";
 
@@ -41,13 +42,14 @@ function Content({posting}: ContentProps) {
     if (posting.bodyPreview != null && posting.bodyPreview.text) {
         return (
             <div className="content">
-                <EntryHtml postingId={posting.id} html={posting.bodyPreview.text} nodeName="" media={posting.media}/>
+                <EntryHtml postingId={posting.id} html={posting.bodyPreview.text} nodeName={REL_CURRENT}
+                           media={posting.media}/>
                 <Jump href={`/post/${posting.id}`} className="btn btn-link read-more">{t("continue-reading")}</Jump>
             </div>
         );
     } else {
         return (
-            <EntryHtml className="content" postingId={posting.id} html={posting.body.previewText} nodeName=""
+            <EntryHtml className="content" postingId={posting.id} html={posting.body.previewText} nodeName={REL_CURRENT}
                        media={posting.media}/>
         );
     }
@@ -93,10 +95,10 @@ export default function FeedPosting({posting, story, deleting}: FeedPostingProps
                     </div>
                     <PostingSubject posting={posting} preview={true}/>
                     <Content posting={posting}/>
-                    <EntryLinkPreviews nodeName=""
+                    <EntryLinkPreviews nodeName={REL_CURRENT}
                                        linkPreviews={posting.bodyPreview?.linkPreviews ?? posting.body.linkPreviews}
                                        limit={2} media={posting.media ?? null}/>
-                    <EntryGallery postingId={posting.id} nodeName="" media={posting.media ?? null}
+                    <EntryGallery postingId={posting.id} nodeName={REL_CURRENT} media={posting.media ?? null}
                                   onExpand={() => dispatch(goToPosting(posting.id, null, true))}/>
                     <div className="reactions-line">
                         <PostingReactions postingId={posting.id} postingReceiverName={posting.receiverName}

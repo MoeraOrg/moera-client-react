@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { isAtComposePage } from "state/navigation/selectors";
 import Jump from "ui/navigation/Jump";
+import { REL_HOME } from "util/rel-node-name";
 import "./NewPostButton.css";
 
 export default function NewPostButton() {
@@ -17,7 +18,7 @@ export default function NewPostButton() {
     }
 
     return (
-        <Jump nodeName=":" href="/compose" className="btn btn-success btn-sm new-post-button">
+        <Jump nodeName={REL_HOME} href="/compose" className="btn btn-success btn-sm new-post-button">
             <FontAwesomeIcon icon={faPenAlt}/>
             &nbsp;&nbsp;{t("new-post-button")}
         </Jump>

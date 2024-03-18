@@ -9,6 +9,8 @@ import { ClientAction } from "state/action";
 import { messageBox } from "state/messagebox/actions";
 import { errorThrown } from "state/error/actions";
 import { readAsArrayBuffer } from "util/read-file";
+import { RelNodeName } from "util/rel-node-name";
+import { WithContext } from "state/action-types";
 
 export interface VerifiedMediaFile extends PrivateMediaFileInfo {
     digest?: string | null;
@@ -22,8 +24,8 @@ const formatMb = (size: number): string =>
 type ImageUploadResult<T> = Generator<CallEffect | PutEffect<any>, T>;
 
 export function* imageUpload(
-    caller: ClientAction, features: PostingFeatures | null, nodeName: string | null, file: File, compress: boolean,
-    onProgress?: ImageUploadProgressHandler
+    caller: WithContext<ClientAction>, features: PostingFeatures | null, nodeName: RelNodeName | string, file: File,
+    compress: boolean, onProgress?: ImageUploadProgressHandler
 ): ImageUploadResult<VerifiedMediaFile | null> {
     try {
         if (features != null) {

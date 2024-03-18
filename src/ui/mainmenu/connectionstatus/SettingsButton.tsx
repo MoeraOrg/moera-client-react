@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { isAtSettingsPage } from "state/navigation/selectors";
 import Jump from "ui/navigation/Jump";
+import { REL_HOME } from "util/rel-node-name";
 
 export default function SettingsButton() {
     const atSettings = useSelector(isAtSettingsPage);
@@ -17,7 +18,7 @@ export default function SettingsButton() {
         );
     } else {
         return (
-            <Jump nodeName=":" href="/settings" className="connection-button" title={t("settings")}>
+            <Jump nodeName={REL_HOME} href="/settings" className="connection-button" title={t("settings")}>
                 <FontAwesomeIcon icon={faCog}/>
             </Jump>
         );

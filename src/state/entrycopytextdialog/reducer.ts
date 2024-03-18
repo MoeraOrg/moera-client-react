@@ -1,10 +1,11 @@
 import { ClientAction } from "state/action";
 import { EntryCopyTextDialogState } from "state/entrycopytextdialog/state";
+import { REL_CURRENT } from "util/rel-node-name";
 
 const initialState = {
     show: false,
     body: null,
-    nodeName: "",
+    nodeName: REL_CURRENT,
     media: null
 }
 

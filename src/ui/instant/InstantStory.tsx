@@ -17,6 +17,7 @@ import { Avatar } from "ui/control";
 import { getInstantTarget, getInstantTypeDetails } from "ui/instant/instant-types";
 import InstantHtml from "ui/instant/InstantHtml";
 import "./InstantStory.css";
+import { REL_HOME } from "util/rel-node-name";
 
 interface Props {
     story: ExtStoryInfo;
@@ -51,13 +52,14 @@ export default function InstantStory({story, lastNew, hide}: Props) {
         <div className={cx("instant", {"unread": !story.read, "last-new": lastNew})}>
             {!googlePlayHiding || !story.hideSheriffMarked ?
                 <>
-                    {profileLink &&
+                    {(profileLink && story.summaryNodeName != null) &&
                         <Jump nodeName={story.summaryNodeName} href="/profile" className="outer cells-avatar"/>
                     }
                     <Jump nodeName={nodeName} href={href} readId={readId} onNear={onJump} onFar={onJump}
                           className={cx("outer", {"cells-summary": profileLink, "cells-all": !profileLink})}/>
                     <div className="summary-avatar">
-                        <Avatar avatar={story.summaryAvatar} ownerName={story.summaryNodeName} nodeName=":" size={36}/>
+                        <Avatar avatar={story.summaryAvatar} ownerName={story.summaryNodeName} nodeName={REL_HOME}
+                                size={36}/>
                     </div>
                     <div className="summary">
                         <InstantHtml story={story}/>

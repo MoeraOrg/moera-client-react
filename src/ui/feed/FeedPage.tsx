@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
-import { isAtHomeNode, isGooglePlayHiding } from "state/node/selectors";
+import { getOwnerNameOrUrl, isAtHomeNode, isGooglePlayHiding } from "state/node/selectors";
 import {
     feedFutureSliceLoad,
     feedPastSliceLoad,
@@ -188,7 +188,7 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
 
 export const getStories = createSelector(
     (state: ClientState, feedName: string) => getFeedState(state, feedName).stories,
-    (state: ClientState) => state.postings[""] ?? {}, // FIXME it is an overly general dependency
+    (state: ClientState) => state.postings[getOwnerNameOrUrl(state)] ?? {}, // FIXME it is an overly general dependency
     isGooglePlayHiding,
     (stories, postings, hiding) =>
         stories

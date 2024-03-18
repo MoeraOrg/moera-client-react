@@ -4,12 +4,13 @@ import { executor } from "state/executor";
 import { errorThrown } from "state/error/actions";
 import { CommentInfo, Node, PostingInfo } from "api";
 import { OpenSourceDialogAction, sourceDialogLoaded, sourceDialogLoadFailed } from "state/sourcedialog/actions";
+import { WithContext } from "state/action-types";
 
 export default [
     executor("OPEN_SOURCE_DIALOG", "", openSourceDialogSaga)
 ];
 
-function* openSourceDialogSaga(action: OpenSourceDialogAction) {
+function* openSourceDialogSaga(action: WithContext<OpenSourceDialogAction>) {
     const {nodeName, postingId, commentId} = action.payload;
 
     try {

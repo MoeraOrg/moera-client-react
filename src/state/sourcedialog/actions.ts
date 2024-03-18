@@ -1,12 +1,13 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
+import { RelNodeName } from "util/rel-node-name";
 
 export type OpenSourceDialogAction = ActionWithPayload<"OPEN_SOURCE_DIALOG", {
-    nodeName: string;
+    nodeName: RelNodeName | string;
     postingId: string;
     commentId: string | null;
 }>;
 export const openSourceDialog = (
-    nodeName: string, postingId: string, commentId?: string | null
+    nodeName: RelNodeName | string, postingId: string, commentId?: string | null
 ): OpenSourceDialogAction =>
     actionWithPayload("OPEN_SOURCE_DIALOG", {nodeName, postingId, commentId: commentId ?? null});
 

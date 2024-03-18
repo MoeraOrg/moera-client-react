@@ -21,12 +21,14 @@ import { homeIntroduced } from "state/init-selectors";
 import { errorThrown } from "state/error/actions";
 import { ClientAction } from "state/action";
 import {
-    closeCommentDialog, CommentComposeCancelAction,
+    closeCommentDialog,
+    CommentComposeCancelAction,
     commentComposeCancelled,
     CommentCopyLinkAction,
     CommentDeleteAction,
     commentDeleted,
-    commentDeleteFailed, CommentDialogCommentLoadAction,
+    commentDeleteFailed,
+    CommentDialogCommentLoadAction,
     commentDialogCommentLoaded,
     commentDialogCommentLoadFailed,
     CommentDialogCommentResetAction,
@@ -55,7 +57,8 @@ import {
     commentsBlockedUsersLoaded,
     commentsBlockedUsersLoadFailed,
     commentSet,
-    CommentSetVisibilityAction, CommentsFutureSliceLoadAction,
+    CommentSetVisibilityAction,
+    CommentsFutureSliceLoadAction,
     commentsFutureSliceLoadFailed,
     commentsFutureSliceSet,
     CommentsLoadAllAction,
@@ -63,19 +66,23 @@ import {
     commentsPastSliceLoadFailed,
     commentsPastSliceSet,
     CommentsReceiverFeaturesLoadAction,
-    commentsReceiverFeaturesLoaded, CommentsReceiverSwitchAction,
+    commentsReceiverFeaturesLoaded,
+    CommentsReceiverSwitchAction,
     commentsReceiverSwitched,
     commentsScrollToComposer,
-    commentsSliceUpdate, CommentsUpdateAction,
+    commentsSliceUpdate,
+    CommentsUpdateAction,
     CommentVerifyAction,
     commentVerifyFailed,
     DetailedPostingLoadAction,
     DetailedPostingLoadAttachedAction,
     detailedPostingLoaded,
     detailedPostingLoadedAttached,
-    detailedPostingLoadFailed, FocusedCommentLoadAction,
+    detailedPostingLoadFailed,
+    FocusedCommentLoadAction,
     focusedCommentLoaded,
-    focusedCommentLoadFailed, GlanceCommentLoadAction,
+    focusedCommentLoadFailed,
+    GlanceCommentLoadAction,
     glanceCommentLoaded,
     glanceCommentLoadFailed
 } from "state/detailedposting/actions";
@@ -104,6 +111,7 @@ import { toAvatarDescription } from "util/avatar";
 import { quoteHtml } from "util/html";
 import { mentionName } from "util/names";
 import { getWindowSelectionHtml, insertText } from "util/ui";
+import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("DETAILED_POSTING_LOAD", "", detailedPostingLoadSaga, homeIntroduced),
@@ -145,7 +153,7 @@ export default [
     executor("GLANCE_COMMENT_LOAD", null, glanceCommentLoadSaga)
 ];
 
-function* detailedPostingLoadSaga(action: DetailedPostingLoadAction) {
+function* detailedPostingLoadSaga(action: WithContext<DetailedPostingLoadAction>) {
     const id = yield* select(getDetailedPostingId);
     if (id == null) {
         yield* put(detailedPostingLoadFailed().causedBy(action));
@@ -153,7 +161,7 @@ function* detailedPostingLoadSaga(action: DetailedPostingLoadAction) {
     }
 
     try {
-        const posting = yield* call(Node.getPosting, action, "", id, false, ["posting.not-found"]);
+        const posting = yield* call(Node.getPosting, action, REL_CURRENT, id, false, ["posting.not-found"]);
         yield* call(fillActivityReaction, action, posting)
         yield* call(fillBlockedOperations, action, posting)
         yield* put(detailedPostingLoaded(posting).causedBy(action));
@@ -164,13 +172,13 @@ function* detailedPostingLoadSaga(action: DetailedPostingLoadAction) {
     }
 }
 
-function* detailedPostingLoadAttachedSaga(action: DetailedPostingLoadAttachedAction) {
+function* detailedPostingLoadAttachedSaga(action: WithContext<DetailedPostingLoadAttachedAction>) {
     const id = yield* select(getDetailedPostingId);
     if (id == null) {
         return;
     }
     const loaded = yield* select(state => {
-        const media = getPosting(state, id)?.media;
+        const media = getPosting(state, id, REL_CURRENT)?.media;
         if (media == null) {
             return true;
         }
@@ -179,7 +187,7 @@ function* detailedPostingLoadAttachedSaga(action: DetailedPostingLoadAttachedAct
             .filter((m): m is PrivateMediaFileInfo => m != null)
             .map(m => m.postingId)
             .filter((p): p is string => p != null)
-            .every(p => isPostingCached(state, p));
+            .every(p => isPostingCached(state, p, REL_CURRENT));
     });
     if (loaded) {
         yield* put(detailedPostingLoadedAttached().causedBy(action));
@@ -187,10 +195,10 @@ function* detailedPostingLoadAttachedSaga(action: DetailedPostingLoadAttachedAct
     }
 
     try {
-        const postings = yield* call(Node.getPostingsAttachedToPosting, action, "", id);
+        const postings = yield* call(Node.getPostingsAttachedToPosting, action, REL_CURRENT, id);
         yield* call(fillActivityReactionsInPostings, action, postings);
         yield* call(fillBlockedOperationsInPostings, action, postings);
-        yield* put(postingsSet(postings, "").causedBy(action));
+        yield* put(postingsSet(postings, REL_CURRENT).causedBy(action));
         yield* put(detailedPostingLoadedAttached().causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
@@ -212,7 +220,7 @@ function* commentsReceiverSwitchSaga(action: CommentsReceiverSwitchAction) {
     yield* put(commentsReceiverSwitched(receiverName, receiverFullName, receiverPostingId).causedBy(action));
 }
 
-function* commentsReceiverFeaturesLoadSaga(action: CommentsReceiverFeaturesLoadAction) {
+function* commentsReceiverFeaturesLoadSaga(action: WithContext<CommentsReceiverFeaturesLoadAction>) {
     const nodeName = yield* select(getCommentsReceiverName);
     if (nodeName == null) {
         return;
@@ -225,7 +233,7 @@ function* commentsReceiverFeaturesLoadSaga(action: CommentsReceiverFeaturesLoadA
     }
 }
 
-function* commentsLoadAllSaga(action: CommentsLoadAllAction) {
+function* commentsLoadAllSaga(action: WithContext<CommentsLoadAllAction>) {
     let {receiverName, receiverPostingId, before, after} = yield* select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
         return;
@@ -252,7 +260,7 @@ function* commentsLoadAllSaga(action: CommentsLoadAllAction) {
     }
 }
 
-function* commentsPastSliceLoadSaga(action: CommentsPastSliceLoadAction) {
+function* commentsPastSliceLoadSaga(action: WithContext<CommentsPastSliceLoadAction>) {
     const {receiverName, receiverPostingId, after} = yield* select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
         yield* put(commentsPastSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
@@ -270,7 +278,7 @@ function* commentsPastSliceLoadSaga(action: CommentsPastSliceLoadAction) {
     }
 }
 
-function* commentsFutureSliceLoadSaga(action: CommentsFutureSliceLoadAction) {
+function* commentsFutureSliceLoadSaga(action: WithContext<CommentsFutureSliceLoadAction>) {
     const {receiverName, receiverPostingId, before} = yield* select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
         yield* put(commentsFutureSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
@@ -288,7 +296,7 @@ function* commentsFutureSliceLoadSaga(action: CommentsFutureSliceLoadAction) {
     }
 }
 
-function* commentsUpdateSaga(action: CommentsUpdateAction) {
+function* commentsUpdateSaga(action: WithContext<CommentsUpdateAction>) {
     let {receiverName, receiverPostingId, before, after} = yield* select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
         return;
@@ -327,7 +335,7 @@ function* commentsBlockedUsersLoadSaga(action: WithContext<CommentsBlockedUsersL
     const entryPostingId = receiverName === homeOwnerName ? null : receiverPostingId;
 
     try {
-        const blocked = yield* call(Node.searchBlockedUsers, action, ":", {
+        const blocked = yield* call(Node.searchBlockedUsers, action, REL_HOME, {
             entryId,
             entryNodeName,
             entryPostingId,
@@ -340,7 +348,7 @@ function* commentsBlockedUsersLoadSaga(action: WithContext<CommentsBlockedUsersL
     }
 }
 
-function* commentLoadSaga(action: CommentLoadAction) {
+function* commentLoadSaga(action: WithContext<CommentLoadAction>) {
     const {commentId} = action.payload;
 
     const {receiverName, receiverPostingId} = yield* select(getCommentsState);
@@ -357,7 +365,7 @@ function* commentLoadSaga(action: CommentLoadAction) {
     }
 }
 
-function* commentPostSaga(action: CommentPostAction) {
+function* commentPostSaga(action: WithContext<CommentPostAction>) {
     const {commentId, postingId, commentText, commentSourceText} = action.payload;
 
     const {receiverName, receiverPostingId} = yield* select(getCommentsState);
@@ -369,7 +377,7 @@ function* commentPostSaga(action: CommentPostAction) {
         if (commentId == null) {
             yield* put(postingCommentCountUpdate(receiverPostingId, receiverName, 1).causedBy(action));
             const created = yield* call(Node.createComment, action, receiverName, receiverPostingId, commentText);
-            yield* put(postingCommentsSet(postingId, created.total, "").causedBy(action));
+            yield* put(postingCommentsSet(postingId, created.total, REL_CURRENT).causedBy(action));
             comment = created.comment;
         } else {
             comment = yield* call(Node.updateComment, action, receiverName, receiverPostingId, commentId, commentText);
@@ -382,11 +390,11 @@ function* commentPostSaga(action: CommentPostAction) {
         yield* put(commentPosted(receiverName, receiverPostingId, comment.id, comment.moment).causedBy(action));
 
         if (draftId != null) {
-            yield* call(Node.deleteDraft, action, ":", draftId, ["draft.not-found"]);
+            yield* call(Node.deleteDraft, action, REL_HOME, draftId, ["draft.not-found"]);
         }
 
         if (receiverName !== commentText.ownerName) {
-            yield* call(Node.updateRemoteComment, action, ":", receiverName, receiverPostingId, comment.id,
+            yield* call(Node.updateRemoteComment, action, REL_HOME, receiverName, receiverPostingId, comment.id,
                 commentSourceText);
         }
     } catch (e) {
@@ -396,7 +404,7 @@ function* commentPostSaga(action: CommentPostAction) {
 }
 
 function* loadRemoteMediaAttachments(
-    action: ClientAction, nodeName: string | null, attachments: MediaAttachment[] | null
+    action: WithContext<ClientAction>, nodeName: string, attachments: MediaAttachment[] | null
 ) {
     if (attachments != null) {
         for (const attachment of attachments) {
@@ -407,7 +415,7 @@ function* loadRemoteMediaAttachments(
     }
 }
 
-function* loadRepliedTo(action: ClientAction, nodeName: string, postingId: string, id: string) {
+function* loadRepliedTo(action: WithContext<ClientAction>, nodeName: string, postingId: string, id: string) {
     let repliedToComment: CommentInfo | null = yield* select(state => getComment(state, id));
     if (repliedToComment == null) {
         repliedToComment = yield* call(Node.getComment, action, nodeName, postingId, id, false, ["comment.not-found"]);
@@ -426,7 +434,7 @@ function* loadRepliedTo(action: ClientAction, nodeName: string, postingId: strin
     }
 }
 
-function* commentDraftLoadSaga(action: CommentDraftLoadAction) {
+function* commentDraftLoadSaga(action: WithContext<CommentDraftLoadAction>) {
     const {isDialog} = action.payload;
 
     const {nodeName, postingId, commentId} = yield* select((state: ClientState) => ({
@@ -441,7 +449,7 @@ function* commentDraftLoadSaga(action: CommentDraftLoadAction) {
 
     try {
         const draftType: DraftType = commentId != null ? "comment-update" : "new-comment";
-        const drafts = yield* call(Node.getDrafts, action, ":", draftType, nodeName, postingId, commentId)
+        const drafts = yield* call(Node.getDrafts, action, REL_HOME, draftType, nodeName, postingId, commentId)
         const draft = drafts.length > 0 ? drafts[0] : null;
         if (draft != null) {
             yield* call(loadRemoteMediaAttachments, action, nodeName, draft.media ?? null);
@@ -467,7 +475,7 @@ function* commentDraftLoadSaga(action: CommentDraftLoadAction) {
     }
 }
 
-function* commentDraftSaveSaga(action: CommentDraftSaveAction) {
+function* commentDraftSaveSaga(action: WithContext<CommentDraftSaveAction>) {
     const {draftId, draftText, formId} = action.payload;
 
     if (draftText.receiverPostingId == null) {
@@ -477,9 +485,9 @@ function* commentDraftSaveSaga(action: CommentDraftSaveAction) {
     try {
         let draft: DraftInfo;
         if (draftId == null) {
-            draft = yield* call(Node.createDraft, action, ":", draftText);
+            draft = yield* call(Node.createDraft, action, REL_HOME, draftText);
         } else {
-            draft = yield* call(Node.updateDraft, action, ":", draftId, draftText);
+            draft = yield* call(Node.updateDraft, action, REL_HOME, draftId, draftText);
         }
         yield* put(commentDraftSaved(
             draftText.receiverName, draftText.receiverPostingId, draftText.receiverCommentId ?? null, draft, formId
@@ -492,29 +500,29 @@ function* commentDraftSaveSaga(action: CommentDraftSaveAction) {
     }
 }
 
-function* commentDraftDeleteSaga(action: CommentDraftDeleteAction) {
+function* commentDraftDeleteSaga(action: WithContext<CommentDraftDeleteAction>) {
     const {draft} = action.payload;
 
     if (draft?.id == null) {
         return;
     }
 
-    yield* call(Node.deleteDraft, action, ":", draft.id, ["draft.not-found"]);
+    yield* call(Node.deleteDraft, action, REL_HOME, draft.id, ["draft.not-found"]);
     if (draft.receiverPostingId != null) {
         yield* put(commentDraftDeleted(draft.receiverName, draft.receiverPostingId).causedBy(action));
     }
 }
 
-function* commentComposeCancelSaga(action: CommentComposeCancelAction) {
+function* commentComposeCancelSaga(action: WithContext<CommentComposeCancelAction>) {
     const draftId = yield* select(state => state.detailedPosting.compose.draft?.id);
 
     if (draftId != null) {
-        yield* call(Node.deleteDraft, action, ":", draftId, ["draft.not-found"]);
+        yield* call(Node.deleteDraft, action, REL_HOME, draftId, ["draft.not-found"]);
     }
     yield* put(commentComposeCancelled().causedBy(action));
 }
 
-function* commentDeleteSaga(action: CommentDeleteAction) {
+function* commentDeleteSaga(action: WithContext<CommentDeleteAction>) {
     const {commentId} = action.payload;
 
     const {postingId, receiverName, receiverPostingId} = yield* select((state: ClientState) => ({
@@ -529,15 +537,15 @@ function* commentDeleteSaga(action: CommentDeleteAction) {
     try {
         const info = yield* call(Node.deleteComment, action, receiverName, receiverPostingId, commentId);
         yield* put(commentDeleted(receiverName, receiverPostingId, commentId).causedBy(action));
-        yield* put(postingCommentsSet(postingId, info.total, "").causedBy(action));
-        yield* call(Node.deleteRemoteComment, action, ":", receiverName, receiverPostingId, commentId);
+        yield* put(postingCommentsSet(postingId, info.total, REL_CURRENT).causedBy(action));
+        yield* call(Node.deleteRemoteComment, action, REL_HOME, receiverName, receiverPostingId, commentId);
     } catch (e) {
         yield* put(commentDeleteFailed(receiverName, receiverPostingId, commentId).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
 
-function* commentSetVisibilitySaga(action: CommentSetVisibilityAction) {
+function* commentSetVisibilitySaga(action: WithContext<CommentSetVisibilityAction>) {
     const {commentId, visible} = action.payload;
 
     const {
@@ -578,7 +586,7 @@ function* commentSetVisibilitySaga(action: CommentSetVisibilityAction) {
     }
 }
 
-function* focusedCommentLoadSaga(action: FocusedCommentLoadAction) {
+function* focusedCommentLoadSaga(action: WithContext<FocusedCommentLoadAction>) {
     const {receiverName, receiverPostingId, focusedCommentId} = yield* select(getCommentsState);
     if (receiverName == null || receiverPostingId == null || focusedCommentId == null) {
         return;
@@ -597,10 +605,10 @@ function* focusedCommentLoadSaga(action: FocusedCommentLoadAction) {
     }
 }
 
-function* commentCopyLinkSaga(action: CommentCopyLinkAction) {
+function* commentCopyLinkSaga(action: WithContext<CommentCopyLinkAction>) {
     const {id, postingId} = action.payload;
     try {
-        const href = yield* call(postingGetLink, action, postingId);
+        const href = yield* call(postingGetLink, action, postingId, REL_CURRENT);
         yield* call(clipboardCopy, `${href}?comment=${id}`);
         if (!Browser.isAndroidBrowser()) {
             yield* put(flashBox(i18n.t("link-copied")).causedBy(action));
@@ -610,7 +618,7 @@ function* commentCopyLinkSaga(action: CommentCopyLinkAction) {
     }
 }
 
-function* commentDialogCommentLoadSaga(action: CommentDialogCommentLoadAction) {
+function* commentDialogCommentLoadSaga(action: WithContext<CommentDialogCommentLoadAction>) {
     const {receiverName, receiverPostingId, commentId} = yield* select(state => ({
         receiverName: getCommentsState(state).receiverName,
         receiverPostingId: getCommentsState(state).receiverPostingId,
@@ -629,24 +637,25 @@ function* commentDialogCommentLoadSaga(action: CommentDialogCommentLoadAction) {
     }
 }
 
-function* commentDialogCommentResetSaga(action: CommentDialogCommentResetAction) {
+function* commentDialogCommentResetSaga(action: WithContext<CommentDialogCommentResetAction>) {
     const {draftId, closeDialog} = action.payload;
 
     if (closeDialog) {
         yield* put(closeCommentDialog().causedBy(action));
     }
     if (draftId != null) {
-        yield* call(Node.deleteDraft, action, ":", draftId, ["draft.not-found"]);
+        yield* call(Node.deleteDraft, action, REL_HOME, draftId, ["draft.not-found"]);
     }
 }
 
-function* commentVerifySaga(action: CommentVerifyAction) {
+function* commentVerifySaga(action: WithContext<CommentVerifyAction>) {
     const {receiverName, receiverPostingId} = yield* select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
         return;
     }
     try {
-        yield* call(Node.verifyRemoteComment, action, ":", receiverName, receiverPostingId, action.payload.commentId);
+        yield* call(Node.verifyRemoteComment, action, REL_HOME, receiverName, receiverPostingId,
+            action.payload.commentId);
     } catch (e) {
         yield* put(commentVerifyFailed(receiverName, receiverPostingId, action.payload.commentId).causedBy(action));
         yield* put(errorThrown(e));
@@ -675,7 +684,7 @@ function* commentReactSaga(action: WithContext<CommentReactAction>) {
         yield* put(commentReactionSet(
             receiverName, id, receiverPostingId, {negative, emoji}, seniorAttributes, created.totals
         ).causedBy(action));
-        yield* call(Node.createRemoteCommentReaction, action, ":", receiverName, receiverPostingId, id,
+        yield* call(Node.createRemoteCommentReaction, action, REL_HOME, receiverName, receiverPostingId, id,
             {negative, emoji});
     } catch (e) {
         yield* put(errorThrown(e));
@@ -730,7 +739,7 @@ function* commentReactionDeleteSaga(action: WithContext<CommentReactionDeleteAct
         yield* put(commentReactionSet(
             receiverName, id, receiverPostingId, null, seniorAttributes, totals
         ).causedBy(action));
-        yield* call(Node.deleteRemoteCommentReaction, action, ":", receiverName, receiverPostingId, id);
+        yield* call(Node.deleteRemoteCommentReaction, action, REL_HOME, receiverName, receiverPostingId, id);
     } catch (e) {
         yield* put(errorThrown(e));
     }
@@ -776,7 +785,7 @@ function* commentReplySaga(action: CommentReplyAction) {
     yield* put(commentsScrollToComposer().causedBy(action));
 }
 
-function* glanceCommentLoadSaga(action: GlanceCommentLoadAction) {
+function* glanceCommentLoadSaga(action: WithContext<GlanceCommentLoadAction>) {
     const {receiverName, receiverPostingId, commentId, comment} = yield* select(
         state => {
             const comments = getCommentsState(state);

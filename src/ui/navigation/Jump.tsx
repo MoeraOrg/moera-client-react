@@ -4,16 +4,17 @@ import * as URI from 'uri-js';
 
 import { ClientState } from "state/state";
 import { getNamingNameDetails } from "state/naming/selectors";
-import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
-import { getNodeRootPage, getOwnerName } from "state/node/selectors";
+import { getHomeOwnerNameOrUrl, getHomeRootPage } from "state/home/selectors";
+import { getNodeRootPage, getOwnerNameOrUrl } from "state/node/selectors";
 import { goToLocation, initFromLocation, initFromNodeLocation } from "state/navigation/actions";
 import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
+import { absoluteNodeName, REL_CURRENT, RelNodeName } from "util/rel-node-name";
 
 export type JumpCallback = (href: string, callback: () => void) => void | null;
 
 interface Props {
-    nodeName?: string | null;
+    nodeName?: RelNodeName | string;
     nodeUri?: string | null;
     href: string;
     className?: string;
@@ -26,14 +27,15 @@ interface Props {
 }
 
 function Jump(
-    {nodeName, nodeUri, href, className, style, title, readId, onNear, onFar, children}: Props,
+    {nodeName = REL_CURRENT, nodeUri, href, className, style, title, readId, onNear, onFar, children}: Props,
     ref: ForwardedRef<HTMLAnchorElement>
 ) {
-    const ownerName = useSelector(getOwnerName);
+    const ownerNameOrUrl = useSelector(getOwnerNameOrUrl);
     const rootPage = useSelector(getNodeRootPage);
-    const homeOwnerName = useSelector(getHomeOwnerName);
+    const homeOwnerNameOrUrl = useSelector(getHomeOwnerNameOrUrl);
     const homeRootPage = useSelector(getHomeRootPage);
-    const details = useSelector((state: ClientState) => getNamingNameDetails(state, nodeName));
+    const nodeOwnerName = absoluteNodeName(nodeName, {ownerNameOrUrl, homeOwnerNameOrUrl});
+    const details = useSelector((state: ClientState) => getNamingNameDetails(state, nodeOwnerName));
     const dispatch = useDispatch();
 
     const onNearClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -84,15 +86,14 @@ function Jump(
         e.preventDefault();
     }
 
-    const nodeOwnerName = nodeName ? (nodeName === ":" ? homeOwnerName : nodeName) : ownerName;
-    if (nodeOwnerName === ownerName) {
+    if (nodeOwnerName === ownerNameOrUrl) {
         const nodeLocation = rootPage ?? nodeUri;
-        const url = Browser.universalLocation(Browser.getRootLocation(), ownerName, nodeLocation, href, readId);
+        const url = Browser.universalLocation(Browser.getRootLocation(), ownerNameOrUrl, nodeLocation, href, readId);
         return <a href={url} className={className} style={style} title={title} data-nodename={nodeOwnerName}
                   data-href={href} ref={ref} onClick={onNearClick} suppressHydrationWarning>{children}</a>;
     } else {
         let nodeLocation;
-        if (nodeOwnerName === homeOwnerName) {
+        if (nodeOwnerName === homeOwnerNameOrUrl) {
             nodeLocation = homeRootPage ?? nodeUri;
         } else if (details.loaded) {
             nodeLocation = details.nodeUri;

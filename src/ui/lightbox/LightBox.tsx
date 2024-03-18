@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { MediaAttachment } from "api";
 import { ClientState } from "state/state";
-import { getNamingNameNodeUri } from "state/naming/selectors";
+import { getNamingNameRoot } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { closeLightBox, LightBoxMediaSequence, lightBoxMediaSet } from "state/lightbox/actions";
 import { getLightBoxMediaId, getLightBoxMediaPostingId } from "state/lightbox/selectors";
@@ -14,28 +14,25 @@ import { ExtPostingInfo } from "state/postings/state";
 import { getPosting } from "state/postings/selectors";
 import { ExtCommentInfo } from "state/detailedposting/state";
 import { getComment } from "state/detailedposting/selectors";
-import { getNodeRootPage } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import * as Browser from "ui/browser";
 import LightBoxCaption from "ui/lightbox/LightBoxCaption";
 import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import LightBoxShareButton from "ui/lightbox/LightBoxShareButton";
 import LightBoxDownloadButton from "ui/lightbox/LightBoxDownloadButton";
+import { REL_CURRENT } from "util/rel-node-name";
 import { urlWithParameters } from "util/url";
 import "./LightBox.css";
 
 export default function LightBox() {
-    const posting = useSelector((state: ClientState) => getPosting(state, state.lightBox.postingId));
+    const posting = useSelector((state: ClientState) => getPosting(state, state.lightBox.postingId, REL_CURRENT));
     const comment = useSelector((state: ClientState) =>
         state.lightBox.commentId != null ? getComment(state, state.lightBox.commentId) : null);
     const mediaId = useSelector(getLightBoxMediaId);
-    const mediaPosting = useSelector((state: ClientState) => getPosting(state, getLightBoxMediaPostingId(state)));
     const mediaNodeName = useSelector((state: ClientState) => state.lightBox.nodeName);
-    const rootPage = useSelector(
-        (state: ClientState) => state.lightBox.nodeName
-            ? getNamingNameNodeUri(state, state.lightBox.nodeName)
-            : getNodeRootPage(state)
-    );
+    const mediaPosting = useSelector((state: ClientState) =>
+        getPosting(state, getLightBoxMediaPostingId(state), mediaNodeName));
+    const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, state.lightBox.nodeName));
     const carte = useSelector(getCurrentViewMediaCarte);
     const loopGallery = useSelector((state: ClientState) => getSetting(state, "entry.gallery.loop") as boolean);
     const dispatch = useDispatch();
