@@ -21,28 +21,30 @@ import FeedTitle from "ui/feed/FeedTitle";
 import FeedPageHeader from "ui/feed/FeedPageHeader";
 import FeedPosting from "ui/feed/FeedPosting";
 import FeedSentinel from "ui/feed/FeedSentinel";
-import { REL_HOME } from "util/rel-node-name";
+import { REL_HOME, RelNodeName } from "util/rel-node-name";
 import { getPageHeaderHeight } from "util/ui";
 import "./FeedPage.css";
 
 interface Props {
+    nodeName: RelNodeName | string;
     feedName: string;
     visible: boolean;
     title: string;
     shareable?: boolean;
 }
 
-export default function FeedPage({feedName, visible, title, shareable}: Props) {
-    const loadingFuture = useSelector((state: ClientState) => getFeedState(state, feedName).loadingFuture);
-    const loadingPast = useSelector((state: ClientState) => getFeedState(state, feedName).loadingPast);
-    const before = useSelector((state: ClientState) => getFeedState(state, feedName).before);
-    const after = useSelector((state: ClientState) => getFeedState(state, feedName).after);
-    const stories = useSelector((state: ClientState) => getStories(state, feedName));
-    const totalInFuture = useSelector((state: ClientState) => getFeedState(state, feedName).totalInFuture);
-    const totalPinned = useSelector((state: ClientState) => getFeedState(state, feedName).status.totalPinned);
-    const notViewed = useSelector((state: ClientState) => getFeedState(state, feedName).status.notViewed);
-    const notViewedMoment = useSelector((state: ClientState) => getFeedState(state, feedName).status.notViewedMoment);
-    const anchor = useSelector((state: ClientState) => getFeedState(state, feedName).anchor);
+export default function FeedPage({nodeName, feedName, visible, title, shareable}: Props) {
+    const loadingFuture = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).loadingFuture);
+    const loadingPast = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).loadingPast);
+    const before = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).before);
+    const after = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).after);
+    const stories = useSelector((state: ClientState) => getStories(state, nodeName, feedName));
+    const totalInFuture = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).totalInFuture);
+    const totalPinned = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).status.totalPinned);
+    const notViewed = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).status.notViewed);
+    const notViewedMoment = useSelector((state: ClientState) =>
+        getFeedState(state, nodeName, feedName).status.notViewedMoment);
+    const anchor = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).anchor);
     const atHomeNode = useSelector(isAtHomeNode);
     const dispatch = useDispatch();
 
@@ -81,23 +83,23 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
         ) {
             scrollTo(sanchor);
             onScroll();
-            dispatch(feedScrolledToAnchor(feedName));
+            dispatch(feedScrolledToAnchor(nodeName, feedName));
         }
-    }, [after, anchor, before, beginning, dispatch, feedName, onScroll]);
+    }, [after, anchor, before, beginning, dispatch, feedName, nodeName, onScroll]);
 
     const loadFuture = useCallback(() => {
         if (loadingFuture || before >= Number.MAX_SAFE_INTEGER) {
             return;
         }
-        dispatch(feedFutureSliceLoad(feedName));
-    }, [before, dispatch, feedName, loadingFuture]);
+        dispatch(feedFutureSliceLoad(nodeName, feedName));
+    }, [before, dispatch, feedName, loadingFuture, nodeName]);
 
     const loadPast = useCallback(() => {
         if (loadingPast || after <= Number.MIN_SAFE_INTEGER) {
             return;
         }
-        dispatch(feedPastSliceLoad(feedName));
-    }, [after, dispatch, feedName, loadingPast]);
+        dispatch(feedPastSliceLoad(nodeName, feedName));
+    }, [after, dispatch, feedName, loadingPast, nodeName]);
 
     useEffect(() => {
         if (visible) {
@@ -108,8 +110,8 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
 
     const [at] = useDebounce(topmostMoment, 500);
     useEffect(() => {
-        dispatch(feedScrolled(feedName, at));
-    }, [at, dispatch, feedName]);
+        dispatch(feedScrolled(nodeName, feedName, at));
+    }, [at, dispatch, feedName, nodeName]);
 
     const [momentToView] = useDebounce(getNotViewedMoment(), 1000);
     useEffect(() => {
@@ -154,7 +156,7 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
         return (
             <>
                 <FeedTitle/>
-                <FeedPageHeader feedName={feedName} title={title} empty atTop={true} atBottom={true}
+                <FeedPageHeader nodeName={nodeName} feedName={feedName} title={title} empty atTop={true} atBottom={true}
                                 totalAfterTop={0} notViewed={0} notViewedMoment={null}/>
                 <div className="no-postings">{t("nothing-yet")}</div>
             </>
@@ -164,7 +166,7 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
     return (
         <>
             <FeedTitle/>
-            <FeedPageHeader feedName={feedName} title={title} shareable={shareable}
+            <FeedPageHeader nodeName={nodeName} feedName={feedName} title={title} shareable={shareable}
                             atTop={atTop && before >= Number.MAX_SAFE_INTEGER}
                             atBottom={atBottom && after <= Number.MIN_SAFE_INTEGER}
                             totalAfterTop={totalAfterTop}
@@ -188,7 +190,8 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
 }
 
 export const getStories = createSelector(
-    (state: ClientState, feedName: string) => getFeedState(state, feedName).stories,
+    (state: ClientState, nodeName: RelNodeName | string, feedName: string) =>
+        getFeedState(state, nodeName, feedName).stories,
     (state: ClientState) => state.postings[getOwnerNameOrUrl(state)] ?? {}, // FIXME it is an overly general dependency
     isGooglePlayHiding,
     (stories, postings, hiding) =>

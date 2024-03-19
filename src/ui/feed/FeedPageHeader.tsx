@@ -12,8 +12,10 @@ import FeedGotoButton from "ui/feed/FeedGotoButton";
 import FeedTopButton from "ui/feed/FeedTopButton";
 import * as Browser from "ui/browser";
 import { getPageHeaderHeight } from "util/ui";
+import { RelNodeName } from "util/rel-node-name";
 
 interface Props {
+    nodeName: RelNodeName | string;
     feedName: string;
     title: string;
     empty?: boolean;
@@ -26,7 +28,8 @@ interface Props {
 }
 
 export default function FeedPageHeader({
-    feedName, title, empty = false, shareable = false, atTop, atBottom, totalAfterTop, notViewed, notViewedMoment
+    nodeName, feedName, title, empty = false, shareable = false, atTop, atBottom, totalAfterTop, notViewed,
+    notViewedMoment
 }: Props) {
     const avatar = useSelector(getOwnerAvatar);
     const ownerName = useSelector(getOwnerName);
@@ -55,14 +58,14 @@ export default function FeedPageHeader({
                     </Jump>
                 }
                 {title}
-                <FeedSubscribeButton feedName={feedName} small={Browser.isTinyScreen()}/>
+                <FeedSubscribeButton nodeName={nodeName} feedName={feedName} small={Browser.isTinyScreen()}/>
                 {shareable && <PageShareButton href="/"/>}
             </h2>
             <div className="page-header-buttons">
-                {!empty && <FeedGotoButton feedName={feedName} atBottom={atBottom}/>}
+                {!empty && <FeedGotoButton nodeName={nodeName} feedName={feedName} atBottom={atBottom}/>}
             </div>
-            <FeedTopButton feedName={feedName} atTop={atTop} totalAfterTop={totalAfterTop} notViewed={notViewed}
-                           notViewedMoment={notViewedMoment}/>
+            <FeedTopButton nodeName={nodeName} feedName={feedName} atTop={atTop} totalAfterTop={totalAfterTop}
+                           notViewed={notViewed} notViewedMoment={notViewedMoment}/>
         </PageHeader>
     );
 }

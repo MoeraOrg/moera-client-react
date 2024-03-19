@@ -20,6 +20,7 @@ import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdi
 import { confirmBox } from "state/confirmbox/actions";
 import { Button, DropdownMenuItems } from "ui/control";
 import { tGender } from "i18n";
+import { REL_CURRENT } from "util/rel-node-name";
 
 interface Props {
     nodeName: string;
@@ -32,11 +33,11 @@ export default function SubscribeButtonMenu({nodeName, feedName}: Props) {
     const friendsId = useSelector(getHomeFriendsId);
     const ownerName = useSelector(getOwnerName);
     const googlePlayGoverned = useSelector((state: ClientState) =>
-        isFeedSheriff(state, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE));
+        isFeedSheriff(state, REL_CURRENT, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE));
     const googlePlaySheriff = useSelector((state: ClientState) =>
         getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE);
     const googlePlayProhibited = useSelector((state: ClientState) =>
-        isFeedSheriffProhibited(state, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE));
+        isFeedSheriffProhibited(state, REL_CURRENT, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE));
     const dispatch = useDispatch();
 
     const fullName = card?.details.profile.fullName ?? null;

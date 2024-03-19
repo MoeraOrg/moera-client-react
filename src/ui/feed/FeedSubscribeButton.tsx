@@ -6,18 +6,20 @@ import { getOwnerCard, getOwnerName, isAtHomeNode, isOwnerNameSet } from "state/
 import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
 import { isFeedGeneralLoading, isFeedGeneralReady } from "state/feeds/selectors";
 import { Loading, SubscribeButton } from "ui/control";
+import { RelNodeName } from "util/rel-node-name";
 
 interface Props {
+    nodeName: RelNodeName | string;
     feedName: string;
     small?: boolean | null;
 }
 
-export default function FeedSubscribeButton({feedName, small}: Props) {
+export default function FeedSubscribeButton({nodeName, feedName, small}: Props) {
     const show = useSelector((state: ClientState) =>
         isOwnerNameSet(state) && !isAtHomeNode(state) && isConnectedToHome(state) && isHomeOwnerNameSet(state));
     const ownerName = useSelector(getOwnerName);
-    const generalReady = useSelector((state: ClientState) => isFeedGeneralReady(state, feedName));
-    const generalLoading = useSelector((state: ClientState) => isFeedGeneralLoading(state, feedName));
+    const generalReady = useSelector((state: ClientState) => isFeedGeneralReady(state, nodeName, feedName));
+    const generalLoading = useSelector((state: ClientState) => isFeedGeneralLoading(state, nodeName, feedName));
     const subscription = useSelector((state: ClientState) => getOwnerCard(state)?.subscription);
 
     if (ownerName == null || !show) {

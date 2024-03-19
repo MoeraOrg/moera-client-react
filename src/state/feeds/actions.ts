@@ -241,26 +241,28 @@ export const feedsUpdate = (): FeedsUpdateAction =>
     actionWithoutPayload("FEEDS_UPDATE");
 
 export type FeedScrolledAction = ActionWithPayload<"FEED_SCROLLED", {
-    nodeName: string;
+    nodeName: RelNodeName | string;
     feedName: string;
     at: number;
 }>;
-export const feedScrolled = (nodeName: string, feedName: string, at: number): FeedScrolledAction =>
+export const feedScrolled = (nodeName: RelNodeName | string, feedName: string, at: number): FeedScrolledAction =>
     actionWithPayload("FEED_SCROLLED", {nodeName, feedName, at});
 
 export type FeedScrollToAnchorAction = ActionWithPayload<"FEED_SCROLL_TO_ANCHOR", {
-    nodeName: string;
+    nodeName: RelNodeName | string;
     feedName: string;
     at: number;
 }>;
-export const feedScrollToAnchor = (nodeName: string, feedName: string, at: number): FeedScrollToAnchorAction =>
+export const feedScrollToAnchor = (
+    nodeName: RelNodeName | string, feedName: string, at: number
+): FeedScrollToAnchorAction =>
     actionWithPayload("FEED_SCROLL_TO_ANCHOR", {nodeName, feedName, at});
 
 export type FeedScrolledToAnchorAction = ActionWithPayload<"FEED_SCROLLED_TO_ANCHOR", {
-    nodeName: string;
+    nodeName: RelNodeName | string;
     feedName: string;
 }>;
-export const feedScrolledToAnchor = (nodeName: string, feedName: string): FeedScrolledToAnchorAction =>
+export const feedScrolledToAnchor = (nodeName: RelNodeName | string, feedName: string): FeedScrolledToAnchorAction =>
     actionWithPayload("FEED_SCROLLED_TO_ANCHOR", {nodeName, feedName});
 
 export type FeedsAnyAction =

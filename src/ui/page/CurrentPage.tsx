@@ -12,6 +12,7 @@ import ProfilePage from "ui/profile/ProfilePage";
 import DetailedPostingPage from "ui/detailedposting/DetailedPostingPage";
 import NewsPage from "ui/news/NewsPage";
 import GooglePlayProhibitedPage from "ui/page/GooglePlayProhibitedPage";
+import { REL_CURRENT } from "util/rel-node-name";
 
 const ComposePage = React.lazy(() => import("ui/compose/ComposePage"));
 const SettingsPage = React.lazy(() => import("ui/settings/SettingsPage"));
@@ -23,8 +24,8 @@ export default function CurrentPage() {
     const positioned = useSelector(isDetailedPostingPositioned);
     const googlePlayProhibited = useSelector(
         (state: ClientState) => isGooglePlayHiding(state)
-            && isFeedGeneralReady(state, "timeline")
-            && isFeedSheriffProhibited(state, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE)
+            && isFeedGeneralReady(state, REL_CURRENT, "timeline")
+            && isFeedSheriffProhibited(state, REL_CURRENT, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE)
     );
 
     useEffect(() => {

@@ -64,13 +64,13 @@ export default [
         "COMPOSE_POST_SUCCEEDED",
         (state, signal: ComposePostSucceededAction) =>
             !isComposePostingEditing(state) && hasPostingFeedReference(signal.payload.posting, "timeline"),
-        signal => storyAdded(getPostingStory(signal.payload.posting, "timeline")!)
+        signal => storyAdded(REL_CURRENT, getPostingStory(signal.payload.posting, "timeline")!)
     ),
     trigger(
         "COMPOSE_POST_SUCCEEDED",
         (state, signal: ComposePostSucceededAction) =>
             isComposePostingEditing(state) && hasPostingFeedReference(signal.payload.posting, "timeline"),
-        signal => storyUpdated(getPostingStory(signal.payload.posting, "timeline")!)
+        signal => storyUpdated(REL_CURRENT, getPostingStory(signal.payload.posting, "timeline")!)
     ),
     trigger(
         "EVENT_NODE_POSTING_UPDATED",

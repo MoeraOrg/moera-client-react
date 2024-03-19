@@ -43,7 +43,7 @@ export default function ProfileView() {
             <PageHeader>
                 <h2>
                     {t("profile")}
-                    {" "}<FeedSubscribeButton feedName="timeline"/>
+                    {" "}<FeedSubscribeButton nodeName={REL_CURRENT} feedName="timeline"/>
                     {" "}{editable && <EditButton/>}
                     <PageShareButton href="/profile"/>
                 </h2>

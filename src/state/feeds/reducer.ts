@@ -478,7 +478,8 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
         }
 
         case "FEED_SCROLLED": {
-            const {nodeName, feedName, at} = action.payload;
+            let {nodeName, feedName, at} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
             const {istate, feed} = getFeed(state, nodeName, feedName);
             if (feed.scrollingActive) {
                 return istate.set([nodeName, feedName, "at"], at).value();
@@ -488,7 +489,8 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
         }
 
         case "FEED_SCROLL_TO_ANCHOR": {
-            const {nodeName, feedName, at} = action.payload;
+            let {nodeName, feedName, at} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
             const {istate, feed} = getFeed(state, nodeName, feedName);
             if (feed.scrollingActive) {
                 updateScrollingOnActive(istate, nodeName, feedName, feed, at);
@@ -497,14 +499,16 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
         }
 
         case "FEED_SCROLLED_TO_ANCHOR": {
-            const {nodeName, feedName} = action.payload;
+            let {nodeName, feedName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
             return getFeed(state, nodeName, feedName).istate
                 .set([nodeName, feedName, "anchor"], null)
                 .value();
         }
 
         case "STORY_READING_UPDATE": {
-            const {nodeName, feedName, id, read} = action.payload;
+            let {nodeName, feedName, id, read} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
             const {istate, feed} = getFeed(state, nodeName, feedName);
             const index = feed.stories.findIndex(t => t.id === id);
             if (index >= 0) {

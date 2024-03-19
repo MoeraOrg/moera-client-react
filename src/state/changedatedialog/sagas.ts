@@ -17,7 +17,7 @@ function* storyChangeDateSaga(action: WithContext<StoryChangeDateAction>) {
     try {
         const story = yield* call(Node.updateStory, action, REL_CURRENT, id, {publishAt: publishedAt});
         yield* put(closeChangeDateDialog().causedBy(action));
-        yield* put(storyUpdated(story).causedBy(action));
+        yield* put(storyUpdated(REL_CURRENT, story).causedBy(action));
     } catch (e) {
         yield* put(storyChangeDateFailed().causedBy(action))
         yield* put(errorThrown(e));

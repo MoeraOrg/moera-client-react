@@ -10,16 +10,18 @@ import { getFeedAtTimestamp } from "state/feeds/selectors";
 import { feedScrollToAnchor } from "state/feeds/actions";
 import * as Browser from "ui/browser";
 import { Button, CloseButton, Loading } from "ui/control";
+import { RelNodeName } from "util/rel-node-name";
 
 const DatePicker = React.lazy(() => import('react-datepicker'));
 
 interface Props {
+    nodeName: RelNodeName | string;
     feedName: string;
     atBottom: boolean;
 }
 
-export default function FeedGotoButton({feedName, atBottom}: Props) {
-    const timestamp = useSelector((state: ClientState) => getFeedAtTimestamp(state, feedName));
+export default function FeedGotoButton({nodeName, feedName, atBottom}: Props) {
+    const timestamp = useSelector((state: ClientState) => getFeedAtTimestamp(state, nodeName, feedName));
     const dispatch = useDispatch();
 
     const [active, setActive] = useState<boolean>(false);
@@ -34,11 +36,11 @@ export default function FeedGotoButton({feedName, atBottom}: Props) {
         if (isNaN(moment)) {
             return;
         }
-        dispatch(feedScrollToAnchor(feedName, moment));
+        dispatch(feedScrollToAnchor(nodeName, feedName, moment));
     };
 
     const toBottom = (e: React.MouseEvent) => {
-        dispatch(feedScrollToAnchor(feedName, Number.MIN_SAFE_INTEGER));
+        dispatch(feedScrollToAnchor(nodeName, feedName, Number.MIN_SAFE_INTEGER));
         e.preventDefault();
     };
 

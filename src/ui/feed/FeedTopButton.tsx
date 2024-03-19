@@ -5,9 +5,11 @@ import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { feedScrollToAnchor } from "state/feeds/actions";
+import { RelNodeName } from "util/rel-node-name";
 import "./FeedTopButton.css";
 
 interface Props {
+    nodeName: RelNodeName | string;
     feedName: string;
     atTop: boolean;
     totalAfterTop: number;
@@ -15,7 +17,7 @@ interface Props {
     notViewedMoment: number | null;
 }
 
-export default function FeedTopButton({feedName, atTop, totalAfterTop, notViewed, notViewedMoment}: Props) {
+export default function FeedTopButton({nodeName, feedName, atTop, totalAfterTop, notViewed, notViewedMoment}: Props) {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -43,7 +45,7 @@ export default function FeedTopButton({feedName, atTop, totalAfterTop, notViewed
         const moment = notViewedMoment != null && notViewed < totalAfterTop
             ? notViewedMoment
             : Number.MAX_SAFE_INTEGER;
-        dispatch(feedScrollToAnchor(feedName, moment));
+        dispatch(feedScrollToAnchor(nodeName, feedName, moment));
         event.preventDefault();
     };
 
