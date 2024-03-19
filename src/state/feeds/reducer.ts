@@ -11,16 +11,26 @@ import { getInstantSummary, getInstantTypeDetails } from "ui/instant/instant-typ
 import { replaceEmojis } from "util/html";
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { isSheriffGoverned, isSheriffMarked } from "util/sheriff";
+import { absoluteNodeName } from "util/rel-node-name";
 
 const initialState = {
 };
 
-function getFeed(state: FeedsState, feedName: string): {istate: WrappedObject<FeedsState>, feed: FeedState} {
+function getFeed(
+    state: FeedsState, nodeName: string, feedName: string
+): {
+    istate: WrappedObject<FeedsState>, feed: FeedState
+} {
     const istate = immutable.wrap(state);
-    let feed = state[feedName];
+    let nodeFeeds = state[nodeName];
+    if (nodeFeeds == null) {
+        nodeFeeds = {};
+        istate.set([nodeName], {});
+    }
+    let feed = nodeFeeds[feedName];
     if (feed == null) {
         feed = cloneDeep(emptyFeed);
-        istate.set([feedName], feed);
+        istate.set([nodeName, feedName], feed);
     }
     return {istate, feed};
 }
@@ -86,16 +96,17 @@ function sheriffMarkStory(story: ExtStoryInfo): void {
     }
 }
 
-function updateScrollingOnActive(istate: WrappedObject<FeedsState>, feedName: string, feed: FeedState,
-                                 anchor: number | null): void {
+function updateScrollingOnActive(
+    istate: WrappedObject<FeedsState>, nodeName: string, feedName: string, feed: FeedState, anchor: number | null
+): void {
     if (anchor != null) {
         if (anchor <= feed.before && anchor > feed.after) {
-            istate.assign([feedName], {
+            istate.assign([nodeName, feedName], {
                 anchor,
                 scrollingActive: true
             });
         } else {
-            istate.assign([feedName], {
+            istate.assign([nodeName, feedName], {
                 before: anchor,
                 after: anchor,
                 stories: [],
@@ -105,13 +116,15 @@ function updateScrollingOnActive(istate: WrappedObject<FeedsState>, feedName: st
             });
         }
     } else {
-        istate.set([feedName, "scrollingActive"], true);
+        istate.set([nodeName, feedName, "scrollingActive"], true);
     }
 }
 
-function updateScrollingOnInactive(istate: WrappedObject<FeedsState>, feedName: string, feed: FeedState): void {
+function updateScrollingOnInactive(
+    istate: WrappedObject<FeedsState>, nodeName: string, feedName: string, feed: FeedState
+): void {
     if (feed.scrollingActive) {
-        istate.assign([feedName], {
+        istate.assign([nodeName, feedName], {
             anchor: feed.at,
             scrollingActive: false
         });
@@ -123,50 +136,60 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
         case "INIT_FROM_LOCATION": {
             const istate = immutable.wrap(state);
             Object.keys(state)
-                .filter(name => !name.startsWith(":"))
+                .filter(name => name !== action.payload.nodeName && name !== action.context.homeOwnerNameOrUrl)
                 .forEach(name => istate.del([name]));
             return istate.value();
         }
 
         case "GO_TO_PAGE": {
             const istate = immutable.wrap(state);
+            const nodeName = action.context.ownerNameOrUrl;
             const feedName = PAGE_FEEDS.get(action.payload.page);
-            if (feedName != null && state[feedName] == null) {
-                istate.set([feedName], cloneDeep(emptyFeed));
-                updateScrollingOnActive(istate, feedName, emptyFeed, action.payload.details.at);
+
+            let nodeFeeds = state[nodeName];
+            if (nodeFeeds == null) {
+                nodeFeeds = {};
+                istate.set([nodeName], {});
             }
-            for (let [fn, feed] of Object.entries(state)) {
+
+            if (feedName != null && nodeFeeds[feedName] == null) {
+                istate.set([nodeName, feedName], cloneDeep(emptyFeed));
+                updateScrollingOnActive(istate, nodeName, feedName, emptyFeed, action.payload.details.at);
+            }
+            for (let [fn, feed] of Object.entries(nodeFeeds)) {
                 if (feed != null) {
                     if (fn === feedName) {
-                        updateScrollingOnActive(istate, fn, feed, action.payload.details.at);
+                        updateScrollingOnActive(istate, nodeName, fn, feed, action.payload.details.at);
                     } else {
-                        updateScrollingOnInactive(istate, fn, feed);
+                        updateScrollingOnInactive(istate, nodeName, fn, feed);
                     }
                 }
             }
+
             return istate.value();
         }
 
         case "FEED_GENERAL_LOAD": {
-            const {feedName} = action.payload;
-            const {istate, feed} = getFeed(state, feedName);
+            let {nodeName, feedName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
+            const {istate, feed} = getFeed(state, nodeName, feedName);
             if (!feed.loadedGeneral) {
-                istate.set([feedName, "loadingGeneral"], true);
+                istate.set([nodeName, feedName, "loadingGeneral"], true);
             }
             return istate.value();
         }
 
         case "FEED_GENERAL_LOAD_FAILED": {
-            const {feedName} = action.payload;
-            return getFeed(state, feedName).istate
-                .set([feedName, "loadingGeneral"], false)
+            const {nodeName, feedName} = action.payload;
+            return getFeed(state, nodeName, feedName).istate
+                .set([nodeName, feedName, "loadingGeneral"], false)
                 .value();
         }
 
         case "FEED_GENERAL_SET": {
-            const {feedName, info} = action.payload;
-            return getFeed(state, feedName).istate
-                .assign([feedName], {
+            const {nodeName, feedName, info} = action.payload;
+            return getFeed(state, nodeName, feedName).istate
+                .assign([nodeName, feedName], {
                     ...emptyInfo,
                     ...info,
                     loadingGeneral: false,
@@ -176,9 +199,10 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
         }
 
         case "FEED_GENERAL_UNSET": {
-            const {feedName} = action.payload;
-            return getFeed(state, feedName).istate
-                .assign([feedName], {
+            let {nodeName, feedName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
+            return getFeed(state, nodeName, feedName).istate
+                .assign([nodeName, feedName], {
                     ...emptyInfo,
                     loadingGeneral: false,
                     loadedGeneral: false
@@ -187,27 +211,29 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
         }
 
         case "FEED_STATUS_LOAD": {
-            const {feedName} = action.payload;
-            return getFeed(state, feedName).istate
-                .set([feedName, "loadingStatus"], true)
+            let {nodeName, feedName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
+            return getFeed(state, nodeName, feedName).istate
+                .set([nodeName, feedName, "loadingStatus"], true)
                 .value();
         }
 
         case "FEED_STATUS_LOAD_FAILED": {
-            const {feedName} = action.payload;
-            return getFeed(state, feedName).istate
-                .set([feedName, "loadingStatus"], false)
+            const {nodeName, feedName} = action.payload;
+            return getFeed(state, nodeName, feedName).istate
+                .set([nodeName, feedName, "loadingStatus"], false)
                 .value();
         }
 
         case "FEED_STATUS_SET": {
-            const {feedName, status} = action.payload;
-            return getFeed(state, feedName).istate
-                .assign([feedName], {
+            let {nodeName, feedName, status} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
+            return getFeed(state, nodeName, feedName).istate
+                .assign([nodeName, feedName], {
                     loadingStatus: false,
                     loadedStatus: true
                 })
-                .update([feedName, "status"], prevStatus => ({
+                .update([nodeName, feedName, "status"], prevStatus => ({
                     total: status.total,
                     totalPinned: status.totalPinned,
                     lastMoment: status.lastMoment ?? prevStatus.lastMoment,
@@ -220,15 +246,16 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
         }
 
         case "FEED_STATUS_UPDATED": {
-            const {feedName, viewed, read, before} = action.payload;
-            const {istate, feed} = getFeed(state, feedName);
+            let {nodeName, feedName, viewed, read, before} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
+            const {istate, feed} = getFeed(state, nodeName, feedName);
             for (let i = 0; i < feed.stories.length; i++) {
                 if (feed.stories[i].moment <= before) {
                     if (viewed != null) {
-                        istate.set([feedName, "stories", i, "viewed"], viewed);
+                        istate.set([nodeName, feedName, "stories", i, "viewed"], viewed);
                     }
                     if (read != null) {
-                        istate.set([feedName, "stories", i, "read"], read);
+                        istate.set([nodeName, feedName, "stories", i, "read"], read);
                     }
                 }
             }
@@ -236,43 +263,45 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
         }
 
         case "FEED_PAST_SLICE_LOAD": {
-            const {feedName} = action.payload;
-            return getFeed(state, feedName).istate
-                .set([feedName, "loadingPast"], true)
+            let {nodeName, feedName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
+            return getFeed(state, nodeName, feedName).istate
+                .set([nodeName, feedName, "loadingPast"], true)
                 .value();
         }
 
         case "FEED_PAST_SLICE_LOAD_FAILED": {
-            const {feedName} = action.payload;
-            return getFeed(state, feedName).istate
-                .set([feedName, "loadingPast"], false)
+            const {nodeName, feedName} = action.payload;
+            return getFeed(state, nodeName, feedName).istate
+                .set([nodeName, feedName, "loadingPast"], false)
                 .value();
         }
 
         case "FEED_FUTURE_SLICE_LOAD": {
-            const {feedName} = action.payload;
-            return getFeed(state, feedName).istate
-                .set([feedName, "loadingFuture"], true)
+            let {nodeName, feedName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
+            return getFeed(state, nodeName, feedName).istate
+                .set([nodeName, feedName, "loadingFuture"], true)
                 .value();
         }
 
         case "FEED_FUTURE_SLICE_LOAD_FAILED": {
-            const {feedName} = action.payload;
-            return getFeed(state, feedName).istate
-                .set([feedName, "loadingFuture"], false)
+            const {nodeName, feedName} = action.payload;
+            return getFeed(state, nodeName, feedName).istate
+                .set([nodeName, feedName, "loadingFuture"], false)
                 .value();
         }
 
         case "FEED_PAST_SLICE_SET":
         case "FEED_FUTURE_SLICE_SET": {
-            const {feedName, ...loadedSlice} = action.payload;
-            const {istate, feed} = getFeed(state, feedName);
+            const {nodeName, feedName, ...loadedSlice} = action.payload;
+            const {istate, feed} = getFeed(state, nodeName, feedName);
 
             if (action.type === "FEED_PAST_SLICE_SET") {
-                istate.set([feedName, "loadingPast"], false);
+                istate.set([nodeName, feedName, "loadingPast"], false);
             }
             if (action.type === "FEED_FUTURE_SLICE_SET") {
-                istate.set([feedName, "loadingFuture"], false);
+                istate.set([nodeName, feedName, "loadingFuture"], false);
             }
 
             let {pending, before, after} = feed;
@@ -302,10 +331,10 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                     }
 
                     if (slice.after <= prevAfter) {
-                        istate.set([feedName, "totalInPast"], slice.totalInPast);
+                        istate.set([nodeName, feedName, "totalInPast"], slice.totalInPast);
                     }
                     if (slice.before >= prevBefore) {
-                        istate.set([feedName, "totalInFuture"], slice.totalInFuture);
+                        istate.set([nodeName, feedName, "totalInFuture"], slice.totalInFuture);
                     }
                     changed = true;
                 }
@@ -313,27 +342,27 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             }
 
             stories.sort((a, b) => b.moment - a.moment);
-            istate.assign([feedName], {before, after, stories, pending});
+            istate.assign([nodeName, feedName], {before, after, stories, pending});
             return istate.value();
         }
 
         case "FEED_SLICE_UPDATE": {
-            const {feedName} = action.payload;
-            const {istate, feed} = getFeed(state, feedName);
+            const {nodeName, feedName} = action.payload;
+            const {istate, feed} = getFeed(state, nodeName, feedName);
             const stories = feed.stories.slice()
                 .filter(t => t.moment > action.payload.before || t.moment <= action.payload.after);
             action.payload.stories
                 .forEach(t => stories.push(extractStory(t, action.context.homeOwnerName)));
             stories.sort((a, b) => b.moment - a.moment);
-            istate.set([feedName, "stories"], stories);
+            istate.set([nodeName, feedName, "stories"], stories);
             if (action.payload.after <= feed.after) {
-                istate.assign([feedName], {
+                istate.assign([nodeName, feedName], {
                     after: action.payload.after,
                     totalInPast: action.payload.totalInPast
                 });
             }
             if (action.payload.before >= feed.before) {
-                istate.assign([feedName], {
+                istate.assign([nodeName, feedName], {
                     before: action.payload.before,
                     totalInFuture: action.payload.totalInFuture
                 });
@@ -343,39 +372,45 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
 
         case "FEEDS_UNSET": {
             const istate = immutable.wrap(state);
-            for (let [feedName, feed] of Object.entries(state)) {
-                if (feed != null) {
-                    if (feed.anchor != null) {
-                        istate.assign([feedName], {
-                            before: feed.anchor,
-                            after: feed.anchor,
-                            stories: [],
-                            at: feed.anchor,
-                            loadedStatus: false
-                        });
-                    } else {
-                        istate.assign([feedName], {
-                            before: feed.at,
-                            after: feed.at,
-                            stories: [],
-                            anchor: feed.at,
-                            loadedStatus: false
+            for (let [nodeName, nodeFeeds] of Object.entries(state)) {
+                if (nodeFeeds == null) {
+                    continue;
+                }
+                for (let [feedName, feed] of Object.entries(nodeFeeds)) {
+                    if (feed != null) {
+                        if (feed.anchor != null) {
+                            istate.assign([nodeName, feedName], {
+                                before: feed.anchor,
+                                after: feed.anchor,
+                                stories: [],
+                                at: feed.anchor,
+                                loadedStatus: false
+                            });
+                        } else {
+                            istate.assign([nodeName, feedName], {
+                                before: feed.at,
+                                after: feed.at,
+                                stories: [],
+                                anchor: feed.at,
+                                loadedStatus: false
+                            });
+                        }
+                        istate.assign([nodeName, feedName, "status"], {
+                            notViewed: 0,
+                            notRead: 0,
+                            notViewedMoment: null,
+                            notReadMoment: null
                         });
                     }
-                    istate.assign([feedName, "status"], {
-                        notViewed: 0,
-                        notRead: 0,
-                        notViewedMoment: null,
-                        notReadMoment: null
-                    });
                 }
             }
             return istate.value();
         }
 
         case "STORY_ADDED": {
-            const {feedName, moment, posting} = action.payload.story;
-            const {istate, feed} = getFeed(state, feedName);
+            let {nodeName, story: {feedName, moment, posting}} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
+            const {istate, feed} = getFeed(state, nodeName, feedName);
             if (moment != null) {
                 if (moment <= feed.before && moment > feed.after) {
                     if (!feed.stories.some(p => p.moment === moment)) {
@@ -384,42 +419,47 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                         const stories = feed.stories.filter(p => p.postingId !== postingId);
                         stories.push(extractStory(action.payload.story, action.context.homeOwnerName));
                         stories.sort((a, b) => b.moment - a.moment);
-                        istate.set([feedName, "stories"], stories);
-                        istate.set([feedName, "status", "total"], feed.status.total + (stories.length - count));
+                        istate.set([nodeName, feedName, "stories"], stories);
+                        istate.set(
+                            [nodeName, feedName, "status", "total"],
+                            feed.status.total + (stories.length - count)
+                        );
                     }
                 } else if (moment > feed.before) {
-                    istate.set([feedName, "status", "total"], feed.status.total + 1);
-                    istate.set([feedName, "totalInFuture"], feed.totalInFuture + 1);
+                    istate.set([nodeName, feedName, "status", "total"], feed.status.total + 1);
+                    istate.set([nodeName, feedName, "totalInFuture"], feed.totalInFuture + 1);
                 } else {
-                    istate.set([feedName, "status", "total"], feed.status.total + 1);
-                    istate.set([feedName, "totalInPast"], feed.totalInPast + 1);
+                    istate.set([nodeName, feedName, "status", "total"], feed.status.total + 1);
+                    istate.set([nodeName, feedName, "totalInPast"], feed.totalInPast + 1);
                 }
             }
             return istate.value();
         }
 
         case "STORY_DELETED": {
-            const {feedName, moment, id} = action.payload.story;
-            const {istate, feed} = getFeed(state, feedName);
-            istate.set([feedName, "status", "total"], feed.status.total - 1);
+            let {nodeName, story: {feedName, moment, id}} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
+            const {istate, feed} = getFeed(state, nodeName, feedName);
+            istate.set([nodeName, feedName, "status", "total"], feed.status.total - 1);
             if (moment <= feed.before && moment > feed.after) {
                 const index = feed.stories.findIndex(p => p.id === id);
                 if (index >= 0) {
                     const stories = feed.stories.slice();
                     stories.splice(index, 1);
-                    istate.set([feedName, "stories"], stories);
+                    istate.set([nodeName, feedName, "stories"], stories);
                 }
             } else if (moment > feed.before) {
-                istate.set([feedName, "totalInFuture"], feed.totalInFuture - 1);
+                istate.set([nodeName, feedName, "totalInFuture"], feed.totalInFuture - 1);
             } else {
-                istate.set([feedName, "totalInPast"], feed.totalInPast - 1);
+                istate.set([nodeName, feedName, "totalInPast"], feed.totalInPast - 1);
             }
             return istate.value();
         }
 
         case "STORY_UPDATED": {
-            const {id, feedName, moment} = action.payload.story;
-            const {istate, feed} = getFeed(state, feedName);
+            let {nodeName, story: {id, feedName, moment}} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
+            const {istate, feed} = getFeed(state, nodeName, feedName);
             let stories = null;
             const index = feed.stories.findIndex(p => p.id === id);
             if (index >= 0) {
@@ -434,51 +474,52 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 stories.push(story);
                 stories.sort((a, b) => b.moment - a.moment);
             }
-            return stories != null ? istate.set([feedName, "stories"], stories).value() : istate.value();
+            return stories != null ? istate.set([nodeName, feedName, "stories"], stories).value() : istate.value();
         }
 
         case "FEED_SCROLLED": {
-            const {feedName, at} = action.payload;
-            const {istate, feed} = getFeed(state, feedName);
+            const {nodeName, feedName, at} = action.payload;
+            const {istate, feed} = getFeed(state, nodeName, feedName);
             if (feed.scrollingActive) {
-                return istate.set([feedName, "at"], at).value();
+                return istate.set([nodeName, feedName, "at"], at).value();
             } else {
                 return istate.value();
             }
         }
 
         case "FEED_SCROLL_TO_ANCHOR": {
-            const {feedName, at} = action.payload;
-            const {istate, feed} = getFeed(state, feedName);
+            const {nodeName, feedName, at} = action.payload;
+            const {istate, feed} = getFeed(state, nodeName, feedName);
             if (feed.scrollingActive) {
-                updateScrollingOnActive(istate, feedName, feed, at);
+                updateScrollingOnActive(istate, nodeName, feedName, feed, at);
             }
             return istate.value();
         }
 
         case "FEED_SCROLLED_TO_ANCHOR": {
-            const {feedName} = action.payload;
-            return getFeed(state, feedName).istate
-                .set([feedName, "anchor"], null)
+            const {nodeName, feedName} = action.payload;
+            return getFeed(state, nodeName, feedName).istate
+                .set([nodeName, feedName, "anchor"], null)
                 .value();
         }
 
         case "STORY_READING_UPDATE": {
-            const {feedName, id, read} = action.payload;
-            const {istate, feed} = getFeed(state, feedName);
+            const {nodeName, feedName, id, read} = action.payload;
+            const {istate, feed} = getFeed(state, nodeName, feedName);
             const index = feed.stories.findIndex(t => t.id === id);
             if (index >= 0) {
-                istate.set([feedName, "stories", index, "read"], read);
+                istate.set([nodeName, feedName, "stories", index, "read"], read);
             }
             return istate.value();
         }
 
         case "STORY_SATISFY": {
-            const {feedName, id} = action.payload;
-            const {istate, feed} = getFeed(state, feedName);
+            let {nodeName, feedName, id} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
+            const {istate, feed} = getFeed(state, nodeName, feedName);
             const index = feed.stories.findIndex(t => t.id === id);
             if (index >= 0) {
-                istate.set([feedName, "stories", index, "satisfied"], true);
+                istate.set([nodeName, feedName, "stories", index, "satisfied"], true);
             }
             return istate.value();
         }
@@ -486,12 +527,17 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
         case "SETTINGS_LANGUAGE_CHANGED": {
             const {homeOwnerName} = action.context;
             const istate = immutable.wrap(state);
-            for (let [fn, feed] of Object.entries(state)) {
-                if (feed != null) {
-                    istate.set([fn, "stories"], feed.stories.map(story => ({
-                        ...story,
-                        summary: replaceEmojis(getInstantSummary(story, homeOwnerName))
-                    })));
+            for (let [nodeName, nodeFeeds] of Object.entries(state)) {
+                if (nodeFeeds == null) {
+                    continue;
+                }
+                for (let [fn, feed] of Object.entries(nodeFeeds)) {
+                    if (feed != null) {
+                        istate.set([nodeName, fn, "stories"], feed.stories.map(story => ({
+                            ...story,
+                            summary: replaceEmojis(getInstantSummary(story, homeOwnerName))
+                        })));
+                    }
                 }
             }
             return istate.value();
@@ -499,11 +545,12 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
 
         case "EVENT_NODE_FEED_SHERIFF_DATA_UPDATED": {
             const {feedName, sheriffs, sheriffMarks} = action.payload;
-            const {istate, feed} = getFeed(state, feedName);
+            const nodeName = action.context.ownerNameOrUrl;
+            const {istate, feed} = getFeed(state, nodeName, feedName);
             if (!feed.loadedGeneral) {
                 return state;
             }
-            return istate.assign([feedName], {sheriffs, sheriffMarks}).value();
+            return istate.assign([nodeName, feedName], {sheriffs, sheriffMarks}).value();
         }
 
         default:

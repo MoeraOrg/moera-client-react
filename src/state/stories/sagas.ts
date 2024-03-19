@@ -11,7 +11,7 @@ import {
     storyUpdated
 } from "state/stories/actions";
 import { executor } from "state/executor";
-import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export default [
     executor("STORY_PINNING_UPDATE", null, storyPinningUpdateSaga),
@@ -23,27 +23,27 @@ function* storyPinningUpdateSaga(action: WithContext<StoryPinningUpdateAction>) 
     const {id, pinned} = action.payload;
     try {
         const story = yield* call(Node.updateStory, action, REL_CURRENT, id, {pinned});
-        yield* put(storyUpdated(story).causedBy(action));
+        yield* put(storyUpdated(REL_CURRENT, story).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
     }
 }
 
 function* storyReadingUpdateSaga(action: WithContext<StoryReadingUpdateAction>) {
-    const {id, read} = action.payload;
+    const {nodeName, id, read} = action.payload;
     try {
-        const story = yield* call(Node.updateStory, action, REL_HOME, id, {read});
-        yield* put(storyUpdated(story).causedBy(action));
+        const story = yield* call(Node.updateStory, action, nodeName, id, {read});
+        yield* put(storyUpdated(nodeName, story).causedBy(action));
     } catch (e) {
         // ignore, not important
     }
 }
 
 function* storySatisfySaga(action: WithContext<StorySatisfyAction>) {
-    const {id} = action.payload;
+    const {nodeName, id} = action.payload;
     try {
-        const story = yield* call(Node.updateStory, action, REL_HOME, id, {satisfied: true});
-        yield* put(storyUpdated(story).causedBy(action));
+        const story = yield* call(Node.updateStory, action, nodeName, id, {satisfied: true});
+        yield* put(storyUpdated(nodeName, story).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
     }

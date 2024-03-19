@@ -41,134 +41,126 @@ import { getOwnerName } from "state/node/selectors";
 import { storyAdded, storyDeleted, storyUpdated } from "state/stories/actions";
 import { postingSubscriptionSet, remotePostingSubscriptionSet } from "state/postings/actions";
 import { WithContext } from "state/action-types";
+import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { now } from "util/misc";
-import { REL_CURRENT } from "util/rel-node-name";
 
-function toStory(
-    eventPayload: Omit<StoryAddedEvent | StoryUpdatedEvent | StoryDeletedEvent, "type">, isHome: boolean
-): StoryInfo {
-    const story: StoryInfo = {
-        publishedAt: 0,
-        ...eventPayload,
-        createdAt: now()
-    };
-    if (isHome) {
-        story.feedName = ":" + story.feedName;
-    }
-    return story;
-}
+const toStory = (eventPayload: Omit<StoryAddedEvent | StoryUpdatedEvent | StoryDeletedEvent, "type">): StoryInfo => ({
+    publishedAt: 0,
+    ...eventPayload,
+    createdAt: now()
+});
 
 export default [
     trigger(
         "GO_TO_PAGE",
         state => (isAtTimelinePage(state) || isAtProfilePage(state) || isAtDetailedPostingPage(state))
-            && isFeedGeneralToBeLoaded(state, "timeline"),
-        feedGeneralLoad("timeline")
+            && isFeedGeneralToBeLoaded(state, REL_CURRENT, "timeline"),
+        feedGeneralLoad(REL_CURRENT, "timeline")
     ),
     trigger(
         ["GO_TO_PAGE", "FEEDS_UNSET"],
-        state => isAtTimelinePage(state) && isFeedStatusToBeLoaded(state, "timeline"),
-        feedStatusLoad("timeline")
+        state => isAtTimelinePage(state) && isFeedStatusToBeLoaded(state, REL_CURRENT, "timeline"),
+        feedStatusLoad(REL_CURRENT, "timeline")
     ),
     trigger(
         ["GO_TO_PAGE", "FEEDS_UNSET"],
-        state => isAtNewsPage(state) && isFeedStatusToBeLoaded(state, "news"),
-        feedStatusLoad("news")
+        state => isAtNewsPage(state) && isFeedStatusToBeLoaded(state, REL_CURRENT, "news"),
+        feedStatusLoad(REL_CURRENT, "news")
     ),
     trigger(
         ["GO_TO_PAGE", "FEEDS_UNSET"],
-        state => isAtTimelinePage(state) && isFeedFutureToBeLoaded(state, "timeline"),
-        feedFutureSliceLoad("timeline")
+        state => isAtTimelinePage(state) && isFeedFutureToBeLoaded(state, REL_CURRENT, "timeline"),
+        feedFutureSliceLoad(REL_CURRENT, "timeline")
     ),
     trigger(
         ["GO_TO_PAGE", "FEEDS_UNSET"],
-        state => isAtTimelinePage(state) && isFeedPastToBeLoaded(state, "timeline"),
-        feedPastSliceLoad("timeline")
+        state => isAtTimelinePage(state) && isFeedPastToBeLoaded(state, REL_CURRENT, "timeline"),
+        feedPastSliceLoad(REL_CURRENT, "timeline")
     ),
     trigger(
         ["GO_TO_PAGE", "FEEDS_UNSET"],
-        state => isAtNewsPage(state) && isFeedFutureToBeLoaded(state, "news"),
-        feedFutureSliceLoad("timeline")
+        state => isAtNewsPage(state) && isFeedFutureToBeLoaded(state, REL_CURRENT, "news"),
+        feedFutureSliceLoad(REL_CURRENT, "news")
     ),
     trigger(
         ["GO_TO_PAGE", "FEEDS_UNSET"],
-        state => isAtNewsPage(state) && isFeedPastToBeLoaded(state, "news"),
-        feedPastSliceLoad("timeline")
+        state => isAtNewsPage(state) && isFeedPastToBeLoaded(state, REL_CURRENT, "news"),
+        feedPastSliceLoad(REL_CURRENT, "news")
     ),
     trigger("FEED_SCROLLED", true, updateLocation),
     trigger(
         "HOME_READY",
         disj(isAtTimelinePage, isAtProfilePage, isAtDetailedPostingPage),
-        feedGeneralLoad("timeline")
+        feedGeneralLoad(REL_CURRENT, "timeline")
     ),
     trigger(
         "HOME_READY",
         inv(disj(isAtTimelinePage, isAtProfilePage, isAtDetailedPostingPage)),
-        feedGeneralUnset("timeline")
+        feedGeneralUnset(REL_CURRENT, "timeline")
     ),
     trigger("HOME_READY", true, feedsUnset),
     trigger("WAKE_UP", true, feedsUpdate),
-    trigger("FEEDS_UNSET", isConnectedToHome, feedStatusLoad(":instant")),
-    trigger("FEEDS_UNSET", isConnectedToHome, feedStatusLoad(":news")),
+    trigger("FEEDS_UNSET", isConnectedToHome, feedStatusLoad(REL_HOME, "instant")),
+    trigger("FEEDS_UNSET", isConnectedToHome, feedStatusLoad(REL_HOME, "news")),
     trigger(
         ["POST_INIT", "POST_INIT_DELAYED"],
-        state => isConnectedToHome(state) && isFeedToBeLoaded(state, ":instant"),
-        feedPastSliceLoad(":instant")
+        state => isConnectedToHome(state) && isFeedToBeLoaded(state, REL_HOME, "instant"),
+        feedPastSliceLoad(REL_HOME, "instant")
     ),
     trigger(
         "EVENT_NODE_STORY_ADDED",
         true,
-        (signal: EventAction<StoryAddedEvent>) => storyAdded(toStory(signal.payload, false))
+        (signal: EventAction<StoryAddedEvent>) => storyAdded(REL_CURRENT, toStory(signal.payload))
     ),
     trigger(
         "EVENT_NODE_STORY_DELETED",
         true,
-        (signal: EventAction<StoryDeletedEvent>) => storyDeleted(toStory(signal.payload, false))
+        (signal: EventAction<StoryDeletedEvent>) => storyDeleted(REL_CURRENT, toStory(signal.payload))
     ),
     trigger(
         "EVENT_NODE_STORY_UPDATED",
         true,
-        (signal: EventAction<StoryUpdatedEvent>) => storyUpdated(toStory(signal.payload, false))
+        (signal: EventAction<StoryUpdatedEvent>) => storyUpdated(REL_CURRENT, toStory(signal.payload))
     ),
     trigger(
         "EVENT_HOME_STORY_ADDED",
         true,
-        (signal: EventAction<StoryAddedEvent>) => storyAdded(toStory(signal.payload, true))
+        (signal: EventAction<StoryAddedEvent>) => storyAdded(REL_HOME, toStory(signal.payload))
     ),
     trigger(
         "EVENT_HOME_STORY_DELETED",
         true,
-        (signal: EventAction<StoryDeletedEvent>) => storyDeleted(toStory(signal.payload, true))
+        (signal: EventAction<StoryDeletedEvent>) => storyDeleted(REL_HOME, toStory(signal.payload))
     ),
     trigger(
         "EVENT_HOME_STORY_UPDATED",
         true,
-        (signal: EventAction<StoryUpdatedEvent>) => storyUpdated(toStory(signal.payload, true))
+        (signal: EventAction<StoryUpdatedEvent>) => storyUpdated(REL_HOME, toStory(signal.payload))
     ),
     trigger(
         "EVENT_NODE_FEED_STATUS_UPDATED",
         true,
         (signal: EventAction<FeedStatusUpdatedEvent>) =>
-            feedStatusSet(signal.payload.feedName, signal.payload.status)
+            feedStatusSet(REL_CURRENT, signal.payload.feedName, signal.payload.status)
     ),
     trigger(
         "EVENT_HOME_FEED_STATUS_UPDATED",
         true,
         (signal: EventAction<FeedStatusUpdatedEvent>) =>
-            feedStatusSet(":" + signal.payload.feedName, signal.payload.status)
+            feedStatusSet(REL_HOME, signal.payload.feedName, signal.payload.status)
     ),
     trigger(
         "EVENT_NODE_STORIES_STATUS_UPDATED",
         true,
         (signal: EventAction<StoriesStatusUpdatedEvent>) => feedStatusUpdated(
-            signal.payload.feedName, signal.payload.viewed ?? null, signal.payload.read ?? null,
+            REL_CURRENT, signal.payload.feedName, signal.payload.viewed ?? null, signal.payload.read ?? null,
             signal.payload.before)
     ),
     trigger(
         "EVENT_HOME_STORIES_STATUS_UPDATED",
         true,
         (signal: EventAction<StoriesStatusUpdatedEvent>) => feedStatusUpdated(
-            ":" + signal.payload.feedName, signal.payload.viewed ?? null, signal.payload.read ?? null,
+            REL_HOME, signal.payload.feedName, signal.payload.viewed ?? null, signal.payload.read ?? null,
             signal.payload.before)
     ),
     trigger(

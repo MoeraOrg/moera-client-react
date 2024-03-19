@@ -1,8 +1,7 @@
 import { FeedReference, PostingInfo, StoryInfo } from "api";
 import { ClientState } from "state/state";
 import { VerificationStatus } from "state/state-types";
-import { getOwnerNameOrUrl } from "state/node/selectors";
-import { getHomeOwnerNameOrUrl } from "state/home/selectors";
+import { getRelNodeNameContext } from "state/home/selectors";
 import { ExtPostingInfo, PostingsState, PostingState } from "state/postings/state";
 import { isSheriffGoverned, isSheriffMarked } from "util/sheriff";
 import { now } from "util/misc";
@@ -14,9 +13,7 @@ function getPostingState(
     if (id == null) {
         return undefined;
     }
-    const ownerNameOrUrl = getOwnerNameOrUrl(state);
-    const homeOwnerNameOrUrl = getHomeOwnerNameOrUrl(state);
-    nodeName = absoluteNodeName(nodeName, {ownerNameOrUrl, homeOwnerNameOrUrl});
+    nodeName = absoluteNodeName(nodeName, getRelNodeNameContext(state));
     return state.postings[nodeName]?.[id];
 }
 

@@ -6,12 +6,13 @@ import { feedStatusUpdate } from "state/feeds/actions";
 import { getFeedNotViewed, getFeedState, getInstantBorder } from "state/feeds/selectors";
 import { Popover } from "ui/control";
 import InstantBell from "ui/instant/InstantBell";
+import { REL_HOME } from "util/rel-node-name";
 
 const Instants = React.lazy(() => import("ui/instant/Instants"));
 
 export default function InstantButton() {
-    const stories = useSelector((state: ClientState) => getFeedState(state, ":instant").stories);
-    const notViewedCount = useSelector((state: ClientState) => getFeedNotViewed(state, ":instant"));
+    const stories = useSelector((state: ClientState) => getFeedState(state, REL_HOME, "instant").stories);
+    const notViewedCount = useSelector((state: ClientState) => getFeedNotViewed(state, REL_HOME, "instant"));
     const instantBorder = useSelector(getInstantBorder);
     const dispatch = useDispatch();
 
@@ -27,7 +28,7 @@ export default function InstantButton() {
             return;
         }
         topMoment.current = stories[0].moment;
-        dispatch(feedStatusUpdate(":instant", true, null, topMoment.current));
+        dispatch(feedStatusUpdate(REL_HOME, "instant", true, null, topMoment.current));
     }
 
     const onToggle = (v: boolean) => {

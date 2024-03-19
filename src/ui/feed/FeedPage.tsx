@@ -21,6 +21,7 @@ import FeedTitle from "ui/feed/FeedTitle";
 import FeedPageHeader from "ui/feed/FeedPageHeader";
 import FeedPosting from "ui/feed/FeedPosting";
 import FeedSentinel from "ui/feed/FeedSentinel";
+import { REL_HOME } from "util/rel-node-name";
 import { getPageHeaderHeight } from "util/ui";
 import "./FeedPage.css";
 
@@ -117,7 +118,7 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
         }
         if (momentToView != null) {
             markAllViewed();
-            dispatch(feedStatusUpdate(":" + feedName, true, null, momentToView));
+            dispatch(feedStatusUpdate(REL_HOME, feedName, true, null, momentToView));
         }
     }, [atHomeNode, dispatch, feedName, momentToView]);
 

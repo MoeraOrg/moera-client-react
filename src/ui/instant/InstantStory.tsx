@@ -36,11 +36,11 @@ export default function InstantStory({story, lastNew, hide}: Props) {
         hide();
         performJump();
         if (!story.read) {
-            dispatch(storyReadingUpdate(":instant", story.id, true));
+            dispatch(storyReadingUpdate(REL_HOME, "instant", story.id, true));
         }
     }
 
-    const onEnvelope = () => dispatch(storyReadingUpdate(":instant", story.id, !story.read));
+    const onEnvelope = () => dispatch(storyReadingUpdate(REL_HOME, "instant", story.id, !story.read));
 
     const {nodeName, href} = getInstantTarget(story);
     const buttons = getInstantTypeDetails(story.storyType)?.buttons;

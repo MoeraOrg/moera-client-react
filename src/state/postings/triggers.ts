@@ -14,19 +14,19 @@ import {
     postingReactionLoad,
     postingReactionsReload
 } from "state/postings/actions";
+import { WithContext } from "state/action-types";
 import { isPostingCached } from "state/postings/selectors";
 import { StoryAddedAction, StoryUpdatedAction } from "state/stories/actions";
 import { isConnectedToHome } from "state/home/selectors";
-import { isCurrentNodeStory } from "state/stories/selectors";
 import { flashBox } from "state/flashbox/actions";
-import { REL_CURRENT } from "util/rel-node-name";
+import { absoluteNodeName, REL_CURRENT } from "util/rel-node-name";
 
 export default [
     trigger(
         ["STORY_ADDED", "STORY_UPDATED"],
-        (state, signal: (StoryAddedAction | StoryUpdatedAction)) =>
+        (state, signal: (WithContext<StoryAddedAction> | WithContext<StoryUpdatedAction>)) =>
             signal.payload.story.postingId != null
-            && isCurrentNodeStory(state, signal.payload.story)
+            && absoluteNodeName(signal.payload.nodeName, signal.context) === signal.context.ownerNameOrUrl
             && !isPostingCached(state, signal.payload.story.postingId, REL_CURRENT),
         signal => postingLoad(signal.payload.story.postingId!, REL_CURRENT)
     ),

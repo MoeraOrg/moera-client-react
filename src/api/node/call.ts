@@ -14,11 +14,11 @@ import { WithContext } from "state/action-types";
 import { errorAuthInvalid } from "state/error/actions";
 import { messageBox } from "state/messagebox/actions";
 import { cartesLoad } from "state/cartes/actions";
-import { getNodeRootLocation, getOwnerNameOrUrl, getToken } from "state/node/selectors";
+import { getNodeRootLocation, getToken } from "state/node/selectors";
 import { getCurrentAllCarte } from "state/cartes/selectors";
 import {
-    getHomeOwnerNameOrUrl,
     getHomeRootLocation,
+    getRelNodeNameContext,
     isConnectedToHome,
     isHomeOwnerNameSet
 } from "state/home/selectors";
@@ -175,14 +175,11 @@ export function* selectApi(
     if (caller != null) {
         ({ownerNameOrUrl, homeOwnerNameOrUrl} = caller.context);
     } else {
-        ({ownerNameOrUrl, homeOwnerNameOrUrl} = yield* select((state: ClientState) => ({
-            ownerNameOrUrl: getOwnerNameOrUrl(state),
-            homeOwnerNameOrUrl: getHomeOwnerNameOrUrl(state)
-        })));
+        ({ownerNameOrUrl, homeOwnerNameOrUrl} = yield* select(getRelNodeNameContext));
     }
     if (nodeName instanceof RelNodeName) {
         const isHome = nodeName.isHomeNode();
-        nodeName = nodeName.absolute(ownerNameOrUrl, homeOwnerNameOrUrl);
+        nodeName = nodeName.absolute({ownerNameOrUrl, homeOwnerNameOrUrl});
         if (nodeName === "" && isHome) {
             throw new HomeNotConnectedError(caller);
         }

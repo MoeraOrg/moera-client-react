@@ -13,7 +13,7 @@ import { REL_HOME } from "util/rel-node-name";
 import "./NewsButton.css";
 
 export default function NewsButton() {
-    const count = useSelector((state: ClientState) => getFeedNotViewed(state, ":news"));
+    const count = useSelector((state: ClientState) => getFeedNotViewed(state, REL_HOME, "news"));
     const {href, active} = useMainMenuHomeNews();
     const {t} = useTranslation();
 

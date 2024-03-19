@@ -7,14 +7,13 @@ import * as URI from 'uri-js';
 
 import { LinkPreview, MediaAttachment, PostingFeatures, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
-import { getOwnerNameOrUrl } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import { linkPreviewImageUpload, linkPreviewLoad } from "state/linkpreviews/actions";
 import { LinkPreviewsState } from "state/linkpreviews/state";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
 import EntryLinkSelector from "ui/entry/EntryLinkSelector";
 import { extractUrls } from "util/text";
-import { getHomeOwnerNameOrUrl } from "state/home/selectors";
+import { getRelNodeNameContext } from "state/home/selectors";
 import { absoluteNodeName, RelNodeName } from "util/rel-node-name";
 
 interface Props {
@@ -58,8 +57,7 @@ export function bodyToLinkPreviews(
 }
 
 export default function RichTextLinkPreviews({name, urlsField, nodeName, features, small, disabled}: Props) {
-    const ownerNameOrUrl = useSelector(getOwnerNameOrUrl);
-    const homeOwnerNameOrUrl = useSelector(getHomeOwnerNameOrUrl);
+    const nodeNameContext = useSelector(getRelNodeNameContext);
     const linkPreviewsState = useSelector((state: ClientState) => state.linkPreviews);
     const maxAutomatic = useSelector((state: ClientState) =>
         getSetting(state, "rich-text-editor.link-previews.max-automatic") as number);
@@ -68,7 +66,7 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, feature
     const [, {value}, {setValue}] = useField<RichTextLinkPreviewsValue>(name);
     const [, {value: urls}] = useField<string[]>(urlsField);
 
-    const targetNodeName = absoluteNodeName(nodeName, {ownerNameOrUrl, homeOwnerNameOrUrl});
+    const targetNodeName = absoluteNodeName(nodeName, nodeNameContext);
 
     const {urlsToLoad, imagesToLoad, value: newValue} = useMemo<ValueChange>(
         () => buildValue(urls, targetNodeName, linkPreviewsState, value, maxAutomatic),

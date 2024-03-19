@@ -31,4 +31,6 @@ export interface FeedState extends Omit<FeedInfo, "feedName"> {
     at: number;
 }
 
-export type FeedsState = Partial<Record<string, FeedState>>;
+type NodeFeedsState = Partial<Record<string, FeedState>>;
+
+export type FeedsState = Partial<Record<string, NodeFeedsState>>;

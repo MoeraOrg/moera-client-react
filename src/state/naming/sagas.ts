@@ -148,12 +148,12 @@ function* namingNamesMaintenanceSaga(action: NamingNamesMaintenanceAction) {
 function* getUsedNames() {
     let used = new Set<string>();
 
-    const {feedNames, postings} = yield* select((state: ClientState) => ({
-        feedNames: getAllFeeds(state),
+    const {feeds, postings} = yield* select((state: ClientState) => ({
+        feeds: getAllFeeds(state),
         postings: state.postings[getOwnerNameOrUrl(state)] ?? {}
     }));
-    for (const feedName of feedNames) {
-        const stories = yield* select(state => getFeedState(state, feedName).stories)
+    for (const {nodeName, feedName} of feeds) {
+        const stories = yield* select(state => getFeedState(state, nodeName, feedName).stories)
         stories.forEach(story => {
             if (story.remoteNodeName) {
                 used.add(story.remoteNodeName);

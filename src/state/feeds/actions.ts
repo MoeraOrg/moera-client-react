@@ -1,31 +1,36 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { ContactInfo, FeedInfo, FeedStatus, StoryInfo, SubscriberInfo, SubscriptionInfo } from "api";
 import { FeedSlice } from "state/feeds/state";
+import { RelNodeName } from "util/rel-node-name";
 
 export type FeedGeneralLoadAction = ActionWithPayload<"FEED_GENERAL_LOAD", {
+    nodeName: RelNodeName | string;
     feedName: string;
 }>;
-export const feedGeneralLoad = (feedName: string): FeedGeneralLoadAction =>
-    actionWithPayload("FEED_GENERAL_LOAD", {feedName});
+export const feedGeneralLoad = (nodeName: RelNodeName | string, feedName: string): FeedGeneralLoadAction =>
+    actionWithPayload("FEED_GENERAL_LOAD", {nodeName, feedName});
 
 export type FeedGeneralLoadFailedAction = ActionWithPayload<"FEED_GENERAL_LOAD_FAILED", {
+    nodeName: string;
     feedName: string;
 }>;
-export const feedGeneralLoadFailed = (feedName: string): FeedGeneralLoadFailedAction =>
-    actionWithPayload("FEED_GENERAL_LOAD_FAILED", {feedName});
+export const feedGeneralLoadFailed = (nodeName: string, feedName: string): FeedGeneralLoadFailedAction =>
+    actionWithPayload("FEED_GENERAL_LOAD_FAILED", {nodeName, feedName});
 
 export type FeedGeneralSetAction = ActionWithPayload<"FEED_GENERAL_SET", {
+    nodeName: string;
     feedName: string;
     info: FeedInfo;
 }>;
-export const feedGeneralSet = (feedName: string, info: FeedInfo): FeedGeneralSetAction =>
-    actionWithPayload("FEED_GENERAL_SET", {feedName, info});
+export const feedGeneralSet = (nodeName: string, feedName: string, info: FeedInfo): FeedGeneralSetAction =>
+    actionWithPayload("FEED_GENERAL_SET", {nodeName, feedName, info});
 
 export type FeedGeneralUnsetAction = ActionWithPayload<"FEED_GENERAL_UNSET", {
+    nodeName: RelNodeName | string;
     feedName: string;
 }>;
-export const feedGeneralUnset = (feedName: string): FeedGeneralUnsetAction =>
-    actionWithPayload("FEED_GENERAL_UNSET", {feedName});
+export const feedGeneralUnset = (nodeName: RelNodeName | string, feedName: string): FeedGeneralUnsetAction =>
+    actionWithPayload("FEED_GENERAL_UNSET", {nodeName, feedName});
 
 export type FeedSubscribeAction = ActionWithPayload<"FEED_SUBSCRIBE", {
     nodeName: string;
@@ -110,93 +115,110 @@ export const feedSubscriptionUpdated = (
     actionWithPayload("FEED_SUBSCRIPTION_UPDATED", {nodeName, subscription});
 
 export type FeedStatusLoadAction = ActionWithPayload<"FEED_STATUS_LOAD", {
+    nodeName: RelNodeName | string;
     feedName: string;
 }>;
-export const feedStatusLoad = (feedName: string): FeedStatusLoadAction =>
-    actionWithPayload("FEED_STATUS_LOAD", {feedName});
+export const feedStatusLoad = (nodeName: RelNodeName | string, feedName: string): FeedStatusLoadAction =>
+    actionWithPayload("FEED_STATUS_LOAD", {nodeName, feedName});
 
 export type FeedStatusLoadFailedAction = ActionWithPayload<"FEED_STATUS_LOAD_FAILED", {
+    nodeName: string;
     feedName: string;
 }>;
-export const feedStatusLoadFailed = (feedName: string): FeedStatusLoadFailedAction =>
-    actionWithPayload("FEED_STATUS_LOAD_FAILED", {feedName});
+export const feedStatusLoadFailed = (nodeName: string, feedName: string): FeedStatusLoadFailedAction =>
+    actionWithPayload("FEED_STATUS_LOAD_FAILED", {nodeName, feedName});
 
 export type FeedStatusSetAction = ActionWithPayload<"FEED_STATUS_SET", {
+    nodeName: RelNodeName | string;
     feedName: string;
     status: FeedStatus;
 }>;
-export const feedStatusSet = (feedName: string, status: FeedStatus): FeedStatusSetAction =>
-    actionWithPayload("FEED_STATUS_SET", {feedName, status});
+export const feedStatusSet = (
+    nodeName: RelNodeName | string, feedName: string, status: FeedStatus
+): FeedStatusSetAction =>
+    actionWithPayload("FEED_STATUS_SET", {nodeName, feedName, status});
 
 export type FeedStatusUpdateAction = ActionWithPayload<"FEED_STATUS_UPDATE", {
+    nodeName: RelNodeName | string;
     feedName: string;
     viewed: boolean | null;
     read: boolean | null;
     before: number;
 }>;
 export const feedStatusUpdate = (
-    feedName: string, viewed: boolean | null, read: boolean | null, before: number
+    nodeName: RelNodeName | string, feedName: string, viewed: boolean | null, read: boolean | null, before: number
 ): FeedStatusUpdateAction =>
-    actionWithPayload("FEED_STATUS_UPDATE", {feedName, viewed, read, before});
+    actionWithPayload("FEED_STATUS_UPDATE", {nodeName, feedName, viewed, read, before});
 
 export type FeedStatusUpdateFailedAction = ActionWithPayload<"FEED_STATUS_UPDATE_FAILED", {
+    nodeName: string;
     feedName: string;
 }>;
-export const feedStatusUpdateFailed = (feedName: string): FeedStatusUpdateFailedAction =>
-    actionWithPayload("FEED_STATUS_UPDATE_FAILED", {feedName});
+export const feedStatusUpdateFailed = (nodeName: string, feedName: string): FeedStatusUpdateFailedAction =>
+    actionWithPayload("FEED_STATUS_UPDATE_FAILED", {nodeName, feedName});
 
 export type FeedStatusUpdatedAction = ActionWithPayload<"FEED_STATUS_UPDATED", {
+    nodeName: RelNodeName | string;
     feedName: string;
     viewed: boolean | null;
     read: boolean | null;
     before: number;
 }>;
 export const feedStatusUpdated = (
-    feedName: string, viewed: boolean | null, read: boolean | null, before: number
+    nodeName: RelNodeName | string, feedName: string, viewed: boolean | null, read: boolean | null, before: number
 ): FeedStatusUpdatedAction =>
-    actionWithPayload("FEED_STATUS_UPDATED", {feedName, viewed, read, before});
+    actionWithPayload("FEED_STATUS_UPDATED", {nodeName, feedName, viewed, read, before});
 
 export type FeedPastSliceLoadAction = ActionWithPayload<"FEED_PAST_SLICE_LOAD", {
+    nodeName: RelNodeName | string;
     feedName: string;
 }>;
-export const feedPastSliceLoad = (feedName: string): FeedPastSliceLoadAction =>
-    actionWithPayload("FEED_PAST_SLICE_LOAD", {feedName});
+export const feedPastSliceLoad = (nodeName: RelNodeName | string, feedName: string): FeedPastSliceLoadAction =>
+    actionWithPayload("FEED_PAST_SLICE_LOAD", {nodeName, feedName});
 
 export type FeedPastSliceLoadFailedAction = ActionWithPayload<"FEED_PAST_SLICE_LOAD_FAILED", {
+    nodeName: string;
     feedName: string;
 }>;
-export const feedPastSliceLoadFailed = (feedName: string): FeedPastSliceLoadFailedAction =>
-    actionWithPayload("FEED_PAST_SLICE_LOAD_FAILED", {feedName});
+export const feedPastSliceLoadFailed = (nodeName: string, feedName: string): FeedPastSliceLoadFailedAction =>
+    actionWithPayload("FEED_PAST_SLICE_LOAD_FAILED", {nodeName, feedName});
 
 export type FeedFutureSliceLoadAction = ActionWithPayload<"FEED_FUTURE_SLICE_LOAD", {
+    nodeName: RelNodeName | string;
     feedName: string;
 }>;
-export const feedFutureSliceLoad = (feedName: string): FeedFutureSliceLoadAction =>
-    actionWithPayload("FEED_FUTURE_SLICE_LOAD", {feedName});
+export const feedFutureSliceLoad = (nodeName: RelNodeName | string, feedName: string): FeedFutureSliceLoadAction =>
+    actionWithPayload("FEED_FUTURE_SLICE_LOAD", {nodeName, feedName});
 
 export type FeedFutureSliceLoadFailedAction = ActionWithPayload<"FEED_FUTURE_SLICE_LOAD_FAILED", {
+    nodeName: string;
     feedName: string;
 }>;
-export const feedFutureSliceLoadFailed = (feedName: string): FeedFutureSliceLoadFailedAction =>
-    actionWithPayload("FEED_FUTURE_SLICE_LOAD_FAILED", {feedName});
+export const feedFutureSliceLoadFailed = (nodeName: string, feedName: string): FeedFutureSliceLoadFailedAction =>
+    actionWithPayload("FEED_FUTURE_SLICE_LOAD_FAILED", {nodeName, feedName});
 
 export type FeedPastSliceSetAction = ActionWithPayload<"FEED_PAST_SLICE_SET", {
+    nodeName: string;
     feedName: string;
 } & FeedSlice>;
 export const feedPastSliceSet = (
-    feedName: string, stories: StoryInfo[], before: number, after: number, totalInPast: number, totalInFuture: number
+    nodeName: string, feedName: string, stories: StoryInfo[], before: number, after: number,
+    totalInPast: number, totalInFuture: number
 ): FeedPastSliceSetAction =>
-    actionWithPayload("FEED_PAST_SLICE_SET", {feedName, stories, before, after, totalInPast, totalInFuture});
+    actionWithPayload("FEED_PAST_SLICE_SET", {nodeName, feedName, stories, before, after, totalInPast, totalInFuture});
 
 export type FeedFutureSliceSetAction = ActionWithPayload<"FEED_FUTURE_SLICE_SET", {
+    nodeName: string;
     feedName: string;
 } & FeedSlice>;
 export const feedFutureSliceSet = (
-    feedName: string, stories: StoryInfo[], before: number, after: number, totalInPast: number, totalInFuture: number
+    nodeName: string, feedName: string, stories: StoryInfo[], before: number, after: number,
+    totalInPast: number, totalInFuture: number
 ): FeedFutureSliceSetAction =>
-    actionWithPayload("FEED_FUTURE_SLICE_SET", {feedName, stories, before, after, totalInPast, totalInFuture});
+    actionWithPayload("FEED_FUTURE_SLICE_SET", {nodeName, feedName, stories, before, after, totalInPast, totalInFuture});
 
 export type FeedSliceUpdateAction = ActionWithPayload<"FEED_SLICE_UPDATE", {
+    nodeName: string;
     feedName: string;
     stories: StoryInfo[];
     before: number;
@@ -205,9 +227,10 @@ export type FeedSliceUpdateAction = ActionWithPayload<"FEED_SLICE_UPDATE", {
     totalInFuture: number;
 }>;
 export const feedSliceUpdate = (
-    feedName: string, stories: StoryInfo[], before: number, after: number, totalInPast: number, totalInFuture: number
+    nodeName: string, feedName: string, stories: StoryInfo[], before: number, after: number,
+    totalInPast: number, totalInFuture: number
 ): FeedSliceUpdateAction =>
-    actionWithPayload("FEED_SLICE_UPDATE", {feedName, stories, before, after, totalInPast, totalInFuture});
+    actionWithPayload("FEED_SLICE_UPDATE", {nodeName, feedName, stories, before, after, totalInPast, totalInFuture});
 
 export type FeedsUnsetAction = ActionWithoutPayload<"FEEDS_UNSET">;
 export const feedsUnset = (): FeedsUnsetAction =>
@@ -218,24 +241,27 @@ export const feedsUpdate = (): FeedsUpdateAction =>
     actionWithoutPayload("FEEDS_UPDATE");
 
 export type FeedScrolledAction = ActionWithPayload<"FEED_SCROLLED", {
+    nodeName: string;
     feedName: string;
     at: number;
 }>;
-export const feedScrolled = (feedName: string, at: number): FeedScrolledAction =>
-    actionWithPayload("FEED_SCROLLED", {feedName, at});
+export const feedScrolled = (nodeName: string, feedName: string, at: number): FeedScrolledAction =>
+    actionWithPayload("FEED_SCROLLED", {nodeName, feedName, at});
 
 export type FeedScrollToAnchorAction = ActionWithPayload<"FEED_SCROLL_TO_ANCHOR", {
+    nodeName: string;
     feedName: string;
     at: number;
 }>;
-export const feedScrollToAnchor = (feedName: string, at: number): FeedScrollToAnchorAction =>
-    actionWithPayload("FEED_SCROLL_TO_ANCHOR", {feedName, at});
+export const feedScrollToAnchor = (nodeName: string, feedName: string, at: number): FeedScrollToAnchorAction =>
+    actionWithPayload("FEED_SCROLL_TO_ANCHOR", {nodeName, feedName, at});
 
 export type FeedScrolledToAnchorAction = ActionWithPayload<"FEED_SCROLLED_TO_ANCHOR", {
+    nodeName: string;
     feedName: string;
 }>;
-export const feedScrolledToAnchor = (feedName: string): FeedScrolledToAnchorAction =>
-    actionWithPayload("FEED_SCROLLED_TO_ANCHOR", {feedName});
+export const feedScrolledToAnchor = (nodeName: string, feedName: string): FeedScrolledToAnchorAction =>
+    actionWithPayload("FEED_SCROLLED_TO_ANCHOR", {nodeName, feedName});
 
 export type FeedsAnyAction =
     FeedGeneralLoadAction

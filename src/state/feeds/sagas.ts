@@ -30,7 +30,8 @@ import {
     FeedSubscriberSetVisibilityAction,
     feedSubscriberUpdated,
     FeedSubscriptionSetVisibilityAction,
-    feedSubscriptionUpdated, FeedsUpdateAction,
+    feedSubscriptionUpdated,
+    FeedsUpdateAction,
     FeedUnsubscribeAction,
     feedUnsubscribed,
     feedUnsubscribeFailed
@@ -46,17 +47,27 @@ import { fillBlockedOperationsInStories } from "state/blockedoperations/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
 import { flashBox } from "state/flashbox/actions";
 import { getInstantTypeDetails } from "ui/instant/instant-types";
-import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
+import { absoluteNodeName, REL_HOME } from "util/rel-node-name";
 
 export default [
     executor(
         "FEED_GENERAL_LOAD",
-        (payload, context) => `${context?.homeOwnerName}:${context?.ownerName}:${payload.feedName}`,
+        (payload, context) => `${context?.homeOwnerName}:${payload.nodeName}:${payload.feedName}`,
         feedGeneralLoadSaga,
         homeIntroduced
     ),
-    executor("FEED_SUBSCRIBE", payload => `${payload.nodeName}:${payload.feedName}`, feedSubscribeSaga, homeIntroduced),
-    executor("FEED_UNSUBSCRIBE", payload => `${payload.nodeName}:${payload.feedName}`, feedUnsubscribeSaga, homeIntroduced),
+    executor(
+        "FEED_SUBSCRIBE",
+        payload => `${payload.nodeName}:${payload.feedName}`,
+        feedSubscribeSaga,
+        homeIntroduced
+    ),
+    executor(
+        "FEED_UNSUBSCRIBE",
+        payload => `${payload.nodeName}:${payload.feedName}`,
+        feedUnsubscribeSaga,
+        homeIntroduced
+    ),
     executor(
         "FEED_SUBSCRIBER_SET_VISIBILITY",
         payload => payload.subscriberId,
@@ -69,11 +80,21 @@ export default [
         feedSubscriptionSetVisibilitySaga,
         homeIntroduced
     ),
-    executor("FEED_STATUS_LOAD", payload => payload.feedName, feedStatusLoadSaga, homeIntroduced),
-    executor("FEED_STATUS_UPDATE", payload => payload.feedName, feedStatusUpdateSaga),
+    executor(
+        "FEED_STATUS_LOAD",
+        payload => `${payload.nodeName}:${payload.feedName}`,
+        feedStatusLoadSaga,
+        homeIntroduced
+    ),
+    executor("FEED_STATUS_UPDATE", payload => `${payload.nodeName}:${payload.feedName}`, feedStatusUpdateSaga),
     executor("FEED_PAST_SLICE_LOAD", null, feedPastSliceLoadSaga, homeIntroduced),
     executor("FEED_FUTURE_SLICE_LOAD", null, feedFutureSliceLoadSaga, homeIntroduced),
-    executor("FEED_STATUS_SET", payload => payload.feedName, feedStatusSetSaga, homeIntroduced),
+    executor(
+        "FEED_STATUS_SET",
+        payload => `${payload.nodeName}:${payload.feedName}`,
+        feedStatusSetSaga,
+        homeIntroduced
+    ),
     executor("FEEDS_UPDATE", "", feedsUpdateSaga, homeIntroduced),
     executor("FEED_PAST_SLICE_SET", null, feedExecuteSliceButtonsActions),
     executor("FEED_FUTURE_SLICE_SET", null, feedExecuteSliceButtonsActions),
@@ -83,12 +104,13 @@ export default [
 ];
 
 function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {
-    const {feedName} = action.payload;
+    let {nodeName, feedName} = action.payload;
+    nodeName = absoluteNodeName(nodeName, action.context);
     try {
-        const info = yield* call(Node.getFeedGeneral, action, REL_CURRENT, feedName);
-        yield* put(feedGeneralSet(feedName, info).causedBy(action));
+        const info = yield* call(Node.getFeedGeneral, action, nodeName, feedName);
+        yield* put(feedGeneralSet(nodeName, feedName, info).causedBy(action));
     } catch (e) {
-        yield* put(feedGeneralLoadFailed(feedName).causedBy(action));
+        yield* put(feedGeneralLoadFailed(nodeName, feedName).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -101,7 +123,7 @@ function* feedSubscribeSaga(action: WithContext<FeedSubscribeAction>) {
         yield* put(flashBox(i18n.t("you-subscribed")).causedBy(action));
         yield* put(feedSubscribed(nodeName, subscription).causedBy(action));
         if (storyId != null) {
-            yield* put(storySatisfy(":instant", storyId).causedBy(action));
+            yield* put(storySatisfy(REL_HOME, "instant", storyId).causedBy(action));
         }
     } catch (e) {
         yield* put(feedSubscribeFailed(nodeName, feedName).causedBy(action));
@@ -192,111 +214,103 @@ function* feedSubscriptionSetVisibilitySaga(action: WithContext<FeedSubscription
 }
 
 function* feedStatusLoadSaga(action: WithContext<FeedStatusLoadAction>) {
-    const {feedName} = action.payload;
+    let {nodeName, feedName} = action.payload;
+    nodeName = absoluteNodeName(nodeName, action.context);
     try {
-        const status = feedName.startsWith(":")
-            ? yield* call(Node.getFeedStatus, action, REL_HOME, feedName.substring(1))
-            : yield* call(Node.getFeedStatus, action, REL_CURRENT, feedName);
-        yield* put(feedStatusSet(feedName, status).causedBy(action));
+        const status = yield* call(Node.getFeedStatus, action, nodeName, feedName);
+        yield* put(feedStatusSet(nodeName, feedName, status).causedBy(action));
     } catch (e) {
-        yield* put(feedStatusLoadFailed(feedName).causedBy(action));
+        yield* put(feedStatusLoadFailed(nodeName, feedName).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
 
 function* feedStatusUpdateSaga(action: WithContext<FeedStatusUpdateAction>) {
-    const {feedName, viewed, read, before} = action.payload;
-    try {
-        yield* put(feedStatusUpdated(feedName, viewed, read, before).causedBy(action));
-        // feedName must start with ":"
-        if (action.context.ownerName === action.context.homeOwnerName) {
-            yield* put(feedStatusUpdated(feedName.substring(1), viewed, read, before).causedBy(action));
+    let {nodeName, feedName, viewed, read, before} = action.payload;
+    nodeName = absoluteNodeName(nodeName, action.context);
+
+    yield* put(feedStatusUpdated(nodeName, feedName, viewed, read, before).causedBy(action));
+    if (nodeName === action.context.homeOwnerName) {
+        try {
+            const status = yield* call(Node.updateFeedStatus, action, nodeName, feedName, {viewed, read, before});
+            yield* put(feedStatusSet(nodeName, feedName, status).causedBy(action));
+        } catch (e) {
+            yield* put(feedStatusUpdateFailed(nodeName, feedName).causedBy(action));
         }
-        const status = yield* call(Node.updateFeedStatus, action, REL_HOME, feedName.substring(1),
-            {viewed, read, before});
-        yield* put(feedStatusSet(feedName, status).causedBy(action));
-        if (action.context.ownerName === action.context.homeOwnerName) {
-            yield* put(feedStatusSet(feedName.substring(1), status).causedBy(action));
-        }
-    } catch (e) {
-        yield* put(feedStatusUpdateFailed(feedName).causedBy(action));
     }
 }
 
 function* feedPastSliceLoadSaga(action: WithContext<FeedPastSliceLoadAction>) {
-    const {feedName} = action.payload;
+    let {nodeName, feedName} = action.payload;
+    nodeName = absoluteNodeName(nodeName, action.context);
     try {
-        const before = (yield* select(state => getFeedState(state, feedName))).after;
-        const slice = feedName.startsWith(":")
-            ? yield* call(Node.getFeedSlice, action, REL_HOME, feedName.substring(1), null, before, 20)
-            : yield* call(Node.getFeedSlice, action, REL_CURRENT, feedName, null, before, 20);
+        const before = (yield* select(state => getFeedState(state, nodeName, feedName))).after;
+        const slice = yield* call(Node.getFeedSlice, action, nodeName, feedName, null, before, 20);
         yield* call(fillActivityReactionsInStories, action, slice.stories);
         yield* call(fillBlockedOperationsInStories, action, slice.stories);
         yield* put(feedPastSliceSet(
-            feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
+            nodeName, feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
         ).causedBy(action));
         yield* call(fillSubscriptions, action, slice.stories);
     } catch (e) {
-        yield* put(feedPastSliceLoadFailed(feedName).causedBy(action));
+        yield* put(feedPastSliceLoadFailed(nodeName, feedName).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
 
 function* feedFutureSliceLoadSaga(action: WithContext<FeedFutureSliceLoadAction>) {
-    const {feedName} = action.payload;
+    let {nodeName, feedName} = action.payload;
+    nodeName = absoluteNodeName(nodeName, action.context);
     try {
-        const after = (yield* select(state => getFeedState(state, feedName))).before;
-        const slice = feedName.startsWith(":")
-            ? yield* call(Node.getFeedSlice, action, REL_HOME, feedName.substring(1), after, null, 20)
-            : yield* call(Node.getFeedSlice, action, REL_CURRENT, feedName, after, null, 20);
+        const after = (yield* select(state => getFeedState(state, nodeName, feedName))).before;
+        const slice = yield* call(Node.getFeedSlice, action, nodeName, feedName, after, null, 20);
         yield* call(fillActivityReactionsInStories, action, slice.stories);
         yield* call(fillBlockedOperationsInStories, action, slice.stories);
         yield* put(feedFutureSliceSet(
-            feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
+            nodeName, feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
         ).causedBy(action));
         yield* call(fillSubscriptions, action, slice.stories);
     } catch (e) {
-        yield* put(feedFutureSliceLoadFailed(feedName).causedBy(action));
+        yield* put(feedFutureSliceLoadFailed(nodeName, feedName).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
 
 function* feedStatusSetSaga(action: WithContext<FeedStatusSetAction>) {
-    const {feedName} = action.payload;
+    let {nodeName, feedName} = action.payload;
+    nodeName = absoluteNodeName(nodeName, action.context);
     yield* delay(5000); // Wait for events to make updates, so re-fetching may not be needed
-    const feedState = yield* select(state => getFeedState(state, feedName));
+    const feedState = yield* select(state => getFeedState(state, nodeName, feedName));
     if (feedState.status.lastMoment != null && feedState.before >= Number.MAX_SAFE_INTEGER
         && feedState.stories.length > 0 && feedState.status.lastMoment > feedState.stories[0].moment
     ) {
-        yield* call(feedUpdateSlice, action, feedName, Number.MAX_SAFE_INTEGER, feedState.stories[0].moment);
+        yield* call(feedUpdateSlice, action, nodeName, feedName, Number.MAX_SAFE_INTEGER, feedState.stories[0].moment);
     }
 }
 
 function* feedsUpdateSaga(action: WithContext<FeedsUpdateAction>) {
-    const feedNames = yield* select(getAllFeeds);
-    for (const feedName of feedNames) {
+    const feeds = yield* select(getAllFeeds);
+    for (const {nodeName, feedName} of feeds) {
         try {
-            const status = feedName.startsWith(":")
-                ? yield* call(Node.getFeedStatus, action, REL_HOME, feedName.substring(1))
-                : yield* call(Node.getFeedStatus, action, REL_CURRENT, feedName);
-            yield* put(feedStatusSet(feedName, status).causedBy(action));
+            const status = yield* call(Node.getFeedStatus, action, nodeName, feedName);
+            yield* put(feedStatusSet(nodeName, feedName, status).causedBy(action));
         } catch (e) {
             yield* put(errorThrown(e));
         }
-        let {before, after} = yield* select(state => getFeedState(state, feedName));
-        yield* call(feedUpdateSlice, action, feedName, before, after);
+        let {before, after} = yield* select(state => getFeedState(state, nodeName, feedName));
+        yield* call(feedUpdateSlice, action, nodeName, feedName, before, after);
     }
 }
 
-function* feedUpdateSlice(action: WithContext<ClientAction>, feedName: string, before: number, after: number) {
+function* feedUpdateSlice(
+    action: WithContext<ClientAction>, nodeName: string, feedName: string, before: number, after: number
+) {
     try {
         while (before > after && after < Number.MAX_SAFE_INTEGER) {
-            const slice = feedName.startsWith(":")
-                ? yield* call(Node.getFeedSlice, action, REL_HOME, feedName.substring(1), after, null, 20)
-                : yield* call(Node.getFeedSlice, action, REL_CURRENT, feedName, after, null, 20);
+            const slice = yield* call(Node.getFeedSlice, action, nodeName, feedName, after, null, 20);
             yield* call(fillActivityReactionsInStories, action, slice.stories);
             yield* put(feedSliceUpdate(
-                feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
+                nodeName, feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
             ).causedBy(action));
             yield* call(fillSubscriptions, action, slice.stories);
             if (after === slice.before) {

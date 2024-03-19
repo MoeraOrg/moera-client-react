@@ -281,7 +281,7 @@ function* friendshipUpdateSaga(action: WithContext<FriendshipUpdateAction>) {
             yield* put(friendshipUpdated(friends[0]).causedBy(action));
         }
         if (storyId != null) {
-            yield* put(storySatisfy(":instant", storyId).causedBy(action));
+            yield* put(storySatisfy(REL_HOME, "instant", storyId).causedBy(action));
         }
         if (friendGroups != null && friendGroups.length > 0) {
             yield* call(subscribeToFriend, action, nodeName);

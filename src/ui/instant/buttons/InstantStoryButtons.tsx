@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { storySatisfy } from "state/stories/actions";
 import { ExtStoryInfo } from "state/feeds/state";
 import { Button } from "ui/control";
+import { REL_HOME } from "util/rel-node-name";
 
 export interface InstantStoryButtonsProps {
     story: ExtStoryInfo;
@@ -28,7 +29,7 @@ export function InstantStoryButtons({story, ready, accepting, accepted, acceptTi
         return null;
     }
 
-    const onIgnore = () => dispatch(storySatisfy(":instant", story.id));
+    const onIgnore = () => dispatch(storySatisfy(REL_HOME, "instant", story.id));
 
     return (
         <div className="buttons">

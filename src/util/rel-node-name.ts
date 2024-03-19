@@ -1,5 +1,10 @@
 type RelNodeNameType = "current" | "home";
 
+export interface RelNodeNameContext {
+    ownerNameOrUrl: string,
+    homeOwnerNameOrUrl: string
+}
+
 export class RelNodeName {
 
     private readonly type: RelNodeNameType;
@@ -16,7 +21,7 @@ export class RelNodeName {
         return this.type === "home";
     }
 
-    absolute(ownerNameOrUrl: string, homeOwnerNameOrUrl: string): string {
+    absolute({ownerNameOrUrl, homeOwnerNameOrUrl}: RelNodeNameContext): string {
         if (this.isCurrentNode()) {
             return ownerNameOrUrl;
         } else {
@@ -24,14 +29,19 @@ export class RelNodeName {
         }
     }
 
+    valueOf(): string {
+        return this.type;
+    }
+
+    toString(): string {
+        return `RelNodeName.${this.type.toUpperCase()}`;
+    }
+
 }
 
 export const REL_CURRENT = new RelNodeName("current");
 export const REL_HOME = new RelNodeName("home");
 
-export function absoluteNodeName(
-    nodeName: RelNodeName | string,
-    {ownerNameOrUrl, homeOwnerNameOrUrl}: {ownerNameOrUrl: string, homeOwnerNameOrUrl: string}
-): string {
-    return nodeName instanceof RelNodeName ? nodeName.absolute(ownerNameOrUrl, homeOwnerNameOrUrl) : nodeName;
+export function absoluteNodeName(nodeName: RelNodeName | string, context: RelNodeNameContext): string {
+    return nodeName instanceof RelNodeName ? nodeName.absolute(context) : nodeName;
 }

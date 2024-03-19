@@ -12,6 +12,7 @@ import { goHomeLocation, goToRemoval, initFromLocation, initFromNodeLocation } f
 import { storyReadingUpdate } from "state/stories/actions";
 import * as Browser from "ui/browser";
 import App from "ui/App";
+import { REL_HOME } from "util/rel-node-name";
 import * as serviceWorker from "serviceWorker";
 
 function sendInitAction(): void {
@@ -29,7 +30,7 @@ function sendInitAction(): void {
     }
     const readId = Browser.parameters.get("read");
     if (readId) {
-        store.dispatch(storyReadingUpdate(":instant", readId, true));
+        store.dispatch(storyReadingUpdate(REL_HOME, "instant", readId, true));
     }
 }
 
