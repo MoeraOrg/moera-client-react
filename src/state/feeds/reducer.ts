@@ -151,17 +151,22 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 nodeFeeds = {};
                 istate.set([nodeName], {});
             }
-
             if (feedName != null && nodeFeeds[feedName] == null) {
                 istate.set([nodeName, feedName], cloneDeep(emptyFeed));
                 updateScrollingOnActive(istate, nodeName, feedName, emptyFeed, action.payload.details.at);
             }
-            for (let [fn, feed] of Object.entries(nodeFeeds)) {
-                if (feed != null) {
-                    if (fn === feedName) {
-                        updateScrollingOnActive(istate, nodeName, fn, feed, action.payload.details.at);
-                    } else {
-                        updateScrollingOnInactive(istate, nodeName, fn, feed);
+
+            for (let [name, feeds] of Object.entries(state)) {
+                if (feeds == null) {
+                    continue;
+                }
+                for (let [fn, feed] of Object.entries(feeds)) {
+                    if (feed != null) {
+                        if (name === nodeName && fn === feedName) {
+                            updateScrollingOnActive(istate, name, fn, feed, action.payload.details.at);
+                        } else {
+                            updateScrollingOnInactive(istate, name, fn, feed);
+                        }
                     }
                 }
             }

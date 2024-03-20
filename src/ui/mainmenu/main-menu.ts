@@ -26,22 +26,15 @@ interface MainMenuHomeNewsProps {
 }
 
 export function useMainMenuHomeNews(): MainMenuHomeNewsProps {
-    const atHome = useSelector(isAtHomeNode);
-    const atNews = useSelector(isAtNewsPage);
+    const atHomeNews = useSelector((state: ClientState) => isAtHomeNode(state) && isAtNewsPage(state));
     const moment = useSelector((state: ClientState) => getFeedNotViewedMoment(state, REL_HOME, "news"));
     const feedAt = useSelector((state: ClientState) => getFeedAt(state, REL_HOME, "news"));
     const targetStory = useSelector((state: ClientState) => getSetting(state, "news-button.target-story") as string);
 
     let href = "/news";
-    if (targetStory === "earliest-new") {
-        if (atHome) {
-            if (moment != null && (feedAt > moment || atNews)) {
-                href += `?before=${moment}`;
-            }
-        } else if (moment != null) {
-            href += `?before=${moment}`;
-        }
+    if (targetStory === "earliest-new" && moment != null && (feedAt > moment || atHomeNews)) {
+        href += `?before=${moment}`;
     }
 
-    return useMemo(() => ({active: atHome && atNews, href}), [atHome, atNews, href]);
+    return useMemo(() => ({active: atHomeNews, href}), [atHomeNews, href]);
 }
