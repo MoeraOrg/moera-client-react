@@ -63,7 +63,15 @@ function immutableSetSubscriptionId(state: PostingsState, nodeName: string, id: 
 
 export default (state: PostingsState = initialState, action: WithContext<ClientAction>): PostingsState => {
     switch (action.type) {
-        case "INIT_FROM_LOCATION":
+        case "INIT_FROM_LOCATION": {
+            const istate = immutable.wrap(state);
+            Object.keys(state)
+                .filter(name => name !== action.payload.nodeName && name !== action.context.homeOwnerNameOrUrl)
+                .forEach(name => istate.del([name]));
+            return istate.value();
+        }
+
+        case "FEEDS_UNSET":
             return {};
 
         case "FEED_PAST_SLICE_SET":
