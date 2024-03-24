@@ -18,7 +18,7 @@ interface NodeAndFeed {
 export function getAllFeeds(state: ClientState): NodeAndFeed[] {
     const all: NodeAndFeed[] = [];
     for (let [nodeName, nodeFeeds] of Object.entries(state.feeds)) {
-        if (nodeFeeds != null) {
+        if (nodeName && nodeFeeds != null) {
             Object.keys(nodeFeeds).map(feedName => ({nodeName, feedName})).forEach(v => all.push(v));
         }
     }
