@@ -16,4 +16,5 @@
     --zindex-risen-modal-backdrop: 1072;
     --zindex-risen-modal: 1077;
     --zindex-tooltip: 1080; /* Bootstrap */
+    --zindex-toast: 1090; /* Bootstrap */
 }
