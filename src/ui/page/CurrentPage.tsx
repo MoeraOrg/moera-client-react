@@ -7,10 +7,10 @@ import { isDetailedPostingPositioned } from "state/detailedposting/selectors";
 import { isGooglePlayHiding } from "state/node/selectors";
 import { isFeedGeneralReady, isFeedSheriffProhibited } from "state/feeds/selectors";
 import { Loading } from "ui/control";
-import TimelinePage from "ui/timeline/TimelinePage";
+import TimelinePage from "ui/feed/TimelinePage";
 import ProfilePage from "ui/profile/ProfilePage";
 import DetailedPostingPage from "ui/detailedposting/DetailedPostingPage";
-import NewsPage from "ui/news/NewsPage";
+import NewsPage from "ui/feed/NewsPage";
 import GooglePlayProhibitedPage from "ui/page/GooglePlayProhibitedPage";
 import { REL_CURRENT } from "util/rel-node-name";
 
