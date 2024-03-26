@@ -7,6 +7,7 @@ export interface OverlayProps {
     onClose: () => void;
     closeOnClick: boolean;
     closeOnEscape: boolean;
+    closeOnBack: boolean;
 }
 
 export interface OverlayZIndex {
@@ -20,6 +21,7 @@ export class Overlay<E extends Element> {
     private onClose: (() => void) | undefined;
     closeOnClick: boolean = false;
     closeOnEscape: boolean = false;
+    closeOnBack: boolean = false;
 
     private readonly parent: Overlay<any> | null;
     private children: Overlay<any>[] = [];
@@ -50,6 +52,7 @@ export class Overlay<E extends Element> {
         const closable = props.onClose != null;
         this.closeOnClick = props.closeOnClick ?? closable;
         this.closeOnEscape = props.closeOnEscape ?? closable;
+        this.closeOnBack = props.closeOnBack ?? closable;
     }
 
     private closeChildren(): void {
@@ -87,7 +90,7 @@ export class OverlaysManager {
 
     constructor() {
         this.rootOverlay = new Overlay(null, null, null);
-        this.rootOverlay.setProps({closeOnClick: false, closeOnEscape: false})
+        this.rootOverlay.setProps({})
         this.topOverlay = this.rootOverlay;
 
         document.body.addEventListener("keydown", this.onKeyDown);
@@ -145,9 +148,13 @@ export class OverlaysManager {
         }
     }
 
-    closeUppermost(): boolean {
-        if (this.topOverlay.lower != null) {
-            this.closeOverlay(this.topOverlay);
+    mobileBack(): boolean {
+        const overlay = this.topOverlay;
+        if (!overlay.closeOnBack) {
+            return true;
+        }
+        if (overlay.lower != null) {
+            this.closeOverlay(overlay);
             return true;
         }
         return false;

@@ -53,7 +53,9 @@ export default function Navigation() {
     }, [dispatch]);
 
     const back = useCallback(() => {
-        if (window.closeLightDialog) {
+        if (window.overlays.mobileBack()) {
+            return;
+        } else if (window.closeLightDialog) {
             window.closeLightDialog();
         } else if (messageBoxShow) {
             dispatch(closeMessageBox());
