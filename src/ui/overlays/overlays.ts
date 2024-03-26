@@ -1,67 +1,93 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useSyncExternalStore } from 'react';
 
 const ROOT_OVERLAY_ZINDEX = 1044;
 
 export interface OverlayProps {
-    parent: Overlay<any>;
+    parentId: string;
     onClose: () => void;
     closeOnClick: boolean;
     closeOnEscape: boolean;
 }
 
+export interface OverlayZIndex {
+    shadow: number;
+    widget: number;
+}
+
 export class Overlay<E extends Element> {
 
     readonly element: React.RefObject<E> | null;
-    private readonly onClose: (() => void) | undefined;
-    readonly closeOnClick: boolean;
-    readonly closeOnEscape: boolean;
+    private onClose: (() => void) | undefined;
+    closeOnClick: boolean = false;
+    closeOnEscape: boolean = false;
 
-    private readonly parent: Overlay<any> | undefined;
+    private readonly parent: Overlay<any> | null;
     private children: Overlay<any>[] = [];
     lower: Overlay<any> | null;
-    closed: boolean = false;
+    destroyed: boolean = false;
 
-    zIndex: number = ROOT_OVERLAY_ZINDEX;
+    readonly zIndex: OverlayZIndex;
 
     mouseDownX: number | undefined = undefined;
     mouseDownY: number | undefined = undefined;
 
-    constructor(element: React.RefObject<E> | null, lower: Overlay<any> | null, props: Partial<OverlayProps>) {
+    constructor(element: React.RefObject<E> | null, lower: Overlay<any> | null, parent: Overlay<any> | null) {
         this.element = element;
-        this.onClose = props.onClose;
-        this.closeOnClick = props.closeOnClick ?? true;
-        this.closeOnEscape = props.closeOnEscape ?? true;
-        this.parent = props.parent;
+        this.parent = parent;
         if (this.parent != null) {
             this.parent.children.push(this);
         }
         this.lower = lower;
         if (lower != null) {
-            this.zIndex = lower.zIndex + 6;
+            this.zIndex = {shadow: lower.zIndex.shadow + 6, widget: lower.zIndex.widget + 6};
+        } else {
+            this.zIndex = {shadow: ROOT_OVERLAY_ZINDEX, widget: ROOT_OVERLAY_ZINDEX + 3};
         }
     }
 
-    close(): void {
+    setProps(props: Partial<OverlayProps>) {
+        this.onClose = props.onClose;
+        const closable = props.onClose != null;
+        this.closeOnClick = props.closeOnClick ?? closable;
+        this.closeOnEscape = props.closeOnEscape ?? closable;
+    }
+
+    private closeChildren(): void {
         this.children.forEach(o => o.close());
         this.children = [];
-        if (this.onClose != null) {
-            this.onClose();
-        }
+    }
+
+    private destroySelf(): void {
         if (this.parent != null) {
             this.parent.children = this.parent.children.filter(o => Object.is(o, this));
         }
-        this.closed = true;
+        this.destroyed = true;
+    }
+
+    destroy(): void {
+        this.closeChildren();
+        this.destroySelf();
+    }
+
+    close(): void {
+        this.closeChildren();
+        if (this.onClose != null) {
+            this.onClose();
+        }
+        this.destroySelf();
     }
 
 }
 
 export class OverlaysManager {
 
+    private readonly overlays: Map<string, Overlay<any>> = new Map();
     private readonly rootOverlay: Overlay<any>;
     private topOverlay: Overlay<any>;
 
     constructor() {
-        this.rootOverlay = new Overlay(null, null, {closeOnClick: false, closeOnEscape: false});
+        this.rootOverlay = new Overlay(null, null, null);
+        this.rootOverlay.setProps({closeOnClick: false, closeOnEscape: false})
         this.topOverlay = this.rootOverlay;
 
         document.body.addEventListener("keydown", this.onKeyDown);
@@ -69,26 +95,59 @@ export class OverlaysManager {
         document.body.addEventListener("mouseup", this.onMouseUp);
     }
 
-    open<E extends Element>(element: React.RefObject<E>, props: Partial<OverlayProps> = {}): Overlay<E> {
-        const overlay = new Overlay<E>(element, this.topOverlay, {parent: this.rootOverlay, ...props});
+    open<E extends Element>(
+        id: string, element: React.RefObject<E>, parentId: string | null | undefined
+    ): Overlay<E> {
+        const parent = parentId != null ? this.overlays.get(parentId) : null;
+        const overlay = new Overlay<E>(element, this.topOverlay, parent ?? this.rootOverlay);
+        this.overlays.set(id, overlay);
         this.topOverlay = overlay;
         return overlay;
     }
 
-    close(overlay: Overlay<any>): void {
-        if (overlay.closed) {
+    get(id: string): Overlay<any> | undefined {
+        return this.overlays.get(id);
+    }
+
+    private destroyOverlay(overlay: Overlay<any> | null | undefined): void {
+        if (overlay == null || overlay.destroyed) {
+            return;
+        }
+
+        overlay.destroy();
+        this.updateTopOverlay();
+    }
+
+    destroy(id: string): void {
+        const overlay = this.overlays.get(id);
+        this.destroyOverlay(overlay);
+        this.overlays.delete(id);
+    }
+
+    private closeOverlay(overlay: Overlay<any> | null | undefined): void {
+        if (overlay == null || overlay.destroyed) {
             return;
         }
 
         overlay.close();
-        while (this.topOverlay.closed && this.topOverlay.lower != null) {
+        this.updateTopOverlay();
+    }
+
+    close(id: string): void {
+        const overlay = this.overlays.get(id);
+        this.closeOverlay(overlay);
+        this.overlays.delete(id);
+    }
+
+    private updateTopOverlay(): void {
+        while (this.topOverlay.destroyed && this.topOverlay.lower != null) {
             this.topOverlay = this.topOverlay.lower;
         }
     }
 
     closeUppermost(): boolean {
         if (this.topOverlay.lower != null) {
-            this.close(this.topOverlay);
+            this.closeOverlay(this.topOverlay);
             return true;
         }
         return false;
@@ -96,7 +155,7 @@ export class OverlaysManager {
 
     private onKeyDown = (event: KeyboardEvent) => {
         if ((event.key === "Escape" || event.key === "Esc") && this.topOverlay.closeOnEscape) {
-            this.close(this.topOverlay);
+            this.closeOverlay(this.topOverlay);
         }
     };
 
@@ -109,7 +168,7 @@ export class OverlaysManager {
         const r = overlay.element.current.getBoundingClientRect();
         if (
             (r.left <= e.clientX && r.right >= e.clientX && r.top <= e.clientY && r.bottom >= e.clientY)
-            || (e.clientX === 0 && e.clientY === 0) // Ugly hack, but need to workaround wrong mouse events in FF
+            || (e.clientX === 0 && e.clientY === 0) // Ugly hack, but need to work around wrong mouse events in FF
         ) {
             overlay.mouseDownX = undefined;
             overlay.mouseDownY = undefined;
@@ -129,7 +188,7 @@ export class OverlaysManager {
             overlay.mouseDownX != null && Math.abs(overlay.mouseDownX - e.clientX) <= 10
             && overlay.mouseDownY != null && Math.abs(overlay.mouseDownY - e.clientY) <= 10
         ) {
-            this.close(overlay);
+            this.closeOverlay(overlay);
         }
         overlay.mouseDownX = undefined;
         overlay.mouseDownY = undefined;
@@ -138,26 +197,25 @@ export class OverlaysManager {
 }
 
 export type UseOverlayBag<E extends Element> = [
-    React.RefObject<E>, () => void, number | undefined, number | undefined, Overlay<E> | null
+    React.RefObject<E>, OverlayZIndex | undefined
 ];
 
-export function useOverlay<E extends Element>(props: Partial<OverlayProps> = {}): UseOverlayBag<E> {
+export function useOverlay<E extends Element>(id: string, props: Partial<OverlayProps> = {}): UseOverlayBag<E> {
     const ref = useRef<E>(null);
-    const [overlay, setOverlay] = useState<Overlay<E> | null>(null);
-    useEffect(() => {
-        setOverlay(overlay => overlay == null ? window.overlays.open(ref, props) : overlay);
-    }, [props]);
-    const onClose = useCallback(() => {
-        if (overlay != null) {
-            window.overlays.close(overlay);
-            setOverlay(null);
+
+    const subscribe = useCallback(() => {
+        window.overlays.open(id, ref, props.parentId);
+        return () => window.overlays.destroy(id);
+    }, [id, props.parentId]);
+    const zIndex = useSyncExternalStore(
+        subscribe,
+        () => {
+            const overlay = window.overlays.get(id);
+            return overlay?.zIndex;
         }
-    }, [overlay]);
-    return [
-        ref,
-        onClose,
-        overlay?.zIndex,
-        overlay != null ? overlay.zIndex + 3 : undefined,
-        overlay
-    ];
+    );
+    const overlay = window.overlays.get(id);
+    overlay?.setProps(props);
+
+    return [ref, zIndex];
 }

@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 
 import { CloseButton, Loading } from "ui/control";
 import { useOverlay } from "ui/overlays/overlays";
+import { randomId } from "util/ui";
 import "./ModalDialog.css";
 
 interface Props {
@@ -23,8 +24,9 @@ interface Props {
 export function ModalDialog({
     title, size, className, style, centered = true, risen, shadowClick = true, loading, children, onClose, onKeyDown
 }: Props) {
-    const [modalDialog, modalOnClose, shadowZIndex, zIndex] =
-        useOverlay<HTMLDivElement>({closeOnClick: shadowClick, onClose});
+    const overlayProps = useMemo(() => ({closeOnClick: shadowClick, onClose}), [onClose, shadowClick]);
+    const overlayId = useRef<string>(randomId(4));
+    const [modalDialog, zIndex] = useOverlay<HTMLDivElement>(overlayId.current, overlayProps);
 
     useEffect(() => {
         if (onKeyDown != null) {
@@ -37,8 +39,8 @@ export function ModalDialog({
 
     return ReactDOM.createPortal(
         <>
-            <div className={cx("modal-backdrop", "show", {"risen": risen})} style={{zIndex: shadowZIndex}}/>
-            <div className={cx("modal", "show", {"risen": risen})} style={{zIndex}}>
+            <div className={cx("modal-backdrop", "show", {"risen": risen})} style={{zIndex: zIndex?.shadow}}/>
+            <div className={cx("modal", "show", {"risen": risen})} style={{zIndex: zIndex?.widget}}>
                 <div className={cx(
                     "modal-dialog",
                     className,
@@ -53,7 +55,7 @@ export function ModalDialog({
                             <div className="modal-header">
                                 <h4 className="modal-title">{title}</h4>
                                 {onClose &&
-                                    <CloseButton onClick={modalOnClose}/>
+                                    <CloseButton onClick={onClose}/>
                                 }
                             </div>
                         }
