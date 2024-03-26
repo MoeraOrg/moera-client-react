@@ -1,10 +1,11 @@
+import { createSelector } from 'reselect';
+
 import { AvatarImage, BlockedUserInfo, FriendGroupInfo } from "api";
 import { ClientState } from "state/state";
 import { getOwnerNameOrUrl, getToken } from "state/node/selectors";
 import { NodeCardState } from "state/nodecards/state";
 import { getNodeCard } from "state/nodecards/selectors";
 import * as Browser from "ui/browser";
-import { RelNodeNameContext } from "util/rel-node-name";
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 
 const EMPTY_ARRAY: any[] = [];
@@ -42,11 +43,10 @@ export function getHomeOwnerNameOrUrl(state: ClientState): string {
     return getHomeOwnerName(state) ?? getHomeRootLocation(state) ?? "";
 }
 
-export function getRelNodeNameContext(state: ClientState): RelNodeNameContext {
-    const ownerNameOrUrl = getOwnerNameOrUrl(state);
-    const homeOwnerNameOrUrl = getHomeOwnerNameOrUrl(state);
-    return {ownerNameOrUrl, homeOwnerNameOrUrl};
-}
+export const getRelNodeNameContext = createSelector(
+    getOwnerNameOrUrl,
+    getHomeOwnerNameOrUrl,
+    (ownerNameOrUrl, homeOwnerNameOrUrl) => ({ownerNameOrUrl, homeOwnerNameOrUrl}));
 
 export function getHomeOwnerCard(state: ClientState): NodeCardState | null {
     return getNodeCard(state, getHomeOwnerNameOrUrl(state));
