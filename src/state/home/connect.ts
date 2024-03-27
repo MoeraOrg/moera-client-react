@@ -43,6 +43,9 @@ function* connectToHomeFailure(action: WithContext<ConnectToHomeAction>, error: 
                 message = i18n.t("reset-token-expired");
                 yield* put(connectDialogSetForm(location, login, "forgot").causedBy(action));
                 break;
+            case "credentials.login-incorrect":
+                message = i18n.t("login-incorrect");
+                break;
             default:
                 break;
         }
