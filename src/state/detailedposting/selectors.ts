@@ -263,16 +263,18 @@ export const getCommentsWithVisibility = createSelector(
     getHomeInvisibleUsers,
     isGooglePlayHiding,
     (comments, locallyBlocked, globallyBlocked, hideSheriffMarked) => {
-        if (locallyBlocked.length === 0 && globallyBlocked.length === 0) {
-            return comments;
+        let invisibleNames: Set<string>;
+        if (locallyBlocked.length !== 0 || globallyBlocked.length !== 0) {
+            invisibleNames = new Set(
+                locallyBlocked
+                    .concat(globallyBlocked)
+                    .filter(bu => bu.blockedOperation === "visibility")
+                    .map(bu => bu.nodeName)
+            );
+        } else {
+            invisibleNames = new Set();
         }
-        const invisibleNames = new Set(
-            locallyBlocked
-                .concat(globallyBlocked)
-                .filter(bu => bu.blockedOperation === "visibility")
-                .map(bu => bu.nodeName)
-        );
-        if (invisibleNames.size === 0) {
+        if (invisibleNames.size === 0 && !hideSheriffMarked) {
             return comments;
         }
         return comments.map(c =>
