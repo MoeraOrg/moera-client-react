@@ -13,8 +13,6 @@
     --zindex-modal: 1055; /* Bootstrap */
     --zindex-modal-loading: 1056;
     --zindex-popover: 1070; /* Bootstrap */
-    --zindex-risen-modal-backdrop: 1072;
-    --zindex-risen-modal: 1077;
     --zindex-tooltip: 1080; /* Bootstrap */
     --zindex-toast: 1090; /* Bootstrap */
 }

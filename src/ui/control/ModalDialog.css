@@ -1,13 +1,5 @@
-.modal-backdrop.risen {
-    z-index: var(--zindex-risen-modal-backdrop);
-}
-
 .modal {
     display: block;
-}
-
-.modal.risen {
-    z-index: var(--zindex-risen-modal);
 }
 
 .modal .loading-overlay {

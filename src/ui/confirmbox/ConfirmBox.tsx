@@ -52,7 +52,7 @@ export default function ConfirmBox() {
         .replaceAll("&lt;br&gt;", "<br>"); // <br> tag is allowed
 
     return (
-        <ModalDialog risen onClose={onCancel != null ? onClickCancel : onClickNo}>
+        <ModalDialog onClose={onCancel != null ? onClickCancel : onClickNo}>
             <div className="modal-body">
                 <div dangerouslySetInnerHTML={{__html: escapedMessage}}/>
                 {dontShowAgainBox &&

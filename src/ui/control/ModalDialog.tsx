@@ -13,7 +13,6 @@ interface Props {
     className?: string;
     style?: Partial<Record<string, string>>;
     centered?: boolean;
-    risen?: boolean;
     shadowClick?: boolean;
     loading?: boolean;
     onClose?: () => void;
@@ -22,7 +21,7 @@ interface Props {
 }
 
 export function ModalDialog({
-    title, size, className, style, centered = true, risen, shadowClick = true, loading, children, onClose, onKeyDown
+    title, size, className, style, centered = true, shadowClick = true, loading, children, onClose, onKeyDown
 }: Props) {
     const overlayProps = useMemo(() => ({closeOnClick: shadowClick, onClose}), [onClose, shadowClick]);
     const overlayId = useRef<string>(randomId(4));
@@ -39,8 +38,8 @@ export function ModalDialog({
 
     return ReactDOM.createPortal(
         <>
-            <div className={cx("modal-backdrop", "show", {"risen": risen})} style={{zIndex: zIndex?.shadow}}/>
-            <div className={cx("modal", "show", {"risen": risen})} style={{zIndex: zIndex?.widget}}>
+            <div className={cx("modal-backdrop", "show")} style={{zIndex: zIndex?.shadow}}/>
+            <div className={cx("modal", "show")} style={{zIndex: zIndex?.widget}}>
                 <div className={cx(
                     "modal-dialog",
                     className,

@@ -160,7 +160,7 @@ export default function RichTextImageDialogDropzone({
                 )
             }
             <input {...getInputProps()}/>
-            {copyImageShow && <RichTextCopyImageDialog onSubmit={submitCopyImage} risen/>}
+            {copyImageShow && <RichTextCopyImageDialog onSubmit={submitCopyImage}/>}
         </div>
     );
 }

@@ -15,7 +15,7 @@ export default function ProgressBox() {
     const width = !preparing ? done * 100.0 / total : 100;
 
     return (
-        <ModalDialog risen>
+        <ModalDialog>
             <div className="modal-body">
                 <div className="text-center">{preparing ? t("preparing") : t("progress", {done, total})}</div>
                 <div className={cx("progress", {"d-none": !preparing})}>

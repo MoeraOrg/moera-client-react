@@ -29,7 +29,7 @@ export default function MessageBox() {
             .replace("&lt;/b&gt;", "</b>");
 
     return (
-        <ModalDialog risen onClose={onCloseClick}>
+        <ModalDialog onClose={onCloseClick}>
             <div className="modal-body" dangerouslySetInnerHTML={{__html: escapedMessage}}/>
             <div className="modal-footer">
                 <Button variant="primary" onClick={onCloseClick} autoFocus>{t("ok")}</Button>
