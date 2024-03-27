@@ -6,8 +6,6 @@ import { dialogClosed, goToLocation, initFromLocation } from "state/navigation/a
 import { cartesLoad } from "state/cartes/actions";
 import { getInstantCount } from "state/feeds/selectors";
 import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
-import { closeMessageBox } from "state/messagebox/actions";
-import { closeConfirmBox } from "state/confirmbox/actions";
 import * as Browser from "ui/browser";
 import { asyncReturn } from "util/async-calls";
 
@@ -20,10 +18,6 @@ export default function Navigation() {
     const locked = useSelector((state: ClientState) => state.navigation.locked);
     const count = useSelector(getInstantCount);
     const closeDialogAction = useSelector((state: ClientState) => state.navigation.closeDialogAction);
-    const messageBoxShow = useSelector((state: ClientState) => state.messageBox.show);
-    const messageBoxOnClose = useSelector((state: ClientState) => state.messageBox.onClose);
-    const confirmBoxShow = useSelector((state: ClientState) => state.confirmBox.show);
-    const confirmBoxOnNo = useSelector((state: ClientState) => state.confirmBox.onNo);
     const dispatch = useDispatch();
 
     const currentNodeName = useRef<string | null>(null);
@@ -42,34 +36,18 @@ export default function Navigation() {
         event.preventDefault();
     }, [dispatch, rootLocation]);
 
-    const executeOnClose = useCallback((onClose: any) => {
-        if (onClose) {
-            if (typeof(onClose) === "function") {
-                onClose();
-            } else {
-                dispatch(onClose);
-            }
-        }
-    }, [dispatch]);
-
     const back = useCallback(() => {
         if (window.overlays.mobileBack()) {
             return;
         } else if (window.closeLightDialog) {
             window.closeLightDialog();
-        } else if (messageBoxShow) {
-            dispatch(closeMessageBox());
-            executeOnClose(messageBoxOnClose);
-        } else if (confirmBoxShow) {
-            dispatch(closeConfirmBox());
-            executeOnClose(confirmBoxOnNo);
         } else if (closeDialogAction != null) {
             dispatch(closeDialogAction);
             dispatch(dialogClosed());
         } else {
             window.Android?.back();
         }
-    }, [closeDialogAction, confirmBoxOnNo, confirmBoxShow, dispatch, executeOnClose, messageBoxOnClose, messageBoxShow]);
+    }, [closeDialogAction, dispatch]);
 
     const messageReceived = useCallback((event: MessageEvent) => {
         const data = event.data;
