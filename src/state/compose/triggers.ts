@@ -13,11 +13,10 @@ import {
     composeDraftUnset,
     composePostingLoad,
     ComposePostSucceededAction,
-    composePreviewClose,
     composeReady,
     composeSharedTextLoad
 } from "state/compose/actions";
-import { dialogClosed, dialogOpened, goToPosting, updateLocation } from "state/navigation/actions";
+import { goToPosting, updateLocation } from "state/navigation/actions";
 import { isAtComposePage } from "state/navigation/selectors";
 import {
     getComposeDraftId,
@@ -93,8 +92,6 @@ export default [
         conj(isAtComposePage, isComposeBecameReady),
         composeReady
     ),
-    trigger("COMPOSE_PREVIEW", true, dialogOpened(composePreviewClose())),
-    trigger("COMPOSE_PREVIEW_CLOSE", true, dialogClosed),
     trigger(
         ["EVENT_HOME_DRAFT_ADDED", "EVENT_HOME_DRAFT_UPDATED"],
         (state, signal: EventAction<DraftAddedEvent> | EventAction<DraftUpdatedEvent>) =>

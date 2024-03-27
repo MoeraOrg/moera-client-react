@@ -2,12 +2,11 @@ import { conj, trigger } from "state/trigger";
 import {
     ProfileAvatarConfirmDeleteAction,
     profileAvatarDelete,
-    profileCloseAvatarEditDialog,
     profileEditConflict,
     profileLoad
 } from "state/profile/actions";
 import { isProfileEditing } from "state/profile/selectors";
-import { bottomMenuHide, bottomMenuShow, dialogClosed, dialogOpened, newLocation } from "state/navigation/actions";
+import { bottomMenuHide, bottomMenuShow, newLocation } from "state/navigation/actions";
 import { isAtProfilePage } from "state/navigation/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 
@@ -27,8 +26,5 @@ export default [
         (signal: ProfileAvatarConfirmDeleteAction) =>
             confirmBox("Delete the avatar?", "Delete", "Cancel",
                 profileAvatarDelete(signal.payload.id, signal.payload.onDeleted))),
-    trigger("PROFILE_OPEN_AVATAR_EDIT_DIALOG", true, dialogOpened(profileCloseAvatarEditDialog())),
-    trigger("PROFILE_CLOSE_AVATAR_EDIT_DIALOG", true, dialogClosed),
-    trigger("PROFILE_AVATAR_CREATED", true, dialogClosed),
     trigger("EVENT_NODE_PROFILE_UPDATED", conj(isAtProfilePage, isProfileEditing), profileEditConflict)
 ]

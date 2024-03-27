@@ -7,5 +7,4 @@ export interface NavigationState {
     update: boolean;
     locked: boolean;
     bottomMenuVisible: boolean;
-    closeDialogAction: any;
 }

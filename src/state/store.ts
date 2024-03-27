@@ -98,7 +98,6 @@ import { collectTriggers, invokeTriggers } from "state/trigger";
 import homeTriggers from "state/home/triggers";
 import cartesTriggers from "state/cartes/triggers";
 import navigationTriggers from "state/navigation/triggers";
-import connectDialogTriggers from "state/connectdialog/triggers";
 import nodeTriggers from "state/node/triggers";
 import nodeNameTriggers from "state/nodename/triggers";
 import profileTriggers from "state/profile/triggers";
@@ -110,24 +109,14 @@ import settingsTriggers from "state/settings/triggers";
 import complainsTriggers from "state/complains/triggers";
 import namingTriggers from "state/naming/triggers";
 import reactionsDialogTriggers from "state/reactionsdialog/triggers";
-import changeDateDialogTriggers from "state/changedatedialog/triggers";
 import peopleTriggers from "state/people/triggers";
 import nodeCardsTriggers from "state/nodecards/triggers";
 import contactsTriggers from "state/contacts/triggers";
-import shareDialogTriggers from "state/sharedialog/triggers";
-import sourceDialogTriggers from "state/sourcedialog/triggers";
 import imageEditDialogTriggers from "state/imageeditdialog/triggers";
 import lightBoxTriggers from "state/lightbox/triggers";
-import donateDialogTriggers from "state/donatedialog/triggers";
-import entryCopyTextDialogTriggers from "state/entrycopytextdialog/triggers";
-import peopleHideDialogTriggers from "state/peoplehidedialog/triggers";
-import friendGroupAddDialogTriggers from "state/friendgroupadddialog/triggers";
-import friendGroupsDialogTriggers from "state/friendgroupsdialog/triggers";
 import askDialogTriggers from "state/askdialog/triggers";
-import blockDialogTriggers from "state/blockdialog/triggers";
 import blockingDetailsDialogTriggers from "state/blockingdetailsdialog/triggers";
 import blockedOperationsTriggers from "state/blockedoperations/triggers";
-import sheriffOrderDialogTriggers from "state/sherifforderdialog/triggers";
 import sheriffOrderDetailsDialogTriggers from "state/sherifforderdetailsdialog/triggers";
 import messageBoxTriggers from "state/messagebox/triggers";
 import confirmBoxTriggers from "state/confirmbox/triggers";
@@ -197,7 +186,6 @@ const triggers = collectTriggers(
     homeTriggers,
     cartesTriggers,
     navigationTriggers,
-    connectDialogTriggers,
     nodeTriggers,
     nodeNameTriggers,
     profileTriggers,
@@ -209,24 +197,14 @@ const triggers = collectTriggers(
     complainsTriggers,
     namingTriggers,
     reactionsDialogTriggers,
-    changeDateDialogTriggers,
     peopleTriggers,
     nodeCardsTriggers,
     contactsTriggers,
-    shareDialogTriggers,
-    sourceDialogTriggers,
     imageEditDialogTriggers,
     lightBoxTriggers,
-    donateDialogTriggers,
-    entryCopyTextDialogTriggers,
-    peopleHideDialogTriggers,
-    friendGroupAddDialogTriggers,
-    friendGroupsDialogTriggers,
     askDialogTriggers,
-    blockDialogTriggers,
     blockingDetailsDialogTriggers,
     blockedOperationsTriggers,
-    sheriffOrderDialogTriggers,
     sheriffOrderDetailsDialogTriggers,
     messageBoxTriggers,
     confirmBoxTriggers,

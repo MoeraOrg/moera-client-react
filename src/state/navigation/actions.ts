@@ -128,10 +128,6 @@ export type GoToLocationAction = ActionWithPayload<"GO_TO_LOCATION", {
 export const goToLocation = (path: string | null, query: string | null, hash: string | null): GoToLocationAction =>
     actionWithPayload("GO_TO_LOCATION", {path, query, hash});
 
-export type GoHomeAction = ActionWithoutPayload<"GO_HOME">;
-export const goHome = (): GoHomeAction =>
-    actionWithoutPayload("GO_HOME");
-
 export type GoHomeLocationAction = ActionWithPayload<"GO_HOME_LOCATION", {
     path: string | null;
     query: string | null;
@@ -148,16 +144,6 @@ export type BottomMenuShowAction = ActionWithoutPayload<"BOTTOM_MENU_SHOW">;
 export const bottomMenuShow = (): BottomMenuShowAction =>
     actionWithoutPayload("BOTTOM_MENU_SHOW");
 
-export type DialogOpenedAction = ActionWithPayload<"DIALOG_OPENED", {
-    closeAction: any;
-}>;
-export const dialogOpened = (closeAction: any): DialogOpenedAction =>
-    actionWithPayload("DIALOG_OPENED", {closeAction});
-
-export type DialogClosedAction = ActionWithoutPayload<"DIALOG_CLOSED">;
-export const dialogClosed = (): DialogClosedAction =>
-    actionWithoutPayload("DIALOG_CLOSED");
-
 export type BodyScrollUpdateAction = ActionWithoutPayload<"BODY_SCROLL_UPDATE">;
 export const bodyScrollUpdate = (): BodyScrollUpdateAction =>
     actionWithoutPayload("BODY_SCROLL_UPDATE");
@@ -173,10 +159,7 @@ export type NavigationAnyAction =
     | LocationLockAction
     | LocationUnlockAction
     | GoToLocationAction
-    | GoHomeAction
     | GoHomeLocationAction
     | BottomMenuHideAction
     | BottomMenuShowAction
-    | DialogOpenedAction
-    | DialogClosedAction
     | BodyScrollUpdateAction;

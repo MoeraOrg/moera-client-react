@@ -1,7 +1,7 @@
 import { conj, trigger } from "state/trigger";
-import { closeLightBox, lightBoxMediaPostingLoad, OpenLightBoxAction } from "state/lightbox/actions";
+import { lightBoxMediaPostingLoad, OpenLightBoxAction } from "state/lightbox/actions";
 import { postingLoad } from "state/postings/actions";
-import { bodyScrollUpdate, dialogClosed, dialogOpened, updateLocation } from "state/navigation/actions";
+import { bodyScrollUpdate, updateLocation } from "state/navigation/actions";
 import { isLightBoxMediaPostingToBeLoaded, isLightBoxShown, isLightBoxToBeLoaded } from "state/lightbox/selectors";
 import { REL_CURRENT } from "util/rel-node-name";
 
@@ -11,8 +11,6 @@ export default [
         conj(isLightBoxShown, isLightBoxToBeLoaded),
         (signal: OpenLightBoxAction) => postingLoad(signal.payload.postingId, REL_CURRENT)
     ),
-    trigger("OPEN_LIGHT_BOX", true, dialogOpened(closeLightBox())),
-    trigger("CLOSE_LIGHT_BOX", true, dialogClosed),
     trigger(["OPEN_LIGHT_BOX", "CLOSE_LIGHT_BOX", "LIGHT_BOX_MEDIA_SET"], true, updateLocation),
     trigger(
         ["OPEN_LIGHT_BOX", "LIGHT_BOX_MEDIA_SET", "POSTING_SET", "COMMENT_SET", "COMMENTS_PAST_SLICE_SET",

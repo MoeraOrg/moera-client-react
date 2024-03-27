@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
-import { dialogClosed, goToLocation, initFromLocation } from "state/navigation/actions";
+import { goToLocation, initFromLocation } from "state/navigation/actions";
 import { cartesLoad } from "state/cartes/actions";
 import { getInstantCount } from "state/feeds/selectors";
 import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
@@ -17,7 +17,6 @@ export default function Navigation() {
     const update = useSelector((state: ClientState) => state.navigation.update);
     const locked = useSelector((state: ClientState) => state.navigation.locked);
     const count = useSelector(getInstantCount);
-    const closeDialogAction = useSelector((state: ClientState) => state.navigation.closeDialogAction);
     const dispatch = useDispatch();
 
     const currentNodeName = useRef<string | null>(null);
@@ -41,13 +40,10 @@ export default function Navigation() {
             return;
         } else if (window.closeLightDialog) {
             window.closeLightDialog();
-        } else if (closeDialogAction != null) {
-            dispatch(closeDialogAction);
-            dispatch(dialogClosed());
         } else {
             window.Android?.back();
         }
-    }, [closeDialogAction, dispatch]);
+    }, []);
 
     const messageReceived = useCallback((event: MessageEvent) => {
         const data = event.data;
