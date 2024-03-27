@@ -49,11 +49,6 @@ export default function LightBox() {
     const overlayId = useRef<string>(randomId(4));
     const [, zIndex] = useOverlay<HTMLDivElement>(overlayId.current, overlayProps);
 
-    useEffect(() => {
-        Browser.disableBodyScroll();
-        return () => Browser.enableBodyScroll();
-    }, []);
-
     const media = useMemo(() => getGallery(posting, comment), [comment, posting]);
     const auth = carte != null ? "carte:" + carte : null;
     let mainHref = "";

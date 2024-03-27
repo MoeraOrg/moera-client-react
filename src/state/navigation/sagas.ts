@@ -22,7 +22,6 @@ import { nodeReady } from "state/node/actions";
 import { isAtNode } from "state/node/selectors";
 import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
-import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
 
 export default [
@@ -31,8 +30,7 @@ export default [
     executor("NEW_LOCATION", null, newLocationSaga),
     executor("UPDATE_LOCATION", null, updateLocationSaga),
     executor("GO_TO_LOCATION", payload => `${payload.path}:${payload.query}:${payload.hash}`, goToLocationSaga),
-    executor("GO_HOME_LOCATION", "", goHomeLocationSaga, homeIntroduced),
-    executor("BODY_SCROLL_UPDATE", "", bodyScrollUpdateSaga)
+    executor("GO_HOME_LOCATION", "", goHomeLocationSaga, homeIntroduced)
 ];
 
 function* transformation(caller: ClientAction,
@@ -120,24 +118,5 @@ function* goHomeLocationSaga(action: GoHomeLocationAction) {
         yield* put(initFromLocation(homeOwnerName, rootLocation, path, query, hash).causedBy(action));
     } else {
         yield* put(nodeReady());
-    }
-}
-
-function* bodyScrollUpdateSaga() {
-    const {messageBoxShow, confirmBoxShow, lightBoxShow} = yield* select(state => ({
-        messageBoxShow: state.messageBox.show,
-        confirmBoxShow: state.confirmBox.show,
-        lightBoxShow: state.lightBox.show
-    }));
-
-    const enabled = !messageBoxShow
-        && !confirmBoxShow
-        && !lightBoxShow
-        && !window.closeLightDialog;
-
-    if (enabled) {
-        Browser.enableBodyScroll();
-    } else {
-        Browser.disableBodyScroll();
     }
 }

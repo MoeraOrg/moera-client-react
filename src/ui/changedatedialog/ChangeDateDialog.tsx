@@ -27,6 +27,7 @@ function ChangeDateDialogInner() {
     const onClose = () => dispatch(closeChangeDateDialog());
 
     return (
+        // shadowClick is false here, because DateTimeField dropdown is out of the dialog bounds
         <ModalDialog title={t("change-date-time")} onClose={onClose} shadowClick={false}>
             <Form>
                 <div className="modal-body">

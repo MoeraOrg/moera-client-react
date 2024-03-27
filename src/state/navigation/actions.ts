@@ -144,10 +144,6 @@ export type BottomMenuShowAction = ActionWithoutPayload<"BOTTOM_MENU_SHOW">;
 export const bottomMenuShow = (): BottomMenuShowAction =>
     actionWithoutPayload("BOTTOM_MENU_SHOW");
 
-export type BodyScrollUpdateAction = ActionWithoutPayload<"BODY_SCROLL_UPDATE">;
-export const bodyScrollUpdate = (): BodyScrollUpdateAction =>
-    actionWithoutPayload("BODY_SCROLL_UPDATE");
-
 export type NavigationAnyAction =
     InitFromNodeLocationAction
     | InitFromLocationAction
@@ -161,5 +157,4 @@ export type NavigationAnyAction =
     | GoToLocationAction
     | GoHomeLocationAction
     | BottomMenuHideAction
-    | BottomMenuShowAction
-    | BodyScrollUpdateAction;
+    | BottomMenuShowAction;

@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
-import { bodyScrollUpdate } from "state/navigation/actions";
 import { usePopover } from "ui/control";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
@@ -30,11 +29,8 @@ export default function Instants({instantBorder}: Props) {
 
     useEffect(() => {
         window.closeLightDialog = hide;
-        dispatch(bodyScrollUpdate());
-
         return () => {
             window.closeLightDialog = null;
-            dispatch(bodyScrollUpdate());
         }
     }, [hide, dispatch]);
 

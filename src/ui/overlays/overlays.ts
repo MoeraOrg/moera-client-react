@@ -1,5 +1,7 @@
 import React, { useCallback, useRef, useSyncExternalStore } from 'react';
 
+import { disableBodyScroll, enableBodyScroll } from "ui/browser";
+
 const ROOT_OVERLAY_ZINDEX = 1044;
 
 export interface OverlayProps {
@@ -105,6 +107,7 @@ export class OverlaysManager {
         const overlay = new Overlay<E>(element, this.topOverlay, parent ?? this.rootOverlay);
         this.overlays.set(id, overlay);
         this.topOverlay = overlay;
+        disableBodyScroll();
         return overlay;
     }
 
@@ -145,6 +148,9 @@ export class OverlaysManager {
     private updateTopOverlay(): void {
         while (this.topOverlay.destroyed && this.topOverlay.lower != null) {
             this.topOverlay = this.topOverlay.lower;
+        }
+        if (this.topOverlay.lower == null) {
+            enableBodyScroll();
         }
     }
 

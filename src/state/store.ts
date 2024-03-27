@@ -118,8 +118,6 @@ import askDialogTriggers from "state/askdialog/triggers";
 import blockingDetailsDialogTriggers from "state/blockingdetailsdialog/triggers";
 import blockedOperationsTriggers from "state/blockedoperations/triggers";
 import sheriffOrderDetailsDialogTriggers from "state/sherifforderdetailsdialog/triggers";
-import messageBoxTriggers from "state/messagebox/triggers";
-import confirmBoxTriggers from "state/confirmbox/triggers";
 import signUpDialogTriggers from "state/signupdialog/triggers";
 import quickTipsTriggers from "state/quicktips/triggers";
 import refreshTriggers from "state/refresh/triggers";
@@ -206,8 +204,6 @@ const triggers = collectTriggers(
     blockingDetailsDialogTriggers,
     blockedOperationsTriggers,
     sheriffOrderDetailsDialogTriggers,
-    messageBoxTriggers,
-    confirmBoxTriggers,
     signUpDialogTriggers,
     quickTipsTriggers,
     refreshTriggers

@@ -1,7 +1,7 @@
 import { conj, trigger } from "state/trigger";
 import { lightBoxMediaPostingLoad, OpenLightBoxAction } from "state/lightbox/actions";
 import { postingLoad } from "state/postings/actions";
-import { bodyScrollUpdate, updateLocation } from "state/navigation/actions";
+import { updateLocation } from "state/navigation/actions";
 import { isLightBoxMediaPostingToBeLoaded, isLightBoxShown, isLightBoxToBeLoaded } from "state/lightbox/selectors";
 import { REL_CURRENT } from "util/rel-node-name";
 
@@ -17,6 +17,5 @@ export default [
          "COMMENTS_FUTURE_SLICE_SET", "FOCUSED_COMMENT_LOADED"],
         conj(isLightBoxShown, isLightBoxMediaPostingToBeLoaded),
         lightBoxMediaPostingLoad
-    ),
-    trigger(["OPEN_LIGHT_BOX", "CLOSE_LIGHT_BOX"], true, bodyScrollUpdate)
+    )
 ];
