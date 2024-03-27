@@ -156,11 +156,10 @@ export class OverlaysManager {
 
     mobileBack(): boolean {
         const overlay = this.topOverlay;
-        if (!overlay.closeOnBack) {
-            return true;
-        }
         if (overlay.lower != null) {
-            this.closeOverlay(overlay);
+            if (overlay.closeOnBack) {
+                this.closeOverlay(overlay);
+            }
             return true;
         }
         return false;
