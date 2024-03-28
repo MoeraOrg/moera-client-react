@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { PopoverContext } from "ui/control";
-import { useNewOverlayId } from "ui/overlays/overlays";
 import Overlay from "ui/overlays/Overlay";
 import "./Popover.css";
 
@@ -61,8 +60,6 @@ export function Popover({
     // invoked from span.onClick
     const hide = useCallback(() => setTimeout(() => setVisible(false)), []);
 
-    const overlayId = useNewOverlayId();
-
     return (
         <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {})}}>
             <span ref={setButtonRef} onClick={toggle} title={title} className={cx(textClassName, {"active": visible})}>
@@ -72,7 +69,7 @@ export function Popover({
             </span>
             {ReactDOM.createPortal(
                 (!detached || visible) &&
-                    <Overlay id={overlayId} elementRef={popperRef} props={{onClose: hide}}>
+                    <Overlay elementRef={popperRef} props={{onClose: hide}}>
                         {zIndex =>
                             <div
                                 ref={setPopperRef}

@@ -221,11 +221,10 @@ function isRef<E extends Element>(ref: React.RefObject<E> | E): ref is React.Ref
     return 'current' in ref;
 }
 
-export const useNewOverlayId = (): string => useRef<string>(randomId(4)).current;
-
 export function useOverlay<E extends Element>(
-    id: string, ref: React.RefObject<E> | E | null, props: Partial<OverlayProps> = {}
-): OverlayZIndex | undefined {
+    ref: React.RefObject<E> | E | null, props: Partial<OverlayProps> = {}
+): [OverlayZIndex | undefined, string] {
+    const id = useRef<string>(randomId(4)).current;
     const subscribe = useCallback(() => {
         window.overlays.open(id, ref, props.parentId);
         return () => window.overlays.destroy(id);
@@ -240,5 +239,5 @@ export function useOverlay<E extends Element>(
     const overlay = window.overlays.get(id);
     overlay?.setProps(props);
 
-    return zIndex;
+    return [zIndex, id];
 }
