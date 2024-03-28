@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Modifier, usePopper } from 'react-popper';
 import PopperJS from '@popperjs/core';
@@ -41,13 +41,22 @@ export function DelayedPopover({
     const {styles: popperStyles, attributes, state, forceUpdate} =
         usePopper(buttonRef, popperRef, {placement, modifiers});
 
-    const [locus, setLocus] = useState<ClickLocus>("out");
-    const [touch, setTouch] = useState<TouchLocus>("none");
+    const locusRef = useRef<ClickLocus>("out");
+    const touchRef = useRef<TouchLocus>("none");
+    const [locusUpdates, setLocusUpdates] = useState<number>(0);
+
+    const getLocus = useCallback(() => locusRef.current, []);
+    const setLocus = useCallback((locus: ClickLocus) => {
+        locusRef.current = locus;
+        setLocusUpdates(u => u + 1);
+    }, []);
+    const getTouch = useCallback(() => touchRef.current, []);
+    const setTouch = useCallback((touch: TouchLocus) => touchRef.current = touch, []);
+
     const [scrollY, setScrollY] = useState<number | null>(null);
     const [popup, setPopup] = useState<boolean>(false);
 
-    const popupVisible = popup || locus !== "out";
-    const [zIndex, overlayId] = useOverlay(popperRef, {visible: popupVisible});
+    const [zIndex, overlayId] = useOverlay(popperRef, {visible: popup});
     const topmostOverlay = useIsTopmostOverlay(overlayId);
 
     const hide = useCallback(() => {
@@ -55,11 +64,11 @@ export function DelayedPopover({
             return;
         }
         setPopup(false);
-        if (touch !== "none") {
+        if (getTouch() !== "none") {
             setLocus("out");
             setTouch("none");
         }
-    }, [popup, topmostOverlay, touch]);
+    }, [popup, topmostOverlay, getTouch, setLocus, setTouch]);
 
     const show = useCallback(() => {
         if (onShow && !onShow()) {
@@ -67,10 +76,10 @@ export function DelayedPopover({
         }
 
         setPopup(true);
-        if (touch === "touch") {
+        if (getTouch() === "touch") {
             setTouch("lock");
         }
-    }, [onShow, touch]);
+    }, [onShow, getTouch, setTouch]);
 
     const documentClick = useCallback((event: MouseEvent) => {
         if (!disabled && (!clickable || !isInPopover(event))) {
@@ -86,13 +95,13 @@ export function DelayedPopover({
     }, [documentClick, popup]);
 
     const onTimeout = useCallback(() => {
-        if (touch !== "none" && scrollY != null && Math.abs(scrollY - window.scrollY) > 10) {
+        if (getTouch() !== "none" && scrollY != null && Math.abs(scrollY - window.scrollY) > 10) {
             setLocus("out");
             setTouch("none");
             return;
         }
 
-        switch (locus) {
+        switch (getLocus()) {
             case "out":
                 hide();
                 break;
@@ -102,30 +111,30 @@ export function DelayedPopover({
             default:
             // do nothing
         }
-    }, [hide, locus, scrollY, show, touch]);
+    }, [getTouch, scrollY, getLocus, setLocus, setTouch, hide, show]);
 
     useEffect(() => {
         if (disabled) {
             return;
         }
 
-        if (locus === "main" && onPreparePopper) {
+        if (getLocus() === "main" && onPreparePopper) {
             onPreparePopper();
         }
         const id = setTimeout(onTimeout, 1000);
         return () => clearTimeout(id);
-    }, [disabled, locus, onPreparePopper, onTimeout]);
+    }, [disabled, getLocus, onPreparePopper, onTimeout, locusUpdates]);
 
     useEffect(() => {
-        if (touch !== "none") {
+        if (getTouch() !== "none") {
             setScrollY(window.scrollY);
             return () => setScrollY(null);
         }
-    }, [touch]);
+    }, [getTouch]);
 
     const documentClickCapture = useCallback((event: MouseEvent) => {
         if (!disabled) {
-            switch (touch) {
+            switch (getTouch()) {
                 case "touch":
                     setLocus("out");
                     setTouch("none");
@@ -142,42 +151,42 @@ export function DelayedPopover({
                 // do nothing
             }
         }
-    }, [disabled, hide, touch]);
+    }, [disabled, getTouch, hide, setLocus, setTouch]);
 
     useEffect(() => {
-        if (touch !== "none") {
+        if (getTouch() !== "none") {
             document.addEventListener("click", documentClickCapture, {capture: true, passive: false});
             return () => document.removeEventListener("click", documentClickCapture, {capture: true});
         }
-    }, [documentClickCapture, touch]);
+    }, [documentClickCapture, getTouch]);
 
     const contextMenu = useCallback((event: MouseEvent) => {
-        if (touch === "touch") {
+        if (getTouch() === "touch") {
             event.preventDefault();
         }
-    }, [touch]);
+    }, [getTouch]);
 
     useEffect(() => {
-        if (touch === "touch") {
+        if (getTouch() === "touch") {
             document.addEventListener("contextmenu", contextMenu);
             return () => document.removeEventListener("contextmenu", contextMenu);
         }
-    }, [contextMenu, touch]);
+    }, [contextMenu, getTouch]);
 
-    const mainEnter = useCallback(() => setLocus("main"), []);
+    const mainEnter = useCallback(() => setLocus("main"), [setLocus]);
 
     const mainLeave = useCallback(() => {
-        if (locus === "main") {
+        if (getLocus() === "main") {
             setLocus("out");
         }
-    }, [locus]);
+    }, [getLocus, setLocus]);
 
     const mainTouch = useCallback(() => {
-        if (locus === "out") {
+        if (getLocus() === "out") {
             setLocus("main");
             setTouch("touch");
         }
-    }, [locus]);
+    }, [getLocus, setLocus, setTouch]);
 
     useEffect(() => {
         if (buttonRef != null) {
@@ -200,7 +209,7 @@ export function DelayedPopover({
     const popupEnter = () => setLocus("popup");
 
     const popupLeave = () => {
-        if (locus === "popup") {
+        if (getLocus() === "popup") {
             setLocus("out");
         }
     };
@@ -208,7 +217,7 @@ export function DelayedPopover({
     return (
         <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {})}}>
             {element(setButtonRef)}
-            {popupVisible && createPortalIfNeeded(
+            {popup && createPortalIfNeeded(
                 <div
                     ref={setPopperRef}
                     style={{...popperStyles.popper, zIndex: zIndex?.widget}}
@@ -216,11 +225,11 @@ export function DelayedPopover({
                     className={cx(
                         "shadow",
                         "fade",
+                        "show",
                         `bs-popover-${state?.placement}`, // activates Bootstrap style for .popover-arrow
                         {
                             "popover": styles === "popover",
                             "dropdown-menu": styles === "menu",
-                            "show": popup
                         },
                         className
                     )}
