@@ -34,7 +34,7 @@ export function AvatarField({name, size, disabled}: Props) {
 
     const {
         visible, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
-        placement
+        placement, zIndex
     } = useButtonPopper("bottom-start");
 
     const onClick = (event: React.MouseEvent) => {
@@ -58,7 +58,7 @@ export function AvatarField({name, size, disabled}: Props) {
                 <Avatar avatar={value} ownerName={homeOwnerName} size={size}/>
             </div>
             {visible &&
-                <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
+                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                      className={`fade popover shadow-sm bs-popover-${placement} show`}>
                     <div className="selector">
                         {avatarsLoaded ?

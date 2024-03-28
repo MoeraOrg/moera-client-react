@@ -34,7 +34,7 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
         getSetting(state, "principal.public.disabled") as boolean);
 
     const {
-        visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
+        visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
     } = useButtonPopper("bottom-end");
 
     const {t} = useTranslation();
@@ -50,7 +50,7 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
                 <FontAwesomeIcon icon={faChevronDown} className="chevron"/>
             </button>
             {visible &&
-                <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
+                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                      className="fade dropdown-menu shadow-sm show">
                     {caption && <div className="caption">{caption}</div>}
                     {principalValues.map(({value: v, icon, title}) =>

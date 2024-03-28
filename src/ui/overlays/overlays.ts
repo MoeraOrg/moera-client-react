@@ -9,6 +9,7 @@ export interface OverlayProps {
     parentId: string;
     onClose: () => void;
     closeOnClick: boolean;
+    closeOnSelect: boolean;
     closeOnEscape: boolean;
     closeOnBack: boolean;
 }
@@ -23,6 +24,7 @@ export class Overlay<E extends Element> {
     readonly element: React.RefObject<E> | E | null;
     private onClose: (() => void) | undefined;
     closeOnClick: boolean = false;
+    closeOnSelect: boolean = false;
     closeOnEscape: boolean = false;
     closeOnBack: boolean = false;
 
@@ -56,6 +58,7 @@ export class Overlay<E extends Element> {
         this.onClose = props.onClose;
         const closable = props.onClose != null;
         this.closeOnClick = props.closeOnClick ?? closable;
+        this.closeOnSelect = props.closeOnSelect ?? false;
         this.closeOnEscape = props.closeOnEscape ?? closable;
         this.closeOnBack = props.closeOnBack ?? closable;
     }
@@ -205,14 +208,16 @@ export class OverlaysManager {
             return;
         }
 
-        const r = element.getBoundingClientRect();
-        if (
-            (r.left <= e.clientX && r.right >= e.clientX && r.top <= e.clientY && r.bottom >= e.clientY)
-            || (e.clientX === 0 && e.clientY === 0) // Ugly hack, but need to work around wrong mouse events in FF
-        ) {
-            overlay.mouseDownX = undefined;
-            overlay.mouseDownY = undefined;
-            return;
+        if (!overlay.closeOnSelect) {
+            const r = element.getBoundingClientRect();
+            if (
+                (r.left <= e.clientX && r.right >= e.clientX && r.top <= e.clientY && r.bottom >= e.clientY)
+                || (e.clientX === 0 && e.clientY === 0) // Ugly hack, but need to work around wrong mouse events in FF
+            ) {
+                overlay.mouseDownX = undefined;
+                overlay.mouseDownY = undefined;
+                return;
+            }
         }
         overlay.mouseDownX = e.clientX;
         overlay.mouseDownY = e.clientY;

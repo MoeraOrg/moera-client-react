@@ -20,7 +20,7 @@ interface Props {
 
 export function DropdownMenu({content, items, className, disabled, onDialogOpened, children}: Props) {
     const {
-        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
+        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
     } = useButtonPopper("bottom-end");
 
     const {t} = useTranslation();
@@ -39,7 +39,7 @@ export function DropdownMenu({content, items, className, disabled, onDialogOpene
                 }
             </button>
             {visible &&
-                <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
+                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                      className="fade dropdown-menu shadow-sm show">
                     {content}
                     {items && <DropdownMenuItems items={items}/>}
