@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { PopoverContext } from "ui/control";
-import Overlay from "ui/overlays/Overlay";
+import { useOverlay } from "ui/overlays/overlays";
 import "./Popover.css";
 
 interface Props {
@@ -60,6 +60,8 @@ export function Popover({
     // invoked from span.onClick
     const hide = useCallback(() => setTimeout(() => setVisible(false)), []);
 
+    const [zIndex] = useOverlay(popperRef, {visible: !detached || visible, onClose: hide});
+
     return (
         <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {})}}>
             <span ref={setButtonRef} onClick={toggle} title={title} className={cx(textClassName, {"active": visible})}>
@@ -69,32 +71,28 @@ export function Popover({
             </span>
             {ReactDOM.createPortal(
                 (!detached || visible) &&
-                    <Overlay elementRef={popperRef} props={{onClose: hide}}>
-                        {zIndex =>
-                            <div
-                                ref={setPopperRef}
-                                style={{...styles.popper, zIndex: zIndex?.widget}}
-                                {...attributes.popper}
-                                className={cx(
-                                    "popover",
-                                    "fade",
-                                    `bs-popover-${state?.placement}`, // activates Bootstrap style for .popover-arrow
-                                    {"show": visible},
-                                    className
-                                )}
-                            >
-                                <div
-                                    ref={setArrowRef}
-                                    style={styles.arrow}
-                                    {...attributes.arrow}
-                                    className="popover-arrow"
-                                />
-                                <div className="popover-body">
-                                    {children}
-                                </div>
-                            </div>
-                        }
-                    </Overlay>,
+                    <div
+                        ref={setPopperRef}
+                        style={{...styles.popper, zIndex: zIndex?.widget}}
+                        {...attributes.popper}
+                        className={cx(
+                            "popover",
+                            "fade",
+                            `bs-popover-${state?.placement}`, // activates Bootstrap style for .popover-arrow
+                            {"show": visible},
+                            className
+                        )}
+                    >
+                        <div
+                            ref={setArrowRef}
+                            style={styles.arrow}
+                            {...attributes.arrow}
+                            className="popover-arrow"
+                        />
+                        <div className="popover-body">
+                            {children}
+                        </div>
+                    </div>,
                 document.querySelector("#modal-root")!
             )}
         </PopoverContext.Provider>

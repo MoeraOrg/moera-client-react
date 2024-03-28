@@ -221,14 +221,20 @@ function isRef<E extends Element>(ref: React.RefObject<E> | E): ref is React.Ref
     return 'current' in ref;
 }
 
+type UseOverlayProps = Partial<OverlayProps> & {visible?: boolean};
+
 export function useOverlay<E extends Element>(
-    ref: React.RefObject<E> | E | null, props: Partial<OverlayProps> = {}
+    ref: React.RefObject<E> | E | null, props: UseOverlayProps = {}
 ): [OverlayZIndex | undefined, string] {
     const id = useRef<string>(randomId(4)).current;
     const subscribe = useCallback(() => {
-        window.overlays.open(id, ref, props.parentId);
-        return () => window.overlays.destroy(id);
-    }, [id, props.parentId, ref]);
+        const visible = props.visible ?? true;
+        if (visible) {
+            window.overlays.open(id, ref, props.parentId);
+            return () => window.overlays.destroy(id);
+        }
+        return () => {};
+    }, [id, props.parentId, props.visible, ref]);
     const zIndex = useSyncExternalStore(
         subscribe,
         () => {
