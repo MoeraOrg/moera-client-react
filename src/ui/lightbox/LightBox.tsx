@@ -19,7 +19,7 @@ import LightBoxCaption from "ui/lightbox/LightBoxCaption";
 import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import LightBoxShareButton from "ui/lightbox/LightBoxShareButton";
 import LightBoxDownloadButton from "ui/lightbox/LightBoxDownloadButton";
-import { OverlayProps, useNewOverlayId, useOverlay } from "ui/overlays/overlays";
+import { useNewOverlayId, useOverlay } from "ui/overlays/overlays";
 import { REL_CURRENT } from "util/rel-node-name";
 import { urlWithParameters } from "util/url";
 import "./LightBox.css";
@@ -41,11 +41,7 @@ export default function LightBox() {
     const onCloseRequest = useCallback(() => dispatch(closeLightBox()), [dispatch]);
 
     const overlayId = useNewOverlayId();
-    const overlayProps = useMemo<Partial<OverlayProps>>(
-        () => ({closeOnClick: false, closeOnEscape: false, onClose: onCloseRequest}),
-        [onCloseRequest]
-    );
-    const zIndex = useOverlay<HTMLDivElement>(overlayId.current, null, overlayProps);
+    const zIndex = useOverlay(overlayId, null, {closeOnClick: false, closeOnEscape: false, onClose: onCloseRequest});
 
     const media = useMemo(() => getGallery(posting, comment), [comment, posting]);
     const auth = carte != null ? "carte:" + carte : null;

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 import { Modifier, usePopper } from 'react-popper';
@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { PopoverContext } from "ui/control";
-import { OverlayProps, useNewOverlayId } from "ui/overlays/overlays";
+import { useNewOverlayId } from "ui/overlays/overlays";
 import Overlay from "ui/overlays/Overlay";
 import "./Popover.css";
 
@@ -62,7 +62,6 @@ export function Popover({
     const hide = useCallback(() => setTimeout(() => setVisible(false)), []);
 
     const overlayId = useNewOverlayId();
-    const overlayProps = useMemo<Partial<OverlayProps>>(() => ({onClose: hide}), [hide]);
 
     return (
         <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {})}}>
@@ -73,7 +72,7 @@ export function Popover({
             </span>
             {ReactDOM.createPortal(
                 (!detached || visible) &&
-                    <Overlay id={overlayId.current} elementRef={popperRef} props={overlayProps}>
+                    <Overlay id={overlayId} elementRef={popperRef} props={{onClose: hide}}>
                         {zIndex =>
                             <div
                                 ref={setPopperRef}

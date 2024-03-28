@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 
 import { CloseButton, Loading } from "ui/control";
-import { OverlayProps, useNewOverlayId, useOverlay } from "ui/overlays/overlays";
+import { useNewOverlayId, useOverlay } from "ui/overlays/overlays";
 import "./ModalDialog.css";
 
 interface Props {
@@ -24,11 +24,7 @@ export function ModalDialog({
 }: Props) {
     const modalDialog = useRef<HTMLDivElement>(null);
     const overlayId = useNewOverlayId();
-    const overlayProps = useMemo<Partial<OverlayProps>>(
-        () => ({closeOnClick: shadowClick, onClose}),
-        [onClose, shadowClick]
-    );
-    const zIndex = useOverlay(overlayId.current, modalDialog, overlayProps);
+    const zIndex = useOverlay(overlayId, modalDialog, {closeOnClick: shadowClick, onClose});
 
     useEffect(() => {
         if (onKeyDown != null) {
