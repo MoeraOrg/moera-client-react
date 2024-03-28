@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 import { Modifier, usePopper } from 'react-popper';
@@ -7,7 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { PopoverContext } from "ui/control";
-
+import { OverlayProps, useNewOverlayId } from "ui/overlays/overlays";
+import Overlay from "ui/overlays/Overlay";
 import "./Popover.css";
 
 interface Props {
@@ -40,30 +41,6 @@ export function Popover({
     const {styles, attributes, state, forceUpdate} =
         usePopper(buttonRef, popperRef, {placement: "bottom", strategy, modifiers});
 
-    const documentClick = useCallback((event: MouseEvent) => {
-        if (popperRef != null) {
-            const r = popperRef.getBoundingClientRect();
-            if (r.left <= event.clientX && r.right >= event.clientX
-                && r.top <= event.clientY && r.bottom >= event.clientY
-            ) {
-                return;
-            }
-        }
-        setVisible(false);
-    }, [popperRef]);
-
-    useEffect(() => {
-        if (visible) {
-            document.getElementById("app-root")!.addEventListener("click", documentClick);
-            document.getElementById("modal-root")!.addEventListener("click", documentClick);
-
-            return () => {
-                document.getElementById("app-root")!.removeEventListener("click", documentClick);
-                document.getElementById("modal-root")!.removeEventListener("click", documentClick);
-            }
-        }
-    }, [documentClick, visible]);
-
     useEffect(() => {
         if (onToggle != null) {
             onToggle(visible);
@@ -72,14 +49,23 @@ export function Popover({
 
     useEffect(() => {
         if (visible) {
-            forceUpdate && forceUpdate();
+            // setTimeout() is needed here, because forceUpdate() uses flushSync() that should not be called from
+            // lifecycle methods
+            forceUpdate && setTimeout(() => forceUpdate());
         }
     }, [forceUpdate, visible]);
 
     const toggle = () => setVisible(!visible);
 
+    // setTimeout() is needed here to make hide(), invoked from overlay.onClosed, to be called after toggle(),
+    // invoked from span.onClick
+    const hide = useCallback(() => setTimeout(() => setVisible(false)), []);
+
+    const overlayId = useNewOverlayId();
+    const overlayProps = useMemo<Partial<OverlayProps>>(() => ({onClose: hide}), [hide]);
+
     return (
-        <PopoverContext.Provider value={{hide: () => setVisible(false), update: forceUpdate ?? (() => {})}}>
+        <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {})}}>
             <span ref={setButtonRef} onClick={toggle} title={title} className={cx(textClassName, {"active": visible})}>
                 {element && React.createElement(element)}
                 {icon && <FontAwesomeIcon icon={icon}/>}
@@ -87,18 +73,32 @@ export function Popover({
             </span>
             {ReactDOM.createPortal(
                 (!detached || visible) &&
-                    <div ref={setPopperRef} style={styles.popper} {...attributes.popper} className={cx(
-                        "popover",
-                        "fade",
-                        `bs-popover-${state?.placement}`, // activates Bootstrap style for .popover-arrow
-                        {"show": visible},
-                        className
-                    )}>
-                        <div ref={setArrowRef} style={styles.arrow} {...attributes.arrow} className="popover-arrow"/>
-                        <div className="popover-body">
-                            {children}
-                        </div>
-                    </div>,
+                    <Overlay id={overlayId.current} elementRef={popperRef} props={overlayProps}>
+                        {zIndex =>
+                            <div
+                                ref={setPopperRef}
+                                style={{...styles.popper, zIndex: zIndex?.widget}}
+                                {...attributes.popper}
+                                className={cx(
+                                    "popover",
+                                    "fade",
+                                    `bs-popover-${state?.placement}`, // activates Bootstrap style for .popover-arrow
+                                    {"show": visible},
+                                    className
+                                )}
+                            >
+                                <div
+                                    ref={setArrowRef}
+                                    style={styles.arrow}
+                                    {...attributes.arrow}
+                                    className="popover-arrow"
+                                />
+                                <div className="popover-body">
+                                    {children}
+                                </div>
+                            </div>
+                        }
+                    </Overlay>,
                 document.querySelector("#modal-root")!
             )}
         </PopoverContext.Provider>

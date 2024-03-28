@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -26,13 +26,6 @@ export default function Instants({instantBorder}: Props) {
     const pastIntersecting = useRef<boolean>(true);
 
     const {hide} = usePopover();
-
-    useEffect(() => {
-        window.closeLightDialog = hide;
-        return () => {
-            window.closeLightDialog = null;
-        }
-    }, [hide, dispatch]);
 
     const loadPast = () => {
         if (loadingPast || after <= Number.MIN_SAFE_INTEGER) {

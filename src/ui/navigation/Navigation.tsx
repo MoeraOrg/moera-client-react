@@ -35,16 +35,6 @@ export default function Navigation() {
         event.preventDefault();
     }, [dispatch, rootLocation]);
 
-    const back = useCallback(() => {
-        if (window.overlays.mobileBack()) {
-            return;
-        } else if (window.closeLightDialog) {
-            window.closeLightDialog();
-        } else {
-            window.Android?.back();
-        }
-    }, []);
-
     const messageReceived = useCallback((event: MessageEvent) => {
         const data = event.data;
         if (data === null || typeof data !== "string") {
@@ -59,7 +49,7 @@ export default function Navigation() {
 
         switch (message.action) {
             case "back":
-                back();
+                window.overlays.mobileBack();
                 return;
 
             case "call-return":
@@ -73,7 +63,7 @@ export default function Navigation() {
             default:
                 return;
         }
-    }, [back, dispatch]);
+    }, [dispatch]);
 
     useEffect(() => {
         window.addEventListener("popstate", popState);

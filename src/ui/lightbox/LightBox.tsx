@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
@@ -15,14 +15,12 @@ import { getPosting } from "state/postings/selectors";
 import { ExtCommentInfo } from "state/detailedposting/state";
 import { getComment } from "state/detailedposting/selectors";
 import { getSetting } from "state/settings/selectors";
-import * as Browser from "ui/browser";
 import LightBoxCaption from "ui/lightbox/LightBoxCaption";
 import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import LightBoxShareButton from "ui/lightbox/LightBoxShareButton";
 import LightBoxDownloadButton from "ui/lightbox/LightBoxDownloadButton";
-import { OverlayProps, useOverlay } from "ui/overlays/overlays";
+import { OverlayProps, useNewOverlayId, useOverlay } from "ui/overlays/overlays";
 import { REL_CURRENT } from "util/rel-node-name";
-import { randomId } from "util/ui";
 import { urlWithParameters } from "util/url";
 import "./LightBox.css";
 
@@ -42,12 +40,12 @@ export default function LightBox() {
 
     const onCloseRequest = useCallback(() => dispatch(closeLightBox()), [dispatch]);
 
+    const overlayId = useNewOverlayId();
     const overlayProps = useMemo<Partial<OverlayProps>>(
         () => ({closeOnClick: false, closeOnEscape: false, onClose: onCloseRequest}),
         [onCloseRequest]
     );
-    const overlayId = useRef<string>(randomId(4));
-    const [, zIndex] = useOverlay<HTMLDivElement>(overlayId.current, overlayProps);
+    const zIndex = useOverlay<HTMLDivElement>(overlayId.current, null, overlayProps);
 
     const media = useMemo(() => getGallery(posting, comment), [comment, posting]);
     const auth = carte != null ? "carte:" + carte : null;

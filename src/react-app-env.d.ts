@@ -118,7 +118,6 @@ type AndroidMessage =
 
 interface Window {
     Android?: AndroidJsInterface;
-    closeLightDialog?: (() => void) | null;
     loadedImages?: Set<string>;
     loadedAvatars?: Map<string, string>;
     overlays: import("ui/overlays/overlays").OverlaysManager;
