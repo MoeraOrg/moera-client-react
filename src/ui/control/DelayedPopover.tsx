@@ -1,10 +1,11 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
 import { Modifier, usePopper } from 'react-popper';
 import PopperJS from '@popperjs/core';
 import cx from "classnames";
 
 import { PopoverContext } from "ui/control";
-import ReactDOM from "react-dom";
+import { useIsTopmostOverlay, useOverlay } from "ui/overlays/overlays";
 
 export type DelayedPopoverElement = (ref: (dom: Element | null) => void) => any;
 
@@ -45,13 +46,20 @@ export function DelayedPopover({
     const [scrollY, setScrollY] = useState<number | null>(null);
     const [popup, setPopup] = useState<boolean>(false);
 
+    const popupVisible = popup || locus !== "out";
+    const [zIndex, overlayId] = useOverlay(popperRef, {visible: popupVisible});
+    const topmostOverlay = useIsTopmostOverlay(overlayId);
+
     const hide = useCallback(() => {
+        if (popup && !topmostOverlay) {
+            return;
+        }
         setPopup(false);
         if (touch !== "none") {
             setLocus("out");
             setTouch("none");
         }
-    }, [touch]);
+    }, [popup, topmostOverlay, touch]);
 
     const show = useCallback(() => {
         if (onShow && !onShow()) {
@@ -200,25 +208,36 @@ export function DelayedPopover({
     return (
         <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {})}}>
             {element(setButtonRef)}
-            {(popup || locus !== "out") && createPortalIfNeeded(
-                <div ref={setPopperRef} style={popperStyles.popper} {...attributes.popper} className={cx(
-                    "shadow",
-                    "fade",
-                    `bs-popover-${state?.placement}`, // activates Bootstrap style for .popover-arrow
-                    {
-                        "popover": styles === "popover",
-                        "dropdown-menu": styles === "menu",
-                        "show": popup
-                    },
-                    className
-                )}>
+            {popupVisible && createPortalIfNeeded(
+                <div
+                    ref={setPopperRef}
+                    style={{...popperStyles.popper, zIndex: zIndex?.widget}}
+                    {...attributes.popper}
+                    className={cx(
+                        "shadow",
+                        "fade",
+                        `bs-popover-${state?.placement}`, // activates Bootstrap style for .popover-arrow
+                        {
+                            "popover": styles === "popover",
+                            "dropdown-menu": styles === "menu",
+                            "show": popup
+                        },
+                        className
+                    )}
+                >
                     {arrow &&
-                        <div ref={setArrowRef} style={popperStyles.arrow} {...attributes.arrow}
-                             className="popover-arrow"/>
+                        <div
+                            ref={setArrowRef}
+                            style={popperStyles.arrow}
+                            {...attributes.arrow}
+                            className="popover-arrow"
+                        />
                     }
-                    <div className={cx({"popover-body": styles === "popover"})}
-                         onMouseEnter={popupEnter}
-                         onMouseLeave={!sticky ? popupLeave : undefined}>
+                    <div
+                        className={cx({"popover-body": styles === "popover"})}
+                        onMouseEnter={popupEnter}
+                        onMouseLeave={!sticky ? popupLeave : undefined}
+                    >
                         {children}
                     </div>
                 </div>,
