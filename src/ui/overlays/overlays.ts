@@ -70,7 +70,7 @@ export class Overlay<E extends Element> {
 
     private destroySelf(): void {
         if (this.parent != null) {
-            this.parent.children = this.parent.children.filter(o => Object.is(o, this));
+            this.parent.children = this.parent.children.filter(o => !Object.is(o, this));
         }
         this.destroyed = true;
     }
