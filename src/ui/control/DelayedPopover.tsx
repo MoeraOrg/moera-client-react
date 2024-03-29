@@ -5,7 +5,7 @@ import PopperJS from '@popperjs/core';
 import cx from "classnames";
 
 import { PopoverContext } from "ui/control";
-import { useIsTopmostOverlay, useOverlay } from "ui/overlays/overlays";
+import { OverlayZIndex, useOverlay } from "ui/overlays/overlays";
 
 export type DelayedPopoverElement = (ref: (dom: Element | null) => void) => any;
 
@@ -56,11 +56,11 @@ export function DelayedPopover({
     const [scrollY, setScrollY] = useState<number | null>(null);
     const [popup, setPopup] = useState<boolean>(false);
 
-    const [zIndex, overlayId] = useOverlay(popperRef, {visible: popup});
-    const topmostOverlay = useIsTopmostOverlay(overlayId);
+    let zIndex: OverlayZIndex | undefined;
+    let overlayId: string = "";
 
     const hide = useCallback(() => {
-        if (popup && !topmostOverlay) {
+        if (disabled || !window.overlays.isTopmostOverlay(overlayId)) {
             return;
         }
         setPopup(false);
@@ -68,7 +68,7 @@ export function DelayedPopover({
             setLocus("out");
             setTouch("none");
         }
-    }, [popup, topmostOverlay, getTouch, setLocus, setTouch]);
+    }, [overlayId, disabled, getTouch, setLocus, setTouch]);
 
     const show = useCallback(() => {
         if (onShow && !onShow()) {
@@ -81,18 +81,7 @@ export function DelayedPopover({
         }
     }, [onShow, getTouch, setTouch]);
 
-    const documentClick = useCallback((event: MouseEvent) => {
-        if (!disabled && (!clickable || !isInPopover(event))) {
-            hide();
-        }
-    }, [clickable, disabled, hide]);
-
-    useEffect(() => {
-        if (popup) {
-            document.addEventListener("click", documentClick);
-            return () => document.removeEventListener("click", documentClick);
-        }
-    }, [documentClick, popup]);
+    [zIndex, overlayId] = useOverlay(popperRef, {visible: popup, onClose: hide, closeOnSelect: !clickable});
 
     const onTimeout = useCallback(() => {
         if (getTouch() !== "none" && scrollY != null && Math.abs(scrollY - window.scrollY) > 10) {

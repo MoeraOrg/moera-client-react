@@ -179,7 +179,7 @@ export class OverlaysManager {
         this.topOverlayChanged();
     }
 
-    isTopOverlay(id: string): boolean {
+    isTopmostOverlay(id: string): boolean {
         return Object.is(this.topOverlay, this.get(id));
     }
 
@@ -283,6 +283,6 @@ export function useIsTopmostOverlay(id: string): boolean {
     }, []);
     return useSyncExternalStore(
         subscribe,
-        () => window.overlays.isTopOverlay(id)
+        () => window.overlays.isTopmostOverlay(id)
     );
 }
