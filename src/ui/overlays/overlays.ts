@@ -95,7 +95,6 @@ export class OverlaysManager {
     private readonly overlays: Map<string, Overlay<any>> = new Map();
     private readonly rootOverlay: Overlay<Element>;
     private topOverlay: Overlay<Element>;
-    private topOverlayListeners: (() => any)[] = [];
 
     constructor() {
         this.rootOverlay = new Overlay(null, null, null);
@@ -152,21 +151,8 @@ export class OverlaysManager {
         this.overlays.delete(id);
     }
 
-    topOverlaySubscribe(listener: () => any): void {
-        this.topOverlayListeners.push(listener);
-    }
-
-    topOverlayUnsubscribe(listener: () => any): void {
-        this.topOverlayListeners = this.topOverlayListeners.filter(l => !Object.is(l, listener));
-    }
-
-    private topOverlayChanged(): void {
-        this.topOverlayListeners.forEach(listener => listener());
-    }
-
     private setTopOverlay(overlay: Overlay<Element>): void {
         this.topOverlay = overlay;
-        this.topOverlayChanged();
     }
 
     private updateTopOverlay(): void {
@@ -176,7 +162,6 @@ export class OverlaysManager {
         if (this.topOverlay.lower == null) {
             enableBodyScroll();
         }
-        this.topOverlayChanged();
     }
 
     isTopmostOverlay(id: string): boolean {
@@ -274,15 +259,4 @@ export function useOverlay<E extends Element>(
     overlay?.setProps(props);
 
     return [zIndex, id];
-}
-
-export function useIsTopmostOverlay(id: string): boolean {
-    const subscribe = useCallback((listener: () => void) => {
-        window.overlays.topOverlaySubscribe(listener)
-        return () => window.overlays.topOverlayUnsubscribe(listener);
-    }, []);
-    return useSyncExternalStore(
-        subscribe,
-        () => window.overlays.isTopmostOverlay(id)
-    );
 }
