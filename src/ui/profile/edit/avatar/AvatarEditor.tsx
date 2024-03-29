@@ -36,7 +36,7 @@ export default function AvatarEditor({name}: Props) {
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
         placement, zIndex
-    } = useButtonPopper("bottom-start", {hideAlways: false});
+    } = useButtonPopper("bottom-start", {closeOnSelect: false});
 
     const onSelect = (avatar: AvatarInfo) => setValue(avatar);
 

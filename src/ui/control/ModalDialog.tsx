@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 
-import { CloseButton, Loading } from "ui/control";
+import { CloseButton, Loading, ModalDialogContext } from "ui/control";
 import { useOverlay } from "ui/overlays/overlays";
 import "./ModalDialog.css";
 
@@ -14,16 +14,19 @@ interface Props {
     centered?: boolean;
     shadowClick?: boolean;
     loading?: boolean;
+    parentOverlayId?: string;
     onClose?: () => void;
     onKeyDown?: (event: KeyboardEvent) => void;
     children: any;
 }
 
 export function ModalDialog({
-    title, size, className, style, centered = true, shadowClick = true, loading, children, onClose, onKeyDown
+    title, size, className, style, centered = true, shadowClick = true, loading, parentOverlayId, onClose, onKeyDown,
+    children
 }: Props) {
     const modalDialog = useRef<HTMLDivElement>(null);
-    const [zIndex] = useOverlay(modalDialog, {closeOnClick: shadowClick, onClose});
+    const [zIndex, overlayId]
+        = useOverlay(modalDialog, {parentId: parentOverlayId, closeOnClick: shadowClick, onClose});
 
     useEffect(() => {
         if (onKeyDown != null) {
@@ -35,7 +38,7 @@ export function ModalDialog({
     }, [onKeyDown]);
 
     return ReactDOM.createPortal(
-        <>
+        <ModalDialogContext.Provider value={{overlayId}}>
             <div className={cx("modal-backdrop", "show")} style={{zIndex: zIndex?.shadow}}/>
             <div className={cx("modal", "show")} style={{zIndex: zIndex?.widget}}>
                 <div className={cx(
@@ -62,7 +65,7 @@ export function ModalDialog({
                     </div>
                 </div>
             </div>
-        </>,
+        </ModalDialogContext.Provider>,
         document.getElementById("modal-root")!
     );
 }

@@ -17,6 +17,7 @@ interface Props {
     disabled?: boolean;
     clickable?: boolean;
     sticky?: boolean;
+    parentOverlayId?: string;
     onPreparePopper?: () => void;
     onShow?: () => boolean;
     element: DelayedPopoverElement;
@@ -29,8 +30,8 @@ type ClickLocus = "out" | "main" | "popup";
 type TouchLocus = "none" | "touch" | "lock";
 
 export function DelayedPopover({
-    placement, arrow, className, styles = "popover", disabled, clickable, sticky, onPreparePopper, onShow, element,
-    popoverContainer, children
+    placement, arrow, className, styles = "popover", disabled, clickable, sticky, parentOverlayId, onPreparePopper,
+    onShow, element, popoverContainer, children
 }: Props) {
     // Such usage of useState() is counter-intuitive, but required by react-popper
     const [buttonRef, setButtonRef] = useState<Element | null>(null);
@@ -81,7 +82,8 @@ export function DelayedPopover({
         }
     }, [onShow, getTouch, setTouch]);
 
-    [zIndex, overlayId] = useOverlay(popperRef, {visible: popup, onClose: hide, closeOnSelect: !clickable});
+    [zIndex, overlayId]
+        = useOverlay(popperRef, {parentId: parentOverlayId, visible: popup, onClose: hide, closeOnSelect: !clickable});
 
     const onTimeout = useCallback(() => {
         if (getTouch() !== "none" && scrollY != null && Math.abs(scrollY - window.scrollY) > 10) {
@@ -204,7 +206,7 @@ export function DelayedPopover({
     };
 
     return (
-        <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {})}}>
+        <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {}), overlayId}}>
             {element(setButtonRef)}
             {popup && createPortalIfNeeded(
                 <div

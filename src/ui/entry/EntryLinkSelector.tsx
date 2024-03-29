@@ -6,7 +6,7 @@ import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { useButtonPopper } from "ui/hook";
-import { Button } from "ui/control";
+import { Button, useModalDialog } from "ui/control";
 import "./EntryLinkSelector.css";
 
 interface Props {
@@ -16,9 +16,10 @@ interface Props {
 }
 
 export default function EntryLinkSelector({urls, onSelect, disabled}: Props) {
+    const {overlayId: parentOverlayId} = useModalDialog();
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
-    } = useButtonPopper("bottom-start");
+    } = useButtonPopper("bottom-start", {parentOverlayId});
     const {t} = useTranslation();
 
     if (urls.length === 0) {

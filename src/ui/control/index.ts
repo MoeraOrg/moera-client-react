@@ -23,6 +23,7 @@ export { LabelButton } from "ui/control/LabelButton";
 export { Loading } from "ui/control/Loading";
 export { LoadingInline } from "ui/control/LoadingInline";
 export { ModalDialog } from "ui/control/ModalDialog";
+export { ModalDialogContext, useModalDialog } from "ui/control/modal-dialog-context";
 export { NameHelp } from "ui/control/NameHelp";
 export { NameSelector } from "ui/control/NameSelector";
 export { PlusButton } from "ui/control/PlusButton";

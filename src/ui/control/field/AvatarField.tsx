@@ -11,8 +11,7 @@ import { ClientState } from "state/state";
 import { homeAvatarsLoad } from "state/home/actions";
 import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { useButtonPopper } from "ui/hook";
-import { Avatar } from "ui/control/Avatar";
-import { Loading } from "ui/control/Loading";
+import { Avatar, Loading, useModalDialog } from "ui/control";
 import "./AvatarField.css";
 
 interface Props {
@@ -32,10 +31,11 @@ export function AvatarField({name, size, disabled}: Props) {
 
     const [, {value}, {setValue}] = useField<AvatarInfo | null>(name);
 
+    const {overlayId: parentOverlayId} = useModalDialog();
     const {
         visible, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
         placement, zIndex
-    } = useButtonPopper("bottom-start");
+    } = useButtonPopper("bottom-start", {parentOverlayId});
 
     const onClick = (event: React.MouseEvent) => {
         if (disabled) {

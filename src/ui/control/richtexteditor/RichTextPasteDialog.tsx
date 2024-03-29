@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ModalDialog } from "ui/control/ModalDialog";
 import { Button } from "ui/control/Button";
 import "./RichTextPasteDialog.css";
+import { useModalDialog } from "ui/control/modal-dialog-context";
 
 export type RichTextPasteMode = "none" | "text" | "html";
 
@@ -26,9 +27,11 @@ export default function RichTextPasteDialog({onSubmit}: Props) {
         }
     }
 
+    const {overlayId: parentOverlayId} = useModalDialog();
+
     return (
-        <ModalDialog title={t("paste-with-formatting")} className="rich-text-paste-dialog" onKeyDown={onKeyDown}
-                     onClose={() => onSubmit("none", false)}>
+        <ModalDialog title={t("paste-with-formatting")} className="rich-text-paste-dialog"
+                     parentOverlayId={parentOverlayId} onKeyDown={onKeyDown} onClose={() => onSubmit("none", false)}>
             <div className="modal-body">
                 {t("clipboard-contains-formatting")}
                 <div className="check">

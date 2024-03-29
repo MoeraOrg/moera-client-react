@@ -11,9 +11,9 @@ import { FriendGroupInfo, PrincipalFlag, PrincipalValue } from "api";
 import { ClientState } from "state/state";
 import { getNodeFriendGroups } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
-import { Principal } from "ui/control/Principal";
-import { useButtonPopper } from "ui/hook";
+import { Principal, useModalDialog } from "ui/control";
 import { getPrincipalDisplay, PrincipalDisplay } from "ui/control/principal-display";
+import { useButtonPopper } from "ui/hook";
 import "./PrincipalSelect.css";
 
 interface Props {
@@ -33,9 +33,10 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
     const publicDisabled = useSelector((state: ClientState) =>
         getSetting(state, "principal.public.disabled") as boolean);
 
+    const {overlayId: parentOverlayId} = useModalDialog();
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
-    } = useButtonPopper("bottom-end");
+    } = useButtonPopper("bottom-end", {parentOverlayId});
 
     const {t} = useTranslation();
 

@@ -5,7 +5,8 @@ import { Options, Placement } from '@popperjs/core';
 import { useOverlay } from "ui/overlays/overlays";
 
 type ButtonPopperOptions = Partial<Options> & {
-    hideAlways?: boolean;
+    closeOnSelect?: boolean;
+    parentOverlayId?: string;
 }
 
 export function useButtonPopper(placement: Placement, options: ButtonPopperOptions = {}) {
@@ -27,7 +28,10 @@ export function useButtonPopper(placement: Placement, options: ButtonPopperOptio
     // invoked by the target button, and after menu selection
     const hide = useCallback(() => setTimeout(() => setVisible(false)), []);
 
-    const [zIndex] = useOverlay(popperRef, {visible, onClose: hide, closeOnSelect: options.hideAlways ?? true});
+    const [zIndex, overlayId] = useOverlay(
+        popperRef,
+        {parentId: options.parentOverlayId, visible, onClose: hide, closeOnSelect: options.closeOnSelect ?? true}
+    );
 
     return {
         visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef,
@@ -35,6 +39,6 @@ export function useButtonPopper(placement: Placement, options: ButtonPopperOptio
         popperAttributes: attributes ? attributes.popper : {},
         arrowStyles: styles && styles.arrow ? styles.arrow : {},
         placement: state ? state.placement.split("-")[0] : "",
-        zIndex
+        zIndex, overlayId
     };
 }

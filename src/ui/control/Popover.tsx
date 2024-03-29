@@ -20,12 +20,14 @@ interface Props {
     detached?: boolean;
     strategy?: PositioningStrategy;
     offset?: [number, number?];
+    parentOverlayId?: string;
     onToggle?: (visible: boolean) => void;
     children: React.ReactNode;
 }
 
 export function Popover({
-    className, text, textClassName, icon, title, element, detached, strategy = "fixed", offset, onToggle, children
+    className, text, textClassName, icon, title, element, detached, strategy = "fixed", offset, parentOverlayId,
+    onToggle, children
 }: Props) {
     const [visible, setVisible] = useState<boolean>(false);
 
@@ -60,10 +62,11 @@ export function Popover({
     // invoked from span.onClick
     const hide = useCallback(() => setTimeout(() => setVisible(false)), []);
 
-    const [zIndex] = useOverlay(popperRef, {visible: !detached || visible, onClose: hide});
+    const [zIndex, overlayId]
+        = useOverlay(popperRef, {parentId: parentOverlayId, visible: !detached || visible, onClose: hide});
 
     return (
-        <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {})}}>
+        <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {}), overlayId}}>
             <span ref={setButtonRef} onClick={toggle} title={title} className={cx(textClassName, {"active": visible})}>
                 {element && React.createElement(element)}
                 {icon && <FontAwesomeIcon icon={icon}/>}
