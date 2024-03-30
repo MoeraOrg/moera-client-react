@@ -113,7 +113,7 @@ export function DelayedPopover({
         if (getLocus() === "main" && onPreparePopper) {
             onPreparePopper();
         }
-        const id = setTimeout(onTimeout, 700);
+        const id = setTimeout(onTimeout, 1000);
         return () => clearTimeout(id);
     }, [disabled, getLocus, onPreparePopper, onTimeout, locusUpdates]);
 
