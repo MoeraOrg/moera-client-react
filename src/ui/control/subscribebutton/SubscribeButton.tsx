@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { getHomeOwnerGender } from "state/home/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
-import { DropdownMenu } from "ui/control";
+import { DropdownMenu, useModalDialog, usePopover } from "ui/control";
 import SubscribeButtonMenu from "ui/control/subscribebutton/SubscribeButtonMenu";
 import { tGender } from "i18n";
 import "./SubscribeButton.css";
@@ -76,13 +76,22 @@ export function SubscribeButton({small, nodeName, feedName, onDialogOpened}: Pro
     const caption = blockedCaption ?? friendCaption ?? subscriptionCaption;
     const showIcon = small && caption != null;
 
+    const {overlayId: dialogOverlayId} = useModalDialog();
+    const {overlayId: popoverOverlayId} = usePopover();
+    const parentOverlayId = popoverOverlayId ?? dialogOverlayId;
+
     return (
-        <DropdownMenu className={cx(
-            ["btn", "btn-sm", "subscribe-button"],
-            {"btn-outline-primary": !blocked && !blockedBy, "btn-outline-danger": blocked || blockedBy}
-        )} content={
-            <SubscribeButtonMenu nodeName={nodeName} feedName={feedName}/>
-        } onDialogOpened={onDialogOpened}>
+        <DropdownMenu
+            className={cx(
+                ["btn", "btn-sm", "subscribe-button"],
+                {"btn-outline-primary": !blocked && !blockedBy, "btn-outline-danger": blocked || blockedBy}
+            )}
+            content={
+                <SubscribeButtonMenu nodeName={nodeName} feedName={feedName}/>
+            }
+            parentOverlayId={parentOverlayId}
+            onDialogOpened={onDialogOpened}
+        >
             {showIcon ?
                 <FontAwesomeIcon icon={icon}/>
             :
