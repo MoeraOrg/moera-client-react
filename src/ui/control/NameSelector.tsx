@@ -21,9 +21,10 @@ interface Props {
     defaultQuery?: string;
     onChange?: (query: string | null) => void;
     onSubmit: (success: boolean, result: NameListItem) => void;
+    submitOnEscape?: boolean;
 }
 
-export function NameSelector({defaultQuery = "", onChange, onSubmit}: Props) {
+export function NameSelector({defaultQuery = "", onChange, onSubmit, submitOnEscape = false}: Props) {
     const contactNames = useSelector(getNames);
     const homeName = useSelector(getHomeOwnerName);
     const homeAvatar = useSelector(getHomeOwnerAvatar);
@@ -92,7 +93,11 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit}: Props) {
         }
     }
 
-    const handleClose = () => handleSubmit(false, -1);
+    const handleClose = () => {
+        if (submitOnEscape) {
+            handleSubmit(false, -1);
+        }
+    }
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         switch (event.key) {

@@ -35,7 +35,7 @@ export default function OwnerNavigator() {
 
     return (
         <div id="owner-navigator">
-            <NameSelector onChange={onChange} onSubmit={onSubmit}/>
+            <NameSelector onChange={onChange} onSubmit={onSubmit} submitOnEscape/>
             <Button variant="secondary" size="sm" loading={switching} onClick={onButtonClick}>{t("go")}</Button>
         </div>
     );
