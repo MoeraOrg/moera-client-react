@@ -64,7 +64,8 @@ export function DelayedPopover({
         if (disabled || !window.overlays.isTopmostOverlay(overlayId)) {
             return;
         }
-        setPopup(false);
+        // setTimeout() is needed here to dismiss the popup only after handling the click on elements inside the popup
+        setTimeout(() => setPopup(false));
         if (getTouch() !== "none") {
             setLocus("out");
             setTouch("none");
