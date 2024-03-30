@@ -11,6 +11,7 @@ export { DonateButton } from "ui/control/DonateButton";
 export { DraftSaver } from "ui/control/draft/DraftSaver";
 export { DropdownMenu } from "ui/control/dropdownmenu/DropdownMenu";
 export { DropdownMenuItems } from "ui/control/dropdownmenu/DropdownMenuItems";
+export { useDropdownMenu } from "ui/control/dropdownmenu/dropdown-menu-types";
 export { EmojiButton } from "ui/control/EmojiButton";
 export { EmojiChoice } from "ui/control/EmojiChoice";
 export type { EmojiOnClick, EmojiProps } from "ui/control/EmojiChoice";
