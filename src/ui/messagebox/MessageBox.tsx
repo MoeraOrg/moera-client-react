@@ -10,6 +10,7 @@ import { htmlEntities } from "util/html";
 export default function MessageBox() {
     const message = useSelector((state: ClientState) => state.messageBox.message);
     const onClose = useSelector((state: ClientState) => state.messageBox.onClose);
+    const parentOverlayId = useSelector((state: ClientState) => state.messageBox.parentOverlayId);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -29,7 +30,7 @@ export default function MessageBox() {
             .replace("&lt;/b&gt;", "</b>");
 
     return (
-        <ModalDialog onClose={onCloseClick}>
+        <ModalDialog parentOverlayId={parentOverlayId} onClose={onCloseClick}>
             <div className="modal-body" dangerouslySetInnerHTML={{__html: escapedMessage}}/>
             <div className="modal-footer">
                 <Button variant="primary" onClick={onCloseClick} autoFocus>{t("ok")}</Button>
