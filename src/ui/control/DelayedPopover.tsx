@@ -45,6 +45,7 @@ export function DelayedPopover({
     const locusRef = useRef<ClickLocus>("out");
     const touchRef = useRef<TouchLocus>("none");
     const [locusUpdates, setLocusUpdates] = useState<number>(0);
+    const [touchUpdates, setTouchUpdates] = useState<number>(0);
 
     const getLocus = useCallback(() => locusRef.current, []);
     const setLocus = useCallback((locus: ClickLocus) => {
@@ -52,7 +53,10 @@ export function DelayedPopover({
         setLocusUpdates(u => u + 1);
     }, []);
     const getTouch = useCallback(() => touchRef.current, []);
-    const setTouch = useCallback((touch: TouchLocus) => touchRef.current = touch, []);
+    const setTouch = useCallback((touch: TouchLocus) => {
+        touchRef.current = touch;
+        setTouchUpdates(u => u + 1);
+    }, []);
 
     const [scrollY, setScrollY] = useState<number | null>(null);
     const [popup, setPopup] = useState<boolean>(false);
@@ -122,7 +126,7 @@ export function DelayedPopover({
             setScrollY(window.scrollY);
             return () => setScrollY(null);
         }
-    }, [getTouch]);
+    }, [getTouch, touchUpdates]);
 
     const documentClickCapture = useCallback((event: MouseEvent) => {
         if (!disabled) {
@@ -150,7 +154,7 @@ export function DelayedPopover({
             document.addEventListener("click", documentClickCapture, {capture: true, passive: false});
             return () => document.removeEventListener("click", documentClickCapture, {capture: true});
         }
-    }, [documentClickCapture, getTouch]);
+    }, [documentClickCapture, getTouch, touchUpdates]);
 
     const contextMenu = useCallback((event: MouseEvent) => {
         if (getTouch() === "touch") {
@@ -163,7 +167,7 @@ export function DelayedPopover({
             document.addEventListener("contextmenu", contextMenu);
             return () => document.removeEventListener("contextmenu", contextMenu);
         }
-    }, [contextMenu, getTouch]);
+    }, [contextMenu, getTouch, touchUpdates]);
 
     const mainEnter = useCallback(() => setLocus("main"), [setLocus]);
 
