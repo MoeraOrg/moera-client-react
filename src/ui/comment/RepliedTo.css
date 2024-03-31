@@ -6,6 +6,7 @@
 }
 
 .replied-to A {
+    color: var(--bs-gray-600);
     text-decoration: none;
 }
 
