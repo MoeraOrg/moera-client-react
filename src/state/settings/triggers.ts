@@ -18,7 +18,6 @@ import {
     isSettingsTokensToBeLoaded
 } from "state/settings/selectors";
 import {
-    settingsChangePasswordDialogClose,
     settingsClientConflict,
     settingsClientValuesLoad,
     settingsClientValuesUnset,
@@ -34,12 +33,11 @@ import {
     settingsPluginsLoad,
     settingsPluginsUnset,
     settingsRemindSetSheriffGooglePlay,
-    settingsTokensDialogClose,
     settingsTokensLoad,
     settingsTokensUnset
 } from "state/settings/actions";
 import { isConnectedToHome } from "state/home/selectors";
-import { dialogClosed, dialogOpened, newLocation, updateLocation } from "state/navigation/actions";
+import { newLocation, updateLocation } from "state/navigation/actions";
 import { flashBox } from "state/flashbox/actions";
 
 export default [
@@ -59,8 +57,6 @@ export default [
     ),
     trigger("SETTINGS_GO_TO_TAB", true, newLocation),
     trigger("SETTINGS_GO_TO_SHEET", true, updateLocation),
-    trigger("SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN", true, dialogOpened(settingsChangePasswordDialogClose())),
-    trigger("SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE", true, dialogClosed),
     trigger(
         ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_SHEET"],
         conj(isConnectedToHome, isAtSettingsPage, isSettingsAtSecuritySheet, isSettingsTokensToBeLoaded),
@@ -84,10 +80,6 @@ export default [
         conj(isAtSettingsPage, isAtSettingsNodeTab, isSettingsPluginsLoaded),
         settingsPluginsConflict
     ),
-    trigger("SETTINGS_TOKENS_DIALOG_OPEN", true, dialogOpened(settingsTokensDialogClose())),
-    trigger("SETTINGS_TOKENS_DIALOG_CLOSE", true, dialogClosed),
-    trigger("SETTINGS_TOKENS_CREATED", true, dialogClosed),
-    trigger("SETTINGS_TOKENS_UPDATED", true, dialogClosed),
     trigger("POST_INIT_DELAYED", isRemindToSetSheriffGooglePlay, settingsRemindSetSheriffGooglePlay),
     trigger(
         ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_SHEET"],

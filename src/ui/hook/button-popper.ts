@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useCallback, useState } from 'react';
 import { usePopper } from 'react-popper';
 import { Options, Placement } from '@popperjs/core';
 
-import { ClientState } from "state/state";
+import { useOverlay } from "ui/overlays/overlays";
 
 type ButtonPopperOptions = Partial<Options> & {
-    hideAlways?: boolean;
+    closeOnSelect?: boolean;
+    parentOverlayId?: string;
 }
 
 export function useButtonPopper(placement: Placement, options: ButtonPopperOptions = {}) {
@@ -24,43 +24,21 @@ export function useButtonPopper(placement: Placement, options: ButtonPopperOptio
         event.preventDefault();
     };
 
-    const boxShown = useSelector<ClientState>(state => state.confirmBox.show || state.messageBox.show);
-    const hideAlways = options.hideAlways ?? true;
-    const onHide = useCallback((event: MouseEvent) => {
-        if (boxShown) {
-            return;
-        }
-        if (!hideAlways && popperRef) {
-            const r = popperRef.getBoundingClientRect();
-            if (r.left <= event.clientX && r.right >= event.clientX
-                && r.top <= event.clientY && r.bottom >= event.clientY) {
-                return;
-            }
-        }
-        setVisible(false);
-        event.preventDefault();
-    }, [setVisible, hideAlways, popperRef, boxShown]) as EventListener;
+    // setTimeout() is needed here to make hide(), invoked from overlay.onClosed, to be called after onToggle,
+    // invoked by the target button, and after menu selection
+    const hide = useCallback(() => setTimeout(() => setVisible(false)), []);
 
-    useEffect(() => {
-        if (visible) {
-            document.getElementById("app-root")!.addEventListener("click", onHide);
-            document.getElementById("modal-root")!.addEventListener("click", onHide);
-            document.getElementsByClassName("ReactModalPortal").item(0)?.addEventListener("click", onHide); // lightbox
-            return () => {
-                document.getElementById("app-root")!.removeEventListener("click", onHide);
-                document.getElementById("modal-root")!.removeEventListener("click", onHide);
-                document.getElementsByClassName("ReactModalPortal").item(0)?.removeEventListener("click", onHide);
-            }
-        }
-    }, [visible, onHide])
-
-    const hide = () => setVisible(false);
+    const [zIndex, overlayId] = useOverlay(
+        popperRef,
+        {parentId: options.parentOverlayId, visible, onClose: hide, closeOnSelect: options.closeOnSelect ?? true}
+    );
 
     return {
         visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef,
         popperStyles: styles ? styles.popper : {},
         popperAttributes: attributes ? attributes.popper : {},
         arrowStyles: styles && styles.arrow ? styles.arrow : {},
-        placement: state ? state.placement.split("-")[0] : ""
+        placement: state ? state.placement.split("-")[0] : "",
+        zIndex, overlayId
     };
 }

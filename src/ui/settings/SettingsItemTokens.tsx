@@ -38,8 +38,13 @@ export default function SettingsItemTokens() {
     }
 
     const onDelete = (token: TokenInfo) => (e: React.MouseEvent) => {
-        dispatch(confirmBox(t("want-delete-token", {name: getName(token)}), t("delete"), t("cancel"),
-            settingsTokensDelete(token.id), null, "danger"));
+        dispatch(confirmBox({
+            message: t("want-delete-token", {name: getName(token)}),
+            yes: t("delete"),
+            no: t("cancel"),
+            onYes: settingsTokensDelete(token.id),
+            variant: "danger"
+        }));
         e.preventDefault();
     }
 

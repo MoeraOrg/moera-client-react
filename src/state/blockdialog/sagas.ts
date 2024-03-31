@@ -114,10 +114,13 @@ function* blockedUserUnfriendSaga(action: WithContext<BlockedUserUnfriendAction>
             return actions;
         }
 
-        yield* put(confirmBox(
-            i18n.t("still-friend-blocked-user", {name: formattedName}), null, null, onYes, onNo, "primary", null,
-            null, true
-        ).causedBy(action));
+        yield* put(confirmBox({
+            message: i18n.t("still-friend-blocked-user", {name: formattedName}),
+            onYes,
+            onNo,
+            variant: "primary",
+            dontShowAgainBox: true
+        }).causedBy(action));
     } else if (unfriend === "yes") {
         yield* put(friendshipUpdate(nodeName, null).causedBy(action));
     }
@@ -158,10 +161,13 @@ function* blockedUserUnsubscribeSaga(action: WithContext<BlockedUserUnsubscribeA
             }
         }
 
-        yield* put(confirmBox(
-            i18n.t("still-subscribed-blocked-user", {name: formattedName}), null, null, onYes, onNo, "primary", null,
-            null, true
-        ).causedBy(action));
+        yield* put(confirmBox({
+            message: i18n.t("still-subscribed-blocked-user", {name: formattedName}),
+            onYes,
+            onNo,
+            variant: "primary",
+            dontShowAgainBox: true
+        }).causedBy(action));
     } else if (unsubscribe === "yes") {
         yield* put(feedUnsubscribe(nodeName, "timeline", subscriptionId).causedBy(action));
     }

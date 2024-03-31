@@ -6,7 +6,6 @@ import { executor } from "state/executor";
 import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import {
-    GoHomeAction,
     GoHomeLocationAction,
     GoToLocationAction,
     initFromLocation,
@@ -23,7 +22,6 @@ import { nodeReady } from "state/node/actions";
 import { isAtNode } from "state/node/selectors";
 import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
-import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
 
 export default [
@@ -32,9 +30,7 @@ export default [
     executor("NEW_LOCATION", null, newLocationSaga),
     executor("UPDATE_LOCATION", null, updateLocationSaga),
     executor("GO_TO_LOCATION", payload => `${payload.path}:${payload.query}:${payload.hash}`, goToLocationSaga),
-    executor("GO_HOME", "", goHomeSaga),
-    executor("GO_HOME_LOCATION", "", goHomeLocationSaga, homeIntroduced),
-    executor("BODY_SCROLL_UPDATE", "", bodyScrollUpdateSaga)
+    executor("GO_HOME_LOCATION", "", goHomeLocationSaga, homeIntroduced)
 ];
 
 function* transformation(caller: ClientAction,
@@ -102,21 +98,6 @@ function* changeLocation(action: NewLocationAction | UpdateLocationAction | null
     yield* put(locationSet(info.toUrl(), info.title, action == null || action.type === "NEW_LOCATION").causedBy(action));
 }
 
-function* goHomeSaga(action: GoHomeAction) {
-    const {homeOwnerName, homeRootPage} = yield* select((state: ClientState) => ({
-        homeOwnerName: getHomeOwnerName(state),
-        homeRootPage: getHomeRootPage(state)
-    }));
-    if (homeRootPage == null) {
-        return;
-    }
-    const {scheme, host, port, path} = URI.parse(homeRootPage);
-    if (scheme != null && host != null) {
-        const rootLocation = rootUrl(scheme, host, port);
-        yield* put(initFromLocation(homeOwnerName, rootLocation, path ?? null, null, null).causedBy(action));
-    }
-}
-
 function* goHomeLocationSaga(action: GoHomeLocationAction) {
     const {path, query, hash} = action.payload;
     const {atNode, homeOwnerName, homeRootPage} = yield* select((state: ClientState) => ({
@@ -137,26 +118,5 @@ function* goHomeLocationSaga(action: GoHomeLocationAction) {
         yield* put(initFromLocation(homeOwnerName, rootLocation, path, query, hash).causedBy(action));
     } else {
         yield* put(nodeReady());
-    }
-}
-
-function* bodyScrollUpdateSaga() {
-    const {messageBoxShow, confirmBoxShow, lightBoxShow, closeDialogAction} = yield* select(state => ({
-        messageBoxShow: state.messageBox.show,
-        confirmBoxShow: state.confirmBox.show,
-        lightBoxShow: state.lightBox.show,
-        closeDialogAction: state.navigation.closeDialogAction,
-    }));
-
-    const enabled = !messageBoxShow
-        && !confirmBoxShow
-        && closeDialogAction == null
-        && !lightBoxShow
-        && !window.closeLightDialog;
-
-    if (enabled) {
-        Browser.enableBodyScroll();
-    } else {
-        Browser.disableBodyScroll();
     }
 }

@@ -200,9 +200,10 @@ function RichTextArea(
                 delayedUpdateUrls();
             }
         }
-        if (panel.current != null && anyInput.current && value.length >= start
-            && MENTION_START.test(value.substring(0, start))) {
-
+        if (
+            panel.current != null && anyInput.current && value.length >= start
+            && MENTION_START.test(value.substring(0, start))
+        ) {
             const button = panel.current.querySelector("button.mention") as HTMLButtonElement;
             if (!button) {
                 return false;
@@ -215,8 +216,10 @@ function RichTextArea(
     }
 
     const onControlKey = (event: React.KeyboardEvent) => {
-        if (!panel.current || !event.ctrlKey || event.shiftKey || event.altKey || event.metaKey || !event.code
-            || !event.code.startsWith("Key")) {
+        if (
+            !panel.current || !event.ctrlKey || event.shiftKey || event.altKey || event.metaKey || !event.code
+            || !event.code.startsWith("Key")
+        ) {
             return false;
         }
         const button = panel.current.querySelector(`button[data-letter=${event.code.substring(3)}]`) as HTMLButtonElement;

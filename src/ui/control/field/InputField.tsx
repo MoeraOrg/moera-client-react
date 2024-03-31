@@ -23,13 +23,12 @@ interface Props {
     noFeedback?: boolean;
     initialValue?: string | null;
     defaultValue?: string | null;
-    onEscape?: () => void;
 }
 
 function InputFieldImpl(
     {
         name, title, placeholder, disabled, maxLength, horizontal = false, groupClassName, labelClassName, col,
-        autoFocus, anyValue, className, autoComplete, noFeedback = false, initialValue, defaultValue, onEscape
+        autoFocus, anyValue, className, autoComplete, noFeedback = false, initialValue, defaultValue
     }: Props,
     ref: ForwardedRef<HTMLInputElement>
 ) {
@@ -40,12 +39,6 @@ function InputFieldImpl(
             inputRef.current.focus();
         }
     }, [autoFocus]);
-
-    const onKeyDown = (event: React.KeyboardEvent) => {
-        if (onEscape && (event.key === "Escape" || event.key === "Esc")) {
-            onEscape();
-        }
-    };
 
     const [inputProps, {touched, error}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<string>(name, initialValue, defaultValue);
@@ -78,7 +71,6 @@ function InputFieldImpl(
                     disabled={disabled}
                     maxLength={maxLength}
                     ref={composeRefs(ref, inputRef)}
-                    onKeyDown={onKeyDown}
                 />
                 {!noFeedback && touched && <FieldError error={error}/>}
             </Wrapper>

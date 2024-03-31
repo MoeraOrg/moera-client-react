@@ -10,7 +10,7 @@ import { Button, Checkbox, ModalDialog } from "ui/control";
 import { htmlEntities } from "util/html";
 
 export default function ConfirmBox() {
-    const {message, yes, no, cancel, onYes, onNo, onCancel, variant, dontShowAgainBox} =
+    const {message, yes, no, cancel, onYes, onNo, onCancel, variant, dontShowAgainBox, parentOverlayId} =
         useSelector((state: ClientState) => state.confirmBox);
     const dispatch = useDispatch();
     const {t} = useTranslation();
@@ -52,7 +52,7 @@ export default function ConfirmBox() {
         .replaceAll("&lt;br&gt;", "<br>"); // <br> tag is allowed
 
     return (
-        <ModalDialog risen onClose={onCancel != null ? onClickCancel : onClickNo}>
+        <ModalDialog parentOverlayId={parentOverlayId} onClose={onCancel != null ? onClickCancel : onClickNo}>
             <div className="modal-body">
                 <div dangerouslySetInnerHTML={{__html: escapedMessage}}/>
                 {dontShowAgainBox &&

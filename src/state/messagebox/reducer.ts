@@ -1,10 +1,11 @@
 import { MessageBoxState } from "state/messagebox/state";
 import { ClientAction } from "state/action";
 
-const initialState = {
+const initialState: MessageBoxState = {
     show: false,
     message: null,
-    onClose: null
+    onClose: null,
+    parentOverlayId: undefined
 };
 
 export default (state: MessageBoxState = initialState, action: ClientAction): MessageBoxState => {

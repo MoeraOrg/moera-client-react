@@ -1,4 +1,5 @@
-import { createContext } from "react";
+import { createContext, useContext } from 'react';
+
 import { RelNodeName } from "util/rel-node-name";
 
 export interface TextMenuItem {
@@ -24,9 +25,12 @@ export type MenuItem = TextMenuItem | DividerMenuItem | CaptionMenuItem;
 interface DropdownMenuInterface {
     hide: () => void;
     onDialogOpened?: () => void;
+    overlayId: string | undefined;
 }
 
 export const DropdownMenuContext = createContext<DropdownMenuInterface>({
-    hide: () => {}
+    hide: () => {},
+    overlayId: undefined
 });
 
+export const useDropdownMenu = (): DropdownMenuInterface => useContext(DropdownMenuContext);

@@ -2,8 +2,9 @@ import { ImageEditDialogState } from "state/imageeditdialog/state";
 import { ClientAction } from "state/action";
 import { REL_CURRENT } from "util/rel-node-name";
 
-const initialState = {
+const initialState: ImageEditDialogState = {
     show: false,
+    parentOverlayId: undefined,
     nodeName: REL_CURRENT,
     media: null,
     loading: false,
@@ -16,6 +17,7 @@ export default (state: ImageEditDialogState = initialState, action: ClientAction
             return {
                 ...state,
                 show: true,
+                parentOverlayId: action.payload.parentOverlayId,
                 nodeName: action.payload.nodeName,
                 media: action.payload.media
             }

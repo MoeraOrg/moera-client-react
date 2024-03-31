@@ -2,8 +2,8 @@ import * as Base64js from 'base64-js';
 
 import { isSpaces } from "util/misc";
 
-export function randomId(): string {
-    let buf = new Uint8Array(16);
+export function randomId(len: number = 16): string {
+    let buf = new Uint8Array(len);
     window.crypto.getRandomValues(buf);
     return Base64js.fromByteArray(buf);
 }

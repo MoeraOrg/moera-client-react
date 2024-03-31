@@ -318,11 +318,14 @@ function* settingsPluginsDeleteSaga(action: WithContext<SettingsPluginsDeleteAct
 
 function* settingsRemindSetSheriffGooglePlaySaga(action: SettingsRemindSetSheriffGooglePlayAction) {
     const count = yield* select(state => getSetting(state, "sheriff.google-play.reminder.count") as number);
-    yield* put(confirmBox(
-        i18n.t("do-want-allow-android-google-play"), null, null, settingsRemindSetSheriffGooglePlayChoice(true),
-        settingsRemindSetSheriffGooglePlayChoice(false), "primary",
-        count < 2 ? i18n.t("remind-later") : i18n.t("stop-asking"), settingsRemindSetSheriffGooglePlayChoice(null)
-    ).causedBy(action));
+    yield* put(confirmBox({
+        message: i18n.t("do-want-allow-android-google-play"),
+        onYes: settingsRemindSetSheriffGooglePlayChoice(true),
+        onNo: settingsRemindSetSheriffGooglePlayChoice(false),
+        variant: "primary",
+        cancel: count < 2 ? i18n.t("remind-later") : i18n.t("stop-asking"),
+        onCancel: settingsRemindSetSheriffGooglePlayChoice(null)
+    }).causedBy(action));
 }
 
 function* settingsRemindSetSheriffGooglePlayChoiceSaga(action: SettingsRemindSetSheriffGooglePlayChoiceAction) {

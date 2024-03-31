@@ -6,7 +6,7 @@ import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { useButtonPopper } from "ui/hook";
-import { Button } from "ui/control";
+import { Button, useModalDialog } from "ui/control";
 import "./EntryLinkSelector.css";
 
 interface Props {
@@ -16,9 +16,10 @@ interface Props {
 }
 
 export default function EntryLinkSelector({urls, onSelect, disabled}: Props) {
+    const {overlayId: parentOverlayId} = useModalDialog();
     const {
-        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
-    } = useButtonPopper("bottom-start");
+        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
+    } = useButtonPopper("bottom-start", {parentOverlayId});
     const {t} = useTranslation();
 
     if (urls.length === 0) {
@@ -42,7 +43,7 @@ export default function EntryLinkSelector({urls, onSelect, disabled}: Props) {
                     <span className="badge bg-info text-light">{uniqueUrls.length}</span>
                 </Button>
                 {visible &&
-                    <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
+                    <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                          className="fade dropdown-menu popover shadow-sm show">
                         {uniqueUrls.map(url =>
                             <div key={url} className="item" onClick={onClick(url)}>

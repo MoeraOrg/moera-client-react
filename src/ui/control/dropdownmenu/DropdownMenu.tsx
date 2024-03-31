@@ -14,14 +14,15 @@ interface Props {
     items?: MenuItem[];
     className?: string | null;
     disabled?: boolean;
+    parentOverlayId?: string;
     onDialogOpened?: () => void;
     children?: ReactNode;
 }
 
-export function DropdownMenu({content, items, className, disabled, onDialogOpened, children}: Props) {
+export function DropdownMenu({content, items, className, disabled, parentOverlayId, onDialogOpened, children}: Props) {
     const {
-        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
-    } = useButtonPopper("bottom-end");
+        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex, overlayId
+    } = useButtonPopper("bottom-end", {parentOverlayId});
 
     const {t} = useTranslation();
 
@@ -31,7 +32,7 @@ export function DropdownMenu({content, items, className, disabled, onDialogOpene
     }
 
     return (
-        <DropdownMenuContext.Provider value={{hide, onDialogOpened}}>
+        <DropdownMenuContext.Provider value={{hide, onDialogOpened, overlayId}}>
             <button className={cx("menu", className)} disabled={disabled} ref={setButtonRef} aria-label={t("menu")}
                     onClick={onToggle}>
                 {children ??
@@ -39,7 +40,7 @@ export function DropdownMenu({content, items, className, disabled, onDialogOpene
                 }
             </button>
             {visible &&
-                <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
+                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                      className="fade dropdown-menu shadow-sm show">
                     {content}
                     {items && <DropdownMenuItems items={items}/>}

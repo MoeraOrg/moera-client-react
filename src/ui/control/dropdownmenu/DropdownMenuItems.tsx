@@ -1,12 +1,12 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Jump from "ui/navigation/Jump";
 import {
     CaptionMenuItem,
     DividerMenuItem,
-    DropdownMenuContext,
-    MenuItem
+    MenuItem,
+    useDropdownMenu
 } from "ui/control/dropdownmenu/dropdown-menu-types";
 import { RelNodeName } from "util/rel-node-name";
 
@@ -67,7 +67,7 @@ interface Props {
 
 export function DropdownMenuItems({items}: Props) {
     const {t} = useTranslation();
-    const {hide, onDialogOpened} = useContext(DropdownMenuContext);
+    const {hide, onDialogOpened} = useDropdownMenu();
 
     const onClick = (item: RenderedItem) => (_: string, performJump: () => void) => {
         hide();

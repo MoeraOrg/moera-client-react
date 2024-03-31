@@ -99,8 +99,13 @@ function PostingMenuItems({posting, story, detailed}: Props) {
     }
 
     const onDelete = () => {
-        dispatch(confirmBox(t("delete-post", {heading: posting.heading}), t("delete"), t("cancel"),
-            postingDelete(posting.id, REL_CURRENT), null, "danger"));
+        dispatch(confirmBox({
+            message: t("delete-post", {heading: posting.heading}),
+            yes: t("delete"),
+            no: t("cancel"),
+            onYes: postingDelete(posting.id, REL_CURRENT),
+            variant: "danger"
+        }));
     };
 
     const onPin = () => dispatch(storyPinningUpdate(story.id, !story.pinned));
@@ -139,8 +144,13 @@ function PostingMenuItems({posting, story, detailed}: Props) {
         }));
 
     const onUnhideInGooglePlay = () => {
-        dispatch(confirmBox(t("unhide-post-google-play", {heading: posting.heading}), t("unhide"), t("cancel"),
-            sheriffOrderDelete({nodeName: ownerName, feedName: "timeline", postingId}), null, "success"));
+        dispatch(confirmBox({
+            message: t("unhide-post-google-play", {heading: posting.heading}),
+            yes: t("unhide"),
+            no: t("cancel"),
+            onYes: sheriffOrderDelete({nodeName: ownerName, feedName: "timeline", postingId}),
+            variant: "success"
+        }));
     };
 
     const postingHref = `/post/${posting.id}`;

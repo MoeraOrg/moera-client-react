@@ -11,9 +11,9 @@ import { FriendGroupInfo, PrincipalFlag, PrincipalValue } from "api";
 import { ClientState } from "state/state";
 import { getNodeFriendGroups } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
-import { Principal } from "ui/control/Principal";
-import { useButtonPopper } from "ui/hook";
+import { Principal, useModalDialog } from "ui/control";
 import { getPrincipalDisplay, PrincipalDisplay } from "ui/control/principal-display";
+import { useButtonPopper } from "ui/hook";
 import "./PrincipalSelect.css";
 
 interface Props {
@@ -33,9 +33,10 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
     const publicDisabled = useSelector((state: ClientState) =>
         getSetting(state, "principal.public.disabled") as boolean);
 
+    const {overlayId: parentOverlayId} = useModalDialog();
     const {
-        visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
-    } = useButtonPopper("bottom-end");
+        visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
+    } = useButtonPopper("bottom-end", {parentOverlayId});
 
     const {t} = useTranslation();
 
@@ -50,7 +51,7 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
                 <FontAwesomeIcon icon={faChevronDown} className="chevron"/>
             </button>
             {visible &&
-                <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
+                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                      className="fade dropdown-menu shadow-sm show">
                     {caption && <div className="caption">{caption}</div>}
                     {principalValues.map(({value: v, icon, title}) =>

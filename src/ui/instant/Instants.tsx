@@ -1,11 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
-import { bodyScrollUpdate } from "state/navigation/actions";
 import { usePopover } from "ui/control";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
@@ -27,16 +26,6 @@ export default function Instants({instantBorder}: Props) {
     const pastIntersecting = useRef<boolean>(true);
 
     const {hide} = usePopover();
-
-    useEffect(() => {
-        window.closeLightDialog = hide;
-        dispatch(bodyScrollUpdate());
-
-        return () => {
-            window.closeLightDialog = null;
-            dispatch(bodyScrollUpdate());
-        }
-    }, [hide, dispatch]);
 
     const loadPast = () => {
         if (loadingPast || after <= Number.MIN_SAFE_INTEGER) {

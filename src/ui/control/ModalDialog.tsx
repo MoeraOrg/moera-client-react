@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 
-import { CloseButton, Loading } from "ui/control";
+import { CloseButton, Loading, ModalDialogContext } from "ui/control";
+import { useOverlay } from "ui/overlays/overlays";
 import "./ModalDialog.css";
 
 interface Props {
@@ -11,71 +12,35 @@ interface Props {
     className?: string;
     style?: Partial<Record<string, string>>;
     centered?: boolean;
-    risen?: boolean;
     shadowClick?: boolean;
     loading?: boolean;
+    parentOverlayId?: string;
     onClose?: () => void;
     onKeyDown?: (event: KeyboardEvent) => void;
     children: any;
 }
 
 export function ModalDialog({
-    title, size, className, style, centered = true, risen, shadowClick = true, loading, children, onClose, onKeyDown
+    title, size, className, style, centered = true, shadowClick = true, loading, parentOverlayId, onClose, onKeyDown,
+    children
 }: Props) {
-    const mouseDownX = useRef<number>();
-    const mouseDownY = useRef<number>();
-
-    const onModalKeyDown = useCallback((event: KeyboardEvent) => {
-        if ((event.key === "Escape" || event.key === "Esc") && onClose) {
-            onClose();
-        }
-        if (onKeyDown) {
-            onKeyDown(event);
-        }
-    }, [onClose, onKeyDown]);
-
     const modalDialog = useRef<HTMLDivElement>(null);
-
-    const onBackdropMouseDown = (e: React.MouseEvent) => {
-        if (modalDialog.current != null) {
-            const r = modalDialog.current.getBoundingClientRect();
-            if (
-                (r.left <= e.clientX && r.right >= e.clientX && r.top <= e.clientY && r.bottom >= e.clientY)
-                || (e.clientX === 0 && e.clientY === 0) // Ugly hack, but need to workaround wrong mouse events in FF
-            ) {
-                mouseDownX.current = undefined;
-                mouseDownY.current = undefined;
-                return;
-            }
-        }
-        mouseDownX.current = e.clientX;
-        mouseDownY.current = e.clientY;
-    }
-
-    const onBackdropMouseUp = (e: React.MouseEvent) => {
-        if (
-            mouseDownX.current != null && Math.abs(mouseDownX.current - e.clientX) <= 10
-            && mouseDownY.current != null && Math.abs(mouseDownY.current - e.clientY) <= 10
-            && shadowClick && onClose != null
-        ) {
-            onClose();
-        }
-        mouseDownX.current = undefined;
-        mouseDownY.current = undefined;
-    }
+    const [zIndex, overlayId]
+        = useOverlay(modalDialog, {parentId: parentOverlayId, closeOnClick: shadowClick, onClose});
 
     useEffect(() => {
-        document.body.addEventListener("keydown", onModalKeyDown);
-        return () => {
-            document.body.removeEventListener("keydown", onModalKeyDown);
+        if (onKeyDown != null) {
+            document.body.addEventListener("keydown", onKeyDown);
+            return () => {
+                document.body.removeEventListener("keydown", onKeyDown);
+            }
         }
-    }, [onModalKeyDown]);
+    }, [onKeyDown]);
 
     return ReactDOM.createPortal(
-        <>
-            <div className={cx("modal-backdrop", "show", {"risen": risen})}/>
-            <div className={cx("modal", "show", {"risen": risen})}
-                 onMouseDown={onBackdropMouseDown} onMouseUp={onBackdropMouseUp}>
+        <ModalDialogContext.Provider value={{overlayId}}>
+            <div className={cx("modal-backdrop", "show")} style={{zIndex: zIndex?.shadow}}/>
+            <div className={cx("modal", "show")} style={{zIndex: zIndex?.widget}}>
                 <div className={cx(
                     "modal-dialog",
                     className,
@@ -100,7 +65,7 @@ export function ModalDialog({
                     </div>
                 </div>
             </div>
-        </>,
+        </ModalDialogContext.Provider>,
         document.getElementById("modal-root")!
     );
 }

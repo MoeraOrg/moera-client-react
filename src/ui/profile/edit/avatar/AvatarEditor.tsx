@@ -35,8 +35,8 @@ export default function AvatarEditor({name}: Props) {
 
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
-        placement
-    } = useButtonPopper("bottom-start", {hideAlways: false});
+        placement, zIndex
+    } = useButtonPopper("bottom-start", {closeOnSelect: false});
 
     const onSelect = (avatar: AvatarInfo) => setValue(avatar);
 
@@ -74,7 +74,7 @@ export default function AvatarEditor({name}: Props) {
                     <Avatar avatar={value} ownerName={nodeName} size={200}/>
                 </div>
                 {visible &&
-                    <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
+                    <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                          className={`fade popover bs-popover-${placement} shadow-sm show`}>
                         <AvatarSelector nodeName={nodeName} loading={avatarsLoading} loaded={avatarsLoaded}
                                         avatars={avatars} active={value} onSelect={onSelect} onNew={onNew}

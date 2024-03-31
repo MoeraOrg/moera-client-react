@@ -1,8 +1,7 @@
 import { conj, inv, trigger } from "state/trigger";
-import { bottomMenuShow, dialogClosed, dialogOpened, goToTimeline, updateLocation } from "state/navigation/actions";
+import { bottomMenuShow, goToTimeline, updateLocation } from "state/navigation/actions";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import {
-    closeCommentDialog,
     commentDialogCommentLoad,
     commentDialogCommentReset,
     commentDialogConflict,
@@ -187,9 +186,6 @@ export default [
         signal => commentReactionLoad(signal.payload.id, signal.payload.postingId)
     ),
     trigger("OPEN_COMMENT_DIALOG", true, commentDialogCommentLoad),
-    trigger("OPEN_COMMENT_DIALOG", true, dialogOpened(closeCommentDialog())),
-    trigger("CLOSE_COMMENT_DIALOG", true, dialogClosed),
-    trigger("COMMENT_POSTED", true, dialogClosed),
     trigger(
         "EVENT_RECEIVER_COMMENT_UPDATED",
         (state, signal: EventAction<CommentUpdatedEvent>) =>

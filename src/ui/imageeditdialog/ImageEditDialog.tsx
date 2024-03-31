@@ -35,6 +35,7 @@ type Props = OuterProps & FormikProps<Values>;
 function ImageEditDialogInner(props: Props) {
     const {posting, smileysEnabled, resetForm} = props;
 
+    const parentOverlayId = useSelector((state: ClientState) => state.imageEditDialog.parentOverlayId);
     const media = useSelector((state: ClientState) => state.imageEditDialog.media);
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, state.imageEditDialog.nodeName));
     const carte = useSelector(getCurrentViewMediaCarte);
@@ -60,7 +61,7 @@ function ImageEditDialogInner(props: Props) {
     const [imageWidth, imageHeight] = mediaImageSize(800, null, null, media);
 
     return (
-        <ModalDialog title={t("edit-image")} loading={loading} onClose={onClose}>
+        <ModalDialog title={t("edit-image")} parentOverlayId={parentOverlayId} loading={loading} onClose={onClose}>
             <Form>
                 <div className="modal-body image-edit-dialog">
                     <img className="preview" alt="" src={src} width={imageWidth} height={imageHeight}/>

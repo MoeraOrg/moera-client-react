@@ -24,9 +24,19 @@ export default function ComposeResetButton() {
 
     const onClick = () => {
         if (postingId == null) {
-            dispatch(confirmBox(t("want-delete-draft"), t("yes"), t("no"), composeDraftListItemDelete(draftId, true)));
+            dispatch(confirmBox({
+                message: t("want-delete-draft"),
+                yes: t("yes"),
+                no: t("no"),
+                onYes: composeDraftListItemDelete(draftId, true)
+            }));
         } else {
-            dispatch(confirmBox(t("want-forget-changes"), t("yes"), t("no"), composeUpdateDraftDelete(true)));
+            dispatch(confirmBox({
+                message: t("want-forget-changes"),
+                yes: t("yes"),
+                no: t("no"),
+                onYes: composeUpdateDraftDelete(true)
+            }));
         }
     };
 

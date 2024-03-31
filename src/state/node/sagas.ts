@@ -62,12 +62,12 @@ function* ownerVerifySaga(action: OwnerVerifyAction) {
             if (scheme != null && host != null) {
                 const rootLocation = rootUrl(scheme, host, port);
                 const {path = null, query = null, fragment = null} = URI.parse(href);
-                yield* put(confirmBox(
-                    i18n.t("blog-moved", {name: NodeName.shorten(ownerName), location: rootLocation}),
-                    i18n.t("open"),
-                    i18n.t("cancel"),
-                    initFromLocation(ownerName, rootLocation, path, query, fragment)
-                ).causedBy(action));
+                yield* put(confirmBox({
+                    message: i18n.t("blog-moved", {name: NodeName.shorten(ownerName), location: rootLocation}),
+                    yes: i18n.t("open"),
+                    no: i18n.t("cancel"),
+                    onYes: initFromLocation(ownerName, rootLocation, path, query, fragment)
+                }).causedBy(action));
             }
         }
     } catch (e) {

@@ -8,7 +8,7 @@ import "./VerticalMenuToggler.css";
 
 export default function VerticalMenuToggler() {
     const {
-        visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
+        visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
     } = useButtonPopper("bottom", {strategy: "fixed"});
 
     const {t} = useTranslation();
@@ -21,7 +21,8 @@ export default function VerticalMenuToggler() {
             </button>
             {visible &&
                 ReactDOM.createPortal(
-                    <div ref={setPopperRef} style={popperStyles} {...popperAttributes} className="vertical-menu-popper">
+                    <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
+                         className="vertical-menu-popper">
                         <VerticalMenu/>
                     </div>,
                     document.querySelector("#modal-root")!

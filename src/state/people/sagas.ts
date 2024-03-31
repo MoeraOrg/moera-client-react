@@ -323,9 +323,9 @@ function* subscribeToFriend(action: WithContext<FriendshipUpdateAction>, nodeNam
             }
         }
 
-        yield* put(confirmBox(
-            i18n.t("not-subscribed-friend"), null, null, onYes, onNo, "primary", null, null, true
-        ).causedBy(action));
+        yield* put(confirmBox({
+            message: i18n.t("not-subscribed-friend"), onYes, onNo, variant: "primary", dontShowAgainBox: true
+        }).causedBy(action));
     } else if (add === "yes") {
         yield* put(feedSubscribe(nodeName, "timeline").causedBy(action));
     }

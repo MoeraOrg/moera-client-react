@@ -5,11 +5,12 @@ import { RelNodeName } from "util/rel-node-name";
 export type OpenImageEditDialogAction = ActionWithPayload<"OPEN_IMAGE_EDIT_DIALOG", {
     nodeName: RelNodeName | string;
     media: PrivateMediaFileInfo;
+    parentOverlayId: string | undefined;
 }>;
 export const openImageEditDialog = (
-    nodeName: RelNodeName | string, media: PrivateMediaFileInfo
+    nodeName: RelNodeName | string, media: PrivateMediaFileInfo, parentOverlayId: string | undefined
 ): OpenImageEditDialogAction =>
-    actionWithPayload("OPEN_IMAGE_EDIT_DIALOG", {nodeName, media});
+    actionWithPayload("OPEN_IMAGE_EDIT_DIALOG", {nodeName, media, parentOverlayId});
 
 export type CloseImageEditDialogAction = ActionWithoutPayload<"CLOSE_IMAGE_EDIT_DIALOG">;
 export const closeImageEditDialog = (): CloseImageEditDialogAction =>

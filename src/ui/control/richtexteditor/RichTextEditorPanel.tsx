@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import cx from 'classnames';
 import {
     faAt,
@@ -61,15 +61,8 @@ export default function RichTextEditorPanel({
 
     const {t} = useTranslation();
 
-    const onImageClose = useCallback(() => {
-        setImageDialog(false);
-        window.closeLightDialog = null;
-        selectImage(null);
-    }, [setImageDialog, selectImage]);
-
     const onImage = (event: React.MouseEvent) => {
         setImageDialog(true);
-        window.closeLightDialog = onImageClose;
         event.preventDefault();
     }
 
@@ -79,7 +72,8 @@ export default function RichTextEditorPanel({
             source, mediaFile, href, standardSize = "large", customWidth, customHeight, align, caption, title, alt
         }: RichTextImageValues
     ) => {
-        onImageClose();
+        setImageDialog(false);
+        selectImage(null);
 
         if (textArea.current == null) {
             return;
@@ -111,13 +105,8 @@ export default function RichTextEditorPanel({
     useEffect(() => {
         if (selectedImage) {
             setImageDialog(true);
-            window.closeLightDialog = onImageClose;
-
-            return () => {
-                window.closeLightDialog = null;
-            }
         }
-    }, [selectedImage, setImageDialog, onImageClose])
+    }, [selectedImage, setImageDialog])
 
     useEffect(() => {
         if (externalImage) {
@@ -169,14 +158,8 @@ export default function RichTextEditorPanel({
         event.preventDefault();
     }
 
-    const onSpoilerClose = () => {
-        setSpoilerDialog(false);
-        window.closeLightDialog = null;
-    }
-
     const onSpoiler = (event: React.MouseEvent) => {
         setSpoilerDialog(true);
-        window.closeLightDialog = onSpoilerClose;
         event.preventDefault();
     }
 
@@ -185,7 +168,7 @@ export default function RichTextEditorPanel({
             return;
         }
 
-        onSpoilerClose();
+        setSpoilerDialog(false);
         if (ok) {
             if (title) {
                 wrapSelection(textArea.current, `<mr-spoiler title="${htmlEntities(title)}">`, "</mr-spoiler>");
@@ -200,14 +183,8 @@ export default function RichTextEditorPanel({
         textArea.current.focus();
     }
 
-    const onFoldClose = () => {
-        setFoldDialog(false);
-        window.closeLightDialog = null;
-    }
-
     const onFold = (event: React.MouseEvent) => {
         setFoldDialog(true);
-        window.closeLightDialog = onFoldClose;
         event.preventDefault();
     }
 
@@ -216,7 +193,7 @@ export default function RichTextEditorPanel({
             return;
         }
 
-        onFoldClose();
+        setFoldDialog(false);
         if (ok) {
             let wrapBegin = "<details>";
             let wrapEnd = "</details>";
@@ -237,19 +214,15 @@ export default function RichTextEditorPanel({
         textArea.current.focus();
     }
 
-    const onMentionClose = () => {
-        setMentionDialog(false);
-        window.closeLightDialog = null;
-    }
-
     const onMention = (event: React.MouseEvent) => {
-        setMentionDialog(true);
-        window.closeLightDialog = onMentionClose;
+        if (!mentionDialog) {
+            setMentionDialog(true);
+        }
         event.preventDefault();
     }
 
     const onMentionSubmit = (ok: boolean, {nodeName, fullName}: NameListItem) => {
-        onMentionClose();
+        setMentionDialog(false);
 
         if (textArea.current == null) {
             return;
@@ -303,11 +276,6 @@ export default function RichTextEditorPanel({
         event.preventDefault();
     }
 
-    const onLinkClose = () => {
-        setLinkDialog(false);
-        window.closeLightDialog = null;
-    }
-
     const onLink = (event: React.MouseEvent) => {
         if (textArea.current == null) {
             return;
@@ -315,12 +283,11 @@ export default function RichTextEditorPanel({
 
         setLinkDialog(true);
         setDialogText(getTextSelection(textArea.current));
-        window.closeLightDialog = onLinkClose;
         event.preventDefault();
     }
 
     const onLinkSubmit = (ok: boolean, {href, text}: RichTextLinkValues) => {
-        onLinkClose();
+        setLinkDialog(false);
 
         if (textArea.current == null) {
             return;

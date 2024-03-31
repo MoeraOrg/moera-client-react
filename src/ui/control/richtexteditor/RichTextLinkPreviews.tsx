@@ -7,13 +7,13 @@ import * as URI from 'uri-js';
 
 import { LinkPreview, MediaAttachment, PostingFeatures, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
+import { getRelNodeNameContext } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { linkPreviewImageUpload, linkPreviewLoad } from "state/linkpreviews/actions";
 import { LinkPreviewsState } from "state/linkpreviews/state";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
 import EntryLinkSelector from "ui/entry/EntryLinkSelector";
 import { extractUrls } from "util/text";
-import { getRelNodeNameContext } from "state/home/selectors";
 import { absoluteNodeName, RelNodeName } from "util/rel-node-name";
 
 interface Props {

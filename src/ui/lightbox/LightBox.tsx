@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
@@ -15,11 +15,11 @@ import { getPosting } from "state/postings/selectors";
 import { ExtCommentInfo } from "state/detailedposting/state";
 import { getComment } from "state/detailedposting/selectors";
 import { getSetting } from "state/settings/selectors";
-import * as Browser from "ui/browser";
 import LightBoxCaption from "ui/lightbox/LightBoxCaption";
 import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import LightBoxShareButton from "ui/lightbox/LightBoxShareButton";
 import LightBoxDownloadButton from "ui/lightbox/LightBoxDownloadButton";
+import { useOverlay } from "ui/overlays/overlays";
 import { REL_CURRENT } from "util/rel-node-name";
 import { urlWithParameters } from "util/url";
 import "./LightBox.css";
@@ -38,10 +38,9 @@ export default function LightBox() {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    useEffect(() => {
-        Browser.disableBodyScroll();
-        return () => Browser.enableBodyScroll();
-    }, []);
+    const onCloseRequest = useCallback(() => dispatch(closeLightBox()), [dispatch]);
+
+    const [zIndex] = useOverlay(null, {closeOnClick: false, closeOnEscape: false, onClose: onCloseRequest});
 
     const media = useMemo(() => getGallery(posting, comment), [comment, posting]);
     const auth = carte != null ? "carte:" + carte : null;
@@ -83,8 +82,6 @@ export default function LightBox() {
         title = `${index + 1} / ${media.length}`;
     }
 
-    const onCloseRequest = () => dispatch(closeLightBox());
-
     const onMovePrevRequest = () => prevMediaId != null ? dispatch(lightBoxMediaSet(prevMediaId, prevSequence)) : null;
 
     const onMoveNextRequest = () => nextMediaId != null ? dispatch(lightBoxMediaSet(nextMediaId, nextSequence)) : null;
@@ -94,7 +91,7 @@ export default function LightBox() {
                   onCloseRequest={onCloseRequest} closeLabel={t("close")}
                   onMovePrevRequest={onMovePrevRequest} prevLabel={t("previous-image")}
                   onMoveNextRequest={onMoveNextRequest} nextLabel={t("next-image")}
-                  reactModalStyle={{overlay: {zIndex: 1040}}}
+                  reactModalStyle={{overlay: {zIndex: zIndex?.shadow}}}
                   toolbarButtons={[
                       <LightBoxShareButton mediaNodeName={mediaNodeName} mediaHref={mainHref}/>,
                       <LightBoxDownloadButton mediaUrl={mainSrc} mediaMimeType={mainMimeType}/>,

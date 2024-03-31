@@ -11,8 +11,7 @@ import { ClientState } from "state/state";
 import { homeAvatarsLoad } from "state/home/actions";
 import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { useButtonPopper } from "ui/hook";
-import { Avatar } from "ui/control/Avatar";
-import { Loading } from "ui/control/Loading";
+import { Avatar, Loading, useModalDialog } from "ui/control";
 import "./AvatarField.css";
 
 interface Props {
@@ -32,10 +31,11 @@ export function AvatarField({name, size, disabled}: Props) {
 
     const [, {value}, {setValue}] = useField<AvatarInfo | null>(name);
 
+    const {overlayId: parentOverlayId} = useModalDialog();
     const {
         visible, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
-        placement
-    } = useButtonPopper("bottom-start");
+        placement, zIndex
+    } = useButtonPopper("bottom-start", {parentOverlayId});
 
     const onClick = (event: React.MouseEvent) => {
         if (disabled) {
@@ -58,7 +58,7 @@ export function AvatarField({name, size, disabled}: Props) {
                 <Avatar avatar={value} ownerName={homeOwnerName} size={size}/>
             </div>
             {visible &&
-                <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
+                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                      className={`fade popover shadow-sm bs-popover-${placement} show`}>
                     <div className="selector">
                         {avatarsLoaded ?

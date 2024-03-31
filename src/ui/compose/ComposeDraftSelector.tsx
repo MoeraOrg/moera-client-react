@@ -22,7 +22,7 @@ export default function ComposeDraftSelector() {
     const dispatch = useDispatch();
 
     const {
-        visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
+        visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
     } = useButtonPopper("bottom-start");
 
     const {t} = useTranslation();
@@ -56,7 +56,7 @@ export default function ComposeDraftSelector() {
                 }
             </Button>
             {visible &&
-                <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
+                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                      className="fade dropdown-menu popover shadow-sm show">
                     <ComposeNewPost/>
                     {draftList.map(draft =>

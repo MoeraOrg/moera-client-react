@@ -11,16 +11,17 @@ const initialState: ConfirmBoxState = {
     onNo: null,
     onCancel: null,
     variant: "primary",
-    dontShowAgainBox: false
+    dontShowAgainBox: false,
+    parentOverlayId: undefined
 };
 
 export default (state: ConfirmBoxState = initialState, action: ClientAction): ConfirmBoxState => {
     switch (action.type) {
         case "CONFIRM_BOX":
             return {
-                ...state,
+                ...initialState,
                 show: true,
-                ...action.payload
+                ...action.payload.attributes
             };
 
         case "CLOSE_CONFIRM_BOX":

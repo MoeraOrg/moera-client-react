@@ -7,8 +7,7 @@ const initialState: NavigationState = {
     title: "",
     update: false,
     locked: false,
-    bottomMenuVisible: true,
-    closeDialogAction: null
+    bottomMenuVisible: true
 };
 
 export default (state: NavigationState = initialState, action: ClientAction): NavigationState => {
@@ -18,8 +17,7 @@ export default (state: NavigationState = initialState, action: ClientAction): Na
             path = path != null && path.startsWith("/moera") ? path.substring(6) : path;
             return {
                 ...state,
-                location: path + (query ?? "") + (hash ?? ""),
-                closeDialogAction: null
+                location: path + (query ?? "") + (hash ?? "")
             };
         }
 
@@ -27,8 +25,7 @@ export default (state: NavigationState = initialState, action: ClientAction): Na
             return {
                 ...state,
                 page: action.payload.page,
-                bottomMenuVisible: true,
-                closeDialogAction: state.page !== action.payload.page ? null : state.closeDialogAction
+                bottomMenuVisible: true
             };
 
         case "LOCATION_SET":
@@ -62,18 +59,6 @@ export default (state: NavigationState = initialState, action: ClientAction): Na
             return {
                 ...state,
                 bottomMenuVisible: true
-            }
-
-        case "DIALOG_OPENED":
-            return {
-                ...state,
-                closeDialogAction: action.payload.closeAction
-            }
-
-        case "DIALOG_CLOSED":
-            return {
-                ...state,
-                closeDialogAction: null
             }
 
         default:

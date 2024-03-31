@@ -11,6 +11,7 @@ import store from "state/store";
 import { goHomeLocation, goToRemoval, initFromLocation, initFromNodeLocation } from "state/navigation/actions";
 import { storyReadingUpdate } from "state/stories/actions";
 import * as Browser from "ui/browser";
+import { OverlaysManager } from "ui/overlays/overlays";
 import App from "ui/App";
 import { REL_HOME } from "util/rel-node-name";
 import * as serviceWorker from "serviceWorker";
@@ -34,6 +35,7 @@ function sendInitAction(): void {
     }
 }
 
+window.overlays = new OverlaysManager();
 window.Android?.setSwipeRefreshEnabled(false);
 
 const rootElement = document.getElementById("app-root");

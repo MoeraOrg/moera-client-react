@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { VerifiedMediaFile } from "api";
 import { openImageEditDialog } from "state/imageeditdialog/actions";
-import { DropdownMenu } from "ui/control";
+import { DropdownMenu, useModalDialog } from "ui/control";
 import AttachedImage from "ui/control/richtexteditor/AttachedImage";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import "./UploadedImage.css";
@@ -32,6 +32,8 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
+    const {overlayId: parentOverlayId} = useModalDialog();
+
     return (
         <div className={cx("rich-text-editor-uploaded-image", {"dragged": dragged})}>
             {showMenu &&
@@ -40,7 +42,7 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
                         title: t("edit-ellipsis"),
                         nodeName: REL_CURRENT,
                         href: "/",
-                        onClick: () => dispatch(openImageEditDialog(nodeName, media)),
+                        onClick: () => dispatch(openImageEditDialog(nodeName, media, parentOverlayId)),
                         show: media.postingId != null
                     },
                     {

@@ -12,7 +12,7 @@ import {
     MAIN_POSITIVE_REACTIONS_SET,
     REACTION_EMOJIS
 } from "api";
-import { Button, EmojiProps, EmojiSelector, ModalDialog } from "ui/control";
+import { Button, EmojiProps, EmojiSelector, ModalDialog, useModalDialog } from "ui/control";
 import EmojiList from "util/emoji-list";
 import "./EmojiListDialog.css";
 
@@ -144,8 +144,10 @@ export function EmojiListDialog({negative, value, advanced, onConfirm, onCancel}
         onConfirm(value.join(","));
     };
 
+    const {overlayId: parentOverlayId} = useModalDialog();
+
     return (
-        <ModalDialog onClose={onCancel}>
+        <ModalDialog parentOverlayId={parentOverlayId} onClose={onCancel}>
             <div className="emoji-list-dialog modal-body">
                 {advanced ?
                     <div className="help">
