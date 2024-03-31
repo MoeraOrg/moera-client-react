@@ -291,6 +291,7 @@ function* feedStatusSetSaga(action: WithContext<FeedStatusSetAction>) {
 function* feedsUpdateSaga(action: WithContext<FeedsUpdateAction>) {
     const feeds = yield* select(getAllFeeds);
     for (const {nodeName, feedName} of feeds) {
+        window.Android?.log(`Updating feed "${feedName}" on node "${nodeName}"`); // FIXME temporary
         try {
             const status = yield* call(Node.getFeedStatus, action, nodeName, feedName);
             yield* put(feedStatusSet(nodeName, feedName, status).causedBy(action));
