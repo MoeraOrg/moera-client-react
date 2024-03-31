@@ -3,8 +3,8 @@ import { createSelector } from 'reselect';
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { AvatarImage, BlockedUserInfo, CommentInfo, Features, PostingInfo } from "api";
 import { ClientState } from "state/state";
-import { getOwnerName, isGooglePlayHiding } from "state/node/selectors";
-import { getHomeInvisibleUsers, isConnectedToHome } from "state/home/selectors";
+import { getOwnerName, isAtHomeNode } from "state/node/selectors";
+import { getHomeInvisibleUsers, getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
 import {
     getPosting,
     isPostingBeingDeleted,
@@ -12,6 +12,7 @@ import {
     isPostingSheriffProhibited
 } from "state/postings/selectors";
 import { CommentsState, ExtCommentInfo } from "state/detailedposting/state";
+import * as Browser from "ui/browser";
 import { isSheriffMarked } from "util/sheriff";
 import { REL_CURRENT } from "util/rel-node-name";
 
@@ -77,6 +78,16 @@ export function isCommentsReceiverPostingId(state: ClientState, id: string): boo
 
 export function getCommentsReceiverFeatures(state: ClientState): Features | null {
     return getCommentsState(state).receiverFeatures;
+}
+
+export function isCommentsAtHome(state: ClientState): boolean {
+    const receiverName = getCommentsReceiverName(state);
+    return (receiverName == null && isAtHomeNode(state)) || receiverName === getHomeOwnerName(state);
+}
+
+export function isGooglePlayHidingComments(state: ClientState): boolean {
+    return Browser.isAndroidGooglePlay() && !isCommentsAtHome(state)
+        && getHomeOwnerName(state) !== SHERIFF_GOOGLE_PLAY_TIMELINE;
 }
 
 export function isCommentsReceiverToBeSwitched(state: ClientState): boolean {
@@ -261,7 +272,7 @@ export const getCommentsWithVisibility = createSelector(
     getComments,
     getCommentsBlockedUsers,
     getHomeInvisibleUsers,
-    isGooglePlayHiding,
+    isGooglePlayHidingComments,
     (comments, locallyBlocked, globallyBlocked, hideSheriffMarked) => {
         let invisibleNames: Set<string>;
         if (locallyBlocked.length !== 0 || globallyBlocked.length !== 0) {
