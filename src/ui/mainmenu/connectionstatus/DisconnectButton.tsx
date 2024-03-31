@@ -23,7 +23,13 @@ export default function DisconnectButton() {
     };
 
     const onClick = () =>
-        dispatch(confirmBox(t("want-disconnect"), t("disconnect"), t("cancel"), onConfirmed, null, "danger"));
+        dispatch(confirmBox({
+            message: t("want-disconnect"),
+            yes: t("disconnect"),
+            no: t("cancel"),
+            onYes: onConfirmed,
+            variant: "danger"
+        }));
 
     return (
         <span className="connection-button" title={t("disconnect")} onClick={onClick}>

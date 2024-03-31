@@ -75,9 +75,13 @@ function CommentDialogInner(props: Props) {
         if (draft == null) {
             dispatch(closeCommentDialog());
         } else {
-            dispatch(confirmBox(
-                t("forget-changes"), t("forget"), t("cancel"), commentDialogCommentReset(draft.id, true), null, "danger"
-            ));
+            dispatch(confirmBox({
+                message: t("forget-changes"),
+                yes: t("forget"),
+                no: t("cancel"),
+                onYes: commentDialogCommentReset(draft.id, true),
+                variant: "danger"
+            }));
         }
         event.preventDefault();
     };

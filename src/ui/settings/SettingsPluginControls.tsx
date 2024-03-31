@@ -19,8 +19,13 @@ export default function SettingsPluginControls({plugin}: Props) {
     }
 
     const onDelete = (e: React.MouseEvent) => {
-        dispatch(confirmBox(t("want-delete-addon", {name: plugin.title ?? plugin.name}), t("delete"), t("cancel"),
-            settingsPluginsDelete(plugin.name, plugin.tokenId!), null, "danger"));
+        dispatch(confirmBox({
+            message: t("want-delete-addon", {name: plugin.title ?? plugin.name}),
+            yes: t("delete"),
+            no: t("cancel"),
+            onYes: settingsPluginsDelete(plugin.name, plugin.tokenId!),
+            variant: "danger"
+        }));
         e.preventDefault();
     }
 

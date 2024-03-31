@@ -47,7 +47,13 @@ export default function Connections() {
 
     const onDisconnectActive = () => {
         hide();
-        dispatch(confirmBox(t("want-disconnect"), t("disconnect"), t("cancel"), onConfirmed, null, "danger"));
+        dispatch(confirmBox({
+            message: t("want-disconnect"),
+            yes: t("disconnect"),
+            no: t("cancel"),
+            onYes: onConfirmed,
+            variant: "danger"
+        }));
     }
 
     return (

@@ -131,6 +131,7 @@
   "delete" : "Видалити",
   "delete-account-moera" : "Видалити мій аккаунт у Moera",
   "delete-account-need-log-in" : "Щоб видалити свій аккаунт, вам потрібно до нього",
+  "delete-avatar" : "Видалити аватар?",
   "delete-blog" : "Видалити мій блог",
   "delete-comment" : "Ви дійсно бажаєте видалити коментар \"{heading}\"?",
   "delete-draft" : "Видалити чернетку",

@@ -82,18 +82,33 @@ export default function SubscribeButtonMenu({nodeName, feedName}: Props) {
         dispatch(openSheriffOrderDialog({nodeName, fullName, feedName: "timeline"}));
 
     const onUnhideInGooglePlay = () => {
-        dispatch(confirmBox(t("unhide-blog-google-play", {"name": blogName}), t("unhide"), t("cancel"),
-            sheriffOrderDelete({nodeName, feedName: "timeline"}), null, "success"));
+        dispatch(confirmBox({
+            message: t("unhide-blog-google-play", {"name": blogName}),
+            yes: t("unhide"),
+            no: t("cancel"),
+            onYes: sheriffOrderDelete({nodeName, feedName: "timeline"}),
+            variant: "success"
+        }));
     };
 
     const onHideContentInGooglePlay = () => {
-        dispatch(confirmBox(t("hide-content-user-in-google-play", {"name": blogName}), t("hide"), t("cancel"),
-            sheriffListAdd(nodeName), null, "danger"));
+        dispatch(confirmBox({
+            message: t("hide-content-user-in-google-play", {"name": blogName}),
+            yes: t("hide"),
+            no: t("cancel"),
+            onYes: sheriffListAdd(nodeName),
+            variant: "danger"
+        }));
     };
 
     const onUnhideContentInGooglePlay = () => {
-        dispatch(confirmBox(t("unhide-content-user-in-google-play", {"name": blogName}), t("unhide"), t("cancel"),
-            sheriffListDelete(nodeName), null, "success"));
+        dispatch(confirmBox({
+            message: t("unhide-content-user-in-google-play", {"name": blogName}),
+            yes: t("unhide"),
+            no: t("cancel"),
+            onYes: sheriffListDelete(nodeName),
+            variant: "success"
+        }));
     };
 
     const subscribed = subscription != null;

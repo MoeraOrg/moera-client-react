@@ -131,6 +131,7 @@
   "delete" : "Delete",
   "delete-account-moera" : "Delete my account in Moera",
   "delete-account-need-log-in" : "To delete your account, you need to",
+  "delete-avatar" : "Delete the avatar?",
   "delete-blog" : "Delete my blog",
   "delete-comment" : "Do you really want to delete the comment \"{heading}\"?",
   "delete-draft" : "Delete draft",

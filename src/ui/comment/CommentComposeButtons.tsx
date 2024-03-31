@@ -20,9 +20,13 @@ export default function CommentComposeButtons() {
     const {t} = useTranslation();
 
     const onCancel = (e: React.MouseEvent) => {
-        dispatch(confirmBox(
-            t("forget-unfinished-comment"), t("forget"), t("cancel"), commentComposeCancel(), null, "danger"
-        ));
+        dispatch(confirmBox({
+            message: t("forget-unfinished-comment"),
+            yes: t("forget"),
+            no: t("cancel"),
+            onYes: commentComposeCancel(),
+            variant: "danger"
+        }));
         e.preventDefault();
     };
 

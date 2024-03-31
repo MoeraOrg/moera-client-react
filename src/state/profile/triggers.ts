@@ -1,3 +1,5 @@
+import i18n from 'i18next';
+
 import { conj, trigger } from "state/trigger";
 import {
     ProfileAvatarConfirmDeleteAction,
@@ -24,7 +26,11 @@ export default [
         "PROFILE_AVATAR_CONFIRM_DELETE",
         true,
         (signal: ProfileAvatarConfirmDeleteAction) =>
-            confirmBox("Delete the avatar?", "Delete", "Cancel",
-                profileAvatarDelete(signal.payload.id, signal.payload.onDeleted))),
+            confirmBox({
+                message: i18n.t("delete-avatar"),
+                yes: i18n.t("delete"),
+                no: i18n.t("cancel"),
+                onYes: profileAvatarDelete(signal.payload.id, signal.payload.onDeleted)
+            })),
     trigger("EVENT_NODE_PROFILE_UPDATED", conj(isAtProfilePage, isProfileEditing), profileEditConflict)
 ]

@@ -131,6 +131,7 @@
   "delete" : "Usuń",
   "delete-account-moera" : "Usuń moje konto w Moera",
   "delete-account-need-log-in" : "Aby usunąć swoje konto, musisz się",
+  "delete-avatar" : "Usunąć awatar?",
   "delete-blog" : "Usuń mój blog",
   "delete-comment" : "Czy na pewno chcesz usunąć komentarz \"{heading}\"?",
   "delete-draft" : "Usuń szkic",

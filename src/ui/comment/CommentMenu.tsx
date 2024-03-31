@@ -74,8 +74,13 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
     const onEdit = () => dispatch(openCommentDialog(comment.id));
 
     const onDelete = () => {
-        dispatch(confirmBox(t("delete-comment", {heading: comment.heading}), t("delete"), t("cancel"),
-            commentDelete(comment.id), null, "danger"));
+        dispatch(confirmBox({
+            message: t("delete-comment", {heading: comment.heading}),
+            yes: t("delete"),
+            no: t("cancel"),
+            onYes: commentDelete(comment.id),
+            variant: "danger"
+        }));
     };
 
     const onViewSource = () => {
@@ -119,13 +124,18 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
 
     const onUnhideInGooglePlay = () => {
         if (receiverName != null && receiverPostingId != null) {
-            dispatch(confirmBox(t("unhide-comment-google-play", {heading: comment.heading}), t("unhide"), t("cancel"),
-                sheriffOrderDelete({
+            dispatch(confirmBox({
+                message: t("unhide-comment-google-play", {heading: comment.heading}),
+                yes: t("unhide"),
+                no: t("cancel"),
+                onYes: sheriffOrderDelete({
                     nodeName: receiverName,
                     feedName: "timeline",
                     postingId: receiverPostingId,
                     commentId: comment.id
-                }), null, "success"));
+                }),
+                variant: "success"
+            }));
         }
     };
 
