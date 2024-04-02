@@ -29,6 +29,17 @@ export function register(config) {
         return;
     }
 
+    const startTimestamp = Date.now();
+    navigator.serviceWorker.addEventListener("message", event => {
+        if (
+            event.data.meta === "workbox-broadcast-update"
+            && event.data.payload.cacheName === "client"
+            && Date.now() - startTimestamp < 5000
+        ) {
+            window.location.reload();
+        }
+    });
+
     window.addEventListener("load", async () => {
         const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 

@@ -51,4 +51,4 @@ if (rootElement != null) {
 sendInitAction();
 Storage.loadData();
 
-serviceWorker.unregister();
+serviceWorker.register();
