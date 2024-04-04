@@ -7,6 +7,11 @@
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read http://bit.ly/CRA-PWA
 
+interface ServiceWorkerConfig {
+    onUpdate?: (registration: ServiceWorkerRegistration) => void;
+    onSuccess?: (registration: ServiceWorkerRegistration) => void;
+}
+
 const isLocalhost = Boolean(
     window.location.hostname === "localhost"
     // [::1] is the IPv6 localhost address.
@@ -15,7 +20,7 @@ const isLocalhost = Boolean(
     || window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/)
 );
 
-export function register(config) {
+export function register(config?: ServiceWorkerConfig): void {
     if (process.env.NODE_ENV !== "production" || !("serviceWorker" in navigator)) {
         return;
     }
@@ -53,7 +58,7 @@ export function register(config) {
     });
 }
 
-async function registerValidServiceWorker(swUrl, config) {
+async function registerValidServiceWorker(swUrl: string | URL, config: ServiceWorkerConfig | undefined): Promise<void> {
     try {
         const registration = await navigator.serviceWorker.register(swUrl);
         registration.onupdatefound = () => {
@@ -92,7 +97,7 @@ async function registerValidServiceWorker(swUrl, config) {
     }
 }
 
-async function checkValidServiceWorker(swUrl, config) {
+async function checkValidServiceWorker(swUrl: string | URL, config: ServiceWorkerConfig | undefined): Promise<void> {
     try {
         // Check if the service worker can be found. If it can't reload the page.
         const response = await fetch(swUrl);
@@ -112,7 +117,7 @@ async function checkValidServiceWorker(swUrl, config) {
     }
 }
 
-export async function unregister() {
+export async function unregister(): Promise<void> {
     if (!("serviceWorker" in navigator)) {
         return;
     }

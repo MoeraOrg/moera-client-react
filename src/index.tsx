@@ -14,7 +14,7 @@ import * as Browser from "ui/browser";
 import { OverlaysManager } from "ui/overlays/overlays";
 import App from "ui/App";
 import { REL_HOME } from "util/rel-node-name";
-import * as serviceWorker from "serviceWorker";
+import * as serviceWorker from "sw/ServiceWorkerFrontend";
 
 function sendInitAction(): void {
     const {name, rootLocation, path = null, query = null, hash = null} = Browser.parseDocumentLocation();

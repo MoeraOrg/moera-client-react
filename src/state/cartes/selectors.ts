@@ -27,6 +27,18 @@ export function isCartesToBeUpdated(state: ClientState): boolean {
     return getCartesTtl(state) < 30 * 60;
 }
 
+function isAllCarte(carte: CarteInfo): boolean {
+    return carte.permissions == null || carte.permissions.includes("other");
+}
+
+function isViewMediaCarte(carte: CarteInfo): boolean {
+    return carte.permissions != null && carte.permissions.length === 1 && carte.permissions[0] === "view-media";
+}
+
+export function getViewMediaCartes(state: ClientState): CarteInfo[] {
+    return state.cartes.cartes.filter(isViewMediaCarte);
+}
+
 function getCurrentCarte(state: ClientState, filter: (carte: CarteInfo) => boolean): string | null {
     const current = now() - (getSetting(state, "clock.offset") as number) * 60 * 60;
     const carte = state.cartes.cartes
@@ -35,14 +47,11 @@ function getCurrentCarte(state: ClientState, filter: (carte: CarteInfo) => boole
 }
 
 export function getCurrentAllCarte(state: ClientState): string | null {
-    return getCurrentCarte(state, carte => carte.permissions == null || carte.permissions.includes("other"));
+    return getCurrentCarte(state, isAllCarte);
 }
 
 export function getCurrentViewMediaCarte(state: ClientState): string | null {
-    return getCurrentCarte(
-        state,
-        carte => carte.permissions != null && carte.permissions.length === 1 && carte.permissions[0] === "view-media"
-    );
+    return getCurrentCarte(state, isViewMediaCarte);
 }
 
 export function isCartesInitialized(state: ClientState): boolean {
