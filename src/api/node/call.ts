@@ -230,8 +230,9 @@ export function* selectApi(
     return {rootLocation: root.location, rootApi: root.api, errorTitle};
 }
 
-function* authorize(headers: Partial<Record<string, string>>, rootLocation: string | null,
-                    auth: boolean | string): Generator<SelectEffect, boolean> {
+function* authorize(
+    headers: Partial<Record<string, string>>, rootLocation: string | null, auth: boolean | string
+): Generator<SelectEffect, boolean> {
     if (auth === false) {
         return true;
     }
