@@ -22,7 +22,7 @@ clientsClaim();
 // even if you decide not to use precaching. See https://cra.link/PWA
 
 // @ts-ignore
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ignored = self.__WB_MANIFEST;
 // precacheAndRoute(self.__WB_MANIFEST);
 
