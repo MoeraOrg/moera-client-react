@@ -1,13 +1,22 @@
-export class UseCacheKeyPlugin {
+import { WorkboxPlugin } from 'workbox-core';
+import { CacheKeyWillBeUsedCallbackParam } from "workbox-core/src/types";
 
-    private readonly key: string;
+type CacheKey = string | ((url: string) => string);
 
-    constructor(key: string) {
+export class UseCacheKeyPlugin implements WorkboxPlugin {
+
+    private readonly key: CacheKey;
+
+    constructor(key: CacheKey) {
         this.key = key;
     }
 
-    async cacheKeyWillBeUsed(): Promise<Request | string> {
-        return this.key;
+    async cacheKeyWillBeUsed({request: {url}}: CacheKeyWillBeUsedCallbackParam): Promise<Request | string> {
+        if (typeof(this.key) === "function") {
+            return this.key(url);
+        } else {
+            return this.key;
+        }
     }
 
 }

@@ -27,6 +27,24 @@ export function urlWithParameters(url: string,
     return url + (url.indexOf("?") < 0 ? "?" : "&") + query;
 }
 
+export function urlWithoutParameters(url: string, parameters: string[]): string {
+    if (parameters.length === 0) {
+        return url;
+    }
+    const components = URI.parse(url);
+    if (!components.query) {
+        return url;
+    }
+    let query: string[] = [];
+    for (let param of components.query.split("&")) {
+        const [name] = param.split("=");
+        if (!parameters.includes(name)) {
+            query.push(param);
+        }
+    }
+    return URI.serialize({...components, query: query.join("&")});
+}
+
 export function rootUrl(scheme: string, host: string, port?: number | string | null): string {
     if (!scheme.endsWith(":")) {
         scheme += ":";

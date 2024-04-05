@@ -10,6 +10,7 @@ import { StaleWhileRevalidate } from 'workbox-strategies';
 import { ExpirationPlugin } from 'workbox-expiration';
 
 import { UseCacheKeyPlugin } from "sw/workbox-plugins";
+import { urlWithoutParameters } from "util/url";
 import { BUILD_NUMBER } from "build-number";
 
 console.log(`Started service worker revision ${BUILD_NUMBER}`);
@@ -59,6 +60,31 @@ registerRoute(
         cacheName: "twemoji",
         plugins: [
             new ExpirationPlugin({maxEntries: 64})
+        ]
+    })
+);
+
+registerRoute(
+    ({url}) => url.pathname.includes("/moera/media/public/"),
+    new StaleWhileRevalidate({
+        cacheName: "media-public",
+        plugins: [
+            new ExpirationPlugin({maxEntries: 64}),
+            new UseCacheKeyPlugin(url => {
+                const pos = url.lastIndexOf("/");
+                return pos > 0 ? url.substring(pos + 1) : url;
+            })
+        ]
+    })
+);
+
+registerRoute(
+    ({url}) => url.pathname.includes("/moera/media/private/"),
+    new StaleWhileRevalidate({
+        cacheName: "media-private",
+        plugins: [
+            new ExpirationPlugin({maxEntries: 64}),
+            new UseCacheKeyPlugin(url => urlWithoutParameters(url, ["auth"]))
         ]
     })
 );
