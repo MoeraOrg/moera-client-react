@@ -9,7 +9,6 @@ import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
 import { ExpirationPlugin } from 'workbox-expiration';
 
-import { registerMessageReceiver } from "sw/cartes";
 import { UseCacheKeyPlugin } from "sw/workbox-plugins";
 import { BUILD_NUMBER } from "build-number";
 
@@ -63,5 +62,3 @@ registerRoute(
         ]
     })
 );
-
-registerMessageReceiver();

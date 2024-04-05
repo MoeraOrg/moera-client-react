@@ -35,10 +35,6 @@ function isViewMediaCarte(carte: CarteInfo): boolean {
     return carte.permissions != null && carte.permissions.length === 1 && carte.permissions[0] === "view-media";
 }
 
-export function getViewMediaCartes(state: ClientState): CarteInfo[] {
-    return state.cartes.cartes.filter(isViewMediaCarte);
-}
-
 function getCurrentCarte(state: ClientState, filter: (carte: CarteInfo) => boolean): string | null {
     const current = now() - (getSetting(state, "clock.offset") as number) * 60 * 60;
     const carte = state.cartes.cartes
