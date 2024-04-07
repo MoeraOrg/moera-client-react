@@ -133,7 +133,7 @@ export function getLocation(
                 let components;
                 switch(name) {
                     case "name":
-                        name = value;
+                        name = decodeURIComponent(value);
                         break;
                     case "root":
                         components = URI.parse(value);
