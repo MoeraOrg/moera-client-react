@@ -28,40 +28,42 @@ import PostingReactions from "ui/posting/PostingReactions";
 import PostingComments from "ui/posting/PostingComments";
 import PostingButtons from "ui/posting/PostingButtons";
 import Jump from "ui/navigation/Jump";
-import { REL_CURRENT } from "util/rel-node-name";
+import { RelNodeName } from "util/rel-node-name";
 import "ui/posting/Posting.css";
 import "ui/entry/Entry.css";
 
 interface ContentProps {
+    nodeName: RelNodeName | string;
     posting: ExtPostingInfo;
 }
 
-function Content({posting}: ContentProps) {
+function Content({nodeName, posting}: ContentProps) {
     const {t} = useTranslation();
 
     if (posting.bodyPreview != null && posting.bodyPreview.text) {
         return (
             <div className="content">
-                <EntryHtml postingId={posting.id} html={posting.bodyPreview.text} nodeName={REL_CURRENT}
+                <EntryHtml postingId={posting.id} html={posting.bodyPreview.text} nodeName={nodeName}
                            media={posting.media}/>
                 <Jump href={`/post/${posting.id}`} className="btn btn-link read-more">{t("continue-reading")}</Jump>
             </div>
         );
     } else {
         return (
-            <EntryHtml className="content" postingId={posting.id} html={posting.body.previewText} nodeName={REL_CURRENT}
+            <EntryHtml className="content" postingId={posting.id} html={posting.body.previewText} nodeName={nodeName}
                        media={posting.media}/>
         );
     }
 }
 
 interface FeedPostingProps {
+    nodeName: RelNodeName | string;
     posting: ExtPostingInfo;
     story: MinimalStoryInfo;
     deleting: boolean;
 }
 
-export default function FeedPosting({posting, story, deleting}: FeedPostingProps) {
+export default function FeedPosting({nodeName, posting, story, deleting}: FeedPostingProps) {
     const atHome = useSelector(isAtHomeNode);
     const postingEditable = useSelector((state: ClientState) => isPermitted("edit", posting, "owner", state));
     const isSheriff = useSelector(getHomeOwnerName) === SHERIFF_GOOGLE_PLAY_TIMELINE;
@@ -94,15 +96,14 @@ export default function FeedPosting({posting, story, deleting}: FeedPostingProps
                         </div>
                     </div>
                     <PostingSubject posting={posting} preview={true}/>
-                    <Content posting={posting}/>
-                    <EntryLinkPreviews nodeName={REL_CURRENT}
+                    <Content nodeName={nodeName} posting={posting}/>
+                    <EntryLinkPreviews nodeName={nodeName}
                                        linkPreviews={posting.bodyPreview?.linkPreviews ?? posting.body.linkPreviews}
                                        limit={2} media={posting.media ?? null}/>
-                    <EntryGallery postingId={posting.id} nodeName={REL_CURRENT} media={posting.media ?? null}
+                    <EntryGallery postingId={posting.id} nodeName={nodeName} media={posting.media ?? null}
                                   onExpand={() => dispatch(goToPosting(posting.id, null, true))}/>
                     <div className="reactions-line">
-                        <PostingReactions postingId={posting.id} postingReceiverName={posting.receiverName}
-                                          reactions={posting.reactions}/>
+                        <PostingReactions nodeName={nodeName} postingId={posting.id} reactions={posting.reactions}/>
                         <PostingComments postingId={posting.id} totalComments={posting.totalComments}/>
                     </div>
                     <PostingButtons posting={posting} story={story}/>

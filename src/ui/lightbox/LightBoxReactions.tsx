@@ -11,12 +11,12 @@ import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ReactionButton } from "ui/control";
 import PostingReactions from "ui/posting/PostingReactions";
-import { REL_CURRENT } from "util/rel-node-name";
 import "./LightBoxReactions.css";
 
 export default function LightBoxReactions() {
+    const nodeName = useSelector(getLightBoxNodeName);
     const posting = useSelector((state: ClientState) =>
-        getPosting(state, getLightBoxMediaPostingId(state), getLightBoxNodeName(state)));
+        getPosting(state, getLightBoxMediaPostingId(state), nodeName));
     const homeOwnerName = useSelector(getHomeOwnerName);
     const enableSelf = useSelector((state: ClientState) =>
         getSetting(state, "posting.reactions.self.enabled") as boolean);
@@ -27,16 +27,15 @@ export default function LightBoxReactions() {
     }
 
     const onReactionAdd = (negative: boolean, emoji: number) =>
-        dispatch(postingReact(posting.id, negative, emoji, REL_CURRENT));
+        dispatch(postingReact(posting.id, negative, emoji, nodeName));
 
-    const onReactionDelete = () => dispatch(postingReactionDelete(posting.id, REL_CURRENT));
+    const onReactionDelete = () => dispatch(postingReactionDelete(posting.id, nodeName));
 
     const cr = posting.clientReaction || {} as ClientReactionInfo;
     const hide = posting.ownerName === homeOwnerName && !enableSelf && !cr.emoji;
     return (
         <div className="lightbox-reactions">
-            <PostingReactions postingId={posting.id} postingReceiverName={posting.receiverName}
-                              reactions={posting.reactions}/>
+            <PostingReactions nodeName={nodeName} postingId={posting.id} reactions={posting.reactions}/>
             {!hide &&
                 <ReactionButton icon={faThumbsUp} className="lightbox-reaction-button positive"
                                 invisible={cr.emoji != null && cr.negative} negative={false}

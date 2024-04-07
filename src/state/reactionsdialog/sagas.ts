@@ -40,11 +40,12 @@ function* reactionsDialogPastReactionsLoadSaga(action: WithContext<ReactionsDial
     if (nodeName == null || posting == null) {
         return;
     }
-    const postingId = posting.receiverPostingId ?? posting.id;
+    const rNodeName = posting.receiverName ?? nodeName;
+    const rPostingId = posting.receiverPostingId ?? posting.id;
     try {
         const slice = commentId == null
-            ? yield* call(Node.getPostingReactionsSlice, action, nodeName, postingId, negative, emoji, before, 40)
-            : yield* call(Node.getCommentReactionsSlice, action, nodeName, postingId, commentId, negative, emoji,
+            ? yield* call(Node.getPostingReactionsSlice, action, rNodeName, rPostingId, negative, emoji, before, 40)
+            : yield* call(Node.getCommentReactionsSlice, action, rNodeName, rPostingId, commentId, negative, emoji,
                 before, 40);
         yield* put(reactionsDialogPastReactionsLoaded(
             slice.reactions, posting.id, commentId, negative, emoji, slice.before, slice.after, slice.total
@@ -64,11 +65,12 @@ function* reactionsDialogTotalsLoadSaga(action: WithContext<ReactionsDialogTotal
     if (nodeName == null || posting == null) {
         return;
     }
-    const postingId = posting.receiverPostingId ?? posting.id;
+    const rNodeName = posting.receiverName ?? nodeName;
+    const rPostingId = posting.receiverPostingId ?? posting.id;
     try {
         const totals = commentId == null
-            ? yield* call(Node.getPostingReactionTotals, action, nodeName, posting.id)
-            : yield* call(Node.getCommentReactionTotals, action, nodeName, postingId, commentId)
+            ? yield* call(Node.getPostingReactionTotals, action, rNodeName, rPostingId)
+            : yield* call(Node.getCommentReactionTotals, action, rNodeName, rPostingId, commentId)
         yield* put(reactionsDialogTotalsLoaded(totals.positive, totals.negative).causedBy(action));
     } catch (e) {
         yield* put(reactionsDialogTotalsLoadFailed().causedBy(action));

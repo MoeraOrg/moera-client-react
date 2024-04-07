@@ -2,6 +2,7 @@ import { PrincipalValue, ReactionInfo } from "api";
 import { ClientState } from "state/state";
 import { VerificationStatus } from "state/state-types";
 import { isPermitted } from "state/node/selectors";
+import { ExtPostingInfo } from "state/postings/state";
 import { getPosting } from "state/postings/selectors";
 import { getComment, getCommentsReceiverFeatures, getCommentsReceiverName } from "state/detailedposting/selectors";
 import { ReactionsDialogTabsState } from "state/reactionsdialog/state";
@@ -17,7 +18,7 @@ export function getReactionsDialogPostingId(state: ClientState): string | null {
     return state.reactionsDialog.postingId;
 }
 
-export function getReactionsDialogPosting(state: ClientState) {
+export function getReactionsDialogPosting(state: ClientState): ExtPostingInfo | null {
     return getPosting(state, state.reactionsDialog.postingId, state.reactionsDialog.nodeName);
 }
 

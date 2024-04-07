@@ -176,8 +176,9 @@ export default function FeedPage({nodeName, feedName, visible, title, shareable}
                               visible={before < Number.MAX_SAFE_INTEGER} onSentinel={onSentinelFuture}
                               onBoundary={onBoundaryFuture} onClick={loadFuture}/>
                 {stories.map(({story, posting, deleting}) =>
-                    <FeedPosting key={story.moment} posting={posting} story={story} deleting={deleting}/>)
-                }
+                    <FeedPosting key={story.moment} nodeName={nodeName} posting={posting} story={story}
+                                 deleting={deleting}/>
+                )}
                 <FeedSentinel bottom loading={loadingPast} title={t("load-older-posts")} margin="0px 0px 50% 0px"
                               visible={after > Number.MIN_SAFE_INTEGER} onSentinel={onSentinelPast}
                               onBoundary={onBoundaryPast} onClick={loadPast}/>

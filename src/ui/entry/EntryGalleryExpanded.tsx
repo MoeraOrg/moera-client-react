@@ -10,7 +10,7 @@ import EntryGallery from "ui/entry/EntryGallery";
 import EntryHtml from "ui/entry/EntryHtml";
 import PostingReactions from "ui/posting/PostingReactions";
 import EntryGalleryButtons from "ui/entry/EntryGalleryButtons";
-import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
+import { RelNodeName } from "util/rel-node-name";
 import "./EntryGalleryExpanded.css";
 
 interface Props {
@@ -39,9 +39,9 @@ export default function EntryGalleryExpanded({nodeName, postingId, media, onColl
                         {posting &&
                             <>
                                 <EntryHtml className="content" postingId={posting.id} html={posting.body.text}
-                                           nodeName={REL_CURRENT}/>
+                                           nodeName={nodeName}/>
                                 <div className="reactions-line">
-                                    <PostingReactions postingId={posting.id} postingReceiverName={posting.receiverName}
+                                    <PostingReactions nodeName={nodeName} postingId={posting.id}
                                                       reactions={posting.reactions}/>
                                 </div>
                                 {connectedToHome && <EntryGalleryButtons posting={posting} mediaId={mediaFile.id}/>}

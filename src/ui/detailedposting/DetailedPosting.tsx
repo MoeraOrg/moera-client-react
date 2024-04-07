@@ -27,8 +27,8 @@ import EntryGalleryExpanded from "ui/entry/EntryGalleryExpanded";
 import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
 import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
-import { getPageHeaderHeight } from "util/ui";
 import { REL_CURRENT } from "util/rel-node-name";
+import { getPageHeaderHeight } from "util/ui";
 
 interface Props {
     story: MinimalStoryInfo;
@@ -99,8 +99,7 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
                 </div>
             }
             <div className="reactions-line">
-                <PostingReactions postingId={posting.id} postingReceiverName={posting.receiverName}
-                                  reactions={posting.reactions}/>
+                <PostingReactions nodeName={REL_CURRENT} postingId={posting.id} reactions={posting.reactions}/>
                 <PostingComments postingId={posting.id} totalComments={posting.totalComments}/>
             </div>
             <PostingButtons posting={posting} story={story} menu/>
