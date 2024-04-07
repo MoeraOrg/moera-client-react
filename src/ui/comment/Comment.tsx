@@ -87,8 +87,7 @@ export default function Comment({comment, previousId, focused}: Props) {
                             {connectedToHome && comment.signature != null &&
                                 <CommentButtons nodeName={realOwnerName} postingId={realPostingId} comment={comment}/>
                             }
-                            <CommentReactions postingId={postingId} commentId={comment.id}
-                                              reactions={comment.reactions ?? null}
+                            <CommentReactions commentId={comment.id} reactions={comment.reactions ?? null}
                                               seniorReaction={comment.seniorReaction ?? null}/>
                         </div>
                     </div>
