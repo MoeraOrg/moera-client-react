@@ -9,7 +9,9 @@ import PageHeader from "ui/page/PageHeader";
 import PageShareButton from "ui/page/PageShareButton";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import FeedGotoButton from "ui/feed/FeedGotoButton";
+import FeedTopBox from "ui/feed/FeedTopBox";
 import FeedTopButton from "ui/feed/FeedTopButton";
+import FeedSkipPinnedButton from "ui/feed/FeedSkipPinnedButton";
 import * as Browser from "ui/browser";
 import { getPageHeaderHeight } from "util/ui";
 import { RelNodeName } from "util/rel-node-name";
@@ -64,8 +66,11 @@ export default function FeedPageHeader({
             <div className="page-header-buttons">
                 {!empty && <FeedGotoButton nodeName={nodeName} feedName={feedName} atBottom={atBottom}/>}
             </div>
-            <FeedTopButton nodeName={nodeName} feedName={feedName} atTop={atTop} totalAfterTop={totalAfterTop}
-                           notViewed={notViewed} notViewedMoment={notViewedMoment}/>
+            <FeedTopBox>
+                <FeedTopButton nodeName={nodeName} feedName={feedName} atTop={atTop} totalAfterTop={totalAfterTop}
+                               notViewed={notViewed} notViewedMoment={notViewedMoment}/>
+                <FeedSkipPinnedButton nodeName={nodeName} feedName={feedName}/>
+            </FeedTopBox>
         </PageHeader>
     );
 }

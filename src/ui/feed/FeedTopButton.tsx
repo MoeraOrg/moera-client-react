@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 
 import { feedScrollToAnchor } from "state/feeds/actions";
 import { RelNodeName } from "util/rel-node-name";
-import "./FeedTopButton.css";
 
 interface Props {
     nodeName: RelNodeName | string;
@@ -50,11 +49,9 @@ export default function FeedTopButton({nodeName, feedName, atTop, totalAfterTop,
     };
 
     return (
-        <div className="feed-top-box">
-            <div className="feed-top-button" onClick={onClick}>
-                <FontAwesomeIcon icon={faArrowUp}/>{title}
-                {news > 0 && <span className="new">{t("count-new", {count: news})}</span>}
-            </div>
+        <div className="feed-top-button" onClick={onClick}>
+            <FontAwesomeIcon icon={faArrowUp}/>{title}
+            {news > 0 && <span className="new">{t("count-new", {count: news})}</span>}
         </div>
     );
 };
