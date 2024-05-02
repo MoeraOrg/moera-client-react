@@ -254,8 +254,8 @@ export function htmlToEmoji(html: string): string {
         .replace(/<b\s[^>]*class="emoji"[^>]*>(..?)<\/b>/gi, "$1")
         .replace(/<img\s+src="https:\/\/twemoji\.[^"]*\/([0-9a-f]+).svg"[^>]*>/gi,
             (g0, g1) => String.fromCodePoint(parseInt(g1, 16)))
-        .replace(/<img\s[^>]*src="https:\/\/static.[a-z]+.fbcdn.net\/images\/emoji.php\/[^"]*\/([0-9a-f]+).png"[^>]*>/gi,
-            (g0, g1) => String.fromCodePoint(parseInt(g1, 16)));
+        .replace(/<img\s[^>]*src="https:\/\/static.[a-z]+.fbcdn.net\/images\/emoji.php\/[^"]*\/([0-9a-f_]+).png"[^>]*>/gi,
+            (g0, g1) => String.fromCodePoint(...(g1.split("_").map((v: string) => parseInt(v, 16)))));
 }
 
 type ReplacementLevel = "none" | "basic" | "all";
