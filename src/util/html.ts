@@ -59,7 +59,7 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
     ]),
     allowedAttributes: {
         ...sanitizeHtml.defaults.allowedAttributes,
-        "*": ["dir", "id"],
+        "*": ["dir", "id", "data-*"],
         img: ["src", "srcset", "width", "height", "alt", "title", "style"],
         a: ["href", "title", "data-nodename", "data-href"],
         b: ["style"],
@@ -76,7 +76,7 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
         img: ["emoji"],
         b: ["emoji"],
         span: ["katex"],
-        div: ["footnotes", "katex"]
+        div: ["footnotes", "katex", "mr-spoiler"]
     },
     allowedIframeHostnames: [
         "c.simmer.io",
@@ -121,7 +121,11 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
         h6: addDirAuto,
         p: addDirAuto,
         ol: addDirAuto,
-        ul: addDirAuto
+        ul: addDirAuto,
+        "mr-spoiler": (tagName: string, attribs: Attributes) => ({
+            tagName: "div",
+            attribs: {"class": "mr-spoiler", "data-title": attribs["title"]}
+        }),
     }
 };
 

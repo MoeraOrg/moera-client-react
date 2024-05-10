@@ -120,8 +120,8 @@ export default function EntryHtml({
                 </Suspense>
             );
         });
-        dom.current.querySelectorAll("mr-spoiler").forEach(node => {
-            const title = node.getAttribute("title") ?? undefined;
+        dom.current.querySelectorAll("div.mr-spoiler").forEach(node => {
+            const title = node.getAttribute("data-title") ?? undefined;
             const html = node.innerHTML;
 
             createRoot(node).render(
