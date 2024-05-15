@@ -4,7 +4,7 @@ import * as HtmlEntities from 'html-entities';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
 import { twemojiUrl } from "util/twemoji";
-import { mediaImageSize } from "util/media-images";
+import { mediaHashStrip, mediaImageSize } from "util/media-images";
 import { isNumericString } from "util/misc";
 
 let prefixIndex = 0;
@@ -18,12 +18,14 @@ function createDimensionsTransformer(media: MediaAttachment[] | null | undefined
         (media ?? [])
             .map(ma => ma.media)
             .filter((mf): mf is PrivateMediaFileInfo => mf != null)
-            .map(mf => [mf.hash, mf])
+            .map(mf => [mediaHashStrip(mf.hash), mf])
     );
 
     return (tagName: string, attribs: Attributes): Tag => {
         const src = attribs["src"];
-        const mediaFile = src != null && src.startsWith("hash:") ? mediaMap.get(src.substring(5)) : null;
+        const mediaFile = src != null && src.startsWith("hash:")
+            ? mediaMap.get(mediaHashStrip(src.substring(5)))
+            : null;
         if (mediaFile == null) {
             return {tagName, attribs};
         }

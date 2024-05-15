@@ -13,6 +13,9 @@ function toInt(s: number | string | null | undefined): number {
     return isFinite(val) ? val : 0;
 }
 
+// For backward compatibility with padded media file IDs
+export const mediaHashStrip = (hash: string): string => hash.endsWith("=") ? hash.substring(0, hash.length - 1) : hash;
+
 export const mediaImagePreview = (location: string, width: number): string => urlWithParameters(location, {width});
 
 export function mediaImageFindLargerPreview(previews: MediaFilePreviewInfo[] | null | undefined,

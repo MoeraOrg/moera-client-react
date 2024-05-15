@@ -12,6 +12,7 @@ import { interceptLinkClick } from "ui/entry/link-click-intercept";
 import MrSpoiler from "ui/entry/MrSpoiler";
 import { isNumericString } from "util/misc";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
+import { mediaHashStrip } from "util/media-images";
 
 const InlineMath = React.lazy(() => import("ui/katex/InlineMath"));
 const BlockMath = React.lazy(() => import("ui/katex/BlockMath"));
@@ -34,7 +35,7 @@ export default function EntryHtml({
         (media ?? [])
             .map(ma => ma.media)
             .filter((mf): mf is PrivateMediaFileInfo => mf != null)
-            .map(mf => [mf.hash, mf])
+            .map(mf => [mediaHashStrip(mf.hash), mf])
     );
 
     const hydrate = () => {
@@ -72,7 +73,9 @@ export default function EntryHtml({
         });
         dom.current.querySelectorAll("img").forEach(node => {
             const src = node.getAttribute("src");
-            const mediaFile = src != null && src.startsWith("hash:") ? mediaMap.get(src.substring(5)) : null;
+            const mediaFile = src != null && src.startsWith("hash:")
+                ? mediaMap.get(mediaHashStrip(src.substring(5)))
+                : null;
             if (mediaFile != null) {
                 const width = node.getAttribute("width");
                 const height = node.getAttribute("height");
