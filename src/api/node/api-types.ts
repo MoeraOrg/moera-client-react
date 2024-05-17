@@ -456,6 +456,7 @@ export interface LinkPreviewInfo {
 
 export interface MediaFilePreviewInfo {
     targetWidth: number;
+    directPath?: string | null;
     width: number;
     height: number;
     original?: boolean | null;
@@ -539,6 +540,7 @@ export interface PrivateMediaFileInfo {
     id: string;
     hash: string;
     path: string;
+    directPath?: string | null;
     mimeType: string;
     width: number;
     height: number;

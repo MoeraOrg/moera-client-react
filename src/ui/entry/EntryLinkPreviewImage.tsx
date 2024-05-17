@@ -9,10 +9,16 @@ import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import PreloadedImage from "ui/posting/PreloadedImage";
 import * as Browser from "ui/browser";
 import { Loading } from 'ui/control';
-import { mediaImagePreview, mediaImageSize, mediaSizes, mediaSources } from "util/media-images";
+import {
+    mediaImageFindLargerPreview,
+    mediaImagePreview,
+    mediaImageSize,
+    mediaSizes,
+    mediaSources
+} from "util/media-images";
+import { RelNodeName } from "util/rel-node-name";
 import { urlWithParameters } from "util/url";
 import "./EntryLinkPreviewImage.css";
-import { RelNodeName } from "util/rel-node-name";
 
 interface Props {
     nodeName: RelNodeName | string;
@@ -32,10 +38,18 @@ export default function EntryLinkPreviewImage({nodeName, mediaFile, loading}: Pr
         return null;
     }
 
-    const isPublic = (mediaFile.operations?.view ?? "public") === "public";
-    const auth = !isPublic && carte != null ? "carte:" + carte : null;
-    const mediaLocation = urlWithParameters(rootPage + "/media/" + mediaFile.path, {auth});
-    const src = mediaImagePreview(mediaLocation, 800);
+    let mediaLocation: string;
+    let src: string;
+    if (mediaFile.directPath) {
+        mediaLocation = rootPage + "/media/" + mediaFile.directPath;
+        const preview = mediaImageFindLargerPreview(mediaFile.previews, 800);
+        src = rootPage + "/media/" + preview?.directPath ?? mediaFile.directPath;
+    } else {
+        const isPublic = (mediaFile.operations?.view ?? "public") === "public";
+        const auth = !isPublic && carte != null ? "carte:" + carte : null;
+        mediaLocation = urlWithParameters(rootPage + "/media/" + mediaFile.path, {auth});
+        src = mediaImagePreview(mediaLocation, 800);
+    }
     const srcSet = mediaSources(mediaLocation, mediaFile.previews);
     const sizes = mediaSizes(mediaFile.previews ?? []);
     const [imageWidth, imageHeight] = mediaImageSize(800, null, null, mediaFile, false);

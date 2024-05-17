@@ -37,7 +37,7 @@ export function mediaSources(location: string, previews: MediaFilePreviewInfo[] 
         return "";
     }
     return previews.map(preview => {
-        const url = preview.original ? location : mediaImagePreview(location, preview.targetWidth);
+        const url = preview.original ? location : preview.directPath ?? mediaImagePreview(location, preview.targetWidth);
         return `${url} ${preview.width}w`;
     }).join(",");
 }

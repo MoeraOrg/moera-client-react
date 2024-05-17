@@ -70,7 +70,11 @@ function mediaUrl(rootPage: string, carte: string | null, mediaFile: PrivateMedi
     if (mediaFile == null) {
         return "";
     }
-    const auth = carte != null ? "carte:" + carte : null;
-    const mediaLocation = urlWithParameters(rootPage + "/media/" + mediaFile.path, {auth});
-    return htmlEntities(mediaImagePreview(mediaLocation, 900));
+    if (mediaFile.directPath) {
+        return htmlEntities(rootPage + "/media/" + mediaFile.directPath)
+    } else {
+        const auth = carte != null ? "carte:" + carte : null;
+        const mediaLocation = urlWithParameters(rootPage + "/media/" + mediaFile.path, {auth});
+        return htmlEntities(mediaImagePreview(mediaLocation, 900));
+    }
 }

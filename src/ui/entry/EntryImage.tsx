@@ -9,7 +9,13 @@ import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { openLightBox } from "state/lightbox/actions";
 import Jump from "ui/navigation/Jump";
 import PreloadedImage from "ui/posting/PreloadedImage";
-import { mediaImagePreview, mediaImageSize, mediaSizes, mediaSources } from "util/media-images";
+import {
+    mediaImageFindLargerPreview,
+    mediaImagePreview,
+    mediaImageSize,
+    mediaSizes,
+    mediaSources
+} from "util/media-images";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { urlWithParameters, ut } from "util/url";
 import "./EntryImage.css";
@@ -35,9 +41,17 @@ export default function EntryImage({
     const dispatch = useDispatch();
 
     const isPublic = (mediaFile.operations?.view ?? "public") === "public";
-    const auth = !isPublic && carte != null ? "carte:" + carte : null;
-    const mediaLocation = urlWithParameters(rootPage + "/media/" + mediaFile.path, {auth});
-    const src = mediaImagePreview(mediaLocation, 900);
+    let mediaLocation: string;
+    let src: string;
+    if (mediaFile.directPath) {
+        mediaLocation = rootPage + "/media/" + mediaFile.directPath;
+        const preview = mediaImageFindLargerPreview(mediaFile.previews, 900);
+        src = rootPage + "/media/" + preview?.directPath ?? mediaFile.directPath;
+    } else {
+        const auth = !isPublic && carte != null ? "carte:" + carte : null;
+        mediaLocation = urlWithParameters(rootPage + "/media/" + mediaFile.path, {auth});
+        src = mediaImagePreview(mediaLocation, 900);
+    }
     const srcSet = mediaSources(mediaLocation, mediaFile.previews);
     const sizes = mediaSizes(mediaFile.previews ?? []);
     const [imageWidth, imageHeight] = mediaImageSize(900, width, height, mediaFile, false);

@@ -14,7 +14,7 @@ import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { Button, DeleteButton } from "ui/control";
 import RichTextCopyImageDialog, { RichTextCopyImageValues } from "ui/control/richtexteditor/RichTextCopyImageDialog";
 import * as Browser from "ui/browser";
-import { mediaImagePreview, mediaImageSize } from "util/media-images";
+import { mediaImageFindLargerPreview, mediaImagePreview, mediaImageSize } from "util/media-images";
 import { urlWithParameters } from "util/url";
 import "./RichTextImageDialogDropzone.css";
 import { RelNodeName } from "util/rel-node-name";
@@ -115,9 +115,15 @@ export default function RichTextImageDialogDropzone({
             onDrop: uploadImage
         });
 
-    const auth = carte != null ? "carte:" + carte : null;
-    const mediaLocation = value != null ? urlWithParameters(rootPage + "/media/" + value.path, {auth}) : null;
-    const src = mediaLocation != null ? mediaImagePreview(mediaLocation, 150) : null;
+    let src: string | null;
+    if (value?.directPath) {
+        const preview = mediaImageFindLargerPreview(value.previews, 150);
+        src = rootPage + "/media/" + preview?.directPath ?? value.directPath;
+    } else {
+        const auth = carte != null ? "carte:" + carte : null;
+        const mediaLocation = value != null ? urlWithParameters(rootPage + "/media/" + value.path, {auth}) : null;
+        src = mediaLocation != null ? mediaImagePreview(mediaLocation, 150) : null;
+    }
     const [imageWidth, imageHeight] = value != null ? mediaImageSize(150, 150, 150, value) : [0, 0];
     if (!uploading && externalImage) {
         uploadImage([externalImage]);

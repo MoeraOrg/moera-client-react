@@ -13,7 +13,7 @@ import { getPosting } from "state/postings/selectors";
 import { closeImageEditDialog, imageEditDialogPost } from "state/imageeditdialog/actions";
 import { Button, ModalDialog } from "ui/control";
 import { RichTextField, RichTextValue } from "ui/control/richtexteditor";
-import { mediaImagePreview, mediaImageSize } from "util/media-images";
+import { mediaImageFindLargerPreview, mediaImagePreview, mediaImageSize } from "util/media-images";
 import { replaceSmileys } from "util/text";
 import { urlWithParameters } from "util/url";
 import store from "state/store";
@@ -56,8 +56,14 @@ function ImageEditDialogInner(props: Props) {
 
     const onClose = () => dispatch(closeImageEditDialog());
 
-    const auth = carte != null ? "carte:" + carte : null;
-    const src = mediaImagePreview(urlWithParameters(rootPage + "/media/" + media.path, {auth}), 800);
+    let src: string;
+    if (media.directPath) {
+        const preview = mediaImageFindLargerPreview(media.previews, 800);
+        src = rootPage + "/media/" + preview?.directPath ?? media.directPath;
+    } else {
+        const auth = carte != null ? "carte:" + carte : null;
+        src = mediaImagePreview(urlWithParameters(rootPage + "/media/" + media.path, {auth}), 800);
+    }
     const [imageWidth, imageHeight] = mediaImageSize(800, null, null, media);
 
     return (

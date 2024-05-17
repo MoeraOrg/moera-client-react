@@ -5,7 +5,7 @@ import { VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
-import { mediaImagePreview, mediaImageSize } from "util/media-images";
+import { mediaImageFindLargerPreview, mediaImagePreview, mediaImageSize } from "util/media-images";
 import { urlWithParameters } from "util/url";
 import { RelNodeName } from "util/rel-node-name";
 
@@ -19,8 +19,14 @@ export default function AttachedImage({media, nodeName, onClick}: Props) {
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, nodeName));
     const carte = useSelector(getCurrentViewMediaCarte);
 
-    const auth = carte != null ? "carte:" + carte : null;
-    const src = mediaImagePreview(urlWithParameters(rootPage + "/media/" + media.path, {auth}), 150);
+    let src: string;
+    if (media.directPath) {
+        const preview = mediaImageFindLargerPreview(media.previews, 150);
+        src = rootPage + "/media/" + preview?.directPath ?? media.directPath;
+    } else {
+        const auth = carte != null ? "carte:" + carte : null;
+        src = mediaImagePreview(urlWithParameters(rootPage + "/media/" + media.path, {auth}), 150);
+    }
     const [imageWidth, imageHeight] = mediaImageSize(150, 150, 150, media);
 
     return (

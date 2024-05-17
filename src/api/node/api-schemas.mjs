@@ -1179,6 +1179,10 @@ export const NODE_API_SCHEMAS = {
                 "targetWidth": {
                     type: "integer"
                 },
+                "directPath": {
+                    type: "string",
+                    nullable: true
+                },
                 "width": {
                     type: "integer"
                 },
@@ -1380,6 +1384,10 @@ export const NODE_API_SCHEMAS = {
                 },
                 "path": {
                     type: "string"
+                },
+                "directPath": {
+                    type: "string",
+                    nullable: true
                 },
                 "mimeType": {
                     type: "string"
