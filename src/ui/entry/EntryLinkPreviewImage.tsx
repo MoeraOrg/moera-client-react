@@ -38,19 +38,20 @@ export default function EntryLinkPreviewImage({nodeName, mediaFile, loading}: Pr
         return null;
     }
 
+    const mediaPrefix = rootPage + "/media/";
     let mediaLocation: string;
     let src: string;
     if (mediaFile.directPath) {
-        mediaLocation = rootPage + "/media/" + mediaFile.directPath;
+        mediaLocation = mediaPrefix + mediaFile.directPath;
         const preview = mediaImageFindLargerPreview(mediaFile.previews, 800);
         src = rootPage + "/media/" + preview?.directPath ?? mediaFile.directPath;
     } else {
         const isPublic = (mediaFile.operations?.view ?? "public") === "public";
         const auth = !isPublic && carte != null ? "carte:" + carte : null;
-        mediaLocation = urlWithParameters(rootPage + "/media/" + mediaFile.path, {auth});
+        mediaLocation = urlWithParameters(mediaPrefix + mediaFile.path, {auth});
         src = mediaImagePreview(mediaLocation, 800);
     }
-    const srcSet = mediaSources(mediaLocation, mediaFile.previews);
+    const srcSet = mediaSources(mediaLocation, mediaPrefix, mediaFile.previews);
     const sizes = mediaSizes(mediaFile.previews ?? []);
     const [imageWidth, imageHeight] = mediaImageSize(800, null, null, mediaFile, false);
     const vertical = Browser.isTinyScreen() ? imageHeight > imageWidth * 0.55 : imageHeight > imageWidth;

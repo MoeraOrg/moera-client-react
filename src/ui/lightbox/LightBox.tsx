@@ -60,9 +60,15 @@ export default function LightBox() {
         if (index < 0) {
             index = 0;
         }
-        mainHref = "/media/" + media[index].media?.path;
-        mainSrc = urlWithParameters(rootPage + mainHref, {auth});
-        mainMimeType = media[index].media?.mimeType ?? "image/jpeg";
+        const mainMedia = media[index].media;
+        if (mainMedia?.directPath) {
+            mainHref = "/media/" + mainMedia.directPath;
+            mainSrc = rootPage + mainHref;
+        } else {
+            mainHref = "/media/" + mainMedia?.path;
+            mainSrc = urlWithParameters(rootPage + mainHref, {auth});
+        }
+        mainMimeType = mainMedia?.mimeType ?? "image/jpeg";
         const prevIndex = index > 0
             ? index - 1
             : (index === 0 && loop ? media.length - 1 : null);
@@ -70,13 +76,23 @@ export default function LightBox() {
             ? index + 1
             : (index === media.length - 1 && loop ? 0 : null);
         if (prevIndex != null) {
-            prevSrc = urlWithParameters(rootPage + "/media/" + media[prevIndex].media?.path, {auth});
-            prevMediaId = media[prevIndex].media?.id;
+            const prevMedia = media[prevIndex].media;
+            if (prevMedia?.directPath) {
+                prevSrc = rootPage + "/media/" + prevMedia.directPath;
+            } else {
+                prevSrc = urlWithParameters(rootPage + "/media/" + prevMedia?.path, {auth});
+            }
+            prevMediaId = prevMedia?.id;
             prevSequence = prevIndex > index ? "prev-loop" : "normal";
         }
         if (nextIndex != null) {
-            nextSrc = urlWithParameters(rootPage + "/media/" + media[nextIndex].media?.path, {auth});
-            nextMediaId = media[nextIndex].media?.id;
+            const nextMedia = media[nextIndex].media;
+            if (nextMedia?.directPath) {
+                nextSrc = rootPage + "/media/" + nextMedia.directPath;
+            } else {
+                nextSrc = urlWithParameters(rootPage + "/media/" + nextMedia?.path, {auth});
+            }
+            nextMediaId = nextMedia?.id;
             nextSequence = nextIndex < index ? "next-loop" : "normal";
         }
         title = `${index + 1} / ${media.length}`;

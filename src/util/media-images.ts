@@ -32,12 +32,18 @@ export function mediaImageFindLargerPreview(previews: MediaFilePreviewInfo[] | n
     return larger;
 }
 
-export function mediaSources(location: string, previews: MediaFilePreviewInfo[] | null | undefined): string {
+export function mediaSources(
+    originalLocation: string, mediaPrefix: string, previews: MediaFilePreviewInfo[] | null | undefined
+): string {
     if (previews == null) {
         return "";
     }
     return previews.map(preview => {
-        const url = preview.original ? location : preview.directPath ?? mediaImagePreview(location, preview.targetWidth);
+        const url = preview.original
+            ? originalLocation
+            : preview.directPath
+                ? mediaPrefix + preview.directPath
+                : mediaImagePreview(originalLocation, preview.targetWidth);
         return `${url} ${preview.width}w`;
     }).join(",");
 }

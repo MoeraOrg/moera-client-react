@@ -41,18 +41,19 @@ export default function EntryImage({
     const dispatch = useDispatch();
 
     const isPublic = (mediaFile.operations?.view ?? "public") === "public";
+    const mediaPrefix = rootPage + "/media/";
     let mediaLocation: string;
     let src: string;
     if (mediaFile.directPath) {
-        mediaLocation = rootPage + "/media/" + mediaFile.directPath;
+        mediaLocation = mediaPrefix + mediaFile.directPath;
         const preview = mediaImageFindLargerPreview(mediaFile.previews, 900);
         src = rootPage + "/media/" + preview?.directPath ?? mediaFile.directPath;
     } else {
         const auth = !isPublic && carte != null ? "carte:" + carte : null;
-        mediaLocation = urlWithParameters(rootPage + "/media/" + mediaFile.path, {auth});
+        mediaLocation = urlWithParameters(mediaPrefix + mediaFile.path, {auth});
         src = mediaImagePreview(mediaLocation, 900);
     }
-    const srcSet = mediaSources(mediaLocation, mediaFile.previews);
+    const srcSet = mediaSources(mediaLocation, mediaPrefix, mediaFile.previews);
     const sizes = mediaSizes(mediaFile.previews ?? []);
     const [imageWidth, imageHeight] = mediaImageSize(900, width, height, mediaFile, false);
 
