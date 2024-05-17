@@ -83,7 +83,7 @@ registerRoute(
     new StaleWhileRevalidate({
         cacheName: "media-private",
         plugins: [
-            new ExpirationPlugin({maxEntries: 64}),
+            new ExpirationPlugin({maxEntries: 64, maxAgeSeconds: 3 * 60 * 60}),
             new UseCacheKeyPlugin(url => urlWithoutParameters(url, ["auth"]))
         ]
     })
