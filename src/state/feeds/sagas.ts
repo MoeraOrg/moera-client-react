@@ -1,7 +1,7 @@
 import { call, delay, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
-import { Node, PrincipalValue } from "api";
+import { Node, PrincipalValue, StoryInfo } from "api";
 import { ClientAction } from "state/action";
 import {
     FeedFutureSliceLoadAction,
@@ -328,23 +328,27 @@ function* feedExecuteSliceButtonsActions(
     action: WithContext<FeedPastSliceSetAction | FeedFutureSliceSetAction | FeedSliceUpdateAction>
 ) {
     for (const story of action.payload.stories) {
-        const details = getInstantTypeDetails(story.storyType);
-        if (details?.buttonsAction != null) {
-            const storyAction = details.buttonsAction(story, action.context);
-            if (storyAction != null) {
-                yield* put(storyAction.causedBy(action));
-            }
-        }
+        yield* executeStoryButtonsActions(story, action);
     }
 }
 
 function* feedExecuteButtonsActions(action: WithContext<StoryAddedAction | StoryUpdatedAction>) {
     const {story} = action.payload;
+    yield* executeStoryButtonsActions(story, action);
+}
+
+function* executeStoryButtonsActions(story: StoryInfo, cause: WithContext<ClientAction>) {
     const details = getInstantTypeDetails(story.storyType);
     if (details?.buttonsAction != null) {
-        const storyAction = details.buttonsAction(story, action.context);
-        if (storyAction != null) {
-            yield* put(storyAction.causedBy(action));
+        const storyActions = details.buttonsAction(story, cause.context);
+        if (storyActions != null) {
+            if (Array.isArray(storyActions)) {
+                for (const storyAction of storyActions) {
+                    yield* put(storyAction.causedBy(cause));
+                }
+            } else {
+                yield* put(storyActions.causedBy(cause));
+            }
         }
     }
 }

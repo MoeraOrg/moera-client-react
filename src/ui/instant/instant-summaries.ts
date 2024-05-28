@@ -448,3 +448,7 @@ export function buildSheriffComplainDecidedSummary(data: StorySummaryData, homeO
         target: formatSheriffTarget(data, homeOwnerName, t)
     });
 }
+
+export function buildDefrostingSummary(t: TFunction): string {
+    return t("instant-summary.story.defrosting");
+}

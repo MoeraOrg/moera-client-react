@@ -128,6 +128,7 @@
   "decision" : "Decyzja",
   "decision-sheriff-initiative" : "Decyzja została podjęta z inicjatywy szeryfa.",
   "decision-upon-complain" : "Decyzja została podjęta po <0>skardze</0> złożonej przez innego użytkownika.",
+  "defrosting-message-box" : "\uD83C\uDF89 <b>Bardzo się cieszymy, że możemy Cię ponownie zobaczyć po tak długiej nieobecności!</b><br><br>Od tego czasu w Moera wydarzyło się wiele wspaniałych rzeczy. Rozejrzyj się, gdy Twój kanał zapełnia się nowymi postami.",
   "delete" : "Usuń",
   "delete-account-moera" : "Usuń moje konto w Moera",
   "delete-account-need-log-in" : "Aby usunąć swoje konto, musisz się",
@@ -312,6 +313,7 @@
       "comment-reaction-added" : "{reactions} Twój komentarz {heading} na {posting}",
       "comment-reaction-task-failed" : "Nie udało się zareagować na komentarz {commentNode} {commentHeading} do posta {postingNode} {postingHeading}",
       "comment-update-task-failed" : "Nie udało się zaktualizować komentarza {commentHeading} do posta {node} {postingHeading}",
+      "defrosting" : "Cieszymy się, że znów widzimy Was po tak długiej nieobecności! W ciągu najbliższych kilku minut Twój kanał zostanie wypełniony nowymi postami",
       "friend-added" : "{node} dodał/a Cię do grupy znajomych \"{group}\"",
       "friend-added-to-friends" : "{node} {gender, select, female {dodała} other {dodał}} Cię do znajomych",
       "friend-deleted" : "{node} {gender, select, female {usunąła} other {usunął}} Cię z grupy znajomych \"{group}\"",
@@ -703,6 +705,9 @@
       "friends_view" : "Lista znajomych jest widoczna dla",
       "friends_view-total" : "Liczba znajomych jest widoczna dla",
       "instants_lifetime" : "Usuń powiadomienia po",
+      "instants" : {
+        "prioritize" : "Uporządkuj powiadomienia zgodnie z ich ważnością"
+      },
       "instants_viewed_lifetime" : "Usuń wyświetlone powiadomienia po",
       "media_max-size" : "Maksymalny rozmiar przesłanego pliku multimedialnego",
       "media_preview-gain" : "Współczynnik powiększenia podglądu pliku multimedialnego",

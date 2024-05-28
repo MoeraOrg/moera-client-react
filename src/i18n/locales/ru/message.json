@@ -128,6 +128,7 @@
   "decision" : "Решение",
   "decision-sheriff-initiative" : "Решение было принято по инициативе шерифа.",
   "decision-upon-complain" : "Решение было принято по <0>жалобе</0> другого пользователя.",
+  "defrosting-message-box" : "\uD83C\uDF89 <b>Мы очень рады снова видеть вас после столь долгого отсутствия!</b><br><br>Много замечательных вещей появилось в Moera с тех пор. Осмотритесь, пока ваша лента наполняется новыми постами.",
   "delete" : "Удалить",
   "delete-account-moera" : "Удалить мой аккаунт в Moera",
   "delete-account-need-log-in" : "Чтобы удалить свой аккаунт, вы должны в него",
@@ -312,6 +313,7 @@
       "comment-reaction-added" : "{reactions} ваш комментарий {heading} к {posting}",
       "comment-reaction-task-failed" : "Не удалось подписать реакцию на комментарий {commentNode} {commentHeading} к посту {postingNode} {postingHeading}",
       "comment-update-task-failed" : "Не удалось подписать комментарий {commentHeading} к посту {node} {postingHeading}",
+      "defrosting" : "Мы очень рады видеть вас снова после столь долгого отсутствия! В ближайшие несколько минут ваша лента наполнится новыми постами",
       "friend-added" : "{node} {gender, select, female {добавила} other {добавил}} вас в группу друзей \"{group}\"",
       "friend-added-to-friends" : "{node} {gender, select, female {добавила} other {добавил}} вас к себе в друзья",
       "friend-deleted" : "{node} {gender, select, female {удалила} other {удалил}} вас из группы друзей \"{group}\"",
@@ -703,6 +705,9 @@
       "friends_view" : "Список друзей виден",
       "friends_view-total" : "Число друзей видно",
       "instants_lifetime" : "Стирать уведомления через",
+      "instants" : {
+        "prioritize" : "Сортировать уведомления в соответствии с их важностью"
+      },
       "instants_viewed_lifetime" : "Стирать просмотренные уведомления через",
       "media_max-size" : "Максимальный размер загружаемых медиафайлов",
       "media_preview-gain" : "Фактор эффективности предпросмотра медиа",

@@ -128,6 +128,7 @@
   "decision" : "Decision",
   "decision-sheriff-initiative" : "The decision was made at the sheriff's initiative.",
   "decision-upon-complain" : "The decision was made upon <0>a complaint</0> by another user.",
+  "defrosting-message-box" : "\uD83C\uDF89 <b>We are thrilled to see you again after such a long absence!</b><br><br>Many great new things have been added to Moera since then. Look around while your feed is being filled with new posts.",
   "delete" : "Delete",
   "delete-account-moera" : "Delete my account in Moera",
   "delete-account-need-log-in" : "To delete your account, you need to",
@@ -312,6 +313,7 @@
       "comment-reaction-added" : "{reactions} your comment {heading} on {posting}",
       "comment-reaction-task-failed" : "Failed to sign a reaction to {commentNode} comment {commentHeading} to {postingNode} post {postingHeading}",
       "comment-update-task-failed" : "Failed to sign the comment {commentHeading} to {node} post {postingHeading}",
+      "defrosting" : "We are thrilled to see you again after such a long absence! In the next few minutes, your feed will be filled with new posts",
       "friend-added" : "{node} added you to the group of friends \"{group}\"",
       "friend-added-to-friends" : "{node} added you to {gender, select, female {her} other {his}} friends",
       "friend-deleted" : "{node} removed you from the group of friends \"{group}\"",
@@ -703,6 +705,9 @@
       "friends_view" : "List of friends is visible to",
       "friends_view-total" : "Number of friends is visible to",
       "instants_lifetime" : "Purge notifications after",
+      "instants" : {
+        "prioritize" : "Arrange notifications according to their importance"
+      },
       "instants_viewed_lifetime" : "Purge viewed notifications after",
       "media_max-size" : "Maximal size of an uploaded media",
       "media_preview-gain" : "Media preview gain factor",

@@ -2815,6 +2815,10 @@ export const NODE_API_SCHEMAS = {
                         }
                     ]
                 },
+                "frozen": {
+                    type: "boolean",
+                    nullable: true
+                },
             },
             additionalProperties: false
         },

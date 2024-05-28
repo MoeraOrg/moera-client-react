@@ -8,13 +8,15 @@ import {
     StoryPinningUpdateAction,
     StoryReadingUpdateAction,
     StorySatisfyAction,
-    storyUpdated
+    storyUpdated,
+    StoryViewingUpdateAction
 } from "state/stories/actions";
 import { executor } from "state/executor";
 import { REL_CURRENT } from "util/rel-node-name";
 
 export default [
     executor("STORY_PINNING_UPDATE", null, storyPinningUpdateSaga),
+    executor("STORY_VIEWING_UPDATE", null, storyViewingUpdateSaga, homeIntroduced),
     executor("STORY_READING_UPDATE", null, storyReadingUpdateSaga, homeIntroduced),
     executor("STORY_SATISFY", null, storySatisfySaga)
 ];
@@ -29,6 +31,15 @@ function* storyPinningUpdateSaga(action: WithContext<StoryPinningUpdateAction>) 
     }
 }
 
+function* storyViewingUpdateSaga(action: WithContext<StoryViewingUpdateAction>) {
+    const {nodeName, id, viewed} = action.payload;
+    try {
+        const story = yield* call(Node.updateStory, action, nodeName, id, {viewed});
+        yield* put(storyUpdated(nodeName, story).causedBy(action));
+    } catch (e) {
+        // ignore, not important
+    }
+}
 function* storyReadingUpdateSaga(action: WithContext<StoryReadingUpdateAction>) {
     const {nodeName, id, read} = action.payload;
     try {

@@ -31422,7 +31422,7 @@ return errors === 0;
 }
 
 export const WhoAmI = validate125;
-const schema146 = {"type":"object","properties":{"nodeName":{"type":"string","nullable":true},"nodeNameChanging":{"type":"boolean","nullable":true},"fullName":{"type":"string","nullable":true},"gender":{"type":"string","nullable":true},"title":{"type":"string","nullable":true},"avatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]}},"additionalProperties":false};
+const schema146 = {"type":"object","properties":{"nodeName":{"type":"string","nullable":true},"nodeNameChanging":{"type":"boolean","nullable":true},"fullName":{"type":"string","nullable":true},"gender":{"type":"string","nullable":true},"title":{"type":"string","nullable":true},"avatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"frozen":{"type":"boolean","nullable":true}},"additionalProperties":false};
 
 function validate125(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
 let vErrors = null;
@@ -31431,7 +31431,7 @@ if(errors === 0){
 if(data && typeof data == "object" && !Array.isArray(data)){
 const _errs1 = errors;
 for(const key0 in data){
-if(!((((((key0 === "nodeName") || (key0 === "nodeNameChanging")) || (key0 === "fullName")) || (key0 === "gender")) || (key0 === "title")) || (key0 === "avatar"))){
+if(!(((((((key0 === "nodeName") || (key0 === "nodeNameChanging")) || (key0 === "fullName")) || (key0 === "gender")) || (key0 === "title")) || (key0 === "avatar")) || (key0 === "frozen"))){
 delete data[key0];
 }
 }
@@ -32009,6 +32009,48 @@ var valid0 = _errs17 === errors;
 }
 else {
 var valid0 = true;
+}
+if(valid0){
+if(data.frozen !== undefined){
+let data11 = data.frozen;
+const _errs40 = errors;
+if((typeof data11 !== "boolean") && (data11 !== null)){
+let dataType12 = typeof data11;
+let coerced12 = undefined;
+if(dataType12 == 'object' && Array.isArray(data11) && data11.length == 1){
+data11 = data11[0];
+dataType12 = typeof data11;
+if((typeof data11 === "boolean") && (data11 === null)){
+coerced12 = data11;
+}
+}
+if(!(coerced12 !== undefined)){
+if(data11 === "false" || data11 === 0 || data11 === null){
+coerced12 = false;
+}
+else if(data11 === "true" || data11 === 1){
+coerced12 = true;
+}
+else if(data11 === "" || data11 === 0 || data11 === false){
+coerced12 = null;
+}
+else {
+validate125.errors = [{instancePath:instancePath+"/frozen",schemaPath:"#/properties/frozen/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
+return false;
+}
+}
+if(coerced12 !== undefined){
+data11 = coerced12;
+if(data !== undefined){
+data["frozen"] = coerced12;
+}
+}
+}
+var valid0 = _errs40 === errors;
+}
+else {
+var valid0 = true;
+}
 }
 }
 }

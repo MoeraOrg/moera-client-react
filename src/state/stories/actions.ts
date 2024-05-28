@@ -9,6 +9,17 @@ export type StoryPinningUpdateAction = ActionWithPayload<"STORY_PINNING_UPDATE",
 export const storyPinningUpdate = (id: string, pinned: boolean): StoryPinningUpdateAction =>
     actionWithPayload("STORY_PINNING_UPDATE", {id, pinned});
 
+export type StoryViewingUpdateAction = ActionWithPayload<"STORY_VIEWING_UPDATE", {
+    nodeName: RelNodeName | string;
+    feedName: string;
+    id: string;
+    viewed: boolean;
+}>;
+export const storyViewingUpdate = (
+    nodeName: RelNodeName | string, feedName: string, id: string, viewed: boolean
+): StoryViewingUpdateAction =>
+    actionWithPayload("STORY_VIEWING_UPDATE", {nodeName, feedName, id, viewed});
+
 export type StoryReadingUpdateAction = ActionWithPayload<"STORY_READING_UPDATE", {
     nodeName: RelNodeName | string;
     feedName: string;
@@ -51,6 +62,7 @@ export const storyUpdated = (nodeName: RelNodeName | string, story: StoryInfo): 
 
 export type StoriesAnyAction =
     StoryPinningUpdateAction
+    | StoryViewingUpdateAction
     | StoryReadingUpdateAction
     | StorySatisfyAction
     | StoryAddedAction

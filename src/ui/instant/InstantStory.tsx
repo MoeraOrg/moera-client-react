@@ -16,8 +16,8 @@ import Jump from "ui/navigation/Jump";
 import { Avatar } from "ui/control";
 import { getInstantTarget, getInstantTypeDetails } from "ui/instant/instant-types";
 import InstantHtml from "ui/instant/InstantHtml";
-import "./InstantStory.css";
 import { REL_HOME } from "util/rel-node-name";
+import "./InstantStory.css";
 
 interface Props {
     story: ExtStoryInfo;

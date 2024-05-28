@@ -38,9 +38,9 @@ export type SourceFormat = "plain-text" | "html" | "markdown" | "application";
 export type StoryType = "asked-to-friend" | "asked-to-subscribe" | "blocked-user" | "blocked-user-in-posting"
     | "comment-added" | "comment-media-reaction-added-negative" | "comment-media-reaction-added-positive"
     | "comment-media-reaction-failed" | "comment-post-task-failed" | "comment-reaction-added-negative"
-    | "comment-reaction-added-positive" | "comment-reaction-task-failed" | "comment-update-task-failed" | "friend-added"
-    | "friend-deleted" | "friend-group-deleted" | "mention-comment" | "mention-posting" | "posting-added"
-    | "posting-media-reaction-added-negative" | "posting-media-reaction-added-positive"
+    | "comment-reaction-added-positive" | "comment-reaction-task-failed" | "comment-update-task-failed" | "defrosting"
+    | "friend-added" | "friend-deleted" | "friend-group-deleted" | "mention-comment" | "mention-posting"
+    | "posting-added" | "posting-media-reaction-added-negative" | "posting-media-reaction-added-positive"
     | "posting-media-reaction-failed" | "posting-post-task-failed" | "posting-reaction-task-failed"
     | "posting-subscribe-task-failed" | "posting-update-task-failed" | "posting-updated" | "reaction-added-negative"
     | "reaction-added-positive" | "remote-comment-added" | "reply-comment" | "sheriff-complain-added"
@@ -1055,6 +1055,7 @@ export interface WhoAmI {
     gender?: string | null;
     title?: string | null;
     avatar?: AvatarImage | null;
+    frozen?: boolean | null;
 }
 
 export interface ActivityReactionFilter {

@@ -1,7 +1,8 @@
 import React from 'react';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { // @fortawesome
+import {
     faAt,
+    faCloudSun,
     faComment,
     faExclamationCircle,
     faEye,
@@ -33,6 +34,7 @@ import {
     buildCommentReactionAddedSummary,
     buildCommentReactionTaskFailedSummary,
     buildCommentUpdateTaskFailedSummary,
+    buildDefrostingSummary,
     buildFriendAddedSummary,
     buildFriendDeletedSummary,
     buildFriendGroupDeletedSummary,
@@ -67,6 +69,7 @@ import InstantStoryFriendGroupButtons, {
 } from "ui/instant/buttons/InstantStoryFriendGroupButtons";
 import InstantStoryBlockedButtons from "ui/instant/buttons/InstantStoryBlockedButtons";
 import InstantStorySheriffOrderButtons from "ui/instant/buttons/InstantStorySheriffOrderButtons";
+import { instantStoryDefrostingAction } from "ui/instant/buttons/InstantStoryDefrostingButtons";
 import { REL_HOME, RelNodeName } from "util/rel-node-name";
 
 type InstantSummarySupplier = (data: StorySummaryData, homeOwnerName: string | null, t: TFunction) => string;
@@ -78,8 +81,9 @@ interface InstantTarget {
 
 type InstantTargetSupplier = (story: StoryInfo | ExtStoryInfo) => InstantTarget;
 
-export type InstantStoryButtonsActionSupplier = (story: StoryInfo,
-                                                 context: ActionContext) => ClientAction | null | undefined;
+export type InstantStoryButtonsActionSupplier = (
+    story: StoryInfo, context: ActionContext
+) => ClientAction | ClientAction[] | null | undefined;
 
 type SheriffField = "posting" | "comment" | "comments";
 
@@ -389,6 +393,16 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
             nodeName: story.summaryNodeName ?? REL_HOME,
             href: `/complains/${story.summaryData?.sheriff?.complainId}`
         })
+    },
+    "defrosting": {
+        color: "var(--bs-orange)",
+        icon: faCloudSun,
+        summary: (data, homeOwnerName, t) => buildDefrostingSummary(t),
+        target: story => ({
+            nodeName: REL_HOME,
+            href: "/news"
+        }),
+        buttonsAction: instantStoryDefrostingAction
     }
 };
 
@@ -405,8 +419,5 @@ export function getInstantTarget(story: StoryInfo | ExtStoryInfo): InstantTarget
 }
 
 export function getInstantSummary(story: StoryInfo | ExtStoryInfo, homeOwnerName: string | null): string {
-    if (story.summaryData == null) {
-        return "";
-    }
-    return getInstantTypeDetails(story.storyType)?.summary(story.summaryData, homeOwnerName, i18n.t) ?? "";
+    return getInstantTypeDetails(story.storyType)?.summary(story.summaryData ?? {}, homeOwnerName, i18n.t) ?? "";
 }
