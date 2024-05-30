@@ -31,5 +31,5 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     } else if (state.settings.tab === "client") {
         info = info.sub("client");
     }
-    return info.withHash(state.settings.sheet);
+    return info.noIndex().withHash(state.settings.sheet);
 }

@@ -4,12 +4,16 @@ export class LocationInfo {
     parameters: Partial<Record<string, string>>;
     hash: string;
     title: string | null;
+    canonicalUrl: string | null;
+    noIndexPage: boolean;
 
     constructor() {
         this.directories = [];
         this.parameters = {};
         this.hash = "";
         this.title = "";
+        this.canonicalUrl = null;
+        this.noIndexPage = false;
     }
 
     static fromUrl(path: string | null, query: string | null, hash: string | null): LocationInfo {
@@ -22,6 +26,8 @@ export class LocationInfo {
         info.parameters = {...this.parameters};
         info.hash = this.hash;
         info.title = this.title;
+        info.canonicalUrl = this.canonicalUrl;
+        info.noIndexPage = this.noIndexPage;
         return info;
     }
 
@@ -84,6 +90,18 @@ export class LocationInfo {
 
     hasTitle(): boolean {
         return this.title != null && this.title !== "";
+    }
+
+    withCanonicalUrl(canonicalUrl: string | null): LocationInfo {
+        const info = this.clone();
+        info.canonicalUrl = canonicalUrl;
+        return info;
+    }
+
+    noIndex(): LocationInfo {
+        const info = this.clone();
+        info.noIndexPage = true;
+        return info;
     }
 
     toUrl(): string {

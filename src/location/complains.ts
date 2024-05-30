@@ -34,5 +34,5 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     if (groupId != null) {
         info = info.sub(groupId);
     }
-    return info.withTitle(i18n.t("complains") + atOwner(state));
+    return info.noIndex().withTitle(i18n.t("complains") + atOwner(state));
 }

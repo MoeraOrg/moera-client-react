@@ -14,6 +14,8 @@ export default function Navigation() {
     const rootLocation = useSelector(getNodeRootLocation);
     const location = useSelector((state: ClientState) => state.navigation.location);
     const title = useSelector((state: ClientState) => state.navigation.title);
+    const canonicalUrl = useSelector((state: ClientState) => state.navigation.canonicalUrl);
+    const noIndex = useSelector((state: ClientState) => state.navigation.noIndex);
     const update = useSelector((state: ClientState) => state.navigation.update);
     const locked = useSelector((state: ClientState) => state.navigation.locked);
     const count = useSelector(getInstantCount);
@@ -107,6 +109,25 @@ export default function Navigation() {
             document.title = counter + "Moera";
         }
     }, [count, title]);
+
+    useEffect(() => {
+        if (canonicalUrl != null) {
+            const linkTag = document.createElement("link");
+            linkTag.setAttribute("rel", "canonical");
+            linkTag.href = canonicalUrl;
+            document.head.appendChild(linkTag);
+            return () => document.querySelector("link[rel=canonical]")?.remove();
+        }
+    }, [canonicalUrl]);
+
+    useEffect(() => {
+        let value = "notranslate";
+        if (noIndex) {
+            value = "noindex,follow," + value;
+        }
+        const robots = document.querySelector("meta[name=robots]")!;
+        robots.setAttribute("content", value);
+    }, [noIndex]);
 
     return null;
 }

@@ -2,6 +2,7 @@ import i18n from 'i18next';
 
 import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
+import { getNodeRootLocation } from "state/node/selectors";
 import { goToProfile } from "state/navigation/actions";
 import { profileEdit, profileEditCancel } from "state/profile/actions";
 import { isProfileEditing } from "state/profile/selectors";
@@ -25,6 +26,7 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
     info = info.sub("profile");
+    info = info.withCanonicalUrl(getNodeRootLocation(state) + info.toUrl());
     const editing = isProfileEditing(state);
     info = editing ? info.withParameter("edit", "true") : info;
     return info.withTitle((!editing ? i18n.t("profile") : i18n.t("edit-profile")) + atOwner(state));

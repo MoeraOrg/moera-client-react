@@ -12,7 +12,7 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
 }
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
-    info = info.sub("compose");
+    info = info.sub("compose").noIndex();
     const id = getComposePostingId(state);
     if (id == null) {
         const draftId = getComposeDraftId(state);

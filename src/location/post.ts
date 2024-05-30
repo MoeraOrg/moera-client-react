@@ -1,5 +1,6 @@
 import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
+import { getNodeRootLocation } from "state/node/selectors";
 import { goToPosting } from "state/navigation/actions";
 import { openLightBox } from "state/lightbox/actions";
 import { getDetailedPosting, getDetailedPostingId, getFocusedCommentId } from "state/detailedposting/selectors";
@@ -24,6 +25,7 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     if (focusedCommentId != null) {
         info = info.withParameter("comment", focusedCommentId);
     }
+    info = info.withCanonicalUrl(getNodeRootLocation(state) + info.toUrl());
     const posting = getDetailedPosting(state);
     const heading = posting != null ? posting.heading : "";
     return info.withTitle(heading + atOwner(state));

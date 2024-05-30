@@ -107,10 +107,14 @@ export const updateLocation = (): UpdateLocationAction =>
 export type LocationSetAction = ActionWithPayload<"LOCATION_SET", {
     location: string;
     title: string | null;
+    canonicalUrl: string | null;
+    noIndex: boolean;
     update: boolean;
 }>;
-export const locationSet = (location: string, title: string | null, update: boolean): LocationSetAction =>
-    actionWithPayload("LOCATION_SET", {location, title, update});
+export const locationSet = (
+    location: string, title: string | null, canonicalUrl: string | null, noIndex: boolean, update: boolean
+): LocationSetAction =>
+    actionWithPayload("LOCATION_SET", {location, title, canonicalUrl, noIndex, update});
 
 export type LocationLockAction = ActionWithoutPayload<"LOCATION_LOCK">;
 export const locationLock = (): LocationLockAction =>

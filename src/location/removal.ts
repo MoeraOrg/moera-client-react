@@ -14,5 +14,5 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
 }
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
-    return info.sub("removal").withTitle(i18n.t("delete-account-moera"));
+    return info.sub("removal").noIndex().withTitle(i18n.t("delete-account-moera"));
 }

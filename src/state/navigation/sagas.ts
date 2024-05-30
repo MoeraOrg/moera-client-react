@@ -95,7 +95,8 @@ function* updateLocationSaga(action: UpdateLocationAction) {
 
 function* changeLocation(action: NewLocationAction | UpdateLocationAction | null) {
     const info = yield* select(locationBuild, new LocationInfo());
-    yield* put(locationSet(info.toUrl(), info.title, action == null || action.type === "NEW_LOCATION").causedBy(action));
+    const update = action == null || action.type === "NEW_LOCATION";
+    yield* put(locationSet(info.toUrl(), info.title, info.canonicalUrl, info.noIndexPage, update).causedBy(action));
 }
 
 function* goHomeLocationSaga(action: GoHomeLocationAction) {

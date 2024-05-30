@@ -4,7 +4,7 @@ import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import { goToPeople } from "state/navigation/actions";
 import { peopleGoToTab } from "state/people/actions";
-import { getNodeFriendGroups } from "state/node/selectors";
+import { getNodeFriendGroups, getNodeRootLocation } from "state/node/selectors";
 import { LocationInfo } from "location/LocationInfo";
 import { getPeopleTabTitle } from "ui/people/people-tabs";
 import { atOwner } from "util/names";
@@ -23,8 +23,7 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
 }
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
-    return info
-        .sub("people")
-        .sub(state.people.tab)
-        .withTitle(getPeopleTabTitle(state.people.tab, getNodeFriendGroups(state), i18n.t) + atOwner(state));
+    info = info.sub("people").sub(state.people.tab);
+    info = info.withCanonicalUrl(getNodeRootLocation(state) + info.toUrl());
+    return info.withTitle(getPeopleTabTitle(state.people.tab, getNodeFriendGroups(state), i18n.t) + atOwner(state));
 }

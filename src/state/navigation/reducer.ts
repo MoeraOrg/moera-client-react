@@ -5,6 +5,8 @@ const initialState: NavigationState = {
     page: "timeline",
     location: "",
     title: "",
+    canonicalUrl: null,
+    noIndex: false,
     update: false,
     locked: false,
     bottomMenuVisible: true
@@ -33,6 +35,8 @@ export default (state: NavigationState = initialState, action: ClientAction): Na
                 ...state,
                 location: action.payload.location,
                 title: action.payload.title ?? "",
+                canonicalUrl: action.payload.canonicalUrl,
+                noIndex: action.payload.noIndex,
                 update: !state.locked ? action.payload.update : state.update && action.payload.update
             };
 

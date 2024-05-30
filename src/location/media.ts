@@ -1,5 +1,6 @@
 import { ClientState } from "state/state";
 import { LocationInfo } from "location/LocationInfo";
+import { getNodeRootLocation } from "state/node/selectors";
 import { getLightBoxCommentId, getLightBoxMediaId, getLightBoxPostingId } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
 import { atOwner } from "util/names";
@@ -18,6 +19,7 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     if (mediaId != null) {
         info = info.withParameter("media", mediaId);
     }
+    info = info.withCanonicalUrl(getNodeRootLocation(state) + info.toUrl());
     const posting = getPosting(state, postingId, REL_CURRENT);
     const heading = posting != null ? posting.heading : "";
     return info.withTitle(heading + atOwner(state));
