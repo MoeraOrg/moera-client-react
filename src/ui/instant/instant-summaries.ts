@@ -438,13 +438,14 @@ export function buildSheriffUnmarkedSummary(data: StorySummaryData, homeOwnerNam
     });
 }
 
-export function buildSheriffComplainAddedSummary(t: TFunction): string {
-    return t("instant-summary.story.sheriff-complain-added");
+export function buildSheriffComplaintAddedSummary(t: TFunction): string {
+    return t("instant-summary.story.sheriff-complaint-added");
 }
 
-export function buildSheriffComplainDecidedSummary(data: StorySummaryData, homeOwnerName: string | null,
-                                                   t: TFunction): string {
-    return t("instant-summary.story.sheriff-complain-decided", {
+export function buildSheriffComplaintDecidedSummary(
+    data: StorySummaryData, homeOwnerName: string | null, t: TFunction
+): string {
+    return t("instant-summary.story.sheriff-complaint-decided", {
         target: formatSheriffTarget(data, homeOwnerName, t)
     });
 }

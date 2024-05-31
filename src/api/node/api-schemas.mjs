@@ -2026,7 +2026,7 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
-        SheriffComplainGroupInfo: {
+        SheriffComplaintGroupInfo: {
             type: "object",
             properties: {
                 "id": {
@@ -2127,7 +2127,7 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
-        SheriffComplainGroupsSliceInfo: {
+        SheriffComplaintGroupsSliceInfo: {
             type: "object",
             properties: {
                 "before": {
@@ -2139,7 +2139,7 @@ export const NODE_API_SCHEMAS = {
                 "groups": {
                     type: "array",
                     items: {
-                        $ref: "node#/definitions/SheriffComplainGroupInfo"
+                        $ref: "node#/definitions/SheriffComplaintGroupInfo"
                     }
                 },
                 "total": {
@@ -2163,7 +2163,7 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
-        SheriffComplainInfo: {
+        SheriffComplaintInfo: {
             type: "object",
             properties: {
                 "id": {
@@ -2183,7 +2183,7 @@ export const NODE_API_SCHEMAS = {
                 "group": {
                     anyOf: [
                         {
-                            $ref: "node#/definitions/SheriffComplainGroupInfo",
+                            $ref: "node#/definitions/SheriffComplaintGroupInfo",
                             type: "object",
                             nullable: true
                         },
@@ -2216,10 +2216,10 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
-        SheriffComplainInfoArray: {
+        SheriffComplaintInfoArray: {
             type: "array",
             items: {
-                $ref: "node#/definitions/SheriffComplainInfo"
+                $ref: "node#/definitions/SheriffComplaintInfo"
             }
         },
 
@@ -2314,7 +2314,7 @@ export const NODE_API_SCHEMAS = {
                 "signatureVersion": {
                     type: "integer"
                 },
-                "complainGroupId": {
+                "complaintGroupId": {
                     type: "string",
                     nullable: true
                 },
@@ -2456,7 +2456,7 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
-                "complainId": {
+                "complaintId": {
                     type: "string",
                     nullable: true
                 },

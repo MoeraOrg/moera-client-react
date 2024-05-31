@@ -73,9 +73,9 @@ function SheriffOrderDialogInner({target}: Props) {
                                    anyValue noMedia/>
                     {!isSheriff &&
                         <div className="alert alert-warning">
-                            <CheckboxField name="anonymous" title={t("not-publish-my-complain")} groupClassName="mb-0"
+                            <CheckboxField name="anonymous" title={t("not-publish-my-complaint")} groupClassName="mb-0"
                                            anyValue/>
-                            <span dangerouslySetInnerHTML={{__html: t("note-complains-public")}}/>
+                            <span dangerouslySetInnerHTML={{__html: t("note-complaints-public")}}/>
                         </div>
                     }
                 </div>

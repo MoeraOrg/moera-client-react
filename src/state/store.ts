@@ -19,7 +19,7 @@ import compose from "state/compose/reducer";
 import postings from "state/postings/reducer";
 import feeds from "state/feeds/reducer";
 import settings from "state/settings/reducer";
-import complains from "state/complains/reducer";
+import complaints from "state/complaints/reducer";
 import cartes from "state/cartes/reducer";
 import reactionsDialog from "state/reactionsdialog/reducer";
 import postingReply from "state/postingreply/reducer";
@@ -67,7 +67,7 @@ import detailedPostingExecutors from "state/detailedposting/sagas";
 import composeExecutors from "state/compose/sagas";
 import postingsExecutors from "state/postings/sagas";
 import settingsExecutors from "state/settings/sagas";
-import complainsExecutors from "state/complains/sagas";
+import complaintsExecutors from "state/complaints/sagas";
 import namingExecutors from "state/naming/sagas";
 import reactionsDialogExecutors from "state/reactionsdialog/sagas";
 import postingReplyExecutors from "state/postingreply/sagas";
@@ -106,7 +106,7 @@ import detailedPostingTriggers from "state/detailedposting/triggers";
 import composeTriggers from "state/compose/triggers";
 import postingsTriggers from "state/postings/triggers";
 import settingsTriggers from "state/settings/triggers";
-import complainsTriggers from "state/complains/triggers";
+import complaintsTriggers from "state/complaints/triggers";
 import namingTriggers from "state/naming/triggers";
 import reactionsDialogTriggers from "state/reactionsdialog/triggers";
 import peopleTriggers from "state/people/triggers";
@@ -140,7 +140,7 @@ const reducers = combineReducers({
     postings,
     feeds,
     settings,
-    complains,
+    complaints,
     cartes,
     reactionsDialog,
     postingReply,
@@ -192,7 +192,7 @@ const triggers = collectTriggers(
     composeTriggers,
     postingsTriggers,
     settingsTriggers,
-    complainsTriggers,
+    complaintsTriggers,
     namingTriggers,
     reactionsDialogTriggers,
     peopleTriggers,
@@ -224,7 +224,7 @@ const executors = collectExecutors(
     composeExecutors,
     postingsExecutors,
     settingsExecutors,
-    complainsExecutors,
+    complaintsExecutors,
     namingExecutors,
     reactionsDialogExecutors,
     postingReplyExecutors,

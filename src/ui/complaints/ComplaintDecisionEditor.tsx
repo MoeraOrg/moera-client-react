@@ -4,15 +4,15 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
-import { SHERIFF_ORDER_REASON_CODES, SheriffComplainDecisionText, SheriffOrderReason } from "api";
+import { SHERIFF_ORDER_REASON_CODES, SheriffComplaintDecisionText, SheriffOrderReason } from "api";
 import { ClientState } from "state/state";
-import { complainsDecisionPost } from "state/complains/actions";
-import { ExtComplainGroupInfo } from "state/complains/state";
+import { complaintsDecisionPost } from "state/complaints/actions";
+import { ExtComplaintGroupInfo } from "state/complaints/state";
 import { Button } from "ui/control";
 import { CheckboxField, SelectField, SelectFieldChoice } from "ui/control/field";
 import { RichTextValue, RichTextField } from "ui/control/richtexteditor";
 import store from "state/store";
-import "./ComplainDecisionEditor.css";
+import "./ComplaintDecisionEditor.css";
 
 type DecisionCode = "choose" | "reject" | SheriffOrderReason;
 
@@ -31,26 +31,26 @@ interface Values {
 }
 
 interface OuterProps {
-    group: ExtComplainGroupInfo | null;
+    group: ExtComplaintGroupInfo | null;
 }
 
 type Props = OuterProps & FormikProps<Values>;
 
-function ComplainDecisionEditor({group, values}: Props) {
-    const submitting = useSelector((state: ClientState) => state.complains.submitting);
+function ComplaintDecisionEditor({group, values}: Props) {
+    const submitting = useSelector((state: ClientState) => state.complaints.submitting);
     const {t} = useTranslation();
 
     const submitEnabled = values.decisionCode !== "choose"
         && (values.decisionCode !== group?.decisionCode || values.decisionDetails.text !== group?.decisionDetails);
 
     return (
-        <div className="complain-decision-editor">
+        <div className="complaint-decision-editor">
             <h4>{t("decision")}</h4>
             <Form>
                 <SelectField name="decisionCode" choices={DECISION_CODES} anyValue/>
                 <div className={cx({"d-none": values.decisionCode === "choose"})}>
                     <RichTextField name="decisionDetails" format="plain-text" smileysEnabled anyValue noMedia/>
-                    <CheckboxField name="anonymous" title={t("not-show-complains")} anyValue/>
+                    <CheckboxField name="anonymous" title={t("not-show-complaints")} anyValue/>
                 </div>
                 <Button variant="primary" type="submit" loading={submitting} disabled={!submitEnabled}
                         className={cx({"d-none": !submitEnabled})}>
@@ -61,7 +61,7 @@ function ComplainDecisionEditor({group, values}: Props) {
     );
 }
 
-const complainDecisionEditorLogic = {
+const complaintDecisionEditorLogic = {
 
     mapPropsToValues: (props: OuterProps): Values => ({
         decisionCode: props.group?.status === "rejected" ? "reject" : props.group?.decisionCode ?? "choose",
@@ -76,7 +76,7 @@ const complainDecisionEditorLogic = {
             return;
         }
 
-        const decision: SheriffComplainDecisionText = {
+        const decision: SheriffComplaintDecisionText = {
             reject: values.decisionCode === "reject",
             decisionCode: values.decisionCode === "reject" ? null : values.decisionCode,
             decisionDetails: values.decisionDetails.text,
@@ -84,10 +84,10 @@ const complainDecisionEditorLogic = {
         }
 
         formik.setStatus("submitted");
-        store.dispatch(complainsDecisionPost(id, decision));
+        store.dispatch(complaintsDecisionPost(id, decision));
         formik.setSubmitting(false);
     }
 
 };
 
-export default withFormik(complainDecisionEditorLogic)(ComplainDecisionEditor);
+export default withFormik(complaintDecisionEditorLogic)(ComplaintDecisionEditor);

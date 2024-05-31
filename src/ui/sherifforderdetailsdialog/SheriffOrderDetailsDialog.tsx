@@ -23,7 +23,7 @@ export default function SheriffOrderDetailsDialog() {
 
     const onClose = () => dispatch(closeSheriffOrderDetailsDialog());
 
-    const onOpenComplain = (_: string, performJump: () => void) => {
+    const onOpenComplaint = (_: string, performJump: () => void) => {
         dispatch(closeSheriffOrderDetailsDialog());
         performJump();
     }
@@ -66,10 +66,10 @@ export default function SheriffOrderDetailsDialog() {
                             </Trans>
                         </p>
                         <p>
-                            {info?.complainGroupId != null ?
-                                <Trans i18nKey="decision-upon-complain">
-                                    <Jump nodeName={info.sheriffName} href={`/complains/${info.complainGroupId}`}
-                                          onNear={onOpenComplain} onFar={onOpenComplain}/>
+                            {info?.complaintGroupId != null ?
+                                <Trans i18nKey="decision-upon-complaint">
+                                    <Jump nodeName={info.sheriffName} href={`/complaints/${info.complaintGroupId}`}
+                                          onNear={onOpenComplaint} onFar={onOpenComplaint}/>
                                 </Trans>
                             :
                                 t("decision-sheriff-initiative")

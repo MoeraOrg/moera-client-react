@@ -25,7 +25,7 @@ export type PushRelayType = "fcm";
 export type SettingType = "bool" | "int" | "string" | "json" | "Duration" | "PrivateKey" | "PublicKey" | "Timestamp"
     | "UUID" | "Principal";
 
-export type SheriffComplainStatus = "posted" | "prepared" | "prepare-failed" | "not-found" | "invalid-target"
+export type SheriffComplaintStatus = "posted" | "prepared" | "prepare-failed" | "not-found" | "invalid-target"
     | "not-original" | "not-sheriff" | "approved" | "rejected";
 
 export type SheriffOrderCategory = "visibility";
@@ -43,8 +43,8 @@ export type StoryType = "asked-to-friend" | "asked-to-subscribe" | "blocked-user
     | "posting-added" | "posting-media-reaction-added-negative" | "posting-media-reaction-added-positive"
     | "posting-media-reaction-failed" | "posting-post-task-failed" | "posting-reaction-task-failed"
     | "posting-subscribe-task-failed" | "posting-update-task-failed" | "posting-updated" | "reaction-added-negative"
-    | "reaction-added-positive" | "remote-comment-added" | "reply-comment" | "sheriff-complain-added"
-    | "sheriff-complain-decided" | "sheriff-marked" | "sheriff-unmarked" | "subscriber-added" | "subscriber-deleted"
+    | "reaction-added-positive" | "remote-comment-added" | "reply-comment" | "sheriff-complaint-added"
+    | "sheriff-complaint-decided" | "sheriff-marked" | "sheriff-unmarked" | "subscriber-added" | "subscriber-deleted"
     | "unblocked-user" | "unblocked-user-in-posting";
 
 export type SubscriptionReason = "user" | "mention" | "comment";
@@ -759,14 +759,14 @@ export interface SettingTypeModifiers {
     principals?: PrincipalFlag[] | null;
 }
 
-export interface SheriffComplainDecisionText {
+export interface SheriffComplaintDecisionText {
     reject: boolean;
     decisionCode?: SheriffOrderReason | null;
     decisionDetails?: string | null;
     anonymous?: boolean | null;
 }
 
-export interface SheriffComplainGroupInfo {
+export interface SheriffComplaintGroupInfo {
     id: string;
     remoteNodeName: string;
     remoteNodeFullName?: string | null;
@@ -785,35 +785,35 @@ export interface SheriffComplainGroupInfo {
     remoteCommentHeading?: string | null;
     createdAt: number;
     moment: number;
-    status: SheriffComplainStatus;
+    status: SheriffComplaintStatus;
     decisionCode?: SheriffOrderReason | null;
     decisionDetails?: string | null;
     decidedAt?: number | null;
     anonymous?: boolean | null;
 }
 
-export interface SheriffComplainGroupsSliceInfo {
+export interface SheriffComplaintGroupsSliceInfo {
     before: number;
     after: number;
-    groups: SheriffComplainGroupInfo[];
+    groups: SheriffComplaintGroupInfo[];
     total: number;
     totalInPast: number;
     totalInFuture: number;
 }
 
-export interface SheriffComplainInfo {
+export interface SheriffComplaintInfo {
     id: string;
     ownerName: string;
     ownerFullName?: string | null;
     ownerGender?: string | null;
-    group?: SheriffComplainGroupInfo | null;
+    group?: SheriffComplaintGroupInfo | null;
     reasonCode: SheriffOrderReason;
     reasonDetails?: string | null;
     anonymousRequested?: boolean | null;
     createdAt: number;
 }
 
-export interface SheriffComplainText {
+export interface SheriffComplaintText {
     ownerFullName?: string | null;
     ownerGender?: string | null;
     nodeName: string;
@@ -885,7 +885,7 @@ export interface SheriffOrderInfo {
     createdAt: number;
     signature: string;
     signatureVersion: number;
-    complainGroupId?: string | null;
+    complaintGroupId?: string | null;
 }
 
 export interface StoryAttributes {
@@ -932,7 +932,7 @@ export interface StorySummaryReaction {
 export interface StorySummarySheriff {
     sheriffName: string;
     orderId?: string | null;
-    complainId?: string | null;
+    complaintId?: string | null;
 }
 
 export interface SubscriberDescription {

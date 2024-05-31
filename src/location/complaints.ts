@@ -3,25 +3,25 @@ import i18n from 'i18next';
 import { LocationInfo } from "location/LocationInfo";
 import { ClientAction } from "state/action";
 import { ClientState } from "state/state";
-import { goToComplains } from "state/navigation/actions";
-import { complainsGroupClose, complainsGroupOpen } from "state/complains/actions";
-import { getActiveComplainGroupId } from "state/complains/selectors";
+import { goToComplaints } from "state/navigation/actions";
+import { complaintsGroupClose, complaintsGroupOpen } from "state/complaints/actions";
+import { getActiveComplaintGroupId } from "state/complaints/selectors";
 import { atOwner } from "util/names";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
-    const actions: ClientAction[] = [goToComplains()];
+    const actions: ClientAction[] = [goToComplaints()];
     const srcGroupId = srcInfo.directories[1];
     const dstGroupId = dstInfo.directories[1];
     if (srcGroupId == null) {
         if (dstGroupId != null) {
-            actions.push(complainsGroupOpen(dstGroupId));
+            actions.push(complaintsGroupOpen(dstGroupId));
         }
     } else {
         if (dstGroupId == null) {
-            actions.push(complainsGroupClose());
+            actions.push(complaintsGroupClose());
         } else {
             if (srcGroupId !== dstGroupId) {
-                actions.push(complainsGroupOpen(dstGroupId));
+                actions.push(complaintsGroupOpen(dstGroupId));
             }
         }
     }
@@ -29,10 +29,10 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
 }
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
-    info = info.sub("complains");
-    const groupId = getActiveComplainGroupId(state);
+    info = info.sub("complaints");
+    const groupId = getActiveComplaintGroupId(state);
     if (groupId != null) {
         info = info.sub(groupId);
     }
-    return info.noIndex().withTitle(i18n.t("complains") + atOwner(state));
+    return info.noIndex().withTitle(i18n.t("complaints") + atOwner(state));
 }

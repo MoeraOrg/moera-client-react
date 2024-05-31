@@ -59,9 +59,9 @@ import {
     RemoteReactionDeletedEvent,
     RemoteReactionVerificationFailedEvent,
     RemoteReactionVerifiedEvent,
-    SheriffComplainAddedEvent,
-    SheriffComplainGroupAddedEvent,
-    SheriffComplainGroupUpdatedEvent,
+    SheriffComplaintAddedEvent,
+    SheriffComplaintGroupAddedEvent,
+    SheriffComplaintGroupUpdatedEvent,
     StoriesStatusUpdatedEvent,
     StoryAddedEvent,
     StoryDeletedEvent,
@@ -147,9 +147,9 @@ export type ClientEventAction =
     | EventAction<RemoteReactionDeletedEvent>
     | EventAction<RemoteReactionVerificationFailedEvent>
     | EventAction<RemoteReactionVerifiedEvent>
-    | EventAction<SheriffComplainAddedEvent>
-    | EventAction<SheriffComplainGroupAddedEvent>
-    | EventAction<SheriffComplainGroupUpdatedEvent>
+    | EventAction<SheriffComplaintAddedEvent>
+    | EventAction<SheriffComplaintGroupAddedEvent>
+    | EventAction<SheriffComplaintGroupUpdatedEvent>
     | EventAction<StoriesStatusUpdatedEvent>
     | EventAction<StoryAddedEvent>
     | EventAction<StoryDeletedEvent>

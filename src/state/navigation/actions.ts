@@ -77,9 +77,9 @@ export type GoToPeopleAction = GoToPageAction<"people", {}>;
 export const goToPeople = (): GoToPeopleAction =>
     goToPage("people", {});
 
-export type GoToComplainsAction = GoToPageAction<"complains", {}>;
-export const goToComplains = (): GoToComplainsAction =>
-    goToPage("complains", {});
+export type GoToComplaintsAction = GoToPageAction<"complaints", {}>;
+export const goToComplaints = (): GoToComplaintsAction =>
+    goToPage("complaints", {});
 
 export type GoToRemovalAction = GoToPageAction<"removal", {}>;
 export const goToRemoval = (): GoToRemovalAction =>
@@ -93,7 +93,7 @@ export type GoToPageAnyAction =
     | GoToSettingsAction
     | GoToNewsAction
     | GoToPeopleAction
-    | GoToComplainsAction
+    | GoToComplaintsAction
     | GoToRemovalAction;
 
 export type NewLocationAction = ActionWithoutPayload<"NEW_LOCATION">;

@@ -1,4 +1,4 @@
-.user-complain {
+.user-complaint {
     background-color: var(--bs-gray-100);
     border-radius: .25rem;
     padding: .5rem;
@@ -7,28 +7,28 @@
     margin-top: 1rem;
 }
 
-.user-complain .owner {
+.user-complaint .owner {
     font-weight: bold;
     margin-right: .5em;
 }
 
-.user-complain .owner > A {
+.user-complaint .owner > A {
     color: var(--node-name);
 }
 
-.user-complain .date {
+.user-complaint .date {
     font-size: .8rem;
     color: var(--bs-gray-500);
 }
 
-.user-complain P {
+.user-complaint P {
     margin-top: 1rem;
 }
 
-.user-complain P:last-child {
+.user-complaint P:last-child {
     margin-bottom: 0;
 }
 
-.user-complain .anonymous-requested {
+.user-complaint .anonymous-requested {
     color: var(--bs-danger);
 }

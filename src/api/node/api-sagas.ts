@@ -1607,58 +1607,58 @@ export function* updateNodeSettingsMetadata(
 
 export function* getSheriffComplaintGroupsSlice(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, after: number | null = null,
-    before: number | null = null, limit: number | null = null, status: API.SheriffComplainStatus | null = null,
+    before: number | null = null, limit: number | null = null, status: API.SheriffComplaintStatus | null = null,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.SheriffComplainGroupsSliceInfo> {
+): CallApiResult<API.SheriffComplaintGroupsSliceInfo> {
 
-    const location = urlWithParameters(ut`/sheriff/complains/groups`, {after, before, limit, status});
-    return yield* callApi<API.SheriffComplainGroupsSliceInfo>({
-        caller, nodeName, method: "GET", location, schema: "SheriffComplainGroupsSliceInfo", errorFilter
+    const location = urlWithParameters(ut`/sheriff/complaints/groups`, {after, before, limit, status});
+    return yield* callApi<API.SheriffComplaintGroupsSliceInfo>({
+        caller, nodeName, method: "GET", location, schema: "SheriffComplaintGroupsSliceInfo", errorFilter
     });
 }
 
 export function* getSheriffComplaintGroup(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.SheriffComplainGroupInfo> {
+): CallApiResult<API.SheriffComplaintGroupInfo> {
 
-    const location = ut`/sheriff/complains/groups/${id}`;
-    return yield* callApi<API.SheriffComplainGroupInfo>({
-        caller, nodeName, method: "GET", location, schema: "SheriffComplainGroupInfo", errorFilter
+    const location = ut`/sheriff/complaints/groups/${id}`;
+    return yield* callApi<API.SheriffComplaintGroupInfo>({
+        caller, nodeName, method: "GET", location, schema: "SheriffComplaintGroupInfo", errorFilter
     });
 }
 
 export function* getSheriffComplaintsByGroup(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.SheriffComplainInfo[]> {
+): CallApiResult<API.SheriffComplaintInfo[]> {
 
-    const location = ut`/sheriff/complains/groups/${id}/complains`;
-    return yield* callApi<API.SheriffComplainInfo[]>({
-        caller, nodeName, method: "GET", location, schema: "SheriffComplainInfoArray", errorFilter
+    const location = ut`/sheriff/complaints/groups/${id}/complaints`;
+    return yield* callApi<API.SheriffComplaintInfo[]>({
+        caller, nodeName, method: "GET", location, schema: "SheriffComplaintInfoArray", errorFilter
     });
 }
 
 export function* updateSheriffComplaintGroup(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
-    decision: API.SheriffComplainDecisionText, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.SheriffComplainGroupInfo> {
+    decision: API.SheriffComplaintDecisionText, errorFilter: ErrorFilter = false, auth: true | string = true
+): CallApiResult<API.SheriffComplaintGroupInfo> {
 
-    const location = ut`/sheriff/complains/groups/${id}`;
-    return yield* callApi<API.SheriffComplainGroupInfo>({
-        caller, nodeName, method: "PUT", location, body: decision, auth, schema: "SheriffComplainGroupInfo",
+    const location = ut`/sheriff/complaints/groups/${id}`;
+    return yield* callApi<API.SheriffComplaintGroupInfo>({
+        caller, nodeName, method: "PUT", location, body: decision, auth, schema: "SheriffComplaintGroupInfo",
         errorFilter
     });
 }
 
 export function* createSheriffComplaint(
-    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, complaint: API.SheriffComplainText,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, complaint: API.SheriffComplaintText,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.SheriffComplainInfo> {
+): CallApiResult<API.SheriffComplaintInfo> {
 
-    const location = "/sheriff/complains";
-    return yield* callApi<API.SheriffComplainInfo>({
-        caller, nodeName, method: "POST", location, body: complaint, auth, schema: "SheriffComplainInfo",
+    const location = "/sheriff/complaints";
+    return yield* callApi<API.SheriffComplaintInfo>({
+        caller, nodeName, method: "POST", location, body: complaint, auth, schema: "SheriffComplaintInfo",
         errorFilter
     });
 }

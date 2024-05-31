@@ -1,31 +1,31 @@
-import { SheriffComplainGroupInfo, SheriffComplainInfo } from "api";
+import { SheriffComplaintGroupInfo, SheriffComplaintInfo } from "api";
 
-export interface ExtComplainGroupInfo extends SheriffComplainGroupInfo {
+export interface ExtComplaintGroupInfo extends SheriffComplaintGroupInfo {
     extracted?: true;
     remotePostingHeadingHtml: string | null;
     remoteCommentHeadingHtml: string | null;
     decisionDetailsHtml: string | null;
 }
 
-export interface ExtComplainInfo extends SheriffComplainInfo {
+export interface ExtComplaintInfo extends SheriffComplaintInfo {
     extracted?: true;
     reasonDetailsHtml: string | null;
 }
 
-export interface ComplainsState {
+export interface ComplaintsState {
     loadingFuture: boolean;
     loadingPast: boolean;
     before: number;
     after: number;
-    complainGroups: Partial<Record<string, ExtComplainGroupInfo>>;
-    complainGroupList: string[];
+    complaintGroups: Partial<Record<string, ExtComplaintGroupInfo>>;
+    complaintGroupList: string[];
     inboxOnly: boolean;
     total: number;
     totalInFuture: number;
     totalInPast: number;
-    activeComplainGroupId: string | null;
+    activeComplaintGroupId: string | null;
     loadingActive: boolean;
-    complains: ExtComplainInfo[];
-    loadingComplains: boolean;
+    complaints: ExtComplaintInfo[];
+    loadingComplaints: boolean;
     submitting: boolean;
 }

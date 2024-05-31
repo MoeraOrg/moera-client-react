@@ -1,4 +1,4 @@
-.complain-group-line {
+.complaint-group-line {
     display: grid;
     grid-template: 2em auto / 2em;
     height: 2em;
@@ -8,30 +8,30 @@
     cursor: pointer;
 }
 
-.complain-group-line:hover {
+.complaint-group-line:hover {
     background: var(--highlight);
     color: black;
 }
 
-.complain-group-line .status {
+.complaint-group-line .status {
     grid-row: 1 / 2;
     grid-column: 1 / 2;
     place-self: center;
 }
 
-.complain-group-line .status.processing {
+.complaint-group-line .status.processing {
     color: var(--verifying);
 }
 
-.complain-group-line .status.good {
+.complaint-group-line .status.good {
     color: var(--correct);
 }
 
-.complain-group-line .status.wrong {
+.complaint-group-line .status.wrong {
     color: var(--incorrect);
 }
 
-.complain-group-line .heading {
+.complaint-group-line .heading {
     grid-row: 1 / 2;
     grid-column: 2 / 3;
     line-height: 2;
@@ -41,6 +41,6 @@
     text-overflow: ellipsis;
 }
 
-.complain-group-line .heading.unread {
+.complaint-group-line .heading.unread {
     font-weight: bold;
 }

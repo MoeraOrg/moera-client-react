@@ -50,8 +50,8 @@ import {
     buildReactionAddedSummary,
     buildRemoteCommentAddedSummary,
     buildReplyCommentSummary,
-    buildSheriffComplainAddedSummary,
-    buildSheriffComplainDecidedSummary,
+    buildSheriffComplaintAddedSummary,
+    buildSheriffComplaintDecidedSummary,
     buildSheriffMarkedSummary,
     buildSheriffUnmarkedSummary,
     buildSubscriberAddedSummary,
@@ -376,22 +376,22 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         }),
         buttons: InstantStorySheriffOrderButtons
     },
-    "sheriff-complain-added": {
+    "sheriff-complaint-added": {
         color: "var(--bs-blue)",
         icon: faHatCowboy,
-        summary: (data, homeOwnerName, t) => buildSheriffComplainAddedSummary(t),
+        summary: (data, homeOwnerName, t) => buildSheriffComplaintAddedSummary(t),
         target: story => ({
             nodeName: story.summaryNodeName ?? REL_HOME,
-            href: `/complains/${story.summaryData?.sheriff?.complainId}`
+            href: `/complaints/${story.summaryData?.sheriff?.complaintId}`
         })
     },
-    "sheriff-complain-decided": {
+    "sheriff-complaint-decided": {
         color: "var(--bs-indigo)",
         icon: faHatCowboy,
-        summary: (data, homeOwnerName, t) => buildSheriffComplainDecidedSummary(data, homeOwnerName, t),
+        summary: (data, homeOwnerName, t) => buildSheriffComplaintDecidedSummary(data, homeOwnerName, t),
         target: story => ({
             nodeName: story.summaryNodeName ?? REL_HOME,
-            href: `/complains/${story.summaryData?.sheriff?.complainId}`
+            href: `/complaints/${story.summaryData?.sheriff?.complaintId}`
         })
     },
     "defrosting": {

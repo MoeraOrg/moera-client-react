@@ -17,7 +17,7 @@ import { REL_CURRENT } from "util/rel-node-name";
 const ComposePage = React.lazy(() => import("ui/compose/ComposePage"));
 const SettingsPage = React.lazy(() => import("ui/settings/SettingsPage"));
 const PeoplePage = React.lazy(() => import("ui/people/PeoplePage"));
-const ComplainsPage = React.lazy(() => import("ui/complains/ComplainsPage"));
+const ComplaintsPage = React.lazy(() => import("ui/complaints/ComplaintsPage"));
 
 export default function CurrentPage() {
     const page = useSelector((state: ClientState) => state.navigation.page);
@@ -65,10 +65,10 @@ export default function CurrentPage() {
                     <PeoplePage/>
                 </Suspense>
             );
-        case "complains":
+        case "complaints":
             return (
                 <Suspense fallback={<Loading overlay large/>}>
-                    <ComplainsPage/>
+                    <ComplaintsPage/>
                 </Suspense>
             );
         default:

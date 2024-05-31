@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 
 import { Loading } from "ui/control";
-import "./ComplainsSentinel.css";
+import "./ComplaintsSentinel.css";
 
 interface Props {
     visible: boolean;
@@ -13,20 +13,20 @@ interface Props {
     onClick: () => void;
 }
 
-export default function ComplainsSentinel({visible, loading, title, total, onClick}: Props) {
+export default function ComplaintsSentinel({visible, loading, title, total, onClick}: Props) {
     if (loading) {
         return (
-            <div className="complains-sentinel">
+            <div className="complaints-sentinel">
                 <Loading/>
             </div>
         );
     }
     if (!visible) {
-        return <div className="complains-sentinel"/>;
+        return <div className="complaints-sentinel"/>;
     }
     const fullTitle = total > 0 ? `${title} (${total})` : title;
     return (
-        <button className="btn btn-link complains-sentinel" onClick={onClick}>
+        <button className="btn btn-link complaints-sentinel" onClick={onClick}>
             <FontAwesomeIcon className="icon" icon={faSyncAlt}/>&nbsp;&nbsp;{fullTitle}
         </button>
     );

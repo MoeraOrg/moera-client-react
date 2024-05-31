@@ -1,16 +1,16 @@
-.complain .status.processing {
+.complaint .status.processing {
     color: var(--verifying);
 }
 
-.complain .status.good {
+.complaint .status.good {
     color: var(--correct);
 }
 
-.complain .status.wrong {
+.complaint .status.wrong {
     color: var(--incorrect);
 }
 
-.complain .anonymous {
+.complaint .anonymous {
     background-color: var(--bs-gray-100);
     border-radius: .25rem;
     padding: .5rem;

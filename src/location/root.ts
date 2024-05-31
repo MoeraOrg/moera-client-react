@@ -1,6 +1,6 @@
 import { goToTimeline } from "state/navigation/actions";
 import {
-    isAtComplainsPage,
+    isAtComplaintsPage,
     isAtComposePage,
     isAtDetailedPostingPage,
     isAtNewsPage,
@@ -10,7 +10,7 @@ import {
     isAtSettingsPage,
     isAtTimelinePage
 } from "state/navigation/selectors";
-import { build as complainsBuild, transform as complainsTransform } from "location/complains";
+import { build as complaintsBuild, transform as complaintsTransform } from "location/complaints";
 import { build as composeBuild, transform as composeTransform } from "location/compose";
 import { build as newsBuild, transform as newsTransform } from "location/news";
 import { build as peopleBuild, transform as peopleTransform } from "location/people";
@@ -50,8 +50,8 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (dstInfo.directories[0] === "people") {
         return peopleTransform(srcInfo, dstInfo);
     }
-    if (dstInfo.directories[0] === "complains") {
-        return complainsTransform(srcInfo, dstInfo);
+    if (dstInfo.directories[0] === "complaints") {
+        return complaintsTransform(srcInfo, dstInfo);
     }
     if (dstInfo.directories[0] === "removal") {
         return removalTransform(srcInfo, dstInfo);
@@ -84,8 +84,8 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     if (isAtPeoplePage(state)) {
         return peopleBuild(state, info);
     }
-    if (isAtComplainsPage(state)) {
-        return complainsBuild(state, info);
+    if (isAtComplaintsPage(state)) {
+        return complaintsBuild(state, info);
     }
     if (isAtRemovalPage(state)) {
         return removalBuild(state, info);

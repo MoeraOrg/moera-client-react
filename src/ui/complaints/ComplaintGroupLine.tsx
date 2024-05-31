@@ -6,27 +6,27 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
-import { ExtComplainGroupInfo } from "state/complains/state";
-import { getComplainHeadingHtml, getComplainStatusDetails } from "ui/complains/complain-details";
+import { ExtComplaintGroupInfo } from "state/complaints/state";
+import { getComplaintHeadingHtml, getComplaintStatusDetails } from "ui/complaints/complaint-details";
 import { NameDisplayMode } from "ui/types";
 import Jump from "ui/navigation/Jump";
-import "./ComplainGroupLine.css";
+import "./ComplaintGroupLine.css";
 
 interface Props {
-    group: ExtComplainGroupInfo;
+    group: ExtComplaintGroupInfo;
 }
 
-export default function ComplainGroupLine({group}: Props) {
+export default function ComplaintGroupLine({group}: Props) {
     const nameDisplayMode = useSelector((state: ClientState) =>
         getSetting(state, "full-name.display") as NameDisplayMode);
     const {t} = useTranslation();
 
-    const {icon: statusIcon, className: statusClass, unread} = getComplainStatusDetails(group.status);
-    const headingHtml = getComplainHeadingHtml(group, nameDisplayMode, t);
+    const {icon: statusIcon, className: statusClass, unread} = getComplaintStatusDetails(group.status);
+    const headingHtml = getComplaintHeadingHtml(group, nameDisplayMode, t);
 
     return (
-        <Jump href={`/complains/${group.id}`} className="complain-group-line">
-            <div className={cx("status", statusClass)} title={t("complain-status." + group.status)}>
+        <Jump href={`/complaints/${group.id}`} className="complaint-group-line">
+            <div className={cx("status", statusClass)} title={t("complaint-status." + group.status)}>
                 {statusIcon &&
                     <FontAwesomeIcon icon={statusIcon}/>
                 }

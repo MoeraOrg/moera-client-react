@@ -29,8 +29,8 @@ export function isAtPeoplePage(state: ClientState): boolean {
     return isAtNode(state) && state.navigation.page === "people";
 }
 
-export function isAtComplainsPage(state: ClientState): boolean {
-    return isAtNode(state) && state.navigation.page === "complains";
+export function isAtComplaintsPage(state: ClientState): boolean {
+    return isAtNode(state) && state.navigation.page === "complaints";
 }
 
 export function isAtRemovalPage(state: ClientState): boolean {

@@ -5,24 +5,24 @@ import { useTranslation } from 'react-i18next';
 
 import { getDateFnsLocale } from "i18n";
 import { isAtHomeNode } from "state/node/selectors";
-import { ExtComplainInfo } from "state/complains/state";
+import { ExtComplaintInfo } from "state/complaints/state";
 import NodeName from "ui/nodename/NodeName";
-import "./Complain.css";
+import "./Complaint.css";
 
 interface Props {
-    complain: ExtComplainInfo;
+    complaint: ExtComplaintInfo;
 }
 
-export default function Complain({complain}: Props) {
+export default function Complaint({complaint}: Props) {
     const atHomeNode = useSelector(isAtHomeNode);
     const {t} = useTranslation();
 
-    const date = fromUnixTime(complain.createdAt);
+    const date = fromUnixTime(complaint.createdAt);
 
     return (
-        <div className="user-complain">
+        <div className="user-complaint">
             <span className="owner">
-                <NodeName name={complain.ownerName} fullName={complain.ownerFullName}/>
+                <NodeName name={complaint.ownerName} fullName={complaint.ownerFullName}/>
             </span>
             <span className="date">
                 <time dateTime={formatISO(date)} title={formatDistanceToNow(date, {locale: getDateFnsLocale()})}>
@@ -31,14 +31,14 @@ export default function Complain({complain}: Props) {
             </span>
             <p>
                 <strong>{t("reason")}: </strong>
-                {t(`sheriff-order-reason.${complain?.reasonCode ?? "other"}`)}
+                {t(`sheriff-order-reason.${complaint?.reasonCode ?? "other"}`)}
             </p>
-            {complain.reasonDetailsHtml &&
-                <p dangerouslySetInnerHTML={{__html: complain.reasonDetailsHtml}}/>
+            {complaint.reasonDetailsHtml &&
+                <p dangerouslySetInnerHTML={{__html: complaint.reasonDetailsHtml}}/>
             }
-            {(complain.anonymousRequested && atHomeNode) &&
+            {(complaint.anonymousRequested && atHomeNode) &&
                 <p className="anonymous-requested">
-                    {t("user-asks-not-publish-complain")}
+                    {t("user-asks-not-publish-complaint")}
                 </p>
             }
         </div>

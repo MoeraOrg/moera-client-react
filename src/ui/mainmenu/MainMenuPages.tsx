@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import MainMenuTimelineLink from "ui/mainmenu/MainMenuTimelineLink";
 import MainMenuLink from "ui/mainmenu/MainMenuLink";
 import MainMenuNewsLink from "ui/mainmenu/MainMenuNewsLink";
-import MainMenuComplainsLink from "ui/mainmenu/MainMenuComplainsLink";
+import MainMenuComplaintsLink from "ui/mainmenu/MainMenuComplaintsLink";
 
 export default function MainMenuPages() {
     const {t} = useTranslation();
@@ -14,7 +14,7 @@ export default function MainMenuPages() {
             <MainMenuLink page="profile" href="/profile">{t("profile")}</MainMenuLink>
             <MainMenuLink page="people" href="/people">{t("people")}</MainMenuLink>
             <MainMenuNewsLink/>
-            <MainMenuComplainsLink/>
+            <MainMenuComplaintsLink/>
         </ul>
     );
 }

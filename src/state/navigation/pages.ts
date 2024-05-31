@@ -6,5 +6,5 @@ export type Page =
     | "settings"
     | "news"
     | "people"
-    | "complains"
+    | "complaints"
     | "removal";

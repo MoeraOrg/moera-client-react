@@ -6,7 +6,7 @@ import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { getOwnerName } from "state/node/selectors";
 import MainMenuLink from "ui/mainmenu/MainMenuLink";
 
-export default function MainMenuComplainsLink() {
+export default function MainMenuComplaintsLink() {
     const ownerName = useSelector(getOwnerName);
     const {t} = useTranslation();
 
@@ -14,5 +14,5 @@ export default function MainMenuComplainsLink() {
         return null;
     }
 
-    return <MainMenuLink page="complains" href="/complains">{t("complains")}</MainMenuLink>
+    return <MainMenuLink page="complaints" href="/complaints">{t("complaints")}</MainMenuLink>
 }

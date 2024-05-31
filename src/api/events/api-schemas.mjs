@@ -1271,14 +1271,14 @@ export const EVENT_SCHEMAS = {
             additionalProperties: false
         },
 
-        SheriffComplainAddedEvent: {
+        SheriffComplaintAddedEvent: {
             type: "object",
             properties: {
                 "type": {
                     type: "string"
                 },
-                "complain": {
-                    $ref: "node#/definitions/SheriffComplainInfo"
+                "complaint": {
+                    $ref: "node#/definitions/SheriffComplaintInfo"
                 },
                 "groupId": {
                     type: "string"
@@ -1286,20 +1286,20 @@ export const EVENT_SCHEMAS = {
             },
             required: [
                 "type",
-                "complain",
+                "complaint",
                 "groupId",
             ],
             additionalProperties: false
         },
 
-        SheriffComplainGroupAddedEvent: {
+        SheriffComplaintGroupAddedEvent: {
             type: "object",
             properties: {
                 "type": {
                     type: "string"
                 },
                 "group": {
-                    $ref: "node#/definitions/SheriffComplainGroupInfo"
+                    $ref: "node#/definitions/SheriffComplaintGroupInfo"
                 },
             },
             required: [
@@ -1309,14 +1309,14 @@ export const EVENT_SCHEMAS = {
             additionalProperties: false
         },
 
-        SheriffComplainGroupUpdatedEvent: {
+        SheriffComplaintGroupUpdatedEvent: {
             type: "object",
             properties: {
                 "type": {
                     type: "string"
                 },
                 "group": {
-                    $ref: "node#/definitions/SheriffComplainGroupInfo"
+                    $ref: "node#/definitions/SheriffComplaintGroupInfo"
                 },
             },
             required: [

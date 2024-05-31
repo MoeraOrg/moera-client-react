@@ -11,8 +11,8 @@ import {
     FriendGroupInfo,
     FriendInfo,
     FriendOfInfo,
-    SheriffComplainGroupInfo,
-    SheriffComplainInfo,
+    SheriffComplaintGroupInfo,
+    SheriffComplaintInfo,
     SheriffMark,
     StoryOperations,
     StorySummaryData,
@@ -318,17 +318,17 @@ export interface RemoteReactionVerifiedEvent extends BaseEvent<"REMOTE_REACTION_
     correct: boolean;
 }
 
-export interface SheriffComplainAddedEvent extends BaseEvent<"SHERIFF_COMPLAIN_ADDED"> {
-    complain: SheriffComplainInfo;
+export interface SheriffComplaintAddedEvent extends BaseEvent<"SHERIFF_COMPLAINT_ADDED"> {
+    complaint: SheriffComplaintInfo;
     groupId: string;
 }
 
-export interface SheriffComplainGroupAddedEvent extends BaseEvent<"SHERIFF_COMPLAIN_GROUP_ADDED"> {
-    group: SheriffComplainGroupInfo;
+export interface SheriffComplaintGroupAddedEvent extends BaseEvent<"SHERIFF_COMPLAINT_GROUP_ADDED"> {
+    group: SheriffComplaintGroupInfo;
 }
 
-export interface SheriffComplainGroupUpdatedEvent extends BaseEvent<"SHERIFF_COMPLAIN_GROUP_UPDATED"> {
-    group: SheriffComplainGroupInfo;
+export interface SheriffComplaintGroupUpdatedEvent extends BaseEvent<"SHERIFF_COMPLAINT_GROUP_UPDATED"> {
+    group: SheriffComplaintGroupInfo;
 }
 
 export interface StoriesStatusUpdatedEvent extends BaseEvent<"STORIES_STATUS_UPDATED"> {

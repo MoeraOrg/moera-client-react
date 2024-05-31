@@ -1,11 +1,11 @@
-.complain-decision-view {
+.complaint-decision-view {
     background-color: var(--bs-blue-100);
     border-radius: .25rem;
     padding: .5rem;
     margin-top: 1rem;
 }
 
-.complain-decision-view .info {
+.complaint-decision-view .info {
     background-color: white;
     border-radius: .25rem;
     border: solid 1px var(--bs-gray-400);
