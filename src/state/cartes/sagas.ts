@@ -1,7 +1,7 @@
 import { call, put } from 'typed-redux-saga';
 import i18n from 'i18next';
 
-import { Node, NodeApiError } from "api";
+import { CarteAttributes, Node, NodeApiError } from "api";
 import { Storage } from "storage";
 import { executor } from "state/executor";
 import { CartesLoadAction, cartesLoaded, cartesSet, ClockOffsetWarnAction } from "state/cartes/actions";
@@ -17,7 +17,17 @@ export default [
 
 function* cartesLoadSaga(action: WithContext<CartesLoadAction>) {
     try {
-        const {cartesIp, cartes, createdAt} = yield* call(Node.getCartes, action, REL_HOME, null, ["node-name-not-set"]);
+        let attrs: CarteAttributes = {clientScope: ["all"]};
+        const {cartesIp, cartes: allCartes, createdAt} = yield* call(
+            Node.createCartes, action, REL_HOME, attrs, ["node-name-not-set"]
+        );
+        yield* put(cartesSet(cartesIp ?? null, allCartes, createdAt - now()).causedBy(action));
+
+        attrs = {clientScope: ["view-media"]};
+        const {cartes: viewMediaCartes} = yield* call(
+            Node.createCartes, action, REL_HOME, attrs, ["node-name-not-set"]
+        );
+        const cartes = allCartes.concat(viewMediaCartes);
         Storage.storeCartesData(cartesIp ?? null, cartes);
         yield* put(cartesSet(cartesIp ?? null, cartes, createdAt - now()).causedBy(action));
     } catch (e) {

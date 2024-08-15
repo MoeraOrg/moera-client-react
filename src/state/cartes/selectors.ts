@@ -28,11 +28,11 @@ export function isCartesToBeUpdated(state: ClientState): boolean {
 }
 
 function isAllCarte(carte: CarteInfo): boolean {
-    return carte.permissions == null || carte.permissions.includes("other");
+    return carte.clientScope == null || carte.clientScope.includes("other");
 }
 
 function isViewMediaCarte(carte: CarteInfo): boolean {
-    return carte.permissions != null && carte.permissions.length === 1 && carte.permissions[0] === "view-media";
+    return carte.clientScope != null && carte.clientScope.length === 1 && carte.clientScope[0] === "view-media";
 }
 
 function getCurrentCarte(state: ClientState, filter: (carte: CarteInfo) => boolean): string | null {

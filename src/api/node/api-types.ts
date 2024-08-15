@@ -22,6 +22,12 @@ export type PushContentType = "story-added" | "story-deleted" | "feed-updated";
 
 export type PushRelayType = "fcm";
 
+export type Scope = "none" | "identify" | "other" | "view-media" | "view-content" | "add-post" | "update-post"
+    | "add-comment" | "update-comment" | "react" | "delete-own-content" | "delete-others-content" | "view-people"
+    | "block" | "friend" | "remote-identify" | "drafts" | "view-feeds" | "update-feeds" | "name" | "plugins"
+    | "view-profile" | "update-profile" | "sheriff" | "view-settings" | "update-settings" | "subscribe" | "tokens"
+    | "user-lists" | "grant" | "upload-public-media" | "upload-private-media" | "view-all" | "all";
+
 export type SettingType = "bool" | "int" | "string" | "json" | "Duration" | "PrivateKey" | "PublicKey" | "Timestamp"
     | "UUID" | "Principal";
 
@@ -271,11 +277,19 @@ export interface BlockedUsersChecksums {
     visibility: number;
 }
 
+export interface CarteAttributes {
+    clientScope?: Scope[] | null;
+    adminScope?: Scope[] | null;
+    nodeName?: string | null;
+    limit?: number | null;
+}
+
 export interface CarteInfo {
     carte: string;
     beginning: number;
     deadline: number;
-    permissions?: string[] | null;
+    clientScope?: Scope[] | null;
+    adminScope?: Scope[] | null;
 }
 
 export interface CarteSet {
@@ -436,6 +450,16 @@ export interface FundraiserInfo {
     qrCode?: string | null;
     text?: string | null;
     href?: string | null;
+}
+
+export interface GrantChange {
+    scope: Scope[];
+    revoke: boolean;
+}
+
+export interface GrantInfo {
+    nodeName: string;
+    scope: Scope[];
 }
 
 export interface LinkPreview {
@@ -997,7 +1021,7 @@ export interface SubscriptionOverride {
 export interface TokenAttributes {
     login: string;
     password: string;
-    authCategory?: number | null;
+    permissions?: Scope[] | null;
     name?: string | null;
 }
 
@@ -1005,7 +1029,7 @@ export interface TokenInfo {
     id: string;
     token: string;
     name?: string | null;
-    permissions: string[];
+    permissions: Scope[];
     pluginName?: string | null;
     createdAt: number;
     deadline?: number | null;

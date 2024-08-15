@@ -223,14 +223,14 @@ export function* searchBlockedByUsers(
     });
 }
 
-export function* getCartes(
-    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, limit: number | null = null,
+export function* createCartes(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, attributes: API.CarteAttributes,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.CarteSet> {
 
-    const location = urlWithParameters(ut`/cartes`, {limit});
+    const location = "/cartes";
     return yield* callApi<API.CarteSet>({
-        caller, nodeName, method: "GET", location, auth, schema: "CarteSet", errorFilter
+        caller, nodeName, method: "POST", location, body: attributes, auth, schema: "CarteSet", errorFilter
     });
 }
 
@@ -866,12 +866,57 @@ export function* getFriendOf(
     });
 }
 
-export function* uploadPrivateMedia(
+export function* getGrant(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): CallApiResult<API.GrantInfo> {
+
+    const location = ut`/grants/${remoteNodeName}`;
+    return yield* callApi<API.GrantInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "GrantInfo", errorFilter
+    });
+}
+
+export function* grantOrRevoke(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    change: API.GrantChange, errorFilter: ErrorFilter = false, auth: true | string = true
+): CallApiResult<API.GrantInfo> {
+
+    const location = ut`/grants/${remoteNodeName}`;
+    return yield* callApi<API.GrantInfo>({
+        caller, nodeName, method: "PUT", location, body: change, auth, schema: "GrantInfo", errorFilter
+    });
+}
+
+export function* revokeAll(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): CallApiResult<API.Result> {
+
+    const location = ut`/grants/${remoteNodeName}`;
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
+    });
+}
+
+export function* uploadAdminMedia(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, file: File,
     onProgress?: ProgressHandler, errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.PrivateMediaFileInfo> {
 
     const location = "/media/private";
+    return yield* callApi<API.PrivateMediaFileInfo>({
+        caller, nodeName, method: "POST", location, body: file, onProgress, auth, schema: "PrivateMediaFileInfo",
+        errorFilter
+    });
+}
+
+export function* uploadPrivateMedia(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, clientName: string, file: File,
+    onProgress?: ProgressHandler, errorFilter: ErrorFilter = false, auth: true | string = true
+): CallApiResult<API.PrivateMediaFileInfo> {
+
+    const location = ut`/media/private/${clientName}`;
     return yield* callApi<API.PrivateMediaFileInfo>({
         caller, nodeName, method: "POST", location, body: file, onProgress, auth, schema: "PrivateMediaFileInfo",
         errorFilter

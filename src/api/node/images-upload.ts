@@ -24,8 +24,8 @@ const formatMb = (size: number): string =>
 type ImageUploadResult<T> = Generator<CallEffect | PutEffect<any>, T>;
 
 export function* imageUpload(
-    caller: WithContext<ClientAction>, features: PostingFeatures | null, nodeName: RelNodeName | string, file: File,
-    compress: boolean, onProgress?: ImageUploadProgressHandler
+    caller: WithContext<ClientAction>, features: PostingFeatures | null, nodeName: RelNodeName | string,
+    clientNodeName: string, file: File, compress: boolean, onProgress?: ImageUploadProgressHandler
 ): ImageUploadResult<VerifiedMediaFile | null> {
     try {
         if (features != null) {
@@ -56,7 +56,7 @@ export function* imageUpload(
                 yield* call([window.crypto.subtle, window.crypto.subtle.digest], "SHA-256", fileContent)));
         }
 
-        const mediaFile = yield* call(Node.uploadPrivateMedia, caller, nodeName, file, onProgress);
+        const mediaFile = yield* call(Node.uploadPrivateMedia, caller, nodeName, clientNodeName, file, onProgress);
         return {...mediaFile, digest};
     } catch (e) {
         yield* put(errorThrown(e));

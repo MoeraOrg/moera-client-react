@@ -15,7 +15,14 @@ export default [
 
 function* richTextEditorImageUpload(action: WithContext<RichTextEditorImagesUploadAction>, index: number) {
     const {features, nodeName, files, compress, onSuccess, onProgress, onFailure} = action.payload;
-    const mediaFile = yield* call(imageUpload, action, features, nodeName, files[index], compress,
+    const {homeOwnerName} = action.context;
+
+    if (homeOwnerName == null) {
+        onFailure(index);
+        return;
+    }
+
+    const mediaFile = yield* call(imageUpload, action, features, nodeName, homeOwnerName, files[index], compress,
         (loaded: number, total: number) => onProgress(index, loaded, total));
     if (mediaFile != null) {
         onSuccess(index, mediaFile);

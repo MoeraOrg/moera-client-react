@@ -559,7 +559,14 @@ export const NODE_API_SCHEMAS = {
                 "deadline": {
                     type: "integer"
                 },
-                "permissions": {
+                "clientScope": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    },
+                    nullable: true
+                },
+                "adminScope": {
                     type: "array",
                     items: {
                         type: "string"
@@ -1115,6 +1122,26 @@ export const NODE_API_SCHEMAS = {
             },
             required: [
                 "title",
+            ],
+            additionalProperties: false
+        },
+
+        GrantInfo: {
+            type: "object",
+            properties: {
+                "nodeName": {
+                    type: "string"
+                },
+                "scope": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    }
+                },
+            },
+            required: [
+                "nodeName",
+                "scope",
             ],
             additionalProperties: false
         },

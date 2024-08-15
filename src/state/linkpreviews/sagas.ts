@@ -34,6 +34,12 @@ function* linkPreviewLoadSaga(action: WithContext<LinkPreviewLoadAction>) {
 
 function* linkPreviewImageUploadSaga(action: WithContext<LinkPreviewImageUploadAction>) {
     const {url, nodeName, features} = action.payload;
+    const {homeOwnerName} = action.context;
+
+    if (homeOwnerName == null) {
+        yield* put(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
+        return;
+    }
 
     const imageUrl = yield* select(state => getLinkPreviewInfo(state, url)?.imageUrl);
     if (imageUrl == null) {
@@ -44,7 +50,7 @@ function* linkPreviewImageUploadSaga(action: WithContext<LinkPreviewImageUploadA
     try {
         const blob = yield* call(Node.proxyMedia, action, REL_HOME, imageUrl);
         const file = new File([blob], `moera-lp-${randomId()}.img`, {type: blob.type});
-        const mediaFile = yield* call(imageUpload, action, features, nodeName, file, true);
+        const mediaFile = yield* call(imageUpload, action, features, nodeName, homeOwnerName, file, true);
         if (mediaFile != null) {
             yield* put(linkPreviewImageUploaded(url, nodeName, mediaFile).causedBy(action));
         } else {
