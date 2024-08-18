@@ -65,16 +65,18 @@ function TokenDialogInner({token, values, setFieldValue}: Props) {
                         <FormGroup title={t("scope.all")} layout="right" groupClassName="mb-0"
                                    labelClassName="text-danger">
                             <Checkbox name="scopes" className="form-check-input" checked={scopeAllChecked}
-                                      onChange={onScopeAllChange}/>
+                                      onChange={onScopeAllChange} disabled={token != null}/>
                         </FormGroup>
                         <FormGroup title={t("scope.view-all")} layout="right">
                             <Checkbox name="scopes" className="form-check-input" checked={scopeViewAllChecked}
-                                      onChange={onScopeViewAllChange}/>
+                                      onChange={onScopeViewAllChange} disabled={token != null}/>
                         </FormGroup>
                         {SCOPES.map(sc =>
                             <CheckboxField<Scope[]> key={sc} id={`scope_${sc}`} name="scopes" value={sc}
                                                     title={t(`scope.${sc}`)} groupClassName="mb-0"
-                                                    isChecked={(v: string[]) => v.includes(sc)} anyValue/>
+                                                    isChecked={(v: string[]) => v.includes(sc)}
+                                                    disabled={token != null && !token.permissions.includes(sc)}
+                                                    anyValue/>
                         )}
                     </fieldset>
                 </div>
@@ -94,7 +96,7 @@ const tokenLogic = {
     mapPropsToValues: (props: OuterProps): Values => ({
         name: props.token?.name ?? "",
         password: "",
-        scopes: []
+        scopes: props.token?.permissions ?? []
     }),
 
     validate: (values: Values, props: OuterProps): FormikErrors<Values> => {
@@ -116,7 +118,7 @@ const tokenLogic = {
                 () => formik.setFieldError("password", "password-incorrect")
             ));
         } else {
-            store.dispatch(settingsTokensUpdate(formik.props.token.id, name));
+            store.dispatch(settingsTokensUpdate(formik.props.token.id, name, values.scopes));
         }
         formik.setSubmitting(false);
     }

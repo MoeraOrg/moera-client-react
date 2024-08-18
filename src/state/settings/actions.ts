@@ -186,9 +186,12 @@ export const settingsTokensCreateFailed = (): SettingsTokensCreateFailedAction =
 export type SettingsTokensUpdateAction = ActionWithPayload<"SETTINGS_TOKENS_UPDATE", {
     id: string;
     name: string | null;
+    permissions: Scope[] | null;
 }>;
-export const settingsTokensUpdate = (id: string, name: string | null): SettingsTokensUpdateAction =>
-    actionWithPayload("SETTINGS_TOKENS_UPDATE", {id, name});
+export const settingsTokensUpdate = (
+    id: string, name: string | null, permissions: Scope[] | null
+): SettingsTokensUpdateAction =>
+    actionWithPayload("SETTINGS_TOKENS_UPDATE", {id, name, permissions});
 
 export type SettingsTokensUpdatedAction = ActionWithPayload<"SETTINGS_TOKENS_UPDATED", {
     token: TokenInfo;

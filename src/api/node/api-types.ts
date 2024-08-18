@@ -1038,8 +1038,9 @@ export interface TokenInfo {
     lastUsedIp?: string | null;
 }
 
-export interface TokenName {
+export interface TokenUpdate {
     name?: string | null;
+    permissions?: Scope[] | null;
 }
 
 export interface UpdateInfo {

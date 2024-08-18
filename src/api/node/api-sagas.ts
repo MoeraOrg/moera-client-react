@@ -1895,13 +1895,13 @@ export function* getTokenInfo(
 }
 
 export function* updateToken(
-    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string, token: API.TokenName,
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string, update: API.TokenUpdate,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.TokenInfo> {
 
     const location = ut`/tokens/${id}`;
     return yield* callApi<API.TokenInfo>({
-        caller, nodeName, method: "PUT", location, body: token, auth, schema: "TokenInfo", errorFilter
+        caller, nodeName, method: "PUT", location, body: update, auth, schema: "TokenInfo", errorFilter
     });
 }
 

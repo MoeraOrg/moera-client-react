@@ -263,10 +263,10 @@ function* settingsTokensCreateSaga(action: WithContext<SettingsTokensCreateActio
 }
 
 function* settingsTokensUpdateSaga(action: WithContext<SettingsTokensUpdateAction>) {
-    const {id, name} = action.payload;
+    const {id, name, permissions} = action.payload;
 
     try {
-        const token = yield* call(Node.updateToken, action, REL_HOME, id, {name});
+        const token = yield* call(Node.updateToken, action, REL_HOME, id, {name, permissions});
         yield* put(settingsTokensUpdated(token).causedBy(action));
     } catch (e) {
         yield* put(settingsTokensUpdateFailed().causedBy(action));
