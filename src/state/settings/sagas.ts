@@ -246,10 +246,10 @@ function* settingsTokensLoadSaga(action: WithContext<SettingsTokensLoadAction>) 
 }
 
 function* settingsTokensCreateSaga(action: WithContext<SettingsTokensCreateAction>) {
-    const {password, name, onLoginIncorrect} = action.payload;
+    const {password, name, permissions, onLoginIncorrect} = action.payload;
 
     try {
-        const token = yield* call(Node.createToken, action, REL_HOME, {login: "admin", password, name},
+        const token = yield* call(Node.createToken, action, REL_HOME, {login: "admin", password, name, permissions},
             ["credentials.login-incorrect", "credentials.not-created"]);
         yield* put(settingsTokensCreated(token).causedBy(action));
     } catch (e) {

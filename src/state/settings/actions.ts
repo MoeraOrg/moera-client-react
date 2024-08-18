@@ -1,5 +1,5 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
-import { PluginInfo, SettingInfo, SettingMetaInfo, TokenInfo } from "api";
+import { PluginInfo, Scope, SettingInfo, SettingMetaInfo, TokenInfo } from "api";
 import { SettingsTabId } from "state/settings/state";
 
 export type SettingsGoToTabAction = ActionWithPayload<"SETTINGS_GO_TO_TAB", {
@@ -165,12 +165,13 @@ export const settingsTokensDialogClose = (): SettingsTokensDialogCloseAction =>
 export type SettingsTokensCreateAction = ActionWithPayload<"SETTINGS_TOKENS_CREATE", {
     password: string;
     name: string | null;
+    permissions: Scope[];
     onLoginIncorrect: () => void
 }>;
 export const settingsTokensCreate = (
-    password: string, name: string | null, onLoginIncorrect: () => void
+    password: string, name: string | null, permissions: Scope[], onLoginIncorrect: () => void
 ): SettingsTokensCreateAction =>
-    actionWithPayload("SETTINGS_TOKENS_CREATE", {password, name, onLoginIncorrect});
+    actionWithPayload("SETTINGS_TOKENS_CREATE", {password, name, permissions, onLoginIncorrect});
 
 export type SettingsTokensCreatedAction = ActionWithPayload<"SETTINGS_TOKENS_CREATED", {
     token: TokenInfo;
