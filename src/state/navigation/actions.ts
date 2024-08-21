@@ -1,5 +1,6 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { Page } from "state/navigation/pages";
+import { Scope } from "../../api";
 
 export type InitFromNodeLocationAction = ActionWithPayload<"INIT_FROM_NODE_LOCATION", {
     nodeName: string;
@@ -85,6 +86,17 @@ export type GoToRemovalAction = GoToPageAction<"removal", {}>;
 export const goToRemoval = (): GoToRemovalAction =>
     goToPage("removal", {});
 
+export type GoToGrantAction = GoToPageAction<"grant", {
+    clientName: string;
+    carte: string;
+    scope: Scope[];
+    redirectUri: string | null;
+}>;
+export const goToGrant = (
+    clientName: string, carte: string, scope: Scope[], redirectUri: string | null
+): GoToGrantAction =>
+    goToPage("grant", {clientName, carte, scope, redirectUri});
+
 export type GoToPageAnyAction =
     GoToProfileAction
     | GoToTimelineAction
@@ -94,7 +106,8 @@ export type GoToPageAnyAction =
     | GoToNewsAction
     | GoToPeopleAction
     | GoToComplaintsAction
-    | GoToRemovalAction;
+    | GoToRemovalAction
+    | GoToGrantAction;
 
 export type NewLocationAction = ActionWithoutPayload<"NEW_LOCATION">;
 export const newLocation = (): NewLocationAction =>

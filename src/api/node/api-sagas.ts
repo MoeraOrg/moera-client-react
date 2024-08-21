@@ -234,6 +234,18 @@ export function* createCartes(
     });
 }
 
+export function* verifyCarte(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, clientCarte: API.ClientCarte,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): CallApiResult<API.CarteVerificationInfo> {
+
+    const location = "/cartes/verify";
+    return yield* callApi<API.CarteVerificationInfo>({
+        caller, nodeName, method: "POST", location, body: clientCarte, auth, schema: "CarteVerificationInfo",
+        errorFilter
+    });
+}
+
 export function* getCommentsSlice(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
     after: number | null = null, before: number | null = null, limit: number | null = null,

@@ -27,6 +27,7 @@ import changeDateDialog from "state/changedatedialog/reducer";
 import people from "state/people/reducer";
 import nodeCards from "state/nodecards/reducer";
 import contacts from "state/contacts/reducer";
+import grant from "state/grant/reducer";
 import shareDialog from "state/sharedialog/reducer";
 import sourceDialog from "state/sourcedialog/reducer";
 import imageEditDialog from "state/imageeditdialog/reducer";
@@ -76,6 +77,7 @@ import changeDateDialogExecutors from "state/changedatedialog/sagas";
 import peopleExecutors from "state/people/sagas";
 import nodeCardsExecutors from "state/nodecards/sagas";
 import contactsExecutors from "state/contacts/sagas";
+import grantExecutors from "state/grant/sagas";
 import shareDialogExecutors from "state/sharedialog/sagas";
 import sourceDialogExecutors from "state/sourcedialog/sagas";
 import imageEditDialogExecutors from "state/imageeditdialog/sagas";
@@ -112,6 +114,7 @@ import reactionsDialogTriggers from "state/reactionsdialog/triggers";
 import peopleTriggers from "state/people/triggers";
 import nodeCardsTriggers from "state/nodecards/triggers";
 import contactsTriggers from "state/contacts/triggers";
+import grantTriggers from "state/grant/triggers";
 import imageEditDialogTriggers from "state/imageeditdialog/triggers";
 import lightBoxTriggers from "state/lightbox/triggers";
 import askDialogTriggers from "state/askdialog/triggers";
@@ -148,6 +151,7 @@ const reducers = combineReducers({
     people,
     nodeCards,
     contacts,
+    grant,
     shareDialog,
     sourceDialog,
     imageEditDialog,
@@ -198,6 +202,7 @@ const triggers = collectTriggers(
     peopleTriggers,
     nodeCardsTriggers,
     contactsTriggers,
+    grantTriggers,
     imageEditDialogTriggers,
     lightBoxTriggers,
     askDialogTriggers,
@@ -233,6 +238,7 @@ const executors = collectExecutors(
     peopleExecutors,
     nodeCardsExecutors,
     contactsExecutors,
+    grantExecutors,
     shareDialogExecutors,
     sourceDialogExecutors,
     imageEditDialogExecutors,

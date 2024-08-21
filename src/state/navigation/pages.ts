@@ -7,4 +7,5 @@ export type Page =
     | "news"
     | "people"
     | "complaints"
-    | "removal";
+    | "removal"
+    | "grant";

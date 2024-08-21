@@ -17,6 +17,7 @@ import { FeedsAnyAction } from "state/feeds/actions";
 import { FlashBoxAnyAction } from "state/flashbox/actions";
 import { FriendGroupAddDialogAnyAction } from "state/friendgroupadddialog/actions";
 import { FriendGroupsDialogAnyAction } from "state/friendgroupsdialog/actions";
+import { GrantAnyAction } from "state/grant/actions";
 import { HomeAnyAction } from "state/home/actions";
 import { ImageEditDialogAnyAction } from "state/imageeditdialog/actions";
 import { LightBoxAnyAction } from "state/lightbox/actions";
@@ -68,6 +69,7 @@ export type ClientAction =
     | FlashBoxAnyAction
     | FriendGroupAddDialogAnyAction
     | FriendGroupsDialogAnyAction
+    | GrantAnyAction
     | HomeAnyAction
     | ImageEditDialogAnyAction
     | LightBoxAnyAction

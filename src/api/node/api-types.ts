@@ -288,6 +288,7 @@ export interface CarteInfo {
     carte: string;
     beginning: number;
     deadline: number;
+    nodeName?: string | null;
     clientScope?: Scope[] | null;
     adminScope?: Scope[] | null;
 }
@@ -296,6 +297,20 @@ export interface CarteSet {
     cartesIp?: string | null;
     cartes: CarteInfo[];
     createdAt: number;
+}
+
+export interface CarteVerificationInfo {
+    valid: boolean;
+    clientName?: string | null;
+    clientScope?: Scope[] | null;
+    adminScope?: Scope[] | null;
+    errorCode?: string | null;
+    errorMessage?: string | null;
+}
+
+export interface ClientCarte {
+    clientName?: string | null;
+    carte: string;
 }
 
 export interface ClientReactionInfo {

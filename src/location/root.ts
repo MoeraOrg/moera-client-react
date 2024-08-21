@@ -3,6 +3,7 @@ import {
     isAtComplaintsPage,
     isAtComposePage,
     isAtDetailedPostingPage,
+    isAtGrantPage,
     isAtNewsPage,
     isAtPeoplePage,
     isAtProfilePage,
@@ -12,6 +13,7 @@ import {
 } from "state/navigation/selectors";
 import { build as complaintsBuild, transform as complaintsTransform } from "location/complaints";
 import { build as composeBuild, transform as composeTransform } from "location/compose";
+import { build as grantBuild, transform as grantTransform } from "location/grant";
 import { build as newsBuild, transform as newsTransform } from "location/news";
 import { build as peopleBuild, transform as peopleTransform } from "location/people";
 import { build as postBuild, transform as postTransform } from "location/post";
@@ -56,6 +58,9 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (dstInfo.directories[0] === "removal") {
         return removalTransform(srcInfo, dstInfo);
     }
+    if (dstInfo.directories[0] === "grant") {
+        return grantTransform(srcInfo, dstInfo);
+    }
     return [];
 }
 
@@ -89,6 +94,9 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     }
     if (isAtRemovalPage(state)) {
         return removalBuild(state, info);
+    }
+    if (isAtGrantPage(state)) {
+        return grantBuild(state, info);
     }
     return info;
 }

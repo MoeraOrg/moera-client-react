@@ -37,6 +37,10 @@ export function isAtRemovalPage(state: ClientState): boolean {
     return state.navigation.page === "removal";
 }
 
+export function isAtGrantPage(state: ClientState): boolean {
+    return state.navigation.page === "grant";
+}
+
 export function isBottomMenuVisible(state: ClientState): boolean {
     return state.navigation.bottomMenuVisible;
 }
