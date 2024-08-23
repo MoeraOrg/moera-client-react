@@ -319,6 +319,17 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 state.grants.grants.filter(g => g.nodeName !== action.payload.nodeName)
             );
 
+        case "EVENT_HOME_GRANT_UPDATED": {
+            const {grant} = action.payload;
+
+            const grants = state.grants.grants.filter(g => g.nodeName !== grant.nodeName);
+            if (grant.scope.length > 0) {
+                grants.push(grant);
+                grants.sort((ga, gb) => ga.nodeName < gb.nodeName ? -1 : (ga.nodeName > gb.nodeName ? 1 : 0));
+            }
+            return immutable.set(state, "grants.grants", grants);
+        }
+
         case "SETTINGS_TOKENS_LOAD":
             return immutable.set(state, "tokens.loading", true);
 

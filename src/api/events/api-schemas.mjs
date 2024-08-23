@@ -561,6 +561,23 @@ export const EVENT_SCHEMAS = {
             additionalProperties: false
         },
 
+        GrantUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "grant": {
+                    $ref: "node#/definitions/GrantInfo"
+                },
+            },
+            required: [
+                "type",
+                "grant",
+            ],
+            additionalProperties: false
+        },
+
         NodeNameChangedEvent: {
             type: "object",
             properties: {

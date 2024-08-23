@@ -11,6 +11,7 @@ import {
     FriendGroupInfo,
     FriendInfo,
     FriendOfInfo,
+    GrantInfo,
     SheriffComplaintGroupInfo,
     SheriffComplaintInfo,
     SheriffMark,
@@ -156,6 +157,10 @@ export interface FriendGroupUpdatedEvent extends BaseEvent<"FRIEND_GROUP_UPDATED
 
 export interface FriendshipUpdatedEvent extends BaseEvent<"FRIENDSHIP_UPDATED"> {
     friend: FriendInfo;
+}
+
+export interface GrantUpdatedEvent extends BaseEvent<"GRANT_UPDATED"> {
+    grant: GrantInfo;
 }
 
 export interface NodeNameChangedEvent extends BaseEvent<"NODE_NAME_CHANGED"> {

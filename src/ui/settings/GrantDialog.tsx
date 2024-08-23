@@ -55,7 +55,6 @@ const tokenLogic = {
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         const revoke = (formik.props.grant?.scope ?? []).filter(sc => !values.scopes.includes(sc));
-        console.log(formik.props.grant?.scope, values.scopes, revoke);
         store.dispatch(settingsGrantsDialogConfirm(formik.props.nodeName, revoke));
         formik.setSubmitting(false);
     }
