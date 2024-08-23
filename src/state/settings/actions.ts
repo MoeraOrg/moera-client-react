@@ -1,5 +1,5 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
-import { PluginInfo, Scope, SettingInfo, SettingMetaInfo, TokenInfo } from "api";
+import { GrantInfo, PluginInfo, Scope, SettingInfo, SettingMetaInfo, TokenInfo } from "api";
 import { SettingsTabId } from "state/settings/state";
 
 export type SettingsGoToTabAction = ActionWithPayload<"SETTINGS_GO_TO_TAB", {
@@ -133,6 +133,65 @@ export const settingsChangedPassword = (): SettingsChangedPasswordAction =>
 export type SettingsChangePasswordFailedAction = ActionWithoutPayload<"SETTINGS_CHANGE_PASSWORD_FAILED">;
 export const settingsChangePasswordFailed = (): SettingsChangePasswordFailedAction =>
     actionWithoutPayload("SETTINGS_CHANGE_PASSWORD_FAILED");
+
+export type SettingsGrantsLoadAction = ActionWithoutPayload<"SETTINGS_GRANTS_LOAD">;
+export const settingsGrantsLoad = (): SettingsGrantsLoadAction =>
+    actionWithoutPayload("SETTINGS_GRANTS_LOAD");
+
+export type SettingsGrantsLoadedAction = ActionWithPayload<"SETTINGS_GRANTS_LOADED", {
+    grants: GrantInfo[];
+}>;
+export const settingsGrantsLoaded = (grants: GrantInfo[]): SettingsGrantsLoadedAction =>
+    actionWithPayload("SETTINGS_GRANTS_LOADED", {grants});
+
+export type SettingsGrantsLoadFailedAction = ActionWithoutPayload<"SETTINGS_GRANTS_LOAD_FAILED">;
+export const settingsGrantsLoadFailed = (): SettingsGrantsLoadFailedAction =>
+    actionWithoutPayload("SETTINGS_GRANTS_LOAD_FAILED");
+
+export type SettingsGrantsUnsetAction = ActionWithoutPayload<"SETTINGS_GRANTS_UNSET">;
+export const settingsGrantsUnset = (): SettingsGrantsUnsetAction =>
+    actionWithoutPayload("SETTINGS_GRANTS_UNSET");
+
+export type SettingsGrantsDialogOpenAction = ActionWithPayload<"SETTINGS_GRANTS_DIALOG_OPEN", {
+    nodeName: string;
+    grant: GrantInfo | null;
+}>;
+export const settingsGrantsDialogOpen = (nodeName: string, grant: GrantInfo | null): SettingsGrantsDialogOpenAction =>
+    actionWithPayload("SETTINGS_GRANTS_DIALOG_OPEN", {nodeName, grant});
+
+export type SettingsGrantsDialogCloseAction = ActionWithoutPayload<"SETTINGS_GRANTS_DIALOG_CLOSE">;
+export const settingsGrantsDialogClose = (): SettingsGrantsDialogCloseAction =>
+    actionWithoutPayload("SETTINGS_GRANTS_DIALOG_CLOSE");
+
+export type SettingsGrantsDialogConfirmAction = ActionWithPayload<"SETTINGS_GRANTS_DIALOG_CONFIRM", {
+    nodeName: string;
+    revoke: Scope[];
+}>;
+export const settingsGrantsDialogConfirm = (nodeName: string, revoke: Scope[]): SettingsGrantsDialogConfirmAction =>
+    actionWithPayload("SETTINGS_GRANTS_DIALOG_CONFIRM", {nodeName, revoke});
+
+export type SettingsGrantsDialogConfirmedAction = ActionWithPayload<"SETTINGS_GRANTS_DIALOG_CONFIRMED", {
+    nodeName: string;
+    scope: Scope[];
+}>;
+export const settingsGrantsDialogConfirmed = (nodeName: string, scope: Scope[]): SettingsGrantsDialogConfirmedAction =>
+    actionWithPayload("SETTINGS_GRANTS_DIALOG_CONFIRMED", {nodeName, scope});
+
+export type SettingsGrantsDialogConfirmFailedAction = ActionWithoutPayload<"SETTINGS_GRANTS_DIALOG_CONFIRM_FAILED">;
+export const settingsGrantsDialogConfirmFailed = (): SettingsGrantsDialogConfirmFailedAction =>
+    actionWithoutPayload("SETTINGS_GRANTS_DIALOG_CONFIRM_FAILED");
+
+export type SettingsGrantsDeleteAction = ActionWithPayload<"SETTINGS_GRANTS_DELETE", {
+    nodeName: string;
+}>;
+export const settingsGrantsDelete = (nodeName: string): SettingsGrantsDeleteAction =>
+    actionWithPayload("SETTINGS_GRANTS_DELETE", {nodeName});
+
+export type SettingsGrantsDeletedAction = ActionWithPayload<"SETTINGS_GRANTS_DELETED", {
+    nodeName: string;
+}>;
+export const settingsGrantsDeleted = (nodeName: string): SettingsGrantsDeletedAction =>
+    actionWithPayload("SETTINGS_GRANTS_DELETED", {nodeName});
 
 export type SettingsTokensLoadAction = ActionWithoutPayload<"SETTINGS_TOKENS_LOAD">;
 export const settingsTokensLoad = (): SettingsTokensLoadAction =>
@@ -347,6 +406,17 @@ export type SettingsAnyAction =
     | SettingsChangePasswordAction
     | SettingsChangedPasswordAction
     | SettingsChangePasswordFailedAction
+    | SettingsGrantsLoadAction
+    | SettingsGrantsLoadedAction
+    | SettingsGrantsLoadFailedAction
+    | SettingsGrantsUnsetAction
+    | SettingsGrantsDialogOpenAction
+    | SettingsGrantsDialogCloseAction
+    | SettingsGrantsDialogConfirmAction
+    | SettingsGrantsDialogConfirmedAction
+    | SettingsGrantsDialogConfirmFailedAction
+    | SettingsGrantsDeleteAction
+    | SettingsGrantsDeletedAction
     | SettingsTokensLoadAction
     | SettingsTokensLoadedAction
     | SettingsTokensLoadFailedAction

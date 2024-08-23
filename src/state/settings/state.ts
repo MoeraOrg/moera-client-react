@@ -1,4 +1,4 @@
-import { ClientSettingMetaInfo, PluginInfo, SettingMetaInfo, TokenInfo } from "api";
+import { ClientSettingMetaInfo, GrantInfo, PluginInfo, SettingMetaInfo, TokenInfo } from "api";
 
 export type SettingsTabId = "node" | "client";
 
@@ -25,6 +25,17 @@ export interface SettingsState {
     updating: boolean;
     changePasswordDialogShow: boolean;
     changingPassword: boolean;
+    grants: {
+        loading: boolean;
+        loaded: boolean;
+        grants: GrantInfo[];
+        dialog: {
+            show: boolean;
+            nodeName: string;
+            grant: GrantInfo | null;
+            updating: boolean;
+        }
+    },
     tokens: {
         loading: boolean;
         loaded: boolean;

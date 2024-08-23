@@ -32,6 +32,14 @@ import {
     SettingsDeleteNodeRequestSendAction,
     settingsDeleteNodeRequestStatusSet,
     settingsDeleteNodeRequestUpdateFailed,
+    SettingsGrantsDeleteAction,
+    settingsGrantsDeleted,
+    SettingsGrantsDialogConfirmAction,
+    settingsGrantsDialogConfirmed,
+    settingsGrantsDialogConfirmFailed,
+    SettingsGrantsLoadAction,
+    settingsGrantsLoaded,
+    settingsGrantsLoadFailed,
     settingsLanguageChanged,
     SettingsNodeMetaLoadAction,
     settingsNodeMetaLoaded,
@@ -71,10 +79,10 @@ import { executor } from "state/executor";
 import { getSetting, getSettingNode, getSettingsClient, getSettingsClientMeta } from "state/settings/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { confirmBox } from "state/confirmbox/actions";
+import { messageBox } from "state/messagebox/actions";
 import * as Browser from "ui/browser";
 import { deserializeSheriffs, serializeSheriffs } from "util/sheriff";
 import { now } from "util/misc";
-import { messageBox } from "state/messagebox/actions";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
@@ -86,6 +94,9 @@ export default [
     executor("SETTINGS_UPDATE", null, settingsUpdateSaga),
     executor("SETTINGS_UPDATE_SUCCEEDED", null, settingsUpdateSucceededSaga),
     executor("SETTINGS_CHANGE_PASSWORD", "", settingsChangePasswordSaga),
+    executor("SETTINGS_GRANTS_LOAD", "", settingsGrantsLoadSaga, homeIntroduced),
+    executor("SETTINGS_GRANTS_DIALOG_CONFIRM", payload => payload.nodeName, settingsGrantsDialogConfirmSaga),
+    executor("SETTINGS_GRANTS_DELETE", payload => payload.nodeName, settingsGrantsDeleteSaga),
     executor("SETTINGS_TOKENS_LOAD", "", settingsTokensLoadSaga, homeIntroduced),
     executor("SETTINGS_TOKENS_CREATE", null, settingsTokensCreateSaga),
     executor("SETTINGS_TOKENS_UPDATE", payload => payload.id, settingsTokensUpdateSaga),
@@ -232,6 +243,39 @@ function* settingsChangePasswordSaga(action: WithContext<SettingsChangePasswordA
             yield* put(errorThrown(e));
         }
         yield* put(settingsChangePasswordFailed().causedBy(action));
+    }
+}
+
+function* settingsGrantsLoadSaga(action: WithContext<SettingsGrantsLoadAction>) {
+    try {
+        const grants = yield* call(Node.getAllGrants, action, REL_HOME);
+        yield* put(settingsGrantsLoaded(grants).causedBy(action));
+    } catch (e) {
+        yield* put(settingsGrantsLoadFailed().causedBy(action));
+        yield* put(errorThrown(e));
+    }
+}
+
+function* settingsGrantsDialogConfirmSaga(action: WithContext<SettingsGrantsDialogConfirmAction>) {
+    const {nodeName, revoke} = action.payload;
+
+    try {
+        const info = yield* call(Node.grantOrRevoke, action, REL_HOME, nodeName, {scope: revoke, revoke: true});
+        yield* put(settingsGrantsDialogConfirmed(nodeName, info.scope).causedBy(action));
+    } catch (e) {
+        yield* put(settingsGrantsDialogConfirmFailed().causedBy(action));
+        yield* put(errorThrown(e));
+    }
+}
+
+function* settingsGrantsDeleteSaga(action: WithContext<SettingsGrantsDeleteAction>) {
+    const {nodeName} = action.payload;
+
+    try {
+        yield* call(Node.revokeAll, action, REL_HOME, nodeName);
+        yield* put(settingsGrantsDeleted(nodeName).causedBy(action));
+    } catch (e) {
+        yield* put(errorThrown(e));
     }
 }
 

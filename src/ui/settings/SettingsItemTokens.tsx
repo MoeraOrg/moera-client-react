@@ -64,7 +64,7 @@ export default function SettingsItemTokens() {
                     <Button variant="link" onClick={onClick(tk.id)}>{getName(tk)}</Button>
                     {!isHomeToken(tk, homeToken) ?
                         <>
-                            <button className="token-button" title={t("rename")} onClick={onEdit(tk)}>
+                            <button className="token-button" title={t("change")} onClick={onEdit(tk)}>
                                 <FontAwesomeIcon icon={faPen}/>
                             </button>
                             <button className="token-button red" title={t("delete")} onClick={onDelete(tk)}>

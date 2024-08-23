@@ -3,6 +3,7 @@ import { ComponentType } from 'react';
 import { CLIENT_SETTINGS_PLUGIN_PREFIX, CLIENT_SETTINGS_PREFIX, PluginInfo } from "api";
 import { SettingsTabId } from "state/settings/state";
 import SettingsItemPassword from "ui/settings/SettingsItemPassword";
+import SettingsItemGrants from "ui/settings/SettingsItemGrants";
 import SettingsItemTokens from "ui/settings/SettingsItemTokens";
 
 interface Sheet {
@@ -106,6 +107,9 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
                 option("ask.friend.allowed"),
                 option("ask.interval"),
                 option("ask.total.max")
+            ]),
+            chapter("grants", null, [
+                component(SettingsItemGrants)
             ]),
             chapter("tokens", null, [
                 component(SettingsItemTokens)

@@ -25,6 +25,17 @@ const emptySettings = {
     updating: false,
     changePasswordDialogShow: false,
     changingPassword: false,
+    grants: {
+        loading: false,
+        loaded: false,
+        grants: [],
+        dialog: {
+            show: false,
+            nodeName: "",
+            grant: null,
+            updating: false
+        }
+    },
     tokens: {
         loading: false,
         loaded: false,
@@ -254,6 +265,59 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 ...state,
                 changingPassword: false
             }
+
+        case "SETTINGS_GRANTS_LOAD":
+            return immutable.set(state, "grants.loading", true);
+
+        case "SETTINGS_GRANTS_LOADED":
+            return immutable.assign(state, "grants", {
+                loading: false,
+                loaded: true,
+                grants: action.payload.grants
+            });
+
+        case "SETTINGS_GRANTS_LOAD_FAILED":
+            return immutable.set(state, "grants.loading", false);
+
+        case "SETTINGS_GRANTS_UNSET":
+            return immutable.set(state, "grants", cloneDeep(initialState.grants));
+
+        case "SETTINGS_GRANTS_DIALOG_OPEN":
+            return immutable.assign(state, "grants.dialog", {
+                show: true,
+                nodeName: action.payload.nodeName,
+                grant: action.payload.grant
+            });
+
+        case "SETTINGS_GRANTS_DIALOG_CLOSE":
+            return immutable.set(state, "grants.dialog.show", false);
+
+        case "SETTINGS_GRANTS_DIALOG_CONFIRM":
+            return immutable.set(state, "grants.dialog.updating", true);
+
+        case "SETTINGS_GRANTS_DIALOG_CONFIRMED":
+            return immutable.wrap(state)
+                .assign("grants.dialog", {
+                    show: false,
+                    updating: false
+                })
+                .set(
+                    "grants.grants",
+                    state.grants.grants
+                        .map(g => g.nodeName !== action.payload.nodeName ? g : {...g, scope: action.payload.scope})
+                        .filter(g => g.scope.length > 0)
+                )
+                .value();
+
+        case "SETTINGS_GRANTS_DIALOG_CONFIRM_FAILED":
+            return immutable.set(state, "grants.dialog.updating", false);
+
+        case "SETTINGS_GRANTS_DELETED":
+            return immutable.set(
+                state,
+                "grants.grants",
+                state.grants.grants.filter(g => g.nodeName !== action.payload.nodeName)
+            );
 
         case "SETTINGS_TOKENS_LOAD":
             return immutable.set(state, "tokens.loading", true);

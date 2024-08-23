@@ -878,6 +878,17 @@ export function* getFriendOf(
     });
 }
 
+export function* getAllGrants(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
+    auth: true | string = true
+): CallApiResult<API.GrantInfo[]> {
+
+    const location = "/grants";
+    return yield* callApi<API.GrantInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "GrantInfoArray", errorFilter
+    });
+}
+
 export function* getGrant(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     errorFilter: ErrorFilter = false, auth: true | string = true

@@ -11,6 +11,7 @@ import {
     isSettingsAtSecuritySheet,
     isSettingsClientValuesToBeLoaded,
     isSettingsDeleteNodeRequestToBeLoaded,
+    isSettingsGrantsToBeLoaded,
     isSettingsNodeMetaToBeLoaded,
     isSettingsNodeValuesToBeLoaded,
     isSettingsPluginsLoaded,
@@ -24,6 +25,8 @@ import {
     settingsDeleteNodeRequestLoad,
     settingsDeleteNodeRequestUnset,
     settingsGoToTab,
+    settingsGrantsLoad,
+    settingsGrantsUnset,
     settingsNodeConflict,
     settingsNodeMetaLoad,
     settingsNodeMetaUnset,
@@ -57,6 +60,12 @@ export default [
     ),
     trigger("SETTINGS_GO_TO_TAB", true, newLocation),
     trigger("SETTINGS_GO_TO_SHEET", true, updateLocation),
+    trigger(
+        ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_SHEET"],
+        conj(isConnectedToHome, isAtSettingsPage, isSettingsAtSecuritySheet, isSettingsGrantsToBeLoaded),
+        settingsGrantsLoad
+    ),
+    trigger("HOME_READY", inv(isConnectedToHome), settingsGrantsUnset),
     trigger(
         ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_SHEET"],
         conj(isConnectedToHome, isAtSettingsPage, isSettingsAtSecuritySheet, isSettingsTokensToBeLoaded),

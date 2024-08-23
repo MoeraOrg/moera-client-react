@@ -1189,6 +1189,13 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
+        GrantInfoArray: {
+            type: "array",
+            items: {
+                $ref: "node#/definitions/GrantInfo"
+            }
+        },
+
         LinkPreview: {
             type: "object",
             properties: {
