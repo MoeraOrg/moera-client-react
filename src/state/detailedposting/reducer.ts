@@ -598,6 +598,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                 && comment.moment <= state.comments.before
                 && comment.moment > state.comments.after) {
 
+                const prevComment = state.comments.comments.find(c => c.id === comment.id);
+                if (prevComment != null && comment.revisionCreatedAt < prevComment.revisionCreatedAt) {
+                    return state;
+                }
                 const comments = state.comments.comments.filter(c => c.id !== comment.id);
                 comments.push(extractComment(comment));
                 comments.sort((a, b) => a.moment - b.moment);
