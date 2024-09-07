@@ -48,6 +48,9 @@
   "blocking-node" : "Blocking {name}",
   "blocking-reason" : "Reason of blocking",
   "blocking-till" : "Blocking till",
+  "blog" : {
+    "itself" : "The blog itself"
+  },
   "blog-moved" : "It seems that blog <b>{name}</b> has moved to the new address <b>{location}</b>. Do you want to open the blog at the new location?",
   "bold" : "Bold",
   "bottom" : "Bottom",
@@ -71,6 +74,7 @@
   "clipboard-contains-formatting" : "The clipboard contains text with formatting. Do you want to paste the text with formatting tags?",
   "clock-differ" : "<b>Warning:</b> Clock in your computer significantly differ from the real time. This may affect cryptographic algorithms and cause problems for Moera client. It is recommended to turn clock synchronization on in your operating system.",
   "close" : "Close",
+  "collapse" : "Collapse ↑",
   "comment-button" : "Comment",
   "comment-edited-conflict" : "The comment was edited by somebody.",
   "commenting-allowed-to" : "Commenting allowed to",
@@ -207,6 +211,7 @@
   "enable-reactions" : "Enable reactions",
   "enter-name" : "Enter name...",
   "enter-text-here" : "Enter text here...",
+  "expand" : "Expand ↓",
   "expires" : "Expires:",
   "failure-reason" : "Failure reason",
   "feed-title" : {
@@ -261,6 +266,7 @@
   "hide-my-subscription" : "Hide my subscription",
   "hide-post-google-play" : "Do not show the post \"{heading}\" on Android (Google Play).",
   "hide-subscription-to-me" : "Hide subscription to me",
+  "how-often-blog-search" : "How often was your blog found on Google and other search engines in the past week?",
   "ignore" : "Ignore",
   "image" : "Image",
   "image-alignment" : {
@@ -459,6 +465,7 @@
   "permissions" : "Permissions",
   "pin" : "Pin",
   "pinned-post" : "Pinned post",
+  "popularity-blog-search" : "Popularity of Your Blog in Search",
   "post-button" : "Post",
   "post-edited-conflict" : "The post was edited by somebody.",
   "posting-not-found" : "Post is not found or cannot be displayed.",
@@ -927,6 +934,7 @@
   "view-source" : "View source",
   "view-source-title" : "View Source",
   "visibility" : "Visibility",
+  "visits" : "{count} {count, plural, one {visit} other {visits}}",
   "want-allow-android-google-play" : "I want my blog to be accessible with Moera for Android app installed from Google Play. I allow the sheriff to read the content of my blog and decide (according to the rules), which posts or comments are to be hidden in Moera for Android",
   "want-delete-addon" : "Do you really want to delete the add-on \"{name}\"?",
   "want-delete-draft" : "Do you really want to delete the draft?",

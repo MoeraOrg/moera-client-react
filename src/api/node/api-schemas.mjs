@@ -2500,6 +2500,27 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
+        StorySummaryPageClicks: {
+            type: "object",
+            properties: {
+                "heading": {
+                    type: "string",
+                    nullable: true
+                },
+                "href": {
+                    type: "string"
+                },
+                "clicks": {
+                    type: "integer"
+                },
+            },
+            required: [
+                "href",
+                "clicks",
+            ],
+            additionalProperties: false
+        },
+
         StorySummaryReaction: {
             type: "object",
             properties: {
@@ -4011,6 +4032,13 @@ export const NODE_API_SCHEMAS = {
                 },
                 "description": {
                     type: "string",
+                    nullable: true
+                },
+                "clicks": {
+                    type: "array",
+                    items: {
+                        $ref: "node#/definitions/StorySummaryPageClicks"
+                    },
                     nullable: true
                 },
             },

@@ -403,7 +403,13 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
             href: "/news"
         }),
         buttonsAction: instantStoryDefrostingAction
-    }
+    },
+    "search-report": {
+        color: "var(--bs-green)",
+        icon: faPenAlt,
+        summary: () => "",
+        target: story => ({nodeName: REL_HOME, href: `/post/${getStoryPostingId(story)}`})
+    },
 };
 
 function getStoryPostingId(story: StoryInfo | ExtStoryInfo): string | null | undefined {

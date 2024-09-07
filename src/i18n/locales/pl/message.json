@@ -48,6 +48,9 @@
   "blocking-node" : "Blokowanie {name}",
   "blocking-reason" : "Powód blokowania",
   "blocking-till" : "Blokowanie do",
+  "blog" : {
+    "itself" : "Sam blog"
+  },
   "blog-moved" : "Wygląda na to, że blog <b>{name}</b> został przeniesiony pod nowy adres <b>{location}</b>. Chcesz otworzyć blog w nowej lokalizacji?",
   "bold" : "Pogrubienie",
   "bottom" : "Dół",
@@ -71,6 +74,7 @@
   "clipboard-contains-formatting" : "Schowek zawiera tekst z formatowaniem. Czy chcesz wkleić tekst z tagami formatującymi?",
   "clock-differ" : "<b>Ostrzeżenie:</b> Zegar w Twoim komputerze znacznie różni się od rzeczywistego czasu. Może to wpłynąć na algorytmy kryptograficzne i powodować problemy dla klienta Moera. Zaleca się włączenie synchronizacji zegara w systemie operacyjnym.",
   "close" : "Zamknij",
+  "collapse" : "Zwiń ↑",
   "comment-button" : "Komentarz",
   "comment-edited-conflict" : "Komentarz został edytowany przez kogoś.",
   "commenting-allowed-to" : "Komentowanie dozwolone dla",
@@ -207,6 +211,7 @@
   "enable-reactions" : "Włącz reakcje",
   "enter-name" : "Wpisz imię...",
   "enter-text-here" : "Wpisz tekst tutaj...",
+  "expand" : "Rozwiń ↓",
   "expires" : "Wygasa:",
   "failure-reason" : "Powód niepowodzenia",
   "feed-title" : {
@@ -261,6 +266,7 @@
   "hide-my-subscription" : "Ukryj moją subskrypcję",
   "hide-post-google-play" : "Nie pokazuj posta \"{heading}\" w Androidzie (Google Play).",
   "hide-subscription-to-me" : "Ukryj subskrypcję do mnie",
+  "how-often-blog-search" : "Jak często Twój blog był znajdowany w Google i innych wyszukiwarkach w ostatnim tygodniu?",
   "ignore" : "Ignoruj",
   "image" : "Obrazek",
   "image-alignment" : {
@@ -459,6 +465,7 @@
   "permissions" : "Uprawnienia",
   "pin" : "Przypnij",
   "pinned-post" : "Przypięty post",
+  "popularity-blog-search" : "Popularność Twojego bloga w wyszukiwarce",
   "post-button" : "Opublikuj",
   "post-edited-conflict" : "Post został edytowany przez kogoś innego.",
   "posting-not-found" : "Nie znaleziono posta lub nie można go wyświetlić.",
@@ -927,6 +934,7 @@
   "view-source" : "Wyświetl źródło",
   "view-source-title" : "Wyświetl źródło",
   "visibility" : "Widoczność",
+  "visits" : "{count} {count, plural, one {wizyta} few {wizyty} other {wizyt}}",
   "want-allow-android-google-play" : "Chciałbym, aby mój blog był widoczny w aplikacji Moera na Androida zainstalowanej z Google Play. Zezwalam szeryfowi na zapoznanie się z treścią mojego bloga i decydowanie (zgodnie z zasadami), które posty lub komentarze mają być ukryte w Moera na Androida",
   "want-delete-addon" : "Czy na pewno chcesz usunąć dodatek \"{name}\"?",
   "want-delete-draft" : "Czy na pewno chcesz usunąć szkic?",

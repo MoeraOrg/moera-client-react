@@ -19,7 +19,7 @@ import { useDebounce } from "ui/hook";
 import { Page } from "ui/page/Page";
 import FeedTitle from "ui/feed/FeedTitle";
 import FeedPageHeader from "ui/feed/FeedPageHeader";
-import FeedPosting from "ui/feed/FeedPosting";
+import FeedStory from "ui/feed/FeedStory";
 import FeedSentinel from "ui/feed/FeedSentinel";
 import { REL_HOME, RelNodeName } from "util/rel-node-name";
 import { getPageHeaderHeight } from "util/ui";
@@ -176,8 +176,8 @@ export default function FeedPage({nodeName, feedName, visible, title, shareable}
                               visible={before < Number.MAX_SAFE_INTEGER} onSentinel={onSentinelFuture}
                               onBoundary={onBoundaryFuture} onClick={loadFuture}/>
                 {stories.map(({story, posting, deleting}) =>
-                    <FeedPosting key={story.moment} nodeName={nodeName} posting={posting} story={story}
-                                 deleting={deleting}/>
+                    <FeedStory key={story.moment} nodeName={nodeName} posting={posting} story={story}
+                               deleting={deleting}/>
                 )}
                 <FeedSentinel bottom loading={loadingPast} title={t("load-older-posts")} margin="0px 0px 50% 0px"
                               visible={after > Number.MIN_SAFE_INTEGER} onSentinel={onSentinelPast}
@@ -190,17 +190,20 @@ export default function FeedPage({nodeName, feedName, visible, title, shareable}
     );
 }
 
-export const getStories = createSelector(
+const getStories = createSelector(
     (state: ClientState, nodeName: RelNodeName | string, feedName: string) =>
         getFeedState(state, nodeName, feedName).stories,
     (state: ClientState) => state.postings[getOwnerNameOrUrl(state)] ?? {}, // FIXME it is an overly general dependency
     isGooglePlayHiding,
     (stories, postings, hiding) =>
         stories
-            .filter(t => t.postingId != null)
-            .filter(t => postings[t.postingId!])
-            .map(t => ({story: t, ...postings[t.postingId!]!}))
-            .filter(({posting}) => !hiding || !isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE))
+            .filter(t => t.postingId == null || postings[t.postingId])
+            .map(t =>
+                ({story: t, ...(t.postingId != null ? postings[t.postingId]! : {posting: null, deleting: false})})
+            )
+            .filter(({posting}) =>
+                posting == null || !hiding || !isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE)
+            )
 );
 
 function toSafeRange(moment: number): number {

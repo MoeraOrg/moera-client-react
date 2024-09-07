@@ -49,7 +49,7 @@ export type StoryType = "asked-to-friend" | "asked-to-subscribe" | "blocked-user
     | "posting-added" | "posting-media-reaction-added-negative" | "posting-media-reaction-added-positive"
     | "posting-media-reaction-failed" | "posting-post-task-failed" | "posting-reaction-task-failed"
     | "posting-subscribe-task-failed" | "posting-update-task-failed" | "posting-updated" | "reaction-added-negative"
-    | "reaction-added-positive" | "remote-comment-added" | "reply-comment" | "sheriff-complaint-added"
+    | "reaction-added-positive" | "remote-comment-added" | "reply-comment" | "search-report" | "sheriff-complaint-added"
     | "sheriff-complaint-decided" | "sheriff-marked" | "sheriff-unmarked" | "subscriber-added" | "subscriber-deleted"
     | "unblocked-user" | "unblocked-user-in-posting";
 
@@ -961,6 +961,12 @@ export interface StorySummaryNode {
     ownerGender?: string | null;
 }
 
+export interface StorySummaryPageClicks {
+    heading?: string | null;
+    href: string;
+    clicks: number;
+}
+
 export interface StorySummaryReaction {
     ownerName?: string | null;
     ownerFullName?: string | null;
@@ -1409,6 +1415,7 @@ export interface StorySummaryData {
     blocked?: StorySummaryBlocked | null;
     sheriff?: StorySummarySheriff | null;
     description?: string | null;
+    clicks?: StorySummaryPageClicks[] | null;
 }
 
 export interface CommentInfoBase<B> {

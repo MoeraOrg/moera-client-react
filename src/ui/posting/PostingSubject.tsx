@@ -1,8 +1,7 @@
 import React from 'react';
 
 import { ExtPostingInfo } from "state/postings/state";
-import Jump from "ui/navigation/Jump";
-import "./PostingSubject.css";
+import StorySubject from "ui/story/StorySubject";
 
 interface Props {
     posting: ExtPostingInfo;
@@ -11,12 +10,5 @@ interface Props {
 
 export default function PostingSubject({posting, preview}: Props) {
     const subjectHtml = preview ? posting.bodyPreview?.subjectHtml : posting.body.subjectHtml;
-    if (!subjectHtml) {
-        return null;
-    }
-    return (
-        <div className="subject" dir="auto">
-            <Jump href={`/post/${posting.id}`}><span dangerouslySetInnerHTML={{__html: subjectHtml}}/></Jump>
-        </div>
-    );
+    return <StorySubject subjectHtml={subjectHtml} href={`/post/${posting.id}`}/>
 }

@@ -3,13 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbtack } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
-import "./PostingPin.css";
+import "./StoryPin.css";
 
 interface Props {
     pinned?: boolean | null;
 }
 
-export default function PostingPin({pinned}: Props) {
+export default function StoryPin({pinned}: Props) {
     const {t} = useTranslation();
 
     if (!pinned) {
