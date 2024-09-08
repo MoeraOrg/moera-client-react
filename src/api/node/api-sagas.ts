@@ -1765,6 +1765,17 @@ export function* updateStory(
     });
 }
 
+export function* deleteStory(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): CallApiResult<API.Result> {
+
+    const location = ut`/stories/${id}`;
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
+    });
+}
+
 export function* getSubscribers(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string | null = null,
     type: API.SubscriptionType | null = null, feedName: string | null = null, entryId: string | null = null,

@@ -1,5 +1,5 @@
 import { actionWithPayload, ActionWithPayload } from "state/action-types";
-import { StoryInfo } from "api";
+import { StoryInfo, StoryType } from "api";
 import { RelNodeName } from "util/rel-node-name";
 
 export type StoryPinningUpdateAction = ActionWithPayload<"STORY_PINNING_UPDATE", {
@@ -46,6 +46,13 @@ export type StoryAddedAction = ActionWithPayload<"STORY_ADDED", {
 export const storyAdded = (nodeName: RelNodeName | string, story: StoryInfo): StoryAddedAction =>
     actionWithPayload("STORY_ADDED", {nodeName, story});
 
+export type StoryDeleteAction = ActionWithPayload<"STORY_DELETE", {
+    nodeName: RelNodeName | string;
+    story: StoryInfo;
+}>;
+export const storyDelete = (nodeName: RelNodeName | string, story: StoryInfo): StoryDeleteAction =>
+    actionWithPayload("STORY_DELETE", {nodeName, story});
+
 export type StoryDeletedAction = ActionWithPayload<"STORY_DELETED", {
     nodeName: RelNodeName | string;
     story: StoryInfo;
@@ -60,11 +67,20 @@ export type StoryUpdatedAction = ActionWithPayload<"STORY_UPDATED", {
 export const storyUpdated = (nodeName: RelNodeName | string, story: StoryInfo): StoryUpdatedAction =>
     actionWithPayload("STORY_UPDATED", {nodeName, story});
 
+export type StoryTypeBlockAction = ActionWithPayload<"STORY_TYPE_BLOCK", {
+    nodeName: RelNodeName | string;
+    storyType: StoryType;
+}>;
+export const storyTypeBlock = (nodeName: RelNodeName | string, storyType: StoryType): StoryTypeBlockAction =>
+    actionWithPayload("STORY_TYPE_BLOCK", {nodeName, storyType});
+
 export type StoriesAnyAction =
     StoryPinningUpdateAction
     | StoryViewingUpdateAction
     | StoryReadingUpdateAction
     | StorySatisfyAction
     | StoryAddedAction
+    | StoryDeleteAction
     | StoryDeletedAction
-    | StoryUpdatedAction;
+    | StoryUpdatedAction
+    | StoryTypeBlockAction;

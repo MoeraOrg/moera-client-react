@@ -12,12 +12,13 @@ import { RelNodeName } from "util/rel-node-name";
 
 interface Props {
     nodeName: RelNodeName | string;
+    feedName: string;
     story: ExtStoryInfo;
     posting: ExtPostingInfo | null;
     deleting: boolean;
 }
 
-export default function FeedStory({nodeName, story, posting, deleting}: Props) {
+export default function FeedStory({nodeName, feedName, story, posting, deleting}: Props) {
     const atHome = useSelector(isAtHomeNode);
 
     return (
@@ -30,7 +31,7 @@ export default function FeedStory({nodeName, story, posting, deleting}: Props) {
                     {(story.storyType === "posting-added" && posting != null) &&
                         <FeedPosting nodeName={nodeName} posting={posting} story={story}/>
                     }
-                    {story.storyType === "search-report" && <SearchReportStory story={story}/>}
+                    {story.storyType === "search-report" && <SearchReportStory feedName={feedName} story={story}/>}
                 </>
             }
         </div>

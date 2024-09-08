@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ExtStoryInfo } from "state/feeds/state";
+import StoryMenu from "ui/story/StoryMenu";
 import StoryPin from "ui/story/StoryPin";
 import StorySubject from "ui/story/StorySubject";
 import StoryDate from "ui/story/StoryDate";
@@ -9,10 +10,11 @@ import StoryDate from "ui/story/StoryDate";
 const COLLAPSED_LENGTH = 5;
 
 interface Props {
+    feedName: string;
     story: ExtStoryInfo;
 }
 
-export default function SearchReportStory({story}: Props) {
+export default function SearchReportStory({feedName, story}: Props) {
     const [expanded, setExpanded] = useState<boolean>(false);
     const {t} = useTranslation();
 
@@ -22,6 +24,7 @@ export default function SearchReportStory({story}: Props) {
 
     return (
         <>
+            <StoryMenu story={{...story, feedName}}/>
             <StoryPin pinned={story.pinned}/>
             <div className="owner-line">
                 <div className="owner-info">
