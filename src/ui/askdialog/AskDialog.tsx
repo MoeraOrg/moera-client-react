@@ -14,7 +14,7 @@ import { formatFullName } from "util/names";
 import store from "state/store";
 
 interface OuterProps {
-    nodeName: string | null;
+    nodeName: string;
 }
 
 interface Values {
@@ -35,10 +35,6 @@ function AskDialogInner({nodeName}: Props) {
     ) as NameDisplayMode;
     const dispatch = useDispatch();
     const {t} = useTranslation();
-
-    if (nodeName == null) {
-        return null;
-    }
 
     const name = formatFullName(nodeName, card?.details.profile.fullName, nameDisplayMode);
 
@@ -121,6 +117,10 @@ const AskDialogOuter = withFormik(askDialogLogic)(AskDialogInner);
 
 export default function AskDialog() {
     const nodeName = useSelector((state: ClientState) => state.askDialog.nodeName);
+
+    if (nodeName == null) {
+        return null;
+    }
 
     return <AskDialogOuter nodeName={nodeName}/>
 }
