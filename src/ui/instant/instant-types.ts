@@ -408,7 +408,13 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         color: "var(--bs-green)",
         icon: faPenAlt,
         summary: () => "",
-        target: story => ({nodeName: REL_HOME, href: `/post/${getStoryPostingId(story)}`})
+        target: story => ({nodeName: REL_HOME, href: "/"})
+    },
+    "reminder-full-name": {
+        color: "var(--bs-green)",
+        icon: faPenAlt,
+        summary: () => "",
+        target: story => ({nodeName: REL_HOME, href: "/"})
     },
 };
 
