@@ -2,14 +2,15 @@ import { trigger } from "state/trigger";
 import {
     ConnectedToHomeAction,
     homeFriendGroupsLoad,
-    homeReady,
     homeInvisibleUsersLoad,
     homeOwnerSet,
-    homeOwnerVerify
+    HomeOwnerSetAction,
+    homeOwnerVerify,
+    homeReady
 } from "state/home/actions";
 import { EventAction, NodeNameChangedEvent } from "api/events";
 import { ClientState } from "state/state";
-import { isConnectedToHome } from "state/home/selectors";
+import { getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
 
 export default [
     trigger("CONNECTED_TO_HOME", true, homeOwnerVerify),
@@ -19,7 +20,12 @@ export default [
         homeReady
     ),
     trigger("DISCONNECTED_FROM_HOME", true, homeReady),
-    trigger("HOME_OWNER_SET", true, homeReady),
+    trigger(
+        "HOME_OWNER_SET",
+        (state: ClientState, signal: HomeOwnerSetAction) =>
+            getHomeOwnerName(state) == null || signal.payload.name !== getHomeOwnerName(state),
+        homeReady
+    ),
     trigger("HOME_READY", isConnectedToHome, homeFriendGroupsLoad),
     trigger("HOME_READY", isConnectedToHome, homeInvisibleUsersLoad),
     trigger(

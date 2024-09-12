@@ -74,6 +74,12 @@ export type StoryTypeBlockAction = ActionWithPayload<"STORY_TYPE_BLOCK", {
 export const storyTypeBlock = (nodeName: RelNodeName | string, storyType: StoryType): StoryTypeBlockAction =>
     actionWithPayload("STORY_TYPE_BLOCK", {nodeName, storyType});
 
+export type ReminderFullNameUpdateAction = ActionWithPayload<"REMINDER_FULL_NAME_UPDATE", {
+    fullName: string;
+}>;
+export const reminderFullNameUpdate = (fullName: string): ReminderFullNameUpdateAction =>
+    actionWithPayload("REMINDER_FULL_NAME_UPDATE", {fullName});
+
 export type StoriesAnyAction =
     StoryPinningUpdateAction
     | StoryViewingUpdateAction
@@ -83,4 +89,5 @@ export type StoriesAnyAction =
     | StoryDeleteAction
     | StoryDeletedAction
     | StoryUpdatedAction
-    | StoryTypeBlockAction;
+    | StoryTypeBlockAction
+    | ReminderFullNameUpdateAction;

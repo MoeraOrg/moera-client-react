@@ -6,6 +6,7 @@ import { homeIntroduced } from "state/init-selectors";
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import {
+    ReminderFullNameUpdateAction,
     StoryDeleteAction,
     storyDeleted,
     StoryPinningUpdateAction,
@@ -16,8 +17,9 @@ import {
     StoryViewingUpdateAction
 } from "state/stories/actions";
 import { executor } from "state/executor";
+import { profileSet } from "state/profile/actions";
 import { flashBox } from "state/flashbox/actions";
-import { REL_CURRENT } from "util/rel-node-name";
+import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("STORY_PINNING_UPDATE", null, storyPinningUpdateSaga),
@@ -25,7 +27,8 @@ export default [
     executor("STORY_READING_UPDATE", null, storyReadingUpdateSaga, homeIntroduced),
     executor("STORY_SATISFY", null, storySatisfySaga),
     executor("STORY_DELETE", null, storyDeleteSaga),
-    executor("STORY_TYPE_BLOCK", null, storyTypeBlockSaga)
+    executor("STORY_TYPE_BLOCK", null, storyTypeBlockSaga),
+    executor("REMINDER_FULL_NAME_UPDATE", null, reminderFullNameUpdateSaga)
 ];
 
 function* storyPinningUpdateSaga(action: WithContext<StoryPinningUpdateAction>) {
@@ -84,6 +87,17 @@ function* storyTypeBlockSaga(action: WithContext<StoryTypeBlockAction>) {
         yield* put(
             flashBox(i18n.t("story-type-turned-off", {type: i18n.t("story-type-plural." + storyType)})).causedBy(action)
         );
+    } catch (e) {
+        yield* put(errorThrown(e));
+    }
+}
+
+function* reminderFullNameUpdateSaga(action: WithContext<ReminderFullNameUpdateAction>) {
+    const {fullName} = action.payload;
+    try {
+        const profile = yield* call(Node.updateProfile, action, REL_HOME, {fullName});
+        yield* put(flashBox(i18n.t("full-name-set")).causedBy(action));
+        yield* put(profileSet(profile).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
     }

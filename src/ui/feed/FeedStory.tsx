@@ -7,6 +7,7 @@ import { ExtStoryInfo } from "state/feeds/state";
 import { ExtPostingInfo } from "state/postings/state";
 import PostingDeleting from "ui/posting/PostingDeleting";
 import FeedPosting from "ui/feed/story/FeedPosting";
+import ReminderFullNameStory from "ui/feed/story/ReminderFullNameStory";
 import SearchReportStory from "ui/feed/story/SearchReportStory";
 import { RelNodeName } from "util/rel-node-name";
 
@@ -31,7 +32,12 @@ export default function FeedStory({nodeName, feedName, story, posting, deleting}
                     {(story.storyType === "posting-added" && posting != null) &&
                         <FeedPosting nodeName={nodeName} posting={posting} story={story}/>
                     }
-                    {story.storyType === "search-report" && <SearchReportStory feedName={feedName} story={story}/>}
+                    {story.storyType === "reminder-full-name" &&
+                        <ReminderFullNameStory feedName={feedName} story={story}/>
+                    }
+                    {story.storyType === "search-report" &&
+                        <SearchReportStory feedName={feedName} story={story}/>
+                    }
                 </>
             }
         </div>
