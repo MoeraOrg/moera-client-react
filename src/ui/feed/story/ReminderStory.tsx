@@ -1,0 +1,23 @@
+import React from 'react';
+
+import { ExtStoryInfo } from "state/feeds/state";
+import ReminderAvatarStory from "ui/feed/story/ReminderAvatarStory";
+import ReminderFullNameStory from "ui/feed/story/ReminderFullNameStory";
+
+interface Props {
+    feedName: string;
+    story: ExtStoryInfo;
+}
+
+const ReminderStory = ({feedName, story}: Props) => (
+    <>
+        {story.storyType === "reminder-avatar" &&
+            <ReminderAvatarStory feedName={feedName} story={story}/>
+        }
+        {story.storyType === "reminder-full-name" &&
+            <ReminderFullNameStory feedName={feedName} story={story}/>
+        }
+    </>
+);
+
+export default ReminderStory;
