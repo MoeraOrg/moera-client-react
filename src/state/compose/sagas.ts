@@ -125,7 +125,7 @@ function* composeDraftSaveSaga(action: WithContext<ComposeDraftSaveAction>) {
         if (draftId == null) {
             draft = yield* call(Node.createDraft, action, REL_HOME, draftText);
         } else {
-            draft = yield* call(Node.updateDraft, action, REL_HOME, draftId, draftText);
+            draft = yield* call(Node.updateDraft, action, REL_HOME, draftId, draftText, ["draft.not-found"]);
         }
         if (draftText.receiverPostingId == null) {
             yield* put(composeDraftListItemSet(draft.id, draft).causedBy(action));
@@ -133,7 +133,9 @@ function* composeDraftSaveSaga(action: WithContext<ComposeDraftSaveAction>) {
         yield* put(composeDraftSaved(draftText.receiverPostingId ?? null, draft).causedBy(action));
     } catch (e) {
         yield* put(composeDraftSaveFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        if (!(e instanceof NodeApiError)) {
+            yield* put(errorThrown(e));
+        }
     }
 }
 

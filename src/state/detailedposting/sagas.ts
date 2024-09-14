@@ -487,7 +487,7 @@ function* commentDraftSaveSaga(action: WithContext<CommentDraftSaveAction>) {
         if (draftId == null) {
             draft = yield* call(Node.createDraft, action, REL_HOME, draftText);
         } else {
-            draft = yield* call(Node.updateDraft, action, REL_HOME, draftId, draftText);
+            draft = yield* call(Node.updateDraft, action, REL_HOME, draftId, draftText, ["draft.not-found"]);
         }
         yield* put(commentDraftSaved(
             draftText.receiverName, draftText.receiverPostingId, draftText.receiverCommentId ?? null, draft, formId
@@ -496,7 +496,9 @@ function* commentDraftSaveSaga(action: WithContext<CommentDraftSaveAction>) {
         yield* put(commentDraftSaveFailed(
             draftText.receiverName, draftText.receiverPostingId, draftText.receiverCommentId ?? null
         ).causedBy(action));
-        yield* put(errorThrown(e));
+        if (!(e instanceof NodeApiError)) {
+            yield* put(errorThrown(e));
+        }
     }
 }
 
