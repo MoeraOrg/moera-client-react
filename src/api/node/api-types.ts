@@ -28,6 +28,8 @@ export type Scope = "none" | "identify" | "other" | "view-media" | "view-content
     | "view-profile" | "update-profile" | "sheriff" | "view-settings" | "update-settings" | "subscribe" | "tokens"
     | "user-lists" | "grant" | "upload-public-media" | "upload-private-media" | "view-all" | "all";
 
+export type SearchEngine = "google";
+
 export type SettingType = "bool" | "int" | "string" | "json" | "Duration" | "PrivateKey" | "PublicKey" | "Timestamp"
     | "UUID" | "Principal";
 
