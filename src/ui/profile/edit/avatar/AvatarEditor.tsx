@@ -21,9 +21,10 @@ import "./AvatarEditor.css";
 
 interface Props {
     name: string;
+    onChange?: (avatar: AvatarInfo) => void;
 }
 
-export default function AvatarEditor({name}: Props) {
+export default function AvatarEditor({name, onChange}: Props) {
     const avatarsLoading = useSelector((state: ClientState) => state.profile.avatars.loading);
     const avatarsLoaded = useSelector((state: ClientState) => state.profile.avatars.loaded);
     const avatars = useSelector((state: ClientState) => state.profile.avatars.avatars);
@@ -38,7 +39,10 @@ export default function AvatarEditor({name}: Props) {
         placement, zIndex
     } = useButtonPopper("bottom-start", {closeOnSelect: false});
 
-    const onSelect = (avatar: AvatarInfo) => setValue(avatar);
+    const onSelect = (avatar: AvatarInfo) => {
+        setValue(avatar)
+            .then(() => onChange && onChange(avatar));
+    }
 
     const onEdit = (event: React.MouseEvent) => {
         if (!avatarsLoaded && !avatarsLoading) {

@@ -80,6 +80,12 @@ export type ReminderFullNameUpdateAction = ActionWithPayload<"REMINDER_FULL_NAME
 export const reminderFullNameUpdate = (fullName: string): ReminderFullNameUpdateAction =>
     actionWithPayload("REMINDER_FULL_NAME_UPDATE", {fullName});
 
+export type ReminderAvatarUpdateAction = ActionWithPayload<"REMINDER_AVATAR_UPDATE", {
+    avatarId: string;
+}>;
+export const reminderAvatarUpdate = (avatarId: string): ReminderAvatarUpdateAction =>
+    actionWithPayload("REMINDER_AVATAR_UPDATE", {avatarId});
+
 export type StoriesAnyAction =
     StoryPinningUpdateAction
     | StoryViewingUpdateAction
@@ -90,4 +96,5 @@ export type StoriesAnyAction =
     | StoryDeletedAction
     | StoryUpdatedAction
     | StoryTypeBlockAction
-    | ReminderFullNameUpdateAction;
+    | ReminderFullNameUpdateAction
+    | ReminderAvatarUpdateAction;

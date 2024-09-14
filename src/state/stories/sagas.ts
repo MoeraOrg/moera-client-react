@@ -6,6 +6,7 @@ import { homeIntroduced } from "state/init-selectors";
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import {
+    ReminderAvatarUpdateAction,
     ReminderFullNameUpdateAction,
     StoryDeleteAction,
     storyDeleted,
@@ -28,7 +29,8 @@ export default [
     executor("STORY_SATISFY", null, storySatisfySaga),
     executor("STORY_DELETE", null, storyDeleteSaga),
     executor("STORY_TYPE_BLOCK", null, storyTypeBlockSaga),
-    executor("REMINDER_FULL_NAME_UPDATE", null, reminderFullNameUpdateSaga)
+    executor("REMINDER_FULL_NAME_UPDATE", null, reminderFullNameUpdateSaga),
+    executor("REMINDER_AVATAR_UPDATE", null, reminderAvatarUpdateSaga),
 ];
 
 function* storyPinningUpdateSaga(action: WithContext<StoryPinningUpdateAction>) {
@@ -97,6 +99,17 @@ function* reminderFullNameUpdateSaga(action: WithContext<ReminderFullNameUpdateA
     try {
         const profile = yield* call(Node.updateProfile, action, REL_HOME, {fullName});
         yield* put(flashBox(i18n.t("full-name-set")).causedBy(action));
+        yield* put(profileSet(profile).causedBy(action));
+    } catch (e) {
+        yield* put(errorThrown(e));
+    }
+}
+
+function* reminderAvatarUpdateSaga(action: WithContext<ReminderAvatarUpdateAction>) {
+    const {avatarId} = action.payload;
+    try {
+        const profile = yield* call(Node.updateProfile, action, REL_HOME, {avatarId});
+        yield* put(flashBox(i18n.t("avatar-set")).causedBy(action));
         yield* put(profileSet(profile).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
