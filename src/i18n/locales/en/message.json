@@ -1,4 +1,5 @@
 {
+  "access-google-play-sheriff-granted" : "Access for the Google Play sheriff is granted",
   "access-granted" : "Access granted",
   "access-request-not-valid" : "Access request is not valid",
   "add-comment" : "Add Comment",
@@ -173,7 +174,7 @@
   "donations-android-prohibited" : "Donations feature is prohibited in Android apps downloaded from Google Play according to <0>Google Play Payments Policy</0>.<1/><2/>Please use Moera web client for this.",
   "dont-ask-again" : "Don't ask again",
   "dont-ask-next-time" : "Don't ask next time",
-  "do-want-allow-android-google-play" : "<b>Do you want your blog to be accessible with Moera for Android app installed from Google Play?</b><br><br>Answering \"Yes\" will allow the sheriff to read the content of your blog and decide (according to the rules), which posts or comments are to be hidden in Moera for Android.",
+  "do-want-allow-android-google-play" : "<0>Do you want your blog to be accessible with Moera for Android app installed from Google Play?</0> To do this, you must allow the sheriff to read the contents of your blog and decide (in accordance with Google Play rules) which posts or comments should be hidden in Moera for Android.",
   "download" : "Download",
   "downloading-image" : "Downloading image...",
   "do-you-have-blog" : "Do you have a Moera blog?",
@@ -272,6 +273,7 @@
   "hide-post-google-play" : "Do not show the post \"{heading}\" on Android (Google Play).",
   "hide-subscription-to-me" : "Hide subscription to me",
   "how-often-blog-search" : "How often was your blog found on Google and other search engines in the past week?",
+  "i-agree" : "I agree",
   "ignore" : "Ignore",
   "image" : "Image",
   "image-alignment" : {

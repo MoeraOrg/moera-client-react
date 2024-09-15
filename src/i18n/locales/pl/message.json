@@ -1,4 +1,5 @@
 {
+  "access-google-play-sheriff-granted" : "Dostęp dla szeryfa Google Play został przyznany",
   "access-granted" : "Dostęp przyznany",
   "access-request-not-valid" : "Żądanie dostępu jest nieprawidłowe",
   "add-comment" : "Dodaj komentarz",
@@ -173,7 +174,7 @@
   "donations-android-prohibited" : "Funkcja dotacji jest zabroniona w aplikacjach Android pobranych z Google Play zgodnie z <0>Polityką Płatności Google Play</0>.<1/><2/>Proszę użyć klienta Moera web do tego celu.",
   "dont-ask-again" : "Nie pytaj ponownie",
   "dont-ask-next-time" : "Nie pytaj następnym razem",
-  "do-want-allow-android-google-play" : "<b>Czy chcesz, aby Twój blog był dostępny dzięki aplikacji Moera na Androida zainstalowanej z Google Play?</b><br><br>Odpowiedź „Tak” umożliwi szeryfowi zapoznanie się z treścią Twojego bloga i podjęcie decyzji (zgodnie z do regulaminu), które posty lub komentarze mają być ukryte w Moera na Androida.",
+  "do-want-allow-android-google-play" : "<0>Czy chcesz, aby Twój blog był dostępny dzięki aplikacji Moera na Androida zainstalowanej z Google Play?</0> Aby to zrobić, musisz pozwolić szeryfowi na odczytanie zawartości twojego bloga i decydowanie (zgodnie z zasadami Google Play), które posty lub komentarze powinny być ukryte w Moera dla Androida.",
   "download" : "Pobierz",
   "downloading-image" : "Pobieranie obrazu...",
   "do-you-have-blog" : "Czy masz bloga Moera?",
@@ -272,6 +273,7 @@
   "hide-post-google-play" : "Nie pokazuj posta \"{heading}\" w Androidzie (Google Play).",
   "hide-subscription-to-me" : "Ukryj subskrypcję do mnie",
   "how-often-blog-search" : "Jak często Twój blog był znajdowany w Google i innych wyszukiwarkach w ostatnim tygodniu?",
+  "i-agree" : "Zgadzam się",
   "ignore" : "Ignoruj",
   "image" : "Obrazek",
   "image-alignment" : {

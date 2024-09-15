@@ -1,4 +1,4 @@
-import { actionWithPayload, ActionWithPayload } from "state/action-types";
+import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { StoryInfo, StoryType } from "api";
 import { RelNodeName } from "util/rel-node-name";
 
@@ -92,6 +92,10 @@ export type ReminderEmailUpdateAction = ActionWithPayload<"REMINDER_EMAIL_UPDATE
 export const reminderEmailUpdate = (email: string): ReminderEmailUpdateAction =>
     actionWithPayload("REMINDER_EMAIL_UPDATE", {email});
 
+export type ReminderSheriffAllowAction = ActionWithoutPayload<"REMINDER_SHERIFF_ALLOW">;
+export const reminderSheriffAllow = (): ReminderSheriffAllowAction =>
+    actionWithoutPayload("REMINDER_SHERIFF_ALLOW");
+
 export type StoriesAnyAction =
     StoryPinningUpdateAction
     | StoryViewingUpdateAction
@@ -104,4 +108,5 @@ export type StoriesAnyAction =
     | StoryTypeBlockAction
     | ReminderFullNameUpdateAction
     | ReminderAvatarUpdateAction
-    | ReminderEmailUpdateAction;
+    | ReminderEmailUpdateAction
+    | ReminderSheriffAllowAction;

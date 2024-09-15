@@ -325,19 +325,6 @@ export type SettingsLanguageChangedAction = ActionWithoutPayload<"SETTINGS_LANGU
 export const settingsLanguageChanged = (): SettingsLanguageChangedAction =>
     actionWithoutPayload("SETTINGS_LANGUAGE_CHANGED");
 
-export type SettingsRemindSetSheriffGooglePlayAction = ActionWithoutPayload<"SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY">;
-export const settingsRemindSetSheriffGooglePlay = (): SettingsRemindSetSheriffGooglePlayAction =>
-    actionWithoutPayload("SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY");
-
-export type SettingsRemindSetSheriffGooglePlayChoiceAction =
-    ActionWithPayload<"SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE", {
-        allow: boolean | null
-    }>;
-export const settingsRemindSetSheriffGooglePlayChoice = (
-    allow: boolean | null
-): SettingsRemindSetSheriffGooglePlayChoiceAction =>
-    actionWithPayload("SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE", {allow});
-
 export type SettingsDeleteNodeRequestLoadAction = ActionWithoutPayload<"SETTINGS_DELETE_NODE_REQUEST_LOAD">;
 export const settingsDeleteNodeRequestLoad = (): SettingsDeleteNodeRequestLoadAction =>
     actionWithoutPayload("SETTINGS_DELETE_NODE_REQUEST_LOAD");
@@ -442,8 +429,6 @@ export type SettingsAnyAction =
     | SettingsPluginsConflictAction
     | SettingsPluginsConflictCloseAction
     | SettingsLanguageChangedAction
-    | SettingsRemindSetSheriffGooglePlayAction
-    | SettingsRemindSetSheriffGooglePlayChoiceAction
     | SettingsDeleteNodeRequestLoadAction
     | SettingsDeleteNodeRequestLoadedAction
     | SettingsDeleteNodeRequestLoadFailedAction

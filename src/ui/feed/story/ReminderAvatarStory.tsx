@@ -37,10 +37,10 @@ function ReminderAvatarStoryInner({feedName, story, submitForm}: Props) {
                     </Trans>
                 </p>
                 <p>{t("want-set-right-now-click-circle")}</p>
-                <Form className="row gx-2 ms-2 me-2">
+                <Form>
                     <AvatarEditor name="avatar" onChange={onChange}/>
                 </Form>
-                <p className="ms-3 text-body-tertiary">{t("new-avatar-new-posts")}</p>
+                <p className="ms-2 text-body-tertiary">{t("new-avatar-new-posts")}</p>
             </div>
         </>
     );

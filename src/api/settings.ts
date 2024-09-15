@@ -570,22 +570,6 @@ const META: ClientSettingMetaInfo[] = [
             ]
         }
     },
-    {
-        name: "sheriff.google-play.reminder.count",
-        type: "int",
-        defaultValue: "0",
-        modifiers: {
-            min: 0,
-            max: 3
-        },
-        internal: true
-    },
-    {
-        name: "sheriff.google-play.reminder.shown-at",
-        type: "Timestamp",
-        defaultValue: "1688335364",
-        internal: true
-    }
 ];
 
 function collectMetaMap(map: Map<string, ClientSettingMetaInfo>, metadata: ClientSettingMetaInfo[]) {

@@ -1,4 +1,5 @@
 {
+  "access-google-play-sheriff-granted" : "Доступ шерифу Google Play разрешён",
   "access-granted" : "Доступ разрешён",
   "access-request-not-valid" : "Запрос на доступ недействителен",
   "add-comment" : "Отправить",
@@ -173,7 +174,7 @@
   "donations-android-prohibited" : "Функция донатов запрещена в приложениях для Android, загруженных из Google Play, в соответствии с <0>Политикой платежей Google Play</0>.<1/><2/> Пожалуйста, используйте веб-клиент Moera для этого.",
   "dont-ask-again" : "Больше не спрашивать",
   "dont-ask-next-time" : "Не спрашивать следующий раз",
-  "do-want-allow-android-google-play" : "<b>Вы хотите, чтобы ваш блог был виден в приложении Moera для Android, установленном из Google Play?</b><br><br>Ответ \"Да\" означает, что вы разрешаете шерифу читать содержимое вашего блога и решать (в соответствии с правилами), какие посты или комментарии следует скрыть в Moera для Android.",
+  "do-want-allow-android-google-play" : "<0>Вы хотите, чтобы ваш блог был виден в приложении Moera для Android, установленном из Google Play?</0> Для этого вы должны разрешить шерифу читать содержимое вашего блога и решать (в соответствии с правилами Google Play), какие посты или комментарии следует скрыть в Moera для Android.",
   "download" : "Скачать",
   "downloading-image" : "Скачивание картинки...",
   "do-you-have-blog" : "У вас есть блог на Moera?",
@@ -272,6 +273,7 @@
   "hide-post-google-play" : "Не показывать пост \"{heading}\" в Android (Google Play).",
   "hide-subscription-to-me" : "Скрыть подписку на меня",
   "how-often-blog-search" : "Как часто ваш блог находили в Google и других поисковых системах за последнюю неделю?",
+  "i-agree" : "Я {gender, select, female {согласна} other {согласен}}",
   "ignore" : "Игнорировать",
   "image" : "Картинка",
   "image-alignment" : {

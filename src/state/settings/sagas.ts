@@ -12,7 +12,6 @@ import {
     SettingInfo
 } from "api";
 import { Storage } from "storage";
-import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import { homeIntroduced } from "state/init-selectors";
@@ -52,9 +51,6 @@ import {
     SettingsPluginsLoadAction,
     settingsPluginsLoaded,
     settingsPluginsLoadFailed,
-    SettingsRemindSetSheriffGooglePlayAction,
-    settingsRemindSetSheriffGooglePlayChoice,
-    SettingsRemindSetSheriffGooglePlayChoiceAction,
     SettingsTokensCreateAction,
     settingsTokensCreated,
     settingsTokensCreateFailed,
@@ -67,7 +63,6 @@ import {
     SettingsTokensUpdateAction,
     settingsTokensUpdated,
     settingsTokensUpdateFailed,
-    settingsUpdate,
     SettingsUpdateAction,
     settingsUpdateFailed,
     settingsUpdateSucceeded,
@@ -76,13 +71,10 @@ import {
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import { executor } from "state/executor";
-import { getSetting, getSettingNode, getSettingsClient, getSettingsClientMeta } from "state/settings/selectors";
+import { getSetting, getSettingsClient, getSettingsClientMeta } from "state/settings/selectors";
 import { flashBox } from "state/flashbox/actions";
-import { confirmBox } from "state/confirmbox/actions";
 import { messageBox } from "state/messagebox/actions";
 import * as Browser from "ui/browser";
-import { deserializeSheriffs, serializeSheriffs } from "util/sheriff";
-import { now } from "util/misc";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
@@ -104,8 +96,6 @@ export default [
     executor("SETTINGS_TOKENS_NEW_TOKEN_COPY", null, settingsTokensNewTokenCopySaga),
     executor("SETTINGS_PLUGINS_LOAD", "", settingsPluginsLoadSaga, homeIntroduced),
     executor("SETTINGS_PLUGINS_DELETE", payload => payload.name, settingsPluginsDeleteSaga),
-    executor("SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY", "", settingsRemindSetSheriffGooglePlaySaga),
-    executor("SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE", "", settingsRemindSetSheriffGooglePlayChoiceSaga),
     executor("SETTINGS_DELETE_NODE_REQUEST_LOAD", "", settingsDeleteNodeRequestLoadSaga),
     executor("SETTINGS_DELETE_NODE_REQUEST_SEND", "", settingsDeleteNodeRequestSendSaga),
     executor("SETTINGS_DELETE_NODE_REQUEST_CANCEL", "", settingsDeleteNodeRequestCancelSaga)
@@ -358,42 +348,6 @@ function* settingsPluginsDeleteSaga(action: WithContext<SettingsPluginsDeleteAct
     } catch (e) {
         yield* put(errorThrown(e));
     }
-}
-
-function* settingsRemindSetSheriffGooglePlaySaga(action: SettingsRemindSetSheriffGooglePlayAction) {
-    const count = yield* select(state => getSetting(state, "sheriff.google-play.reminder.count") as number);
-    yield* put(confirmBox({
-        message: i18n.t("do-want-allow-android-google-play"),
-        onYes: settingsRemindSetSheriffGooglePlayChoice(true),
-        onNo: settingsRemindSetSheriffGooglePlayChoice(false),
-        variant: "primary",
-        cancel: count < 2 ? i18n.t("remind-later") : i18n.t("stop-asking"),
-        onCancel: settingsRemindSetSheriffGooglePlayChoice(null)
-    }).causedBy(action));
-}
-
-function* settingsRemindSetSheriffGooglePlayChoiceSaga(action: SettingsRemindSetSheriffGooglePlayChoiceAction) {
-    const {sheriffs, count} = yield* select(state => ({
-        sheriffs: deserializeSheriffs(getSettingNode(state, "sheriffs.timeline") as string),
-        count: getSetting(state, "sheriff.google-play.reminder.count") as number
-    }));
-    const updates: SettingInfo[] = [];
-    if (action.payload.allow === true) {
-        updates.push(
-            {name: "sheriffs.timeline", value: serializeSheriffs(sheriffs.concat(SHERIFF_GOOGLE_PLAY_TIMELINE))},
-            {name: CLIENT_SETTINGS_PREFIX + "sheriff.google-play.reminder.count", value: "3"}
-        );
-    } else if (action.payload.allow === false) {
-        updates.push(
-            {name: CLIENT_SETTINGS_PREFIX + "sheriff.google-play.reminder.count", value: "3"}
-        );
-    } else {
-        updates.push(
-            {name: CLIENT_SETTINGS_PREFIX + "sheriff.google-play.reminder.count", value: String(count + 1)},
-            {name: CLIENT_SETTINGS_PREFIX + "sheriff.google-play.reminder.shown-at", value: String(now())}
-        );
-    }
-    yield* put(settingsUpdate(updates).causedBy(action));
 }
 
 function* settingsDeleteNodeRequestLoadSaga(action: WithContext<SettingsDeleteNodeRequestLoadAction>) {

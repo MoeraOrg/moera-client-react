@@ -5,7 +5,6 @@ import { isAtRemovalPage, isAtSettingsPage } from "state/navigation/selectors";
 import {
     isAtSettingsClientTab,
     isAtSettingsNodeTab,
-    isRemindToSetSheriffGooglePlay,
     isSettingsAtAddonsSheet,
     isSettingsAtRemovalSheet,
     isSettingsAtSecuritySheet,
@@ -35,7 +34,6 @@ import {
     settingsPluginsConflict,
     settingsPluginsLoad,
     settingsPluginsUnset,
-    settingsRemindSetSheriffGooglePlay,
     settingsTokensLoad,
     settingsTokensUnset
 } from "state/settings/actions";
@@ -89,7 +87,6 @@ export default [
         conj(isAtSettingsPage, isAtSettingsNodeTab, isSettingsPluginsLoaded),
         settingsPluginsConflict
     ),
-    trigger("POST_INIT_DELAYED", isRemindToSetSheriffGooglePlay, settingsRemindSetSheriffGooglePlay),
     trigger(
         ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_SHEET"],
         conj(

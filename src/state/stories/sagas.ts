@@ -1,13 +1,16 @@
-import { call, put } from 'typed-redux-saga';
+import { call, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
-import { Node } from "api";
+import { Node, SettingInfo } from "api";
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { homeIntroduced } from "state/init-selectors";
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import {
-    ReminderAvatarUpdateAction, ReminderEmailUpdateAction,
+    ReminderAvatarUpdateAction,
+    ReminderEmailUpdateAction,
     ReminderFullNameUpdateAction,
+    ReminderSheriffAllowAction,
     StoryDeleteAction,
     storyDeleted,
     StoryPinningUpdateAction,
@@ -19,8 +22,11 @@ import {
 } from "state/stories/actions";
 import { executor } from "state/executor";
 import { profileSet } from "state/profile/actions";
+import { settingsUpdate } from "state/settings/actions";
+import { getSettingNode } from "state/settings/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
+import { deserializeSheriffs, serializeSheriffs } from "util/sheriff";
 
 export default [
     executor("STORY_PINNING_UPDATE", null, storyPinningUpdateSaga),
@@ -32,6 +38,7 @@ export default [
     executor("REMINDER_FULL_NAME_UPDATE", null, reminderFullNameUpdateSaga),
     executor("REMINDER_AVATAR_UPDATE", null, reminderAvatarUpdateSaga),
     executor("REMINDER_EMAIL_UPDATE", null, reminderEmailUpdateSaga),
+    executor("REMINDER_SHERIFF_ALLOW", null, reminderSheriffAllowSaga),
 ];
 
 function* storyPinningUpdateSaga(action: WithContext<StoryPinningUpdateAction>) {
@@ -126,4 +133,13 @@ function* reminderEmailUpdateSaga(action: WithContext<ReminderEmailUpdateAction>
     } catch (e) {
         yield* put(errorThrown(e));
     }
+}
+
+function* reminderSheriffAllowSaga(action: WithContext<ReminderSheriffAllowAction>) {
+    const sheriffs = yield* select(state => deserializeSheriffs(getSettingNode(state, "sheriffs.timeline") as string));
+    const updates: SettingInfo[] = [
+        {name: "sheriffs.timeline", value: serializeSheriffs(sheriffs.concat(SHERIFF_GOOGLE_PLAY_TIMELINE))},
+    ];
+    yield* put(settingsUpdate(updates).causedBy(action));
+    yield* put(flashBox(i18n.t("access-google-play-sheriff-granted")).causedBy(action));
 }
