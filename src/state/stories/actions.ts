@@ -86,6 +86,12 @@ export type ReminderAvatarUpdateAction = ActionWithPayload<"REMINDER_AVATAR_UPDA
 export const reminderAvatarUpdate = (avatarId: string): ReminderAvatarUpdateAction =>
     actionWithPayload("REMINDER_AVATAR_UPDATE", {avatarId});
 
+export type ReminderEmailUpdateAction = ActionWithPayload<"REMINDER_EMAIL_UPDATE", {
+    email: string;
+}>;
+export const reminderEmailUpdate = (email: string): ReminderEmailUpdateAction =>
+    actionWithPayload("REMINDER_EMAIL_UPDATE", {email});
+
 export type StoriesAnyAction =
     StoryPinningUpdateAction
     | StoryViewingUpdateAction
@@ -97,4 +103,5 @@ export type StoriesAnyAction =
     | StoryUpdatedAction
     | StoryTypeBlockAction
     | ReminderFullNameUpdateAction
-    | ReminderAvatarUpdateAction;
+    | ReminderAvatarUpdateAction
+    | ReminderEmailUpdateAction;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useSelector } from 'react-redux';
 import cx from 'classnames';
 
@@ -9,6 +9,7 @@ import PostingDeleting from "ui/posting/PostingDeleting";
 import FeedPosting from "ui/feed/story/FeedPosting";
 import SearchReportStory from "ui/feed/story/SearchReportStory";
 import { RelNodeName } from "util/rel-node-name";
+import { Loading } from "ui/control";
 
 const ReminderStory = React.lazy(() => import("ui/feed/story/ReminderStory"));
 
@@ -34,7 +35,9 @@ export default function FeedStory({nodeName, feedName, story, posting, deleting}
                         <FeedPosting nodeName={nodeName} posting={posting} story={story}/>
                     }
                     {story.storyType.startsWith("reminder-") &&
-                        <ReminderStory feedName={feedName} story={story}/>
+                        <Suspense fallback={<Loading/>}>
+                            <ReminderStory feedName={feedName} story={story}/>
+                        </Suspense>
                     }
                     {story.storyType === "search-report" &&
                         <SearchReportStory feedName={feedName} story={story}/>

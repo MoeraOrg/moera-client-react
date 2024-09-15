@@ -422,6 +422,12 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         summary: () => "",
         target: story => ({nodeName: REL_HOME, href: "/"})
     },
+    "reminder-email": {
+        color: "var(--bs-green)",
+        icon: faPenAlt,
+        summary: () => "",
+        target: story => ({nodeName: REL_HOME, href: "/"})
+    },
 };
 
 function getStoryPostingId(story: StoryInfo | ExtStoryInfo): string | null | undefined {

@@ -35,7 +35,7 @@ function ReminderFullNameStoryInner({feedName, story, values, isSubmitting}: Pro
         <>
             <StoryMenu story={{...story, feedName}}/>
             <StoryPin pinned={story.pinned}/>
-            <div className="content">
+            <div className="content me-3">
                 <p>
                     <Trans i18nKey="why-not-set-full-name" values={example.current}>
                         <span className="fs-5 fw-bold me-2"/>

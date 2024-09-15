@@ -2,10 +2,10 @@ import React from 'react';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { AvatarInfo } from "api";
 import { ExtStoryInfo } from "state/feeds/state";
-import { reminderAvatarUpdate } from "state/stories/actions";
-import AvatarEditor from "ui/profile/edit/avatar/AvatarEditor";
+import { reminderEmailUpdate } from "state/stories/actions";
+import { Button } from "ui/control";
+import { InputField } from "ui/control/field";
 import StoryMenu from "ui/story/StoryMenu";
 import StoryPin from "ui/story/StoryPin";
 import store from "state/store";
@@ -16,15 +16,13 @@ interface OuterProps {
 }
 
 interface Values {
-    avatar: AvatarInfo | null;
+    email: string;
 }
 
 type Props = OuterProps & FormikProps<Values>;
 
-function ReminderAvatarStoryInner({feedName, story, submitForm}: Props) {
+function ReminderEmailStoryInner({feedName, story, values, isSubmitting}: Props) {
     const {t} = useTranslation();
-
-    const onChange = () => submitForm();
 
     return (
         <>
@@ -32,34 +30,36 @@ function ReminderAvatarStoryInner({feedName, story, submitForm}: Props) {
             <StoryPin pinned={story.pinned}/>
             <div className="content me-3">
                 <p>
-                    <Trans i18nKey="why-not-set-avatar">
+                    <Trans i18nKey="recommend-set-email">
                         <span className="fs-5 fw-bold me-2"/>
                     </Trans>
                 </p>
-                <p>{t("want-set-right-now-click-circle")}</p>
+                <p>{t("want-set-right-now")}</p>
                 <Form className="row gx-2 ms-2 me-2">
-                    <AvatarEditor name="avatar" onChange={onChange}/>
+                    <InputField name="email" maxLength={96} placeholder={t("email")}
+                                groupClassName="col-md-10 col-8 mb-0" anyValue autoFocus/>
+                    <div className="col-md-2 col-4">
+                        <Button variant="primary" type="submit" loading={isSubmitting}
+                                disabled={values.email.trim() === ''}>{t("update")}</Button>
+                    </div>
                 </Form>
-                <p className="ms-3 text-body-tertiary">{t("new-avatar-new-posts")}</p>
             </div>
         </>
     );
 }
 
-const reminderAvatarStoryLogic = {
+const reminderEmailStoryLogic = {
 
     mapPropsToValues: (): Values => ({
-        avatar: null
+        email: ""
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        if (values.avatar != null) {
-            store.dispatch(reminderAvatarUpdate(values.avatar.id));
-        }
+        store.dispatch(reminderEmailUpdate(values.email));
     }
 
 };
 
-const ReminderAvatarStory = withFormik(reminderAvatarStoryLogic)(ReminderAvatarStoryInner);
+const ReminderEmailStory = withFormik(reminderEmailStoryLogic)(ReminderEmailStoryInner);
 
-export default ReminderAvatarStory;
+export default ReminderEmailStory;
