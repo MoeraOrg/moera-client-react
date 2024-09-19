@@ -13,6 +13,7 @@ export interface NodeNameState {
     };
     showingRegisterDialog: boolean;
     registering: boolean;
+    storedMnemonic: boolean;
     mnemonicName: string | null;
     mnemonic: string[] | null;
     showingUpdateDialog: boolean;

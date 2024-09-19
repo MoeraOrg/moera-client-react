@@ -31,3 +31,7 @@ export function isNodeNameOperationPending(state: ClientState): boolean {
 export function isNodeNameOperationFinished(state: ClientState): boolean {
     return state.nodeName.operationStatus != null && !isNodeNameOperationPending(state);
 }
+
+export function hasNodeNameStoredMnemonic(state: ClientState): boolean {
+    return state.nodeName.storedMnemonic;
+}

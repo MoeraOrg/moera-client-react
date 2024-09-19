@@ -8,7 +8,7 @@ import {
     ClientSettingMetaInfo,
     HomeNotConnectedError,
     Node,
-    NodeApiError,
+    NodeApiError, NodeName,
     SettingInfo
 } from "api";
 import { Storage } from "storage";
@@ -40,6 +40,7 @@ import {
     settingsGrantsLoaded,
     settingsGrantsLoadFailed,
     settingsLanguageChanged,
+    SettingsMnemonicLoadAction,
     SettingsNodeMetaLoadAction,
     settingsNodeMetaLoaded,
     settingsNodeMetaLoadFailed,
@@ -72,6 +73,7 @@ import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import { executor } from "state/executor";
 import { getSetting, getSettingsClient, getSettingsClientMeta } from "state/settings/selectors";
+import { mnemonicOpen } from "state/nodename/actions";
 import { flashBox } from "state/flashbox/actions";
 import { messageBox } from "state/messagebox/actions";
 import * as Browser from "ui/browser";
@@ -86,6 +88,7 @@ export default [
     executor("SETTINGS_UPDATE", null, settingsUpdateSaga),
     executor("SETTINGS_UPDATE_SUCCEEDED", null, settingsUpdateSucceededSaga),
     executor("SETTINGS_CHANGE_PASSWORD", "", settingsChangePasswordSaga),
+    executor("SETTINGS_MNEMONIC_LOAD", "", settingsMnemonicLoadSaga, homeIntroduced),
     executor("SETTINGS_GRANTS_LOAD", "", settingsGrantsLoadSaga, homeIntroduced),
     executor("SETTINGS_GRANTS_DIALOG_CONFIRM", payload => payload.nodeName, settingsGrantsDialogConfirmSaga),
     executor("SETTINGS_GRANTS_DELETE", payload => payload.nodeName, settingsGrantsDeleteSaga),
@@ -233,6 +236,18 @@ function* settingsChangePasswordSaga(action: WithContext<SettingsChangePasswordA
             yield* put(errorThrown(e));
         }
         yield* put(settingsChangePasswordFailed().causedBy(action));
+    }
+}
+
+function* settingsMnemonicLoadSaga(action: WithContext<SettingsMnemonicLoadAction>) {
+    try {
+        const keyMnemonic = yield* call(Node.getStoredMnemonic, action, REL_HOME);
+        if (action.context.homeOwnerName != null) {
+            const name = NodeName.shorten(action.context.homeOwnerName);
+            yield* put(mnemonicOpen(name, keyMnemonic.mnemonic).causedBy(action));
+        }
+    } catch (e) {
+        yield* put(errorThrown(e));
     }
 }
 

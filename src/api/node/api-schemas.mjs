@@ -1196,6 +1196,22 @@ export const NODE_API_SCHEMAS = {
             }
         },
 
+        KeyMnemonic: {
+            type: "object",
+            properties: {
+                "mnemonic": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    }
+                },
+            },
+            required: [
+                "mnemonic",
+            ],
+            additionalProperties: false
+        },
+
         LinkPreview: {
             type: "object",
             properties: {
@@ -1300,6 +1316,10 @@ export const NODE_API_SCHEMAS = {
                 },
                 "operationErrorMessage": {
                     type: "string",
+                    nullable: true
+                },
+                "storedMnemonic": {
+                    type: "boolean",
                     nullable: true
                 },
                 "operations": {

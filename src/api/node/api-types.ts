@@ -480,6 +480,10 @@ export interface GrantInfo {
     scope: Scope[];
 }
 
+export interface KeyMnemonic {
+    mnemonic: string[];
+}
+
 export interface LinkPreview {
     siteName?: string | null;
     url?: string | null;
@@ -532,6 +536,7 @@ export interface NodeNameInfo {
     operationStatusUpdated?: number | null;
     operationErrorCode?: string | null;
     operationErrorMessage?: string | null;
+    storedMnemonic?: boolean | null;
     operations?: NodeNameOperations | null;
 }
 

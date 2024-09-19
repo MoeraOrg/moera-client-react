@@ -6,8 +6,8 @@ import {
     isAtSettingsClientTab,
     isAtSettingsNodeTab,
     isSettingsAtAddonsSheet,
+    isSettingsAtApplicationsSheet,
     isSettingsAtRemovalSheet,
-    isSettingsAtSecuritySheet,
     isSettingsClientValuesToBeLoaded,
     isSettingsDeleteNodeRequestToBeLoaded,
     isSettingsGrantsToBeLoaded,
@@ -60,13 +60,13 @@ export default [
     trigger("SETTINGS_GO_TO_SHEET", true, updateLocation),
     trigger(
         ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_SHEET"],
-        conj(isConnectedToHome, isAtSettingsPage, isSettingsAtSecuritySheet, isSettingsGrantsToBeLoaded),
+        conj(isConnectedToHome, isAtSettingsPage, isSettingsAtApplicationsSheet, isSettingsGrantsToBeLoaded),
         settingsGrantsLoad
     ),
     trigger("HOME_READY", inv(isConnectedToHome), settingsGrantsUnset),
     trigger(
         ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_SHEET"],
-        conj(isConnectedToHome, isAtSettingsPage, isSettingsAtSecuritySheet, isSettingsTokensToBeLoaded),
+        conj(isConnectedToHome, isAtSettingsPage, isSettingsAtApplicationsSheet, isSettingsTokensToBeLoaded),
         settingsTokensLoad
     ),
     trigger("HOME_READY", inv(isConnectedToHome), settingsTokensUnset),

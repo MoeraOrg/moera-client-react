@@ -10,9 +10,10 @@ export const nodeNameLoadFailed = (): NodeNameLoadFailedAction =>
 
 export type NodeNameSetAction = ActionWithPayload<"NODE_NAME_SET", {
     nodeName: string | null;
+    storedMnemonic: boolean;
 }>;
-export const nodeNameSet = (nodeName: string | null): NodeNameSetAction =>
-    actionWithPayload("NODE_NAME_SET", {nodeName});
+export const nodeNameSet = (nodeName: string | null, storedMnemonic: boolean): NodeNameSetAction =>
+    actionWithPayload("NODE_NAME_SET", {nodeName, storedMnemonic});
 
 export type NodeNameUnsetAction = ActionWithoutPayload<"NODE_NAME_UNSET">;
 export const nodeNameUnset = (): NodeNameUnsetAction =>
@@ -44,9 +45,24 @@ export type RegisterNameFailedAction = ActionWithoutPayload<"REGISTER_NAME_FAILE
 export const registerNameFailed = (): RegisterNameFailedAction =>
     actionWithoutPayload("REGISTER_NAME_FAILED");
 
-export type MnemonicCloseAction = ActionWithoutPayload<"MNEMONIC_CLOSE">;
-export const mnemonicClose = (): MnemonicCloseAction =>
-    actionWithoutPayload("MNEMONIC_CLOSE");
+export type MnemonicOpenAction = ActionWithPayload<"MNEMONIC_OPEN", {
+    name: string;
+    mnemonic: string[];
+}>;
+export const mnemonicOpen = (name: string, mnemonic: string[]): MnemonicOpenAction =>
+    actionWithPayload("MNEMONIC_OPEN", {name, mnemonic});
+
+export type MnemonicCloseAction = ActionWithPayload<"MNEMONIC_CLOSE", {
+    store: boolean;
+}>;
+export const mnemonicClose = (store: boolean): MnemonicCloseAction =>
+    actionWithPayload("MNEMONIC_CLOSE", {store});
+
+export type MnemonicClosedAction = ActionWithPayload<"MNEMONIC_CLOSED", {
+    stored: boolean;
+}>;
+export const mnemonicClosed = (stored: boolean): MnemonicClosedAction =>
+    actionWithPayload("MNEMONIC_CLOSED", {stored});
 
 export type NodeNameUpdateDialogAction = ActionWithPayload<"NODE_NAME_UPDATE_DIALOG", {
     changeName: boolean;
@@ -83,7 +99,9 @@ export type NodeNameAnyAction =
     | RegisterNameAction
     | RegisterNameSucceededAction
     | RegisterNameFailedAction
+    | MnemonicOpenAction
     | MnemonicCloseAction
+    | MnemonicClosedAction
     | NodeNameUpdateDialogAction
     | NodeNameUpdateDialogCancelAction
     | NodeNameUpdateAction

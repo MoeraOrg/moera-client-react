@@ -36,6 +36,10 @@ export function isSettingsAtSecuritySheet(state: ClientState): boolean {
     return state.settings.tab === "node" && state.settings.sheet === "security";
 }
 
+export function isSettingsAtApplicationsSheet(state: ClientState): boolean {
+    return state.settings.tab === "node" && state.settings.sheet === "applications";
+}
+
 export function isSettingsAtAddonsSheet(state: ClientState): boolean {
     return state.settings.tab === "node" && state.settings.sheet === "addons";
 }

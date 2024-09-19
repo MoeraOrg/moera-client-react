@@ -134,6 +134,10 @@ export type SettingsChangePasswordFailedAction = ActionWithoutPayload<"SETTINGS_
 export const settingsChangePasswordFailed = (): SettingsChangePasswordFailedAction =>
     actionWithoutPayload("SETTINGS_CHANGE_PASSWORD_FAILED");
 
+export type SettingsMnemonicLoadAction = ActionWithoutPayload<"SETTINGS_MNEMONIC_LOAD">;
+export const settingsMnemonicLoad = (): SettingsMnemonicLoadAction =>
+    actionWithoutPayload("SETTINGS_MNEMONIC_LOAD");
+
 export type SettingsGrantsLoadAction = ActionWithoutPayload<"SETTINGS_GRANTS_LOAD">;
 export const settingsGrantsLoad = (): SettingsGrantsLoadAction =>
     actionWithoutPayload("SETTINGS_GRANTS_LOAD");
@@ -393,6 +397,7 @@ export type SettingsAnyAction =
     | SettingsChangePasswordAction
     | SettingsChangedPasswordAction
     | SettingsChangePasswordFailedAction
+    | SettingsMnemonicLoadAction
     | SettingsGrantsLoadAction
     | SettingsGrantsLoadedAction
     | SettingsGrantsLoadFailedAction

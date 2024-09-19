@@ -3,6 +3,7 @@ import { ComponentType } from 'react';
 import { CLIENT_SETTINGS_PLUGIN_PREFIX, CLIENT_SETTINGS_PREFIX, PluginInfo } from "api";
 import { SettingsTabId } from "state/settings/state";
 import SettingsItemPassword from "ui/settings/SettingsItemPassword";
+import SettingsItemMnemonic from "ui/settings/SettingsItemMnemonic";
 import SettingsItemGrants from "ui/settings/SettingsItemGrants";
 import SettingsItemTokens from "ui/settings/SettingsItemTokens";
 
@@ -72,24 +73,25 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             chapter("general", null, [
                 option("posting.subject.present"),
                 option("posting.max-size"),
-                option("posting.revealed.notification.age")
+                option("posting.revealed.notification.age"),
             ]),
             chapter("media", null, [
                 option("media.max-size"),
                 option("posting.media.max-size"),
                 option("posting.image.recommended-size"),
-                option("posting.image.recommended-pixels")
-            ])
+                option("posting.image.recommended-pixels"),
+            ]),
         ]),
         sheet("news", [
             option("news.lifetime"),
             option("news.purge-pinned"),
-            option("posting.picked.hide-on-delete")
+            option("posting.picked.hide-on-delete"),
         ]),
         sheet("security", [
             chapter("password", null, [
-                component(SettingsItemPassword)
+                component(SettingsItemPassword),
             ]),
+            component(SettingsItemMnemonic),
             chapter("subscribers-and-subscriptions", null, [
                 option("subscribers.view", 0),
                 option("subscribers.view-total", 0),
@@ -100,23 +102,17 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
                 option("friend-ofs.view", 0),
                 option("friend-ofs.view-total", 0),
                 option("blocked-users.view", 0),
-                option("blocked-by-users.view")
+                option("blocked-by-users.view"),
             ]),
             chapter("subscription-friend-requests", null, [
                 option("ask.subscribe.allowed", 0),
                 option("ask.friend.allowed"),
                 option("ask.interval"),
-                option("ask.total.max")
+                option("ask.total.max"),
             ]),
-            chapter("grants", null, [
-                component(SettingsItemGrants)
-            ]),
-            chapter("tokens", null, [
-                component(SettingsItemTokens)
-            ])
         ]),
         sheet("moderation", [
-            option("sheriffs.timeline")
+            option("sheriffs.timeline"),
         ]),
         sheet("webui", [
             option("webui.enabled"),
@@ -126,11 +122,19 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             option("webui.allow-indexing"),
             option("webui.head.top.html"),
             option("webmaster.name"),
-            option("webmaster.email")
+            option("webmaster.email"),
+        ]),
+        sheet("applications", [
+            chapter("grants", null, [
+                component(SettingsItemGrants),
+            ]),
+            chapter("tokens", null, [
+                component(SettingsItemTokens),
+            ]),
         ]),
         sheet("addons"),
         sheet("other"),
-        sheet("removal", undefined, "nav-danger mt-md-4")
+        sheet("removal", undefined, "nav-danger mt-md-4"),
     ],
     "client": [
         sheet("appearance", [
@@ -139,14 +143,14 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             option(CLIENT_SETTINGS_PREFIX + "feed.width"),
             option(CLIENT_SETTINGS_PREFIX + "avatar.shape"),
             option(CLIENT_SETTINGS_PREFIX + "full-name.display", 4),
-            option(CLIENT_SETTINGS_PREFIX + "entry.gallery.loop")
+            option(CLIENT_SETTINGS_PREFIX + "entry.gallery.loop"),
         ]),
         sheet("notifications", [
             option(CLIENT_SETTINGS_PREFIX + "instants.number.mode"),
             option(CLIENT_SETTINGS_PREFIX + "instants.profile-link"),
             option(CLIENT_SETTINGS_PREFIX + "news-button.target-story"),
             option(CLIENT_SETTINGS_PREFIX + "mobile.notifications.enabled", 0),
-            option(CLIENT_SETTINGS_PREFIX + "mobile.notifications.news.enabled")
+            option(CLIENT_SETTINGS_PREFIX + "mobile.notifications.news.enabled"),
         ]),
         sheet("posting", [
             chapter("general", null, [
@@ -155,12 +159,12 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
                 option(CLIENT_SETTINGS_PREFIX + "posting.media.compress.default", 0),
                 option(CLIENT_SETTINGS_PREFIX + "posting.smileys.enabled", 0),
                 option(CLIENT_SETTINGS_PREFIX + "posting.time.relative"),
-                option(CLIENT_SETTINGS_PREFIX + "rich-text-editor.link-previews.max-automatic")
+                option(CLIENT_SETTINGS_PREFIX + "rich-text-editor.link-previews.max-automatic"),
             ]),
             chapter("comments", null, [
                 option(CLIENT_SETTINGS_PREFIX + "posting.comments.visibility.default", 0),
                 option(CLIENT_SETTINGS_PREFIX + "posting.comments.addition.default", 2),
-                option(CLIENT_SETTINGS_PREFIX + "posting.comments.hide.default")
+                option(CLIENT_SETTINGS_PREFIX + "posting.comments.hide.default"),
             ]),
             chapter("reactions", null, [
                 option(CLIENT_SETTINGS_PREFIX + "posting.reactions.enabled.default", 1),
@@ -169,32 +173,32 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
                 option(CLIENT_SETTINGS_PREFIX + "posting.reactions.negative.default", 4),
                 option(CLIENT_SETTINGS_PREFIX + "posting.reactions.self.enabled", 0),
                 option(CLIENT_SETTINGS_PREFIX + "posting.reactions.totals-visible.default", 0),
-                option(CLIENT_SETTINGS_PREFIX + "posting.reactions.visible.default")
+                option(CLIENT_SETTINGS_PREFIX + "posting.reactions.visible.default"),
             ]),
             chapter("replies", null, [
                 option(CLIENT_SETTINGS_PREFIX + "posting.reply.subject-prefix"),
                 option(CLIENT_SETTINGS_PREFIX + "posting.reply.preamble"),
-                option(CLIENT_SETTINGS_PREFIX + "posting.reply.quote-all")
+                option(CLIENT_SETTINGS_PREFIX + "posting.reply.quote-all"),
             ])
         ]),
         sheet("comment", [
             chapter("general", null, [
                 option(CLIENT_SETTINGS_PREFIX + "comment.replied-to.glance.enabled", 0),
                 option(CLIENT_SETTINGS_PREFIX + "comment.smileys.enabled"),
-                option(CLIENT_SETTINGS_PREFIX + "comment.submit-key")
+                option(CLIENT_SETTINGS_PREFIX + "comment.submit-key"),
             ]),
             chapter("reactions", null, [
                 option(CLIENT_SETTINGS_PREFIX + "comment.reactions.positive.default"),
                 option(CLIENT_SETTINGS_PREFIX + "comment.reactions.negative.default", 4),
-                option(CLIENT_SETTINGS_PREFIX + "comment.reactions.self.enabled")
+                option(CLIENT_SETTINGS_PREFIX + "comment.reactions.self.enabled"),
             ]),
         ]),
         sheet("reactions", [
             option(CLIENT_SETTINGS_PREFIX + "reactions.positive.available"),
-            option(CLIENT_SETTINGS_PREFIX + "reactions.negative.available")
+            option(CLIENT_SETTINGS_PREFIX + "reactions.negative.available"),
         ]),
-        sheet("other")
-    ]
+        sheet("other"),
+    ],
 }
 
 export function getSheets(tab: SettingsTabId): Sheet[] {

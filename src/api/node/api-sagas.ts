@@ -1060,6 +1060,39 @@ export function* deleteNodeName(
     });
 }
 
+export function* getStoredMnemonic(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
+    auth: true | string = true
+): CallApiResult<API.KeyMnemonic> {
+
+    const location = "/node-name/mnemonic";
+    return yield* callApi<API.KeyMnemonic>({
+        caller, nodeName, method: "GET", location, auth, schema: "KeyMnemonic", errorFilter
+    });
+}
+
+export function* storeMnemonic(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, mnemonic: API.KeyMnemonic,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): CallApiResult<API.Result> {
+
+    const location = "/node-name/mnemonic";
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "POST", location, body: mnemonic, auth, schema: "Result", errorFilter
+    });
+}
+
+export function* deleteStoredMnemonic(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
+    auth: true | string = true
+): CallApiResult<API.Result> {
+
+    const location = "/node-name/mnemonic";
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
+    });
+}
+
 export function* sendNotification(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, packet: API.NotificationPacket,
     errorFilter: ErrorFilter = false

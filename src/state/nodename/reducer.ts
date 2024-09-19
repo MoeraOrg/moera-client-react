@@ -14,12 +14,13 @@ const emptyInfo = {
     }
 };
 
-const initialState = {
+const initialState: NodeNameState = {
     loaded: false,
     loading: false,
     ...emptyInfo,
     showingRegisterDialog: false,
     registering: false,
+    storedMnemonic: false,
     mnemonicName: null,
     mnemonic: null,
     showingUpdateDialog: false,
@@ -49,6 +50,7 @@ export default (state: NodeNameState = initialState, action: ClientAction): Node
                 ...state,
                 ...emptyInfo,
                 name: action.payload.nodeName,
+                storedMnemonic: action.payload.storedMnemonic,
                 loading: false,
                 loaded: true
             };
@@ -94,9 +96,17 @@ export default (state: NodeNameState = initialState, action: ClientAction): Node
                 registering: false
             };
 
-        case "MNEMONIC_CLOSE":
+        case "MNEMONIC_OPEN":
             return {
                 ...state,
+                mnemonicName: action.payload.name,
+                mnemonic: action.payload.mnemonic
+            };
+
+        case "MNEMONIC_CLOSED":
+            return {
+                ...state,
+                storedMnemonic: action.payload.stored,
                 mnemonic: null
             };
 
