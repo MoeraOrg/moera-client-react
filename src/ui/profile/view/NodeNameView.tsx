@@ -3,9 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Loading } from "ui/control";
-import { isNodeNameDefined, isNodeNameManageable, isNodeNameOperationPending } from "state/nodename/selectors";
+import {
+    isNodeNameDefined,
+    isNodeNameManageable,
+    isNodeNameOperationPending,
+    isNodeNameReady
+} from "state/nodename/selectors";
 import { nodeNameUpdateDialog, registerNameDialog } from "state/nodename/actions";
 import { ClientState } from "state/state";
+import { getOwnerName, isAtHomeNode } from "state/node/selectors";
 import ManagementMenu from "ui/profile/view/ManagementMenu";
 import OperationStatus from "ui/profile/view/OperationStatus";
 import RegisterNameDialog from "ui/profile/manage/RegisterNameDialog";
@@ -14,41 +20,56 @@ import "./NodeNameView.css";
 
 const NodeNameUpdateDialog = React.lazy(() => import("ui/profile/manage/NodeNameUpdateDialog"));
 
-export default function NodeNameView() {
+function NodeNameManagement() {
+    const ready = useSelector(isNodeNameReady);
     const loading = useSelector((state: ClientState) => state.nodeName.loading);
-    const name = useSelector((state: ClientState) => state.nodeName.name);
-    const nameDefined = useSelector(isNodeNameDefined);
     const manageable = useSelector(isNodeNameManageable);
+    const nameDefined = useSelector(isNodeNameDefined);
     const operationPending = useSelector(isNodeNameOperationPending);
-    const showRegisterNameDialog = useSelector((state: ClientState) => state.nodeName.showingRegisterDialog);
-    const showNodeNameUpdateDialog = useSelector((state: ClientState) => state.nodeName.showingUpdateDialog);
     const dispatch = useDispatch();
     const {t} = useTranslation();
+
+    if (!ready) {
+        return loading && <Loading/>;
+    }
+    if (!manageable) {
+        return null;
+    }
+
+    if (nameDefined) {
+        return (
+            <>
+                {!operationPending && <ManagementMenu/>}
+                <OperationStatus/>
+            </>
+        );
+    } else {
+        return (
+            <>
+                <Button variant="primary" size="sm" disabled={operationPending}
+                        onClick={() => dispatch(registerNameDialog())}>
+                    {t("register-new-name")}
+                </Button>
+                <Button variant="outline-secondary" size="sm" disabled={operationPending}
+                        style={{marginLeft: "1.5rem"}} onClick={() => dispatch(nodeNameUpdateDialog(true))}>
+                    {t("transfer-existing-name-button")}
+                </Button>
+            </>
+        )
+    }
+}
+
+export default function NodeNameView() {
+    const atHomeNode = useSelector(isAtHomeNode);
+    const name = useSelector(getOwnerName);
+    const showRegisterNameDialog = useSelector((state: ClientState) => state.nodeName.showingRegisterDialog);
+    const showNodeNameUpdateDialog = useSelector((state: ClientState) => state.nodeName.showingUpdateDialog);
 
     return (
         <>
             <div className="node-name-view">
-                {nameDefined ?
-                    <>
-                        {name && <span className="name">{mentionName(name)}</span>}
-                        {manageable && !operationPending && <ManagementMenu/>}
-                        {manageable && <OperationStatus/>}
-                    </>
-                    :
-                    (manageable &&
-                        <>
-                            <Button variant="primary" size="sm" disabled={operationPending}
-                                    onClick={() => dispatch(registerNameDialog())}>
-                                {t("register-new-name")}
-                            </Button>
-                            <Button variant="outline-secondary" size="sm" disabled={operationPending}
-                                    style={{marginLeft: "1.5rem"}} onClick={() => dispatch(nodeNameUpdateDialog(true))}>
-                                {t("transfer-existing-name-button")}
-                            </Button>
-                        </>
-                    )
-                }
-                {loading && <Loading/>}
+                {name && <span className="name">{mentionName(name)}</span>}
+                {atHomeNode && <NodeNameManagement/>}
             </div>
             {showRegisterNameDialog && <RegisterNameDialog/>}
             {showNodeNameUpdateDialog &&

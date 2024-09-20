@@ -49,8 +49,15 @@ export default (state: NodeNameState = initialState, action: ClientAction): Node
             return {
                 ...state,
                 ...emptyInfo,
-                name: action.payload.nodeName,
-                storedMnemonic: action.payload.storedMnemonic,
+                name: action.payload.info.name ?? null,
+                operationStatus: action.payload.info.operationStatus ?? null,
+                operationStatusUpdated: action.payload.info.operationStatusUpdated ?? null,
+                operationErrorCode: action.payload.info.operationErrorCode ?? null,
+                operationErrorMessage: action.payload.info.operationErrorMessage ?? null,
+                operations: {
+                    manage: action.payload.info.operations?.manage ?? emptyInfo.operations.manage
+                },
+                storedMnemonic: action.payload.info.storedMnemonic ?? false,
                 loading: false,
                 loaded: true
             };

@@ -134,7 +134,8 @@ export function isOwnerNameSet(state: ClientState): boolean {
 export function isOwnerNameRecentlyChanged(state: ClientState): boolean {
     return isOwnerNameSet(state)
         && (state.node.owner.verifiedAt === 0
-            || (isNodeNameOperationFinished(state)
+            || (getOwnerName(state) === state.nodeName.name
+                && isNodeNameOperationFinished(state)
                 && state.node.owner.verifiedAt < (state.nodeName.operationStatusUpdated ?? 0)));
 }
 

@@ -1,4 +1,5 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
+import { NodeNameInfo } from "api";
 
 export type NodeNameLoadAction = ActionWithoutPayload<"NODE_NAME_LOAD">;
 export const nodeNameLoad = (): NodeNameLoadAction =>
@@ -9,11 +10,10 @@ export const nodeNameLoadFailed = (): NodeNameLoadFailedAction =>
     actionWithoutPayload("NODE_NAME_LOAD_FAILED");
 
 export type NodeNameSetAction = ActionWithPayload<"NODE_NAME_SET", {
-    nodeName: string | null;
-    storedMnemonic: boolean;
+    info: NodeNameInfo;
 }>;
-export const nodeNameSet = (nodeName: string | null, storedMnemonic: boolean): NodeNameSetAction =>
-    actionWithPayload("NODE_NAME_SET", {nodeName, storedMnemonic});
+export const nodeNameSet = (info: NodeNameInfo): NodeNameSetAction =>
+    actionWithPayload("NODE_NAME_SET", {info});
 
 export type NodeNameUnsetAction = ActionWithoutPayload<"NODE_NAME_UNSET">;
 export const nodeNameUnset = (): NodeNameUnsetAction =>

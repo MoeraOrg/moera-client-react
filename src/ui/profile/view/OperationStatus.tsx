@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { formatISO, fromUnixTime } from 'date-fns';
+import { addHours, format, formatISO, fromUnixTime, isAfter } from 'date-fns';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
@@ -15,10 +15,16 @@ export default function OperationStatus() {
     const errorMessage = useSelector((state: ClientState) => state.nodeName.operationErrorMessage);
     const {t} = useTranslation();
 
+    const recent = statusUpdated && isAfter(addHours(statusUpdated, 12), new Date());
+    if (!recent) {
+        return null;
+    }
+
     const text = status != null ? t(`operation-status.${status}`) : undefined;
     const success = status === "succeeded";
     const failure = status === "failed";
-    const date = statusUpdated ? fromUnixTime(statusUpdated) : null;
+    const date = fromUnixTime(statusUpdated);
+
     return (
         <span className={cx(
             "naming-operation-status", {
@@ -32,11 +38,7 @@ export default function OperationStatus() {
                     {t("failure-reason")}: {errorMessage || errorCode}
                 </Popover>
             }
-            {date &&
-                <>
-                    {` ${t("operation-at")} `}<time dateTime={formatISO(date)}>format(date, "dd-MM-yyyy HH:mm:ss")</time>
-                </>
-            }
+            {` ${t("operation-at")} `}<time dateTime={formatISO(date)}>{format(date, "dd-MM-yyyy HH:mm:ss")}</time>
         </span>
     );
 }
