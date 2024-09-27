@@ -41,7 +41,7 @@ export type SheriffOrderCategory = "visibility";
 export type SheriffOrderReason = "unlawful" | "defamatory" | "threat" | "spam" | "scam" | "malware" | "copyright"
     | "impersonating" | "privacy" | "other";
 
-export type SourceFormat = "plain-text" | "html" | "markdown" | "application";
+export type SourceFormat = "plain-text" | "html" | "markdown" | "delta" | "application";
 
 export type StoryType = "asked-to-friend" | "asked-to-subscribe" | "blocked-user" | "blocked-user-in-posting"
     | "comment-added" | "comment-media-reaction-added-negative" | "comment-media-reaction-added-positive"

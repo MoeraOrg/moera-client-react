@@ -1,14 +1,28 @@
-import { MediaWithDigest, VerifiedMediaFile } from "api";
+import Delta from 'quill-delta/dist/Delta';
+
+import { MediaWithDigest, SourceFormat, VerifiedMediaFile } from "api";
 import { mediaHashesExtract } from "util/media-images";
 
 export class RichTextValue {
 
-    text: string;
-    media?: (VerifiedMediaFile | null)[] | null;
+    readonly value: string | Delta;
+    readonly media?: (VerifiedMediaFile | null)[] | null;
 
-    constructor(text: string, media?: (VerifiedMediaFile | null)[] | null) {
-        this.text = text;
+    constructor(value: string | Delta, format: SourceFormat, media?: (VerifiedMediaFile | null)[] | null) {
+        if (format === "delta" && typeof value === "string") {
+            value = value ? JSON.parse(value) : new Delta();
+        }
+
+        this.value = value;
         this.media = media;
+    }
+
+    get text(): string {
+        return typeof this.value !== "string" ? JSON.stringify(this.value) : this.value;
+    }
+
+    get delta(): Delta {
+        return typeof this.value !== "string" ? this.value : new Delta().insert(this.value);
     }
 
     orderedMediaListWithDigests(): MediaWithDigest[] | null {

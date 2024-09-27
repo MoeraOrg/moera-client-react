@@ -99,7 +99,7 @@ const profileEditorLogic = {
         title: props.profile.title || "",
         gender: props.profile.gender || "",
         email: props.profile.email || "",
-        bioSrc: new RichTextValue(props.profile.bioSrc || ""),
+        bioSrc: new RichTextValue(props.profile.bioSrc || "", "markdown"),
         avatar: props.profile.avatar ?? null,
         fundraisers: props.profile.fundraisers ?? [],
         viewEmail: props.profile.operations?.viewEmail ?? "admin"

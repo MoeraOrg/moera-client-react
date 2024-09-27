@@ -65,7 +65,7 @@ const complaintDecisionEditorLogic = {
 
     mapPropsToValues: (props: OuterProps): Values => ({
         decisionCode: props.group?.status === "rejected" ? "reject" : props.group?.decisionCode ?? "choose",
-        decisionDetails: new RichTextValue(props.group?.decisionDetails ?? ""),
+        decisionDetails: new RichTextValue(props.group?.decisionDetails ?? "", "plain-text"),
         anonymous: props.group?.anonymous ?? false
     }),
 

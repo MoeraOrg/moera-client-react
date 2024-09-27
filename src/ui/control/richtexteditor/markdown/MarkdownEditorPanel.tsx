@@ -29,7 +29,7 @@ import { getTextSelection, insertText, wrapSelection, wrapSelectionLines } from 
 import { mentionName } from "util/names";
 import { NameListItem } from "util/names-list";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
-import "./RichTextEditorPanel.css";
+import "./MarkdownEditorPanel.css";
 
 interface Props {
     textArea: React.RefObject<HTMLTextAreaElement>,
@@ -48,7 +48,7 @@ interface Props {
     uploadingExternalImage?: () => void;
 }
 
-export default function RichTextEditorPanel({
+export default function MarkdownEditorPanel({
     textArea, panel, hiding, format, features, noMedia, nodeName = REL_CURRENT, forceImageCompress, selectedImage,
     selectImage, onImageAdded, onImageDeleted, externalImage, uploadingExternalImage
 }: Props) {
@@ -330,7 +330,7 @@ export default function RichTextEditorPanel({
     }
 
     return (
-        <div className={cx("rich-text-editor-panel", {"hiding": hiding})} ref={panel}>
+        <div className={cx("markdown-editor-panel", {"hiding": hiding})} ref={panel}>
             <div className="group">
                 <RichTextEditorButton icon={faBold} title={t("bold")} letter="B" onClick={onBold}/>
                 <RichTextEditorButton icon={faItalic} title={t("italic")} letter="I" onClick={onItalic}/>

@@ -312,7 +312,7 @@ export const composePageLogic = {
             avatar,
             fullName,
             subject,
-            body: new RichTextValue(body, media),
+            body: new RichTextValue(body, bodyFormat, media),
             bodyUrls,
             linkPreviews,
             bodyFormat,

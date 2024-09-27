@@ -92,7 +92,7 @@ const sheriffOrderDialogLogic = {
 
     mapPropsToValues: (): Values => ({
         reasonCode: "other",
-        reasonDetails: new RichTextValue(""),
+        reasonDetails: new RichTextValue("", "plain-text"),
         anonymous: false
     }),
 

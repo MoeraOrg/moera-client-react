@@ -12,6 +12,7 @@ const BODY_FORMAT_ICONS: Record<SourceFormat, IconProp | null> = {
     "plain-text": faRemoveFormat,
     "html": faCode,
     "markdown": faMarkdown,
+    "delta": faFileAlt,
     "application": null
 };
 

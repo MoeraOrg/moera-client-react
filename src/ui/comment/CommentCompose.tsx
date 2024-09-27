@@ -4,7 +4,6 @@ import { Form, FormikProps, withFormik } from 'formik';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import { useTranslation } from 'react-i18next';
 
-import { SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
@@ -34,7 +33,7 @@ import "./CommentCompose.css";
 type Props = CommentComposeProps & FormikProps<CommentComposeValues>;
 
 function CommentCompose(props: Props) {
-    const {values, resetForm, submitForm} = props;
+    const {sourceFormatDefault, smileysEnabled, values, resetForm, submitForm} = props;
 
     const ready = useSelector(isCommentComposerReady);
     const receiverName = useSelector(getCommentsReceiverName);
@@ -43,10 +42,7 @@ function CommentCompose(props: Props) {
     const loadedDraft = useSelector((state: ClientState) => state.detailedPosting.compose.loadedDraft);
     const formId = useSelector((state: ClientState) => state.detailedPosting.compose.formId);
     const beingPosted = useSelector((state: ClientState) => state.detailedPosting.compose.beingPosted);
-    const sourceFormatDefault = useSelector((state: ClientState) =>
-        getSetting(state, "comment.body-src-format.default") as SourceFormat);
     const submitKey = useSelector((state: ClientState) => getSetting(state, "comment.submit-key") as string);
-    const smileysEnabled = useSelector((state: ClientState) => getSetting(state, "comment.smileys.enabled") as boolean);
     const features = useSelector(getPostingFeatures);
     const dispatch = useDispatch();
     const {t} = useTranslation();

@@ -20,6 +20,7 @@ interface PropsToValuesProps {
     comment: CommentInfo | null;
     draft: DraftInfo | null;
     avatarDefault: AvatarImage | null;
+    sourceFormatDefault: SourceFormat;
 }
 
 interface ValuesToCommentTextProps {
@@ -126,6 +127,9 @@ export const commentComposeLogic = {
         const avatar = props.draft != null
             ? props.draft.ownerAvatar ?? null
             : props.comment != null ? props.comment.ownerAvatar ?? null : props.avatarDefault;
+        const bodyFormat = props.draft != null
+            ? props.draft.bodySrcFormat ?? "markdown"
+            : props.comment != null ? props.comment.bodySrcFormat ?? "markdown" : props.sourceFormatDefault;
         const body = props.draft != null
             ? props.draft.bodySrc?.text ?? ""
             : props.comment != null ? props.comment.bodySrc?.text ?? "" : "";
@@ -144,7 +148,7 @@ export const commentComposeLogic = {
 
         return {
             avatar,
-            body: new RichTextValue(body, media),
+            body: new RichTextValue(body, bodyFormat, media),
             bodyUrls,
             linkPreviews
         };
