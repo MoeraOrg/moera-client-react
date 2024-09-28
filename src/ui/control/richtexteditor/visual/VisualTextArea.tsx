@@ -8,10 +8,12 @@ import "./VisualTextArea.css";
 
 interface Props {
     value?: Delta;
+    autoFocus?: boolean;
+    disabled?: boolean;
     onChange?: (contents: Delta) => void;
 }
 
-export function VisualTextArea({value, onChange}: Props) {
+export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
     const {quill, quillRef} = useQuill({
         modules: {
             toolbar: [
@@ -22,8 +24,17 @@ export function VisualTextArea({value, onChange}: Props) {
                 ["image", "link"],
                 ["clean"],
             ]
-        }
+        },
+        readOnly: disabled,
     });
+
+    useEffect(() => quill?.enable(disabled !== true), [disabled, quill]);
+
+    useEffect(() => {
+        if (!disabled && autoFocus && quill != null) {
+            quill.focus();
+        }
+    }, [disabled, autoFocus, quill]);
 
     useEffect(() => {
         if (quill != null && value != null && !deepEqual(value, quill.getContents())) {
@@ -36,7 +47,6 @@ export function VisualTextArea({value, onChange}: Props) {
     useEffect(() => {
         if (quill != null && onChange != null) {
             const handler = (delta: Delta, oldContent: Delta) => {
-                console.log(delta, oldContent, quill.getContents());
                 onChange(quill.getContents());
             }
             quill.on('text-change', handler);
