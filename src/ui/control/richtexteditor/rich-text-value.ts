@@ -10,7 +10,7 @@ export class RichTextValue {
 
     constructor(value: string | Delta, format: SourceFormat, media?: (VerifiedMediaFile | null)[] | null) {
         if (format === "delta" && typeof value === "string") {
-            value = value ? JSON.parse(value) : new Delta();
+            value = new Delta(value ? JSON.parse(value) : undefined);
         }
 
         this.value = value;
