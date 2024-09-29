@@ -2,3 +2,23 @@
     font-family: unset;
     font-size: unset;
 }
+
+.rich-text-editor .ql-editor h1 {
+    font-size: calc(1.375rem + 1.5vw);
+}
+
+.rich-text-editor .ql-editor h2 {
+    font-size: calc(1.325rem + .9vw);
+}
+
+.rich-text-editor .ql-editor h3 {
+    font-size: calc(1.3rem + .6vw);
+}
+
+.rich-text-editor .ql-editor h4 {
+    font-size: calc(1.275rem + .3vw);
+}
+
+.rich-text-editor .ql-editor h5 {
+    font-size: calc(1.25rem);
+}
