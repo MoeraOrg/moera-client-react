@@ -19,7 +19,7 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
             toolbar: [
                 [{"header": [false, 1, 2, 3, 4, 5]}],
                 ["bold", "italic", "strike"],
-                [{"list": "ordered"}, {"list": "bullet"}],
+                [{list: "ordered"}, {list: "bullet"}, {indent: "+1"}, {indent: "-1"}],
                 ["blockquote"],
                 ["image", "link"],
                 ["clean"],
