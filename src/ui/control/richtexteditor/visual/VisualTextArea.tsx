@@ -1,9 +1,8 @@
 import { useEffect } from 'react';
-import { useQuill } from 'react-quilljs';
 import deepEqual from 'react-fast-compare';
 import Delta from 'quill-delta/dist/Delta';
-import 'quill/dist/quill.snow.css';
 
+import { useQuill } from "ui/control/richtexteditor/visual/quill";
 import "./VisualTextArea.css";
 
 interface Props {
@@ -23,7 +22,8 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
                 ["blockquote"],
                 ["image", "link"],
                 ["clean"],
-            ]
+            ],
+            magicUrl: true,
         },
         readOnly: disabled,
     });
