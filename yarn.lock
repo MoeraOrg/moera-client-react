@@ -2377,7 +2377,7 @@
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.10.tgz#0af26845b5067e1c9a622658a51f60a3934d51e8"
   integrity sha512-3Gnx08Ns1sEoCrWssEgTSJs/rsT2vhGP+Ja9cnnk9k4ALxinORlQneLXFeFKOTJMOeZUFD1s7w+w2AphTpvzZw==
 
-"@types/quill@^2.0.14", "@types/quill@^2.0.9":
+"@types/quill@^2.0.9":
   version "2.0.14"
   resolved "https://registry.yarnpkg.com/@types/quill/-/quill-2.0.14.tgz#78309020cccd6d9569bbba5733f4329a4ae76b47"
   integrity sha512-zvoXCRnc2Dl8g+7/9VSAmRWPN6oH+MVhTPizmCR+GJCITplZ5VRVzMs4+a/nOE3yzNwEZqylJJrMB07bwbM1/g==
@@ -8099,11 +8099,6 @@ react-qr-code@^2.0.12:
   dependencies:
     prop-types "^15.8.1"
     qr.js "0.0.0"
-
-react-quilljs@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/react-quilljs/-/react-quilljs-2.0.4.tgz#16f57e93ad6f9cda6ffa13b17ccc22b8c75ae91c"
-  integrity sha512-NmXRjsCUrExIWQgCjCEB9D7o1tbNT6foiDxyj/wZrdCNmnyMTNlkIr04+gMC0oYw12po2DklN+l2BCudXybA5w==
 
 react-redux@^8.1.2:
   version "8.1.3"

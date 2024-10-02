@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import deepEqual from 'react-fast-compare';
+import Toolbar from 'quill/modules/toolbar';
 import Delta from 'quill-delta/dist/Delta';
 
-import { useQuill } from "ui/control/richtexteditor/visual/quill";
+import Quill, { QuillOptions } from "ui/control/richtexteditor/visual/quill";
 import "./VisualTextArea.css";
 
 interface Props {
@@ -13,48 +14,67 @@ interface Props {
 }
 
 export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
-    const {quill, quillRef} = useQuill({
+    const quillOptions = useRef<QuillOptions>({
         modules: {
-            toolbar: [
-                [{"header": [false, 1, 2, 3, 4, 5]}],
-                ["bold", "italic", "strike"],
-                [{list: "ordered"}, {list: "bullet"}, {indent: "+1"}, {indent: "-1"}],
-                ["blockquote"],
-                ["image", "link"],
-                ["clean"],
-            ],
+            toolbar: {
+                container: [
+                    [{"header": [false, 1, 2, 3, 4, 5]}],
+                    ["bold", "italic", "strike"],
+                    [{list: "ordered"}, {list: "bullet"}, {indent: "+1"}, {indent: "-1"}],
+                    ["blockquote"],
+                    ["image", "link"],
+                    ["clean"],
+                ],
+                handlers: {
+                    blockquote: function (this: Toolbar) {
+                        this.quill.format("blockquote", true);
+                    }
+                }
+            },
             magicUrl: true,
         },
         readOnly: disabled,
+        theme: "snow",
     });
 
-    useEffect(() => quill?.enable(disabled !== true), [disabled, quill]);
+    const [quillElement, setQuillElement] = useState<HTMLDivElement | null>(null);
+
+    const quill = useRef<Quill>();
 
     useEffect(() => {
-        if (!disabled && autoFocus && quill != null) {
-            quill.focus();
+        if (quillElement != null) {
+            quill.current = new Quill(quillElement, quillOptions.current);
         }
-    }, [disabled, autoFocus, quill]);
+    }, [quillElement]);
+
+    useEffect(() => quill.current?.enable(disabled !== true), [disabled]);
 
     useEffect(() => {
-        if (quill != null && value != null && !deepEqual(value, quill.getContents())) {
-            const range = quill.getSelection(false);
-            quill.setContents(value, "silent");
-            quill.setSelection(range, "silent");
+        if (!disabled && autoFocus && quill.current != null) {
+            quill.current.focus();
+        }
+    }, [disabled, autoFocus]);
+
+    useEffect(() => {
+        if (quill.current != null && value != null && !deepEqual(value, quill.current.getContents())) {
+            const range = quill.current.getSelection(false);
+            quill.current.setContents(value, "silent");
+            quill.current.setSelection(range, "silent");
         }
     }, [quill, value]);
 
     useEffect(() => {
-        if (quill != null && onChange != null) {
+        if (quill.current != null && onChange != null) {
+            const currentQuill = quill.current;
             const handler = (delta: Delta, oldContent: Delta) => {
-                onChange(quill.getContents());
+                onChange(currentQuill.getContents());
             }
-            quill.on('text-change', handler);
+            currentQuill.on('text-change', handler);
             return () => {
-                quill.off('text-change', handler)
+                currentQuill.off('text-change', handler)
             }
         }
-    }, [quill, onChange]);
+    }, [onChange]);
 
-    return <div><div ref={quillRef}/></div>;
+    return <div><div ref={setQuillElement}/></div>;
 }
