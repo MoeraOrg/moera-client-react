@@ -1,6 +1,8 @@
 import Quill from 'quill';
 import Block from 'quill/blots/block';
 import Container from 'quill/blots/container';
+import { ListContainer } from 'quill/formats/list';
+import Header from 'quill/formats/header';
 
 class BlockquoteContainer extends Container {
 
@@ -9,10 +11,11 @@ class BlockquoteContainer extends Container {
 
 }
 
-class BlockquoteBlot extends Block {
+class Blockquote extends Block {
 
     static blotName = "blockquote";
-    static tagName = "P";
+    static tagName = "DIV";
+    static className = "quoted-text";
     static requiredContainer = BlockquoteContainer;
 
     static register() {
@@ -21,6 +24,6 @@ class BlockquoteBlot extends Block {
 
 }
 
-BlockquoteContainer.allowedChildren = [BlockquoteBlot];
+BlockquoteContainer.allowedChildren = [Blockquote, ListContainer, Header];
 
-export {BlockquoteContainer, BlockquoteBlot as default};
+export {BlockquoteContainer, Blockquote as default};
