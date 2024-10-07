@@ -5,7 +5,7 @@ import { Attributor, Scope } from 'parchment';
 
 import Blockquote from "ui/control/richtexteditor/visual/Blockquote";
 import QuotableHeader from "ui/control/richtexteditor/visual/QuotableHeader";
-import QuotableListItem from "ui/control/richtexteditor/visual/QuotableListItem";
+import QuotableListItem from "ui/control/richtexteditor/visual/QuotableList";
 
 const QuoteLevelAttribute = new Attributor("quote-level", "data-quote-level", {
     scope: Scope.BLOCK,
