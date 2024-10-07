@@ -5,22 +5,27 @@
 
 .rich-text-editor .ql-editor H1 {
     font-size: calc(1.375rem + 1.5vw);
+    padding-bottom: .5rem;
 }
 
 .rich-text-editor .ql-editor H2 {
     font-size: calc(1.325rem + .9vw);
+    padding-bottom: .5rem;
 }
 
 .rich-text-editor .ql-editor H3 {
     font-size: calc(1.3rem + .6vw);
+    padding-bottom: .5rem;
 }
 
 .rich-text-editor .ql-editor H4 {
     font-size: calc(1.275rem + .3vw);
+    padding-bottom: .5rem;
 }
 
 .rich-text-editor .ql-editor H5 {
     font-size: calc(1.25rem);
+    padding-bottom: .5rem;
 }
 
 .rich-text-editor .ql-editor BLOCKQUOTE {
@@ -38,4 +43,11 @@
     position: absolute;
     left: .5rem;
     top: -1.5rem;
+}
+
+.rich-text-editor .ql-editor .inner-quote {
+    border-left: 3px solid var(--bs-cyan);
+    display: inline-block;
+    height: 100%;
+    width: 1.5rem;
 }

@@ -27,7 +27,8 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
                 ],
                 handlers: {
                     blockquote: function (this: Toolbar) {
-                        this.quill.format("blockquote", true);
+                        const level = (this.quill.getFormat()?.["quote-level"] as string | undefined) ?? "0";
+                        this.quill.format("blockquote", String(parseInt(level) + 1));
                     }
                 }
             },
