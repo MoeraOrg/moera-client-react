@@ -17,5 +17,5 @@ Quill.register(QuotableHeader, true);
 Quill.register(QuotableListItem, true);
 Quill.register(QuoteLevelAttribute);
 
-export type { QuillOptions } from 'quill';
+export type { QuillOptions, Range } from 'quill';
 export default Quill;

@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import deepEqual from 'react-fast-compare';
 import Toolbar from 'quill/modules/toolbar';
 import Delta from 'quill-delta/dist/Delta';
 
-import Quill, { QuillOptions } from "ui/control/richtexteditor/visual/quill";
+import Quill, { QuillOptions, Range } from "ui/control/richtexteditor/visual/quill";
 import "./VisualTextArea.css";
 
 interface Props {
@@ -67,15 +67,36 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
     useEffect(() => {
         if (quill.current != null && onChange != null) {
             const currentQuill = quill.current;
-            const handler = (delta: Delta, oldContent: Delta) => {
-                onChange(currentQuill.getContents());
-            }
-            currentQuill.on('text-change', handler);
+            const handler = () => onChange(currentQuill.getContents());
+            currentQuill.on("text-change", handler);
             return () => {
-                currentQuill.off('text-change', handler)
+                currentQuill.off("text-change", handler);
             }
         }
     }, [onChange]);
+
+    const onSelectionChange = useCallback((range: Range) => {
+        if (quill.current != null && quillElement?.parentElement != null) {
+            const formats = quill.current.getFormat(range);
+            const inList = !!formats["list"];
+            const indentButtons = quillElement.parentElement.querySelectorAll(".ql-indent");
+            if (inList) {
+                indentButtons.forEach(button => button.classList.remove("d-none"));
+            } else {
+                indentButtons.forEach(button => button.classList.add("d-none"));
+            }
+        }
+    }, [quillElement]);
+
+    useEffect(() => {
+        if (quill.current != null) {
+            const currentQuill = quill.current;
+            currentQuill.on("selection-change", onSelectionChange);
+            return () => {
+                currentQuill.off("selection-change", onSelectionChange)
+            }
+        }
+    }, [onSelectionChange]);
 
     return <div><div ref={setQuillElement}/></div>;
 }
