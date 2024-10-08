@@ -6,6 +6,9 @@ export function assignStyle(domNode: HTMLElement, level: number | string): void 
     if (level > 1) {
         domNode.style.paddingLeft = `${(level - 1) * 1.5}rem`;
         domNode.style.position = "relative";
+    } else {
+        domNode.style.removeProperty("padding-left");
+        domNode.style.removeProperty("position");
     }
 }
 
