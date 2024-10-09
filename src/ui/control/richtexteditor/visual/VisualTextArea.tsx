@@ -87,12 +87,10 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
     const onEditorChange = useCallback((...args: any[]) => {
         if (quill.current != null && quillElement != null) {
             const range: Range = args[0] === "selection-change" ? args[1] : quill.current?.getSelection();
-            if (range?.index != null) {
-                const formats = quill.current.getFormat(range);
+            const formats: Record<string, any> = range?.index != null ? quill.current.getFormat(range) : [];
 
-                showButtons(quillElement, ".ql-indent", !!formats["list"]);
-                showButtons(quillElement, ".ql-blockquote-off", !!formats["blockquote"] || !!formats["quote-level"]);
-            }
+            showButtons(quillElement, ".ql-indent", !!formats["list"]);
+            showButtons(quillElement, ".ql-blockquote-off", !!formats["blockquote"] || !!formats["quote-level"]);
         }
     }, [quillElement]);
 
