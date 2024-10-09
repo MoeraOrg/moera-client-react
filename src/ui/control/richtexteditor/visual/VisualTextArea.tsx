@@ -3,7 +3,9 @@ import deepEqual from 'react-fast-compare';
 import Toolbar from 'quill/modules/toolbar';
 import Delta from 'quill-delta/dist/Delta';
 
+import * as Browser from "ui/browser";
 import Quill, { QuillOptions, Range } from "ui/control/richtexteditor/visual/quill";
+import AddReactionIcon from "ui/control/richtexteditor/visual/icons/add_reaction.isvg";
 import "./VisualTextArea.css";
 
 interface Props {
@@ -22,6 +24,7 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
                     ["bold", "italic", "strike"],
                     [{list: "ordered"}, {list: "bullet"}, {indent: "+1"}, {indent: "-1"}],
                     ["blockquote", "blockquote-off"],
+                    ["emoji"],
                     ["image", "link"],
                     ["clean"],
                 ],
@@ -42,6 +45,7 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
                 }
             },
             magicUrl: true,
+            emoji: true,
         },
         readOnly: disabled,
         theme: "snow-extended",
@@ -54,6 +58,13 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
     useEffect(() => {
         if (quillElement != null) {
             quill.current = new Quill(quillElement, quillOptions.current);
+            quillElement.parentElement?.querySelectorAll(".ql-emoji").forEach(button => {
+                if (Browser.isMobile()) {
+                    button.classList.add("d-none");
+                } else {
+                    button.innerHTML = AddReactionIcon;
+                }
+            });
         }
     }, [quillElement]);
 

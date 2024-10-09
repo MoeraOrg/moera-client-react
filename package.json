@@ -20,6 +20,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
     "@popperjs/core": "^2.11.8",
+    "@rytrox/quill-emoji-mart": "^1.0.0",
     "@seznam/compose-react-refs": "^1.0.6",
     "@stomp/stompjs": "^7.0.0",
     "@svgr/webpack": "^8.1.0",
