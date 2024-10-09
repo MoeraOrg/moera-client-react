@@ -2,13 +2,37 @@ import SnowTheme from 'quill/themes/snow';
 import Toolbar from 'quill/modules/toolbar';
 import Icons from 'quill/ui/icons';
 
+import AddLinkIcon from "ui/control/richtexteditor/visual/icons/add_link.isvg";
+import AddPhotoAlternateIcon from "ui/control/richtexteditor/visual/icons/add_photo_alternate.isvg";
+import FormatBoldIcon from "ui/control/richtexteditor/visual/icons/format_bold.isvg";
+import FormatClearIcon from "ui/control/richtexteditor/visual/icons/format_clear.isvg";
+import FormatIndentDecreaseIcon from "ui/control/richtexteditor/visual/icons/format_indent_decrease.isvg";
+import FormatIndentIncreaseIcon from "ui/control/richtexteditor/visual/icons/format_indent_increase.isvg";
+import FormatItalicIcon from "ui/control/richtexteditor/visual/icons/format_italic.isvg";
+import FormatListBulletedIcon from "ui/control/richtexteditor/visual/icons/format_list_bulleted.isvg";
+import FormatListNumberedIcon from "ui/control/richtexteditor/visual/icons/format_list_numbered.isvg";
 import FormatQuoteIcon from "ui/control/richtexteditor/visual/icons/format_quote.isvg";
 import FormatQuoteOffIcon from "ui/control/richtexteditor/visual/icons/format_quote_off.isvg";
+import FormatStrikethroughIcon from "ui/control/richtexteditor/visual/icons/format_strikethrough.isvg";
 
 const SNOW_EXTENDED_ICONS = {
     ...Icons,
+    bold: FormatBoldIcon,
+    italic: FormatItalicIcon,
+    strike: FormatStrikethroughIcon,
+    list: {
+        ordered: FormatListNumberedIcon,
+        bullet: FormatListBulletedIcon,
+    },
+    indent: {
+        "+1": FormatIndentIncreaseIcon,
+        "-1": FormatIndentDecreaseIcon,
+    },
     blockquote: FormatQuoteIcon,
-    "blockquote-off": FormatQuoteOffIcon
+    "blockquote-off": FormatQuoteOffIcon,
+    image: AddPhotoAlternateIcon,
+    link: AddLinkIcon,
+    clean: FormatClearIcon,
 }
 
 export default class SnowExtendedTheme extends SnowTheme {
