@@ -31,6 +31,9 @@ class Blockquote extends Block {
             super.format("quote-level", value);
             QuoteStyle.assignStyle(this.domNode, value);
             this.attachUI(QuoteStyle.createUI(value));
+        } else if ((name === "blockquote" || name === "quote-level") && !value) {
+            super.format("quote-level", value);
+            super.format("blockquote", value);
         } else {
             super.format(name, value);
         }

@@ -3,6 +3,7 @@ import Quill from 'quill';
 import ListItem, { ListContainer } from 'quill/formats/list';
 
 import * as QuoteStyle from "ui/control/richtexteditor/visual/QuoteStyle";
+import { removeContainerOf } from "ui/control/richtexteditor/visual/QuoteStyle";
 
 export class QuotableListContainer extends ListContainer {
 
@@ -14,15 +15,27 @@ export class QuotableListContainer extends ListContainer {
     }
 
     formatQuote(value: string) {
-        this.wrap("blockquote");
-        QuoteStyle.assignStyle(this.domNode, value);
-        this.attachUI(QuoteStyle.createUI(value));
+        if (value) {
+            this.wrap("blockquote");
+            QuoteStyle.assignStyle(this.domNode, value);
+            this.attachUI(QuoteStyle.createUI(value));
+        }
 
         this.children.forEach(child => {
-            if (child instanceof QuotableListItem && child.domNode.getAttribute("data-quote-level") !== value) {
+            if (!(child instanceof QuotableListItem)) {
+                return;
+            }
+
+            const childLevel = child.domNode.getAttribute("data-quote-level") || "0";
+            const targetLevel = value || "0";
+            if (childLevel !== targetLevel) {
                 child.format("quote-level", value);
             }
-        })
+        });
+
+        if (!value) {
+            removeContainerOf(this);
+        }
     }
 
 }
@@ -32,7 +45,7 @@ export default class QuotableListItem extends ListItem {
     private postponedQuoteValue: string | null = null;
 
     format(name: string, value: string): void {
-        if ((name === "blockquote" || name === "quote-level") && value) {
+        if (name === "blockquote" || name === "quote-level") {
             this.formatParent(value);
         } else {
             super.format(name, value);

@@ -1,3 +1,6 @@
+import { BlockquoteContainer } from "ui/control/richtexteditor/visual/Blockquote";
+import { Parent } from 'parchment';
+
 export function assignStyle(domNode: HTMLElement, level: number | string): void {
     if (typeof level === "string") {
         level = parseInt(level);
@@ -26,4 +29,11 @@ export function createUI(level: number | string): HTMLElement {
         ui.appendChild(pad);
     }
     return ui;
+}
+
+export function removeContainerOf(block: Parent) {
+    if (block.parent instanceof BlockquoteContainer) {
+        block.parent.moveChildren(block.parent.parent, block.parent);
+        block.parent.remove();
+    }
 }
