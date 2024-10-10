@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import deepEqual from 'react-fast-compare';
 import Toolbar from 'quill/modules/toolbar';
 import Delta from 'quill-delta/dist/Delta';
@@ -6,6 +6,9 @@ import Delta from 'quill-delta/dist/Delta';
 import * as Browser from "ui/browser";
 import Quill, { QuillOptions, Range } from "ui/control/richtexteditor/visual/quill";
 import AddReactionIcon from "ui/control/richtexteditor/visual/icons/add_reaction.isvg";
+import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
+import { NameListItem } from "util/names-list";
+import { mentionName } from "util/names";
 import "./VisualTextArea.css";
 
 interface Props {
@@ -16,6 +19,13 @@ interface Props {
 }
 
 export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
+    const [mentionDialog, setMentionDialog] = useState<boolean>(false);
+
+    const onMention = useCallback(
+        () => mentionDialog || setMentionDialog(true),
+        [mentionDialog]
+    );
+
     const quillOptions = useRef<QuillOptions>({
         modules: {
             toolbar: {
@@ -24,7 +34,7 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
                     ["bold", "italic", "strike"],
                     [{list: "ordered"}, {list: "bullet"}, {indent: "+1"}, {indent: "-1"}],
                     ["blockquote", "blockquote-off"],
-                    ["emoji"],
+                    ["emoji", "mention"],
                     ["image", "link"],
                     ["clean"],
                 ],
@@ -42,6 +52,10 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
                             this.quill.format("blockquote", false);
                         }
                     },
+
+                    emoji: () => {},
+
+                    mention: onMention,
                 }
             },
             magicUrl: true,
@@ -53,11 +67,11 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
 
     const [quillElement, setQuillElement] = useState<HTMLDivElement | null>(null);
 
-    const quill = useRef<Quill>();
+    const [quill, setQuill] = useState<Quill | null>(null);
 
     useEffect(() => {
         if (quillElement != null) {
-            quill.current = new Quill(quillElement, quillOptions.current);
+            setQuill(new Quill(quillElement, quillOptions.current));
             quillElement.parentElement?.querySelectorAll(".ql-emoji").forEach(button => {
                 if (Browser.isMobile()) {
                     button.classList.add("d-none");
@@ -68,54 +82,112 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
         }
     }, [quillElement]);
 
-    useEffect(() => quill.current?.enable(disabled !== true), [disabled]);
+    useEffect(() => quill?.enable(disabled !== true), [disabled, quill]);
 
     useEffect(() => {
-        if (!disabled && autoFocus && quill.current != null) {
-            quill.current.focus();
+        if (!disabled && autoFocus && quill != null) {
+            quill.focus();
         }
-    }, [disabled, autoFocus]);
+    }, [disabled, autoFocus, quill]);
 
     useEffect(() => {
-        if (quill.current != null && value != null && !deepEqual(value, quill.current.getContents())) {
-            const range = quill.current.getSelection(false);
-            quill.current.setContents(value, "silent");
-            quill.current.setSelection(range, "silent");
+        if (quill != null && value != null && !deepEqual(value, quill.getContents())) {
+            const range = quill.getSelection(false);
+            quill.setContents(value, "silent");
+            quill.setSelection(range, "silent");
         }
     }, [quill, value]);
 
     useEffect(() => {
-        if (quill.current != null && onChange != null) {
-            const currentQuill = quill.current;
-            const handler = () => onChange(currentQuill.getContents());
-            currentQuill.on("text-change", handler);
+        if (quill != null && onChange != null) {
+            const handler = () => onChange(quill.getContents());
+            quill.on("text-change", handler);
             return () => {
-                currentQuill.off("text-change", handler);
+                quill.off("text-change", handler);
             }
         }
-    }, [onChange]);
+    }, [onChange, quill]);
+
+    useEffect(() => {
+        if (quillElement != null) {
+            showButtons(quillElement, ".ql-indent", false);
+            showButtons(quillElement, ".ql-blockquote-off", false);
+        }
+    }, [quillElement]);
 
     const onEditorChange = useCallback((...args: any[]) => {
-        if (quill.current != null && quillElement != null) {
-            const range: Range = args[0] === "selection-change" ? args[1] : quill.current?.getSelection();
-            const formats: Record<string, any> = range?.index != null ? quill.current.getFormat(range) : [];
+        if (quill != null && quillElement != null) {
+            const range: Range = args[0] === "selection-change" ? args[1] : quill.getSelection();
+            const formats: Record<string, any> = range?.index != null ? quill.getFormat(range) : [];
 
             showButtons(quillElement, ".ql-indent", !!formats["list"]);
             showButtons(quillElement, ".ql-blockquote-off", !!formats["blockquote"] || !!formats["quote-level"]);
         }
-    }, [quillElement]);
+    }, [quill, quillElement]);
 
     useEffect(() => {
-        if (quill.current != null) {
-            const currentQuill = quill.current;
-            currentQuill.on("editor-change", onEditorChange);
+        if (quill != null) {
+            quill.on("editor-change", onEditorChange);
             return () => {
-                currentQuill.off("editor-change", onEditorChange)
+                quill.off("editor-change", onEditorChange)
             }
         }
-    }, [onEditorChange]);
+    }, [onEditorChange, quill]);
 
-    return <div><div ref={setQuillElement}/></div>;
+    const onMentionSubmit = (ok: boolean, {nodeName, fullName}: NameListItem) => {
+        setMentionDialog(false);
+
+        if (quill == null) {
+            return;
+        }
+
+        if (!ok) {
+            quill.focus();
+            return;
+        }
+
+        let {index, length} = quill.getSelection(true) ?? {index: 0, length: 0};
+        let delta = new Delta();
+        if (index > 0 && quill.getText(index - 1, 1) === "@") {
+            index--;
+            delta = delta.retain(index).delete(1);
+        } else {
+            delta = delta.retain(index);
+        }
+        const text = fullName || mentionName(nodeName);
+        delta = delta.insert(text, {mention: nodeName}).insert(" ");
+        quill.updateContents(delta, "user");
+        quill.setSelection(index + text.length + 1, length);
+    }
+
+    const onTextEntered = useCallback((...args: any[]) => {
+        if (quill != null && quillElement != null && args[0] === "text-change" && args[3] === "user") {
+            const isMention =
+                (args[1] as Delta)
+                    .map(op => op.insert)
+                    .filter((data): data is string => typeof data === "string")
+                    .some(text => text.endsWith("@"));
+            if (isMention) {
+                onMention();
+            }
+        }
+    }, [onMention, quill, quillElement]);
+
+    useEffect(() => {
+        if (quill != null) {
+            quill.on("editor-change", onTextEntered);
+            return () => {
+                quill.off("editor-change", onTextEntered)
+            }
+        }
+    }, [onTextEntered, quill]);
+
+    return (
+        <div>
+            <div ref={setQuillElement}/>
+            {mentionDialog && <RichTextMentionDialog onSubmit={onMentionSubmit}/>}
+        </div>
+    );
 }
 
 function showButtons(quillElement: HTMLDivElement, selector: string, visible: boolean): void {

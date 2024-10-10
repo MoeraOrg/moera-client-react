@@ -4,6 +4,7 @@ import Icons from 'quill/ui/icons';
 
 import AddLinkIcon from "ui/control/richtexteditor/visual/icons/add_link.isvg";
 import AddPhotoAlternateIcon from "ui/control/richtexteditor/visual/icons/add_photo_alternate.isvg";
+import AlternateEmailIcon from "ui/control/richtexteditor/visual/icons/alternate_email.isvg";
 import FormatBoldIcon from "ui/control/richtexteditor/visual/icons/format_bold.isvg";
 import FormatClearIcon from "ui/control/richtexteditor/visual/icons/format_clear.isvg";
 import FormatIndentDecreaseIcon from "ui/control/richtexteditor/visual/icons/format_indent_decrease.isvg";
@@ -30,6 +31,7 @@ const SNOW_EXTENDED_ICONS = {
     },
     blockquote: FormatQuoteIcon,
     "blockquote-off": FormatQuoteOffIcon,
+    mention: AlternateEmailIcon,
     image: AddPhotoAlternateIcon,
     link: AddLinkIcon,
     clean: FormatClearIcon,
