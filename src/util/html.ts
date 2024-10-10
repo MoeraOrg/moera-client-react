@@ -91,6 +91,7 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
         "player.vimeo.com",
         "rumble.com",
         "www.facebook.com",
+        "www.linkedin.com",
         "www.youtube-nocookie.com",
         "www.youtube.com",
         "gifer.com",
