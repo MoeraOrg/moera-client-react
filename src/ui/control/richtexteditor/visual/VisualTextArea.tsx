@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import deepEqual from 'react-fast-compare';
+import { Delta, Op } from 'quill/core';
 import Toolbar from 'quill/modules/toolbar';
-import Delta from 'quill-delta/dist/Delta';
 
 import * as Browser from "ui/browser";
 import Quill, { QuillOptions, Range } from "ui/control/richtexteditor/visual/quill";
@@ -162,14 +162,14 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
 
     const onTextEntered = useCallback((...args: any[]) => {
         if (quill != null && quillElement != null && args[0] === "text-change" && args[3] === "user") {
-            const isMention =
-                (args[1] as Delta)
-                    .map(op => op.insert)
-                    .filter((data): data is string => typeof data === "string")
-                    .some(text => text.endsWith("@"));
-            if (isMention) {
-                onMention();
+            const mentionIndex = findMention(args[1]);
+            if (mentionIndex == null) {
+                return;
             }
+            if (mentionIndex > 0 && !/^\s$/.test(quill.getText(mentionIndex - 1, 1))) {
+                return;
+            }
+            onMention();
         }
     }, [onMention, quill, quillElement]);
 
@@ -199,4 +199,16 @@ function showButtons(quillElement: HTMLDivElement, selector: string, visible: bo
             buttons.forEach(button => button.classList.add("d-none"));
         }
     }
+}
+
+function findMention(delta: Delta): number | null {
+    let index = 0;
+    for (const op of delta.ops) {
+        if (op.insert && typeof op.insert === "string" && op.insert.endsWith("@")) {
+            return index + op.insert.length - 1;
+        } else {
+            index += Op.length(op);
+        }
+    }
+    return null;
 }
