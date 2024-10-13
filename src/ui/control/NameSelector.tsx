@@ -154,11 +154,14 @@ function trimQuery(text: string | null | undefined): string | null {
 }
 
 function reorderNames(names: NameListItem[], query: string | null): NameListItem[] {
-    if (names.length <= 1 || query == null) {
+    if (!query) {
         return names;
     }
     const index = names.findIndex(nm => nm.nodeName === query);
-    if (index <= 0) { // Not found or at the first place
+    if (index < 0) {
+        return [{nodeName: query}, ...names];
+    }
+    if (index === 0) { // Already at the first place
         return names;
     }
     const list = names.slice();

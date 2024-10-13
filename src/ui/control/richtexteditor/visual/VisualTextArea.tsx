@@ -141,7 +141,7 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
             return;
         }
 
-        if (!ok) {
+        if (!ok && !nodeName) {
             quill.focus();
             return;
         }
@@ -155,9 +155,9 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
             delta = delta.retain(index);
         }
         const text = fullName || mentionName(nodeName);
-        delta = delta.insert(text, {mention: nodeName}).insert(" ");
+        delta = ok ? delta.insert(text, {mention: nodeName}).insert(" ") : delta.insert(text);
         quill.updateContents(delta, "user");
-        quill.setSelection(index + text.length + 1, length);
+        quill.setSelection(index + text.length + (ok ? 1 : 0), length);
     }
 
     const onTextEntered = useCallback((...args: any[]) => {

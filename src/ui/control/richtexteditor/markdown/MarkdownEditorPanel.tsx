@@ -245,7 +245,7 @@ export default function MarkdownEditorPanel({
                     + `${htmlEntities(text)}</a>`);
             }
         } else {
-            insertText(textArea.current, nodeName ? mentionName(nodeName) : "@")
+            insertText(textArea.current, nodeName ? "\\" + mentionName(nodeName) : "\\@")
         }
         textArea.current.focus();
     }
