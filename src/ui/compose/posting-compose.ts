@@ -104,9 +104,9 @@ function getSharedText(props: ComposePageProps, format: SourceFormat): string {
 }
 
 const replaceSmileysIfNeeded = (enabled: boolean, text: string): string =>
-    enabled ? replaceSmileys(text) : text;
+    (enabled ? replaceSmileys(text) : text).trim();
 
-function _buildPublications(values: ComposePageValues, props: ValuesToPostingTextProps): StoryAttributes[] | null {
+function buildPublications(values: ComposePageValues, props: ValuesToPostingTextProps): StoryAttributes[] | null {
     if (props.postingId != null) {
         return null;
     }
@@ -127,15 +127,15 @@ export const valuesToPostingText = (values: ComposePageValues, props: ValuesToPo
     } : null,
     bodySrc: JSON.stringify({
         subject: props.features?.subjectPresent
-            ? replaceSmileysIfNeeded(props.smileysEnabled, values.subject?.trim() ?? "")
+            ? replaceSmileysIfNeeded(props.smileysEnabled, values.subject ?? "")
             : null,
-        text: replaceSmileysIfNeeded(props.smileysEnabled, values.body.text.trim()),
+        text: values.body.toString(props.smileysEnabled),
         linkPreviews: values.linkPreviews.previews
     }),
     bodySrcFormat: values.bodyFormat,
     media: (values.body.orderedMediaList() ?? []).concat(values.linkPreviews.media.map(vm => vm.id)),
     acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
-    publications: _buildPublications(values, props),
+    publications: buildPublications(values, props),
     updateInfo: {
         important: values.updateImportant,
         description: values.updateDescription

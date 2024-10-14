@@ -1,4 +1,4 @@
-import Delta from 'quill-delta/dist/Delta';
+import Delta from 'quill-delta';
 
 import { SMILEY_LIKE, SMILEYS } from "smileys";
 import { deltaReplace } from "util/delta";

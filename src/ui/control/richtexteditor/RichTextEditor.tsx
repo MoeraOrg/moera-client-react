@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import cx from 'classnames';
-import Delta from 'quill-delta/dist/Delta';
+import Delta from 'quill-delta';
 
 import { PostingFeatures, PrivateMediaFileInfo, VerifiedMediaFile } from "api";
 import { VisualTextArea } from "ui/control/richtexteditor/visual/VisualTextArea";

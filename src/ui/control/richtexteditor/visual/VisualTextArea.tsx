@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import deepEqual from 'react-fast-compare';
-import { Delta } from 'quill/core';
+import Delta from 'quill-delta';
 import Toolbar from 'quill/modules/toolbar';
 
 import * as Browser from "ui/browser";
@@ -171,7 +171,7 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
 
             const spaceIndex = deltaFindInsert(args[1], s => /\s$/.test(s));
             if (spaceIndex != null) {
-                const delta = deltaReplaceSmileys(quill.getContents());
+                const delta = deltaReplaceSmileys(quill.getContents(), false);
                 if (!deltaEmpty(delta)) {
                     quill.updateContents(delta, "api");
                 }

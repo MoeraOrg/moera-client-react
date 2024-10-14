@@ -1,7 +1,9 @@
-import Delta from 'quill-delta/dist/Delta';
+import Delta from 'quill-delta';
 
 import { MediaWithDigest, SourceFormat, VerifiedMediaFile } from "api";
 import { mediaHashesExtract } from "util/media-images";
+import { deltaReplaceSmileys, replaceSmileys } from "util/text";
+import { deltaEmpty } from "util/delta";
 
 export class RichTextValue {
 
@@ -23,6 +25,18 @@ export class RichTextValue {
 
     get delta(): Delta {
         return typeof this.value !== "string" ? this.value : new Delta().insert(this.value);
+    }
+
+    toString(smileysEnabled: boolean = false): string {
+        if (typeof this.value !== "string") {
+            if (!smileysEnabled) {
+                return JSON.stringify(this.value);
+            }
+            const delta = deltaReplaceSmileys(this.value);
+            return JSON.stringify(!deltaEmpty(delta) ? this.value.compose(delta) : this.value);
+        } else {
+            return (smileysEnabled ? replaceSmileys(this.value) : this.value).trim();
+        }
     }
 
     orderedMediaListWithDigests(): MediaWithDigest[] | null {

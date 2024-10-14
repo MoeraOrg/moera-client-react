@@ -14,7 +14,6 @@ import { closeImageEditDialog, imageEditDialogPost } from "state/imageeditdialog
 import { Button, ModalDialog } from "ui/control";
 import { RichTextField, RichTextValue } from "ui/control/richtexteditor";
 import { mediaImageFindLargerPreview, mediaImagePreview, mediaImageSize } from "util/media-images";
-import { replaceSmileys } from "util/text";
 import { urlWithParameters } from "util/url";
 import store from "state/store";
 import "./ImageEditDialog.css";
@@ -89,17 +88,13 @@ const logic = {
         caption: new RichTextValue(props.posting?.bodySrc?.text ?? "", props.posting?.bodySrcFormat || "markdown")
     }),
 
-    _replaceSmileys(enabled: boolean, text: string): string {
-        return enabled ? replaceSmileys(text) : text;
-    },
-
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.setStatus("submitted");
         store.dispatch(imageEditDialogPost({
             ownerName: formik.props.homeOwnerName,
             ownerFullName: formik.props.homeOwnerFullName,
             bodySrc: JSON.stringify({
-                text: this._replaceSmileys(formik.props.smileysEnabled, values.caption.text.trim())
+                text: values.caption.toString(formik.props.smileysEnabled)
             }),
             bodySrcFormat: formik.props.posting?.bodySrcFormat || "markdown"
         }));

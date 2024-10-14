@@ -1,5 +1,4 @@
-import Delta from 'quill-delta/dist/Delta';
-import Op from 'quill-delta/dist/Op';
+import Delta, { Op } from 'quill-delta';
 
 type ReplacementFunction = (match: string, ...groups: string[]) => string;
 
