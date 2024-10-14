@@ -57,7 +57,6 @@ export default function MarkdownEditorPanel({
     const [linkDialog, setLinkDialog] = useState<boolean>(false);
     const [imageDialog, setImageDialog] = useState<boolean>(false);
     const [mentionDialog, setMentionDialog] = useState<boolean>(false);
-    const [dialogText, setDialogText] = useState<string>("");
 
     const {t} = useTranslation();
 
@@ -282,11 +281,10 @@ export default function MarkdownEditorPanel({
         }
 
         setLinkDialog(true);
-        setDialogText(getTextSelection(textArea.current));
         event.preventDefault();
     }
 
-    const onLinkSubmit = (ok: boolean, {href, text}: RichTextLinkValues) => {
+    const onLinkSubmit = (ok: boolean, {href}: RichTextLinkValues) => {
         setLinkDialog(false);
 
         if (textArea.current == null) {
@@ -295,35 +293,9 @@ export default function MarkdownEditorPanel({
 
         if (ok) {
             if (isMarkdown()) {
-                if (text) {
-                    if (href) {
-                        insertText(textArea.current, `[${text}](${href})`);
-                    } else {
-                        insertText(textArea.current, `[${text}]`);
-                        wrapSelection(textArea.current, "(", ")");
-                    }
-                } else {
-                    if (href) {
-                        insertText(textArea.current, href);
-                    } else {
-                        wrapSelection(textArea.current, "[](", ")");
-                    }
-                }
+                wrapSelection(textArea.current, "[", `](${htmlEntities(href ?? "")})`);
             } else {
-                if (text) {
-                    if (href) {
-                        insertText(textArea.current, `<a href="${htmlEntities(href)}">${htmlEntities(text)}</a>`);
-                    } else {
-                        insertText(textArea.current, "");
-                        wrapSelection(textArea.current, "<a href=\"", `">${htmlEntities(text)}</a>`);
-                    }
-                } else {
-                    if (href) {
-                        insertText(textArea.current, `<a href="${htmlEntities(href)}">${htmlEntities(href)}</a>`);
-                    } else {
-                        wrapSelection(textArea.current, "<a href=\"", "\"></a>");
-                    }
-                }
+                wrapSelection(textArea.current, `<a href="${htmlEntities(href ?? "")}">`, "</a>");
             }
         }
         textArea.current.focus();
@@ -351,7 +323,7 @@ export default function MarkdownEditorPanel({
             </div>
             {spoilerDialog && <RichTextSpoilerDialog onSubmit={onSpoilerSubmit}/>}
             {foldDialog && <RichTextFoldDialog onSubmit={onFoldSubmit}/>}
-            {linkDialog && <RichTextLinkDialog text={dialogText} onSubmit={onLinkSubmit}/>}
+            {linkDialog && <RichTextLinkDialog onSubmit={onLinkSubmit}/>}
             {imageDialog &&
                 <RichTextImageDialog onSubmit={onImageSubmit} nodeName={nodeName}
                                      forceCompress={forceImageCompress} selectedImage={selectedImage}

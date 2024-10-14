@@ -7,6 +7,7 @@ import * as Browser from "ui/browser";
 import Quill, { QuillOptions, Range } from "ui/control/richtexteditor/visual/quill";
 import AddReactionIcon from "ui/control/richtexteditor/visual/icons/add_reaction.isvg";
 import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
+import RichTextLinkDialog, { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
 import { deltaReplaceSmileys } from "util/text";
@@ -22,10 +23,16 @@ interface Props {
 
 export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
     const [mentionDialog, setMentionDialog] = useState<boolean>(false);
+    const [linkDialog, setLinkDialog] = useState<boolean>(false);
 
     const onMention = useCallback(
         () => mentionDialog || setMentionDialog(true),
         [mentionDialog]
+    );
+
+    const onLink = useCallback(
+        () => linkDialog || setLinkDialog(true),
+        [linkDialog]
     );
 
     const quillOptions = useRef<QuillOptions>({
@@ -58,6 +65,8 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
                     emoji: () => {},
 
                     mention: onMention,
+
+                    link: onLink,
                 }
             },
             magicUrl: true,
@@ -188,10 +197,29 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
         }
     }, [onTextEntered, quill]);
 
+    const onLinkSubmit = (ok: boolean, {href}: RichTextLinkValues) => {
+        setLinkDialog(false);
+
+        if (quill == null) {
+            return;
+        }
+
+        if (ok && href) {
+            const selection = quill.getSelection(true);
+            if (selection.length > 0) {
+                quill.format("link", href);
+            } else {
+                quill.insertText(selection.index, href, {link: href});
+            }
+        }
+        quill.focus();
+    }
+
     return (
         <div>
             <div ref={setQuillElement}/>
             {mentionDialog && <RichTextMentionDialog onSubmit={onMentionSubmit}/>}
+            {linkDialog && <RichTextLinkDialog onSubmit={onLinkSubmit}/>}
         </div>
     );
 }
