@@ -1,14 +1,14 @@
+import Delta from 'quill-delta/dist/Delta';
+
 import { SMILEY_LIKE, SMILEYS } from "smileys";
+import { deltaReplace } from "util/delta";
 import { unhtmlEntitiesMinimal } from "util/html";
 
 const URLS = /https?:\/\/[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9]{1,6}\b(?:[-a-zA-Z0-9(!@:%_+.,;~#?&/=]*[-a-zA-Z0-9@:%_+~#&/=])?/ig;
 const EMBEDDED = /<(?:iframe|img)[^>]+src=['"]([^'"]+)['"][^>]*>/ig;
 
-export function replaceSmileys(text: string, removeEscapes = true): string {
-    if (text == null) {
-        return text;
-    }
-    return text.replace(SMILEY_LIKE, (match: string, p1: string, p2: string) => {
+function smileyReplacer(removeEscapes: boolean) {
+    return (match: string, p1: string, p2: string) => {
         if (p2.startsWith("\\")) {
             if (!removeEscapes) {
                 return match;
@@ -34,7 +34,15 @@ export function replaceSmileys(text: string, removeEscapes = true): string {
             }
         }
         return match;
-    })
+    };
+}
+
+export function replaceSmileys(text: string, removeEscapes = true): string {
+    return text.replace(SMILEY_LIKE, smileyReplacer(removeEscapes))
+}
+
+export function deltaReplaceSmileys(document: Delta, removeEscapes = true): Delta {
+    return deltaReplace(document, SMILEY_LIKE, smileyReplacer(removeEscapes))
 }
 
 export function ellipsize(text: null | undefined, len: number): null;
