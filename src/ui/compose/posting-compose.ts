@@ -1,6 +1,7 @@
 import { fromUnixTime, getUnixTime, isEqual } from 'date-fns';
 import { FormikBag } from 'formik';
 import deepEqual from 'react-fast-compare';
+import Delta from 'quill-delta';
 
 import {
     AvatarImage,
@@ -14,13 +15,14 @@ import {
     SourceFormat,
     StoryAttributes
 } from "api";
+import store from "state/store";
 import { composePost } from "state/compose/actions";
 import { DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import { settingsUpdate } from "state/settings/actions";
 import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
-import store from "state/store";
+import { toDelta } from "util/delta";
 
 export type ComposePageToolsTab = null | "format" | "comments" | "reactions" | "updated";
 
@@ -233,11 +235,15 @@ export const composePageLogic = {
         const bodyFormat = props.draft != null
             ? props.draft.bodySrcFormat ?? "markdown"
             : props.posting != null ? props.posting.bodySrcFormat ?? "markdown" : props.sourceFormatDefault;
-        const body = props.draft != null
+        let body: string | Delta;
+        body = props.draft != null
             ? props.draft.bodySrc?.text ?? ""
             : props.posting != null
                 ? props.posting.bodySrc?.text ?? ""
                 : props.sharedText != null ? getSharedText(props, bodyFormat) : "";
+        if (bodyFormat === "delta") {
+            body = toDelta(body);
+        }
         const attachments = props.draft != null ? props.draft.media : props.posting?.media;
         let media = attachments != null
             ? attachments.map(ma => ma.media ?? null).filter((mf): mf is PrivateMediaFileInfo => mf != null)

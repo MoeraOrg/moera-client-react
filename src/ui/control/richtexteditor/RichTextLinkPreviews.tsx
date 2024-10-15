@@ -4,6 +4,7 @@ import { useField } from 'formik';
 import deepEqual from 'react-fast-compare';
 import * as immutable from 'object-path-immutable';
 import * as URI from 'uri-js';
+import Delta from 'quill-delta';
 
 import { LinkPreview, MediaAttachment, PostingFeatures, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
@@ -15,6 +16,7 @@ import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
 import EntryLinkSelector from "ui/entry/EntryLinkSelector";
 import { extractUrls } from "util/text";
 import { absoluteNodeName, RelNodeName } from "util/rel-node-name";
+import { deltaExtractUrls } from "util/delta";
 
 interface Props {
     name: string;
@@ -36,9 +38,9 @@ export interface RichTextLinkPreviewsValue {
 }
 
 export function bodyToLinkPreviews(
-    body: string, linkPreviewsInfo: LinkPreview[], media: VerifiedMediaFile[]
+    body: string | Delta, linkPreviewsInfo: LinkPreview[], media: VerifiedMediaFile[]
 ): [RichTextLinkPreviewsValue, string[], VerifiedMediaFile[]] {
-    const bodyUrls = extractUrls(body);
+    const bodyUrls = body instanceof Delta ? deltaExtractUrls(body) : extractUrls(body);
     const linkPreviewsUrls = new Set(linkPreviewsInfo.map(lp => lp.url));
     const linkPreviewsImages = new Set(
         linkPreviewsInfo.map(lp => lp.imageHash).filter((ih): ih is string => ih != null)

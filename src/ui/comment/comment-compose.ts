@@ -1,5 +1,6 @@
 import { FormikBag } from 'formik';
 import deepEqual from 'react-fast-compare';
+import Delta from 'quill-delta';
 
 import {
     AvatarImage,
@@ -10,10 +11,11 @@ import {
     SourceFormat,
     VerifiedMediaFile
 } from "api";
+import store from "state/store";
 import { commentPost } from "state/detailedposting/actions";
 import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
 import { toAvatarDescription } from "util/avatar";
-import store from "state/store";
+import { toDelta } from "util/delta";
 
 interface PropsToValuesProps {
     comment: CommentInfo | null;
@@ -125,9 +127,13 @@ export const commentComposeLogic = {
         const bodyFormat = props.draft != null
             ? props.draft.bodySrcFormat ?? "markdown"
             : props.comment != null ? props.comment.bodySrcFormat ?? "markdown" : props.sourceFormatDefault;
-        const body = props.draft != null
+        let body: string | Delta;
+        body = props.draft != null
             ? props.draft.bodySrc?.text ?? ""
             : props.comment != null ? props.comment.bodySrc?.text ?? "" : "";
+        if (bodyFormat === "delta") {
+            body = toDelta(body);
+        }
         const attachments = props.draft != null ? props.draft.media : props.comment?.media;
         let media = attachments != null
             ? attachments

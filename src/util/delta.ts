@@ -2,6 +2,22 @@ import Delta, { Op } from 'quill-delta';
 
 type ReplacementFunction = (match: string, ...groups: string[]) => string;
 
+export function toDelta(text?: string | Delta | Op[] | {ops?: Op[]} | null | undefined): Delta {
+    if (text == null) {
+        return new Delta();
+    }
+    if (text instanceof Delta) {
+        return text;
+    }
+    if (Array.isArray(text)) {
+        return new Delta(text);
+    }
+    if (typeof text === "object") {
+        return new Delta({ops: text.ops ?? []});
+    }
+    return new Delta(text ? JSON.parse(text) : undefined);
+}
+
 export function deltaReplace(document: Delta, pattern: RegExp, replacer: ReplacementFunction): Delta {
     const delta: Delta = new Delta();
 
@@ -53,4 +69,15 @@ export function deltaFindInsert(delta: Delta, filter: (text: string) => boolean)
         }
     }
     return null;
+}
+
+export function deltaExtractUrls(delta: Delta): string[] {
+    const urls: string[] = [];
+    delta.forEach(op => {
+        const link = op.attributes?.["link"];
+        if (link != null) {
+            urls.push(link as string);
+        }
+    })
+    return urls;
 }

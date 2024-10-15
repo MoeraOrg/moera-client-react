@@ -3,7 +3,7 @@ import Delta from 'quill-delta';
 import { MediaWithDigest, SourceFormat, VerifiedMediaFile } from "api";
 import { mediaHashesExtract } from "util/media-images";
 import { deltaReplaceSmileys, replaceSmileys } from "util/text";
-import { deltaEmpty } from "util/delta";
+import { deltaEmpty, toDelta } from "util/delta";
 
 export class RichTextValue {
 
@@ -11,8 +11,8 @@ export class RichTextValue {
     readonly media?: (VerifiedMediaFile | null)[] | null;
 
     constructor(value: string | Delta, format: SourceFormat, media?: (VerifiedMediaFile | null)[] | null) {
-        if (format === "delta" && typeof value === "string") {
-            value = new Delta(value ? JSON.parse(value) : undefined);
+        if (format === "delta") {
+            value = toDelta(value);
         }
 
         this.value = value;

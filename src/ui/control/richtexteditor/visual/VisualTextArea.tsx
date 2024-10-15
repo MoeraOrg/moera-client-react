@@ -11,7 +11,7 @@ import RichTextLinkDialog, { RichTextLinkValues } from "ui/control/richtextedito
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
 import { deltaReplaceSmileys } from "util/text";
-import { deltaEmpty, deltaFindInsert } from "util/delta";
+import { deltaEmpty, deltaExtractUrls, deltaFindInsert } from "util/delta";
 import "./VisualTextArea.css";
 
 interface Props {
@@ -19,9 +19,10 @@ interface Props {
     autoFocus?: boolean;
     disabled?: boolean;
     onChange?: (contents: Delta) => void;
+    onUrls?: (urls: string[]) => void;
 }
 
-export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
+export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: Props) {
     const [mentionDialog, setMentionDialog] = useState<boolean>(false);
     const [linkDialog, setLinkDialog] = useState<boolean>(false);
 
@@ -223,6 +224,27 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
         }
         quill.focus();
     }
+
+    const updateUrls = useCallback((...args: any[]) => {
+        if (!onUrls || quill == null || args[0] !== "text-change") {
+            return;
+        }
+        for (const op of (args[1] as Delta).ops) {
+            if (op.delete || ((op.insert || op.retain) && op.attributes?.hasOwnProperty("link"))) {
+                onUrls(deltaExtractUrls(quill.getContents()));
+                return;
+            }
+        }
+    }, [onUrls, quill]);
+
+    useEffect(() => {
+        if (quill != null) {
+            quill.on("editor-change", updateUrls);
+            return () => {
+                quill.off("editor-change", updateUrls)
+            }
+        }
+    }, [updateUrls, quill]);
 
     return (
         <div>

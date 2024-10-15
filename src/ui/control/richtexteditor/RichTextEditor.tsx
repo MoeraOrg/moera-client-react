@@ -98,7 +98,8 @@ export function RichTextEditor({
     return (
         <div className={cx("rich-text-editor", className)}>
             {format === "delta" ?
-                <VisualTextArea value={value.delta} autoFocus={autoFocus} disabled={disabled} onChange={onDeltaChange}/>
+                <VisualTextArea value={value.delta} autoFocus={autoFocus} disabled={disabled} onChange={onDeltaChange}
+                                onUrls={onUrls}/>
             :
                 <>
                     {format !== "plain-text" &&
