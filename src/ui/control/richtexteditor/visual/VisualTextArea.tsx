@@ -42,7 +42,7 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
                     [{"header": [false, 1, 2, 3, 4, 5]}],
                     ["bold", "italic", "strike"],
                     [{list: "ordered"}, {list: "bullet"}, {indent: "+1"}, {indent: "-1"}],
-                    ["blockquote", "blockquote-off"],
+                    ["blockquote", "blockquote-off", "horizontal-rule"],
                     ["emoji", "mention"],
                     ["image", "link"],
                     ["clean"],
@@ -51,6 +51,7 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
                     blockquote: function (this: Toolbar) {
                         const level = parseInt((this.quill.getFormat()?.["quote-level"] as string | undefined) ?? "0");
                         this.quill.format("blockquote", String(level + 1));
+                        this.quill.focus();
                     },
 
                     "blockquote-off": function (this: Toolbar) {
@@ -60,6 +61,14 @@ export function VisualTextArea({value, autoFocus, disabled, onChange}: Props) {
                         } else if (level === 1) {
                             this.quill.format("blockquote", false);
                         }
+                        this.quill.focus();
+                    },
+
+                    "horizontal-rule": function (this: Toolbar) {
+                        const selection = this.quill.getSelection(true);
+                        this.quill.insertEmbed(selection.index, "horizontal-rule", true, "user");
+                        selection.index++;
+                        this.quill.setSelection(selection);
                     },
 
                     emoji: () => {},

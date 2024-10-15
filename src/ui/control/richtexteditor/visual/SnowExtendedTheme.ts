@@ -10,6 +10,7 @@ import FormatClearIcon from "ui/control/richtexteditor/visual/icons/format_clear
 import FormatIndentDecreaseIcon from "ui/control/richtexteditor/visual/icons/format_indent_decrease.isvg";
 import FormatIndentIncreaseIcon from "ui/control/richtexteditor/visual/icons/format_indent_increase.isvg";
 import FormatItalicIcon from "ui/control/richtexteditor/visual/icons/format_italic.isvg";
+import HorizontalRuleIcon from "ui/control/richtexteditor/visual/icons/horizontal_rule.isvg";
 import FormatListBulletedIcon from "ui/control/richtexteditor/visual/icons/format_list_bulleted.isvg";
 import FormatListNumberedIcon from "ui/control/richtexteditor/visual/icons/format_list_numbered.isvg";
 import FormatQuoteIcon from "ui/control/richtexteditor/visual/icons/format_quote.isvg";
@@ -31,6 +32,7 @@ const SNOW_EXTENDED_ICONS = {
     },
     blockquote: FormatQuoteIcon,
     "blockquote-off": FormatQuoteOffIcon,
+    "horizontal-rule": HorizontalRuleIcon,
     mention: AlternateEmailIcon,
     image: AddPhotoAlternateIcon,
     link: AddLinkIcon,

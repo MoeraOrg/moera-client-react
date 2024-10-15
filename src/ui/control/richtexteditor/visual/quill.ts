@@ -8,6 +8,7 @@ import Blockquote from "ui/control/richtexteditor/visual/Blockquote";
 import QuotableHeader from "ui/control/richtexteditor/visual/QuotableHeader";
 import QuotableListItem from "ui/control/richtexteditor/visual/QuotableList";
 import Mention from "ui/control/richtexteditor/visual/Mention";
+import HorizontalRule from "ui/control/richtexteditor/visual/HorizontalRule";
 import SnowExtendedTheme from "ui/control/richtexteditor/visual/SnowExtendedTheme";
 
 const QuoteLevelAttribute = new Attributor("quote-level", "data-quote-level", {
@@ -20,6 +21,7 @@ Quill.register(Blockquote, true);
 Quill.register(QuotableHeader, true);
 Quill.register(QuotableListItem, true);
 Quill.register(Mention);
+Quill.register(HorizontalRule);
 Quill.register(QuoteLevelAttribute);
 Quill.register("themes/snow-extended", SnowExtendedTheme);
 
