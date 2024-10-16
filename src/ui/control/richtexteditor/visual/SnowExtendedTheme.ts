@@ -16,12 +16,14 @@ import FormatListNumberedIcon from "ui/control/richtexteditor/visual/icons/forma
 import FormatQuoteIcon from "ui/control/richtexteditor/visual/icons/format_quote.isvg";
 import FormatQuoteOffIcon from "ui/control/richtexteditor/visual/icons/format_quote_off.isvg";
 import FormatStrikethroughIcon from "ui/control/richtexteditor/visual/icons/format_strikethrough.isvg";
+import ReportIcon from "ui/control/richtexteditor/visual/icons/report.isvg";
 
 const SNOW_EXTENDED_ICONS = {
     ...Icons,
     bold: FormatBoldIcon,
     italic: FormatItalicIcon,
     strike: FormatStrikethroughIcon,
+    spoiler: ReportIcon,
     list: {
         ordered: FormatListNumberedIcon,
         bullet: FormatListBulletedIcon,

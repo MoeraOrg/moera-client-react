@@ -6,6 +6,8 @@ import Toolbar from 'quill/modules/toolbar';
 import * as Browser from "ui/browser";
 import Quill, { QuillOptions, Range } from "ui/control/richtexteditor/visual/quill";
 import AddReactionIcon from "ui/control/richtexteditor/visual/icons/add_reaction.isvg";
+import useSpoilerTooltip from "ui/control/richtexteditor/visual/SpoilerTooltip";
+import RichTextSpoilerDialog, { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
 import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
 import RichTextLinkDialog, { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
 import { NameListItem } from "util/names-list";
@@ -23,6 +25,7 @@ interface Props {
 }
 
 export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: Props) {
+    const [spoilerDialog, setSpoilerDialog] = useState<boolean>(false);
     const [mentionDialog, setMentionDialog] = useState<boolean>(false);
     const [linkDialog, setLinkDialog] = useState<boolean>(false);
 
@@ -31,17 +34,12 @@ export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: P
         [mentionDialog]
     );
 
-    const onLink = useCallback(
-        () => linkDialog || setLinkDialog(true),
-        [linkDialog]
-    );
-
     const quillOptions = useRef<QuillOptions>({
         modules: {
             toolbar: {
                 container: [
                     [{"header": [false, 1, 2, 3, 4, 5]}],
-                    ["bold", "italic", "strike"],
+                    ["bold", "italic", "strike", "spoiler"],
                     [{list: "ordered"}, {list: "bullet"}, {indent: "+1"}, {indent: "-1"}],
                     ["blockquote", "blockquote-off", "horizontal-rule"],
                     ["emoji", "mention"],
@@ -49,6 +47,8 @@ export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: P
                     ["clean"],
                 ],
                 handlers: {
+                    spoiler: () => spoilerDialog || setSpoilerDialog(true),
+
                     blockquote: function (this: Toolbar) {
                         const level = parseInt((this.quill.getFormat()?.["quote-level"] as string | undefined) ?? "0");
                         this.quill.format("blockquote", String(level + 1));
@@ -76,7 +76,7 @@ export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: P
 
                     mention: onMention,
 
-                    link: onLink,
+                    link: () => linkDialog || setLinkDialog(true),
                 }
             },
             magicUrl: true,
@@ -154,6 +154,19 @@ export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: P
             }
         }
     }, [onEditorChange, quill]);
+
+    const onSpoilerSubmit = (ok: boolean, {title}: RichTextSpoilerValues) => {
+        setSpoilerDialog(false);
+
+        if (quill == null || !ok) {
+            return;
+        }
+
+        quill.format("spoiler", title || "spoiler!");
+        quill.focus();
+    };
+
+    useSpoilerTooltip(quill);
 
     const onMentionSubmit = (ok: boolean, {nodeName, fullName}: NameListItem) => {
         setMentionDialog(false);
@@ -249,6 +262,7 @@ export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: P
     return (
         <div>
             <div ref={setQuillElement}/>
+            {spoilerDialog && <RichTextSpoilerDialog onSubmit={onSpoilerSubmit}/>}
             {mentionDialog && <RichTextMentionDialog onSubmit={onMentionSubmit}/>}
             {linkDialog && <RichTextLinkDialog onSubmit={onLinkSubmit}/>}
         </div>

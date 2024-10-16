@@ -56,3 +56,10 @@
     color: var(--bs-link-color);
     text-decoration: underline;
 }
+
+.rich-text-editor .ql-editor .spoiler {
+    color: #dc3545;
+    background-color: var(--bs-gray-300);
+    font-weight: normal;
+    cursor: text;
+}

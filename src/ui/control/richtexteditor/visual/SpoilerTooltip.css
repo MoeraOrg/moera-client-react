@@ -1,0 +1,4 @@
+.rich-text-editor .ql-tooltip:has(.spoiler-title)::before {
+    content: "Spoiler";
+    font-weight: bold;
+}
