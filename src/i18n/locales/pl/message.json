@@ -455,6 +455,7 @@
   "only-selected-allowed": "Dozwolone tylko wybrane",
   "only-selected-allowed-star-preferred": "Dozwolone tylko wybrane, oznaczone <0/> są preferowane",
   "open": "Otwórz",
+  "open-link": "Otwórz link:",
   "operation-at": "o",
   "operation-status": {
     "added": "Operacja została dodana",
