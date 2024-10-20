@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Tooltip from 'quill/ui/tooltip';
 
 import Quill, { Range } from "ui/control/richtexteditor/visual/quill";
 import Spoiler from "ui/control/richtexteditor/visual/Spoiler";
-import "./SpoilerTooltip.css";
 
 class SpoilerTooltip extends Tooltip {
 
@@ -17,50 +16,103 @@ class SpoilerTooltip extends Tooltip {
 
 }
 
-export default function useSpoilerTooltip(quill: Quill | null) {
-    const tooltip = useRef<SpoilerTooltip | null>(null);
+export type SpoilerEditCallback = (selection: Range, title: string) => void;
 
+export default function useSpoilerTooltip(quill: Quill | null, onEditCallback?: SpoilerEditCallback) {
+    const [tooltip, setTooltip] = useState<SpoilerTooltip | null>(null);
+    const blotRange = useRef<Range | null>(null);
+    const spoilerText = useRef<string | undefined>(undefined);
     const {t} = useTranslation();
-
-    const spoilerSpy = useCallback((range: Range) => {
-        if (quill == null || tooltip.current == null) {
-            return;
-        }
-
-        const spoilerText = quill.getFormat(range)?.spoiler as string | undefined;
-        if (spoilerText) {
-            assignText(tooltip.current, ".spoiler-title", spoilerText);
-            tooltip.current.show();
-            const [spoiler, offset] = quill.scroll.descendant(Spoiler, range.index);
-            if (spoiler != null) {
-                const bounds = quill.getBounds(new Range(range.index - offset, spoiler.length()));
-                if (bounds) {
-                    tooltip.current.position(bounds);
-                }
-            }
-        } else {
-            tooltip.current.hide();
-        }
-    }, [quill]);
 
     useEffect(() => {
         if (quill != null) {
-            tooltip.current = new SpoilerTooltip(quill);
-            assignText(tooltip.current, ".title", t("spoiler"));
-            assignText(tooltip.current, ".ql-action", t("edit"));
-            assignText(tooltip.current, ".ql-remove", t("delete"));
+            setTooltip(new SpoilerTooltip(quill));
+            return () => setTooltip(null);
+        }
+    }, [quill]);
+
+    const spoilerSpy = useCallback((range: Range) => {
+        if (quill == null || tooltip == null) {
+            return;
+        }
+
+        spoilerText.current = quill.getFormat(range)?.spoiler as string | undefined;
+        if (spoilerText.current) {
+            const element = tooltip?.root.querySelector(".spoiler-title");
+            if (element) {
+                element.textContent = spoilerText.current;
+            }
+            tooltip.show();
+            const [spoiler, offset] = quill.scroll.descendant(Spoiler, range.index);
+            if (spoiler != null) {
+                blotRange.current = new Range(range.index - offset, spoiler.length());
+                const bounds = quill.getBounds(blotRange.current);
+                if (bounds) {
+                    tooltip.position(bounds);
+                }
+            }
+        } else {
+            tooltip.hide();
+            blotRange.current = null;
+        }
+    }, [quill, tooltip]);
+
+    useEffect(() => {
+        if (quill != null) {
             quill.on("selection-change", spoilerSpy);
             return () => {
-                quill.off("selection-change", spoilerSpy)
-                tooltip.current = null;
+                quill.off("selection-change", spoilerSpy);
             }
         }
-    }, [spoilerSpy, quill, t]);
-}
+    }, [quill, spoilerSpy]);
 
-function assignText(tooltip: SpoilerTooltip | null, query: string, text: string) {
-    const element = tooltip?.root.querySelector(query);
-    if (element) {
-        element.textContent = text;
-    }
+    useEffect(() => {
+        if (quill != null) {
+            const element = tooltip?.root.querySelector(".title");
+            if (element) {
+                element.textContent = t("spoiler");
+            }
+        }
+    }, [quill, t, tooltip]);
+
+    const onEdit = useCallback((event: Event) => {
+        if (quill != null && tooltip != null && blotRange.current != null && onEditCallback != null) {
+            quill.focus();
+            tooltip.hide();
+            onEditCallback(blotRange.current, spoilerText.current ?? "");
+        }
+        event.preventDefault();
+    }, [onEditCallback, quill, tooltip]);
+
+    useEffect(() => {
+        if (quill != null) {
+            const element = tooltip?.root.querySelector(".ql-action");
+            if (element) {
+                element.textContent = t("edit");
+                element.addEventListener("click", onEdit);
+                return () => element.removeEventListener("click", onEdit);
+            }
+        }
+    }, [onEdit, quill, t, tooltip]);
+
+    const onDelete = useCallback((event: Event) => {
+        if (quill != null && tooltip != null && blotRange.current != null) {
+            quill.focus();
+            quill.formatText(blotRange.current, "spoiler", false, "user");
+            tooltip.hide();
+            blotRange.current = null;
+        }
+        event.preventDefault();
+    }, [quill, tooltip]);
+
+    useEffect(() => {
+        if (quill != null) {
+            const element = tooltip?.root.querySelector(".ql-remove");
+            if (element) {
+                element.textContent = t("delete");
+                element.addEventListener("click", onDelete);
+                return () => element.removeEventListener("click", onDelete);
+            }
+        }
+    }, [onDelete, quill, t, tooltip]);
 }

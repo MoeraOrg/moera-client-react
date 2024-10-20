@@ -6,7 +6,7 @@ import Toolbar from 'quill/modules/toolbar';
 import * as Browser from "ui/browser";
 import Quill, { QuillOptions, Range } from "ui/control/richtexteditor/visual/quill";
 import AddReactionIcon from "ui/control/richtexteditor/visual/icons/add_reaction.isvg";
-import useSpoilerTooltip from "ui/control/richtexteditor/visual/SpoilerTooltip";
+import useSpoilerTooltip, { SpoilerEditCallback } from "ui/control/richtexteditor/visual/SpoilerTooltip";
 import RichTextSpoilerDialog, { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
 import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
 import RichTextLinkDialog, { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
@@ -28,6 +28,19 @@ export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: P
     const [spoilerDialog, setSpoilerDialog] = useState<boolean>(false);
     const [mentionDialog, setMentionDialog] = useState<boolean>(false);
     const [linkDialog, setLinkDialog] = useState<boolean>(false);
+    const [dialogSelection, setDialogSelection] = useState<Range>(new Range(0));
+    const [dialogValue, setDialogValue] = useState<string>("");
+
+    const onSpoiler = useCallback<SpoilerEditCallback>((selection, title) => {
+        if (spoilerDialog) {
+            return;
+        }
+        if (selection.length > 0) {
+            setDialogSelection(selection);
+            setDialogValue(title);
+            setSpoilerDialog(true);
+        }
+    }, [spoilerDialog]);
 
     const onMention = useCallback(
         () => mentionDialog || setMentionDialog(true),
@@ -47,15 +60,17 @@ export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: P
                     ["clean"],
                 ],
                 handlers: {
-                    spoiler: () => spoilerDialog || setSpoilerDialog(true),
+                    spoiler: function (this: Toolbar): void {
+                        onSpoiler(this.quill.getSelection(true), "");
+                    },
 
-                    blockquote: function (this: Toolbar) {
+                    blockquote: function (this: Toolbar): void {
                         const level = parseInt((this.quill.getFormat()?.["quote-level"] as string | undefined) ?? "0");
                         this.quill.format("blockquote", String(level + 1));
                         this.quill.focus();
                     },
 
-                    "blockquote-off": function (this: Toolbar) {
+                    "blockquote-off": function (this: Toolbar): void {
                         const level = parseInt((this.quill.getFormat()?.["quote-level"] as string | undefined) ?? "0");
                         if (level > 1) {
                             this.quill.format("blockquote", String(level - 1));
@@ -65,7 +80,7 @@ export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: P
                         this.quill.focus();
                     },
 
-                    "horizontal-rule": function (this: Toolbar) {
+                    "horizontal-rule": function (this: Toolbar): void {
                         const selection = this.quill.getSelection(true);
                         this.quill.insertEmbed(selection.index, "horizontal-rule", true, "user");
                         selection.index++;
@@ -162,11 +177,11 @@ export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: P
             return;
         }
 
-        quill.format("spoiler", title || "spoiler!");
+        quill.formatText(dialogSelection.index, dialogSelection.length, "spoiler", title || "spoiler!");
         quill.focus();
     };
 
-    useSpoilerTooltip(quill);
+    useSpoilerTooltip(quill, onSpoiler);
 
     const onMentionSubmit = (ok: boolean, {nodeName, fullName}: NameListItem) => {
         setMentionDialog(false);
@@ -262,7 +277,7 @@ export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: P
     return (
         <div>
             <div ref={setQuillElement}/>
-            {spoilerDialog && <RichTextSpoilerDialog onSubmit={onSpoilerSubmit}/>}
+            {spoilerDialog && <RichTextSpoilerDialog title={dialogValue} onSubmit={onSpoilerSubmit}/>}
             {mentionDialog && <RichTextMentionDialog onSubmit={onMentionSubmit}/>}
             {linkDialog && <RichTextLinkDialog onSubmit={onLinkSubmit}/>}
         </div>

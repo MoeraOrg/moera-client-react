@@ -52,6 +52,7 @@ export default class SnowExtendedTheme extends SnowTheme {
             this.buildPickers(toolbar.container.querySelectorAll("select"), SNOW_EXTENDED_ICONS);
         }
 
+        // @ts-ignore
         this.tooltip = new LinkTooltip(this.quill, this.options.bounds);
     }
 

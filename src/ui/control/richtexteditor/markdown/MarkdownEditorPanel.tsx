@@ -321,7 +321,7 @@ export default function MarkdownEditorPanel({
                 <RichTextEditorButton icon={faLink} title={t("link")} letter="L" onClick={onLink}/>
                 <RichTextEditorButton icon={faImage} title={t("image")} letter="M" onClick={onImage}/>
             </div>
-            {spoilerDialog && <RichTextSpoilerDialog onSubmit={onSpoilerSubmit}/>}
+            {spoilerDialog && <RichTextSpoilerDialog title="" onSubmit={onSpoilerSubmit}/>}
             {foldDialog && <RichTextFoldDialog onSubmit={onFoldSubmit}/>}
             {linkDialog && <RichTextLinkDialog onSubmit={onLinkSubmit}/>}
             {imageDialog &&
