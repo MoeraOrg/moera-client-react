@@ -17,7 +17,6 @@ import FormatQuoteIcon from "ui/control/richtexteditor/visual/icons/format_quote
 import FormatQuoteOffIcon from "ui/control/richtexteditor/visual/icons/format_quote_off.isvg";
 import FormatStrikethroughIcon from "ui/control/richtexteditor/visual/icons/format_strikethrough.isvg";
 import ReportIcon from "ui/control/richtexteditor/visual/icons/report.isvg";
-import LinkTooltip from "ui/control/richtexteditor/visual/icons/LinkTooltip";
 
 const SNOW_EXTENDED_ICONS = {
     ...Icons,
@@ -45,15 +44,12 @@ const SNOW_EXTENDED_ICONS = {
 export default class SnowExtendedTheme extends SnowTheme {
 
     extendToolbar(toolbar: Toolbar) {
-        super.extendToolbar(toolbar);
-
         if (toolbar.container != null) {
+            toolbar.container.classList.add('ql-snow');
             this.buildButtons(toolbar.container.querySelectorAll("button"), SNOW_EXTENDED_ICONS);
             this.buildPickers(toolbar.container.querySelectorAll("select"), SNOW_EXTENDED_ICONS);
         }
-
-        // @ts-ignore
-        this.tooltip = new LinkTooltip(this.quill, this.options.bounds);
+        this.tooltip = undefined;
     }
 
 }

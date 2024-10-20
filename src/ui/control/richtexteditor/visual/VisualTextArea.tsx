@@ -9,6 +9,7 @@ import AddReactionIcon from "ui/control/richtexteditor/visual/icons/add_reaction
 import useSpoilerTooltip, { SpoilerEditCallback } from "ui/control/richtexteditor/visual/SpoilerTooltip";
 import RichTextSpoilerDialog, { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
 import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
+import useLinkTooltip, { LinkEditCallback } from "ui/control/richtexteditor/visual/icons/LinkTooltip";
 import RichTextLinkDialog, { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
@@ -46,6 +47,17 @@ export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: P
         () => mentionDialog || setMentionDialog(true),
         [mentionDialog]
     );
+
+    const onLink = useCallback<LinkEditCallback>((selection, href) => {
+        if (linkDialog) {
+            return;
+        }
+        if (selection.length > 0) {
+            setDialogSelection(selection);
+            setDialogValue(href);
+            setLinkDialog(true);
+        }
+    }, [linkDialog]);
 
     const quillOptions = useRef<QuillOptions>({
         modules: {
@@ -91,7 +103,9 @@ export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: P
 
                     mention: onMention,
 
-                    link: () => linkDialog || setLinkDialog(true),
+                    link: function (this: Toolbar): void {
+                        onLink(this.quill.getSelection(true), "");
+                    },
                 }
             },
             magicUrl: true,
@@ -177,7 +191,7 @@ export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: P
             return;
         }
 
-        quill.formatText(dialogSelection.index, dialogSelection.length, "spoiler", title || "spoiler!");
+        quill.formatText(dialogSelection.index, dialogSelection.length, "spoiler", title || "spoiler!", "user");
         quill.focus();
     };
 
@@ -245,13 +259,15 @@ export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: P
         if (ok && href) {
             const selection = quill.getSelection(true);
             if (selection.length > 0) {
-                quill.format("link", href);
+                quill.format("link", href, "user");
             } else {
-                quill.insertText(selection.index, href, {link: href});
+                quill.insertText(selection.index, href, {link: href}, "user");
             }
         }
         quill.focus();
     }
+
+    useLinkTooltip(quill, onLink);
 
     const updateUrls = useCallback((...args: any[]) => {
         if (!onUrls || quill == null || args[0] !== "text-change") {
@@ -279,7 +295,7 @@ export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: P
             <div ref={setQuillElement}/>
             {spoilerDialog && <RichTextSpoilerDialog title={dialogValue} onSubmit={onSpoilerSubmit}/>}
             {mentionDialog && <RichTextMentionDialog onSubmit={onMentionSubmit}/>}
-            {linkDialog && <RichTextLinkDialog onSubmit={onLinkSubmit}/>}
+            {linkDialog && <RichTextLinkDialog href={dialogValue} onSubmit={onLinkSubmit}/>}
         </div>
     );
 }

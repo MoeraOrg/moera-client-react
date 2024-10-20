@@ -323,7 +323,7 @@ export default function MarkdownEditorPanel({
             </div>
             {spoilerDialog && <RichTextSpoilerDialog title="" onSubmit={onSpoilerSubmit}/>}
             {foldDialog && <RichTextFoldDialog onSubmit={onFoldSubmit}/>}
-            {linkDialog && <RichTextLinkDialog onSubmit={onLinkSubmit}/>}
+            {linkDialog && <RichTextLinkDialog href="" onSubmit={onLinkSubmit}/>}
             {imageDialog &&
                 <RichTextImageDialog onSubmit={onImageSubmit} nodeName={nodeName}
                                      forceCompress={forceImageCompress} selectedImage={selectedImage}
