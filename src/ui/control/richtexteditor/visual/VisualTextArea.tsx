@@ -9,7 +9,7 @@ import AddReactionIcon from "ui/control/richtexteditor/visual/icons/add_reaction
 import useSpoilerTooltip, { SpoilerEditCallback } from "ui/control/richtexteditor/visual/SpoilerTooltip";
 import RichTextSpoilerDialog, { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
 import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
-import useLinkTooltip, { LinkEditCallback } from "ui/control/richtexteditor/visual/icons/LinkTooltip";
+import useLinkTooltip, { LinkEditCallback } from "ui/control/richtexteditor/visual/LinkTooltip";
 import RichTextLinkDialog, { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
@@ -191,7 +191,14 @@ export function VisualTextArea({value, autoFocus, disabled, onChange, onUrls}: P
             return;
         }
 
-        quill.formatText(dialogSelection.index, dialogSelection.length, "spoiler", title || "spoiler!", "user");
+        title ||= "spoiler!";
+
+        const selectedText = quill.getText(dialogSelection.index, dialogSelection.length).trim();
+        if (selectedText.includes("\n")) {
+            quill.formatLine(dialogSelection.index, dialogSelection.length, "spoiler-block", title, "user");
+        } else {
+            quill.formatText(dialogSelection.index, dialogSelection.length, "spoiler", title, "user");
+        }
         quill.focus();
     };
 

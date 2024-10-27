@@ -7,14 +7,14 @@ import { removeContainerOf } from "ui/control/richtexteditor/visual/QuoteStyle";
 
 export class QuotableListContainer extends ListContainer {
 
-    appendChild(other: Blot) {
+    appendChild(other: Blot): void {
         super.appendChild(other);
         if (other instanceof QuotableListItem) {
             other.runPostponedQuoteFormat();
         }
     }
 
-    formatQuote(value: string) {
+    formatQuote(value: string): void {
         if (value) {
             this.wrap("blockquote");
             QuoteStyle.assignStyle(this.domNode, value);
@@ -46,13 +46,13 @@ export default class QuotableListItem extends ListItem {
 
     format(name: string, value: string): void {
         if (name === "blockquote" || name === "quote-level") {
-            this.formatParent(value);
+            this.formatParentQuote(value);
         } else {
             super.format(name, value);
         }
     }
 
-    private formatParent(value: string): void {
+    private formatParentQuote(value: string): void {
         const parent = this.parent;
         if (parent instanceof QuotableListContainer) {
             super.format("quote-level", value);
@@ -64,7 +64,7 @@ export default class QuotableListItem extends ListItem {
 
     public runPostponedQuoteFormat(): void {
         if (this.postponedQuoteValue != null) {
-            this.formatParent(this.postponedQuoteValue);
+            this.formatParentQuote(this.postponedQuoteValue);
         }
     }
 
