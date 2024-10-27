@@ -169,13 +169,14 @@ export default function MarkdownEditorPanel({
 
         setSpoilerDialog(false);
         if (ok) {
+            const tag = getTextSelection(textArea.current).includes("\n") ? "mr-spoiler-block" : "mr-spoiler";
             if (title) {
-                wrapSelection(textArea.current, `<mr-spoiler title="${htmlEntities(title)}">`, "</mr-spoiler>");
+                wrapSelection(textArea.current, `<${tag} title="${htmlEntities(title)}">`, `</${tag}>`);
             } else {
-                if (isMarkdown()) {
+                if (isMarkdown() && tag === "mr-spoiler") {
                     wrapSelection(textArea.current, "||");
                 } else {
-                    wrapSelection(textArea.current, "<mr-spoiler>", "</mr-spoiler>");
+                    wrapSelection(textArea.current, `<${tag}>`, `</${tag}>`);
                 }
             }
         }

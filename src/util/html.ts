@@ -57,7 +57,8 @@ function createAnchorTransformers(): { [tagName: string]: string | Transformer }
 
 const BASE_SAFE_HTML_SETTINGS: IOptions = {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-        "img", "del", "ins", "sub", "strike", "details", "summary", "mr-spoiler", "iframe", "video", "audio"
+        "img", "del", "ins", "sub", "strike", "details", "summary", "mr-spoiler", "mr-spoiler-block", "iframe", "video",
+        "audio"
     ]),
     allowedAttributes: {
         ...sanitizeHtml.defaults.allowedAttributes,
@@ -71,14 +72,15 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
             "src", "width", "height", "frameborder", "allow", "allowfullscreen", "sandbox", "scrolling",
             "allowtransparency", "style"
         ],
-        "mr-spoiler": ["title"]
+        "mr-spoiler": ["title"],
+        "mr-spoiler-block": ["title"],
     },
     allowedSchemes: [...sanitizeHtml.defaults.allowedSchemes, "hash"],
     allowedClasses: {
         img: ["emoji"],
         b: ["emoji"],
-        span: ["katex"],
-        div: ["footnotes", "katex", "mr-spoiler"]
+        span: ["katex", "mr-spoiler"],
+        div: ["footnotes", "katex", "mr-spoiler"],
     },
     allowedIframeHostnames: [
         "c.simmer.io",
@@ -94,7 +96,7 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
         "www.youtube-nocookie.com",
         "www.youtube.com",
         "gifer.com",
-        "giphy.com"
+        "giphy.com",
     ],
     allowedIframeDomains: ["livejournal.com"],
     allowedStyles: {
@@ -124,7 +126,7 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
         p: addDirAuto,
         ol: addDirAuto,
         ul: addDirAuto,
-        "mr-spoiler": (tagName: string, attribs: Attributes) => ({
+        "mr-spoiler-block": (tagName: string, attribs: Attributes) => ({
             tagName: "div",
             attribs: {"class": "mr-spoiler", "data-title": attribs["title"]}
         }),

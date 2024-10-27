@@ -64,7 +64,7 @@ export function wrapSelection(field: HTMLTextAreaElement | HTMLInputElement, wra
     const selectionEnd = field.selectionEnd;
     const selection = getTextSelection(field);
     insertText(field, wrap + selection + (wrapEnd ?? wrap));
-    // Restore the selection around the previously-selected text
+    // Restore the selection around the previously selected text
     field.selectionStart = (selectionStart ?? 0) + wrap.length;
     field.selectionEnd = (selectionEnd ?? selectionStart ?? 0) + wrap.length;
 }
@@ -76,7 +76,7 @@ export function wrapSelectionLines(field: HTMLTextAreaElement | HTMLInputElement
     const selection = getTextSelection(field);
     const wrapped = wrapLines(selection, wrapStart, wrapEnd);
     insertText(field, wrapped);
-    // Restore the selection around the previously-selected text
+    // Restore the selection around the previously selected text
     const startShift = wrapped.startsWith(wrapStart) ? wrapStart.length : 0;
     const endShift = wrapped.endsWith(wrapEnd) ? -wrapEnd.length : 0;
     field.selectionStart = (selectionStart ?? 0) + startShift;
