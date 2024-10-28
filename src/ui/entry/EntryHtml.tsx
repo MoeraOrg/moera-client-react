@@ -123,6 +123,16 @@ export default function EntryHtml({
                 </Suspense>
             );
         });
+        dom.current.querySelectorAll("mr-spoiler").forEach(node => {
+            const title = node.getAttribute("title") ?? undefined;
+            const html = node.innerHTML;
+
+            createRoot(node).render(
+                <Provider store={store}>
+                    <MrSpoiler title={title}><span dangerouslySetInnerHTML={{__html: html}}/></MrSpoiler>
+                </Provider>
+            );
+        });
         dom.current.querySelectorAll("div.mr-spoiler").forEach(node => {
             const title = node.getAttribute("data-title") ?? undefined;
             const html = node.innerHTML;
