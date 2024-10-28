@@ -24,6 +24,11 @@ declare module '*.gif' {
   export default src;
 }
 
+declare module '*.isvg' {
+  const src: string;
+  export default src;
+}
+
 declare module '*.jpg' {
   const src: string;
   export default src;
