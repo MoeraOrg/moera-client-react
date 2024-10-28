@@ -2,8 +2,8 @@ import React, { useCallback, useRef, useState } from 'react';
 import cx from 'classnames';
 
 import { PostingFeatures, PrivateMediaFileInfo, VerifiedMediaFile } from "api";
-import RichTextArea, { RichTextAreaProps } from "ui/control/richtexteditor/RichTextArea";
-import RichTextEditorPanel from "ui/control/richtexteditor/RichTextEditorPanel";
+import MarkdownArea, { MarkdownAreaProps } from "ui/control/richtexteditor/markdown/MarkdownArea";
+import MarkdownEditorPanel from "ui/control/richtexteditor/markdown/MarkdownEditorPanel";
 import RichTextEditorDropzone from "ui/control/richtexteditor/RichTextEditorDropzone";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
@@ -20,7 +20,7 @@ type Props = {
     onChange?: (value: RichTextValue) => void;
     onUrls?: (urls: string[]) => void;
     noMedia?: boolean;
-} & Omit<RichTextAreaProps, "textArea" | "panel" | "value" | "onChange">;
+} & Omit<MarkdownAreaProps, "textArea" | "panel" | "value" | "onChange">;
 
 export function RichTextEditor({
     name, value, features, rows, maxHeight, placeholder, className, autoFocus, autoComplete, disabled, smileysEnabled,
@@ -89,14 +89,14 @@ export function RichTextEditor({
     return (
         <div className={cx("rich-text-editor", className)}>
             {format !== "plain-text" &&
-                <RichTextEditorPanel panel={panel} textArea={textArea} hiding={hidingPanel} format={format}
+                <MarkdownEditorPanel panel={panel} textArea={textArea} hiding={hidingPanel} format={format}
                                      features={features} noMedia={noMedia} nodeName={nodeName}
                                      forceImageCompress={forceImageCompress} selectedImage={selectedImage}
                                      selectImage={setSelectedImage} onImageAdded={onImageAdded}
                                      onImageDeleted={onImageDeleted} externalImage={imageFromClipboard}
                                      uploadingExternalImage={() => setImageFromClipboard(undefined)}/>
             }
-            <RichTextArea name={name} value={value.text} format={format} rows={rows} maxHeight={maxHeight}
+            <MarkdownArea name={name} value={value.text} format={format} rows={rows} maxHeight={maxHeight}
                           placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
                           disabled={disabled} smileysEnabled={smileysEnabled} onKeyDown={onKeyDown}
                           onChange={onTextChange} onBlur={onBlur} onUrls={onUrls} ref={textArea} panel={panel}

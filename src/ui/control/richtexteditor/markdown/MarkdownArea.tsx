@@ -15,7 +15,7 @@ import { insertText } from "util/ui";
 
 const MENTION_START = /(^|\s)@$/;
 
-export interface RichTextAreaProps {
+export interface MarkdownAreaProps {
     name: string;
     value?: string;
     format: SourceFormat;
@@ -35,11 +35,11 @@ export interface RichTextAreaProps {
     uploadImage?: (image: File) => void;
 }
 
-function RichTextArea(
+function MarkdownArea(
     {
         name, value, format, className, autoFocus, autoComplete, maxHeight, placeholder, rows = 3, disabled,
         smileysEnabled, onKeyDown, onChange, onBlur, onUrls, panel, uploadImage
-    }: RichTextAreaProps,
+    }: MarkdownAreaProps,
     ref: ForwardedRef<HTMLTextAreaElement>
 ) {
     const pasteRich = useSelector((state: ClientState) => getSetting(state, "rich-text-editor.paste-rich") as string);
@@ -287,4 +287,4 @@ function shouldPasteHtml(html: string): boolean {
     return !containsTags(safeImportHtml(html), "all");
 }
 
-export default forwardRef(RichTextArea);
+export default forwardRef(MarkdownArea);

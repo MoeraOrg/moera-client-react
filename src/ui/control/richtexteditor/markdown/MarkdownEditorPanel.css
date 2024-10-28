@@ -1,23 +1,23 @@
-.rich-text-editor-panel {
+.markdown-editor-panel {
     background-color: var(--bs-gray-200);
     border-top-left-radius: .25rem;
     border-top-right-radius: .25rem;
 }
 
-.rich-text-editor-panel.hiding {
+.markdown-editor-panel.hiding {
     display: none;
 }
 
-.rich-text-editor:focus-within .rich-text-editor-panel.hiding {
+.markdown-editor:focus-within .markdown-editor-panel.hiding {
     display: block;
 }
 
-.rich-text-editor-panel .group {
+.markdown-editor-panel .group {
     display: inline-block;
 }
 
 @media only screen and (min-width: 576px) {
-    .rich-text-editor-panel .group {
+    .markdown-editor-panel .group {
         margin-right: .75rem;
     }
 }

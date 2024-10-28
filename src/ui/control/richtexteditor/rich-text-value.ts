@@ -1,5 +1,6 @@
 import { MediaWithDigest, VerifiedMediaFile } from "api";
 import { mediaHashesExtract } from "util/media-images";
+import { replaceSmileys } from "util/text";
 
 export class RichTextValue {
 
@@ -9,6 +10,10 @@ export class RichTextValue {
     constructor(text: string, media?: (VerifiedMediaFile | null)[] | null) {
         this.text = text;
         this.media = media;
+    }
+
+    toString(smileysEnabled: boolean = false): string {
+        return (smileysEnabled ? replaceSmileys(this.text) : this.text).trim();
     }
 
     orderedMediaListWithDigests(): MediaWithDigest[] | null {

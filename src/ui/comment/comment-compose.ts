@@ -10,16 +10,16 @@ import {
     SourceFormat,
     VerifiedMediaFile
 } from "api";
+import store from "state/store";
 import { commentPost } from "state/detailedposting/actions";
 import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
-import { replaceSmileys } from "util/text";
 import { toAvatarDescription } from "util/avatar";
-import store from "state/store";
 
 interface PropsToValuesProps {
     comment: CommentInfo | null;
     draft: DraftInfo | null;
     avatarDefault: AvatarImage | null;
+    sourceFormatDefault: SourceFormat;
 }
 
 interface ValuesToCommentTextProps {
@@ -40,10 +40,6 @@ export interface CommentComposeValues {
     linkPreviews: RichTextLinkPreviewsValue;
 }
 
-function replaceSmileysIfNeeded(smileysEnabled: boolean, text: string): string {
-    return smileysEnabled ? replaceSmileys(text) : text;
-}
-
 export function valuesToCommentText(values: CommentComposeValues, props: ValuesToCommentTextProps): CommentText | null {
     if (props.ownerName == null) {
         return null;
@@ -55,7 +51,7 @@ export function valuesToCommentText(values: CommentComposeValues, props: ValuesT
         ownerGender: props.ownerGender,
         ownerAvatar: toAvatarDescription(values.avatar),
         bodySrc: JSON.stringify({
-            text: replaceSmileysIfNeeded(props.smileysEnabled, values.body.text.trim()),
+            text: values.body.toString(props.smileysEnabled),
             linkPreviews: values.linkPreviews.previews
         }),
         bodySrcFormat: props.sourceFormatDefault,
@@ -69,7 +65,7 @@ function valuesToCommentSourceText(values: CommentComposeValues, props: ValuesTo
     return {
         ownerAvatar: toAvatarDescription(values.avatar),
         bodySrc: JSON.stringify({
-            text: replaceSmileysIfNeeded(props.smileysEnabled, values.body.text.trim()),
+            text: values.body.toString(props.smileysEnabled),
             linkPreviews: values.linkPreviews.previews
         }),
         bodySrcFormat: props.sourceFormatDefault,
