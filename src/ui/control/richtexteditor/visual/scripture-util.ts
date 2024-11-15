@@ -62,6 +62,8 @@ function domToScripture(
             return createParagraphElement(children);
         case "A":
             return createLinkElement(element.getAttribute("href") ?? "", children);
+        case "BR":
+            return createScriptureText("\n", attributes);
         default:
             return children;
     }
@@ -82,7 +84,7 @@ function scriptureToHtmlNode(descendant: ScriptureDescendant): string {
         }
     }
     if (SlateText.isText(descendant)) {
-        return htmlEntities(descendant.text);
+        return htmlEntities(descendant.text).replaceAll("\n", "<br>");
     }
     return "";
 }

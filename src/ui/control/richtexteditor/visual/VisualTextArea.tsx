@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createEditor, Descendant } from 'slate';
 import { Editable, Slate, withReact } from 'slate-react';
 import deepEqual from 'react-fast-compare';
@@ -23,10 +23,17 @@ export default function VisualTextArea({value, onChange}: Props) {
         }
     }, [editor, value]);
 
+    const onKeyDown = (event: React.KeyboardEvent) => {
+        if (event.key === "Enter" && (event.shiftKey || event.ctrlKey)) {
+            editor.insertText("\n");
+            event.preventDefault();
+        }
+    };
+
     return (
         <Slate editor={editor} initialValue={toScripture("")}
                onValueChange={onChange as ((contents: Descendant[]) => void) | undefined}>
-            <Editable className="visual-text-area" renderElement={VisualRenderElement}/>
+            <Editable className="visual-text-area" renderElement={VisualRenderElement} onKeyDown={onKeyDown}/>
         </Slate>
     );
 }
