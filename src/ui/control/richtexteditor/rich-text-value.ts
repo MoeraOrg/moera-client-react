@@ -1,7 +1,8 @@
 import { MediaWithDigest, SourceFormat, VerifiedMediaFile } from "api";
 import { mediaHashesExtract } from "util/media-images";
 import { replaceSmileys } from "util/text";
-import { Scripture, scriptureToHtml, toScripture } from "util/scripture";
+import { Scripture } from "ui/control/richtexteditor/visual/scripture";
+import { scriptureToHtml, toScripture } from "ui/control/richtexteditor/visual/scripture-util";
 
 export class RichTextValue {
 

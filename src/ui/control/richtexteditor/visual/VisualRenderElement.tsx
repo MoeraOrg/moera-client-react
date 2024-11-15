@@ -1,6 +1,6 @@
 import { DefaultElement, RenderElementProps } from 'slate-react';
 
-import { isScriptureElement } from "util/scripture";
+import { isScriptureElement } from "ui/control/richtexteditor/visual/scripture";
 
 export default function VisualRenderElement(props: RenderElementProps) {
     const {element, attributes, children} = props;

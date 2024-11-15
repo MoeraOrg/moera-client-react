@@ -13,8 +13,9 @@ import {
 import store from "state/store";
 import { commentPost } from "state/detailedposting/actions";
 import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
+import { Scripture } from "ui/control/richtexteditor/visual/scripture";
+import { toScripture } from "ui/control/richtexteditor/visual/scripture-util";
 import { toAvatarDescription } from "util/avatar";
-import { Scripture, toScripture } from "util/scripture";
 
 interface PropsToValuesProps {
     comment: CommentInfo | null;

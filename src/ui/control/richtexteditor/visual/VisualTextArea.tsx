@@ -4,7 +4,8 @@ import { Editable, Slate, withReact } from 'slate-react';
 import deepEqual from 'react-fast-compare';
 
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
-import { Scripture, toScripture } from "util/scripture";
+import { Scripture } from "ui/control/richtexteditor/visual/scripture";
+import { toScripture } from "ui/control/richtexteditor/visual/scripture-util";
 import "./VisualTextArea.css";
 
 interface Props {

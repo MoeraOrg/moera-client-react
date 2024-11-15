@@ -8,7 +8,7 @@ import VisualTextArea from "ui/control/richtexteditor/visual/VisualTextArea";
 import RichTextEditorDropzone from "ui/control/richtexteditor/RichTextEditorDropzone";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
-import { Scripture } from "util/scripture";
+import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { arrayMove } from "util/misc";
 import "./RichTextEditor.css";
 

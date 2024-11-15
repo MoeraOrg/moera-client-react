@@ -13,9 +13,10 @@ import { linkPreviewImageUpload, linkPreviewLoad } from "state/linkpreviews/acti
 import { LinkPreviewsState } from "state/linkpreviews/state";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
 import EntryLinkSelector from "ui/entry/EntryLinkSelector";
+import { Scripture } from "ui/control/richtexteditor/visual/scripture";
+import { scriptureExtractUrls } from "ui/control/richtexteditor/visual/scripture-util";
 import { extractUrls } from "util/text";
 import { absoluteNodeName, RelNodeName } from "util/rel-node-name";
-import { Scripture, scriptureExtractUrls } from "util/scripture";
 
 interface Props {
     name: string;

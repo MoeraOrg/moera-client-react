@@ -19,9 +19,10 @@ import { composePost } from "state/compose/actions";
 import { DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import { settingsUpdate } from "state/settings/actions";
 import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
+import { Scripture } from "ui/control/richtexteditor/visual/scripture";
+import { toScripture } from "ui/control/richtexteditor/visual/scripture-util";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
-import { Scripture, toScripture } from "util/scripture";
 
 export type ComposePageToolsTab = null | "format" | "comments" | "reactions" | "updated";
 
