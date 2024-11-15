@@ -98,7 +98,7 @@ export function RichTextEditor({
     return (
         <div className={cx("rich-text-editor", className)}>
             {format === "visual-html" ?
-                <VisualTextArea value={value.text} onChange={onScriptureChange}/>
+                <VisualTextArea value={value.scripture} onChange={onScriptureChange}/>
             :
                 <>
                     {format !== "plain-text" &&

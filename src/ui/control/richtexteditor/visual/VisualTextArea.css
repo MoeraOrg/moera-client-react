@@ -1,0 +1,7 @@
+.visual-text-area {
+    padding: .375rem .75rem;
+}
+
+.visual-text-area P:last-child {
+    margin-bottom: 0;
+}
