@@ -14,6 +14,7 @@ import store from "state/store";
 import { commentPost } from "state/detailedposting/actions";
 import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
 import { toAvatarDescription } from "util/avatar";
+import { Scripture, toScripture } from "util/scripture";
 
 interface PropsToValuesProps {
     comment: CommentInfo | null;
@@ -77,8 +78,7 @@ function valuesToCommentSourceText(values: CommentComposeValues, props: ValuesTo
 }
 
 export function areValuesEmpty(values: CommentComposeValues): boolean {
-    return values.body.text.trim() === ""
-        && (values.body.media == null || values.body.media.length === 0);
+    return values.body.text === "" && (values.body.media == null || values.body.media.length === 0);
 }
 
 export function areImagesUploaded(values: CommentComposeValues): boolean {
@@ -122,9 +122,16 @@ export const commentComposeLogic = {
         const avatar = props.draft != null
             ? props.draft.ownerAvatar ?? null
             : props.comment != null ? props.comment.ownerAvatar ?? null : props.avatarDefault;
-        const body = props.draft != null
+        const bodyFormat = props.draft != null
+                ? props.draft.bodySrcFormat ?? "markdown"
+                : props.comment != null ? props.comment.bodySrcFormat ?? "markdown" : props.sourceFormatDefault;
+        let body: string | Scripture;
+        body = props.draft != null
             ? props.draft.bodySrc?.text ?? ""
             : props.comment != null ? props.comment.bodySrc?.text ?? "" : "";
+        if (bodyFormat === "visual-html") {
+            body = toScripture(body);
+        }
         const attachments = props.draft != null ? props.draft.media : props.comment?.media;
         let media = attachments != null
             ? attachments
@@ -140,7 +147,7 @@ export const commentComposeLogic = {
 
         return {
             avatar,
-            body: new RichTextValue(body, media),
+            body: new RichTextValue(body, bodyFormat, media),
             bodyUrls,
             linkPreviews
         };

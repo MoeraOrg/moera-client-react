@@ -15,6 +15,7 @@ import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
 import EntryLinkSelector from "ui/entry/EntryLinkSelector";
 import { extractUrls } from "util/text";
 import { absoluteNodeName, RelNodeName } from "util/rel-node-name";
+import { Scripture, scriptureExtractUrls } from "util/scripture";
 
 interface Props {
     name: string;
@@ -36,9 +37,9 @@ export interface RichTextLinkPreviewsValue {
 }
 
 export function bodyToLinkPreviews(
-    body: string, linkPreviewsInfo: LinkPreview[], media: VerifiedMediaFile[]
+    body: string | Scripture, linkPreviewsInfo: LinkPreview[], media: VerifiedMediaFile[]
 ): [RichTextLinkPreviewsValue, string[], VerifiedMediaFile[]] {
-    const bodyUrls = extractUrls(body);
+    const bodyUrls = typeof body !== "string" ? scriptureExtractUrls(body) : extractUrls(body);
     const linkPreviewsUrls = new Set(linkPreviewsInfo.map(lp => lp.url));
     const linkPreviewsImages = new Set(
         linkPreviewsInfo.map(lp => lp.imageHash).filter((ih): ih is string => ih != null)

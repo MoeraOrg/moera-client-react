@@ -163,7 +163,7 @@ const blockDialogLogic = {
         const formattedName = formatFullName(props.nodeName, props.fullName, props.nameDisplayMode);
         const level = blockingLevel(props.prevBlocked.map(bu => bu.blockedOperation));
         const days = daysTillDeadline(props.prevBlocked);
-        const reason = new RichTextValue(props.prevBlocked[0]?.reasonSrc ?? "");
+        const reason = new RichTextValue(props.prevBlocked[0]?.reasonSrc ?? "", "markdown");
         return {
             formattedName,
             level,

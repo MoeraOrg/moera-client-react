@@ -862,7 +862,8 @@
   "source-format": {
     "html": "HTML",
     "markdown": "Markdown",
-    "plain-text": "Без форматування"
+    "plain-text": "Без форматування",
+    "visual-html": "Візуальний редактор"
   },
   "spoiler": "Спойлер",
   "spoiler-alert": "спойлер!",

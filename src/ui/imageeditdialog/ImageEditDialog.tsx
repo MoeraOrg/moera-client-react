@@ -85,7 +85,7 @@ function ImageEditDialogInner(props: Props) {
 const logic = {
 
     mapPropsToValues: (props: OuterProps): Values => ({
-        caption: new RichTextValue(props.posting?.bodySrc?.text ?? "")
+        caption: new RichTextValue(props.posting?.bodySrc?.text ?? "", props.posting?.bodySrcFormat || "markdown")
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {

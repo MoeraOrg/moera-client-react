@@ -862,7 +862,8 @@
   "source-format": {
     "html": "HTML",
     "markdown": "Markdown",
-    "plain-text": "Brak formatowania"
+    "plain-text": "Brak formatowania",
+    "visual-html": "Edytor wizualny"
   },
   "spoiler": "Spoiler",
   "spoiler-alert": "spoiler!",

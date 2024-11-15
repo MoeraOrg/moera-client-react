@@ -99,7 +99,7 @@ const profileEditorLogic = {
         title: props.profile.title || "",
         gender: props.profile.gender || "",
         email: props.profile.email || "",
-        bioSrc: new RichTextValue(props.profile.bioSrc || ""),
+        bioSrc: new RichTextValue(props.profile.bioSrc || "", "markdown"),
         avatar: props.profile.avatar ?? null,
         fundraisers: props.profile.fundraisers ?? [],
         viewEmail: props.profile.operations?.viewEmail ?? "admin"
@@ -135,7 +135,7 @@ const profileEditorLogic = {
             title: values.title.trim(),
             gender: values.gender.trim(),
             email: values.email.trim(),
-            bioSrc: values.bioSrc.text.trim(),
+            bioSrc: values.bioSrc.text,
             bioSrcFormat: "markdown",
             avatarId: values.avatar ? values.avatar.id : null,
             fundraisers: values.fundraisers,

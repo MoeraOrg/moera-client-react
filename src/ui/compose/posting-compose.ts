@@ -21,6 +21,7 @@ import { settingsUpdate } from "state/settings/actions";
 import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
+import { Scripture, toScripture } from "util/scripture";
 
 export type ComposePageToolsTab = null | "format" | "comments" | "reactions" | "updated";
 
@@ -168,7 +169,7 @@ export const valuesToPostingText = (values: ComposePageValues, props: ValuesToPo
 
 export const areValuesEmpty = (values: ComposePageValues): boolean =>
     (values.subject == null || values.subject.trim() === "")
-        && values.body.text.trim() === ""
+        && values.body.text === ""
         && (values.body.media == null || values.body.media.length === 0);
 
 export const areImagesUploaded = (values: ComposePageValues): boolean =>
@@ -233,11 +234,15 @@ export const composePageLogic = {
         const bodyFormat = props.draft != null
             ? props.draft.bodySrcFormat ?? "markdown"
             : props.posting != null ? props.posting.bodySrcFormat ?? "markdown" : props.sourceFormatDefault;
-        const body = props.draft != null
+        let body: string | Scripture;
+        body = props.draft != null
             ? props.draft.bodySrc?.text ?? ""
             : props.posting != null
                 ? props.posting.bodySrc?.text ?? ""
                 : props.sharedText != null ? getSharedText(props, bodyFormat) : "";
+        if (bodyFormat === "visual-html") {
+            body = toScripture(body);
+        }
         const attachments = props.draft != null ? props.draft.media : props.posting?.media;
         let media = attachments != null
             ? attachments.map(ma => ma.media ?? null).filter((mf): mf is PrivateMediaFileInfo => mf != null)
@@ -312,7 +317,7 @@ export const composePageLogic = {
             avatar,
             fullName,
             subject,
-            body: new RichTextValue(body, media),
+            body: new RichTextValue(body, bodyFormat, media),
             bodyUrls,
             linkPreviews,
             bodyFormat,
