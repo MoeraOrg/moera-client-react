@@ -7,7 +7,16 @@
     height: 1.7em;
 }
 
+.rich-text-editor-button.active {
+    color: var(--bs-primary);
+}
+
 .rich-text-editor-button:hover {
     background-color: var(--highlight);
     color: var(--bs-gray-800);
+}
+
+.rich-text-editor-button.active:hover {
+    background-color: var(--highlight-blue);
+    color: var(--bs-primary);
 }

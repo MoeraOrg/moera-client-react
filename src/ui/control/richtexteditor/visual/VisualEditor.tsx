@@ -5,6 +5,7 @@ import deepEqual from 'react-fast-compare';
 
 import VisualEditorPanel from "ui/control/richtexteditor/visual/VisualEditorPanel";
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
+import VisualRenderLeaf from "ui/control/richtexteditor/visual/VisualRenderLeaf";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { toScripture } from "ui/control/richtexteditor/visual/scripture-util";
@@ -44,7 +45,8 @@ export default function VisualEditor({hidingPanel, value, onChange}: VisualEdito
         <Slate editor={editor} initialValue={toScripture("")}
                onValueChange={onScriptureChange as ((contents: Descendant[]) => void) | undefined}>
             <VisualEditorPanel hiding={hidingPanel}/>
-            <Editable className="visual-text-area" renderElement={VisualRenderElement} onKeyDown={onKeyDown}/>
+            <Editable className="visual-text-area" renderElement={VisualRenderElement} renderLeaf={VisualRenderLeaf}
+                      onKeyDown={onKeyDown}/>
         </Slate>
     );
 }

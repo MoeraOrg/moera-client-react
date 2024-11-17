@@ -1,13 +1,14 @@
-import { Text as SlateText } from 'slate';
-
 import {
     createLinkElement,
     createParagraphElement,
     createScriptureText,
+    equalScriptureMarks,
     isLinkElement,
     isScriptureElement,
+    isScriptureText,
     Scripture,
-    ScriptureDescendant
+    ScriptureDescendant,
+    ScriptureMarks, ScriptureText
 } from "ui/control/richtexteditor/visual/scripture";
 import { htmlEntities } from "util/html";
 
@@ -29,9 +30,7 @@ export function toScripture(text?: string | Scripture | null | undefined): Scrip
     return scripture;
 }
 
-function domToScripture(
-    node: Node, attributes: Record<string, any> = {}
-): Scripture | ScriptureDescendant | null {
+function domToScripture(node: Node, attributes: ScriptureMarks = {}): Scripture | ScriptureDescendant | null {
     if (node.nodeType === Node.TEXT_NODE) {
         return createScriptureText(node.textContent ?? "", attributes);
     } else if (node.nodeType !== Node.ELEMENT_NODE) {
@@ -39,17 +38,36 @@ function domToScripture(
     }
 
     const element: Element = node as Element;
-    const markAttributes: Record<string, any> = {...attributes};
+    const markAttributes: ScriptureMarks = {...attributes};
 
     switch (element.nodeName) {
         case "B":
             markAttributes.bold = true;
+            break;
+        case "I":
+            markAttributes.italic = true;
+            break;
+        case "S":
+        case "STRIKE":
+            markAttributes.strikeout = true;
+            break;
     }
 
-    const children: Scripture  = Array.from(element.childNodes)
+    const children: Scripture = [];
+    Array.from(element.childNodes)
         .map(node => domToScripture(node, markAttributes))
         .filter((node: Scripture | ScriptureDescendant | null): node is Scripture | ScriptureDescendant => node != null)
-        .flat();
+        .flat()
+        .forEach(node => {
+            if (isScriptureText(node) && children.length > 0) {
+                const prevNode = children[children.length - 1];
+                if (isScriptureText(prevNode) && equalScriptureMarks(prevNode, node)) {
+                    prevNode.text += node.text;
+                    return;
+                }
+            }
+            children.push(node);
+        });
 
     if (children.length === 0) {
         children.push(createScriptureText(""));
@@ -73,20 +91,87 @@ export function scriptureToHtml(scripture?: Scripture | null | undefined): strin
     if (!scripture) { // null, undefined, "", []
         return "";
     }
-    return scripture.map(scriptureToHtmlNode).join("");
+
+    const context = {output: "", openStack: []};
+    scriptureNodesToHtml(scripture, context);
+
+    return context.output;
 }
 
-function scriptureToHtmlNode(descendant: ScriptureDescendant): string {
-    if (isScriptureElement(descendant)) {
-        switch (descendant.type) {
+interface ScriptureToHtmlContext {
+    output: string;
+    openStack: string[];
+}
+
+function scriptureNodesToHtml(nodes: ScriptureDescendant[], context: ScriptureToHtmlContext): void {
+    nodes.forEach(node => scriptureNodeToHtml(node, context));
+}
+
+function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtmlContext): void {
+    if (isScriptureElement(node)) {
+        closeAllTags(context);
+        switch (node.type) {
             case "paragraph":
-                return `<p>${scriptureToHtml(descendant.children as Scripture)}</p>`;
+                context.output += "<p>";
+                scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
+                context.output += "</p>";
+                return;
         }
     }
-    if (SlateText.isText(descendant)) {
-        return htmlEntities(descendant.text).replaceAll("\n", "<br>");
+    if (isScriptureText(node)) {
+        scriptureTextToHtml(node, context);
+        return;
     }
-    return "";
+}
+
+function scriptureTextToHtml(node: ScriptureText, context: ScriptureToHtmlContext): void {
+    const toOpen = new Set<string>();
+    const toClose = new Set<string>();
+
+    requireTag("b", node.bold, toOpen, toClose, context);
+    requireTag("i", node.italic, toOpen, toClose, context);
+    requireTag("s", node.strikeout, toOpen, toClose, context);
+
+    while (toClose.size > 0) {
+        const tag = context.openStack.pop();
+        if (tag == null) {
+            console.error("Unexpected stack underflow in scriptureTextToHtml()");
+            return;
+        }
+        context.output += `</${tag}>`;
+        if (toClose.has(tag)) {
+            toClose.delete(tag);
+        } else {
+            toOpen.add(tag);
+        }
+    }
+
+    toOpen.forEach(tag => {
+        context.output += `<${tag}>`;
+        context.openStack.push(tag);
+    });
+
+    context.output += htmlEntities(node.text).replaceAll("\n", "<br>");
+}
+
+function requireTag(
+    tagName: string, isPresent: boolean | undefined, toOpen: Set<string>, toClose: Set<string>,
+    context: ScriptureToHtmlContext
+): void {
+    const isOpen = context.openStack.includes(tagName);
+    if (isOpen && !isPresent) {
+        toClose.add(tagName);
+    }
+    if (!isOpen && isPresent) {
+        toOpen.add(tagName);
+    }
+}
+
+function closeAllTags(context: ScriptureToHtmlContext): void {
+    while (context.openStack.length > 0) {
+        const tag = context.openStack.pop();
+        context.output += `</${tag}>`;
+    }
 }
 
 export function scriptureExtractUrls(scripture: Scripture): string[] {

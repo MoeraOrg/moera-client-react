@@ -10,11 +10,13 @@ interface Props {
     title: string;
     letter?: string;
     className?: string;
+    active?: boolean;
     onClick?: (event: React.MouseEvent) => void;
 }
 
-const RichTextEditorButton = ({icon, title, letter, className, onClick}: Props) => (
-    <button className={cx("rich-text-editor-button", className)} title={letter ? `${title} (Ctrl-${letter})` : title}
+const RichTextEditorButton = ({icon, title, letter, className, active, onClick}: Props) => (
+    <button className={cx("rich-text-editor-button", className, {active})}
+            title={letter ? `${title} (Ctrl-${letter})` : title}
             data-letter={letter} onClick={onClick}>
         <FontAwesomeIcon icon={icon}/>
     </button>

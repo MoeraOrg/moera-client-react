@@ -29,13 +29,26 @@ export const createLinkElement = (href: string, children: Scripture): LinkElemen
 
 export type ScriptureElement = ParagraphElement | LinkElement;
 
-export function isScriptureElement(value: any): value is ScriptureElement {
-    return SlateElement.isElement(value) && "type" in value;
-}
+export const isScriptureElement = (value: any): value is ScriptureElement =>
+    SlateElement.isElement(value) && "type" in value;
 
 /* text */
 
-export type ScriptureText = SlateText;
+export interface ScriptureMarks {
+    bold?: boolean;
+    italic?: boolean;
+    strikeout?: boolean;
+}
+
+export const equalScriptureMarks = (a: ScriptureMarks, b: ScriptureMarks): boolean =>
+    Boolean(a.bold) === Boolean(b.bold)
+    && Boolean(a.italic) === Boolean(b.italic)
+    && Boolean(a.strikeout) === Boolean(b.strikeout);
+
+export type ScriptureText = SlateText & ScriptureMarks;
+
+export const isScriptureText = (value: any): value is ScriptureText =>
+    SlateText.isText(value);
 
 export const createScriptureText = (text: string, attributes: Record<string, any> = {}): ScriptureText =>
     ({text, ...attributes});
