@@ -16,3 +16,33 @@
     border-radius: .25rem;
     padding: .375rem .75rem;
 }
+
+.rich-text-editor-panel {
+    /*background-color: var(--bs-gray-200);*/
+    padding: .5em;
+    border-bottom: 1px solid var(--bs-gray-400);
+}
+
+.rich-text-editor-panel.hiding {
+    display: none;
+}
+
+.rich-text-editor:focus-within .rich-text-editor-panel.hiding {
+    display: block;
+}
+
+.rich-text-editor-panel .group {
+    display: inline-block;
+}
+
+@media only screen and (min-width: 576px) {
+    .rich-text-editor-panel .group {
+        margin-right: 1rem;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .rich-text-editor-panel .group {
+        margin-right: .25rem;
+    }
+}

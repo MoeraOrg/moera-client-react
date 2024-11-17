@@ -29,7 +29,6 @@ import { getTextSelection, insertText, wrapSelection, wrapSelectionLines } from 
 import { mentionName } from "util/names";
 import { NameListItem } from "util/names-list";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
-import "./MarkdownEditorPanel.css";
 
 interface Props {
     textArea: React.RefObject<HTMLTextAreaElement>,
@@ -303,7 +302,7 @@ export default function MarkdownEditorPanel({
     }
 
     return (
-        <div className={cx("markdown-editor-panel", {"hiding": hiding})} ref={panel}>
+        <div className={cx("rich-text-editor-panel", {"hiding": hiding})} ref={panel}>
             <div className="group">
                 <RichTextEditorButton icon={faBold} title={t("bold")} letter="B" onClick={onBold}/>
                 <RichTextEditorButton icon={faItalic} title={t("italic")} letter="I" onClick={onItalic}/>
@@ -320,7 +319,7 @@ export default function MarkdownEditorPanel({
             </div>
             <div className="group">
                 <RichTextEditorButton icon={faLink} title={t("link")} letter="L" onClick={onLink}/>
-                <RichTextEditorButton icon={faImage} title={t("image")} letter="M" onClick={onImage}/>
+                {!noMedia && <RichTextEditorButton icon={faImage} title={t("image")} letter="M" onClick={onImage}/>}
             </div>
             {spoilerDialog && <RichTextSpoilerDialog title="" onSubmit={onSpoilerSubmit}/>}
             {foldDialog && <RichTextFoldDialog onSubmit={onFoldSubmit}/>}
