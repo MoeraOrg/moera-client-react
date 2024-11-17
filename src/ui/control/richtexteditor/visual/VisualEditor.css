@@ -1,7 +1,13 @@
 .visual-text-area {
     padding: .375rem .75rem;
+    overflow-y: auto;
 }
 
 .visual-text-area P:last-child {
     margin-bottom: 0;
+}
+
+.visual-text-area SPAN[data-slate-placeholder=true] {
+    top: .5em !important;
+    width: 90% !important;
 }

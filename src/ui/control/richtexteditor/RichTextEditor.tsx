@@ -63,7 +63,8 @@ export function RichTextEditor({
     return (
         <div className={cx("rich-text-editor", className)}>
             {format === "visual-html" ?
-                <VisualEditor value={value} hidingPanel={hidingPanel} onChange={onChange}/>
+                <VisualEditor value={value} rows={rows} maxHeight={maxHeight} placeholder={placeholder}
+                              autoFocus={autoFocus} disabled={disabled} hidingPanel={hidingPanel} onChange={onChange}/>
             :
                 <MarkdownEditor name={name} value={value} features={features} rows={rows} maxHeight={maxHeight}
                                 placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
