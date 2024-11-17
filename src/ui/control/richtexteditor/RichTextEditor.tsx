@@ -1,37 +1,24 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import cx from 'classnames';
 
-import { PostingFeatures, PrivateMediaFileInfo, VerifiedMediaFile } from "api";
-import MarkdownArea, { MarkdownAreaProps } from "ui/control/richtexteditor/markdown/MarkdownArea";
-import MarkdownEditorPanel from "ui/control/richtexteditor/markdown/MarkdownEditorPanel";
-import VisualTextArea from "ui/control/richtexteditor/visual/VisualTextArea";
+import { PrivateMediaFileInfo, VerifiedMediaFile } from "api";
+import { MarkdownEditor, MarkdownEditorProps } from "ui/control/richtexteditor/markdown/MarkdownEditor";
+import VisualEditor, { VisualEditorProps } from "ui/control/richtexteditor/visual/VisualEditor";
 import RichTextEditorDropzone from "ui/control/richtexteditor/RichTextEditorDropzone";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
-import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
-import { Scripture } from "ui/control/richtexteditor/visual/scripture";
+import { REL_CURRENT } from "util/rel-node-name";
 import { arrayMove } from "util/misc";
 import "./RichTextEditor.css";
 
 type Props = {
     className?: string;
-    hidingPanel?: boolean;
-    value: RichTextValue;
-    features: PostingFeatures | null;
-    nodeName?: RelNodeName | string;
-    forceImageCompress?: boolean;
-    onChange?: (value: RichTextValue) => void;
-    onUrls?: (urls: string[]) => void;
-    noMedia?: boolean;
-} & Omit<MarkdownAreaProps, "textArea" | "panel" | "value" | "onChange">;
+} & MarkdownEditorProps & VisualEditorProps;
 
 export function RichTextEditor({
     name, value, features, rows, maxHeight, placeholder, className, autoFocus, autoComplete, disabled, smileysEnabled,
     hidingPanel, format, nodeName = REL_CURRENT, forceImageCompress, onKeyDown, onChange, onBlur, onUrls, noMedia
 }: Props) {
-    const panel = useRef<HTMLDivElement>(null);
-    const textArea = useRef<HTMLTextAreaElement>(null);
     const [selectedImage, setSelectedImage] = useState<PrivateMediaFileInfo | null>(null);
-    const [imageFromClipboard, setImageFromClipboard] = useState<File | undefined>(undefined);
 
     const onImageLoadStarted = (count: number) => {
         if (onChange != null && count > 0) {
@@ -50,14 +37,6 @@ export function RichTextEditor({
             }
             const media = [...value.media];
             media[index] = image;
-            onChange(new RichTextValue(value.text, format, media));
-        }
-    }
-
-    const onImageAdded = (image: VerifiedMediaFile) => {
-        if (onChange != null) {
-            const media = value.media != null ? value.media.filter(v => v == null || v.id !== image.id) : [];
-            media.push(image);
             onChange(new RichTextValue(value.text, format, media));
         }
     }
@@ -81,40 +60,17 @@ export function RichTextEditor({
         }
     }
 
-    // useCallback() is mandatory here
-    const onTextChange = useCallback(() => {
-        if (onChange != null && textArea.current != null) {
-            onChange(new RichTextValue(textArea.current.value, format, value.media));
-        }
-    }, [format, onChange, value.media]);
-
-    // useCallback() is mandatory here
-    const onScriptureChange = useCallback((content: Scripture) => {
-        if (onChange != null) {
-            onChange(new RichTextValue(content, format, value.media));
-        }
-    }, [format, onChange, value.media]);
-
     return (
         <div className={cx("rich-text-editor", className)}>
             {format === "visual-html" ?
-                <VisualTextArea value={value.scripture} onChange={onScriptureChange}/>
+                <VisualEditor value={value} hidingPanel={hidingPanel} onChange={onChange}/>
             :
-                <>
-                    {format !== "plain-text" &&
-                        <MarkdownEditorPanel panel={panel} textArea={textArea} hiding={hidingPanel} format={format}
-                                             features={features} noMedia={noMedia} nodeName={nodeName}
-                                             forceImageCompress={forceImageCompress} selectedImage={selectedImage}
-                                             selectImage={setSelectedImage} onImageAdded={onImageAdded}
-                                             onImageDeleted={onImageDeleted} externalImage={imageFromClipboard}
-                                             uploadingExternalImage={() => setImageFromClipboard(undefined)}/>
-                    }
-                    <MarkdownArea name={name} value={value.text} format={format} rows={rows} maxHeight={maxHeight}
-                                  placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
-                                  disabled={disabled} smileysEnabled={smileysEnabled} onKeyDown={onKeyDown}
-                                  onChange={onTextChange} onBlur={onBlur} onUrls={onUrls} ref={textArea} panel={panel}
-                                  uploadImage={setImageFromClipboard}/>
-                </>
+                <MarkdownEditor name={name} value={value} features={features} rows={rows} maxHeight={maxHeight}
+                                placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
+                                disabled={disabled} smileysEnabled={smileysEnabled} hidingPanel={hidingPanel}
+                                format={format} nodeName={nodeName} forceImageCompress={forceImageCompress}
+                                onKeyDown={onKeyDown} onChange={onChange} onBlur={onBlur} onUrls={onUrls}
+                                noMedia={noMedia}/>
             }
             {!noMedia &&
                 <RichTextEditorDropzone value={value} features={features} hiding={hidingPanel}
