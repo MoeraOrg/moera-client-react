@@ -63,7 +63,7 @@ function CommentCompose(props: Props) {
     }
 
     const onBlur = () => {
-        if (values.body.text.length === 0) {
+        if (values.body.text.trim().length === 0) {
             dispatch(bottomMenuShow());
         }
     }

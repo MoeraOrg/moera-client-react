@@ -170,7 +170,7 @@ export const valuesToPostingText = (values: ComposePageValues, props: ValuesToPo
 
 export const areValuesEmpty = (values: ComposePageValues): boolean =>
     (values.subject == null || values.subject.trim() === "")
-        && values.body.text === ""
+        && values.body.text.trim() === ""
         && (values.body.media == null || values.body.media.length === 0);
 
 export const areImagesUploaded = (values: ComposePageValues): boolean =>

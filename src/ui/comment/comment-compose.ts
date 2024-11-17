@@ -79,7 +79,7 @@ function valuesToCommentSourceText(values: CommentComposeValues, props: ValuesTo
 }
 
 export function areValuesEmpty(values: CommentComposeValues): boolean {
-    return values.body.text === "" && (values.body.media == null || values.body.media.length === 0);
+    return values.body.text.trim() === "" && (values.body.media == null || values.body.media.length === 0);
 }
 
 export function areImagesUploaded(values: CommentComposeValues): boolean {

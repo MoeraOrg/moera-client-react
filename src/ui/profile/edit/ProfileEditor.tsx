@@ -135,7 +135,7 @@ const profileEditorLogic = {
             title: values.title.trim(),
             gender: values.gender.trim(),
             email: values.email.trim(),
-            bioSrc: values.bioSrc.text,
+            bioSrc: values.bioSrc.toString(true),
             bioSrcFormat: "markdown",
             avatarId: values.avatar ? values.avatar.id : null,
             fundraisers: values.fundraisers,

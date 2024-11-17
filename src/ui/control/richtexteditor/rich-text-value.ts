@@ -18,7 +18,7 @@ export class RichTextValue {
     }
 
     get text(): string {
-        return this.toString();
+        return typeof this.value !== "string" ? scriptureToHtml(this.value) : this.value;
     }
 
     get scripture(): Scripture {
