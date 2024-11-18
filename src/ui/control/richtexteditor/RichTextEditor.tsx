@@ -9,6 +9,7 @@ import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { REL_CURRENT } from "util/rel-node-name";
 import { arrayMove } from "util/misc";
 import "./RichTextEditor.css";
+import RichTextEditorDialogs from "ui/control/richtexteditor/RichTextEditorDialogs";
 
 type Props = {
     className?: string;
@@ -62,17 +63,20 @@ export function RichTextEditor({
 
     return (
         <div className={cx("rich-text-editor", className)}>
-            {format === "visual-html" ?
-                <VisualEditor value={value} rows={rows} maxHeight={maxHeight} placeholder={placeholder}
-                              autoFocus={autoFocus} disabled={disabled} hidingPanel={hidingPanel} onChange={onChange}/>
-            :
-                <MarkdownEditor name={name} value={value} features={features} rows={rows} maxHeight={maxHeight}
-                                placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
-                                disabled={disabled} smileysEnabled={smileysEnabled} hidingPanel={hidingPanel}
-                                format={format} nodeName={nodeName} forceImageCompress={forceImageCompress}
-                                onKeyDown={onKeyDown} onChange={onChange} onBlur={onBlur} onUrls={onUrls}
-                                noMedia={noMedia}/>
-            }
+            <RichTextEditorDialogs>
+                {format === "visual-html" ?
+                    <VisualEditor value={value} rows={rows} maxHeight={maxHeight} placeholder={placeholder}
+                                  autoFocus={autoFocus} disabled={disabled} hidingPanel={hidingPanel}
+                                  onChange={onChange}/>
+                :
+                    <MarkdownEditor name={name} value={value} features={features} rows={rows} maxHeight={maxHeight}
+                                    placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
+                                    disabled={disabled} smileysEnabled={smileysEnabled} hidingPanel={hidingPanel}
+                                    format={format} nodeName={nodeName} forceImageCompress={forceImageCompress}
+                                    onKeyDown={onKeyDown} onChange={onChange} onBlur={onBlur} onUrls={onUrls}
+                                    noMedia={noMedia}/>
+                }
+            </RichTextEditorDialogs>
             {!noMedia &&
                 <RichTextEditorDropzone value={value} features={features} hiding={hidingPanel}
                                         nodeName={nodeName ?? null} forceCompress={forceImageCompress}

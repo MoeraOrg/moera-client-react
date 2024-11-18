@@ -16,14 +16,14 @@ import { useTranslation } from 'react-i18next';
 import { NodeName, PostingFeatures, PrivateMediaFileInfo, SourceFormat } from "api";
 import * as Browser from "ui/browser";
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
-import RichTextSpoilerDialog, { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
-import RichTextFoldDialog, { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
-import RichTextLinkDialog, { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
+import { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
+import { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
+import { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
 import RichTextImageDialog, {
     getImageDimensions,
     RichTextImageValues
 } from "ui/control/richtexteditor/RichTextImageDialog";
-import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
+import { useRichTextEditorDialogs } from "ui/control/richtexteditor/rich-text-editor-dialogs-context";
 import { htmlEntities } from "util/html";
 import { getTextSelection, insertText, wrapSelection, wrapSelectionLines } from "util/ui";
 import { mentionName } from "util/names";
@@ -51,11 +51,8 @@ export default function MarkdownEditorPanel({
     textArea, panel, hiding, format, features, noMedia, nodeName = REL_CURRENT, forceImageCompress, selectedImage,
     selectImage, onImageAdded, onImageDeleted, externalImage, uploadingExternalImage
 }: Props) {
-    const [spoilerDialog, setSpoilerDialog] = useState<boolean>(false);
-    const [foldDialog, setFoldDialog] = useState<boolean>(false);
-    const [linkDialog, setLinkDialog] = useState<boolean>(false);
     const [imageDialog, setImageDialog] = useState<boolean>(false);
-    const [mentionDialog, setMentionDialog] = useState<boolean>(false);
+    const {showSpoilerDialog, showFoldDialog, showLinkDialog, showMentionDialog} = useRichTextEditorDialogs();
 
     const {t} = useTranslation();
 
@@ -157,96 +154,91 @@ export default function MarkdownEditorPanel({
     }
 
     const onSpoiler = (event: React.MouseEvent) => {
-        setSpoilerDialog(true);
-        event.preventDefault();
-    }
+        showSpoilerDialog(true, (ok: boolean, {title}: RichTextSpoilerValues) => {
+            if (textArea.current == null) {
+                return;
+            }
 
-    const onSpoilerSubmit = (ok: boolean, {title}: RichTextSpoilerValues) => {
-        if (textArea.current == null) {
-            return;
-        }
-
-        setSpoilerDialog(false);
-        if (ok) {
-            const tag = getTextSelection(textArea.current).includes("\n") ? "mr-spoiler-block" : "mr-spoiler";
-            if (title) {
-                wrapSelection(textArea.current, `<${tag} title="${htmlEntities(title)}">`, `</${tag}>`);
-            } else {
-                if (isMarkdown() && tag === "mr-spoiler") {
-                    wrapSelection(textArea.current, "||");
+            showSpoilerDialog(false);
+            if (ok) {
+                const tag = getTextSelection(textArea.current).includes("\n") ? "mr-spoiler-block" : "mr-spoiler";
+                if (title) {
+                    wrapSelection(textArea.current, `<${tag} title="${htmlEntities(title)}">`, `</${tag}>`);
                 } else {
-                    wrapSelection(textArea.current, `<${tag}>`, `</${tag}>`);
+                    if (isMarkdown() && tag === "mr-spoiler") {
+                        wrapSelection(textArea.current, "||");
+                    } else {
+                        wrapSelection(textArea.current, `<${tag}>`, `</${tag}>`);
+                    }
                 }
             }
-        }
-        textArea.current.focus();
+            textArea.current.focus();
+        });
+
+        event.preventDefault();
     }
 
     const onFold = (event: React.MouseEvent) => {
-        setFoldDialog(true);
+        showFoldDialog(true, (ok: boolean, {summary}: RichTextFoldValues) => {
+            if (textArea.current == null) {
+                return;
+            }
+
+            showFoldDialog(false);
+            if (ok) {
+                let wrapBegin = "<details>";
+                let wrapEnd = "</details>";
+                if (summary) {
+                    wrapBegin += `<summary>${htmlEntities(summary)}</summary>`;
+                }
+                const selection = getTextSelection(textArea.current);
+                if (!selection || !selection.startsWith("\n")) {
+                    wrapBegin += "\n";
+                }
+                if (!selection || !selection.endsWith("\n")) {
+                    wrapEnd = "\n" + wrapEnd;
+                } else {
+                    wrapEnd += "\n";
+                }
+                wrapSelection(textArea.current, wrapBegin, wrapEnd);
+            }
+            textArea.current.focus();
+        });
+
         event.preventDefault();
-    }
-
-    const onFoldSubmit = (ok: boolean, {summary}: RichTextFoldValues) => {
-        if (textArea.current == null) {
-            return;
-        }
-
-        setFoldDialog(false);
-        if (ok) {
-            let wrapBegin = "<details>";
-            let wrapEnd = "</details>";
-            if (summary) {
-                wrapBegin += `<summary>${htmlEntities(summary)}</summary>`;
-            }
-            const selection = getTextSelection(textArea.current);
-            if (!selection || !selection.startsWith("\n")) {
-                wrapBegin += "\n";
-            }
-            if (!selection || !selection.endsWith("\n")) {
-                wrapEnd = "\n" + wrapEnd;
-            } else {
-                wrapEnd += "\n";
-            }
-            wrapSelection(textArea.current, wrapBegin, wrapEnd);
-        }
-        textArea.current.focus();
     }
 
     const onMention = (event: React.MouseEvent) => {
-        if (!mentionDialog) {
-            setMentionDialog(true);
-        }
-        event.preventDefault();
-    }
+        showMentionDialog(true, (ok: boolean, {nodeName, fullName}: Partial<NameListItem>) => {
+            showMentionDialog(false);
 
-    const onMentionSubmit = (ok: boolean, {nodeName, fullName}: NameListItem) => {
-        setMentionDialog(false);
-
-        if (textArea.current == null) {
-            return;
-        }
-
-        const value = textArea.current.value;
-        const start = textArea.current.selectionStart;
-        if (value.length >= start && value[start - 1] === "@") {
-            textArea.current.selectionStart = start - 1;
-        }
-
-        if (ok) {
-            if (isMarkdown()) {
-                insertText(textArea.current, mentionName(nodeName, fullName))
-            } else {
-                const text = (fullName || NodeName.shorten(nodeName)) ?? nodeName ?? "";
-                const href = Browser.universalLocation(null, nodeName, null, "/");
-                insertText(textArea.current,
-                    `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(nodeName ?? "")}" data-href="/">`
-                    + `${htmlEntities(text)}</a>`);
+            if (textArea.current == null) {
+                return;
             }
-        } else {
-            insertText(textArea.current, nodeName ? "\\" + mentionName(nodeName) : "\\@");
-        }
-        textArea.current.focus();
+
+            const value = textArea.current.value;
+            const start = textArea.current.selectionStart;
+            if (value.length >= start && value[start - 1] === "@") {
+                textArea.current.selectionStart = start - 1;
+            }
+
+            if (ok) {
+                if (isMarkdown()) {
+                    insertText(textArea.current, mentionName(nodeName, fullName))
+                } else {
+                    const text = (fullName || NodeName.shorten(nodeName)) ?? nodeName ?? "";
+                    const href = Browser.universalLocation(null, nodeName, null, "/");
+                    insertText(textArea.current,
+                        `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(nodeName ?? "")}" data-href="/">`
+                        + `${htmlEntities(text)}</a>`);
+                }
+            } else {
+                insertText(textArea.current, nodeName ? "\\" + mentionName(nodeName) : "\\@");
+            }
+            textArea.current.focus();
+        });
+
+        event.preventDefault();
     }
 
     const onQuote = (event: React.MouseEvent) => {
@@ -280,25 +272,24 @@ export default function MarkdownEditorPanel({
             return;
         }
 
-        setLinkDialog(true);
-        event.preventDefault();
-    }
+        showLinkDialog(true, (ok: boolean, {href}: Partial<RichTextLinkValues>) => {
+            showLinkDialog(false);
 
-    const onLinkSubmit = (ok: boolean, {href}: RichTextLinkValues) => {
-        setLinkDialog(false);
-
-        if (textArea.current == null) {
-            return;
-        }
-
-        if (ok) {
-            if (isMarkdown()) {
-                wrapSelection(textArea.current, "[", `](${htmlEntities(href ?? "")})`);
-            } else {
-                wrapSelection(textArea.current, `<a href="${htmlEntities(href ?? "")}">`, "</a>");
+            if (textArea.current == null) {
+                return;
             }
-        }
-        textArea.current.focus();
+
+            if (ok) {
+                if (isMarkdown()) {
+                    wrapSelection(textArea.current, "[", `](${htmlEntities(href ?? "")})`);
+                } else {
+                    wrapSelection(textArea.current, `<a href="${htmlEntities(href ?? "")}">`, "</a>");
+                }
+            }
+            textArea.current.focus();
+        });
+
+        event.preventDefault();
     }
 
     return (
@@ -321,9 +312,6 @@ export default function MarkdownEditorPanel({
                 <RichTextEditorButton icon={faLink} title={t("link")} letter="L" onClick={onLink}/>
                 {!noMedia && <RichTextEditorButton icon={faImage} title={t("image")} letter="M" onClick={onImage}/>}
             </div>
-            {spoilerDialog && <RichTextSpoilerDialog title="" onSubmit={onSpoilerSubmit}/>}
-            {foldDialog && <RichTextFoldDialog onSubmit={onFoldSubmit}/>}
-            {linkDialog && <RichTextLinkDialog href="" onSubmit={onLinkSubmit}/>}
             {imageDialog &&
                 <RichTextImageDialog onSubmit={onImageSubmit} nodeName={nodeName}
                                      forceCompress={forceImageCompress} selectedImage={selectedImage}
@@ -331,7 +319,6 @@ export default function MarkdownEditorPanel({
                                      onDeleted={onImageDeleted} externalImage={externalImage}
                                      uploadingExternalImage={uploadingExternalImage}/>
             }
-            {mentionDialog && <RichTextMentionDialog onSubmit={onMentionSubmit}/>}
         </div>
     );
 }

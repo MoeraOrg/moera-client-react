@@ -4,8 +4,10 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, ModalDialog, useModalDialog } from "ui/control";
 
+export type RichTextEditorDialogSubmit<V> = (ok: boolean, values: Partial<V>) => void;
+
 export interface RichTextEditorDialogProps<V> {
-    onSubmit: (ok: boolean, values: Partial<V>) => void;
+    onSubmit: RichTextEditorDialogSubmit<V>;
 }
 
 export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V extends FormikValues>(
