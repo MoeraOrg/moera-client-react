@@ -1,26 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { createEditor, Descendant } from 'slate';
-import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
+import { ReactEditor, Slate, withReact } from 'slate-react';
 import deepEqual from 'react-fast-compare';
 
+import VisualEditorCommands from "ui/control/richtexteditor/visual/VisualEditorCommands";
 import VisualEditorPanel from "ui/control/richtexteditor/visual/VisualEditorPanel";
-import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
-import VisualRenderLeaf from "ui/control/richtexteditor/visual/VisualRenderLeaf";
+import VisualTextArea, { VisualTextAreaProps } from "ui/control/richtexteditor/visual/VisualTextArea";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { toScripture } from "ui/control/richtexteditor/visual/scripture-util";
-import "./VisualEditor.css";
 
-export interface VisualEditorProps {
+export type VisualEditorProps = {
     value: RichTextValue;
-    rows?: number;
-    maxHeight?: string | null;
-    placeholder?: string;
-    autoFocus?: boolean;
-    disabled?: boolean;
     hidingPanel?: boolean;
     onChange?: (value: RichTextValue) => void;
-}
+} & VisualTextAreaProps;
 
 export default function VisualEditor({
     value, rows, maxHeight, placeholder, autoFocus, disabled, hidingPanel, onChange
@@ -47,30 +41,19 @@ export default function VisualEditor({
         }
     }, [onChange, value.media]);
 
-    const onKeyDown = (event: React.KeyboardEvent) => {
-        if (event.key === "Enter" && (event.shiftKey || event.ctrlKey)) {
-            editor.insertText("\n");
-            event.preventDefault();
-        }
-    };
-
     return (
         <Slate editor={editor} initialValue={toScripture("")}
                onValueChange={onScriptureChange as ((contents: Descendant[]) => void) | undefined}>
-            <VisualEditorPanel hiding={hidingPanel}/>
-            <Editable
-                className="visual-text-area"
-                style={{
-                    minHeight: rows != null ? `${Math.ceil(rows * 1.5)}em` : undefined,
-                    maxHeight: maxHeight ?? "calc(100vh - 26rem)"
-                }}
-                placeholder={placeholder}
-                readOnly={disabled}
-                autoFocus={autoFocus}
-                renderElement={VisualRenderElement}
-                renderLeaf={VisualRenderLeaf}
-                onKeyDown={onKeyDown}
-            />
+            <VisualEditorCommands>
+                <VisualEditorPanel hiding={hidingPanel}/>
+                <VisualTextArea
+                    rows={rows}
+                    maxHeight={maxHeight}
+                    placeholder={placeholder}
+                    disabled={disabled}
+                    autoFocus={autoFocus}
+                />
+            </VisualEditorCommands>
         </Slate>
     );
 }
