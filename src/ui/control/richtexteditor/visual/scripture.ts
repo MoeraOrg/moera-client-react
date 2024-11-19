@@ -55,6 +55,8 @@ export const createScriptureText = (text: string, attributes: Record<string, any
 
 /* document */
 
+export const SCRIPTURE_INLINE_TYPES: string[] = ["link"];
+
 export type ScriptureDescendant = ScriptureElement | ScriptureText;
 
 // Slate editor JSON format

@@ -17,7 +17,7 @@ export interface VisualTextAreaProps {
 
 export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus, disabled}: VisualTextAreaProps) {
     const editor = useSlateStatic() as ReactEditor;
-    const {formatBold, formatItalic, formatStrikeout} = useVisualEditorCommands();
+    const {formatBold, formatItalic, formatStrikeout, formatLink} = useVisualEditorCommands();
 
     const onKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === "Enter" && (event.shiftKey || event.ctrlKey)) {
@@ -33,6 +33,9 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
                 event.preventDefault();
             } else if (event.code === "Key" + VISUAL_EDITOR_KEYS.STRIKEOUT) {
                 formatStrikeout();
+                event.preventDefault();
+            } else if (event.code === "Key" + VISUAL_EDITOR_KEYS.LINK) {
+                formatLink();
                 event.preventDefault();
             }
         }

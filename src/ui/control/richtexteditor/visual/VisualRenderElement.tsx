@@ -9,6 +9,8 @@ export default function VisualRenderElement(props: RenderElementProps) {
         switch (element.type) {
             case "paragraph":
                 return <p {...attributes}>{children}</p>;
+            case "link":
+                return <a href={element.href} {...attributes}>{children}</a>;
             default:
                 return <DefaultElement {...props}/>;
         }

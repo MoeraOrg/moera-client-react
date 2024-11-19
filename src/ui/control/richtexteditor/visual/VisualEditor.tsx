@@ -8,7 +8,7 @@ import VisualEditorPanel from "ui/control/richtexteditor/visual/VisualEditorPane
 import VisualTextArea, { VisualTextAreaProps } from "ui/control/richtexteditor/visual/VisualTextArea";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
-import { toScripture } from "ui/control/richtexteditor/visual/scripture-util";
+import { toScripture, withScripture } from "ui/control/richtexteditor/visual/scripture-util";
 
 export type VisualEditorProps = {
     value: RichTextValue;
@@ -19,7 +19,7 @@ export type VisualEditorProps = {
 export default function VisualEditor({
     value, rows, maxHeight, placeholder, autoFocus, disabled, hidingPanel, onChange
 }: VisualEditorProps) {
-    const [editor] = useState(() => withReact(createEditor()));
+    const [editor] = useState(() => withScripture(withReact(createEditor())));
 
     useEffect(() => {
         if (!disabled && autoFocus) {

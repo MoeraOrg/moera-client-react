@@ -1,3 +1,5 @@
+import { BaseEditor, BaseElement, Node as SlateNode } from 'slate';
+
 import {
     createLinkElement,
     createParagraphElement,
@@ -7,10 +9,32 @@ import {
     isScriptureElement,
     isScriptureText,
     Scripture,
+    SCRIPTURE_INLINE_TYPES,
     ScriptureDescendant,
-    ScriptureMarks, ScriptureText
+    ScriptureMarks,
+    ScriptureText
 } from "ui/control/richtexteditor/visual/scripture";
 import { htmlEntities } from "util/html";
+
+export function isSelectionInElement(editor: BaseEditor, type: string): boolean {
+    if (editor.selection == null) {
+        return false;
+    }
+    const ancestors = SlateNode.ancestors(editor, editor.selection.anchor.path);
+    for (const [element] of ancestors) {
+        if (isScriptureElement(element) && element.type === type) {
+            return true;
+        }
+    }
+    return false;
+}
+
+export function withScripture<T extends BaseEditor>(editor: T): T {
+    const {isInline} = editor;
+    editor.isInline = (element: BaseElement) =>
+        (isScriptureElement(element) && SCRIPTURE_INLINE_TYPES.includes(element.type)) || isInline(element);
+    return editor;
+}
 
 export function toScripture(text?: string | Scripture | null | undefined): Scripture {
     if (!text) { // null, undefined, "", []
@@ -115,6 +139,11 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 context.output += "<p>";
                 scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
                 context.output += "</p>";
+                return;
+            case "link":
+                context.output += `<a href="${htmlEntities(node.href)}">`;
+                scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
+                context.output += "</a>";
                 return;
         }
     }
