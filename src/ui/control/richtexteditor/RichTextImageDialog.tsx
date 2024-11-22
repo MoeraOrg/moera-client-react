@@ -78,16 +78,16 @@ type Props = {
 } & RichTextEditorDialogProps<RichTextImageValues>;
 
 const mapPropsToValues = (props: Props): RichTextImageValues => ({
-    source: props.noMedia === true ? "internet" : "device",
-    mediaFile: props.selectedImage ?? null,
-    href: "",
-    standardSize: "large",
-    customWidth: null,
-    customHeight: null,
-    align: "text-start",
-    caption: "",
-    title: "",
-    alt: ""
+    source: props.prevValues?.source ?? (props.noMedia === true ? "internet" : "device"),
+    mediaFile: props.prevValues?.mediaFile ?? props.selectedImage ?? null,
+    href: props.prevValues?.href ?? "",
+    standardSize: props.prevValues?.standardSize ?? "large",
+    customWidth: props.prevValues?.customWidth,
+    customHeight: props.prevValues?.customHeight,
+    align: props.prevValues?.align ?? "text-start",
+    caption: props.prevValues?.caption ?? "",
+    title: props.prevValues?.title ?? "",
+    alt: props.prevValues?.alt ?? ""
 });
 
 function RichTextImageDialog({

@@ -10,14 +10,14 @@ export interface RichTextFoldValues {
 
 type Props = RichTextEditorDialogProps<RichTextFoldValues>;
 
-const mapPropsToValues = (): RichTextFoldValues => ({
-    summary: ""
+const mapPropsToValues = (props: Props): RichTextFoldValues => ({
+    summary: props.prevValues?.summary ?? ""
 });
 
 function RichTextFoldDialog() {
     const {t} = useTranslation();
 
-    return <InputField name="summary" title={t("summary")} placeholder="Details" autoFocus/>;
+    return <InputField name="summary" title={t("summary")} placeholder={t("summary")} autoFocus/>;
 }
 
 export default richTextEditorDialog<Props, RichTextFoldValues>("fold", mapPropsToValues, RichTextFoldDialog);

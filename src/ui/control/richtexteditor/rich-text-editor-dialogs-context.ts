@@ -6,9 +6,21 @@ import { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog
 import { NameListItem } from "util/names-list";
 
 export interface RichTextEditorDialogsInterface {
-    showSpoilerDialog: (show: boolean, onSubmit?: RichTextEditorDialogSubmit<RichTextSpoilerValues>) => void;
-    showFoldDialog: (show: boolean, onSubmit?: RichTextEditorDialogSubmit<RichTextFoldValues>) => void;
-    showLinkDialog: (show: boolean, onSubmit?: RichTextEditorDialogSubmit<RichTextLinkValues>) => void;
+    showSpoilerDialog: (
+        show: boolean,
+        prevValues?: RichTextSpoilerValues | null,
+        onSubmit?: RichTextEditorDialogSubmit<RichTextSpoilerValues>
+    ) => void;
+    showFoldDialog: (
+        show: boolean,
+        prevValues?: RichTextFoldValues | null,
+        onSubmit?: RichTextEditorDialogSubmit<RichTextFoldValues>
+    ) => void;
+    showLinkDialog: (
+        show: boolean,
+        prevValues?: RichTextLinkValues | null,
+        onSubmit?: RichTextEditorDialogSubmit<RichTextLinkValues>
+    ) => void;
     showMentionDialog: (show: boolean, onSubmit?: RichTextEditorDialogSubmit<NameListItem>) => void;
 }
 

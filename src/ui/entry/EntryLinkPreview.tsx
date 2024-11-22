@@ -59,7 +59,7 @@ export function EntryLinkPreview({
         e.preventDefault();
     }
 
-    const onEditSubmit = (ok: boolean, values: Partial<EntryLinkPreviewEditValues>) => {
+    const onEditSubmit = (ok: boolean | null, values: Partial<EntryLinkPreviewEditValues>) => {
         setEdit(false);
         if (ok && onUpdate != null) {
             onUpdate(values.title ?? "", values.description ?? "");

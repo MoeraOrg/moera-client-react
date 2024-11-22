@@ -8,12 +8,10 @@ export interface RichTextSpoilerValues {
     title?: string;
 }
 
-interface Props extends RichTextEditorDialogProps<RichTextSpoilerValues> {
-    title: string;
-}
+type Props = RichTextEditorDialogProps<RichTextSpoilerValues>;
 
 const mapPropsToValues = (props: Props): RichTextSpoilerValues => ({
-    title: props.title
+    title: props.prevValues?.title
 });
 
 function RichTextSpoilerDialog() {

@@ -5,12 +5,13 @@ import { ReactEditor, useSlateSelector, useSlateStatic } from 'slate-react';
 import {
     createLinkElement,
     createScriptureText,
-    equalScriptureMarks,
+    equalScriptureMarks, isLinkElement, LinkElement,
     ScriptureMarks
 } from "ui/control/richtexteditor/visual/scripture";
 import { VisualEditorCommandsContext } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 import { useRichTextEditorDialogs } from "ui/control/richtexteditor/rich-text-editor-dialogs-context";
 import { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
+import { findWrappingElement, isSelectionInElement } from "ui/control/richtexteditor/visual/scripture-util";
 
 interface Props {
     children: ReactNode;
@@ -18,30 +19,46 @@ interface Props {
 
 export default function VisualEditorCommands({children}: Props) {
     const editor = useSlateStatic() as ReactEditor;
-    const marks = useSlateSelector(editor => Editor.marks(editor) as ScriptureMarks, equalScriptureMarks);
+    const {
+        bold: inBold = false, italic: inItalic = false, strikeout: inStrikeout = false
+    } = useSlateSelector(
+        editor => Editor.marks(editor) as ScriptureMarks ?? {bold: false, italic: false, strikeout: false},
+        equalScriptureMarks
+    );
+    const inLink = useSlateSelector(editor => isSelectionInElement(editor, "link"));
     const {showLinkDialog} = useRichTextEditorDialogs();
 
     const formatBold = () => {
-        editor.addMark("bold", !marks?.bold);
+        editor.addMark("bold", !inBold);
     }
 
     const formatItalic = () => {
-        editor.addMark("italic", !marks?.italic);
+        editor.addMark("italic", !inItalic);
     }
 
     const formatStrikeout = () => {
-        editor.addMark("strikeout", !marks?.strikeout);
+        editor.addMark("strikeout", !inStrikeout);
     }
 
     const formatLink = () => {
-        showLinkDialog(true, (ok: boolean, {href = ""}: Partial<RichTextLinkValues>) => {
-            showLinkDialog(false);
+        const [element, path] = findWrappingElement(editor, "link") ?? [null, null];
+        const prevValues = element != null && isLinkElement(element) ? {href: element.href} : null;
 
-            if (ok) {
-                if (editor.selection == null || Range.isCollapsed(editor.selection)) {
-                    editor.insertNode(createLinkElement(href, [createScriptureText(href)]));
-                } else {
-                    editor.wrapNodes(createLinkElement(href, []), {split: true});
+        showLinkDialog(true, prevValues, (ok: boolean | null, {href = ""}: Partial<RichTextLinkValues>) => {
+            showLinkDialog(false);
+            if (path != null) {
+                if (ok) {
+                    editor.setNodes<LinkElement>({href}, {at: path});
+                } else if (ok == null) {
+                    editor.unwrapNodes({at: path});
+                }
+            } else {
+                if (ok) {
+                    if (editor.selection == null || Range.isCollapsed(editor.selection)) {
+                        editor.insertNode(createLinkElement(href, [createScriptureText(href)]));
+                    } else {
+                        editor.wrapNodes(createLinkElement(href, []), {split: true});
+                    }
                 }
             }
             ReactEditor.focus(editor);
@@ -49,7 +66,9 @@ export default function VisualEditorCommands({children}: Props) {
     }
 
     return (
-        <VisualEditorCommandsContext.Provider value={{formatBold, formatItalic, formatStrikeout, formatLink}}>
+        <VisualEditorCommandsContext.Provider value={{
+            inBold, inItalic, inStrikeout, inLink, formatBold, formatItalic, formatStrikeout, formatLink
+        }}>
             {children}
         </VisualEditorCommandsContext.Provider>
     );

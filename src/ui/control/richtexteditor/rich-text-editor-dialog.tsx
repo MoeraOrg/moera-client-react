@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, ModalDialog, useModalDialog } from "ui/control";
 
-export type RichTextEditorDialogSubmit<V> = (ok: boolean, values: Partial<V>) => void;
+export type RichTextEditorDialogSubmit<V> = (ok: boolean | null, values: Partial<V>) => void;
 
 export interface RichTextEditorDialogProps<V> {
+    prevValues?: V | null;
     onSubmit: RichTextEditorDialogSubmit<V>;
 }
 
@@ -23,9 +24,11 @@ export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V e
     };
 
     const dialog = function (props: P) {
-        const {onSubmit} = props;
+        const {prevValues, onSubmit} = props;
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const {t} = useTranslation();
+
+        const onCancel = () => onSubmit(prevValues == null ? false : null, {});
 
         const onClose = () => onSubmit(false, {});
 
@@ -39,7 +42,8 @@ export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V e
                         <DialogBody {...props}/>
                     </div>
                     <div className="modal-footer">
-                        <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
+                        <Button variant={prevValues == null ? "secondary" : "danger me-5"}
+                                onClick={onCancel}>{prevValues == null ? t("cancel") : t("delete")}</Button>
                         <Button variant="primary" type="submit">{t("ok")}</Button>
                     </div>
                 </Form>

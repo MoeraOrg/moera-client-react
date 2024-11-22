@@ -14,20 +14,30 @@ interface Props {
 
 export default function RichTextEditorDialogs({children}: Props) {
     const [spoilerDialog, setSpoilerDialog] = useState<boolean>(false);
+    const [spoilerDialogPrevValues, setSpoilerDialogPrevValues] = useState<RichTextSpoilerValues | null>(null);
     const [spoilerDialogOnSubmit, setSpoilerDialogOnSubmit] =
         useState<RichTextEditorDialogSubmit<RichTextSpoilerValues>>(() => () => {});
+
     const [foldDialog, setFoldDialog] = useState<boolean>(false);
+    const [foldDialogPrevValues, setFoldDialogPrevValues] = useState<RichTextFoldValues | null>(null);
     const [foldDialogOnSubmit, setFoldDialogOnSubmit] =
         useState<RichTextEditorDialogSubmit<RichTextFoldValues>>(() => () => {});
+
     const [linkDialog, setLinkDialog] = useState<boolean>(false);
+    const [linkDialogPrevValues, setLinkDialogPrevValues] = useState<RichTextLinkValues | null>(null);
     const [linkDialogOnSubmit, setLinkDialogOnSubmit] =
         useState<RichTextEditorDialogSubmit<RichTextLinkValues>>(() => () => {});
+
     const [mentionDialog, setMentionDialog] = useState<boolean>(false);
     const [mentionDialogOnSubmit, setMentionDialogOnSubmit] =
         useState<RichTextEditorDialogSubmit<NameListItem>>(() => () => {});
 
-    const showSpoilerDialog = (show: boolean, onSubmit?: RichTextEditorDialogSubmit<RichTextSpoilerValues>) => {
+    const showSpoilerDialog = (
+        show: boolean, prevValues?: RichTextSpoilerValues | null,
+        onSubmit?: RichTextEditorDialogSubmit<RichTextSpoilerValues>
+    ) => {
         if (show) {
+            setSpoilerDialogPrevValues(prevValues ?? null);
             onSubmit && setSpoilerDialogOnSubmit(() => onSubmit);
             setSpoilerDialog(true);
         } else {
@@ -35,8 +45,11 @@ export default function RichTextEditorDialogs({children}: Props) {
         }
     }
 
-    const showFoldDialog = (show: boolean, onSubmit?: RichTextEditorDialogSubmit<RichTextFoldValues>) => {
+    const showFoldDialog = (
+        show: boolean, prevValues?: RichTextFoldValues | null, onSubmit?: RichTextEditorDialogSubmit<RichTextFoldValues>
+    ) => {
         if (show) {
+            setFoldDialogPrevValues(prevValues ?? null);
             onSubmit && setFoldDialogOnSubmit(() => onSubmit);
             setFoldDialog(true);
         } else {
@@ -44,8 +57,11 @@ export default function RichTextEditorDialogs({children}: Props) {
         }
     }
 
-    const showLinkDialog = (show: boolean, onSubmit?: RichTextEditorDialogSubmit<RichTextLinkValues>) => {
+    const showLinkDialog = (
+        show: boolean, prevValues?: RichTextLinkValues | null, onSubmit?: RichTextEditorDialogSubmit<RichTextLinkValues>
+    ) => {
         if (show) {
+            setLinkDialogPrevValues(prevValues ?? null);
             onSubmit && setLinkDialogOnSubmit(() => onSubmit);
             setLinkDialog(true);
         } else {
@@ -69,9 +85,11 @@ export default function RichTextEditorDialogs({children}: Props) {
             >
                 {children}
             </RichTextEditorDialogsContext.Provider>
-            {spoilerDialog && <RichTextSpoilerDialog title="" onSubmit={spoilerDialogOnSubmit}/>}
-            {foldDialog && <RichTextFoldDialog onSubmit={foldDialogOnSubmit}/>}
-            {linkDialog && <RichTextLinkDialog href="" onSubmit={linkDialogOnSubmit}/>}
+            {spoilerDialog &&
+                <RichTextSpoilerDialog prevValues={spoilerDialogPrevValues} onSubmit={spoilerDialogOnSubmit}/>
+            }
+            {foldDialog && <RichTextFoldDialog prevValues={foldDialogPrevValues} onSubmit={foldDialogOnSubmit}/>}
+            {linkDialog && <RichTextLinkDialog  prevValues={linkDialogPrevValues} onSubmit={linkDialogOnSubmit}/>}
             {mentionDialog && <RichTextMentionDialog onSubmit={mentionDialogOnSubmit}/>}
         </>
     );

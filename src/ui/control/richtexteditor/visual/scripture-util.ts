@@ -1,4 +1,4 @@
-import { BaseEditor, BaseElement, Node as SlateNode } from 'slate';
+import { Ancestor, BaseEditor, BaseElement, Node as SlateNode, NodeEntry } from 'slate';
 
 import {
     createLinkElement,
@@ -16,18 +16,22 @@ import {
 } from "ui/control/richtexteditor/visual/scripture";
 import { htmlEntities } from "util/html";
 
-export function isSelectionInElement(editor: BaseEditor, type: string): boolean {
+export function findWrappingElement(editor: BaseEditor, type: string): NodeEntry<Ancestor> | null {
     if (editor.selection == null) {
-        return false;
+        return null;
     }
     const ancestors = SlateNode.ancestors(editor, editor.selection.anchor.path);
-    for (const [element] of ancestors) {
+    for (const ancestor of ancestors) {
+        const [element] = ancestor;
         if (isScriptureElement(element) && element.type === type) {
-            return true;
+            return ancestor;
         }
     }
-    return false;
+    return null;
 }
+
+export const isSelectionInElement = (editor: BaseEditor, type: string): boolean =>
+    findWrappingElement(editor, type) != null;
 
 export function withScripture<T extends BaseEditor>(editor: T): T {
     const {isInline} = editor;

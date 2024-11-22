@@ -8,12 +8,10 @@ export interface RichTextLinkValues {
     href?: string;
 }
 
-interface Props extends RichTextEditorDialogProps<RichTextLinkValues> {
-    href: string;
-}
+type Props = RichTextEditorDialogProps<RichTextLinkValues>;
 
 const mapPropsToValues = (props: Props): RichTextLinkValues => ({
-    href: props.href
+    href: props.prevValues?.href ?? ""
 });
 
 function RichTextLinkDialog() {

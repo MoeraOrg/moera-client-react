@@ -139,7 +139,7 @@ export default function RichTextEditorDropzone({
         e.preventDefault();
     }
 
-    const submitCopyImage = (ok: boolean, {url}: RichTextCopyImageValues) => {
+    const submitCopyImage = (ok: boolean | null, {url}: RichTextCopyImageValues) => {
         setCopyImageShow(false);
         if (!ok || !url) {
             return;

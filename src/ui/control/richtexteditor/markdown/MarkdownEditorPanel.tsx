@@ -62,7 +62,7 @@ export default function MarkdownEditorPanel({
     }
 
     const onImageSubmit = (
-        ok: boolean,
+        ok: boolean | null,
         {
             source, mediaFile, href, standardSize = "large", customWidth, customHeight, align, caption, title, alt
         }: RichTextImageValues
@@ -154,7 +154,7 @@ export default function MarkdownEditorPanel({
     }
 
     const onSpoiler = (event: React.MouseEvent) => {
-        showSpoilerDialog(true, (ok: boolean, {title}: RichTextSpoilerValues) => {
+        showSpoilerDialog(true, null, (ok: boolean | null, {title}: RichTextSpoilerValues) => {
             if (textArea.current == null) {
                 return;
             }
@@ -179,7 +179,7 @@ export default function MarkdownEditorPanel({
     }
 
     const onFold = (event: React.MouseEvent) => {
-        showFoldDialog(true, (ok: boolean, {summary}: RichTextFoldValues) => {
+        showFoldDialog(true, null, (ok: boolean | null, {summary}: RichTextFoldValues) => {
             if (textArea.current == null) {
                 return;
             }
@@ -209,7 +209,7 @@ export default function MarkdownEditorPanel({
     }
 
     const onMention = (event: React.MouseEvent) => {
-        showMentionDialog(true, (ok: boolean, {nodeName, fullName}: Partial<NameListItem>) => {
+        showMentionDialog(true, (ok: boolean | null, {nodeName, fullName}: Partial<NameListItem>) => {
             showMentionDialog(false);
 
             if (textArea.current == null) {
@@ -272,7 +272,7 @@ export default function MarkdownEditorPanel({
             return;
         }
 
-        showLinkDialog(true, (ok: boolean, {href}: Partial<RichTextLinkValues>) => {
+        showLinkDialog(true, null, (ok: boolean | null, {href}: Partial<RichTextLinkValues>) => {
             showLinkDialog(false);
 
             if (textArea.current == null) {
