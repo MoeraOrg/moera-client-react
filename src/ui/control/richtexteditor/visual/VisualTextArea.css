@@ -15,3 +15,10 @@
 .visual-text-area A {
     text-decoration: underline;
 }
+
+.visual-text-area .spoiler {
+    background-color: var(--bs-gray-300);
+    color: unset;
+    font-weight: unset;
+    cursor: unset;
+}

@@ -3,7 +3,7 @@ import { Ancestor, BaseEditor, BaseElement, Node as SlateNode, NodeEntry } from 
 import {
     createLinkElement,
     createParagraphElement,
-    createScriptureText,
+    createScriptureText, createSpoilerElement,
     equalScriptureMarks,
     isLinkElement,
     isScriptureElement,
@@ -108,6 +108,8 @@ function domToScripture(node: Node, attributes: ScriptureMarks = {}): Scripture 
             return createParagraphElement(children);
         case "A":
             return createLinkElement(element.getAttribute("href") ?? "", children);
+        case "MR-SPOILER":
+            return createSpoilerElement(element.getAttribute("title") ?? "", children);
         case "BR":
             return createScriptureText("\n", attributes);
         default:
@@ -148,6 +150,11 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 context.output += `<a href="${htmlEntities(node.href)}">`;
                 scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
                 context.output += "</a>";
+                return;
+            case "spoiler":
+                context.output += `<mr-spoiler title="${htmlEntities(node.title)}">`;
+                scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
+                context.output += "</mr-spoiler>";
                 return;
         }
     }

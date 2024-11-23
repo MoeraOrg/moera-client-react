@@ -25,9 +25,22 @@ export const isLinkElement = (value: any): value is LinkElement =>
 export const createLinkElement = (href: string, children: Scripture): LinkElement =>
     ({type: "link", href, children});
 
+/* MR-SPOILER */
+
+export interface SpoilerElement extends SlateElement {
+    type: "spoiler";
+    title: string;
+}
+
+export const isSpoilerElement = (value: any): value is SpoilerElement =>
+    isScriptureElement(value) && value.type === "spoiler";
+
+export const createSpoilerElement = (title: string, children: Scripture): SpoilerElement =>
+    ({type: "spoiler", title, children});
+
 /* element */
 
-export type ScriptureElement = ParagraphElement | LinkElement;
+export type ScriptureElement = ParagraphElement | LinkElement | SpoilerElement;
 
 export const isScriptureElement = (value: any): value is ScriptureElement =>
     SlateElement.isElement(value) && "type" in value;
@@ -55,7 +68,7 @@ export const createScriptureText = (text: string, attributes: Record<string, any
 
 /* document */
 
-export const SCRIPTURE_INLINE_TYPES: string[] = ["link"];
+export const SCRIPTURE_INLINE_TYPES: string[] = ["link", "spoiler"];
 
 export type ScriptureDescendant = ScriptureElement | ScriptureText;
 

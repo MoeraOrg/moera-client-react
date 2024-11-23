@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
-import { faBold, faItalic, faLink, faStrikethrough } from '@fortawesome/free-solid-svg-icons';
+import { faBold, faExclamationCircle, faItalic, faLink, faStrikethrough } from '@fortawesome/free-solid-svg-icons';
 
 import { VisualEditorButton } from "ui/control/richtexteditor/visual/VisualEditorButton";
 import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
@@ -13,7 +13,8 @@ interface Props {
 
 export default function VisualEditorPanel({hiding}: Props) {
     const {
-        inBold, inItalic, inStrikeout, inLink, formatBold, formatItalic, formatStrikeout, formatLink
+        inBold, inItalic, inStrikeout, inLink, inSpoiler,
+        formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler
     } = useVisualEditorCommands();
 
     const {t} = useTranslation();
@@ -27,6 +28,8 @@ export default function VisualEditorPanel({hiding}: Props) {
                                     active={inItalic} command={formatItalic}/>
                 <VisualEditorButton icon={faStrikethrough} title={t("strikeout")} letter={VISUAL_EDITOR_KEYS.STRIKEOUT}
                                     active={inStrikeout} command={formatStrikeout}/>
+                <VisualEditorButton icon={faExclamationCircle} title={t("spoiler")}
+                                    active={inSpoiler} command={formatSpoiler}/>
             </div>
             <div className="group">
                 <VisualEditorButton icon={faLink} title={t("link")} letter={VISUAL_EDITOR_KEYS.LINK}
