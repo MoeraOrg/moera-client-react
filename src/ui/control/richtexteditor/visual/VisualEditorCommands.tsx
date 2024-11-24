@@ -4,6 +4,7 @@ import { ReactEditor, useSlateSelector, useSlateStatic } from 'slate-react';
 
 import { NodeName } from "api";
 import {
+    createHorizontalRuleElement,
     createLinkElement,
     createMentionElement,
     createScriptureText,
@@ -40,17 +41,14 @@ export default function VisualEditorCommands({children}: Props) {
     const inMention = useSlateSelector(editor => isSelectionInElement(editor, "mention"));
     const {showLinkDialog, showSpoilerDialog, showMentionDialog} = useRichTextEditorDialogs();
 
-    const formatBold = () => {
+    const formatBold = () =>
         editor.addMark("bold", !inBold);
-    }
 
-    const formatItalic = () => {
+    const formatItalic = () =>
         editor.addMark("italic", !inItalic);
-    }
 
-    const formatStrikeout = () => {
+    const formatStrikeout = () =>
         editor.addMark("strikeout", !inStrikeout);
-    }
 
     const formatLink = () => {
         const [element, path] = findWrappingElement(editor, "link") ?? [null, null];
@@ -124,10 +122,13 @@ export default function VisualEditorCommands({children}: Props) {
         });
     }
 
+    const formatHorizontalRule = () =>
+        editor.insertNode(createHorizontalRuleElement());
+
     return (
         <VisualEditorCommandsContext.Provider value={{
             inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention,
-            formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention
+            formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>

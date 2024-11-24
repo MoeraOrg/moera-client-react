@@ -15,6 +15,8 @@ export default function VisualRenderElement(props: RenderElementProps) {
                 return <span className="spoiler" {...attributes}>{children}</span>;
             case "mention":
                 return <span className="mention" {...attributes}>{children}</span>;
+            case "horizontal-rule":
+                return <div {...attributes}>{children}<hr/></div>;
             default:
                 return <DefaultElement {...props}/>;
         }

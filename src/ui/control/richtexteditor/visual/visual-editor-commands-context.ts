@@ -14,6 +14,7 @@ export interface VisualEditorCommandsInterface {
     formatLink: () => void;
     formatSpoiler: () => void;
     formatMention: () => void;
+    formatHorizontalRule: () => void;
 }
 
 export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInterface>({
@@ -30,6 +31,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     formatLink: () => {},
     formatSpoiler: () => {},
     formatMention: () => {},
+    formatHorizontalRule: () => {},
 });
 
 export const useVisualEditorCommands = (): VisualEditorCommandsInterface => useContext(VisualEditorCommandsContext);

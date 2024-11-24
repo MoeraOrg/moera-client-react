@@ -1,6 +1,7 @@
 import { Ancestor, BaseEditor, BaseElement, Node as SlateNode, NodeEntry } from 'slate';
 
 import {
+    createHorizontalRuleElement,
     createLinkElement,
     createMentionElement,
     createParagraphElement,
@@ -12,6 +13,7 @@ import {
     isScriptureText,
     Scripture,
     SCRIPTURE_INLINE_TYPES,
+    SCRIPTURE_VOID_TYPES,
     ScriptureDescendant,
     ScriptureMarks,
     ScriptureText
@@ -37,9 +39,11 @@ export const isSelectionInElement = (editor: BaseEditor, type: string): boolean 
     findWrappingElement(editor, type) != null;
 
 export function withScripture<T extends BaseEditor>(editor: T): T {
-    const {isInline} = editor;
+    const {isInline, isVoid} = editor;
     editor.isInline = (element: BaseElement) =>
         (isScriptureElement(element) && SCRIPTURE_INLINE_TYPES.includes(element.type)) || isInline(element);
+    editor.isVoid = (element: BaseElement) =>
+        (isScriptureElement(element) && SCRIPTURE_VOID_TYPES.includes(element.type)) || isVoid(element);
     return editor;
 }
 
@@ -127,6 +131,8 @@ function domToScripture(node: Node, attributes: ScriptureMarks = {}): Scripture 
             }
         case "MR-SPOILER":
             return createSpoilerElement(unhtmlEntities(element.getAttribute("title") ?? ""), children);
+        case "HR":
+            return createHorizontalRuleElement();
         case "BR":
             return createScriptureText("\n", attributes);
         default:
@@ -179,6 +185,9 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 context.output += ' data-href="/">';
                 scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
                 context.output += "</a>";
+                return;
+            case "horizontal-rule":
+                context.output += "<hr>";
                 return;
         }
     }

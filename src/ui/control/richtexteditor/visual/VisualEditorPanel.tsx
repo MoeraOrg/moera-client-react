@@ -7,6 +7,7 @@ import {
     faExclamationCircle,
     faItalic,
     faLink,
+    faMinus,
     faStrikethrough
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -21,7 +22,7 @@ interface Props {
 export default function VisualEditorPanel({hiding}: Props) {
     const {
         inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention,
-        formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention
+        formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule
     } = useVisualEditorCommands();
 
     const {t} = useTranslation();
@@ -39,8 +40,10 @@ export default function VisualEditorPanel({hiding}: Props) {
                                     active={inSpoiler} command={formatSpoiler}/>
             </div>
             <div className="group">
-                <VisualEditorButton icon={faAt} title={t("mention")} className="mention"
-                                    active={inMention} command={formatMention}/>
+                <VisualEditorButton icon={faMinus} title={t("horizontal-line")} command={formatHorizontalRule}/>
+            </div>
+            <div className="group">
+                <VisualEditorButton icon={faAt} title={t("mention")} active={inMention} command={formatMention}/>
             </div>
             <div className="group">
                 <VisualEditorButton icon={faLink} title={t("link")} letter={VISUAL_EDITOR_KEYS.LINK}

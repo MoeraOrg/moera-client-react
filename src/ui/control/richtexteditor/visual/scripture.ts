@@ -51,9 +51,21 @@ export const isMentionElement = (value: any): value is MentionElement =>
 export const createMentionElement = (nodeName: string, children: Scripture): MentionElement =>
     ({type: "mention", nodeName, children});
 
+/* HR */
+
+export interface HorizontalRuleElement extends SlateElement {
+    type: "horizontal-rule";
+}
+
+export const isHorizontalRuleElement = (value: any): value is HorizontalRuleElement =>
+    isScriptureElement(value) && value.type === "horizontal-rule";
+
+export const createHorizontalRuleElement = (): HorizontalRuleElement =>
+    ({type: "horizontal-rule", children: [createScriptureText("")]});
+
 /* element */
 
-export type ScriptureElement = ParagraphElement | LinkElement | SpoilerElement | MentionElement;
+export type ScriptureElement = ParagraphElement | LinkElement | SpoilerElement | MentionElement | HorizontalRuleElement;
 
 export const isScriptureElement = (value: any): value is ScriptureElement =>
     SlateElement.isElement(value) && "type" in value;
@@ -81,7 +93,9 @@ export const createScriptureText = (text: string, attributes: Record<string, any
 
 /* document */
 
-export const SCRIPTURE_INLINE_TYPES: string[] = ["link", "spoiler", "mention"];
+export const SCRIPTURE_INLINE_TYPES: ScriptureElement["type"][] = ["link", "spoiler", "mention"];
+
+export const SCRIPTURE_VOID_TYPES: ScriptureElement["type"][] = ["horizontal-rule"];
 
 export type ScriptureDescendant = ScriptureElement | ScriptureText;
 
