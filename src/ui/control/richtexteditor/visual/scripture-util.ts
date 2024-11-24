@@ -2,8 +2,10 @@ import { Ancestor, BaseEditor, BaseElement, Node as SlateNode, NodeEntry } from 
 
 import {
     createLinkElement,
+    createMentionElement,
     createParagraphElement,
-    createScriptureText, createSpoilerElement,
+    createScriptureText,
+    createSpoilerElement,
     equalScriptureMarks,
     isLinkElement,
     isScriptureElement,
@@ -14,7 +16,8 @@ import {
     ScriptureMarks,
     ScriptureText
 } from "ui/control/richtexteditor/visual/scripture";
-import { htmlEntities } from "util/html";
+import { htmlEntities, unhtmlEntities } from "util/html";
+import * as Browser from "ui/browser";
 
 export function findWrappingElement(editor: BaseEditor, type: string): NodeEntry<Ancestor> | null {
     if (editor.selection == null) {
@@ -81,23 +84,32 @@ function domToScripture(node: Node, attributes: ScriptureMarks = {}): Scripture 
             break;
     }
 
-    const children: Scripture = [];
-    Array.from(element.childNodes)
+    const childNodes = Array.from(element.childNodes)
         .map(node => domToScripture(node, markAttributes))
         .filter((node: Scripture | ScriptureDescendant | null): node is Scripture | ScriptureDescendant => node != null)
-        .flat()
-        .forEach(node => {
-            if (isScriptureText(node) && children.length > 0) {
-                const prevNode = children[children.length - 1];
-                if (isScriptureText(prevNode) && equalScriptureMarks(prevNode, node)) {
-                    prevNode.text += node.text;
-                    return;
-                }
-            }
-            children.push(node);
-        });
+        .flat();
 
-    if (children.length === 0) {
+    const children: Scripture = [];
+    let prevInline = true;
+    for (const node of childNodes) {
+        if (isScriptureText(node) && children.length > 0) {
+            const prevNode = children[children.length - 1];
+            if (isScriptureText(prevNode) && equalScriptureMarks(prevNode, node)) {
+                prevNode.text += node.text;
+                continue;
+            }
+        }
+        if (isScriptureElement(node) && SCRIPTURE_INLINE_TYPES.includes(node.type)) {
+            if (prevInline) {
+                children.push(createScriptureText(""));
+            }
+            prevInline = true;
+        } else {
+            prevInline = false;
+        }
+        children.push(node);
+    }
+    if (prevInline) {
         children.push(createScriptureText(""));
     }
 
@@ -107,9 +119,14 @@ function domToScripture(node: Node, attributes: ScriptureMarks = {}): Scripture 
         case "P":
             return createParagraphElement(children);
         case "A":
-            return createLinkElement(element.getAttribute("href") ?? "", children);
+            const nodeName = element.getAttribute("data-nodename");
+            if (nodeName == null) {
+                return createLinkElement(unhtmlEntities(element.getAttribute("href") ?? ""), children);
+            } else {
+                return createMentionElement(unhtmlEntities(nodeName), children);
+            }
         case "MR-SPOILER":
-            return createSpoilerElement(element.getAttribute("title") ?? "", children);
+            return createSpoilerElement(unhtmlEntities(element.getAttribute("title") ?? ""), children);
         case "BR":
             return createScriptureText("\n", attributes);
         default:
@@ -155,6 +172,13 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 context.output += `<mr-spoiler title="${htmlEntities(node.title)}">`;
                 scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
                 context.output += "</mr-spoiler>";
+                return;
+            case "mention":
+                const href = Browser.universalLocation(null, node.nodeName, null, "/");
+                context.output += `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(node.nodeName ?? "")}"`
+                context.output += ' data-href="/">';
+                scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
+                context.output += "</a>";
                 return;
         }
     }

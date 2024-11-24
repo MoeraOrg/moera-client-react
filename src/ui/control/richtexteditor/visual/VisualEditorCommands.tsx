@@ -1,9 +1,11 @@
 import React, { ReactNode } from 'react';
-import { Editor, Range } from 'slate';
+import { Editor, Path, Range, Transforms } from 'slate';
 import { ReactEditor, useSlateSelector, useSlateStatic } from 'slate-react';
 
+import { NodeName } from "api";
 import {
     createLinkElement,
+    createMentionElement,
     createScriptureText,
     createSpoilerElement,
     equalScriptureMarks,
@@ -18,6 +20,8 @@ import { useRichTextEditorDialogs } from "ui/control/richtexteditor/rich-text-ed
 import { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
 import { findWrappingElement, isSelectionInElement } from "ui/control/richtexteditor/visual/scripture-util";
 import { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
+import { NameListItem } from "util/names-list";
+import { mentionName } from "util/names";
 
 interface Props {
     children: ReactNode;
@@ -33,7 +37,8 @@ export default function VisualEditorCommands({children}: Props) {
     );
     const inLink = useSlateSelector(editor => isSelectionInElement(editor, "link"));
     const inSpoiler = useSlateSelector(editor => isSelectionInElement(editor, "spoiler"));
-    const {showLinkDialog, showSpoilerDialog} = useRichTextEditorDialogs();
+    const inMention = useSlateSelector(editor => isSelectionInElement(editor, "mention"));
+    const {showLinkDialog, showSpoilerDialog, showMentionDialog} = useRichTextEditorDialogs();
 
     const formatBold = () => {
         editor.addMark("bold", !inBold);
@@ -97,10 +102,32 @@ export default function VisualEditorCommands({children}: Props) {
         });
     }
 
+    const formatMention = () => {
+        if (inMention) {
+            return;
+        }
+        showMentionDialog(true, (ok: boolean | null, {nodeName, fullName}: Partial<NameListItem>) => {
+            showMentionDialog(false);
+
+            if (ok && nodeName != null) {
+                const text = (fullName || NodeName.shorten(nodeName)) ?? nodeName ?? "";
+                editor.insertNode(createMentionElement(nodeName, [createScriptureText(text)]));
+                const selection = editor.selection?.anchor.path;
+                if (selection != null) {
+                    Transforms.select(editor, {path: Path.next(Path.parent(selection)), offset: 0});
+                }
+                editor.insertText(" ");
+            } else {
+                editor.insertText(nodeName ? mentionName(nodeName) : "@");
+            }
+            ReactEditor.focus(editor);
+        });
+    }
+
     return (
         <VisualEditorCommandsContext.Provider value={{
-            inBold, inItalic, inStrikeout, inLink, inSpoiler,
-            formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler
+            inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention,
+            formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>

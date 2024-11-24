@@ -38,9 +38,22 @@ export const isSpoilerElement = (value: any): value is SpoilerElement =>
 export const createSpoilerElement = (title: string, children: Scripture): SpoilerElement =>
     ({type: "spoiler", title, children});
 
+/* MENTION */
+
+export interface MentionElement extends SlateElement {
+    type: "mention";
+    nodeName: string;
+}
+
+export const isMentionElement = (value: any): value is MentionElement =>
+    isScriptureElement(value) && value.type === "mention";
+
+export const createMentionElement = (nodeName: string, children: Scripture): MentionElement =>
+    ({type: "mention", nodeName, children});
+
 /* element */
 
-export type ScriptureElement = ParagraphElement | LinkElement | SpoilerElement;
+export type ScriptureElement = ParagraphElement | LinkElement | SpoilerElement | MentionElement;
 
 export const isScriptureElement = (value: any): value is ScriptureElement =>
     SlateElement.isElement(value) && "type" in value;
@@ -68,7 +81,7 @@ export const createScriptureText = (text: string, attributes: Record<string, any
 
 /* document */
 
-export const SCRIPTURE_INLINE_TYPES: string[] = ["link", "spoiler"];
+export const SCRIPTURE_INLINE_TYPES: string[] = ["link", "spoiler", "mention"];
 
 export type ScriptureDescendant = ScriptureElement | ScriptureText;
 

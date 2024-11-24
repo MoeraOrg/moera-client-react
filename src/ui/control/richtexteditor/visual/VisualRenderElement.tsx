@@ -13,6 +13,8 @@ export default function VisualRenderElement(props: RenderElementProps) {
                 return <a href={element.href} {...attributes}>{children}</a>;
             case "spoiler":
                 return <span className="spoiler" {...attributes}>{children}</span>;
+            case "mention":
+                return <span className="mention" {...attributes}>{children}</span>;
             default:
                 return <DefaultElement {...props}/>;
         }

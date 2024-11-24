@@ -1,4 +1,5 @@
 import React from 'react';
+import { Node } from 'slate';
 import { Editable, ReactEditor, useSlateStatic } from 'slate-react';
 
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
@@ -6,6 +7,7 @@ import VisualRenderLeaf from "ui/control/richtexteditor/visual/VisualRenderLeaf"
 import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 import { VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
 import "./VisualTextArea.css";
+import { isScriptureText } from "ui/control/richtexteditor/visual/scripture";
 
 export interface VisualTextAreaProps {
     rows?: number;
@@ -17,13 +19,27 @@ export interface VisualTextAreaProps {
 
 export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus, disabled}: VisualTextAreaProps) {
     const editor = useSlateStatic() as ReactEditor;
-    const {formatBold, formatItalic, formatStrikeout, formatLink} = useVisualEditorCommands();
+    const {formatBold, formatItalic, formatStrikeout, formatLink, formatMention} = useVisualEditorCommands();
 
     const onKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === "Enter" && (event.shiftKey || event.ctrlKey)) {
             editor.insertText("\n");
             event.preventDefault();
         }
+
+        if (event.key === "@") {
+            if (editor.selection != null) {
+                const node = Node.get(editor, editor.selection.anchor.path);
+                if (isScriptureText(node)) {
+                    const offset = editor.selection.anchor.offset;
+                    if (offset === 0 || /\s/.test(node.text.charAt(offset - 1))) {
+                        formatMention();
+                        event.preventDefault();
+                    }
+                }
+            }
+        }
+
         if (event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
             if (event.code === "Key" + VISUAL_EDITOR_KEYS.BOLD) {
                 formatBold();

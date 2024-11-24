@@ -22,3 +22,7 @@
     font-weight: unset;
     cursor: unset;
 }
+
+.visual-text-area .mention {
+    color: var(--bs-link-color);
+}
