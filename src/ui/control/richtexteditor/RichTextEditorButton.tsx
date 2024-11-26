@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ForwardedRef, forwardRef } from 'react';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
@@ -14,12 +14,16 @@ interface Props {
     onClick?: (event: React.MouseEvent) => void;
 }
 
-const RichTextEditorButton = ({icon, title, letter, className, active, onClick}: Props) => (
+const RichTextEditorButtonImpl = (
+    {icon, title, letter, className, active, onClick}: Props, ref: ForwardedRef<HTMLButtonElement>
+) => (
     <button className={cx("rich-text-editor-button", className, {active})}
             title={letter ? `${title} (Ctrl-${letter})` : title}
-            data-letter={letter} onClick={onClick}>
+            data-letter={letter} onClick={onClick} ref={ref}>
         <FontAwesomeIcon icon={icon}/>
     </button>
 )
+
+const RichTextEditorButton = forwardRef(RichTextEditorButtonImpl);
 
 export default RichTextEditorButton;

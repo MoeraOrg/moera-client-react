@@ -15,6 +15,7 @@ export interface VisualEditorCommandsInterface {
     formatSpoiler: () => void;
     formatMention: () => void;
     formatHorizontalRule: () => void;
+    formatEmoji: (emoji: string) => void;
 }
 
 export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInterface>({
@@ -32,6 +33,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     formatSpoiler: () => {},
     formatMention: () => {},
     formatHorizontalRule: () => {},
+    formatEmoji: () => {},
 });
 
 export const useVisualEditorCommands = (): VisualEditorCommandsInterface => useContext(VisualEditorCommandsContext);

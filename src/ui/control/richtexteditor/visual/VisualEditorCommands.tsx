@@ -125,10 +125,16 @@ export default function VisualEditorCommands({children}: Props) {
     const formatHorizontalRule = () =>
         editor.insertNode(createHorizontalRuleElement());
 
+    const formatEmoji = (emoji: string) => {
+        editor.insertText(emoji);
+        ReactEditor.focus(editor);
+    }
+
     return (
         <VisualEditorCommandsContext.Provider value={{
             inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention,
-            formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule
+            formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
+            formatEmoji
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>

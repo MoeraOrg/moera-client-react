@@ -212,6 +212,7 @@
   "email": "E-mail",
   "email-not-set": "Unfortunately, E-mail address for blog <b>{location}</b> is not set, so automatic password reset is impossible. Please, contact your Moera provider or server owner to find alternative ways to reset the password.",
   "email-set": "E-mail address set",
+  "emoji": "Emoji",
   "enable-oppose-reactions": "Enable \"Oppose\" reactions",
   "enable-reactions": "Enable reactions",
   "enter-name": "Enter name...",

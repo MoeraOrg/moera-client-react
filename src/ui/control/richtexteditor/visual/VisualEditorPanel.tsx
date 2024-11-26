@@ -11,7 +11,9 @@ import {
     faStrikethrough
 } from '@fortawesome/free-solid-svg-icons';
 
+import * as Browser from "ui/browser";
 import { VisualEditorButton } from "ui/control/richtexteditor/visual/VisualEditorButton";
+import VisualEditorEmojiButton from "ui/control/richtexteditor/visual/VisualEditorEmojiButton";
 import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 import { VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
 
@@ -22,7 +24,8 @@ interface Props {
 export default function VisualEditorPanel({hiding}: Props) {
     const {
         inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention,
-        formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule
+        formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
+        formatEmoji
     } = useVisualEditorCommands();
 
     const {t} = useTranslation();
@@ -43,6 +46,7 @@ export default function VisualEditorPanel({hiding}: Props) {
                 <VisualEditorButton icon={faMinus} title={t("horizontal-line")} command={formatHorizontalRule}/>
             </div>
             <div className="group">
+                {!Browser.isMobile() && <VisualEditorEmojiButton onSelect={formatEmoji}/>}
                 <VisualEditorButton icon={faAt} title={t("mention")} active={inMention} command={formatMention}/>
             </div>
             <div className="group">

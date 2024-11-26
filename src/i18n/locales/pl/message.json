@@ -212,6 +212,7 @@
   "email": "E-mail",
   "email-not-set": "Niestety, adres e-mail dla bloga <b>{location}</b> nie został ustawiony, więc automatyczne resetowanie hasła jest niemożliwe. Skontaktuj się z dostawcą Moera lub właścicielem serwera, aby znaleźć alternatywne sposoby resetowania hasła.",
   "email-set": "Adres e-mail ustawiony",
+  "emoji": "Emoji",
   "enable-oppose-reactions": "Włącz reakcje \"Przeciwny\"",
   "enable-reactions": "Włącz reakcje",
   "enter-name": "Wpisz imię...",
