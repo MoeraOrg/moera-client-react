@@ -115,7 +115,7 @@ export default function VisualEditorCommands({children}: Props) {
         });
     }
 
-    const formatMention = () => {
+    const formatMention = (typeOnCancel: boolean) => {
         if (inMention) {
             return;
         }
@@ -130,7 +130,7 @@ export default function VisualEditorCommands({children}: Props) {
                     Transforms.select(editor, {path: Path.next(Path.parent(selection)), offset: 0});
                 }
                 editor.insertText(" ");
-            } else {
+            } else if (typeOnCancel) {
                 editor.insertText(nodeName ? mentionName(nodeName) : "@");
             }
             ReactEditor.focus(editor);

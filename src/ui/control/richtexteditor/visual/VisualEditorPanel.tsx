@@ -57,7 +57,7 @@ export default function VisualEditorPanel({hiding}: Props) {
             <div className="group">
                 {!Browser.isMobile() && <VisualEditorEmojiButton onSelect={formatEmoji}/>}
                 <VisualEditorButton icon={msAlternateEmail} title={t("mention")} active={inMention}
-                                    command={formatMention}/>
+                                    command={() => formatMention(false)}/>
             </div>
             <div className="group">
                 <VisualEditorButton icon={msAddLink} title={t("link")} letter={VISUAL_EDITOR_KEYS.LINK}

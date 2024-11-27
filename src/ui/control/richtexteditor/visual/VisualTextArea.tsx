@@ -63,7 +63,7 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
                 if (isScriptureText(node)) {
                     const offset = editor.selection.anchor.offset;
                     if (offset === 0 || /\s/.test(node.text.charAt(offset - 1))) {
-                        formatMention();
+                        formatMention(true);
                         event.preventDefault();
                     }
                 }

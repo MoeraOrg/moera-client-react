@@ -14,7 +14,7 @@ export interface VisualEditorCommandsInterface {
     formatStrikeout: () => void;
     formatLink: () => void;
     formatSpoiler: () => void;
-    formatMention: () => void;
+    formatMention: (typeOnCancel: boolean) => void;
     formatHorizontalRule: () => void;
     formatEmoji: (emoji: string) => void;
     formatBlockquote: () => void;
