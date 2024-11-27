@@ -1,12 +1,11 @@
 import React, { ForwardedRef, forwardRef } from 'react';
 import cx from 'classnames';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
+import { MaterialSymbol } from "ui/material-symbols";
 import "./RichTextEditorButton.css";
 
 interface Props {
-    icon: IconProp;
+    icon: MaterialSymbol;
     title: string;
     letter?: string;
     className?: string;
@@ -20,7 +19,7 @@ const RichTextEditorButtonImpl = (
     <button className={cx("rich-text-editor-button", className, {active})}
             title={letter ? `${title} (Ctrl-${letter})` : title}
             data-letter={letter} onClick={onClick} ref={ref}>
-        <FontAwesomeIcon icon={icon}/>
+        {icon && React.createElement(icon, {fill: "currentColor"})}
     </button>
 )
 

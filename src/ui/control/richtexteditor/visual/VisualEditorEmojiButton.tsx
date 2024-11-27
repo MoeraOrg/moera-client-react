@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { faFaceSmile } from '@fortawesome/free-regular-svg-icons';
 import EmojiPicker from '@emoji-mart/react';
 import emojiData from '@emoji-mart/data';
 import i18n from 'i18next';
 
+import { msAddReaction } from "ui/material-symbols";
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
 import { useButtonPopper } from "ui/hook";
 
@@ -27,7 +27,7 @@ export default function VisualEditorEmojiButton({onSelect}: Props) {
 
     return (
         <>
-            <RichTextEditorButton ref={setButtonRef} icon={faFaceSmile} title={t("emoji")} onClick={onToggle}/>
+            <RichTextEditorButton ref={setButtonRef} icon={msAddReaction} title={t("emoji")} onClick={onToggle}/>
             {visible &&
                 <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                      className={`fade popover bs-popover-${placement} shadow-sm show`}>

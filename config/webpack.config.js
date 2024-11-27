@@ -417,7 +417,26 @@ module.exports = function (webpackEnv) {
             },
             {
               test: /\.isvg$/,
-              loader: require.resolve('svg-inline-loader'),
+              use: [
+                {
+                  loader: require.resolve('@svgr/webpack'),
+                  options: {
+                    prettier: false,
+                    svgo: false,
+                    svgoConfig: {
+                      plugins: [{ removeViewBox: false }],
+                    },
+                    titleProp: true,
+                    ref: true,
+                  },
+                },
+                {
+                  loader: require.resolve('svg-inline-loader'),
+                },
+              ],
+              issuer: {
+                and: [/\.(ts|tsx|js|jsx|md|mdx)$/],
+              },
             },
             // Process application JS with Babel.
             // The preset includes JSX, Flow, TypeScript, and some ESnext features.

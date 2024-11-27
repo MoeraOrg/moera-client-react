@@ -1,11 +1,11 @@
 import React from 'react';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { ReactEditor, useSlateStatic } from 'slate-react';
 
+import { MaterialSymbol } from "ui/material-symbols";
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
 
 interface Props {
-    icon: IconProp;
+    icon: MaterialSymbol;
     title: string;
     letter?: string;
     className?: string;

@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import cx from 'classnames';
-import {
-    faAt,
-    faBold,
-    faCaretSquareDown,
-    faExclamationCircle,
-    faImage,
-    faItalic,
-    faLink,
-    faQuoteLeft,
-    faStrikethrough
-} from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { NodeName, PostingFeatures, PrivateMediaFileInfo, SourceFormat } from "api";
+import {
+    msAddLink,
+    msAddPhotoAlternate,
+    msAlternateEmail, msExpandCircleDown,
+    msFormatBold,
+    msFormatItalic,
+    msFormatQuote,
+    msFormatStrikethrough,
+    msReport
+} from "ui/material-symbols";
 import * as Browser from "ui/browser";
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
 import { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
@@ -295,22 +294,25 @@ export default function MarkdownEditorPanel({
     return (
         <div className={cx("rich-text-editor-panel", {"hiding": hiding})} ref={panel}>
             <div className="group">
-                <RichTextEditorButton icon={faBold} title={t("bold")} letter="B" onClick={onBold}/>
-                <RichTextEditorButton icon={faItalic} title={t("italic")} letter="I" onClick={onItalic}/>
-                <RichTextEditorButton icon={faStrikethrough} title={t("strikeout")} letter="R"
+                <RichTextEditorButton icon={msFormatBold} title={t("bold")} letter="B" onClick={onBold}/>
+                <RichTextEditorButton icon={msFormatItalic} title={t("italic")} letter="I" onClick={onItalic}/>
+                <RichTextEditorButton icon={msFormatStrikethrough} title={t("strikeout")} letter="R"
                                       onClick={onStrike}/>
             </div>
             <div className="group">
-                <RichTextEditorButton icon={faExclamationCircle} title={t("spoiler")} onClick={onSpoiler}/>
-                <RichTextEditorButton icon={faCaretSquareDown} title={t("fold")} onClick={onFold}/>
+                <RichTextEditorButton icon={msReport} title={t("spoiler")} onClick={onSpoiler}/>
+                <RichTextEditorButton icon={msExpandCircleDown} title={t("fold")} onClick={onFold}/>
             </div>
             <div className="group">
-                <RichTextEditorButton icon={faAt} title={t("mention")} className="mention" onClick={onMention}/>
-                <RichTextEditorButton icon={faQuoteLeft} title={t("quote")} letter="Q" onClick={onQuote}/>
+                <RichTextEditorButton icon={msAlternateEmail} title={t("mention")} className="mention"
+                                      onClick={onMention}/>
+                <RichTextEditorButton icon={msFormatQuote} title={t("quote")} letter="Q" onClick={onQuote}/>
             </div>
             <div className="group">
-                <RichTextEditorButton icon={faLink} title={t("link")} letter="L" onClick={onLink}/>
-                {!noMedia && <RichTextEditorButton icon={faImage} title={t("image")} letter="M" onClick={onImage}/>}
+                <RichTextEditorButton icon={msAddLink} title={t("link")} letter="L" onClick={onLink}/>
+                {!noMedia &&
+                    <RichTextEditorButton icon={msAddPhotoAlternate} title={t("image")} letter="M" onClick={onImage}/>
+                }
             </div>
             {imageDialog &&
                 <RichTextImageDialog onSubmit={onImageSubmit} nodeName={nodeName}
