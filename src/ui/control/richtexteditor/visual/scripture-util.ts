@@ -2,6 +2,7 @@ import { Ancestor, BaseEditor, BaseElement, Node as SlateNode, NodeEntry, Transf
 
 import { SMILEY_LIKE } from "smileys";
 import {
+    createBlockquoteElement,
     createHorizontalRuleElement,
     createLinkElement,
     createMentionElement,
@@ -27,7 +28,7 @@ export function findWrappingElement(editor: BaseEditor, type: string): NodeEntry
     if (editor.selection == null) {
         return null;
     }
-    const ancestors = SlateNode.ancestors(editor, editor.selection.anchor.path);
+    const ancestors = SlateNode.ancestors(editor, editor.selection.anchor.path, {reverse: true});
     for (const ancestor of ancestors) {
         const [element] = ancestor;
         if (isScriptureElement(element) && element.type === type) {
@@ -137,6 +138,8 @@ function domToScripture(node: Node, attributes: ScriptureMarks = {}): Scripture 
             return createHorizontalRuleElement();
         case "BR":
             return createScriptureText("\n", attributes);
+        case "BLOCKQUOTE":
+            return createBlockquoteElement(children);
         default:
             return children;
     }
@@ -190,6 +193,11 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 return;
             case "horizontal-rule":
                 context.output += "<hr>";
+                return;
+            case "blockquote":
+                context.output += "<blockquote>";
+                scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
+                context.output += "</blockquote>";
                 return;
         }
     }

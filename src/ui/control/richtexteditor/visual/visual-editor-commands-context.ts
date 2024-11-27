@@ -7,6 +7,7 @@ export interface VisualEditorCommandsInterface {
     inLink: boolean;
     inSpoiler: boolean;
     inMention: boolean;
+    inBlockquote: boolean;
 
     formatBold: () => void;
     formatItalic: () => void;
@@ -16,6 +17,8 @@ export interface VisualEditorCommandsInterface {
     formatMention: () => void;
     formatHorizontalRule: () => void;
     formatEmoji: (emoji: string) => void;
+    formatBlockquote: () => void;
+    formatBlockunquote: () => void;
 }
 
 export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInterface>({
@@ -25,6 +28,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     inLink: false,
     inSpoiler: false,
     inMention: false,
+    inBlockquote: false,
 
     formatBold: () => {},
     formatItalic: () => {},
@@ -34,6 +38,8 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     formatMention: () => {},
     formatHorizontalRule: () => {},
     formatEmoji: () => {},
+    formatBlockquote: () => {},
+    formatBlockunquote: () => {},
 });
 
 export const useVisualEditorCommands = (): VisualEditorCommandsInterface => useContext(VisualEditorCommandsContext);

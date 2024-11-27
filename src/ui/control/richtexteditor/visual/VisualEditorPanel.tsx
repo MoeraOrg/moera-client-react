@@ -8,6 +8,7 @@ import {
     faItalic,
     faLink,
     faMinus,
+    faQuoteLeft, faQuoteRight,
     faStrikethrough
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -23,9 +24,9 @@ interface Props {
 
 export default function VisualEditorPanel({hiding}: Props) {
     const {
-        inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention,
+        inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote,
         formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
-        formatEmoji
+        formatEmoji, formatBlockquote, formatBlockunquote
     } = useVisualEditorCommands();
 
     const {t} = useTranslation();
@@ -43,6 +44,11 @@ export default function VisualEditorPanel({hiding}: Props) {
                                     active={inSpoiler} command={formatSpoiler}/>
             </div>
             <div className="group">
+                <VisualEditorButton icon={faQuoteLeft} title={t("quote")} letter={VISUAL_EDITOR_KEYS.BLOCKQUOTE}
+                                    command={formatBlockquote}/>
+                {inBlockquote &&
+                    <VisualEditorButton icon={faQuoteRight} title={t("unquote")} command={formatBlockunquote}/>
+                }
                 <VisualEditorButton icon={faMinus} title={t("horizontal-line")} command={formatHorizontalRule}/>
             </div>
             <div className="group">

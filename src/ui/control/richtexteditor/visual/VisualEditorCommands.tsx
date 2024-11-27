@@ -4,6 +4,7 @@ import { ReactEditor, useSlateSelector, useSlateStatic } from 'slate-react';
 
 import { NodeName } from "api";
 import {
+    createBlockquoteElement,
     createHorizontalRuleElement,
     createLinkElement,
     createMentionElement,
@@ -39,6 +40,7 @@ export default function VisualEditorCommands({children}: Props) {
     const inLink = useSlateSelector(editor => isSelectionInElement(editor, "link"));
     const inSpoiler = useSlateSelector(editor => isSelectionInElement(editor, "spoiler"));
     const inMention = useSlateSelector(editor => isSelectionInElement(editor, "mention"));
+    const inBlockquote = useSlateSelector(editor => isSelectionInElement(editor, "blockquote"));
     const {showLinkDialog, showSpoilerDialog, showMentionDialog} = useRichTextEditorDialogs();
 
     const formatBold = () =>
@@ -130,11 +132,26 @@ export default function VisualEditorCommands({children}: Props) {
         ReactEditor.focus(editor);
     }
 
+    const formatBlockquote = () => {
+        if (editor.selection == null || Range.isCollapsed(editor.selection)) {
+            editor.wrapNodes(createBlockquoteElement([]));
+        } else {
+            editor.wrapNodes(createBlockquoteElement([]), {split: true});
+        }
+    }
+
+    const formatBlockunquote = () => {
+        const [, path] = findWrappingElement(editor, "blockquote") ?? [null, null];
+        if (path != null) {
+            editor.unwrapNodes({at: path});
+        }
+    }
+
     return (
         <VisualEditorCommandsContext.Provider value={{
-            inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention,
+            inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote,
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
-            formatEmoji
+            formatEmoji, formatBlockquote, formatBlockunquote
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>

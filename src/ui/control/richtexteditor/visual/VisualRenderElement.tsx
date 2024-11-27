@@ -17,6 +17,8 @@ export default function VisualRenderElement(props: RenderElementProps) {
                 return <span className="mention" {...attributes}>{children}</span>;
             case "horizontal-rule":
                 return <div {...attributes}>{children}<hr/></div>;
+            case "blockquote":
+                return <blockquote {...attributes}>{children}</blockquote>;
             default:
                 return <DefaultElement {...props}/>;
         }

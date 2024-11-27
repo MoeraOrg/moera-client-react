@@ -1,13 +1,17 @@
 import React from 'react';
-import { Node } from 'slate';
+import { Node, Path, Range } from 'slate';
 import { Editable, ReactEditor, useSlateStatic } from 'slate-react';
 
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
 import VisualRenderLeaf from "ui/control/richtexteditor/visual/VisualRenderLeaf";
 import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 import { VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
-import { isScriptureText } from "ui/control/richtexteditor/visual/scripture";
-import { scriptureReplaceSmileys } from "ui/control/richtexteditor/visual/scripture-util";
+import {
+    createParagraphElement,
+    createScriptureText,
+    isScriptureText
+} from "ui/control/richtexteditor/visual/scripture";
+import { findWrappingElement, scriptureReplaceSmileys } from "ui/control/richtexteditor/visual/scripture-util";
 import "./VisualTextArea.css";
 
 export interface VisualTextAreaProps {
@@ -20,11 +24,33 @@ export interface VisualTextAreaProps {
 
 export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus, disabled}: VisualTextAreaProps) {
     const editor = useSlateStatic() as ReactEditor;
-    const {formatBold, formatItalic, formatStrikeout, formatLink, formatMention} = useVisualEditorCommands();
+    const {
+        inBlockquote, formatBold, formatItalic, formatStrikeout, formatLink, formatMention
+    } = useVisualEditorCommands();
 
     const onKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === "Enter" || event.key === " ") {
             setTimeout(() => scriptureReplaceSmileys(editor));
+        }
+        // TODO Ctrl-Enter in the case of comments
+        if (
+            event.key === "Enter" && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey
+            && editor.selection != null && Range.isCollapsed(editor.selection)
+        ) {
+            if (inBlockquote) {
+                const [, path] = findWrappingElement(editor, "blockquote") ?? [null, null];
+                if (path != null) {
+                    if (editor.isStart(editor.selection.anchor, path) && !Path.hasPrevious(path)) {
+                        editor.insertNode(createParagraphElement([createScriptureText("")]), {at: path});
+                        event.preventDefault();
+                    }
+                    if (editor.isEnd(editor.selection.anchor, path) && !Node.has(editor, Path.next(path))) {
+                        editor.insertNode(createParagraphElement([createScriptureText("")]), {at: Path.next(path)});
+                        editor.move({distance: 1, unit: "line"});
+                        event.preventDefault();
+                    }
+                }
+            }
         }
         if (event.key === "Enter" && (event.shiftKey || event.ctrlKey)) {
             editor.insertText("\n");

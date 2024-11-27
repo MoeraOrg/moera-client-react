@@ -63,9 +63,27 @@ export const isHorizontalRuleElement = (value: any): value is HorizontalRuleElem
 export const createHorizontalRuleElement = (): HorizontalRuleElement =>
     ({type: "horizontal-rule", children: [createScriptureText("")]});
 
+/* BLOCKQUOTE */
+
+export interface BlockquoteElement extends SlateElement {
+    type: "blockquote";
+}
+
+export const isBlockquoteElement = (value: any): value is BlockquoteElement =>
+    isScriptureElement(value) && value.type === "blockquote";
+
+export const createBlockquoteElement = (children: Scripture): BlockquoteElement =>
+    ({type: "blockquote", children});
+
 /* element */
 
-export type ScriptureElement = ParagraphElement | LinkElement | SpoilerElement | MentionElement | HorizontalRuleElement;
+export type ScriptureElement =
+    ParagraphElement
+    | LinkElement
+    | SpoilerElement
+    | MentionElement
+    | HorizontalRuleElement
+    | BlockquoteElement;
 
 export const isScriptureElement = (value: any): value is ScriptureElement =>
     SlateElement.isElement(value) && "type" in value;
@@ -93,9 +111,11 @@ export const createScriptureText = (text: string, attributes: Record<string, any
 
 /* document */
 
-export const SCRIPTURE_INLINE_TYPES: ScriptureElement["type"][] = ["link", "spoiler", "mention"];
+export type ScriptureElementType = ScriptureElement["type"];
 
-export const SCRIPTURE_VOID_TYPES: ScriptureElement["type"][] = ["horizontal-rule"];
+export const SCRIPTURE_INLINE_TYPES: ScriptureElementType[] = ["link", "spoiler", "mention"];
+
+export const SCRIPTURE_VOID_TYPES: ScriptureElementType[] = ["horizontal-rule"];
 
 export type ScriptureDescendant = ScriptureElement | ScriptureText;
 

@@ -4,31 +4,6 @@
     clear: both;
 }
 
-.entry BLOCKQUOTE {
-    border-left: 3px solid var(--bs-cyan);
-    padding: .2rem .2rem .2rem 2.7rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.entry BLOCKQUOTE BLOCKQUOTE {
-    padding-left: 1.5rem;
-}
-
-.entry BLOCKQUOTE:not(BLOCKQUOTE BLOCKQUOTE)::before {
-    content: "\201C";
-    font-family: serif;
-    font-size: 4rem;
-    color: var(--bs-cyan);
-    position: absolute;
-    left: .5rem;
-    top: -1.5rem;
-}
-
-.entry BLOCKQUOTE BLOCKQUOTE:last-child, .entry BLOCKQUOTE P:last-child {
-    margin-bottom: 0;
-}
-
 .entry A:hover {
     text-decoration: underline;
 }
