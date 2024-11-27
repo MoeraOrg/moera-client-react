@@ -38,6 +38,19 @@ export const isSpoilerElement = (value: any): value is SpoilerElement =>
 export const createSpoilerElement = (title: string, children: Scripture): SpoilerElement =>
     ({type: "spoiler", title, children});
 
+/* MR-SPOILER-BLOCK */
+
+export interface SpoilerBlockElement extends SlateElement {
+    type: "spoiler-block";
+    title: string;
+}
+
+export const isSpoilerBlockElement = (value: any): value is SpoilerBlockElement =>
+    isScriptureElement(value) && value.type === "spoiler-block";
+
+export const createSpoilerBlockElement = (title: string, children: Scripture): SpoilerBlockElement =>
+    ({type: "spoiler-block", title, children});
+
 /* MENTION */
 
 export interface MentionElement extends SlateElement {
@@ -81,6 +94,7 @@ export type ScriptureElement =
     ParagraphElement
     | LinkElement
     | SpoilerElement
+    | SpoilerBlockElement
     | MentionElement
     | HorizontalRuleElement
     | BlockquoteElement;

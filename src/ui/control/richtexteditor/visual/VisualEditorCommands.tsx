@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Editor, Path, Range, Transforms } from 'slate';
+import { Editor, Element, Node, Path, Range, Transforms } from 'slate';
 import { ReactEditor, useSlateSelector, useSlateStatic } from 'slate-react';
 
 import { NodeName } from "api";
@@ -9,12 +9,15 @@ import {
     createLinkElement,
     createMentionElement,
     createScriptureText,
+    createSpoilerBlockElement,
     createSpoilerElement,
     equalScriptureMarks,
     isLinkElement,
+    isSpoilerBlockElement,
     isSpoilerElement,
     LinkElement,
     ScriptureMarks,
+    SpoilerBlockElement,
     SpoilerElement
 } from "ui/control/richtexteditor/visual/scripture";
 import { VisualEditorCommandsContext } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
@@ -38,7 +41,7 @@ export default function VisualEditorCommands({children}: Props) {
         equalScriptureMarks
     );
     const inLink = useSlateSelector(editor => isSelectionInElement(editor, "link"));
-    const inSpoiler = useSlateSelector(editor => isSelectionInElement(editor, "spoiler"));
+    const inSpoiler = useSlateSelector(editor => isSelectionInElement(editor, ["spoiler", "spoiler-block"]));
     const inMention = useSlateSelector(editor => isSelectionInElement(editor, "mention"));
     const inBlockquote = useSlateSelector(editor => isSelectionInElement(editor, "blockquote"));
     const {showLinkDialog, showSpoilerDialog, showMentionDialog} = useRichTextEditorDialogs();
@@ -78,14 +81,16 @@ export default function VisualEditorCommands({children}: Props) {
     }
 
     const formatSpoiler = () => {
-        const [element, path] = findWrappingElement(editor, "spoiler") ?? [null, null];
-        const prevValues = element != null && isSpoilerElement(element) ? {title: element.title} : null;
+        const [element, path] = findWrappingElement(editor, ["spoiler", "spoiler-block"]) ?? [null, null];
+        const prevValues = element != null && (isSpoilerElement(element) || isSpoilerBlockElement(element))
+            ? {title: element.title}
+            : null;
 
         showSpoilerDialog(true, prevValues, (ok: boolean | null, {title = ""}: Partial<RichTextSpoilerValues>) => {
             showSpoilerDialog(false);
             if (path != null) {
                 if (ok) {
-                    editor.setNodes<SpoilerElement>({title}, {at: path});
+                    editor.setNodes<SpoilerElement | SpoilerBlockElement>({title}, {at: path});
                 } else if (ok == null) {
                     editor.unwrapNodes({at: path});
                 }
@@ -94,7 +99,15 @@ export default function VisualEditorCommands({children}: Props) {
                     if (editor.selection == null || Range.isCollapsed(editor.selection)) {
                         editor.insertNode(createSpoilerElement(title, [createScriptureText("")]));
                     } else {
-                        editor.wrapNodes(createSpoilerElement(title, []), {split: true});
+                        const [parent] = Node.common(editor, editor.selection.anchor.path, editor.selection.focus.path);
+                        if (
+                            Editor.isEditor(parent)
+                            || (Element.isElement(parent) && editor.isBlock(parent) && editor.hasBlocks(parent))
+                        ) {
+                            editor.wrapNodes(createSpoilerBlockElement(title, []), {split: true});
+                        } else {
+                            editor.wrapNodes(createSpoilerElement(title, []), {split: true});
+                        }
                     }
                 }
             }

@@ -8,6 +8,7 @@ import {
     createMentionElement,
     createParagraphElement,
     createScriptureText,
+    createSpoilerBlockElement,
     createSpoilerElement,
     equalScriptureMarks,
     isLinkElement,
@@ -17,6 +18,7 @@ import {
     SCRIPTURE_INLINE_TYPES,
     SCRIPTURE_VOID_TYPES,
     ScriptureDescendant,
+    ScriptureElementType,
     ScriptureMarks,
     ScriptureText
 } from "ui/control/richtexteditor/visual/scripture";
@@ -24,21 +26,28 @@ import * as Browser from "ui/browser";
 import { htmlEntities, unhtmlEntities } from "util/html";
 import { smileyReplacer, TextReplacementFunction } from "util/text";
 
-export function findWrappingElement(editor: BaseEditor, type: string): NodeEntry<Ancestor> | null {
+export function findWrappingElement(
+    editor: BaseEditor, type: ScriptureElementType | ScriptureElementType[]
+): NodeEntry<Ancestor> | null {
     if (editor.selection == null) {
         return null;
     }
     const ancestors = SlateNode.ancestors(editor, editor.selection.anchor.path, {reverse: true});
     for (const ancestor of ancestors) {
         const [element] = ancestor;
-        if (isScriptureElement(element) && element.type === type) {
+        if (
+            isScriptureElement(element)
+            && ((Array.isArray(type) && type.includes(element.type)) || element.type === type)
+        ) {
             return ancestor;
         }
     }
     return null;
 }
 
-export const isSelectionInElement = (editor: BaseEditor, type: string): boolean =>
+export const isSelectionInElement = (
+    editor: BaseEditor, type: ScriptureElementType | ScriptureElementType[]
+): boolean =>
     findWrappingElement(editor, type) != null;
 
 export function withScripture<T extends BaseEditor>(editor: T): T {
@@ -134,6 +143,8 @@ function domToScripture(node: Node, attributes: ScriptureMarks = {}): Scripture 
             }
         case "MR-SPOILER":
             return createSpoilerElement(unhtmlEntities(element.getAttribute("title") ?? ""), children);
+        case "MR-SPOILER-BLOCK":
+            return createSpoilerBlockElement(unhtmlEntities(element.getAttribute("title") ?? ""), children);
         case "HR":
             return createHorizontalRuleElement();
         case "BR":
@@ -183,6 +194,11 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 context.output += `<mr-spoiler title="${htmlEntities(node.title)}">`;
                 scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
                 context.output += "</mr-spoiler>";
+                return;
+            case "spoiler-block":
+                context.output += `<mr-spoiler-block title="${htmlEntities(node.title)}">`;
+                scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
+                context.output += "</mr-spoiler-block>";
                 return;
             case "mention":
                 const href = Browser.universalLocation(null, node.nodeName, null, "/");

@@ -124,7 +124,7 @@ export default function EntryHtml({
             );
         });
         dom.current.querySelectorAll("mr-spoiler").forEach(node => {
-            const title = node.getAttribute("title") ?? undefined;
+            const title = node.getAttribute("title") || undefined;
             const html = node.innerHTML;
 
             createRoot(node).render(
@@ -134,7 +134,7 @@ export default function EntryHtml({
             );
         });
         dom.current.querySelectorAll("div.mr-spoiler").forEach(node => {
-            const title = node.getAttribute("data-title") ?? undefined;
+            const title = node.getAttribute("data-title") || undefined;
             const html = node.innerHTML;
 
             createRoot(node).render(

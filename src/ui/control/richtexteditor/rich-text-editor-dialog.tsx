@@ -42,7 +42,7 @@ export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V e
                         <DialogBody {...props}/>
                     </div>
                     <div className="modal-footer">
-                        <Button variant={prevValues == null ? "secondary" : "danger me-5"}
+                        <Button variant={prevValues == null ? "secondary" : "danger me-auto"}
                                 onClick={onCancel}>{prevValues == null ? t("cancel") : t("delete")}</Button>
                         <Button variant="primary" type="submit">{t("ok")}</Button>
                     </div>

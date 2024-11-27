@@ -23,6 +23,10 @@
     cursor: unset;
 }
 
+.visual-text-area DIV.spoiler {
+    margin-bottom: 1rem;
+}
+
 .visual-text-area .mention {
     color: var(--bs-link-color);
 }
