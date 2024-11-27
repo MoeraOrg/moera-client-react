@@ -8,7 +8,8 @@ import {
     faItalic,
     faLink,
     faMinus,
-    faQuoteLeft, faQuoteRight,
+    faQuoteLeft,
+    faQuoteRight,
     faStrikethrough
 } from '@fortawesome/free-solid-svg-icons';
 
