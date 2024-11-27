@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { createEditor, Descendant } from 'slate';
 import { ReactEditor, Slate, withReact } from 'slate-react';
+import { withHistory } from 'slate-history';
 import deepEqual from 'react-fast-compare';
 
 import VisualEditorCommands from "ui/control/richtexteditor/visual/VisualEditorCommands";
@@ -19,7 +20,7 @@ export type VisualEditorProps = {
 export default function VisualEditor({
     value, rows, maxHeight, placeholder, autoFocus, disabled, hidingPanel, onChange
 }: VisualEditorProps) {
-    const [editor] = useState(() => withScripture(withReact(createEditor())));
+    const [editor] = useState(() => withScripture(withHistory(withReact(createEditor()))));
 
     useEffect(() => {
         if (!disabled && autoFocus) {

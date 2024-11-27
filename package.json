@@ -69,6 +69,7 @@
     "shorten-url": "^1.1.0",
     "slate": "^0.110.2",
     "slate-dom": "^0.111.0",
+    "slate-history": "^0.110.3",
     "slate-react": "^0.111.0",
     "stream-browserify": "^3.0.0",
     "twemoji-parser": "^14.0.0",
