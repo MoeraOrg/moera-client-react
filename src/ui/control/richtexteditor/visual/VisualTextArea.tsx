@@ -6,8 +6,9 @@ import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderEl
 import VisualRenderLeaf from "ui/control/richtexteditor/visual/VisualRenderLeaf";
 import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 import { VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
-import "./VisualTextArea.css";
 import { isScriptureText } from "ui/control/richtexteditor/visual/scripture";
+import { scriptureReplaceSmileys } from "ui/control/richtexteditor/visual/scripture-util";
+import "./VisualTextArea.css";
 
 export interface VisualTextAreaProps {
     rows?: number;
@@ -22,6 +23,9 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
     const {formatBold, formatItalic, formatStrikeout, formatLink, formatMention} = useVisualEditorCommands();
 
     const onKeyDown = (event: React.KeyboardEvent) => {
+        if (event.key === "Enter" || event.key === " ") {
+            setTimeout(() => scriptureReplaceSmileys(editor));
+        }
         if (event.key === "Enter" && (event.shiftKey || event.ctrlKey)) {
             editor.insertText("\n");
             event.preventDefault();

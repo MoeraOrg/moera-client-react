@@ -1,5 +1,6 @@
-import { Ancestor, BaseEditor, BaseElement, Node as SlateNode, NodeEntry } from 'slate';
+import { Ancestor, BaseEditor, BaseElement, Node as SlateNode, NodeEntry, Transforms } from 'slate';
 
+import { SMILEY_LIKE } from "smileys";
 import {
     createHorizontalRuleElement,
     createLinkElement,
@@ -18,8 +19,9 @@ import {
     ScriptureMarks,
     ScriptureText
 } from "ui/control/richtexteditor/visual/scripture";
-import { htmlEntities, unhtmlEntities } from "util/html";
 import * as Browser from "ui/browser";
+import { htmlEntities, unhtmlEntities } from "util/html";
+import { smileyReplacer, TextReplacementFunction } from "util/text";
 
 export function findWrappingElement(editor: BaseEditor, type: string): NodeEntry<Ancestor> | null {
     if (editor.selection == null) {
@@ -254,4 +256,29 @@ export function scriptureExtractUrls(scripture: Scripture): string[] {
                 ? node.href
                 : (isScriptureElement(node) ? scriptureExtractUrls(node.children as Scripture) : [])
         ).flat();
+}
+
+function scriptureReplace(editor: BaseEditor, pattern: RegExp, replacer: TextReplacementFunction): void {
+    const textNodes = SlateNode.texts(editor, {pass: node => isScriptureText(node) && node.text.length > 0});
+    for (const [{text}, path] of textNodes) {
+        let delta = 0;
+        while (true) {
+            const match = pattern.exec(text);
+            if (match == null) {
+                break;
+            }
+
+            const replacement = replacer(match[0], ...match.slice(1));
+            if (replacement !== match[0]) {
+                const at = {path, offset: match.index + delta};
+                Transforms.delete(editor, {at, distance: match[0].length, unit: "character"});
+                Transforms.insertText(editor, replacement, {at});
+                delta += replacement.length - match[0].length;
+            }
+        }
+    }
+}
+
+export function scriptureReplaceSmileys(editor: BaseEditor, removeEscapes: boolean = true): void {
+    scriptureReplace(editor, SMILEY_LIKE, smileyReplacer(removeEscapes));
 }

@@ -4,7 +4,9 @@ import { unhtmlEntitiesMinimal } from "util/html";
 const URLS = /https?:\/\/[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9]{1,6}\b(?:[-a-zA-Z0-9(!@:%_+.,;~#?&/=]*[-a-zA-Z0-9@:%_+~#&/=])?/ig;
 const EMBEDDED = /<(?:iframe|img)[^>]+src=['"]([^'"]+)['"][^>]*>/ig;
 
-function smileyReplacer(removeEscapes: boolean) {
+export type TextReplacementFunction = (match: string, ...groups: string[]) => string;
+
+export function smileyReplacer(removeEscapes: boolean = true): TextReplacementFunction {
     return (match: string, p1: string, p2: string) => {
         if (p2.startsWith("\\")) {
             if (!removeEscapes) {
@@ -34,7 +36,7 @@ function smileyReplacer(removeEscapes: boolean) {
     };
 }
 
-export function replaceSmileys(text: string, removeEscapes = true): string {
+export function replaceSmileys(text: string, removeEscapes: boolean = true): string {
     return text.replace(SMILEY_LIKE, smileyReplacer(removeEscapes))
 }
 
