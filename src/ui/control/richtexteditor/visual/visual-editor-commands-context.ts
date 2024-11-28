@@ -8,6 +8,9 @@ export interface VisualEditorCommandsInterface {
     inSpoiler: boolean;
     inMention: boolean;
     inBlockquote: boolean;
+    inList: boolean;
+    inUnorderedList: boolean;
+    inOrderedList: boolean;
 
     formatBold: () => void;
     formatItalic: () => void;
@@ -19,6 +22,8 @@ export interface VisualEditorCommandsInterface {
     formatEmoji: (emoji: string) => void;
     formatBlockquote: () => void;
     formatBlockunquote: () => void;
+    formatUnorderedList: () => void;
+    formatOrderedList: () => void;
 }
 
 export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInterface>({
@@ -29,6 +34,9 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     inSpoiler: false,
     inMention: false,
     inBlockquote: false,
+    inList: false,
+    inUnorderedList: false,
+    inOrderedList: false,
 
     formatBold: () => {},
     formatItalic: () => {},
@@ -40,6 +48,8 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     formatEmoji: () => {},
     formatBlockquote: () => {},
     formatBlockunquote: () => {},
+    formatUnorderedList: () => {},
+    formatOrderedList: () => {},
 });
 
 export const useVisualEditorCommands = (): VisualEditorCommandsInterface => useContext(VisualEditorCommandsContext);

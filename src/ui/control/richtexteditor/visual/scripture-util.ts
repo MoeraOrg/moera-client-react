@@ -5,11 +5,14 @@ import {
     createBlockquoteElement,
     createHorizontalRuleElement,
     createLinkElement,
+    createListItemElement,
     createMentionElement,
+    createOrderedListElement,
     createParagraphElement,
     createScriptureText,
     createSpoilerBlockElement,
     createSpoilerElement,
+    createUnorderedListElement,
     equalScriptureMarks,
     isLinkElement,
     isScriptureElement,
@@ -151,6 +154,12 @@ function domToScripture(node: Node, attributes: ScriptureMarks = {}): Scripture 
             return createScriptureText("\n", attributes);
         case "BLOCKQUOTE":
             return createBlockquoteElement(children);
+        case "UL":
+            return createUnorderedListElement(children);
+        case "OL":
+            return createOrderedListElement(children);
+        case "LI":
+            return createListItemElement(children);
         default:
             return children;
     }
@@ -214,6 +223,21 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 context.output += "<blockquote>";
                 scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
                 context.output += "</blockquote>";
+                return;
+            case "list-unordered":
+                context.output += "<ul>";
+                scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
+                context.output += "</ul>";
+                return;
+            case "list-ordered":
+                context.output += "<ol>";
+                scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
+                context.output += "</ol>";
+                return;
+            case "list-item":
+                context.output += "<li>";
+                scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
+                context.output += "</li>";
                 return;
         }
     }

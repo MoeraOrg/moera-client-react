@@ -25,7 +25,7 @@ export interface VisualTextAreaProps {
 export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus, disabled}: VisualTextAreaProps) {
     const editor = useSlateStatic() as ReactEditor;
     const {
-        inBlockquote, formatBold, formatItalic, formatStrikeout, formatLink, formatMention
+        inBlockquote, inList, formatBold, formatItalic, formatStrikeout, formatLink, formatMention
     } = useVisualEditorCommands();
 
     const onKeyDown = (event: React.KeyboardEvent) => {
@@ -51,10 +51,32 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
                     }
                 }
             }
+            if (inList) {
+                const [, path] = findWrappingElement(editor, "list-item") ?? [null, null];
+                if (path != null && editor.string(path) === "") {
+                    editor.setNodes(createParagraphElement([]));
+                    editor.liftNodes();
+                    event.preventDefault();
+                }
+            }
         }
         if (event.key === "Enter" && (event.shiftKey || event.ctrlKey)) {
             editor.insertText("\n");
             event.preventDefault();
+        }
+
+        if (
+            event.key === "Backspace" && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey
+            && editor.selection != null && Range.isCollapsed(editor.selection)
+        ) {
+            if (inList) {
+                const [, path] = findWrappingElement(editor, "list-item") ?? [null, null];
+                if (path != null && editor.isStart(editor.selection.anchor, path)) {
+                    editor.setNodes(createParagraphElement([]));
+                    editor.liftNodes();
+                    event.preventDefault();
+                }
+            }
         }
 
         if (event.key === "@") {

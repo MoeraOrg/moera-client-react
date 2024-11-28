@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Editor, Element, Node, Path, Range, Transforms } from 'slate';
+import { Editor, Element, Node, NodeEntry, Path, Range, Transforms } from 'slate';
 import { ReactEditor, useSlateSelector, useSlateStatic } from 'slate-react';
 
 import { NodeName } from "api";
@@ -7,15 +7,23 @@ import {
     createBlockquoteElement,
     createHorizontalRuleElement,
     createLinkElement,
+    createListItemElement,
     createMentionElement,
+    createOrderedListElement,
+    createParagraphElement,
     createScriptureText,
     createSpoilerBlockElement,
     createSpoilerElement,
+    createUnorderedListElement,
     equalScriptureMarks,
     isLinkElement,
+    isListItemElement,
+    isParagraphElement,
     isSpoilerBlockElement,
     isSpoilerElement,
     LinkElement,
+    ListElement,
+    ScriptureElement,
     ScriptureMarks,
     SpoilerBlockElement,
     SpoilerElement
@@ -44,6 +52,9 @@ export default function VisualEditorCommands({children}: Props) {
     const inSpoiler = useSlateSelector(editor => isSelectionInElement(editor, ["spoiler", "spoiler-block"]));
     const inMention = useSlateSelector(editor => isSelectionInElement(editor, "mention"));
     const inBlockquote = useSlateSelector(editor => isSelectionInElement(editor, "blockquote"));
+    const inUnorderedList = useSlateSelector(editor => isSelectionInElement(editor, "list-unordered"));
+    const inOrderedList = useSlateSelector(editor => isSelectionInElement(editor, "list-ordered"));
+    const inList = inOrderedList || inUnorderedList;
     const {showLinkDialog, showSpoilerDialog, showMentionDialog} = useRichTextEditorDialogs();
 
     const formatBold = () =>
@@ -160,11 +171,85 @@ export default function VisualEditorCommands({children}: Props) {
         }
     }
 
+    const formatList = (listElement: ListElement) => {
+        if (editor.selection == null) {
+            return;
+        }
+
+        const getWrappingList = (): NodeEntry<ListElement> | [null, null] => {
+            if (editor.selection == null) {
+                return [null, null];
+            }
+
+            const {value, done} = editor.nodes({
+                at: editor.selection,
+                match: isListItemElement,
+                mode: "highest"
+            }).next();
+
+            return done
+                ? [null, null]
+                : [Node.parent(editor, value[1]) as ListElement, Path.parent(value[1])];
+        }
+
+        const hasParagraphs = (): boolean => {
+            if (editor.selection == null) {
+                return false;
+            }
+
+            const {done} = editor.nodes({
+                at: editor.selection,
+                match: isParagraphElement,
+                mode: "highest"
+            }).next();
+
+            return !done;
+        }
+
+        const [list, listPath] = getWrappingList();
+        const wrap = hasParagraphs() || (list != null && list.type !== listElement.type);
+
+        if (wrap) {
+            Transforms.setNodes<ScriptureElement>(
+                editor,
+                createListItemElement([]),
+                {at: editor.selection, match: isParagraphElement, mode: "highest"}
+            );
+            if (listPath != null) {
+                editor.unwrapNodes({at: listPath});
+            }
+            editor.wrapNodes(listElement);
+        } else if (list != null && listPath != null) {
+            Transforms.setNodes<ScriptureElement>(
+                editor,
+                createParagraphElement([]),
+                {at: editor.selection, match: isListItemElement, mode: "highest"}
+            );
+            if (list.children.every(node => !isListItemElement(node))) {
+                editor.unwrapNodes({at: listPath});
+            } else {
+                Transforms.liftNodes(
+                    editor,
+                    {at: editor.selection, match: isParagraphElement, mode: "highest"}
+                );
+            }
+        }
+    }
+
+    const formatUnorderedList = () => {
+        formatList(createUnorderedListElement([]));
+    }
+
+    const formatOrderedList = () => {
+        formatList(createOrderedListElement([]));
+    }
+
     return (
         <VisualEditorCommandsContext.Provider value={{
-            inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote,
+            inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
+            inOrderedList,
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
-            formatEmoji, formatBlockquote, formatBlockunquote
+            formatEmoji, formatBlockquote, formatBlockunquote, formatUnorderedList, formatOrderedList
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>

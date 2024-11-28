@@ -6,7 +6,7 @@ import {
     msAddLink,
     msAlternateEmail,
     msFormatBold,
-    msFormatItalic,
+    msFormatItalic, msFormatListBulleted, msFormatListNumbered,
     msFormatQuote,
     msFormatQuoteOff,
     msFormatStrikethrough,
@@ -27,7 +27,7 @@ export default function VisualEditorPanel({hiding}: Props) {
     const {
         inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote,
         formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
-        formatEmoji, formatBlockquote, formatBlockunquote
+        formatEmoji, formatBlockquote, formatBlockunquote, formatOrderedList, formatUnorderedList
     } = useVisualEditorCommands();
 
     const {t} = useTranslation();
@@ -44,6 +44,12 @@ export default function VisualEditorPanel({hiding}: Props) {
                                     active={inStrikeout} command={formatStrikeout}/>
                 <VisualEditorButton icon={msReport} title={t("spoiler")}
                                     active={inSpoiler} command={formatSpoiler}/>
+            </div>
+            <div className="group">
+                <VisualEditorButton icon={msFormatListNumbered} title={t("numbered-list")}
+                                    command={formatOrderedList}/>
+                <VisualEditorButton icon={msFormatListBulleted} title={t("bulleted-list")}
+                                    command={formatUnorderedList}/>
             </div>
             <div className="group">
                 <VisualEditorButton icon={msFormatQuote} title={t("quote")} letter={VISUAL_EDITOR_KEYS.BLOCKQUOTE}
