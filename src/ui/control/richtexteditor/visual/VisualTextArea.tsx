@@ -25,7 +25,9 @@ export interface VisualTextAreaProps {
 export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus, disabled}: VisualTextAreaProps) {
     const editor = useSlateStatic() as ReactEditor;
     const {
-        inBlockquote, inList, formatBold, formatItalic, formatStrikeout, formatLink, formatMention
+        enableBlockquote,
+        inBlockquote, inList,
+        formatBold, formatItalic, formatStrikeout, formatLink, formatMention, formatBlockquote
     } = useVisualEditorCommands();
 
     const onKeyDown = (event: React.KeyboardEvent) => {
@@ -104,6 +106,9 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
                 event.preventDefault();
             } else if (event.code === "Key" + VISUAL_EDITOR_KEYS.LINK) {
                 formatLink();
+                event.preventDefault();
+            } else if (enableBlockquote && event.code === "Key" + VISUAL_EDITOR_KEYS.BLOCKQUOTE) {
+                formatBlockquote();
                 event.preventDefault();
             }
         }

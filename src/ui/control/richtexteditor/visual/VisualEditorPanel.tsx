@@ -25,7 +25,8 @@ interface Props {
 
 export default function VisualEditorPanel({hiding}: Props) {
     const {
-        inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote,
+        enableBlockquote,
+        inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inUnorderedList, inOrderedList,
         formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
         formatEmoji, formatBlockquote, formatBlockunquote, formatOrderedList, formatUnorderedList
     } = useVisualEditorCommands();
@@ -47,13 +48,15 @@ export default function VisualEditorPanel({hiding}: Props) {
             </div>
             <div className="group">
                 <VisualEditorButton icon={msFormatListNumbered} title={t("numbered-list")}
-                                    command={formatOrderedList}/>
+                                    active={inOrderedList} command={formatOrderedList}/>
                 <VisualEditorButton icon={msFormatListBulleted} title={t("bulleted-list")}
-                                    command={formatUnorderedList}/>
+                                    active={inUnorderedList} command={formatUnorderedList}/>
             </div>
             <div className="group">
-                <VisualEditorButton icon={msFormatQuote} title={t("quote")} letter={VISUAL_EDITOR_KEYS.BLOCKQUOTE}
-                                    command={formatBlockquote}/>
+                {enableBlockquote &&
+                    <VisualEditorButton icon={msFormatQuote} title={t("quote")} letter={VISUAL_EDITOR_KEYS.BLOCKQUOTE}
+                                        command={formatBlockquote}/>
+                }
                 {inBlockquote &&
                     <VisualEditorButton icon={msFormatQuoteOff} title={t("unquote")} command={formatBlockunquote}/>
                 }

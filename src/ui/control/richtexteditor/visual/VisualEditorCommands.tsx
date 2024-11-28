@@ -55,6 +55,7 @@ export default function VisualEditorCommands({children}: Props) {
     const inUnorderedList = useSlateSelector(editor => isSelectionInElement(editor, "list-unordered"));
     const inOrderedList = useSlateSelector(editor => isSelectionInElement(editor, "list-ordered"));
     const inList = inOrderedList || inUnorderedList;
+    const enableBlockquote = !inList;
     const {showLinkDialog, showSpoilerDialog, showMentionDialog} = useRichTextEditorDialogs();
 
     const formatBold = () =>
@@ -112,8 +113,11 @@ export default function VisualEditorCommands({children}: Props) {
                     } else {
                         const [parent] = Node.common(editor, editor.selection.anchor.path, editor.selection.focus.path);
                         if (
-                            Editor.isEditor(parent)
-                            || (Element.isElement(parent) && editor.isBlock(parent) && editor.hasBlocks(parent))
+                            !inList
+                            && (
+                                Editor.isEditor(parent)
+                                || (Element.isElement(parent) && editor.isBlock(parent) && editor.hasBlocks(parent))
+                            )
                         ) {
                             editor.wrapNodes(createSpoilerBlockElement(title, []), {split: true});
                         } else {
@@ -242,6 +246,7 @@ export default function VisualEditorCommands({children}: Props) {
 
     return (
         <VisualEditorCommandsContext.Provider value={{
+            enableBlockquote,
             inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
             inOrderedList,
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,

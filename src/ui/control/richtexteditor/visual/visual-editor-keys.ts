@@ -3,5 +3,5 @@ export const VISUAL_EDITOR_KEYS = {
     ITALIC: "I",
     STRIKEOUT: "R",
     LINK: "L",
-    BLOCKQUOTE: "Q",
+    BLOCKQUOTE: "A",
 };
