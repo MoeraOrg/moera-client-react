@@ -225,14 +225,10 @@ export default function VisualEditorCommands({children}: Props) {
                 createParagraphElement([]),
                 {at: editor.selection, match: isListItemElement, mode: "highest"}
             );
-            if (list.children.every(node => !isListItemElement(node))) {
-                editor.unwrapNodes({at: listPath});
-            } else {
-                Transforms.liftNodes(
-                    editor,
-                    {at: editor.selection, match: isParagraphElement, mode: "highest"}
-                );
-            }
+            Transforms.liftNodes(
+                editor,
+                {at: editor.selection, match: isParagraphElement, mode: "highest"}
+            );
         }
     }
 
