@@ -5,7 +5,7 @@ import { Editable, ReactEditor, useSlateStatic } from 'slate-react';
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
 import VisualRenderLeaf from "ui/control/richtexteditor/visual/VisualRenderLeaf";
 import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
-import { VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
+import { letterToKeyCode, VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
 import {
     createParagraphElement,
     createScriptureText,
@@ -95,19 +95,19 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
         }
 
         if (event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
-            if (event.code === "Key" + VISUAL_EDITOR_KEYS.BOLD) {
+            if (event.code === letterToKeyCode(VISUAL_EDITOR_KEYS.BOLD)) {
                 formatBold();
                 event.preventDefault();
-            } else if (event.code === "Key" + VISUAL_EDITOR_KEYS.ITALIC) {
+            } else if (event.code === letterToKeyCode(VISUAL_EDITOR_KEYS.ITALIC)) {
                 formatItalic();
                 event.preventDefault();
-            } else if (event.code === "Key" + VISUAL_EDITOR_KEYS.STRIKEOUT) {
+            } else if (event.code === letterToKeyCode(VISUAL_EDITOR_KEYS.STRIKEOUT)) {
                 formatStrikeout();
                 event.preventDefault();
-            } else if (event.code === "Key" + VISUAL_EDITOR_KEYS.LINK) {
+            } else if (event.code === letterToKeyCode(VISUAL_EDITOR_KEYS.LINK)) {
                 formatLink();
                 event.preventDefault();
-            } else if (enableBlockquote && event.code === "Key" + VISUAL_EDITOR_KEYS.BLOCKQUOTE) {
+            } else if (enableBlockquote && event.code === letterToKeyCode(VISUAL_EDITOR_KEYS.BLOCKQUOTE)) {
                 formatBlockquote();
                 event.preventDefault();
             }
