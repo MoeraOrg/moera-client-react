@@ -1,16 +1,12 @@
 import React from 'react';
-import { Node, Path, Range } from 'slate';
+import { Node, Range } from 'slate';
 import { Editable, ReactEditor, useSlateStatic } from 'slate-react';
 
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
 import VisualRenderLeaf from "ui/control/richtexteditor/visual/VisualRenderLeaf";
 import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 import { letterToKeyCode, VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
-import {
-    createParagraphElement,
-    createScriptureText,
-    isScriptureText
-} from "ui/control/richtexteditor/visual/scripture";
+import { createParagraphElement, isScriptureText } from "ui/control/richtexteditor/visual/scripture";
 import { findWrappingElement, scriptureReplaceSmileys } from "ui/control/richtexteditor/visual/scripture-util";
 import "./VisualTextArea.css";
 
@@ -40,17 +36,10 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
             && editor.selection != null && Range.isCollapsed(editor.selection)
         ) {
             if (inBlockquote) {
-                const [, path] = findWrappingElement(editor, "blockquote") ?? [null, null];
-                if (path != null) {
-                    if (editor.isStart(editor.selection.anchor, path) && !Path.hasPrevious(path)) {
-                        editor.insertNode(createParagraphElement([createScriptureText("")]), {at: path});
-                        event.preventDefault();
-                    }
-                    if (editor.isEnd(editor.selection.anchor, path) && !Node.has(editor, Path.next(path))) {
-                        editor.insertNode(createParagraphElement([createScriptureText("")]), {at: Path.next(path)});
-                        editor.move({distance: 1, unit: "line"});
-                        event.preventDefault();
-                    }
+                const [, path] = findWrappingElement(editor, "paragraph") ?? [null, null];
+                if (path != null && editor.string(path) === "") {
+                    editor.liftNodes();
+                    event.preventDefault();
                 }
             }
             if (inList) {
@@ -71,6 +60,14 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
             event.key === "Backspace" && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey
             && editor.selection != null && Range.isCollapsed(editor.selection)
         ) {
+            if (inBlockquote) {
+                // TODO also 'header' and 'spoiler-block'
+                const [, path] = findWrappingElement(editor, "paragraph") ?? [null, null];
+                if (path != null && editor.isStart(editor.selection.anchor, path)) {
+                    editor.liftNodes();
+                    event.preventDefault();
+                }
+            }
             if (inList) {
                 const [, path] = findWrappingElement(editor, "list-item") ?? [null, null];
                 if (path != null && editor.isStart(editor.selection.anchor, path)) {
