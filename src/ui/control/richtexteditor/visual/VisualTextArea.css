@@ -30,3 +30,125 @@
 .visual-text-area .mention {
     color: var(--bs-link-color);
 }
+
+.visual-text-area, .visual-text-area > :not(DIV.list-item) {
+    counter-reset: list-counter-1 list-counter-2 list-counter-3 list-counter-4 list-counter-5;
+}
+
+.visual-text-area DIV.list-item ~ P {
+    margin-top: 1rem;
+}
+
+.visual-text-area DIV.list-item {
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.visual-text-area DIV.list-item::before {
+    position: absolute;
+    left: 0;
+}
+
+.visual-text-area DIV.ol-1 {
+    margin-left: 1rem;
+    counter-increment: list-counter-1;
+    counter-reset: list-counter-2 list-counter-3 list-counter-4 list-counter-5;
+}
+
+.visual-text-area DIV.ol-1::before {
+    content: counter(list-counter-1) ". ";
+}
+
+.visual-text-area DIV.ol-2 {
+    margin-left: 2rem;
+    counter-increment: list-counter-2;
+    counter-reset: list-counter-3 list-counter-4 list-counter-5;
+}
+
+.visual-text-area DIV.ol-2::before {
+    content: counter(list-counter-2, lower-alpha) ". ";
+}
+
+.visual-text-area DIV.ol-3 {
+    margin-left: 3rem;
+    counter-increment: list-counter-3;
+    counter-reset: list-counter-4 list-counter-5;
+}
+
+.visual-text-area DIV.ol-3::before {
+    content: counter(list-counter-3, lower-roman) ". ";
+}
+
+.visual-text-area DIV.ol-4 {
+    margin-left: 4rem;
+    counter-increment: list-counter-4;
+    counter-reset: list-counter-5;
+}
+
+.visual-text-area DIV.ol-4::before {
+    content: counter(list-counter-4) ". ";
+}
+
+.visual-text-area DIV.ol-5 {
+    margin-left: 5rem;
+    counter-increment: list-counter-5;
+}
+
+.visual-text-area DIV.ol-5::before {
+    content: counter(list-counter-5, lower-alpha) ". ";
+}
+
+.visual-text-area DIV.ul-1 {
+    margin-left: 1rem;
+    counter-reset: list-counter-1 list-counter-2 list-counter-3 list-counter-4 list-counter-5;
+}
+
+.visual-text-area DIV.ul-1::before {
+    content: "\2022";
+    font-size: 1.5em;
+    top: -.25em;
+}
+
+.visual-text-area DIV.ul-2 {
+    margin-left: 2rem;
+    counter-reset: list-counter-2 list-counter-3 list-counter-4 list-counter-5;
+}
+
+.visual-text-area DIV.ul-2::before {
+    content: "\25e6";
+    font-size: 1.5em;
+    top: -.25em;
+}
+
+.visual-text-area DIV.ul-3 {
+    margin-left: 3rem;
+    counter-reset: list-counter-3 list-counter-4 list-counter-5;
+}
+
+.visual-text-area DIV.ul-3::before {
+    content: "\25aa";
+    font-size: 1.5em;
+    top: -.25em;
+}
+
+.visual-text-area DIV.ul-4 {
+    margin-left: 4rem;
+    counter-reset: list-counter-4 list-counter-5;
+}
+
+.visual-text-area DIV.ul-4::before {
+    content: "\2022";
+    font-size: 1.5em;
+    top: -.25em;
+}
+
+.visual-text-area DIV.ul-5 {
+    margin-left: 5rem;
+    counter-reset: list-counter-5;
+}
+
+.visual-text-area DIV.ul-5::before {
+    content: "\25e6";
+    font-size: 1.5em;
+    top: -.25em;
+}

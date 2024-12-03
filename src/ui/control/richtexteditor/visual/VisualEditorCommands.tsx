@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Editor, Element, Node, NodeEntry, Path, Range, Transforms } from 'slate';
+import { Editor, Element, Node, Path, Range, Transforms } from 'slate';
 import { ReactEditor, useSlateSelector, useSlateStatic } from 'slate-react';
 
 import { NodeName } from "api";
@@ -9,12 +9,10 @@ import {
     createLinkElement,
     createListItemElement,
     createMentionElement,
-    createOrderedListElement,
     createParagraphElement,
     createScriptureText,
     createSpoilerBlockElement,
     createSpoilerElement,
-    createUnorderedListElement,
     equalScriptureMarks,
     isLinkElement,
     isListItemElement,
@@ -22,7 +20,7 @@ import {
     isSpoilerBlockElement,
     isSpoilerElement,
     LinkElement,
-    ListElement,
+    ListItemElement,
     ScriptureElement,
     ScriptureMarks,
     SpoilerBlockElement,
@@ -52,9 +50,10 @@ export default function VisualEditorCommands({children}: Props) {
     const inSpoiler = useSlateSelector(editor => isSelectionInElement(editor, ["spoiler", "spoiler-block"]));
     const inMention = useSlateSelector(editor => isSelectionInElement(editor, "mention"));
     const inBlockquote = useSlateSelector(editor => isSelectionInElement(editor, "blockquote"));
-    const inUnorderedList = useSlateSelector(editor => isSelectionInElement(editor, "list-unordered"));
-    const inOrderedList = useSlateSelector(editor => isSelectionInElement(editor, "list-ordered"));
-    const inList = inOrderedList || inUnorderedList;
+    const listItem = useSlateSelector(editor => findWrappingElement<ListItemElement>(editor, "list-item"));
+    const inList = listItem != null;
+    const inUnorderedList = inList && !listItem[0].ordered;
+    const inOrderedList = inList && listItem[0].ordered;
     const enableBlockquote = !inList;
     const {showLinkDialog, showSpoilerDialog, showMentionDialog} = useRichTextEditorDialogs();
 
@@ -175,73 +174,66 @@ export default function VisualEditorCommands({children}: Props) {
         }
     }
 
-    const formatList = (listElement: ListElement) => {
+    const formatList = (ordered: boolean) => {
         if (editor.selection == null) {
             return;
         }
 
-        const getWrappingList = (): NodeEntry<ListElement> | [null, null] => {
-            if (editor.selection == null) {
-                return [null, null];
+        const nodes = editor.nodes({
+            at: editor.selection,
+            match: node => isParagraphElement(node) || isListItemElement(node),
+            mode: "all"
+        });
+
+        let minLevel = 100;
+        let listOrdered: boolean | null | undefined = undefined;
+        for (const [node] of nodes) {
+            if (isListItemElement(node)) {
+                minLevel = Math.min(minLevel, node.level);
+                if (listOrdered !== null) {
+                    listOrdered = listOrdered === undefined || listOrdered === node.ordered ? node.ordered : null;
+                }
+            } else {
+                minLevel = 1;
+                listOrdered = null;
             }
-
-            const {value, done} = editor.nodes({
-                at: editor.selection,
-                match: isListItemElement,
-                mode: "highest"
-            }).next();
-
-            return done
-                ? [null, null]
-                : [Node.parent(editor, value[1]) as ListElement, Path.parent(value[1])];
         }
 
-        const hasParagraphs = (): boolean => {
-            if (editor.selection == null) {
-                return false;
-            }
-
-            const {done} = editor.nodes({
+        if (listOrdered === ordered) {
+            editor.setNodes<ScriptureElement>(createParagraphElement([]), {
                 at: editor.selection,
-                match: isParagraphElement,
-                mode: "highest"
-            }).next();
-
-            return !done;
-        }
-
-        const [list, listPath] = getWrappingList();
-        const wrap = hasParagraphs() || (list != null && list.type !== listElement.type);
-
-        if (wrap) {
-            Transforms.setNodes<ScriptureElement>(
-                editor,
-                createListItemElement([]),
-                {at: editor.selection, match: isParagraphElement, mode: "highest"}
-            );
-            if (listPath != null) {
-                editor.unwrapNodes({at: listPath});
-            }
-            editor.wrapNodes(listElement);
-        } else if (list != null && listPath != null) {
-            Transforms.setNodes<ScriptureElement>(
-                editor,
-                createParagraphElement([]),
-                {at: editor.selection, match: isListItemElement, mode: "highest"}
-            );
-            Transforms.liftNodes(
-                editor,
-                {at: editor.selection, match: isParagraphElement, mode: "highest"}
-            );
+                match: isListItemElement
+            });
+        } else {
+            editor.setNodes<ScriptureElement>(createListItemElement(ordered, minLevel, []), {
+                at: editor.selection,
+                match: node => (isListItemElement(node) && node.level === minLevel) || isParagraphElement(node)
+            });
         }
     }
 
-    const formatUnorderedList = () => {
-        formatList(createUnorderedListElement([]));
-    }
+    const formatIndent = (delta: number) => {
+        if (editor.selection == null) {
+            return;
+        }
 
-    const formatOrderedList = () => {
-        formatList(createOrderedListElement([]));
+        const nodes = editor.nodes<ListItemElement>({
+            at: editor.selection,
+            match: node => isListItemElement(node),
+            mode: "all"
+        });
+
+        for (const [node, path] of nodes) {
+            let level = node.level + delta;
+            if (level < 1) {
+                level = 1;
+            } else if (level > 5) {
+                level = 5;
+            }
+            if (level !== node.level) {
+                editor.setNodes<ListItemElement>({level}, {at: path, match: isListItemElement});
+            }
+        }
     }
 
     return (
@@ -250,7 +242,7 @@ export default function VisualEditorCommands({children}: Props) {
             inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
             inOrderedList,
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
-            formatEmoji, formatBlockquote, formatBlockunquote, formatUnorderedList, formatOrderedList
+            formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>

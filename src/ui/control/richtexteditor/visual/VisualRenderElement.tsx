@@ -21,12 +21,10 @@ export default function VisualRenderElement(props: RenderElementProps) {
                 return <div {...attributes}>{children}<hr/></div>;
             case "blockquote":
                 return <blockquote {...attributes}>{children}</blockquote>;
-            case "list-unordered":
-                return <ul {...attributes}>{children}</ul>;
-            case "list-ordered":
-                return <ol {...attributes}>{children}</ol>;
-            case "list-item":
-                return <li {...attributes}>{children}</li>;
+            case "list-item": {
+                const listClass = (element.ordered ? "ol-" : "ul-") + element.level;
+                return <div className={`list-item ${listClass}`} {...attributes}>{children}</div>;
+            }
             default:
                 return <DefaultElement {...props}/>;
         }

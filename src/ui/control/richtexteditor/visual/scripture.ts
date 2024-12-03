@@ -88,43 +88,19 @@ export const isBlockquoteElement = (value: any): value is BlockquoteElement =>
 export const createBlockquoteElement = (children: Scripture): BlockquoteElement =>
     ({type: "blockquote", children});
 
-/* UL */
-
-export interface UnorderedListElement extends SlateElement {
-    type: "list-unordered";
-}
-
-export const isUnorderedListElement = (value: any): value is UnorderedListElement =>
-    isScriptureElement(value) && value.type === "list-unordered";
-
-export const createUnorderedListElement = (children: Scripture): UnorderedListElement =>
-    ({type: "list-unordered", children});
-
-/* OL */
-
-export interface OrderedListElement extends SlateElement {
-    type: "list-ordered";
-}
-
-export const isOrderedListElement = (value: any): value is OrderedListElement =>
-    isScriptureElement(value) && value.type === "list-ordered";
-
-export const createOrderedListElement = (children: Scripture): OrderedListElement =>
-    ({type: "list-ordered", children});
-
 /* LI */
-
-export type ListElement = UnorderedListElement | OrderedListElement;
 
 export interface ListItemElement extends SlateElement {
     type: "list-item";
+    ordered: boolean;
+    level: number;
 }
 
 export const isListItemElement = (value: any): value is ListItemElement =>
     isScriptureElement(value) && value.type === "list-item";
 
-export const createListItemElement = (children: Scripture): ListItemElement =>
-    ({type: "list-item", children});
+export const createListItemElement = (ordered: boolean, level: number, children: Scripture): ListItemElement =>
+    ({type: "list-item", ordered, level, children});
 
 /* element */
 
@@ -136,8 +112,6 @@ export type ScriptureElement =
     | MentionElement
     | HorizontalRuleElement
     | BlockquoteElement
-    | UnorderedListElement
-    | OrderedListElement
     | ListItemElement;
 
 export const isScriptureElement = (value: any): value is ScriptureElement =>

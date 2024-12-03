@@ -6,7 +6,11 @@ import {
     msAddLink,
     msAlternateEmail,
     msFormatBold,
-    msFormatItalic, msFormatListBulleted, msFormatListNumbered,
+    msFormatIndentDecrease,
+    msFormatIndentIncrease,
+    msFormatItalic,
+    msFormatListBulleted,
+    msFormatListNumbered,
     msFormatQuote,
     msFormatQuoteOff,
     msFormatStrikethrough,
@@ -26,9 +30,10 @@ interface Props {
 export default function VisualEditorPanel({hiding}: Props) {
     const {
         enableBlockquote,
-        inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inUnorderedList, inOrderedList,
+        inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
+        inOrderedList,
         formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
-        formatEmoji, formatBlockquote, formatBlockunquote, formatOrderedList, formatUnorderedList
+        formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent
     } = useVisualEditorCommands();
 
     const {t} = useTranslation();
@@ -48,9 +53,17 @@ export default function VisualEditorPanel({hiding}: Props) {
             </div>
             <div className="group">
                 <VisualEditorButton icon={msFormatListNumbered} title={t("numbered-list")}
-                                    active={inOrderedList} command={formatOrderedList}/>
+                                    active={inOrderedList} command={() => formatList(true)}/>
                 <VisualEditorButton icon={msFormatListBulleted} title={t("bulleted-list")}
-                                    active={inUnorderedList} command={formatUnorderedList}/>
+                                    active={inUnorderedList} command={() => formatList(false)}/>
+                {inList &&
+                    <>
+                        <VisualEditorButton icon={msFormatIndentIncrease} title={t("increase-indent")}
+                                            command={() => formatIndent(1)}/>
+                        <VisualEditorButton icon={msFormatIndentDecrease} title={t("decrease-indent")}
+                                            command={() => formatIndent(-1)}/>
+                    </>
+                }
             </div>
             <div className="group">
                 {enableBlockquote &&

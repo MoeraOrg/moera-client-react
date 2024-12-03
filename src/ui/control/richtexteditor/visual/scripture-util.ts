@@ -1,4 +1,4 @@
-import { Ancestor, BaseEditor, BaseElement, Node as SlateNode, NodeEntry, Transforms } from 'slate';
+import { BaseEditor, BaseElement, Node as SlateNode, NodeEntry, Path, Transforms } from 'slate';
 
 import { SMILEY_LIKE } from "smileys";
 import {
@@ -7,20 +7,20 @@ import {
     createLinkElement,
     createListItemElement,
     createMentionElement,
-    createOrderedListElement,
     createParagraphElement,
     createScriptureText,
     createSpoilerBlockElement,
     createSpoilerElement,
-    createUnorderedListElement,
     equalScriptureMarks,
     isLinkElement,
+    isListItemElement,
     isScriptureElement,
     isScriptureText,
     Scripture,
     SCRIPTURE_INLINE_TYPES,
     SCRIPTURE_VOID_TYPES,
     ScriptureDescendant,
+    ScriptureElement,
     ScriptureElementType,
     ScriptureMarks,
     ScriptureText
@@ -29,20 +29,27 @@ import * as Browser from "ui/browser";
 import { htmlEntities, unhtmlEntities } from "util/html";
 import { smileyReplacer, TextReplacementFunction } from "util/text";
 
-export function findWrappingElement(
-    editor: BaseEditor, type: ScriptureElementType | ScriptureElementType[]
-): NodeEntry<Ancestor> | null {
-    if (editor.selection == null) {
+interface WrappingElementOptions {
+    at?: Path;
+    reverse?: boolean;
+}
+
+export function findWrappingElement<T extends ScriptureElement>(
+    editor: BaseEditor, type: T["type"] | T["type"][], options?: WrappingElementOptions
+): NodeEntry<T> | null {
+    const {at, reverse} = options ?? {};
+    const path = at ?? editor.selection?.anchor.path;
+    if (path == null) {
         return null;
     }
-    const ancestors = SlateNode.ancestors(editor, editor.selection.anchor.path, {reverse: true});
+    const ancestors = SlateNode.ancestors(editor, path, {reverse: reverse ?? true});
     for (const ancestor of ancestors) {
-        const [element] = ancestor;
+        const [element, path] = ancestor;
         if (
             isScriptureElement(element)
             && ((Array.isArray(type) && type.includes(element.type)) || element.type === type)
         ) {
-            return ancestor;
+            return [element as T, path];
         }
     }
     return null;
@@ -70,7 +77,8 @@ export function toScripture(text?: string | Scripture | null | undefined): Scrip
         return text;
     }
 
-    const scripture = domToScripture(new DOMParser().parseFromString(text, "text/html").body);
+    const context = {attributes: {}, listOrdered: false, listLevel: 0};
+    const scripture = domToScripture(new DOMParser().parseFromString(text, "text/html").body, context);
     if (scripture == null) {
         return [createParagraphElement([createScriptureText("")])];
     }
@@ -80,31 +88,46 @@ export function toScripture(text?: string | Scripture | null | undefined): Scrip
     return scripture;
 }
 
-function domToScripture(node: Node, attributes: ScriptureMarks = {}): Scripture | ScriptureDescendant | null {
+interface DomToScriptureContext {
+    attributes: ScriptureMarks;
+    listOrdered: boolean;
+    listLevel: number;
+}
+
+function domToScripture(node: Node, context: DomToScriptureContext): Scripture | ScriptureDescendant | null {
     if (node.nodeType === Node.TEXT_NODE) {
-        return createScriptureText(node.textContent ?? "", attributes);
+        return createScriptureText(node.textContent ?? "", context.attributes);
     } else if (node.nodeType !== Node.ELEMENT_NODE) {
         return null;
     }
 
     const element: Element = node as Element;
-    const markAttributes: ScriptureMarks = {...attributes};
+    const attributes: ScriptureMarks = {...context.attributes};
+    let {listOrdered, listLevel} = context;
 
     switch (element.nodeName) {
         case "B":
-            markAttributes.bold = true;
+            attributes.bold = true;
             break;
         case "I":
-            markAttributes.italic = true;
+            attributes.italic = true;
             break;
         case "S":
         case "STRIKE":
-            markAttributes.strikeout = true;
+            attributes.strikeout = true;
+            break;
+        case "OL":
+            listOrdered = true;
+            listLevel++;
+            break;
+        case "UL":
+            listOrdered = false;
+            listLevel++;
             break;
     }
 
     const childNodes = Array.from(element.childNodes)
-        .map(node => domToScripture(node, markAttributes))
+        .map(node => domToScripture(node, {attributes, listOrdered, listLevel}))
         .filter((node: Scripture | ScriptureDescendant | null): node is Scripture | ScriptureDescendant => node != null)
         .flat();
 
@@ -154,12 +177,15 @@ function domToScripture(node: Node, attributes: ScriptureMarks = {}): Scripture 
             return createScriptureText("\n", attributes);
         case "BLOCKQUOTE":
             return createBlockquoteElement(children);
-        case "UL":
-            return createUnorderedListElement(children);
-        case "OL":
-            return createOrderedListElement(children);
         case "LI":
-            return createListItemElement(children);
+            return [
+                createListItemElement(
+                    context.listOrdered,
+                    context.listLevel,
+                    children.filter(node => !isListItemElement(node))
+                ),
+                ...children.filter(isListItemElement)
+            ];
         default:
             return children;
     }
@@ -170,7 +196,7 @@ export function scriptureToHtml(scripture?: Scripture | null | undefined): strin
         return "";
     }
 
-    const context = {output: "", openStack: []};
+    const context = {output: "", openStack: [], listStack: []};
     scriptureNodesToHtml(scripture, context);
 
     return context.output;
@@ -179,15 +205,56 @@ export function scriptureToHtml(scripture?: Scripture | null | undefined): strin
 interface ScriptureToHtmlContext {
     output: string;
     openStack: string[];
+    listStack: boolean[];
 }
 
 function scriptureNodesToHtml(nodes: ScriptureDescendant[], context: ScriptureToHtmlContext): void {
+    const {listStack} = context;
+    context.listStack = [];
     nodes.forEach(node => scriptureNodeToHtml(node, context));
+    context.listStack = listStack;
 }
 
 function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtmlContext): void {
+    const listLevel = (ordered: boolean, level: number) => {
+        if (level > context.listStack.length) {
+            if (context.output.endsWith("</li>")) {
+                context.output = context.output.substring(0, context.output.length - 5);
+            }
+            for (let i = 0; i < level - context.listStack.length; i++) {
+                if (i !== 0) {
+                    context.output += "<li>";
+                }
+                context.output += listOpenTag(ordered, context.listStack.length + 1);
+                context.listStack.push(ordered);
+            }
+        }
+        if (level < context.listStack.length) {
+            for (let i = context.listStack.length; i > level; i--) {
+                const o = context.listStack.pop()!;
+                context.output += listCloseTag(o);
+                if (i !== 1) {
+                    context.output += "</li>";
+                }
+            }
+        }
+        if (
+            level > 0
+            && level === context.listStack.length
+            && ordered !== context.listStack[context.listStack.length - 1]
+        ) {
+            const o = context.listStack.pop()!;
+            context.output += listCloseTag(o);
+            context.output += listOpenTag(ordered, context.listStack.length + 1);
+            context.listStack.push(ordered);
+        }
+    }
+
     if (isScriptureElement(node)) {
         closeAllTags(context);
+        if (node.type !== "list-item") {
+            listLevel(false, 0);
+        }
         switch (node.type) {
             case "paragraph":
                 context.output += "<p>";
@@ -224,17 +291,8 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
                 context.output += "</blockquote>";
                 return;
-            case "list-unordered":
-                context.output += "<ul>";
-                scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
-                context.output += "</ul>";
-                return;
-            case "list-ordered":
-                context.output += "<ol>";
-                scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
-                context.output += "</ol>";
-                return;
             case "list-item":
+                listLevel(node.ordered, node.level);
                 context.output += "<li>";
                 scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
                 context.output += "</li>";
@@ -246,6 +304,33 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
         return;
     }
 }
+
+function listOpenTag(ordered: boolean, level: number): string {
+    if (ordered) {
+        switch (level % 3) {
+            default:
+            case 1:
+                return "<ol>";
+            case 2:
+                return "<ol type='a'>";
+            case 0:
+                return "<ol type='i'>";
+        }
+    } else {
+        switch (level % 3) {
+            default:
+            case 1:
+                return "<ul>";
+            case 2:
+                return "<ul type='circle'>";
+            case 0:
+                return "<ul type='square'>";
+        }
+    }
+}
+
+const listCloseTag = (ordered: boolean): string =>
+    ordered ? "</ol>" : "</ul>";
 
 function scriptureTextToHtml(node: ScriptureText, context: ScriptureToHtmlContext): void {
     const toOpen = new Set<string>();

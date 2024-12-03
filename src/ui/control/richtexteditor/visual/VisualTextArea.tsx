@@ -6,7 +6,12 @@ import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderEl
 import VisualRenderLeaf from "ui/control/richtexteditor/visual/VisualRenderLeaf";
 import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 import { letterToKeyCode, VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
-import { createParagraphElement, isScriptureText } from "ui/control/richtexteditor/visual/scripture";
+import {
+    createListItemElement,
+    createParagraphElement,
+    isScriptureText,
+    ListItemElement
+} from "ui/control/richtexteditor/visual/scripture";
 import { findWrappingElement, scriptureReplaceSmileys } from "ui/control/richtexteditor/visual/scripture-util";
 import "./VisualTextArea.css";
 
@@ -43,10 +48,13 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
                 }
             }
             if (inList) {
-                const [, path] = findWrappingElement(editor, "list-item") ?? [null, null];
+                const [listItem, path] = findWrappingElement<ListItemElement>(editor, "list-item") ?? [null, null];
                 if (path != null && editor.string(path) === "") {
-                    editor.setNodes(createParagraphElement([]));
-                    editor.liftNodes();
+                    if (listItem.level > 1) {
+                        editor.setNodes(createListItemElement(listItem.ordered, listItem.level - 1, []));
+                    } else {
+                        editor.setNodes(createParagraphElement([]));
+                    }
                     event.preventDefault();
                 }
             }
@@ -69,10 +77,13 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
                 }
             }
             if (inList) {
-                const [, path] = findWrappingElement(editor, "list-item") ?? [null, null];
+                const [listItem, path] = findWrappingElement<ListItemElement>(editor, "list-item") ?? [null, null];
                 if (path != null && editor.isStart(editor.selection.anchor, path)) {
-                    editor.setNodes(createParagraphElement([]));
-                    editor.liftNodes();
+                    if (listItem.level > 1) {
+                        editor.setNodes(createListItemElement(listItem.ordered, listItem.level - 1, []));
+                    } else {
+                        editor.setNodes(createParagraphElement([]));
+                    }
                     event.preventDefault();
                 }
             }

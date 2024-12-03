@@ -24,8 +24,8 @@ export interface VisualEditorCommandsInterface {
     formatEmoji: (emoji: string) => void;
     formatBlockquote: () => void;
     formatBlockunquote: () => void;
-    formatUnorderedList: () => void;
-    formatOrderedList: () => void;
+    formatList: (ordered: boolean) => void;
+    formatIndent: (delta: number) => void;
 }
 
 export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInterface>({
@@ -52,8 +52,8 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     formatEmoji: () => {},
     formatBlockquote: () => {},
     formatBlockunquote: () => {},
-    formatUnorderedList: () => {},
-    formatOrderedList: () => {},
+    formatList: () => {},
+    formatIndent: () => {},
 });
 
 export const useVisualEditorCommands = (): VisualEditorCommandsInterface => useContext(VisualEditorCommandsContext);
