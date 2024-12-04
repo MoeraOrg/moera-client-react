@@ -13,12 +13,13 @@ import {
     msFormatListNumbered,
     msFormatQuote,
     msFormatQuoteOff,
-    msFormatStrikethrough,
     msHorizontalRule,
-    msReport
+    msReport,
+    msStrikethroughS
 } from "ui/material-symbols";
 import * as Browser from "ui/browser";
 import { VisualEditorButton } from "ui/control/richtexteditor/visual/VisualEditorButton";
+import VisualEditorHeadingButton from "ui/control/richtexteditor/visual/VisualEditorHeadingButton";
 import VisualEditorEmojiButton from "ui/control/richtexteditor/visual/VisualEditorEmojiButton";
 import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 import { VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
@@ -33,7 +34,7 @@ export default function VisualEditorPanel({hiding}: Props) {
         inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
         inOrderedList,
         formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
-        formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent
+        formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading
     } = useVisualEditorCommands();
 
     const {t} = useTranslation();
@@ -41,11 +42,14 @@ export default function VisualEditorPanel({hiding}: Props) {
     return (
         <div className={cx("rich-text-editor-panel", {"hiding": hiding})}>
             <div className="group">
+                <VisualEditorHeadingButton onSelect={formatHeading}/>
+            </div>
+            <div className="group">
                 <VisualEditorButton icon={msFormatBold} title={t("bold")} letter={VISUAL_EDITOR_KEYS.BOLD}
                                     active={inBold} command={formatBold}/>
                 <VisualEditorButton icon={msFormatItalic} title={t("italic")} letter={VISUAL_EDITOR_KEYS.ITALIC}
                                     active={inItalic} command={formatItalic}/>
-                <VisualEditorButton icon={msFormatStrikethrough} title={t("strikeout")}
+                <VisualEditorButton icon={msStrikethroughS} title={t("strikeout")}
                                     letter={VISUAL_EDITOR_KEYS.STRIKEOUT}
                                     active={inStrikeout} command={formatStrikeout}/>
                 <VisualEditorButton icon={msReport} title={t("spoiler")}

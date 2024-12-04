@@ -91,7 +91,7 @@ export function DropdownMenuItems({items}: Props) {
                         {item.divider && <div className="dropdown-divider"/>}
                         {item.caption ?
                             <div className="caption">{item.title}</div>
-                            :
+                        :
                             <Jump className="dropdown-item" nodeName={item.nodeName} href={item.href ?? "/"}
                                   onNear={onClick(item)} onFar={onClick(item)}>
                                 {item.title}
@@ -99,7 +99,7 @@ export function DropdownMenuItems({items}: Props) {
                         }
                     </React.Fragment>
                 ))
-                :
+            :
                 <span className="dropdown-item disabled no-actions">{t("no-actions")}</span>
             }
         </>

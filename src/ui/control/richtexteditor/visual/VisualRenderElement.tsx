@@ -1,3 +1,4 @@
+import React from 'react';
 import { DefaultElement, RenderElementProps } from 'slate-react';
 
 import { isScriptureElement } from "ui/control/richtexteditor/visual/scripture";
@@ -24,6 +25,10 @@ export default function VisualRenderElement(props: RenderElementProps) {
             case "list-item": {
                 const listClass = (element.ordered ? "ol-" : "ul-") + element.level;
                 return <div className={`list-item ${listClass}`} {...attributes}>{children}</div>;
+            }
+            case "heading": {
+                const tagName = `h${element.level}`;
+                return React.createElement(tagName, attributes, ...children);
             }
             default:
                 return <DefaultElement {...props}/>;

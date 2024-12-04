@@ -9,6 +9,7 @@ import { letterToKeyCode, VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/v
 import {
     createListItemElement,
     createParagraphElement,
+    createScriptureText,
     isScriptureText,
     ListItemElement
 } from "ui/control/richtexteditor/visual/scripture";
@@ -27,7 +28,7 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
     const editor = useSlateStatic() as ReactEditor;
     const {
         enableBlockquote,
-        inBlockquote, inList,
+        inBlockquote, inList, headingLevel,
         formatBold, formatItalic, formatStrikeout, formatLink, formatMention, formatBlockquote
     } = useVisualEditorCommands();
 
@@ -58,6 +59,13 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
                     event.preventDefault();
                 }
             }
+            if (headingLevel > 0) {
+                const [, path] = findWrappingElement(editor, "heading") ?? [null, null];
+                if (path != null && editor.isEdge(editor.selection.anchor, path)) {
+                    editor.insertNode(createParagraphElement([createScriptureText("")]));
+                    event.preventDefault();
+                }
+            }
         }
         if (event.key === "Enter" && (event.shiftKey || event.ctrlKey)) {
             editor.insertText("\n");
@@ -69,8 +77,7 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
             && editor.selection != null && Range.isCollapsed(editor.selection)
         ) {
             if (inBlockquote) {
-                // TODO also 'header' and 'spoiler-block'
-                const [, path] = findWrappingElement(editor, "paragraph") ?? [null, null];
+                const [, path] = findWrappingElement(editor, ["paragraph", "heading", "spoiler-block"]) ?? [null, null];
                 if (path != null && editor.isStart(editor.selection.anchor, path)) {
                     editor.liftNodes();
                     event.preventDefault();

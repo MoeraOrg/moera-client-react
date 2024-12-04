@@ -1,7 +1,7 @@
 import React, { ForwardedRef, forwardRef } from 'react';
 import cx from 'classnames';
 
-import { MaterialSymbol } from "ui/material-symbols";
+import { Icon, MaterialSymbol } from "ui/material-symbols";
 import "./RichTextEditorButton.css";
 
 interface Props {
@@ -19,7 +19,7 @@ const RichTextEditorButtonImpl = (
     <button className={cx("rich-text-editor-button", className, {active})}
             title={letter ? `${title} (Ctrl-${letter})` : title}
             data-letter={letter} onClick={onClick} ref={ref}>
-        {icon && React.createElement(icon, {fill: "currentColor"})}
+        {icon && <Icon icon={icon}/>}
     </button>
 )
 

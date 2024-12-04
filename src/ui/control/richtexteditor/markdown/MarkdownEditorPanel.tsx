@@ -6,12 +6,13 @@ import { NodeName, PostingFeatures, PrivateMediaFileInfo, SourceFormat } from "a
 import {
     msAddLink,
     msAddPhotoAlternate,
-    msAlternateEmail, msExpandCircleDown,
+    msAlternateEmail,
+    msExpandCircleDown,
     msFormatBold,
     msFormatItalic,
     msFormatQuote,
-    msFormatStrikethrough,
-    msReport
+    msReport,
+    msStrikethroughS
 } from "ui/material-symbols";
 import * as Browser from "ui/browser";
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
@@ -296,7 +297,7 @@ export default function MarkdownEditorPanel({
             <div className="group">
                 <RichTextEditorButton icon={msFormatBold} title={t("bold")} letter="B" onClick={onBold}/>
                 <RichTextEditorButton icon={msFormatItalic} title={t("italic")} letter="I" onClick={onItalic}/>
-                <RichTextEditorButton icon={msFormatStrikethrough} title={t("strikeout")} letter="R"
+                <RichTextEditorButton icon={msStrikethroughS} title={t("strikeout")} letter="R"
                                       onClick={onStrike}/>
             </div>
             <div className="group">

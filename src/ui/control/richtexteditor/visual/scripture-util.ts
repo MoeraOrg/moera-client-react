@@ -3,6 +3,7 @@ import { BaseEditor, BaseElement, Node as SlateNode, NodeEntry, Path, Transforms
 import { SMILEY_LIKE } from "smileys";
 import {
     createBlockquoteElement,
+    createHeadingElement,
     createHorizontalRuleElement,
     createLinkElement,
     createListItemElement,
@@ -186,6 +187,16 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
                 ),
                 ...children.filter(isListItemElement)
             ];
+        case "H1":
+            return createHeadingElement(1, children);
+        case "H2":
+            return createHeadingElement(2, children);
+        case "H3":
+            return createHeadingElement(3, children);
+        case "H4":
+            return createHeadingElement(4, children);
+        case "H5":
+            return createHeadingElement(5, children);
         default:
             return children;
     }
@@ -297,6 +308,10 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
                 context.output += "</li>";
                 return;
+            case "heading":
+                context.output += `<h${node.level}>`;
+                scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
+                context.output += `</h${node.level}>`;
         }
     }
     if (isScriptureText(node)) {

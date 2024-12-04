@@ -14,6 +14,8 @@ import {
     createSpoilerBlockElement,
     createSpoilerElement,
     equalScriptureMarks,
+    HeadingElement,
+    isHeadingElement,
     isLinkElement,
     isListItemElement,
     isParagraphElement,
@@ -21,6 +23,7 @@ import {
     isSpoilerElement,
     LinkElement,
     ListItemElement,
+    ParagraphElement,
     ScriptureElement,
     ScriptureMarks,
     SpoilerBlockElement,
@@ -54,6 +57,8 @@ export default function VisualEditorCommands({children}: Props) {
     const inList = listItem != null;
     const inUnorderedList = inList && !listItem[0].ordered;
     const inOrderedList = inList && listItem[0].ordered;
+    const heading = useSlateSelector(editor => findWrappingElement<HeadingElement>(editor, "heading"));
+    const headingLevel = heading != null ? heading[0].level : 0;
     const enableBlockquote = !inList;
     const {showLinkDialog, showSpoilerDialog, showMentionDialog} = useRichTextEditorDialogs();
 
@@ -236,13 +241,28 @@ export default function VisualEditorCommands({children}: Props) {
         }
     }
 
+    const formatHeading = (level: number) => {
+        if (level <= 0) {
+            editor.setNodes<ParagraphElement>(
+                {type: "paragraph"},
+                {match: node => isHeadingElement(node)}
+            );
+        } else {
+            editor.setNodes<HeadingElement>(
+                {type: "heading", level},
+                {match: node => isHeadingElement(node) || isParagraphElement(node)}
+            );
+        }
+        ReactEditor.focus(editor);
+    }
+
     return (
         <VisualEditorCommandsContext.Provider value={{
             enableBlockquote,
             inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
-            inOrderedList,
+            inOrderedList, headingLevel,
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
-            formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent
+            formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>

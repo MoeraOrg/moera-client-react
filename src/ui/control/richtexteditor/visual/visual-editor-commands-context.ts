@@ -13,6 +13,7 @@ export interface VisualEditorCommandsInterface {
     inList: boolean;
     inUnorderedList: boolean;
     inOrderedList: boolean;
+    headingLevel: number;
 
     formatBold: () => void;
     formatItalic: () => void;
@@ -26,6 +27,7 @@ export interface VisualEditorCommandsInterface {
     formatBlockunquote: () => void;
     formatList: (ordered: boolean) => void;
     formatIndent: (delta: number) => void;
+    formatHeading: (level: number) => void;
 }
 
 export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInterface>({
@@ -41,6 +43,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     inList: false,
     inUnorderedList: false,
     inOrderedList: false,
+    headingLevel: 0,
 
     formatBold: () => {},
     formatItalic: () => {},
@@ -54,6 +57,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     formatBlockunquote: () => {},
     formatList: () => {},
     formatIndent: () => {},
+    formatHeading: () => {},
 });
 
 export const useVisualEditorCommands = (): VisualEditorCommandsInterface => useContext(VisualEditorCommandsContext);

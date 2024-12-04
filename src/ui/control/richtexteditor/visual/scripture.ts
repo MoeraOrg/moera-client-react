@@ -102,6 +102,19 @@ export const isListItemElement = (value: any): value is ListItemElement =>
 export const createListItemElement = (ordered: boolean, level: number, children: Scripture): ListItemElement =>
     ({type: "list-item", ordered, level, children});
 
+/* H? */
+
+export interface HeadingElement extends SlateElement {
+    type: "heading";
+    level: number;
+}
+
+export const isHeadingElement = (value: any): value is HeadingElement =>
+    isScriptureElement(value) && value.type === "heading";
+
+export const createHeadingElement = (level: number, children: Scripture): HeadingElement =>
+    ({type: "heading", level, children});
+
 /* element */
 
 export type ScriptureElement =
@@ -112,7 +125,8 @@ export type ScriptureElement =
     | MentionElement
     | HorizontalRuleElement
     | BlockquoteElement
-    | ListItemElement;
+    | ListItemElement
+    | HeadingElement;
 
 export const isScriptureElement = (value: any): value is ScriptureElement =>
     SlateElement.isElement(value) && "type" in value;
