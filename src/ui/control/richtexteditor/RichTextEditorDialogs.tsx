@@ -5,6 +5,7 @@ import RichTextSpoilerDialog, { RichTextSpoilerValues } from "ui/control/richtex
 import RichTextFoldDialog, { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
 import RichTextLinkDialog, { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
 import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
+import RichTextVideoDialog, { RichTextVideoValues } from "ui/control/richtexteditor/RichTextVideoDialog";
 import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/rich-text-editor-dialog";
 import { NameListItem } from "util/names-list";
 
@@ -31,6 +32,10 @@ export default function RichTextEditorDialogs({children}: Props) {
     const [mentionDialog, setMentionDialog] = useState<boolean>(false);
     const [mentionDialogOnSubmit, setMentionDialogOnSubmit] =
         useState<RichTextEditorDialogSubmit<NameListItem>>(() => () => {});
+
+    const [videoDialog, setVideoDialog] = useState<boolean>(false);
+    const [videoDialogOnSubmit, setVideoDialogOnSubmit] =
+        useState<RichTextEditorDialogSubmit<RichTextVideoValues>>(() => () => {});
 
     const showSpoilerDialog = (
         show: boolean, prevValues?: RichTextSpoilerValues | null,
@@ -78,10 +83,19 @@ export default function RichTextEditorDialogs({children}: Props) {
         }
     }
 
+    const showVideoDialog = (show: boolean, onSubmit?: RichTextEditorDialogSubmit<RichTextVideoValues>) => {
+        if (show) {
+            onSubmit && setVideoDialogOnSubmit(() => onSubmit);
+            setVideoDialog(true);
+        } else {
+            setVideoDialog(false);
+        }
+    }
+
     return (
         <>
             <RichTextEditorDialogsContext.Provider
-                value={{showSpoilerDialog, showFoldDialog, showLinkDialog, showMentionDialog}}
+                value={{showSpoilerDialog, showFoldDialog, showLinkDialog, showMentionDialog, showVideoDialog}}
             >
                 {children}
             </RichTextEditorDialogsContext.Provider>
@@ -91,6 +105,7 @@ export default function RichTextEditorDialogs({children}: Props) {
             {foldDialog && <RichTextFoldDialog prevValues={foldDialogPrevValues} onSubmit={foldDialogOnSubmit}/>}
             {linkDialog && <RichTextLinkDialog  prevValues={linkDialogPrevValues} onSubmit={linkDialogOnSubmit}/>}
             {mentionDialog && <RichTextMentionDialog onSubmit={mentionDialogOnSubmit}/>}
+            {videoDialog && <RichTextVideoDialog onSubmit={videoDialogOnSubmit}/>}
         </>
     );
 }

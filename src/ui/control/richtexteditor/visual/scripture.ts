@@ -115,6 +115,19 @@ export const isHeadingElement = (value: any): value is HeadingElement =>
 export const createHeadingElement = (level: number, children: Scripture): HeadingElement =>
     ({type: "heading", level, children});
 
+/* IFRAME */
+
+export interface IframeElement extends SlateElement {
+    type: "iframe";
+    code: string;
+}
+
+export const isIframeElement = (value: any): value is IframeElement =>
+    isScriptureElement(value) && value.type === "iframe";
+
+export const createIframeElement = (code: string): IframeElement =>
+    ({type: "iframe", code, children: [createScriptureText("")]});
+
 /* element */
 
 export type ScriptureElement =
@@ -126,7 +139,8 @@ export type ScriptureElement =
     | HorizontalRuleElement
     | BlockquoteElement
     | ListItemElement
-    | HeadingElement;
+    | HeadingElement
+    | IframeElement;
 
 export const isScriptureElement = (value: any): value is ScriptureElement =>
     SlateElement.isElement(value) && "type" in value;
@@ -158,7 +172,7 @@ export type ScriptureElementType = ScriptureElement["type"];
 
 export const SCRIPTURE_INLINE_TYPES: ScriptureElementType[] = ["link", "spoiler", "mention"];
 
-export const SCRIPTURE_VOID_TYPES: ScriptureElementType[] = ["horizontal-rule"];
+export const SCRIPTURE_VOID_TYPES: ScriptureElementType[] = ["horizontal-rule", "iframe"];
 
 export type ScriptureDescendant = ScriptureElement | ScriptureText;
 

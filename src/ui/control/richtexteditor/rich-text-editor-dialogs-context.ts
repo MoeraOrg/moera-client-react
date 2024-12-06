@@ -3,6 +3,7 @@ import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/rich-text-
 import { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
 import { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
 import { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
+import { RichTextVideoValues } from "ui/control/richtexteditor/RichTextVideoDialog";
 import { NameListItem } from "util/names-list";
 
 export interface RichTextEditorDialogsInterface {
@@ -22,6 +23,7 @@ export interface RichTextEditorDialogsInterface {
         onSubmit?: RichTextEditorDialogSubmit<RichTextLinkValues>
     ) => void;
     showMentionDialog: (show: boolean, onSubmit?: RichTextEditorDialogSubmit<NameListItem>) => void;
+    showVideoDialog: (show: boolean, onSubmit?: RichTextEditorDialogSubmit<RichTextVideoValues>) => void;
 }
 
 export const RichTextEditorDialogsContext = createContext<RichTextEditorDialogsInterface>({
@@ -29,6 +31,7 @@ export const RichTextEditorDialogsContext = createContext<RichTextEditorDialogsI
     showFoldDialog: () => {},
     showLinkDialog: () => {},
     showMentionDialog: () => {},
+    showVideoDialog: () => {},
 });
 
 export const useRichTextEditorDialogs = (): RichTextEditorDialogsInterface => useContext(RichTextEditorDialogsContext);

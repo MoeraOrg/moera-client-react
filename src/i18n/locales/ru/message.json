@@ -118,6 +118,7 @@
   "content-unhidden-in-google-play": "Весь контент раскрыт в Android (Google Play)",
   "continue-reading": "Читать дальше →",
   "copy": "Копировать",
+  "copy-embedding-video-code": "Скопируйте код «Встроить» видео с YouTube, Rumble и т.д. и вставьте его сюда",
   "copy-image-from-internet": "Копировать картинку из Интернета",
   "copy-image-link": "Копировать ссылку на картинку",
   "copy-link": "Копировать ссылку",
@@ -305,6 +306,7 @@
   "insert-image": "Вставить картинку",
   "insert-link": "Вставить ссылку",
   "insert-mention": "Вставить упоминание",
+  "insert-video": "Вставить видео",
   "instants": "Уведомления",
   "instant-summary": {
     "and": "и",

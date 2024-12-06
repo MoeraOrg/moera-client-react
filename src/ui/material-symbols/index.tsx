@@ -18,6 +18,7 @@ import { ReactComponent as msFormatQuote } from "ui/material-symbols/format_quot
 import { ReactComponent as msFormatQuoteOff } from "ui/material-symbols/format_quote_off.isvg";
 import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
 import { ReactComponent as msStrikethroughS } from "ui/material-symbols/strikethrough_s.isvg";
+import { ReactComponent as msVideoCameraBackAdd } from "ui/material-symbols/video_camera_back_add.isvg";
 
 export {
     msAddLink,
@@ -37,7 +38,8 @@ export {
     msFormatQuote,
     msFormatQuoteOff,
     msReport,
-    msStrikethroughS
+    msStrikethroughS,
+    msVideoCameraBackAdd
 };
 
 export type MaterialSymbol = React.FunctionComponent<React.SVGProps<SVGSVGElement> & { title?: string }>;

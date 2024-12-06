@@ -5,6 +5,7 @@ import {
     createBlockquoteElement,
     createHeadingElement,
     createHorizontalRuleElement,
+    createIframeElement,
     createLinkElement,
     createListItemElement,
     createMentionElement,
@@ -197,6 +198,8 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
             return createHeadingElement(4, children);
         case "H5":
             return createHeadingElement(5, children);
+        case "IFRAME":
+            return createIframeElement(element.outerHTML);
         default:
             return children;
     }
@@ -312,6 +315,10 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 context.output += `<h${node.level}>`;
                 scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
                 context.output += `</h${node.level}>`;
+                return;
+            case "iframe":
+                context.output += node.code;
+                return;
         }
     }
     if (isScriptureText(node)) {

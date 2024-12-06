@@ -118,6 +118,7 @@
   "content-unhidden-in-google-play": "Cała treść jest ukryta na Androidzie (Google Play) jest widoczna na Androidzie (Google Play)",
   "continue-reading": "Kontynuuj czytanie →",
   "copy": "Kopiuj",
+  "copy-embedding-video-code": "Skopiuj kod „Osadź” wideo z YouTube, Rumble itp. i wklej go tutaj",
   "copy-image-from-internet": "Kopiuj obraz z internetu",
   "copy-image-link": "Kopiuj link do obrazu",
   "copy-link": "Kopiuj link",
@@ -305,6 +306,7 @@
   "insert-image": "Wstaw obraz",
   "insert-link": "Wstaw link",
   "insert-mention": "Wstaw wzmiankę",
+  "insert-video": "Wstaw wideo",
   "instants": "Powiadomienia",
   "instant-summary": {
     "and": "i",

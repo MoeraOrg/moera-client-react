@@ -6,6 +6,7 @@ import { NodeName } from "api";
 import {
     createBlockquoteElement,
     createHorizontalRuleElement,
+    createIframeElement,
     createLinkElement,
     createListItemElement,
     createMentionElement,
@@ -24,6 +25,7 @@ import {
     LinkElement,
     ListItemElement,
     ParagraphElement,
+    SCRIPTURE_VOID_TYPES,
     ScriptureElement,
     ScriptureMarks,
     SpoilerBlockElement,
@@ -36,6 +38,7 @@ import { findWrappingElement, isSelectionInElement } from "ui/control/richtexted
 import { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
+import { RichTextVideoValues } from "ui/control/richtexteditor/RichTextVideoDialog";
 
 interface Props {
     children: ReactNode;
@@ -60,7 +63,8 @@ export default function VisualEditorCommands({children}: Props) {
     const heading = useSlateSelector(editor => findWrappingElement<HeadingElement>(editor, "heading"));
     const headingLevel = heading != null ? heading[0].level : 0;
     const enableBlockquote = !inList;
-    const {showLinkDialog, showSpoilerDialog, showMentionDialog} = useRichTextEditorDialogs();
+    const inVoid = useSlateSelector(editor => isSelectionInElement(editor, SCRIPTURE_VOID_TYPES));
+    const {showLinkDialog, showSpoilerDialog, showMentionDialog, showVideoDialog} = useRichTextEditorDialogs();
 
     const formatBold = () =>
         editor.addMark("bold", !inBold);
@@ -256,13 +260,24 @@ export default function VisualEditorCommands({children}: Props) {
         ReactEditor.focus(editor);
     }
 
+    const formatVideo = () => {
+        showVideoDialog(true, (ok: boolean | null, {code}: Partial<RichTextVideoValues>) => {
+            showVideoDialog(false);
+
+            if (ok && code) {
+                editor.insertNode(createIframeElement(code));
+            }
+            ReactEditor.focus(editor);
+        });
+    }
+
     return (
         <VisualEditorCommandsContext.Provider value={{
             enableBlockquote,
             inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
-            inOrderedList, headingLevel,
+            inOrderedList, headingLevel, inVoid,
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
-            formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading
+            formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>

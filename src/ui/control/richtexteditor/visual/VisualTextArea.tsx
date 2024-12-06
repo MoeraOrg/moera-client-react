@@ -1,5 +1,5 @@
 import React from 'react';
-import { Node, Range } from 'slate';
+import { Node, Path, Range } from 'slate';
 import { Editable, ReactEditor, useSlateStatic } from 'slate-react';
 
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
@@ -28,7 +28,7 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
     const editor = useSlateStatic() as ReactEditor;
     const {
         enableBlockquote,
-        inBlockquote, inList, headingLevel,
+        inBlockquote, inList, headingLevel, inVoid,
         formatBold, formatItalic, formatStrikeout, formatLink, formatMention, formatBlockquote
     } = useVisualEditorCommands();
 
@@ -66,10 +66,20 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
                     event.preventDefault();
                 }
             }
+            if (inVoid) {
+                editor.insertNode(createParagraphElement([createScriptureText("")]));
+                event.preventDefault();
+            }
         }
         if (event.key === "Enter" && (event.shiftKey || event.ctrlKey)) {
-            editor.insertText("\n");
-            event.preventDefault();
+            if (inVoid && editor.selection != null && Range.isCollapsed(editor.selection)) {
+                const parent = Path.parent(editor.selection.anchor.path);
+                editor.insertNode(createParagraphElement([createScriptureText("")]), {at: parent});
+                event.preventDefault();
+            } else {
+                editor.insertText("\n");
+                event.preventDefault();
+            }
         }
 
         if (

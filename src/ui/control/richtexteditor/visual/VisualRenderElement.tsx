@@ -19,7 +19,7 @@ export default function VisualRenderElement(props: RenderElementProps) {
             case "mention":
                 return <span className="mention" {...attributes}>{children}</span>;
             case "horizontal-rule":
-                return <div {...attributes}>{children}<hr/></div>;
+                return <div {...attributes} contentEditable={false}>{children}<hr/></div>;
             case "blockquote":
                 return <blockquote {...attributes}>{children}</blockquote>;
             case "list-item": {
@@ -30,6 +30,8 @@ export default function VisualRenderElement(props: RenderElementProps) {
                 const tagName = `h${element.level}`;
                 return React.createElement(tagName, attributes, ...children);
             }
+            case "iframe":
+                return <div {...attributes}>{children}<div dangerouslySetInnerHTML={{__html: element.code}}/></div>;
             default:
                 return <DefaultElement {...props}/>;
         }

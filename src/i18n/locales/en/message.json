@@ -118,6 +118,7 @@
   "content-unhidden-in-google-play": "All content is unhidden in Android (Google Play)",
   "continue-reading": "Continue Reading →",
   "copy": "Copy",
+  "copy-embedding-video-code": "Copy video \"Embed\" code from YouTube, Rumble etc. and paste it here",
   "copy-image-from-internet": "Copy Image From Internet",
   "copy-image-link": "Copy image link",
   "copy-link": "Copy link",
@@ -305,6 +306,7 @@
   "insert-image": "Insert an image",
   "insert-link": "Insert a link",
   "insert-mention": "Insert a mention",
+  "insert-video": "Insert video",
   "instants": "Notifications",
   "instant-summary": {
     "and": "and",
