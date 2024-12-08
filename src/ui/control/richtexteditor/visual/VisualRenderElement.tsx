@@ -31,7 +31,11 @@ export default function VisualRenderElement(props: RenderElementProps) {
                 return React.createElement(tagName, attributes, ...children);
             }
             case "iframe":
-                return <div {...attributes}>{children}<div dangerouslySetInnerHTML={{__html: element.code}}/></div>;
+                return (
+                    <div {...attributes} contentEditable={false}>
+                        {children}<div dangerouslySetInnerHTML={{__html: element.code}}/>
+                    </div>
+                );
             default:
                 return <DefaultElement {...props}/>;
         }

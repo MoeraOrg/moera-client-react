@@ -200,6 +200,11 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
             return createHeadingElement(5, children);
         case "IFRAME":
             return createIframeElement(element.outerHTML);
+        case "DIV":
+            if (element.classList.contains("mr-video")) {
+                return createIframeElement(element.innerHTML);
+            }
+            return children;
         default:
             return children;
     }
@@ -228,6 +233,8 @@ function scriptureNodesToHtml(nodes: ScriptureDescendant[], context: ScriptureTo
     nodes.forEach(node => scriptureNodeToHtml(node, context));
     context.listStack = listStack;
 }
+
+const STANDALONE_VIDEO = /^(?:<iframe.*<\/iframe>|<video.*<\/video>)$/i;
 
 function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtmlContext): void {
     const listLevel = (ordered: boolean, level: number) => {
@@ -317,7 +324,11 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 context.output += `</h${node.level}>`;
                 return;
             case "iframe":
-                context.output += node.code;
+                if (STANDALONE_VIDEO.test(node.code)) {
+                    context.output += node.code;
+                } else {
+                    context.output += "<div class='mr-video'>" + node.code + "</div>";
+                }
                 return;
         }
     }
