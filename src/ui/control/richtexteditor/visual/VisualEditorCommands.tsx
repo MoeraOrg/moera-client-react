@@ -5,6 +5,7 @@ import { ReactEditor, useSlateSelector, useSlateStatic } from 'slate-react';
 import { NodeName } from "api";
 import {
     createBlockquoteElement,
+    createDetailsElement,
     createHorizontalRuleElement,
     createIframeElement,
     createLinkElement,
@@ -14,12 +15,14 @@ import {
     createScriptureText,
     createSpoilerBlockElement,
     createSpoilerElement,
+    DetailsElement,
     equalScriptureMarks,
     HeadingElement,
+    isDetailsElement,
     isHeadingElement,
     isLinkElement,
     isListItemElement,
-    isParagraphElement,
+    isParagraphElement, isScriptureElement,
     isSpoilerBlockElement,
     isSpoilerElement,
     LinkElement,
@@ -39,6 +42,7 @@ import { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoiler
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
 import { RichTextVideoValues } from "ui/control/richtexteditor/RichTextVideoDialog";
+import { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
 
 interface Props {
     children: ReactNode;
@@ -64,7 +68,10 @@ export default function VisualEditorCommands({children}: Props) {
     const headingLevel = heading != null ? heading[0].level : 0;
     const enableBlockquote = !inList;
     const inVoid = useSlateSelector(editor => isSelectionInElement(editor, SCRIPTURE_VOID_TYPES));
-    const {showLinkDialog, showSpoilerDialog, showMentionDialog, showVideoDialog} = useRichTextEditorDialogs();
+    const inFold = useSlateSelector(editor => isSelectionInElement(editor, "details"));
+    const {
+        showLinkDialog, showSpoilerDialog, showMentionDialog, showVideoDialog, showFoldDialog
+    } = useRichTextEditorDialogs();
 
     const formatBold = () =>
         editor.addMark("bold", !inBold);
@@ -271,13 +278,40 @@ export default function VisualEditorCommands({children}: Props) {
         });
     }
 
+    const formatFold = () => {
+        const [element, path] = findWrappingElement(editor, "details") ?? [null, null];
+        const prevValues = element != null && isDetailsElement(element) ? {summary: element.summary} : null;
+
+        showFoldDialog(true, prevValues, (ok: boolean | null, {summary = ""}: Partial<RichTextFoldValues>) => {
+            showFoldDialog(false);
+            console.log(element, isScriptureElement(element), path, ok);
+            if (path != null) {
+                if (ok) {
+                    editor.setNodes<DetailsElement>({summary}, {at: path});
+                } else if (ok == null) {
+                    editor.unwrapNodes({at: path});
+                }
+            } else {
+                if (ok) {
+                    if (editor.selection == null || Range.isCollapsed(editor.selection)) {
+                        editor.insertNode(createDetailsElement(summary, [createScriptureText("")]));
+                    } else {
+                        editor.wrapNodes(createDetailsElement(summary, []), {split: true});
+                    }
+                }
+            }
+            ReactEditor.focus(editor);
+        });
+    }
+
     return (
         <VisualEditorCommandsContext.Provider value={{
             enableBlockquote,
             inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
-            inOrderedList, headingLevel, inVoid,
+            inOrderedList, headingLevel, inVoid, inFold,
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
-            formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo
+            formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo,
+            formatFold
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>

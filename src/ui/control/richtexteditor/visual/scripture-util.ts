@@ -2,7 +2,7 @@ import { BaseEditor, BaseElement, Node as SlateNode, NodeEntry, Path, Transforms
 
 import { SMILEY_LIKE } from "smileys";
 import {
-    createBlockquoteElement,
+    createBlockquoteElement, createDetailsElement,
     createHeadingElement,
     createHorizontalRuleElement,
     createIframeElement,
@@ -205,6 +205,14 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
                 return createIframeElement(element.innerHTML);
             }
             return children;
+        case "DETAILS": {
+            const summaryElement = element.querySelector(":scope > summary");
+            const summary = summaryElement?.textContent ?? "";
+            return createDetailsElement(summary, children);
+        }
+        case "SUMMARY": {
+            return null;
+        }
         default:
             return children;
     }
@@ -329,6 +337,14 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 } else {
                     context.output += "<div class='mr-video'>" + node.code + "</div>";
                 }
+                return;
+            case "details":
+                context.output += "<details>";
+                if (node.summary) {
+                    context.output += `<summary>${node.summary}</summary>`;
+                }
+                scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
+                context.output += "</details>";
                 return;
         }
     }

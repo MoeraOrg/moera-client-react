@@ -128,6 +128,19 @@ export const isIframeElement = (value: any): value is IframeElement =>
 export const createIframeElement = (code: string): IframeElement =>
     ({type: "iframe", code, children: [createScriptureText("")]});
 
+/* DETAILS */
+
+export interface DetailsElement extends SlateElement {
+    type: "details";
+    summary: string;
+}
+
+export const isDetailsElement = (value: any): value is DetailsElement =>
+    isScriptureElement(value) && value.type === "details";
+
+export const createDetailsElement = (summary: string, children: Scripture): DetailsElement =>
+    ({type: "details", summary, children});
+
 /* element */
 
 export type ScriptureElement =
@@ -140,7 +153,8 @@ export type ScriptureElement =
     | BlockquoteElement
     | ListItemElement
     | HeadingElement
-    | IframeElement;
+    | IframeElement
+    | DetailsElement;
 
 export const isScriptureElement = (value: any): value is ScriptureElement =>
     SlateElement.isElement(value) && "type" in value;

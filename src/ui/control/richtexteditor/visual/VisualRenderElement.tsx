@@ -36,6 +36,13 @@ export default function VisualRenderElement(props: RenderElementProps) {
                         {children}<div dangerouslySetInnerHTML={{__html: element.code}}/>
                     </div>
                 );
+            case "details":
+                return (
+                    <details open {...attributes}>
+                        {element.summary && <summary>{element.summary}</summary>}
+                        {children}
+                    </details>
+                );
             default:
                 return <DefaultElement {...props}/>;
         }

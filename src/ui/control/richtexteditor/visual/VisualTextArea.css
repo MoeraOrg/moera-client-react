@@ -35,7 +35,7 @@
     counter-reset: list-counter-1 list-counter-2 list-counter-3 list-counter-4 list-counter-5;
 }
 
-.visual-text-area DIV.list-item ~ P {
+.visual-text-area DIV.list-item ~ P, .visual-text-area DIV.list-item ~ DETAILS {
     margin-top: 1rem;
 }
 
@@ -151,4 +151,18 @@
     content: "\25e6";
     font-size: 1.5em;
     top: -.25em;
+}
+
+.visual-text-area DETAILS {
+    border: 1px dashed var(--bs-gray-600);
+    padding: 0 .5rem;
+}
+
+.visual-text-area DETAILS[open] {
+    padding-bottom: .5rem;
+}
+
+.visual-text-area DETAILS[open] > SUMMARY {
+    border-bottom: 1px dashed var(--bs-gray-400);
+    margin-bottom: .5rem;
 }

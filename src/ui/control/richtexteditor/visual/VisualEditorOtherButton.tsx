@@ -15,9 +15,9 @@ import { VisualEditorButton } from "ui/control/richtexteditor/visual/VisualEdito
 import { VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
 import { useButtonPopper } from "ui/hook";
 import "./VisualEditorOtherButton.css";
+import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 
 interface Props {
-    onFold?: () => void;
     onCode?: () => void;
     onCodeBlock?: () => void;
     onFormula?: () => void;
@@ -25,14 +25,12 @@ interface Props {
     onSuperscript?: () => void;
 }
 
-export default function VisualEditorOtherButton({
-    onFold, onCode, onCodeBlock, onFormula, onSubscript, onSuperscript
-}: Props) {
+export default function VisualEditorOtherButton({onCode, onCodeBlock, onFormula, onSubscript, onSuperscript}: Props) {
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
         placement, zIndex
     } = useButtonPopper("bottom", {closeOnSelect: false});
-
+    const {inFold, formatFold} = useVisualEditorCommands();
     const {t} = useTranslation();
 
     const onCommand = (command?: () => void) => () => {
@@ -47,7 +45,8 @@ export default function VisualEditorOtherButton({
                 <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                      className={`fade popover bs-popover-${placement} shadow-sm show`}>
                     <div className="other-buttons">
-                        <VisualEditorButton icon={msExpandCircleDown} title={t("fold")} command={onCommand(onFold)}/>
+                        <VisualEditorButton icon={msExpandCircleDown} title={t("fold")} active={inFold}
+                                            command={onCommand(formatFold)}/>
                         <VisualEditorButton icon={msCode} title={t("code")} letter={VISUAL_EDITOR_KEYS.CODE}
                                             command={onCommand(onCode)}/>
                         <VisualEditorButton icon={msCodeBlocks} title={t("code-block")}
