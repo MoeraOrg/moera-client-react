@@ -1,0 +1,8 @@
+.rich-text-editor-panel .other-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    grid-template-rows: repeat(2, auto);
+    grid-gap: .5em;
+    padding: 1em;
+    font-size: 1.1em;
+}

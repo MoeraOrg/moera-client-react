@@ -22,6 +22,7 @@ import * as Browser from "ui/browser";
 import { VisualEditorButton } from "ui/control/richtexteditor/visual/VisualEditorButton";
 import VisualEditorHeadingButton from "ui/control/richtexteditor/visual/VisualEditorHeadingButton";
 import VisualEditorEmojiButton from "ui/control/richtexteditor/visual/VisualEditorEmojiButton";
+import VisualEditorOtherButton from "ui/control/richtexteditor/visual/VisualEditorOtherButton";
 import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 import { VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
 
@@ -79,7 +80,8 @@ export default function VisualEditorPanel({hiding}: Props) {
                     <VisualEditorButton icon={msFormatQuoteOff} title={t("unquote")} command={formatBlockunquote}/>
                 }
                 <VisualEditorButton icon={msHorizontalRule} title={t("horizontal-line")}
-                                    command={formatHorizontalRule}/>
+                                    letter={VISUAL_EDITOR_KEYS.HORIZONTAL_RULE} command={formatHorizontalRule}/>
+                <VisualEditorOtherButton/>
             </div>
             <div className="group">
                 {!Browser.isMobile() && <VisualEditorEmojiButton onSelect={formatEmoji}/>}
