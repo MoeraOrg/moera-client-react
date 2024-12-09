@@ -69,6 +69,7 @@ export default function VisualEditorCommands({children}: Props) {
     const headingLevel = heading != null ? heading[0].level : 0;
     const enableBlockquote = !inList;
     const inVoid = useSlateSelector(editor => isSelectionInElement(editor, SCRIPTURE_VOID_TYPES));
+    const enableHeading = !inList && !inVoid;
     const inFold = useSlateSelector(editor => isSelectionInElement(editor, "details"));
     const inSubscript = supsub < 0;
     const inSuperscript = supsub > 0;
@@ -318,7 +319,7 @@ export default function VisualEditorCommands({children}: Props) {
 
     return (
         <VisualEditorCommandsContext.Provider value={{
-            enableBlockquote,
+            enableBlockquote, enableHeading,
             inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
             inOrderedList, headingLevel, inVoid, inFold, inCode, inSubscript, inSuperscript,
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,

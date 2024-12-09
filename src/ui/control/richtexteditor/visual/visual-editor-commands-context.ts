@@ -2,6 +2,7 @@ import { createContext, useContext } from "react";
 
 export interface VisualEditorCommandsInterface {
     enableBlockquote: boolean;
+    enableHeading: boolean;
 
     inBold: boolean;
     inItalic: boolean;
@@ -42,6 +43,7 @@ export interface VisualEditorCommandsInterface {
 
 export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInterface>({
     enableBlockquote: true,
+    enableHeading: true,
 
     inBold: false,
     inItalic: false,

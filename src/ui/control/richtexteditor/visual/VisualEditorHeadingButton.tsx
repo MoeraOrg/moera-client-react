@@ -15,7 +15,7 @@ export default function VisualEditorHeadingButton({onSelect}: Props) {
         visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
     } = useButtonPopper("bottom", {closeOnSelect: false});
 
-    const {headingLevel} = useVisualEditorCommands();
+    const {enableHeading, headingLevel} = useVisualEditorCommands();
     const {t} = useTranslation();
 
     const onItemSelect = (headingLevel: number) => {
@@ -25,8 +25,9 @@ export default function VisualEditorHeadingButton({onSelect}: Props) {
 
     return (
         <>
-            <button className="rich-text-editor-button selector ps-3" onClick={onToggle} ref={setButtonRef}>
-                <span className="text">{headingTitle(headingLevel, t)}</span> <Icon icon={msArrowDropDown}/>
+            <button className="rich-text-editor-button selector ps-3" disabled={!enableHeading} onClick={onToggle}
+                    ref={setButtonRef}>
+                <span className="text">{headingTitle(headingLevel, t)}</span><Icon icon={msArrowDropDown}/>
             </button>
             {visible &&
                 <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
