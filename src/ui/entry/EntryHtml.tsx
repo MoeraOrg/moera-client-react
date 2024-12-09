@@ -1,10 +1,11 @@
-import React, { Suspense, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import 'katex/dist/katex.min.css';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
 import store from "state/store";
+import { BlockMath, InlineMath } from "ui/katex";
 import NodeNameMention from "ui/nodename/NodeNameMention";
 import Jump from "ui/navigation/Jump";
 import EntryImage from "ui/entry/EntryImage";
@@ -13,9 +14,6 @@ import MrSpoiler from "ui/entry/MrSpoiler";
 import { isNumericString } from "util/misc";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { mediaHashStrip } from "util/media-images";
-
-const InlineMath = React.lazy(() => import("ui/katex/InlineMath"));
-const BlockMath = React.lazy(() => import("ui/katex/BlockMath"));
 
 interface Props {
     className?: string;
@@ -111,16 +109,12 @@ export default function EntryHtml({
         });
         dom.current.querySelectorAll("span.katex").forEach(node => {
             createRoot(node).render(
-                <Suspense fallback={<>Loading math...</>}>
-                    <InlineMath math={(node as HTMLElement).innerText}/>
-                </Suspense>
+                <InlineMath math={(node as HTMLElement).innerText}/>
             );
         });
         dom.current.querySelectorAll("div.katex").forEach(node => {
             createRoot(node).render(
-                <Suspense fallback={<>Loading math...</>}>
-                    <BlockMath math={(node as HTMLElement).innerText}/>
-                </Suspense>
+                <BlockMath math={(node as HTMLElement).innerText}/>
             );
         });
         dom.current.querySelectorAll("mr-spoiler").forEach(node => {

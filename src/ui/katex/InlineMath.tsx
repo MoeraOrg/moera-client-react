@@ -1,15 +1,12 @@
-// Copied from react-katex
-
 import React from 'react';
 
-import createMathComponent from "ui/katex/create-math-component";
+import { useMath } from "ui/katex/hook";
 
-interface Props {
-    html: string;
+export interface InlineMathProps {
+    math: string;
 }
 
-const InlineMath = ({html}: Props) => (
-    <span dangerouslySetInnerHTML={{__html: html}}/>
-);
-
-export default createMathComponent(InlineMath, {displayMode: false});
+export default function InlineMath({math}: InlineMathProps) {
+    const html = useMath(math);
+    return <span dangerouslySetInnerHTML={{__html: html}}/>;
+}

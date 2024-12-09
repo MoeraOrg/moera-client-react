@@ -1,15 +1,12 @@
-// Copied from react-katex
-
 import React from 'react';
 
-import createMathComponent from "ui/katex/create-math-component";
+import { useMath } from "ui/katex/hook";
 
-interface Props {
-    html: string;
+export interface BlockMathProps {
+    math: string;
 }
 
-const BlockMath = ({html}: Props) => (
-    <div dangerouslySetInnerHTML={{__html: html}}/>
-);
-
-export default createMathComponent(BlockMath, {displayMode: true});
+export default function BlockMath({math}: BlockMathProps) {
+    const html = useMath(math);
+    return <div dangerouslySetInnerHTML={{__html: html}}/>;
+}
