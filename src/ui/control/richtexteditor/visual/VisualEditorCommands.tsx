@@ -39,10 +39,10 @@ import { useRichTextEditorDialogs } from "ui/control/richtexteditor/rich-text-ed
 import { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
 import { findWrappingElement, isSelectionInElement } from "ui/control/richtexteditor/visual/scripture-util";
 import { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
-import { NameListItem } from "util/names-list";
-import { mentionName } from "util/names";
 import { RichTextVideoValues } from "ui/control/richtexteditor/RichTextVideoDialog";
 import { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
+import { NameListItem } from "util/names-list";
+import { mentionName } from "util/names";
 
 interface Props {
     children: ReactNode;
@@ -51,9 +51,10 @@ interface Props {
 export default function VisualEditorCommands({children}: Props) {
     const editor = useSlateStatic() as ReactEditor;
     const {
-        bold: inBold = false, italic: inItalic = false, strikeout: inStrikeout = false
+        bold: inBold = false, italic: inItalic = false, strikeout: inStrikeout = false, code: inCode = false,
+        supsub = 0,
     } = useSlateSelector(
-        editor => Editor.marks(editor) as ScriptureMarks ?? {bold: false, italic: false, strikeout: false},
+        editor => Editor.marks(editor) as ScriptureMarks ?? {},
         equalScriptureMarks
     );
     const inLink = useSlateSelector(editor => isSelectionInElement(editor, "link"));
@@ -69,6 +70,8 @@ export default function VisualEditorCommands({children}: Props) {
     const enableBlockquote = !inList;
     const inVoid = useSlateSelector(editor => isSelectionInElement(editor, SCRIPTURE_VOID_TYPES));
     const inFold = useSlateSelector(editor => isSelectionInElement(editor, "details"));
+    const inSubscript = supsub < 0;
+    const inSuperscript = supsub > 0;
     const {
         showLinkDialog, showSpoilerDialog, showMentionDialog, showVideoDialog, showFoldDialog
     } = useRichTextEditorDialogs();
@@ -304,14 +307,23 @@ export default function VisualEditorCommands({children}: Props) {
         });
     }
 
+    const formatCode = () =>
+        editor.addMark("code", !inCode);
+
+    const formatSubscript = () =>
+        editor.addMark("supsub", !inSubscript ? -1 : 0);
+
+    const formatSuperscript = () =>
+        editor.addMark("supsub", !inSuperscript ? 1 : 0);
+
     return (
         <VisualEditorCommandsContext.Provider value={{
             enableBlockquote,
             inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
-            inOrderedList, headingLevel, inVoid, inFold,
+            inOrderedList, headingLevel, inVoid, inFold, inCode, inSubscript, inSuperscript,
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
             formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo,
-            formatFold
+            formatFold, formatCode, formatSubscript, formatSuperscript
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>

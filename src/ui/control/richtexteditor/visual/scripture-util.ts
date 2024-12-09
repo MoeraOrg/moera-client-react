@@ -118,6 +118,15 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
         case "STRIKE":
             attributes.strikeout = true;
             break;
+        case "CODE":
+            attributes.code = true;
+            break;
+        case "SUB":
+            attributes.supsub = -1;
+            break;
+        case "SUP":
+            attributes.supsub = 1;
+            break;
         case "OL":
             listOrdered = true;
             listLevel++;
@@ -388,6 +397,9 @@ function scriptureTextToHtml(node: ScriptureText, context: ScriptureToHtmlContex
     requireTag("b", node.bold, toOpen, toClose, context);
     requireTag("i", node.italic, toOpen, toClose, context);
     requireTag("s", node.strikeout, toOpen, toClose, context);
+    requireTag("code", node.code, toOpen, toClose, context);
+    requireTag("sub", (node.supsub ?? 0) < 0, toOpen, toClose, context);
+    requireTag("sup", (node.supsub ?? 0) > 0, toOpen, toClose, context);
 
     while (toClose.size > 0) {
         const tag = context.openStack.pop();

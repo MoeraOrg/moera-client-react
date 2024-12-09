@@ -5,7 +5,7 @@ import { Editable, ReactEditor, useSlateStatic } from 'slate-react';
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
 import VisualRenderLeaf from "ui/control/richtexteditor/visual/VisualRenderLeaf";
 import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
-import { letterToKeyCode, VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
+import { checkKeyCode, VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
 import {
     createListItemElement,
     createParagraphElement,
@@ -29,7 +29,8 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
     const {
         enableBlockquote,
         inBlockquote, inList, headingLevel, inVoid,
-        formatBold, formatItalic, formatStrikeout, formatLink, formatMention, formatBlockquote
+        formatBold, formatItalic, formatStrikeout, formatLink, formatMention, formatBlockquote, formatHorizontalRule,
+        formatCode
     } = useVisualEditorCommands();
 
     const onKeyDown = (event: React.KeyboardEvent) => {
@@ -119,21 +120,27 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
             }
         }
 
-        if (event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
-            if (event.code === letterToKeyCode(VISUAL_EDITOR_KEYS.BOLD)) {
+        if (event.ctrlKey && !event.altKey && !event.metaKey) {
+            if (checkKeyCode(VISUAL_EDITOR_KEYS.BOLD, event.code, event.shiftKey)) {
                 formatBold();
                 event.preventDefault();
-            } else if (event.code === letterToKeyCode(VISUAL_EDITOR_KEYS.ITALIC)) {
+            } else if (checkKeyCode(VISUAL_EDITOR_KEYS.ITALIC, event.code, event.shiftKey)) {
                 formatItalic();
                 event.preventDefault();
-            } else if (event.code === letterToKeyCode(VISUAL_EDITOR_KEYS.STRIKEOUT)) {
+            } else if (checkKeyCode(VISUAL_EDITOR_KEYS.STRIKEOUT, event.code, event.shiftKey)) {
                 formatStrikeout();
                 event.preventDefault();
-            } else if (event.code === letterToKeyCode(VISUAL_EDITOR_KEYS.LINK)) {
+            } else if (checkKeyCode(VISUAL_EDITOR_KEYS.LINK, event.code, event.shiftKey)) {
                 formatLink();
                 event.preventDefault();
-            } else if (enableBlockquote && event.code === letterToKeyCode(VISUAL_EDITOR_KEYS.BLOCKQUOTE)) {
+            } else if (enableBlockquote && checkKeyCode(VISUAL_EDITOR_KEYS.BLOCKQUOTE, event.code, event.shiftKey)) {
                 formatBlockquote();
+                event.preventDefault();
+            } else if (checkKeyCode(VISUAL_EDITOR_KEYS.HORIZONTAL_RULE, event.code, event.shiftKey)) {
+                formatHorizontalRule();
+                event.preventDefault();
+            } else if (checkKeyCode(VISUAL_EDITOR_KEYS.CODE, event.code, event.shiftKey)) {
+                formatCode();
                 event.preventDefault();
             }
         }

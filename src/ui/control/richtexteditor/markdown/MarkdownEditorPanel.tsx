@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { NodeName, PostingFeatures, PrivateMediaFileInfo, SourceFormat } from "api";
 import {
     msAddLink,
-    msAddPhotoAlternate,
     msAlternateEmail,
     msExpandCircleDown,
     msFormatBold,
     msFormatItalic,
     msFormatQuote,
+    msPhotoLibrary,
     msReport,
     msStrikethroughS
 } from "ui/material-symbols";
@@ -312,7 +312,7 @@ export default function MarkdownEditorPanel({
             <div className="group">
                 <RichTextEditorButton icon={msAddLink} title={t("link")} letter="L" onClick={onLink}/>
                 {!noMedia &&
-                    <RichTextEditorButton icon={msAddPhotoAlternate} title={t("image")} letter="M" onClick={onImage}/>
+                    <RichTextEditorButton icon={msPhotoLibrary} title={t("image")} letter="M" onClick={onImage}/>
                 }
             </div>
             {imageDialog &&

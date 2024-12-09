@@ -1,8 +1,6 @@
 import * as React from 'react';
 
 import { ReactComponent as msAddLink } from "ui/material-symbols/add_link.isvg";
-import { ReactComponent as msAddPhotoAlternate } from "ui/material-symbols/add_photo_alternate.isvg";
-import { ReactComponent as msAddReaction } from "ui/material-symbols/add_reaction.isvg";
 import { ReactComponent as msAlternateEmail } from "ui/material-symbols/alternate_email.isvg";
 import { ReactComponent as msArrowDropDown } from "ui/material-symbols/arrow_drop_down.isvg";
 import { ReactComponent as msCode } from "ui/material-symbols/code.isvg";
@@ -20,16 +18,16 @@ import { ReactComponent as msFormatQuote } from "ui/material-symbols/format_quot
 import { ReactComponent as msFormatQuoteOff } from "ui/material-symbols/format_quote_off.isvg";
 import { ReactComponent as msFunction } from "ui/material-symbols/function.isvg";
 import { ReactComponent as msMoreHoriz } from "ui/material-symbols/more_horiz.isvg";
+import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_library.isvg";
 import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
+import { ReactComponent as msSentimentSatisfied } from "ui/material-symbols/sentiment_satisfied.isvg";
 import { ReactComponent as msStrikethroughS } from "ui/material-symbols/strikethrough_s.isvg";
 import { ReactComponent as msSubscript } from "ui/material-symbols/subscript.isvg";
 import { ReactComponent as msSuperscript } from "ui/material-symbols/superscript.isvg";
-import { ReactComponent as msVideoCameraBackAdd } from "ui/material-symbols/video_camera_back_add.isvg";
+import { ReactComponent as msVideoLibrary } from "ui/material-symbols/video_library.isvg";
 
 export {
     msAddLink,
-    msAddPhotoAlternate,
-    msAddReaction,
     msAlternateEmail,
     msArrowDropDown,
     msCode,
@@ -47,11 +45,13 @@ export {
     msFormatQuote,
     msFormatQuoteOff,
     msMoreHoriz,
+    msPhotoLibrary,
     msReport,
+    msSentimentSatisfied,
     msStrikethroughS,
     msSubscript,
     msSuperscript,
-    msVideoCameraBackAdd,
+    msVideoLibrary,
 };
 
 export type MaterialSymbol = React.FunctionComponent<React.SVGProps<SVGSVGElement> & { title?: string }>;

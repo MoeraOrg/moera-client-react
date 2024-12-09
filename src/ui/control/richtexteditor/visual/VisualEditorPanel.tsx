@@ -16,7 +16,7 @@ import {
     msHorizontalRule,
     msReport,
     msStrikethroughS,
-    msVideoCameraBackAdd
+    msVideoLibrary,
 } from "ui/material-symbols";
 import * as Browser from "ui/browser";
 import { VisualEditorButton } from "ui/control/richtexteditor/visual/VisualEditorButton";
@@ -91,7 +91,7 @@ export default function VisualEditorPanel({hiding}: Props) {
             <div className="group">
                 <VisualEditorButton icon={msAddLink} title={t("link")} letter={VISUAL_EDITOR_KEYS.LINK}
                                     active={inLink} command={formatLink}/>
-                <VisualEditorButton icon={msVideoCameraBackAdd} title={t("insert-video")} command={formatVideo}/>
+                <VisualEditorButton icon={msVideoLibrary} title={t("insert-video")} command={formatVideo}/>
             </div>
         </div>
     );

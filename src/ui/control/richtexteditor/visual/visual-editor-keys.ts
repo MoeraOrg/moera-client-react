@@ -5,12 +5,18 @@ export const VISUAL_EDITOR_KEYS = {
     LINK: "K",
     BLOCKQUOTE: "'",
     HORIZONTAL_RULE: "H",
-    CODE: "T",
+    CODE: "Shift-C",
 };
 
-export function letterToKeyCode(letter: string): string {
-    if (letter === "'") {
-        return "Quote";
+export function checkKeyCode(letter: string, code: string, shiftKey: boolean): boolean {
+    if (letter.startsWith("Shift-") !== shiftKey) {
+        return false;
     }
-    return "Key" + letter;
+    if (letter.startsWith("Shift-")) {
+        letter = letter.substring(6);
+    }
+    if (letter === "'") {
+        return code === "Quote";
+    }
+    return code === "Key" + letter;
 }

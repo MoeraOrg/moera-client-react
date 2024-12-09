@@ -13,24 +13,23 @@ import {
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
 import { VisualEditorButton } from "ui/control/richtexteditor/visual/VisualEditorButton";
 import { VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
+import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 import { useButtonPopper } from "ui/hook";
 import "./VisualEditorOtherButton.css";
-import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 
 interface Props {
-    onCode?: () => void;
     onCodeBlock?: () => void;
     onFormula?: () => void;
-    onSubscript?: () => void;
-    onSuperscript?: () => void;
 }
 
-export default function VisualEditorOtherButton({onCode, onCodeBlock, onFormula, onSubscript, onSuperscript}: Props) {
+export default function VisualEditorOtherButton({onCodeBlock, onFormula}: Props) {
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
         placement, zIndex
     } = useButtonPopper("bottom", {closeOnSelect: false});
-    const {inFold, formatFold} = useVisualEditorCommands();
+    const {
+        inFold, inCode, inSubscript, inSuperscript, formatFold, formatCode, formatSubscript, formatSuperscript
+    } = useVisualEditorCommands();
     const {t} = useTranslation();
 
     const onCommand = (command?: () => void) => () => {
@@ -48,13 +47,14 @@ export default function VisualEditorOtherButton({onCode, onCodeBlock, onFormula,
                         <VisualEditorButton icon={msExpandCircleDown} title={t("fold")} active={inFold}
                                             command={onCommand(formatFold)}/>
                         <VisualEditorButton icon={msCode} title={t("code")} letter={VISUAL_EDITOR_KEYS.CODE}
-                                            command={onCommand(onCode)}/>
+                                            active={inCode} command={onCommand(formatCode)}/>
                         <VisualEditorButton icon={msCodeBlocks} title={t("code-block")}
                                             command={onCommand(onCodeBlock)}/>
                         <VisualEditorButton icon={msFunction} title={t("formula")} command={onCommand(onFormula)}/>
-                        <VisualEditorButton icon={msSubscript} title={t("subscript")} command={onCommand(onSubscript)}/>
-                        <VisualEditorButton icon={msSuperscript} title={t("superscript")}
-                                            command={onCommand(onSuperscript)}/>
+                        <VisualEditorButton icon={msSubscript} title={t("subscript")} active={inSubscript}
+                                            command={onCommand(formatSubscript)}/>
+                        <VisualEditorButton icon={msSuperscript} title={t("superscript")} active={inSuperscript}
+                                            command={onCommand(formatSuperscript)}/>
                     </div>
                     <div ref={setArrowRef} style={arrowStyles} className="popover-arrow"/>
                 </div>
