@@ -18,17 +18,17 @@ import { useButtonPopper } from "ui/hook";
 import "./VisualEditorOtherButton.css";
 
 interface Props {
-    onCodeBlock?: () => void;
     onFormula?: () => void;
 }
 
-export default function VisualEditorOtherButton({onCodeBlock, onFormula}: Props) {
+export default function VisualEditorOtherButton({onFormula}: Props) {
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
         placement, zIndex
     } = useButtonPopper("bottom", {closeOnSelect: false});
     const {
-        inFold, inCode, inSubscript, inSuperscript, formatFold, formatCode, formatSubscript, formatSuperscript
+        inFold, inCode, inSubscript, inSuperscript, inCodeBlock,
+        formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock
     } = useVisualEditorCommands();
     const {t} = useTranslation();
 
@@ -48,8 +48,8 @@ export default function VisualEditorOtherButton({onCodeBlock, onFormula}: Props)
                                             command={onCommand(formatFold)}/>
                         <VisualEditorButton icon={msCode} title={t("code")} letter={VISUAL_EDITOR_KEYS.CODE}
                                             active={inCode} command={onCommand(formatCode)}/>
-                        <VisualEditorButton icon={msCodeBlocks} title={t("code-block")}
-                                            command={onCommand(onCodeBlock)}/>
+                        <VisualEditorButton icon={msCodeBlocks} title={t("code-block")} active={inCodeBlock}
+                                            command={onCommand(formatCodeBlock)}/>
                         <VisualEditorButton icon={msFunction} title={t("formula")} command={onCommand(onFormula)}/>
                         <VisualEditorButton icon={msSubscript} title={t("subscript")} active={inSubscript}
                                             command={onCommand(formatSubscript)}/>

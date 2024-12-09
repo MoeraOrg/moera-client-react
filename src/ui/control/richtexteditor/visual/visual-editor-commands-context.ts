@@ -20,6 +20,7 @@ export interface VisualEditorCommandsInterface {
     inVoid: boolean;
     inFold: boolean;
     inCode: boolean;
+    inCodeBlock: boolean;
     inSubscript: boolean;
     inSuperscript: boolean;
 
@@ -39,6 +40,7 @@ export interface VisualEditorCommandsInterface {
     formatVideo: () => void;
     formatFold: () => void;
     formatCode: () => void;
+    formatCodeBlock: () => void;
     formatSubscript: () => void;
     formatSuperscript: () => void;
 }
@@ -63,6 +65,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     inVoid: false,
     inFold: false,
     inCode: false,
+    inCodeBlock: false,
     inSubscript: false,
     inSuperscript: false,
 
@@ -82,6 +85,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     formatVideo: () => {},
     formatFold: () => {},
     formatCode: () => {},
+    formatCodeBlock: () => {},
     formatSubscript: () => {},
     formatSuperscript: () => {},
 });

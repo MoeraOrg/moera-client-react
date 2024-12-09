@@ -54,6 +54,14 @@ export default function VisualRenderElement(props: RenderElementProps) {
                         {children}
                     </details>
                 );
+            case "code-block":
+                return (
+                    // @ts-ignore
+                    <pre className="block-border block-border-red"  style={{"--bb-badge": `"${t("code")}"`}}
+                         {...attributes}>
+                        {children}
+                    </pre>
+                );
             default:
                 return <DefaultElement {...props}/>;
         }

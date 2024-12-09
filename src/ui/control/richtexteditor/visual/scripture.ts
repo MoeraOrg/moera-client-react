@@ -141,6 +141,18 @@ export const isDetailsElement = (value: any): value is DetailsElement =>
 export const createDetailsElement = (summary: string, children: Scripture): DetailsElement =>
     ({type: "details", summary, children});
 
+/* PRE */
+
+export interface CodeBlockElement extends SlateElement {
+    type: "code-block";
+}
+
+export const isCodeBlockElement = (value: any): value is CodeBlockElement =>
+    isScriptureElement(value) && value.type === "code-block";
+
+export const createCodeBlockElement = (children: Scripture): CodeBlockElement =>
+    ({type: "code-block", children});
+
 /* element */
 
 export type ScriptureElement =
@@ -154,7 +166,8 @@ export type ScriptureElement =
     | ListItemElement
     | HeadingElement
     | IframeElement
-    | DetailsElement;
+    | DetailsElement
+    | CodeBlockElement;
 
 export const isScriptureElement = (value: any): value is ScriptureElement =>
     SlateElement.isElement(value) && "type" in value;

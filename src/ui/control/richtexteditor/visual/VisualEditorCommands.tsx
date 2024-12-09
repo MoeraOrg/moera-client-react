@@ -5,6 +5,7 @@ import { ReactEditor, useSlateSelector, useSlateStatic } from 'slate-react';
 import { NodeName } from "api";
 import {
     createBlockquoteElement,
+    createCodeBlockElement,
     createDetailsElement,
     createHorizontalRuleElement,
     createIframeElement,
@@ -76,6 +77,7 @@ export default function VisualEditorCommands({children}: Props) {
     const inFold = useSlateSelector(editor => isSelectionInElement(editor, "details"));
     const inSubscript = supsub < 0;
     const inSuperscript = supsub > 0;
+    const inCodeBlock = useSlateSelector(editor => isSelectionInElement(editor, "code-block"));
     const {
         showLinkDialog, showSpoilerDialog, showMentionDialog, showVideoDialog, showFoldDialog
     } = useRichTextEditorDialogs();
@@ -320,14 +322,23 @@ export default function VisualEditorCommands({children}: Props) {
     const formatSuperscript = () =>
         editor.addMark("supsub", !inSuperscript ? 1 : 0);
 
+    const formatCodeBlock = () => {
+        if (editor.selection == null || Range.isCollapsed(editor.selection)) {
+            editor.insertNode(createCodeBlockElement([createScriptureText("")]));
+        } else {
+            editor.setNodes(createCodeBlockElement([]), {split: true});
+        }
+    }
+
     return (
         <VisualEditorCommandsContext.Provider value={{
             enableBlockquote, enableHeading,
             inBold, inItalic, inStrikeout, inLink, inSpoilerInline, inSpoilerBlock, inSpoiler, inMention, inBlockquote,
             inList, inUnorderedList, inOrderedList, headingLevel, inVoid, inFold, inCode, inSubscript, inSuperscript,
+            inCodeBlock,
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
             formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo,
-            formatFold, formatCode, formatSubscript, formatSuperscript
+            formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>

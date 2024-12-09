@@ -164,10 +164,15 @@
     --bb-color: var(--bs-blue-600);
 }
 
+.visual-text-area .block-border-red {
+    --bb-color: var(--bs-code-color);
+}
+
 .visual-text-area .block-border {
     border: 1px dashed var(--bb-color);
     position: relative;
     padding: .75rem .5rem .5rem .5rem;
+    overflow: visible;
 }
 
 .visual-text-area .block-border:before {
