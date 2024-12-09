@@ -31,11 +31,14 @@
     color: var(--bs-link-color);
 }
 
-.visual-text-area, .visual-text-area > :not(DIV.list-item) {
+.visual-text-area,
+.visual-text-area > :not(DIV.list-item) {
     counter-reset: list-counter-1 list-counter-2 list-counter-3 list-counter-4 list-counter-5;
 }
 
-.visual-text-area DIV.list-item ~ P, .visual-text-area DIV.list-item ~ DETAILS {
+.visual-text-area DIV.list-item ~ P,
+.visual-text-area DIV.list-item ~ DETAILS,
+.visual-text-area DIV.list-item ~ .block-border {
     margin-top: 1rem;
 }
 
@@ -153,16 +156,38 @@
     top: -.25em;
 }
 
+.visual-text-area .block-border-gray {
+    --bb-color: var(--bs-gray-600);
+}
+
+.visual-text-area .block-border-blue {
+    --bb-color: var(--bs-blue-600);
+}
+
+.visual-text-area .block-border {
+    border: 1px dashed var(--bb-color);
+    position: relative;
+    padding: .75rem .5rem .5rem .5rem;
+}
+
+.visual-text-area .block-border:before {
+    position: absolute;
+    top: -.75em;
+    left: 1.5em;
+    background-color: var(--bb-color);
+    color: white;
+    text-transform: lowercase;
+    font-weight: 400;
+    font-size: .75em;
+    padding: 0 .5em;
+    border-radius: .3em;
+    content: var(--bb-badge);
+}
+
 .visual-text-area DETAILS {
-    border: 1px dashed var(--bs-gray-600);
-    padding: 0 .5rem;
+    padding-bottom: 0;
 }
 
 .visual-text-area DETAILS[open] {
     padding-bottom: .5rem;
-}
-
-.visual-text-area DETAILS[open] > SUMMARY {
-    border-bottom: 1px dashed var(--bs-gray-400);
-    margin-bottom: .5rem;
 }
