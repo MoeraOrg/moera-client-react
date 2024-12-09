@@ -28,7 +28,7 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
     const editor = useSlateStatic() as ReactEditor;
     const {
         enableBlockquote,
-        inBlockquote, inList, headingLevel, inVoid,
+        inBlockquote, inSpoilerBlock, inFold, inList, headingLevel, inVoid,
         formatBold, formatItalic, formatStrikeout, formatLink, formatMention, formatBlockquote, formatHorizontalRule,
         formatCode
     } = useVisualEditorCommands();
@@ -87,9 +87,15 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
             event.key === "Backspace" && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey
             && editor.selection != null && Range.isCollapsed(editor.selection)
         ) {
-            if (inBlockquote) {
-                const [, path] = findWrappingElement(editor, ["paragraph", "heading", "spoiler-block"]) ?? [null, null];
-                if (path != null && editor.isStart(editor.selection.anchor, path)) {
+            if (inBlockquote || inSpoilerBlock || inFold) {
+                const [, blockPath] = findWrappingElement(editor, [
+                    "blockquote", "spoiler-block", "details"
+                ]) ?? [null, null];
+                const [, path] = findWrappingElement(editor, ["paragraph", "heading"]) ?? [null, null];
+                if (
+                    path != null && blockPath != null
+                    && path.length > blockPath.length && editor.isStart(editor.selection.anchor, path)
+                ) {
                     editor.liftNodes();
                     event.preventDefault();
                 }

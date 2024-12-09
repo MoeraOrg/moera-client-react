@@ -22,7 +22,8 @@ import {
     isHeadingElement,
     isLinkElement,
     isListItemElement,
-    isParagraphElement, isScriptureElement,
+    isParagraphElement,
+    isScriptureElement,
     isSpoilerBlockElement,
     isSpoilerElement,
     LinkElement,
@@ -58,7 +59,9 @@ export default function VisualEditorCommands({children}: Props) {
         equalScriptureMarks
     );
     const inLink = useSlateSelector(editor => isSelectionInElement(editor, "link"));
-    const inSpoiler = useSlateSelector(editor => isSelectionInElement(editor, ["spoiler", "spoiler-block"]));
+    const inSpoilerInline = useSlateSelector(editor => isSelectionInElement(editor, "spoiler"));
+    const inSpoilerBlock = useSlateSelector(editor => isSelectionInElement(editor, "spoiler-block"));
+    const inSpoiler = inSpoilerInline || inSpoilerBlock;
     const inMention = useSlateSelector(editor => isSelectionInElement(editor, "mention"));
     const inBlockquote = useSlateSelector(editor => isSelectionInElement(editor, "blockquote"));
     const listItem = useSlateSelector(editor => findWrappingElement<ListItemElement>(editor, "list-item"));
@@ -320,8 +323,8 @@ export default function VisualEditorCommands({children}: Props) {
     return (
         <VisualEditorCommandsContext.Provider value={{
             enableBlockquote, enableHeading,
-            inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
-            inOrderedList, headingLevel, inVoid, inFold, inCode, inSubscript, inSuperscript,
+            inBold, inItalic, inStrikeout, inLink, inSpoilerInline, inSpoilerBlock, inSpoiler, inMention, inBlockquote,
+            inList, inUnorderedList, inOrderedList, headingLevel, inVoid, inFold, inCode, inSubscript, inSuperscript,
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
             formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo,
             formatFold, formatCode, formatSubscript, formatSuperscript

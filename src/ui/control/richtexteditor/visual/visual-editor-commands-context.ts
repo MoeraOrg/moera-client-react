@@ -8,6 +8,8 @@ export interface VisualEditorCommandsInterface {
     inItalic: boolean;
     inStrikeout: boolean;
     inLink: boolean;
+    inSpoilerInline: boolean;
+    inSpoilerBlock: boolean;
     inSpoiler: boolean;
     inMention: boolean;
     inBlockquote: boolean;
@@ -49,6 +51,8 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     inItalic: false,
     inStrikeout: false,
     inLink: false,
+    inSpoilerInline: false,
+    inSpoilerBlock: false,
     inSpoiler: false,
     inMention: false,
     inBlockquote: false,
