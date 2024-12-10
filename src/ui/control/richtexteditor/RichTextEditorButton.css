@@ -15,6 +15,11 @@
     width: fit-content;
 }
 
+.rich-text-editor-button.dropdown-toggle::after {
+    margin-left: .4em;
+    vertical-align: .1em;
+}
+
 .rich-text-editor-button.active {
     color: var(--bs-primary);
 }

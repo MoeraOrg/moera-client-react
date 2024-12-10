@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import { ReactComponent as msAddLink } from "ui/material-symbols/add_link.isvg";
 import { ReactComponent as msAlternateEmail } from "ui/material-symbols/alternate_email.isvg";
-import { ReactComponent as msArrowDropDown } from "ui/material-symbols/arrow_drop_down.isvg";
 import { ReactComponent as msCode } from "ui/material-symbols/code.isvg";
 import { ReactComponent as msCodeBlocks } from "ui/material-symbols/code_blocks.isvg";
 import { ReactComponent as msExpandCircleDown } from "ui/material-symbols/expand_circle_down.isvg";
@@ -29,7 +28,6 @@ import { ReactComponent as msVideoLibrary } from "ui/material-symbols/video_libr
 export {
     msAddLink,
     msAlternateEmail,
-    msArrowDropDown,
     msCode,
     msCodeBlocks,
     msExpandCircleDown,

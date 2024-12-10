@@ -175,7 +175,7 @@
     overflow: visible;
 }
 
-.visual-text-area .block-border:before {
+.visual-text-area .block-border::before {
     position: absolute;
     top: -.75em;
     left: 1.5em;

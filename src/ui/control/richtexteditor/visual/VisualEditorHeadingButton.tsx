@@ -2,7 +2,6 @@ import React from 'react';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, msArrowDropDown } from "ui/material-symbols";
 import { useButtonPopper } from "ui/hook";
 import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 
@@ -25,9 +24,9 @@ export default function VisualEditorHeadingButton({onSelect}: Props) {
 
     return (
         <>
-            <button className="rich-text-editor-button selector ps-3" disabled={!enableHeading} onClick={onToggle}
-                    ref={setButtonRef}>
-                <span className="text">{headingTitle(headingLevel, t)}</span><Icon icon={msArrowDropDown}/>
+            <button className="rich-text-editor-button selector dropdown-toggle ps-3 pe-3" disabled={!enableHeading}
+                    onClick={onToggle} ref={setButtonRef}>
+                <span className="text">{headingTitle(headingLevel, t)}</span>
             </button>
             {visible &&
                 <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
