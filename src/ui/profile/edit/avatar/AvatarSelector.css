@@ -43,9 +43,9 @@
     width: 100px;
     height: 100px;
     text-align: center;
-    border: 2px solid var(--input-focus-border);
+    border: 2px solid var(--bs-blue-300);
     border-radius: 10px;
-    color: var(--input-focus-border);
+    color: var(--bs-blue-300);
     font-weight: bold;
     font-size: 1.5rem;
     padding-top: 1rem;

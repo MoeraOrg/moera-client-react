@@ -21,7 +21,7 @@
     margin-left: .5rem;
     padding: .3rem;
     font-size: 1.2rem;
-    color: var(--red-light);
+    color: var(--bs-red);
 }
 
 .draft-selector .dropdown-item:hover .draft-delete {

@@ -7,12 +7,41 @@
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/variables-dark";
+
+$nav-tabs-link-active-color:  $gray-800;
+$nav-link-color:              $gray-600;
+$nav-link-hover-color:        $gray-700;
+
 @import "~bootstrap/scss/maps";
 @import "~bootstrap/scss/mixins";
 @import "~bootstrap/scss/utilities";
 
 // Layout & components
 @import "~bootstrap/scss/root";
+
+$blues: (
+  "100": $blue-100,
+  "200": $blue-200,
+  "300": $blue-300,
+  "400": $blue-400,
+  "500": $blue-500,
+  "600": $blue-600,
+  "700": $blue-700,
+  "800": $blue-800,
+  "900": $blue-900
+);
+
+:root {
+  @each $color, $value in $blues {
+    --#{$prefix}blue-#{$color}: #{$value};
+  }
+
+  --#{$prefix}cyan-200: #{$cyan-200};
+
+  --#{$prefix}input-focus-border-color: #{$input-focus-border-color};
+  --#{$prefix}input-focus-box-shadow: #{$input-focus-box-shadow};
+}
+
 @import "~bootstrap/scss/reboot";
 @import "~bootstrap/scss/type";
 @import "~bootstrap/scss/images";

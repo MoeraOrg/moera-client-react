@@ -30,7 +30,7 @@
 }
 
 #owner-name .node-name.incorrect {
-    color: var(--incorrect-light);
+    color: var(--incorrect);
 }
 
 #owner-name .node-name .mention {

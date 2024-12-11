@@ -1,5 +1,5 @@
 .sheriff-visibility {
-    color: var(--red-light);
+    color: var(--bs-red);
     font-size: 90%;
     margin-right: .5em;
 }

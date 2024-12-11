@@ -1,6 +1,6 @@
 .comment-button, A.comment-button {
     text-decoration: none;
-    color: var(--link-button);
+    color: var(--comment-button);
     cursor: pointer;
     background-color: transparent;
     border: none;
