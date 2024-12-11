@@ -9,11 +9,13 @@ import * as Browser from "ui/browser";
 import "./RichTextImageDialogTabs.css";
 
 export default function RichTextImageDialogTabs() {
-    const [{onBlur}, {value}, {setValue}] = useField<string>("source");
+    const [, {value}, {setValue}] = useField<string>("source");
     const {t} = useTranslation();
 
+    // FIXME use <Tabs> component here, if still in use after redesign
+
     return (
-        <ul className="nav nav-tabs rich-text-image-dialog-tabs" onBlur={onBlur}>
+        <ul className="nav nav-tabs rich-text-image-dialog-tabs">
             <li className="nav-item">
                 <span className={cx("nav-link", {"active": value === "device"})}
                       onClick={() => setValue("device")}>

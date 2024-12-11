@@ -91,7 +91,8 @@ const mapPropsToValues = (props: Props): RichTextImageValues => ({
 });
 
 function RichTextImageDialog({
-    features, noMedia = false, nodeName = REL_CURRENT, forceCompress, onAdded, onDeleted, externalImage, uploadingExternalImage
+    features, noMedia = false, nodeName = REL_CURRENT, forceCompress, onAdded, onDeleted, externalImage,
+    uploadingExternalImage
 }: Props) {
     const [showAlign, setShowAlign] = useState<boolean>(false);
     const [showCaption, setShowCaption] = useState<boolean>(false);
