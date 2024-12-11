@@ -196,3 +196,7 @@
 .visual-text-area DETAILS[open] {
     padding-bottom: .5rem;
 }
+
+.visual-text-area .formula {
+    cursor: pointer;
+}

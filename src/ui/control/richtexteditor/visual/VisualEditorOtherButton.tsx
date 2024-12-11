@@ -17,18 +17,14 @@ import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual
 import { useButtonPopper } from "ui/hook";
 import "./VisualEditorOtherButton.css";
 
-interface Props {
-    onFormula?: () => void;
-}
-
-export default function VisualEditorOtherButton({onFormula}: Props) {
+export default function VisualEditorOtherButton() {
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
         placement, zIndex
     } = useButtonPopper("bottom", {closeOnSelect: false});
     const {
-        inFold, inCode, inSubscript, inSuperscript, inCodeBlock,
-        formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock
+        inFold, inCode, inSubscript, inSuperscript, inCodeBlock, inFormula,
+        formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula
     } = useVisualEditorCommands();
     const {t} = useTranslation();
 
@@ -50,7 +46,8 @@ export default function VisualEditorOtherButton({onFormula}: Props) {
                                             active={inCode} command={onCommand(formatCode)}/>
                         <VisualEditorButton icon={msCodeBlocks} title={t("code-block")} active={inCodeBlock}
                                             command={onCommand(formatCodeBlock)}/>
-                        <VisualEditorButton icon={msFunction} title={t("formula")} command={onCommand(onFormula)}/>
+                        <VisualEditorButton icon={msFunction} title={t("formula")} active={inFormula}
+                                            command={onCommand(formatFormula)}/>
                         <VisualEditorButton icon={msSubscript} title={t("subscript")} active={inSubscript}
                                             command={onCommand(formatSubscript)}/>
                         <VisualEditorButton icon={msSuperscript} title={t("superscript")} active={inSuperscript}

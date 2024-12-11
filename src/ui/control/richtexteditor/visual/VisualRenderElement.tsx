@@ -3,11 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { DefaultElement, RenderElementProps } from 'slate-react';
 
 import { isScriptureElement } from "ui/control/richtexteditor/visual/scripture";
+import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
+import { BlockMath, InlineMath } from "ui/katex";
 
 export default function VisualRenderElement(props: RenderElementProps) {
     const {element, attributes, children} = props;
 
+    const {formatFormula} = useVisualEditorCommands();
     const {t} = useTranslation();
+
+    const onFormulaClick = () => setTimeout(() => formatFormula());
 
     if (isScriptureElement(element)) {
         switch (element.type) {
@@ -61,6 +66,18 @@ export default function VisualRenderElement(props: RenderElementProps) {
                          {...attributes}>
                         {children}
                     </pre>
+                );
+            case "formula":
+                return (
+                    <span className="formula" {...attributes} contentEditable={false} onClick={onFormulaClick}>
+                        {children}<InlineMath math={element.content}/>
+                    </span>
+                );
+            case "formula-block":
+                return (
+                    <p className="formula" {...attributes} contentEditable={false} onClick={onFormulaClick}>
+                        {children}<BlockMath math={element.content}/>
+                    </p>
                 );
             default:
                 return <DefaultElement {...props}/>;

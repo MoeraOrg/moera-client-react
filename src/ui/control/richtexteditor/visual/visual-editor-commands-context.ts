@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext } from 'react';
 
 export interface VisualEditorCommandsInterface {
     enableBlockquote: boolean;
@@ -23,6 +23,7 @@ export interface VisualEditorCommandsInterface {
     inCodeBlock: boolean;
     inSubscript: boolean;
     inSuperscript: boolean;
+    inFormula: boolean;
 
     formatBold: () => void;
     formatItalic: () => void;
@@ -43,6 +44,7 @@ export interface VisualEditorCommandsInterface {
     formatCodeBlock: () => void;
     formatSubscript: () => void;
     formatSuperscript: () => void;
+    formatFormula: () => void;
 }
 
 export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInterface>({
@@ -68,6 +70,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     inCodeBlock: false,
     inSubscript: false,
     inSuperscript: false,
+    inFormula: false,
 
     formatBold: () => {},
     formatItalic: () => {},
@@ -88,6 +91,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     formatCodeBlock: () => {},
     formatSubscript: () => {},
     formatSuperscript: () => {},
+    formatFormula: () => {},
 });
 
 export const useVisualEditorCommands = (): VisualEditorCommandsInterface => useContext(VisualEditorCommandsContext);

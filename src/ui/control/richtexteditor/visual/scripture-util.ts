@@ -5,6 +5,8 @@ import {
     createBlockquoteElement,
     createCodeBlockElement,
     createDetailsElement,
+    createFormulaBlockElement,
+    createFormulaElement,
     createHeadingElement,
     createHorizontalRuleElement,
     createIframeElement,
@@ -211,9 +213,17 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
             return createHeadingElement(5, children);
         case "IFRAME":
             return createIframeElement(element.outerHTML);
+        case "SPAN":
+            if (element.classList.contains("katex")) {
+                return createFormulaElement(element.textContent ?? "");
+            }
+            return children;
         case "DIV":
             if (element.classList.contains("mr-video")) {
                 return createIframeElement(element.innerHTML);
+            }
+            if (element.classList.contains("katex")) {
+                return createFormulaBlockElement(element.textContent ?? "");
             }
             return children;
         case "DETAILS": {
@@ -348,7 +358,7 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 if (STANDALONE_VIDEO.test(node.code)) {
                     context.output += node.code;
                 } else {
-                    context.output += "<div class='mr-video'>" + node.code + "</div>";
+                    context.output += `<div class="mr-video">${node.code}</div>`;
                 }
                 return;
             case "details":
@@ -363,6 +373,12 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 context.output += "<pre>";
                 scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
                 context.output += "</pre>";
+                return;
+            case "formula":
+                context.output += `<span class="katex">${node.content}</span>`;
+                return;
+            case "formula-block":
+                context.output += `<div class="katex">${node.content}</div>`;
                 return;
         }
     }

@@ -28,9 +28,9 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
     const editor = useSlateStatic() as ReactEditor;
     const {
         enableBlockquote,
-        inBlockquote, inList, headingLevel, inVoid, inCodeBlock,
+        inBlockquote, inList, headingLevel, inVoid, inCodeBlock, inFormula,
         formatBold, formatItalic, formatStrikeout, formatLink, formatMention, formatBlockquote, formatHorizontalRule,
-        formatCode
+        formatCode, formatFormula
     } = useVisualEditorCommands();
 
     const onKeyDown = (event: React.KeyboardEvent) => {
@@ -109,6 +109,11 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
                     event.preventDefault();
                 }
             }
+        }
+
+        if (event.code === "Space" && inFormula) {
+            formatFormula();
+            event.preventDefault();
         }
 
         if (event.key === "@") {

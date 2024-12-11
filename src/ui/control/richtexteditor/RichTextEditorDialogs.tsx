@@ -6,6 +6,7 @@ import RichTextFoldDialog, { RichTextFoldValues } from "ui/control/richtextedito
 import RichTextLinkDialog, { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
 import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
 import RichTextVideoDialog, { RichTextVideoValues } from "ui/control/richtexteditor/RichTextVideoDialog";
+import RichTextFormulaDialog, { RichTextFormulaValues } from "ui/control/richtexteditor/RichTextFormulaDialog";
 import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/rich-text-editor-dialog";
 import { NameListItem } from "util/names-list";
 
@@ -36,6 +37,11 @@ export default function RichTextEditorDialogs({children}: Props) {
     const [videoDialog, setVideoDialog] = useState<boolean>(false);
     const [videoDialogOnSubmit, setVideoDialogOnSubmit] =
         useState<RichTextEditorDialogSubmit<RichTextVideoValues>>(() => () => {});
+
+    const [formulaDialog, setFormulaDialog] = useState<boolean>(false);
+    const [formulaDialogPrevValues, setFormulaDialogPrevValues] = useState<RichTextFormulaValues | null>(null);
+    const [formulaDialogOnSubmit, setFormulaDialogOnSubmit] =
+        useState<RichTextEditorDialogSubmit<RichTextFormulaValues>>(() => () => {});
 
     const showSpoilerDialog = (
         show: boolean, prevValues?: RichTextSpoilerValues | null,
@@ -92,11 +98,25 @@ export default function RichTextEditorDialogs({children}: Props) {
         }
     }
 
+    const showFormulaDialog = (
+        show: boolean, prevValues?: RichTextFormulaValues | null,
+        onSubmit?: RichTextEditorDialogSubmit<RichTextFormulaValues>
+    ) => {
+        if (show) {
+            setFormulaDialogPrevValues(prevValues ?? null);
+            onSubmit && setFormulaDialogOnSubmit(() => onSubmit);
+            setFormulaDialog(true);
+        } else {
+            setFormulaDialog(false);
+        }
+    }
+
     return (
         <>
-            <RichTextEditorDialogsContext.Provider
-                value={{showSpoilerDialog, showFoldDialog, showLinkDialog, showMentionDialog, showVideoDialog}}
-            >
+            <RichTextEditorDialogsContext.Provider value={{
+                showSpoilerDialog, showFoldDialog, showLinkDialog, showMentionDialog, showVideoDialog,
+                showFormulaDialog
+            }}>
                 {children}
             </RichTextEditorDialogsContext.Provider>
             {spoilerDialog &&
@@ -106,6 +126,9 @@ export default function RichTextEditorDialogs({children}: Props) {
             {linkDialog && <RichTextLinkDialog  prevValues={linkDialogPrevValues} onSubmit={linkDialogOnSubmit}/>}
             {mentionDialog && <RichTextMentionDialog onSubmit={mentionDialogOnSubmit}/>}
             {videoDialog && <RichTextVideoDialog onSubmit={videoDialogOnSubmit}/>}
+            {formulaDialog &&
+                <RichTextFormulaDialog prevValues={formulaDialogPrevValues} onSubmit={formulaDialogOnSubmit}/>
+            }
         </>
     );
 }

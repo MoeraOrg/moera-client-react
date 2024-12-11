@@ -7,6 +7,6 @@ export interface InlineMathProps {
 }
 
 export default function InlineMath({math}: InlineMathProps) {
-    const html = useMath(math);
+    const html = useMath(math, {displayMode: false, throwOnError: false});
     return <span dangerouslySetInnerHTML={{__html: html}}/>;
 }

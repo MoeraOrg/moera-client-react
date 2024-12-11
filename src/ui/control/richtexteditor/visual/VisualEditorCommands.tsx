@@ -7,6 +7,8 @@ import {
     createBlockquoteElement,
     createCodeBlockElement,
     createDetailsElement,
+    createFormulaBlockElement,
+    createFormulaElement,
     createHorizontalRuleElement,
     createIframeElement,
     createLinkElement,
@@ -18,8 +20,12 @@ import {
     createSpoilerElement,
     DetailsElement,
     equalScriptureMarks,
+    FormulaBlockElement,
+    FormulaElement,
     HeadingElement,
     isDetailsElement,
+    isFormulaBlockElement,
+    isFormulaElement,
     isHeadingElement,
     isLinkElement,
     isListItemElement,
@@ -43,6 +49,7 @@ import { findWrappingElement, isSelectionInElement } from "ui/control/richtexted
 import { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
 import { RichTextVideoValues } from "ui/control/richtexteditor/RichTextVideoDialog";
 import { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
+import { RichTextFormulaValues } from "ui/control/richtexteditor/RichTextFormulaDialog";
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
 
@@ -78,8 +85,9 @@ export default function VisualEditorCommands({children}: Props) {
     const inSubscript = supsub < 0;
     const inSuperscript = supsub > 0;
     const inCodeBlock = useSlateSelector(editor => isSelectionInElement(editor, "code-block"));
+    const inFormula = useSlateSelector(editor => isSelectionInElement(editor, ["formula", "formula-block"]));
     const {
-        showLinkDialog, showSpoilerDialog, showMentionDialog, showVideoDialog, showFoldDialog
+        showLinkDialog, showSpoilerDialog, showMentionDialog, showVideoDialog, showFoldDialog, showFormulaDialog
     } = useRichTextEditorDialogs();
 
     const formatBold = () =>
@@ -330,15 +338,38 @@ export default function VisualEditorCommands({children}: Props) {
         }
     }
 
+    const formatFormula = () => {
+        const [element, path] = findWrappingElement(editor, ["formula", "formula-block"]) ?? [null, null];
+        const prevValues = element != null && (isFormulaElement(element) || isFormulaBlockElement(element))
+            ? {math: element.content, block: isFormulaBlockElement(element)}
+            : null;
+
+        showFormulaDialog(true, prevValues, (ok: boolean | null, {math, block}: Partial<RichTextFormulaValues>) => {
+            showFormulaDialog(false);
+
+            if (ok && math) {
+                const node = block ? createFormulaBlockElement(math) : createFormulaElement(math);
+                if (path != null) {
+                    editor.setNodes<FormulaElement | FormulaBlockElement>(node, {at: path});
+                } else {
+                    editor.insertNode(node);
+                }
+            } else if (ok == null && path != null) {
+                editor.removeNodes({at: path});
+            }
+            ReactEditor.focus(editor);
+        });
+    }
+
     return (
         <VisualEditorCommandsContext.Provider value={{
             enableBlockquote, enableHeading,
             inBold, inItalic, inStrikeout, inLink, inSpoilerInline, inSpoilerBlock, inSpoiler, inMention, inBlockquote,
             inList, inUnorderedList, inOrderedList, headingLevel, inVoid, inFold, inCode, inSubscript, inSuperscript,
-            inCodeBlock,
+            inCodeBlock, inFormula,
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
             formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo,
-            formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock
+            formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>

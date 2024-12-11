@@ -153,6 +153,32 @@ export const isCodeBlockElement = (value: any): value is CodeBlockElement =>
 export const createCodeBlockElement = (children: Scripture): CodeBlockElement =>
     ({type: "code-block", children});
 
+/* KATEX */
+
+export interface FormulaElement extends SlateElement {
+    type: "formula";
+    content: string;
+}
+
+export const isFormulaElement = (value: any): value is FormulaElement =>
+    isScriptureElement(value) && value.type === "formula";
+
+export const createFormulaElement = (content: string): FormulaElement =>
+    ({type: "formula", content, children: [createScriptureText("")]});
+
+/* KATEX-BLOCK */
+
+export interface FormulaBlockElement extends SlateElement {
+    type: "formula-block";
+    content: string;
+}
+
+export const isFormulaBlockElement = (value: any): value is FormulaBlockElement =>
+    isScriptureElement(value) && value.type === "formula-block";
+
+export const createFormulaBlockElement = (content: string): FormulaBlockElement =>
+    ({type: "formula-block", content, children: [createScriptureText("")]});
+
 /* element */
 
 export type ScriptureElement =
@@ -167,7 +193,9 @@ export type ScriptureElement =
     | HeadingElement
     | IframeElement
     | DetailsElement
-    | CodeBlockElement;
+    | CodeBlockElement
+    | FormulaElement
+    | FormulaBlockElement;
 
 export const isScriptureElement = (value: any): value is ScriptureElement =>
     SlateElement.isElement(value) && "type" in value;
@@ -201,9 +229,9 @@ export const createScriptureText = (text: string, attributes: Record<string, any
 
 export type ScriptureElementType = ScriptureElement["type"];
 
-export const SCRIPTURE_INLINE_TYPES: ScriptureElementType[] = ["link", "spoiler", "mention"];
+export const SCRIPTURE_INLINE_TYPES: ScriptureElementType[] = ["link", "spoiler", "mention", "formula"];
 
-export const SCRIPTURE_VOID_TYPES: ScriptureElementType[] = ["horizontal-rule", "iframe"];
+export const SCRIPTURE_VOID_TYPES: ScriptureElementType[] = ["horizontal-rule", "iframe", "formula", "formula-block"];
 
 export type ScriptureDescendant = ScriptureElement | ScriptureText;
 

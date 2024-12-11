@@ -7,6 +7,6 @@ export interface BlockMathProps {
 }
 
 export default function BlockMath({math}: BlockMathProps) {
-    const html = useMath(math);
+    const html = useMath(math, {displayMode: true, throwOnError: false});
     return <div dangerouslySetInnerHTML={{__html: html}}/>;
 }
