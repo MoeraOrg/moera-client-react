@@ -1,4 +1,5 @@
 import { BaseEditor, BaseElement, Node as SlateNode, NodeEntry, Path, Transforms } from 'slate';
+import { DOMEditor } from 'slate-dom';
 
 import { SMILEY_LIKE } from "smileys";
 import {
@@ -66,12 +67,32 @@ export const isSelectionInElement = (
 ): boolean =>
     findWrappingElement(editor, type) != null;
 
-export function withScripture<T extends BaseEditor>(editor: T): T {
-    const {isInline, isVoid} = editor;
-    editor.isInline = (element: BaseElement) =>
+export function withScripture<T extends DOMEditor>(editor: T): T {
+    const {isInline, isVoid, insertTextData} = editor;
+
+    editor.isInline = (element: BaseElement): boolean =>
         (isScriptureElement(element) && SCRIPTURE_INLINE_TYPES.includes(element.type)) || isInline(element);
-    editor.isVoid = (element: BaseElement) =>
+
+    editor.isVoid = (element: BaseElement): boolean =>
         (isScriptureElement(element) && SCRIPTURE_VOID_TYPES.includes(element.type)) || isVoid(element);
+
+    editor.insertTextData = (data: DataTransfer): boolean => {
+        const text = data.getData("text/plain");
+
+        const m = text.match(/^(\s*)(http[s]?:\/\/\S+)(\s*)$/);
+        if (!m) {
+            return insertTextData(data);
+        }
+
+        editor.insertFragment([
+            createScriptureText(m[1]),
+            createLinkElement(m[2], [createScriptureText(m[2])]),
+            createScriptureText(m[3] || " ")
+        ]);
+
+        return true;
+    }
+
     return editor;
 }
 

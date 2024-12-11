@@ -114,7 +114,11 @@ export default function VisualEditorCommands({children}: Props) {
             } else {
                 if (ok) {
                     if (editor.selection == null || Range.isCollapsed(editor.selection)) {
-                        editor.insertNode(createLinkElement(href, [createScriptureText(href)]));
+                        editor.insertFragment([
+                            createScriptureText(""),
+                            createLinkElement(href, [createScriptureText(href)]),
+                            createScriptureText("")
+                        ]);
                     } else {
                         editor.wrapNodes(createLinkElement(href, []), {split: true});
                     }

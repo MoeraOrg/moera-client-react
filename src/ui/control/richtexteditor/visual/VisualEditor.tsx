@@ -20,7 +20,7 @@ export type VisualEditorProps = {
 export default function VisualEditor({
     value, rows, maxHeight, placeholder, autoFocus, disabled, hidingPanel, onChange
 }: VisualEditorProps) {
-    const [editor] = useState(() => withScripture(withHistory(withReact(createEditor()))));
+    const [editor] = useState(() => withScripture(withHistory(withReact(createEditor(), "x-scripture-fragment"))));
 
     useEffect(() => {
         if (!disabled && autoFocus) {
