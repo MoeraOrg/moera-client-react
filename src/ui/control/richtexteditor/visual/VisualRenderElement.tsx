@@ -75,9 +75,9 @@ export default function VisualRenderElement(props: RenderElementProps) {
                 );
             case "formula-block":
                 return (
-                    <p className="formula" {...attributes} contentEditable={false} onClick={onFormulaClick}>
+                    <div className="formula" {...attributes} contentEditable={false} onClick={onFormulaClick}>
                         {children}<BlockMath math={element.content}/>
-                    </p>
+                    </div>
                 );
             default:
                 return <DefaultElement {...props}/>;

@@ -38,7 +38,8 @@
 
 .visual-text-area DIV.list-item ~ P,
 .visual-text-area DIV.list-item ~ DETAILS,
-.visual-text-area DIV.list-item ~ .block-border {
+.visual-text-area DIV.list-item ~ .block-border,
+.visual-text-area DIV.list-item ~ DIV.formula {
     margin-top: 1rem;
 }
 
