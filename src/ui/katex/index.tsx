@@ -7,13 +7,13 @@ const InlineMathImpl = React.lazy(() => import("ui/katex/InlineMath"));
 const BlockMathImpl = React.lazy(() => import("ui/katex/BlockMath"));
 
 export const InlineMath = (props: InlineMathProps) => (
-    <Suspense fallback={<>Loading math...</>}>
+    <Suspense fallback={<span>Loading math...</span>}>
         <InlineMathImpl {...props}/>
     </Suspense>
 );
 
 export const BlockMath = (props: BlockMathProps) => (
-    <Suspense fallback={<>Loading math...</>}>
+    <Suspense fallback={<div>Loading math...</div>}>
         <BlockMathImpl {...props}/>
     </Suspense>
 );
