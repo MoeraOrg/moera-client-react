@@ -1,0 +1,7 @@
+.nav.nav-tabs .nav-link {
+    cursor: pointer;
+}
+
+.nav.nav-tabs .nav-link.active {
+    cursor: default;
+}
