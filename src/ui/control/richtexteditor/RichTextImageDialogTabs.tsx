@@ -15,20 +15,20 @@ export default function RichTextImageDialogTabs() {
     return (
         <ul className="nav nav-tabs rich-text-image-dialog-tabs" onBlur={onBlur}>
             <li className="nav-item">
-                    <span className={cx("nav-link", {"active": value === "device"})}
-                          onClick={() => setValue("device")}>
-                        {Browser.isTinyScreen() ?
-                            <><FontAwesomeIcon icon={faMobileAlt}/> {t("from-device")}</>
-                        :
-                            <><FontAwesomeIcon icon={faDesktop}/> {t("from-computer")}</>
-                        }
-                    </span>
+                <span className={cx("nav-link", {"active": value === "device"})}
+                      onClick={() => setValue("device")}>
+                    {Browser.isTinyScreen() ?
+                        <><FontAwesomeIcon icon={faMobileAlt}/> {t("from-device")}</>
+                    :
+                        <><FontAwesomeIcon icon={faDesktop}/> {t("from-computer")}</>
+                    }
+                </span>
             </li>
             <li className="nav-item">
-                    <span className={cx("nav-link", {"active": value === "internet"})}
-                          onClick={() => setValue("internet")}>
-                        <FontAwesomeIcon icon={faGlobeEurope}/> {t("from-internet")}
-                    </span>
+                <span className={cx("nav-link", {"active": value === "internet"})}
+                      onClick={() => setValue("internet")}>
+                    <FontAwesomeIcon icon={faGlobeEurope}/> {t("from-internet")}
+                </span>
             </li>
         </ul>
     );

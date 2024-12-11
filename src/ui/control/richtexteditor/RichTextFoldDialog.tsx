@@ -17,7 +17,7 @@ const mapPropsToValues = (props: Props): RichTextFoldValues => ({
 function RichTextFoldDialog() {
     const {t} = useTranslation();
 
-    return <InputField name="summary" title={t("summary")} placeholder={t("summary")} autoFocus/>;
+    return <InputField name="summary" title={t("summary")} placeholder={t("summary")} anyValue autoFocus/>;
 }
 
 export default richTextEditorDialog<Props, RichTextFoldValues>("fold", mapPropsToValues, RichTextFoldDialog);

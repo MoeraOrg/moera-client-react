@@ -17,7 +17,7 @@ const mapPropsToValues = (): RichTextCopyImageValues => ({
 const RichTextCopyImageDialog = () => {
     const {t} = useTranslation();
 
-    return <InputField name="url" title={t("url")} autoFocus/>;
+    return <InputField name="url" title={t("url")} anyValue autoFocus/>;
 }
 
 export default richTextEditorDialog<Props, RichTextCopyImageValues>(
