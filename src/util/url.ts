@@ -1,5 +1,7 @@
 import * as URI from 'uri-js';
 
+export const URL_PATTERN = "https?://[-a-zA-Z0-9@:%._+~#=]{1,256}.[a-zA-Z0-9]{1,6}\\b(?:[-a-zA-Z0-9(!@:%_+.,;~#?&/=]*[-a-zA-Z0-9@:%_+~#&/=])?";
+
 export function normalizeUrl(url: null | undefined): null;
 export function normalizeUrl(url: string): string;
 export function normalizeUrl(url: string | null | undefined): string | null;
@@ -116,3 +118,8 @@ export function getSchemeOrDomain(url: string | null | undefined): string | null
     }
     return components.host.startsWith("www.") ? components.host.substring(4) : components.host;
 }
+
+const URL_TEST_PATTERN = new RegExp("^" + URL_PATTERN + "$", "i");
+
+export const isUrl = (text: string): boolean =>
+    URL_TEST_PATTERN.test(text);

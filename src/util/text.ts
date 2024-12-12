@@ -1,7 +1,8 @@
 import { SMILEY_LIKE, SMILEYS } from "smileys";
 import { unhtmlEntitiesMinimal } from "util/html";
+import { URL_PATTERN } from "util/url";
 
-const URLS = /https?:\/\/[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9]{1,6}\b(?:[-a-zA-Z0-9(!@:%_+.,;~#?&/=]*[-a-zA-Z0-9@:%_+~#&/=])?/ig;
+const URLS = new RegExp(URL_PATTERN, "ig");
 const EMBEDDED = /<(?:iframe|img)[^>]+src=['"]([^'"]+)['"][^>]*>/ig;
 
 export type TextReplacementFunction = (match: string, ...groups: string[]) => string;

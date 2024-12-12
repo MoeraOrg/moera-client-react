@@ -4,13 +4,14 @@ import { FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { NamingRules } from "api";
+import store from "state/store";
 import { connectToHome } from "state/home/actions";
 import { connectDialogSetForm } from "state/connectdialog/actions";
 import { ConnectDialogForm } from "state/connectdialog/state";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
 import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
-import store from "state/store";
+import { isUrl } from "util/url";
 
 interface OuterProps {
     location: string;
@@ -66,7 +67,7 @@ const connectFormLogic = {
         const location = values.location.trim();
         if (!location) {
             errors.location = "must-not-empty";
-        } else if (!/^http[s]?:/.test(location) && !NamingRules.isRegisteredNameValid(location)) {
+        } else if (!isUrl(location) && !NamingRules.isRegisteredNameValid(location)) {
             errors.location = "name-or-node-url-not-valid";
         }
         if (!values.password) {

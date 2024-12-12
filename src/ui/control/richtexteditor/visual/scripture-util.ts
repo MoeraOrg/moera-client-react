@@ -35,6 +35,7 @@ import {
 import * as Browser from "ui/browser";
 import { htmlEntities, unhtmlEntities } from "util/html";
 import { smileyReplacer, TextReplacementFunction } from "util/text";
+import { URL_PATTERN } from "util/url";
 
 interface WrappingElementOptions {
     at?: Path;
@@ -79,7 +80,7 @@ export function withScripture<T extends DOMEditor>(editor: T): T {
     editor.insertTextData = (data: DataTransfer): boolean => {
         const text = data.getData("text/plain");
 
-        const m = text.match(/^(\s*)(http[s]?:\/\/\S+)(\s*)$/);
+        const m = text.match(new RegExp("^(\\s*)(" + URL_PATTERN + ")(\\s*)$"));
         if (!m) {
             return insertTextData(data);
         }
