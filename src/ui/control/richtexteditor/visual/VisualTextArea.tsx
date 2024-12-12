@@ -13,7 +13,11 @@ import {
     isScriptureText,
     ListItemElement
 } from "ui/control/richtexteditor/visual/scripture";
-import { findWrappingElement, scriptureReplaceSmileys } from "ui/control/richtexteditor/visual/scripture-util";
+import {
+    findWrappingElement,
+    scriptureReplaceSmileys,
+    scriptureReplaceUrl
+} from "ui/control/richtexteditor/visual/scripture-util";
 import "./VisualTextArea.css";
 
 export interface VisualTextAreaProps {
@@ -36,6 +40,10 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
     const onKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === "Enter" || event.key === " ") {
             setTimeout(() => scriptureReplaceSmileys(editor));
+            if (editor.selection != null && Range.isCollapsed(editor.selection)) {
+                const point = editor.selection.anchor;
+                setTimeout(() => scriptureReplaceUrl(editor, point));
+            }
         }
         // TODO Ctrl-Enter in the case of comments
         if (

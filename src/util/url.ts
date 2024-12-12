@@ -1,6 +1,6 @@
 import * as URI from 'uri-js';
 
-export const URL_PATTERN = "https?://[-a-zA-Z0-9@:%._+~#=]{1,256}.[a-zA-Z0-9]{1,6}\\b(?:[-a-zA-Z0-9(!@:%_+.,;~#?&/=]*[-a-zA-Z0-9@:%_+~#&/=])?";
+export const URL_PATTERN = "https?://[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9]{1,6}\\b(?:[-a-zA-Z0-9(!@:%_+.,;~#?&/=]*[-a-zA-Z0-9@:%_+~#&/=])?";
 
 export function normalizeUrl(url: null | undefined): null;
 export function normalizeUrl(url: string): string;

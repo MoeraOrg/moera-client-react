@@ -1,4 +1,4 @@
-import { BaseEditor, BaseElement, Node as SlateNode, NodeEntry, Path, Transforms } from 'slate';
+import { BaseEditor, BaseElement, BasePoint, Node as SlateNode, NodeEntry, Path, Transforms } from 'slate';
 import { DOMEditor } from 'slate-dom';
 
 import { SMILEY_LIKE } from "smileys";
@@ -522,4 +522,27 @@ function scriptureReplace(editor: BaseEditor, pattern: RegExp, replacer: TextRep
 
 export function scriptureReplaceSmileys(editor: BaseEditor, removeEscapes: boolean = true): void {
     scriptureReplace(editor, SMILEY_LIKE, smileyReplacer(removeEscapes));
+}
+
+const URL_AT_END = new RegExp("(" + URL_PATTERN + ")\\s*$", "i");
+
+export function scriptureReplaceUrl(editor: BaseEditor, beforePoint: BasePoint): void {
+    let textNode;
+    try {
+        textNode = SlateNode.leaf(editor, beforePoint.path);
+        if (!isScriptureText(textNode)) {
+            return;
+        }
+    } catch (e) {
+        return;
+    }
+
+    const {text} = textNode;
+    const m = text.substring(0, beforePoint.offset).match(URL_AT_END);
+    if (m == null || m.index == null) {
+        return;
+    }
+    const at = {path: beforePoint.path, offset: m.index};
+    Transforms.delete(editor, {at, distance: m[1].length, unit: "character"});
+    editor.insertNode(createLinkElement(m[1], [createScriptureText(m[1])]), {at});
 }
