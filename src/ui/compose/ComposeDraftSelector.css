@@ -7,3 +7,8 @@
         order: 1;
     }
 }
+
+.draft-selector .dropdown-menu {
+    max-height: 40vh;
+    overflow-y: auto;
+}

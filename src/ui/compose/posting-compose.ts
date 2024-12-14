@@ -168,22 +168,25 @@ export const valuesToPostingText = (values: ComposePageValues, props: ValuesToPo
     }
 });
 
+function isPostingContentEmpty(
+    subject: string | null | undefined,
+    text: string | null | undefined,
+    media: (PrivateMediaFileInfo | null)[] | string[] | null | undefined
+): boolean {
+    const textEmpty = (!subject || subject.trim() === "") && (!text || text.trim() === "<p></p>");
+    const mediaEmpty = media == null || media.length === 0;
+    return textEmpty && mediaEmpty;
+}
+
 export const areValuesEmpty = (values: ComposePageValues): boolean =>
-    (values.subject == null || values.subject.trim() === "")
-        && values.body.text.trim() === ""
-        && (values.body.media == null || values.body.media.length === 0);
+    isPostingContentEmpty(values.subject, values.body.text, values.body.media);
 
 export const areImagesUploaded = (values: ComposePageValues): boolean =>
     values.body.media == null || values.body.media.every(media => media != null);
 
 function isPostingTextEmpty(postingText: PostingText): boolean {
-    let textEmpty = postingText.bodySrc == null;
-    if (!textEmpty) {
-        const {subject, text} = JSON.parse(postingText.bodySrc!);
-        textEmpty = !subject && !text;
-    }
-    const mediaEmpty = postingText.media == null || postingText.media.length === 0;
-    return textEmpty && mediaEmpty;
+    const {subject, text} = postingText.bodySrc != null ? JSON.parse(postingText.bodySrc) : {subject: null, text: null};
+    return isPostingContentEmpty(subject, text, postingText.media);
 }
 
 export function isPostingTextChanged(postingText: PostingText, posting: PostingInfo | null) {

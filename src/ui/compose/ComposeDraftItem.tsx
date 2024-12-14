@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
@@ -33,12 +33,17 @@ export default function ComposeDraftItem({draft, current, onSelect, onDelete}: P
 
     const editDate = fromUnixTime(draft.editedAt ?? draft.createdAt);
 
+    const text = useMemo(
+        () => draft.text ? draft.text.replaceAll("<p>", "").replaceAll("</p>", " ") : t("no-text"),
+        [draft.text, t]
+    );
+
     return (
         <div key={draft.id} className={cx("dropdown-item", {"current": current})}>
             <div className="draft-info" onClick={handleSelect}>
                 <div className="content">
                     {draft.subject && <b>{draft.subject} </b>}
-                    <LinesEllipsis text={draft.text ? draft.text : t("no-text")} maxLine="3"/>
+                    <LinesEllipsis text={text} maxLine="3"/>
                 </div>
                 <time className="edited" dateTime={formatISO(editDate)}>
                     {formatDistanceToNow(editDate, {locale: getDateFnsLocale()})}
