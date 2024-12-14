@@ -18,7 +18,7 @@ export default function ComposeBodyFormat({sourceFormats}: Props) {
     return (
         <ComposePageTool name="format">
             <SelectField title={t("text-formatting")} name="bodyFormat" horizontal layout="left" groupClassName="ps-2"
-                         col="col-md-3" choices={choices} anyValue setting="posting.body-src-format.default"/>
+                         col="col-md-3" choices={choices} anyValue/>
         </ComposePageTool>
     );
 }
