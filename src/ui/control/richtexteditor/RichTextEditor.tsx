@@ -64,7 +64,7 @@ export function RichTextEditor({
     return (
         <div className={cx("rich-text-editor", className)}>
             <RichTextEditorDialogs>
-                {format === "visual-html" ?
+                {format.endsWith("/visual") ?
                     <VisualEditor value={value} rows={rows} maxHeight={maxHeight} placeholder={placeholder}
                                   autoFocus={autoFocus} disabled={disabled} hidingPanel={hidingPanel}
                                   onChange={onChange}/>

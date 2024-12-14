@@ -14,11 +14,11 @@ export default function ComposeBodyFormat({sourceFormats}: Props) {
 
     const choices: SelectFieldChoice[] = sourceFormats
         .filter(f => f !== "application")
-        .map(value => ({value, title: `source-format.${value}`}));
+        .map(value => ({value, title: `source-format.${value.replaceAll("/", "--")}`}));
     return (
         <ComposePageTool name="format">
             <SelectField title={t("text-formatting")} name="bodyFormat" horizontal layout="left" groupClassName="ps-2"
-                         col="col-md-2" choices={choices} anyValue setting="posting.body-src-format.default"/>
+                         col="col-md-3" choices={choices} anyValue setting="posting.body-src-format.default"/>
         </ComposePageTool>
     );
 }

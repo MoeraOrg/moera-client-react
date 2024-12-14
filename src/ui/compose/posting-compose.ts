@@ -241,7 +241,7 @@ export const composePageLogic = {
             : props.posting != null
                 ? props.posting.bodySrc?.text ?? ""
                 : props.sharedText != null ? getSharedText(props, bodyFormat) : "";
-        if (bodyFormat === "visual-html") {
+        if (bodyFormat === "html/visual") {
             body = toScripture(body);
         }
         const attachments = props.draft != null ? props.draft.media : props.posting?.media;

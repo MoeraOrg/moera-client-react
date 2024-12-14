@@ -12,7 +12,7 @@ const BODY_FORMAT_ICONS: Record<SourceFormat, IconProp | null> = {
     "plain-text": faRemoveFormat,
     "html": faCode,
     "markdown": faMarkdown,
-    "visual-html": faFileAlt,
+    "html/visual": faFileAlt,
     "application": null
 };
 
@@ -25,6 +25,6 @@ export default function ComposeBodyFormatButton({sourceFormats}: Props) {
     const {t} = useTranslation();
 
     const icon = BODY_FORMAT_ICONS[value] ?? faFileAlt;
-    return <ComposeIconButton icon={icon} name="format" changed={value !== initialValue}
-                              tooltip={sourceFormats.includes(value) ? t(`source-format.${value}`) : null}/>
+    const tooltip = sourceFormats.includes(value) ? t(`source-format.${value.replaceAll("/", "--")}`) : null;
+    return <ComposeIconButton icon={icon} name="format" changed={value !== initialValue} tooltip={tooltip}/>
 };

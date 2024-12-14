@@ -877,9 +877,9 @@
   "sorry-you-banned": "Sorry, you cannot perform this operation, because the author has banned you.",
   "source-format": {
     "html": "HTML",
+    "html--visual": "Visual editor",
     "markdown": "Markdown",
-    "plain-text": "No formatting",
-    "visual-html": "Visual editor"
+    "plain-text": "No formatting"
   },
   "spoiler": "Spoiler",
   "spoiler-alert": "spoiler!",

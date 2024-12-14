@@ -10,7 +10,7 @@ export class RichTextValue {
     readonly media?: (VerifiedMediaFile | null)[] | null;
 
     constructor(value: string | Scripture, format: SourceFormat, media?: (VerifiedMediaFile | null)[] | null) {
-        if (format === "visual-html") {
+        if (format === "html/visual") {
             value = toScripture(value);
         }
         this.value = value;

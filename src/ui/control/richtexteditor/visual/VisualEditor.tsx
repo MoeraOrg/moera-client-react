@@ -38,7 +38,7 @@ export default function VisualEditor({
     // useCallback() is mandatory here
     const onScriptureChange = useCallback((content: Scripture) => {
         if (onChange != null) {
-            onChange(new RichTextValue(content, "visual-html", value.media));
+            onChange(new RichTextValue(content, "html/visual", value.media));
         }
     }, [onChange, value.media]);
 

@@ -130,7 +130,7 @@ export const commentComposeLogic = {
         body = props.draft != null
             ? props.draft.bodySrc?.text ?? ""
             : props.comment != null ? props.comment.bodySrc?.text ?? "" : "";
-        if (bodyFormat === "visual-html") {
+        if (bodyFormat === "html/visual") {
             body = toScripture(body);
         }
         const attachments = props.draft != null ? props.draft.media : props.comment?.media;
