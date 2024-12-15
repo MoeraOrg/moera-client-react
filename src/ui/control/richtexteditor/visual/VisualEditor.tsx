@@ -25,13 +25,19 @@ export default function VisualEditor({
     useEffect(() => {
         if (!disabled && autoFocus) {
             ReactEditor.focus(editor);
+            if (editor.selection == null && editor.children != null) {
+                editor.select(editor.start([]));
+            }
         }
     }, [disabled, autoFocus, editor]);
 
     useEffect(() => {
         if (value.scripture != null && !deepEqual(value.scripture, editor.children)) {
             editor.children = value.scripture;
-            editor.select([]);
+            setTimeout(() => {
+                editor.select(editor.start([]));
+                editor.collapse({edge: "start"});
+            });
             editor.onChange();
         }
     }, [editor, value]);
