@@ -2,7 +2,7 @@ import { MediaWithDigest, SourceFormat, VerifiedMediaFile } from "api";
 import { mediaHashesExtract } from "util/media-images";
 import { replaceSmileys } from "util/text";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
-import { scriptureToHtml, toScripture } from "ui/control/richtexteditor/visual/scripture-util";
+import { scriptureToHtml, htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
 
 export class RichTextValue {
 
@@ -11,7 +11,7 @@ export class RichTextValue {
 
     constructor(value: string | Scripture, format: SourceFormat, media?: (VerifiedMediaFile | null)[] | null) {
         if (format === "html/visual") {
-            value = toScripture(value);
+            value = htmlToScripture(value);
         }
         this.value = value;
         this.media = media;
@@ -22,7 +22,7 @@ export class RichTextValue {
     }
 
     get scripture(): Scripture {
-        return typeof this.value !== "string" ? this.value : toScripture(this.value);
+        return typeof this.value !== "string" ? this.value : htmlToScripture(this.value);
     }
 
     toString(smileysEnabled: boolean = false): string {

@@ -14,7 +14,7 @@ import store from "state/store";
 import { commentPost } from "state/detailedposting/actions";
 import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
-import { toScripture } from "ui/control/richtexteditor/visual/scripture-util";
+import { htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { toAvatarDescription } from "util/avatar";
 
 interface PropsToValuesProps {
@@ -131,7 +131,7 @@ export const commentComposeLogic = {
             ? props.draft.bodySrc?.text ?? ""
             : props.comment != null ? props.comment.bodySrc?.text ?? "" : "";
         if (bodyFormat === "html/visual") {
-            body = toScripture(body);
+            body = htmlToScripture(body);
         }
         const attachments = props.draft != null ? props.draft.media : props.comment?.media;
         let media = attachments != null

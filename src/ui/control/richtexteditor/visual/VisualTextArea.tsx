@@ -17,7 +17,7 @@ import {
     findWrappingElement,
     scriptureReplaceSmileys,
     scriptureReplaceUrl
-} from "ui/control/richtexteditor/visual/scripture-util";
+} from "ui/control/richtexteditor/visual/scripture-editor";
 import "./VisualTextArea.css";
 
 export interface VisualTextAreaProps {

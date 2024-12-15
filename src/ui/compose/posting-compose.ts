@@ -20,7 +20,7 @@ import { DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import { settingsUpdate } from "state/settings/actions";
 import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
-import { toScripture } from "ui/control/richtexteditor/visual/scripture-util";
+import { htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
 
@@ -245,7 +245,7 @@ export const composePageLogic = {
                 ? props.posting.bodySrc?.text ?? ""
                 : props.sharedText != null ? getSharedText(props, bodyFormat) : "";
         if (bodyFormat === "html/visual") {
-            body = toScripture(body);
+            body = htmlToScripture(body);
         }
         const attachments = props.draft != null ? props.draft.media : props.posting?.media;
         let media = attachments != null

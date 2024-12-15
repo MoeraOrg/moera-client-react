@@ -9,7 +9,8 @@ import VisualEditorPanel from "ui/control/richtexteditor/visual/VisualEditorPane
 import VisualTextArea, { VisualTextAreaProps } from "ui/control/richtexteditor/visual/VisualTextArea";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
-import { toScripture, withScripture } from "ui/control/richtexteditor/visual/scripture-util";
+import { withScripture } from "ui/control/richtexteditor/visual/scripture-editor";
+import { htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
 
 export type VisualEditorProps = {
     value: RichTextValue;
@@ -50,7 +51,7 @@ export default function VisualEditor({
     }, [onChange, value.media]);
 
     return (
-        <Slate editor={editor} initialValue={toScripture("")}
+        <Slate editor={editor} initialValue={htmlToScripture("")}
                onValueChange={onScriptureChange as ((contents: Descendant[]) => void) | undefined}>
             <VisualEditorCommands>
                 <VisualEditorPanel hiding={hidingPanel}/>

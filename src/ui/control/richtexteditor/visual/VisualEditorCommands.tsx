@@ -44,8 +44,8 @@ import {
 } from "ui/control/richtexteditor/visual/scripture";
 import { VisualEditorCommandsContext } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 import { useRichTextEditorDialogs } from "ui/control/richtexteditor/rich-text-editor-dialogs-context";
+import { findWrappingElement, isSelectionInElement } from "ui/control/richtexteditor/visual/scripture-editor";
 import { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
-import { findWrappingElement, isSelectionInElement } from "ui/control/richtexteditor/visual/scripture-util";
 import { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
 import { RichTextVideoValues } from "ui/control/richtexteditor/RichTextVideoDialog";
 import { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
