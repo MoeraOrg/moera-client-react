@@ -229,9 +229,51 @@ export const createScriptureText = (text: string, attributes: Record<string, any
 
 export type ScriptureElementType = ScriptureElement["type"];
 
-export const SCRIPTURE_INLINE_TYPES: ScriptureElementType[] = ["link", "spoiler", "mention", "formula"];
+export const SCRIPTURE_SUPER_BLOCK_TYPES: ScriptureElementType[] = ["spoiler-block", "blockquote", "details"];
+export const SCRIPTURE_SIMPLE_BLOCK_TYPES: ScriptureElementType[] = ["paragraph", "list-item", "heading", "code-block"];
+export const SCRIPTURE_VOID_BLOCK_TYPES: ScriptureElementType[] = ["horizontal-rule", "iframe", "formula-block"];
+export const SCRIPTURE_BLOCK_TYPES: ScriptureElementType[] = [
+    SCRIPTURE_SUPER_BLOCK_TYPES, SCRIPTURE_SIMPLE_BLOCK_TYPES, SCRIPTURE_VOID_BLOCK_TYPES
+].flat();
 
-export const SCRIPTURE_VOID_TYPES: ScriptureElementType[] = ["horizontal-rule", "iframe", "formula", "formula-block"];
+export const SCRIPTURE_REGULAR_INLINE_TYPES: ScriptureElementType[] = ["link", "spoiler", "mention"];
+export const SCRIPTURE_VOID_INLINE_TYPES: ScriptureElementType[] = ["formula"];
+export const SCRIPTURE_INLINE_TYPES: ScriptureElementType[] = [
+    SCRIPTURE_REGULAR_INLINE_TYPES, SCRIPTURE_VOID_INLINE_TYPES
+].flat();
+
+export const SCRIPTURE_VOID_TYPES: ScriptureElementType[] = [
+    SCRIPTURE_VOID_BLOCK_TYPES, SCRIPTURE_VOID_INLINE_TYPES
+].flat();
+
+export const SCRIPTURE_KNOWN_TYPES: ScriptureElementType[] = [SCRIPTURE_BLOCK_TYPES, SCRIPTURE_INLINE_TYPES].flat();
+
+export const isScriptureOfType = (
+    types: ScriptureElementType[], value: ScriptureElement | string
+): boolean =>
+    typeof value === "string" ? (types as string[]).includes(value) : types.includes(value.type);
+
+export const isScriptureSuperBlock = (value: ScriptureElement | string): boolean =>
+    isScriptureOfType(SCRIPTURE_SUPER_BLOCK_TYPES, value);
+export const isScriptureSimpleBlock = (value: ScriptureElement | string): boolean =>
+    isScriptureOfType(SCRIPTURE_SIMPLE_BLOCK_TYPES, value);
+export const isScriptureVoidBlock = (value: ScriptureElement | string): boolean =>
+    isScriptureOfType(SCRIPTURE_VOID_BLOCK_TYPES, value);
+export const isScriptureBlock = (value: ScriptureElement | string): boolean =>
+    isScriptureOfType(SCRIPTURE_BLOCK_TYPES, value);
+
+export const isScriptureRegularInline = (value: ScriptureElement | string): boolean =>
+    isScriptureOfType(SCRIPTURE_REGULAR_INLINE_TYPES, value);
+export const isScriptureVoidInline = (value: ScriptureElement | string): boolean =>
+    isScriptureOfType(SCRIPTURE_VOID_INLINE_TYPES, value);
+export const isScriptureInline = (value: ScriptureElement | string): boolean =>
+    isScriptureOfType(SCRIPTURE_INLINE_TYPES, value);
+
+export const isScriptureVoid = (value: ScriptureElement | string): boolean =>
+    isScriptureOfType(SCRIPTURE_VOID_TYPES, value);
+
+export const isScriptureKnown = (value: ScriptureElement | string): boolean =>
+    isScriptureOfType(SCRIPTURE_KNOWN_TYPES, value);
 
 export type ScriptureDescendant = ScriptureElement | ScriptureText;
 

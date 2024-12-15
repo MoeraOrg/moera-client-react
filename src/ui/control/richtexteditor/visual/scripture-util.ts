@@ -1,4 +1,15 @@
-import { BaseEditor, BaseElement, BasePoint, Node as SlateNode, NodeEntry, Path, Transforms } from 'slate';
+import {
+    BaseEditor,
+    BaseElement,
+    BasePoint,
+    Element as SlateElement,
+    Node as SlateNode,
+    NodeEntry,
+    Operation,
+    Path,
+    Text as SlateText,
+    Transforms
+} from 'slate';
 import { DOMEditor } from 'slate-dom';
 
 import { SMILEY_LIKE } from "smileys";
@@ -22,10 +33,13 @@ import {
     isLinkElement,
     isListItemElement,
     isScriptureElement,
+    isScriptureInline,
+    isScriptureKnown,
+    isScriptureSimpleBlock,
+    isScriptureSuperBlock,
     isScriptureText,
+    isScriptureVoid,
     Scripture,
-    SCRIPTURE_INLINE_TYPES,
-    SCRIPTURE_VOID_TYPES,
     ScriptureDescendant,
     ScriptureElement,
     ScriptureElementType,
@@ -69,13 +83,13 @@ export const isSelectionInElement = (
     findWrappingElement(editor, type) != null;
 
 export function withScripture<T extends DOMEditor>(editor: T): T {
-    const {isInline, isVoid, insertTextData} = editor;
+    const {isInline, isVoid, insertTextData, normalizeNode} = editor;
 
     editor.isInline = (element: BaseElement): boolean =>
-        (isScriptureElement(element) && SCRIPTURE_INLINE_TYPES.includes(element.type)) || isInline(element);
+        (isScriptureElement(element) && isScriptureInline(element)) || isInline(element);
 
     editor.isVoid = (element: BaseElement): boolean =>
-        (isScriptureElement(element) && SCRIPTURE_VOID_TYPES.includes(element.type)) || isVoid(element);
+        (isScriptureElement(element) && isScriptureVoid(element)) || isVoid(element);
 
     editor.insertTextData = (data: DataTransfer): boolean => {
         const text = data.getData("text/plain");
@@ -92,6 +106,64 @@ export function withScripture<T extends DOMEditor>(editor: T): T {
         ]);
 
         return true;
+    }
+
+    editor.normalizeNode = (entry: NodeEntry, options?: {operation?: Operation}) => {
+        const [node, path] = entry;
+
+        if (SlateElement.isElement(node) && !isScriptureElement(node)) {
+            Transforms.unwrapNodes(editor, {at: path});
+            return;
+        }
+        if (isScriptureElement(node)) {
+            if (!isScriptureKnown(node)) {
+                Transforms.unwrapNodes(editor, {at: path});
+                return;
+            }
+            if (isScriptureSimpleBlock(node)) {
+                let empty = true;
+                for (const [child, childPath] of SlateNode.children(editor, path)) {
+                    empty = false;
+                    if (isScriptureElement(child) && !isScriptureInline(child)) {
+                        Transforms.unwrapNodes(editor, {at: childPath});
+                        return;
+                    }
+                }
+                if (empty) {
+                    Transforms.insertNodes(editor, createScriptureText(""), {at: [...path, 0]});
+                    return;
+                }
+            }
+            if (isScriptureSuperBlock(node)) {
+                let empty = true;
+                let inlineStart: Path | null = null;
+                for (const [child, childPath] of SlateNode.children(editor, path)) {
+                    empty = false;
+                    if (
+                        (SlateText.isText(child) || (isScriptureElement(child) && isScriptureInline(child)))
+                        && inlineStart == null
+                    ) {
+                        inlineStart = childPath;
+                    }
+                    if (isScriptureElement(child) && !isScriptureInline(child) && inlineStart != null) {
+                        Transforms.wrapNodes(
+                            editor,
+                            createParagraphElement([]),
+                            {at: {anchor: editor.start(inlineStart), focus: editor.end(childPath)}}
+                        );
+                        return;
+                    }
+                }
+                if (empty) {
+                    Transforms.insertNodes(
+                        editor, createParagraphElement([createScriptureText("")]), {at: [...path, 0]}
+                    );
+                    return;
+                }
+            }
+        }
+
+        normalizeNode(entry, options);
     }
 
     return editor;
@@ -178,7 +250,7 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
                 continue;
             }
         }
-        if (isScriptureElement(node) && SCRIPTURE_INLINE_TYPES.includes(node.type)) {
+        if (isScriptureElement(node) && isScriptureInline(node)) {
             if (prevInline) {
                 children.push(createScriptureText(""));
             }
@@ -284,6 +356,7 @@ function scriptureNodesToHtml(nodes: ScriptureDescendant[], context: ScriptureTo
     const {listStack} = context;
     context.listStack = [];
     nodes.forEach(node => scriptureNodeToHtml(node, context));
+    closeAllTags(context);
     listLevel(false, 0, context);
     context.listStack = listStack;
 }
@@ -291,7 +364,6 @@ function scriptureNodesToHtml(nodes: ScriptureDescendant[], context: ScriptureTo
 const STANDALONE_VIDEO = /^(?:<iframe.*<\/iframe>|<video.*<\/video>)$/i;
 
 function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtmlContext): void {
-
     if (isScriptureElement(node)) {
         closeAllTags(context);
         if (node.type !== "list-item") {
