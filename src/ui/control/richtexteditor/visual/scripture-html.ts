@@ -26,6 +26,7 @@ import {
 } from "ui/control/richtexteditor/visual/scripture";
 import * as Browser from "ui/browser";
 import { htmlEntities, unhtmlEntities } from "util/html";
+import { notNull } from "util/misc";
 
 export function htmlToScripture(text?: string | Scripture | null | undefined): Scripture {
     if (!text) { // null, undefined, "", []
@@ -65,16 +66,27 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
 
     switch (element.nodeName) {
         case "B":
+        case "STRONG":
+        case "MARK":
+        case "INS":
+        case "U":
             attributes.bold = true;
             break;
         case "I":
+        case "EM":
+        case "CITE":
+        case "Q":
             attributes.italic = true;
             break;
         case "S":
         case "STRIKE":
+        case "DEL":
             attributes.strikeout = true;
             break;
         case "CODE":
+        case "KBD":
+        case "SAMP":
+        case "VAR":
             attributes.code = true;
             break;
         case "SUB":
@@ -84,6 +96,7 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
             attributes.supsub = 1;
             break;
         case "OL":
+        case "DL":
             listOrdered = true;
             listLevel++;
             break;
@@ -95,7 +108,7 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
 
     const childNodes = Array.from(element.childNodes)
         .map(node => domToScripture(node, {attributes, listOrdered, listLevel}))
-        .filter((node: Scripture | ScriptureDescendant | null): node is Scripture | ScriptureDescendant => node != null)
+        .filter(notNull)
         .flat();
 
     const children: Scripture = [];
@@ -126,6 +139,9 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
         case "BODY":
             return children;
         case "P":
+        case "H6":
+        case "TD":
+        case "TH":
             return createParagraphElement(children);
         case "A":
             const nodeName = element.getAttribute("data-nodename");
@@ -145,11 +161,23 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
         case "BLOCKQUOTE":
             return createBlockquoteElement(children);
         case "LI":
+        case "DD":
             return [
                 createListItemElement(
                     context.listOrdered,
                     context.listLevel,
                     children.filter(node => !isListItemElement(node))
+                ),
+                ...children.filter(isListItemElement)
+            ];
+        case "DT":
+            return [
+                createListItemElement(
+                    context.listOrdered,
+                    context.listLevel,
+                    children
+                        .filter(node => !isListItemElement(node))
+                        .map(node => isScriptureText(node) ? {...node, bold: true} : node)
                 ),
                 ...children.filter(isListItemElement)
             ];
@@ -164,23 +192,28 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
         case "H5":
             return createHeadingElement(5, children);
         case "IFRAME":
+        case "VIDEO":
+        case "AUDIO":
             return createIframeElement(element.outerHTML);
         case "SPAN":
             if (element.classList.contains("katex")) {
-                return createFormulaElement(element.textContent ?? "");
+                return createFormulaElement(unhtmlEntities(element.textContent) ?? "");
             }
             return children;
         case "DIV":
+            if (element.classList.contains("mr-spoiler")) {
+                return createSpoilerBlockElement(unhtmlEntities(element.getAttribute("data-title")) ?? "", children);
+            }
             if (element.classList.contains("mr-video")) {
                 return createIframeElement(element.innerHTML);
             }
             if (element.classList.contains("katex")) {
-                return createFormulaBlockElement(element.textContent ?? "");
+                return createFormulaBlockElement(unhtmlEntities(element.textContent) ?? "");
             }
             return children;
         case "DETAILS": {
             const summaryElement = element.querySelector(":scope > summary");
-            const summary = summaryElement?.textContent ?? "";
+            const summary = unhtmlEntities(summaryElement?.textContent) ?? "";
             return createDetailsElement(summary, children);
         }
         case "SUMMARY": {
@@ -219,7 +252,7 @@ function scriptureNodesToHtml(nodes: ScriptureDescendant[], context: ScriptureTo
     context.listStack = listStack;
 }
 
-const STANDALONE_VIDEO = /^(?:<iframe.*<\/iframe>|<video.*<\/video>)$/i;
+const STANDALONE_VIDEO = /^(?:<iframe.*<\/iframe>|<video.*<\/video>|<audio.*<\/audio>)$/i;
 
 function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtmlContext): void {
     if (isScriptureElement(node)) {
@@ -284,7 +317,7 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
             case "details":
                 context.output += "<details>";
                 if (node.summary) {
-                    context.output += `<summary>${node.summary}</summary>`;
+                    context.output += `<summary>${htmlEntities(node.summary)}</summary>`;
                 }
                 scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
                 context.output += "</details>";
@@ -295,10 +328,10 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 context.output += "</pre>";
                 return;
             case "formula":
-                context.output += `<span class="katex">${node.content}</span>`;
+                context.output += `<span class="katex">${htmlEntities(node.content)}</span>`;
                 return;
             case "formula-block":
-                context.output += `<div class="katex">${node.content}</div>`;
+                context.output += `<div class="katex">${htmlEntities(node.content)}</div>`;
                 return;
         }
     }
