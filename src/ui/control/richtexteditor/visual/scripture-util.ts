@@ -120,6 +120,14 @@ export function withScripture<T extends DOMEditor>(editor: T): T {
                 Transforms.unwrapNodes(editor, {at: path});
                 return;
             }
+            if (isLinkElement(node)) {
+                for (const [child, childPath] of SlateNode.children(editor, path)) {
+                    if (isLinkElement(child)) {
+                        Transforms.unwrapNodes(editor, {at: childPath});
+                        return;
+                    }
+                }
+            }
             if (isScriptureSimpleBlock(node)) {
                 let empty = true;
                 for (const [child, childPath] of SlateNode.children(editor, path)) {

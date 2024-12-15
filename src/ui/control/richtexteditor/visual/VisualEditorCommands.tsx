@@ -119,7 +119,7 @@ export default function VisualEditorCommands({children}: Props) {
                             createScriptureText("")
                         ]);
                     } else {
-                        editor.wrapNodes(createLinkElement(href, []), {split: true});
+                        editor.wrapNodes(createLinkElement(href, []), {at: editor.selection, split: true});
                     }
                 }
             }
