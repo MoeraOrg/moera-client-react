@@ -284,50 +284,18 @@ function scriptureNodesToHtml(nodes: ScriptureDescendant[], context: ScriptureTo
     const {listStack} = context;
     context.listStack = [];
     nodes.forEach(node => scriptureNodeToHtml(node, context));
+    listLevel(false, 0, context);
     context.listStack = listStack;
 }
 
 const STANDALONE_VIDEO = /^(?:<iframe.*<\/iframe>|<video.*<\/video>)$/i;
 
 function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtmlContext): void {
-    const listLevel = (ordered: boolean, level: number) => {
-        if (level > context.listStack.length) {
-            if (context.output.endsWith("</li>")) {
-                context.output = context.output.substring(0, context.output.length - 5);
-            }
-            for (let i = 0; i < level - context.listStack.length; i++) {
-                if (i !== 0) {
-                    context.output += "<li>";
-                }
-                context.output += listOpenTag(ordered, context.listStack.length + 1);
-                context.listStack.push(ordered);
-            }
-        }
-        if (level < context.listStack.length) {
-            for (let i = context.listStack.length; i > level; i--) {
-                const o = context.listStack.pop()!;
-                context.output += listCloseTag(o);
-                if (i !== 1) {
-                    context.output += "</li>";
-                }
-            }
-        }
-        if (
-            level > 0
-            && level === context.listStack.length
-            && ordered !== context.listStack[context.listStack.length - 1]
-        ) {
-            const o = context.listStack.pop()!;
-            context.output += listCloseTag(o);
-            context.output += listOpenTag(ordered, context.listStack.length + 1);
-            context.listStack.push(ordered);
-        }
-    }
 
     if (isScriptureElement(node)) {
         closeAllTags(context);
         if (node.type !== "list-item") {
-            listLevel(false, 0);
+            listLevel(false, 0, context);
         }
         switch (node.type) {
             case "paragraph":
@@ -366,7 +334,7 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 context.output += "</blockquote>";
                 return;
             case "list-item":
-                listLevel(node.ordered, node.level);
+                listLevel(node.ordered, node.level, context);
                 context.output += "<li>";
                 scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
                 context.output += "</li>";
@@ -407,6 +375,40 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
     if (isScriptureText(node)) {
         scriptureTextToHtml(node, context);
         return;
+    }
+}
+
+function listLevel(ordered: boolean, level: number, context: ScriptureToHtmlContext): void {
+    if (level > context.listStack.length) {
+        if (context.output.endsWith("</li>")) {
+            context.output = context.output.substring(0, context.output.length - 5);
+        }
+        for (let i = 0; i < level - context.listStack.length; i++) {
+            if (i !== 0) {
+                context.output += "<li>";
+            }
+            context.output += listOpenTag(ordered, context.listStack.length + 1);
+            context.listStack.push(ordered);
+        }
+    }
+    if (level < context.listStack.length) {
+        for (let i = context.listStack.length; i > level; i--) {
+            const o = context.listStack.pop()!;
+            context.output += listCloseTag(o);
+            if (i !== 1) {
+                context.output += "</li>";
+            }
+        }
+    }
+    if (
+        level > 0
+        && level === context.listStack.length
+        && ordered !== context.listStack[context.listStack.length - 1]
+    ) {
+        const o = context.listStack.pop()!;
+        context.output += listCloseTag(o);
+        context.output += listOpenTag(ordered, context.listStack.length + 1);
+        context.listStack.push(ordered);
     }
 }
 
