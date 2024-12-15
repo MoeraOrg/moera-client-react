@@ -31,7 +31,6 @@ export interface VisualTextAreaProps {
 export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus, disabled}: VisualTextAreaProps) {
     const editor = useSlateStatic() as ReactEditor;
     const {
-        enableBlockquote,
         inBlockquote, inList, headingLevel, inVoid, inCodeBlock, inFormula,
         formatBold, formatItalic, formatStrikeout, formatLink, formatMention, formatBlockquote, formatHorizontalRule,
         formatCode, formatFormula
@@ -150,7 +149,7 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
             } else if (checkKeyCode(VISUAL_EDITOR_KEYS.LINK, event.code, event.shiftKey)) {
                 formatLink();
                 event.preventDefault();
-            } else if (enableBlockquote && checkKeyCode(VISUAL_EDITOR_KEYS.BLOCKQUOTE, event.code, event.shiftKey)) {
+            } else if (checkKeyCode(VISUAL_EDITOR_KEYS.BLOCKQUOTE, event.code, event.shiftKey)) {
                 formatBlockquote();
                 event.preventDefault();
             } else if (checkKeyCode(VISUAL_EDITOR_KEYS.HORIZONTAL_RULE, event.code, event.shiftKey)) {

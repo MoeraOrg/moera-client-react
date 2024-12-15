@@ -78,7 +78,6 @@ export default function VisualEditorCommands({children}: Props) {
     const inOrderedList = inList && listItem[0].ordered;
     const heading = useSlateSelector(editor => findWrappingElement<HeadingElement>(editor, "heading"));
     const headingLevel = heading != null ? heading[0].level : 0;
-    const enableBlockquote = !inList;
     const inVoid = useSlateSelector(editor => isSelectionInElement(editor, SCRIPTURE_VOID_TYPES));
     const enableHeading = !inList && !inVoid;
     const inFold = useSlateSelector(editor => isSelectionInElement(editor, "details"));
@@ -149,11 +148,8 @@ export default function VisualEditorCommands({children}: Props) {
                     } else {
                         const [parent] = Node.common(editor, editor.selection.anchor.path, editor.selection.focus.path);
                         if (
-                            !inList
-                            && (
-                                Editor.isEditor(parent)
-                                || (Element.isElement(parent) && editor.isBlock(parent) && editor.hasBlocks(parent))
-                            )
+                            Editor.isEditor(parent)
+                            || (Element.isElement(parent) && editor.isBlock(parent) && editor.hasBlocks(parent))
                         ) {
                             editor.wrapNodes(createSpoilerBlockElement(title, []), {split: true});
                         } else {
@@ -367,7 +363,7 @@ export default function VisualEditorCommands({children}: Props) {
 
     return (
         <VisualEditorCommandsContext.Provider value={{
-            enableBlockquote, enableHeading,
+            enableHeading,
             inBold, inItalic, inStrikeout, inLink, inSpoilerInline, inSpoilerBlock, inSpoiler, inMention, inBlockquote,
             inList, inUnorderedList, inOrderedList, headingLevel, inVoid, inFold, inCode, inSubscript, inSuperscript,
             inCodeBlock, inFormula,

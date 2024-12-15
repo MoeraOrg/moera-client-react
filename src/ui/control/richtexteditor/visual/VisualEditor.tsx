@@ -31,6 +31,7 @@ export default function VisualEditor({
     useEffect(() => {
         if (value.scripture != null && !deepEqual(value.scripture, editor.children)) {
             editor.children = value.scripture;
+            editor.select([]);
             editor.onChange();
         }
     }, [editor, value]);

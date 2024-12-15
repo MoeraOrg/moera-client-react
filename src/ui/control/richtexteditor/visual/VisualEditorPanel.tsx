@@ -32,7 +32,6 @@ interface Props {
 
 export default function VisualEditorPanel({hiding}: Props) {
     const {
-        enableBlockquote,
         inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
         inOrderedList,
         formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
@@ -72,10 +71,8 @@ export default function VisualEditorPanel({hiding}: Props) {
                 }
             </div>
             <div className="group">
-                {enableBlockquote &&
-                    <VisualEditorButton icon={msFormatQuote} title={t("quote")} letter={VISUAL_EDITOR_KEYS.BLOCKQUOTE}
-                                        command={formatBlockquote}/>
-                }
+                <VisualEditorButton icon={msFormatQuote} title={t("quote")} letter={VISUAL_EDITOR_KEYS.BLOCKQUOTE}
+                                    command={formatBlockquote}/>
                 {inBlockquote &&
                     <VisualEditorButton icon={msFormatQuoteOff} title={t("unquote")} command={formatBlockunquote}/>
                 }
