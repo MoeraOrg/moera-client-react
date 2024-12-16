@@ -29,6 +29,7 @@ import {
     ScriptureElement,
     ScriptureElementType
 } from "ui/control/richtexteditor/visual/scripture";
+import { htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { smileyReplacer, TextReplacementFunction } from "util/text";
 import { URL_PATTERN } from "util/url";
 
@@ -64,13 +65,27 @@ export const isSelectionInElement = (
     findWrappingElement(editor, type) != null;
 
 export function withScripture<T extends DOMEditor>(editor: T): T {
-    const {isInline, isVoid, insertTextData, normalizeNode} = editor;
+    const {isInline, isVoid, insertFragmentData, insertTextData, normalizeNode} = editor;
 
     editor.isInline = (element: BaseElement): boolean =>
         (isScriptureElement(element) && isScriptureInline(element)) || isInline(element);
 
     editor.isVoid = (element: BaseElement): boolean =>
         (isScriptureElement(element) && isScriptureVoid(element)) || isVoid(element);
+
+    editor.insertFragmentData = (data: DataTransfer): boolean => {
+        if (insertFragmentData(data)) {
+            return true;
+        }
+
+        const html = data.getData("text/html");
+        if (html) {
+            editor.insertFragment(htmlToScripture(html));
+            return true;
+        }
+
+        return false;
+    }
 
     editor.insertTextData = (data: DataTransfer): boolean => {
         const text = data.getData("text/plain");

@@ -1,3 +1,5 @@
+import { Descendant } from 'slate';
+
 import {
     createBlockquoteElement,
     createCodeBlockElement,
@@ -15,12 +17,19 @@ import {
     createSpoilerBlockElement,
     createSpoilerElement,
     equalScriptureMarks,
+    isLinkElement,
     isListItemElement,
+    isScriptureBlock,
     isScriptureElement,
     isScriptureInline,
+    isScriptureRegularInline,
+    isScriptureSimpleBlock,
+    isScriptureSuperBlock,
     isScriptureText,
+    isScriptureVoidBlock,
     Scripture,
     ScriptureDescendant,
+    ScriptureElementType,
     ScriptureMarks,
     ScriptureText
 } from "ui/control/richtexteditor/visual/scripture";
@@ -37,14 +46,15 @@ export function htmlToScripture(text?: string | Scripture | null | undefined): S
     }
 
     const context = {attributes: {}, listOrdered: false, listLevel: 0};
-    const scripture = domToScripture(new DOMParser().parseFromString(text, "text/html").body, context);
+    let scripture = domToScripture(new DOMParser().parseFromString(text, "text/html").body, context);
     if (scripture == null) {
         return [createParagraphElement([createScriptureText("")])];
     }
     if (!Array.isArray(scripture)) {
-        return [scripture];
+        scripture = [scripture];
     }
-    return scripture;
+    console.log(text, scripture, normalizeFragment(scripture));
+    return normalizeFragment(scripture);
 }
 
 interface DomToScriptureContext {
@@ -106,34 +116,10 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
             break;
     }
 
-    const childNodes = Array.from(element.childNodes)
+    const children = Array.from(element.childNodes)
         .map(node => domToScripture(node, {attributes, listOrdered, listLevel}))
         .filter(notNull)
         .flat();
-
-    const children: Scripture = [];
-    let prevInline = true;
-    for (const node of childNodes) {
-        if (isScriptureText(node) && children.length > 0) {
-            const prevNode = children[children.length - 1];
-            if (isScriptureText(prevNode) && equalScriptureMarks(prevNode, node)) {
-                prevNode.text += node.text;
-                continue;
-            }
-        }
-        if (isScriptureElement(node) && isScriptureInline(node)) {
-            if (prevInline) {
-                children.push(createScriptureText(""));
-            }
-            prevInline = true;
-        } else {
-            prevInline = false;
-        }
-        children.push(node);
-    }
-    if (prevInline) {
-        children.push(createScriptureText(""));
-    }
 
     switch (element.nodeName) {
         case "BODY":
@@ -146,14 +132,15 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
         case "A":
             const nodeName = element.getAttribute("data-nodename");
             if (nodeName == null) {
-                return createLinkElement(unhtmlEntities(element.getAttribute("href") ?? ""), children);
+                const href = unhtmlEntities(element.getAttribute("href"));
+                return href ? createLinkElement(href, children) : null;
             } else {
                 return createMentionElement(unhtmlEntities(nodeName), children);
             }
         case "MR-SPOILER":
-            return createSpoilerElement(unhtmlEntities(element.getAttribute("title") ?? ""), children);
+            return createSpoilerElement(unhtmlEntities(element.getAttribute("title")), children);
         case "MR-SPOILER-BLOCK":
-            return createSpoilerBlockElement(unhtmlEntities(element.getAttribute("title") ?? ""), children);
+            return createSpoilerBlockElement(unhtmlEntities(element.getAttribute("title")), children);
         case "HR":
             return createHorizontalRuleElement();
         case "BR":
@@ -197,23 +184,23 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
             return createIframeElement(element.outerHTML);
         case "SPAN":
             if (element.classList.contains("katex")) {
-                return createFormulaElement(unhtmlEntities(element.textContent) ?? "");
+                return createFormulaElement(unhtmlEntities(element.textContent));
             }
             return children;
         case "DIV":
             if (element.classList.contains("mr-spoiler")) {
-                return createSpoilerBlockElement(unhtmlEntities(element.getAttribute("data-title")) ?? "", children);
+                return createSpoilerBlockElement(unhtmlEntities(element.getAttribute("data-title")), children);
             }
             if (element.classList.contains("mr-video")) {
                 return createIframeElement(element.innerHTML);
             }
             if (element.classList.contains("katex")) {
-                return createFormulaBlockElement(unhtmlEntities(element.textContent) ?? "");
+                return createFormulaBlockElement(unhtmlEntities(element.textContent));
             }
             return children;
         case "DETAILS": {
             const summaryElement = element.querySelector(":scope > summary");
-            const summary = unhtmlEntities(summaryElement?.textContent) ?? "";
+            const summary = unhtmlEntities(summaryElement?.textContent);
             return createDetailsElement(summary, children);
         }
         case "SUMMARY": {
@@ -283,7 +270,7 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 return;
             case "mention":
                 const href = Browser.universalLocation(null, node.nodeName, null, "/");
-                context.output += `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(node.nodeName ?? "")}"`
+                context.output += `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(node.nodeName)}"`
                 context.output += ' data-href="/">';
                 scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
                 context.output += "</a>";
@@ -453,4 +440,127 @@ function closeAllTags(context: ScriptureToHtmlContext): void {
         const tag = context.openStack.pop();
         context.output += `</${tag}>`;
     }
+}
+
+// NOTE: normalization functions modify the scripture passed to their input
+
+function normalizeFragment(nodes: Descendant[]): Scripture {
+    const hasBlocks = nodes.some(d => isScriptureElement(d) && isScriptureBlock(d));
+    return hasBlocks ? normalizeBlocks(nodes) : normalizeInlines(nodes, []);
+}
+
+function normalizeBlocks(nodes: Descendant[]): Scripture {
+    const input: Descendant[] = Array.from(nodes);
+    const output: Scripture = [];
+
+    let inlines: ScriptureDescendant[] = [];
+    while (input.length > 0) {
+        const node = input.shift()!;
+
+        if (isScriptureElement(node)) {
+            if (isScriptureBlock(node) && inlines.length > 0) {
+                const significant = inlines.some(d =>
+                    isScriptureElement(d) || (isScriptureText(d) && d.text.trim().length > 0)
+                );
+                if (significant) {
+                    output.push(createParagraphElement(normalizeInlines(inlines, [])));
+                }
+                inlines = [];
+            }
+            if (isScriptureSuperBlock(node)) {
+                node.children = normalizeBlocks(node.children);
+                if (node.children.length === 0) {
+                    node.children = [createParagraphElement([createScriptureText("")])];
+                }
+            } else if (isScriptureSimpleBlock(node)) {
+                const children = node.children;
+                const last = children.findIndex(d => isScriptureElement(d) && isScriptureBlock(d));
+                node.children = normalizeInlines(last < 0 ? children : children.slice(0, last), []);
+                if (node.children.length === 0) {
+                    node.children = [createScriptureText("")];
+                }
+                if (last >= 0) {
+                    input.unshift({...node, children: children.slice(last + 1)});
+                    input.unshift(children[last]);
+                }
+            } else if (isScriptureVoidBlock(node)) {
+                node.children = [createScriptureText("")];
+            } else if (isScriptureInline(node)) {
+                inlines.push(node);
+                continue;
+            } else {
+                continue;
+            }
+        } else if (isScriptureText(node)) {
+            inlines.push(node);
+            continue;
+        } else {
+            continue;
+        }
+
+        output.push(node);
+    }
+
+    if (inlines.length > 0) {
+        const significant = inlines.some(d =>
+            isScriptureElement(d) || (isScriptureText(d) && d.text.trim().length > 0)
+        );
+        if (significant) {
+            output.push(createParagraphElement(normalizeInlines(inlines, [])));
+        }
+    }
+
+    return output;
+}
+
+function normalizeInlines(nodes: Descendant[], prohibited: ScriptureElementType[]): Scripture {
+    const input: Descendant[] = Array.from(nodes);
+    const output: Scripture = [];
+
+    let prevInline = true;
+    while (input.length > 0) {
+        const node = input.shift()!;
+
+        if (isScriptureText(node)) {
+            if (output.length > 0) {
+                const prevNode = output[output.length - 1];
+                if (isScriptureText(prevNode) && equalScriptureMarks(prevNode, node)) {
+                    prevNode.text += node.text;
+                    continue;
+                }
+            }
+            prevInline = false;
+        } else if (isScriptureElement(node)) {
+            if (!isScriptureInline(node) || prohibited.includes(node.type)) {
+                input.unshift(...node.children);
+                continue;
+            }
+
+            if (prevInline) {
+                output.push(createScriptureText(""));
+            }
+            prevInline = true;
+
+            if (isScriptureRegularInline(node)) {
+                node.children = normalizeInlines(
+                    node.children,
+                    !isLinkElement(node) ? prohibited : [...prohibited, "link"]
+                );
+                if (node.children.length === 0) {
+                    node.children = [createScriptureText("")];
+                }
+            } else {
+                node.children = [createScriptureText("")];
+            }
+        } else {
+            continue;
+        }
+
+        output.push(node);
+    }
+    if (prevInline) {
+        output.push(createScriptureText(""));
+    }
+
+    return output;
 }
