@@ -34,7 +34,7 @@ import {
     ScriptureText
 } from "ui/control/richtexteditor/visual/scripture";
 import * as Browser from "ui/browser";
-import { htmlEntities, unhtmlEntities } from "util/html";
+import { htmlEntities, htmlToEmoji, linefeedsToHtml, safeImportHtml, unhtmlEntities } from "util/html";
 import { notNull } from "util/misc";
 
 export function htmlToScripture(text?: string | Scripture | null | undefined): Scripture {
@@ -53,7 +53,6 @@ export function htmlToScripture(text?: string | Scripture | null | undefined): S
     if (!Array.isArray(scripture)) {
         scripture = [scripture];
     }
-    console.log(text, scripture, normalizeFragment(scripture));
     return normalizeFragment(scripture);
 }
 
@@ -212,6 +211,9 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
             return children;
     }
 }
+
+export const safeImportScripture = (html: string) =>
+    htmlToScripture(htmlToEmoji(linefeedsToHtml(safeImportHtml(html))))
 
 export function scriptureToHtml(scripture?: Scripture | null | undefined): string {
     if (!scripture) { // null, undefined, "", []

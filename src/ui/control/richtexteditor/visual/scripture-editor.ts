@@ -29,7 +29,7 @@ import {
     ScriptureElement,
     ScriptureElementType
 } from "ui/control/richtexteditor/visual/scripture";
-import { htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
+import { safeImportScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { smileyReplacer, TextReplacementFunction } from "util/text";
 import { URL_PATTERN } from "util/url";
 
@@ -80,7 +80,7 @@ export function withScripture<T extends DOMEditor>(editor: T): T {
 
         const html = data.getData("text/html");
         if (html) {
-            editor.insertFragment(htmlToScripture(html));
+            editor.insertFragment(safeImportScripture(html));
             return true;
         }
 

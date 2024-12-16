@@ -239,6 +239,15 @@ export function safeImportHtml(html: string | null | undefined): string {
         .trim();
 }
 
+export function linefeedsToHtml(html: string | null | undefined): string {
+    if (!html) {
+        return "";
+    }
+    return html
+        .replaceAll("\n\n", "<p>")
+        .replaceAll("\n", "<br>");
+}
+
 export function quoteHtml(html: string): string;
 export function quoteHtml(html?: null): null;
 export function quoteHtml(html?: string | null): string | null;
