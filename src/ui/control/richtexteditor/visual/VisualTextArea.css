@@ -171,6 +171,7 @@
 
 .visual-text-area .block-border {
     border: 1px dashed var(--bb-color);
+    border-radius: .5rem;
     position: relative;
     padding: .75rem .5rem .5rem .5rem;
     overflow: visible;
