@@ -20,7 +20,7 @@ import { DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import { settingsUpdate } from "state/settings/actions";
 import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
-import { htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
+import { htmlToScripture, safeImportScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
 
@@ -92,17 +92,24 @@ export interface ComposePageValues {
 const getPublishAt = (publications: FeedReference[] | null | undefined): Date | null =>
     publications != null && publications.length > 0 ? fromUnixTime(publications[0].publishedAt) : null;
 
-function getSharedText(props: ComposePageProps, format: SourceFormat): string {
-    let content;
+function getSharedText(props: ComposePageProps, format: SourceFormat): string | Scripture {
+    let content: string | Scripture;
     if (props.sharedTextType === "html") {
-        content = safeImportHtml(props.sharedText);
-        if (format === "markdown") {
-            content = quoteHtml(content);
+        switch (format) {
+            case "markdown":
+                content = quoteHtml(safeImportHtml(props.sharedText));
+                break;
+            case "html/visual":
+                content = safeImportScripture(props.sharedText);
+                break;
+            default:
+                content = safeImportHtml(props.sharedText);
+                break;
         }
     } else {
-        content = props.sharedText;
+        content = props.sharedText ?? "";
     }
-    return content ?? "";
+    return content;
 }
 
 const replaceSmileysIfNeeded = (enabled: boolean, text: string): string =>
