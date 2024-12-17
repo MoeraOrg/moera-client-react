@@ -34,6 +34,7 @@ export default function VisualEditor({
 
     useEffect(() => {
         if (value.scripture != null && !deepEqual(value.scripture, editor.children)) {
+            editor.deselect();
             editor.children = value.scripture;
             setTimeout(() => {
                 editor.select(editor.start([]));
