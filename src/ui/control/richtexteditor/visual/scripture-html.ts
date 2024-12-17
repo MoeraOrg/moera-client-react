@@ -37,7 +37,7 @@ import * as Browser from "ui/browser";
 import { htmlEntities, htmlToEmoji, linefeedsToHtml, safeImportHtml, unhtmlEntities } from "util/html";
 import { notNull } from "util/misc";
 
-export function htmlToScripture(text?: string | Scripture | null | undefined): Scripture {
+export function htmlToScripture(text?: string | Scripture | null | undefined, cleanup?: boolean): Scripture {
     if (!text) { // null, undefined, "", []
         return [createParagraphElement([createScriptureText("")])];
     }
@@ -53,7 +53,11 @@ export function htmlToScripture(text?: string | Scripture | null | undefined): S
     if (!Array.isArray(scripture)) {
         scripture = [scripture];
     }
-    return normalizeFragment(scripture);
+    scripture = normalizeFragment(scripture);
+    if (cleanup) {
+        scripture = scriptureCleanup(scripture);
+    }
+    return scripture;
 }
 
 interface DomToScriptureContext {
@@ -461,12 +465,7 @@ function normalizeBlocks(nodes: Descendant[]): Scripture {
 
         if (isScriptureElement(node)) {
             if (isScriptureBlock(node) && inlines.length > 0) {
-                const significant = inlines.some(d =>
-                    isScriptureElement(d) || (isScriptureText(d) && d.text.trim().length > 0)
-                );
-                if (significant) {
-                    output.push(createParagraphElement(normalizeInlines(inlines, [])));
-                }
+                output.push(createParagraphElement(normalizeInlines(inlines, [])));
                 inlines = [];
             }
             if (isScriptureSuperBlock(node)) {
@@ -504,12 +503,7 @@ function normalizeBlocks(nodes: Descendant[]): Scripture {
     }
 
     if (inlines.length > 0) {
-        const significant = inlines.some(d =>
-            isScriptureElement(d) || (isScriptureText(d) && d.text.trim().length > 0)
-        );
-        if (significant) {
-            output.push(createParagraphElement(normalizeInlines(inlines, [])));
-        }
+        output.push(createParagraphElement(normalizeInlines(inlines, [])));
     }
 
     return output;
@@ -564,5 +558,34 @@ function normalizeInlines(nodes: Descendant[], prohibited: ScriptureElementType[
         output.push(createScriptureText(""));
     }
 
+    return output;
+}
+
+const isSignificant = (nodes: Descendant[]): boolean =>
+    nodes.some(d => isScriptureElement(d) || (isScriptureText(d) && d.text.trim().length > 0));
+
+
+function scriptureCleanup(scripture: Scripture): Scripture {
+    const output: Scripture = [];
+    for (const node of scripture) {
+        if (isScriptureText(node)) {
+            let textNode: ScriptureText = node;
+            if (output.length > 0) {
+                const prevNode = output[output.length - 1];
+                if (isScriptureText(prevNode) && equalScriptureMarks(prevNode, node)) {
+                    prevNode.text += node.text;
+                    textNode = prevNode;
+                }
+            }
+            textNode.text = textNode.text.replace(/ +/g, " ");
+        }
+        if (isScriptureElement(node)) {
+            node.children = scriptureCleanup(node.children as Scripture);
+            if (!isSignificant(node.children)) {
+                continue;
+            }
+        }
+        output.push(node);
+    }
     return output;
 }
