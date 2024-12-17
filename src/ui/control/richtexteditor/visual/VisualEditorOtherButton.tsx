@@ -42,7 +42,7 @@ export default function VisualEditorOtherButton() {
                     <div className="other-buttons">
                         <VisualEditorButton icon={msExpandCircleDown} title={t("fold")} active={inFold}
                                             command={onCommand(formatFold)}/>
-                        <VisualEditorButton icon={msCode} title={t("code")} letter={VISUAL_EDITOR_KEYS.CODE}
+                        <VisualEditorButton icon={msCode} title={t("code")} hotkey={VISUAL_EDITOR_KEYS.CODE.title}
                                             active={inCode} command={onCommand(formatCode)}/>
                         <VisualEditorButton icon={msCodeBlocks} title={t("code-block")} active={inCodeBlock}
                                             command={onCommand(formatCodeBlock)}/>

@@ -46,12 +46,12 @@ export default function VisualEditorPanel({hiding}: Props) {
                 <VisualEditorHeadingButton onSelect={formatHeading}/>
             </div>
             <div className="group">
-                <VisualEditorButton icon={msFormatBold} title={t("bold")} letter={VISUAL_EDITOR_KEYS.BOLD}
+                <VisualEditorButton icon={msFormatBold} title={t("bold")} hotkey={VISUAL_EDITOR_KEYS.BOLD.title}
                                     active={inBold} command={formatBold}/>
-                <VisualEditorButton icon={msFormatItalic} title={t("italic")} letter={VISUAL_EDITOR_KEYS.ITALIC}
+                <VisualEditorButton icon={msFormatItalic} title={t("italic")} hotkey={VISUAL_EDITOR_KEYS.ITALIC.title}
                                     active={inItalic} command={formatItalic}/>
                 <VisualEditorButton icon={msStrikethroughS} title={t("strikeout")}
-                                    letter={VISUAL_EDITOR_KEYS.STRIKEOUT}
+                                    hotkey={VISUAL_EDITOR_KEYS.STRIKEOUT.title}
                                     active={inStrikeout} command={formatStrikeout}/>
                 <VisualEditorButton icon={msReport} title={t("spoiler")}
                                     active={inSpoiler} command={formatSpoiler}/>
@@ -71,13 +71,13 @@ export default function VisualEditorPanel({hiding}: Props) {
                 }
             </div>
             <div className="group">
-                <VisualEditorButton icon={msFormatQuote} title={t("quote")} letter={VISUAL_EDITOR_KEYS.BLOCKQUOTE}
+                <VisualEditorButton icon={msFormatQuote} title={t("quote")} hotkey={VISUAL_EDITOR_KEYS.BLOCKQUOTE.title}
                                     command={formatBlockquote}/>
                 {inBlockquote &&
                     <VisualEditorButton icon={msFormatQuoteOff} title={t("unquote")} command={formatBlockunquote}/>
                 }
                 <VisualEditorButton icon={msHorizontalRule} title={t("horizontal-line")}
-                                    letter={VISUAL_EDITOR_KEYS.HORIZONTAL_RULE} command={formatHorizontalRule}/>
+                                    hotkey={VISUAL_EDITOR_KEYS.HORIZONTAL_RULE.title} command={formatHorizontalRule}/>
                 <VisualEditorOtherButton/>
             </div>
             <div className="group">
@@ -86,7 +86,7 @@ export default function VisualEditorPanel({hiding}: Props) {
                                     command={() => formatMention(false)}/>
             </div>
             <div className="group">
-                <VisualEditorButton icon={msAddLink} title={t("link")} letter={VISUAL_EDITOR_KEYS.LINK}
+                <VisualEditorButton icon={msAddLink} title={t("link")} hotkey={VISUAL_EDITOR_KEYS.LINK.title}
                                     active={inLink} command={formatLink}/>
                 <VisualEditorButton icon={msVideoLibrary} title={t("insert-video")} command={formatVideo}/>
             </div>

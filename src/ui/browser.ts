@@ -7,7 +7,7 @@ import { rootUrl, urlWithParameters } from "util/url";
 import { randomId } from "util/ui";
 
 type UserAgent = "firefox" | "chrome" | "opera" | "yandex" | "brave" | "vivaldi" | "dolphin" | "unknown";
-type UserAgentOs = "android" | "ios" | "unknown";
+type UserAgentOs = "android" | "ios" | "windows" | "linux" | "mac" | "unknown";
 
 interface DocumentLocation {
     name?: string | null;
@@ -47,6 +47,12 @@ function initUserAgent(): [UserAgent, UserAgentOs] {
         userAgentOs = "android";
     } else if (navigator.userAgent.includes("iPhone")) {
         userAgentOs = "ios";
+    } else if (navigator.userAgent.includes("Mac")) {
+        userAgentOs = "mac";
+    } else if (navigator.userAgent.includes("Linux")) {
+        userAgentOs = "linux";
+    } else if (navigator.userAgent.includes("Windows")) {
+        userAgentOs = "windows";
     }
     return [userAgent, userAgentOs];
 }
@@ -97,6 +103,9 @@ export const isAndroidBrowser = (): boolean =>
 
 export const isAndroidGooglePlay = (): boolean =>
     androidAppFlavor === "google-play";
+
+export const isMac = (): boolean =>
+    userAgentOs === "mac";
 
 export function changeLanguage(lang: string | null | undefined) {
     if (window.Android && window.Android.getApiVersion() >= 2) {

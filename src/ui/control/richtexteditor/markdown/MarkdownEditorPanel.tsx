@@ -295,9 +295,9 @@ export default function MarkdownEditorPanel({
     return (
         <div className={cx("rich-text-editor-panel", {"hiding": hiding})} ref={panel}>
             <div className="group">
-                <RichTextEditorButton icon={msFormatBold} title={t("bold")} letter="B" onClick={onBold}/>
-                <RichTextEditorButton icon={msFormatItalic} title={t("italic")} letter="I" onClick={onItalic}/>
-                <RichTextEditorButton icon={msStrikethroughS} title={t("strikeout")} letter="R"
+                <RichTextEditorButton icon={msFormatBold} title={t("bold")} hotkey="Ctrl-B" onClick={onBold}/>
+                <RichTextEditorButton icon={msFormatItalic} title={t("italic")} hotkey="Ctrl-I" onClick={onItalic}/>
+                <RichTextEditorButton icon={msStrikethroughS} title={t("strikeout")} hotkey="Ctrl-R"
                                       onClick={onStrike}/>
             </div>
             <div className="group">
@@ -307,12 +307,12 @@ export default function MarkdownEditorPanel({
             <div className="group">
                 <RichTextEditorButton icon={msAlternateEmail} title={t("mention")} className="mention"
                                       onClick={onMention}/>
-                <RichTextEditorButton icon={msFormatQuote} title={t("quote")} letter="Q" onClick={onQuote}/>
+                <RichTextEditorButton icon={msFormatQuote} title={t("quote")} hotkey="Ctrl-Q" onClick={onQuote}/>
             </div>
             <div className="group">
-                <RichTextEditorButton icon={msAddLink} title={t("link")} letter="L" onClick={onLink}/>
+                <RichTextEditorButton icon={msAddLink} title={t("link")} hotkey="Ctrl-L" onClick={onLink}/>
                 {!noMedia &&
-                    <RichTextEditorButton icon={msPhotoLibrary} title={t("image")} letter="M" onClick={onImage}/>
+                    <RichTextEditorButton icon={msPhotoLibrary} title={t("image")} hotkey="Ctrl-M" onClick={onImage}/>
                 }
             </div>
             {imageDialog &&

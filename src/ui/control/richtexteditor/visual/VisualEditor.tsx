@@ -16,10 +16,11 @@ export type VisualEditorProps = {
     value: RichTextValue;
     hidingPanel?: boolean;
     onChange?: (value: RichTextValue) => void;
+    onUrls?: (urls: string[]) => void;
 } & VisualTextAreaProps;
 
 export default function VisualEditor({
-    value, rows, maxHeight, placeholder, autoFocus, disabled, hidingPanel, onChange
+    value, rows, maxHeight, placeholder, autoFocus, disabled, hidingPanel, onChange, onUrls
 }: VisualEditorProps) {
     const [editor] = useState(() => withScripture(withHistory(withReact(createEditor(), "x-scripture-fragment"))));
 

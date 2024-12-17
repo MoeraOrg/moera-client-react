@@ -1,22 +1,29 @@
-export const VISUAL_EDITOR_KEYS = {
-    BOLD: "B",
-    ITALIC: "I",
-    STRIKEOUT: "R",
-    LINK: "K",
-    BLOCKQUOTE: "'",
-    HORIZONTAL_RULE: "H",
-    CODE: "Shift-C",
-};
+import isHotkey, { KeyboardEventLike } from 'is-hotkey';
 
-export function checkKeyCode(letter: string, code: string, shiftKey: boolean): boolean {
-    if (letter.startsWith("Shift-") !== shiftKey) {
-        return false;
+import * as Browser from "ui/browser";
+
+class VisualEditorKey {
+
+    readonly title: string;
+    private readonly checker: (event: KeyboardEventLike) => boolean;
+
+    constructor(key: string) {
+        this.title = Browser.isMac() ? key.replace("Mod", "Cmd") : key.replace("Mod", "Ctrl");
+        this.checker = isHotkey(key.replaceAll("-", "+"));
     }
-    if (letter.startsWith("Shift-")) {
-        letter = letter.substring(6);
+
+    check(event: KeyboardEventLike): boolean {
+        return this.checker(event);
     }
-    if (letter === "'") {
-        return code === "Quote";
-    }
-    return code === "Key" + letter;
+
 }
+
+export const VISUAL_EDITOR_KEYS = {
+    BOLD:               new VisualEditorKey("Mod-B"),
+    ITALIC:             new VisualEditorKey("Mod-I"),
+    STRIKEOUT:          new VisualEditorKey("Mod-R"),
+    LINK:               new VisualEditorKey("Mod-K"),
+    BLOCKQUOTE:         new VisualEditorKey("Mod-'"),
+    HORIZONTAL_RULE:    new VisualEditorKey("Mod-H"),
+    CODE:               new VisualEditorKey("Mod-Shift-C"),
+};

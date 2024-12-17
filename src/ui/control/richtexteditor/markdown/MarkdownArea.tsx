@@ -2,6 +2,7 @@ import React, { ForwardedRef, forwardRef, useCallback, useEffect, useRef, useSta
 import { useDispatch, useSelector } from 'react-redux';
 import composeRefs from '@seznam/compose-react-refs';
 import { useTranslation } from 'react-i18next';
+import isHotkey from 'is-hotkey';
 
 import { CLIENT_SETTINGS_PREFIX, SourceFormat } from "api";
 import { ClientState } from "state/state";
@@ -215,23 +216,21 @@ function MarkdownArea(
         }
     }
 
-    const onControlKey = (event: React.KeyboardEvent) => {
-        if (
-            !panel.current || !event.ctrlKey || event.shiftKey || event.altKey || event.metaKey || !event.code
-            || !event.code.startsWith("Key")
-        ) {
+    const onHotkey = (event: React.KeyboardEvent) => {
+        if (!panel.current) {
             return false;
         }
-        const button = panel.current.querySelector(`button[data-letter=${event.code.substring(3)}]`) as HTMLButtonElement;
-        if (!button) {
-            return false;
+        for (const button of panel.current.querySelectorAll("button[data-hotkey]") as NodeListOf<HTMLButtonElement>) {
+            if (isHotkey(button.getAttribute("data-hotkey")!.replace("Ctrl-", "Mod+"))(event)) {
+                button.click();
+                return true;
+            }
         }
-        button.click();
-        return true;
+        return false;
     }
 
     const onKeyDownHandler = (event: React.KeyboardEvent) => {
-        if (onControlKey(event)) {
+        if (onHotkey(event)) {
             event.preventDefault();
             return;
         }

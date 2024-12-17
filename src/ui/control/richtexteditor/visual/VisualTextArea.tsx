@@ -5,7 +5,7 @@ import { Editable, ReactEditor, useSlateStatic } from 'slate-react';
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
 import VisualRenderLeaf from "ui/control/richtexteditor/visual/VisualRenderLeaf";
 import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
-import { checkKeyCode, VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
+import { VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
 import {
     createListItemElement,
     createParagraphElement,
@@ -137,25 +137,25 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
         }
 
         if (event.ctrlKey && !event.altKey && !event.metaKey) {
-            if (checkKeyCode(VISUAL_EDITOR_KEYS.BOLD, event.code, event.shiftKey)) {
+            if (VISUAL_EDITOR_KEYS.BOLD.check(event)) {
                 formatBold();
                 event.preventDefault();
-            } else if (checkKeyCode(VISUAL_EDITOR_KEYS.ITALIC, event.code, event.shiftKey)) {
+            } else if (VISUAL_EDITOR_KEYS.ITALIC.check(event)) {
                 formatItalic();
                 event.preventDefault();
-            } else if (checkKeyCode(VISUAL_EDITOR_KEYS.STRIKEOUT, event.code, event.shiftKey)) {
+            } else if (VISUAL_EDITOR_KEYS.STRIKEOUT.check(event)) {
                 formatStrikeout();
                 event.preventDefault();
-            } else if (checkKeyCode(VISUAL_EDITOR_KEYS.LINK, event.code, event.shiftKey)) {
+            } else if (VISUAL_EDITOR_KEYS.LINK.check(event)) {
                 formatLink();
                 event.preventDefault();
-            } else if (checkKeyCode(VISUAL_EDITOR_KEYS.BLOCKQUOTE, event.code, event.shiftKey)) {
+            } else if (VISUAL_EDITOR_KEYS.BLOCKQUOTE.check(event)) {
                 formatBlockquote();
                 event.preventDefault();
-            } else if (checkKeyCode(VISUAL_EDITOR_KEYS.HORIZONTAL_RULE, event.code, event.shiftKey)) {
+            } else if (VISUAL_EDITOR_KEYS.HORIZONTAL_RULE.check(event)) {
                 formatHorizontalRule();
                 event.preventDefault();
-            } else if (checkKeyCode(VISUAL_EDITOR_KEYS.CODE, event.code, event.shiftKey)) {
+            } else if (VISUAL_EDITOR_KEYS.CODE.check(event)) {
                 formatCode();
                 event.preventDefault();
             }
