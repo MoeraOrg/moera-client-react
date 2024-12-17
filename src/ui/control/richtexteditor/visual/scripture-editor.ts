@@ -141,6 +141,7 @@ export function withScripture<T extends DOMEditor>(editor: T): T {
             if (isScriptureSuperBlock(node)) {
                 let empty = true;
                 let inlineStart: Path | null = null;
+                let prevPath: Path | null = null;
                 for (const [child, childPath] of SlateNode.children(editor, path)) {
                     empty = false;
                     if (
@@ -149,14 +150,26 @@ export function withScripture<T extends DOMEditor>(editor: T): T {
                     ) {
                         inlineStart = childPath;
                     }
-                    if (isScriptureElement(child) && !isScriptureInline(child) && inlineStart != null) {
+                    if (
+                        isScriptureElement(child) && !isScriptureInline(child)
+                        && inlineStart != null && prevPath != null
+                    ) {
                         Transforms.wrapNodes(
                             editor,
                             createParagraphElement([]),
-                            {at: {anchor: editor.start(inlineStart), focus: editor.end(childPath)}}
+                            {at: {anchor: editor.start(inlineStart), focus: editor.end(prevPath)}}
                         );
                         return;
                     }
+                    prevPath = childPath;
+                }
+                if (inlineStart != null) {
+                    Transforms.wrapNodes(
+                        editor,
+                        createParagraphElement([]),
+                        {at: {anchor: editor.start(inlineStart), focus: editor.end(path)}}
+                    );
+                    return;
                 }
                 if (empty) {
                     Transforms.insertNodes(
