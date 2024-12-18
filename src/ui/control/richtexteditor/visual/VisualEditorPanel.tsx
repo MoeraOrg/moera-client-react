@@ -69,13 +69,13 @@ export default function VisualEditorPanel({hiding}: Props) {
                                             command={() => formatIndent(-1)}/>
                     </>
                 }
-            </div>
-            <div className="group">
                 <VisualEditorButton icon={msFormatQuote} title={t("quote")} hotkey={VISUAL_EDITOR_KEYS.BLOCKQUOTE.title}
                                     command={formatBlockquote}/>
                 {inBlockquote &&
                     <VisualEditorButton icon={msFormatQuoteOff} title={t("unquote")} command={formatBlockunquote}/>
                 }
+            </div>
+            <div className="group">
                 <VisualEditorButton icon={msHorizontalRule} title={t("horizontal-line")}
                                     hotkey={VISUAL_EDITOR_KEYS.HORIZONTAL_RULE.title} command={formatHorizontalRule}/>
                 <VisualEditorOtherButton/>
