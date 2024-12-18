@@ -30,7 +30,6 @@ import {
     isLinkElement,
     isListItemElement,
     isParagraphElement,
-    isScriptureElement,
     isSpoilerBlockElement,
     isSpoilerElement,
     LinkElement,
@@ -119,7 +118,8 @@ export default function VisualEditorCommands({children}: Props) {
                             createScriptureText("")
                         ]);
                     } else {
-                        editor.wrapNodes(createLinkElement(href, []), {at: editor.selection, split: true});
+                        const at = editor.unhangRange(editor.selection);
+                        editor.wrapNodes(createLinkElement(href, []), {at, split: true});
                     }
                 }
             }
