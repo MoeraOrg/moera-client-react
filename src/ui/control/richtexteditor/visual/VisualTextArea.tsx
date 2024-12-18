@@ -1,6 +1,7 @@
 import React from 'react';
 import { Node, Path, Range } from 'slate';
 import { Editable, ReactEditor, useSlateStatic } from 'slate-react';
+import isHotkey from 'is-hotkey';
 
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
 import VisualRenderLeaf from "ui/control/richtexteditor/visual/VisualRenderLeaf";
@@ -28,6 +29,13 @@ export interface VisualTextAreaProps {
     disabled?: boolean;
 }
 
+// TODO Ctrl-Enter in the case of comments
+const isHardEnter = isHotkey("Enter");
+
+const isSoftEnter = isHotkey(["Mod+Enter", "Shift+Enter"]);
+
+const isBackspace = isHotkey("Backspace");
+
 export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus, disabled}: VisualTextAreaProps) {
     const editor = useSlateStatic() as ReactEditor;
     const {
@@ -44,11 +52,7 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
                 setTimeout(() => scriptureReplaceUrl(editor, point));
             }
         }
-        // TODO Ctrl-Enter in the case of comments
-        if (
-            event.key === "Enter" && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey
-            && editor.selection != null && Range.isCollapsed(editor.selection)
-        ) {
+        if (isHardEnter(event) && editor.selection != null && Range.isCollapsed(editor.selection)) {
             if (inBlockquote) {
                 const [, path] = findWrappingElement(editor, "paragraph") ?? [null, null];
                 if (path != null && editor.string(path) === "") {
@@ -78,8 +82,27 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
                 editor.insertNode(createParagraphElement([createScriptureText("")]));
                 event.preventDefault();
             }
+
+            if (!event.defaultPrevented) {
+                const [node] = editor.node(editor.selection.anchor);
+                if (isScriptureText(node)) {
+                    const {offset} = editor.selection.anchor;
+                    let m = node.text.substring(0, offset).match(/\s*$/);
+                    if (m) {
+                        for (let i = 0; i < m[0].length; i++) {
+                            editor.deleteBackward("character");
+                        }
+                    }
+                    m = node.text.substring(offset).match(/^\s*/);
+                    if (m) {
+                        for (let i = 0; i < m[0].length; i++) {
+                            editor.deleteForward("character");
+                        }
+                    }
+                }
+            }
         }
-        if (event.key === "Enter" && (event.shiftKey || event.ctrlKey)) {
+        if (isSoftEnter(event)) {
             if (inVoid && editor.selection != null && Range.isCollapsed(editor.selection)) {
                 const parent = Path.parent(editor.selection.anchor.path);
                 editor.insertNode(createParagraphElement([createScriptureText("")]), {at: parent});
@@ -90,10 +113,7 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
             }
         }
 
-        if (
-            event.key === "Backspace" && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey
-            && editor.selection != null && Range.isCollapsed(editor.selection)
-        ) {
+        if (isBackspace(event) && editor.selection != null && Range.isCollapsed(editor.selection)) {
             const [, blockPath] = findWrappingElement(editor, [
                 "blockquote", "spoiler-block", "details"
             ]) ?? [null, null];
@@ -113,6 +133,14 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
                     } else {
                         editor.setNodes(createParagraphElement([]));
                     }
+                    event.preventDefault();
+                }
+            }
+
+            if (inCodeBlock) {
+                const [, path] = findWrappingElement(editor, "code-block") ?? [null, null];
+                if (path != null && editor.isStart(editor.selection.anchor, path)) {
+                    editor.setNodes(createParagraphElement([]));
                     event.preventDefault();
                 }
             }
