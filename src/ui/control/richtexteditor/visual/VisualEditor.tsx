@@ -9,7 +9,11 @@ import VisualEditorPanel from "ui/control/richtexteditor/visual/VisualEditorPane
 import VisualTextArea, { VisualTextAreaProps } from "ui/control/richtexteditor/visual/VisualTextArea";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { isLinkElement, Scripture } from "ui/control/richtexteditor/visual/scripture";
-import { scriptureExtractUrls, withScripture } from "ui/control/richtexteditor/visual/scripture-editor";
+import {
+    isScriptureEmpty,
+    scriptureExtractUrls,
+    withScripture
+} from "ui/control/richtexteditor/visual/scripture-editor";
 import { htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
 
 export type VisualEditorProps = {
@@ -98,7 +102,7 @@ export default function VisualEditor({
                 <VisualTextArea
                     rows={rows}
                     maxHeight={maxHeight}
-                    placeholder={placeholder}
+                    placeholder={isScriptureEmpty(editor.children) ? placeholder : undefined}
                     disabled={disabled}
                     autoFocus={autoFocus}
                 />

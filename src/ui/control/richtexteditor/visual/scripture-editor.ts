@@ -2,7 +2,7 @@ import {
     BaseEditor,
     BaseElement,
     BaseOperation,
-    BasePoint,
+    BasePoint, Descendant,
     Element as SlateElement,
     Node as SlateNode,
     NodeEntry,
@@ -19,6 +19,7 @@ import {
     createParagraphElement,
     createScriptureText,
     isLinkElement,
+    isParagraphElement,
     isScriptureElement,
     isScriptureInline,
     isScriptureKnown,
@@ -273,4 +274,21 @@ export function scriptureReplaceUrl(editor: BaseEditor, beforePoint: BasePoint):
     const at = {path: beforePoint.path, offset: m.index};
     Transforms.delete(editor, {at, distance: m[1].length, unit: "character"});
     editor.insertNode(createLinkElement(m[1], [createScriptureText(m[1])]), {at});
+}
+
+export function isScriptureEmpty(scripture: Descendant[] | null | undefined): boolean {
+    if (!scripture || scripture.length === 0) {
+        return true;
+    }
+
+    if (scripture.length > 1) {
+        return false;
+    }
+
+    const node = scripture[0];
+    return isScriptureElement(node) && isParagraphElement(node)
+        && (
+            node.children.length === 0
+            || (node.children.length === 1 && isScriptureText(node.children[0]) && node.children[0].text === "")
+        );
 }
