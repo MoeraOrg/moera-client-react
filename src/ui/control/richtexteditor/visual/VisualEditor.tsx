@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { createEditor, Descendant } from 'slate';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { BaseOperation, createEditor, Descendant } from 'slate';
 import { ReactEditor, Slate, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
 import deepEqual from 'react-fast-compare';
@@ -8,8 +8,8 @@ import VisualEditorCommands from "ui/control/richtexteditor/visual/VisualEditorC
 import VisualEditorPanel from "ui/control/richtexteditor/visual/VisualEditorPanel";
 import VisualTextArea, { VisualTextAreaProps } from "ui/control/richtexteditor/visual/VisualTextArea";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
-import { Scripture } from "ui/control/richtexteditor/visual/scripture";
-import { withScripture } from "ui/control/richtexteditor/visual/scripture-editor";
+import { isLinkElement, Scripture } from "ui/control/richtexteditor/visual/scripture";
+import { scriptureExtractUrls, withScripture } from "ui/control/richtexteditor/visual/scripture-editor";
 import { htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
 
 export type VisualEditorProps = {
@@ -44,6 +44,44 @@ export default function VisualEditor({
             editor.onChange();
         }
     }, [editor, value]);
+
+
+    const updateUrls = useCallback(() => {
+        onUrls && onUrls(scriptureExtractUrls(editor.children as Scripture));
+    }, [editor.children, onUrls]);
+
+    const updateUrlsTimeout = useRef<number | NodeJS.Timeout | null>(null);
+
+    const delayedUpdateUrls = useCallback(() => {
+        if (updateUrlsTimeout.current != null) {
+            clearTimeout(updateUrlsTimeout.current);
+        }
+        updateUrlsTimeout.current = setTimeout(updateUrls, 1500);
+    }, [updateUrls]);
+
+    const onEditorChange = useCallback((operation: BaseOperation) => {
+        switch (operation.type) {
+            case "remove_node":
+            case "remove_text":
+                delayedUpdateUrls();
+                break;
+            case "insert_node":
+                if (isLinkElement(operation.node)) {
+                    setTimeout(() => updateUrls());
+                }
+                break;
+            case "set_node":
+                if (isLinkElement(operation.properties)) {
+                    setTimeout(() => updateUrls());
+                }
+                break;
+        }
+    }, [delayedUpdateUrls, updateUrls]);
+
+    useEffect(() => {
+        editor.addChangeListener(onEditorChange);
+        return () => editor.removeChangeListener(onEditorChange);
+    }, [editor, onEditorChange]);
 
     // useCallback() is mandatory here
     const onScriptureChange = useCallback((content: Scripture) => {

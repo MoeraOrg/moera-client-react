@@ -1,6 +1,7 @@
 import {
     BaseEditor,
     BaseElement,
+    BaseOperation,
     BasePoint,
     Element as SlateElement,
     Node as SlateNode,
@@ -64,16 +65,27 @@ export const isSelectionInElement = (
 ): boolean =>
     findWrappingElement(editor, type) != null;
 
-export function withScripture<T extends DOMEditor>(editor: T): T {
-    const {isInline, isVoid, insertFragmentData, insertTextData, normalizeNode} = editor;
+export type EditorChangeListener = (operation: BaseOperation) => void;
 
-    editor.isInline = (element: BaseElement): boolean =>
+export type ScriptureEditor<T extends DOMEditor> = T & {
+    changeListeners: EditorChangeListener[];
+
+    addChangeListener(listener: EditorChangeListener): void;
+    removeChangeListener(listener: EditorChangeListener): void;
+}
+
+export function withScripture<T extends DOMEditor>(editor: T): ScriptureEditor<T> {
+    const {isInline, isVoid, insertFragmentData, insertTextData, normalizeNode, apply} = editor;
+
+    const scriptureEditor = editor as ScriptureEditor<T>;
+
+    scriptureEditor.isInline = (element: BaseElement): boolean =>
         (isScriptureElement(element) && isScriptureInline(element)) || isInline(element);
 
-    editor.isVoid = (element: BaseElement): boolean =>
+    scriptureEditor.isVoid = (element: BaseElement): boolean =>
         (isScriptureElement(element) && isScriptureVoid(element)) || isVoid(element);
 
-    editor.insertFragmentData = (data: DataTransfer): boolean => {
+    scriptureEditor.insertFragmentData = (data: DataTransfer): boolean => {
         if (insertFragmentData(data)) {
             return true;
         }
@@ -85,9 +97,9 @@ export function withScripture<T extends DOMEditor>(editor: T): T {
         }
 
         return false;
-    }
+    };
 
-    editor.insertTextData = (data: DataTransfer): boolean => {
+    scriptureEditor.insertTextData = (data: DataTransfer): boolean => {
         const text = data.getData("text/plain");
 
         const m = text.match(new RegExp("^(\\s*)(" + URL_PATTERN + ")(\\s*)$"));
@@ -102,9 +114,9 @@ export function withScripture<T extends DOMEditor>(editor: T): T {
         ]);
 
         return true;
-    }
+    };
 
-    editor.normalizeNode = (entry: NodeEntry, options?: {operation?: Operation}) => {
+    scriptureEditor.normalizeNode = (entry: NodeEntry, options?: { operation?: Operation }) => {
         const [node, path] = entry;
 
         if (SlateElement.isElement(node) && !isScriptureElement(node)) {
@@ -181,9 +193,29 @@ export function withScripture<T extends DOMEditor>(editor: T): T {
         }
 
         normalizeNode(entry, options);
-    }
+    };
 
-    return editor;
+    scriptureEditor.changeListeners = [];
+
+    scriptureEditor.addChangeListener = (listener: EditorChangeListener): void => {
+        if (!scriptureEditor.changeListeners.includes(listener)) {
+            scriptureEditor.changeListeners.push(listener);
+        }
+    };
+
+    scriptureEditor.removeChangeListener = (listener: EditorChangeListener): void => {
+        const index = scriptureEditor.changeListeners.indexOf(listener);
+        if (index !== -1) {
+            scriptureEditor.changeListeners.splice(index, 1);
+        }
+    };
+
+    scriptureEditor.apply = (operation: BaseOperation) => {
+        scriptureEditor.changeListeners.forEach(listener => listener(operation));
+        apply(operation);
+    };
+
+    return scriptureEditor;
 }
 
 export function scriptureExtractUrls(scripture: Scripture): string[] {

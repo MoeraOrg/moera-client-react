@@ -301,7 +301,6 @@ export default function VisualEditorCommands({children}: Props) {
 
         showFoldDialog(true, prevValues, (ok: boolean | null, {summary = ""}: Partial<RichTextFoldValues>) => {
             showFoldDialog(false);
-            console.log(element, isScriptureElement(element), path, ok);
             if (path != null) {
                 if (ok) {
                     editor.setNodes<DetailsElement>({summary}, {at: path});

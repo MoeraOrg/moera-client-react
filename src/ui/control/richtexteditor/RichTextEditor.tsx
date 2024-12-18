@@ -67,7 +67,7 @@ export function RichTextEditor({
                 {format.endsWith("/visual") ?
                     <VisualEditor value={value} rows={rows} maxHeight={maxHeight} placeholder={placeholder}
                                   autoFocus={autoFocus} disabled={disabled} hidingPanel={hidingPanel}
-                                  onChange={onChange}/>
+                                  onChange={onChange} onUrls={onUrls}/>
                 :
                     <MarkdownEditor name={name} value={value} features={features} rows={rows} maxHeight={maxHeight}
                                     placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
