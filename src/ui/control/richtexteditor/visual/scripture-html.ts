@@ -217,7 +217,7 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
 }
 
 export const safeImportScripture = (html: string | null | undefined): Scripture =>
-    htmlToScripture(htmlToEmoji(linefeedsToHtml(safeImportHtml(html))), true)
+    htmlToScripture(htmlToEmoji(linefeedsToHtml(safeImportHtml(html?.replaceAll("\n", " ")))), true);
 
 export function scriptureToHtml(scripture?: Scripture | null | undefined): string {
     if (!scripture) { // null, undefined, "", []
