@@ -24,6 +24,7 @@ export const VISUAL_EDITOR_KEYS = {
     STRIKEOUT:          new VisualEditorKey("Mod-Shift-S"),
     LINK:               new VisualEditorKey("Mod-K"),
     BLOCKQUOTE:         new VisualEditorKey("Mod-'"),
+    BLOCKUNQUOTE:       new VisualEditorKey("Mod-Shift-'"),
     HORIZONTAL_RULE:    new VisualEditorKey("Mod-H"),
     CODE:               new VisualEditorKey("Mod-Shift-C"),
     MARK:               new VisualEditorKey("Mod-M"),

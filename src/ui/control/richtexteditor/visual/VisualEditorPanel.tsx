@@ -73,7 +73,8 @@ export default function VisualEditorPanel({hiding}: Props) {
                 <VisualEditorButton icon={msFormatQuote} title={t("quote")} hotkey={VISUAL_EDITOR_KEYS.BLOCKQUOTE.title}
                                     command={formatBlockquote}/>
                 {inBlockquote &&
-                    <VisualEditorButton icon={msFormatQuoteOff} title={t("unquote")} command={formatBlockunquote}/>
+                    <VisualEditorButton icon={msFormatQuoteOff} title={t("unquote")}
+                                        hotkey={VISUAL_EDITOR_KEYS.BLOCKUNQUOTE.title} command={formatBlockunquote}/>
                 }
             </div>
             <div className="group">
