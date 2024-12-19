@@ -217,6 +217,9 @@ export const equalScriptureMarks = (a: ScriptureMarks, b: ScriptureMarks): boole
     && Boolean(a.code) === Boolean(b.code)
     && (a.supsub ?? 0) === (b.supsub ?? 0);
 
+
+export const SCRIPTURE_MARKS: (keyof ScriptureMarks)[] = ["bold", "italic", "strikeout", "code", "supsub"];
+
 export type ScriptureText = SlateText & ScriptureMarks;
 
 export const isScriptureText = (value: any): value is ScriptureText =>

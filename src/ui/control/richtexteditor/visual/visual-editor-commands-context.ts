@@ -44,6 +44,7 @@ export interface VisualEditorCommandsInterface {
     formatSubscript: () => void;
     formatSuperscript: () => void;
     formatFormula: () => void;
+    formatClear: () => void;
 }
 
 export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInterface>({
@@ -90,6 +91,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     formatSubscript: () => {},
     formatSuperscript: () => {},
     formatFormula: () => {},
+    formatClear: () => {},
 });
 
 export const useVisualEditorCommands = (): VisualEditorCommandsInterface => useContext(VisualEditorCommandsContext);

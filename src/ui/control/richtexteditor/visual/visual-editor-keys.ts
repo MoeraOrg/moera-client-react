@@ -21,9 +21,10 @@ class VisualEditorKey {
 export const VISUAL_EDITOR_KEYS = {
     BOLD:               new VisualEditorKey("Mod-B"),
     ITALIC:             new VisualEditorKey("Mod-I"),
-    STRIKEOUT:          new VisualEditorKey("Mod-R"),
+    STRIKEOUT:          new VisualEditorKey("Mod-Shift-S"),
     LINK:               new VisualEditorKey("Mod-K"),
     BLOCKQUOTE:         new VisualEditorKey("Mod-'"),
     HORIZONTAL_RULE:    new VisualEditorKey("Mod-H"),
     CODE:               new VisualEditorKey("Mod-Shift-C"),
+    CLEAR:              new VisualEditorKey("Mod-\\"),
 };

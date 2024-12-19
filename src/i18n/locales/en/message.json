@@ -72,6 +72,7 @@
   "change-password-ellipsis": "Change Password...",
   "choose-decision": "Please, choose your decision...",
   "choose-request": "Choose a request...",
+  "clear-formatting": "Clear formatting",
   "clear-selection": "Clear selection",
   "client-settings-changed-conflict": "Client settings were changed by somebody.",
   "clipboard-contains-formatting": "The clipboard contains text with formatting. Do you want to paste the text with formatting tags?",

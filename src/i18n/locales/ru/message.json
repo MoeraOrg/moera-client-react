@@ -72,6 +72,7 @@
   "change-password-ellipsis": "Изменить пароль...",
   "choose-decision": "Пожалуйста, выберите свой вариант...",
   "choose-request": "Выберите просьбу...",
+  "clear-formatting": "Убрать форматирование",
   "clear-selection": "Отменить выбор",
   "client-settings-changed-conflict": "Настройки клиента были кем-то изменены.",
   "clipboard-contains-formatting": "Буфер обмена содержит текст с форматированием. Вставить текст с тегами форматирования?",

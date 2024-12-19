@@ -5,7 +5,7 @@ import cx from 'classnames';
 import {
     msAddLink,
     msAlternateEmail,
-    msFormatBold,
+    msFormatBold, msFormatClear,
     msFormatIndentDecrease,
     msFormatIndentIncrease,
     msFormatItalic,
@@ -35,7 +35,8 @@ export default function VisualEditorPanel({hiding}: Props) {
         inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
         inOrderedList,
         formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
-        formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo
+        formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo,
+        formatClear
     } = useVisualEditorCommands();
 
     const {t} = useTranslation();
@@ -89,6 +90,10 @@ export default function VisualEditorPanel({hiding}: Props) {
                 <VisualEditorButton icon={msAddLink} title={t("link")} hotkey={VISUAL_EDITOR_KEYS.LINK.title}
                                     active={inLink} command={formatLink}/>
                 <VisualEditorButton icon={msVideoLibrary} title={t("insert-video")} command={formatVideo}/>
+            </div>
+            <div className="group">
+                <VisualEditorButton icon={msFormatClear} title={t("clear-formatting")}
+                                    hotkey={VISUAL_EDITOR_KEYS.CLEAR.title} command={formatClear}/>
             </div>
         </div>
     );

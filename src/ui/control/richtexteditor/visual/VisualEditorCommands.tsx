@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Editor, Element, Node, Path, Range, Transforms } from 'slate';
+import { Editor, Element, Node, Path, PathRef, Range, Transforms } from 'slate';
 import { ReactEditor, useSlateSelector, useSlateStatic } from 'slate-react';
 
 import { NodeName } from "api";
@@ -29,12 +29,12 @@ import {
     isHeadingElement,
     isLinkElement,
     isListItemElement,
-    isParagraphElement,
+    isParagraphElement, isScriptureElement, isScriptureRegularInline, isScriptureSimpleBlock, isScriptureSuperBlock,
     isSpoilerBlockElement,
     isSpoilerElement,
     LinkElement,
     ListItemElement,
-    ParagraphElement,
+    ParagraphElement, SCRIPTURE_MARKS,
     SCRIPTURE_VOID_TYPES,
     ScriptureElement,
     ScriptureMarks,
@@ -360,6 +360,87 @@ export default function VisualEditorCommands({children}: Props) {
         });
     }
 
+    interface ClearItem {
+        type: "unwrap" | "set";
+        pathRef: PathRef;
+    }
+
+    const findClearItems = (): ClearItem[] => {
+        if (editor.selection == null) {
+            return [];
+        }
+
+        const clearItems: ClearItem[] = [];
+
+        if (Range.isCollapsed(editor.selection)) {
+            for (const [node, path] of Node.ancestors(editor, editor.selection.anchor.path, {reverse: true})) {
+                if (!isScriptureElement(node) || isParagraphElement(node)) {
+                    continue;
+                }
+                if (isScriptureRegularInline(node) || isScriptureSuperBlock(node)) {
+                    clearItems.push({type: "unwrap", pathRef: editor.pathRef(path)});
+                    break;
+                }
+                if (isScriptureSimpleBlock(node)) {
+                    clearItems.push({type: "set", pathRef: editor.pathRef(path)});
+                    break;
+                }
+            }
+        } else {
+            for (
+                const [node, path] of Node.elements(editor, {
+                from: editor.selection.anchor.path,
+                to: editor.selection.focus.path
+            })
+                ) {
+                if (!isScriptureElement(node) || isParagraphElement(node)) {
+                    continue;
+                }
+                const nodeRange = {anchor: editor.start(path), focus: editor.end(path)};
+                if (!Range.surrounds(editor.selection, nodeRange)) {
+                    continue;
+                }
+                if (isScriptureRegularInline(node) || isScriptureSuperBlock(node)) {
+                    clearItems.push({type: "unwrap", pathRef: editor.pathRef(path)});
+                }
+                if (isScriptureSimpleBlock(node)) {
+                    clearItems.push({type: "set", pathRef: editor.pathRef(path)});
+                }
+            }
+        }
+
+        return clearItems;
+    }
+
+    const clearBlocks = () => {
+        const clearItems = findClearItems();
+
+        if (clearItems.length === 0) {
+            return;
+        }
+
+        setTimeout(() => {
+            clearItems.forEach(item => {
+                const path = item.pathRef.current;
+                if (path != null) {
+                    if (item.type === "unwrap") {
+                        editor.unwrapNodes({at: path});
+                    } else {
+                        editor.setNodes(createParagraphElement([]), {at: path});
+                    }
+                }
+                item.pathRef.unref();
+            });
+            clearBlocks();
+        });
+    }
+
+    const formatClear = () => {
+        SCRIPTURE_MARKS.forEach(mark => editor.removeMark(mark));
+
+        clearBlocks();
+    }
+
     return (
         <VisualEditorCommandsContext.Provider value={{
             enableHeading,
@@ -368,7 +449,7 @@ export default function VisualEditorCommands({children}: Props) {
             inCodeBlock, inFormula,
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
             formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo,
-            formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula
+            formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula, formatClear
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>
