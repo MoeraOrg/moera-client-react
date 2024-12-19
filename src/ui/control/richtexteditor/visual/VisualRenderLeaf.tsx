@@ -18,6 +18,7 @@ export default function VisualRenderLeaf(props: RenderLeafProps) {
                 fontStyle: leaf.italic ? "italic" : undefined,
                 textDecorationLine: leaf.strikeout ? "line-through" : undefined,
                 color: leaf.code ? "var(--bs-code-color)" : undefined,
+                backgroundColor: leaf.mark ? "var(--bs-highlight-bg)" : undefined,
                 wordWrap: leaf.code ? "break-word" : undefined,
             }}
         >

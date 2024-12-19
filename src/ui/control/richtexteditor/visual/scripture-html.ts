@@ -80,8 +80,6 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
     switch (element.nodeName) {
         case "B":
         case "STRONG":
-        case "MARK":
-        case "INS":
         case "U":
             attributes.bold = true;
             break;
@@ -107,6 +105,10 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
             break;
         case "SUP":
             attributes.supsub = 1;
+            break;
+        case "INS":
+        case "MARK":
+            attributes.mark = true;
             break;
         case "OL":
         case "DL":
@@ -405,6 +407,7 @@ function scriptureTextToHtml(node: ScriptureText, context: ScriptureToHtmlContex
     requireTag("code", node.code, toOpen, toClose, context);
     requireTag("sub", (node.supsub ?? 0) < 0, toOpen, toClose, context);
     requireTag("sup", (node.supsub ?? 0) > 0, toOpen, toClose, context);
+    requireTag("mark", node.mark, toOpen, toClose, context);
 
     while (toClose.size > 0) {
         const tag = context.openStack.pop();

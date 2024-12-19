@@ -60,7 +60,7 @@ export default function VisualEditorCommands({children}: Props) {
     const editor = useSlateStatic() as ReactEditor;
     const {
         bold: inBold = false, italic: inItalic = false, strikeout: inStrikeout = false, code: inCode = false,
-        supsub = 0,
+        supsub = 0, mark: inMark = false,
     } = useSlateSelector(
         editor => Editor.marks(editor) as ScriptureMarks ?? {},
         equalScriptureMarks
@@ -360,6 +360,9 @@ export default function VisualEditorCommands({children}: Props) {
         });
     }
 
+    const formatMark = () =>
+        editor.addMark("mark", !inMark);
+
     interface ClearItem {
         type: "unwrap" | "set";
         pathRef: PathRef;
@@ -446,10 +449,11 @@ export default function VisualEditorCommands({children}: Props) {
             enableHeading,
             inBold, inItalic, inStrikeout, inLink, inSpoilerInline, inSpoilerBlock, inSpoiler, inMention, inBlockquote,
             inList, inUnorderedList, inOrderedList, headingLevel, inVoid, inFold, inCode, inSubscript, inSuperscript,
-            inCodeBlock, inFormula,
+            inCodeBlock, inFormula, inMark,
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
             formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo,
-            formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula, formatClear
+            formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula, formatMark,
+            formatClear
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>

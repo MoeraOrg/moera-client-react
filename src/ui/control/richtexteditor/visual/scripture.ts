@@ -208,6 +208,7 @@ export interface ScriptureMarks {
     strikeout?: boolean;
     code?: boolean;
     supsub?: number;
+    mark?: boolean;
 }
 
 export const equalScriptureMarks = (a: ScriptureMarks, b: ScriptureMarks): boolean =>
@@ -215,10 +216,10 @@ export const equalScriptureMarks = (a: ScriptureMarks, b: ScriptureMarks): boole
     && Boolean(a.italic) === Boolean(b.italic)
     && Boolean(a.strikeout) === Boolean(b.strikeout)
     && Boolean(a.code) === Boolean(b.code)
-    && (a.supsub ?? 0) === (b.supsub ?? 0);
+    && (a.supsub ?? 0) === (b.supsub ?? 0)
+    && Boolean(a.mark) === Boolean(b.mark);
 
-
-export const SCRIPTURE_MARKS: (keyof ScriptureMarks)[] = ["bold", "italic", "strikeout", "code", "supsub"];
+export const SCRIPTURE_MARKS: (keyof ScriptureMarks)[] = ["bold", "italic", "strikeout", "code", "supsub", "mark"];
 
 export type ScriptureText = SlateText & ScriptureMarks;
 

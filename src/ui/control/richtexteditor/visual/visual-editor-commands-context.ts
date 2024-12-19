@@ -23,6 +23,7 @@ export interface VisualEditorCommandsInterface {
     inSubscript: boolean;
     inSuperscript: boolean;
     inFormula: boolean;
+    inMark: boolean;
 
     formatBold: () => void;
     formatItalic: () => void;
@@ -44,6 +45,7 @@ export interface VisualEditorCommandsInterface {
     formatSubscript: () => void;
     formatSuperscript: () => void;
     formatFormula: () => void;
+    formatMark: () => void;
     formatClear: () => void;
 }
 
@@ -70,6 +72,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     inSubscript: false,
     inSuperscript: false,
     inFormula: false,
+    inMark: false,
 
     formatBold: () => {},
     formatItalic: () => {},
@@ -91,6 +94,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     formatSubscript: () => {},
     formatSuperscript: () => {},
     formatFormula: () => {},
+    formatMark: () => {},
     formatClear: () => {},
 });
 

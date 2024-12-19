@@ -26,5 +26,6 @@ export const VISUAL_EDITOR_KEYS = {
     BLOCKQUOTE:         new VisualEditorKey("Mod-'"),
     HORIZONTAL_RULE:    new VisualEditorKey("Mod-H"),
     CODE:               new VisualEditorKey("Mod-Shift-C"),
+    MARK:               new VisualEditorKey("Mod-M"),
     CLEAR:              new VisualEditorKey("Mod-\\"),
 };

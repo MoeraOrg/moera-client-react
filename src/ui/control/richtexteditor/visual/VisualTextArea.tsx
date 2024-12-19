@@ -41,7 +41,7 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
     const {
         inBlockquote, inList, headingLevel, inVoid, inCodeBlock, inFormula,
         formatBold, formatItalic, formatStrikeout, formatLink, formatMention, formatBlockquote, formatHorizontalRule,
-        formatCode, formatFormula, formatClear
+        formatCode, formatFormula, formatMark, formatClear
     } = useVisualEditorCommands();
 
     const onKeyDown = (event: React.KeyboardEvent) => {
@@ -185,6 +185,9 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
                 event.preventDefault();
             } else if (VISUAL_EDITOR_KEYS.CODE.check(event)) {
                 formatCode();
+                event.preventDefault();
+            } else if (VISUAL_EDITOR_KEYS.MARK.check(event)) {
+                formatMark();
                 event.preventDefault();
             } else if (VISUAL_EDITOR_KEYS.CLEAR.check(event)) {
                 formatClear();

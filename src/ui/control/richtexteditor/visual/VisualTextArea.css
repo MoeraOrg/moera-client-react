@@ -17,7 +17,8 @@
 }
 
 .visual-text-area .spoiler {
-    background-color: var(--bs-gray-300);
+    background-color: unset;
+    border: 1px dashed var(--bs-gray-600);
     color: unset;
     font-weight: unset;
     cursor: unset;

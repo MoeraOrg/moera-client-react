@@ -1,7 +1,8 @@
 .spoiler {
     color: white;
     background-color: black;
-    font-weight: bold;
+    font-weight: 600;
     border: none;
+    border-radius: .25em;
     cursor: pointer;
 }

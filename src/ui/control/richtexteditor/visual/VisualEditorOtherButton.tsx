@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
     msCode,
     msCodeBlocks,
-    msExpandCircleDown,
+    msExpandCircleDown, msFormatInkHighlighter,
     msFunction,
     msMoreHoriz,
     msSubscript,
@@ -23,8 +23,8 @@ export default function VisualEditorOtherButton() {
         placement, zIndex
     } = useButtonPopper("bottom", {closeOnSelect: false});
     const {
-        inFold, inCode, inSubscript, inSuperscript, inCodeBlock, inFormula,
-        formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula
+        inFold, inCode, inSubscript, inSuperscript, inCodeBlock, inFormula, inMark,
+        formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula, formatMark,
     } = useVisualEditorCommands();
     const {t} = useTranslation();
 
@@ -52,6 +52,9 @@ export default function VisualEditorOtherButton() {
                                             command={onCommand(formatSubscript)}/>
                         <VisualEditorButton icon={msSuperscript} title={t("superscript")} active={inSuperscript}
                                             command={onCommand(formatSuperscript)}/>
+                        <VisualEditorButton icon={msFormatInkHighlighter} title={t("mark")}
+                                            hotkey={VISUAL_EDITOR_KEYS.MARK.title} active={inMark}
+                                            command={onCommand(formatMark)}/>
                     </div>
                     <div ref={setArrowRef} style={arrowStyles} className="popover-arrow"/>
                 </div>
