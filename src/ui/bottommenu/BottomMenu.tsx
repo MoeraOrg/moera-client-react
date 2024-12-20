@@ -10,6 +10,7 @@ import { isBottomMenuVisible } from "state/navigation/selectors";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { Button, Loading } from "ui/control";
+import { useActiveElement } from "ui/hook";
 import QuickTipsButton from "ui/quicktips/QuickTipsButton";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
 import NewsButton from "ui/mainmenu/connectionstatus/NewsButton";
@@ -22,10 +23,16 @@ export default function BottomMenu() {
     const atNode = useSelector(isAtNode);
     const connecting = useSelector((state: ClientState) => state.home.connecting);
     const connected = useSelector(isConnectedToHome);
-    const visible = useSelector(isBottomMenuVisible);
+    const bottomMenuVisible = useSelector(isBottomMenuVisible);
+    const activeElement = useActiveElement();
     const dispatch = useDispatch();
     const {t} = useTranslation();
-    const className = cx(["connection-status", "d-lg-none", "navbar-dark", "bg-dark"], {"invisible": !visible});
+
+    const invisible = !bottomMenuVisible
+        || activeElement?.tagName === "TEXTAREA"
+        || activeElement?.classList.contains("visual-text-area");
+
+    const className = cx(["connection-status", "d-lg-none", "navbar-dark", "bg-dark"], {invisible});
 
     if (connecting) {
         return (
