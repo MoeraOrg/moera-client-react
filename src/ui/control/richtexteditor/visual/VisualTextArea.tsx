@@ -212,6 +212,7 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
             renderElement={VisualRenderElement}
             renderLeaf={VisualRenderLeaf}
             onKeyDown={onKeyDown}
+            scrollSelectionIntoView={() => {}}
         />
     );
 }
