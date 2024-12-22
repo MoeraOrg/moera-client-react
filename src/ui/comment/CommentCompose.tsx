@@ -14,7 +14,6 @@ import {
     getCommentsReceiverPostingId,
     isCommentComposerReady
 } from "state/detailedposting/selectors";
-import * as Browser from "ui/browser";
 import { AvatarField } from "ui/control/field";
 import { RichTextField, RichTextLinkPreviews } from "ui/control/richtexteditor";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
@@ -25,7 +24,6 @@ import {
     CommentComposeValues
 } from "ui/comment/comment-compose";
 import CommentComposeButtons from "ui/comment/CommentComposeButtons";
-import { insertText } from "util/ui";
 import { mentionName } from "util/names";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./CommentCompose.css";
@@ -68,19 +66,6 @@ function CommentCompose(props: Props) {
         }
     }
 
-    const onKeyDown = (event: React.KeyboardEvent) => {
-        if (event.key === "Enter") {
-            const submit = !Browser.isTouchScreen() && !event.shiftKey
-                && ((submitKey === "enter" && !event.ctrlKey) || (submitKey === "ctrl-enter" && event.ctrlKey));
-            if (submit) {
-                submitForm();
-            } else {
-                insertText(event.target as HTMLTextAreaElement, "\n");
-            }
-            event.preventDefault();
-        }
-    }
-
     const mention = receiverFullName ? receiverFullName : mentionName(receiverName);
     return (
         <div id="comment-composer" onFocus={onFocus} onBlur={onBlur}>
@@ -93,7 +78,7 @@ function CommentCompose(props: Props) {
                                    placeholder={t("write-comment-here", {mention})} disabled={!ready || beingPosted}
                                    smileysEnabled={smileysEnabled}
                                    hidingPanel={areValuesEmpty(values)} format={sourceFormatDefault}
-                                   onKeyDown={onKeyDown} urlsField="bodyUrls"/>
+                                   submitKey={submitKey} onSubmit={() => submitForm()} urlsField="bodyUrls"/>
                     <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls"
                                           nodeName={receiverName ?? REL_CURRENT} features={features} small
                                           disabled={!ready || beingPosted}/>

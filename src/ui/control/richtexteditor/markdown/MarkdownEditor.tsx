@@ -14,12 +14,15 @@ export type MarkdownEditorProps = {
     forceImageCompress?: boolean;
     onChange?: (value: RichTextValue) => void;
     onUrls?: (urls: string[]) => void;
+    submitKey?: string;
+    onSubmit?: () => void;
     noMedia?: boolean;
 } & Omit<MarkdownAreaProps, "textArea" | "panel" | "value" | "onChange">;
 
 export function MarkdownEditor({
     name, value, features, rows, maxHeight, placeholder, autoFocus, autoComplete, disabled, smileysEnabled,
-    hidingPanel, format, nodeName = REL_CURRENT, forceImageCompress, onKeyDown, onChange, onBlur, onUrls, noMedia
+    hidingPanel, format, nodeName = REL_CURRENT, forceImageCompress, submitKey, onSubmit, onChange, onBlur, onUrls,
+    noMedia
 }: MarkdownEditorProps) {
     const panel = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
@@ -60,7 +63,7 @@ export function MarkdownEditor({
             }
             <MarkdownArea name={name} value={value.text} format={format} rows={rows} maxHeight={maxHeight}
                           placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
-                          disabled={disabled} smileysEnabled={smileysEnabled} onKeyDown={onKeyDown}
+                          disabled={disabled} smileysEnabled={smileysEnabled} submitKey={submitKey} onSubmit={onSubmit}
                           onChange={onTextChange} onBlur={onBlur} onUrls={onUrls} ref={textArea} panel={panel}
                           uploadImage={setImageFromClipboard}/>
         </>

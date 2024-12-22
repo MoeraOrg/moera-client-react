@@ -692,6 +692,7 @@
         "clock_offset": "Смещение часов относительно реального времени (в часах)",
         "comment_body-src-format_default": "Форматирование текста комментария (по умолчанию)",
         "comment_body-src-format_default-items": {
+          "html--visual": "Визуальный редактор",
           "plain-text": "Без форматирования"
         },
         "comment_reactions_negative_default": "Набор неодобрительных реакций на мой комментарий (по умолчанию)",

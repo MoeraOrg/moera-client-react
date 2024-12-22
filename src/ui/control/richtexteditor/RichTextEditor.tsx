@@ -5,11 +5,11 @@ import { PrivateMediaFileInfo, VerifiedMediaFile } from "api";
 import { MarkdownEditor, MarkdownEditorProps } from "ui/control/richtexteditor/markdown/MarkdownEditor";
 import VisualEditor, { VisualEditorProps } from "ui/control/richtexteditor/visual/VisualEditor";
 import RichTextEditorDropzone from "ui/control/richtexteditor/RichTextEditorDropzone";
+import RichTextEditorDialogs from "ui/control/richtexteditor/RichTextEditorDialogs";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { REL_CURRENT } from "util/rel-node-name";
 import { arrayMove } from "util/misc";
 import "./RichTextEditor.css";
-import RichTextEditorDialogs from "ui/control/richtexteditor/RichTextEditorDialogs";
 
 type Props = {
     className?: string;
@@ -17,7 +17,8 @@ type Props = {
 
 export function RichTextEditor({
     name, value, features, rows, maxHeight, placeholder, className, autoFocus, autoComplete, disabled, smileysEnabled,
-    hidingPanel, format, nodeName = REL_CURRENT, forceImageCompress, onKeyDown, onChange, onBlur, onUrls, noMedia
+    hidingPanel, format, nodeName = REL_CURRENT, forceImageCompress, onChange, submitKey, onSubmit, onBlur, onUrls,
+                                   noMedia
 }: Props) {
     const [selectedImage, setSelectedImage] = useState<PrivateMediaFileInfo | null>(null);
 
@@ -67,14 +68,14 @@ export function RichTextEditor({
                 {format.endsWith("/visual") ?
                     <VisualEditor value={value} rows={rows} maxHeight={maxHeight} placeholder={placeholder}
                                   autoFocus={autoFocus} disabled={disabled} hidingPanel={hidingPanel}
-                                  onChange={onChange} onUrls={onUrls}/>
+                                  onChange={onChange} submitKey={submitKey} onSubmit={onSubmit} onUrls={onUrls}/>
                 :
                     <MarkdownEditor name={name} value={value} features={features} rows={rows} maxHeight={maxHeight}
                                     placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
                                     disabled={disabled} smileysEnabled={smileysEnabled} hidingPanel={hidingPanel}
                                     format={format} nodeName={nodeName} forceImageCompress={forceImageCompress}
-                                    onKeyDown={onKeyDown} onChange={onChange} onBlur={onBlur} onUrls={onUrls}
-                                    noMedia={noMedia}/>
+                                    submitKey={submitKey} onSubmit={onSubmit}onChange={onChange} onBlur={onBlur}
+                                    onUrls={onUrls} noMedia={noMedia}/>
                 }
             </RichTextEditorDialogs>
             {!noMedia &&

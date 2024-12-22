@@ -21,16 +21,14 @@ import {
 } from "state/detailedposting/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { getPostingFeatures } from "state/compose/selectors";
-import * as Browser from "ui/browser";
 import NodeName from "ui/nodename/NodeName";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
 import { AvatarField } from "ui/control/field";
 import { RichTextField, RichTextLinkPreviews } from "ui/control/richtexteditor";
 import { commentComposeLogic, CommentComposeProps, CommentComposeValues } from "ui/comment/comment-compose";
 import CommentDraftSaver from "ui/comment/CommentDraftSaver";
-import { insertText } from "util/ui";
-import "./CommentDialog.css";
 import { REL_CURRENT } from "util/rel-node-name";
+import "./CommentDialog.css";
 
 type Props = CommentComposeProps & FormikProps<CommentComposeValues>;
 
@@ -57,19 +55,6 @@ function CommentDialogInner(props: Props) {
         resetForm({values});
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [commentId, ready]); // 'props' are missing on purpose
-
-    const onKeyDown = (event: React.KeyboardEvent) => {
-        if (event.key === "Enter") {
-            const submit = !Browser.isTouchScreen() && !event.shiftKey
-                && ((submitKey === "enter" && !event.ctrlKey) || (submitKey === "ctrl-enter" && event.ctrlKey));
-            if (submit) {
-                submitForm();
-            } else {
-                insertText(event.target as HTMLTextAreaElement, "\n");
-            }
-            event.preventDefault();
-        }
-    }
 
     const onCancel = (event: React.MouseEvent) => {
         if (draft == null) {
@@ -101,8 +86,8 @@ function CommentDialogInner(props: Props) {
                     </div>
                     <RichTextField name="body" rows={5} features={features} nodeName={receiverName ?? REL_CURRENT}
                                    forceImageCompress anyValue autoFocus disabled={!ready || beingPosted}
-                                   smileysEnabled={smileysEnabled} format={sourceFormatDefault} onKeyDown={onKeyDown}
-                                   urlsField="bodyUrls"/>
+                                   smileysEnabled={smileysEnabled} format={sourceFormatDefault} submitKey={submitKey}
+                                   onSubmit={() => submitForm()} urlsField="bodyUrls"/>
                     <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls"
                                           nodeName={receiverName ?? REL_CURRENT} features={features} small
                                           disabled={!ready || beingPosted}/>

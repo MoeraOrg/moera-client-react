@@ -692,6 +692,7 @@
         "clock_offset": "Зміщення годинника щодо реального часу (у годинах)",
         "comment_body-src-format_default": "Форматування тексту коментаря (за замовчуванням)",
         "comment_body-src-format_default-items": {
+          "html--visual": "Візуальний редактор",
           "plain-text": "Без форматування"
         },
         "comment_reactions_negative_default": "Набір несхвальних реакцій на мій коментар (за замовчуванням)",

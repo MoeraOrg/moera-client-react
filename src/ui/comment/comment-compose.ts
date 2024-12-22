@@ -7,6 +7,7 @@ import {
     CommentSourceText,
     CommentText,
     DraftInfo,
+    PrivateMediaFileInfo,
     SourceFormat,
     VerifiedMediaFile
 } from "api";
@@ -78,8 +79,17 @@ function valuesToCommentSourceText(values: CommentComposeValues, props: ValuesTo
     };
 }
 
+function isCommentContentEmpty(
+    text: string | null | undefined,
+    media: (PrivateMediaFileInfo | null)[] | string[] | null | undefined
+): boolean {
+    const textEmpty = !text || text.trim() === "<p></p>";
+    const mediaEmpty = media == null || media.length === 0;
+    return textEmpty && mediaEmpty;
+}
+
 export function areValuesEmpty(values: CommentComposeValues): boolean {
-    return values.body.text.trim() === "" && (values.body.media == null || values.body.media.length === 0);
+    return isCommentContentEmpty(values.body.text, values.body.media);
 }
 
 export function areImagesUploaded(values: CommentComposeValues): boolean {
@@ -87,13 +97,8 @@ export function areImagesUploaded(values: CommentComposeValues): boolean {
 }
 
 export function isCommentTextEmpty(commentText: CommentText): boolean {
-    let textEmpty = commentText.bodySrc == null;
-    if (!textEmpty) {
-        const {text} = JSON.parse(commentText.bodySrc!);
-        textEmpty = !text;
-    }
-    const mediaEmpty = commentText.media == null || commentText.media.length === 0;
-    return textEmpty && mediaEmpty;
+    const {text} = commentText.bodySrc != null ? JSON.parse(commentText.bodySrc) : {text: null};
+    return isCommentContentEmpty(text, commentText.media);
 }
 
 export function isCommentTextChanged(commentText: CommentText, comment: CommentInfo | null) {

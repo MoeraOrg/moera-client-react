@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Node, Path, Range } from 'slate';
 import { Editable, ReactEditor, useSlateStatic } from 'slate-react';
 import isHotkey from 'is-hotkey';
 
+import * as Browser from "ui/browser";
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
 import VisualRenderLeaf from "ui/control/richtexteditor/visual/VisualRenderLeaf";
 import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
@@ -27,16 +28,15 @@ export interface VisualTextAreaProps {
     placeholder?: string;
     autoFocus?: boolean;
     disabled?: boolean;
+    submitKey?: string;
+    onSubmit?: () => void;
 }
-
-// TODO Ctrl-Enter in the case of comments
-const isHardEnter = isHotkey("Enter");
-
-const isSoftEnter = isHotkey(["Mod+Enter", "Shift+Enter"]);
 
 const isBackspace = isHotkey("Backspace");
 
-export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus, disabled}: VisualTextAreaProps) {
+export default function VisualTextArea({
+    rows, maxHeight, placeholder, autoFocus, disabled, submitKey, onSubmit
+}: VisualTextAreaProps) {
     const editor = useSlateStatic() as ReactEditor;
     const {
         inBlockquote, inList, headingLevel, inVoid, inCodeBlock, inFormula,
@@ -44,7 +44,24 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
         formatHorizontalRule, formatCode, formatFormula, formatMark, formatClear
     } = useVisualEditorCommands();
 
+    const [isSubmitKey, isHardEnter, isSoftEnter] = useMemo(() => {
+        const submitHotkey = !Browser.isTouchScreen()
+            ? submitKey?.toLowerCase().replace("ctrl-", "mod-").replaceAll("-", "+")
+            : undefined;
+        return [
+            submitHotkey ? isHotkey(submitHotkey) : () => false,
+            submitHotkey === "enter" ? isHotkey("Mod+Enter") : isHotkey("Enter"),
+            submitHotkey != null ? isHotkey("Shift+Enter") : isHotkey(["Mod+Enter", "Shift+Enter"])
+        ];
+    }, [submitKey]);
+
     const onKeyDown = (event: React.KeyboardEvent) => {
+        if (onSubmit != null && isSubmitKey(event)) {
+            onSubmit();
+            event.preventDefault();
+            return;
+        }
+
         if (event.key === "Enter" || event.key === " ") {
             setTimeout(() => scriptureReplaceSmileys(editor));
             if (editor.selection != null && Range.isCollapsed(editor.selection)) {
@@ -101,6 +118,8 @@ export default function VisualTextArea({rows, maxHeight, placeholder, autoFocus,
                     }
                 }
             }
+            editor.insertBreak();
+            event.preventDefault();
         }
         if (isSoftEnter(event)) {
             if (inVoid && editor.selection != null && Range.isCollapsed(editor.selection)) {

@@ -13,6 +13,7 @@ import RichTextPasteDialog, { RichTextPasteMode } from "ui/control/richtextedito
 import { extractUrls, replaceSmileys } from "util/text";
 import { containsTags, quoteHtml, safeImportHtml } from "util/html";
 import { insertText } from "util/ui";
+import * as Browser from "ui/browser";
 
 const MENTION_START = /(^|\s)@$/;
 
@@ -28,7 +29,8 @@ export interface MarkdownAreaProps {
     autoComplete?: string;
     disabled?: boolean;
     smileysEnabled?: boolean;
-    onKeyDown?: (event: React.KeyboardEvent) => void;
+    submitKey?: string;
+    onSubmit?: () => void;
     onChange?: (event: React.FormEvent) => void;
     onBlur?: (event: React.FocusEvent) => void;
     onUrls?: (urls: string[]) => void;
@@ -39,7 +41,7 @@ export interface MarkdownAreaProps {
 function MarkdownArea(
     {
         name, value, format, className, autoFocus, autoComplete, maxHeight, placeholder, rows = 3, disabled,
-        smileysEnabled, onKeyDown, onChange, onBlur, onUrls, panel, uploadImage
+        smileysEnabled, submitKey, onSubmit, onChange, onBlur, onUrls, panel, uploadImage
     }: MarkdownAreaProps,
     ref: ForwardedRef<HTMLTextAreaElement>
 ) {
@@ -234,8 +236,15 @@ function MarkdownArea(
             event.preventDefault();
             return;
         }
-        if (onKeyDown) {
-            onKeyDown(event);
+        if (event.key === "Enter") {
+            const submit = !Browser.isTouchScreen() && !event.shiftKey
+                && ((submitKey === "enter" && !event.ctrlKey) || (submitKey === "ctrl-enter" && event.ctrlKey));
+            if (submit) {
+                onSubmit && onSubmit();
+            } else {
+                insertText(event.target as HTMLTextAreaElement, "\n");
+            }
+            event.preventDefault();
         }
     }
 

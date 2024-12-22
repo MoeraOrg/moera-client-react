@@ -20,11 +20,13 @@ export type VisualEditorProps = {
     value: RichTextValue;
     hidingPanel?: boolean;
     onChange?: (value: RichTextValue) => void;
+    submitKey?: string;
+    onSubmit?: () => void;
     onUrls?: (urls: string[]) => void;
 } & VisualTextAreaProps;
 
 export default function VisualEditor({
-    value, rows, maxHeight, placeholder, autoFocus, disabled, hidingPanel, onChange, onUrls
+    value, rows, maxHeight, placeholder, autoFocus, disabled, hidingPanel, onChange, submitKey, onSubmit, onUrls
 }: VisualEditorProps) {
     const [editor] = useState(() => withScripture(withHistory(withReact(createEditor(), "x-scripture-fragment"))));
 
@@ -105,6 +107,8 @@ export default function VisualEditor({
                     placeholder={isScriptureEmpty(editor.children) ? placeholder : undefined}
                     disabled={disabled}
                     autoFocus={autoFocus}
+                    submitKey={submitKey}
+                    onSubmit={onSubmit}
                 />
             </VisualEditorCommands>
         </Slate>

@@ -141,6 +141,10 @@ const META: ClientSettingMetaInfo[] = [
                 {
                     title: "Markdown",
                     value: "markdown"
+                },
+                {
+                    title: "Visual editor",
+                    value: "html/visual"
                 }
             ]
         }

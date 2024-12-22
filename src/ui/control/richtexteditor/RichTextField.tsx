@@ -31,14 +31,15 @@ interface Props {
     smileysEnabled?: boolean;
     hidingPanel?: boolean;
     format: SourceFormat;
-    onKeyDown?: (event: React.KeyboardEvent) => void;
+    submitKey?: string;
+    onSubmit?: () => void;
     urlsField?: string;
 }
 
 export function RichTextField({
     name, title, rows = 3, maxHeight, features, noMedia, nodeName = REL_CURRENT, forceImageCompress, placeholder,
     autoFocus, anyValue, className, autoComplete, noFeedback = false, disabled = false, initialValue, defaultValue,
-    smileysEnabled, hidingPanel, format, onKeyDown, urlsField
+    smileysEnabled, hidingPanel, format, submitKey, onSubmit, urlsField
 }: Props) {
     const [{value, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
@@ -80,7 +81,8 @@ export function RichTextField({
                     smileysEnabled={smileysEnabled}
                     hidingPanel={hidingPanel}
                     format={format}
-                    onKeyDown={onKeyDown}
+                    submitKey={submitKey}
+                    onSubmit={onSubmit}
                     onUrls={urlsField != null ? onUrls : undefined}
                     noMedia={noMedia}
                     nodeName={nodeName}

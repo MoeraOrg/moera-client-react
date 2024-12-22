@@ -151,7 +151,10 @@ export default function SettingsField({name, fieldName, titleName, meta, initial
                         let items = undefined;
                         if ("items" in modifiers && modifiers.items != null) {
                             items = modifiers.items.map(item => ({
-                                title: t(`${titleName}-items.${item.value}`, {defaultValue: item.title}),
+                                title: t(
+                                    `${titleName}-items.${item.value.replaceAll("/", "--")}`,
+                                    {defaultValue: item.title}
+                                ),
                                 value: item.value
                             }));
                         }

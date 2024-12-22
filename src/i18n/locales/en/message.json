@@ -692,6 +692,7 @@
         "clock_offset": "Clock offset from the real time (in hours)",
         "comment_body-src-format_default": "Default comment text formatting",
         "comment_body-src-format_default-items": {
+          "html--visual": "Visual editor",
           "plain-text": "No formatting"
         },
         "comment_reactions_negative_default": "Default set of \"Oppose\" reactions to my comment",

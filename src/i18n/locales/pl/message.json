@@ -692,6 +692,7 @@
         "clock_offset": "Przesunięcie zegara od czasu rzeczywistego (w godzinach)",
         "comment_body-src-format_default": "Domyślne formatowanie tekstu komentarza",
         "comment_body-src-format_default-items": {
+          "html--visual": "Edytor wizualny",
           "plain-text": "Bez formatowania"
         },
         "comment_reactions_negative_default": "Domyślny zestaw reakcji \"Przeciwny\" dla mojego komentarza",
