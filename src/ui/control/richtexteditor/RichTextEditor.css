@@ -35,7 +35,7 @@
 }
 
 .rich-text-editor-panel .group {
-    display: inline-block;
+    display: inline;
 }
 
 @media only screen and (min-width: 576px) {
