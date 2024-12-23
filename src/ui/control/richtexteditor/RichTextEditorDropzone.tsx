@@ -182,13 +182,13 @@ export default function RichTextEditorDropzone({
                     : downloading ?
                         t("downloading-image")
                     :
-                        <button className="upload-button" onClick={onSelectImages}>
+                        <div className="upload-button" role="button" tabIndex={0} onClick={onSelectImages}>
                             <Trans i18nKey={buttonsTitle}>
                                 <b/>
                                 <button className="copy-image" onClick={openCopyImage}/>
                                 <br/>
                             </Trans>
-                        </button>
+                        </div>
                     }
                     {!forceCompress &&
                         <>

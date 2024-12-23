@@ -43,9 +43,6 @@
 }
 
 .rich-text-editor-dropzone .upload-button {
-    border: none;
-    background-color: transparent;
-    width: 100%;
     padding: 1em;
 }
 
