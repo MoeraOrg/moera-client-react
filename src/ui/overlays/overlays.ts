@@ -95,11 +95,13 @@ export class OverlaysManager {
     private readonly overlays: Map<string, Overlay<any>> = new Map();
     private readonly rootOverlay: Overlay<Element>;
     private topOverlay: Overlay<Element>;
+    lastCloseAt: number;
 
     constructor() {
         this.rootOverlay = new Overlay(null, null, null);
         this.rootOverlay.setProps({})
         this.topOverlay = this.rootOverlay;
+        this.lastCloseAt = 0;
 
         document.body.addEventListener("keydown", this.onKeyDown);
         document.body.addEventListener("mousedown", this.onMouseDown);
@@ -223,6 +225,7 @@ export class OverlaysManager {
             && overlay.mouseDownY != null && Math.abs(overlay.mouseDownY - e.clientY) <= 10
         ) {
             this.closeOverlay(overlay);
+            this.lastCloseAt = Date.now();
         }
         overlay.mouseDownX = undefined;
         overlay.mouseDownY = undefined;
@@ -260,3 +263,8 @@ export function useOverlay<E extends Element>(
 
     return [zIndex, id];
 }
+
+// May be used to ignore clicking some button on the background when closing an overlay.
+// A dirty hack, but there is no other way to connect 'mouseup' DOM event handler with 'click' React event handler.
+export const isOverlayClosedRecently = (): boolean =>
+    Date.now() - window.overlays.lastCloseAt < 100;

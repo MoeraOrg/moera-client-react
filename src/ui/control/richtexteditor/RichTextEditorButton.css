@@ -4,7 +4,8 @@
     font-size: 1.1em;
     border: 0;
     width: 2em;
-    height: 1.7em;
+    height: 2.7em;
+    padding: .5rem 0;
 }
 
 .rich-text-editor-button:disabled {

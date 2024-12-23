@@ -9,13 +9,13 @@ import { PostingFeatures, PrivateMediaFileInfo, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { richTextEditorImageCopy, richTextEditorImagesUpload } from "state/richtexteditor/actions";
 import { getSetting } from "state/settings/selectors";
-import { Button } from "ui/control";
 import { RichTextValue } from "ui/control/richtexteditor";
 import RichTextEditorImageList from "ui/control/richtexteditor/RichTextEditorImageList";
 import RichTextCopyImageDialog, { RichTextCopyImageValues } from "ui/control/richtexteditor/RichTextCopyImageDialog";
 import * as Browser from "ui/browser";
-import "./RichTextEditorDropzone.css";
+import { isOverlayClosedRecently } from "ui/overlays/overlays";
 import { RelNodeName } from "util/rel-node-name";
+import "./RichTextEditorDropzone.css";
 
 type UploadStatus = "loading" | "success" | "failure";
 
@@ -157,42 +157,53 @@ export default function RichTextEditorDropzone({
             },
             onDrop: uploadImage
         });
+
+    const onSelectImages = (event: React.MouseEvent) => {
+        if (!event.isDefaultPrevented() && !isOverlayClosedRecently()) {
+            open();
+        }
+        event.preventDefault();
+    }
+
     const progressSummary = useMemo(() => calcProgressSummary(uploadProgress), [uploadProgress])
     const buttonsTitle = !Browser.isTinyScreen() ? "upload-or-copy-or-drop-images" : "upload-or-copy-images";
 
     return (
-        <div className={cx(
-            "rich-text-editor-dropzone",
-            {"hiding": hiding, "drag-accept": isDragAccept, "drag-reject": isDragReject}
-        )} {...getRootProps()}>
-            <RichTextEditorImageList value={value} nodeName={nodeName} selectedImage={selectedImage}
-                                     selectImage={selectImage} onDeleted={onDeleted} onReorder={onReorder}/>
-            <div className="upload">
-                {uploadProgress.length > 0 ?
-                    t("uploading-files", {...progressSummary})
-                : downloading ?
-                    t("downloading-image")
-                :
-                    <>
-                        <Trans i18nKey={buttonsTitle}>
-                            <Button variant="outline-info" size="sm" onClick={open}/>
-                            <Button variant="outline-secondary" size="sm" onClick={openCopyImage}/>
-                        </Trans>
-                        {!forceCompress &&
-                            <>
+        <>
+            <div className={cx(
+                "rich-text-editor-dropzone",
+                {"hiding": hiding, "drag-accept": isDragAccept, "drag-reject": isDragReject}
+            )} {...getRootProps()}>
+                <RichTextEditorImageList value={value} nodeName={nodeName} selectedImage={selectedImage}
+                                         selectImage={selectImage} onDeleted={onDeleted} onReorder={onReorder}/>
+                <div className="upload">
+                    {uploadProgress.length > 0 ? /* FIXME centered with padding */
+                        t("uploading-files", {...progressSummary})
+                    : downloading ?
+                        t("downloading-image")
+                    :
+                        <button className="upload-button" onClick={onSelectImages}>
+                            <Trans i18nKey={buttonsTitle}>
+                                <b/>
+                                <button className="copy-image" onClick={openCopyImage}/>
                                 <br/>
-                                <label className="form-check-label" htmlFor="editorImagesCompress">
-                                    {t("compress-images")}
-                                </label>
-                                <input className="form-check-input" type="checkbox" checked={compress}
-                                       onChange={e => setCompress(e.target.checked)} id="editorImagesCompress"/>
-                            </>
-                        }
-                    </>
-                }
+                            </Trans>
+                        </button>
+                    }
+                    {!forceCompress &&
+                        <>
+                            <br/>
+                            <label className="form-check-label" htmlFor="editorImagesCompress">
+                                {t("compress-images")}
+                            </label>
+                            <input className="form-check-input" type="checkbox" checked={compress}
+                                   onChange={e => setCompress(e.target.checked)} id="editorImagesCompress"/>
+                        </>
+                    }
+                </div>
+                <input {...getInputProps()}/>
+                {copyImageShow && <RichTextCopyImageDialog onSubmit={submitCopyImage}/>}
             </div>
-            <input {...getInputProps()}/>
-            {copyImageShow && <RichTextCopyImageDialog onSubmit={submitCopyImage}/>}
-        </div>
+        </>
     );
 }

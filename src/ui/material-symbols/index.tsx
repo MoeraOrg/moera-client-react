@@ -18,6 +18,7 @@ import { ReactComponent as msFormatQuote } from "ui/material-symbols/format_quot
 import { ReactComponent as msFormatQuoteOff } from "ui/material-symbols/format_quote_off.isvg";
 import { ReactComponent as msFunction } from "ui/material-symbols/function.isvg";
 import { ReactComponent as msMoreHoriz } from "ui/material-symbols/more_horiz.isvg";
+import { ReactComponent as msMoreVert } from "ui/material-symbols/more_vert.isvg";
 import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_library.isvg";
 import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
 import { ReactComponent as msSentimentSatisfied } from "ui/material-symbols/sentiment_satisfied.isvg";
@@ -45,6 +46,7 @@ export {
     msFormatQuote,
     msFormatQuoteOff,
     msMoreHoriz,
+    msMoreVert,
     msPhotoLibrary,
     msReport,
     msSentimentSatisfied,
@@ -59,7 +61,10 @@ export type MaterialSymbol = React.FunctionComponent<React.SVGProps<SVGSVGElemen
 interface IconProps {
     icon: MaterialSymbol;
     fill?: string;
+    className?: string;
+    height?: number | string;
+    width?: number | string;
 }
 
-export const Icon = ({icon, fill}: IconProps) =>
-    React.createElement(icon, {fill: fill ?? "currentColor"});
+export const Icon = ({icon, fill, className, height, width}: IconProps) =>
+    React.createElement(icon, {fill: fill ?? "currentColor", className, height: height ?? 24, width: width ?? 24});

@@ -1,7 +1,7 @@
 .rich-text-editor-uploaded-image {
     display: inline-block;
-    padding: .25rem;
     position: relative;
+    margin-inline-end: .5rem;
 }
 
 .rich-text-editor-uploaded-image .thumbnail {
@@ -10,6 +10,7 @@
     object-fit: cover;
     object-position: center;
     cursor: pointer;
+    border-radius: .5rem;
 }
 
 .rich-text-editor-uploaded-image.dragged .thumbnail {
@@ -18,15 +19,16 @@
 
 .rich-text-editor-uploaded-image .menu {
     position: absolute;
-    right: 0;
-    top: 0;
-    background-color: transparent;
-    border: 0;
+    right: .25rem;
+    top: .25rem;
+    background-color: white;
+    color: var(--bs-gray-600);
+    border: 1px solid var(--bs-gray-400);
+    border-radius: .6rem;
     padding: 0;
-    color: var(--bs-gray-400);
-    font-size: 1.2em;
-    height: 1em;
-    width: 1em;
+    font-size: 50%;
+    height: 1.2rem;
+    width: 1.2rem;
     line-height: 1;
     cursor: pointer;
 }

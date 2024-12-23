@@ -2,13 +2,12 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronCircleDown, faCircle } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { VerifiedMediaFile } from "api";
 import { openImageEditDialog } from "state/imageeditdialog/actions";
+import { Icon, msMoreVert } from "ui/material-symbols";
 import { DropdownMenu, useModalDialog } from "ui/control";
 import AttachedImage from "ui/control/richtexteditor/AttachedImage";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
@@ -56,10 +55,7 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
                         show: onDelete != null
                     }
                 ]}>
-                    <span className="fa-layers fa-fw">
-                        <FontAwesomeIcon icon={faCircle} color="white"/>
-                        <FontAwesomeIcon icon={faChevronCircleDown}/>
-                    </span>
+                    <Icon icon={msMoreVert} width={12} height={12}/>
                 </DropdownMenu>
             }
             <div ref={sortable.setNodeRef} style={sortableStyle}{...sortable.attributes} {...sortable.listeners}>

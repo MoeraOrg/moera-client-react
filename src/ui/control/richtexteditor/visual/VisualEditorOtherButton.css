@@ -2,7 +2,12 @@
     display: grid;
     grid-template-columns: repeat(3, auto);
     grid-template-rows: repeat(3, auto);
-    grid-gap: .5em;
-    padding: 1em;
+    padding: .5em;
     font-size: 1.1em;
+}
+
+.rich-text-editor-panel .other-buttons .rich-text-editor-button {
+    border-radius: .5em;
+    padding: .375em;
+    width: 2.5em;
 }

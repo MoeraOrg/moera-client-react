@@ -18,6 +18,7 @@ import UploadedImage from "ui/control/richtexteditor/UploadedImage";
 import AttachedImage from "ui/control/richtexteditor/AttachedImage";
 import { mediaHashesExtract } from "util/media-images";
 import { RelNodeName } from "util/rel-node-name";
+import "./RichTextEditorImageList.css";
 
 interface Props {
     value: RichTextValue;
@@ -77,13 +78,16 @@ export default function RichTextEditorImageList({value, nodeName, selectedImage,
     return (
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragCancel={onDragCancel}>
             <SortableContext items={mediaIds}>
-                <div>
-                    {mediaList.filter(media => media.id !== selectedImage?.id).map(media =>
-                        <UploadedImage key={media.id} media={media} nodeName={nodeName}
-                                       dragged={dragged?.id === media.id} showMenu={!dragged}
-                                       onDelete={onDelete(media.id)} onClick={!dragged ? onClick(media) : undefined}/>
-                    )}
-                </div>
+                {mediaList.length > 0 &&
+                    <div className="rich-text-editor-image-list">
+                        {mediaList.filter(media => media.id !== selectedImage?.id).map(media =>
+                            <UploadedImage key={media.id} media={media} nodeName={nodeName}
+                                           dragged={dragged?.id === media.id} showMenu={!dragged}
+                                           onDelete={onDelete(media.id)}
+                                           onClick={!dragged ? onClick(media) : undefined}/>
+                        )}
+                    </div>
+                }
             </SortableContext>
             {ReactDOM.createPortal(
                 <DragOverlay zIndex={1080} dropAnimation={null}>

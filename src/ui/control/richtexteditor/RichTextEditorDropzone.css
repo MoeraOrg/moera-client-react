@@ -1,6 +1,7 @@
 .rich-text-editor-dropzone {
-    border: 2px dashed var(--bs-info);
-    margin-top: .2rem;
+    border: 1px dashed var(--bs-primary);
+    border-radius: .5rem;
+    margin-top: .75rem;
 }
 
 .rich-text-editor-dropzone.hiding {
@@ -12,18 +13,18 @@
 }
 
 .rich-text-editor-dropzone.drag-accept {
-    border: 2px solid var(--bs-primary);
+    border: 1px solid var(--bs-primary);
+    box-shadow: 0 0 0 .25rem var(--bs-primary-bg-subtle);
 }
 
 .rich-text-editor-dropzone.drag-reject {
-    border: 2px solid var(--bs-danger);
+    border: 1px solid var(--bs-danger);
+    box-shadow: 0 0 0 .25rem var(--bs-danger-bg-subtle);
 }
 
 .rich-text-editor-dropzone .upload {
     color: var(--bs-gray-600);
     text-align: center;
-    line-height: 1.2;
-    padding: .5em;
 }
 
 .rich-text-editor-dropzone .upload LABEL {
@@ -39,4 +40,20 @@
 .rich-text-editor-dropzone .upload INPUT:checked {
     background-color: var(--bs-info);
     border-color: var(--bs-info);
+}
+
+.rich-text-editor-dropzone .upload-button {
+    border: none;
+    background-color: transparent;
+    width: 100%;
+    padding: 1em;
+}
+
+.rich-text-editor-dropzone .upload-button .copy-image {
+    display: inline;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    text-decoration: underline;
+    color: var(--bs-purple);
 }

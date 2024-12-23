@@ -1,5 +1,4 @@
 .visual-text-area {
-    padding: .375rem .75rem;
     overflow-y: auto;
 }
 
@@ -10,6 +9,7 @@
 .visual-text-area SPAN[data-slate-placeholder=true] {
     top: .5em !important;
     width: 90% !important;
+    color: var(--bs-gray-600);
 }
 
 .visual-text-area A {
