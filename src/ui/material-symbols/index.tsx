@@ -18,6 +18,7 @@ import { ReactComponent as msFormatListNumbered } from "ui/material-symbols/form
 import { ReactComponent as msFormatQuote } from "ui/material-symbols/format_quote.isvg";
 import { ReactComponent as msFormatQuoteOff } from "ui/material-symbols/format_quote_off.isvg";
 import { ReactComponent as msFunction } from "ui/material-symbols/function.isvg";
+import { ReactComponent as msMediaLink } from "ui/material-symbols/media_link.isvg";
 import { ReactComponent as msMoreHoriz } from "ui/material-symbols/more_horiz.isvg";
 import { ReactComponent as msMoreVert } from "ui/material-symbols/more_vert.isvg";
 import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_library.isvg";
@@ -47,6 +48,7 @@ export {
     msFormatListNumbered,
     msFormatQuote,
     msFormatQuoteOff,
+    msMediaLink,
     msMoreHoriz,
     msMoreVert,
     msPhotoLibrary,

@@ -5,7 +5,8 @@ import cx from 'classnames';
 import {
     msAddLink,
     msAlternateEmail,
-    msFormatBold, msFormatClear,
+    msFormatBold,
+    msFormatClear,
     msFormatIndentDecrease,
     msFormatIndentIncrease,
     msFormatItalic,
@@ -14,9 +15,9 @@ import {
     msFormatQuote,
     msFormatQuoteOff,
     msHorizontalRule,
+    msMediaLink,
     msReport,
     msStrikethroughS,
-    msVideoLibrary,
 } from "ui/material-symbols";
 import * as Browser from "ui/browser";
 import { VisualEditorButton } from "ui/control/richtexteditor/visual/VisualEditorButton";
@@ -90,7 +91,7 @@ export default function VisualEditorPanel({hiding}: Props) {
             <div className="group">
                 <VisualEditorButton icon={msAddLink} title={t("link")} hotkey={VISUAL_EDITOR_KEYS.LINK.title}
                                     active={inLink} command={formatLink}/>
-                <VisualEditorButton icon={msVideoLibrary} title={t("insert-video")} command={formatVideo}/>
+                <VisualEditorButton icon={msMediaLink} title={t("insert-video")} command={formatVideo}/>
             </div>
             <div className="group">
                 <VisualEditorButton icon={msFormatClear} title={t("clear-formatting")}
