@@ -111,7 +111,7 @@ function RichTextImageDialog({
                                              uploadingExternalImage={uploadingExternalImage}
                                              externalImage={externalImage}/>
             :
-                <InputField name="href" title={t("url")} autoFocus/>
+                <InputField name="href" title={t("link")} autoFocus/>
             }
             <SelectField name="standardSize" title={t("size")} choices={STANDARD_SIZES} horizontal anyValue/>
             {standardSize === "custom" &&

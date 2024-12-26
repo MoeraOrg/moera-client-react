@@ -19,7 +19,7 @@ function RichTextLinkDialog() {
 
     return (
         <>
-            <InputField name="href" title={t("url")} anyValue autoFocus/>
+            <InputField name="href" title={t("link")} anyValue autoFocus/>
         </>
     );
 }

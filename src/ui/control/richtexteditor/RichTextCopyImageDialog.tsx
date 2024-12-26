@@ -24,7 +24,7 @@ const RichTextCopyImageDialog = ({forceCompress}: Props) => {
 
     return (
         <>
-            <InputField name="url" title={t("url")} anyValue autoFocus/>
+            <InputField name="url" title={t("link")} anyValue autoFocus/>
             {!forceCompress &&
                 <CheckboxField title={t("compress-images")} name="compress" anyValue/>
             }
