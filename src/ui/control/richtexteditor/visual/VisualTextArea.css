@@ -203,3 +203,24 @@
 .visual-text-area .formula {
     cursor: pointer;
 }
+
+.visual-text-area FIGURE {
+    display: inline-block;
+}
+
+.visual-text-area FIGCAPTION {
+    font-size: .875em;
+    line-height: 1.5;
+    margin-top: .5em;
+    color: var(--bs-secondary);
+}
+
+.visual-text-area IMG:not(.emoji) {
+    width: auto;
+    height: auto;
+}
+
+.visual-text-area IMG {
+    max-width: min(100vw - 4rem, var(--feed-width) - 3.5rem, var(--width, 100vw));
+    max-height: var(--height, 200vh);
+}

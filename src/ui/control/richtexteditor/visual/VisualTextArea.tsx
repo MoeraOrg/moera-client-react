@@ -39,9 +39,9 @@ export default function VisualTextArea({
 }: VisualTextAreaProps) {
     const editor = useSlateStatic() as ReactEditor;
     const {
-        inBlockquote, inList, headingLevel, inVoid, inCodeBlock, inFormula,
+        inBlockquote, inList, headingLevel, inVoid, inCodeBlock, inFormula, inImageEmbedded,
         formatBold, formatItalic, formatStrikeout, formatLink, formatMention, formatBlockquote, formatBlockunquote,
-        formatHorizontalRule, formatCode, formatFormula, formatMark, formatClear
+        formatHorizontalRule, formatCode, formatFormula, formatMark, formatClear, formatImageEmbedded
     } = useVisualEditorCommands();
 
     const [isSubmitKey, isHardEnter, isSoftEnter] = useMemo(() => {
@@ -165,9 +165,15 @@ export default function VisualTextArea({
             }
         }
 
-        if (event.code === "Space" && inFormula) {
-            formatFormula();
-            event.preventDefault();
+        if (event.code === "Space") {
+            if (inFormula) {
+                formatFormula();
+                event.preventDefault();
+            }
+            if (inImageEmbedded) {
+                formatImageEmbedded();
+                event.preventDefault();
+            }
         }
 
         if (event.key === "@") {

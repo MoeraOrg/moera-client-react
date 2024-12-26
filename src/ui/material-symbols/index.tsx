@@ -23,6 +23,7 @@ import { ReactComponent as msMoreHoriz } from "ui/material-symbols/more_horiz.is
 import { ReactComponent as msMoreVert } from "ui/material-symbols/more_vert.isvg";
 import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_library.isvg";
 import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
+import { ReactComponent as msSatellite } from "ui/material-symbols/satellite.isvg";
 import { ReactComponent as msSentimentSatisfied } from "ui/material-symbols/sentiment_satisfied.isvg";
 import { ReactComponent as msStrikethroughS } from "ui/material-symbols/strikethrough_s.isvg";
 import { ReactComponent as msSubscript } from "ui/material-symbols/subscript.isvg";
@@ -53,6 +54,7 @@ export {
     msMoreVert,
     msPhotoLibrary,
     msReport,
+    msSatellite,
     msSentimentSatisfied,
     msStrikethroughS,
     msSubscript,

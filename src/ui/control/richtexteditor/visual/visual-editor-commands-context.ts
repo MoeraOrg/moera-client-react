@@ -24,6 +24,7 @@ export interface VisualEditorCommandsInterface {
     inSuperscript: boolean;
     inFormula: boolean;
     inMark: boolean;
+    inImageEmbedded: boolean;
 
     formatBold: () => void;
     formatItalic: () => void;
@@ -47,6 +48,7 @@ export interface VisualEditorCommandsInterface {
     formatFormula: () => void;
     formatMark: () => void;
     formatClear: () => void;
+    formatImageEmbedded: () => void;
 }
 
 export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInterface>({
@@ -73,6 +75,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     inSuperscript: false,
     inFormula: false,
     inMark: false,
+    inImageEmbedded: false,
 
     formatBold: () => {},
     formatItalic: () => {},
@@ -96,6 +99,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     formatFormula: () => {},
     formatMark: () => {},
     formatClear: () => {},
+    formatImageEmbedded: () => {},
 });
 
 export const useVisualEditorCommands = (): VisualEditorCommandsInterface => useContext(VisualEditorCommandsContext);

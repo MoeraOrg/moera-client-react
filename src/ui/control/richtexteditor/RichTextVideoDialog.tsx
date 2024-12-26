@@ -21,4 +21,4 @@ function RichTextVideoDialog() {
                       anyValue autoFocus/>;
 }
 
-export default richTextEditorDialog<Props, RichTextVideoValues>("insert-video", mapPropsToValues, RichTextVideoDialog);
+export default richTextEditorDialog<Props, RichTextVideoValues>("video-internet", mapPropsToValues, RichTextVideoDialog);

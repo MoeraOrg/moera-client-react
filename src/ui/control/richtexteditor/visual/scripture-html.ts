@@ -9,6 +9,7 @@ import {
     createHeadingElement,
     createHorizontalRuleElement,
     createIframeElement,
+    createImageEmbeddedElement,
     createLinkElement,
     createListItemElement,
     createMentionElement,
@@ -17,6 +18,7 @@ import {
     createSpoilerBlockElement,
     createSpoilerElement,
     equalScriptureMarks,
+    isImageEmbeddedElement,
     isLinkElement,
     isListItemElement,
     isScriptureBlock,
@@ -33,9 +35,10 @@ import {
     ScriptureMarks,
     ScriptureText
 } from "ui/control/richtexteditor/visual/scripture";
+import { findStandardSize, getImageDimensions } from "ui/control/richtexteditor/rich-text-image";
 import * as Browser from "ui/browser";
 import { htmlEntities, htmlToEmoji, linefeedsToHtml, safeImportHtml, unhtmlEntities } from "util/html";
-import { notNull } from "util/misc";
+import { isNumericString, notNull } from "util/misc";
 
 export function htmlToScripture(text?: string | Scripture | null | undefined, cleanup?: boolean): Scripture {
     if (!text) { // null, undefined, "", []
@@ -208,11 +211,33 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
             const summary = unhtmlEntities(summaryElement?.textContent);
             return createDetailsElement(summary, children);
         }
-        case "SUMMARY": {
+        case "SUMMARY":
             return null;
-        }
         case "PRE":
             return createCodeBlockElement(children);
+        case "IMG": {
+            const src = element.getAttribute("src") ?? "";
+            const widthS = element.getAttribute("width");
+            const width = widthS != null && isNumericString(widthS) ? parseInt(widthS, 10) : undefined;
+            const heightS = element.getAttribute("height");
+            const height = heightS != null && isNumericString(heightS) ? parseInt(heightS, 10) : undefined;
+            const standardSize = findStandardSize(width, height);
+            const customWidth = standardSize === "custom" ? width : undefined;
+            const customHeight = standardSize === "custom" ? height : undefined;
+            return createImageEmbeddedElement(src, standardSize, customWidth, customHeight);
+        }
+        case "FIGURE": {
+            const captionElement = element.querySelector(":scope > figcaption");
+            const caption = unhtmlEntities(captionElement?.textContent) || undefined;
+            const imageElement = children.find(isImageEmbeddedElement);
+            if (imageElement == null) {
+                return null;
+            }
+            imageElement.caption = caption;
+            return imageElement;
+        }
+        case "FIGCAPTION":
+            return null;
         default:
             return children;
     }
@@ -328,6 +353,24 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
             case "formula-block":
                 context.output += `<div class="katex">${htmlEntities(node.content)}</div>`;
                 return;
+            case "image-embedded": {
+                if (!node.href) {
+                    return;
+                }
+                if (node.caption) {
+                    context.output += "<figure>";
+                }
+                const {width, height} = getImageDimensions(
+                    node.standardSize ?? "large", node.customWidth, node.customHeight
+                );
+                const widthAttr = width != null ? ` width="${width}"` : "";
+                const heightAttr = height != null ? ` height="${height}"` : "";
+                context.output += `<img${widthAttr}${heightAttr} src="${htmlEntities(node.href)}">`;
+                if (node.caption) {
+                    context.output += `<figcaption>${htmlEntities(node.caption)}</figcaption></figure>`;
+                }
+                return;
+            }
         }
     }
     if (isScriptureText(node)) {

@@ -11,6 +11,7 @@ import {
     createFormulaElement,
     createHorizontalRuleElement,
     createIframeElement,
+    createImageEmbeddedElement,
     createLinkElement,
     createListItemElement,
     createMentionElement,
@@ -23,18 +24,25 @@ import {
     FormulaBlockElement,
     FormulaElement,
     HeadingElement,
+    ImageEmbeddedElement,
     isDetailsElement,
     isFormulaBlockElement,
     isFormulaElement,
     isHeadingElement,
+    isImageEmbeddedElement,
     isLinkElement,
     isListItemElement,
-    isParagraphElement, isScriptureElement, isScriptureRegularInline, isScriptureSimpleBlock, isScriptureSuperBlock,
+    isParagraphElement,
+    isScriptureElement,
+    isScriptureRegularInline,
+    isScriptureSimpleBlock,
+    isScriptureSuperBlock,
     isSpoilerBlockElement,
     isSpoilerElement,
     LinkElement,
     ListItemElement,
-    ParagraphElement, SCRIPTURE_MARKS,
+    ParagraphElement,
+    SCRIPTURE_MARKS,
     SCRIPTURE_VOID_TYPES,
     ScriptureElement,
     ScriptureMarks,
@@ -49,6 +57,7 @@ import { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoiler
 import { RichTextVideoValues } from "ui/control/richtexteditor/RichTextVideoDialog";
 import { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
 import { RichTextFormulaValues } from "ui/control/richtexteditor/RichTextFormulaDialog";
+import { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
 
@@ -84,8 +93,10 @@ export default function VisualEditorCommands({children}: Props) {
     const inSuperscript = supsub > 0;
     const inCodeBlock = useSlateSelector(editor => isSelectionInElement(editor, "code-block"));
     const inFormula = useSlateSelector(editor => isSelectionInElement(editor, ["formula", "formula-block"]));
+    const inImageEmbedded = useSlateSelector(editor => isSelectionInElement(editor, "image-embedded"));
     const {
-        showLinkDialog, showSpoilerDialog, showMentionDialog, showVideoDialog, showFoldDialog, showFormulaDialog
+        showLinkDialog, showSpoilerDialog, showMentionDialog, showVideoDialog, showFoldDialog, showFormulaDialog,
+        showImageDialog
     } = useRichTextEditorDialogs();
 
     const formatBold = () =>
@@ -447,16 +458,52 @@ export default function VisualEditorCommands({children}: Props) {
         clearBlocks();
     }
 
+    const formatImageEmbedded = () => {
+        const [element, path] = findWrappingElement(editor, "image-embedded") ?? [null, null];
+        const prevValues = element != null && isImageEmbeddedElement(element)
+            ? {
+                href: element.href,
+                standardSize: element.standardSize,
+                customWidth: element.customWidth,
+                customHeight: element.customHeight,
+                caption: element.caption,
+            }
+            : null;
+
+        showImageDialog(
+            true,
+            prevValues,
+            (
+                ok: boolean | null,
+                {href, standardSize, customWidth, customHeight, caption}: Partial<RichTextImageValues>
+            ) => {
+                showImageDialog(false);
+
+                if (ok && href) {
+                    const node = createImageEmbeddedElement(href, standardSize, customWidth, customHeight, caption);
+                    if (path != null) {
+                        editor.setNodes<ImageEmbeddedElement>(node, {at: path});
+                    } else {
+                        editor.insertNode(node);
+                    }
+                } else if (ok == null && path != null) {
+                    editor.removeNodes({at: path});
+                }
+                ReactEditor.focus(editor);
+            }
+        );
+    }
+
     return (
         <VisualEditorCommandsContext.Provider value={{
             enableHeading,
             inBold, inItalic, inStrikeout, inLink, inSpoilerInline, inSpoilerBlock, inSpoiler, inMention, inBlockquote,
             inList, inUnorderedList, inOrderedList, headingLevel, inVoid, inFold, inCode, inSubscript, inSuperscript,
-            inCodeBlock, inFormula, inMark,
+            inCodeBlock, inFormula, inMark, inImageEmbedded,
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
             formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo,
             formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula, formatMark,
-            formatClear
+            formatClear, formatImageEmbedded
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>

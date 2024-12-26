@@ -4,9 +4,11 @@ import { useTranslation } from 'react-i18next';
 import {
     msCode,
     msCodeBlocks,
-    msExpandCircleDown, msFormatInkHighlighter,
+    msExpandCircleDown,
+    msFormatInkHighlighter,
     msFunction,
     msMoreHoriz,
+    msSatellite,
     msSubscript,
     msSuperscript
 } from "ui/material-symbols";
@@ -23,8 +25,9 @@ export default function VisualEditorOtherButton() {
         placement, zIndex
     } = useButtonPopper("bottom", {closeOnSelect: false});
     const {
-        inFold, inCode, inSubscript, inSuperscript, inCodeBlock, inFormula, inMark,
+        inFold, inCode, inSubscript, inSuperscript, inCodeBlock, inFormula, inMark, inImageEmbedded,
         formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula, formatMark,
+        formatImageEmbedded
     } = useVisualEditorCommands();
     const {t} = useTranslation();
 
@@ -55,6 +58,8 @@ export default function VisualEditorOtherButton() {
                         <VisualEditorButton icon={msFormatInkHighlighter} title={t("mark")}
                                             hotkey={VISUAL_EDITOR_KEYS.MARK.title} active={inMark}
                                             command={onCommand(formatMark)}/>
+                        <VisualEditorButton icon={msSatellite} title={t("image-internet")} active={inImageEmbedded}
+                                            command={onCommand(formatImageEmbedded)}/>
                     </div>
                     <div ref={setArrowRef} style={arrowStyles} className="popover-arrow"/>
                 </div>

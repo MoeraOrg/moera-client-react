@@ -4,15 +4,18 @@ import { DefaultElement, RenderElementProps } from 'slate-react';
 
 import { isScriptureElement } from "ui/control/richtexteditor/visual/scripture";
 import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
+import { getImageDimensions } from "ui/control/richtexteditor/rich-text-image";
 import { BlockMath, InlineMath } from "ui/katex";
 
 export default function VisualRenderElement(props: RenderElementProps) {
     const {element, attributes, children} = props;
 
-    const {formatFormula} = useVisualEditorCommands();
+    const {formatFormula, formatImageEmbedded} = useVisualEditorCommands();
     const {t} = useTranslation();
 
     const onFormulaClick = () => setTimeout(() => formatFormula());
+
+    const onImageEmbeddedClick = () => setTimeout(() => formatImageEmbedded());
 
     if (isScriptureElement(element)) {
         switch (element.type) {
@@ -79,6 +82,41 @@ export default function VisualRenderElement(props: RenderElementProps) {
                         {children}<BlockMath math={element.content}/>
                     </div>
                 );
+            case "image-embedded": {
+                const {width, height} = getImageDimensions(
+                    element.standardSize ?? "large", element.customWidth, element.customHeight
+                );
+                let style: React.CSSProperties = {};
+                if (width != null) {
+                    // @ts-ignore
+                    style["--width"] = `${width}px`;
+                }
+                if (height != null) {
+                    // @ts-ignore
+                    style["--height"] = `${height}px`;
+                }
+                return (
+                    <span className="image-embedded" {...attributes} contentEditable={false}
+                         onClick={onImageEmbeddedClick}>
+                        {element.caption ?
+                            <>
+                                {children}
+                                <figure>
+                                    <img src={element.href} width={width ?? undefined} height={height ?? undefined}
+                                         alt="" style={style}/>
+                                    <figcaption>{element.caption}</figcaption>
+                                </figure>
+                            </>
+                        :
+                            <>
+                                {children}
+                                <img src={element.href} width={width ?? undefined} height={height ?? undefined}
+                                     alt="" style={style}/>
+                            </>
+                        }
+                    </span>
+                );
+            }
             default:
                 return <DefaultElement {...props}/>;
         }

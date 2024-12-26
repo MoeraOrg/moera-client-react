@@ -19,11 +19,9 @@ import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton
 import { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
 import { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
 import { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
-import RichTextImageDialog, {
-    getImageDimensions,
-    RichTextImageValues
-} from "ui/control/richtexteditor/RichTextImageDialog";
+import RichTextImageDialog, { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
 import { useRichTextEditorDialogs } from "ui/control/richtexteditor/rich-text-editor-dialogs-context";
+import { getImageDimensions } from "ui/control/richtexteditor/rich-text-image";
 import { htmlEntities } from "util/html";
 import { getTextSelection, insertText, wrapSelection, wrapSelectionLines } from "util/ui";
 import { mentionName } from "util/names";
@@ -63,9 +61,7 @@ export default function MarkdownEditorPanel({
 
     const onImageSubmit = (
         ok: boolean | null,
-        {
-            source, mediaFile, href, standardSize = "large", customWidth, customHeight, align, caption, title, alt
-        }: RichTextImageValues
+        {source, mediaFile, href, standardSize = "large", customWidth, customHeight, caption}: RichTextImageValues
     ) => {
         setImageDialog(false);
         selectImage(null);
@@ -78,16 +74,12 @@ export default function MarkdownEditorPanel({
         if (ok) {
             const figureBegin = caption ? "<figure>" : "";
             const figureEnd = caption ? `<figcaption>${htmlEntities(caption)}</figcaption></figure>` : "";
-            const divBegin = align != null && align !== "text-start" ? `<div class="${align}">` : "";
-            const divEnd = align != null && align !== "text-start" ? "</div>" : "";
             const {width, height} = getImageDimensions(standardSize, customWidth, customHeight);
             const widthAttr = width != null ? ` width="${width}"` : "";
             const heightAttr = height != null ? ` height="${height}"` : "";
-            const titleAttr = title ? ` title="${htmlEntities(title)}"` : "";
-            const altAttr = alt ? ` alt="${htmlEntities(alt)}"` : "";
 
-            const tagBegin = `${divBegin}${figureBegin}<img${altAttr}${titleAttr}${widthAttr}${heightAttr} src="`;
-            const tagEnd = `">${figureEnd}${divEnd}`;
+            const tagBegin = `${figureBegin}<img${widthAttr}${heightAttr} src="`;
+            const tagEnd = `">${figureEnd}`;
             if (src) {
                 insertText(textArea.current, tagBegin + htmlEntities(src) + tagEnd);
             } else {

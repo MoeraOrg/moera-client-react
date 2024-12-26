@@ -91,7 +91,7 @@ export default function VisualEditorPanel({hiding}: Props) {
             <div className="group">
                 <VisualEditorButton icon={msAddLink} title={t("link")} hotkey={VISUAL_EDITOR_KEYS.LINK.title}
                                     active={inLink} command={formatLink}/>
-                <VisualEditorButton icon={msMediaLink} title={t("insert-video")} command={formatVideo}/>
+                <VisualEditorButton icon={msMediaLink} title={t("video-internet")} command={formatVideo}/>
             </div>
             <div className="group">
                 <VisualEditorButton icon={msFormatClear} title={t("clear-formatting")}

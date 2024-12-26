@@ -1,5 +1,7 @@
 import { Element as SlateElement, Text as SlateText } from 'slate';
 
+import { RichTextImageStandardSize } from "ui/control/richtexteditor/rich-text-image";
+
 /* P */
 
 export interface ParagraphElement extends SlateElement {
@@ -179,6 +181,29 @@ export const isFormulaBlockElement = (value: any): value is FormulaBlockElement 
 export const createFormulaBlockElement = (content: string): FormulaBlockElement =>
     ({type: "formula-block", content, children: [createScriptureText("")]});
 
+/* IMG */
+
+export interface ImageEmbeddedElement extends SlateElement {
+    type: "image-embedded";
+    href: string;
+    standardSize?: RichTextImageStandardSize;
+    customWidth?: number | null;
+    customHeight?: number | null;
+    caption?: string;
+}
+
+export const isImageEmbeddedElement = (value: any): value is ImageEmbeddedElement =>
+    isScriptureElement(value) && value.type === "image-embedded";
+
+export const createImageEmbeddedElement = (
+    href: string, standardSize?: RichTextImageStandardSize, customWidth?: number | null, customHeight?: number | null,
+    caption?: string
+): ImageEmbeddedElement =>
+    ({
+        type: "image-embedded", href, standardSize, customWidth, customHeight, caption,
+        children: [createScriptureText("")]
+    });
+
 /* element */
 
 export type ScriptureElement =
@@ -195,7 +220,8 @@ export type ScriptureElement =
     | DetailsElement
     | CodeBlockElement
     | FormulaElement
-    | FormulaBlockElement;
+    | FormulaBlockElement
+    | ImageEmbeddedElement;
 
 export const isScriptureElement = (value: any): value is ScriptureElement =>
     SlateElement.isElement(value) && "type" in value;
@@ -241,7 +267,7 @@ export const SCRIPTURE_BLOCK_TYPES: ScriptureElementType[] = [
 ].flat();
 
 export const SCRIPTURE_REGULAR_INLINE_TYPES: ScriptureElementType[] = ["link", "spoiler", "mention"];
-export const SCRIPTURE_VOID_INLINE_TYPES: ScriptureElementType[] = ["formula"];
+export const SCRIPTURE_VOID_INLINE_TYPES: ScriptureElementType[] = ["formula", "image-embedded"];
 export const SCRIPTURE_INLINE_TYPES: ScriptureElementType[] = [
     SCRIPTURE_REGULAR_INLINE_TYPES, SCRIPTURE_VOID_INLINE_TYPES
 ].flat();
