@@ -21,7 +21,16 @@ export default function ErrorPane() {
 
     const [expanded, setExpanded] = useState<boolean>(false);
 
-    const onClick = () => setExpanded(!expanded);
+    const onClick = (e: React.MouseEvent) => {
+        if (!e.defaultPrevented) {
+            setExpanded(!expanded);
+        }
+    }
+
+    const onClose = (e: React.MouseEvent) => {
+        dispatch(errorDismiss());
+        e.preventDefault()
+    }
 
     return (
         <div className={
@@ -44,7 +53,7 @@ export default function ErrorPane() {
                     )}
                 </>
             }
-            <CloseButton onClick={() => dispatch(errorDismiss())}/>
+            <CloseButton onClick={onClose}/>
         </div>
     );
 }
