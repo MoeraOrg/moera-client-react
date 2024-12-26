@@ -99,9 +99,12 @@ export default function VisualEditorCommands({children}: Props) {
 
     const formatLink = () => {
         const [element, path] = findWrappingElement(editor, "link") ?? [null, null];
+        const noSelection = editor.selection == null || Range.isCollapsed(editor.selection);
         const prevValues = element != null && isLinkElement(element) ? {href: element.href} : null;
 
-        showLinkDialog(true, prevValues, (ok: boolean | null, {href = ""}: Partial<RichTextLinkValues>) => {
+        showLinkDialog(
+            true, !noSelection, prevValues, (ok: boolean | null, {href = "", text = ""}: Partial<RichTextLinkValues>
+        ) => {
             showLinkDialog(false);
             if (path != null) {
                 if (ok) {
@@ -111,14 +114,14 @@ export default function VisualEditorCommands({children}: Props) {
                 }
             } else {
                 if (ok) {
-                    if (editor.selection == null || Range.isCollapsed(editor.selection)) {
+                    if (noSelection) {
                         editor.insertFragment([
                             createScriptureText(""),
-                            createLinkElement(href, [createScriptureText(href)]),
+                            createLinkElement(href, [createScriptureText(text || href)]),
                             createScriptureText("")
                         ]);
                     } else {
-                        const at = editor.unhangRange(editor.selection);
+                        const at = editor.unhangRange(editor.selection!);
                         editor.wrapNodes(createLinkElement(href, []), {at, split: true});
                     }
                 }

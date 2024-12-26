@@ -6,20 +6,27 @@ import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/rich
 
 export interface RichTextLinkValues {
     href?: string;
+    text?: string;
 }
 
-type Props = RichTextEditorDialogProps<RichTextLinkValues>;
+type Props = {
+    noText?: boolean;
+} & RichTextEditorDialogProps<RichTextLinkValues>;
 
 const mapPropsToValues = (props: Props): RichTextLinkValues => ({
-    href: props.prevValues?.href ?? ""
+    href: props.prevValues?.href ?? "",
+    text: ""
 });
 
-function RichTextLinkDialog() {
+function RichTextLinkDialog({noText = false, prevValues}: Props) {
     const {t} = useTranslation();
 
     return (
         <>
             <InputField name="href" title={t("link")} anyValue autoFocus/>
+            {(!noText && prevValues == null) &&
+                <InputField name="text" title={t("text-optional")} anyValue/>
+            }
         </>
     );
 }

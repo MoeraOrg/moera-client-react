@@ -272,7 +272,9 @@ export default function MarkdownEditorPanel({
             return;
         }
 
-        showLinkDialog(true, null, (ok: boolean | null, {href}: Partial<RichTextLinkValues>) => {
+        const noSelection = getTextSelection(textArea.current).length === 0;
+
+        showLinkDialog(true, !noSelection, null, (ok: boolean | null, {href, text}: Partial<RichTextLinkValues>) => {
             showLinkDialog(false);
 
             if (textArea.current == null) {
@@ -281,9 +283,17 @@ export default function MarkdownEditorPanel({
 
             if (ok) {
                 if (isMarkdown()) {
-                    wrapSelection(textArea.current, "[", `](${htmlEntities(href ?? "")})`);
+                    if (text) {
+                        insertText(textArea.current, `[${text}](${htmlEntities(href ?? "")})`);
+                    } else {
+                        wrapSelection(textArea.current, "[", `](${htmlEntities(href ?? "")})`);
+                    }
                 } else {
-                    wrapSelection(textArea.current, `<a href="${htmlEntities(href ?? "")}">`, "</a>");
+                    if (text) {
+                        insertText(textArea.current, `<a href="${htmlEntities(href ?? "")}">${htmlEntities(text)}</a>`);
+                    } else {
+                        wrapSelection(textArea.current, `<a href="${htmlEntities(href ?? "")}">`, "</a>");
+                    }
                 }
             }
             textArea.current.focus();

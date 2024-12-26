@@ -26,6 +26,7 @@ export default function RichTextEditorDialogs({children}: Props) {
         useState<RichTextEditorDialogSubmit<RichTextFoldValues>>(() => () => {});
 
     const [linkDialog, setLinkDialog] = useState<boolean>(false);
+    const [linkDialogNoText, setLinkDialogNoText] = useState<boolean | undefined>(undefined);
     const [linkDialogPrevValues, setLinkDialogPrevValues] = useState<RichTextLinkValues | null>(null);
     const [linkDialogOnSubmit, setLinkDialogOnSubmit] =
         useState<RichTextEditorDialogSubmit<RichTextLinkValues>>(() => () => {});
@@ -69,9 +70,11 @@ export default function RichTextEditorDialogs({children}: Props) {
     }
 
     const showLinkDialog = (
-        show: boolean, prevValues?: RichTextLinkValues | null, onSubmit?: RichTextEditorDialogSubmit<RichTextLinkValues>
+        show: boolean, noText?: boolean, prevValues?: RichTextLinkValues | null,
+        onSubmit?: RichTextEditorDialogSubmit<RichTextLinkValues>
     ) => {
         if (show) {
+            setLinkDialogNoText(noText);
             setLinkDialogPrevValues(prevValues ?? null);
             onSubmit && setLinkDialogOnSubmit(() => onSubmit);
             setLinkDialog(true);
@@ -123,7 +126,10 @@ export default function RichTextEditorDialogs({children}: Props) {
                 <RichTextSpoilerDialog prevValues={spoilerDialogPrevValues} onSubmit={spoilerDialogOnSubmit}/>
             }
             {foldDialog && <RichTextFoldDialog prevValues={foldDialogPrevValues} onSubmit={foldDialogOnSubmit}/>}
-            {linkDialog && <RichTextLinkDialog  prevValues={linkDialogPrevValues} onSubmit={linkDialogOnSubmit}/>}
+            {linkDialog &&
+                <RichTextLinkDialog noText={linkDialogNoText} prevValues={linkDialogPrevValues}
+                                    onSubmit={linkDialogOnSubmit}/>
+            }
             {mentionDialog && <RichTextMentionDialog onSubmit={mentionDialogOnSubmit}/>}
             {videoDialog && <RichTextVideoDialog onSubmit={videoDialogOnSubmit}/>}
             {formulaDialog &&

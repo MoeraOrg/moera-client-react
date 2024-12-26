@@ -20,6 +20,7 @@ export interface RichTextEditorDialogsInterface {
     ) => void;
     showLinkDialog: (
         show: boolean,
+        noText?: boolean,
         prevValues?: RichTextLinkValues | null,
         onSubmit?: RichTextEditorDialogSubmit<RichTextLinkValues>
     ) => void;
