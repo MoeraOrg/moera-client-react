@@ -1,10 +1,10 @@
 import React from 'react';
 
 interface Props {
+    element?: string;
     className?: string;
     children: any;
 }
 
-export const Wrapper = ({className, children}: Props) => (
-    className ? <div className={className}>{children}</div> : children
-);
+export const Wrapper = ({element = "div", className, children}: Props) =>
+    className ? React.createElement(element, {className}, children) : children;
