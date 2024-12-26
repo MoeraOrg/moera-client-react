@@ -154,7 +154,7 @@ export default function MarkdownEditorPanel({
     }
 
     const onSpoiler = (event: React.MouseEvent) => {
-        showSpoilerDialog(true, null, (ok: boolean | null, {title}: RichTextSpoilerValues) => {
+        showSpoilerDialog(true, null, (ok: boolean | null, {title}: Partial<RichTextSpoilerValues>) => {
             if (textArea.current == null) {
                 return;
             }
@@ -179,7 +179,7 @@ export default function MarkdownEditorPanel({
     }
 
     const onFold = (event: React.MouseEvent) => {
-        showFoldDialog(true, null, (ok: boolean | null, {summary}: RichTextFoldValues) => {
+        showFoldDialog(true, null, (ok: boolean | null, {summary}: Partial<RichTextFoldValues>) => {
             if (textArea.current == null) {
                 return;
             }

@@ -18,7 +18,7 @@ type Props = {
 export function RichTextEditor({
     name, value, features, rows, maxHeight, placeholder, className, autoFocus, autoComplete, disabled, smileysEnabled,
     hidingPanel, format, nodeName = REL_CURRENT, forceImageCompress, onChange, submitKey, onSubmit, onBlur, onUrls,
-                                   noMedia
+    noMedia
 }: Props) {
     const [selectedImage, setSelectedImage] = useState<PrivateMediaFileInfo | null>(null);
 
@@ -81,6 +81,7 @@ export function RichTextEditor({
             {!noMedia &&
                 <RichTextEditorDropzone value={value} features={features} hiding={hidingPanel}
                                         nodeName={nodeName ?? null} forceCompress={forceImageCompress}
+                                        captionSrcFormat={format} smileysEnabled={smileysEnabled}
                                         selectedImage={selectedImage} selectImage={setSelectedImage}
                                         onLoadStarted={onImageLoadStarted} onLoaded={onImageLoaded}
                                         onDeleted={onImageDeleted} onReorder={onImagesReorder}/>

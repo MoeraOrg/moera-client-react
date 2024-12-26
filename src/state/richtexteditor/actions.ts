@@ -1,5 +1,5 @@
 import { actionWithPayload, ActionWithPayload } from "state/action-types";
-import { PostingFeatures, VerifiedMediaFile } from "api";
+import { PostingFeatures, SourceFormat, VerifiedMediaFile } from "api";
 import { RelNodeName } from "util/rel-node-name";
 
 type ImagesUploadSuccessHandler = (index: number, mediaFile: VerifiedMediaFile) => void;
@@ -14,6 +14,8 @@ export type RichTextEditorImagesUploadAction = ActionWithPayload<"RICH_TEXT_EDIT
     onSuccess: ImagesUploadSuccessHandler;
     onFailure: ImagesUploadFailureHandler;
     onProgress: ImagesUploadProgressHandler;
+    captionSrc?: string | null;
+    captionSrcFormat?: SourceFormat | null;
 }>;
 export const richTextEditorImagesUpload = (
     nodeName: RelNodeName | string,
@@ -22,11 +24,13 @@ export const richTextEditorImagesUpload = (
     compress: boolean,
     onSuccess: ImagesUploadSuccessHandler,
     onFailure: ImagesUploadFailureHandler,
-    onProgress: ImagesUploadProgressHandler
+    onProgress: ImagesUploadProgressHandler,
+    captionSrc?: string | null,
+    captionSrcFormat?: SourceFormat | null
 ): RichTextEditorImagesUploadAction =>
     actionWithPayload(
         "RICH_TEXT_EDITOR_IMAGES_UPLOAD",
-        {nodeName, files, features, compress, onSuccess, onFailure, onProgress}
+        {nodeName, files, features, compress, onSuccess, onFailure, onProgress, captionSrc, captionSrcFormat}
     );
 
 type ImageDownloadSuccessHandler = (file: File) => void;

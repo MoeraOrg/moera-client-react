@@ -5,16 +5,18 @@ import cx from 'classnames';
 import * as immutable from 'object-path-immutable';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { PostingFeatures, PrivateMediaFileInfo, VerifiedMediaFile } from "api";
+import { PostingFeatures, PrivateMediaFileInfo, SourceFormat, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { richTextEditorImageCopy, richTextEditorImagesUpload } from "state/richtexteditor/actions";
 import { getSetting } from "state/settings/selectors";
 import { RichTextValue } from "ui/control/richtexteditor";
 import RichTextEditorImageList from "ui/control/richtexteditor/RichTextEditorImageList";
 import RichTextCopyImageDialog, { RichTextCopyImageValues } from "ui/control/richtexteditor/RichTextCopyImageDialog";
+import RichTextUploadImagesDialog, { RichTextUploadImagesValues } from "ui/control/richtexteditor/RichTextUploadImagesDialog";
 import * as Browser from "ui/browser";
 import { isOverlayClosedRecently } from "ui/overlays/overlays";
 import { RelNodeName } from "util/rel-node-name";
+import { isHtmlEmpty } from "util/html";
 import "./RichTextEditorDropzone.css";
 
 type UploadStatus = "loading" | "success" | "failure";
@@ -59,12 +61,15 @@ function updateStatus(progress: UploadProgress[], index: number, status: UploadS
 
 type ImageLoadStartedHandler = (count: number) => void;
 type ImageLoadedHandler = (index: number, image: VerifiedMediaFile) => void;
+
 interface Props {
     value: RichTextValue;
     features: PostingFeatures | null;
     hiding?: boolean;
     nodeName: RelNodeName | string;
     forceCompress?: boolean;
+    captionSrcFormat?: SourceFormat;
+    smileysEnabled?: boolean;
     selectedImage: PrivateMediaFileInfo | null;
     selectImage: (image: VerifiedMediaFile | null) => void;
     onLoadStarted?: ImageLoadStartedHandler;
@@ -74,14 +79,13 @@ interface Props {
 }
 
 export default function RichTextEditorDropzone({
-    value, features, hiding = false, nodeName, forceCompress = false, selectedImage, selectImage, onLoadStarted,
-    onLoaded, onDeleted, onReorder
+    value, features, hiding = false, nodeName, forceCompress = false, captionSrcFormat, smileysEnabled, selectedImage,
+    selectImage, onLoadStarted, onLoaded, onDeleted, onReorder
 }: Props) {
     const compressImages = useSelector((state: ClientState) =>
         getSetting(state, "posting.media.compress.default") as boolean);
     const dispatch = useDispatch();
 
-    const [compress, setCompress] = useState<boolean>(forceCompress || compressImages);
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
     // onLoadStarted and onLoaded may change
@@ -107,8 +111,8 @@ export default function RichTextEditorDropzone({
         setUploadProgress(progress => immutable.assign(progress, [index], {loaded, total}));
     }
 
-    const uploadImage = (files: File[]) => {
-        if (files != null && files.length > 0) {
+    const uploadImages = (files: File[], caption: RichTextValue | undefined) => {
+        if (files.length > 0) {
             const progress: UploadProgress[] = [];
             for (const file of files) {
                 progress.push({status: "loading", loaded: 0, total: file.size});
@@ -117,35 +121,62 @@ export default function RichTextEditorDropzone({
             if (onLoadStartedRef.current) {
                 onLoadStartedRef.current(files.length);
             }
-            dispatch(richTextEditorImagesUpload(nodeName, files, features, compress,
-                onImageUploadSuccess(value.media?.length ?? 0), onImageUploadFailure, onImageUploadProgress));
+            const captionSrcText = caption?.toString(smileysEnabled);
+            const captionSrc = !isHtmlEmpty(captionSrcText) ? JSON.stringify({text: captionSrcText}) : null;
+            dispatch(richTextEditorImagesUpload(
+                nodeName, files, features, compress.current, onImageUploadSuccess(value.media?.length ?? 0),
+                onImageUploadFailure, onImageUploadProgress, captionSrc, captionSrcFormat
+            ));
         }
     };
 
+    const [files, setFiles] = useState<File[]>([]);
+    const compress = useRef<boolean>(forceCompress || compressImages);
+    const [uploadImagesShow, setUploadImagesShow] = useState<boolean>(false);
+
+    const openUploadImages = (files: File[]) => {
+        setFiles(files);
+        setUploadImagesShow(true);
+    }
+
+    const submitUploadImages = (ok: boolean | null, values: Partial<RichTextUploadImagesValues>) => {
+        setUploadImagesShow(false);
+        if (!ok || !values.files || values.files.length === 0) {
+            return;
+        }
+        if (values.compress != null) {
+            compress.current = values.compress;
+        }
+        uploadImages(values.files, values.caption);
+    }
+
     const [copyImageShow, setCopyImageShow] = useState<boolean>(false);
     const [downloading, setDownloading] = useState<boolean>(false);
-
-    const onImageDownloadSuccess = (file: File) => {
-        setDownloading(false);
-        uploadImage([file]);
-    }
-
-    const onImageDownloadFailure = () => {
-        setDownloading(false);
-    }
 
     const openCopyImage = (e: React.MouseEvent) => {
         setCopyImageShow(true);
         e.preventDefault();
     }
 
-    const submitCopyImage = (ok: boolean | null, {url}: RichTextCopyImageValues) => {
+    const onImageDownloadSuccess = (file: File) => {
+        setDownloading(false);
+        uploadImages([file], undefined);
+    }
+
+    const onImageDownloadFailure = () => {
+        setDownloading(false);
+    }
+
+    const submitCopyImage = (ok: boolean | null, values: Partial<RichTextCopyImageValues>) => {
         setCopyImageShow(false);
-        if (!ok || !url) {
+        if (!ok || !values.url) {
             return;
         }
+        if (values.compress != null) {
+            compress.current = values.compress;
+        }
         setDownloading(true);
-        dispatch(richTextEditorImageCopy(url, onImageDownloadSuccess, onImageDownloadFailure));
+        dispatch(richTextEditorImageCopy(values.url, onImageDownloadSuccess, onImageDownloadFailure));
     }
 
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
@@ -155,7 +186,7 @@ export default function RichTextEditorDropzone({
             accept: {
                 "image/*": features?.imageFormats ?? []
             },
-            onDrop: uploadImage
+            onDrop: openUploadImages
         });
 
     const onSelectImages = (event: React.MouseEvent) => {
@@ -177,32 +208,31 @@ export default function RichTextEditorDropzone({
                 <RichTextEditorImageList value={value} nodeName={nodeName} selectedImage={selectedImage}
                                          selectImage={selectImage} onDeleted={onDeleted} onReorder={onReorder}/>
                 <div className="upload">
-                    {uploadProgress.length > 0 ? /* FIXME centered with padding */
+                    {uploadProgress.length > 0 ?
                         t("uploading-files", {...progressSummary})
-                    : downloading ?
-                        t("downloading-image")
                     :
-                        <div className="upload-button" role="button" tabIndex={0} onClick={onSelectImages}>
-                            <Trans i18nKey={buttonsTitle}>
-                                <b/>
-                                <button className="copy-image" onClick={openCopyImage}/>
-                                <br/>
-                            </Trans>
-                        </div>
-                    }
-                    {!forceCompress &&
-                        <>
-                            <br/>
-                            <label className="form-check-label" htmlFor="editorImagesCompress">
-                                {t("compress-images")}
-                            </label>
-                            <input className="form-check-input" type="checkbox" checked={compress}
-                                   onChange={e => setCompress(e.target.checked)} id="editorImagesCompress"/>
-                        </>
+                        downloading ?
+                            t("downloading-image")
+                        :
+                            <div className="upload-button" role="button" tabIndex={0} onClick={onSelectImages}>
+                                <Trans i18nKey={buttonsTitle}>
+                                    <b/>
+                                    <button className="copy-image" onClick={openCopyImage}/>
+                                    <br/>
+                                </Trans>
+                            </div>
                     }
                 </div>
                 <input {...getInputProps()}/>
-                {copyImageShow && <RichTextCopyImageDialog onSubmit={submitCopyImage}/>}
+                {copyImageShow &&
+                    <RichTextCopyImageDialog forceCompress={forceCompress} compressDefault={compress.current}
+                                             onSubmit={submitCopyImage}/>
+                }
+                {uploadImagesShow &&
+                    <RichTextUploadImagesDialog forceCompress={forceCompress} files={files}
+                                                compressDefault={compress.current} captionSrcFormat={captionSrcFormat}
+                                                smileysEnabled={smileysEnabled} onSubmit={submitUploadImages}/>
+                }
             </div>
         </>
     );

@@ -95,7 +95,7 @@ export default function RichTextImageDialogDropzone({
         e.preventDefault();
     }
 
-    const submitCopyImage = (ok: boolean | null, {url}: RichTextCopyImageValues) => {
+    const submitCopyImage = (ok: boolean | null, {url}: Partial<RichTextCopyImageValues>) => {
         setCopyImageShow(false);
         if (!ok || !url) {
             return;

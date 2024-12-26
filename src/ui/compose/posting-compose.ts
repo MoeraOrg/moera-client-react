@@ -22,7 +22,7 @@ import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { htmlToScripture, safeImportScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { replaceSmileys } from "util/text";
-import { quoteHtml, safeImportHtml } from "util/html";
+import { isHtmlEmpty, quoteHtml, safeImportHtml } from "util/html";
 
 export type ComposePageToolsTab = null | "format" | "comments" | "reactions" | "updated";
 
@@ -180,7 +180,7 @@ function isPostingContentEmpty(
     text: string | null | undefined,
     media: (PrivateMediaFileInfo | null)[] | string[] | null | undefined
 ): boolean {
-    const textEmpty = (!subject || subject.trim() === "") && (!text || text.trim() === "<p></p>");
+    const textEmpty = (!subject || subject.trim() === "") && isHtmlEmpty(text);
     const mediaEmpty = media == null || media.length === 0;
     return textEmpty && mediaEmpty;
 }

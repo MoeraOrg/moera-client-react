@@ -293,18 +293,17 @@ export function containsTags(html: string, replacementLevel: ReplacementLevel): 
     return html.search(/<[a-zA-z][^\n]*>/) >= 0;
 }
 
-export function clearHtml(html: string | null | undefined): string {
-    return unhtmlEntities(html).replace(/<\/?[a-z][^>]*>/gi, "").trim();
-}
+export const clearHtml = (html: string | null | undefined): string =>
+    unhtmlEntities(html).replace(/<\/?[a-z][^>]*>/gi, "").trim();
 
-export function htmlEntities(s: string | null | undefined): string {
-    return HtmlEntities.encode(s);
-}
+export const htmlEntities = (s: string | null | undefined): string =>
+    HtmlEntities.encode(s);
 
-export function unhtmlEntities(s: string | null | undefined): string {
-    return HtmlEntities.decode(s);
-}
+export const unhtmlEntities = (s: string | null | undefined): string =>
+    HtmlEntities.decode(s);
 
-export function unhtmlEntitiesMinimal(s: string | null | undefined): string {
-    return (s ?? "").replaceAll("&amp;", "&").replaceAll("&lt;", "<");
-}
+export const unhtmlEntitiesMinimal = (s: string | null | undefined): string =>
+    (s ?? "").replaceAll("&amp;", "&").replaceAll("&lt;", "<");
+
+export const isHtmlEmpty = (html: string | null | undefined): boolean =>
+    !html || html.trim() === "" || html.trim() === "<p></p>";

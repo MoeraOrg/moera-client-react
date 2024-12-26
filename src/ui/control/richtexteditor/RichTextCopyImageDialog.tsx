@@ -1,23 +1,35 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { InputField } from "ui/control/field";
+import { CheckboxField, InputField } from "ui/control/field";
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
 
 export interface RichTextCopyImageValues {
     url?: string;
+    compress?: boolean;
 }
 
-type Props = RichTextEditorDialogProps<RichTextCopyImageValues>;
+type Props = {
+    forceCompress?: boolean;
+    compressDefault?: boolean;
+} & RichTextEditorDialogProps<RichTextCopyImageValues>;
 
-const mapPropsToValues = (): RichTextCopyImageValues => ({
-    url: ""
+const mapPropsToValues = (props: Props): RichTextCopyImageValues => ({
+    url: "",
+    compress: props.compressDefault ?? true,
 });
 
-const RichTextCopyImageDialog = () => {
+const RichTextCopyImageDialog = ({forceCompress}: Props) => {
     const {t} = useTranslation();
 
-    return <InputField name="url" title={t("url")} anyValue autoFocus/>;
+    return (
+        <>
+            <InputField name="url" title={t("url")} anyValue autoFocus/>
+            {!forceCompress &&
+                <CheckboxField title={t("compress-images")} name="compress" anyValue/>
+            }
+        </>
+    );
 }
 
 export default richTextEditorDialog<Props, RichTextCopyImageValues>(

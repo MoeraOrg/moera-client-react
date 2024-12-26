@@ -17,6 +17,7 @@ import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { toAvatarDescription } from "util/avatar";
+import { isHtmlEmpty } from "util/html";
 
 interface PropsToValuesProps {
     comment: CommentInfo | null;
@@ -83,7 +84,7 @@ function isCommentContentEmpty(
     text: string | null | undefined,
     media: (PrivateMediaFileInfo | null)[] | string[] | null | undefined
 ): boolean {
-    const textEmpty = !text || text.trim() === "<p></p>";
+    const textEmpty = isHtmlEmpty(text);
     const mediaEmpty = media == null || media.length === 0;
     return textEmpty && mediaEmpty;
 }

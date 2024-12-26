@@ -27,21 +27,6 @@
     text-align: center;
 }
 
-.rich-text-editor-dropzone .upload LABEL {
-    font-size: smaller;
-    margin-right: .5em;
-}
-
-.rich-text-editor-dropzone .upload INPUT {
-    font-size: smaller;
-    vertical-align: text-top;
-}
-
-.rich-text-editor-dropzone .upload INPUT:checked {
-    background-color: var(--bs-info);
-    border-color: var(--bs-info);
-}
-
 .rich-text-editor-dropzone .upload-button {
     padding: 1em;
 }
