@@ -16,6 +16,7 @@ import {
     msFormatQuoteOff,
     msHorizontalRule,
     msMediaLink,
+    msPhotoLibrary,
     msReport,
     msStrikethroughS,
 } from "ui/material-symbols";
@@ -37,7 +38,7 @@ export default function VisualEditorPanel({hiding}: Props) {
         inOrderedList,
         formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
         formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo,
-        formatClear
+        formatClear, formatImage
     } = useVisualEditorCommands();
 
     const {t} = useTranslation();
@@ -91,6 +92,7 @@ export default function VisualEditorPanel({hiding}: Props) {
             <div className="group">
                 <VisualEditorButton icon={msAddLink} title={t("link")} hotkey={VISUAL_EDITOR_KEYS.LINK.title}
                                     active={inLink} command={formatLink}/>
+                <VisualEditorButton icon={msPhotoLibrary} title={t("image")} command={formatImage}/>
                 <VisualEditorButton icon={msMediaLink} title={t("video-internet")} command={formatVideo}/>
             </div>
             <div className="group">

@@ -49,6 +49,7 @@ export interface VisualEditorCommandsInterface {
     formatMark: () => void;
     formatClear: () => void;
     formatImageEmbedded: () => void;
+    formatImage: () => void;
 }
 
 export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInterface>({
@@ -100,6 +101,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     formatMark: () => {},
     formatClear: () => {},
     formatImageEmbedded: () => {},
+    formatImage: () => {},
 });
 
 export const useVisualEditorCommands = (): VisualEditorCommandsInterface => useContext(VisualEditorCommandsContext);

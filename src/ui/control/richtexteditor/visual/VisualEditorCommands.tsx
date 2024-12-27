@@ -63,6 +63,7 @@ import { RichTextFormulaValues } from "ui/control/richtexteditor/RichTextFormula
 import { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
+import { useRichTextEditorMedia } from "ui/control/richtexteditor/rich-text-editor-media-context";
 
 interface Props {
     children: ReactNode;
@@ -518,6 +519,12 @@ export default function VisualEditorCommands({children}: Props) {
         );
     }
 
+    const {open} = useRichTextEditorMedia();
+
+    const formatImage = () => {
+        open();
+    }
+
     return (
         <VisualEditorCommandsContext.Provider value={{
             enableHeading,
@@ -527,7 +534,7 @@ export default function VisualEditorCommands({children}: Props) {
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
             formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo,
             formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula, formatMark,
-            formatClear, formatImageEmbedded
+            formatClear, formatImageEmbedded, formatImage,
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>
