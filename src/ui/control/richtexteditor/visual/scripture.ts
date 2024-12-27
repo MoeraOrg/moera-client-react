@@ -189,18 +189,36 @@ export interface ImageEmbeddedElement extends SlateElement {
     standardSize?: RichTextImageStandardSize;
     customWidth?: number | null;
     customHeight?: number | null;
-    caption?: string;
 }
 
 export const isImageEmbeddedElement = (value: any): value is ImageEmbeddedElement =>
     isScriptureElement(value) && value.type === "image-embedded";
 
 export const createImageEmbeddedElement = (
-    href: string, standardSize?: RichTextImageStandardSize, customWidth?: number | null, customHeight?: number | null,
-    caption?: string
+    href: string, standardSize?: RichTextImageStandardSize, customWidth?: number | null, customHeight?: number | null
 ): ImageEmbeddedElement =>
+    ({type: "image-embedded", href, standardSize, customWidth, customHeight, children: [createScriptureText("")]});
+
+/* FIGURE+IMG */
+
+export interface FigureImageElement extends SlateElement {
+    type: "figure-image";
+    href: string;
+    caption: string;
+    standardSize?: RichTextImageStandardSize;
+    customWidth?: number | null;
+    customHeight?: number | null;
+}
+
+export const isFigureImageElement = (value: any): value is FigureImageElement =>
+    isScriptureElement(value) && value.type === "figure-image";
+
+export const createFigureImageElement = (
+    href: string, caption: string, standardSize?: RichTextImageStandardSize, customWidth?: number | null,
+    customHeight?: number | null
+): FigureImageElement =>
     ({
-        type: "image-embedded", href, standardSize, customWidth, customHeight, caption,
+        type: "figure-image", href, standardSize, customWidth, customHeight, caption,
         children: [createScriptureText("")]
     });
 
@@ -221,7 +239,8 @@ export type ScriptureElement =
     | CodeBlockElement
     | FormulaElement
     | FormulaBlockElement
-    | ImageEmbeddedElement;
+    | ImageEmbeddedElement
+    | FigureImageElement;
 
 export const isScriptureElement = (value: any): value is ScriptureElement =>
     SlateElement.isElement(value) && "type" in value;
@@ -261,7 +280,9 @@ export type ScriptureElementType = ScriptureElement["type"];
 
 export const SCRIPTURE_SUPER_BLOCK_TYPES: ScriptureElementType[] = ["spoiler-block", "blockquote", "details"];
 export const SCRIPTURE_SIMPLE_BLOCK_TYPES: ScriptureElementType[] = ["paragraph", "list-item", "heading", "code-block"];
-export const SCRIPTURE_VOID_BLOCK_TYPES: ScriptureElementType[] = ["horizontal-rule", "iframe", "formula-block"];
+export const SCRIPTURE_VOID_BLOCK_TYPES: ScriptureElementType[] = [
+    "horizontal-rule", "iframe", "formula-block", "figure-image"
+];
 export const SCRIPTURE_BLOCK_TYPES: ScriptureElementType[] = [
     SCRIPTURE_SUPER_BLOCK_TYPES, SCRIPTURE_SIMPLE_BLOCK_TYPES, SCRIPTURE_VOID_BLOCK_TYPES
 ].flat();

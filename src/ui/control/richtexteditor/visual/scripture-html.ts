@@ -233,8 +233,10 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
             if (imageElement == null) {
                 return null;
             }
-            imageElement.caption = caption;
-            return imageElement;
+            if (!caption) {
+                return imageElement;
+            }
+            return {...imageElement, type: "figure-image", caption};
         }
         case "FIGCAPTION":
             return null;
@@ -357,18 +359,26 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 if (!node.href) {
                     return;
                 }
-                if (node.caption) {
-                    context.output += "<figure>";
-                }
                 const {width, height} = getImageDimensions(
                     node.standardSize ?? "large", node.customWidth, node.customHeight
                 );
                 const widthAttr = width != null ? ` width="${width}"` : "";
                 const heightAttr = height != null ? ` height="${height}"` : "";
                 context.output += `<img${widthAttr}${heightAttr} src="${htmlEntities(node.href)}">`;
-                if (node.caption) {
-                    context.output += `<figcaption>${htmlEntities(node.caption)}</figcaption></figure>`;
+                return;
+            }
+            case "figure-image": {
+                if (!node.href) {
+                    return;
                 }
+                context.output += "<figure>";
+                const {width, height} = getImageDimensions(
+                    node.standardSize ?? "large", node.customWidth, node.customHeight
+                );
+                const widthAttr = width != null ? ` width="${width}"` : "";
+                const heightAttr = height != null ? ` height="${height}"` : "";
+                context.output += `<img${widthAttr}${heightAttr} src="${htmlEntities(node.href)}">`;
+                context.output += `<figcaption>${htmlEntities(node.caption)}</figcaption></figure>`;
                 return;
             }
         }

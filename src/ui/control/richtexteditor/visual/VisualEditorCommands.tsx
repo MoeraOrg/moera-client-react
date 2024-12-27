@@ -7,6 +7,7 @@ import {
     createBlockquoteElement,
     createCodeBlockElement,
     createDetailsElement,
+    createFigureImageElement,
     createFormulaBlockElement,
     createFormulaElement,
     createHorizontalRuleElement,
@@ -21,11 +22,13 @@ import {
     createSpoilerElement,
     DetailsElement,
     equalScriptureMarks,
+    FigureImageElement,
     FormulaBlockElement,
     FormulaElement,
     HeadingElement,
     ImageEmbeddedElement,
     isDetailsElement,
+    isFigureImageElement,
     isFormulaBlockElement,
     isFormulaElement,
     isHeadingElement,
@@ -459,16 +462,26 @@ export default function VisualEditorCommands({children}: Props) {
     }
 
     const formatImageEmbedded = () => {
-        const [element, path] = findWrappingElement(editor, "image-embedded") ?? [null, null];
-        const prevValues = element != null && isImageEmbeddedElement(element)
-            ? {
+        const [element, path] = findWrappingElement(editor, ["image-embedded", "figure-image"]) ?? [null, null];
+        const prevType = element?.type;
+        let prevValues: RichTextImageValues | null = null;
+        if (isImageEmbeddedElement(element)) {
+            prevValues = {
+                href: element.href,
+                standardSize: element.standardSize,
+                customWidth: element.customWidth,
+                customHeight: element.customHeight,
+            }
+        }
+        if (isFigureImageElement(element)) {
+            prevValues = {
                 href: element.href,
                 standardSize: element.standardSize,
                 customWidth: element.customWidth,
                 customHeight: element.customHeight,
                 caption: element.caption,
             }
-            : null;
+        }
 
         showImageDialog(
             true,
@@ -480,9 +493,20 @@ export default function VisualEditorCommands({children}: Props) {
                 showImageDialog(false);
 
                 if (ok && href) {
-                    const node = createImageEmbeddedElement(href, standardSize, customWidth, customHeight, caption);
+                    const node = caption
+                        ? createFigureImageElement(href, caption, standardSize, customWidth, customHeight)
+                        : createImageEmbeddedElement(href, standardSize, customWidth, customHeight);
                     if (path != null) {
-                        editor.setNodes<ImageEmbeddedElement>(node, {at: path});
+                        Editor.withoutNormalizing(editor, () => {
+                            editor.setNodes<ImageEmbeddedElement | FigureImageElement>(node, {at: path});
+                            if (prevType != null && prevType !== node.type) {
+                                if (prevType === "image-embedded") {
+                                    editor.liftNodes({at: path});
+                                } else {
+                                    editor.wrapNodes(createParagraphElement([]), {at: path});
+                                }
+                            }
+                        });
                     } else {
                         editor.insertNode(node);
                     }

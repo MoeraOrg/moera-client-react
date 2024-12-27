@@ -97,24 +97,36 @@ export default function VisualRenderElement(props: RenderElementProps) {
                 }
                 return (
                     <span className="image-embedded" {...attributes} contentEditable={false}
-                         onClick={onImageEmbeddedClick}>
-                        {element.caption ?
-                            <>
-                                {children}
-                                <figure>
-                                    <img src={element.href} width={width ?? undefined} height={height ?? undefined}
-                                         alt="" style={style}/>
-                                    <figcaption>{element.caption}</figcaption>
-                                </figure>
-                            </>
-                        :
-                            <>
-                                {children}
-                                <img src={element.href} width={width ?? undefined} height={height ?? undefined}
-                                     alt="" style={style}/>
-                            </>
-                        }
+                          onClick={onImageEmbeddedClick}>
+                        {children}
+                        <img src={element.href} width={width ?? undefined} height={height ?? undefined}
+                             alt="" style={style}/>
                     </span>
+                );
+            }
+            case "figure-image": {
+                const {width, height} = getImageDimensions(
+                    element.standardSize ?? "large", element.customWidth, element.customHeight
+                );
+                let style: React.CSSProperties = {};
+                if (width != null) {
+                    // @ts-ignore
+                    style["--width"] = `${width}px`;
+                }
+                if (height != null) {
+                    // @ts-ignore
+                    style["--height"] = `${height}px`;
+                }
+                return (
+                    <div className="figure-image" {...attributes} contentEditable={false}
+                          onClick={onImageEmbeddedClick}>
+                        {children}
+                        <figure>
+                            <img src={element.href} width={width ?? undefined} height={height ?? undefined}
+                                 alt="" style={style}/>
+                            <figcaption>{element.caption}</figcaption>
+                        </figure>
+                    </div>
                 );
             }
             default:
