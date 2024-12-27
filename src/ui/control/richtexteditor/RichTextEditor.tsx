@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import cx from 'classnames';
 
 import { PrivateMediaFileInfo, VerifiedMediaFile } from "api";
+import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { MarkdownEditor, MarkdownEditorProps } from "ui/control/richtexteditor/markdown/MarkdownEditor";
 import VisualEditor, { VisualEditorProps } from "ui/control/richtexteditor/visual/VisualEditor";
 import RichTextEditorDropzone from "ui/control/richtexteditor/RichTextEditorDropzone";
 import RichTextEditorDialogs from "ui/control/richtexteditor/RichTextEditorDialogs";
-import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
+import RichTextEditorMedia from "ui/control/richtexteditor/RichTextEditorMedia";
 import { REL_CURRENT } from "util/rel-node-name";
 import { arrayMove } from "util/misc";
 import "./RichTextEditor.css";
@@ -65,27 +66,29 @@ export function RichTextEditor({
     return (
         <div className={cx("rich-text-editor", className)}>
             <RichTextEditorDialogs>
-                {format.endsWith("/visual") ?
-                    <VisualEditor value={value} rows={rows} maxHeight={maxHeight} placeholder={placeholder}
-                                  autoFocus={autoFocus} disabled={disabled} hidingPanel={hidingPanel}
-                                  onChange={onChange} submitKey={submitKey} onSubmit={onSubmit} onUrls={onUrls}/>
-                :
-                    <MarkdownEditor name={name} value={value} features={features} rows={rows} maxHeight={maxHeight}
-                                    placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
-                                    disabled={disabled} smileysEnabled={smileysEnabled} hidingPanel={hidingPanel}
-                                    format={format} nodeName={nodeName} forceImageCompress={forceImageCompress}
-                                    submitKey={submitKey} onSubmit={onSubmit}onChange={onChange} onBlur={onBlur}
-                                    onUrls={onUrls} noMedia={noMedia}/>
-                }
+                <RichTextEditorMedia value={value} features={features} nodeName={nodeName}
+                                     forceCompress={forceImageCompress} captionSrcFormat={format}
+                                     smileysEnabled={smileysEnabled} onLoadStarted={onImageLoadStarted}
+                                     onLoaded={onImageLoaded}>
+                    {format.endsWith("/visual") ?
+                        <VisualEditor value={value} rows={rows} maxHeight={maxHeight} placeholder={placeholder}
+                                      autoFocus={autoFocus} disabled={disabled} hidingPanel={hidingPanel}
+                                      onChange={onChange} submitKey={submitKey} onSubmit={onSubmit} onUrls={onUrls}/>
+                    :
+                        <MarkdownEditor name={name} value={value} features={features} rows={rows} maxHeight={maxHeight}
+                                        placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
+                                        disabled={disabled} smileysEnabled={smileysEnabled} hidingPanel={hidingPanel}
+                                        format={format} nodeName={nodeName} forceImageCompress={forceImageCompress}
+                                        submitKey={submitKey} onSubmit={onSubmit}onChange={onChange} onBlur={onBlur}
+                                        onUrls={onUrls} noMedia={noMedia}/>
+                    }
+                    {!noMedia &&
+                        <RichTextEditorDropzone value={value} hiding={hidingPanel} nodeName={nodeName ?? null}
+                                                selectedImage={selectedImage} selectImage={setSelectedImage}
+                                                onDeleted={onImageDeleted} onReorder={onImagesReorder}/>
+                    }
+                </RichTextEditorMedia>
             </RichTextEditorDialogs>
-            {!noMedia &&
-                <RichTextEditorDropzone value={value} features={features} hiding={hidingPanel}
-                                        nodeName={nodeName ?? null} forceCompress={forceImageCompress}
-                                        captionSrcFormat={format} smileysEnabled={smileysEnabled}
-                                        selectedImage={selectedImage} selectImage={setSelectedImage}
-                                        onLoadStarted={onImageLoadStarted} onLoaded={onImageLoaded}
-                                        onDeleted={onImageDeleted} onReorder={onImagesReorder}/>
-            }
         </div>
     );
 }
