@@ -1,94 +1,44 @@
-import React, { useState } from 'react';
+import React from 'react';
 import cx from 'classnames';
 
-import { PrivateMediaFileInfo, VerifiedMediaFile } from "api";
-import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { MarkdownEditor, MarkdownEditorProps } from "ui/control/richtexteditor/markdown/MarkdownEditor";
 import VisualEditor, { VisualEditorProps } from "ui/control/richtexteditor/visual/VisualEditor";
 import RichTextEditorDropzone from "ui/control/richtexteditor/RichTextEditorDropzone";
 import RichTextEditorDialogs from "ui/control/richtexteditor/RichTextEditorDialogs";
 import RichTextEditorMedia from "ui/control/richtexteditor/RichTextEditorMedia";
 import { REL_CURRENT } from "util/rel-node-name";
-import { arrayMove } from "util/misc";
 import "./RichTextEditor.css";
 
 type Props = {
     className?: string;
 } & MarkdownEditorProps & VisualEditorProps;
 
-export function RichTextEditor({
+export const RichTextEditor = ({
     name, value, features, rows, maxHeight, placeholder, className, autoFocus, autoComplete, disabled, smileysEnabled,
     hidingPanel, format, nodeName = REL_CURRENT, forceImageCompress, onChange, submitKey, onSubmit, onBlur, onUrls,
     noMedia
-}: Props) {
-    const [selectedImage, setSelectedImage] = useState<PrivateMediaFileInfo | null>(null);
-
-    const onImageLoadStarted = (count: number) => {
-        if (onChange != null && count > 0) {
-            const media = value.media != null ? [...value.media] : [];
-            for (let i = 0; i < count; i++) {
-                media.push(null);
-            }
-            onChange(new RichTextValue(value.text, format, media));
-        }
-    }
-
-    const onImageLoaded = (index: number, image: VerifiedMediaFile) => {
-        if (onChange != null && value.media != null && index < value.media.length) {
-            if (value.media.some(v => v != null && v.id === image.id)) {
-                return;
-            }
-            const media = [...value.media];
-            media[index] = image;
-            onChange(new RichTextValue(value.text, format, media));
-        }
-    }
-
-    const onImageDeleted = (id: string) => {
-        if (onChange != null && value.media != null) {
-            const media = value.media.filter(v => v == null || v.id !== id);
-            onChange(new RichTextValue(value.text, format, media));
-        }
-    }
-
-    const onImagesReorder = (activeId: string, overId: string) => {
-        if (onChange != null && value.media != null && activeId !== overId) {
-            const index = value.media.findIndex(v => v != null && v.id === activeId);
-            const overIndex = value.media.findIndex(v => v != null && v.id === overId);
-            if (index == null || overIndex == null) {
-                return;
-            }
-            const media = arrayMove(value.media, index, overIndex);
-            onChange(new RichTextValue(value.text, format, media));
-        }
-    }
-
-    return (
-        <div className={cx("rich-text-editor", className)}>
-            <RichTextEditorDialogs>
-                <RichTextEditorMedia value={value} features={features} nodeName={nodeName}
-                                     forceCompress={forceImageCompress} captionSrcFormat={format}
-                                     smileysEnabled={smileysEnabled} onLoadStarted={onImageLoadStarted}
-                                     onLoaded={onImageLoaded}>
-                    {format.endsWith("/visual") ?
-                        <VisualEditor value={value} rows={rows} maxHeight={maxHeight} placeholder={placeholder}
-                                      autoFocus={autoFocus} disabled={disabled} hidingPanel={hidingPanel}
-                                      onChange={onChange} submitKey={submitKey} onSubmit={onSubmit} onUrls={onUrls}/>
-                    :
-                        <MarkdownEditor name={name} value={value} features={features} rows={rows} maxHeight={maxHeight}
-                                        placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
-                                        disabled={disabled} smileysEnabled={smileysEnabled} hidingPanel={hidingPanel}
-                                        format={format} nodeName={nodeName} forceImageCompress={forceImageCompress}
-                                        submitKey={submitKey} onSubmit={onSubmit}onChange={onChange} onBlur={onBlur}
-                                        onUrls={onUrls} noMedia={noMedia}/>
-                    }
-                    {!noMedia &&
-                        <RichTextEditorDropzone value={value} hiding={hidingPanel} nodeName={nodeName ?? null}
-                                                selectedImage={selectedImage} selectImage={setSelectedImage}
-                                                onDeleted={onImageDeleted} onReorder={onImagesReorder}/>
-                    }
-                </RichTextEditorMedia>
-            </RichTextEditorDialogs>
-        </div>
-    );
-}
+}: Props) => (
+    <div className={cx("rich-text-editor", className)}>
+        <RichTextEditorDialogs>
+            <RichTextEditorMedia value={value} features={features} nodeName={nodeName}
+                                 forceCompress={forceImageCompress} srcFormat={format}
+                                 smileysEnabled={smileysEnabled} onChange={onChange}>
+                {format.endsWith("/visual") ?
+                    <VisualEditor value={value} rows={rows} maxHeight={maxHeight} placeholder={placeholder}
+                                  autoFocus={autoFocus} disabled={disabled} hidingPanel={hidingPanel}
+                                  onChange={onChange} submitKey={submitKey} onSubmit={onSubmit} onUrls={onUrls}/>
+                :
+                    <MarkdownEditor name={name} value={value} features={features} rows={rows} maxHeight={maxHeight}
+                                    placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
+                                    disabled={disabled} smileysEnabled={smileysEnabled} hidingPanel={hidingPanel}
+                                    format={format} nodeName={nodeName} forceImageCompress={forceImageCompress}
+                                    submitKey={submitKey} onSubmit={onSubmit} onChange={onChange} onBlur={onBlur}
+                                    onUrls={onUrls} noMedia={noMedia}/>
+                }
+                {!noMedia &&
+                    <RichTextEditorDropzone value={value} hiding={hidingPanel} nodeName={nodeName ?? null}/>
+                }
+            </RichTextEditorMedia>
+        </RichTextEditorDialogs>
+    </div>
+);

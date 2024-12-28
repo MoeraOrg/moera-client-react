@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import cx from 'classnames';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { PrivateMediaFileInfo, VerifiedMediaFile } from "api";
+import { PrivateMediaFileInfo } from "api";
 import { richTextEditorImageCopy } from "state/richtexteditor/actions";
 import { RichTextValue } from "ui/control/richtexteditor";
 import { UploadProgress, useRichTextEditorMedia } from "ui/control/richtexteditor/rich-text-editor-media-context";
@@ -45,22 +45,17 @@ interface Props {
     value: RichTextValue;
     hiding?: boolean;
     nodeName: RelNodeName | string;
-    selectedImage: PrivateMediaFileInfo | null;
-    selectImage: (image: VerifiedMediaFile | null) => void;
-    onDeleted?: (id: string) => void;
-    onReorder?: (activeId: string, overId: string) => void;
 }
 
-export default function RichTextEditorDropzone({
-    value, hiding = false, nodeName, selectedImage, selectImage, onDeleted, onReorder
-}: Props) {
+export default function RichTextEditorDropzone({value, hiding = false, nodeName}: Props) {
     const dispatch = useDispatch();
     const {
         getRootProps, isDragAccept, isDragReject, open, uploadImages, uploadProgress, forceCompress, compress,
-        setCompress
+        setCompress, deleteImage, reorderImage
     } = useRichTextEditorMedia();
     const {t} = useTranslation();
 
+    const [selectedImage, setSelectedImage] = useState<PrivateMediaFileInfo | null>(null);
     const [copyImageShow, setCopyImageShow] = useState<boolean>(false);
     const [downloading, setDownloading] = useState<boolean>(false);
 
@@ -107,7 +102,8 @@ export default function RichTextEditorDropzone({
                 {"hiding": hiding, "drag-accept": isDragAccept, "drag-reject": isDragReject}
             )} {...getRootProps()}>
                 <RichTextEditorImageList value={value} nodeName={nodeName} selectedImage={selectedImage}
-                                         selectImage={selectImage} onDeleted={onDeleted} onReorder={onReorder}/>
+                                         selectImage={setSelectedImage} onDeleted={deleteImage}
+                                         onReorder={reorderImage}/>
                 <div className="upload">
                     {uploadProgress.length > 0 ?
                         t("uploading-files", {...progressSummary})

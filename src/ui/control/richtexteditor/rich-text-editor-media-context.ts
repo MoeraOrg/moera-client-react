@@ -21,6 +21,8 @@ export interface RichTextEditorMediaInterface {
     forceCompress: boolean;
     compress: boolean;
     setCompress: (compress: boolean) => void;
+    deleteImage: (id: string) => void;
+    reorderImage: (moveId: string, overId: string) => void;
 }
 
 export const RichTextEditorMediaContext = createContext<RichTextEditorMediaInterface>({
@@ -33,6 +35,8 @@ export const RichTextEditorMediaContext = createContext<RichTextEditorMediaInter
     forceCompress: false,
     compress: false,
     setCompress: () => {},
+    deleteImage: () => {},
+    reorderImage: () => {},
 });
 
 export const useRichTextEditorMedia = (): RichTextEditorMediaInterface => useContext(RichTextEditorMediaContext);
