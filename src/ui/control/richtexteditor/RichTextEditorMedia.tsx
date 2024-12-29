@@ -45,6 +45,7 @@ export default function RichTextEditorMedia({
         getSetting(state, "posting.media.compress.default") as boolean);
     const dispatch = useDispatch();
 
+    const uploadedImagesRef = useRef<(VerifiedMediaFile | null)[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
     // value and onChange may change
     const valueRef = useRef<RichTextValue>();
@@ -53,50 +54,25 @@ export default function RichTextEditorMedia({
     onChangeRef.current = onChange;
 
     const imageUploadStarted = (count: number) => {
-        if (onChange != null && valueRef.current != null && count > 0) {
-            const media = valueRef.current?.media != null ? [...valueRef.current.media] : [];
-            for (let i = 0; i < count; i++) {
-                media.push(null);
-            }
-            onChange(new RichTextValue(valueRef.current.text, srcFormat, media));
-        }
+        uploadedImagesRef.current = new Array(count).fill(null);
     }
 
     const imageUploaded = (index: number, image: VerifiedMediaFile) => {
-        if (onChange != null && valueRef.current?.media != null && index < valueRef.current.media.length) {
-            if (valueRef.current.media.some(v => v != null && v.id === image.id)) {
-                return;
-            }
-            const media = [...valueRef.current.media];
-            media[index] = image;
-            onChange(new RichTextValue(valueRef.current.text, srcFormat, media));
+        if (uploadedImagesRef.current.some(v => v != null && v.id === image.id)) {
+            return;
         }
-    }
-
-    const deleteImage = (id: string) => {
-        if (onChange != null && valueRef.current?.media != null) {
-            const media = valueRef.current.media.filter(v => v == null || v.id !== id);
-            onChange(new RichTextValue(valueRef.current.text, srcFormat, media));
-        }
-    }
-
-    const reorderImage = (moveId: string, overId: string) => {
-        if (onChange != null && valueRef.current?.media != null && moveId !== overId) {
-            const index = valueRef.current.media.findIndex(v => v != null && v.id === moveId);
-            const overIndex = valueRef.current.media.findIndex(v => v != null && v.id === overId);
-            if (index == null || overIndex == null) {
-                return;
-            }
-            const media = arrayMove(valueRef.current.media, index, overIndex);
-            onChange(new RichTextValue(valueRef.current.text, srcFormat, media));
+        uploadedImagesRef.current[index] = image;
+        if (uploadedImagesRef.current.every(v => v != null)) {
+            const media = (valueRef.current?.media ?? []).concat(uploadedImagesRef.current);
+            onChangeRef.current?.(new RichTextValue(valueRef.current?.text ?? "", srcFormat, media));
         }
     }
 
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
 
-    const onImageUploadSuccess = (startIndex: number) => (index: number, mediaFile: VerifiedMediaFile) => {
+    const onImageUploadSuccess = (index: number, mediaFile: VerifiedMediaFile) => {
         setUploadProgress(progress => updateStatus(progress, index, "success"));
-        imageUploaded(startIndex + index, mediaFile);
+        imageUploaded(index, mediaFile);
     }
 
     const onImageUploadFailure = (index: number) => {
@@ -114,8 +90,8 @@ export default function RichTextEditorMedia({
             const captionSrcText = caption?.toString(smileysEnabled);
             const captionSrc = !isHtmlEmpty(captionSrcText) ? JSON.stringify({text: captionSrcText}) : null;
             dispatch(richTextEditorImagesUpload(
-                nodeName, files, features, compress.current, onImageUploadSuccess(value.media?.length ?? 0),
-                onImageUploadFailure, onImageUploadProgress, captionSrc, srcFormat
+                nodeName, files, features, compress.current, onImageUploadSuccess, onImageUploadFailure,
+                onImageUploadProgress, captionSrc, srcFormat
             ));
         }
     };
@@ -149,6 +125,25 @@ export default function RichTextEditorMedia({
             },
             onDrop: openUploadImages
         });
+
+    const deleteImage = (id: string) => {
+        if (onChange != null && value.media != null) {
+            const media = value.media.filter(v => v == null || v.id !== id);
+            onChange(new RichTextValue(value.text, srcFormat, media));
+        }
+    }
+
+    const reorderImage = (moveId: string, overId: string) => {
+        if (onChange != null && value.media != null && moveId !== overId) {
+            const index = value.media.findIndex(v => v != null && v.id === moveId);
+            const overIndex = value.media.findIndex(v => v != null && v.id === overId);
+            if (index == null || overIndex == null) {
+                return;
+            }
+            const media = arrayMove(value.media, index, overIndex);
+            onChange(new RichTextValue(value.text, srcFormat, media));
+        }
+    }
 
     return (
         <RichTextEditorMediaContext.Provider value={{
