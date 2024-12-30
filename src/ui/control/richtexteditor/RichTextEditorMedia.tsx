@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef, useState } from 'react';
+import React, { ReactNode, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import * as immutable from 'object-path-immutable';
@@ -7,6 +7,7 @@ import { PostingFeatures, SourceFormat, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { richTextEditorImagesUpload } from "state/richtexteditor/actions";
+import * as Browser from "ui/browser";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import {
     RichTextEditorMediaContext,
@@ -19,6 +20,7 @@ import RichTextUploadImagesDialog, {
 import { isHtmlEmpty } from "util/html";
 import { RelNodeName } from "util/rel-node-name";
 import { arrayMove } from "util/misc";
+import { mediaImageExtensions } from "util/media-images";
 
 function updateStatus(progress: UploadProgress[], index: number, status: UploadStatus): UploadProgress[] {
     const updated = immutable.set(progress, [index, "status"], status);
@@ -116,13 +118,21 @@ export default function RichTextEditorMedia({
         uploadImages(values.files, values.caption);
     }
 
+    const imageExtensions = useMemo(
+        () => features?.imageFormats
+            ? features.imageFormats.flatMap(format => mediaImageExtensions(format)).map(ext => "." + ext)
+            : [],
+        [features]
+    );
+
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
         useDropzone({
             noClick: true,
             noKeyboard: true,
             accept: {
-                "image/*": features?.imageFormats ?? []
+                "image/*": imageExtensions
             },
+            useFsAccessApi: !Browser.isDevMode(),
             onDrop: openUploadImages
         });
 

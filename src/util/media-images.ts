@@ -1,6 +1,7 @@
 import { MediaFilePreviewInfo, PrivateMediaFileInfo } from "api";
 import { urlWithParameters } from "util/url";
 import { isNumber } from "util/misc";
+import MEDIA_IMAGE_EXTENSIONS from "util/media-image-extensions.json";
 
 function toInt(s: number | string | null | undefined): number {
     if (s == null) {
@@ -88,4 +89,8 @@ export function mediaHashesExtract(text: string): Set<string> {
         result.add(match[1]);
     }
     return result;
+}
+
+export function mediaImageExtensions(mimeType: string | null | undefined): string[] {
+    return mimeType != null && mimeType in MEDIA_IMAGE_EXTENSIONS ? MEDIA_IMAGE_EXTENSIONS[mimeType] : [];
 }
