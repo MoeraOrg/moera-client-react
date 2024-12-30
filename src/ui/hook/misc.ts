@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 // Based on @uidotdev/usehooks package
 
