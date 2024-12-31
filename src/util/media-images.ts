@@ -80,6 +80,38 @@ export function mediaImageSize(targetWidth: number,
     return [Math.round(scale * sizeX), Math.round(scale * sizeY)];
 }
 
+export interface MediaImageTagAttributes {
+    src: string;
+    srcSet: string;
+    sizes: string;
+    width: number;
+    height: number;
+}
+
+export function mediaImageTagAttributes(
+    rootPage: string | null, mediaFile: PrivateMediaFileInfo, carte: string | null,
+    targetWidth: number, width?: string | number | null, height?: string | number | null
+): MediaImageTagAttributes {
+    const isPublic = (mediaFile.operations?.view ?? "public") === "public";
+    const mediaPrefix = rootPage + "/media/";
+    let mediaLocation: string;
+    let src: string;
+    if (mediaFile.directPath) {
+        mediaLocation = mediaPrefix + mediaFile.directPath;
+        const preview = mediaImageFindLargerPreview(mediaFile.previews, targetWidth);
+        src = rootPage + "/media/" + preview?.directPath ?? mediaFile.directPath;
+    } else {
+        const auth = !isPublic && carte != null ? "carte:" + carte : null;
+        mediaLocation = urlWithParameters(mediaPrefix + mediaFile.path, {auth});
+        src = mediaImagePreview(mediaLocation, targetWidth);
+    }
+    const srcSet = mediaSources(mediaLocation, mediaPrefix, mediaFile.previews);
+    const sizes = mediaSizes(mediaFile.previews ?? []);
+    const [imageWidth, imageHeight] = mediaImageSize(targetWidth, width, height, mediaFile, false);
+
+    return {src, srcSet, sizes, width: imageWidth, height: imageHeight};
+}
+
 const HASH_URI_PATTERN = /["' (]hash:([A-Za-z0-9_-]+={0,2})["' )]/g;
 
 export function mediaHashesExtract(text: string): Set<string> {

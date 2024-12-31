@@ -13,8 +13,7 @@ import { getPosting } from "state/postings/selectors";
 import { closeImageEditDialog, imageEditDialogPost } from "state/imageeditdialog/actions";
 import { Button, ModalDialog } from "ui/control";
 import { RichTextField, RichTextValue } from "ui/control/richtexteditor";
-import { mediaImageFindLargerPreview, mediaImagePreview, mediaImageSize } from "util/media-images";
-import { urlWithParameters } from "util/url";
+import { mediaImageTagAttributes } from "util/media-images";
 import store from "state/store";
 import "./ImageEditDialog.css";
 
@@ -55,21 +54,16 @@ function ImageEditDialogInner(props: Props) {
 
     const onClose = () => dispatch(closeImageEditDialog());
 
-    let src: string;
-    if (media.directPath) {
-        const preview = mediaImageFindLargerPreview(media.previews, 800);
-        src = rootPage + "/media/" + preview?.directPath ?? media.directPath;
-    } else {
-        const auth = carte != null ? "carte:" + carte : null;
-        src = mediaImagePreview(urlWithParameters(rootPage + "/media/" + media.path, {auth}), 800);
-    }
-    const [imageWidth, imageHeight] = mediaImageSize(800, null, null, media);
+    const {
+        src, srcSet, sizes, width: imageWidth, height: imageHeight
+    } = mediaImageTagAttributes(rootPage, media, carte, 800);
 
     return (
         <ModalDialog title={t("edit-image")} parentOverlayId={parentOverlayId} loading={loading} onClose={onClose}>
             <Form>
                 <div className="modal-body image-edit-dialog">
-                    <img className="preview" alt="" src={src} width={imageWidth} height={imageHeight}/>
+                    <img className="preview" alt="" src={src} srcSet={srcSet} sizes={sizes}
+                         width={imageWidth} height={imageHeight}/>
                     <RichTextField name="caption" format={posting?.bodySrcFormat || "markdown"} maxHeight="14em"
                                    smileysEnabled={smileysEnabled} anyValue noMedia autoFocus/>
                 </div>
