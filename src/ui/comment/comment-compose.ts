@@ -55,7 +55,7 @@ export function valuesToCommentText(values: CommentComposeValues, props: ValuesT
         ownerGender: props.ownerGender,
         ownerAvatar: toAvatarDescription(values.avatar),
         bodySrc: JSON.stringify({
-            text: values.body.toString(props.smileysEnabled),
+            text: values.body.toText(props.smileysEnabled),
             linkPreviews: values.linkPreviews.previews
         }),
         bodySrcFormat: props.sourceFormatDefault,
@@ -69,7 +69,7 @@ function valuesToCommentSourceText(values: CommentComposeValues, props: ValuesTo
     return {
         ownerAvatar: toAvatarDescription(values.avatar),
         bodySrc: JSON.stringify({
-            text: values.body.toString(props.smileysEnabled),
+            text: values.body.toText(props.smileysEnabled),
             linkPreviews: values.linkPreviews.previews
         }),
         bodySrcFormat: props.sourceFormatDefault,

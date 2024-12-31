@@ -138,7 +138,7 @@ export const valuesToPostingText = (values: ComposePageValues, props: ValuesToPo
         subject: props.features?.subjectPresent
             ? replaceSmileysIfNeeded(props.smileysEnabled, values.subject ?? "")
             : null,
-        text: values.body.toString(props.smileysEnabled),
+        text: values.body.toText(props.smileysEnabled),
         linkPreviews: values.linkPreviews.previews
     }),
     bodySrcFormat: values.bodyFormat,

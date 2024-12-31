@@ -89,7 +89,7 @@ export default function RichTextEditorMedia({
         if (files.length > 0) {
             setUploadProgress(files.map(file => ({status: "loading", loaded: 0, total: file.size})));
             imageUploadStarted(files.length);
-            const captionSrcText = caption?.toString(smileysEnabled);
+            const captionSrcText = caption?.toText(smileysEnabled);
             const captionSrc = !isHtmlEmpty(captionSrcText) ? JSON.stringify({text: captionSrcText}) : null;
             dispatch(richTextEditorImagesUpload(
                 nodeName, files, features, compress.current, onImageUploadSuccess, onImageUploadFailure,

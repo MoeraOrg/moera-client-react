@@ -25,7 +25,7 @@ export class RichTextValue {
         return typeof this.value !== "string" ? this.value : htmlToScripture(this.value);
     }
 
-    toString(smileysEnabled: boolean = false): string {
+    toText(smileysEnabled: boolean = false): string {
         let text: string;
         if (typeof this.value !== "string") {
             text = scriptureToHtml(this.value);

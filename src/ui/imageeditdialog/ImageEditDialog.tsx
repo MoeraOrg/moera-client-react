@@ -94,7 +94,7 @@ const logic = {
             ownerName: formik.props.homeOwnerName,
             ownerFullName: formik.props.homeOwnerFullName,
             bodySrc: JSON.stringify({
-                text: values.caption.toString(formik.props.smileysEnabled)
+                text: values.caption.toText(formik.props.smileysEnabled)
             }),
             bodySrcFormat: formik.props.posting?.bodySrcFormat || "markdown"
         }));
