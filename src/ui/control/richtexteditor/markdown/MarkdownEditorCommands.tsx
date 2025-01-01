@@ -9,7 +9,9 @@ import {
     insertTextOnNewLine,
     wrapBlock,
     wrapSelection,
-    wrapSelectionLines, wrapSelectionLinesOnNewLine, wrapSelectionOnNewLine
+    wrapSelectionLines,
+    wrapSelectionLinesOnNewLine,
+    wrapSelectionOnNewLine
 } from "util/ui";
 import { useRichTextEditorDialogs } from "ui/control/richtexteditor/rich-text-editor-dialogs-context";
 import { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
@@ -222,10 +224,7 @@ export default function MarkdownEditorCommands({format, textArea, children}: Pro
         }
 
         if (isMarkdown()) {
-            // insertTextOnNewLine(textArea.current, ordered ? "1. " : "* ");
             wrapSelectionLinesOnNewLine(textArea.current, ordered ? "1. " : "* ", "");
-            // textArea.current.selectionStart -= ordered ? 3 : 2;
-            // wrapBlock(textArea.current, "");
         } else {
             wrapSelectionLines(textArea.current, "<li>", "</li>");
             textArea.current.selectionStart -= 4;
