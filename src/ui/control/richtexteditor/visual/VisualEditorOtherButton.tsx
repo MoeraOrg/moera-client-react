@@ -12,10 +12,10 @@ import {
     msSubscript,
     msSuperscript
 } from "ui/material-symbols";
+import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
 import { VisualEditorButton } from "ui/control/richtexteditor/visual/VisualEditorButton";
 import { VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
-import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 import { useButtonPopper } from "ui/hook";
 import "./VisualEditorOtherButton.css";
 
@@ -28,7 +28,7 @@ export default function VisualEditorOtherButton() {
         inFold, inCode, inSubscript, inSuperscript, inCodeBlock, inFormula, inMark, inImageEmbedded,
         formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula, formatMark,
         formatImageEmbedded
-    } = useVisualEditorCommands();
+    } = useRichTextEditorCommands();
     const {t} = useTranslation();
 
     const onCommand = (command?: () => void) => () => {

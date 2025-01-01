@@ -6,7 +6,7 @@ import { DefaultElement, RenderElementProps } from 'slate-react';
 import { getNodeRootPage } from "state/node/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { isScriptureElement } from "ui/control/richtexteditor/visual/scripture";
-import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
+import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { getImageDimensions } from "ui/control/richtexteditor/rich-text-image";
 import PreloadedImage from "ui/posting/PreloadedImage";
 import { BlockMath, InlineMath } from "ui/katex";
@@ -17,7 +17,7 @@ export default function VisualRenderElement(props: RenderElementProps) {
 
     const rootPage = useSelector(getNodeRootPage);
     const carte = useSelector(getCurrentViewMediaCarte);
-    const {formatFormula, formatImageEmbedded} = useVisualEditorCommands();
+    const {formatFormula, formatImageEmbedded} = useRichTextEditorCommands();
     const {t} = useTranslation();
 
     const onFormulaClick = () => setTimeout(() => formatFormula());

@@ -52,7 +52,7 @@ import {
     SpoilerBlockElement,
     SpoilerElement
 } from "ui/control/richtexteditor/visual/scripture";
-import { VisualEditorCommandsContext } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
+import { RichTextEditorCommandsContext } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { useRichTextEditorDialogs } from "ui/control/richtexteditor/rich-text-editor-dialogs-context";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/rich-text-editor-media-context";
 import { findWrappingElement, isSelectionInElement } from "ui/control/richtexteditor/visual/scripture-editor";
@@ -537,7 +537,7 @@ export default function VisualEditorCommands({children}: Props) {
     }
 
     return (
-        <VisualEditorCommandsContext.Provider value={{
+        <RichTextEditorCommandsContext.Provider value={{
             enableHeading,
             inBold, inItalic, inStrikeout, inLink, inSpoilerInline, inSpoilerBlock, inSpoiler, inMention, inBlockquote,
             inList, inUnorderedList, inOrderedList, headingLevel, inVoid, inFold, inCode, inSubscript, inSuperscript,
@@ -548,6 +548,6 @@ export default function VisualEditorCommands({children}: Props) {
             formatClear, formatImageEmbedded, formatImageAttached,
         }}>
             {children}
-        </VisualEditorCommandsContext.Provider>
+        </RichTextEditorCommandsContext.Provider>
     );
 }

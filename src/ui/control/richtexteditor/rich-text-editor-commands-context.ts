@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-export interface VisualEditorCommandsInterface {
+export interface RichTextEditorCommandsInterface {
     enableHeading: boolean;
 
     inBold: boolean;
@@ -53,7 +53,7 @@ export interface VisualEditorCommandsInterface {
     formatImageAttached: () => void;
 }
 
-export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInterface>({
+export const RichTextEditorCommandsContext = createContext<RichTextEditorCommandsInterface>({
     enableHeading: true,
 
     inBold: false,
@@ -106,4 +106,5 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     formatImageAttached: () => {},
 });
 
-export const useVisualEditorCommands = (): VisualEditorCommandsInterface => useContext(VisualEditorCommandsContext);
+export const useRichTextEditorCommands = (): RichTextEditorCommandsInterface =>
+    useContext(RichTextEditorCommandsContext);

@@ -21,11 +21,11 @@ import {
     msStrikethroughS,
 } from "ui/material-symbols";
 import * as Browser from "ui/browser";
+import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { VisualEditorButton } from "ui/control/richtexteditor/visual/VisualEditorButton";
 import VisualEditorHeadingButton from "ui/control/richtexteditor/visual/VisualEditorHeadingButton";
 import VisualEditorEmojiButton from "ui/control/richtexteditor/visual/VisualEditorEmojiButton";
 import VisualEditorOtherButton from "ui/control/richtexteditor/visual/VisualEditorOtherButton";
-import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 import { VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
 
 interface Props {
@@ -39,7 +39,7 @@ export default function VisualEditorPanel({hiding}: Props) {
         formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
         formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo,
         formatClear, formatImageAttached
-    } = useVisualEditorCommands();
+    } = useRichTextEditorCommands();
 
     const {t} = useTranslation();
 

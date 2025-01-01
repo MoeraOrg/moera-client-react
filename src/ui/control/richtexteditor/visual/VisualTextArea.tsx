@@ -4,9 +4,9 @@ import { Editable, ReactEditor, useSlateStatic } from 'slate-react';
 import isHotkey from 'is-hotkey';
 
 import * as Browser from "ui/browser";
+import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
 import VisualRenderLeaf from "ui/control/richtexteditor/visual/VisualRenderLeaf";
-import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 import { VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
 import {
     createListItemElement,
@@ -43,7 +43,7 @@ export default function VisualTextArea({
         formatBold, formatItalic, formatStrikeout, formatLink, formatMention, formatBlockquote, formatBlockunquote,
         formatHorizontalRule, formatCode, formatFormula, formatMark, formatClear, formatImageEmbedded,
         formatImageAttached,
-    } = useVisualEditorCommands();
+    } = useRichTextEditorCommands();
 
     const [isSubmitKey, isHardEnter, isSoftEnter] = useMemo(() => {
         const submitHotkey = !Browser.isTouchScreen()

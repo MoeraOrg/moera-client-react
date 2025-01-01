@@ -3,7 +3,7 @@ import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
 import { useButtonPopper } from "ui/hook";
-import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
+import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 
 interface Props {
     onSelect?: (headingLevel: number) => void;
@@ -14,7 +14,7 @@ export default function VisualEditorHeadingButton({onSelect}: Props) {
         visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
     } = useButtonPopper("bottom", {closeOnSelect: false});
 
-    const {enableHeading, headingLevel} = useVisualEditorCommands();
+    const {enableHeading, headingLevel} = useRichTextEditorCommands();
     const {t} = useTranslation();
 
     const onItemSelect = (headingLevel: number) => {
