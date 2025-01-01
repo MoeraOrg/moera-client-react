@@ -130,7 +130,7 @@ function MarkdownArea(
             // clipboardData.items is array-like, not a real array, thus weird calling convention
             const imageItem: DataTransferItem = Array.prototype.find.call(
                 event.clipboardData.items,
-                ({kind, type}: DataTransferItem) => kind === 'file' && type.startsWith('image/')
+                ({kind, type}: DataTransferItem) => kind === "file" && type.startsWith("image/")
             );
 
             if (imageItem) {
