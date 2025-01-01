@@ -25,6 +25,7 @@ export interface VisualEditorCommandsInterface {
     inFormula: boolean;
     inMark: boolean;
     inImageEmbedded: boolean;
+    inImageAttached: boolean;
 
     formatBold: () => void;
     formatItalic: () => void;
@@ -49,7 +50,7 @@ export interface VisualEditorCommandsInterface {
     formatMark: () => void;
     formatClear: () => void;
     formatImageEmbedded: () => void;
-    formatImage: () => void;
+    formatImageAttached: () => void;
 }
 
 export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInterface>({
@@ -77,6 +78,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     inFormula: false,
     inMark: false,
     inImageEmbedded: false,
+    inImageAttached: false,
 
     formatBold: () => {},
     formatItalic: () => {},
@@ -101,7 +103,7 @@ export const VisualEditorCommandsContext = createContext<VisualEditorCommandsInt
     formatMark: () => {},
     formatClear: () => {},
     formatImageEmbedded: () => {},
-    formatImage: () => {},
+    formatImageAttached: () => {},
 });
 
 export const useVisualEditorCommands = (): VisualEditorCommandsInterface => useContext(VisualEditorCommandsContext);

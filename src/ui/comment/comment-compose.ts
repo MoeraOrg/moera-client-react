@@ -129,6 +129,12 @@ export const commentComposeLogic = {
         const avatar = props.draft != null
             ? props.draft.ownerAvatar ?? null
             : props.comment != null ? props.comment.ownerAvatar ?? null : props.avatarDefault;
+        const attachments = props.draft != null ? props.draft.media : props.comment?.media;
+        let media = attachments != null
+            ? attachments
+                .map(ma => ma.media != null ? {...ma.media, digest: ma.remoteMedia?.digest} as VerifiedMediaFile : null)
+                .filter((mf): mf is VerifiedMediaFile => mf != null)
+            : [];
         const bodyFormat = props.draft != null
                 ? props.draft.bodySrcFormat ?? "markdown"
                 : props.comment != null ? props.comment.bodySrcFormat ?? "markdown" : props.sourceFormatDefault;
@@ -137,14 +143,8 @@ export const commentComposeLogic = {
             ? props.draft.bodySrc?.text ?? ""
             : props.comment != null ? props.comment.bodySrc?.text ?? "" : "";
         if (bodyFormat === "html/visual") {
-            body = htmlToScripture(body);
+            body = htmlToScripture(body, false, media);
         }
-        const attachments = props.draft != null ? props.draft.media : props.comment?.media;
-        let media = attachments != null
-            ? attachments
-                .map(ma => ma.media != null ? {...ma.media, digest: ma.remoteMedia?.digest} as VerifiedMediaFile : null)
-                .filter((mf): mf is VerifiedMediaFile => mf != null)
-            : [];
 
         const linkPreviewsInfo = props.draft != null
             ? props.draft.bodySrc?.linkPreviews ?? []

@@ -1,5 +1,6 @@
 import { Element as SlateElement, Text as SlateText } from 'slate';
 
+import { PrivateMediaFileInfo } from "api";
 import { RichTextImageStandardSize } from "ui/control/richtexteditor/rich-text-image";
 
 /* P */
@@ -183,27 +184,38 @@ export const createFormulaBlockElement = (content: string): FormulaBlockElement 
 
 /* IMG */
 
-export interface ImageEmbeddedElement extends SlateElement {
-    type: "image-embedded";
-    href: string;
+export interface ImageElement extends SlateElement {
+    type: "image";
+    href?: string;
+    mediaFile?: PrivateMediaFileInfo;
     standardSize?: RichTextImageStandardSize;
     customWidth?: number | null;
     customHeight?: number | null;
 }
 
-export const isImageEmbeddedElement = (value: any): value is ImageEmbeddedElement =>
-    isScriptureElement(value) && value.type === "image-embedded";
+export const isImageElement = (value: any): value is ImageElement =>
+    isScriptureElement(value) && value.type === "image";
 
-export const createImageEmbeddedElement = (
-    href: string, standardSize?: RichTextImageStandardSize, customWidth?: number | null, customHeight?: number | null
-): ImageEmbeddedElement =>
-    ({type: "image-embedded", href, standardSize, customWidth, customHeight, children: [createScriptureText("")]});
+export const createImageElement = (
+    src: string | PrivateMediaFileInfo, standardSize?: RichTextImageStandardSize,
+    customWidth?: number | null, customHeight?: number | null
+): ImageElement =>
+    ({
+        type: "image",
+        href: typeof src === "string" ? src : undefined,
+        mediaFile: typeof src !== "string" ? src : undefined,
+        standardSize,
+        customWidth,
+        customHeight,
+        children: [createScriptureText("")]
+    });
 
 /* FIGURE+IMG */
 
 export interface FigureImageElement extends SlateElement {
     type: "figure-image";
-    href: string;
+    href?: string;
+    mediaFile?: PrivateMediaFileInfo;
     caption: string;
     standardSize?: RichTextImageStandardSize;
     customWidth?: number | null;
@@ -214,11 +226,17 @@ export const isFigureImageElement = (value: any): value is FigureImageElement =>
     isScriptureElement(value) && value.type === "figure-image";
 
 export const createFigureImageElement = (
-    href: string, caption: string, standardSize?: RichTextImageStandardSize, customWidth?: number | null,
-    customHeight?: number | null
+    src: string | PrivateMediaFileInfo, caption: string, standardSize?: RichTextImageStandardSize,
+    customWidth?: number | null, customHeight?: number | null
 ): FigureImageElement =>
     ({
-        type: "figure-image", href, standardSize, customWidth, customHeight, caption,
+        type: "figure-image",
+        href: typeof src === "string" ? src : undefined,
+        mediaFile: typeof src !== "string" ? src : undefined,
+        standardSize,
+        customWidth,
+        customHeight,
+        caption,
         children: [createScriptureText("")]
     });
 
@@ -239,7 +257,7 @@ export type ScriptureElement =
     | CodeBlockElement
     | FormulaElement
     | FormulaBlockElement
-    | ImageEmbeddedElement
+    | ImageElement
     | FigureImageElement;
 
 export const isScriptureElement = (value: any): value is ScriptureElement =>
@@ -288,7 +306,7 @@ export const SCRIPTURE_BLOCK_TYPES: ScriptureElementType[] = [
 ].flat();
 
 export const SCRIPTURE_REGULAR_INLINE_TYPES: ScriptureElementType[] = ["link", "spoiler", "mention"];
-export const SCRIPTURE_VOID_INLINE_TYPES: ScriptureElementType[] = ["formula", "image-embedded"];
+export const SCRIPTURE_VOID_INLINE_TYPES: ScriptureElementType[] = ["formula", "image"];
 export const SCRIPTURE_INLINE_TYPES: ScriptureElementType[] = [
     SCRIPTURE_REGULAR_INLINE_TYPES, SCRIPTURE_VOID_INLINE_TYPES
 ].flat();

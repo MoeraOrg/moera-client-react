@@ -1,5 +1,6 @@
 import { Descendant } from 'slate';
 
+import { PrivateMediaFileInfo } from "api";
 import {
     createBlockquoteElement,
     createCodeBlockElement,
@@ -9,7 +10,7 @@ import {
     createHeadingElement,
     createHorizontalRuleElement,
     createIframeElement,
-    createImageEmbeddedElement,
+    createImageElement,
     createLinkElement,
     createListItemElement,
     createMentionElement,
@@ -18,7 +19,7 @@ import {
     createSpoilerBlockElement,
     createSpoilerElement,
     equalScriptureMarks,
-    isImageEmbeddedElement,
+    isImageElement,
     isLinkElement,
     isListItemElement,
     isScriptureBlock,
@@ -40,7 +41,9 @@ import * as Browser from "ui/browser";
 import { htmlEntities, htmlToEmoji, linefeedsToHtml, safeImportHtml, unhtmlEntities } from "util/html";
 import { isNumericString, notNull } from "util/misc";
 
-export function htmlToScripture(text?: string | Scripture | null | undefined, cleanup?: boolean): Scripture {
+export function htmlToScripture(
+    text?: string | Scripture | null | undefined, cleanup?: boolean, media?: PrivateMediaFileInfo[] | null
+): Scripture {
     if (!text) { // null, undefined, "", []
         return [createParagraphElement([createScriptureText("")])];
     }
@@ -48,7 +51,7 @@ export function htmlToScripture(text?: string | Scripture | null | undefined, cl
         return text;
     }
 
-    const context = {attributes: {}, listOrdered: false, listLevel: 0};
+    const context = {attributes: {}, listOrdered: false, listLevel: 0, media: media ?? []};
     let scripture = domToScripture(new DOMParser().parseFromString(text, "text/html").body, context);
     if (scripture == null) {
         return [createParagraphElement([createScriptureText("")])];
@@ -67,6 +70,7 @@ interface DomToScriptureContext {
     attributes: ScriptureMarks;
     listOrdered: boolean;
     listLevel: number;
+    media: PrivateMediaFileInfo[];
 }
 
 function domToScripture(node: Node, context: DomToScriptureContext): Scripture | ScriptureDescendant | null {
@@ -78,7 +82,7 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
 
     const element: Element = node as Element;
     const attributes: ScriptureMarks = {...context.attributes};
-    let {listOrdered, listLevel} = context;
+    let {listOrdered, listLevel, media} = context;
 
     switch (element.nodeName) {
         case "B":
@@ -125,7 +129,7 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
     }
 
     const children = Array.from(element.childNodes)
-        .map(node => domToScripture(node, {attributes, listOrdered, listLevel}))
+        .map(node => domToScripture(node, {attributes, listOrdered, listLevel, media}))
         .filter(notNull)
         .flat();
 
@@ -216,7 +220,11 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
         case "PRE":
             return createCodeBlockElement(children);
         case "IMG": {
-            const src = element.getAttribute("src") ?? "";
+            let src: string | PrivateMediaFileInfo = element.getAttribute("src") ?? "";
+            if (src.startsWith("hash:")) {
+                const hash = src.substring(5);
+                src = media.find(mf => mf.hash === hash) ?? src;
+            }
             const widthS = element.getAttribute("width");
             const width = widthS != null && isNumericString(widthS) ? parseInt(widthS, 10) : undefined;
             const heightS = element.getAttribute("height");
@@ -224,12 +232,12 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
             const standardSize = findStandardSize(width, height);
             const customWidth = standardSize === "custom" ? width : undefined;
             const customHeight = standardSize === "custom" ? height : undefined;
-            return createImageEmbeddedElement(src, standardSize, customWidth, customHeight);
+            return createImageElement(src, standardSize, customWidth, customHeight);
         }
         case "FIGURE": {
             const captionElement = element.querySelector(":scope > figcaption");
             const caption = unhtmlEntities(captionElement?.textContent) || undefined;
-            const imageElement = children.find(isImageEmbeddedElement);
+            const imageElement = children.find(isImageElement);
             if (imageElement == null) {
                 return null;
             }
@@ -355,29 +363,25 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
             case "formula-block":
                 context.output += `<div class="katex">${htmlEntities(node.content)}</div>`;
                 return;
-            case "image-embedded": {
-                if (!node.href) {
-                    return;
-                }
+            case "image": {
+                const src = node.href ?? "hash:" + node.mediaFile?.hash;
                 const {width, height} = getImageDimensions(
                     node.standardSize ?? "large", node.customWidth, node.customHeight
                 );
                 const widthAttr = width != null ? ` width="${width}"` : "";
                 const heightAttr = height != null ? ` height="${height}"` : "";
-                context.output += `<img${widthAttr}${heightAttr} src="${htmlEntities(node.href)}">`;
+                context.output += `<img${widthAttr}${heightAttr} src="${htmlEntities(src)}">`;
                 return;
             }
             case "figure-image": {
-                if (!node.href) {
-                    return;
-                }
                 context.output += "<figure>";
+                const src = node.href ?? "hash:" + node.mediaFile?.hash;
                 const {width, height} = getImageDimensions(
                     node.standardSize ?? "large", node.customWidth, node.customHeight
                 );
                 const widthAttr = width != null ? ` width="${width}"` : "";
                 const heightAttr = height != null ? ` height="${height}"` : "";
-                context.output += `<img${widthAttr}${heightAttr} src="${htmlEntities(node.href)}">`;
+                context.output += `<img${widthAttr}${heightAttr} src="${htmlEntities(src)}">`;
                 context.output += `<figcaption>${htmlEntities(node.caption)}</figcaption></figure>`;
                 return;
             }

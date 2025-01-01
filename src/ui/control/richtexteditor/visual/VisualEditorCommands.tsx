@@ -12,7 +12,7 @@ import {
     createFormulaElement,
     createHorizontalRuleElement,
     createIframeElement,
-    createImageEmbeddedElement,
+    createImageElement,
     createLinkElement,
     createListItemElement,
     createMentionElement,
@@ -26,13 +26,13 @@ import {
     FormulaBlockElement,
     FormulaElement,
     HeadingElement,
-    ImageEmbeddedElement,
+    ImageElement,
     isDetailsElement,
     isFigureImageElement,
     isFormulaBlockElement,
     isFormulaElement,
     isHeadingElement,
-    isImageEmbeddedElement,
+    isImageElement,
     isLinkElement,
     isListItemElement,
     isParagraphElement,
@@ -54,6 +54,7 @@ import {
 } from "ui/control/richtexteditor/visual/scripture";
 import { VisualEditorCommandsContext } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 import { useRichTextEditorDialogs } from "ui/control/richtexteditor/rich-text-editor-dialogs-context";
+import { useRichTextEditorMedia } from "ui/control/richtexteditor/rich-text-editor-media-context";
 import { findWrappingElement, isSelectionInElement } from "ui/control/richtexteditor/visual/scripture-editor";
 import { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
 import { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
@@ -63,7 +64,6 @@ import { RichTextFormulaValues } from "ui/control/richtexteditor/RichTextFormula
 import { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
-import { useRichTextEditorMedia } from "ui/control/richtexteditor/rich-text-editor-media-context";
 
 interface Props {
     children: ReactNode;
@@ -97,7 +97,12 @@ export default function VisualEditorCommands({children}: Props) {
     const inSuperscript = supsub > 0;
     const inCodeBlock = useSlateSelector(editor => isSelectionInElement(editor, "code-block"));
     const inFormula = useSlateSelector(editor => isSelectionInElement(editor, ["formula", "formula-block"]));
-    const inImageEmbedded = useSlateSelector(editor => isSelectionInElement(editor, "image-embedded"));
+    const [image] = useSlateSelector(editor =>
+        findWrappingElement<ImageElement | FigureImageElement>(editor, ["image", "figure-image"]) ?? [null]
+    );
+    const inImageEmbedded = image != null && image.href != null;
+    const inImageAttached = image != null && image.mediaFile != null;
+
     const {
         showLinkDialog, showSpoilerDialog, showMentionDialog, showVideoDialog, showFoldDialog, showFormulaDialog,
         showImageDialog
@@ -463,10 +468,10 @@ export default function VisualEditorCommands({children}: Props) {
     }
 
     const formatImageEmbedded = () => {
-        const [element, path] = findWrappingElement(editor, ["image-embedded", "figure-image"]) ?? [null, null];
+        const [element, path] = findWrappingElement(editor, ["image", "figure-image"]) ?? [null, null];
         const prevType = element?.type;
         let prevValues: RichTextImageValues | null = null;
-        if (isImageEmbeddedElement(element)) {
+        if (isImageElement(element)) {
             prevValues = {
                 href: element.href,
                 standardSize: element.standardSize,
@@ -496,12 +501,12 @@ export default function VisualEditorCommands({children}: Props) {
                 if (ok && href) {
                     const node = caption
                         ? createFigureImageElement(href, caption, standardSize, customWidth, customHeight)
-                        : createImageEmbeddedElement(href, standardSize, customWidth, customHeight);
+                        : createImageElement(href, standardSize, customWidth, customHeight);
                     if (path != null) {
                         Editor.withoutNormalizing(editor, () => {
-                            editor.setNodes<ImageEmbeddedElement | FigureImageElement>(node, {at: path});
+                            editor.setNodes<ImageElement | FigureImageElement>(node, {at: path});
                             if (prevType != null && prevType !== node.type) {
-                                if (prevType === "image-embedded") {
+                                if (prevType === "image") {
                                     editor.liftNodes({at: path});
                                 } else {
                                     editor.wrapNodes(createParagraphElement([]), {at: path});
@@ -521,8 +526,14 @@ export default function VisualEditorCommands({children}: Props) {
 
     const {open} = useRichTextEditorMedia();
 
-    const formatImage = () => {
-        open();
+    const formatImageAttached = () => {
+        open(images => {
+            for (const image of images) {
+                const node = createImageElement(image, "large");
+                editor.insertNode(node);
+            }
+            ReactEditor.focus(editor);
+        });
     }
 
     return (
@@ -530,11 +541,11 @@ export default function VisualEditorCommands({children}: Props) {
             enableHeading,
             inBold, inItalic, inStrikeout, inLink, inSpoilerInline, inSpoilerBlock, inSpoiler, inMention, inBlockquote,
             inList, inUnorderedList, inOrderedList, headingLevel, inVoid, inFold, inCode, inSubscript, inSuperscript,
-            inCodeBlock, inFormula, inMark, inImageEmbedded,
+            inCodeBlock, inFormula, inMark, inImageEmbedded, inImageAttached,
             formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
             formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo,
             formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula, formatMark,
-            formatClear, formatImageEmbedded, formatImage,
+            formatClear, formatImageEmbedded, formatImageAttached,
         }}>
             {children}
         </VisualEditorCommandsContext.Provider>

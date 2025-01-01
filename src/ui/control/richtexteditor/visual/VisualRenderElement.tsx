@@ -1,15 +1,22 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { DefaultElement, RenderElementProps } from 'slate-react';
 
+import { getNodeRootPage } from "state/node/selectors";
+import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { isScriptureElement } from "ui/control/richtexteditor/visual/scripture";
 import { useVisualEditorCommands } from "ui/control/richtexteditor/visual/visual-editor-commands-context";
 import { getImageDimensions } from "ui/control/richtexteditor/rich-text-image";
+import PreloadedImage from "ui/posting/PreloadedImage";
 import { BlockMath, InlineMath } from "ui/katex";
+import { mediaImageTagAttributes } from "util/media-images";
 
 export default function VisualRenderElement(props: RenderElementProps) {
     const {element, attributes, children} = props;
 
+    const rootPage = useSelector(getNodeRootPage);
+    const carte = useSelector(getCurrentViewMediaCarte);
     const {formatFormula, formatImageEmbedded} = useVisualEditorCommands();
     const {t} = useTranslation();
 
@@ -82,52 +89,86 @@ export default function VisualRenderElement(props: RenderElementProps) {
                         {children}<BlockMath math={element.content}/>
                     </div>
                 );
-            case "image-embedded": {
+            case "image": {
                 const {width, height} = getImageDimensions(
                     element.standardSize ?? "large", element.customWidth, element.customHeight
                 );
-                let style: React.CSSProperties = {};
-                if (width != null) {
-                    // @ts-ignore
-                    style["--width"] = `${width}px`;
+
+                if (element.href != null) {
+                    let style: React.CSSProperties = {};
+                    if (width != null) {
+                        // @ts-ignore
+                        style["--width"] = `${width}px`;
+                    }
+                    if (height != null) {
+                        // @ts-ignore
+                        style["--height"] = `${height}px`;
+                    }
+                    return (
+                        <span className="image-embedded" {...attributes} contentEditable={false}
+                              onClick={onImageEmbeddedClick}>
+                            {children}
+                            <img src={element.href} width={width ?? undefined} height={height ?? undefined}
+                                 alt="" style={style}/>
+                        </span>
+                    );
+                } else if (element.mediaFile != null) {
+                    const {
+                        src, srcSet, sizes, width: imageWidth, height: imageHeight
+                    } = mediaImageTagAttributes(rootPage, element.mediaFile, carte, 900, width, height);
+                    return (
+                        <span className="image-attached" {...attributes} contentEditable={false}
+                              onClick={onImageEmbeddedClick}>
+                            {children}
+                            <PreloadedImage src={src} srcSet={srcSet} sizes={sizes}
+                                            width={imageWidth} height={imageHeight} alt=""/>
+                        </span>
+                    );
+                } else {
+                    return <DefaultElement {...props}/>;
                 }
-                if (height != null) {
-                    // @ts-ignore
-                    style["--height"] = `${height}px`;
-                }
-                return (
-                    <span className="image-embedded" {...attributes} contentEditable={false}
-                          onClick={onImageEmbeddedClick}>
-                        {children}
-                        <img src={element.href} width={width ?? undefined} height={height ?? undefined}
-                             alt="" style={style}/>
-                    </span>
-                );
             }
             case "figure-image": {
                 const {width, height} = getImageDimensions(
                     element.standardSize ?? "large", element.customWidth, element.customHeight
                 );
-                let style: React.CSSProperties = {};
-                if (width != null) {
-                    // @ts-ignore
-                    style["--width"] = `${width}px`;
+
+                if (element.href != null) {
+                    let style: React.CSSProperties = {};
+                    if (width != null) {
+                        // @ts-ignore
+                        style["--width"] = `${width}px`;
+                    }
+                    if (height != null) {
+                        // @ts-ignore
+                        style["--height"] = `${height}px`;
+                    }
+                    return (
+                        <div className="figure-image-embedded" {...attributes} contentEditable={false}
+                              onClick={onImageEmbeddedClick}>
+                            {children}
+                            <figure>
+                                <img src={element.href} width={width ?? undefined} height={height ?? undefined}
+                                     alt="" style={style}/>
+                                <figcaption>{element.caption}</figcaption>
+                            </figure>
+                        </div>
+                    );
+                } else if (element.mediaFile != null) {
+                    const {
+                        src, srcSet, sizes, width: imageWidth, height: imageHeight
+                    } = mediaImageTagAttributes(rootPage, element.mediaFile, carte, 900, width, height);
+                    return (
+                        <div className="figure-image-attached" {...attributes} contentEditable={false}
+                             onClick={onImageEmbeddedClick}>
+                            {children}
+                            <PreloadedImage src={src} srcSet={srcSet} sizes={sizes}
+                                            width={imageWidth} height={imageHeight} alt=""/>
+                        </div>
+                    );
+                } else {
+                    return <DefaultElement {...props}/>;
                 }
-                if (height != null) {
-                    // @ts-ignore
-                    style["--height"] = `${height}px`;
-                }
-                return (
-                    <div className="figure-image" {...attributes} contentEditable={false}
-                          onClick={onImageEmbeddedClick}>
-                        {children}
-                        <figure>
-                            <img src={element.href} width={width ?? undefined} height={height ?? undefined}
-                                 alt="" style={style}/>
-                            <figcaption>{element.caption}</figcaption>
-                        </figure>
-                    </div>
-                );
             }
             default:
                 return <DefaultElement {...props}/>;

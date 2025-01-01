@@ -242,6 +242,10 @@ export const composePageLogic = {
         const subject = props.draft != null
             ? props.draft.bodySrc?.subject ?? ""
             : props.posting != null ? props.posting.bodySrc?.subject ?? "" : "";
+        const attachments = props.draft != null ? props.draft.media : props.posting?.media;
+        let media = attachments != null
+            ? attachments.map(ma => ma.media ?? null).filter((mf): mf is PrivateMediaFileInfo => mf != null)
+            : [];
         const bodyFormat = props.draft != null
             ? props.draft.bodySrcFormat ?? "markdown"
             : props.posting != null ? props.posting.bodySrcFormat ?? "markdown" : props.sourceFormatDefault;
@@ -252,12 +256,8 @@ export const composePageLogic = {
                 ? props.posting.bodySrc?.text ?? ""
                 : props.sharedText != null ? getSharedText(props, bodyFormat) : "";
         if (bodyFormat === "html/visual") {
-            body = htmlToScripture(body);
+            body = htmlToScripture(body, false, media);
         }
-        const attachments = props.draft != null ? props.draft.media : props.posting?.media;
-        let media = attachments != null
-            ? attachments.map(ma => ma.media ?? null).filter((mf): mf is PrivateMediaFileInfo => mf != null)
-            : [];
 
         const linkPreviewsInfo = props.draft != null
             ? props.draft.bodySrc?.linkPreviews ?? []

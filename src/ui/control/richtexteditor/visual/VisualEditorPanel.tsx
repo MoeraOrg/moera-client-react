@@ -35,10 +35,10 @@ interface Props {
 export default function VisualEditorPanel({hiding}: Props) {
     const {
         inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
-        inOrderedList,
+        inOrderedList, inImageAttached,
         formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
         formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo,
-        formatClear, formatImage
+        formatClear, formatImageAttached
     } = useVisualEditorCommands();
 
     const {t} = useTranslation();
@@ -92,7 +92,8 @@ export default function VisualEditorPanel({hiding}: Props) {
             <div className="group">
                 <VisualEditorButton icon={msAddLink} title={t("link")} hotkey={VISUAL_EDITOR_KEYS.LINK.title}
                                     active={inLink} command={formatLink}/>
-                <VisualEditorButton icon={msPhotoLibrary} title={t("image")} command={formatImage}/>
+                <VisualEditorButton icon={msPhotoLibrary} title={t("image")} active={inImageAttached}
+                                    command={formatImageAttached}/>
                 <VisualEditorButton icon={msMediaLink} title={t("video-internet")} command={formatVideo}/>
             </div>
             <div className="group">

@@ -10,6 +10,7 @@ import { richTextEditorImagesUpload } from "state/richtexteditor/actions";
 import * as Browser from "ui/browser";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import {
+    OnUploadedHandler,
     RichTextEditorMediaContext,
     UploadProgress,
     UploadStatus
@@ -26,6 +27,9 @@ function updateStatus(progress: UploadProgress[], index: number, status: UploadS
     const updated = immutable.set(progress, [index, "status"], status);
     return updated.some(p => p.status === "loading") ? updated : [];
 }
+
+const isAllUploaded = (media: (VerifiedMediaFile | null)[]): media is VerifiedMediaFile[] =>
+    media.every(v => v != null);
 
 type ChangeHandler = (value: RichTextValue) => void;
 
@@ -54,6 +58,7 @@ export default function RichTextEditorMedia({
     valueRef.current = value;
     const onChangeRef = useRef<ChangeHandler | undefined>();
     onChangeRef.current = onChange;
+    const onUploadedRef = useRef<OnUploadedHandler | undefined>();
 
     const imageUploadStarted = (count: number) => {
         uploadedImagesRef.current = new Array(count).fill(null);
@@ -64,9 +69,10 @@ export default function RichTextEditorMedia({
             return;
         }
         uploadedImagesRef.current[index] = image;
-        if (uploadedImagesRef.current.every(v => v != null)) {
+        if (isAllUploaded(uploadedImagesRef.current)) {
             const media = (valueRef.current?.media ?? []).concat(uploadedImagesRef.current);
             onChangeRef.current?.(new RichTextValue(valueRef.current?.text ?? "", srcFormat, media));
+            onUploadedRef.current?.(uploadedImagesRef.current);
         }
     }
 
@@ -125,7 +131,7 @@ export default function RichTextEditorMedia({
         [features]
     );
 
-    const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
+    const {getRootProps, getInputProps, isDragAccept, isDragReject, open: openDropzone} =
         useDropzone({
             noClick: true,
             noKeyboard: true,
@@ -135,6 +141,11 @@ export default function RichTextEditorMedia({
             useFsAccessApi: !Browser.isDevMode(),
             onDrop: openUploadImages
         });
+
+    const open = (onUploaded?: OnUploadedHandler) => {
+        onUploadedRef.current = onUploaded;
+        openDropzone();
+    }
 
     const deleteImage = (id: string) => {
         if (onChange != null && value.media != null) {
