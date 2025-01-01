@@ -108,6 +108,9 @@ export default function VisualEditorCommands({children}: Props) {
         showImageDialog
     } = useRichTextEditorDialogs();
 
+    const focus = () =>
+        ReactEditor.focus(editor);
+
     const formatBold = () =>
         editor.addMark("bold", !inBold);
 
@@ -146,7 +149,7 @@ export default function VisualEditorCommands({children}: Props) {
                     }
                 }
             }
-            ReactEditor.focus(editor);
+            focus();
         });
     }
 
@@ -181,7 +184,7 @@ export default function VisualEditorCommands({children}: Props) {
                     }
                 }
             }
-            ReactEditor.focus(editor);
+            focus();
         });
     }
 
@@ -203,7 +206,7 @@ export default function VisualEditorCommands({children}: Props) {
             } else if (typeOnCancel) {
                 editor.insertText(nodeName ? mentionName(nodeName) : "@");
             }
-            ReactEditor.focus(editor);
+            focus();
         });
     }
 
@@ -212,7 +215,7 @@ export default function VisualEditorCommands({children}: Props) {
 
     const formatEmoji = (emoji: string) => {
         editor.insertText(emoji);
-        ReactEditor.focus(editor);
+        focus();
     }
 
     const formatBlockquote = () => {
@@ -304,7 +307,6 @@ export default function VisualEditorCommands({children}: Props) {
                 {match: node => isHeadingElement(node) || isParagraphElement(node)}
             );
         }
-        ReactEditor.focus(editor);
     }
 
     const formatVideo = () => {
@@ -314,7 +316,7 @@ export default function VisualEditorCommands({children}: Props) {
             if (ok && code) {
                 editor.insertNode(createIframeElement(code));
             }
-            ReactEditor.focus(editor);
+            focus();
         });
     }
 
@@ -339,7 +341,7 @@ export default function VisualEditorCommands({children}: Props) {
                     }
                 }
             }
-            ReactEditor.focus(editor);
+            focus();
         });
     }
 
@@ -379,7 +381,7 @@ export default function VisualEditorCommands({children}: Props) {
             } else if (ok == null && path != null) {
                 editor.removeNodes({at: path});
             }
-            ReactEditor.focus(editor);
+            focus();
         });
     }
 
@@ -519,33 +521,33 @@ export default function VisualEditorCommands({children}: Props) {
                 } else if (ok == null && path != null) {
                     editor.removeNodes({at: path});
                 }
-                ReactEditor.focus(editor);
+                focus();
             }
         );
     }
 
-    const {open} = useRichTextEditorMedia();
+    const {openLocalFiles} = useRichTextEditorMedia();
 
     const formatImageAttached = () => {
-        open(images => {
+        openLocalFiles(images => {
             for (const image of images) {
                 const node = createImageElement(image, "large");
                 editor.insertNode(node);
             }
-            ReactEditor.focus(editor);
+            focus();
         });
     }
 
     return (
         <RichTextEditorCommandsContext.Provider value={{
-            enableHeading,
+            enableHeading, enableVideo: true, enableClear: true,
             inBold, inItalic, inStrikeout, inLink, inSpoilerInline, inSpoilerBlock, inSpoiler, inMention, inBlockquote,
             inList, inUnorderedList, inOrderedList, headingLevel, inVoid, inFold, inCode, inSubscript, inSuperscript,
             inCodeBlock, inFormula, inMark, inImageEmbedded, inImageAttached,
-            formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
-            formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo,
-            formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula, formatMark,
-            formatClear, formatImageEmbedded, formatImageAttached,
+            focus, formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention,
+            formatHorizontalRule, formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent,
+            formatHeading, formatVideo, formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock,
+            formatFormula, formatMark, formatClear, formatImageEmbedded, formatImageAttached,
         }}>
             {children}
         </RichTextEditorCommandsContext.Provider>

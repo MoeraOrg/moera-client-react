@@ -34,6 +34,7 @@ interface Props {
 
 export default function VisualEditorPanel({hiding}: Props) {
     const {
+        enableVideo, enableClear,
         inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
         inOrderedList, inImageAttached,
         formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
@@ -94,12 +95,16 @@ export default function VisualEditorPanel({hiding}: Props) {
                                     active={inLink} command={formatLink}/>
                 <VisualEditorButton icon={msPhotoLibrary} title={t("image")} active={inImageAttached}
                                     command={formatImageAttached}/>
-                <VisualEditorButton icon={msMediaLink} title={t("video-internet")} command={formatVideo}/>
+                {enableVideo &&
+                    <VisualEditorButton icon={msMediaLink} title={t("video-internet")} command={formatVideo}/>
+                }
             </div>
-            <div className="group">
-                <VisualEditorButton icon={msFormatClear} title={t("clear-formatting")}
-                                    hotkey={VISUAL_EDITOR_KEYS.CLEAR.title} command={formatClear}/>
-            </div>
+            {enableClear &&
+                <div className="group">
+                    <VisualEditorButton icon={msFormatClear} title={t("clear-formatting")}
+                                        hotkey={VISUAL_EDITOR_KEYS.CLEAR.title} command={formatClear}/>
+                </div>
+            }
         </div>
     );
 }

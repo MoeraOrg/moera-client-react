@@ -2,6 +2,8 @@ import { createContext, useContext } from 'react';
 
 export interface RichTextEditorCommandsInterface {
     enableHeading: boolean;
+    enableVideo: boolean;
+    enableClear: boolean;
 
     inBold: boolean;
     inItalic: boolean;
@@ -27,6 +29,7 @@ export interface RichTextEditorCommandsInterface {
     inImageEmbedded: boolean;
     inImageAttached: boolean;
 
+    focus: () => void;
     formatBold: () => void;
     formatItalic: () => void;
     formatStrikeout: () => void;
@@ -55,6 +58,8 @@ export interface RichTextEditorCommandsInterface {
 
 export const RichTextEditorCommandsContext = createContext<RichTextEditorCommandsInterface>({
     enableHeading: true,
+    enableVideo: true,
+    enableClear: true,
 
     inBold: false,
     inItalic: false,
@@ -80,6 +85,7 @@ export const RichTextEditorCommandsContext = createContext<RichTextEditorCommand
     inImageEmbedded: false,
     inImageAttached: false,
 
+    focus: () => {},
     formatBold: () => {},
     formatItalic: () => {},
     formatStrikeout: () => {},

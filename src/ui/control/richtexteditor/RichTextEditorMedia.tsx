@@ -142,7 +142,7 @@ export default function RichTextEditorMedia({
             onDrop: openUploadImages
         });
 
-    const open = (onUploaded?: OnUploadedHandler) => {
+    const openLocalFiles = (onUploaded?: OnUploadedHandler) => {
         onUploadedRef.current = onUploaded;
         openDropzone();
     }
@@ -168,7 +168,7 @@ export default function RichTextEditorMedia({
 
     return (
         <RichTextEditorMediaContext.Provider value={{
-            getRootProps, isDragAccept, isDragReject, open, uploadImages, uploadProgress, forceCompress,
+            getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadImages, uploadProgress, forceCompress,
             compress: compress.current, setCompress: value => compress.current = value, deleteImage, reorderImage
         }}>
             {children}

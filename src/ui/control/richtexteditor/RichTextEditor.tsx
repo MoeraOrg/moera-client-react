@@ -1,16 +1,21 @@
 import React from 'react';
 import cx from 'classnames';
 
+import { PostingFeatures } from "api";
 import { MarkdownEditor, MarkdownEditorProps } from "ui/control/richtexteditor/markdown/MarkdownEditor";
 import VisualEditor, { VisualEditorProps } from "ui/control/richtexteditor/visual/VisualEditor";
 import RichTextEditorDropzone from "ui/control/richtexteditor/RichTextEditorDropzone";
 import RichTextEditorDialogs from "ui/control/richtexteditor/RichTextEditorDialogs";
 import RichTextEditorMedia from "ui/control/richtexteditor/RichTextEditorMedia";
-import { REL_CURRENT } from "util/rel-node-name";
+import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import "./RichTextEditor.css";
 
 type Props = {
     className?: string;
+    features: PostingFeatures | null;
+    nodeName?: RelNodeName | string;
+    forceImageCompress?: boolean;
+    noMedia?: boolean;
 } & MarkdownEditorProps & VisualEditorProps;
 
 export const RichTextEditor = ({
@@ -28,12 +33,11 @@ export const RichTextEditor = ({
                                   autoFocus={autoFocus} disabled={disabled} hidingPanel={hidingPanel}
                                   onChange={onChange} submitKey={submitKey} onSubmit={onSubmit} onUrls={onUrls}/>
                 :
-                    <MarkdownEditor name={name} value={value} features={features} rows={rows} maxHeight={maxHeight}
+                    <MarkdownEditor name={name} value={value} rows={rows} maxHeight={maxHeight}
                                     placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
                                     disabled={disabled} smileysEnabled={smileysEnabled} hidingPanel={hidingPanel}
-                                    format={format} nodeName={nodeName} forceImageCompress={forceImageCompress}
-                                    submitKey={submitKey} onSubmit={onSubmit} onChange={onChange} onBlur={onBlur}
-                                    onUrls={onUrls} noMedia={noMedia}/>
+                                    format={format} submitKey={submitKey} onSubmit={onSubmit} onChange={onChange}
+                                    onBlur={onBlur} onUrls={onUrls}/>
                 }
                 {!noMedia &&
                     <RichTextEditorDropzone value={value} hiding={hidingPanel} nodeName={nodeName ?? null}/>

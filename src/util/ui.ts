@@ -55,6 +55,16 @@ export function insertText(field: HTMLTextAreaElement | HTMLInputElement, text: 
     }
 }
 
+export function insertTextOnNewLine(field: HTMLTextAreaElement | HTMLInputElement, text: string): void {
+    const value = field.value;
+    const start = field.selectionStart;
+
+    if (start != null && start > 0 && value[start - 1] !== "\n") {
+        text = "\n" + text;
+    }
+    insertText(field, text);
+}
+
 export function getTextSelection(field: HTMLTextAreaElement | HTMLInputElement): string {
     return field.value.slice(field.selectionStart ?? undefined, field.selectionEnd ?? undefined);
 }
@@ -69,8 +79,25 @@ export function wrapSelection(field: HTMLTextAreaElement | HTMLInputElement, wra
     field.selectionEnd = (selectionEnd ?? selectionStart ?? 0) + wrap.length;
 }
 
-export function wrapSelectionLines(field: HTMLTextAreaElement | HTMLInputElement,
-                                   wrapStart: string, wrap?: string): void {
+export function wrapSelectionOnNewLine(
+    field: HTMLTextAreaElement | HTMLInputElement, wrap: string, wrapEnd?: string
+): void {
+    if (wrapEnd == null) {
+        wrapEnd = wrap;
+    }
+
+    const value = field.value;
+    const start = field.selectionStart;
+
+    if (start != null && start > 0 && value[start - 1] !== "\n") {
+        wrap = "\n" + wrap;
+    }
+    wrapSelection(field, wrap, wrapEnd);
+}
+
+export function wrapSelectionLines(
+    field: HTMLTextAreaElement | HTMLInputElement, wrapStart: string, wrap?: string
+): void {
     const wrapEnd = wrap ?? wrapStart;
     const selectionStart = field.selectionStart;
     const selection = getTextSelection(field);
@@ -81,6 +108,22 @@ export function wrapSelectionLines(field: HTMLTextAreaElement | HTMLInputElement
     const endShift = wrapped.endsWith(wrapEnd) ? -wrapEnd.length : 0;
     field.selectionStart = (selectionStart ?? 0) + startShift;
     field.selectionEnd = (selectionStart ?? 0) + wrapped.length + endShift;
+}
+
+export function wrapSelectionLinesOnNewLine(
+    field: HTMLTextAreaElement | HTMLInputElement, wrapStart: string, wrap?: string
+): void {
+    if (wrap == null) {
+        wrap = wrapStart;
+    }
+
+    const value = field.value;
+    const start = field.selectionStart;
+
+    if (start != null && start > 0 && value[start - 1] !== "\n") {
+        wrapStart = "\n" + wrapStart;
+    }
+    wrapSelectionLines(field, wrapStart, wrap);
 }
 
 function wrapLines(s: string, wrapStart: string, wrapEnd: string): string {
@@ -104,6 +147,30 @@ function wrapLines(s: string, wrapStart: string, wrapEnd: string): string {
             + lines[i].substring(end + 1);
     }
     return lines.join("\n");
+}
+
+export function wrapBlock(field: HTMLTextAreaElement | HTMLInputElement, wrap: string, wrapEnd?: string): void {
+    if (wrapEnd == null) {
+        wrapEnd = wrap;
+    }
+
+    const value = field.value;
+    const start = field.selectionStart;
+
+    if (start != null && start > 0 && value[start - 1] !== "\n") {
+        wrap = "\n" + wrap;
+    }
+
+    const selection = getTextSelection(field);
+    if (!selection || !selection.startsWith("\n")) {
+        wrap += "\n";
+    }
+    if (!selection || !selection.endsWith("\n")) {
+        wrapEnd = "\n" + wrapEnd;
+    } else {
+        wrapEnd += "\n";
+    }
+    wrapSelection(field, wrap, wrapEnd);
 }
 
 export function getPageHeaderHeight(): number {

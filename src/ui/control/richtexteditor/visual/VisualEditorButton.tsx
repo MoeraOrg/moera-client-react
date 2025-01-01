@@ -1,8 +1,8 @@
 import React from 'react';
-import { ReactEditor, useSlateStatic } from 'slate-react';
 
 import { MaterialSymbol } from "ui/material-symbols";
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
+import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 
 interface Props {
     icon: MaterialSymbol;
@@ -14,11 +14,11 @@ interface Props {
 }
 
 export function VisualEditorButton({icon, title, hotkey, className, active, command}: Props) {
-    const editor = useSlateStatic() as ReactEditor;
+    const {focus} = useRichTextEditorCommands();
 
     const onClick = (event: React.MouseEvent) => {
         command && command();
-        ReactEditor.focus(editor);
+        focus();
         event.preventDefault();
     }
 

@@ -50,7 +50,7 @@ interface Props {
 export default function RichTextEditorDropzone({value, hiding = false, nodeName}: Props) {
     const dispatch = useDispatch();
     const {
-        getRootProps, isDragAccept, isDragReject, open, uploadImages, uploadProgress, forceCompress, compress,
+        getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadImages, uploadProgress, forceCompress, compress,
         setCompress, deleteImage, reorderImage
     } = useRichTextEditorMedia();
     const {t} = useTranslation();
@@ -87,7 +87,7 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName}
 
     const onSelectImages = (event: React.MouseEvent) => {
         if (!event.isDefaultPrevented() && !isOverlayClosedRecently()) {
-            open();
+            openLocalFiles();
         }
         event.preventDefault();
     }

@@ -14,12 +14,13 @@ export default function VisualEditorHeadingButton({onSelect}: Props) {
         visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
     } = useButtonPopper("bottom", {closeOnSelect: false});
 
-    const {enableHeading, headingLevel} = useRichTextEditorCommands();
+    const {enableHeading, headingLevel, focus} = useRichTextEditorCommands();
     const {t} = useTranslation();
 
     const onItemSelect = (headingLevel: number) => {
         onSelect && onSelect(headingLevel);
         hide();
+        focus();
     };
 
     return (

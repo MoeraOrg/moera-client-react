@@ -18,7 +18,7 @@ export interface RichTextEditorMediaInterface {
     getRootProps: (props?: DropzoneRootProps) => DropzoneRootProps;
     isDragAccept: boolean;
     isDragReject: boolean;
-    open: (onUploaded?: OnUploadedHandler) => void;
+    openLocalFiles: (onUploaded?: OnUploadedHandler) => void;
     uploadImages: (files: File[], caption: RichTextValue | undefined) => void;
     uploadProgress: UploadProgress[];
     forceCompress: boolean;
@@ -32,7 +32,7 @@ export const RichTextEditorMediaContext = createContext<RichTextEditorMediaInter
     getRootProps: () => ({}),
     isDragAccept: false,
     isDragReject: false,
-    open: () => {},
+    openLocalFiles: () => {},
     uploadImages: () => {},
     uploadProgress: [],
     forceCompress: false,
