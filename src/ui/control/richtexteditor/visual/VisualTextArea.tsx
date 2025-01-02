@@ -28,14 +28,16 @@ export interface VisualTextAreaProps {
     placeholder?: string;
     autoFocus?: boolean;
     disabled?: boolean;
+    smileysEnabled?: boolean;
     submitKey?: string;
     onSubmit?: () => void;
+    onBlur?: (event: React.FocusEvent) => void;
 }
 
 const isBackspace = isHotkey("Backspace");
 
 export default function VisualTextArea({
-    rows, maxHeight, placeholder, autoFocus, disabled, submitKey, onSubmit
+    rows, maxHeight, placeholder, autoFocus, disabled, smileysEnabled, submitKey, onSubmit, onBlur
 }: VisualTextAreaProps) {
     const editor = useSlateStatic() as ReactEditor;
     const {
@@ -64,7 +66,9 @@ export default function VisualTextArea({
         }
 
         if (event.key === "Enter" || event.key === " ") {
-            setTimeout(() => scriptureReplaceSmileys(editor));
+            if (smileysEnabled) {
+                setTimeout(() => scriptureReplaceSmileys(editor));
+            }
             if (editor.selection != null && Range.isCollapsed(editor.selection)) {
                 const point = editor.selection.anchor;
                 setTimeout(() => scriptureReplaceUrl(editor, point));
@@ -242,6 +246,7 @@ export default function VisualTextArea({
             renderElement={VisualRenderElement}
             renderLeaf={VisualRenderLeaf}
             onKeyDown={onKeyDown}
+            onBlur={onBlur}
             scrollSelectionIntoView={() => {}}
         />
     );

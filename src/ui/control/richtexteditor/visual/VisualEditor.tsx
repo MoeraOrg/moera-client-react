@@ -27,7 +27,8 @@ export type VisualEditorProps = {
 } & VisualTextAreaProps;
 
 export default function VisualEditor({
-    value, rows, maxHeight, placeholder, autoFocus, disabled, hidingPanel, onChange, submitKey, onSubmit, onUrls
+    value, rows, maxHeight, placeholder, autoFocus, disabled, smileysEnabled, hidingPanel, onChange, submitKey,
+    onSubmit, onUrls, onBlur
 }: VisualEditorProps) {
     const {pasteImage} = useRichTextEditorMedia();
     const [editor] = useState(
@@ -110,9 +111,11 @@ export default function VisualEditor({
                     maxHeight={maxHeight}
                     placeholder={isScriptureEmpty(editor.children) ? placeholder : undefined}
                     disabled={disabled}
+                    smileysEnabled={smileysEnabled}
                     autoFocus={autoFocus}
                     submitKey={submitKey}
                     onSubmit={onSubmit}
+                    onBlur={onBlur}
                 />
             </VisualEditorCommands>
         </Slate>
