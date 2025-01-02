@@ -17,12 +17,12 @@ export default function VisualRenderElement(props: RenderElementProps) {
 
     const rootPage = useSelector(getNodeRootPage);
     const carte = useSelector(getCurrentViewMediaCarte);
-    const {formatFormula, formatImageEmbedded} = useRichTextEditorCommands();
+    const {formatFormula, formatImage} = useRichTextEditorCommands();
     const {t} = useTranslation();
 
     const onFormulaClick = () => setTimeout(() => formatFormula());
 
-    const onImageEmbeddedClick = () => setTimeout(() => formatImageEmbedded());
+    const onImageClick = () => setTimeout(() => formatImage());
 
     if (isScriptureElement(element)) {
         switch (element.type) {
@@ -106,7 +106,7 @@ export default function VisualRenderElement(props: RenderElementProps) {
                     }
                     return (
                         <span className="image-embedded" {...attributes} contentEditable={false}
-                              onClick={onImageEmbeddedClick}>
+                              onClick={onImageClick}>
                             {children}
                             <img src={element.href} width={width ?? undefined} height={height ?? undefined}
                                  alt="" style={style}/>
@@ -118,7 +118,7 @@ export default function VisualRenderElement(props: RenderElementProps) {
                     } = mediaImageTagAttributes(rootPage, element.mediaFile, carte, 900, width, height);
                     return (
                         <span className="image-attached" {...attributes} contentEditable={false}
-                              onClick={onImageEmbeddedClick}>
+                              onClick={onImageClick}>
                             {children}
                             <PreloadedImage src={src} srcSet={srcSet} sizes={sizes}
                                             width={imageWidth} height={imageHeight} alt=""/>
@@ -145,7 +145,7 @@ export default function VisualRenderElement(props: RenderElementProps) {
                     }
                     return (
                         <div className="figure-image-embedded" {...attributes} contentEditable={false}
-                              onClick={onImageEmbeddedClick}>
+                              onClick={onImageClick}>
                             {children}
                             <figure>
                                 <img src={element.href} width={width ?? undefined} height={height ?? undefined}
@@ -160,10 +160,13 @@ export default function VisualRenderElement(props: RenderElementProps) {
                     } = mediaImageTagAttributes(rootPage, element.mediaFile, carte, 900, width, height);
                     return (
                         <div className="figure-image-attached" {...attributes} contentEditable={false}
-                             onClick={onImageEmbeddedClick}>
+                             onClick={onImageClick}>
                             {children}
-                            <PreloadedImage src={src} srcSet={srcSet} sizes={sizes}
-                                            width={imageWidth} height={imageHeight} alt=""/>
+                            <figure>
+                                <PreloadedImage src={src} srcSet={srcSet} sizes={sizes}
+                                                width={imageWidth} height={imageHeight} alt=""/>
+                                <figcaption>{element.caption}</figcaption>
+                            </figure>
                         </div>
                     );
                 } else {

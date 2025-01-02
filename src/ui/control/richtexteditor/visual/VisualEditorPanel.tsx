@@ -39,7 +39,7 @@ export default function VisualEditorPanel({hiding}: Props) {
         inOrderedList, inImageAttached,
         formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
         formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent, formatHeading, formatVideo,
-        formatClear, formatImageAttached
+        formatClear, formatImage
     } = useRichTextEditorCommands();
 
     const {t} = useTranslation();
@@ -94,7 +94,7 @@ export default function VisualEditorPanel({hiding}: Props) {
                 <VisualEditorButton icon={msAddLink} title={t("link")} hotkey={VISUAL_EDITOR_KEYS.LINK.title}
                                     active={inLink} command={formatLink}/>
                 <VisualEditorButton icon={msPhotoLibrary} title={t("image")} active={inImageAttached}
-                                    command={formatImageAttached}/>
+                                    command={() => formatImage(false)}/>
                 {enableVideo &&
                     <VisualEditorButton icon={msMediaLink} title={t("video-internet")} command={formatVideo}/>
                 }

@@ -10,6 +10,7 @@ import RichTextFormulaDialog, { RichTextFormulaValues } from "ui/control/richtex
 import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/rich-text-editor-dialog";
 import { NameListItem } from "util/names-list";
 import RichTextImageDialog, { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
+import { VerifiedMediaFile } from "api";
 
 interface Props {
     children: ReactNode;
@@ -46,6 +47,7 @@ export default function RichTextEditorDialogs({children}: Props) {
         useState<RichTextEditorDialogSubmit<RichTextFormulaValues>>(() => () => {});
 
     const [imageDialog, setImageDialog] = useState<boolean>(false);
+    const [imageDialogMediaFiles, setImageDialogMediaFiles] = useState<VerifiedMediaFile[] | null>(null);
     const [imageDialogPrevValues, setImageDialogPrevValues] = useState<RichTextImageValues | null>(null);
     const [imageDialogOnSubmit, setImageDialogOnSubmit] =
         useState<RichTextEditorDialogSubmit<RichTextImageValues>>(() => () => {});
@@ -121,10 +123,11 @@ export default function RichTextEditorDialogs({children}: Props) {
     }
 
     const showImageDialog = (
-        show: boolean, prevValues?: RichTextImageValues | null,
+        show: boolean, mediaFiles?: VerifiedMediaFile[] | null, prevValues?: RichTextImageValues | null,
         onSubmit?: RichTextEditorDialogSubmit<RichTextImageValues>
     ) => {
         if (show) {
+            setImageDialogMediaFiles(mediaFiles ?? null);
             setImageDialogPrevValues(prevValues ?? null);
             onSubmit && setImageDialogOnSubmit(() => onSubmit);
             setImageDialog(true);
@@ -155,7 +158,8 @@ export default function RichTextEditorDialogs({children}: Props) {
                 <RichTextFormulaDialog prevValues={formulaDialogPrevValues} onSubmit={formulaDialogOnSubmit}/>
             }
             {imageDialog &&
-                <RichTextImageDialog onSubmit={imageDialogOnSubmit} noMedia={true} prevValues={imageDialogPrevValues}/>
+                <RichTextImageDialog mediaFiles={imageDialogMediaFiles} prevValues={imageDialogPrevValues}
+                                     onSubmit={imageDialogOnSubmit}/>
             }
         </>
     );

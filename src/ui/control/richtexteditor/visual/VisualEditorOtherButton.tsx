@@ -27,7 +27,7 @@ export default function VisualEditorOtherButton() {
     const {
         inFold, inCode, inSubscript, inSuperscript, inCodeBlock, inFormula, inMark, inImageEmbedded,
         formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula, formatMark,
-        formatImageEmbedded
+        formatImage
     } = useRichTextEditorCommands();
     const {t} = useTranslation();
 
@@ -59,7 +59,7 @@ export default function VisualEditorOtherButton() {
                                             hotkey={VISUAL_EDITOR_KEYS.MARK.title} active={inMark}
                                             command={onCommand(formatMark)}/>
                         <VisualEditorButton icon={msSatellite} title={t("image-internet")} active={inImageEmbedded}
-                                            command={onCommand(formatImageEmbedded)}/>
+                                            command={onCommand(() => formatImage(true))}/>
                     </div>
                     <div ref={setArrowRef} style={arrowStyles} className="popover-arrow"/>
                 </div>

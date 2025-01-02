@@ -2,19 +2,17 @@ import React from 'react';
 import { useField } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { PostingFeatures, VerifiedMediaFile } from "api";
+import { VerifiedMediaFile } from "api";
 import { InputField, NumberField, SelectField } from "ui/control/field";
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
 import { RichTextImageStandardSize, STANDARD_SIZES } from "ui/control/richtexteditor/rich-text-image";
-import RichTextImageDialogTabs from "ui/control/richtexteditor/RichTextImageDialogTabs";
-import RichTextImageDialogDropzone from "ui/control/richtexteditor/RichTextImageDialogDropzone";
+import UploadedImage from "ui/control/richtexteditor/UploadedImage";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import "./RichTextImageDialog.css";
 
 export interface RichTextImageValues {
-    source?: string;
-    mediaFile?: VerifiedMediaFile | null;
-    href?: string;
+    mediaFiles?: VerifiedMediaFile[] | null;
+    href?: string | null;
     standardSize?: RichTextImageStandardSize;
     customWidth?: number | null;
     customHeight?: number | null;
@@ -22,43 +20,33 @@ export interface RichTextImageValues {
 }
 
 type Props = {
-    features?: PostingFeatures | null;
-    noMedia?: boolean;
+    mediaFiles?: VerifiedMediaFile[] | null;
+    href?: string | null;
     nodeName?: RelNodeName | string;
-    forceCompress?: boolean;
     selectedImage?: VerifiedMediaFile | null;
-    onAdded?: (image: VerifiedMediaFile) => void;
-    onDeleted?: (id: string) => void;
-    externalImage?: File;
-    uploadingExternalImage?: () => void;
 } & RichTextEditorDialogProps<RichTextImageValues>;
 
 const mapPropsToValues = (props: Props): RichTextImageValues => ({
-    source: props.prevValues?.source ?? (props.noMedia === true ? "internet" : "device"),
-    mediaFile: props.prevValues?.mediaFile ?? props.selectedImage ?? null,
-    href: props.prevValues?.href ?? "",
+    mediaFiles: props.prevValues?.mediaFiles ?? props.mediaFiles,
+    href: props.prevValues?.href ?? props.href,
     standardSize: props.prevValues?.standardSize ?? "large",
     customWidth: props.prevValues?.customWidth,
     customHeight: props.prevValues?.customHeight,
     caption: props.prevValues?.caption ?? "",
 });
 
-function RichTextImageDialog({
-    features, noMedia = false, nodeName = REL_CURRENT, forceCompress, onAdded, onDeleted, externalImage,
-    uploadingExternalImage
-}: Props) {
-    const [, {value: source}] = useField<string>("source");
+function RichTextImageDialog({mediaFiles, nodeName = REL_CURRENT}: Props) {
     const [, {value: standardSize}] = useField<RichTextImageStandardSize>("standardSize");
     const {t} = useTranslation();
 
     return (
         <>
-            {!noMedia && <RichTextImageDialogTabs/>}
-            {source === "device" ?
-                <RichTextImageDialogDropzone features={features ?? null} nodeName={nodeName}
-                                             forceCompress={forceCompress} onAdded={onAdded} onDeleted={onDeleted}
-                                             uploadingExternalImage={uploadingExternalImage}
-                                             externalImage={externalImage}/>
+            {mediaFiles != null ?
+                <div className="rich-text-editor-image-list pt-0 mb-3">
+                    {mediaFiles.map(mediaFile =>
+                        <UploadedImage key={mediaFile.id} media={mediaFile} nodeName={nodeName} showMenu={false}/>
+                    )}
+                </div>
             :
                 <InputField name="href" title={t("link")} anyValue autoFocus/>
             }
@@ -71,7 +59,9 @@ function RichTextImageDialog({
                                  format={{useGrouping: false}}/>
                 </div>
             }
-            <InputField name="caption" title={t("caption-optional")} anyValue/>
+            {(mediaFiles == null || mediaFiles.length === 1) &&
+                <InputField name="caption" title={t("caption-optional")} anyValue/>
+            }
         </>
     );
 }

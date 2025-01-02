@@ -52,8 +52,7 @@ export interface RichTextEditorCommandsInterface {
     formatFormula: () => void;
     formatMark: () => void;
     formatClear: () => void;
-    formatImageEmbedded: () => void;
-    formatImageAttached: () => void;
+    formatImage: (embedded?: boolean) => void;
 }
 
 export const RichTextEditorCommandsContext = createContext<RichTextEditorCommandsInterface>({
@@ -108,8 +107,7 @@ export const RichTextEditorCommandsContext = createContext<RichTextEditorCommand
     formatFormula: () => {},
     formatMark: () => {},
     formatClear: () => {},
-    formatImageEmbedded: () => {},
-    formatImageAttached: () => {},
+    formatImage: () => {},
 });
 
 export const useRichTextEditorCommands = (): RichTextEditorCommandsInterface =>

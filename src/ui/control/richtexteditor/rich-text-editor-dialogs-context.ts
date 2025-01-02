@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'react';
 
+import { VerifiedMediaFile } from "api";
 import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/rich-text-editor-dialog";
 import { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
 import { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
@@ -35,6 +36,7 @@ export interface RichTextEditorDialogsInterface {
     ) => void;
     showImageDialog: (
         show: boolean,
+        mediaFiles?: VerifiedMediaFile[] | null,
         prevValues?: RichTextImageValues | null,
         onSubmit?: RichTextEditorDialogSubmit<RichTextImageValues>
     ) => void;

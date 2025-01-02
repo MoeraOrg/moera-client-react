@@ -252,9 +252,6 @@
     "private": "Members only",
     "public": "Public"
   },
-  "from-computer": "From Computer",
-  "from-device": "From Device",
-  "from-internet": "From Internet",
   "full-name": "Full name",
   "full-name-set": "Full name set",
   "gender": "Gender (choose or type anything)",

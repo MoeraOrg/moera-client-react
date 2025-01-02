@@ -469,41 +469,50 @@ export default function VisualEditorCommands({children}: Props) {
         clearBlocks();
     }
 
-    const formatImageEmbedded = () => {
+    const {openLocalFiles} = useRichTextEditorMedia();
+
+    const formatImage = (embedded?: boolean) => {
         const [element, path] = findWrappingElement(editor, ["image", "figure-image"]) ?? [null, null];
         const prevType = element?.type;
         let prevValues: RichTextImageValues | null = null;
-        if (isImageElement(element)) {
+        if (isImageElement(element) || isFigureImageElement(element)) {
             prevValues = {
                 href: element.href,
+                mediaFiles: element.mediaFile != null ? [element.mediaFile] : null,
                 standardSize: element.standardSize,
                 customWidth: element.customWidth,
                 customHeight: element.customHeight,
+                caption: "caption" in element ? element.caption : undefined,
             }
-        }
-        if (isFigureImageElement(element)) {
-            prevValues = {
-                href: element.href,
-                standardSize: element.standardSize,
-                customWidth: element.customWidth,
-                customHeight: element.customHeight,
-                caption: element.caption,
-            }
+        } else if (!embedded) {
+            openLocalFiles((images, standardSize, customWidth, customHeight, caption) => {
+                for (const image of images) {
+                    const node = caption
+                        ? createFigureImageElement(image, caption, standardSize, customWidth, customHeight)
+                        : createImageElement(image, standardSize, customWidth, customHeight);
+                    editor.insertNode(node);
+                }
+                focus();
+            });
+            return;
         }
 
         showImageDialog(
             true,
+            prevValues?.mediaFiles,
             prevValues,
             (
                 ok: boolean | null,
-                {href, standardSize, customWidth, customHeight, caption}: Partial<RichTextImageValues>
+                {mediaFiles, href, standardSize, customWidth, customHeight, caption}: Partial<RichTextImageValues>
             ) => {
                 showImageDialog(false);
 
-                if (ok && href) {
+                const src = href ?? mediaFiles?.[0];
+
+                if (ok && src) {
                     const node = caption
-                        ? createFigureImageElement(href, caption, standardSize, customWidth, customHeight)
-                        : createImageElement(href, standardSize, customWidth, customHeight);
+                        ? createFigureImageElement(src, caption, standardSize, customWidth, customHeight)
+                        : createImageElement(src, standardSize, customWidth, customHeight);
                     if (path != null) {
                         Editor.withoutNormalizing(editor, () => {
                             editor.setNodes<ImageElement | FigureImageElement>(node, {at: path});
@@ -526,18 +535,6 @@ export default function VisualEditorCommands({children}: Props) {
         );
     }
 
-    const {openLocalFiles} = useRichTextEditorMedia();
-
-    const formatImageAttached = () => {
-        openLocalFiles(images => {
-            for (const image of images) {
-                const node = createImageElement(image, "large");
-                editor.insertNode(node);
-            }
-            focus();
-        });
-    }
-
     return (
         <RichTextEditorCommandsContext.Provider value={{
             enableHeading, enableVideo: true, enableClear: true,
@@ -547,7 +544,7 @@ export default function VisualEditorCommands({children}: Props) {
             focus, formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention,
             formatHorizontalRule, formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent,
             formatHeading, formatVideo, formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock,
-            formatFormula, formatMark, formatClear, formatImageEmbedded, formatImageAttached,
+            formatFormula, formatMark, formatClear, formatImage,
         }}>
             {children}
         </RichTextEditorCommandsContext.Provider>

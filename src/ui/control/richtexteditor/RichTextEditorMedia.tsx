@@ -10,11 +10,13 @@ import { richTextEditorImagesUpload } from "state/richtexteditor/actions";
 import * as Browser from "ui/browser";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import {
-    OnUploadedHandler,
+    OnInsertHandler,
     RichTextEditorMediaContext,
     UploadProgress,
     UploadStatus
 } from "ui/control/richtexteditor/rich-text-editor-media-context";
+import { useRichTextEditorDialogs } from "ui/control/richtexteditor/rich-text-editor-dialogs-context";
+import { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
 import RichTextUploadImagesDialog, {
     RichTextUploadImagesValues
 } from "ui/control/richtexteditor/RichTextUploadImagesDialog";
@@ -50,6 +52,7 @@ export default function RichTextEditorMedia({
     const compressImages = useSelector((state: ClientState) =>
         getSetting(state, "posting.media.compress.default") as boolean);
     const dispatch = useDispatch();
+    const {showImageDialog} = useRichTextEditorDialogs();
 
     const uploadedImagesRef = useRef<(VerifiedMediaFile | null)[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
@@ -58,10 +61,25 @@ export default function RichTextEditorMedia({
     valueRef.current = value;
     const onChangeRef = useRef<ChangeHandler | undefined>();
     onChangeRef.current = onChange;
-    const onUploadedRef = useRef<OnUploadedHandler | undefined>();
+    const onInsertRef = useRef<OnInsertHandler | undefined>();
 
-    const imageUploadStarted = (count: number) => {
-        uploadedImagesRef.current = new Array(count).fill(null);
+    const imagesInsert = (images: VerifiedMediaFile[]) => {
+        showImageDialog(
+            true,
+            images,
+            null,
+            (
+                ok: boolean | null,
+                {mediaFiles, standardSize, customWidth, customHeight, caption}: Partial<RichTextImageValues>
+            ) => {
+                showImageDialog(false);
+
+                if (ok && mediaFiles != null && mediaFiles.length > 0) {
+                    onInsertRef.current?.(mediaFiles, standardSize ?? "large", customWidth, customHeight, caption);
+                }
+            }
+        );
+
     }
 
     const imageUploaded = (index: number, image: VerifiedMediaFile) => {
@@ -72,11 +90,11 @@ export default function RichTextEditorMedia({
         if (isAllUploaded(uploadedImagesRef.current)) {
             const media = (valueRef.current?.media ?? []).concat(uploadedImagesRef.current);
             onChangeRef.current?.(new RichTextValue(valueRef.current?.text ?? "", srcFormat, media));
-            onUploadedRef.current?.(uploadedImagesRef.current);
+            if (onInsertRef.current != null) {
+                imagesInsert(uploadedImagesRef.current);
+            }
         }
     }
-
-    const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
 
     const onImageUploadSuccess = (index: number, mediaFile: VerifiedMediaFile) => {
         setUploadProgress(progress => updateStatus(progress, index, "success"));
@@ -87,8 +105,14 @@ export default function RichTextEditorMedia({
         setUploadProgress(progress => updateStatus(progress, index, "failure"));
     }
 
+    const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
+
     const onImageUploadProgress = (index: number, loaded: number, total: number) => {
         setUploadProgress(progress => immutable.assign(progress, [index], {loaded, total}));
+    }
+
+    const imageUploadStarted = (count: number) => {
+        uploadedImagesRef.current = new Array(count).fill(null);
     }
 
     const uploadImages = (files: File[], caption: RichTextValue | undefined) => {
@@ -142,8 +166,8 @@ export default function RichTextEditorMedia({
             onDrop: openUploadImages
         });
 
-    const openLocalFiles = (onUploaded?: OnUploadedHandler) => {
-        onUploadedRef.current = onUploaded;
+    const openLocalFiles = (onInsert?: OnInsertHandler) => {
+        onInsertRef.current = onInsert;
         openDropzone();
     }
 

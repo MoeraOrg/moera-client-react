@@ -33,7 +33,7 @@ interface Props {
 
 function insertImage(
     field: HTMLTextAreaElement, src: string | PrivateMediaFileInfo, standardSize: RichTextImageStandardSize = "large",
-    customWidth?: number | null, customHeight?: number | null, caption?: string
+    customWidth?: number | null, customHeight?: number | null, caption?: string | null
 ) {
     const href = typeof src === "string" ? src : "hash:" + src.hash;
     const figureBegin = caption ? "<figure>" : "";
@@ -56,7 +56,6 @@ export default function MarkdownEditorCommands({format, textArea, children}: Pro
         showLinkDialog, showSpoilerDialog, showMentionDialog, showFoldDialog, showFormulaDialog,
         showImageDialog
     } = useRichTextEditorDialogs();
-    const {openLocalFiles} = useRichTextEditorMedia();
 
     const isMarkdown = () => format === "markdown";
 
@@ -351,35 +350,38 @@ export default function MarkdownEditorCommands({format, textArea, children}: Pro
     const formatClear = () => {
     }
 
-    const formatImageEmbedded = () => {
-        showImageDialog(
-            true,
-            null,
-            (
-                ok: boolean | null,
-                {href, standardSize = "large", customWidth, customHeight, caption}: Partial<RichTextImageValues>
-            ) => {
-                showImageDialog(false);
+    const {openLocalFiles} = useRichTextEditorMedia();
 
-                if (ok && textArea.current != null) {
-                    insertImage(textArea.current, href ?? "", standardSize, customWidth, customHeight, caption);
+    const formatImage = (embedded?: boolean) => {
+        if (embedded) {
+            showImageDialog(
+                true,
+                null,
+                null,
+                (
+                    ok: boolean | null,
+                    {href, standardSize = "large", customWidth, customHeight, caption}: Partial<RichTextImageValues>
+                ) => {
+                    showImageDialog(false);
+
+                    if (ok && textArea.current != null) {
+                        insertImage(textArea.current, href ?? "", standardSize, customWidth, customHeight, caption);
+                    }
+                    focus();
+                }
+            );
+        } else {
+            openLocalFiles((images, standardSize, customWidth, customHeight, caption) => {
+                if (textArea.current == null) {
+                    return;
+                }
+
+                for (const image of images) {
+                    insertImage(textArea.current, image, standardSize, customWidth, customHeight, caption);
                 }
                 focus();
-            }
-        );
-    }
-
-    const formatImageAttached = () => {
-        openLocalFiles(images => {
-            if (textArea.current == null) {
-                return;
-            }
-
-            for (const image of images) {
-                insertImage(textArea.current, image);
-            }
-            focus();
-        });
+            });
+        }
     }
 
     return (
@@ -393,7 +395,7 @@ export default function MarkdownEditorCommands({format, textArea, children}: Pro
             focus, formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention,
             formatHorizontalRule, formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent,
             formatHeading, formatVideo, formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock,
-            formatFormula, formatMark, formatClear, formatImageEmbedded, formatImageAttached,
+            formatFormula, formatMark, formatClear, formatImage,
         }}>
             {children}
         </RichTextEditorCommandsContext.Provider>

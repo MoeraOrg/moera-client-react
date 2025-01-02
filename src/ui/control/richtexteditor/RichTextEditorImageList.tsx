@@ -92,7 +92,7 @@ export default function RichTextEditorImageList({value, nodeName, selectedImage,
             {ReactDOM.createPortal(
                 <DragOverlay zIndex={1080} dropAnimation={null}>
                     {dragged &&
-                        <AttachedImage media={dragged} nodeName={nodeName}/>
+                        <AttachedImage media={dragged} nodeName={nodeName} dragging/>
                     }
                 </DragOverlay>,
                 document.querySelector("#modal-root")!

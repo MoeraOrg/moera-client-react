@@ -43,8 +43,7 @@ export default function VisualTextArea({
     const {
         inBlockquote, inList, headingLevel, inVoid, inCodeBlock, inFormula, inImageEmbedded, inImageAttached,
         formatBold, formatItalic, formatStrikeout, formatLink, formatMention, formatBlockquote, formatBlockunquote,
-        formatHorizontalRule, formatCode, formatFormula, formatMark, formatClear, formatImageEmbedded,
-        formatImageAttached,
+        formatHorizontalRule, formatCode, formatFormula, formatMark, formatClear, formatImage,
     } = useRichTextEditorCommands();
 
     const [isSubmitKey, isHardEnter, isSoftEnter] = useMemo(() => {
@@ -175,12 +174,8 @@ export default function VisualTextArea({
                 formatFormula();
                 event.preventDefault();
             }
-            if (inImageEmbedded) {
-                formatImageEmbedded();
-                event.preventDefault();
-            }
-            if (inImageAttached) {
-                formatImageAttached();
+            if (inImageEmbedded || inImageAttached) {
+                formatImage();
                 event.preventDefault();
             }
         }
