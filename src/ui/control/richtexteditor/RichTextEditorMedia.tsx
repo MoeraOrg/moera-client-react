@@ -15,11 +15,11 @@ import {
     UploadProgress,
     UploadStatus
 } from "ui/control/richtexteditor/rich-text-editor-media-context";
-import { useRichTextEditorDialogs } from "ui/control/richtexteditor/rich-text-editor-dialogs-context";
-import { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
+import { useRichTextEditorDialogs } from "ui/control/richtexteditor/dialog/rich-text-editor-dialogs-context";
+import { RichTextImageValues } from "ui/control/richtexteditor/dialog/RichTextImageDialog";
 import RichTextUploadImagesDialog, {
     RichTextUploadImagesValues
-} from "ui/control/richtexteditor/RichTextUploadImagesDialog";
+} from "ui/control/richtexteditor/dialog/RichTextUploadImagesDialog";
 import { isHtmlEmpty } from "util/html";
 import { RelNodeName } from "util/rel-node-name";
 import { arrayMove } from "util/misc";

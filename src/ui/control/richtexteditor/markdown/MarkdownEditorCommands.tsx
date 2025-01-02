@@ -13,12 +13,12 @@ import {
     wrapSelectionLinesOnNewLine,
     wrapSelectionOnNewLine
 } from "util/ui";
-import { useRichTextEditorDialogs } from "ui/control/richtexteditor/rich-text-editor-dialogs-context";
-import { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
-import { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
-import { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
-import { RichTextFormulaValues } from "ui/control/richtexteditor/RichTextFormulaDialog";
-import { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
+import { useRichTextEditorDialogs } from "ui/control/richtexteditor/dialog/rich-text-editor-dialogs-context";
+import { RichTextLinkValues } from "ui/control/richtexteditor/dialog/RichTextLinkDialog";
+import { RichTextSpoilerValues } from "ui/control/richtexteditor/dialog/RichTextSpoilerDialog";
+import { RichTextFoldValues } from "ui/control/richtexteditor/dialog/RichTextFoldDialog";
+import { RichTextFormulaValues } from "ui/control/richtexteditor/dialog/RichTextFormulaDialog";
+import { RichTextImageValues } from "ui/control/richtexteditor/dialog/RichTextImageDialog";
 import { getImageDimensions, RichTextImageStandardSize } from "ui/control/richtexteditor/rich-text-image";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/rich-text-editor-media-context";
 import { htmlEntities } from "util/html";

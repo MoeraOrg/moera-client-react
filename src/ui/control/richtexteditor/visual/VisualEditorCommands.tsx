@@ -53,15 +53,15 @@ import {
     SpoilerElement
 } from "ui/control/richtexteditor/visual/scripture";
 import { RichTextEditorCommandsContext } from "ui/control/richtexteditor/rich-text-editor-commands-context";
-import { useRichTextEditorDialogs } from "ui/control/richtexteditor/rich-text-editor-dialogs-context";
+import { useRichTextEditorDialogs } from "ui/control/richtexteditor/dialog/rich-text-editor-dialogs-context";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/rich-text-editor-media-context";
 import { findWrappingElement, isSelectionInElement } from "ui/control/richtexteditor/visual/scripture-editor";
-import { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
-import { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
-import { RichTextVideoValues } from "ui/control/richtexteditor/RichTextVideoDialog";
-import { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
-import { RichTextFormulaValues } from "ui/control/richtexteditor/RichTextFormulaDialog";
-import { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
+import { RichTextLinkValues } from "ui/control/richtexteditor/dialog/RichTextLinkDialog";
+import { RichTextSpoilerValues } from "ui/control/richtexteditor/dialog/RichTextSpoilerDialog";
+import { RichTextVideoValues } from "ui/control/richtexteditor/dialog/RichTextVideoDialog";
+import { RichTextFoldValues } from "ui/control/richtexteditor/dialog/RichTextFoldDialog";
+import { RichTextFormulaValues } from "ui/control/richtexteditor/dialog/RichTextFormulaDialog";
+import { RichTextImageValues } from "ui/control/richtexteditor/dialog/RichTextImageDialog";
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
 

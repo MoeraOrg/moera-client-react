@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { SourceFormat } from "api";
 import { CheckboxField } from "ui/control/field";
 import { Loading } from "ui/control/Loading";
-import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
+import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
 import { RichTextField } from "ui/control/richtexteditor/RichTextField";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { Icon, msClose } from "ui/material-symbols";

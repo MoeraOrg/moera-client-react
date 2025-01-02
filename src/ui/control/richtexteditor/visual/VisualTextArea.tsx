@@ -5,9 +5,9 @@ import isHotkey from 'is-hotkey';
 
 import * as Browser from "ui/browser";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
+import { RICH_TEXT_EDITOR_KEYS } from "ui/control/richtexteditor/rich-text-editor-keys";
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
 import VisualRenderLeaf from "ui/control/richtexteditor/visual/VisualRenderLeaf";
-import { VISUAL_EDITOR_KEYS } from "ui/control/richtexteditor/visual/visual-editor-keys";
 import {
     createListItemElement,
     createParagraphElement,
@@ -194,34 +194,34 @@ export default function VisualTextArea({
         }
 
         if (event.ctrlKey && !event.altKey && !event.metaKey) {
-            if (VISUAL_EDITOR_KEYS.BOLD.check(event)) {
+            if (RICH_TEXT_EDITOR_KEYS.BOLD.check(event)) {
                 formatBold();
                 event.preventDefault();
-            } else if (VISUAL_EDITOR_KEYS.ITALIC.check(event)) {
+            } else if (RICH_TEXT_EDITOR_KEYS.ITALIC.check(event)) {
                 formatItalic();
                 event.preventDefault();
-            } else if (VISUAL_EDITOR_KEYS.STRIKEOUT.check(event)) {
+            } else if (RICH_TEXT_EDITOR_KEYS.STRIKEOUT.check(event)) {
                 formatStrikeout();
                 event.preventDefault();
-            } else if (VISUAL_EDITOR_KEYS.LINK.check(event)) {
+            } else if (RICH_TEXT_EDITOR_KEYS.LINK.check(event)) {
                 formatLink();
                 event.preventDefault();
-            } else if (VISUAL_EDITOR_KEYS.BLOCKQUOTE.check(event)) {
+            } else if (RICH_TEXT_EDITOR_KEYS.BLOCKQUOTE.check(event)) {
                 formatBlockquote();
                 event.preventDefault();
-            } else if (VISUAL_EDITOR_KEYS.BLOCKUNQUOTE.check(event)) {
+            } else if (RICH_TEXT_EDITOR_KEYS.BLOCKUNQUOTE.check(event)) {
                 formatBlockunquote();
                 event.preventDefault();
-            } else if (VISUAL_EDITOR_KEYS.HORIZONTAL_RULE.check(event)) {
+            } else if (RICH_TEXT_EDITOR_KEYS.HORIZONTAL_RULE.check(event)) {
                 formatHorizontalRule();
                 event.preventDefault();
-            } else if (VISUAL_EDITOR_KEYS.CODE.check(event)) {
+            } else if (RICH_TEXT_EDITOR_KEYS.CODE.check(event)) {
                 formatCode();
                 event.preventDefault();
-            } else if (VISUAL_EDITOR_KEYS.MARK.check(event)) {
+            } else if (RICH_TEXT_EDITOR_KEYS.MARK.check(event)) {
                 formatMark();
                 event.preventDefault();
-            } else if (VISUAL_EDITOR_KEYS.CLEAR.check(event)) {
+            } else if (RICH_TEXT_EDITOR_KEYS.CLEAR.check(event)) {
                 formatClear();
                 event.preventDefault();
             }

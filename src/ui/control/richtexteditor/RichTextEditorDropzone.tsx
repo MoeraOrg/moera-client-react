@@ -8,7 +8,7 @@ import { richTextEditorImageCopy } from "state/richtexteditor/actions";
 import { RichTextValue } from "ui/control/richtexteditor";
 import { UploadProgress, useRichTextEditorMedia } from "ui/control/richtexteditor/rich-text-editor-media-context";
 import RichTextEditorImageList from "ui/control/richtexteditor/RichTextEditorImageList";
-import RichTextCopyImageDialog, { RichTextCopyImageValues } from "ui/control/richtexteditor/RichTextCopyImageDialog";
+import RichTextCopyImageDialog, { RichTextCopyImageValues } from "ui/control/richtexteditor/dialog/RichTextCopyImageDialog";
 import * as Browser from "ui/browser";
 import { isOverlayClosedRecently } from "ui/overlays/overlays";
 import { RelNodeName } from "util/rel-node-name";

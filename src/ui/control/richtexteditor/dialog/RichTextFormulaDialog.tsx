@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useField } from 'formik';
 
 import { InputField, TextField } from "ui/control/field";
-import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
+import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
 import { Tabs } from "ui/control/Tabs";
 
 export interface RichTextFormulaValues {

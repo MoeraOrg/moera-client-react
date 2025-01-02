@@ -9,7 +9,7 @@ interface Props {
     onSelect?: (headingLevel: number) => void;
 }
 
-export default function VisualEditorHeadingButton({onSelect}: Props) {
+export default function RichTextEditorHeadingButton({onSelect}: Props) {
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
     } = useButtonPopper("bottom", {closeOnSelect: false});

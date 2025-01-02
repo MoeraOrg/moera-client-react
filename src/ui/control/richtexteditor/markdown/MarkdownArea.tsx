@@ -10,7 +10,7 @@ import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
 import * as Browser from "ui/browser";
 import { TextareaAutosize } from "ui/control";
-import RichTextPasteDialog, { RichTextPasteMode } from "ui/control/richtexteditor/RichTextPasteDialog";
+import MarkdownPasteDialog, { RichTextPasteMode } from "ui/control/richtexteditor/markdown/MarkdownPasteDialog";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/rich-text-editor-media-context";
 import { extractUrls, replaceSmileys } from "util/text";
 import { containsTags, quoteHtml, safeImportHtml } from "util/html";
@@ -268,7 +268,7 @@ function MarkdownArea(
                 onChange={onChangeHandler}
                 ref={composeRefs(ref, textArea)}
             />
-            {pasteDialogShow && <RichTextPasteDialog onSubmit={onPasteDialogSubmit}/>}
+            {pasteDialogShow && <MarkdownPasteDialog onSubmit={onPasteDialogSubmit}/>}
         </>
     );
 }

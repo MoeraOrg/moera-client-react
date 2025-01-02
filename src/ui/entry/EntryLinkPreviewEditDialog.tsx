@@ -1,7 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
+import {
+    richTextEditorDialog,
+    RichTextEditorDialogProps
+} from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
 import { InputField, TextField } from "ui/control/field";
 
 export interface EntryLinkPreviewEditValues {

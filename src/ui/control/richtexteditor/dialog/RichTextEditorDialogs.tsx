@@ -1,15 +1,15 @@
 import React, { ReactNode, useState } from 'react';
 
-import { RichTextEditorDialogsContext } from "ui/control/richtexteditor/rich-text-editor-dialogs-context";
-import RichTextSpoilerDialog, { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
-import RichTextFoldDialog, { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
-import RichTextLinkDialog, { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
-import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
-import RichTextVideoDialog, { RichTextVideoValues } from "ui/control/richtexteditor/RichTextVideoDialog";
-import RichTextFormulaDialog, { RichTextFormulaValues } from "ui/control/richtexteditor/RichTextFormulaDialog";
-import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/rich-text-editor-dialog";
+import { RichTextEditorDialogsContext } from "ui/control/richtexteditor/dialog/rich-text-editor-dialogs-context";
+import RichTextSpoilerDialog, { RichTextSpoilerValues } from "ui/control/richtexteditor/dialog/RichTextSpoilerDialog";
+import RichTextFoldDialog, { RichTextFoldValues } from "ui/control/richtexteditor/dialog/RichTextFoldDialog";
+import RichTextLinkDialog, { RichTextLinkValues } from "ui/control/richtexteditor/dialog/RichTextLinkDialog";
+import RichTextMentionDialog from "ui/control/richtexteditor/dialog/RichTextMentionDialog";
+import RichTextVideoDialog, { RichTextVideoValues } from "ui/control/richtexteditor/dialog/RichTextVideoDialog";
+import RichTextFormulaDialog, { RichTextFormulaValues } from "ui/control/richtexteditor/dialog/RichTextFormulaDialog";
+import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
 import { NameListItem } from "util/names-list";
-import RichTextImageDialog, { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
+import RichTextImageDialog, { RichTextImageValues } from "ui/control/richtexteditor/dialog/RichTextImageDialog";
 import { VerifiedMediaFile } from "api";
 
 interface Props {

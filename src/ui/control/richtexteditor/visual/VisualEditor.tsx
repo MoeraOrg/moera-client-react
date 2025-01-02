@@ -5,7 +5,7 @@ import { withHistory } from 'slate-history';
 import deepEqual from 'react-fast-compare';
 
 import VisualEditorCommands from "ui/control/richtexteditor/visual/VisualEditorCommands";
-import VisualEditorPanel from "ui/control/richtexteditor/visual/VisualEditorPanel";
+import RichTextEditorPanel from "ui/control/richtexteditor/panel/RichTextEditorPanel";
 import VisualTextArea, { VisualTextAreaProps } from "ui/control/richtexteditor/visual/VisualTextArea";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { isLinkElement, Scripture } from "ui/control/richtexteditor/visual/scripture";
@@ -105,7 +105,7 @@ export default function VisualEditor({
         <Slate editor={editor} initialValue={htmlToScripture("")}
                onValueChange={onScriptureChange as ((contents: Descendant[]) => void) | undefined}>
             <VisualEditorCommands>
-                <VisualEditorPanel hiding={hidingPanel}/>
+                <RichTextEditorPanel hiding={hidingPanel}/>
                 <VisualTextArea
                     rows={rows}
                     maxHeight={maxHeight}

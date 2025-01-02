@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { VerifiedMediaFile } from "api";
 import { InputField, NumberField, SelectField } from "ui/control/field";
-import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
+import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
 import { RichTextImageStandardSize, STANDARD_SIZES } from "ui/control/richtexteditor/rich-text-image";
 import UploadedImage from "ui/control/richtexteditor/UploadedImage";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";

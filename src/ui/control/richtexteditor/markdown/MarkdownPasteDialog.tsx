@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { ModalDialog } from "ui/control/ModalDialog";
 import { Button } from "ui/control/Button";
-import "./RichTextPasteDialog.css";
 import { useModalDialog } from "ui/control/modal-dialog-context";
+import "./MarkdownPasteDialog.css";
 
 export type RichTextPasteMode = "none" | "text" | "html";
 
@@ -12,7 +12,7 @@ interface Props {
     onSubmit: (mode: RichTextPasteMode, persist: boolean) => void;
 }
 
-export default function RichTextPasteDialog({onSubmit}: Props) {
+export default function MarkdownPasteDialog({onSubmit}: Props) {
     const [persist, setPersist] = useState(false);
     const {t} = useTranslation();
 

@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 
 import MarkdownEditorCommands from "ui/control/richtexteditor/markdown/MarkdownEditorCommands";
-import VisualEditorPanel from "ui/control/richtexteditor/visual/VisualEditorPanel";
+import RichTextEditorPanel from "ui/control/richtexteditor/panel/RichTextEditorPanel";
 import MarkdownArea, { MarkdownAreaProps } from "ui/control/richtexteditor/markdown/MarkdownArea";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 
@@ -31,7 +31,7 @@ export function MarkdownEditor({
     return (
         <MarkdownEditorCommands format={format} textArea={textArea}>
             {format !== "plain-text" &&
-                <VisualEditorPanel hiding={hidingPanel}/>
+                <RichTextEditorPanel hiding={hidingPanel}/>
             }
             <MarkdownArea name={name} value={value.text} format={format} rows={rows} maxHeight={maxHeight}
                           placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}

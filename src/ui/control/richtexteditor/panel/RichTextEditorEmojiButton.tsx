@@ -5,14 +5,14 @@ import emojiData from '@emoji-mart/data';
 import i18n from 'i18next';
 
 import { msSentimentSatisfied } from "ui/material-symbols";
-import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
+import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEditorButton";
 import { useButtonPopper } from "ui/hook";
 
 interface Props {
     onSelect?: (emoji: string) => void;
 }
 
-export default function VisualEditorEmojiButton({onSelect}: Props) {
+export default function RichTextEditorEmojiButton({onSelect}: Props) {
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
         placement, zIndex
