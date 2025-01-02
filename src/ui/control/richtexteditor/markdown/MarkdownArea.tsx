@@ -8,12 +8,13 @@ import { CLIENT_SETTINGS_PREFIX, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
+import * as Browser from "ui/browser";
 import { TextareaAutosize } from "ui/control";
 import RichTextPasteDialog, { RichTextPasteMode } from "ui/control/richtexteditor/RichTextPasteDialog";
+import { useRichTextEditorMedia } from "ui/control/richtexteditor/rich-text-editor-media-context";
 import { extractUrls, replaceSmileys } from "util/text";
 import { containsTags, quoteHtml, safeImportHtml } from "util/html";
 import { insertText } from "util/ui";
-import * as Browser from "ui/browser";
 
 const MENTION_START = /(^|\s)@$/;
 
@@ -35,18 +36,18 @@ export interface MarkdownAreaProps {
     onBlur?: (event: React.FocusEvent) => void;
     onUrls?: (urls: string[]) => void;
     panel: React.RefObject<HTMLDivElement>;
-    uploadImage?: (image: File) => void;
 }
 
 function MarkdownArea(
     {
         name, value, format, className, autoFocus, autoComplete, maxHeight, placeholder, rows = 3, disabled,
-        smileysEnabled, submitKey, onSubmit, onChange, onBlur, onUrls, panel, uploadImage
+        smileysEnabled, submitKey, onSubmit, onChange, onBlur, onUrls, panel
     }: MarkdownAreaProps,
     ref: ForwardedRef<HTMLTextAreaElement>
 ) {
     const pasteRich = useSelector((state: ClientState) => getSetting(state, "rich-text-editor.paste-rich") as string);
     const dispatch = useDispatch();
+    const {pasteImage} = useRichTextEditorMedia();
 
     const textArea = useRef<HTMLTextAreaElement>(null);
 
@@ -126,20 +127,8 @@ function MarkdownArea(
             return;
         }
 
-        if (uploadImage) {
-            // clipboardData.items is array-like, not a real array, thus weird calling convention
-            const imageItem: DataTransferItem = Array.prototype.find.call(
-                event.clipboardData.items,
-                ({kind, type}: DataTransferItem) => kind === "file" && type.startsWith("image/")
-            );
-
-            if (imageItem) {
-                const imageFile = imageItem.getAsFile();
-                if (imageFile) {
-                    uploadImage(imageFile);
-                }
-                return;
-            }
+        if (pasteImage(event.clipboardData)) {
+            return;
         }
 
         const html = event.clipboardData.getData("text/html");
@@ -159,7 +148,7 @@ function MarkdownArea(
             setPasteText(text);
             setPasteHtml(html);
         }
-    }, [format, pasteRich, uploadImage, pasteRichText]);
+    }, [format, pasteRich, pasteImage, pasteRichText]);
 
     useEffect(() => {
         if (textArea.current) {

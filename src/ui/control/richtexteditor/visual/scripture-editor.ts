@@ -75,8 +75,10 @@ export type ScriptureEditor<T extends DOMEditor> = T & {
     removeChangeListener(listener: EditorChangeListener): void;
 }
 
-export function withScripture<T extends DOMEditor>(editor: T): ScriptureEditor<T> {
-    const {isInline, isVoid, insertFragmentData, insertTextData, normalizeNode, apply} = editor;
+export function withScripture<T extends DOMEditor>(
+    editor: T, pasteImage: (data: DataTransfer) => boolean
+): ScriptureEditor<T> {
+    const {isInline, isVoid, insertData, insertFragmentData, insertTextData, normalizeNode, apply} = editor;
 
     const scriptureEditor = editor as ScriptureEditor<T>;
 
@@ -85,6 +87,12 @@ export function withScripture<T extends DOMEditor>(editor: T): ScriptureEditor<T
 
     scriptureEditor.isVoid = (element: BaseElement): boolean =>
         (isScriptureElement(element) && isScriptureVoid(element)) || isVoid(element);
+
+    scriptureEditor.insertData = (data: DataTransfer): void => {
+        if (!pasteImage(data)) {
+            insertData(data);
+        }
+    };
 
     scriptureEditor.insertFragmentData = (data: DataTransfer): boolean => {
         if (insertFragmentData(data)) {

@@ -166,10 +166,29 @@ export default function RichTextEditorMedia({
         }
     }
 
+    const pasteImage = (data: DataTransfer): boolean => {
+        // clipboardData.items is array-like, not a real array, thus weird calling convention
+        const imageItem: DataTransferItem = Array.prototype.find.call(
+            data.items,
+            ({kind, type}: DataTransferItem) => kind === "file" && features?.imageFormats.includes(type)
+        );
+
+        if (imageItem) {
+            const imageFile = imageItem.getAsFile();
+            if (imageFile) {
+                openUploadImages([imageFile]);
+            }
+            return true;
+        }
+
+        return false;
+    }
+
     return (
         <RichTextEditorMediaContext.Provider value={{
             getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadImages, uploadProgress, forceCompress,
-            compress: compress.current, setCompress: value => compress.current = value, deleteImage, reorderImage
+            compress: compress.current, setCompress: value => compress.current = value, deleteImage, reorderImage,
+            pasteImage
         }}>
             {children}
             <input {...getInputProps()}/>

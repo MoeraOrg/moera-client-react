@@ -15,6 +15,7 @@ import {
     withScripture
 } from "ui/control/richtexteditor/visual/scripture-editor";
 import { htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
+import { useRichTextEditorMedia } from "ui/control/richtexteditor/rich-text-editor-media-context";
 
 export type VisualEditorProps = {
     value: RichTextValue;
@@ -28,7 +29,10 @@ export type VisualEditorProps = {
 export default function VisualEditor({
     value, rows, maxHeight, placeholder, autoFocus, disabled, hidingPanel, onChange, submitKey, onSubmit, onUrls
 }: VisualEditorProps) {
-    const [editor] = useState(() => withScripture(withHistory(withReact(createEditor(), "x-scripture-fragment"))));
+    const {pasteImage} = useRichTextEditorMedia();
+    const [editor] = useState(
+        () => withScripture(withHistory(withReact(createEditor(), "x-scripture-fragment")), pasteImage)
+    );
 
     useEffect(() => {
         if (!disabled && autoFocus) {

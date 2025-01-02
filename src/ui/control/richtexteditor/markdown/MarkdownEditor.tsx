@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 
 import MarkdownEditorCommands from "ui/control/richtexteditor/markdown/MarkdownEditorCommands";
 import VisualEditorPanel from "ui/control/richtexteditor/visual/VisualEditorPanel";
@@ -20,7 +20,6 @@ export function MarkdownEditor({
 }: MarkdownEditorProps) {
     const panel = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
-    const [imageFromClipboard, setImageFromClipboard] = useState<File | undefined>(undefined);
 
     // useCallback() is mandatory here
     const onTextChange = useCallback(() => {
@@ -37,8 +36,7 @@ export function MarkdownEditor({
             <MarkdownArea name={name} value={value.text} format={format} rows={rows} maxHeight={maxHeight}
                           placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
                           disabled={disabled} smileysEnabled={smileysEnabled} submitKey={submitKey} onSubmit={onSubmit}
-                          onChange={onTextChange} onBlur={onBlur} onUrls={onUrls} ref={textArea} panel={panel}
-                          uploadImage={setImageFromClipboard}/>
+                          onChange={onTextChange} onBlur={onBlur} onUrls={onUrls} ref={textArea} panel={panel}/>
         </MarkdownEditorCommands>
     );
 }
