@@ -66,7 +66,7 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName}
 
     const onImageDownloadSuccess = (file: File) => {
         setDownloading(false);
-        uploadImages([file], undefined);
+        uploadImages([file], compress);
     }
 
     const onImageDownloadFailure = () => {

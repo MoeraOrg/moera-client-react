@@ -61,7 +61,7 @@ import { RichTextSpoilerValues } from "ui/control/richtexteditor/dialog/RichText
 import { RichTextVideoValues } from "ui/control/richtexteditor/dialog/RichTextVideoDialog";
 import { RichTextFoldValues } from "ui/control/richtexteditor/dialog/RichTextFoldDialog";
 import { RichTextFormulaValues } from "ui/control/richtexteditor/dialog/RichTextFormulaDialog";
-import { RichTextImageValues } from "ui/control/richtexteditor/dialog/RichTextImageDialog";
+import { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
 
@@ -104,8 +104,7 @@ export default function VisualEditorCommands({children}: Props) {
     const inImageAttached = image != null && image.mediaFile != null;
 
     const {
-        showLinkDialog, showSpoilerDialog, showMentionDialog, showVideoDialog, showFoldDialog, showFormulaDialog,
-        showImageDialog
+        showLinkDialog, showSpoilerDialog, showMentionDialog, showVideoDialog, showFoldDialog, showFormulaDialog
     } = useRichTextEditorDialogs();
 
     const focus = () =>
@@ -469,7 +468,7 @@ export default function VisualEditorCommands({children}: Props) {
         clearBlocks();
     }
 
-    const {openLocalFiles} = useRichTextEditorMedia();
+    const {openLocalFiles, showImageDialog} = useRichTextEditorMedia();
 
     const formatImage = (embedded?: boolean) => {
         const [element, path] = findWrappingElement(editor, ["image", "figure-image"]) ?? [null, null];
@@ -499,7 +498,10 @@ export default function VisualEditorCommands({children}: Props) {
 
         showImageDialog(
             true,
+            null,
             prevValues?.mediaFiles,
+            prevValues?.href,
+            true,
             prevValues,
             (
                 ok: boolean | null,

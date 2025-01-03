@@ -4,6 +4,8 @@ import { DropzoneRootProps } from 'react-dropzone';
 import { VerifiedMediaFile } from "api";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { RichTextImageStandardSize } from "ui/control/richtexteditor/rich-text-image";
+import { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
+import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
 
 export type UploadStatus = "loading" | "success" | "failure";
 
@@ -26,7 +28,7 @@ export interface RichTextEditorMediaInterface {
     isDragAccept: boolean;
     isDragReject: boolean;
     openLocalFiles: (onUploaded?: OnInsertHandler) => void;
-    uploadImages: (files: File[], caption: RichTextValue | undefined) => void;
+    uploadImages: (files: File[], compress: boolean, caption?: RichTextValue) => void;
     uploadProgress: UploadProgress[];
     forceCompress: boolean;
     compress: boolean;
@@ -34,6 +36,11 @@ export interface RichTextEditorMediaInterface {
     deleteImage: (id: string) => void;
     reorderImage: (moveId: string, overId: string) => void;
     pasteImage: (data: DataTransfer) => boolean;
+    showImageDialog: (
+        show: boolean, files?: File[] | null, mediaFiles?: VerifiedMediaFile[] | null, href?: string | null,
+        insert?: boolean, prevValues?: RichTextImageValues | null,
+        onSubmit?: RichTextEditorDialogSubmit<RichTextImageValues>
+    ) => void;
 }
 
 export const RichTextEditorMediaContext = createContext<RichTextEditorMediaInterface>({
@@ -49,6 +56,7 @@ export const RichTextEditorMediaContext = createContext<RichTextEditorMediaInter
     deleteImage: () => {},
     reorderImage: () => {},
     pasteImage: () => false,
+    showImageDialog: () => {},
 });
 
 export const useRichTextEditorMedia = (): RichTextEditorMediaInterface => useContext(RichTextEditorMediaContext);

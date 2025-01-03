@@ -1,13 +1,11 @@
 import { createContext, useContext } from 'react';
 
-import { VerifiedMediaFile } from "api";
 import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
 import { RichTextSpoilerValues } from "ui/control/richtexteditor/dialog/RichTextSpoilerDialog";
 import { RichTextFoldValues } from "ui/control/richtexteditor/dialog/RichTextFoldDialog";
 import { RichTextLinkValues } from "ui/control/richtexteditor/dialog/RichTextLinkDialog";
 import { RichTextVideoValues } from "ui/control/richtexteditor/dialog/RichTextVideoDialog";
 import { RichTextFormulaValues } from "ui/control/richtexteditor/dialog/RichTextFormulaDialog";
-import { RichTextImageValues } from "ui/control/richtexteditor/dialog/RichTextImageDialog";
 import { NameListItem } from "util/names-list";
 
 export interface RichTextEditorDialogsInterface {
@@ -34,12 +32,6 @@ export interface RichTextEditorDialogsInterface {
         prevValues?: RichTextFormulaValues | null,
         onSubmit?: RichTextEditorDialogSubmit<RichTextFormulaValues>
     ) => void;
-    showImageDialog: (
-        show: boolean,
-        mediaFiles?: VerifiedMediaFile[] | null,
-        prevValues?: RichTextImageValues | null,
-        onSubmit?: RichTextEditorDialogSubmit<RichTextImageValues>
-    ) => void;
 }
 
 export const RichTextEditorDialogsContext = createContext<RichTextEditorDialogsInterface>({
@@ -49,7 +41,6 @@ export const RichTextEditorDialogsContext = createContext<RichTextEditorDialogsI
     showMentionDialog: () => {},
     showVideoDialog: () => {},
     showFormulaDialog: () => {},
-    showImageDialog: () => {},
 });
 
 export const useRichTextEditorDialogs = (): RichTextEditorDialogsInterface => useContext(RichTextEditorDialogsContext);

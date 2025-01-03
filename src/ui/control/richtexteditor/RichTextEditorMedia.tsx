@@ -15,11 +15,9 @@ import {
     UploadProgress,
     UploadStatus
 } from "ui/control/richtexteditor/rich-text-editor-media-context";
-import { useRichTextEditorDialogs } from "ui/control/richtexteditor/dialog/rich-text-editor-dialogs-context";
-import { RichTextImageValues } from "ui/control/richtexteditor/dialog/RichTextImageDialog";
-import RichTextUploadImagesDialog, {
-    RichTextUploadImagesValues
-} from "ui/control/richtexteditor/dialog/RichTextUploadImagesDialog";
+import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
+import { RichTextImageStandardSize } from "ui/control/richtexteditor/rich-text-image";
+import RichTextImageDialog, { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
 import { isHtmlEmpty } from "util/html";
 import { RelNodeName } from "util/rel-node-name";
 import { arrayMove } from "util/misc";
@@ -52,7 +50,6 @@ export default function RichTextEditorMedia({
     const compressImages = useSelector((state: ClientState) =>
         getSetting(state, "posting.media.compress.default") as boolean);
     const dispatch = useDispatch();
-    const {showImageDialog} = useRichTextEditorDialogs();
 
     const uploadedImagesRef = useRef<(VerifiedMediaFile | null)[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
@@ -61,26 +58,13 @@ export default function RichTextEditorMedia({
     valueRef.current = value;
     const onChangeRef = useRef<ChangeHandler | undefined>();
     onChangeRef.current = onChange;
+
+    // Parameters passed to bottom callbacks from the topmost dialog
     const onInsertRef = useRef<OnInsertHandler | undefined>();
-
-    const imagesInsert = (images: VerifiedMediaFile[]) => {
-        showImageDialog(
-            true,
-            images,
-            null,
-            (
-                ok: boolean | null,
-                {mediaFiles, standardSize, customWidth, customHeight, caption}: Partial<RichTextImageValues>
-            ) => {
-                showImageDialog(false);
-
-                if (ok && mediaFiles != null && mediaFiles.length > 0) {
-                    onInsertRef.current?.(mediaFiles, standardSize ?? "large", customWidth, customHeight, caption);
-                }
-            }
-        );
-
-    }
+    const standardSizeRef = useRef<RichTextImageStandardSize | undefined>();
+    const customWidthRef = useRef<number | null>(null);
+    const customHeightRef = useRef<number | null>(null);
+    const captionRef = useRef<string | undefined>();
 
     const imageUploaded = (index: number, image: VerifiedMediaFile) => {
         if (uploadedImagesRef.current.some(v => v != null && v.id === image.id)) {
@@ -90,8 +74,11 @@ export default function RichTextEditorMedia({
         if (isAllUploaded(uploadedImagesRef.current)) {
             const media = (valueRef.current?.media ?? []).concat(uploadedImagesRef.current);
             onChangeRef.current?.(new RichTextValue(valueRef.current?.text ?? "", srcFormat, media));
-            if (onInsertRef.current != null) {
-                imagesInsert(uploadedImagesRef.current);
+            if (onInsertRef.current != null && uploadedImagesRef.current.length > 0) {
+                onInsertRef.current(
+                    uploadedImagesRef.current, standardSizeRef.current ?? "large",
+                    customWidthRef.current, customHeightRef.current, captionRef.current
+                );
             }
         }
     }
@@ -115,37 +102,51 @@ export default function RichTextEditorMedia({
         uploadedImagesRef.current = new Array(count).fill(null);
     }
 
-    const uploadImages = (files: File[], caption: RichTextValue | undefined) => {
+    const uploadImages = (files: File[], compress: boolean, description: RichTextValue | undefined) => {
         if (files.length > 0) {
             setUploadProgress(files.map(file => ({status: "loading", loaded: 0, total: file.size})));
             imageUploadStarted(files.length);
-            const captionSrcText = caption?.toText(smileysEnabled);
-            const captionSrc = !isHtmlEmpty(captionSrcText) ? JSON.stringify({text: captionSrcText}) : null;
+            const descriptionSrcText = description?.toText(smileysEnabled);
+            const descriptionSrc = !isHtmlEmpty(descriptionSrcText) ? JSON.stringify({text: descriptionSrcText}) : null;
             dispatch(richTextEditorImagesUpload(
-                nodeName, files, features, compress.current, onImageUploadSuccess, onImageUploadFailure,
-                onImageUploadProgress, captionSrc, srcFormat
+                nodeName, files, features, compress, onImageUploadSuccess, onImageUploadFailure, onImageUploadProgress,
+                descriptionSrc, srcFormat
             ));
         }
     };
 
-    const [files, setFiles] = useState<File[]>([]);
-    const compress = useRef<boolean>(forceCompress || compressImages);
-    const [uploadImagesShow, setUploadImagesShow] = useState<boolean>(false);
+    const compressDefault = useRef<boolean>(forceCompress || compressImages);
 
     const openUploadImages = (files: File[]) => {
-        setFiles(files);
-        setUploadImagesShow(true);
-    }
+        showImageDialog(
+            true,
+            files,
+            null,
+            null,
+            onInsertRef.current != null,
+            null,
+            (
+                ok: boolean | null,
+                {
+                    files, compress, description, standardSize, customWidth, customHeight, caption
+                }: Partial<RichTextImageValues>
+            ) => {
+                showImageDialog(false);
 
-    const submitUploadImages = (ok: boolean | null, values: Partial<RichTextUploadImagesValues>) => {
-        setUploadImagesShow(false);
-        if (!ok || !values.files || values.files.length === 0) {
-            return;
-        }
-        if (values.compress != null) {
-            compress.current = values.compress;
-        }
-        uploadImages(values.files, values.caption);
+                if (!ok || !files || files.length === 0) {
+                    return;
+                }
+
+                if (compress != null) {
+                    compressDefault.current = compress;
+                }
+                standardSizeRef.current = standardSize;
+                customWidthRef.current = customWidth ?? null;
+                customHeightRef.current = customHeight ?? null;
+                captionRef.current = caption;
+                uploadImages(files, compress ?? compressDefault.current, description);
+            }
+        );
     }
 
     const imageExtensions = useMemo(
@@ -208,18 +209,47 @@ export default function RichTextEditorMedia({
         return false;
     }
 
+    const [imageDialog, setImageDialog] = useState<boolean>(false);
+    const [imageDialogFiles, setImageDialogFiles] = useState<File[] | null>(null);
+    const [imageDialogMediaFiles, setImageDialogMediaFiles] = useState<VerifiedMediaFile[] | null>(null);
+    const [imageDialogHref, setImageDialogHref] = useState<string | null>(null);
+    const [imageDialogInsert, setImageDialogInsert] = useState<boolean>(false);
+    const [imageDialogPrevValues, setImageDialogPrevValues] = useState<RichTextImageValues | null>(null);
+    const [imageDialogOnSubmit, setImageDialogOnSubmit] =
+        useState<RichTextEditorDialogSubmit<RichTextImageValues>>(() => () => {});
+
+    const showImageDialog = (
+        show: boolean, files: File[] | null = null, mediaFiles: VerifiedMediaFile[] | null = null,
+        href: string | null = null, insert: boolean = false, prevValues: RichTextImageValues | null = null,
+        onSubmit?: RichTextEditorDialogSubmit<RichTextImageValues>
+    ) => {
+        if (show) {
+            setImageDialogFiles(files);
+            setImageDialogMediaFiles(mediaFiles);
+            setImageDialogHref(href);
+            setImageDialogInsert(insert);
+            setImageDialogPrevValues(prevValues);
+            onSubmit && setImageDialogOnSubmit(() => onSubmit);
+            setImageDialog(true);
+        } else {
+            setImageDialog(false);
+        }
+    }
+
     return (
         <RichTextEditorMediaContext.Provider value={{
             getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadImages, uploadProgress, forceCompress,
-            compress: compress.current, setCompress: value => compress.current = value, deleteImage, reorderImage,
-            pasteImage
+            compress: compressDefault.current, setCompress: value => compressDefault.current = value, deleteImage,
+            reorderImage, pasteImage, showImageDialog,
         }}>
             {children}
             <input {...getInputProps()}/>
-            {uploadImagesShow &&
-                <RichTextUploadImagesDialog forceCompress={forceCompress} files={files}
-                                            compressDefault={compress.current} captionSrcFormat={srcFormat}
-                                            smileysEnabled={smileysEnabled} onSubmit={submitUploadImages}/>
+            {imageDialog &&
+                <RichTextImageDialog files={imageDialogFiles} mediaFiles={imageDialogMediaFiles} href={imageDialogHref}
+                                     insert={imageDialogInsert} nodeName={nodeName} forceCompress={forceCompress}
+                                     compressDefault={compressDefault.current} descriptionSrcFormat={srcFormat}
+                                     smileysEnabled={smileysEnabled} prevValues={imageDialogPrevValues}
+                                     onSubmit={imageDialogOnSubmit}/>
             }
         </RichTextEditorMediaContext.Provider>
     );

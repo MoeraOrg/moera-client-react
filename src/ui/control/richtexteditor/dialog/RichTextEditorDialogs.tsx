@@ -9,8 +9,6 @@ import RichTextVideoDialog, { RichTextVideoValues } from "ui/control/richtextedi
 import RichTextFormulaDialog, { RichTextFormulaValues } from "ui/control/richtexteditor/dialog/RichTextFormulaDialog";
 import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
 import { NameListItem } from "util/names-list";
-import RichTextImageDialog, { RichTextImageValues } from "ui/control/richtexteditor/dialog/RichTextImageDialog";
-import { VerifiedMediaFile } from "api";
 
 interface Props {
     children: ReactNode;
@@ -45,12 +43,6 @@ export default function RichTextEditorDialogs({children}: Props) {
     const [formulaDialogPrevValues, setFormulaDialogPrevValues] = useState<RichTextFormulaValues | null>(null);
     const [formulaDialogOnSubmit, setFormulaDialogOnSubmit] =
         useState<RichTextEditorDialogSubmit<RichTextFormulaValues>>(() => () => {});
-
-    const [imageDialog, setImageDialog] = useState<boolean>(false);
-    const [imageDialogMediaFiles, setImageDialogMediaFiles] = useState<VerifiedMediaFile[] | null>(null);
-    const [imageDialogPrevValues, setImageDialogPrevValues] = useState<RichTextImageValues | null>(null);
-    const [imageDialogOnSubmit, setImageDialogOnSubmit] =
-        useState<RichTextEditorDialogSubmit<RichTextImageValues>>(() => () => {});
 
     const showSpoilerDialog = (
         show: boolean, prevValues?: RichTextSpoilerValues | null,
@@ -122,25 +114,11 @@ export default function RichTextEditorDialogs({children}: Props) {
         }
     }
 
-    const showImageDialog = (
-        show: boolean, mediaFiles?: VerifiedMediaFile[] | null, prevValues?: RichTextImageValues | null,
-        onSubmit?: RichTextEditorDialogSubmit<RichTextImageValues>
-    ) => {
-        if (show) {
-            setImageDialogMediaFiles(mediaFiles ?? null);
-            setImageDialogPrevValues(prevValues ?? null);
-            onSubmit && setImageDialogOnSubmit(() => onSubmit);
-            setImageDialog(true);
-        } else {
-            setImageDialog(false);
-        }
-    }
-
     return (
         <>
             <RichTextEditorDialogsContext.Provider value={{
                 showSpoilerDialog, showFoldDialog, showLinkDialog, showMentionDialog, showVideoDialog,
-                showFormulaDialog, showImageDialog
+                showFormulaDialog
             }}>
                 {children}
             </RichTextEditorDialogsContext.Provider>
@@ -156,10 +134,6 @@ export default function RichTextEditorDialogs({children}: Props) {
             {videoDialog && <RichTextVideoDialog onSubmit={videoDialogOnSubmit}/>}
             {formulaDialog &&
                 <RichTextFormulaDialog prevValues={formulaDialogPrevValues} onSubmit={formulaDialogOnSubmit}/>
-            }
-            {imageDialog &&
-                <RichTextImageDialog mediaFiles={imageDialogMediaFiles} prevValues={imageDialogPrevValues}
-                                     onSubmit={imageDialogOnSubmit}/>
             }
         </>
     );

@@ -18,7 +18,7 @@ import { RichTextLinkValues } from "ui/control/richtexteditor/dialog/RichTextLin
 import { RichTextSpoilerValues } from "ui/control/richtexteditor/dialog/RichTextSpoilerDialog";
 import { RichTextFoldValues } from "ui/control/richtexteditor/dialog/RichTextFoldDialog";
 import { RichTextFormulaValues } from "ui/control/richtexteditor/dialog/RichTextFormulaDialog";
-import { RichTextImageValues } from "ui/control/richtexteditor/dialog/RichTextImageDialog";
+import { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
 import { getImageDimensions, RichTextImageStandardSize } from "ui/control/richtexteditor/rich-text-image";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/rich-text-editor-media-context";
 import { htmlEntities } from "util/html";
@@ -53,8 +53,7 @@ function insertImage(
 
 export default function MarkdownEditorCommands({format, textArea, children}: Props) {
     const {
-        showLinkDialog, showSpoilerDialog, showMentionDialog, showFoldDialog, showFormulaDialog,
-        showImageDialog
+        showLinkDialog, showSpoilerDialog, showMentionDialog, showFoldDialog, showFormulaDialog
     } = useRichTextEditorDialogs();
 
     const isMarkdown = () => format === "markdown";
@@ -350,13 +349,16 @@ export default function MarkdownEditorCommands({format, textArea, children}: Pro
     const formatClear = () => {
     }
 
-    const {openLocalFiles} = useRichTextEditorMedia();
+    const {openLocalFiles, showImageDialog} = useRichTextEditorMedia();
 
     const formatImage = (embedded?: boolean) => {
         if (embedded) {
             showImageDialog(
                 true,
                 null,
+                null,
+                "",
+                true,
                 null,
                 (
                     ok: boolean | null,
