@@ -4,9 +4,9 @@ import cx from 'classnames';
 import { PostingFeatures } from "api";
 import { MarkdownEditor, MarkdownEditorProps } from "ui/control/richtexteditor/markdown/MarkdownEditor";
 import VisualEditor, { VisualEditorProps } from "ui/control/richtexteditor/visual/VisualEditor";
-import RichTextEditorDropzone from "ui/control/richtexteditor/RichTextEditorDropzone";
+import RichTextEditorDropzone from "ui/control/richtexteditor/media/RichTextEditorDropzone";
 import RichTextEditorDialogs from "ui/control/richtexteditor/dialog/RichTextEditorDialogs";
-import RichTextEditorMedia from "ui/control/richtexteditor/RichTextEditorMedia";
+import RichTextEditorMedia from "ui/control/richtexteditor/media/RichTextEditorMedia";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import "./RichTextEditor.css";
 

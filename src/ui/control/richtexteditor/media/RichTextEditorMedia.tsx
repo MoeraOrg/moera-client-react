@@ -14,10 +14,10 @@ import {
     RichTextEditorMediaContext,
     UploadProgress,
     UploadStatus
-} from "ui/control/richtexteditor/rich-text-editor-media-context";
+} from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
-import { RichTextImageStandardSize } from "ui/control/richtexteditor/rich-text-image";
-import RichTextImageDialog, { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
+import { RichTextImageStandardSize } from "ui/control/richtexteditor/media/rich-text-image";
+import RichTextImageDialog, { RichTextImageValues } from "ui/control/richtexteditor/media/RichTextImageDialog";
 import { isHtmlEmpty } from "util/html";
 import { RelNodeName } from "util/rel-node-name";
 import { arrayMove } from "util/misc";

@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { SourceFormat, VerifiedMediaFile } from "api";
 import { CheckboxField, InputField, NumberField, SelectField } from "ui/control/field";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
-import { RichTextImageStandardSize, STANDARD_SIZES } from "ui/control/richtexteditor/rich-text-image";
+import { RichTextImageStandardSize, STANDARD_SIZES } from "ui/control/richtexteditor/media/rich-text-image";
 import { RichTextField } from "ui/control/richtexteditor/RichTextField";
-import UploadedImage from "ui/control/richtexteditor/UploadedImage";
+import UploadedImage from "ui/control/richtexteditor/media/UploadedImage";
 import {
     richTextEditorDialog,
     RichTextEditorDialogProps

@@ -14,8 +14,8 @@ import { SortableContext } from '@dnd-kit/sortable';
 
 import { PrivateMediaFileInfo, VerifiedMediaFile } from "api";
 import { RichTextValue } from "ui/control/richtexteditor";
-import UploadedImage from "ui/control/richtexteditor/UploadedImage";
-import AttachedImage from "ui/control/richtexteditor/AttachedImage";
+import UploadedImage from "ui/control/richtexteditor/media/UploadedImage";
+import AttachedImage from "ui/control/richtexteditor/media/AttachedImage";
 import { mediaHashesExtract } from "util/media-images";
 import { RelNodeName } from "util/rel-node-name";
 import "./RichTextEditorImageList.css";

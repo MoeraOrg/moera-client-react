@@ -36,7 +36,7 @@ import {
     ScriptureMarks,
     ScriptureText
 } from "ui/control/richtexteditor/visual/scripture";
-import { findStandardSize, getImageDimensions } from "ui/control/richtexteditor/rich-text-image";
+import { findStandardSize, getImageDimensions } from "ui/control/richtexteditor/media/rich-text-image";
 import * as Browser from "ui/browser";
 import { htmlEntities, htmlToEmoji, linefeedsToHtml, safeImportHtml, unhtmlEntities } from "util/html";
 import { isNumericString, notNull } from "util/misc";

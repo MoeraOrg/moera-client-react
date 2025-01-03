@@ -7,7 +7,7 @@ import { getNodeRootPage } from "state/node/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { isScriptureElement } from "ui/control/richtexteditor/visual/scripture";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
-import { getImageDimensions } from "ui/control/richtexteditor/rich-text-image";
+import { getImageDimensions } from "ui/control/richtexteditor/media/rich-text-image";
 import PreloadedImage from "ui/posting/PreloadedImage";
 import { BlockMath, InlineMath } from "ui/katex";
 import { mediaImageTagAttributes } from "util/media-images";

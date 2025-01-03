@@ -9,7 +9,7 @@ import { VerifiedMediaFile } from "api";
 import { openImageEditDialog } from "state/imageeditdialog/actions";
 import { Icon, msMoreVert } from "ui/material-symbols";
 import { DropdownMenu, useModalDialog } from "ui/control";
-import AttachedImage from "ui/control/richtexteditor/AttachedImage";
+import AttachedImage from "ui/control/richtexteditor/media/AttachedImage";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import "./UploadedImage.css";
 

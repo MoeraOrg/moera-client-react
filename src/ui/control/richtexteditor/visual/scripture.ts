@@ -1,7 +1,7 @@
 import { Element as SlateElement, Text as SlateText } from 'slate';
 
 import { PrivateMediaFileInfo } from "api";
-import { RichTextImageStandardSize } from "ui/control/richtexteditor/rich-text-image";
+import { RichTextImageStandardSize } from "ui/control/richtexteditor/media/rich-text-image";
 
 /* P */
 

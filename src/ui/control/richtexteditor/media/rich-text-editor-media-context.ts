@@ -3,8 +3,8 @@ import { DropzoneRootProps } from 'react-dropzone';
 
 import { VerifiedMediaFile } from "api";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
-import { RichTextImageStandardSize } from "ui/control/richtexteditor/rich-text-image";
-import { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
+import { RichTextImageStandardSize } from "ui/control/richtexteditor/media/rich-text-image";
+import { RichTextImageValues } from "ui/control/richtexteditor/media/RichTextImageDialog";
 import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
 
 export type UploadStatus = "loading" | "success" | "failure";

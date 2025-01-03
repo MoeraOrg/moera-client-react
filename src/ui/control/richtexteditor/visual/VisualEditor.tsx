@@ -15,7 +15,7 @@ import {
     withScripture
 } from "ui/control/richtexteditor/visual/scripture-editor";
 import { htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
-import { useRichTextEditorMedia } from "ui/control/richtexteditor/rich-text-editor-media-context";
+import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 
 export type VisualEditorProps = {
     value: RichTextValue;

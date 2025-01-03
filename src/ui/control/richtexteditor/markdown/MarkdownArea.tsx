@@ -11,7 +11,7 @@ import { getSetting } from "state/settings/selectors";
 import * as Browser from "ui/browser";
 import { TextareaAutosize } from "ui/control";
 import MarkdownPasteDialog, { RichTextPasteMode } from "ui/control/richtexteditor/markdown/MarkdownPasteDialog";
-import { useRichTextEditorMedia } from "ui/control/richtexteditor/rich-text-editor-media-context";
+import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { extractUrls, replaceSmileys } from "util/text";
 import { containsTags, quoteHtml, safeImportHtml } from "util/html";
 import { insertText } from "util/ui";

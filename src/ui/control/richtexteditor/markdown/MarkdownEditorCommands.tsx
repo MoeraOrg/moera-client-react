@@ -18,9 +18,9 @@ import { RichTextLinkValues } from "ui/control/richtexteditor/dialog/RichTextLin
 import { RichTextSpoilerValues } from "ui/control/richtexteditor/dialog/RichTextSpoilerDialog";
 import { RichTextFoldValues } from "ui/control/richtexteditor/dialog/RichTextFoldDialog";
 import { RichTextFormulaValues } from "ui/control/richtexteditor/dialog/RichTextFormulaDialog";
-import { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
-import { getImageDimensions, RichTextImageStandardSize } from "ui/control/richtexteditor/rich-text-image";
-import { useRichTextEditorMedia } from "ui/control/richtexteditor/rich-text-editor-media-context";
+import { RichTextImageValues } from "ui/control/richtexteditor/media/RichTextImageDialog";
+import { getImageDimensions, RichTextImageStandardSize } from "ui/control/richtexteditor/media/rich-text-image";
+import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { htmlEntities } from "util/html";
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
