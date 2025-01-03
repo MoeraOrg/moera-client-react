@@ -23,6 +23,7 @@ import {
 import "./VisualTextArea.css";
 
 export interface VisualTextAreaProps {
+    name: string;
     rows?: number;
     maxHeight?: string | null;
     placeholder?: string;
@@ -37,7 +38,7 @@ export interface VisualTextAreaProps {
 const isBackspace = isHotkey("Backspace");
 
 export default function VisualTextArea({
-    rows, maxHeight, placeholder, autoFocus, disabled, smileysEnabled, submitKey, onSubmit, onBlur
+    name, rows, maxHeight, placeholder, autoFocus, disabled, smileysEnabled, submitKey, onSubmit, onBlur
 }: VisualTextAreaProps) {
     const editor = useSlateStatic() as ReactEditor;
     const {
@@ -230,6 +231,7 @@ export default function VisualTextArea({
 
     return (
         <Editable
+            id={name}
             className="visual-text-area"
             style={{
                 minHeight: rows != null ? `${Math.ceil(rows * 1.5)}em` : undefined,

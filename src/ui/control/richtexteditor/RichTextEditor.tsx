@@ -48,10 +48,10 @@ export function RichTextEditor({
                                      forceCompress={forceImageCompress} srcFormat={format}
                                      smileysEnabled={smileysEnabled} onChange={onMediaChange}>
                     {format.endsWith("/visual") ?
-                        <VisualEditor value={value} rows={rows} maxHeight={maxHeight} placeholder={placeholder}
-                                      autoFocus={autoFocus} disabled={disabled} smileysEnabled={smileysEnabled}
-                                      hidingPanel={hidingPanel} submitKey={submitKey} onSubmit={onSubmit}
-                                      onChange={onTextChange} onBlur={onBlur} onUrls={onUrls}/>
+                        <VisualEditor name={name} value={value} rows={rows} maxHeight={maxHeight}
+                                      placeholder={placeholder} autoFocus={autoFocus} disabled={disabled}
+                                      smileysEnabled={smileysEnabled} hidingPanel={hidingPanel} submitKey={submitKey}
+                                      onSubmit={onSubmit} onChange={onTextChange} onBlur={onBlur} onUrls={onUrls}/>
                     :
                         <MarkdownEditor name={name} value={value} rows={rows} maxHeight={maxHeight}
                                         placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
