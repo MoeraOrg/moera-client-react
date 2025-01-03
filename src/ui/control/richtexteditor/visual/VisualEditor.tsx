@@ -20,7 +20,7 @@ import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-tex
 export type VisualEditorProps = {
     value: RichTextValue;
     hidingPanel?: boolean;
-    onChange?: (value: RichTextValue) => void;
+    onChange?: (value: Scripture) => void;
     submitKey?: string;
     onSubmit?: () => void;
     onUrls?: (urls: string[]) => void;
@@ -97,9 +97,9 @@ export default function VisualEditor({
     // useCallback() is mandatory here
     const onScriptureChange = useCallback((content: Scripture) => {
         if (onChange != null) {
-            onChange(new RichTextValue(content, "html/visual", value.media));
+            onChange(content);
         }
-    }, [onChange, value.media]);
+    }, [onChange]);
 
     return (
         <Slate editor={editor} initialValue={htmlToScripture("")}

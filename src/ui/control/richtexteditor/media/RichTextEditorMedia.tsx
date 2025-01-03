@@ -31,10 +31,10 @@ function updateStatus(progress: UploadProgress[], index: number, status: UploadS
 const isAllUploaded = (media: (VerifiedMediaFile | null)[]): media is VerifiedMediaFile[] =>
     media.every(v => v != null);
 
-type ChangeHandler = (value: RichTextValue) => void;
+type ChangeHandler = (value: (VerifiedMediaFile | null)[]) => void;
 
 interface Props {
-    value: RichTextValue;
+    value: (VerifiedMediaFile | null)[];
     features: PostingFeatures | null;
     nodeName: RelNodeName | string;
     forceCompress?: boolean;
@@ -54,7 +54,7 @@ export default function RichTextEditorMedia({
     const uploadedImagesRef = useRef<(VerifiedMediaFile | null)[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
     // value and onChange may change
-    const valueRef = useRef<RichTextValue>();
+    const valueRef = useRef<(VerifiedMediaFile | null)[]>();
     valueRef.current = value;
     const onChangeRef = useRef<ChangeHandler | undefined>();
     onChangeRef.current = onChange;
@@ -72,8 +72,8 @@ export default function RichTextEditorMedia({
         }
         uploadedImagesRef.current[index] = image;
         if (isAllUploaded(uploadedImagesRef.current)) {
-            const media = (valueRef.current?.media ?? []).concat(uploadedImagesRef.current);
-            onChangeRef.current?.(new RichTextValue(valueRef.current?.text ?? "", srcFormat, media));
+            const media = (valueRef.current ?? []).concat(uploadedImagesRef.current);
+            onChangeRef.current?.(media);
             if (onInsertRef.current != null && uploadedImagesRef.current.length > 0) {
                 onInsertRef.current(
                     uploadedImagesRef.current, standardSizeRef.current ?? "large",
@@ -173,21 +173,21 @@ export default function RichTextEditorMedia({
     }
 
     const deleteImage = (id: string) => {
-        if (onChange != null && value.media != null) {
-            const media = value.media.filter(v => v == null || v.id !== id);
-            onChange(new RichTextValue(value.text, srcFormat, media));
+        if (onChange != null && value != null) {
+            const media = value.filter(v => v == null || v.id !== id);
+            onChange(media);
         }
     }
 
     const reorderImage = (moveId: string, overId: string) => {
-        if (onChange != null && value.media != null && moveId !== overId) {
-            const index = value.media.findIndex(v => v != null && v.id === moveId);
-            const overIndex = value.media.findIndex(v => v != null && v.id === overId);
+        if (onChange != null && value != null && moveId !== overId) {
+            const index = value.findIndex(v => v != null && v.id === moveId);
+            const overIndex = value.findIndex(v => v != null && v.id === overId);
             if (index == null || overIndex == null) {
                 return;
             }
-            const media = arrayMove(value.media, index, overIndex);
-            onChange(new RichTextValue(value.text, srcFormat, media));
+            const media = arrayMove(value, index, overIndex);
+            onChange(media);
         }
     }
 

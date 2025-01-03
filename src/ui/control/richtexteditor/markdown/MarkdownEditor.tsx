@@ -8,7 +8,7 @@ import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 export type MarkdownEditorProps = {
     value: RichTextValue;
     hidingPanel?: boolean;
-    onChange?: (value: RichTextValue) => void;
+    onChange?: (value: string) => void;
     onUrls?: (urls: string[]) => void;
     submitKey?: string;
     onSubmit?: () => void;
@@ -24,9 +24,9 @@ export function MarkdownEditor({
     // useCallback() is mandatory here
     const onTextChange = useCallback(() => {
         if (onChange != null && textArea.current != null) {
-            onChange(new RichTextValue(textArea.current.value, format, value.media));
+            onChange(textArea.current.value);
         }
-    }, [format, onChange, value.media]);
+    }, [onChange]);
 
     return (
         <MarkdownEditorCommands format={format} textArea={textArea}>
