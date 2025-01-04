@@ -108,7 +108,7 @@ function ComposePageInner(props: Props) {
                         {features?.subjectPresent &&
                             <InputField name="subject" title="Title" anyValue disabled={!ready}/>
                         }
-                        <RichTextField name="body" disabled={!ready || beingPosted}
+                        <RichTextField name="body" placeholder={t("whats-new")} disabled={!ready || beingPosted}
                                        format={values.bodyFormat ?? "markdown"} smileysEnabled={smileysEnabled}
                                        features={features} nodeName={REL_CURRENT} urlsField="bodyUrls" anyValue
                                        autoFocus maxHeight="max(100vh - 26rem, 9em)"/>

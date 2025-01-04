@@ -234,7 +234,7 @@ export default function VisualTextArea({
             id={name}
             className="visual-text-area"
             style={{
-                minHeight: rows != null ? `${Math.ceil(rows * 1.5)}em` : undefined,
+                minHeight: rows != null ? `${Math.ceil(rows * 1.7)}em` : undefined,
                 maxHeight: maxHeight ?? "calc(100vh - 26rem)"
             }}
             placeholder={placeholder}

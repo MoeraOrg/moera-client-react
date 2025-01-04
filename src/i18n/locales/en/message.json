@@ -242,7 +242,6 @@
   "forget-unfinished-comment": "Do you really want to forget the unfinished comment?",
   "forgot-home-password": "Forgot Home Password",
   "forgot-password": "Forgot password",
-  "formatting-hint": "<0>Markdown:</0> see <1>cheatsheet</1> or <2>tutorial</2> to see how to do more. See also <3>emoji cheatsheet</3>.",
   "formula": "Formula",
   "friend": "Friend",
   "friend-groups": "Groups of friends...",
@@ -856,7 +855,6 @@
     "unlawful": "Violation of the law"
   },
   "sheriff-order-sent": "Sheriff's order is sent",
-  "show-formatting-hint": "Show formatting hint",
   "show-hidden-comments": "Show hidden comments",
   "show-list-reactions": "Show the detailed list of reactions",
   "show-number-reactions": "Show the number of reactions",
@@ -975,6 +973,7 @@
   "want-set-right-now-click-circle": "Want to set it right now? Click on the circle.",
   "want-turn-off-story-type": "Do you really want to turn off {type}",
   "welcome": "Welcome!",
+  "whats-new": "What's new with you?",
   "where-from": "Where it comes from?",
   "where-go": "Where do you want to go?",
   "why-delete-blog": "Why are you deleting the blog? (optional)",

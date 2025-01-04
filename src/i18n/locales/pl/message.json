@@ -242,7 +242,6 @@
   "forget-unfinished-comment": "Czy na pewno chcesz zapomnieć o niedokończonym komentarzu?",
   "forgot-home-password": "Zapomniałem hasła do domu",
   "forgot-password": "Zapomniałem hasła",
-  "formatting-hint": "<0>Markdown:</0> zobacz <1>cheatsheet</1> lub <2>poradnik</2>, aby dowiedzieć się, jak zrobić więcej. Zobacz również <3>emoji cheatsheet</3>.",
   "formula": "Formuła",
   "friend": "Znajomyj",
   "friend-groups": "Grupy znajomych...",
@@ -856,7 +855,6 @@
     "unlawful": "Naruszenie prawa"
   },
   "sheriff-order-sent": "Rozkaz szeryfa został wysłany",
-  "show-formatting-hint": "Pokaż podpowiedź formatowania",
   "show-hidden-comments": "Pokaż ukryte komentarze",
   "show-list-reactions": "Pokaż szczegółową listę reakcji",
   "show-number-reactions": "Pokaż liczbę reakcji",
@@ -975,6 +973,7 @@
   "want-set-right-now-click-circle": "Chcesz ustawić go teraz? Kliknij na kółko.",
   "want-turn-off-story-type": "Czy na pewno chcesz wyłączyć {type}",
   "welcome": "Witaj!",
+  "whats-new": "Co nowego u ciebie?",
   "where-from": "Skąd to pochodzi?",
   "where-go": "Dokąd chcesz się udać?",
   "why-delete-blog": "Dlaczego usuwasz blog? (opcjonalnie)",
