@@ -27,8 +27,8 @@ export type VisualEditorProps = {
 } & VisualTextAreaProps;
 
 export default function VisualEditor({
-    name, value, rows, maxHeight, placeholder, autoFocus, disabled, smileysEnabled, hidingPanel, onChange, submitKey,
-    onSubmit, onUrls, onBlur
+    name, value, rows, minHeight, maxHeight, placeholder, autoFocus, disabled, smileysEnabled, hidingPanel, onChange,
+    submitKey, onSubmit, onUrls, onBlur
 }: VisualEditorProps) {
     const {pasteImage} = useRichTextEditorMedia();
     const [editor] = useState(
@@ -109,6 +109,7 @@ export default function VisualEditor({
                 <VisualTextArea
                     name={name}
                     rows={rows}
+                    minHeight={minHeight}
                     maxHeight={maxHeight}
                     placeholder={isScriptureEmpty(editor.children) ? placeholder : undefined}
                     disabled={disabled}

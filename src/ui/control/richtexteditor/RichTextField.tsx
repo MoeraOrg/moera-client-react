@@ -14,6 +14,7 @@ interface Props {
     name: string;
     title?: string;
     rows?: number;
+    minHeight?: string | null;
     maxHeight?: string | null;
     features?: PostingFeatures | null;
     noMedia?: boolean;
@@ -37,9 +38,9 @@ interface Props {
 }
 
 export function RichTextField({
-    name, title, rows = 3, maxHeight, features, noMedia, nodeName = REL_CURRENT, forceImageCompress, placeholder,
-    autoFocus, anyValue, className, autoComplete, noFeedback = false, disabled = false, initialValue, defaultValue,
-    smileysEnabled, hidingPanel, format, submitKey, onSubmit, urlsField
+    name, title, rows = 3, minHeight, maxHeight, features, noMedia, nodeName = REL_CURRENT, forceImageCompress,
+    placeholder, autoFocus, anyValue, className, autoComplete, noFeedback = false, disabled = false, initialValue,
+    defaultValue, smileysEnabled, hidingPanel, format, submitKey, onSubmit, urlsField
 }: Props) {
     const [{value, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
@@ -78,6 +79,7 @@ export function RichTextField({
                         })}
                     autoFocus={autoFocus}
                     autoComplete={autoComplete}
+                    minHeight={minHeight}
                     maxHeight={maxHeight}
                     placeholder={placeholder ?? t("enter-text-here")}
                     rows={rows}

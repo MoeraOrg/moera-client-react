@@ -15,8 +15,8 @@ export type MarkdownEditorProps = {
 } & Omit<MarkdownAreaProps, "textArea" | "panel" | "value" | "onChange">;
 
 export function MarkdownEditor({
-    name, value, rows, maxHeight, placeholder, autoFocus, autoComplete, disabled, smileysEnabled, hidingPanel, format,
-                                   submitKey, onSubmit, onChange, onBlur, onUrls
+    name, value, rows, minHeight, maxHeight, placeholder, autoFocus, autoComplete, disabled, smileysEnabled,
+    hidingPanel, format, submitKey, onSubmit, onChange, onBlur, onUrls
 }: MarkdownEditorProps) {
     const panel = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
@@ -33,10 +33,11 @@ export function MarkdownEditor({
             {format !== "plain-text" &&
                 <RichTextEditorPanel hiding={hidingPanel}/>
             }
-            <MarkdownArea name={name} value={value.text} format={format} rows={rows} maxHeight={maxHeight}
-                          placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
-                          disabled={disabled} smileysEnabled={smileysEnabled} submitKey={submitKey} onSubmit={onSubmit}
-                          onChange={onTextChange} onBlur={onBlur} onUrls={onUrls} ref={textArea} panel={panel}/>
+            <MarkdownArea name={name} value={value.text} format={format} rows={rows} minHeight={minHeight}
+                          maxHeight={maxHeight} placeholder={placeholder} autoFocus={autoFocus}
+                          autoComplete={autoComplete} disabled={disabled} smileysEnabled={smileysEnabled}
+                          submitKey={submitKey} onSubmit={onSubmit} onChange={onTextChange} onBlur={onBlur}
+                          onUrls={onUrls} ref={textArea} panel={panel}/>
         </MarkdownEditorCommands>
     );
 }

@@ -23,6 +23,7 @@ export interface MarkdownAreaProps {
     value?: string;
     format: SourceFormat;
     rows?: number;
+    minHeight?: string | null;
     maxHeight?: string | null;
     placeholder?: string;
     className?: string;
@@ -40,7 +41,7 @@ export interface MarkdownAreaProps {
 
 function MarkdownArea(
     {
-        name, value, format, className, autoFocus, autoComplete, maxHeight, placeholder, rows = 3, disabled,
+        name, value, format, className, autoFocus, autoComplete, minHeight, maxHeight, placeholder, rows = 3, disabled,
         smileysEnabled, submitKey, onSubmit, onChange, onBlur, onUrls, panel
     }: MarkdownAreaProps,
     ref: ForwardedRef<HTMLTextAreaElement>
@@ -259,7 +260,7 @@ function MarkdownArea(
                 placeholder={placeholder ?? t("enter-text-here")}
                 rows={rows}
                 style={{
-                    minHeight: rows != null ? `${Math.ceil(rows * 1.5)}em` : undefined,
+                    minHeight: minHeight ?? (rows != null ? `${Math.ceil(rows * 15) / 10}em` : undefined),
                     maxHeight: maxHeight ?? "calc(100vh - 26rem)"
                 }}
                 disabled={disabled}

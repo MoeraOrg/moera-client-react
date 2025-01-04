@@ -981,7 +981,7 @@
   "why-not-set-full-name": "<0>Haven't set a full name yet?</0> A beautiful full name will appear in your posts and comments instead of the username. For example, instead of <1>{name}</1>, it will say <1>{full}</1>. It can be your real name or any other name you like. And you can change it at any time.",
   "width": "Width",
   "write-anything": "Write anything...",
-  "write-comment-here": "Write a comment to {mention} here...",
+  "write-comment": "Write a comment...",
   "write-down-secret-words": "<0>Write down the secret words.</0> With these words, you can, if necessary, transfer your blog to another server, keeping your name and all social connections. Copy these words and store them in a safe place. Delete them from the server so they remain only with you.",
   "write-down-words": "<0>Please write down, save to a file, or print these words and keep them in a safe place.</0><1>If you lose these words, they cannot be recovered, and you will completely lose control over your registered name.</1><2>You will need them for any operations with the name ‘{name}’.</2>",
   "written-down-delete-words": "Written down. Delete the words from the server",

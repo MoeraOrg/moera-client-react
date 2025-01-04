@@ -111,7 +111,7 @@ function ComposePageInner(props: Props) {
                         <RichTextField name="body" placeholder={t("whats-new")} disabled={!ready || beingPosted}
                                        format={values.bodyFormat ?? "markdown"} smileysEnabled={smileysEnabled}
                                        features={features} nodeName={REL_CURRENT} urlsField="bodyUrls" anyValue
-                                       autoFocus maxHeight="max(100vh - 26rem, 9em)"/>
+                                       autoFocus maxHeight="max(100vh - 26rem, 10.8em)"/>
                         <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" nodeName={REL_CURRENT}
                                               features={features} disabled={!ready}/>
 

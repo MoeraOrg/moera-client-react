@@ -981,7 +981,7 @@
   "why-not-set-full-name": "<0>Jeszcze nie ustawiłeś pełnego imienia?</0> Piękne pełne imię będzie pojawiać się w twoich postach i komentarzach zamiast nazwy użytkownika. Na przykład, zamiast <1>{name}</1>, będzie napisane <1>{full}</1>. To może być twoje prawdziwe imię lub dowolne inne, które ci się podoba. I możesz je zmienić w dowolnym momencie.",
   "width": "Szerokość",
   "write-anything": "Napisz cokolwiek...",
-  "write-comment-here": "Napisz komentarz do {mention} tutaj...",
+  "write-comment": "Napisz komentarz...",
   "write-down-secret-words": "<0>Zapisz tajne słowa.</0> Dzięki tym słowom będziesz mógł, w razie potrzeby, przenieść swojego bloga na inny serwer, zachowując nazwę i wszystkie kontakty społeczne. Skopiuj te słowa i umieść je w bezpiecznym miejscu. Usuń je z serwera, aby pozostały tylko u ciebie.\n",
   "write-down-words": "<0>Proszę zapisać, zapisać w pliku lub wydrukować te słowa i przechowywać je w bezpiecznym miejscu.</0><1>Jeśli stracisz te słowa, nie można ich odzyskać i całkowicie stracisz kontrolę nad swoją zarejestrowaną nazwą.</1><2>Będziesz ich potrzebować do wszystkich operacji związanych z nazwą ‘{name}’.</2>",
   "written-down-delete-words": "Zapisano. Usuń słowa z serwera",
