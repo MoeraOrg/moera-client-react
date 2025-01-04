@@ -8,8 +8,8 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { getFeedAtTimestamp } from "state/feeds/selectors";
 import { feedScrollToAnchor } from "state/feeds/actions";
-import * as Browser from "ui/browser";
 import { Button, CloseButton, Loading } from "ui/control";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import { RelNodeName } from "util/rel-node-name";
 
 const DatePicker = React.lazy(() => import('react-datepicker'));
@@ -25,6 +25,7 @@ export default function FeedGotoButton({nodeName, feedName, atBottom}: Props) {
     const dispatch = useDispatch();
 
     const [active, setActive] = useState<boolean>(false);
+    const tinyScreen = useIsTinyScreen();
     const {t} = useTranslation();
 
     const activate = () => setActive(true);
@@ -58,7 +59,7 @@ export default function FeedGotoButton({nodeName, feedName, atBottom}: Props) {
                                     }
                                 }}
                                 dateFormat="dd-MM-yyyy"
-                                withPortal={Browser.isTinyScreen()}/>
+                                withPortal={tinyScreen}/>
                     <Button variant="outline-info" size="sm" className="ms-2" invisible={atBottom} onClick={toBottom}>
                         <FontAwesomeIcon icon={faArrowDown}/>&nbsp;{t("bottom")}
                     </Button>

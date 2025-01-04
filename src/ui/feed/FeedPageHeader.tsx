@@ -12,7 +12,7 @@ import FeedGotoButton from "ui/feed/FeedGotoButton";
 import FeedTopBox from "ui/feed/FeedTopBox";
 import FeedTopButton from "ui/feed/FeedTopButton";
 import FeedSkipPinnedButton from "ui/feed/FeedSkipPinnedButton";
-import * as Browser from "ui/browser";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import { getPageHeaderHeight } from "util/ui";
 import { RelNodeName } from "util/rel-node-name";
 
@@ -37,6 +37,7 @@ export default function FeedPageHeader({
     const ownerName = useSelector(getOwnerName);
 
     const [avatarVisible, setAvatarVisible] = useState(window.scrollY >= getPageHeaderHeight());
+    const tinyScreen = useIsTinyScreen();
     const {t} = useTranslation();
 
     const onScroll = useCallback(
@@ -60,7 +61,7 @@ export default function FeedPageHeader({
                     </Jump>
                 }
                 {title}
-                <FeedSubscribeButton nodeName={nodeName} feedName={feedName} small={Browser.isTinyScreen()}/>
+                <FeedSubscribeButton nodeName={nodeName} feedName={feedName} small={tinyScreen}/>
                 {shareable && <PageShareButton href="/"/>}
             </h2>
             <div className="page-header-buttons">

@@ -8,9 +8,11 @@ import { richTextEditorImageCopy } from "state/richtexteditor/actions";
 import { RichTextValue } from "ui/control/richtexteditor";
 import { UploadProgress, useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import RichTextEditorImageList from "ui/control/richtexteditor/media/RichTextEditorImageList";
-import RichTextCopyImageDialog, { RichTextCopyImageValues } from "ui/control/richtexteditor/dialog/RichTextCopyImageDialog";
-import * as Browser from "ui/browser";
+import RichTextCopyImageDialog, {
+    RichTextCopyImageValues
+} from "ui/control/richtexteditor/dialog/RichTextCopyImageDialog";
 import { isOverlayClosedRecently } from "ui/overlays/overlays";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import { RelNodeName } from "util/rel-node-name";
 import "./RichTextEditorDropzone.css";
 
@@ -48,6 +50,7 @@ interface Props {
 }
 
 export default function RichTextEditorDropzone({value, hiding = false, nodeName}: Props) {
+    const tinyScreen = useIsTinyScreen();
     const dispatch = useDispatch();
     const {
         getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadImages, uploadProgress, forceCompress, compress,
@@ -93,7 +96,7 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName}
     }
 
     const progressSummary = useMemo(() => calcProgressSummary(uploadProgress), [uploadProgress])
-    const buttonsTitle = !Browser.isTinyScreen() ? "upload-or-copy-or-drop-images" : "upload-or-copy-images";
+    const buttonsTitle = !tinyScreen ? "upload-or-copy-or-drop-images" : "upload-or-copy-images";
 
     return (
         <>

@@ -10,7 +10,7 @@ import { getOwnerName } from "state/node/selectors";
 import { closeQuickTips } from "state/quicktips/actions";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
-import * as Browser from "ui/browser";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import { Button, ModalDialog } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 import Jump, { JumpCallback } from "ui/navigation/Jump";
@@ -20,6 +20,7 @@ export default function QuickTips() {
     const ownerName = useSelector(getOwnerName);
     const shown = useSelector((state: ClientState) => getSetting(state, "invitation.quick-tips.shown") as boolean);
     const dispatch = useDispatch();
+    const tinyScreen = useIsTinyScreen();
     const {t} = useTranslation();
 
     const onClose = () => {
@@ -37,7 +38,7 @@ export default function QuickTips() {
         performJump();
     }
 
-    const variant = Browser.isTinyScreen()? "mobile" : "desktop";
+    const variant = tinyScreen ? "mobile" : "desktop";
 
     return (
         <ModalDialog className="quick-tips" title={t("quick-tips.title")} onClose={onClose}>

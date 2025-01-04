@@ -2,9 +2,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CLIENT_SETTINGS_PREFIX, ClientSettingMetaInfo, SettingMetaInfo } from "api";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import { Item } from "ui/settings/settings-menu";
 import SettingsField from "ui/settings/SettingsField";
-import * as Browser from "ui/browser";
 
 export function toFieldName(name: string): string {
     return name.replace(/\./g, "_");
@@ -28,6 +28,7 @@ interface Props {
 }
 
 export function SettingsSheetItems({items, valuesMap, metaMap}: Props) {
+    const tinyScreen = useIsTinyScreen();
     const {t} = useTranslation();
 
     return (
@@ -57,8 +58,8 @@ export function SettingsSheetItems({items, valuesMap, metaMap}: Props) {
                         }
                         if (isClientMeta(meta)) {
                             const wrongScope = meta.internal
-                                || (meta.scope === "desktop" && Browser.isTinyScreen())
-                                || (meta.scope === "mobile" && !Browser.isTinyScreen());
+                                || (meta.scope === "desktop" && tinyScreen)
+                                || (meta.scope === "mobile" && !tinyScreen);
                             if (wrongScope) {
                                 return null;
                             }

@@ -7,16 +7,17 @@ import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import * as Browser from "ui/browser";
 import { Loading } from "ui/control";
 import useComposeTextEditable from "ui/compose/compose-text-editable";
 import ComposeTextEditableIcon from "ui/compose/ComposeTextEditableIcon";
+import { useIsTinyScreen } from "ui/hook/media-query";
 
 const DatePicker = React.lazy(() => import('react-datepicker'));
 
 export default function ComposePublishAt() {
     const postingId = useSelector((state: ClientState) => state.compose.postingId);
     const draftId = useSelector((state: ClientState) => state.compose.draftId);
+    const tinyScreen = useIsTinyScreen();
 
     const {
         edit, field, value, setValue, onEdit, onReset, onKeyDown
@@ -40,7 +41,7 @@ export default function ComposePublishAt() {
                                 timeFormat="HH:mm"
                                 timeIntervals={15}
                                 dateFormat="dd-MM-yyyy, HH:mm"
-                                withPortal={Browser.isTinyScreen()}
+                                withPortal={tinyScreen}
                                 onKeyDown={onKeyDown}
                                 autoFocus/>
                     <button title={t("reset-to-default")} onClick={onReset}>

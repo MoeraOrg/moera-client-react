@@ -8,13 +8,13 @@ import { getDateFnsLocale } from "i18n";
 import { ClientState } from "state/state";
 import { getNodeCard, isNodeCardAnyLoaded, isNodeCardAnyLoading } from "state/nodecards/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import CopyMentionButton from "ui/nodename/CopyMentionButton";
 import { Avatar, DonateButton, Loading, SubscribeButton, usePopover } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import { mentionName, shortGender } from "util/names";
-import * as Browser from "ui/browser";
-import "./NodeCard.css";
 import { RelNodeName } from "util/rel-node-name";
+import "./NodeCard.css";
 
 interface Props {
     nodeName: string;
@@ -28,6 +28,7 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
     const anyLoaded = useSelector((state: ClientState) => isNodeCardAnyLoaded(state, nodeName));
     const anyLoading = useSelector((state: ClientState) => isNodeCardAnyLoading(state, nodeName));
     const homeOwnerName = useSelector(getHomeOwnerName);
+    const tinyScreen = useIsTinyScreen();
     const {t} = useTranslation();
 
     const {hide: hidePopover} = usePopover();
@@ -56,7 +57,7 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
         <div className="node-card">
             <div className="main">
                 <Jump nodeName={nodeName} href="/profile" title={t("profile")} className="avatar-link">
-                    <Avatar avatar={realAvatar} ownerName={nodeName} size={Browser.isTinyScreen() ? 64 : 100}
+                    <Avatar avatar={realAvatar} ownerName={nodeName} size={tinyScreen ? 64 : 100}
                             nodeName={realAvatarNodeName}/>
                 </Jump>
                 <div className="body">

@@ -7,8 +7,8 @@ import { isConnectedToHome } from "state/home/selectors";
 import { isAtNode } from "state/node/selectors";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
-import * as Browser from "ui/browser";
 import { Button, Loading } from "ui/control";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
 import QuickTipsButton from "ui/quicktips/QuickTipsButton";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
@@ -26,9 +26,10 @@ function ConnectionButtons() {
     const connected = useSelector(isConnectedToHome);
     const showNavigator = useSelector((state: ClientState) => state.node.owner.showNavigator);
     const dispatch = useDispatch();
+    const tinyScreen = useIsTinyScreen();
     const {t} = useTranslation();
 
-    if (showNavigator && Browser.isTinyScreen()) {
+    if (showNavigator && tinyScreen) {
         return null;
     }
     if (connecting) {

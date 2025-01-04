@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import cx from 'classnames';
 
-import * as Browser from "ui/browser";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import { getFeedHeaderHeight } from "util/ui";
 import "./PageHeader.css";
 
@@ -18,9 +18,10 @@ interface State {
 
 function PageHeader({children}: Props) {
     const [state, setState] = useState<State>({invisible: false, scroll: null});
+    const tinyScreen = useIsTinyScreen();
 
     const onScroll = useCallback(() => {
-        if (!Browser.isTinyScreen()) {
+        if (!tinyScreen) {
             return;
         }
         setState(state => {
@@ -36,7 +37,7 @@ function PageHeader({children}: Props) {
             }
             return state;
         });
-    }, [setState]);
+    }, [tinyScreen]);
 
     useEffect(() => {
         window.addEventListener("scroll", onScroll);

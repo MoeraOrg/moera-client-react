@@ -2,8 +2,8 @@ import React, { ForwardedRef, forwardRef, useEffect, useRef } from 'react';
 import composeRefs from '@seznam/compose-react-refs';
 import cx from 'classnames';
 
-import * as Browser from "ui/browser";
 import { LoadingInline } from "ui/control";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import "./Button.css";
 
 type Props = {
@@ -24,6 +24,7 @@ function ButtonImpl(
     }: Props,
     ref: ForwardedRef<HTMLButtonElement>
 ) {
+    const tinyScreen = useIsTinyScreen();
     const domRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
@@ -50,7 +51,7 @@ function ButtonImpl(
     return (
         <button type={type} className={klass} disabled={loading || disabled} {...props}
                 ref={composeRefs(domRef, ref)}>
-            {!(loading && (compact || Browser.isTinyScreen())) &&
+            {!(loading && (compact || tinyScreen)) &&
                 <>{props.children}</>
             }
             {loading && <LoadingInline/>}

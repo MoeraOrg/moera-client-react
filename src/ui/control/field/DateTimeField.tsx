@@ -3,7 +3,7 @@ import { useField } from 'formik';
 
 import { FormGroup, Wrapper } from "ui/control";
 import FieldError from "ui/control/field/FieldError";
-import * as Browser from "ui/browser";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import "./DateTimeField.css";
 
 const DatePicker = React.lazy(() => import('react-datepicker'));
@@ -21,6 +21,7 @@ interface Props {
 export const DateTimeField = ({name, title, horizontal = false, groupClassName, labelClassName, col,
                                autoFocus}: Props) => {
     const [{onBlur}, {value, touched, error}, {setValue}] = useField<Date>(name);
+    const tinyScreen = useIsTinyScreen();
 
     return (
         <FormGroup name={name} title={title} horizontal={horizontal} groupClassName={groupClassName}
@@ -42,8 +43,8 @@ export const DateTimeField = ({name, title, horizontal = false, groupClassName, 
                         timeFormat="HH:mm"
                         timeIntervals={15}
                         dateFormat="dd-MM-yyyy, HH:mm"
-                        portalId={!Browser.isTinyScreen() ? "modal-root" : undefined}
-                        withPortal={Browser.isTinyScreen()}
+                        portalId={!tinyScreen ? "modal-root" : undefined}
+                        withPortal={tinyScreen}
                     />
                     {touched && <FieldError error={error}/>}
                 </Suspense>

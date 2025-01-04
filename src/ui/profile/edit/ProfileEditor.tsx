@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { AvatarInfo, FundraiserInfo, PrincipalValue, ProfileInfo } from "api";
 import { ClientState } from "state/state";
 import { profileEditCancel, profileEditConflictClose, profileUpdate } from "state/profile/actions";
-import * as Browser from "ui/browser";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import { Button, ConflictWarning, Loading } from "ui/control";
 import { ComboboxField, InputField, PrincipalField } from "ui/control/field";
 import { RichTextField, RichTextValue } from "ui/control/richtexteditor";
@@ -44,6 +44,7 @@ function ProfileEditorInner(props: Props) {
     const conflict = useSelector((state: ClientState) => state.profile.conflict);
     const updating = useSelector((state: ClientState) => state.profile.updating);
     const dispatch = useDispatch();
+    const tinyScreen = useIsTinyScreen();
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -74,7 +75,7 @@ function ProfileEditorInner(props: Props) {
                                         groupClassName="col-sm-6 col-10 pe-0"/>
                             <PrincipalField name="viewEmail"
                                             values={["public", "signed", "subscribed", "friends", "admin"]}
-                                            long={!Browser.isTinyScreen()}
+                                            long={!tinyScreen}
                                             groupClassName="col-sm-6 col-2 align-self-end pb-1"/>
                         </div>
                         <RichTextField title={t("bio")} name="bioSrc" placeholder={t("write-anything")}
