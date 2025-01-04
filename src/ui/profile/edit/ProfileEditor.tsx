@@ -79,7 +79,7 @@ function ProfileEditorInner(props: Props) {
                                             groupClassName="col-sm-6 col-2 align-self-end pb-1"/>
                         </div>
                         <RichTextField title={t("bio")} name="bioSrc" placeholder={t("write-anything")}
-                                       format="markdown" smileysEnabled anyValue noMedia/>
+                                       format="markdown" anyValue noMedia/>
                         <DonateField title={t("donate")} name="fundraisers"/>
                         <div className="profile-editor-footer">
                             <Button variant="secondary" onClick={() => dispatch(profileEditCancel())}

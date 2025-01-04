@@ -23,8 +23,8 @@ type Props = {
 
 export function RichTextEditor({
     name, value, features, rows, minHeight, maxHeight, placeholder, className, autoFocus, autoComplete, disabled,
-    smileysEnabled, hidingPanel, format, nodeName = REL_CURRENT, forceImageCompress, onChange, submitKey, onSubmit,
-    onBlur, onUrls, noMedia
+    smileysEnabled = true, hidingPanel, format, nodeName = REL_CURRENT, forceImageCompress, onChange, submitKey,
+    onSubmit, onBlur, onUrls, noMedia
 }: Props) {
     const textRef = React.useRef<string | Scripture>();
     textRef.current = value.text;

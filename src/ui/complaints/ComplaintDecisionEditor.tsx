@@ -49,7 +49,7 @@ function ComplaintDecisionEditor({group, values}: Props) {
             <Form>
                 <SelectField name="decisionCode" choices={DECISION_CODES} anyValue/>
                 <div className={cx({"d-none": values.decisionCode === "choose"})}>
-                    <RichTextField name="decisionDetails" format="plain-text" smileysEnabled anyValue noMedia/>
+                    <RichTextField name="decisionDetails" format="plain-text" anyValue noMedia/>
                     <CheckboxField name="anonymous" title={t("not-show-complaints")} anyValue/>
                 </div>
                 <Button variant="primary" type="submit" loading={submitting} disabled={!submitEnabled}

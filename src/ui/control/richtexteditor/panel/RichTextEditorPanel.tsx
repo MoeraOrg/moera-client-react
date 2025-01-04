@@ -87,7 +87,9 @@ export default function RichTextEditorPanel({hiding}: Props) {
                 <RichTextEditorOtherButton/>
             </div>
             <div className="group">
-                {!Browser.isMobile() && <RichTextEditorEmojiButton onSelect={formatEmoji}/>}
+                {!Browser.isMobile() &&
+                    <RichTextEditorEmojiButton onSelect={formatEmoji}/>
+                }
                 <RichTextEditorButton icon={msAlternateEmail} title={t("mention")} active={inMention}
                                       command={() => formatMention(false)}/>
             </div>
