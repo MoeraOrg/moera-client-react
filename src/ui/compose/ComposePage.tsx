@@ -26,7 +26,6 @@ import Jump from "ui/navigation/Jump";
 import ComposeFullName from "ui/compose/ComposeFullName";
 import ComposePublishAt from "ui/compose/ComposePublishAt";
 import ComposeViewPrincipal from "ui/compose/ComposeViewPrincipal";
-import ComposeFormattingHelp from "ui/compose/ComposeFormattingHelp";
 import ComposeBodyFormatButton from "ui/compose/ComposeBodyFormatButton";
 import ComposeCommentsButton from "ui/compose/ComposeCommentsButton";
 import ComposeReactionsButton from "ui/compose/ComposeReactionsButton";
@@ -41,8 +40,8 @@ import ComposeUpdateInfo from "ui/compose/ComposeUpdateInfo";
 import ComposePreviewButton from "ui/compose/ComposePreviewButton";
 import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
 import ComposePreviewDialog from "ui/compose/ComposePreviewDialog";
-import "./ComposePage.css";
 import { REL_CURRENT } from "util/rel-node-name";
+import "./ComposePage.css";
 
 type Props = ComposePageProps & FormikProps<ComposePageValues>;
 
@@ -113,7 +112,6 @@ function ComposePageInner(props: Props) {
                                        format={values.bodyFormat ?? "markdown"} smileysEnabled={smileysEnabled}
                                        features={features} nodeName={REL_CURRENT} urlsField="bodyUrls" anyValue
                                        autoFocus maxHeight="max(100vh - 26rem, 9em)"/>
-                        <ComposeFormattingHelp/>
                         <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" nodeName={REL_CURRENT}
                                               features={features} disabled={!ready}/>
 

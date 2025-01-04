@@ -314,12 +314,6 @@ const META: ClientSettingMetaInfo[] = [
         internal: true
     },
     {
-        name: "posting.body-src-format.show-help",
-        type: "bool",
-        defaultValue: "true",
-        internal: true
-    },
-    {
         name: "posting.body.font-magnitude",
         type: "int",
         defaultValue: "100",
