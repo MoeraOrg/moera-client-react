@@ -67,7 +67,8 @@ export function RichTextEditor({
                                         onBlur={onBlur} onUrls={onUrls}/>
                     }
                     {!noMedia &&
-                        <RichTextEditorDropzone value={value} hiding={hidingPanel} nodeName={nodeName ?? null}/>
+                        <RichTextEditorDropzone value={value} hiding={hidingPanel} nodeName={nodeName ?? null}
+                                                srcFormat={format} smileysEnabled={smileysEnabled}/>
                     }
                 </RichTextEditorMedia>
             </RichTextEditorDialogs>

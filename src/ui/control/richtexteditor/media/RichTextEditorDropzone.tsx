@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import cx from 'classnames';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { PrivateMediaFileInfo } from "api";
+import { PrivateMediaFileInfo, SourceFormat } from "api";
 import { richTextEditorImageCopy } from "state/richtexteditor/actions";
 import { RichTextValue } from "ui/control/richtexteditor";
 import { UploadProgress, useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
@@ -47,9 +47,11 @@ interface Props {
     value: RichTextValue;
     hiding?: boolean;
     nodeName: RelNodeName | string;
+    srcFormat: SourceFormat;
+    smileysEnabled?: boolean;
 }
 
-export default function RichTextEditorDropzone({value, hiding = false, nodeName}: Props) {
+export default function RichTextEditorDropzone({value, hiding = false, nodeName, srcFormat, smileysEnabled}: Props) {
     const tinyScreen = useIsTinyScreen();
     const dispatch = useDispatch();
     const {
@@ -67,9 +69,9 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName}
         e.preventDefault();
     }
 
-    const onImageDownloadSuccess = (file: File) => {
+    const onImageDownloadSuccess = (description: RichTextValue | undefined) => (file: File) => {
         setDownloading(false);
-        uploadImages([file], compress);
+        uploadImages([file], compress, description);
     }
 
     const onImageDownloadFailure = () => {
@@ -85,7 +87,9 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName}
             setCompress(values.compress);
         }
         setDownloading(true);
-        dispatch(richTextEditorImageCopy(values.url, onImageDownloadSuccess, onImageDownloadFailure));
+        dispatch(
+            richTextEditorImageCopy(values.url, onImageDownloadSuccess(values.description), onImageDownloadFailure)
+        );
     }
 
     const onSelectImages = (event: React.MouseEvent) => {
@@ -125,6 +129,7 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName}
                 </div>
                 {copyImageShow &&
                     <RichTextCopyImageDialog forceCompress={forceCompress} compressDefault={compress}
+                                             descriptionSrcFormat={srcFormat} smileysEnabled={smileysEnabled}
                                              onSubmit={submitCopyImage}/>
                 }
             </div>
