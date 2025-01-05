@@ -34,7 +34,7 @@ interface Props {
 
 export default function RichTextEditorPanel({hiding}: Props) {
     const {
-        enableVideo, enableClear,
+        supportsComplexBlocks, supportsEmbeddedMedia, supportsMedia, supportsVideo, supportsClear,
         inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
         inOrderedList, inImageAttached,
         formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention, formatHorizontalRule,
@@ -46,9 +46,11 @@ export default function RichTextEditorPanel({hiding}: Props) {
 
     return (
         <div className={cx("rich-text-editor-panel", {"hiding": hiding})}>
-            <div className="group">
-                <RichTextEditorHeadingButton onSelect={formatHeading}/>
-            </div>
+            {supportsComplexBlocks &&
+                <div className="group">
+                    <RichTextEditorHeadingButton onSelect={formatHeading}/>
+                </div>
+            }
             <div className="group">
                 <RichTextEditorButton icon={msFormatBold} title={t("bold")} hotkey={RICH_TEXT_EDITOR_KEYS.BOLD.title}
                                       active={inBold} command={formatBold}/>
@@ -60,30 +62,35 @@ export default function RichTextEditorPanel({hiding}: Props) {
                 <RichTextEditorButton icon={msReport} title={t("spoiler")}
                                       active={inSpoiler} command={formatSpoiler}/>
             </div>
+            {supportsComplexBlocks &&
+                <div className="group">
+                    <RichTextEditorButton icon={msFormatListNumbered} title={t("numbered-list")}
+                                          active={inOrderedList} command={() => formatList(true)}/>
+                    <RichTextEditorButton icon={msFormatListBulleted} title={t("bulleted-list")}
+                                          active={inUnorderedList} command={() => formatList(false)}/>
+                    {inList &&
+                        <>
+                            <RichTextEditorButton icon={msFormatIndentIncrease} title={t("increase-indent")}
+                                                  command={() => formatIndent(1)}/>
+                            <RichTextEditorButton icon={msFormatIndentDecrease} title={t("decrease-indent")}
+                                                  command={() => formatIndent(-1)}/>
+                        </>
+                    }
+                    <RichTextEditorButton icon={msFormatQuote} title={t("quote")}
+                                          hotkey={RICH_TEXT_EDITOR_KEYS.BLOCKQUOTE.title} command={formatBlockquote}/>
+                    {inBlockquote &&
+                        <RichTextEditorButton icon={msFormatQuoteOff} title={t("unquote")}
+                                              hotkey={RICH_TEXT_EDITOR_KEYS.BLOCKUNQUOTE.title}
+                                              command={formatBlockunquote}/>
+                    }
+                </div>
+            }
             <div className="group">
-                <RichTextEditorButton icon={msFormatListNumbered} title={t("numbered-list")}
-                                      active={inOrderedList} command={() => formatList(true)}/>
-                <RichTextEditorButton icon={msFormatListBulleted} title={t("bulleted-list")}
-                                      active={inUnorderedList} command={() => formatList(false)}/>
-                {inList &&
-                    <>
-                        <RichTextEditorButton icon={msFormatIndentIncrease} title={t("increase-indent")}
-                                              command={() => formatIndent(1)}/>
-                        <RichTextEditorButton icon={msFormatIndentDecrease} title={t("decrease-indent")}
-                                              command={() => formatIndent(-1)}/>
-                    </>
+                {supportsComplexBlocks &&
+                    <RichTextEditorButton icon={msHorizontalRule} title={t("horizontal-line")}
+                                          hotkey={RICH_TEXT_EDITOR_KEYS.HORIZONTAL_RULE.title}
+                                          command={formatHorizontalRule}/>
                 }
-                <RichTextEditorButton icon={msFormatQuote} title={t("quote")}
-                                      hotkey={RICH_TEXT_EDITOR_KEYS.BLOCKQUOTE.title} command={formatBlockquote}/>
-                {inBlockquote &&
-                    <RichTextEditorButton icon={msFormatQuoteOff} title={t("unquote")}
-                                          hotkey={RICH_TEXT_EDITOR_KEYS.BLOCKUNQUOTE.title} command={formatBlockunquote}/>
-                }
-            </div>
-            <div className="group">
-                <RichTextEditorButton icon={msHorizontalRule} title={t("horizontal-line")}
-                                      hotkey={RICH_TEXT_EDITOR_KEYS.HORIZONTAL_RULE.title}
-                                      command={formatHorizontalRule}/>
                 <RichTextEditorOtherButton/>
             </div>
             <div className="group">
@@ -96,13 +103,15 @@ export default function RichTextEditorPanel({hiding}: Props) {
             <div className="group">
                 <RichTextEditorButton icon={msAddLink} title={t("link")} hotkey={RICH_TEXT_EDITOR_KEYS.LINK.title}
                                       active={inLink} command={formatLink}/>
-                <RichTextEditorButton icon={msPhotoLibrary} title={t("image")} active={inImageAttached}
-                                      command={() => formatImage(false)}/>
-                {enableVideo &&
+                {supportsEmbeddedMedia && supportsMedia &&
+                    <RichTextEditorButton icon={msPhotoLibrary} title={t("image")} active={inImageAttached}
+                                          command={() => formatImage(false)}/>
+                }
+                {supportsVideo &&
                     <RichTextEditorButton icon={msMediaLink} title={t("video-internet")} command={formatVideo}/>
                 }
             </div>
-            {enableClear &&
+            {supportsClear &&
                 <div className="group">
                     <RichTextEditorButton icon={msFormatClear} title={t("clear-formatting")}
                                           hotkey={RICH_TEXT_EDITOR_KEYS.CLEAR.title} command={formatClear}/>

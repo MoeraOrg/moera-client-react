@@ -71,10 +71,10 @@ function CommentCompose(props: Props) {
                     <CommentComposeRepliedTo disabled={!ready || beingPosted}/>
                     <RichTextField name="body" rows={1} minHeight="2.5em" maxHeight="max(100vh - 26rem, 7.2em)"
                                    features={features} nodeName={receiverName ?? REL_CURRENT} forceImageCompress
-                                   anyValue placeholder={t("write-comment")} disabled={!ready || beingPosted}
-                                   smileysEnabled={smileysEnabled} hidingPanel={areValuesEmpty(values)}
-                                   format={sourceFormatDefault} submitKey={submitKey} onSubmit={() => submitForm()}
-                                   urlsField="bodyUrls"/>
+                                   noEmbeddedMedia anyValue placeholder={t("write-comment")}
+                                   disabled={!ready || beingPosted} smileysEnabled={smileysEnabled}
+                                   hidingPanel={areValuesEmpty(values)} format={sourceFormatDefault}
+                                   submitKey={submitKey} onSubmit={() => submitForm()} urlsField="bodyUrls"/>
                     <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls"
                                           nodeName={receiverName ?? REL_CURRENT} features={features} small
                                           disabled={!ready || beingPosted}/>

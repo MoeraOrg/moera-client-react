@@ -28,6 +28,9 @@ import { mentionName } from "util/names";
 interface Props {
     format: SourceFormat;
     textArea: React.RefObject<HTMLTextAreaElement>,
+    noComplexBlocks?: boolean | null;
+    noEmbeddedMedia?: boolean | null;
+    noMedia?: boolean | null;
     children: ReactNode;
 }
 
@@ -51,7 +54,9 @@ function insertImage(
     }
 }
 
-export default function MarkdownEditorCommands({format, textArea, children}: Props) {
+export default function MarkdownEditorCommands({
+    format, textArea, noComplexBlocks, noEmbeddedMedia, noMedia, children
+}: Props) {
     const {
         showLinkDialog, showSpoilerDialog, showMentionDialog, showFoldDialog, showFormulaDialog
     } = useRichTextEditorDialogs();
@@ -388,7 +393,8 @@ export default function MarkdownEditorCommands({format, textArea, children}: Pro
 
     return (
         <RichTextEditorCommandsContext.Provider value={{
-            enableHeading: true, enableVideo: false, enableClear: false,
+            enableHeading: true, supportsComplexBlocks: !noComplexBlocks, supportsEmbeddedMedia: !noEmbeddedMedia,
+            supportsMedia: !noMedia, supportsVideo: false, supportsClear: false,
             inBold: false, inItalic: false, inStrikeout: false, inLink: false,
             inSpoilerInline: false, inSpoilerBlock: false, inSpoiler: false, inMention: false, inBlockquote: false,
             inList: false, inUnorderedList: false, inOrderedList: false, headingLevel: 0, inVoid: false, inFold: false,

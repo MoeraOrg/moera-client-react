@@ -66,10 +66,14 @@ import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
 
 interface Props {
+    noComplexBlocks?: boolean | null;
+    noEmbeddedMedia?: boolean | null;
+    noMedia?: boolean | null;
+    noVideo?: boolean | null;
     children: ReactNode;
 }
 
-export default function VisualEditorCommands({children}: Props) {
+export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, children}: Props) {
     const editor = useSlateStatic() as ReactEditor;
     const {
         bold: inBold = false, italic: inItalic = false, strikeout: inStrikeout = false, code: inCode = false,
@@ -539,7 +543,8 @@ export default function VisualEditorCommands({children}: Props) {
 
     return (
         <RichTextEditorCommandsContext.Provider value={{
-            enableHeading, enableVideo: true, enableClear: true,
+            enableHeading, supportsComplexBlocks: !noComplexBlocks, supportsEmbeddedMedia: !noEmbeddedMedia,
+            supportsMedia: !noMedia, supportsVideo: !noVideo, supportsClear: true,
             inBold, inItalic, inStrikeout, inLink, inSpoilerInline, inSpoilerBlock, inSpoiler, inMention, inBlockquote,
             inList, inUnorderedList, inOrderedList, headingLevel, inVoid, inFold, inCode, inSubscript, inSuperscript,
             inCodeBlock, inFormula, inMark, inImageEmbedded, inImageAttached,

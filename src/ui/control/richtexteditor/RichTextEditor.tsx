@@ -17,14 +17,17 @@ type Props = {
     features: PostingFeatures | null;
     nodeName?: RelNodeName | string;
     forceImageCompress?: boolean;
-    noMedia?: boolean;
+    noComplexBlocks?: boolean | null;
+    noEmbeddedMedia?: boolean | null;
+    noMedia?: boolean | null;
+    noVideo?: boolean | null;
     onChange?: (value: RichTextValue) => void;
 } & Omit<MarkdownEditorProps, "onChange"> & Omit<VisualEditorProps, "onChange">;
 
 export function RichTextEditor({
     name, value, features, rows, minHeight, maxHeight, placeholder, className, autoFocus, autoComplete, disabled,
     smileysEnabled = true, hidingPanel, format, nodeName = REL_CURRENT, forceImageCompress, onChange, submitKey,
-    onSubmit, onBlur, onUrls, noMedia
+    onSubmit, onBlur, onUrls, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo
 }: Props) {
     const textRef = React.useRef<string | Scripture>();
     textRef.current = value.text;
@@ -50,14 +53,18 @@ export function RichTextEditor({
                     {format.endsWith("/visual") ?
                         <VisualEditor name={name} value={value} rows={rows} minHeight={minHeight} maxHeight={maxHeight}
                                       placeholder={placeholder} autoFocus={autoFocus} disabled={disabled}
-                                      smileysEnabled={smileysEnabled} hidingPanel={hidingPanel} submitKey={submitKey}
-                                      onSubmit={onSubmit} onChange={onTextChange} onBlur={onBlur} onUrls={onUrls}/>
+                                      smileysEnabled={smileysEnabled} hidingPanel={hidingPanel}
+                                      noComplexBlocks={noComplexBlocks} noEmbeddedMedia={noEmbeddedMedia}
+                                      noMedia={noMedia} noVideo={noVideo} submitKey={submitKey} onSubmit={onSubmit}
+                                      onChange={onTextChange} onBlur={onBlur} onUrls={onUrls}/>
                     :
                         <MarkdownEditor name={name} value={value} rows={rows} minHeight={minHeight}
                                         maxHeight={maxHeight} placeholder={placeholder} autoFocus={autoFocus}
                                         autoComplete={autoComplete} disabled={disabled} smileysEnabled={smileysEnabled}
-                                        hidingPanel={hidingPanel} format={format} submitKey={submitKey}
-                                        onSubmit={onSubmit} onChange={onTextChange} onBlur={onBlur} onUrls={onUrls}/>
+                                        hidingPanel={hidingPanel} noComplexBlocks={noComplexBlocks}
+                                        noEmbeddedMedia={noEmbeddedMedia} noMedia={noMedia} format={format}
+                                        submitKey={submitKey} onSubmit={onSubmit} onChange={onTextChange}
+                                        onBlur={onBlur} onUrls={onUrls}/>
                     }
                     {!noMedia &&
                         <RichTextEditorDropzone value={value} hiding={hidingPanel} nodeName={nodeName ?? null}/>

@@ -66,7 +66,8 @@ function ImageEditDialogInner(props: Props) {
                          width={imageWidth} height={imageHeight}/>
                     <RichTextField name="caption" placeholder={t("description-optional")}
                                    format={posting?.bodySrcFormat || "markdown"} maxHeight="14em"
-                                   smileysEnabled={smileysEnabled} anyValue noMedia autoFocus/>
+                                   smileysEnabled={smileysEnabled} noComplexBlocks noEmbeddedMedia noMedia noVideo
+                                   anyValue autoFocus/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>

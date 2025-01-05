@@ -8,6 +8,9 @@ import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 export type MarkdownEditorProps = {
     value: RichTextValue;
     hidingPanel?: boolean;
+    noComplexBlocks?: boolean | null;
+    noEmbeddedMedia?: boolean | null;
+    noMedia?: boolean | null;
     onChange?: (value: string) => void;
     onUrls?: (urls: string[]) => void;
     submitKey?: string;
@@ -16,7 +19,7 @@ export type MarkdownEditorProps = {
 
 export function MarkdownEditor({
     name, value, rows, minHeight, maxHeight, placeholder, autoFocus, autoComplete, disabled, smileysEnabled,
-    hidingPanel, format, submitKey, onSubmit, onChange, onBlur, onUrls
+    hidingPanel, noComplexBlocks, noEmbeddedMedia, noMedia, format, submitKey, onSubmit, onChange, onBlur, onUrls
 }: MarkdownEditorProps) {
     const panel = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
@@ -29,7 +32,8 @@ export function MarkdownEditor({
     }, [onChange]);
 
     return (
-        <MarkdownEditorCommands format={format} textArea={textArea}>
+        <MarkdownEditorCommands format={format} textArea={textArea} noComplexBlocks={noComplexBlocks}
+                                noEmbeddedMedia={noEmbeddedMedia} noMedia={noMedia}>
             {format !== "plain-text" &&
                 <RichTextEditorPanel hiding={hidingPanel}/>
             }

@@ -20,6 +20,10 @@ import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-tex
 export type VisualEditorProps = {
     value: RichTextValue;
     hidingPanel?: boolean;
+    noComplexBlocks?: boolean | null;
+    noEmbeddedMedia?: boolean | null;
+    noMedia?: boolean | null;
+    noVideo?: boolean | null;
     onChange?: (value: Scripture) => void;
     submitKey?: string;
     onSubmit?: () => void;
@@ -27,8 +31,8 @@ export type VisualEditorProps = {
 } & VisualTextAreaProps;
 
 export default function VisualEditor({
-    name, value, rows, minHeight, maxHeight, placeholder, autoFocus, disabled, smileysEnabled, hidingPanel, onChange,
-    submitKey, onSubmit, onUrls, onBlur
+    name, value, rows, minHeight, maxHeight, placeholder, autoFocus, disabled, smileysEnabled, hidingPanel,
+    noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, onChange, submitKey, onSubmit, onUrls, onBlur
 }: VisualEditorProps) {
     const {pasteImage} = useRichTextEditorMedia();
     const [editor] = useState(
@@ -104,7 +108,8 @@ export default function VisualEditor({
     return (
         <Slate editor={editor} initialValue={htmlToScripture("")}
                onValueChange={onScriptureChange as ((contents: Descendant[]) => void) | undefined}>
-            <VisualEditorCommands>
+            <VisualEditorCommands noComplexBlocks={noComplexBlocks} noEmbeddedMedia={noEmbeddedMedia} noMedia={noMedia}
+                                  noVideo={noVideo}>
                 <RichTextEditorPanel hiding={hidingPanel}/>
                 <VisualTextArea
                     name={name}

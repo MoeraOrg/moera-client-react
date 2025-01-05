@@ -2,8 +2,11 @@ import { createContext, useContext } from 'react';
 
 export interface RichTextEditorCommandsInterface {
     enableHeading: boolean;
-    enableVideo: boolean;
-    enableClear: boolean;
+    supportsComplexBlocks: boolean;
+    supportsEmbeddedMedia: boolean;
+    supportsMedia: boolean;
+    supportsVideo: boolean;
+    supportsClear: boolean;
 
     inBold: boolean;
     inItalic: boolean;
@@ -57,8 +60,11 @@ export interface RichTextEditorCommandsInterface {
 
 export const RichTextEditorCommandsContext = createContext<RichTextEditorCommandsInterface>({
     enableHeading: true,
-    enableVideo: true,
-    enableClear: true,
+    supportsComplexBlocks: true,
+    supportsEmbeddedMedia: true,
+    supportsMedia: true,
+    supportsVideo: true,
+    supportsClear: true,
 
     inBold: false,
     inItalic: false,
