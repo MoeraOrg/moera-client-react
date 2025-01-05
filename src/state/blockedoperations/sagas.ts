@@ -6,11 +6,12 @@ import { isAtHomeNode } from "state/node/selectors";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { REL_HOME } from "util/rel-node-name";
+import { notNull } from "util/misc";
 
 export function* fillBlockedOperationsInStories(caller: WithContext<ClientAction> | null, stories: StoryInfo[]) {
     const postings: PostingInfo[] = stories
         .map(t => t.posting)
-        .filter((p): p is PostingInfo => p != null)
+        .filter(notNull)
         .filter(p => p.receiverName != null && p.receiverPostingId != null);
     yield* call(fillBlockedOperationsInPostings, caller, postings);
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import deepEqual from 'react-fast-compare';
 
-import { MediaAttachment, PostingInfo, PrivateMediaFileInfo } from "api";
+import { MediaAttachment, PostingInfo } from "api";
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { getPosting } from "state/postings/selectors";
@@ -11,6 +11,7 @@ import EntryHtml from "ui/entry/EntryHtml";
 import PostingReactions from "ui/posting/PostingReactions";
 import EntryGalleryButtons from "ui/entry/EntryGalleryButtons";
 import { RelNodeName } from "util/rel-node-name";
+import { notNull } from "util/misc";
 import "./EntryGalleryExpanded.css";
 
 interface Props {
@@ -63,7 +64,7 @@ function getMediaPostings(
     return new Map(media
         .filter(ma => !ma.embedded)
         .map(ma => ma.media)
-        .filter((m): m is PrivateMediaFileInfo => m != null)
+        .filter(notNull)
         .map(m => [m.id, getPosting(state, m.postingId ?? null, nodeName)])
         .filter((r): r is [string, PostingInfo] => r[1] != null)
     );

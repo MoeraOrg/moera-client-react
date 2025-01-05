@@ -11,7 +11,7 @@ import Jump from "ui/navigation/Jump";
 import EntryImage from "ui/entry/EntryImage";
 import { interceptLinkClick } from "ui/entry/link-click-intercept";
 import MrSpoiler from "ui/entry/MrSpoiler";
-import { isNumericString } from "util/misc";
+import { isNumericString, notNull } from "util/misc";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { mediaHashStrip } from "util/media-images";
 
@@ -32,7 +32,7 @@ export default function EntryHtml({
     const mediaMap: Map<string, PrivateMediaFileInfo> = new Map(
         (media ?? [])
             .map(ma => ma.media)
-            .filter((mf): mf is PrivateMediaFileInfo => mf != null)
+            .filter(notNull)
             .map(mf => [mediaHashStrip(mf.hash), mf])
     );
 

@@ -12,6 +12,7 @@ import {
     SubscriberInfo,
     SubscriptionInfo
 } from "api";
+import { notNull } from "util/misc";
 
 export function isPeopleGeneralToBeLoaded(state: ClientState): boolean {
     return !state.people.loadedGeneral && !state.people.loadingGeneral;
@@ -239,6 +240,6 @@ export function getPeopleSelectedContacts(state: ClientState): ContactInfo[] {
     return Object.entries(state.people.selected)
         .filter(([, selected]) => selected)
         .map(([nodeName]) => state.people.contacts[nodeName])
-        .filter((cs): cs is ContactState => cs != null)
+        .filter(notNull)
         .map(cs => cs.contact);
 }

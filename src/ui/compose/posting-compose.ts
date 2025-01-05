@@ -23,6 +23,7 @@ import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { htmlToScripture, safeImportScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { replaceSmileys } from "util/text";
 import { isHtmlEmpty, quoteHtml, safeImportHtml } from "util/html";
+import { notNull } from "util/misc";
 
 export type ComposePageToolsTab = null | "format" | "comments" | "reactions" | "updated";
 
@@ -244,7 +245,7 @@ export const composePageLogic = {
             : props.posting != null ? props.posting.bodySrc?.subject ?? "" : "";
         const attachments = props.draft != null ? props.draft.media : props.posting?.media;
         let media = attachments != null
-            ? attachments.map(ma => ma.media ?? null).filter((mf): mf is PrivateMediaFileInfo => mf != null)
+            ? attachments.map(ma => ma.media ?? null).filter(notNull)
             : [];
         const bodyFormat = props.draft != null
             ? props.draft.bodySrcFormat ?? "markdown"

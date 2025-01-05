@@ -11,6 +11,7 @@ import { getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ComposePageValues, isPostingTextChanged, valuesToPostingText } from "ui/compose/posting-compose";
 import { DraftSaver } from "ui/control";
+import { notNull } from "util/misc";
 
 const getPublishAt = (publications: StoryAttributes[] | null | undefined): number | null | undefined =>
     publications != null && publications.length > 0 ? publications[0].publishAt : null;
@@ -19,7 +20,7 @@ const toDraftText = (
     ownerName: string, postingId: string | null, postingText: PostingText, media: Map<string, VerifiedMediaFile>
 ): DraftText => ({
     ...cloneDeep(postingText),
-    media: postingText.media?.filter(id => id != null).map(id => ({
+    media: postingText.media?.filter(notNull).map(id => ({
         id,
         hash: media.get(id)?.hash,
         digest: media.get(id)?.digest
@@ -57,7 +58,7 @@ export default function ComposeDraftSaver() {
             const media = new Map(
                 (values.body.media ?? [])
                     .concat(values.linkPreviews.media)
-                    .filter((rm): rm is VerifiedMediaFile => rm != null)
+                    .filter(notNull)
                     .map(rm => [rm.id, rm])
             );
             dispatch(composeDraftSave(draftId, toDraftText(ownerName, postingId, text, media)));

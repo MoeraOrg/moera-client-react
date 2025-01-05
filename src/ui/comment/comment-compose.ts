@@ -18,6 +18,7 @@ import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { toAvatarDescription } from "util/avatar";
 import { isHtmlEmpty } from "util/html";
+import { notNull } from "util/misc";
 
 interface PropsToValuesProps {
     comment: CommentInfo | null;
@@ -133,7 +134,7 @@ export const commentComposeLogic = {
         let media = attachments != null
             ? attachments
                 .map(ma => ma.media != null ? {...ma.media, digest: ma.remoteMedia?.digest} as VerifiedMediaFile : null)
-                .filter((mf): mf is VerifiedMediaFile => mf != null)
+                .filter(notNull)
             : [];
         const bodyFormat = props.draft != null
                 ? props.draft.bodySrcFormat ?? "markdown"

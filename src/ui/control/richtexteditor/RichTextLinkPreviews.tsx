@@ -17,6 +17,7 @@ import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { scriptureExtractUrls } from "ui/control/richtexteditor/visual/scripture-editor";
 import { extractUrls } from "util/text";
 import { absoluteNodeName, RelNodeName } from "util/rel-node-name";
+import { notNull } from "util/misc";
 
 interface Props {
     name: string;
@@ -43,7 +44,7 @@ export function bodyToLinkPreviews(
     const bodyUrls = typeof body !== "string" ? scriptureExtractUrls(body) : extractUrls(body);
     const linkPreviewsUrls = new Set(linkPreviewsInfo.map(lp => lp.url));
     const linkPreviewsImages = new Set(
-        linkPreviewsInfo.map(lp => lp.imageHash).filter((ih): ih is string => ih != null)
+        linkPreviewsInfo.map(lp => lp.imageHash).filter(notNull)
     );
     const linkPreviewsStatus: RichTextLinkPreviewsStatus = {};
     for (const url of bodyUrls) {

@@ -2,7 +2,7 @@ import { call, put, select } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
-import { Node, ReactionTotalsInfo } from "api";
+import { Node } from "api";
 import { errorThrown } from "state/error/actions";
 import { ClientAction } from "state/action";
 import {
@@ -56,6 +56,7 @@ import { executor } from "state/executor";
 import * as Browser from "ui/browser";
 import { toAvatarDescription } from "util/avatar";
 import { absoluteNodeName, REL_HOME, RelNodeName } from "util/rel-node-name";
+import { notNull } from "util/misc";
 
 export default [
     executor("POSTING_DELETE", payload => payload.id, postingDeleteSaga),
@@ -179,7 +180,7 @@ function* postingReactionsReloadSaga(action: WithContext<PostingReactionsReloadA
         } else {
             const totals = ids
                 .map(id => postingsState[nodeName]![id]!.posting.reactions)
-                .filter((ts): ts is ReactionTotalsInfo => ts != null);
+                .filter(notNull);
             put(postingsReactionSet([], totals, nodeName).causedBy(action))
         }
     }

@@ -10,7 +10,6 @@ import {
     MediaAttachment,
     Node,
     NodeApiError,
-    PrivateMediaFileInfo,
     ReactionAttributes,
     ReactionInfo,
     RepliedTo
@@ -112,6 +111,7 @@ import { quoteHtml } from "util/html";
 import { mentionName } from "util/names";
 import { getWindowSelectionHtml, insertText } from "util/ui";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
+import { notNull } from "util/misc";
 
 export default [
     executor("DETAILED_POSTING_LOAD", "", detailedPostingLoadSaga, homeIntroduced),
@@ -184,9 +184,9 @@ function* detailedPostingLoadAttachedSaga(action: WithContext<DetailedPostingLoa
         }
         return media
             .map(ma => ma.media)
-            .filter((m): m is PrivateMediaFileInfo => m != null)
+            .filter(notNull)
             .map(m => m.postingId)
-            .filter((p): p is string => p != null)
+            .filter(notNull)
             .every(p => isPostingCached(state, p, REL_CURRENT));
     });
     if (loaded) {

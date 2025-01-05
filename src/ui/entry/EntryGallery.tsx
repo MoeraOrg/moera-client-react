@@ -5,8 +5,9 @@ import { MediaAttachment, PrivateMediaFileInfo } from "api";
 import { getFeedWidth } from "state/settings/selectors";
 import EntryImage from "ui/entry/EntryImage";
 import EntryGalleryExpandButton from "ui/entry/EntryGalleryExpandButton";
-import "./EntryGallery.css";
 import { RelNodeName } from "util/rel-node-name";
+import { notNull } from "util/misc";
+import "./EntryGallery.css";
 
 interface Props {
     postingId?: string;
@@ -40,7 +41,7 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
     const images = media
         .filter(ma => !ma.embedded)
         .map(ma => ma.media)
-        .filter((img): img is PrivateMediaFileInfo => img != null);
+        .filter(notNull);
     if (images.length === 0) {
         return null;
     }

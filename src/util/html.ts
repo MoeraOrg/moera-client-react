@@ -5,7 +5,7 @@ import * as HtmlEntities from 'html-entities';
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
 import { twemojiUrl } from "util/twemoji";
 import { mediaHashStrip, mediaImageSize } from "util/media-images";
-import { isNumericString } from "util/misc";
+import { isNumericString, notNull } from "util/misc";
 
 let prefixIndex = 0;
 
@@ -17,7 +17,7 @@ function createDimensionsTransformer(media: MediaAttachment[] | null | undefined
     const mediaMap: Map<string, PrivateMediaFileInfo> = new Map(
         (media ?? [])
             .map(ma => ma.media)
-            .filter((mf): mf is PrivateMediaFileInfo => mf != null)
+            .filter(notNull)
             .map(mf => [mediaHashStrip(mf.hash), mf])
     );
 

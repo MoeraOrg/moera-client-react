@@ -6,6 +6,7 @@ import { WithContext } from "state/action-types";
 import { getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
 import { postingSubscriptionSet } from "state/postings/actions";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
+import { notNull } from "util/misc";
 
 export function* fillSubscriptions(action: WithContext<ClientAction>, stories: StoryInfo[]) {
     const {connectedToHome, homeOwnerName} = yield* select(state => ({
@@ -19,7 +20,7 @@ export function* fillSubscriptions(action: WithContext<ClientAction>, stories: S
 
     const postings = stories
         .map(t => t.posting)
-        .filter((p): p is PostingInfo => p != null)
+        .filter(notNull)
         .map(posting => ({
             id: posting.id,
             nodeName: posting.receiverName ?? posting.ownerName,

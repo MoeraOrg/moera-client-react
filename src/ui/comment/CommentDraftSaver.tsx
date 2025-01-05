@@ -15,6 +15,7 @@ import {
 import { commentDialogCommentReset, commentDraftDelete, commentDraftSave } from "state/detailedposting/actions";
 import { DraftSaver } from "ui/control";
 import { CommentComposeValues, isCommentTextChanged, valuesToCommentText } from "ui/comment/comment-compose";
+import { notNull } from "util/misc";
 
 interface Props {
     commentId: string | null;
@@ -79,7 +80,7 @@ export default function CommentDraftSaver({commentId}: Props) {
             const media = new Map(
                 (values.body.media ?? [])
                     .concat(values.linkPreviews.media)
-                    .filter((rm): rm is VerifiedMediaFile => rm != null)
+                    .filter(notNull)
                     .map(rm => [rm.id, rm])
             );
             dispatch(commentDraftSave(

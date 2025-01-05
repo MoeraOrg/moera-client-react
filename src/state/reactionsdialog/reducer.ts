@@ -3,6 +3,7 @@ import * as immutable from 'object-path-immutable';
 import { ReactionsDialogState } from "state/reactionsdialog/state";
 import { ClientAction } from "state/action";
 import { REL_CURRENT } from "util/rel-node-name";
+import { notNull } from "util/misc";
 
 const emptyReactions = {
     loading: false,
@@ -117,7 +118,7 @@ export default (state: ReactionsDialogState = initialState, action: ClientAction
             totals.sort((rt1, rt2) =>
                 rt1.total != null && rt2.total != null ? rt2.total - rt1.total : (rt2.share ?? 0) - (rt1.share ?? 0));
             const total = totals.map(rt => rt.total)
-                .filter(v => v != null)
+                .filter(notNull)
                 .reduce((sum, v) => sum! + v!, 0);
             return immutable.assign(state, "totals", {
                 loading: false,

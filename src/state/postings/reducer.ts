@@ -8,6 +8,7 @@ import { ExtPostingInfo, PostingsState } from "state/postings/state";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
 import { ellipsize } from "util/text";
 import { absoluteNodeName } from "util/rel-node-name";
+import { notNull } from "util/misc";
 
 const MAX_SHORT_TITLE = 120;
 
@@ -81,7 +82,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             const nodeName = action.context.ownerNameOrUrl;
             action.payload.stories
                 .map(s => outsideIn(s))
-                .filter((p): p is PostingInfo => p != null)
+                .filter(notNull)
                 .forEach(p => istate.assign([nodeName, p.id], {
                     posting: safeguard(p),
                     deleting: false,

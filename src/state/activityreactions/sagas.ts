@@ -6,11 +6,12 @@ import { WithContext } from "state/action-types";
 import { isAtHomeNode } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { REL_HOME } from "util/rel-node-name";
+import { notNull } from "util/misc";
 
 export function* fillActivityReactionsInStories(caller: WithContext<ClientAction> | null, stories: StoryInfo[]) {
     const postings: PostingInfo[] = stories
         .map(t => t.posting)
-        .filter((p): p is PostingInfo => p != null)
+        .filter(notNull)
         .filter(p => p.receiverName != null && p.receiverPostingId != null);
     yield* call(fillActivityReactionsInPostings, caller, postings);
 }

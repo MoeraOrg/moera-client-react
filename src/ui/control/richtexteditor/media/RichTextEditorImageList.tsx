@@ -18,6 +18,7 @@ import UploadedImage from "ui/control/richtexteditor/media/UploadedImage";
 import AttachedImage from "ui/control/richtexteditor/media/AttachedImage";
 import { mediaHashesExtract } from "util/media-images";
 import { RelNodeName } from "util/rel-node-name";
+import { notNull } from "util/misc";
 import "./RichTextEditorImageList.css";
 
 interface Props {
@@ -51,7 +52,8 @@ export default function RichTextEditorImageList({value, nodeName, selectedImage,
 
     const embedded = mediaHashesExtract(value.text);
     const mediaList = value.media
-        .filter((media): media is VerifiedMediaFile => media != null && !embedded.has(media.hash));
+        .filter(notNull)
+        .filter(media => !embedded.has(media.hash));
     const mediaIds = mediaList.map(mf => mf.id);
 
     const onDragStart = ({active}: DragStartEvent) =>

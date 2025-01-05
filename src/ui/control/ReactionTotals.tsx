@@ -3,10 +3,11 @@ import React from 'react';
 import { NodeName } from "api";
 import { ClientReactionInfo, ReactionTotalInfo, ReactionTotalsInfo } from "api";
 import Twemoji from "ui/twemoji/Twemoji";
+import { notNull } from "util/misc";
 import "./ReactionTotals.css";
 
 function sum(reactionTotals: ReactionTotalInfo[]): number {
-    return (reactionTotals.map(rt => rt.total).filter(v => v != null) as number[]).reduce((sum, v) => sum + v, 0);
+    return reactionTotals.map(rt => rt.total).filter(notNull).reduce((sum, v) => sum + v, 0);
 }
 
 function topEmojis(reactionTotals: ReactionTotalInfo[]) {

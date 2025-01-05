@@ -12,6 +12,7 @@ import * as Browser from "ui/browser";
 import { clearHtml, containsTags, htmlEntities, quoteHtml } from "util/html";
 import { mediaImagePreview } from "util/media-images";
 import { urlWithParameters } from "util/url";
+import { notNull } from "util/misc";
 
 export default [
     executor("ENTRY_COPY_TEXT", null, entryCopyTextSaga)
@@ -58,7 +59,7 @@ function replaceMediaUrls(html: string, rootPage: string, carte: string | null,
     const mediaMap: Map<string, PrivateMediaFileInfo> = new Map(
         (media ?? [])
             .map(ma => ma.media)
-            .filter((mf): mf is PrivateMediaFileInfo => mf != null)
+            .filter(notNull)
             .map(mf => [mf.hash, mf])
     );
     return html.replace(/(<img[^>]*src=")hash:([^"]*)("[^>]*>)/gi,
