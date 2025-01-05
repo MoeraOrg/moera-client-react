@@ -18,34 +18,3 @@
     box-shadow: var(--bs-input-focus-box-shadow);
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
-
-.rich-text-editor-panel {
-    background-color: var(--bs-gray-100);
-    padding: 0 .5rem;
-    border-radius: .5rem;
-    margin-bottom: .75rem;
-}
-
-.rich-text-editor-panel.hiding {
-    display: none;
-}
-
-.rich-text-editor:focus-within .rich-text-editor-panel.hiding {
-    display: block;
-}
-
-.rich-text-editor-panel .group {
-    display: inline;
-}
-
-@media only screen and (min-width: 576px) {
-    .rich-text-editor-panel .group {
-        margin-right: 1rem;
-    }
-}
-
-@media only screen and (max-width: 575px) {
-    .rich-text-editor-panel .group {
-        margin-right: .25rem;
-    }
-}

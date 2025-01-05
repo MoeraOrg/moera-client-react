@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { BaseOperation, createEditor, Descendant } from 'slate';
 import { ReactEditor, Slate, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
 import deepEqual from 'react-fast-compare';
 
+import { SourceFormat } from "api";
 import VisualEditorCommands from "ui/control/richtexteditor/visual/VisualEditorCommands";
 import RichTextEditorPanel from "ui/control/richtexteditor/panel/RichTextEditorPanel";
 import VisualTextArea, { VisualTextAreaProps } from "ui/control/richtexteditor/visual/VisualTextArea";
@@ -16,10 +17,14 @@ import {
 } from "ui/control/richtexteditor/visual/scripture-editor";
 import { htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
+import RichTextEditorDropzone from "ui/control/richtexteditor/media/RichTextEditorDropzone";
+import { RelNodeName } from "util/rel-node-name";
 
 export type VisualEditorProps = {
     value: RichTextValue;
-    hidingPanel?: boolean;
+    format: SourceFormat;
+    nodeName: RelNodeName | string;
+    noPanel?: boolean;
     noComplexBlocks?: boolean | null;
     noEmbeddedMedia?: boolean | null;
     noMedia?: boolean | null;
@@ -28,11 +33,13 @@ export type VisualEditorProps = {
     submitKey?: string;
     onSubmit?: () => void;
     onUrls?: (urls: string[]) => void;
+    children?: ReactNode;
 } & VisualTextAreaProps;
 
 export default function VisualEditor({
-    name, value, rows, minHeight, maxHeight, placeholder, autoFocus, disabled, smileysEnabled, hidingPanel,
-    noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, onChange, submitKey, onSubmit, onUrls, onBlur
+    name, value, format, nodeName, rows, minHeight, maxHeight, placeholder, autoFocus, disabled, smileysEnabled,
+    noPanel, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, onChange, submitKey, onSubmit, onUrls, onBlur,
+    children
 }: VisualEditorProps) {
     const {pasteImage} = useRichTextEditorMedia();
     const [editor] = useState(
@@ -110,7 +117,9 @@ export default function VisualEditor({
                onValueChange={onScriptureChange as ((contents: Descendant[]) => void) | undefined}>
             <VisualEditorCommands noComplexBlocks={noComplexBlocks} noEmbeddedMedia={noEmbeddedMedia} noMedia={noMedia}
                                   noVideo={noVideo}>
-                <RichTextEditorPanel hiding={hidingPanel}/>
+                {!noPanel &&
+                    <RichTextEditorPanel/>
+                }
                 <VisualTextArea
                     name={name}
                     rows={rows}
@@ -124,6 +133,11 @@ export default function VisualEditor({
                     onSubmit={onSubmit}
                     onBlur={onBlur}
                 />
+                {!noMedia &&
+                    <RichTextEditorDropzone value={value} hiding={noPanel} nodeName={nodeName} srcFormat={format}
+                                            smileysEnabled={smileysEnabled}/>
+                }
+                {children}
             </VisualEditorCommands>
         </Slate>
     );

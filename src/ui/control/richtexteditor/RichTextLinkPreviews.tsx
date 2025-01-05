@@ -22,7 +22,7 @@ interface Props {
     name: string;
     urlsField: string;
     nodeName: RelNodeName | string;
-    features: PostingFeatures | null;
+    features?: PostingFeatures | null;
     small?: boolean | null;
     disabled?: boolean;
 }
@@ -77,7 +77,7 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, feature
     useEffect(() => {
         urlsToLoad.forEach(url => dispatch(linkPreviewLoad(url)));
         if (targetNodeName != null) {
-            imagesToLoad.forEach(url => dispatch(linkPreviewImageUpload(url, targetNodeName, features)));
+            imagesToLoad.forEach(url => dispatch(linkPreviewImageUpload(url, targetNodeName, features ?? null)));
         }
         if (!deepEqual(value, newValue)) {
             setValue(newValue)

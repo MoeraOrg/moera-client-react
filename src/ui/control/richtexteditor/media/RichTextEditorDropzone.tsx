@@ -99,6 +99,7 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName,
         event.preventDefault();
     }
 
+    const hidden = hiding && (value.media == null || value.media.length === 0);
     const progressSummary = useMemo(() => calcProgressSummary(uploadProgress), [uploadProgress])
     const buttonsTitle = !tinyScreen ? "upload-or-copy-or-drop-images" : "upload-or-copy-images";
 
@@ -106,7 +107,7 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName,
         <>
             <div className={cx(
                 "rich-text-editor-dropzone",
-                {"hiding": hiding, "drag-accept": isDragAccept, "drag-reject": isDragReject}
+                {"d-none": hidden, "drag-accept": isDragAccept, "drag-reject": isDragReject}
             )} {...getRootProps()}>
                 <RichTextEditorImageList value={value} nodeName={nodeName} selectedImage={selectedImage}
                                          selectImage={setSelectedImage} onDeleted={deleteImage}
@@ -118,13 +119,14 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName,
                         downloading ?
                             t("downloading-image")
                         :
-                            <div className="upload-button" role="button" tabIndex={0} onClick={onSelectImages}>
-                                <Trans i18nKey={buttonsTitle}>
-                                    <b/>
-                                    <button className="copy-image" onClick={openCopyImage}/>
-                                    <br/>
-                                </Trans>
-                            </div>
+                            !hiding &&
+                                <div className="upload-button" role="button" tabIndex={0} onClick={onSelectImages}>
+                                    <Trans i18nKey={buttonsTitle}>
+                                        <b/>
+                                        <button className="copy-image" onClick={openCopyImage}/>
+                                        <br/>
+                                    </Trans>
+                                </div>
                     }
                 </div>
                 {copyImageShow &&

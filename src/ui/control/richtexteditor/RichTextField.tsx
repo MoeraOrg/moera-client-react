@@ -1,11 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { ReactNode, useCallback } from 'react';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { PostingFeatures, SourceFormat } from "api";
 import { FormGroup } from "ui/control";
-import { RichTextEditor, RichTextValue } from "ui/control/richtexteditor";
+import { RichTextEditor, RichTextLinkPreviews, RichTextValue } from "ui/control/richtexteditor";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import FieldError from "ui/control/field/FieldError";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
@@ -33,18 +33,21 @@ interface Props {
     initialValue?: RichTextValue;
     defaultValue?: RichTextValue;
     smileysEnabled?: boolean;
-    hidingPanel?: boolean;
+    noPanel?: boolean;
     format: SourceFormat;
     submitKey?: string;
     onSubmit?: () => void;
     urlsField?: string;
+    linkPreviewsField?: string;
+    linkPreviewsSmall?: boolean | null;
+    children?: ReactNode;
 }
 
 export function RichTextField({
     name, title, rows = 3, minHeight, maxHeight, features, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo,
     nodeName = REL_CURRENT, forceImageCompress, placeholder, autoFocus, anyValue, className, autoComplete,
-    noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled, hidingPanel, format, submitKey,
-    onSubmit, urlsField
+    noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled, noPanel, format, submitKey,
+    onSubmit, urlsField, linkPreviewsField, linkPreviewsSmall, children
 }: Props) {
     const [{value, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
@@ -90,7 +93,7 @@ export function RichTextField({
                     features={features ?? null}
                     disabled={disabled}
                     smileysEnabled={smileysEnabled}
-                    hidingPanel={hidingPanel}
+                    noPanel={noPanel}
                     format={format}
                     submitKey={submitKey}
                     onSubmit={onSubmit}
@@ -101,8 +104,17 @@ export function RichTextField({
                     noVideo={noVideo}
                     nodeName={nodeName}
                     forceImageCompress={forceImageCompress}
-                />
-                {!noFeedback && touched && <FieldError error={(error as any)?.text}/>}
+                >
+                    <>
+                        {!noFeedback && touched && <FieldError error={(error as any)?.text}/>}
+                        {urlsField != null && linkPreviewsField != null &&
+                            <RichTextLinkPreviews name={linkPreviewsField} urlsField={urlsField}
+                                                  nodeName={nodeName} features={features} small={linkPreviewsSmall}
+                                                  disabled={disabled}/>
+                        }
+                        {children}
+                    </>
+                </RichTextEditor>
             </>
         </FormGroup>
     );

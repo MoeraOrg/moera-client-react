@@ -14,14 +14,9 @@ import {
     isCommentComposerReady
 } from "state/detailedposting/selectors";
 import { AvatarField } from "ui/control/field";
-import { RichTextField, RichTextLinkPreviews } from "ui/control/richtexteditor";
+import { RichTextField } from "ui/control/richtexteditor";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
-import {
-    areValuesEmpty,
-    commentComposeLogic,
-    CommentComposeProps,
-    CommentComposeValues
-} from "ui/comment/comment-compose";
+import { commentComposeLogic, CommentComposeProps, CommentComposeValues } from "ui/comment/comment-compose";
 import CommentComposeButtons from "ui/comment/CommentComposeButtons";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./CommentCompose.css";
@@ -72,12 +67,11 @@ function CommentCompose(props: Props) {
                     <RichTextField name="body" rows={1} minHeight="2.5em" maxHeight="max(100vh - 26rem, 7.2em)"
                                    features={features} nodeName={receiverName ?? REL_CURRENT} forceImageCompress
                                    noEmbeddedMedia anyValue placeholder={t("write-comment")}
-                                   disabled={!ready || beingPosted} smileysEnabled={smileysEnabled}
-                                   hidingPanel={areValuesEmpty(values)} format={sourceFormatDefault}
-                                   submitKey={submitKey} onSubmit={() => submitForm()} urlsField="bodyUrls"/>
-                    <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls"
-                                          nodeName={receiverName ?? REL_CURRENT} features={features} small
-                                          disabled={!ready || beingPosted}/>
+                                   disabled={!ready || beingPosted} smileysEnabled={smileysEnabled} noPanel
+                                   format={sourceFormatDefault} submitKey={submitKey} onSubmit={() => submitForm()}
+                                   urlsField="bodyUrls" linkPreviewsField="linkPreviews" linkPreviewsSmall>
+                        <div>Панель будет здесь</div>
+                    </RichTextField>
                 </div>
                 <CommentComposeButtons/>
             </Form>

@@ -1,0 +1,22 @@
+.rich-text-editor-panel {
+    background-color: var(--bs-gray-100);
+    padding: 0 .5rem;
+    border-radius: .5rem;
+    margin-bottom: .75rem;
+}
+
+.rich-text-editor-panel .group {
+    display: inline;
+}
+
+@media only screen and (min-width: 576px) {
+    .rich-text-editor-panel .group {
+        margin-right: 1rem;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .rich-text-editor-panel .group {
+        margin-right: .25rem;
+    }
+}

@@ -24,7 +24,7 @@ import { getPostingFeatures } from "state/compose/selectors";
 import NodeName from "ui/nodename/NodeName";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
 import { AvatarField } from "ui/control/field";
-import { RichTextField, RichTextLinkPreviews } from "ui/control/richtexteditor";
+import { RichTextField } from "ui/control/richtexteditor";
 import { commentComposeLogic, CommentComposeProps, CommentComposeValues } from "ui/comment/comment-compose";
 import CommentDraftSaver from "ui/comment/CommentDraftSaver";
 import { REL_CURRENT } from "util/rel-node-name";
@@ -88,10 +88,7 @@ function CommentDialogInner(props: Props) {
                                    forceImageCompress noEmbeddedMedia anyValue autoFocus
                                    disabled={!ready || beingPosted} smileysEnabled={smileysEnabled}
                                    format={sourceFormatDefault} submitKey={submitKey} onSubmit={() => submitForm()}
-                                   urlsField="bodyUrls"/>
-                    <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls"
-                                          nodeName={receiverName ?? REL_CURRENT} features={features} small
-                                          disabled={!ready || beingPosted}/>
+                                   urlsField="bodyUrls" linkPreviewsField="linkPreviews" linkPreviewsSmall/>
                 </div>
                 <div className="modal-footer">
                     {ready && <CommentDraftSaver commentId={commentId}/>}

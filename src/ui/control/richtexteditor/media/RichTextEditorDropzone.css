@@ -4,14 +4,6 @@
     margin-top: .75rem;
 }
 
-.rich-text-editor-dropzone.hiding {
-    display: none;
-}
-
-.rich-text-editor:focus-within .rich-text-editor-dropzone.hiding {
-    display: block;
-}
-
 .rich-text-editor-dropzone.drag-accept {
     border: 1px solid var(--bs-primary);
     box-shadow: 0 0 0 .25rem var(--bs-primary-bg-subtle);

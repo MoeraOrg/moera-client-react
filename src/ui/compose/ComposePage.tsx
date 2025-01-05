@@ -19,7 +19,7 @@ import {
 } from "ui/compose/posting-compose";
 import { ConflictWarning, Loading } from "ui/control";
 import { AvatarField, InputField } from "ui/control/field";
-import { RichTextField, RichTextLinkPreviews } from "ui/control/richtexteditor";
+import { RichTextField } from "ui/control/richtexteditor";
 import { Page } from "ui/page/Page";
 import PageHeader from "ui/page/PageHeader";
 import Jump from "ui/navigation/Jump";
@@ -110,10 +110,9 @@ function ComposePageInner(props: Props) {
                         }
                         <RichTextField name="body" placeholder={t("whats-new")} disabled={!ready || beingPosted}
                                        format={values.bodyFormat ?? "markdown"} smileysEnabled={smileysEnabled}
-                                       features={features} nodeName={REL_CURRENT} urlsField="bodyUrls" anyValue
-                                       autoFocus maxHeight="max(100vh - 26rem, 10.8em)"/>
-                        <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" nodeName={REL_CURRENT}
-                                              features={features} disabled={!ready}/>
+                                       features={features} nodeName={REL_CURRENT} urlsField="bodyUrls"
+                                       linkPreviewsField="linkPreviews" anyValue autoFocus
+                                       maxHeight="max(100vh - 26rem, 10.8em)"/>
 
                         <div className="features">
                             <div className="feature-buttons">

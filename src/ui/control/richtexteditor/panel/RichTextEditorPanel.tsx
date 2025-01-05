@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import cx from 'classnames';
 
 import {
     msAddLink,
@@ -27,12 +26,9 @@ import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEd
 import RichTextEditorHeadingButton from "ui/control/richtexteditor/panel/RichTextEditorHeadingButton";
 import RichTextEditorEmojiButton from "ui/control/richtexteditor/panel/RichTextEditorEmojiButton";
 import RichTextEditorOtherButton from "ui/control/richtexteditor/panel/RichTextEditorOtherButton";
+import "./RichTextEditorPanel.css";
 
-interface Props {
-    hiding?: boolean;
-}
-
-export default function RichTextEditorPanel({hiding}: Props) {
+export default function RichTextEditorPanel() {
     const {
         supportsComplexBlocks, supportsEmbeddedMedia, supportsMedia, supportsVideo, supportsClear,
         inBold, inItalic, inStrikeout, inLink, inSpoiler, inMention, inBlockquote, inList, inUnorderedList,
@@ -45,7 +41,7 @@ export default function RichTextEditorPanel({hiding}: Props) {
     const {t} = useTranslation();
 
     return (
-        <div className={cx("rich-text-editor-panel", {"hiding": hiding})}>
+        <div className="rich-text-editor-panel">
             {supportsComplexBlocks &&
                 <div className="group">
                     <RichTextEditorHeadingButton onSelect={formatHeading}/>
