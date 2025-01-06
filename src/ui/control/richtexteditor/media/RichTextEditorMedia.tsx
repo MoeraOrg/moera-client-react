@@ -6,7 +6,7 @@ import * as immutable from 'object-path-immutable';
 import { PostingFeatures, SourceFormat, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
-import { richTextEditorImagesUpload } from "state/richtexteditor/actions";
+import { richTextEditorImageCopy, richTextEditorImagesUpload } from "state/richtexteditor/actions";
 import * as Browser from "ui/browser";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import {
@@ -22,6 +22,7 @@ import { isHtmlEmpty } from "util/html";
 import { RelNodeName } from "util/rel-node-name";
 import { arrayMove } from "util/misc";
 import { mediaImageExtensions } from "util/media-images";
+import RichTextCopyImageDialog, { RichTextCopyImageValues } from "ui/control/richtexteditor/dialog/RichTextCopyImageDialog";
 
 function updateStatus(progress: UploadProgress[], index: number, status: UploadStatus): UploadProgress[] {
     const updated = immutable.set(progress, [index, "status"], status);
@@ -236,11 +237,40 @@ export default function RichTextEditorMedia({
         }
     }
 
+    const [copyImageShow, setCopyImageShow] = useState<boolean>(false);
+    const [downloading, setDownloading] = useState<boolean>(false);
+
+    const copyImage = () => {
+        setCopyImageShow(true);
+    }
+
+    const onImageDownloadSuccess = (description: RichTextValue | undefined) => (file: File) => {
+        setDownloading(false);
+        uploadImages([file], compressDefault.current, description);
+    }
+
+    const onImageDownloadFailure = () => {
+        setDownloading(false);
+    }
+
+    const submitCopyImage = (ok: boolean | null, values: Partial<RichTextCopyImageValues>) => {
+        setCopyImageShow(false);
+        if (!ok || !values.url) {
+            return;
+        }
+        if (values.compress != null) {
+            compressDefault.current = values.compress;
+        }
+        setDownloading(true);
+        dispatch(
+            richTextEditorImageCopy(values.url, onImageDownloadSuccess(values.description), onImageDownloadFailure)
+        );
+    }
+
     return (
         <RichTextEditorMediaContext.Provider value={{
-            getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadImages, uploadProgress, forceCompress,
-            compress: compressDefault.current, setCompress: value => compressDefault.current = value, deleteImage,
-            reorderImage, pasteImage, showImageDialog,
+            getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, deleteImage, reorderImage,
+            pasteImage, showImageDialog, downloading, copyImage,
         }}>
             {children}
             <input {...getInputProps()}/>
@@ -250,6 +280,11 @@ export default function RichTextEditorMedia({
                                      compressDefault={compressDefault.current} descriptionSrcFormat={srcFormat}
                                      smileysEnabled={smileysEnabled} prevValues={imageDialogPrevValues}
                                      onSubmit={imageDialogOnSubmit}/>
+            }
+            {copyImageShow &&
+                <RichTextCopyImageDialog forceCompress={forceCompress} compressDefault={compressDefault.current}
+                                         descriptionSrcFormat={srcFormat} smileysEnabled={smileysEnabled}
+                                         onSubmit={submitCopyImage}/>
             }
         </RichTextEditorMediaContext.Provider>
     );

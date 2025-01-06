@@ -134,8 +134,7 @@ export default function VisualEditor({
                     onBlur={onBlur}
                 />
                 {!noMedia &&
-                    <RichTextEditorDropzone value={value} hiding={noPanel} nodeName={nodeName} srcFormat={format}
-                                            smileysEnabled={smileysEnabled}/>
+                    <RichTextEditorDropzone value={value} hiding={noPanel} nodeName={nodeName}/>
                 }
                 {children}
             </VisualEditorCommands>

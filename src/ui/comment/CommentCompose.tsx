@@ -17,6 +17,7 @@ import { AvatarField } from "ui/control/field";
 import { RichTextField } from "ui/control/richtexteditor";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
 import { commentComposeLogic, CommentComposeProps, CommentComposeValues } from "ui/comment/comment-compose";
+import CommentComposePanel from "ui/comment/CommentComposePanel";
 import CommentComposeButtons from "ui/comment/CommentComposeButtons";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./CommentCompose.css";
@@ -59,18 +60,18 @@ function CommentCompose(props: Props) {
     }
 
     return (
-        <div id="comment-composer" onFocus={onFocus} onBlur={onBlur}>
+        <div id="comment-compose" onFocus={onFocus} onBlur={onBlur}>
             <Form>
                 <AvatarField name="avatar" size={36} disabled={!ready || beingPosted}/>
                 <div className="content">
                     <CommentComposeRepliedTo disabled={!ready || beingPosted}/>
-                    <RichTextField name="body" rows={1} minHeight="2.5em" maxHeight="max(100vh - 26rem, 7.2em)"
+                    <RichTextField name="body" rows={2} minHeight="4em" maxHeight="max(100vh - 26rem, 7.2em)"
                                    features={features} nodeName={receiverName ?? REL_CURRENT} forceImageCompress
                                    noEmbeddedMedia anyValue placeholder={t("write-comment")}
                                    disabled={!ready || beingPosted} smileysEnabled={smileysEnabled} noPanel
                                    format={sourceFormatDefault} submitKey={submitKey} onSubmit={() => submitForm()}
                                    urlsField="bodyUrls" linkPreviewsField="linkPreviews" linkPreviewsSmall>
-                        <div>Панель будет здесь</div>
+                        <CommentComposePanel/>
                     </RichTextField>
                 </div>
                 <CommentComposeButtons/>
@@ -80,7 +81,7 @@ function CommentCompose(props: Props) {
 }
 
 function viewComposer() {
-    const composer = document.getElementById("comment-composer");
+    const composer = document.getElementById("comment-compose");
     if (composer != null && composer.contains(document.activeElement)) {
         setTimeout(() => scrollIntoView(composer, {scrollMode: "if-needed", block: "nearest"}));
     }

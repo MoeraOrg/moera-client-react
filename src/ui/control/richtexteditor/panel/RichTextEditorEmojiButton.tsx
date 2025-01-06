@@ -9,10 +9,11 @@ import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEd
 import { useButtonPopper } from "ui/hook";
 
 interface Props {
+    iconSize?: number;
     onSelect?: (emoji: string) => void;
 }
 
-export default function RichTextEditorEmojiButton({onSelect}: Props) {
+export default function RichTextEditorEmojiButton({iconSize, onSelect}: Props) {
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
         placement, zIndex
@@ -27,7 +28,8 @@ export default function RichTextEditorEmojiButton({onSelect}: Props) {
 
     return (
         <>
-            <RichTextEditorButton ref={setButtonRef} icon={msSentimentSatisfied} title={t("emoji")} onClick={onToggle}/>
+            <RichTextEditorButton ref={setButtonRef} icon={msSentimentSatisfied} iconSize={iconSize} title={t("emoji")}
+                                  onClick={onToggle}/>
             {visible &&
                 <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                      className={`fade popover bs-popover-${placement} shadow-sm show`}>

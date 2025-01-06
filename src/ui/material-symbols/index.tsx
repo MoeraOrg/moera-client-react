@@ -6,6 +6,7 @@ import { ReactComponent as msClose } from "ui/material-symbols/close.isvg";
 import { ReactComponent as msCode } from "ui/material-symbols/code.isvg";
 import { ReactComponent as msCodeBlocks } from "ui/material-symbols/code_blocks.isvg";
 import { ReactComponent as msExpandCircleDown } from "ui/material-symbols/expand_circle_down.isvg";
+import { ReactComponent as msFileSave } from "ui/material-symbols/file_save.svg";
 import { ReactComponent as msFormatBold } from "ui/material-symbols/format_bold.isvg";
 import { ReactComponent as msFormatClear } from "ui/material-symbols/format_clear.isvg";
 import { ReactComponent as msFormatIndentDecrease } from "ui/material-symbols/format_indent_decrease.isvg";
@@ -37,6 +38,7 @@ export {
     msCode,
     msCodeBlocks,
     msExpandCircleDown,
+    msFileSave,
     msFormatBold,
     msFormatClear,
     msFormatIndentDecrease,

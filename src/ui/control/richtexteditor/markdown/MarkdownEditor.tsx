@@ -48,8 +48,7 @@ export function MarkdownEditor({
                           submitKey={submitKey} onSubmit={onSubmit} onChange={onTextChange} onBlur={onBlur}
                           onUrls={onUrls} ref={textArea} panel={panel}/>
             {!noMedia &&
-                <RichTextEditorDropzone value={value} hiding={noPanel} nodeName={nodeName} srcFormat={format}
-                                        smileysEnabled={smileysEnabled}/>
+                <RichTextEditorDropzone value={value} hiding={noPanel} nodeName={nodeName}/>
             }
             {children}
         </MarkdownEditorCommands>

@@ -51,7 +51,7 @@ export default function CommentComposeLine() {
         const onSignUp = () => dispatch(openSignUpDialog());
         const onConnect = () => dispatch(openConnectDialog());
         return (
-            <div id="comment-composer" className="alert alert-info">
+            <div id="comment-compose" className="alert alert-info">
                 <Trans i18nKey="add-comments-need" values={{signup: t("sign-up"), connect: t("connect")}}>
                     <Button variant="primary" size="sm" onClick={onSignUp}/>
                     <Button variant="success" size="sm" onClick={onConnect}/>
@@ -63,11 +63,11 @@ export default function CommentComposeLine() {
     if (!commentingAllowed) {
         if (discussionClosed) {
             return (
-                <div id="comment-composer" className="disabled">{t("discussion-closed")}</div>
+                <div id="comment-compose" className="disabled">{t("discussion-closed")}</div>
             );
         } else {
             return (
-                <div id="comment-composer"/>
+                <div id="comment-compose"/>
             );
         }
     }

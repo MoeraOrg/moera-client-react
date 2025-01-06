@@ -1,17 +1,17 @@
-#comment-composer .buttons {
+#comment-compose .buttons {
     text-align: right;
 }
 
-#comment-composer .buttons BUTTON {
+#comment-compose .buttons BUTTON {
     text-transform: uppercase;
 }
 
-#comment-composer .buttons BUTTON[type=submit] {
+#comment-compose .buttons BUTTON[type=submit] {
     margin-left: .5rem;
     margin-right: 1rem;
 }
 
-#comment-composer .buttons .draft-saver {
+#comment-compose .buttons .draft-saver {
     display: inline-block;
     color: var(--bs-gray-500);
 }

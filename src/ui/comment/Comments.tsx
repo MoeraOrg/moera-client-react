@@ -71,7 +71,7 @@ export default function Comments() {
             return;
         }
         if (composerFocused) {
-            scrollToElement(document.getElementById("comment-composer")!);
+            scrollToElement(document.getElementById("comment-compose")!);
             const body = document.getElementById("body");
             if (body != null) {
                 body.focus();

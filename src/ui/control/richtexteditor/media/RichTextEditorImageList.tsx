@@ -11,6 +11,7 @@ import {
     useSensors
 } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
+import cx from 'classnames';
 
 import { PrivateMediaFileInfo, VerifiedMediaFile } from "api";
 import { RichTextValue } from "ui/control/richtexteditor";
@@ -23,6 +24,7 @@ import "./RichTextEditorImageList.css";
 
 interface Props {
     value: RichTextValue;
+    className?: string;
     nodeName: RelNodeName | string;
     selectedImage: PrivateMediaFileInfo | null;
     selectImage: (image: VerifiedMediaFile | null) => void;
@@ -30,7 +32,7 @@ interface Props {
     onReorder?: (activeId: string, overId: string) => void;
 }
 
-export default function RichTextEditorImageList({value, nodeName, selectedImage, selectImage, onDeleted,
+export default function RichTextEditorImageList({value, className, nodeName, selectedImage, selectImage, onDeleted,
                                                  onReorder}: Props) {
     const mouseSensor = useSensor(PointerSensor, {
         activationConstraint: {
@@ -81,7 +83,7 @@ export default function RichTextEditorImageList({value, nodeName, selectedImage,
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragCancel={onDragCancel}>
             <SortableContext items={mediaIds}>
                 {mediaList.length > 0 &&
-                    <div className="rich-text-editor-image-list">
+                    <div className={cx("rich-text-editor-image-list", className)}>
                         {mediaList.filter(media => media.id !== selectedImage?.id).map(media =>
                             <UploadedImage key={media.id} media={media} nodeName={nodeName}
                                            dragged={dragged?.id === media.id} showMenu={!dragged}

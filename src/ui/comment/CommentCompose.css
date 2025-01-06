@@ -1,30 +1,31 @@
-#comment-composer FORM {
+#comment-compose FORM {
     display: flex;
     flex-wrap: wrap;
 }
 
-#comment-composer .content {
+#comment-compose .content {
+    margin-left: 1rem;
     margin-bottom: .5rem;
     flex: 1 1 0;
 }
 
-#comment-composer .content .form-group {
+#comment-compose .content .form-group {
     margin-bottom: 0;
 }
 
-#comment-composer TEXTAREA:empty {
+#comment-compose TEXTAREA:empty {
     background-color: var(--comment-compose);
 }
 
-#comment-composer TEXTAREA:focus {
+#comment-compose TEXTAREA:focus {
     background-color: white;
 }
 
-#comment-composer .buttons {
+#comment-compose .buttons {
     flex: 100%;
 }
 
-#comment-composer.disabled {
+#comment-compose.disabled {
     text-align: center;
     border-top: solid 1px var(--bs-gray-400);
     border-bottom: solid 1px var(--bs-gray-400);

@@ -2,7 +2,6 @@ import { createContext, useContext } from 'react';
 import { DropzoneRootProps } from 'react-dropzone';
 
 import { VerifiedMediaFile } from "api";
-import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { RichTextImageStandardSize } from "ui/control/richtexteditor/media/rich-text-image";
 import { RichTextImageValues } from "ui/control/richtexteditor/media/RichTextImageDialog";
 import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
@@ -28,11 +27,7 @@ export interface RichTextEditorMediaInterface {
     isDragAccept: boolean;
     isDragReject: boolean;
     openLocalFiles: (onUploaded?: OnInsertHandler) => void;
-    uploadImages: (files: File[], compress: boolean, caption?: RichTextValue) => void;
     uploadProgress: UploadProgress[];
-    forceCompress: boolean;
-    compress: boolean;
-    setCompress: (compress: boolean) => void;
     deleteImage: (id: string) => void;
     reorderImage: (moveId: string, overId: string) => void;
     pasteImage: (data: DataTransfer) => boolean;
@@ -41,6 +36,8 @@ export interface RichTextEditorMediaInterface {
         insert?: boolean, prevValues?: RichTextImageValues | null,
         onSubmit?: RichTextEditorDialogSubmit<RichTextImageValues>
     ) => void;
+    downloading: boolean;
+    copyImage: () => void;
 }
 
 export const RichTextEditorMediaContext = createContext<RichTextEditorMediaInterface>({
@@ -48,15 +45,13 @@ export const RichTextEditorMediaContext = createContext<RichTextEditorMediaInter
     isDragAccept: false,
     isDragReject: false,
     openLocalFiles: () => {},
-    uploadImages: () => {},
     uploadProgress: [],
-    forceCompress: false,
-    compress: false,
-    setCompress: () => {},
     deleteImage: () => {},
     reorderImage: () => {},
     pasteImage: () => false,
     showImageDialog: () => {},
+    downloading: false,
+    copyImage: () => {},
 });
 
 export const useRichTextEditorMedia = (): RichTextEditorMediaInterface => useContext(RichTextEditorMediaContext);

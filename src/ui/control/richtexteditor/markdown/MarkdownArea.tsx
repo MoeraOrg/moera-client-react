@@ -260,7 +260,7 @@ function MarkdownArea(
                 placeholder={placeholder ?? t("enter-text-here")}
                 rows={rows}
                 style={{
-                    minHeight: minHeight ?? (rows != null ? `${Math.ceil(rows * 15) / 10}em` : undefined),
+                    minHeight: minHeight ?? (rows != null ? `${Math.ceil(rows * 18) / 10}em` : undefined),
                     maxHeight: maxHeight ?? "calc(100vh - 26rem)"
                 }}
                 disabled={disabled}

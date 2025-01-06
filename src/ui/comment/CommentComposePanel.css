@@ -1,0 +1,11 @@
+.comment-compose-panel {
+    margin-top: .35rem;
+}
+
+.comment-compose-panel .rich-text-editor-button {
+    border-radius: .5em;
+    width: 1.75em;
+    height: 1.75em;
+    padding: .15rem;
+    margin-right: .75em;
+}

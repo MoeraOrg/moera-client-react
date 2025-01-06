@@ -7,6 +7,7 @@ import "./RichTextEditorButton.css";
 
 interface Props {
     icon: MaterialSymbol;
+    iconSize?: number;
     title: string;
     hotkey?: string;
     className?: string;
@@ -16,7 +17,7 @@ interface Props {
 }
 
 export function RichTextEditorButtonImpl(
-    {icon, title, hotkey, className, active, onClick, command}: Props,
+    {icon, iconSize = 24, title, hotkey, className, active, onClick, command}: Props,
     ref: ForwardedRef<HTMLButtonElement>
 ) {
     const {focus} = useRichTextEditorCommands();
@@ -31,7 +32,7 @@ export function RichTextEditorButtonImpl(
         <button className={cx("rich-text-editor-button", className, {active})}
                 title={hotkey ? `${title} (${hotkey})` : title} data-hotkey={hotkey} onClick={onClick ?? onCommandClick}
                 ref={ref}>
-            {icon && <Icon icon={icon}/>}
+            {icon && <Icon icon={icon} width={iconSize} height={iconSize}/>}
         </button>
     );
 }
