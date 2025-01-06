@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import cloneDeep from 'lodash.clonedeep';
 
 import { DraftText, PostingText, StoryAttributes, VerifiedMediaFile } from "api";
@@ -10,7 +11,7 @@ import { composeDraftListItemDelete, composeDraftSave, composeUpdateDraftDelete 
 import { getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ComposePageValues, isPostingTextChanged, valuesToPostingText } from "ui/compose/posting-compose";
-import { DraftSaver } from "ui/control";
+import { useDraftSaver } from "ui/draft/draft-saver";
 import { notNull } from "util/misc";
 
 const getPublishAt = (publications: StoryAttributes[] | null | undefined): number | null | undefined =>
@@ -47,6 +48,7 @@ export default function ComposeDraftSaver() {
     const avatarShapeDefault = useSelector((state: ClientState) =>
         getSetting(state, "avatar.shape.default") as string);
     const dispatch = useDispatch();
+    const {t} = useTranslation();
 
     const toText = (values: ComposePageValues): PostingText =>
         valuesToPostingText(values, {gender, postingId, features, smileysEnabled, newsFeedEnabled, avatarShapeDefault});
@@ -75,9 +77,16 @@ export default function ComposeDraftSaver() {
         }
     }
 
+    const {unsaved, saving, saved} = useDraftSaver({
+        toText, isChanged, save, drop,
+        savingDraftSelector: (state: ClientState) => state.compose.savingDraft,
+        savedDraftSelector: (state: ClientState) => state.compose.savedDraft
+    });
+
     return (
-        <DraftSaver toText={toText} isChanged={isChanged} save={save} drop={drop}
-                    savingDraftSelector={(state: ClientState) => state.compose.savingDraft}
-                    savedDraftSelector={(state: ClientState) => state.compose.savedDraft}/>
+        <div className="ms-2 me-2">
+            {!unsaved && saving && t("draft-saving")}
+            {!unsaved && saved && t("draft-saved")}
+        </div>
     );
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import cloneDeep from 'lodash.clonedeep';
 
 import { CommentText, DraftText, SourceFormat, VerifiedMediaFile } from "api";
@@ -13,8 +14,8 @@ import {
     getCommentsState
 } from "state/detailedposting/selectors";
 import { commentDialogCommentReset, commentDraftDelete, commentDraftSave } from "state/detailedposting/actions";
-import { DraftSaver } from "ui/control";
 import { CommentComposeValues, isCommentTextChanged, valuesToCommentText } from "ui/comment/comment-compose";
+import { useDraftSaver } from "ui/draft/draft-saver";
 import { notNull } from "util/misc";
 
 interface Props {
@@ -63,6 +64,7 @@ export default function CommentDraftSaver({commentId}: Props) {
     const sourceFormatDefault = useSelector((state: ClientState) =>
         getSetting(state, "comment.body-src-format.default") as SourceFormat);
     const dispatch = useDispatch();
+    const {t} = useTranslation();
 
     const toText = (values: CommentComposeValues): CommentText | null =>
         valuesToCommentText(
@@ -103,18 +105,22 @@ export default function CommentDraftSaver({commentId}: Props) {
         }
     }
 
+    const {unsaved, saving, saved} = useDraftSaver({
+        toText, isChanged, save, drop,
+        savingDraftSelector: (state: ClientState) =>
+            commentId == null
+                ? state.detailedPosting.compose.savingDraft
+                : state.detailedPosting.commentDialog.savingDraft,
+        savedDraftSelector: (state: ClientState) =>
+            commentId == null
+                ? state.detailedPosting.compose.savedDraft
+                : state.detailedPosting.commentDialog.savedDraft
+    });
+
     return (
-        <DraftSaver toText={toText} isChanged={isChanged} save={save} drop={drop}
-                    savingDraftSelector={
-                         (state: ClientState) =>
-                             commentId == null
-                                 ? state.detailedPosting.compose.savingDraft
-                                 : state.detailedPosting.commentDialog.savingDraft
-                     }
-                    savedDraftSelector={
-                         (state: ClientState) =>
-                             commentId == null
-                                 ? state.detailedPosting.compose.savedDraft
-                                 : state.detailedPosting.commentDialog.savedDraft}/>
+        <div className="ms-2 me-2">
+            {!unsaved && saving && t("draft-saving")}
+            {!unsaved && saved && t("draft-saved")}
+        </div>
     );
 }

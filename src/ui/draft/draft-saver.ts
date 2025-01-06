@@ -1,12 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useFormikContext } from 'formik';
-import { useTranslation } from 'react-i18next';
 import deepEqual from 'react-fast-compare';
 
 import { ClientState } from "state/state";
 import { useThrottle } from "ui/hook";
-import "./DraftSaver.css";
 
 interface Props<Text, Values> {
     toText: (values: Values) => Text | null;
@@ -17,12 +15,17 @@ interface Props<Text, Values> {
     savedDraftSelector: (state: ClientState) => boolean;
 }
 
-export function DraftSaver<Text, Values>({
+interface DraftSavingState {
+    unsaved: boolean;
+    saving: boolean;
+    saved: boolean;
+}
+
+export function useDraftSaver<Text, Values>({
     toText, isChanged, save, drop, savingDraftSelector, savedDraftSelector
-}: Props<Text, Values>) {
+}: Props<Text, Values>): DraftSavingState {
     const savingDraft = useSelector(savingDraftSelector);
     const savedDraft = useSelector(savedDraftSelector);
-    const {t} = useTranslation();
 
     const {status, values, initialValues} = useFormikContext<Values>();
     const [savedValues, setSavedValues] = useState<Values>(initialValues);
@@ -60,10 +63,9 @@ export function DraftSaver<Text, Values>({
 
     const unsavedChanges = useMemo(() => !deepEqual(values, savedValues), [savedValues, values]);
 
-    return (
-        <div className="draft-saver">
-            {!unsavedChanges && savingDraft && t("draft-saving")}
-            {!unsavedChanges && savedDraft && t("draft-saved")}
-        </div>
-    );
+    return {
+        unsaved: unsavedChanges,
+        saving: savingDraft,
+        saved: savedDraft
+    };
 }
