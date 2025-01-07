@@ -10,8 +10,6 @@ import { commentComposeCancel } from "state/detailedposting/actions";
 import { isCommentComposerReady } from "state/detailedposting/selectors";
 import {
     Icon,
-    msAddLink,
-    msAlternateEmail,
     msCloudDone,
     msCloudUpload,
     msDelete,
@@ -22,7 +20,6 @@ import {
 } from "ui/material-symbols";
 import * as Browser from "ui/browser";
 import { LoadingInline } from "ui/control";
-import { RICH_TEXT_EDITOR_KEYS } from "ui/control/richtexteditor/rich-text-editor-keys";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEditorButton";
@@ -34,9 +31,7 @@ import "./CommentComposePanel.css";
 
 function CommentComposePanel() {
     const {openLocalFiles, copyImage} = useRichTextEditorMedia();
-    const {
-        supportsMedia, supportsVideo, inLink, inMention, formatLink, formatMention, formatEmoji, formatVideo
-    } = useRichTextEditorCommands();
+    const {supportsMedia, supportsVideo, formatEmoji, formatVideo} = useRichTextEditorCommands();
 
     const ready = useSelector(isCommentComposerReady);
     const draft = useSelector((state: ClientState) => state.detailedPosting.compose.draft);
@@ -76,10 +71,6 @@ function CommentComposePanel() {
                     <RichTextEditorButton icon={msFileSave} iconSize={20} title={t("copy-image-from-internet")}
                                           command={copyImage}/>
                 }
-                <RichTextEditorButton icon={msAddLink} iconSize={20} title={t("link")}
-                                      hotkey={RICH_TEXT_EDITOR_KEYS.LINK.title} active={inLink} command={formatLink}/>
-                <RichTextEditorButton icon={msAlternateEmail} iconSize={20} title={t("mention")} active={inMention}
-                                      command={() => formatMention(false)}/>
                 {!Browser.isMobile() &&
                     <RichTextEditorEmojiButton iconSize={20} onSelect={formatEmoji}/>
                 }

@@ -1,17 +1,29 @@
 .formatting-menu-item {
+    display: grid;
+    grid-template-columns: 2em 12em 5em;
     padding-inline-start: .75em;
 }
 
+@media only screen and (max-width: 575px) {
+    .formatting-menu-item {
+        grid-template-columns: 2em 12em 2em;
+    }
+}
+
+.formatting-menu-item .icon {
+    grid-column: 1;
+}
+
 .formatting-menu-item .title {
-    vertical-align: middle;
-    margin-inline-start: .5em;
+    grid-column: 2;
+    overflow-x: hidden;
 }
 
-.formatting-menu-item.active {
+.formatting-menu-item .hotkey {
+    grid-column: 3;
+    text-align: right;
+}
+
+.formatting-menu-item.engaged {
     color: var(--bs-primary);
-    background-color: transparent;
-}
-
-.formatting-menu-item.active:hover {
-    background-color: var(--bs-dropdown-link-hover-bg);
 }

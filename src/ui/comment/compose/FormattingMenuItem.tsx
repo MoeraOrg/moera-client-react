@@ -35,13 +35,12 @@ export function FormattingMenuItemImpl(
 
     const tinyScreen = useIsTinyScreen();
 
-    title = hotkey && !tinyScreen ? `${title} (${hotkey})` : title;
-
     return (
-        <button className={cx("formatting-menu-item dropdown-item", className, {active})} disabled={disabled}
+        <button className={cx("formatting-menu-item dropdown-item", className, {"engaged": active})} disabled={disabled}
                 onClick={onClick ?? onCommandClick} ref={ref}>
-            {icon && <Icon icon={icon} width={iconSize} height={iconSize}/>}
-            <span className="title">{title}</span>
+            <div className="icon">{icon && <Icon icon={icon} width={iconSize} height={iconSize}/>}</div>
+            <div className="title">{title}</div>
+            <div className="hotkey">{hotkey && !tinyScreen ? hotkey : ""}</div>
         </button>
     );
 }
