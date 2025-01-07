@@ -3,6 +3,8 @@ import * as React from 'react';
 import { ReactComponent as msAddLink } from "ui/material-symbols/add_link.isvg";
 import { ReactComponent as msAlternateEmail } from "ui/material-symbols/alternate_email.isvg";
 import { ReactComponent as msClose } from "ui/material-symbols/close.isvg";
+import { ReactComponent as msCloudDone } from "ui/material-symbols/cloud_done.isvg";
+import { ReactComponent as msCloudUpload } from "ui/material-symbols/cloud_upload.isvg";
 import { ReactComponent as msCode } from "ui/material-symbols/code.isvg";
 import { ReactComponent as msCodeBlocks } from "ui/material-symbols/code_blocks.isvg";
 import { ReactComponent as msDelete } from "ui/material-symbols/delete.isvg";
@@ -37,6 +39,8 @@ export {
     msAddLink,
     msAlternateEmail,
     msClose,
+    msCloudDone,
+    msCloudUpload,
     msCode,
     msCodeBlocks,
     msDelete,

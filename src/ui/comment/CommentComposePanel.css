@@ -28,3 +28,8 @@
     color: var(--bs-primary);
     background-color: var(--highlight-primary);
 }
+
+.comment-compose-panel .draft-status {
+    color: var(--bs-gray-400);
+    margin-inline-end: .5em;
+}

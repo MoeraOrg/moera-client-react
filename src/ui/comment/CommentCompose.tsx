@@ -18,7 +18,6 @@ import { RichTextField } from "ui/control/richtexteditor";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
 import { commentComposeLogic, CommentComposeProps, CommentComposeValues } from "ui/comment/comment-compose";
 import CommentComposePanel from "ui/comment/CommentComposePanel";
-import CommentComposeButtons from "ui/comment/CommentComposeButtons";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./CommentCompose.css";
 
@@ -74,7 +73,6 @@ function CommentCompose(props: Props) {
                         <CommentComposePanel/>
                     </RichTextField>
                 </div>
-                <CommentComposeButtons/>
             </Form>
         </div>
     );

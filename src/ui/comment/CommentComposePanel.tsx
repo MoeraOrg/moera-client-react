@@ -9,8 +9,11 @@ import { confirmBox } from "state/confirmbox/actions";
 import { commentComposeCancel } from "state/detailedposting/actions";
 import { isCommentComposerReady } from "state/detailedposting/selectors";
 import {
+    Icon,
     msAddLink,
     msAlternateEmail,
+    msCloudDone,
+    msCloudUpload,
     msDelete,
     msFileSave,
     msMediaLink,
@@ -26,6 +29,7 @@ import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEd
 import RichTextEditorEmojiButton from "ui/control/richtexteditor/panel/RichTextEditorEmojiButton";
 import { areImagesUploaded, areValuesEmpty, CommentComposeValues } from "ui/comment/comment-compose";
 import "./CommentComposePanel.css";
+import { useCommentDraftSaver } from "ui/comment/comment-draft-saver";
 
 function CommentComposePanel() {
     const {openLocalFiles, copyImage} = useRichTextEditorMedia();
@@ -51,6 +55,7 @@ function CommentComposePanel() {
         e.preventDefault();
     };
 
+    const {unsaved, saving, saved} = useCommentDraftSaver(null);
     const {values, submitForm} = useFormikContext<CommentComposeValues>();
     const notReady = !ready || (draft == null && areValuesEmpty(values)) || !areImagesUploaded(values);
 
@@ -79,6 +84,12 @@ function CommentComposePanel() {
                 }
             </div>
             <div className="right-pane">
+                {ready &&
+                    <span className="draft-status">
+                        {!unsaved && saving && <Icon icon={msCloudUpload} width={20} height={20}/>}
+                        {!unsaved && saved && <Icon icon={msCloudDone} width={20} height={20}/>}
+                    </span>
+                }
                 {!beingPosted ?
                     <RichTextEditorButton icon={msSend} iconSize={20} className="submit" disabled={notReady}
                                           title={t("add-comment")} onClick={() => submitForm()}/>

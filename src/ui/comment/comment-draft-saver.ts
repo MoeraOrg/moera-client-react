@@ -1,6 +1,4 @@
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import cloneDeep from 'lodash.clonedeep';
 
 import { CommentText, DraftText, SourceFormat, VerifiedMediaFile } from "api";
@@ -15,12 +13,8 @@ import {
 } from "state/detailedposting/selectors";
 import { commentDialogCommentReset, commentDraftDelete, commentDraftSave } from "state/detailedposting/actions";
 import { CommentComposeValues, isCommentTextChanged, valuesToCommentText } from "ui/comment/comment-compose";
-import { useDraftSaver } from "ui/draft/draft-saver";
+import { DraftSavingState, useDraftSaver } from "ui/draft/draft-saver";
 import { notNull } from "util/misc";
-
-interface Props {
-    commentId: string | null;
-}
 
 const toDraftText = (
     receiverName: string, postingId: string, commentId: string | null, repliedToId: string | null,
@@ -39,7 +33,7 @@ const toDraftText = (
     repliedToId
 } as DraftText);
 
-export default function CommentDraftSaver({commentId}: Props) {
+export function useCommentDraftSaver(commentId: string | null): DraftSavingState {
     const ownerName = useSelector(getOwnerName);
     const ownerFullName = useSelector(getHomeOwnerFullName);
     const ownerGender = useSelector(getHomeOwnerGender);
@@ -64,7 +58,6 @@ export default function CommentDraftSaver({commentId}: Props) {
     const sourceFormatDefault = useSelector((state: ClientState) =>
         getSetting(state, "comment.body-src-format.default") as SourceFormat);
     const dispatch = useDispatch();
-    const {t} = useTranslation();
 
     const toText = (values: CommentComposeValues): CommentText | null =>
         valuesToCommentText(
@@ -105,7 +98,7 @@ export default function CommentDraftSaver({commentId}: Props) {
         }
     }
 
-    const {unsaved, saving, saved} = useDraftSaver({
+    return useDraftSaver({
         toText, isChanged, save, drop,
         savingDraftSelector: (state: ClientState) =>
             commentId == null
@@ -116,11 +109,4 @@ export default function CommentDraftSaver({commentId}: Props) {
                 ? state.detailedPosting.compose.savedDraft
                 : state.detailedPosting.commentDialog.savedDraft
     });
-
-    return (
-        <div className="ms-2 me-2">
-            {!unsaved && saving && t("draft-saving")}
-            {!unsaved && saved && t("draft-saved")}
-        </div>
-    );
 }

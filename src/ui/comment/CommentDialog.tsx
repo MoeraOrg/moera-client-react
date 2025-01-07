@@ -26,7 +26,7 @@ import { Button, ConflictWarning, ModalDialog } from "ui/control";
 import { AvatarField } from "ui/control/field";
 import { RichTextField } from "ui/control/richtexteditor";
 import { commentComposeLogic, CommentComposeProps, CommentComposeValues } from "ui/comment/comment-compose";
-import CommentDraftSaver from "ui/comment/CommentDraftSaver";
+import { useCommentDraftSaver } from "ui/comment/comment-draft-saver";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./CommentDialog.css";
 
@@ -71,6 +71,8 @@ function CommentDialogInner(props: Props) {
         event.preventDefault();
     };
 
+    const {unsaved, saving, saved} = useCommentDraftSaver(commentId);
+
     return (
         <ModalDialog title={t("edit-comment")} className="comment-dialog" loading={loading}
                      onClose={() => dispatch(closeCommentDialog())}>
@@ -91,7 +93,12 @@ function CommentDialogInner(props: Props) {
                                    urlsField="bodyUrls" linkPreviewsField="linkPreviews" linkPreviewsSmall/>
                 </div>
                 <div className="modal-footer">
-                    {ready && <CommentDraftSaver commentId={commentId}/>}
+                    {ready &&
+                        <div className="me-2">
+                            {!unsaved && saving && t("draft-saving")}
+                            {!unsaved && saved && t("draft-saved")}
+                        </div>
+                    }
                     <Button variant="secondary" disabled={!ready || beingPosted} onClick={onCancel}>
                         {t("cancel")}
                     </Button>

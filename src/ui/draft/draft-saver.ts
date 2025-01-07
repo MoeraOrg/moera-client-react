@@ -15,7 +15,7 @@ interface Props<Text, Values> {
     savedDraftSelector: (state: ClientState) => boolean;
 }
 
-interface DraftSavingState {
+export interface DraftSavingState {
     unsaved: boolean;
     saving: boolean;
     saved: boolean;
