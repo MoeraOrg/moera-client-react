@@ -5,8 +5,9 @@ import { ReactComponent as msAlternateEmail } from "ui/material-symbols/alternat
 import { ReactComponent as msClose } from "ui/material-symbols/close.isvg";
 import { ReactComponent as msCode } from "ui/material-symbols/code.isvg";
 import { ReactComponent as msCodeBlocks } from "ui/material-symbols/code_blocks.isvg";
+import { ReactComponent as msDelete } from "ui/material-symbols/delete.isvg";
 import { ReactComponent as msExpandCircleDown } from "ui/material-symbols/expand_circle_down.isvg";
-import { ReactComponent as msFileSave } from "ui/material-symbols/file_save.svg";
+import { ReactComponent as msFileSave } from "ui/material-symbols/file_save.isvg";
 import { ReactComponent as msFormatBold } from "ui/material-symbols/format_bold.isvg";
 import { ReactComponent as msFormatClear } from "ui/material-symbols/format_clear.isvg";
 import { ReactComponent as msFormatIndentDecrease } from "ui/material-symbols/format_indent_decrease.isvg";
@@ -25,6 +26,7 @@ import { ReactComponent as msMoreVert } from "ui/material-symbols/more_vert.isvg
 import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_library.isvg";
 import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
 import { ReactComponent as msSatellite } from "ui/material-symbols/satellite.isvg";
+import { ReactComponent as msSend } from "ui/material-symbols/send.isvg";
 import { ReactComponent as msSentimentSatisfied } from "ui/material-symbols/sentiment_satisfied.isvg";
 import { ReactComponent as msStrikethroughS } from "ui/material-symbols/strikethrough_s.isvg";
 import { ReactComponent as msSubscript } from "ui/material-symbols/subscript.isvg";
@@ -37,6 +39,7 @@ export {
     msClose,
     msCode,
     msCodeBlocks,
+    msDelete,
     msExpandCircleDown,
     msFileSave,
     msFormatBold,
@@ -57,6 +60,7 @@ export {
     msPhotoLibrary,
     msReport,
     msSatellite,
+    msSend,
     msSentimentSatisfied,
     msStrikethroughS,
     msSubscript,

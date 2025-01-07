@@ -1,4 +1,6 @@
 .comment-compose-panel {
+    display: flex;
+    justify-content: space-between;
     margin-top: .35rem;
 }
 
@@ -7,5 +9,22 @@
     width: 1.75em;
     height: 1.75em;
     padding: .15rem;
-    margin-right: .75em;
+}
+
+.comment-compose-panel .left-pane .rich-text-editor-button {
+    margin-inline-end: .75em;
+}
+
+.comment-compose-panel .right-pane .rich-text-editor-button {
+    margin-inline-start: .75em;
+}
+
+.comment-compose-panel .rich-text-editor-button.delete:hover {
+    color: var(--bs-danger);
+    background-color: var(--highlight-red);
+}
+
+.comment-compose-panel .rich-text-editor-button.submit:hover:not(:disabled) {
+    color: var(--bs-primary);
+    background-color: var(--highlight-primary);
 }

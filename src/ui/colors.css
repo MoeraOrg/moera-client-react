@@ -25,6 +25,7 @@
     --highlight-blue: rgba(0, 123, 255, .1);
     --highlight-red: rgba(220, 53, 69, .1);
     --highlight-cyan: #f0fafa;
+    --highlight-primary: var(--highlight-blue);
 
     --cyan-light: var(--bs-cyan-200);
     --green-light: #42d042; /* forest green + 20% lighter */
