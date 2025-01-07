@@ -18,7 +18,7 @@ import { openSignUpDialog } from "state/signupdialog/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { Button } from "ui/control";
 
-const CommentCompose = React.lazy(() => import("ui/comment/CommentCompose"));
+const CommentCompose = React.lazy(() => import("ui/comment/compose/CommentCompose"));
 
 export default function CommentComposeLine() {
     const ownerName = useSelector(getHomeOwnerName);

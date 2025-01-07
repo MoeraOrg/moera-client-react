@@ -24,13 +24,13 @@ import {
     isDetailedPostingGalleryFocused
 } from "state/detailedposting/selectors";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
-import CommentComposeLine from "ui/comment/CommentComposeLine";
+import CommentComposeLine from "ui/comment/compose/CommentComposeLine";
 import CommentsSentinelLine from "ui/comment/CommentsSentinelLine";
 import Comment from "ui/comment/Comment";
 import { getPageHeaderHeight, isElementCompletelyVisible } from "util/ui";
 import "./Comments.css";
 
-const CommentDialog = React.lazy(() => import("ui/comment/CommentDialog"));
+const CommentDialog = React.lazy(() => import("ui/comment/compose/CommentDialog"));
 
 export default function Comments() {
     const visible = useSelector(isAtDetailedPostingPage);

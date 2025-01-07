@@ -25,8 +25,8 @@ import NodeName from "ui/nodename/NodeName";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
 import { AvatarField } from "ui/control/field";
 import { RichTextField } from "ui/control/richtexteditor";
-import { commentComposeLogic, CommentComposeProps, CommentComposeValues } from "ui/comment/comment-compose";
-import { useCommentDraftSaver } from "ui/comment/comment-draft-saver";
+import { commentComposeLogic, CommentComposeProps, CommentComposeValues } from "ui/comment/compose/comment-compose";
+import { useCommentDraftSaver } from "ui/comment/compose/comment-draft-saver";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./CommentDialog.css";
 

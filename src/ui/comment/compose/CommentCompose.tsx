@@ -15,9 +15,9 @@ import {
 } from "state/detailedposting/selectors";
 import { AvatarField } from "ui/control/field";
 import { RichTextField } from "ui/control/richtexteditor";
-import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
-import { commentComposeLogic, CommentComposeProps, CommentComposeValues } from "ui/comment/comment-compose";
-import CommentComposePanel from "ui/comment/CommentComposePanel";
+import CommentComposeRepliedTo from "ui/comment/compose/CommentComposeRepliedTo";
+import { commentComposeLogic, CommentComposeProps, CommentComposeValues } from "ui/comment/compose/comment-compose";
+import CommentComposePanel from "ui/comment/compose/CommentComposePanel";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./CommentCompose.css";
 

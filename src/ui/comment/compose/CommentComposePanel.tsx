@@ -27,9 +27,9 @@ import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-tex
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEditorButton";
 import RichTextEditorEmojiButton from "ui/control/richtexteditor/panel/RichTextEditorEmojiButton";
-import { areImagesUploaded, areValuesEmpty, CommentComposeValues } from "ui/comment/comment-compose";
+import { areImagesUploaded, areValuesEmpty, CommentComposeValues } from "ui/comment/compose/comment-compose";
+import { useCommentDraftSaver } from "ui/comment/compose/comment-draft-saver";
 import "./CommentComposePanel.css";
-import { useCommentDraftSaver } from "ui/comment/comment-draft-saver";
 
 function CommentComposePanel() {
     const {openLocalFiles, copyImage} = useRichTextEditorMedia();

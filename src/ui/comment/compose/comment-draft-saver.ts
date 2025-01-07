@@ -12,7 +12,7 @@ import {
     getCommentsState
 } from "state/detailedposting/selectors";
 import { commentDialogCommentReset, commentDraftDelete, commentDraftSave } from "state/detailedposting/actions";
-import { CommentComposeValues, isCommentTextChanged, valuesToCommentText } from "ui/comment/comment-compose";
+import { CommentComposeValues, isCommentTextChanged, valuesToCommentText } from "ui/comment/compose/comment-compose";
 import { DraftSavingState, useDraftSaver } from "ui/draft/draft-saver";
 import { notNull } from "util/misc";
 
