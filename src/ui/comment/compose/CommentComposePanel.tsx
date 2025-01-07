@@ -27,6 +27,7 @@ import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-tex
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEditorButton";
 import RichTextEditorEmojiButton from "ui/control/richtexteditor/panel/RichTextEditorEmojiButton";
+import CommentComposeFormattingMenu from "ui/comment/compose/CommentComposeFormattingMenu";
 import { areImagesUploaded, areValuesEmpty, CommentComposeValues } from "ui/comment/compose/comment-compose";
 import { useCommentDraftSaver } from "ui/comment/compose/comment-draft-saver";
 import "./CommentComposePanel.css";
@@ -82,6 +83,7 @@ function CommentComposePanel() {
                 {!Browser.isMobile() &&
                     <RichTextEditorEmojiButton iconSize={20} onSelect={formatEmoji}/>
                 }
+                <CommentComposeFormattingMenu/>
             </div>
             <div className="right-pane">
                 {ready &&

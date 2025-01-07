@@ -1,0 +1,17 @@
+.formatting-menu-item {
+    padding-inline-start: .75em;
+}
+
+.formatting-menu-item .title {
+    vertical-align: middle;
+    margin-inline-start: .5em;
+}
+
+.formatting-menu-item.active {
+    color: var(--bs-primary);
+    background-color: transparent;
+}
+
+.formatting-menu-item.active:hover {
+    background-color: var(--bs-dropdown-link-hover-bg);
+}

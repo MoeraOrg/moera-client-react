@@ -51,7 +51,8 @@ export default function RichTextEditorPanel() {
                 <RichTextEditorButton icon={msFormatBold} title={t("bold")} hotkey={RICH_TEXT_EDITOR_KEYS.BOLD.title}
                                       active={inBold} command={formatBold}/>
                 <RichTextEditorButton icon={msFormatItalic} title={t("italic")}
-                                      hotkey={RICH_TEXT_EDITOR_KEYS.ITALIC.title} active={inItalic} command={formatItalic}/>
+                                      hotkey={RICH_TEXT_EDITOR_KEYS.ITALIC.title} active={inItalic}
+                                      command={formatItalic}/>
                 <RichTextEditorButton icon={msStrikethroughS} title={t("strikeout")}
                                       hotkey={RICH_TEXT_EDITOR_KEYS.STRIKEOUT.title}
                                       active={inStrikeout} command={formatStrikeout}/>

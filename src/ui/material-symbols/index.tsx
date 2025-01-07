@@ -16,6 +16,7 @@ import { ReactComponent as msFormatIndentDecrease } from "ui/material-symbols/fo
 import { ReactComponent as msFormatIndentIncrease } from "ui/material-symbols/format_indent_increase.isvg";
 import { ReactComponent as msFormatInkHighlighter } from "ui/material-symbols/format_ink_highlighter.isvg";
 import { ReactComponent as msFormatItalic } from "ui/material-symbols/format_italic.isvg";
+import { ReactComponent as msFormatSize } from "ui/material-symbols/format_size.isvg";
 import { ReactComponent as msHorizontalRule } from "ui/material-symbols/horizontal_rule.isvg";
 import { ReactComponent as msFormatListBulleted } from "ui/material-symbols/format_list_bulleted.isvg";
 import { ReactComponent as msFormatListNumbered } from "ui/material-symbols/format_list_numbered.isvg";
@@ -52,6 +53,7 @@ export {
     msFormatIndentIncrease,
     msFormatInkHighlighter,
     msFormatItalic,
+    msFormatSize,
     msFunction,
     msHorizontalRule,
     msFormatListBulleted,
