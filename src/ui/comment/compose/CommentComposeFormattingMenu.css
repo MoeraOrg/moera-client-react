@@ -11,3 +11,8 @@
 .comment-compose-panel .formatting-menu-button:hover .rich-text-editor-button {
     background-color: transparent;
 }
+
+.formatting-menu {
+    max-height: 90vh;
+    overflow-y: auto;
+}

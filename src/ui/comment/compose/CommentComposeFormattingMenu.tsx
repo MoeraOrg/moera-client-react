@@ -24,6 +24,8 @@ import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEd
 import { RICH_TEXT_EDITOR_KEYS } from "ui/control/richtexteditor/rich-text-editor-keys";
 import { DropdownMenuContext } from "ui/control/dropdownmenu/dropdown-menu-types";
 import { FormattingMenuItem } from "ui/comment/compose/FormattingMenuItem";
+import FormattingHeadingButton from "ui/comment/compose/FormattingHeadingButton";
+import FormattingOtherButton from "ui/comment/compose/FormattingOtherButton";
 import "./CommentComposeFormattingMenu.css";
 
 export default function CommentComposeFormattingMenu() {
@@ -32,7 +34,7 @@ export default function CommentComposeFormattingMenu() {
         inBold, inItalic, inStrikeout, inSpoiler, inOrderedList, inUnorderedList, inList, inBlockquote, inMention,
         inLink,
         formatBold, formatItalic, formatStrikeout, formatSpoiler, formatList, formatIndent, formatBlockquote,
-        formatBlockunquote, formatHorizontalRule, formatMention, formatLink, formatClear,
+        formatBlockunquote, formatHorizontalRule, formatMention, formatLink, formatClear, formatHeading
     } = useRichTextEditorCommands();
 
     const {
@@ -49,7 +51,7 @@ export default function CommentComposeFormattingMenu() {
             {visible &&
                 <DropdownMenuContext.Provider value={{hide, overlayId}}>
                     <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
-                         className={"fade dropdown-menu shadow-sm show"}>
+                         className={"fade formatting-menu dropdown-menu shadow-sm show"}>
                         <FormattingMenuItem icon={msFormatBold} title={t("bold")}
                                             hotkey={RICH_TEXT_EDITOR_KEYS.BOLD.title} active={inBold}
                                             command={formatBold}/>
@@ -63,6 +65,8 @@ export default function CommentComposeFormattingMenu() {
                                             active={inSpoiler} command={formatSpoiler}/>
                         {supportsComplexBlocks &&
                             <>
+                                <div className="dropdown-divider"/>
+                                <FormattingHeadingButton onSelect={formatHeading}/>
                                 <div className="dropdown-divider"/>
                                 <FormattingMenuItem icon={msFormatListNumbered} title={t("numbered-list")}
                                                     active={inOrderedList} command={() => formatList(true)}/>
@@ -92,7 +96,7 @@ export default function CommentComposeFormattingMenu() {
                                                 hotkey={RICH_TEXT_EDITOR_KEYS.HORIZONTAL_RULE.title}
                                                 command={formatHorizontalRule}/>
                         }
-                        {/*<RichTextEditorOtherButton/>*/}
+                        <FormattingOtherButton/>
                         <div className="dropdown-divider"/>
                         <FormattingMenuItem icon={msAlternateEmail} title={t("mention")} active={inMention}
                                             command={() => formatMention(false)}/>
