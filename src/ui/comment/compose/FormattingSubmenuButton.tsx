@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ForwardedRef, forwardRef } from 'react';
 
 import { Icon, MaterialSymbol, msChevronRight, msKeyboardArrowDown } from "ui/material-symbols";
 
@@ -8,8 +8,11 @@ type Props = {
     expanded?: boolean;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-const FormattingSubmenuButton = ({icon, title, disabled, expanded, ...props}: Props) => (
-    <button className="formatting-menu-item dropdown-item" {...props}>
+const FormattingSubmenuButton = (
+    {icon, title, disabled, expanded, ...props}: Props,
+    ref: ForwardedRef<HTMLButtonElement>
+) => (
+    <button className="formatting-menu-item dropdown-item" ref={ref} {...props}>
         <div className="icon"><Icon icon={icon} width={20} height={20}/></div>
         <div className="title">{title}</div>
         <div className="hotkey">
@@ -18,4 +21,4 @@ const FormattingSubmenuButton = ({icon, title, disabled, expanded, ...props}: Pr
     </button>
 );
 
-export default FormattingSubmenuButton;
+export default forwardRef(FormattingSubmenuButton);

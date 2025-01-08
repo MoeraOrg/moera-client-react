@@ -38,7 +38,7 @@ export default function FormattingHeadingButton({onSelect}: Props) {
     return (
         <>
             <FormattingSubmenuButton icon={headingIcon(headingLevel)} title={headingTitle(headingLevel, t)}
-                                     disabled={!enableHeading} expanded={isExpanded}{...getToggleProps()}/>
+                                     disabled={!enableHeading} expanded={isExpanded} {...getToggleProps()}/>
             <div className="formatting-menu-sub" {...getCollapseProps()}>
                 {[0, 1, 2, 3, 4, 5].map(level =>
                     <FormattingMenuItem key={level} icon={headingIcon(level)} title={headingTitle(level, t)}
