@@ -630,19 +630,34 @@ function scriptureCleanup(scripture: Scripture): Scripture {
     for (const node of scripture) {
         if (isScriptureText(node)) {
             let textNode: ScriptureText = node;
+            let skip = false;
             if (output.length > 0) {
                 const prevNode = output[output.length - 1];
                 if (isScriptureText(prevNode) && equalScriptureMarks(prevNode, node)) {
                     prevNode.text += node.text;
                     textNode = prevNode;
+                    skip = true;
                 }
             }
-            textNode.text = textNode.text.replace(/ +/g, " ");
+            textNode.text = textNode.text.replace(/ +/g, " ").replace(/\s*\n\s*/g, "\n");
+            if (skip) {
+                continue;
+            }
         }
         if (isScriptureElement(node)) {
             node.children = scriptureCleanup(node.children as Scripture);
             if (!isSignificant(node.children)) {
                 continue;
+            }
+            if (isScriptureRegularInline(node)) {
+                let child = node.children[0];
+                if (isScriptureText(child)) {
+                    child.text = child.text.trimStart();
+                }
+                child = node.children[node.children.length - 1];
+                if (isScriptureText(child)) {
+                    child.text = child.text.trimEnd();
+                }
             }
         }
         output.push(node);
