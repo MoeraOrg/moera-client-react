@@ -78,7 +78,7 @@ export type ScriptureEditor<T extends DOMEditor> = T & {
 export function withScripture<T extends DOMEditor>(
     editor: T, pasteImage: (data: DataTransfer) => boolean
 ): ScriptureEditor<T> {
-    const {isInline, isVoid, insertData, insertFragmentData, insertTextData, normalizeNode, apply} = editor;
+    const {isInline, isVoid, insertData, insertFragmentData, normalizeNode, apply} = editor;
 
     const scriptureEditor = editor as ScriptureEditor<T>;
 
@@ -112,15 +112,16 @@ export function withScripture<T extends DOMEditor>(
         const text = data.getData("text/plain");
 
         const m = text.match(new RegExp("^(\\s*)(" + URL_PATTERN + ")(\\s*)$"));
-        if (!m) {
-            return insertTextData(data);
+        if (m) {
+            editor.insertFragment([
+                createScriptureText(m[1]),
+                createLinkElement(m[2], [createScriptureText(m[2])]),
+                createScriptureText(m[3] || " ")
+            ]);
         }
 
-        editor.insertFragment([
-            createScriptureText(m[1]),
-            createLinkElement(m[2], [createScriptureText(m[2])]),
-            createScriptureText(m[3] || " ")
-        ]);
+        const html = text.replace(/\s*\n\s*\n\s*/g, "<p>").replace(/\s*\n\s*/g, "<br>");
+        editor.insertFragment(safeImportScripture(html));
 
         return true;
     };
