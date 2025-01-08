@@ -84,7 +84,7 @@ export default function ComposeDraftSaver() {
     });
 
     return (
-        <div className="ms-2 me-2">
+        <div className="draft-saver ms-2 me-2">
             {!unsaved && saving && t("draft-saving")}
             {!unsaved && saved && t("draft-saved")}
         </div>

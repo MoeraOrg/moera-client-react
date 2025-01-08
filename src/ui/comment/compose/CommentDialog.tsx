@@ -94,7 +94,7 @@ function CommentDialogInner(props: Props) {
                 </div>
                 <div className="modal-footer">
                     {ready &&
-                        <div className="me-2">
+                        <div className="draft-saver me-2">
                             {!unsaved && saving && t("draft-saving")}
                             {!unsaved && saved && t("draft-saved")}
                         </div>
