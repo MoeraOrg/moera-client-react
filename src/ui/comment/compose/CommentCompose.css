@@ -13,14 +13,6 @@
     margin-bottom: 0;
 }
 
-#comment-compose TEXTAREA:empty {
-    background-color: var(--comment-compose);
-}
-
-#comment-compose TEXTAREA:focus {
-    background-color: white;
-}
-
 #comment-compose .buttons {
     flex: 100%;
 }
