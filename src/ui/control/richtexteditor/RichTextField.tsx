@@ -49,7 +49,7 @@ export function RichTextField({
     noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled, noPanel, format, submitKey,
     onSubmit, urlsField, linkPreviewsField, linkPreviewsSmall, children
 }: Props) {
-    const [{value, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
+    const [{value, onBlur}, {touched, error}, {setTouched}, {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
     const {setFieldValue} = useFormikContext();
     const {t} = useTranslation();
@@ -57,9 +57,10 @@ export function RichTextField({
     // useCallback() and setFieldValue() (not setValue()) is mandatory here
     const onChange = useCallback(
         (v: RichTextValue) => {
-            setFieldValue(name, v)
+            setFieldValue(name, v);
+            setTouched(true, false);
         },
-        [name, setFieldValue]
+        [name, setFieldValue, setTouched]
     );
     const onUrls = useCallback((v: string[]) => urlsField && setFieldValue(urlsField, v), [urlsField, setFieldValue]);
 
@@ -76,6 +77,7 @@ export function RichTextField({
                 <RichTextEditor
                     name={name}
                     value={value}
+                    touched={touched}
                     onChange={onChange}
                     onBlur={onBlur}
                     className={cx(

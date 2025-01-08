@@ -21,6 +21,7 @@ import { RelNodeName } from "util/rel-node-name";
 
 export type VisualEditorProps = {
     value: RichTextValue;
+    touched: boolean;
     nodeName: RelNodeName | string;
     noPanel?: boolean;
     noComplexBlocks?: boolean | null;
@@ -35,8 +36,8 @@ export type VisualEditorProps = {
 } & VisualTextAreaProps;
 
 export default function VisualEditor({
-    name, value, nodeName, rows, minHeight, maxHeight, placeholder, autoFocus, disabled, smileysEnabled, noPanel,
-    noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, onChange, submitKey, onSubmit, onUrls, onBlur, children
+    name, value, touched, nodeName, rows, minHeight, maxHeight, placeholder, autoFocus, disabled, smileysEnabled,
+    noPanel, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, onChange, submitKey, onSubmit, onUrls, onBlur, children
 }: VisualEditorProps) {
     const {pasteImage} = useRichTextEditorMedia();
     const [editor] = useState(
@@ -53,7 +54,7 @@ export default function VisualEditor({
     }, [disabled, autoFocus, editor]);
 
     useEffect(() => {
-        if (value.scripture != null && !deepEqual(value.scripture, editor.children)) {
+        if (value.scripture != null && !touched && !deepEqual(value.scripture, editor.children)) {
             editor.deselect();
             editor.children = value.scripture;
             setTimeout(() => {
@@ -62,7 +63,7 @@ export default function VisualEditor({
             });
             editor.onChange();
         }
-    }, [editor, value]);
+    }, [editor, touched, value]);
 
 
     const updateUrls = useCallback(() => {
