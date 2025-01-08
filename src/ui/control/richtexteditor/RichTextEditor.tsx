@@ -55,9 +55,8 @@ export function RichTextEditor({
                                       maxHeight={maxHeight} placeholder={placeholder} autoFocus={autoFocus}
                                       disabled={disabled} smileysEnabled={smileysEnabled} noPanel={noPanel}
                                       noComplexBlocks={noComplexBlocks} noEmbeddedMedia={noEmbeddedMedia}
-                                      noMedia={noMedia} format={format} noVideo={noVideo} submitKey={submitKey}
-                                      onSubmit={onSubmit} onChange={onTextChange} onBlur={onBlur} onUrls={onUrls}
-                                      children={children}/>
+                                      noMedia={noMedia} noVideo={noVideo} submitKey={submitKey} onSubmit={onSubmit}
+                                      onChange={onTextChange} onBlur={onBlur} onUrls={onUrls} children={children}/>
                     :
                         <MarkdownEditor name={name} value={value} nodeName={nodeName} rows={rows} minHeight={minHeight}
                                         maxHeight={maxHeight} placeholder={placeholder} autoFocus={autoFocus}

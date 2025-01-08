@@ -4,7 +4,6 @@ import { ReactEditor, Slate, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
 import deepEqual from 'react-fast-compare';
 
-import { SourceFormat } from "api";
 import VisualEditorCommands from "ui/control/richtexteditor/visual/VisualEditorCommands";
 import RichTextEditorPanel from "ui/control/richtexteditor/panel/RichTextEditorPanel";
 import VisualTextArea, { VisualTextAreaProps } from "ui/control/richtexteditor/visual/VisualTextArea";
@@ -22,7 +21,6 @@ import { RelNodeName } from "util/rel-node-name";
 
 export type VisualEditorProps = {
     value: RichTextValue;
-    format: SourceFormat;
     nodeName: RelNodeName | string;
     noPanel?: boolean;
     noComplexBlocks?: boolean | null;
@@ -37,9 +35,8 @@ export type VisualEditorProps = {
 } & VisualTextAreaProps;
 
 export default function VisualEditor({
-    name, value, format, nodeName, rows, minHeight, maxHeight, placeholder, autoFocus, disabled, smileysEnabled,
-    noPanel, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, onChange, submitKey, onSubmit, onUrls, onBlur,
-    children
+    name, value, nodeName, rows, minHeight, maxHeight, placeholder, autoFocus, disabled, smileysEnabled, noPanel,
+    noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, onChange, submitKey, onSubmit, onUrls, onBlur, children
 }: VisualEditorProps) {
     const {pasteImage} = useRichTextEditorMedia();
     const [editor] = useState(
