@@ -28,5 +28,5 @@ export const RICH_TEXT_EDITOR_KEYS = {
     HORIZONTAL_RULE:    new RichTextEditorKey("Mod-H"),
     CODE:               new RichTextEditorKey("Mod-Shift-C"),
     MARK:               new RichTextEditorKey("Mod-M"),
-    CLEAR:              new RichTextEditorKey("Mod-\\"),
+    CLEAR:              new RichTextEditorKey("Mod-0"),
 };
