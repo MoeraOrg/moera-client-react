@@ -42,6 +42,7 @@ export default function VisualTextArea({
     name, rows, minHeight, maxHeight, placeholder, autoFocus, disabled, smileysEnabled, submitKey, onSubmit, onBlur
 }: VisualTextAreaProps) {
     const editor = useSlateStatic() as ReactEditor;
+    const textArea = React.useRef<HTMLDivElement>(null);
     const {
         inBlockquote, inList, headingLevel, inVoid, inCodeBlock, inFormula, inImageEmbedded, inImageAttached,
         formatBold, formatItalic, formatStrikeout, formatLink, formatMention, formatBlockquote, formatBlockunquote,
@@ -228,12 +229,25 @@ export default function VisualTextArea({
                 event.preventDefault();
             }
         }
+
+        if (textArea.current != null) {
+            const selection = window.getSelection();
+            if (selection?.rangeCount) {
+                const range = selection.getRangeAt(0).cloneRange();
+                range.collapse(true);
+                const bottom = range.getBoundingClientRect().bottom - textArea.current.getBoundingClientRect().top;
+                if (bottom > textArea.current.clientHeight) {
+                    textArea.current.scrollTop += bottom - textArea.current.clientHeight;
+                }
+            }
+        }
     };
 
     return (
         <Editable
             id={name}
             className="visual-text-area"
+            ref={textArea}
             style={{
                 minHeight: minHeight ?? (rows != null ? `${Math.ceil(rows * 18) / 10}em` : undefined),
                 maxHeight: maxHeight ?? "calc(100vh - 26rem)"
