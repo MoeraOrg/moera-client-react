@@ -26,8 +26,8 @@ type Props = {
 
 export function RichTextEditor({
     name, value, touched, features, rows, minHeight, maxHeight, placeholder, className, autoFocus, autoComplete,
-    disabled, smileysEnabled = true, noPanel, format, nodeName = REL_CURRENT, forceImageCompress, onChange, submitKey,
-    onSubmit, onBlur, onUrls, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, children
+    disabled, smileysEnabled = true, commentQuote, noPanel, format, nodeName = REL_CURRENT, forceImageCompress,
+    onChange, submitKey, onSubmit, onBlur, onUrls, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, children
 }: Props) {
     const textRef = React.useRef<string | Scripture>();
     textRef.current = value.text;
@@ -47,25 +47,67 @@ export function RichTextEditor({
     return (
         <div className={cx("rich-text-editor", className)}>
             <RichTextEditorDialogs>
-                <RichTextEditorMedia value={value.media ?? []} features={features} nodeName={nodeName}
-                                     forceCompress={forceImageCompress} srcFormat={format}
-                                     smileysEnabled={smileysEnabled} onChange={onMediaChange}>
+                <RichTextEditorMedia
+                    value={value.media ?? []}
+                    features={features}
+                    nodeName={nodeName}
+                    forceCompress={forceImageCompress}
+                    srcFormat={format}
+                    smileysEnabled={smileysEnabled}
+                    onChange={onMediaChange}
+                >
                     {format.endsWith("/visual") ?
-                        <VisualEditor name={name} value={value} touched={touched} nodeName={nodeName} rows={rows}
-                                      minHeight={minHeight} maxHeight={maxHeight} placeholder={placeholder}
-                                      autoFocus={autoFocus} disabled={disabled} smileysEnabled={smileysEnabled}
-                                      noPanel={noPanel} noComplexBlocks={noComplexBlocks}
-                                      noEmbeddedMedia={noEmbeddedMedia} noMedia={noMedia} noVideo={noVideo}
-                                      submitKey={submitKey} onSubmit={onSubmit} onChange={onTextChange} onBlur={onBlur}
-                                      onUrls={onUrls} children={children}/>
+                        <VisualEditor
+                            name={name}
+                            value={value}
+                            touched={touched}
+                            nodeName={nodeName}
+                            rows={rows}
+                            minHeight={minHeight}
+                            maxHeight={maxHeight}
+                            placeholder={placeholder}
+                            autoFocus={autoFocus}
+                            disabled={disabled}
+                            smileysEnabled={smileysEnabled}
+                            commentQuote={commentQuote}
+                            noPanel={noPanel}
+                            noComplexBlocks={noComplexBlocks}
+                            noEmbeddedMedia={noEmbeddedMedia}
+                            noMedia={noMedia}
+                            noVideo={noVideo}
+                            submitKey={submitKey}
+                            onSubmit={onSubmit}
+                            onChange={onTextChange}
+                            onBlur={onBlur}
+                            onUrls={onUrls}
+                            children={children}
+                        />
                     :
-                        <MarkdownEditor name={name} value={value} nodeName={nodeName} rows={rows} minHeight={minHeight}
-                                        maxHeight={maxHeight} placeholder={placeholder} autoFocus={autoFocus}
-                                        autoComplete={autoComplete} disabled={disabled} smileysEnabled={smileysEnabled}
-                                        noPanel={noPanel} noComplexBlocks={noComplexBlocks}
-                                        noEmbeddedMedia={noEmbeddedMedia} noMedia={noMedia} format={format}
-                                        submitKey={submitKey} onSubmit={onSubmit} onChange={onTextChange}
-                                        onBlur={onBlur} onUrls={onUrls} children={children}/>
+                        <MarkdownEditor
+                            name={name}
+                            value={value}
+                            nodeName={nodeName}
+                            rows={rows}
+                            minHeight={minHeight}
+                            maxHeight={maxHeight}
+                            placeholder={placeholder}
+                            autoFocus={autoFocus}
+                            autoComplete={autoComplete}
+                            disabled={disabled}
+                            smileysEnabled={smileysEnabled}
+                            commentQuote={commentQuote}
+                            noPanel={noPanel}
+                            noComplexBlocks={noComplexBlocks}
+                            noEmbeddedMedia={noEmbeddedMedia}
+                            noMedia={noMedia}
+                            format={format}
+                            submitKey={submitKey}
+                            onSubmit={onSubmit}
+                            onChange={onTextChange}
+                            onBlur={onBlur}
+                            onUrls={onUrls}
+                            children={children}
+                        />
                     }
                 </RichTextEditorMedia>
             </RichTextEditorDialogs>

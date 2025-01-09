@@ -23,8 +23,8 @@ export type MarkdownEditorProps = {
 
 export function MarkdownEditor({
     name, value, nodeName, rows, minHeight, maxHeight, placeholder, autoFocus, autoComplete, disabled, smileysEnabled,
-    noPanel, noComplexBlocks, noEmbeddedMedia, noMedia, format, submitKey, onSubmit, onChange, onBlur, onUrls,
-    children
+    commentQuote, noPanel, noComplexBlocks, noEmbeddedMedia, noMedia, format, submitKey, onSubmit, onChange, onBlur,
+    onUrls, children
 }: MarkdownEditorProps) {
     const panel = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
@@ -37,16 +37,37 @@ export function MarkdownEditor({
     }, [onChange]);
 
     return (
-        <MarkdownEditorCommands format={format} textArea={textArea} noComplexBlocks={noComplexBlocks}
-                                noEmbeddedMedia={noEmbeddedMedia} noMedia={noMedia}>
+        <MarkdownEditorCommands
+            format={format}
+            textArea={textArea}
+            noComplexBlocks={noComplexBlocks}
+            noEmbeddedMedia={noEmbeddedMedia}
+            noMedia={noMedia}
+        >
             {format !== "plain-text" && !noPanel &&
                 <RichTextEditorPanel/>
             }
-            <MarkdownArea name={name} value={value.text} format={format} rows={rows} minHeight={minHeight}
-                          maxHeight={maxHeight} placeholder={placeholder} autoFocus={autoFocus}
-                          autoComplete={autoComplete} disabled={disabled} smileysEnabled={smileysEnabled}
-                          submitKey={submitKey} onSubmit={onSubmit} onChange={onTextChange} onBlur={onBlur}
-                          onUrls={onUrls} ref={textArea} panel={panel}/>
+            <MarkdownArea
+                name={name}
+                value={value.text}
+                format={format}
+                rows={rows}
+                minHeight={minHeight}
+                maxHeight={maxHeight}
+                placeholder={placeholder}
+                autoFocus={autoFocus}
+                autoComplete={autoComplete}
+                disabled={disabled}
+                smileysEnabled={smileysEnabled}
+                commentQuote={commentQuote}
+                submitKey={submitKey}
+                onSubmit={onSubmit}
+                onChange={onTextChange}
+                onBlur={onBlur}
+                onUrls={onUrls}
+                ref={textArea}
+                panel={panel}
+            />
             {!noMedia &&
                 <RichTextEditorDropzone value={value} hiding={noPanel} nodeName={nodeName}/>
             }

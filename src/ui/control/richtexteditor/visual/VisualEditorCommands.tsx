@@ -195,6 +195,7 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
         if (inMention) {
             return;
         }
+
         showMentionDialog(true, (ok: boolean | null, {nodeName, fullName}: Partial<NameListItem>) => {
             showMentionDialog(false);
 

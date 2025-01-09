@@ -1,11 +1,13 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Node, Path, Range } from 'slate';
 import { Editable, ReactEditor, useSlateStatic } from 'slate-react';
 import isHotkey from 'is-hotkey';
 
+import { UI_EVENT_COMMENT_QUOTE, UiEventCommentQuote } from "state/detailedposting/events";
 import * as Browser from "ui/browser";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { RICH_TEXT_EDITOR_KEYS } from "ui/control/richtexteditor/rich-text-editor-keys";
+import { safeImportScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
 import VisualRenderLeaf from "ui/control/richtexteditor/visual/VisualRenderLeaf";
 import {
@@ -31,6 +33,7 @@ export interface VisualTextAreaProps {
     autoFocus?: boolean;
     disabled?: boolean;
     smileysEnabled?: boolean;
+    commentQuote?: boolean;
     submitKey?: string;
     onSubmit?: () => void;
     onBlur?: (event: React.FocusEvent) => void;
@@ -39,7 +42,8 @@ export interface VisualTextAreaProps {
 const isBackspace = isHotkey("Backspace");
 
 export default function VisualTextArea({
-    name, rows, minHeight, maxHeight, placeholder, autoFocus, disabled, smileysEnabled, submitKey, onSubmit, onBlur
+    name, rows, minHeight, maxHeight, placeholder, autoFocus, disabled, smileysEnabled, commentQuote, submitKey,
+    onSubmit, onBlur
 }: VisualTextAreaProps) {
     const editor = useSlateStatic() as ReactEditor;
     const textArea = React.useRef<HTMLDivElement>(null);
@@ -242,6 +246,36 @@ export default function VisualTextArea({
             }
         }
     };
+
+    const onCommentQuote = useCallback((event: UiEventCommentQuote) => {
+        const {html, ownerName, ownerFullName} = event.detail;
+
+        let insertHtml = "";
+        if (ownerName) {
+            const mention = `<a data-nodename="${ownerName}">${ownerFullName ?? ownerName}</a>`;
+            if (html) {
+                insertHtml = `<p>${mention}:</p><blockquote>${html}</blockquote>`;
+            } else {
+                insertHtml = mention;
+            }
+        } else {
+            if (html) {
+                insertHtml = `<blockquote>${html}</blockquote>`;
+            }
+        }
+        editor.insertFragment(safeImportScripture(insertHtml));
+    }, [editor]);
+
+    useEffect(() => {
+        if (commentQuote) {
+            // @ts-ignore
+            document.addEventListener(UI_EVENT_COMMENT_QUOTE, onCommentQuote);
+            return () => {
+                // @ts-ignore
+                document.removeEventListener(UI_EVENT_COMMENT_QUOTE, onCommentQuote);
+            }
+        }
+    }, [commentQuote, onCommentQuote]);
 
     return (
         <Editable

@@ -37,7 +37,8 @@ export type VisualEditorProps = {
 
 export default function VisualEditor({
     name, value, touched, nodeName, rows, minHeight, maxHeight, placeholder, autoFocus, disabled, smileysEnabled,
-    noPanel, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, onChange, submitKey, onSubmit, onUrls, onBlur, children
+    commentQuote, noPanel, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, onChange, submitKey, onSubmit, onUrls,
+    onBlur, children
 }: VisualEditorProps) {
     const {pasteImage} = useRichTextEditorMedia();
     const [editor] = useState(
@@ -111,10 +112,17 @@ export default function VisualEditor({
     }, [onChange]);
 
     return (
-        <Slate editor={editor} initialValue={htmlToScripture("")}
-               onValueChange={onScriptureChange as ((contents: Descendant[]) => void) | undefined}>
-            <VisualEditorCommands noComplexBlocks={noComplexBlocks} noEmbeddedMedia={noEmbeddedMedia} noMedia={noMedia}
-                                  noVideo={noVideo}>
+        <Slate
+            editor={editor}
+            initialValue={htmlToScripture("")}
+            onValueChange={onScriptureChange as ((contents: Descendant[]) => void) | undefined}
+        >
+            <VisualEditorCommands
+                noComplexBlocks={noComplexBlocks}
+                noEmbeddedMedia={noEmbeddedMedia}
+                noMedia={noMedia}
+                noVideo={noVideo}
+            >
                 {!noPanel &&
                     <RichTextEditorPanel/>
                 }
@@ -126,6 +134,7 @@ export default function VisualEditor({
                     placeholder={isScriptureEmpty(editor.children) ? placeholder : undefined}
                     disabled={disabled}
                     smileysEnabled={smileysEnabled}
+                    commentQuote={commentQuote}
                     autoFocus={autoFocus}
                     submitKey={submitKey}
                     onSubmit={onSubmit}

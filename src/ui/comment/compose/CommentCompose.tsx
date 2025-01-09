@@ -64,12 +64,28 @@ function CommentCompose(props: Props) {
                 <AvatarField name="avatar" size={36} disabled={!ready || beingPosted}/>
                 <div className="content">
                     <CommentComposeRepliedTo disabled={!ready || beingPosted}/>
-                    <RichTextField name="body" rows={2} minHeight="4em" maxHeight="max(100vh - 26rem, 7.2em)"
-                                   features={features} nodeName={receiverName ?? REL_CURRENT} forceImageCompress
-                                   noEmbeddedMedia anyValue placeholder={t("write-comment")}
-                                   disabled={!ready || beingPosted} smileysEnabled={smileysEnabled} noPanel
-                                   format={sourceFormatDefault} submitKey={submitKey} onSubmit={() => submitForm()}
-                                   urlsField="bodyUrls" linkPreviewsField="linkPreviews" linkPreviewsSmall>
+                    <RichTextField
+                        name="body"
+                        rows={2}
+                        minHeight="4em"
+                        maxHeight="max(100vh - 26rem, 7.2em)"
+                        features={features}
+                        nodeName={receiverName ?? REL_CURRENT}
+                        forceImageCompress
+                        noEmbeddedMedia
+                        anyValue
+                        placeholder={t("write-comment")}
+                        disabled={!ready || beingPosted}
+                        smileysEnabled={smileysEnabled}
+                        commentQuote
+                        noPanel
+                        format={sourceFormatDefault}
+                        submitKey={submitKey}
+                        onSubmit={() => submitForm()}
+                        urlsField="bodyUrls"
+                        linkPreviewsField="linkPreviews"
+                        linkPreviewsSmall
+                    >
                         <CommentComposePanel/>
                     </RichTextField>
                 </div>

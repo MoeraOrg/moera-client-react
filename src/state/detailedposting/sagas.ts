@@ -19,6 +19,7 @@ import { executor } from "state/executor";
 import { homeIntroduced } from "state/init-selectors";
 import { errorThrown } from "state/error/actions";
 import { ClientAction } from "state/action";
+import { ClientState } from "state/state";
 import {
     closeCommentDialog,
     CommentComposeCancelAction,
@@ -96,20 +97,18 @@ import {
     getDetailedPostingId,
     isCommentComposerReplied
 } from "state/detailedposting/selectors";
+import { uiEventCommentQuote } from "state/detailedposting/events";
 import { fillActivityReaction, fillActivityReactionsInPostings } from "state/activityreactions/sagas";
 import { fillBlockedOperations, fillBlockedOperationsInPostings } from "state/blockedoperations/sagas";
 import { postingCommentCountUpdate, postingCommentsSet, postingsSet } from "state/postings/actions";
-import { ClientState } from "state/state";
-import { getOwnerFullName, getOwnerName, isPermitted, isPrincipalIn } from "state/node/selectors";
 import { getPosting, isPostingCached } from "state/postings/selectors";
-import { flashBox } from "state/flashbox/actions";
 import { postingGetLink } from "state/postings/sagas";
+import { getOwnerFullName, getOwnerName, isPermitted, isPrincipalIn } from "state/node/selectors";
+import { flashBox } from "state/flashbox/actions";
 import { fillSubscription } from "state/subscriptions/sagas";
 import * as Browser from "ui/browser";
-import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
 import { toAvatarDescription } from "util/avatar";
-import { mentionName } from "util/names";
-import { getWindowSelectionHtml, insertText } from "util/ui";
+import { getWindowSelectionHtml } from "util/ui";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { notNull } from "util/misc";
 
@@ -758,30 +757,27 @@ function extractAttributes(reactionInfo: ReactionInfo | null | undefined): React
 function* commentReplySaga(action: CommentReplyAction) {
     const {commentId, ownerName, ownerFullName, heading} = action.payload;
 
-    const body = document.getElementById("body") as HTMLTextAreaElement | null;
-    if (body == null) {
-        return;
-    }
     const {replied, repliedToName} = yield* select(state => ({
         replied: isCommentComposerReplied(state),
         repliedToName: getCommentComposerRepliedToName(state)
     }));
-    const text = htmlToMarkdown(getWindowSelectionHtml());
-    if (body.textLength === 0 && !replied) {
+
+    const html = getWindowSelectionHtml();
+
+    if (!replied) {
         yield* put(commentRepliedToSet(commentId, ownerName, ownerFullName, heading).causedBy(action));
-        if (text) {
-            insertText(body, `>>>\n${text}\n>>>\n`);
+        if (html) {
+            document.dispatchEvent(uiEventCommentQuote(html));
         }
     } else {
-        const mention = mentionName(ownerName, ownerFullName);
-        if (text) {
+        if (html) {
             if (ownerName !== repliedToName) {
-                insertText(body, `${mention}:\n>>>\n${text}\n>>>\n`);
+                document.dispatchEvent(uiEventCommentQuote(html, ownerName, ownerFullName));
             } else {
-                insertText(body, `>>>\n${text}\n>>>\n`);
+                document.dispatchEvent(uiEventCommentQuote(html));
             }
         } else {
-            insertText(body, `${mention} `);
+            document.dispatchEvent(uiEventCommentQuote(undefined, ownerName, ownerFullName));
         }
     }
     yield* put(commentsScrollToComposer().causedBy(action));

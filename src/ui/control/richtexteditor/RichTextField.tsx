@@ -33,6 +33,7 @@ interface Props {
     initialValue?: RichTextValue;
     defaultValue?: RichTextValue;
     smileysEnabled?: boolean;
+    commentQuote?: boolean;
     noPanel?: boolean;
     format: SourceFormat;
     submitKey?: string;
@@ -46,8 +47,8 @@ interface Props {
 export function RichTextField({
     name, title, rows = 3, minHeight, maxHeight, features, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo,
     nodeName = REL_CURRENT, forceImageCompress, placeholder, autoFocus, anyValue, className, autoComplete,
-    noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled, noPanel, format, submitKey,
-    onSubmit, urlsField, linkPreviewsField, linkPreviewsSmall, children
+    noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled, commentQuote, noPanel, format,
+    submitKey, onSubmit, urlsField, linkPreviewsField, linkPreviewsSmall, children
 }: Props) {
     const [{value, onBlur}, {touched, error}, {setTouched}, {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
@@ -95,6 +96,7 @@ export function RichTextField({
                     features={features ?? null}
                     disabled={disabled}
                     smileysEnabled={smileysEnabled}
+                    commentQuote={commentQuote}
                     noPanel={noPanel}
                     format={format}
                     submitKey={submitKey}
@@ -110,9 +112,14 @@ export function RichTextField({
                     <>
                         {!noFeedback && touched && <FieldError error={(error as any)?.text}/>}
                         {urlsField != null && linkPreviewsField != null &&
-                            <RichTextLinkPreviews name={linkPreviewsField} urlsField={urlsField}
-                                                  nodeName={nodeName} features={features} small={linkPreviewsSmall}
-                                                  disabled={disabled}/>
+                            <RichTextLinkPreviews
+                                name={linkPreviewsField}
+                                urlsField={urlsField}
+                                nodeName={nodeName}
+                                features={features}
+                                small={linkPreviewsSmall}
+                                disabled={disabled}
+                            />
                         }
                         {children}
                     </>

@@ -6,6 +6,7 @@ import isHotkey from 'is-hotkey';
 
 import { CLIENT_SETTINGS_PREFIX, SourceFormat } from "api";
 import { ClientState } from "state/state";
+import { UI_EVENT_COMMENT_QUOTE, UiEventCommentQuote } from "state/detailedposting/events";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
 import * as Browser from "ui/browser";
@@ -16,6 +17,7 @@ import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html
 import { extractUrls, replaceSmileys } from "util/text";
 import { containsTags, safeImportHtml } from "util/html";
 import { insertText } from "util/ui";
+import { mentionName } from "util/names";
 
 const MENTION_START = /(^|\s)@$/;
 
@@ -32,6 +34,7 @@ export interface MarkdownAreaProps {
     autoComplete?: string;
     disabled?: boolean;
     smileysEnabled?: boolean;
+    commentQuote?: boolean;
     submitKey?: string;
     onSubmit?: () => void;
     onChange?: (event: React.FormEvent) => void;
@@ -43,7 +46,7 @@ export interface MarkdownAreaProps {
 function MarkdownArea(
     {
         name, value, format, className, autoFocus, autoComplete, minHeight, maxHeight, placeholder, rows = 3, disabled,
-        smileysEnabled, submitKey, onSubmit, onChange, onBlur, onUrls, panel
+        smileysEnabled, commentQuote, submitKey, onSubmit, onChange, onBlur, onUrls, panel
     }: MarkdownAreaProps,
     ref: ForwardedRef<HTMLTextAreaElement>
 ) {
@@ -167,6 +170,39 @@ function MarkdownArea(
             }
         }
     }, [autoFocus, onInput, onPaste]);
+
+    const onCommentQuote = useCallback((event: UiEventCommentQuote) => {
+        const {html, ownerName, ownerFullName} = event.detail;
+
+        if (textArea.current == null) {
+            return;
+        }
+
+        const text = htmlToMarkdown(html);
+        if (ownerName) {
+            const mention = mentionName(ownerName, ownerFullName);
+            if (text) {
+                insertText(textArea.current, `${mention}:\n>>>\n${text}\n>>>\n`);
+            } else {
+                insertText(textArea.current, `${mention} `);
+            }
+        } else {
+            if (text) {
+                insertText(textArea.current, `>>>\n${text}\n>>>\n`);
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        if (commentQuote) {
+            // @ts-ignore
+            document.addEventListener(UI_EVENT_COMMENT_QUOTE, onCommentQuote);
+            return () => {
+                // @ts-ignore
+                document.removeEventListener(UI_EVENT_COMMENT_QUOTE, onCommentQuote);
+            }
+        }
+    }, [commentQuote, onCommentQuote]);
 
     useEffect(() => {
         if (!disabled && autoFocus && textArea.current) {
