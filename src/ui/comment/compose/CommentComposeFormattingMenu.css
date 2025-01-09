@@ -8,6 +8,10 @@
     background-color: var(--highlight);
 }
 
+.comment-compose-panel .formatting-menu-button .rich-text-editor-button {
+    margin-inline-end: 0;
+}
+
 .comment-compose-panel .formatting-menu-button:hover .rich-text-editor-button {
     background-color: transparent;
 }
