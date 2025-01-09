@@ -54,6 +54,11 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName}
 
     const [selectedImage, setSelectedImage] = useState<PrivateMediaFileInfo | null>(null);
 
+    const onCopyImage = (e: React.MouseEvent) => {
+        copyImage();
+        e.preventDefault();
+    }
+
     const onSelectImages = (event: React.MouseEvent) => {
         if (!event.isDefaultPrevented() && !isOverlayClosedRecently()) {
             openLocalFiles();
@@ -85,7 +90,7 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName}
                                 <div className="upload-button" role="button" tabIndex={0} onClick={onSelectImages}>
                                     <Trans i18nKey={buttonsTitle}>
                                         <b/>
-                                        <button className="copy-image" onClick={copyImage}/>
+                                        <button className="copy-image" onClick={onCopyImage}/>
                                         <br/>
                                     </Trans>
                                 </div>

@@ -18,11 +18,13 @@ import {
 import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
 import { RichTextImageStandardSize } from "ui/control/richtexteditor/media/rich-text-image";
 import RichTextImageDialog, { RichTextImageValues } from "ui/control/richtexteditor/media/RichTextImageDialog";
+import RichTextCopyImageDialog, {
+    RichTextCopyImageValues
+} from "ui/control/richtexteditor/dialog/RichTextCopyImageDialog";
 import { isHtmlEmpty } from "util/html";
 import { RelNodeName } from "util/rel-node-name";
-import { arrayMove } from "util/misc";
 import { mediaImageExtensions } from "util/media-images";
-import RichTextCopyImageDialog, { RichTextCopyImageValues } from "ui/control/richtexteditor/dialog/RichTextCopyImageDialog";
+import { arrayMove } from "util/misc";
 
 function updateStatus(progress: UploadProgress[], index: number, status: UploadStatus): UploadProgress[] {
     const updated = immutable.set(progress, [index, "status"], status);
@@ -60,33 +62,24 @@ export default function RichTextEditorMedia({
     const onChangeRef = useRef<ChangeHandler | undefined>();
     onChangeRef.current = onChange;
 
-    // Parameters passed to bottom callbacks from the topmost dialog
-    const onInsertRef = useRef<OnInsertHandler | undefined>();
-    const standardSizeRef = useRef<RichTextImageStandardSize | undefined>();
-    const customWidthRef = useRef<number | null>(null);
-    const customHeightRef = useRef<number | null>(null);
-    const captionRef = useRef<string | undefined>();
+    const onImageUploadSuccess = (
+        onInsert?: OnInsertHandler, standardSize?: RichTextImageStandardSize, customWidth?: number | null,
+        customHeight?: number | null, caption?: string
+    ) => (index: number, mediaFile: VerifiedMediaFile) => {
+        setUploadProgress(progress => updateStatus(progress, index, "success"));
 
-    const imageUploaded = (index: number, image: VerifiedMediaFile) => {
-        if (uploadedImagesRef.current.some(v => v != null && v.id === image.id)) {
+        if (uploadedImagesRef.current.some(v => v != null && v.id === mediaFile.id)) {
             return;
         }
-        uploadedImagesRef.current[index] = image;
+        uploadedImagesRef.current[index] = mediaFile;
+
         if (isAllUploaded(uploadedImagesRef.current)) {
             const media = (valueRef.current ?? []).concat(uploadedImagesRef.current);
             onChangeRef.current?.(media);
-            if (onInsertRef.current != null && uploadedImagesRef.current.length > 0) {
-                onInsertRef.current(
-                    uploadedImagesRef.current, standardSizeRef.current ?? "large",
-                    customWidthRef.current, customHeightRef.current, captionRef.current
-                );
+            if (onInsert != null && uploadedImagesRef.current.length > 0) {
+                onInsert(uploadedImagesRef.current, standardSize ?? "large", customWidth, customHeight, caption);
             }
         }
-    }
-
-    const onImageUploadSuccess = (index: number, mediaFile: VerifiedMediaFile) => {
-        setUploadProgress(progress => updateStatus(progress, index, "success"));
-        imageUploaded(index, mediaFile);
     }
 
     const onImageUploadFailure = (index: number) => {
@@ -103,20 +96,26 @@ export default function RichTextEditorMedia({
         uploadedImagesRef.current = new Array(count).fill(null);
     }
 
-    const uploadImages = (files: File[], compress: boolean, description: RichTextValue | undefined) => {
+    const uploadImages = (
+        files: File[], compress: boolean, description: RichTextValue | undefined, onInsert?: OnInsertHandler,
+        standardSize?: RichTextImageStandardSize, customWidth?: number | null, customHeight?: number | null,
+        caption?: string
+    ) => {
         if (files.length > 0) {
             setUploadProgress(files.map(file => ({status: "loading", loaded: 0, total: file.size})));
             imageUploadStarted(files.length);
             const descriptionSrcText = description?.toText(smileysEnabled);
             const descriptionSrc = !isHtmlEmpty(descriptionSrcText) ? JSON.stringify({text: descriptionSrcText}) : null;
             dispatch(richTextEditorImagesUpload(
-                nodeName, files, features, compress, onImageUploadSuccess, onImageUploadFailure, onImageUploadProgress,
-                descriptionSrc, srcFormat
+                nodeName, files, features, compress,
+                onImageUploadSuccess(onInsert, standardSize, customWidth, customHeight, caption), onImageUploadFailure,
+                onImageUploadProgress, descriptionSrc, srcFormat
             ));
         }
     };
 
     const compressDefault = useRef<boolean>(forceCompress || compressImages);
+    const onInsertRef = useRef<OnInsertHandler | undefined>();
 
     const openUploadImages = (files: File[]) => {
         showImageDialog(
@@ -141,11 +140,10 @@ export default function RichTextEditorMedia({
                 if (compress != null) {
                     compressDefault.current = compress;
                 }
-                standardSizeRef.current = standardSize;
-                customWidthRef.current = customWidth ?? null;
-                customHeightRef.current = customHeight ?? null;
-                captionRef.current = caption;
-                uploadImages(files, compress ?? compressDefault.current, description);
+                uploadImages(
+                    files, compress ?? compressDefault.current, description, onInsertRef.current, standardSize,
+                    customWidth, customHeight, caption
+                );
             }
         );
     }
