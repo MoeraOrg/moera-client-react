@@ -239,34 +239,6 @@ export function safeImportHtml(html: string | null | undefined): string {
         .trim();
 }
 
-export function linefeedsToHtml(html: string | null | undefined): string {
-    if (!html) {
-        return "";
-    }
-    return html
-        .replaceAll("\n\n", "<p>")
-        .replaceAll("\n", "<br>");
-}
-
-export function quoteHtml(html: string): string;
-export function quoteHtml(html?: null): null;
-export function quoteHtml(html?: string | null): string | null;
-export function quoteHtml(html?: string | null): string | null {
-    if (html == null) {
-        return null;
-    }
-    return htmlToEmoji(html)
-        .replace(/\n*<p(\s[^>]*)?>\n*/gi, "\n\n")
-        .replace(/<blockquote>\n+/gi, "<blockquote>\n")
-        .replace(/<\/p>/gi, "")
-        .replace(/\n*<br\s*\/?>\n*/gi, "\n")
-        .replace(/(?:<span>)?<a[^>]*data-nodename[^>]*>(@[^<]+)<\/a>(?:<\/span>)?/gi, "$1")
-        .replace(/(?:<span>)?<a[^>]*data-nodename="([^"]*)"[^>]*>([^<]+)<\/a>(?:<\/span>)?/gi, "@$1[$2]")
-        .replace(/<a[^>]*href=(['"])([^'"]+)\1[^>]*>\2<\/a>/gi, "$2")
-        .replace(/\n\s*\n/g, "\n\n")
-        .trim()
-}
-
 export function htmlToEmoji(html: string): string {
     return html
         .replace(/<b\s[^>]*class="emoji"[^>]*>(..?)<\/b>/gi, "$1")

@@ -9,7 +9,8 @@ import { flashBox } from "state/flashbox/actions";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import * as Browser from "ui/browser";
-import { clearHtml, containsTags, htmlEntities, quoteHtml } from "util/html";
+import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
+import { clearHtml, containsTags, htmlEntities } from "util/html";
 import { mediaImagePreview } from "util/media-images";
 import { urlWithParameters } from "util/url";
 import { notNull } from "util/misc";
@@ -36,7 +37,7 @@ function* entryCopyTextSaga(action: EntryCopyTextAction) {
         return;
     }
 
-    text = quoteHtml(text);
+    text = htmlToMarkdown(text);
     if (mode === "text") {
         text = clearHtml(text);
     } else {

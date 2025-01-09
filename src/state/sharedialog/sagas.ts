@@ -15,8 +15,8 @@ import { getNodeUri } from "state/naming/sagas";
 import { messageBox } from "state/messagebox/actions";
 import { flashBox } from "state/flashbox/actions";
 import * as Browser from "ui/browser";
+import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
 import { getWindowSelectionHtml, hasWindowSelection } from "util/ui";
-import { quoteHtml } from "util/html";
 import { absoluteNodeName } from "util/rel-node-name";
 
 export default [
@@ -44,7 +44,7 @@ function* shareDialogPrepareSaga(action: WithContext<ShareDialogPrepareAction>) 
     let {nodeName, href} = action.payload;
 
     nodeName = absoluteNodeName(nodeName, action.context);
-    const text = hasWindowSelection() ? (quoteHtml(getWindowSelectionHtml()) ?? "") : "";
+    const text = hasWindowSelection() ? (htmlToMarkdown(getWindowSelectionHtml()) ?? "") : "";
 
     const nodeUri = yield* call(getNodeUri, action, nodeName);
     if (nodeUri == null) {

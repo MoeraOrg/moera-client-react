@@ -106,8 +106,8 @@ import { flashBox } from "state/flashbox/actions";
 import { postingGetLink } from "state/postings/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
 import * as Browser from "ui/browser";
+import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
 import { toAvatarDescription } from "util/avatar";
-import { quoteHtml } from "util/html";
 import { mentionName } from "util/names";
 import { getWindowSelectionHtml, insertText } from "util/ui";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
@@ -766,7 +766,7 @@ function* commentReplySaga(action: CommentReplyAction) {
         replied: isCommentComposerReplied(state),
         repliedToName: getCommentComposerRepliedToName(state)
     }));
-    const text = quoteHtml(getWindowSelectionHtml());
+    const text = htmlToMarkdown(getWindowSelectionHtml());
     if (body.textLength === 0 && !replied) {
         yield* put(commentRepliedToSet(commentId, ownerName, ownerFullName, heading).causedBy(action));
         if (text) {

@@ -21,8 +21,9 @@ import { settingsUpdate } from "state/settings/actions";
 import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { htmlToScripture, safeImportScripture } from "ui/control/richtexteditor/visual/scripture-html";
+import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
 import { replaceSmileys } from "util/text";
-import { isHtmlEmpty, quoteHtml, safeImportHtml } from "util/html";
+import { isHtmlEmpty, safeImportHtml } from "util/html";
 import { notNull } from "util/misc";
 
 export type ComposePageToolsTab = null | "format" | "comments" | "reactions" | "updated";
@@ -98,7 +99,7 @@ function getSharedText(props: ComposePageProps, format: SourceFormat): string | 
     if (props.sharedTextType === "html") {
         switch (format) {
             case "markdown":
-                content = quoteHtml(safeImportHtml(props.sharedText));
+                content = htmlToMarkdown(safeImportHtml(props.sharedText));
                 break;
             case "html/visual":
                 content = safeImportScripture(props.sharedText);

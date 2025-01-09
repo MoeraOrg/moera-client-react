@@ -11,9 +11,9 @@ import { goToLocation, initFromLocation } from "state/navigation/actions";
 import { getHomeOwnerName, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { executor } from "state/executor";
+import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
 import { getWindowSelectionHtml } from "util/ui";
 import { mentionName } from "util/names";
-import { quoteHtml } from "util/html";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
@@ -55,9 +55,9 @@ function* postingReplySaga(action: WithContext<PostingReplyAction>) {
             .replace("%USER%", mentionName(posting.ownerName, posting.ownerFullName));
         let text = getWindowSelectionHtml();
         if (text) {
-            text = quoteHtml(text);
+            text = htmlToMarkdown(text);
         } else if (quoteAll) {
-            text = quoteHtml(posting.body.text?.trim());
+            text = htmlToMarkdown(posting.body.text?.trim());
         }
         const draftText: DraftText = {
             draftType: "new-posting",
