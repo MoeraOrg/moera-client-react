@@ -24,14 +24,15 @@ export default function FormattingOtherButton() {
     const {
         supportsComplexBlocks, supportsEmbeddedMedia,
         inFold, inCode, inSubscript, inSuperscript, inCodeBlock, inFormula, inMark, inImageEmbedded,
-        formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula, formatMark,
+        focus, formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula, formatMark,
         formatImage
     } = useRichTextEditorCommands();
     const {t} = useTranslation();
 
     return (
         <>
-            <FormattingSubmenuButton icon={msMoreHoriz} title={t("more")} expanded={isExpanded} {...getToggleProps()}/>
+            <FormattingSubmenuButton icon={msMoreHoriz} title={t("more")} expanded={isExpanded}
+                                     {...getToggleProps({onClick: focus})}/>
             <div className="formatting-menu-sub" {...getCollapseProps()}>
                 {supportsComplexBlocks &&
                     <FormattingMenuItem icon={msExpandCircleDown} title={t("fold")} active={inFold}

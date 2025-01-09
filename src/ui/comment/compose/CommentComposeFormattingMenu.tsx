@@ -33,7 +33,7 @@ export default function CommentComposeFormattingMenu() {
         supportsComplexBlocks, supportsClear,
         inBold, inItalic, inStrikeout, inSpoiler, inOrderedList, inUnorderedList, inList, inBlockquote, inMention,
         inLink,
-        formatBold, formatItalic, formatStrikeout, formatSpoiler, formatList, formatIndent, formatBlockquote,
+        focus, formatBold, formatItalic, formatStrikeout, formatSpoiler, formatList, formatIndent, formatBlockquote,
         formatBlockunquote, formatHorizontalRule, formatMention, formatLink, formatClear, formatHeading
     } = useRichTextEditorCommands();
 
@@ -42,11 +42,16 @@ export default function CommentComposeFormattingMenu() {
     } = useButtonPopper("top", {closeOnSelect: false});
     const {t} = useTranslation();
 
+    const onClick = (event: React.MouseEvent) => {
+        focus();
+        onToggle(event);
+    }
+
     return (
         <>
             <span className="formatting-menu-button">
                 <RichTextEditorButton className="selector dropdown-toggle" icon={msFormatSize} iconSize={20}
-                                      title={t("text-formatting")} onClick={onToggle} ref={setButtonRef}/>
+                                      title={t("text-formatting")} onClick={onClick} ref={setButtonRef}/>
             </span>
             {visible &&
                 <DropdownMenuContext.Provider value={{hide, overlayId}}>
