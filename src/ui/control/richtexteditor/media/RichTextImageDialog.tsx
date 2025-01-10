@@ -86,9 +86,19 @@ function RichTextImageDialog({
                 <InputField name="href" title={t("link")} anyValue autoFocus/>
             }
             {!insert && files?.length === 1 &&
-                <RichTextField name="description" format={descriptionSrcFormat ?? "markdown"} maxHeight="14em"
-                               className="mt-3" placeholder={t("description-optional")} smileysEnabled={smileysEnabled}
-                               noComplexBlocks noEmbeddedMedia noMedia noVideo anyValue/>
+                <RichTextField
+                    name="description"
+                    format={descriptionSrcFormat ?? "markdown"}
+                    maxHeight="14em"
+                    className="mt-3"
+                    placeholder={t("description-optional")}
+                    smileysEnabled={smileysEnabled}
+                    noComplexBlocks
+                    noEmbeddedMedia
+                    noMedia
+                    noVideo
+                    anyValue
+                />
             }
             {files != null && !forceCompress &&
                 <CheckboxField title={t("compress-images")} name="compress" groupClassName="mt-3 mb-0" anyValue/>

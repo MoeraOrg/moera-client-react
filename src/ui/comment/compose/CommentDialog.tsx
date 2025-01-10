@@ -86,11 +86,24 @@ function CommentDialogInner(props: Props) {
                         <AvatarField name="avatar" size={36} disabled={!ready || beingPosted}/>
                         <NodeName name={ownerName} fullName={ownerFullName} linked={false} popup={false}/>
                     </div>
-                    <RichTextField name="body" rows={5} features={features} nodeName={receiverName ?? REL_CURRENT}
-                                   forceImageCompress noEmbeddedMedia anyValue autoFocus
-                                   disabled={!ready || beingPosted} smileysEnabled={smileysEnabled}
-                                   format={sourceFormatDefault} submitKey={submitKey} onSubmit={() => submitForm()}
-                                   urlsField="bodyUrls" linkPreviewsField="linkPreviews" linkPreviewsSmall/>
+                    <RichTextField
+                        name="body"
+                        rows={5}
+                        features={features}
+                        nodeName={receiverName ?? REL_CURRENT}
+                        forceImageCompress
+                        noEmbeddedMedia
+                        anyValue
+                        autoFocus
+                        disabled={!ready || beingPosted}
+                        smileysEnabled={smileysEnabled}
+                        format={sourceFormatDefault}
+                        submitKey={submitKey}
+                        onSubmit={() => submitForm()}
+                        urlsField="bodyUrls"
+                        linkPreviewsField="linkPreviews"
+                        linkPreviewsSmall
+                    />
                 </div>
                 <div className="modal-footer">
                     {ready &&

@@ -35,9 +35,19 @@ const RichTextCopyImageDialog = ({forceCompress, descriptionSrcFormat, smileysEn
             {!forceCompress &&
                 <CheckboxField title={t("compress-images")} name="compress" anyValue/>
             }
-            <RichTextField name="description" format={descriptionSrcFormat ?? "markdown"} maxHeight="14em"
-                           className="mt-3" placeholder={t("description-optional")} smileysEnabled={smileysEnabled}
-                           noComplexBlocks noEmbeddedMedia noMedia noVideo anyValue/>
+            <RichTextField
+                name="description"
+                format={descriptionSrcFormat ?? "markdown"}
+                maxHeight="14em"
+                className="mt-3"
+                placeholder={t("description-optional")}
+                smileysEnabled={smileysEnabled}
+                noComplexBlocks
+                noEmbeddedMedia
+                noMedia
+                noVideo
+                anyValue
+            />
         </>
     );
 }
