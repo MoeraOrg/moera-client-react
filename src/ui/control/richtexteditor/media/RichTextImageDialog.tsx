@@ -1,5 +1,5 @@
-import React from 'react';
-import { useField } from 'formik';
+import React, { useEffect } from 'react';
+import { useField, useFormikContext } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { SourceFormat, VerifiedMediaFile } from "api";
@@ -10,6 +10,7 @@ import { RichTextField } from "ui/control/richtexteditor/RichTextField";
 import UploadedImage from "ui/control/richtexteditor/media/UploadedImage";
 import {
     richTextEditorDialog,
+    RichTextEditorDialogBodyProps,
     RichTextEditorDialogProps
 } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
 import { SelectedImages } from "ui/control/richtexteditor/dialog/SelectedImages";
@@ -38,7 +39,7 @@ type Props = {
     compressDefault?: boolean;
     descriptionSrcFormat?: SourceFormat;
     smileysEnabled?: boolean;
-} & RichTextEditorDialogProps<RichTextImageValues>;
+} & RichTextEditorDialogBodyProps<RichTextEditorDialogProps<RichTextImageValues>, RichTextImageValues>;
 
 const mapPropsToValues = (props: Props): RichTextImageValues => ({
     files: props.files != null ? [...props.files] : null,
@@ -53,11 +54,24 @@ const mapPropsToValues = (props: Props): RichTextImageValues => ({
 });
 
 function RichTextImageDialog({
-    mediaFiles, insert, nodeName = REL_CURRENT, forceCompress, descriptionSrcFormat, smileysEnabled, onSubmit
+    mediaFiles, insert, nodeName = REL_CURRENT, forceCompress, descriptionSrcFormat, smileysEnabled, onSubmit,
+    okButtonRef
 }: Props) {
     const [, {value: files}, {setValue: setFiles}] = useField<File[] | null>("files");
     const [, {value: standardSize}] = useField<RichTextImageStandardSize>("standardSize");
+    const {submitForm} = useFormikContext<RichTextImageValues>();
     const {t} = useTranslation();
+
+    useEffect(() => {
+        // If there is no other field that should receive focus
+        if (
+            !(files == null && mediaFiles == null)
+            && !(!insert && files?.length === 1)
+            && okButtonRef?.current != null
+        ) {
+            okButtonRef.current.focus();
+        }
+    }, [files, insert, mediaFiles, okButtonRef]);
 
     const onDelete = (index: number, e: React.MouseEvent) => {
         if (files != null) {
@@ -98,6 +112,9 @@ function RichTextImageDialog({
                     noMedia
                     noVideo
                     anyValue
+                    autoFocus
+                    submitKey="enter"
+                    onSubmit={submitForm}
                 />
             }
             {files != null && !forceCompress &&

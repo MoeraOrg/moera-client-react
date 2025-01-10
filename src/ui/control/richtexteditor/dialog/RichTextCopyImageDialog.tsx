@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useFormikContext } from 'formik';
 
 import { SourceFormat } from "api";
 import { CheckboxField, InputField } from "ui/control/field";
@@ -27,6 +28,7 @@ const mapPropsToValues = (props: Props): RichTextCopyImageValues => ({
 });
 
 const RichTextCopyImageDialog = ({forceCompress, descriptionSrcFormat, smileysEnabled}: Props) => {
+    const {submitForm} = useFormikContext<RichTextCopyImageValues>();
     const {t} = useTranslation();
 
     return (
@@ -47,6 +49,8 @@ const RichTextCopyImageDialog = ({forceCompress, descriptionSrcFormat, smileysEn
                 noMedia
                 noVideo
                 anyValue
+                submitKey="enter"
+                onSubmit={submitForm}
             />
         </>
     );

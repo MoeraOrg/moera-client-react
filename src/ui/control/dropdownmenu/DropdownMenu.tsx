@@ -33,8 +33,8 @@ export function DropdownMenu({content, items, className, disabled, parentOverlay
 
     return (
         <DropdownMenuContext.Provider value={{hide, onDialogOpened, overlayId}}>
-            <button className={cx("menu", className)} disabled={disabled} ref={setButtonRef} aria-label={t("menu")}
-                    onClick={onToggle}>
+            <button type="button" className={cx("menu", className)} disabled={disabled} ref={setButtonRef}
+                    aria-label={t("menu")} onClick={onToggle}>
                 {children ??
                     <FontAwesomeIcon icon={faChevronDown} className="chevron"/>
                 }

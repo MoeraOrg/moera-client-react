@@ -11,10 +11,14 @@ export interface RichTextEditorDialogProps<V> {
     onSubmit: RichTextEditorDialogSubmit<V>;
 }
 
+export type RichTextEditorDialogBodyProps<P extends RichTextEditorDialogProps<V>, V extends FormikValues> = P & {
+    okButtonRef: React.RefObject<HTMLButtonElement>
+};
+
 export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V extends FormikValues>(
     title: string,
     mapPropsToValues: (props: P) => V,
-    DialogBody: React.ComponentType<P>
+    DialogBody: React.ComponentType<RichTextEditorDialogBodyProps<P, V>>
 ) {
     const logic = {
         mapPropsToValues,
@@ -25,6 +29,8 @@ export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V e
 
     const dialog = function (props: P) {
         const {prevValues, onSubmit} = props;
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const okButtonRef = React.useRef<HTMLButtonElement>(null);
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const {t} = useTranslation();
 
@@ -39,12 +45,12 @@ export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V e
             <ModalDialog title={t(title)} parentOverlayId={parentOverlayId} onClose={onClose}>
                 <Form>
                     <div className="modal-body">
-                        <DialogBody {...props}/>
+                        <DialogBody {...props} okButtonRef={okButtonRef}/>
                     </div>
                     <div className="modal-footer">
                         <Button variant={prevValues == null ? "secondary" : "danger me-auto"}
                                 onClick={onCancel}>{prevValues == null ? t("cancel") : t("delete")}</Button>
-                        <Button variant="primary" type="submit">{t("ok")}</Button>
+                        <Button variant="primary" type="submit" ref={okButtonRef}>{t("ok")}</Button>
                     </div>
                 </Form>
             </ModalDialog>

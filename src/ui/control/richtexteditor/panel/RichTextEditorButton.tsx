@@ -30,9 +30,8 @@ export function RichTextEditorButtonImpl(
     }
 
     return (
-        <button className={cx("rich-text-editor-button", className, {active})} disabled={disabled}
-                title={hotkey ? `${title} (${hotkey})` : title} data-hotkey={hotkey} onClick={onClick ?? onCommandClick}
-                ref={ref}>
+        <button type="button" className={cx("rich-text-editor-button", className, {active})} disabled={disabled}
+                title={hotkey ? `${title} (${hotkey})` : title} onClick={onClick ?? onCommandClick} ref={ref}>
             {icon && <Icon icon={icon} width={iconSize} height={iconSize}/>}
         </button>
     );

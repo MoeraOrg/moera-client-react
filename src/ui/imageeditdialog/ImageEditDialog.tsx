@@ -31,7 +31,7 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function ImageEditDialogInner(props: Props) {
-    const {posting, smileysEnabled, resetForm} = props;
+    const {posting, smileysEnabled, submitForm, resetForm} = props;
 
     const parentOverlayId = useSelector((state: ClientState) => state.imageEditDialog.parentOverlayId);
     const media = useSelector((state: ClientState) => state.imageEditDialog.media);
@@ -76,6 +76,8 @@ function ImageEditDialogInner(props: Props) {
                         noVideo
                         anyValue
                         autoFocus
+                        submitKey="enter"
+                        onSubmit={submitForm}
                     />
                 </div>
                 <div className="modal-footer">
