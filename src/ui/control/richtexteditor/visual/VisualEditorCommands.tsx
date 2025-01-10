@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { Editor, Element, Node, Path, PathRef, Range, Transforms } from 'slate';
 import { ReactEditor, useSlateSelector, useSlateStatic } from 'slate-react';
 
-import { NodeName } from "api";
+import { NodeName, VerifiedMediaFile } from "api";
 import {
     createBlockquoteElement,
     createCodeBlockElement,
@@ -542,6 +542,33 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
         );
     }
 
+    const embedImage = (mediaFile: VerifiedMediaFile) => {
+        showImageDialog(
+            true,
+            null,
+            [mediaFile],
+            null,
+            true,
+            null,
+            (
+                ok: boolean | null,
+                {mediaFiles, standardSize, customWidth, customHeight, caption}: Partial<RichTextImageValues>
+            ) => {
+                showImageDialog(false);
+
+                if (ok && mediaFiles != null) {
+                    for (const image of mediaFiles) {
+                        const node = caption
+                            ? createFigureImageElement(image, caption, standardSize, customWidth, customHeight)
+                            : createImageElement(image, standardSize, customWidth, customHeight);
+                        editor.insertNode(node);
+                    }
+                }
+                focus();
+            }
+        );
+    }
+
     return (
         <RichTextEditorCommandsContext.Provider value={{
             enableHeading, supportsComplexBlocks: !noComplexBlocks, supportsEmbeddedMedia: !noEmbeddedMedia,
@@ -552,7 +579,7 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
             focus, formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention,
             formatHorizontalRule, formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent,
             formatHeading, formatVideo, formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock,
-            formatFormula, formatMark, formatClear, formatImage,
+            formatFormula, formatMark, formatClear, formatImage, embedImage,
         }}>
             {children}
         </RichTextEditorCommandsContext.Provider>

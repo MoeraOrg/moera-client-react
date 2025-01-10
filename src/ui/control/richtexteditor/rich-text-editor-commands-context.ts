@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react';
+import { VerifiedMediaFile } from "api";
 
 export interface RichTextEditorCommandsInterface {
     enableHeading: boolean;
@@ -56,6 +57,7 @@ export interface RichTextEditorCommandsInterface {
     formatMark: () => void;
     formatClear: () => void;
     formatImage: (embedded?: boolean) => void;
+    embedImage: (mediaFile: VerifiedMediaFile) => void;
 }
 
 export const RichTextEditorCommandsContext = createContext<RichTextEditorCommandsInterface>({
@@ -114,6 +116,7 @@ export const RichTextEditorCommandsContext = createContext<RichTextEditorCommand
     formatMark: () => {},
     formatClear: () => {},
     formatImage: () => {},
+    embedImage: () => {},
 });
 
 export const useRichTextEditorCommands = (): RichTextEditorCommandsInterface =>

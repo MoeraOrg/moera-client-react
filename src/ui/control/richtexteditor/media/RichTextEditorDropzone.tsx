@@ -1,8 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import cx from 'classnames';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { PrivateMediaFileInfo } from "api";
 import { RichTextValue } from "ui/control/richtexteditor";
 import { UploadProgress, useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import RichTextEditorImageList from "ui/control/richtexteditor/media/RichTextEditorImageList";
@@ -47,12 +46,9 @@ interface Props {
 export default function RichTextEditorDropzone({value, hiding = false, nodeName}: Props) {
     const tinyScreen = useIsTinyScreen();
     const {
-        getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, deleteImage, reorderImage,
-        downloading, copyImage,
+        getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, downloading, copyImage,
     } = useRichTextEditorMedia();
     const {t} = useTranslation();
-
-    const [selectedImage, setSelectedImage] = useState<PrivateMediaFileInfo | null>(null);
 
     const onCopyImage = (e: React.MouseEvent) => {
         copyImage();
@@ -76,9 +72,7 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName}
                 "rich-text-editor-dropzone",
                 {"d-none": hidden, "drag-accept": isDragAccept, "drag-reject": isDragReject}
             )} {...getRootProps()}>
-                <RichTextEditorImageList value={value} className={hiding ? "pb-3" : undefined} nodeName={nodeName}
-                                         selectedImage={selectedImage} selectImage={setSelectedImage}
-                                         onDeleted={deleteImage} onReorder={reorderImage}/>
+                <RichTextEditorImageList value={value} className={hiding ? "pb-3" : undefined} nodeName={nodeName}/>
                 <div className="upload">
                     {uploadProgress.length > 0 ?
                         t("uploading-files", {...progressSummary})

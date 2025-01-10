@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import {
     DndContext,
@@ -13,8 +13,9 @@ import {
 import { SortableContext } from '@dnd-kit/sortable';
 import cx from 'classnames';
 
-import { PrivateMediaFileInfo, VerifiedMediaFile } from "api";
+import { VerifiedMediaFile } from "api";
 import { RichTextValue } from "ui/control/richtexteditor";
+import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import UploadedImage from "ui/control/richtexteditor/media/UploadedImage";
 import AttachedImage from "ui/control/richtexteditor/media/AttachedImage";
 import { mediaHashesExtract } from "util/media-images";
@@ -26,14 +27,11 @@ interface Props {
     value: RichTextValue;
     className?: string;
     nodeName: RelNodeName | string;
-    selectedImage: PrivateMediaFileInfo | null;
-    selectImage: (image: VerifiedMediaFile | null) => void;
-    onDeleted?: (id: string) => void;
-    onReorder?: (activeId: string, overId: string) => void;
 }
 
-export default function RichTextEditorImageList({value, className, nodeName, selectedImage, selectImage, onDeleted,
-                                                 onReorder}: Props) {
+export default function RichTextEditorImageList({value, className, nodeName}: Props) {
+    const {reorderImage} = useRichTextEditorMedia();
+
     const mouseSensor = useSensor(PointerSensor, {
         activationConstraint: {
             distance: 10
@@ -61,34 +59,21 @@ export default function RichTextEditorImageList({value, className, nodeName, sel
     const onDragStart = ({active}: DragStartEvent) =>
         setDragged(mediaList.find(mf => mf.id === active.id) ?? null);
     const onDragEnd = ({active, over}: DragEndEvent) => {
-        if (onReorder != null && over != null && active.id !== over.id) {
-            onReorder(String(active.id), String(over.id));
+        if (over != null && active.id !== over.id) {
+            reorderImage(String(active.id), String(over.id));
         }
         setDragged(null);
     };
     const onDragCancel = () => setDragged(null);
-
-    const onDelete = (id: string) => () => {
-        if (onDeleted) {
-            onDeleted(id);
-        }
-    }
-
-    const onClick = (image: VerifiedMediaFile) => (event: MouseEvent) => {
-        selectImage(image);
-        event.preventDefault();
-    }
 
     return (
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragCancel={onDragCancel}>
             <SortableContext items={mediaIds}>
                 {mediaList.length > 0 &&
                     <div className={cx("rich-text-editor-image-list", className)}>
-                        {mediaList.filter(media => media.id !== selectedImage?.id).map(media =>
+                        {mediaList.map(media =>
                             <UploadedImage key={media.id} media={media} nodeName={nodeName}
-                                           dragged={dragged?.id === media.id} showMenu={!dragged}
-                                           onDelete={onDelete(media.id)}
-                                           onClick={!dragged ? onClick(media) : undefined}/>
+                                           dragged={dragged?.id === media.id} showMenu={!dragged}/>
                         )}
                     </div>
                 }

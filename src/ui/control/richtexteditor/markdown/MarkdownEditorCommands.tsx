@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { NodeName, PrivateMediaFileInfo, SourceFormat } from "api";
+import { NodeName, PrivateMediaFileInfo, SourceFormat, VerifiedMediaFile } from "api";
 import * as Browser from "ui/browser";
 import { RichTextEditorCommandsContext } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import {
@@ -367,7 +367,7 @@ export default function MarkdownEditorCommands({
                 null,
                 (
                     ok: boolean | null,
-                    {href, standardSize = "large", customWidth, customHeight, caption}: Partial<RichTextImageValues>
+                    {href, standardSize, customWidth, customHeight, caption}: Partial<RichTextImageValues>
                 ) => {
                     showImageDialog(false);
 
@@ -391,6 +391,30 @@ export default function MarkdownEditorCommands({
         }
     }
 
+    const embedImage = (mediaFile: VerifiedMediaFile) => {
+        showImageDialog(
+            true,
+            null,
+            [mediaFile],
+            "",
+            true,
+            null,
+            (
+                ok: boolean | null,
+                {mediaFiles, standardSize, customWidth, customHeight, caption}: Partial<RichTextImageValues>
+            ) => {
+                showImageDialog(false);
+
+                if (ok && mediaFiles != null && textArea.current != null) {
+                    for (const image of mediaFiles) {
+                        insertImage(textArea.current, image, standardSize, customWidth, customHeight, caption);
+                    }
+                }
+                focus();
+            }
+        );
+    }
+
     return (
         <RichTextEditorCommandsContext.Provider value={{
             enableHeading: true, supportsComplexBlocks: !noComplexBlocks, supportsEmbeddedMedia: !noEmbeddedMedia,
@@ -403,7 +427,7 @@ export default function MarkdownEditorCommands({
             focus, formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention,
             formatHorizontalRule, formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent,
             formatHeading, formatVideo, formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock,
-            formatFormula, formatMark, formatClear, formatImage,
+            formatFormula, formatMark, formatClear, formatImage, embedImage,
         }}>
             {children}
         </RichTextEditorCommandsContext.Provider>
