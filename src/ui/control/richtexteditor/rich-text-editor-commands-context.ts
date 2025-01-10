@@ -1,5 +1,7 @@
-import { createContext, useContext } from 'react';
+import React, { createContext, useContext } from 'react';
+
 import { VerifiedMediaFile } from "api";
+import { RICH_TEXT_EDITOR_KEYS } from "ui/control/richtexteditor/rich-text-editor-keys";
 
 export interface RichTextEditorCommandsInterface {
     enableHeading: boolean;
@@ -119,5 +121,52 @@ export const RichTextEditorCommandsContext = createContext<RichTextEditorCommand
     embedImage: () => {},
 });
 
-export const useRichTextEditorCommands = (): RichTextEditorCommandsInterface =>
-    useContext(RichTextEditorCommandsContext);
+type RichTextEditorCommands = RichTextEditorCommandsInterface & {
+    handleHotKeys: (event: React.KeyboardEvent) => boolean;
+}
+
+export function useRichTextEditorCommands(): RichTextEditorCommands {
+    const context = useContext(RichTextEditorCommandsContext);
+    
+    const handleHotKeys = (event: React.KeyboardEvent) => {
+        if (event.ctrlKey && !event.altKey && !event.metaKey) {
+            if (RICH_TEXT_EDITOR_KEYS.BOLD.check(event)) {
+                context.formatBold();
+                return true;
+            } else if (RICH_TEXT_EDITOR_KEYS.ITALIC.check(event)) {
+                context.formatItalic();
+                return true;
+            } else if (RICH_TEXT_EDITOR_KEYS.STRIKEOUT.check(event)) {
+                context.formatStrikeout();
+                return true;
+            } else if (RICH_TEXT_EDITOR_KEYS.LINK.check(event)) {
+                context.formatLink();
+                return true;
+            } else if (context.supportsComplexBlocks && RICH_TEXT_EDITOR_KEYS.BLOCKQUOTE.check(event)) {
+                context.formatBlockquote();
+                return true;
+            } else if (context.supportsComplexBlocks && RICH_TEXT_EDITOR_KEYS.BLOCKUNQUOTE.check(event)) {
+                context.formatBlockunquote();
+                return true;
+            } else if (context.supportsComplexBlocks && RICH_TEXT_EDITOR_KEYS.HORIZONTAL_RULE.check(event)) {
+                context.formatHorizontalRule();
+                return true;
+            } else if (RICH_TEXT_EDITOR_KEYS.CODE.check(event)) {
+                context.formatCode();
+                return true;
+            } else if (RICH_TEXT_EDITOR_KEYS.MARK.check(event)) {
+                context.formatMark();
+                return true;
+            } else if (context.supportsClear && RICH_TEXT_EDITOR_KEYS.CLEAR.check(event)) {
+                context.formatClear();
+                return true;
+            }
+        }
+        return false;
+    };
+
+    return {
+        ...context,
+        handleHotKeys
+    };
+}

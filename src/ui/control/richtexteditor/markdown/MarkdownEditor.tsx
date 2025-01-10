@@ -26,7 +26,6 @@ export function MarkdownEditor({
     commentQuote, noPanel, noComplexBlocks, noEmbeddedMedia, noMedia, format, submitKey, onSubmit, onChange, onBlur,
     onUrls, children
 }: MarkdownEditorProps) {
-    const panel = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
 
     // useCallback() is mandatory here
@@ -66,7 +65,6 @@ export function MarkdownEditor({
                 onBlur={onBlur}
                 onUrls={onUrls}
                 ref={textArea}
-                panel={panel}
             />
             {!noMedia &&
                 <RichTextEditorDropzone value={value} hiding={noPanel} nodeName={nodeName}/>

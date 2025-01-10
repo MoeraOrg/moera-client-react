@@ -6,7 +6,6 @@ import isHotkey from 'is-hotkey';
 import { UI_EVENT_COMMENT_QUOTE, UiEventCommentQuote } from "state/detailedposting/events";
 import * as Browser from "ui/browser";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
-import { RICH_TEXT_EDITOR_KEYS } from "ui/control/richtexteditor/rich-text-editor-keys";
 import { safeImportScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
 import VisualRenderLeaf from "ui/control/richtexteditor/visual/VisualRenderLeaf";
@@ -49,8 +48,7 @@ export default function VisualTextArea({
     const textArea = React.useRef<HTMLDivElement>(null);
     const {
         inBlockquote, inList, headingLevel, inVoid, inCodeBlock, inFormula, inImageEmbedded, inImageAttached,
-        formatBold, formatItalic, formatStrikeout, formatLink, formatMention, formatBlockquote, formatBlockunquote,
-        formatHorizontalRule, formatCode, formatFormula, formatMark, formatClear, formatImage,
+        formatMention, formatFormula, formatImage, handleHotKeys,
     } = useRichTextEditorCommands();
 
     const [isSubmitKey, isHardEnter, isSoftEnter] = useMemo(() => {
@@ -200,38 +198,8 @@ export default function VisualTextArea({
             }
         }
 
-        if (event.ctrlKey && !event.altKey && !event.metaKey) {
-            if (RICH_TEXT_EDITOR_KEYS.BOLD.check(event)) {
-                formatBold();
-                event.preventDefault();
-            } else if (RICH_TEXT_EDITOR_KEYS.ITALIC.check(event)) {
-                formatItalic();
-                event.preventDefault();
-            } else if (RICH_TEXT_EDITOR_KEYS.STRIKEOUT.check(event)) {
-                formatStrikeout();
-                event.preventDefault();
-            } else if (RICH_TEXT_EDITOR_KEYS.LINK.check(event)) {
-                formatLink();
-                event.preventDefault();
-            } else if (RICH_TEXT_EDITOR_KEYS.BLOCKQUOTE.check(event)) {
-                formatBlockquote();
-                event.preventDefault();
-            } else if (RICH_TEXT_EDITOR_KEYS.BLOCKUNQUOTE.check(event)) {
-                formatBlockunquote();
-                event.preventDefault();
-            } else if (RICH_TEXT_EDITOR_KEYS.HORIZONTAL_RULE.check(event)) {
-                formatHorizontalRule();
-                event.preventDefault();
-            } else if (RICH_TEXT_EDITOR_KEYS.CODE.check(event)) {
-                formatCode();
-                event.preventDefault();
-            } else if (RICH_TEXT_EDITOR_KEYS.MARK.check(event)) {
-                formatMark();
-                event.preventDefault();
-            } else if (RICH_TEXT_EDITOR_KEYS.CLEAR.check(event)) {
-                formatClear();
-                event.preventDefault();
-            }
+        if (handleHotKeys(event)) {
+            event.preventDefault();
         }
 
         if (textArea.current != null) {

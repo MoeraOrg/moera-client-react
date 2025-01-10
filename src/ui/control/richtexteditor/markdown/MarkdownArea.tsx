@@ -2,7 +2,6 @@ import React, { ForwardedRef, forwardRef, useCallback, useEffect, useRef, useSta
 import { useDispatch, useSelector } from 'react-redux';
 import composeRefs from '@seznam/compose-react-refs';
 import { useTranslation } from 'react-i18next';
-import isHotkey from 'is-hotkey';
 
 import { CLIENT_SETTINGS_PREFIX, SourceFormat } from "api";
 import { ClientState } from "state/state";
@@ -11,6 +10,7 @@ import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
 import * as Browser from "ui/browser";
 import { TextareaAutosize } from "ui/control";
+import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import MarkdownPasteDialog, { RichTextPasteMode } from "ui/control/richtexteditor/markdown/MarkdownPasteDialog";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
@@ -40,18 +40,18 @@ export interface MarkdownAreaProps {
     onChange?: (event: React.FormEvent) => void;
     onBlur?: (event: React.FocusEvent) => void;
     onUrls?: (urls: string[]) => void;
-    panel: React.RefObject<HTMLDivElement>;
 }
 
 function MarkdownArea(
     {
         name, value, format, className, autoFocus, autoComplete, minHeight, maxHeight, placeholder, rows = 3, disabled,
-        smileysEnabled, commentQuote, submitKey, onSubmit, onChange, onBlur, onUrls, panel
+        smileysEnabled, commentQuote, submitKey, onSubmit, onChange, onBlur, onUrls,
     }: MarkdownAreaProps,
     ref: ForwardedRef<HTMLTextAreaElement>
 ) {
     const pasteRich = useSelector((state: ClientState) => getSetting(state, "rich-text-editor.paste-rich") as string);
     const dispatch = useDispatch();
+    const {formatMention, handleHotKeys} = useRichTextEditorCommands();
     const {pasteImage} = useRichTextEditorMedia();
 
     const textArea = useRef<HTMLTextAreaElement>(null);
@@ -230,36 +230,16 @@ function MarkdownArea(
                 delayedUpdateUrls();
             }
         }
-        if (
-            panel.current != null && anyInput.current && value.length >= start
-            && MENTION_START.test(value.substring(0, start))
-        ) {
-            const button = panel.current.querySelector("button.mention") as HTMLButtonElement;
-            if (!button) {
-                return false;
-            }
-            button.click();
+        if (anyInput.current && value.length >= start && MENTION_START.test(value.substring(0, start))) {
+            formatMention(true);
         }
         if (onChange) {
             onChange(event);
         }
     }
 
-    const onHotkey = (event: React.KeyboardEvent) => {
-        if (!panel.current) {
-            return false;
-        }
-        for (const button of panel.current.querySelectorAll("button[data-hotkey]") as NodeListOf<HTMLButtonElement>) {
-            if (isHotkey(button.getAttribute("data-hotkey")!.replace("Ctrl-", "Mod+"))(event)) {
-                button.click();
-                return true;
-            }
-        }
-        return false;
-    }
-
     const onKeyDownHandler = (event: React.KeyboardEvent) => {
-        if (onHotkey(event)) {
+        if (handleHotKeys(event)) {
             event.preventDefault();
             return;
         }
