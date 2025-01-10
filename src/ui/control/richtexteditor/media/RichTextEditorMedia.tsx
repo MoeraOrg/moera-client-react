@@ -97,7 +97,7 @@ export default function RichTextEditorMedia({
     }
 
     const uploadImages = (
-        files: File[], compress: boolean, description: RichTextValue | undefined, onInsert?: OnInsertHandler,
+        files: File[], compress: boolean, description?: RichTextValue, onInsert?: OnInsertHandler,
         standardSize?: RichTextImageStandardSize, customWidth?: number | null, customHeight?: number | null,
         caption?: string
     ) => {
@@ -118,6 +118,11 @@ export default function RichTextEditorMedia({
     const onInsertRef = useRef<OnInsertHandler | undefined>();
 
     const openUploadImages = (files: File[]) => {
+        if (forceCompress && onInsertRef.current == null && files.length > 0) {
+            uploadImages(files, true);
+            return;
+        }
+
         showImageDialog(
             true,
             files,
