@@ -118,6 +118,7 @@ export function withScripture<T extends DOMEditor>(
                 createLinkElement(m[2], [createScriptureText(m[2])]),
                 createScriptureText(m[3] || " ")
             ]);
+            return true;
         }
 
         const html = text.replace(/\s*\n\s*\n\s*/g, "<p>").replace(/\s*\n\s*/g, "<br>");
