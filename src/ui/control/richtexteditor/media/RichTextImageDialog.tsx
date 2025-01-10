@@ -39,7 +39,9 @@ type Props = {
     compressDefault?: boolean;
     descriptionSrcFormat?: SourceFormat;
     smileysEnabled?: boolean;
-} & RichTextEditorDialogBodyProps<RichTextEditorDialogProps<RichTextImageValues>, RichTextImageValues>;
+} & RichTextEditorDialogProps<RichTextImageValues>;
+
+type BodyProps = RichTextEditorDialogBodyProps<Props>;
 
 const mapPropsToValues = (props: Props): RichTextImageValues => ({
     files: props.files != null ? [...props.files] : null,
@@ -56,7 +58,7 @@ const mapPropsToValues = (props: Props): RichTextImageValues => ({
 function RichTextImageDialog({
     mediaFiles, insert, nodeName = REL_CURRENT, forceCompress, descriptionSrcFormat, smileysEnabled, onSubmit,
     okButtonRef
-}: Props) {
+}: BodyProps) {
     const [, {value: files}, {setValue: setFiles}] = useField<File[] | null>("files");
     const [, {value: standardSize}] = useField<RichTextImageStandardSize>("standardSize");
     const {submitForm} = useFormikContext<RichTextImageValues>();

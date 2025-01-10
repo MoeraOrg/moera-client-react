@@ -11,14 +11,14 @@ export interface RichTextEditorDialogProps<V> {
     onSubmit: RichTextEditorDialogSubmit<V>;
 }
 
-export type RichTextEditorDialogBodyProps<P extends RichTextEditorDialogProps<V>, V extends FormikValues> = P & {
+export type RichTextEditorDialogBodyProps<P> = P & {
     okButtonRef: React.RefObject<HTMLButtonElement>
 };
 
 export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V extends FormikValues>(
     title: string,
     mapPropsToValues: (props: P) => V,
-    DialogBody: React.ComponentType<RichTextEditorDialogBodyProps<P, V>>
+    DialogBody: React.ComponentType<RichTextEditorDialogBodyProps<P>>
 ) {
     const logic = {
         mapPropsToValues,
