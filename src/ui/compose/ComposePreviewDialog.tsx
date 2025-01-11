@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { composePreviewClose } from "state/compose/actions";
-import { getFeedWidth } from "state/settings/selectors";
 import { Button, ModalDialog } from "ui/control";
 import DraftOwner from "ui/draft/DraftOwner";
 import DraftSubject from "ui/draft/DraftSubject";
@@ -15,15 +14,13 @@ import "./ComposePreviewDialog.css";
 
 export default function ComposePreviewDialog() {
     const draft = useSelector((state: ClientState) => state.compose.draft ?? state.compose.posting);
-    const feedWidth = useSelector(getFeedWidth);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const onClose = () => dispatch(composePreviewClose());
 
     return (
-        <ModalDialog className="compose-preview-dialog" style={{"--feed-width": feedWidth + "px"}}
-                     title={t("post-preview")} onClose={onClose}>
+        <ModalDialog className="compose-preview-dialog" size="feed" title={t("post-preview")} onClose={onClose}>
             <div className="modal-body">
                 {draft &&
                     <div className="posting entry">

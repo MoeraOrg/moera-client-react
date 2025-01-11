@@ -1,7 +1,3 @@
-.modal-dialog.compose-preview-dialog {
-    max-width: var(--feed-width);
-}
-
 .compose-preview-dialog .modal-children {
     max-height: unset;
 }

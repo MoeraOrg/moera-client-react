@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import * as ReactDOM from 'react-dom';
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
 
+import { getFeedWidth } from "state/settings/selectors";
 import { CloseButton, Loading, ModalDialogContext } from "ui/control";
 import { useOverlay } from "ui/overlays/overlays";
 import "./ModalDialog.css";
@@ -10,7 +12,6 @@ interface Props {
     title?: string;
     size?: string;
     className?: string;
-    style?: Partial<Record<string, string>>;
     centered?: boolean;
     shadowClick?: boolean;
     loading?: boolean;
@@ -21,9 +22,9 @@ interface Props {
 }
 
 export function ModalDialog({
-    title, size, className, style, centered = true, shadowClick = true, loading, parentOverlayId, onClose, onKeyDown,
-    children
+    title, size, className, centered = true, shadowClick = true, loading, parentOverlayId, onClose, onKeyDown, children
 }: Props) {
+    const feedWidth = useSelector(getFeedWidth);
     const modalDialog = useRef<HTMLDivElement>(null);
     const [zIndex, overlayId]
         = useOverlay(modalDialog, {parentId: parentOverlayId, closeOnClick: shadowClick, onClose});
@@ -48,7 +49,8 @@ export function ModalDialog({
                         "modal-dialog-centered": centered,
                         [`modal-${size}`]: !!size
                     }
-                )} style={style}>
+                // @ts-ignore
+                )} style={{"--feed-width": feedWidth + "px"}}>
                     <div className="modal-content" ref={modalDialog}>
                         {loading && <Loading overlay large/>}
                         {title &&

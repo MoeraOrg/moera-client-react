@@ -1,7 +1,3 @@
-.modal-dialog.source-dialog {
-    max-width: var(--feed-width);
-}
-
 .source-dialog TEXTAREA {
     height: calc(100vh - 20rem);
 }

@@ -74,7 +74,7 @@ function CommentDialogInner(props: Props) {
     const {unsaved, saving, saved} = useCommentDraftSaver(commentId);
 
     return (
-        <ModalDialog title={t("edit-comment")} className="comment-dialog" loading={loading}
+        <ModalDialog title={t("edit-comment")} className="comment-dialog" size="feed" loading={loading}
                      onClose={() => dispatch(closeCommentDialog())}>
             {conflict &&
                 <ConflictWarning text={t("comment-edited-conflict")}
