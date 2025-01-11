@@ -2,12 +2,14 @@ import {
     BaseEditor,
     BaseElement,
     BaseOperation,
-    BasePoint, Descendant,
+    BasePoint,
+    Descendant,
     Element as SlateElement,
     Node as SlateNode,
     NodeEntry,
     Operation,
     Path,
+    Range,
     Text as SlateText,
     Transforms
 } from 'slate';
@@ -78,7 +80,7 @@ export type ScriptureEditor<T extends DOMEditor> = T & {
 export function withScripture<T extends DOMEditor>(
     editor: T, pasteImage: (data: DataTransfer) => boolean
 ): ScriptureEditor<T> {
-    const {isInline, isVoid, insertData, insertFragmentData, normalizeNode, apply} = editor;
+    const {isInline, isVoid, insertData, insertFragmentData, insertText, normalizeNode, apply} = editor;
 
     const scriptureEditor = editor as ScriptureEditor<T>;
 
@@ -126,6 +128,14 @@ export function withScripture<T extends DOMEditor>(
 
         return true;
     };
+
+    scriptureEditor.insertText = (text: string): void => {
+        insertText(text);
+        if (text.endsWith(" ") && editor.selection != null && Range.isCollapsed(editor.selection)) {
+            const point = editor.selection.anchor;
+            scriptureReplaceUrl(editor, point);
+        }
+    }
 
     scriptureEditor.normalizeNode = (entry: NodeEntry, options?: { operation?: Operation }) => {
         const [node, path] = entry;
@@ -272,6 +282,9 @@ export function scriptureReplaceUrl(editor: BaseEditor, beforePoint: BasePoint):
         if (!isScriptureText(textNode)) {
             return;
         }
+        if (findWrappingElement(editor, "link", {at: beforePoint.path}) != null) {
+            return;
+        }
     } catch (e) {
         return;
     }
@@ -282,8 +295,14 @@ export function scriptureReplaceUrl(editor: BaseEditor, beforePoint: BasePoint):
         return;
     }
     const at = {path: beforePoint.path, offset: m.index};
-    Transforms.delete(editor, {at, distance: m[1].length, unit: "character"});
-    editor.insertNode(createLinkElement(m[1], [createScriptureText(m[1])]), {at});
+    editor.withoutNormalizing(() => {
+        Transforms.delete(editor, {at, distance: m[1].length, unit: "character"});
+        editor.insertFragment([
+            createScriptureText(""),
+            createLinkElement(m[1], [createScriptureText(m[1])]),
+            createScriptureText("")
+        ], {at});
+    });
 }
 
 export function isScriptureEmpty(scripture: Descendant[] | null | undefined): boolean {

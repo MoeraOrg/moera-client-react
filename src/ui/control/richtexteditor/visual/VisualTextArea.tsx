@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Node, Path, Range } from 'slate';
 import { Editable, ReactEditor, useSlateStatic } from 'slate-react';
 import isHotkey from 'is-hotkey';
@@ -45,7 +45,7 @@ export default function VisualTextArea({
     onSubmit, onBlur
 }: VisualTextAreaProps) {
     const editor = useSlateStatic() as ReactEditor;
-    const textArea = React.useRef<HTMLDivElement>(null);
+    const textArea = useRef<HTMLDivElement>(null);
     const {
         inBlockquote, inList, headingLevel, inVoid, inCodeBlock, inFormula, inImageEmbedded, inImageAttached,
         formatMention, formatFormula, formatImage, handleHotKeys,
