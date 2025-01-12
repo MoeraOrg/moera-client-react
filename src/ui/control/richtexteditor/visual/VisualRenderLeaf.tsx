@@ -2,6 +2,10 @@ import { RenderLeafProps } from 'slate-react';
 import { ScriptureText } from "ui/control/richtexteditor/visual/scripture";
 
 export default function VisualRenderLeaf(props: RenderLeafProps) {
+    if ("placeholder" in props.leaf) {
+        return <span {...props.attributes}>{props.children}</span>;
+    }
+
     const leaf: ScriptureText = props.leaf;
 
     return (
