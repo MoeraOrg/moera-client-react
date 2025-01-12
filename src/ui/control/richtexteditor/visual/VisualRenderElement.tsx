@@ -5,9 +5,10 @@ import { DefaultElement, RenderElementProps } from 'slate-react';
 
 import { getNodeRootPage } from "state/node/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
-import { isScriptureElement } from "ui/control/richtexteditor/visual/scripture";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { getImageDimensions } from "ui/control/richtexteditor/media/rich-text-image";
+import { isScriptureElement } from "ui/control/richtexteditor/visual/scripture";
+import OpenLink from "ui/control/richtexteditor/visual/OpenLink";
 import PreloadedImage from "ui/posting/PreloadedImage";
 import { BlockMath, InlineMath } from "ui/katex";
 import { mediaImageTagAttributes } from "util/media-images";
@@ -29,7 +30,11 @@ export default function VisualRenderElement(props: RenderElementProps) {
             case "paragraph":
                 return <p {...attributes}>{children}</p>;
             case "link":
-                return <a href={element.href} {...attributes}>{children}</a>;
+                return (
+                    <a href={element.href} {...attributes}>
+                        {children}<OpenLink href={element.href}/>
+                    </a>
+                );
             case "spoiler":
                 return <span className="spoiler" {...attributes}>{children}</span>;
             case "spoiler-block":

@@ -1,0 +1,9 @@
+.open-link {
+    position: relative;
+    top: -.1rem;
+    margin-inline-start: .25rem;
+    border: 0;
+    padding: 0;
+    background: none;
+    color: var(--bs-link-color);
+}

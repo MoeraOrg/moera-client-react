@@ -462,6 +462,7 @@
   "only-selected-allowed": "Разрешены только выбранные",
   "only-selected-allowed-star-preferred": "Разрешены только выбранные, а отмеченные <0/> предпочтительны",
   "open": "Открыть",
+  "open-link": "Открыть ссылку",
   "operation-at": "в",
   "operation-status": {
     "added": "Операция добавлена",

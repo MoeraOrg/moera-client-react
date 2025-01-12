@@ -33,6 +33,7 @@ import { ReactComponent as msKeyboardArrowDown } from "ui/material-symbols/keybo
 import { ReactComponent as msMediaLink } from "ui/material-symbols/media_link.isvg";
 import { ReactComponent as msMoreHoriz } from "ui/material-symbols/more_horiz.isvg";
 import { ReactComponent as msMoreVert } from "ui/material-symbols/more_vert.isvg";
+import { ReactComponent as msOpenInNew } from "ui/material-symbols/open_in_new.isvg";
 import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_library.isvg";
 import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
 import { ReactComponent as msSatellite } from "ui/material-symbols/satellite.isvg";
@@ -78,6 +79,7 @@ export {
     msMediaLink,
     msMoreHoriz,
     msMoreVert,
+    msOpenInNew,
     msPhotoLibrary,
     msReport,
     msSatellite,

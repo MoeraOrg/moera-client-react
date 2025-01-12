@@ -462,6 +462,7 @@
   "only-selected-allowed": "Дозволені лише обрані",
   "only-selected-allowed-star-preferred": "Дозволені лише обрані, а зазначені <0/> мають перевагу",
   "open": "Відкрити",
+  "open-link": "Відкрити посилання",
   "operation-at": "у",
   "operation-status": {
     "added": "Операцію додано",

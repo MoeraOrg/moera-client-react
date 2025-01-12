@@ -462,6 +462,7 @@
   "only-selected-allowed": "Only selected are allowed",
   "only-selected-allowed-star-preferred": "Only selected are allowed, marked by <0/> are preferred",
   "open": "Open",
+  "open-link": "Open link",
   "operation-at": "at",
   "operation-status": {
     "added": "Operation has been added",
