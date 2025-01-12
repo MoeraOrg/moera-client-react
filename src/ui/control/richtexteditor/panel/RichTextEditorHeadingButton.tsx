@@ -13,9 +13,13 @@ export default function RichTextEditorHeadingButton({onSelect}: Props) {
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
     } = useButtonPopper("bottom", {closeOnSelect: false});
-
     const {enableHeading, headingLevel, focus} = useRichTextEditorCommands();
     const {t} = useTranslation();
+
+    const onClick = (event: React.MouseEvent) => {
+        focus();
+        onToggle(event);
+    }
 
     const onItemSelect = (headingLevel: number) => {
         onSelect && onSelect(headingLevel);
@@ -26,7 +30,7 @@ export default function RichTextEditorHeadingButton({onSelect}: Props) {
     return (
         <>
             <button className="rich-text-editor-button selector dropdown-toggle ps-3 pe-3" disabled={!enableHeading}
-                    onClick={onToggle} ref={setButtonRef}>
+                    onClick={onClick} ref={setButtonRef}>
                 <span className="text">{headingTitle(headingLevel, t)}</span>
             </button>
             {visible &&

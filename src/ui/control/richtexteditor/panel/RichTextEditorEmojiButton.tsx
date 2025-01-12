@@ -4,9 +4,10 @@ import EmojiPicker from '@emoji-mart/react';
 import emojiData from '@emoji-mart/data';
 import i18n from 'i18next';
 
-import { msSentimentSatisfied } from "ui/material-symbols";
-import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEditorButton";
 import { useButtonPopper } from "ui/hook";
+import { msSentimentSatisfied } from "ui/material-symbols";
+import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
+import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEditorButton";
 
 interface Props {
     iconSize?: number;
@@ -18,8 +19,13 @@ export default function RichTextEditorEmojiButton({iconSize, onSelect}: Props) {
         visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
         placement, zIndex
     } = useButtonPopper("bottom", {closeOnSelect: false});
-
+    const {focus} = useRichTextEditorCommands();
     const {t} = useTranslation();
+
+    const onClick = (event: React.MouseEvent) => {
+        focus();
+        onToggle(event);
+    }
 
     const onEmojiSelect = (data: any) => {
         onSelect && onSelect(data.native);
@@ -29,7 +35,7 @@ export default function RichTextEditorEmojiButton({iconSize, onSelect}: Props) {
     return (
         <>
             <RichTextEditorButton ref={setButtonRef} icon={msSentimentSatisfied} iconSize={iconSize} title={t("emoji")}
-                                  onClick={onToggle}/>
+                                  onClick={onClick}/>
             {visible &&
                 <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                      className={`fade popover bs-popover-${placement} shadow-sm show`}>

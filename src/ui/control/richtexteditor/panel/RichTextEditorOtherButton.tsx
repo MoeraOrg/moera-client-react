@@ -26,10 +26,15 @@ export default function RichTextEditorOtherButton() {
     const {
         supportsComplexBlocks, supportsEmbeddedMedia,
         inFold, inCode, inSubscript, inSuperscript, inCodeBlock, inFormula, inMark, inImageEmbedded,
-        formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula, formatMark,
-        formatImage
+        focus, formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock, formatFormula, formatMark,
+        formatImage,
     } = useRichTextEditorCommands();
     const {t} = useTranslation();
+
+    const onClick = (event: React.MouseEvent) => {
+        focus();
+        onToggle(event);
+    }
 
     const onCommand = (command?: () => void) => () => {
         command && command();
@@ -38,7 +43,7 @@ export default function RichTextEditorOtherButton() {
 
     return (
         <>
-            <RichTextEditorButton ref={setButtonRef} icon={msMoreHoriz} title={t("more")} onClick={onToggle}/>
+            <RichTextEditorButton ref={setButtonRef} icon={msMoreHoriz} title={t("more")} onClick={onClick}/>
             {visible &&
                 <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                      className={`fade popover bs-popover-${placement} shadow-sm show`}>
