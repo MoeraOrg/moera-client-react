@@ -5,7 +5,12 @@ import { useTranslation } from 'react-i18next';
 
 import { PostingFeatures, SourceFormat } from "api";
 import { FormGroup } from "ui/control";
-import { RichTextEditor, RichTextLinkPreviews, RichTextValue } from "ui/control/richtexteditor";
+import {
+    RichTextEditor,
+    RichTextEditorPanelMode,
+    RichTextLinkPreviews,
+    RichTextValue
+} from "ui/control/richtexteditor";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import FieldError from "ui/control/field/FieldError";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
@@ -34,8 +39,7 @@ interface Props {
     defaultValue?: RichTextValue;
     smileysEnabled?: boolean;
     commentQuote?: boolean;
-    noPanel?: boolean;
-    shortPanel?: boolean;
+    panelMode?: RichTextEditorPanelMode;
     format: SourceFormat;
     submitKey?: string;
     onSubmit?: () => void;
@@ -48,8 +52,8 @@ interface Props {
 export function RichTextField({
     name, title, rows = 3, minHeight, maxHeight, features, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo,
     nodeName = REL_CURRENT, forceImageCompress, placeholder, autoFocus, anyValue, className, autoComplete,
-    noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled, commentQuote, noPanel, shortPanel,
-    format, submitKey, onSubmit, urlsField, linkPreviewsField, linkPreviewsSmall, children
+    noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled, commentQuote, panelMode, format,
+    submitKey, onSubmit, urlsField, linkPreviewsField, linkPreviewsSmall, children
 }: Props) {
     const [{value, onBlur}, {touched, error}, {setTouched}, {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
@@ -98,8 +102,7 @@ export function RichTextField({
                     disabled={disabled}
                     smileysEnabled={smileysEnabled}
                     commentQuote={commentQuote}
-                    noPanel={noPanel}
-                    shortPanel={shortPanel}
+                    panelMode={panelMode}
                     format={format}
                     submitKey={submitKey}
                     onSubmit={onSubmit}

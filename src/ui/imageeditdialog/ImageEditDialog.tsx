@@ -70,7 +70,6 @@ function ImageEditDialogInner(props: Props) {
                         format={posting?.bodySrcFormat || "markdown"}
                         maxHeight="14em"
                         smileysEnabled={smileysEnabled}
-                        shortPanel
                         noComplexBlocks
                         noEmbeddedMedia
                         noMedia

@@ -28,6 +28,8 @@ import RichTextEditorEmojiButton from "ui/control/richtexteditor/panel/RichTextE
 import RichTextEditorOtherButton from "ui/control/richtexteditor/panel/RichTextEditorOtherButton";
 import "./RichTextEditorPanel.css";
 
+export type RichTextEditorPanelMode = "float" | "bottom" | "none";
+
 export default function RichTextEditorPanel() {
     const {
         supportsComplexBlocks, supportsEmbeddedMedia, supportsMedia, supportsVideo, supportsClear,

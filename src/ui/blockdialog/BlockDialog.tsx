@@ -129,7 +129,7 @@ function BlockDialogInner({entryNodeName}: Props) {
                             }
                             <details open={values.reasonOpen}>
                                 <summary>{t("blocking-reason")}</summary>
-                                <RichTextField name="reason" format="markdown" anyValue noMedia shortPanel/>
+                                <RichTextField name="reason" format="markdown" anyValue noMedia panelMode="bottom"/>
                             </details>
                         </>
                     }

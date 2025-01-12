@@ -78,7 +78,7 @@ function CommentCompose(props: Props) {
                         disabled={!ready || beingPosted}
                         smileysEnabled={smileysEnabled}
                         commentQuote
-                        noPanel
+                        panelMode="none"
                         format={sourceFormatDefault}
                         submitKey={submitKey}
                         onSubmit={() => submitForm()}
