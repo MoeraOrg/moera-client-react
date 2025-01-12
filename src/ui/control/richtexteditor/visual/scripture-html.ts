@@ -630,7 +630,7 @@ function normalizeInlines(nodes: Descendant[], prohibited: ScriptureElementType[
     return output;
 }
 
-const isSignificant = (nodes: Descendant[]): boolean =>
+export const isSignificant = (nodes: Descendant[]): boolean =>
     nodes.some(d => isScriptureElement(d) || (isScriptureText(d) && d.text.trim().length > 0));
 
 

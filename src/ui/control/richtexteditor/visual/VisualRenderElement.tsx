@@ -12,6 +12,7 @@ import OpenLink from "ui/control/richtexteditor/visual/OpenLink";
 import PreloadedImage from "ui/posting/PreloadedImage";
 import { BlockMath, InlineMath } from "ui/katex";
 import { mediaImageTagAttributes } from "util/media-images";
+import { isSignificant } from "ui/control/richtexteditor/visual/scripture-html";
 
 export default function VisualRenderElement(props: RenderElementProps) {
     const {element, attributes, children} = props;
@@ -32,7 +33,7 @@ export default function VisualRenderElement(props: RenderElementProps) {
             case "link":
                 return (
                     <a href={element.href} {...attributes}>
-                        {children}<OpenLink href={element.href}/>
+                        {children}{isSignificant(element.children) && <OpenLink href={element.href}/>}
                     </a>
                 );
             case "spoiler":
