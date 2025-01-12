@@ -2,6 +2,7 @@ import React from 'react';
 import * as ReactDOM from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
+import * as Browser from "ui/browser";
 import { useButtonPopper } from "ui/hook";
 import {
     msAddLink,
@@ -44,7 +45,7 @@ export default function FormattingMenuButton({iconSize}: Props) {
 
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex, overlayId
-    } = useButtonPopper("top", {closeOnSelect: false});
+    } = useButtonPopper(Browser.isMobile() ? "bottom" : "top", {closeOnSelect: false});
     const {t} = useTranslation();
 
     const onClick = (event: React.MouseEvent) => {
