@@ -350,6 +350,12 @@ const META: ClientSettingMetaInfo[] = [
         modifiers: {}
     },
     {
+        name: "posting.reply.preamble-html",
+        type: "string",
+        defaultValue: "Reply to <a href=\"%POST%\">the post</a> by %USER%:",
+        modifiers: {}
+    },
+    {
         name: "posting.reply.quote-all",
         type: "bool",
         defaultValue: "true",
