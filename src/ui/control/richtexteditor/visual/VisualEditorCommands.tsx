@@ -215,7 +215,10 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
     }
 
     const formatHorizontalRule = () =>
-        editor.insertNode(createHorizontalRuleElement());
+        editor.insertFragment([
+            createHorizontalRuleElement(),
+            createParagraphElement([createScriptureText("")])
+        ]);
 
     const formatEmoji = (emoji: string) => {
         editor.insertText(emoji);
