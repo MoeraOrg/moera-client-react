@@ -3,9 +3,9 @@ import cx from 'classnames';
 
 import { Icon, MaterialSymbol } from "ui/material-symbols";
 import { useIsTinyScreen } from "ui/hook/media-query";
-import { useDropdownMenu } from "ui/control";
+import { useDropdownMenu } from "ui/control/index";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
-import "./FormattingMenuItem.css";
+import "ui/control/richtexteditor/formatting-menu/FormattingMenuItem.css";
 
 interface Props {
     icon: MaterialSymbol;

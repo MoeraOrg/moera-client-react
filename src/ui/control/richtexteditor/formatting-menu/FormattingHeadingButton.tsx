@@ -12,10 +12,10 @@ import {
     msFormatH5,
     msTitle
 } from "ui/material-symbols";
-import { useDropdownMenu } from "ui/control";
+import { useDropdownMenu } from "ui/control/index";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
-import FormattingSubmenuButton from "ui/comment/compose/FormattingSubmenuButton";
-import { FormattingMenuItem } from "ui/comment/compose/FormattingMenuItem";
+import FormattingSubmenuButton from "ui/control/richtexteditor/formatting-menu/FormattingSubmenuButton";
+import { FormattingMenuItem } from "ui/control/richtexteditor/formatting-menu/FormattingMenuItem";
 
 interface Props {
     onSelect?: (headingLevel: number) => void;

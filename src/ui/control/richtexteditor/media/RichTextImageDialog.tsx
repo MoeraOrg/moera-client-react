@@ -109,6 +109,7 @@ function RichTextImageDialog({
                     className="mt-3"
                     placeholder={t("description-optional")}
                     smileysEnabled={smileysEnabled}
+                    shortPanel
                     noComplexBlocks
                     noEmbeddedMedia
                     noMedia

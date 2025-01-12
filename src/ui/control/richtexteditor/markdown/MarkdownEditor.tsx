@@ -1,7 +1,9 @@
 import React, { ReactNode, useCallback, useRef } from 'react';
 
+import { useIsTinyScreen } from "ui/hook/media-query";
 import MarkdownEditorCommands from "ui/control/richtexteditor/markdown/MarkdownEditorCommands";
 import RichTextEditorPanel from "ui/control/richtexteditor/panel/RichTextEditorPanel";
+import RichTextEditorShortPanel from "ui/control/richtexteditor/formatting-menu/RichTextEditorShortPanel";
 import MarkdownArea, { MarkdownAreaProps } from "ui/control/richtexteditor/markdown/MarkdownArea";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import RichTextEditorDropzone from "ui/control/richtexteditor/media/RichTextEditorDropzone";
@@ -11,6 +13,7 @@ export type MarkdownEditorProps = {
     value: RichTextValue;
     nodeName: RelNodeName | string;
     noPanel?: boolean;
+    shortPanel?: boolean;
     noComplexBlocks?: boolean | null;
     noEmbeddedMedia?: boolean | null;
     noMedia?: boolean | null;
@@ -23,8 +26,8 @@ export type MarkdownEditorProps = {
 
 export function MarkdownEditor({
     name, value, nodeName, rows, minHeight, maxHeight, placeholder, autoFocus, autoComplete, disabled, smileysEnabled,
-    commentQuote, noPanel, noComplexBlocks, noEmbeddedMedia, noMedia, format, submitKey, onSubmit, onChange, onBlur,
-    onUrls, children
+    commentQuote, noPanel, shortPanel, noComplexBlocks, noEmbeddedMedia, noMedia, format, submitKey, onSubmit, onChange,
+    onBlur, onUrls, children
 }: MarkdownEditorProps) {
     const textArea = useRef<HTMLTextAreaElement>(null);
 
@@ -35,6 +38,10 @@ export function MarkdownEditor({
         }
     }, [onChange]);
 
+    const tinyScreen = useIsTinyScreen();
+
+    const shortPanelUsed = (shortPanel && !noComplexBlocks) || tinyScreen;
+
     return (
         <MarkdownEditorCommands
             format={format}
@@ -43,7 +50,7 @@ export function MarkdownEditor({
             noEmbeddedMedia={noEmbeddedMedia}
             noMedia={noMedia}
         >
-            {format !== "plain-text" && !noPanel &&
+            {format !== "plain-text" && !noPanel && !shortPanelUsed &&
                 <RichTextEditorPanel/>
             }
             <MarkdownArea
@@ -66,6 +73,9 @@ export function MarkdownEditor({
                 onUrls={onUrls}
                 ref={textArea}
             />
+            {!noPanel && shortPanelUsed &&
+                <RichTextEditorShortPanel/>
+            }
             {!noMedia &&
                 <RichTextEditorDropzone value={value} hiding={noPanel} nodeName={nodeName}/>
             }

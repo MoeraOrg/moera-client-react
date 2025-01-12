@@ -24,7 +24,7 @@ import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-tex
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEditorButton";
 import RichTextEditorEmojiButton from "ui/control/richtexteditor/panel/RichTextEditorEmojiButton";
-import CommentComposeFormattingMenu from "ui/comment/compose/CommentComposeFormattingMenu";
+import FormattingMenuButton from "ui/control/richtexteditor/formatting-menu/FormattingMenuButton";
 import { areImagesUploaded, areValuesEmpty, CommentComposeValues } from "ui/comment/compose/comment-compose";
 import { useCommentDraftSaver } from "ui/comment/compose/comment-draft-saver";
 import "./CommentComposePanel.css";
@@ -74,10 +74,12 @@ function CommentComposePanel() {
                 {!Browser.isMobile() &&
                     <RichTextEditorEmojiButton iconSize={20} onSelect={formatEmoji}/>
                 }
-                <CommentComposeFormattingMenu/>
+                <span className="formatting-menu-button">
+                    <FormattingMenuButton iconSize={20}/>
+                </span>
             </div>
             <div className="right-pane">
-                {ready &&
+            {ready &&
                     <span className="draft-status">
                         {!unsaved && saving && <Icon icon={msCloudUpload} width={20} height={20}/>}
                         {!unsaved && saved && <Icon icon={msCloudDone} width={20} height={20}/>}

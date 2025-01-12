@@ -16,6 +16,7 @@ type Props = {
     features: PostingFeatures | null;
     nodeName?: RelNodeName | string;
     forceImageCompress?: boolean;
+    shortPanel?: boolean;
     noComplexBlocks?: boolean | null;
     noEmbeddedMedia?: boolean | null;
     noMedia?: boolean | null;
@@ -27,7 +28,8 @@ type Props = {
 export function RichTextEditor({
     name, value, touched, features, rows, minHeight, maxHeight, placeholder, className, autoFocus, autoComplete,
     disabled, smileysEnabled = true, commentQuote, noPanel, format, nodeName = REL_CURRENT, forceImageCompress,
-    onChange, submitKey, onSubmit, onBlur, onUrls, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, children
+    shortPanel, onChange, submitKey, onSubmit, onBlur, onUrls, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo,
+    children
 }: Props) {
     const textRef = React.useRef<string | Scripture>();
     textRef.current = value.text;
@@ -71,6 +73,7 @@ export function RichTextEditor({
                             smileysEnabled={smileysEnabled}
                             commentQuote={commentQuote}
                             noPanel={noPanel}
+                            shortPanel={shortPanel}
                             noComplexBlocks={noComplexBlocks}
                             noEmbeddedMedia={noEmbeddedMedia}
                             noMedia={noMedia}
@@ -97,6 +100,7 @@ export function RichTextEditor({
                             smileysEnabled={smileysEnabled}
                             commentQuote={commentQuote}
                             noPanel={noPanel}
+                            shortPanel={shortPanel}
                             noComplexBlocks={noComplexBlocks}
                             noEmbeddedMedia={noEmbeddedMedia}
                             noMedia={noMedia}

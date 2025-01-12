@@ -75,6 +75,7 @@ function SheriffOrderDialogInner({target}: Props) {
                         format="plain-text"
                         anyValue
                         noMedia
+                        shortPanel
                     />
                     {!isSheriff &&
                         <div className="alert alert-warning">

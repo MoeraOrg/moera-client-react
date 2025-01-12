@@ -4,8 +4,10 @@ import { ReactEditor, Slate, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
 import deepEqual from 'react-fast-compare';
 
+import { useIsTinyScreen } from "ui/hook/media-query";
 import VisualEditorCommands from "ui/control/richtexteditor/visual/VisualEditorCommands";
 import RichTextEditorPanel from "ui/control/richtexteditor/panel/RichTextEditorPanel";
+import RichTextEditorShortPanel from "ui/control/richtexteditor/formatting-menu/RichTextEditorShortPanel";
 import VisualTextArea, { VisualTextAreaProps } from "ui/control/richtexteditor/visual/VisualTextArea";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { isLinkElement, Scripture } from "ui/control/richtexteditor/visual/scripture";
@@ -24,6 +26,7 @@ export type VisualEditorProps = {
     touched: boolean;
     nodeName: RelNodeName | string;
     noPanel?: boolean;
+    shortPanel?: boolean;
     noComplexBlocks?: boolean | null;
     noEmbeddedMedia?: boolean | null;
     noMedia?: boolean | null;
@@ -37,8 +40,8 @@ export type VisualEditorProps = {
 
 export default function VisualEditor({
     name, value, touched, nodeName, rows, minHeight, maxHeight, placeholder, autoFocus, disabled, smileysEnabled,
-    commentQuote, noPanel, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, onChange, submitKey, onSubmit, onUrls,
-    onBlur, children
+    commentQuote, noPanel, shortPanel, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, onChange, submitKey,
+    onSubmit, onUrls, onBlur, children
 }: VisualEditorProps) {
     const {pasteImage} = useRichTextEditorMedia();
     const [editor] = useState(
@@ -111,6 +114,10 @@ export default function VisualEditor({
         }
     }, [onChange]);
 
+    const tinyScreen = useIsTinyScreen();
+
+    const shortPanelUsed = (shortPanel && !noComplexBlocks) || tinyScreen;
+
     return (
         <Slate
             editor={editor}
@@ -123,7 +130,7 @@ export default function VisualEditor({
                 noMedia={noMedia}
                 noVideo={noVideo}
             >
-                {!noPanel &&
+                {!noPanel && !shortPanelUsed &&
                     <RichTextEditorPanel/>
                 }
                 <VisualTextArea
@@ -140,6 +147,9 @@ export default function VisualEditor({
                     onSubmit={onSubmit}
                     onBlur={onBlur}
                 />
+                {!noPanel && shortPanelUsed &&
+                    <RichTextEditorShortPanel/>
+                }
                 {!noMedia &&
                     <RichTextEditorDropzone value={value} hiding={noPanel} nodeName={nodeName}/>
                 }

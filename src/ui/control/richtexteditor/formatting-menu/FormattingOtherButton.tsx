@@ -15,8 +15,8 @@ import {
 } from "ui/material-symbols";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { RICH_TEXT_EDITOR_KEYS } from "ui/control/richtexteditor/rich-text-editor-keys";
-import { FormattingMenuItem } from "ui/comment/compose/FormattingMenuItem";
-import FormattingSubmenuButton from "ui/comment/compose/FormattingSubmenuButton";
+import { FormattingMenuItem } from "ui/control/richtexteditor/formatting-menu/FormattingMenuItem";
+import FormattingSubmenuButton from "ui/control/richtexteditor/formatting-menu/FormattingSubmenuButton";
 
 export default function FormattingOtherButton() {
     const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();

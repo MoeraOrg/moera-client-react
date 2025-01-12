@@ -1,4 +1,5 @@
 import React from 'react';
+import * as ReactDOM from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
 import { useButtonPopper } from "ui/hook";
@@ -23,12 +24,16 @@ import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-e
 import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEditorButton";
 import { RICH_TEXT_EDITOR_KEYS } from "ui/control/richtexteditor/rich-text-editor-keys";
 import { DropdownMenuContext } from "ui/control/dropdownmenu/dropdown-menu-types";
-import { FormattingMenuItem } from "ui/comment/compose/FormattingMenuItem";
-import FormattingHeadingButton from "ui/comment/compose/FormattingHeadingButton";
-import FormattingOtherButton from "ui/comment/compose/FormattingOtherButton";
-import "./CommentComposeFormattingMenu.css";
+import { FormattingMenuItem } from "ui/control/richtexteditor/formatting-menu/FormattingMenuItem";
+import FormattingHeadingButton from "ui/control/richtexteditor/formatting-menu/FormattingHeadingButton";
+import FormattingOtherButton from "ui/control/richtexteditor/formatting-menu/FormattingOtherButton";
+import "./FormattingMenuButton.css";
 
-export default function CommentComposeFormattingMenu() {
+interface Props {
+    iconSize?: number;
+}
+
+export default function FormattingMenuButton({iconSize}: Props) {
     const {
         supportsComplexBlocks, supportsClear,
         inBold, inItalic, inStrikeout, inSpoiler, inOrderedList, inUnorderedList, inList, inBlockquote, inMention,
@@ -49,11 +54,9 @@ export default function CommentComposeFormattingMenu() {
 
     return (
         <>
-            <span className="formatting-menu-button">
-                <RichTextEditorButton className="selector dropdown-toggle" icon={msFormatSize} iconSize={20}
-                                      title={t("text-formatting")} onClick={onClick} ref={setButtonRef}/>
-            </span>
-            {visible &&
+            <RichTextEditorButton className="selector dropdown-toggle" icon={msFormatSize} iconSize={iconSize}
+                                  title={t("text-formatting")} onClick={onClick} ref={setButtonRef}/>
+            {visible && ReactDOM.createPortal(
                 <DropdownMenuContext.Provider value={{hide, overlayId}}>
                     <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                          className={"fade formatting-menu dropdown-menu shadow-sm show"}>
@@ -115,8 +118,9 @@ export default function CommentComposeFormattingMenu() {
                             </>
                         }
                     </div>
-                </DropdownMenuContext.Provider>
-            }
+                </DropdownMenuContext.Provider>,
+                document.querySelector("#hovercard-root")!
+            )}
         </>
     );
 }

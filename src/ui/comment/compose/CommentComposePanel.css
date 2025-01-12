@@ -29,6 +29,20 @@
     background-color: var(--highlight-primary);
 }
 
+.comment-compose-panel .formatting-menu-button {
+    border: 1px solid var(--bs-gray-400);
+    border-radius: .25em;
+    padding: .15em;
+}
+
+.comment-compose-panel .formatting-menu-button:hover {
+    background-color: var(--highlight);
+}
+
+.comment-compose-panel .formatting-menu-button:hover .rich-text-editor-button {
+    background-color: transparent;
+}
+
 .comment-compose-panel .draft-status {
     color: var(--bs-gray-400);
     margin-inline-end: .5em;

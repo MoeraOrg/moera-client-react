@@ -35,6 +35,7 @@ interface Props {
     smileysEnabled?: boolean;
     commentQuote?: boolean;
     noPanel?: boolean;
+    shortPanel?: boolean;
     format: SourceFormat;
     submitKey?: string;
     onSubmit?: () => void;
@@ -47,8 +48,8 @@ interface Props {
 export function RichTextField({
     name, title, rows = 3, minHeight, maxHeight, features, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo,
     nodeName = REL_CURRENT, forceImageCompress, placeholder, autoFocus, anyValue, className, autoComplete,
-    noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled, commentQuote, noPanel, format,
-    submitKey, onSubmit, urlsField, linkPreviewsField, linkPreviewsSmall, children
+    noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled, commentQuote, noPanel, shortPanel,
+    format, submitKey, onSubmit, urlsField, linkPreviewsField, linkPreviewsSmall, children
 }: Props) {
     const [{value, onBlur}, {touched, error}, {setTouched}, {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
@@ -98,6 +99,7 @@ export function RichTextField({
                     smileysEnabled={smileysEnabled}
                     commentQuote={commentQuote}
                     noPanel={noPanel}
+                    shortPanel={shortPanel}
                     format={format}
                     submitKey={submitKey}
                     onSubmit={onSubmit}
