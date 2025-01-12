@@ -19,13 +19,19 @@
     margin-inline-start: .75em;
 }
 
-.comment-compose-panel .rich-text-editor-button.delete:hover {
+.comment-compose-panel .rich-text-editor-button.delete {
     color: var(--bs-danger);
+}
+
+.comment-compose-panel .rich-text-editor-button.delete:hover {
     background-color: var(--highlight-red);
 }
 
-.comment-compose-panel .rich-text-editor-button.submit:hover:not(:disabled) {
+.comment-compose-panel .rich-text-editor-button.submit:not(:disabled) {
     color: var(--bs-primary);
+}
+
+.comment-compose-panel .rich-text-editor-button.submit:hover:not(:disabled) {
     background-color: var(--highlight-primary);
 }
 
