@@ -5,3 +5,15 @@
 .nav.nav-tabs .nav-link.active {
     cursor: default;
 }
+
+@media only screen and (max-width: 575px) {
+    .nav.nav-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    .nav.nav-tabs .nav-item {
+        text-wrap: nowrap;
+    }
+}
