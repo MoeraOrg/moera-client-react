@@ -39,8 +39,9 @@ export default function FormattingMenuButton({iconSize}: Props) {
         supportsComplexBlocks, supportsClear,
         inBold, inItalic, inStrikeout, inSpoiler, inOrderedList, inUnorderedList, inList, inBlockquote, inMention,
         inLink,
-        focus, formatBold, formatItalic, formatStrikeout, formatSpoiler, formatList, formatIndent, formatBlockquote,
-        formatBlockunquote, formatHorizontalRule, formatMention, formatLink, formatClear, formatHeading
+        focus, resetSelection, formatBold, formatItalic, formatStrikeout, formatSpoiler, formatList, formatIndent,
+        formatBlockquote, formatBlockunquote, formatHorizontalRule, formatMention, formatLink, formatClear,
+        formatHeading
     } = useRichTextEditorCommands();
 
     const {
@@ -50,6 +51,7 @@ export default function FormattingMenuButton({iconSize}: Props) {
 
     const onClick = (event: React.MouseEvent) => {
         focus();
+        resetSelection();
         onToggle(event);
     }
 

@@ -114,6 +114,15 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
     const focus = () =>
         ReactEditor.focus(editor);
 
+    const resetSelection = () => {
+        if (editor.selection == null || Range.isCollapsed(editor.selection)) {
+            return;
+        }
+        const selection = editor.selection;
+        Transforms.collapse(editor);
+        Transforms.select(editor, selection);
+    }
+
     const formatBold = () =>
         editor.addMark("bold", !inBold);
 
@@ -579,7 +588,7 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
             inBold, inItalic, inStrikeout, inLink, inSpoilerInline, inSpoilerBlock, inSpoiler, inMention, inBlockquote,
             inList, inUnorderedList, inOrderedList, headingLevel, inVoid, inFold, inCode, inSubscript, inSuperscript,
             inCodeBlock, inFormula, inMark, inImageEmbedded, inImageAttached,
-            focus, formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention,
+            focus, resetSelection, formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention,
             formatHorizontalRule, formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent,
             formatHeading, formatVideo, formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock,
             formatFormula, formatMark, formatClear, formatImage, embedImage,

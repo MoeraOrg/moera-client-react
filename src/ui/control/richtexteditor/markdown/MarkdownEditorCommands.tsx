@@ -66,6 +66,20 @@ export default function MarkdownEditorCommands({
     const focus = () =>
         textArea.current?.focus();
 
+    const resetSelection = () => {
+        const selection = window.getSelection();
+        if (selection == null || selection.isCollapsed) {
+            return;
+        }
+
+        const ranges = [];
+        for (let i = 0; i < selection.rangeCount; i++) {
+            ranges.push(selection.getRangeAt(i).cloneRange());
+        }
+        selection.removeAllRanges();
+        ranges.forEach(range => selection.addRange(range));
+    }
+
     const formatBold = () => {
         if (textArea.current == null) {
             return;
@@ -424,7 +438,7 @@ export default function MarkdownEditorCommands({
             inList: false, inUnorderedList: false, inOrderedList: false, headingLevel: 0, inVoid: false, inFold: false,
             inCode: false, inSubscript: false, inSuperscript: false, inCodeBlock: false, inFormula: false,
             inMark: false, inImageEmbedded: false, inImageAttached: false,
-            focus, formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention,
+            focus, resetSelection, formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention,
             formatHorizontalRule, formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent,
             formatHeading, formatVideo, formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock,
             formatFormula, formatMark, formatClear, formatImage, embedImage,

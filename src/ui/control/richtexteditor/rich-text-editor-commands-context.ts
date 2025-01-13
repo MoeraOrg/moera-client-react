@@ -36,6 +36,7 @@ export interface RichTextEditorCommandsInterface {
     inImageAttached: boolean;
 
     focus: () => void;
+    resetSelection: () => void;
     formatBold: () => void;
     formatItalic: () => void;
     formatStrikeout: () => void;
@@ -95,6 +96,7 @@ export const RichTextEditorCommandsContext = createContext<RichTextEditorCommand
     inImageAttached: false,
 
     focus: () => {},
+    resetSelection: () => {},
     formatBold: () => {},
     formatItalic: () => {},
     formatStrikeout: () => {},
