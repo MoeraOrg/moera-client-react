@@ -1,7 +1,17 @@
 .draft-selector .dropdown-item.new-post {
-    color: var(--bs-info);
-    padding-top: .8em;
-    padding-bottom: .8em;
-    font-size: 100%;
-    font-weight: bold;
+    padding: 1rem;
+}
+
+.draft-selector .dropdown-item.new-post DIV {
+    display: flex;
+    gap: .25rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: var(--bs-gray-100);
+    color: var(--secondary-600);
+    border-radius: .5rem;
+    padding: .5rem 1rem;
+    font-size: 1.2rem;
+    font-weight: 400;
 }

@@ -8,8 +8,12 @@
     line-height: 1.5;
 }
 
+.draft-selector .dropdown-item:last-child {
+    border-bottom: none;
+}
+
 .draft-selector .dropdown-item.current {
-    background-color: var(--highlight-cyan);
+    background-color: var(--primary-50);
     cursor: default;
 }
 
@@ -19,9 +23,11 @@
 
 .draft-selector .dropdown-item .draft-delete {
     flex: none;
+    display: flex;
     margin-left: 1rem;
-    padding: .3rem;
+    padding: .5rem;
     background-color: transparent;
+    border-radius: .5rem;
 }
 
 .draft-selector .dropdown-item:hover .draft-delete {

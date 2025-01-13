@@ -1,12 +1,11 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormikContext } from 'formik';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { composeDraftSelect } from "state/compose/actions";
 import { getComposePostingId } from "state/compose/selectors";
+import { Icon, msAddBox } from "ui/material-symbols";
 import { areValuesEmpty, ComposePageValues } from "ui/compose/posting-compose";
 import "./ComposeNewPost.css";
 
@@ -23,8 +22,10 @@ export default function ComposeNewPost() {
     }
     return (
         <div className="dropdown-item new-post" onClick={onClick}>
-            <FontAwesomeIcon icon={faPenAlt}/>
-            &nbsp;&nbsp;{t("new-post-item")}
+            <div>
+                <Icon icon={msAddBox}/>
+                {t("new-post-item")}
+            </div>
         </div>
     );
 }

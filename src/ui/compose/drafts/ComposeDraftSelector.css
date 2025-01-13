@@ -3,7 +3,7 @@
 }
 
 .draft-selector .btn {
-    padding: .3rem .4rem;
+    padding: .3rem .6rem;
 }
 
 .draft-selector .btn .count {
@@ -13,4 +13,5 @@
 .draft-selector .dropdown-menu {
     max-height: 40vh;
     overflow-y: auto;
+    padding: 0;
 }

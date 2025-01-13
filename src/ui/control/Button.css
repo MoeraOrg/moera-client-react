@@ -11,7 +11,7 @@
     --bs-btn-hover-border-color: var(--highlight);
     --bs-btn-active-color: var(--bs-gray-900);
     --bs-btn-active-bg: var(--highlight);
-    --bs-btn-active-border-color: var(--highlight);
+    --bs-btn-active-border-color: var(--primary-600);
     --bs-btn-disabled-color: var(--bs-gray-400);
     --bs-btn-disabled-bg: var(--bs-gray-100);
     --bs-btn-disabled-border-color: var(--bs-gray-100);

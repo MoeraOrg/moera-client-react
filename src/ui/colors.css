@@ -19,6 +19,13 @@
      * --bs-cyan-200: #9eeaf9;
      */
 
+    /* New design colors */
+    --primary-50: #eefafa; /* Future primary */
+    --primary-600: #0fb6bf;
+    --primary-800: #0b898f;
+    --secondary-600: #515795;
+    --secondary-800: #3d4170;
+
     --body-background: var(--bs-gray-200);
     --highlight: rgba(0, 0, 0, .05);
     --highlight-light: rgba(0, 0, 0, .025);
@@ -46,6 +53,5 @@
     --reactions-positive-border: #cddfc9;
     --reactions-negative-border: #e1d3d4;
     --comments: #f8faff;
-    --comment-compose: #e0faff;
     --comment-button: #385898;
 }

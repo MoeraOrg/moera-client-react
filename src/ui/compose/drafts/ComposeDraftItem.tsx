@@ -49,7 +49,7 @@ export default function ComposeDraftItem({draft, current, onSelect, onDelete}: P
                 </time>
             </div>
             <Button variant="tool" className="draft-delete" title={t("delete-draft")} onClick={handleDelete}>
-                <Icon icon={msDelete} height={20} width={20}/>
+                <Icon icon={msDelete} height={16} width={16}/>
             </Button>
         </div>
     );

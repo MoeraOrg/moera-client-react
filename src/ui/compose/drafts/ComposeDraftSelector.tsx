@@ -48,8 +48,7 @@ export default function ComposeDraftSelector() {
 
     return (
         <div ref={setButtonRef} className={cx("draft-selector", {"dropup": visible})}>
-            <Button variant="tool" className="dropdown-toggle" disabled={!ready}
-                    onClick={onToggle}>
+            <Button variant="tool" className="dropdown-toggle" active={visible} disabled={!ready} onClick={onToggle}>
                 {t("Drafts") + " "}
                 {loadingDraftList ?
                     <LoadingInline/>
