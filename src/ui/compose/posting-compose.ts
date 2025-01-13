@@ -26,8 +26,6 @@ import { replaceSmileys } from "util/text";
 import { isHtmlEmpty, safeImportHtml } from "util/html";
 import { notNull } from "util/misc";
 
-export type ComposePageToolsTab = null | "format" | "comments" | "reactions" | "updated";
-
 export interface ValuesToPostingTextProps {
     gender: string | null;
     postingId: string | null;
@@ -68,7 +66,6 @@ export interface ComposePageValues {
     viewPrincipal: PrincipalValue;
     publishAtDefault: Date;
     publishAt: Date;
-    toolsTab: ComposePageToolsTab;
     viewCommentsPrincipal: PrincipalValue;
     viewCommentsPrincipalDefault: PrincipalValue;
     addCommentPrincipal: PrincipalValue;
@@ -337,7 +334,6 @@ export const composePageLogic = {
             viewPrincipal,
             publishAtDefault,
             publishAt,
-            toolsTab: null,
             viewCommentsPrincipal,
             viewCommentsPrincipalDefault: viewCommentsPrincipal,
             addCommentPrincipal,

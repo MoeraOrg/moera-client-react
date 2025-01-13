@@ -27,15 +27,8 @@ import Jump from "ui/navigation/Jump";
 import ComposeFullName from "ui/compose/ComposeFullName";
 import ComposePublishAt from "ui/compose/ComposePublishAt";
 import ComposeViewPrincipal from "ui/compose/ComposeViewPrincipal";
-import ComposeBodyFormatButton from "ui/compose/ComposeBodyFormatButton";
-import ComposeCommentsButton from "ui/compose/ComposeCommentsButton";
-import ComposeReactionsButton from "ui/compose/ComposeReactionsButton";
-import ComposeUpdateInfoButton from "ui/compose/ComposeUpdateInfoButton";
 import ComposeDrafts from "ui/compose/drafts/ComposeDrafts";
-import ComposeBodyFormat from "ui/compose/ComposeBodyFormat";
-import ComposeComments from "ui/compose/ComposeComments";
-import ComposeReactions from "ui/compose/ComposeReactions";
-import ComposeUpdateInfo from "ui/compose/ComposeUpdateInfo";
+import ComposeFeatures from "ui/compose/features/ComposeFeatures";
 import ComposePreviewButton from "ui/compose/ComposePreviewButton";
 import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
 import ComposePreviewDialog from "ui/compose/ComposePreviewDialog";
@@ -129,21 +122,7 @@ function ComposePageInner(props: Props) {
                             {tinyScreen && <ComposeDrafts ready={ready}/>}
                         </RichTextField>
 
-                        <div className="features">
-                            <div className="feature-buttons">
-                                <ComposeBodyFormatButton sourceFormats={sourceFormats}/>
-                                <ComposeCommentsButton/>
-                                <ComposeReactionsButton/>
-                                {postingId != null &&
-                                    <ComposeUpdateInfoButton/>
-                                }
-                            </div>
-                        </div>
-
-                        <ComposeBodyFormat sourceFormats={sourceFormats}/>
-                        <ComposeComments/>
-                        <ComposeReactions/>
-                        <ComposeUpdateInfo/>
+                        <ComposeFeatures sourceFormats={sourceFormats} updateInfo={postingId != null}/>
 
                         <div className="form-buttons">
                             <ComposePreviewButton disabled={submitDisabled}/>

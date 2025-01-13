@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 
 import { SourceFormat } from "api";
 import { SelectField, SelectFieldChoice } from "ui/control/field";
-import ComposePageTool from "ui/compose/ComposePageTool";
 
 interface Props {
     sourceFormats: SourceFormat[];
@@ -16,9 +15,7 @@ export default function ComposeBodyFormat({sourceFormats}: Props) {
         .filter(f => f !== "application")
         .map(value => ({value, title: `source-format.${value.replaceAll("/", "--")}`}));
     return (
-        <ComposePageTool name="format">
-            <SelectField title={t("text-formatting")} name="bodyFormat" horizontal layout="left" groupClassName="ps-2"
-                         col="col-md-3" choices={choices} anyValue/>
-        </ComposePageTool>
+        <SelectField title={t("text-formatting")} name="bodyFormat" horizontal layout="left" groupClassName="ps-2"
+                     col="col-md-3" choices={choices} anyValue/>
     );
 }

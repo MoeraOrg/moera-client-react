@@ -3,7 +3,6 @@ import { useField } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { CheckboxField, EmojiListInputField } from "ui/control/field";
-import ComposePageTool from "ui/compose/ComposePageTool";
 
 export default function ComposeReactions() {
     const [, {value: reactionsEnabled}] = useField<boolean>("reactionsEnabled");
@@ -12,7 +11,7 @@ export default function ComposeReactions() {
     const {t} = useTranslation();
 
     return (
-        <ComposePageTool name="reactions">
+        <>
             <CheckboxField title={t("enable-reactions")} name="reactionsEnabled" groupClassName="ps-2"
                            setting="posting.reactions.enabled.default" anyValue/>
             {reactionsEnabled &&
@@ -29,11 +28,11 @@ export default function ComposeReactions() {
                                              setting="posting.reactions.negative.default"/>
                     }
                     <CheckboxField title={t("show-list-reactions")} name="reactionsVisible"
-                                   groupClassName="ps-2" setting="posting.reactions.visible.default" anyValue/>
+                                   groupClassName="ps-2 mb-0" setting="posting.reactions.visible.default" anyValue/>
                     <CheckboxField title={t("show-number-reactions")} name="reactionTotalsVisible"
                                    groupClassName="ps-2" setting="posting.reactions.totals-visible.default" anyValue/>
                 </>
             }
-        </ComposePageTool>
+        </>
     );
 }

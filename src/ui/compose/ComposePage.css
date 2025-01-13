@@ -81,23 +81,6 @@
     color: var(--bs-gray-500);
 }
 
-.features {
-    display: flex;
-}
-
-@media only screen and (min-width: 576px) {
-    .features {
-        justify-content: space-between;
-        align-items: center;
-    }
-}
-
-@media only screen and (max-width: 575px) {
-    .features {
-        flex-direction: column;
-    }
-}
-
 .form-buttons {
     display: flex;
 }
