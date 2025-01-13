@@ -1,6 +1,4 @@
 import React, { useMemo } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 import LinesEllipsis from 'react-lines-ellipsis';
 import { formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
@@ -8,7 +6,9 @@ import { useTranslation } from 'react-i18next';
 
 import { getDateFnsLocale } from "i18n";
 import { ExtDraftInfo } from "state/compose/state";
-import "ui/compose/drafts/ComposeDraftItem.css";
+import { Button } from "ui/control";
+import { Icon, msDelete } from "ui/material-symbols";
+import "./ComposeDraftItem.css";
 
 interface Props {
     draft: ExtDraftInfo;
@@ -48,9 +48,9 @@ export default function ComposeDraftItem({draft, current, onSelect, onDelete}: P
                     {formatDistanceToNow(editDate, {locale: getDateFnsLocale()})}
                 </time>
             </div>
-            <div className="draft-delete" title={t("delete-draft")} onClick={handleDelete}>
-                <FontAwesomeIcon icon={faTrashCan}/>
-            </div>
+            <Button variant="tool" className="draft-delete" title={t("delete-draft")} onClick={handleDelete}>
+                <Icon icon={msDelete} height={20} width={20}/>
+            </Button>
         </div>
     );
 }

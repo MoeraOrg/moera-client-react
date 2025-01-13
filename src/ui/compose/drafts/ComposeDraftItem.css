@@ -1,10 +1,11 @@
 .draft-selector .dropdown-item {
-    font-size: 90%;
-    line-height: normal;
     display: flex;
     align-items: center;
     cursor: pointer;
-    padding: .25rem .5rem .25rem 1rem;
+    padding: .75rem 1rem;
+    border-bottom: 1px solid var(--bs-gray-200);
+    font-size: 1rem;
+    line-height: 1.5;
 }
 
 .draft-selector .dropdown-item.current {
@@ -18,10 +19,9 @@
 
 .draft-selector .dropdown-item .draft-delete {
     flex: none;
-    margin-left: .5rem;
+    margin-left: 1rem;
     padding: .3rem;
-    font-size: 1.2rem;
-    color: var(--bs-red);
+    background-color: transparent;
 }
 
 .draft-selector .dropdown-item:hover .draft-delete {
@@ -49,6 +49,7 @@
     max-height: 5em;
     overflow-y: hidden;
     overflow-wrap: break-word;
+    padding-bottom: .25rem;
 }
 
 @media only screen and (min-width: 576px) {
@@ -65,6 +66,6 @@
 
 .draft-selector .dropdown-item .edited {
     display: block;
-    font-size: 90%;
+    font-size: .875rem;
     color: var(--bs-gray-500);
 }

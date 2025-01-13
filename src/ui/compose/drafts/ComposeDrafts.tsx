@@ -1,9 +1,9 @@
 import React from 'react';
 
 import ComposeDraftSaver from "ui/compose/drafts/ComposeDraftSaver";
-import ComposeResetButton from "ui/compose/ComposeResetButton";
+import ComposeResetButton from "ui/compose/drafts/ComposeResetButton";
 import ComposeDraftSelector from "ui/compose/drafts/ComposeDraftSelector";
-import "ui/compose/drafts/ComposeDrafts.css";
+import "./ComposeDrafts.css";
 
 interface Props {
     ready: boolean;

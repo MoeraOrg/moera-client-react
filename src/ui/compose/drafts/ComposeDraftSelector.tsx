@@ -10,7 +10,7 @@ import { Button, Loading, LoadingInline } from "ui/control";
 import { useButtonPopper } from "ui/hook";
 import ComposeDraftItem from "ui/compose/drafts/ComposeDraftItem";
 import ComposeNewPost from "ui/compose/ComposeNewPost";
-import "ui/compose/drafts/ComposeDraftSelector.css";
+import "./ComposeDraftSelector.css";
 
 export default function ComposeDraftSelector() {
     const ready = useSelector(isComposeReady);
