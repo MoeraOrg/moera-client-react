@@ -2,6 +2,10 @@
     padding: 1rem;
 }
 
+.draft-selector .dropdown-item.new-post:hover {
+    background-color: transparent;
+}
+
 .draft-selector .dropdown-item.new-post DIV {
     display: flex;
     gap: .25rem;
@@ -14,4 +18,8 @@
     padding: .5rem 1rem;
     font-size: 1.2rem;
     font-weight: 400;
+}
+
+.draft-selector .dropdown-item.new-post:hover DIV {
+    background-color: var(--highlight);
 }
