@@ -13,9 +13,15 @@
     padding: 1rem;
 }
 
+.composer .info-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .5rem;
+}
+
 .composer .info {
     display: flex;
-    margin-bottom: .5rem;
 }
 
 .composer .info .avatar-field {
@@ -90,18 +96,6 @@
     .features {
         flex-direction: column;
     }
-}
-
-.features .drafts {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: var(--bs-gray-500);
-    margin-bottom: .5rem;
-}
-
-.features .drafts .draft-saver {
-    order: 2;
 }
 
 .form-buttons {

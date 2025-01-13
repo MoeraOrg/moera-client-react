@@ -28,7 +28,7 @@ export default function RichTextEditorHeadingButton({onSelect}: Props) {
     };
 
     return (
-        <>
+        <span className={visible ? "dropup" : undefined}>
             <button className="rich-text-editor-button selector dropdown-toggle ps-3 pe-3" disabled={!enableHeading}
                     onClick={onClick} ref={setButtonRef}>
                 <span className="text">{headingTitle(headingLevel, t)}</span>
@@ -44,7 +44,7 @@ export default function RichTextEditorHeadingButton({onSelect}: Props) {
                     )}
                 </div>
             }
-        </>
+        </span>
     );
 }
 

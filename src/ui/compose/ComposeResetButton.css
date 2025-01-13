@@ -1,5 +1,12 @@
-.reset-button {
-    flex: none;
+.btn-tool.reset-button {
+    display: flex;
+    gap: .25rem;
     margin-right: .25rem;
-    order: 3;
+    padding: .3rem .4rem;
+    --bs-btn-hover-color: white;
+    --bs-btn-hover-bg: var(--bs-danger);
+    --bs-btn-hover-border-color: var(--bs-danger);
+    --bs-btn-active-color: white;
+    --bs-btn-active-bg: var(--bs-danger);
+    --bs-btn-active-border-color: var(--bs-danger);
 }

@@ -1,15 +1,16 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { composeDraftListItemDelete, composeDraftSelect } from "state/compose/actions";
 import { isComposeReady } from "state/compose/selectors";
 import { Button, Loading, LoadingInline } from "ui/control";
 import { useButtonPopper } from "ui/hook";
-import ComposeDraftItem from "ui/compose/ComposeDraftItem";
+import ComposeDraftItem from "ui/compose/drafts/ComposeDraftItem";
 import ComposeNewPost from "ui/compose/ComposeNewPost";
-import "./ComposeDraftSelector.css";
+import "ui/compose/drafts/ComposeDraftSelector.css";
 
 export default function ComposeDraftSelector() {
     const ready = useSelector(isComposeReady);
@@ -46,13 +47,14 @@ export default function ComposeDraftSelector() {
     }
 
     return (
-        <div ref={setButtonRef} className="draft-selector btn-group">
-            <Button variant="info" className="dropdown-toggle" disabled={!ready} onClick={onToggle}>
+        <div ref={setButtonRef} className={cx("draft-selector", {"dropup": visible})}>
+            <Button variant="tool" className="dropdown-toggle" disabled={!ready}
+                    onClick={onToggle}>
                 {t("Drafts") + " "}
                 {loadingDraftList ?
                     <LoadingInline/>
                 :
-                    <span className="badge bg-light text-dark">{draftList.length}</span>
+                    <span className="count">({draftList.length})</span>
                 }
             </Button>
             {visible &&

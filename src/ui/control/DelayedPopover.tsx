@@ -2,7 +2,7 @@ import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'reac
 import ReactDOM from 'react-dom';
 import { Modifier, usePopper } from 'react-popper';
 import PopperJS from '@popperjs/core';
-import cx from "classnames";
+import cx from 'classnames';
 
 import { PopoverContext } from "ui/control";
 import { OverlayZIndex, useOverlay } from "ui/overlays/overlays";

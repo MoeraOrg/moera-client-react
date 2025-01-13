@@ -1,0 +1,16 @@
+.draft-selector {
+    display: block;
+}
+
+.draft-selector .btn {
+    padding: .3rem .4rem;
+}
+
+.draft-selector .btn .count {
+    color: var(--bs-gray-600);
+}
+
+.draft-selector .dropdown-menu {
+    max-height: 40vh;
+    overflow-y: auto;
+}

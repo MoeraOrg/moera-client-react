@@ -1,0 +1,14 @@
+.composer .drafts {
+    display: flex;
+    align-items: center;
+}
+
+.composer .drafts .draft-status {
+    display: block;
+    color: var(--bs-gray-400);
+    margin-inline-end: .75rem;
+}
+
+.rich-text-editor-short-panel .drafts {
+    margin-top: .75rem;
+}

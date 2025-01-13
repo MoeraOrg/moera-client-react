@@ -17,6 +17,7 @@ import {
     ComposePageProps,
     ComposePageValues
 } from "ui/compose/posting-compose";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import { ConflictWarning, Loading } from "ui/control";
 import { AvatarField, InputField } from "ui/control/field";
 import { RichTextField } from "ui/control/richtexteditor";
@@ -30,9 +31,7 @@ import ComposeBodyFormatButton from "ui/compose/ComposeBodyFormatButton";
 import ComposeCommentsButton from "ui/compose/ComposeCommentsButton";
 import ComposeReactionsButton from "ui/compose/ComposeReactionsButton";
 import ComposeUpdateInfoButton from "ui/compose/ComposeUpdateInfoButton";
-import ComposeDraftSaver from "ui/compose/ComposeDraftSaver";
-import ComposeResetButton from "ui/compose/ComposeResetButton";
-import ComposeDraftSelector from "ui/compose/ComposeDraftSelector";
+import ComposeDrafts from "ui/compose/drafts/ComposeDrafts";
 import ComposeBodyFormat from "ui/compose/ComposeBodyFormat";
 import ComposeComments from "ui/compose/ComposeComments";
 import ComposeReactions from "ui/compose/ComposeReactions";
@@ -71,6 +70,8 @@ function ComposePageInner(props: Props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [posting, avatarDefault, formId, sharedText, setPostWarningClosed]); // 'props' are missing on purpose
 
+    const tinyScreen = useIsTinyScreen();
+
     const title = postingId == null ? t("new-post-title") : t("edit-post-title");
     const sourceFormats = features?.sourceFormats ?? [];
     const submitDisabled = !ready || areValuesEmpty(values) || !areImagesUploaded(values);
@@ -97,13 +98,16 @@ function ComposePageInner(props: Props) {
                             <ConflictWarning text={t("post-edited-conflict")}
                                              onClose={() => dispatch(composeConflictClose())}/>
                         }
-                        <div className="info">
-                            <AvatarField name="avatar" size={56} disabled={!ready}/>
-                            <div className="body">
-                                <ComposeFullName/>
-                                <ComposePublishAt/>
-                                <ComposeViewPrincipal/>
+                        <div className="info-line">
+                            <div className="info">
+                                <AvatarField name="avatar" size={56} disabled={!ready}/>
+                                <div className="body">
+                                    <ComposeFullName/>
+                                    <ComposePublishAt/>
+                                    <ComposeViewPrincipal/>
+                                </div>
                             </div>
+                            {!tinyScreen && <ComposeDrafts ready={ready}/>}
                         </div>
                         {features?.subjectPresent &&
                             <InputField name="subject" title="Title" anyValue disabled={!ready}/>
@@ -121,7 +125,9 @@ function ComposePageInner(props: Props) {
                             anyValue
                             autoFocus
                             maxHeight="max(100vh - 26rem, 10.8em)"
-                        />
+                        >
+                            {tinyScreen && <ComposeDrafts ready={ready}/>}
+                        </RichTextField>
 
                         <div className="features">
                             <div className="feature-buttons">
@@ -131,11 +137,6 @@ function ComposePageInner(props: Props) {
                                 {postingId != null &&
                                     <ComposeUpdateInfoButton/>
                                 }
-                            </div>
-                            <div className="drafts">
-                                {ready && <ComposeDraftSaver/>}
-                                <ComposeResetButton/>
-                                <ComposeDraftSelector/>
                             </div>
                         </div>
 

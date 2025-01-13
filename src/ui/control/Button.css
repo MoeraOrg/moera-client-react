@@ -1,3 +1,18 @@
 .btn .btn-loading {
     min-height: 2.5em;
 }
+
+.btn-tool {
+    --bs-btn-color: var(--bs-gray-700);
+    --bs-btn-bg: var(--bs-gray-100);
+    --bs-btn-border-color: var(--bs-gray-100);
+    --bs-btn-hover-color: var(--bs-gray-900);
+    --bs-btn-hover-bg: var(--highlight);
+    --bs-btn-hover-border-color: var(--highlight);
+    --bs-btn-active-color: var(--bs-gray-900);
+    --bs-btn-active-bg: var(--highlight);
+    --bs-btn-active-border-color: var(--highlight);
+    --bs-btn-disabled-color: var(--bs-gray-400);
+    --bs-btn-disabled-bg: var(--bs-gray-100);
+    --bs-btn-disabled-border-color: var(--bs-gray-100);
+}

@@ -48,7 +48,7 @@ export default function CurrentPage() {
         case "compose":
             return (
                 <Suspense fallback={<Loading overlay large/>}>
-                    <ComposePage/>;
+                    <ComposePage/>
                 </Suspense>
             );
         case "settings":

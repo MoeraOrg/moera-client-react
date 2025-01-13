@@ -9,7 +9,7 @@ interface Props {
 
 const RichTextEditorShortPanel = ({children}: Props) => (
     <div className="rich-text-editor-short-panel">
-        <FormattingMenuButton/>
+        <FormattingMenuButton iconSize={20}/>
         {children}
     </div>
 );

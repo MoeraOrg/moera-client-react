@@ -1,13 +1,12 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan, faUndoAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { composeDraftListItemDelete, composeUpdateDraftDelete } from "state/compose/actions";
 import { isComposeReady } from "state/compose/selectors";
 import { confirmBox } from "state/confirmbox/actions";
+import { Icon, msDelete, msUndo } from "ui/material-symbols";
 import { Button } from "ui/control";
 import "./ComposeResetButton.css";
 
@@ -42,15 +41,15 @@ export default function ComposeResetButton() {
 
     if (postingId == null) {
         return (
-            <Button variant="danger" className="reset-button" title={t("delete-draft")} disabled={!ready}
+            <Button variant="tool" className="reset-button" title={t("delete-draft")} disabled={!ready}
                     onClick={onClick}>
-                <FontAwesomeIcon icon={faTrashCan}/>
+                <Icon icon={msDelete} height={20} width={20}/>
             </Button>
         );
     } else {
         return (
-            <Button variant="info" className="reset-button" disabled={!ready} onClick={onClick}>
-                <FontAwesomeIcon icon={faUndoAlt}/>
+            <Button variant="tool" className="reset-button pe-3" disabled={!ready} onClick={onClick}>
+                <Icon icon={msUndo} height={20} width={20}/>
                 {" " + t("undo")}
             </Button>
         );

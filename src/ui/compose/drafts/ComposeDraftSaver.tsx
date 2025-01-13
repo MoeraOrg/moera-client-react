@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import cloneDeep from 'lodash.clonedeep';
 
 import { DraftText, PostingText, StoryAttributes, VerifiedMediaFile } from "api";
@@ -13,6 +12,7 @@ import { getSetting } from "state/settings/selectors";
 import { ComposePageValues, isPostingTextChanged, valuesToPostingText } from "ui/compose/posting-compose";
 import { useDraftSaver } from "ui/draft/draft-saver";
 import { notNull } from "util/misc";
+import { Icon, msCloudDone, msCloudUpload } from "ui/material-symbols";
 
 const getPublishAt = (publications: StoryAttributes[] | null | undefined): number | null | undefined =>
     publications != null && publications.length > 0 ? publications[0].publishAt : null;
@@ -48,7 +48,6 @@ export default function ComposeDraftSaver() {
     const avatarShapeDefault = useSelector((state: ClientState) =>
         getSetting(state, "avatar.shape.default") as string);
     const dispatch = useDispatch();
-    const {t} = useTranslation();
 
     const toText = (values: ComposePageValues): PostingText =>
         valuesToPostingText(values, {gender, postingId, features, smileysEnabled, newsFeedEnabled, avatarShapeDefault});
@@ -84,9 +83,9 @@ export default function ComposeDraftSaver() {
     });
 
     return (
-        <div className="draft-saver ms-2 me-2">
-            {!unsaved && saving && t("draft-saving")}
-            {!unsaved && saved && t("draft-saved")}
-        </div>
+        <span className="draft-status">
+            {!unsaved && saving && <Icon icon={msCloudUpload} width={20} height={20}/>}
+            {!unsaved && saved && <Icon icon={msCloudDone} width={20} height={20}/>}
+        </span>
     );
 }

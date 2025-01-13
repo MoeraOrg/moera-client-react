@@ -54,7 +54,7 @@ export default function FormattingMenuButton({iconSize}: Props) {
     }
 
     return (
-        <>
+        <span className={visible ? "dropup" : undefined}>
             <RichTextEditorButton className="selector dropdown-toggle" icon={msFormatSize} iconSize={iconSize}
                                   title={t("text-formatting")} onClick={onClick} ref={setButtonRef}/>
             {visible && ReactDOM.createPortal(
@@ -122,6 +122,6 @@ export default function FormattingMenuButton({iconSize}: Props) {
                 </DropdownMenuContext.Provider>,
                 document.querySelector("#hovercard-root")!
             )}
-        </>
+        </span>
     );
 }

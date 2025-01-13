@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { getDateFnsLocale } from "i18n";
 import { ExtDraftInfo } from "state/compose/state";
-import "./ComposeDraftItem.css";
+import "ui/compose/drafts/ComposeDraftItem.css";
 
 interface Props {
     draft: ExtDraftInfo;

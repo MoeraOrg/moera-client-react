@@ -1,7 +1,13 @@
+.rich-text-editor-short-panel {
+    display: flex;
+    justify-content: space-between;
+}
+
 .rich-text-editor-short-panel .rich-text-editor-button {
     background-color: var(--bs-gray-100);
+    font-size: 1rem;
     padding: .15rem .5rem;
-    height: 2.5rem;
+    height: 2rem;
     border-radius: .5rem;
     margin-top: .75rem;
 }
