@@ -100,6 +100,7 @@
     "@types/react-avatar-editor": "^13.0.0",
     "@types/react-datepicker": "^4.15.0",
     "@types/react-dom": "^18.2.7",
+    "@types/react-lines-ellipsis": "^0.15.6",
     "@types/sanitize-html": "^2.9.0",
     "@types/twemoji-parser": "^13.1.1",
     "babel-jest": "^29.7.0",

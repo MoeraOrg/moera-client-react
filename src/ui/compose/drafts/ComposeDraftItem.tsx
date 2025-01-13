@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
-// @ts-ignore
 import LinesEllipsis from 'react-lines-ellipsis';
 import { formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';

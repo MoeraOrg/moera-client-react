@@ -2438,6 +2438,14 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-lines-ellipsis@^0.15.6":
+  version "0.15.6"
+  resolved "https://registry.yarnpkg.com/@types/react-lines-ellipsis/-/react-lines-ellipsis-0.15.6.tgz#635ce601ae5ebcbd8cd335e9a30c8dfad9ecea71"
+  integrity sha512-76cyWLa1SnLGOPQ+yJy7Ea0D2rWFt3dHOxO+xTQxyBCZdKrlbd/nHpldDSAqexZaI4gGsfHFRG7r0Z4neWeyJA==
+  dependencies:
+    "@types/lodash" "*"
+    "@types/react" "*"
+
 "@types/react-transition-group@^4.4.4":
   version "4.4.9"
   resolved "https://registry.yarnpkg.com/@types/react-transition-group/-/react-transition-group-4.4.9.tgz#12a1a1b5b8791067198149867b0823fbace31579"
