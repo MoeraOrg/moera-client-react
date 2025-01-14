@@ -1,4 +1,10 @@
 .submit-button {
     flex: auto;
-    text-transform: uppercase;
+    margin-inline-end: .15rem;
+}
+
+.btn.submit-menu-button {
+    flex: none;
+    border-top-right-radius: var(--bs-btn-border-radius) !important;
+    border-bottom-right-radius: var(--bs-btn-border-radius) !important;
 }

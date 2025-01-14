@@ -31,11 +31,13 @@ import { ReactComponent as msFormatQuote } from "ui/material-symbols/format_quot
 import { ReactComponent as msFormatQuoteOff } from "ui/material-symbols/format_quote_off.isvg";
 import { ReactComponent as msFunction } from "ui/material-symbols/function.isvg";
 import { ReactComponent as msKeyboardArrowDown } from "ui/material-symbols/keyboard_arrow_down.isvg";
+import { ReactComponent as msKeyboardArrowUp } from "ui/material-symbols/keyboard_arrow_up.isvg";
 import { ReactComponent as msMediaLink } from "ui/material-symbols/media_link.isvg";
 import { ReactComponent as msMoreHoriz } from "ui/material-symbols/more_horiz.isvg";
 import { ReactComponent as msMoreVert } from "ui/material-symbols/more_vert.isvg";
 import { ReactComponent as msOpenInNew } from "ui/material-symbols/open_in_new.isvg";
 import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_library.isvg";
+import { ReactComponent as msPreview } from "ui/material-symbols/preview.isvg";
 import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
 import { ReactComponent as msSatellite } from "ui/material-symbols/satellite.isvg";
 import { ReactComponent as msSend } from "ui/material-symbols/send.isvg";
@@ -79,11 +81,13 @@ export {
     msFormatQuote,
     msFormatQuoteOff,
     msKeyboardArrowDown,
+    msKeyboardArrowUp,
     msMediaLink,
     msMoreHoriz,
     msMoreVert,
     msOpenInNew,
     msPhotoLibrary,
+    msPreview,
     msReport,
     msSatellite,
     msSend,

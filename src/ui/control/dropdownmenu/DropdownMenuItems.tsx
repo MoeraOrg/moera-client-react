@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import cx from 'classnames';
 
 import Jump from "ui/navigation/Jump";
+import { Icon, MaterialSymbol } from "ui/material-symbols";
 import {
     CaptionMenuItem,
     DividerMenuItem,
@@ -19,6 +21,7 @@ function isCaption(item: MenuItem): item is CaptionMenuItem {
 }
 
 interface RenderedItem {
+    icon?: MaterialSymbol;
     title: string;
     nodeName?: RelNodeName | string;
     href?: string;
@@ -47,6 +50,7 @@ function buildItems(items: MenuItem[]): RenderedItem[] {
             });
         } else {
             itemList.push({
+                icon: item.icon,
                 title: item.title,
                 nodeName: item.nodeName,
                 href: item.href,
@@ -92,8 +96,14 @@ export function DropdownMenuItems({items}: Props) {
                         {item.caption ?
                             <div className="caption">{item.title}</div>
                         :
-                            <Jump className="dropdown-item" nodeName={item.nodeName} href={item.href ?? "/"}
-                                  onNear={onClick(item)} onFar={onClick(item)}>
+                            <Jump
+                                className={cx("dropdown-item", {"d-flex align-items-center gap-2": item.icon != null})}
+                                nodeName={item.nodeName}
+                                href={item.href ?? "/"}
+                                onNear={onClick(item)}
+                                onFar={onClick(item)}
+                            >
+                                {item.icon && <Icon icon={item.icon}/>}
                                 {item.title}
                             </Jump>
                         }

@@ -1,9 +1,11 @@
 import { createContext, useContext } from 'react';
 
+import { MaterialSymbol } from "ui/material-symbols";
 import { RelNodeName } from "util/rel-node-name";
 
 export interface TextMenuItem {
     show: boolean;
+    icon?: MaterialSymbol;
     title: string;
     nodeName: RelNodeName | string;
     href: string;

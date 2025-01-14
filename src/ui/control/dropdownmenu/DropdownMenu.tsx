@@ -16,7 +16,7 @@ interface Props {
     disabled?: boolean;
     parentOverlayId?: string;
     onDialogOpened?: () => void;
-    children?: ReactNode;
+    children?: React.ReactNode | ((visible: boolean) => React.ReactNode);
 }
 
 export function DropdownMenu({content, items, className, disabled, parentOverlayId, onDialogOpened, children}: Props) {
@@ -35,8 +35,10 @@ export function DropdownMenu({content, items, className, disabled, parentOverlay
         <DropdownMenuContext.Provider value={{hide, onDialogOpened, overlayId}}>
             <button type="button" className={cx("menu", className)} disabled={disabled} ref={setButtonRef}
                     aria-label={t("menu")} onClick={onToggle}>
-                {children ??
-                    <FontAwesomeIcon icon={faChevronDown} className="chevron"/>
+                {typeof children === "function" ?
+                    children(visible)
+                :
+                    (children ?? <FontAwesomeIcon icon={faChevronDown} className="chevron"/>)
                 }
             </button>
             {visible &&

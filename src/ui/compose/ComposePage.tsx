@@ -29,7 +29,6 @@ import ComposePublishAt from "ui/compose/ComposePublishAt";
 import ComposeViewPrincipal from "ui/compose/ComposeViewPrincipal";
 import ComposeDrafts from "ui/compose/drafts/ComposeDrafts";
 import ComposeFeatures from "ui/compose/features/ComposeFeatures";
-import ComposePreviewButton from "ui/compose/ComposePreviewButton";
 import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
 import ComposePreviewDialog from "ui/compose/ComposePreviewDialog";
 import { REL_CURRENT } from "util/rel-node-name";
@@ -123,12 +122,8 @@ function ComposePageInner(props: Props) {
                         </RichTextField>
 
                         <ComposeFeatures sourceFormats={sourceFormats} updateInfo={postingId != null}/>
-
-                        <div className="form-buttons">
-                            <ComposePreviewButton disabled={submitDisabled}/>
-                            <ComposeSubmitButton loading={beingPosted} update={postingId != null}
-                                                 disabled={submitDisabled}/>
-                        </div>
+                        <ComposeSubmitButton loading={beingPosted} update={postingId != null}
+                                             disabled={submitDisabled}/>
                     </Form>
                 </div>
                 {showPreview && <ComposePreviewDialog/>}
