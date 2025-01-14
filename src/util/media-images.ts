@@ -1,4 +1,12 @@
 import { MediaFilePreviewInfo, PrivateMediaFileInfo } from "api";
+import {
+    isFigureImageElement,
+    isImageElement,
+    isScriptureBlock,
+    isScriptureElement,
+    isScriptureVoidBlock,
+    Scripture
+} from "ui/control/richtexteditor/visual/scripture";
 import { urlWithParameters } from "util/url";
 import { isNumber } from "util/misc";
 import MEDIA_IMAGE_EXTENSIONS from "util/media-image-extensions.json";
@@ -114,13 +122,27 @@ export function mediaImageTagAttributes(
 
 const HASH_URI_PATTERN = /["' (]hash:([A-Za-z0-9_-]+={0,2})["' )]/g;
 
-export function mediaHashesExtract(text: string): Set<string> {
+export function mediaHashesExtract(text: string | Scripture): Set<string> {
     const result = new Set<string>();
-    const matches = text.matchAll(HASH_URI_PATTERN);
-    for (const match of matches) {
-        result.add(match[1]);
+    if (typeof text === "string") {
+        const matches = text.matchAll(HASH_URI_PATTERN);
+        for (const match of matches) {
+            result.add(match[1]);
+        }
+    } else {
+        scriptureMediaHashesExtract(text, result);
     }
     return result;
+}
+
+function scriptureMediaHashesExtract(scripture: Scripture, hashes: Set<string>): void {
+    scripture.forEach(node => {
+        if ((isImageElement(node) || isFigureImageElement(node)) && node.mediaFile?.hash != null) {
+            hashes.add(node.mediaFile.hash);
+        } else if (isScriptureElement(node) && isScriptureBlock(node) && !isScriptureVoidBlock(node)) {
+            scriptureMediaHashesExtract(node.children as Scripture, hashes);
+        }
+    });
 }
 
 export function mediaImageExtensions(mimeType: string | null | undefined): string[] {

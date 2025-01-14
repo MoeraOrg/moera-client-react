@@ -30,7 +30,7 @@ export function RichTextEditor({
     onChange, submitKey, onSubmit, onBlur, onUrls, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, children
 }: Props) {
     const textRef = React.useRef<string | Scripture>();
-    textRef.current = value.text;
+    textRef.current = value.value;
     const mediaRef = React.useRef<(VerifiedMediaFile | null)[] | null>(null);
     mediaRef.current = value.media ?? null;
 

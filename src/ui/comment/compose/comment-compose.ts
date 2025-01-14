@@ -15,6 +15,7 @@ import store from "state/store";
 import { commentPost } from "state/detailedposting/actions";
 import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
+import { isScriptureEmpty } from "ui/control/richtexteditor/visual/scripture-editor";
 import { htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { toAvatarDescription } from "util/avatar";
 import { isHtmlEmpty } from "util/html";
@@ -82,16 +83,16 @@ function valuesToCommentSourceText(values: CommentComposeValues, props: ValuesTo
 }
 
 function isCommentContentEmpty(
-    text: string | null | undefined,
+    text: string | Scripture | null | undefined,
     media: (PrivateMediaFileInfo | null)[] | string[] | null | undefined
 ): boolean {
-    const textEmpty = isHtmlEmpty(text);
+    const textEmpty = typeof text === "string" ? isHtmlEmpty(text) : isScriptureEmpty(text);
     const mediaEmpty = media == null || media.length === 0;
     return textEmpty && mediaEmpty;
 }
 
 export function areValuesEmpty(values: CommentComposeValues): boolean {
-    return isCommentContentEmpty(values.body.text, values.body.media);
+    return isCommentContentEmpty(values.body.value, values.body.media);
 }
 
 export function areImagesUploaded(values: CommentComposeValues): boolean {

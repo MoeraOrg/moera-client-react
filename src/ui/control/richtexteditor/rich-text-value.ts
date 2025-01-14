@@ -45,7 +45,7 @@ export class RichTextValue {
 
         const bodyMedia = this.media.filter(notNull);
         const mediaMap = new Map(bodyMedia.map(mf => [mf.hash, mf]));
-        const embeddedHashes = mediaHashesExtract(this.text);
+        const embeddedHashes = mediaHashesExtract(this.value);
 
         return [...embeddedHashes]
             .map(hash => mediaMap.get(hash))

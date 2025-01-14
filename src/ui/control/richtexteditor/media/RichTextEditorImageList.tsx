@@ -50,7 +50,7 @@ export default function RichTextEditorImageList({value, className, nodeName}: Pr
         return null;
     }
 
-    const embedded = mediaHashesExtract(value.text);
+    const embedded = mediaHashesExtract(value.value);
     const mediaList = value.media
         .filter(notNull)
         .filter(media => !embedded.has(media.hash));

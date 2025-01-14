@@ -22,6 +22,7 @@ import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { htmlToScripture, safeImportScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
+import { isScriptureEmpty } from "ui/control/richtexteditor/visual/scripture-editor";
 import { replaceSmileys } from "util/text";
 import { isHtmlEmpty, safeImportHtml } from "util/html";
 import { notNull } from "util/misc";
@@ -176,16 +177,17 @@ export const valuesToPostingText = (values: ComposePageValues, props: ValuesToPo
 
 function isPostingContentEmpty(
     subject: string | null | undefined,
-    text: string | null | undefined,
+    text: string | Scripture | null | undefined,
     media: (PrivateMediaFileInfo | null)[] | string[] | null | undefined
 ): boolean {
-    const textEmpty = (!subject || subject.trim() === "") && isHtmlEmpty(text);
+    const subjectEmpty = !subject || subject.trim() === "";
+    const textEmpty = typeof text === "string" ? isHtmlEmpty(text) : isScriptureEmpty(text);
     const mediaEmpty = media == null || media.length === 0;
-    return textEmpty && mediaEmpty;
+    return subjectEmpty && textEmpty && mediaEmpty;
 }
 
 export const areValuesEmpty = (values: ComposePageValues): boolean =>
-    isPostingContentEmpty(values.subject, values.body.text, values.body.media);
+    isPostingContentEmpty(values.subject, values.body.value, values.body.media);
 
 export const areImagesUploaded = (values: ComposePageValues): boolean =>
     values.body.media == null || values.body.media.every(media => media != null);

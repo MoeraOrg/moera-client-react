@@ -15,10 +15,13 @@ import {
 } from "state/detailedposting/selectors";
 import { AvatarField } from "ui/control/field";
 import { RichTextField } from "ui/control/richtexteditor";
+import { Scripture } from "ui/control/richtexteditor/visual/scripture";
+import { isScriptureEmpty } from "ui/control/richtexteditor/visual/scripture-editor";
 import CommentComposeRepliedTo from "ui/comment/compose/CommentComposeRepliedTo";
 import { commentComposeLogic, CommentComposeProps, CommentComposeValues } from "ui/comment/compose/comment-compose";
 import CommentComposePanel from "ui/comment/compose/CommentComposePanel";
 import { REL_CURRENT } from "util/rel-node-name";
+import { isHtmlEmpty } from "util/html";
 import "./CommentCompose.css";
 
 type Props = CommentComposeProps & FormikProps<CommentComposeValues>;
@@ -43,17 +46,17 @@ function CommentCompose(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [receiverName, receiverPostingId, loadedDraft, formId, resetForm]); // 'props' are missing on purpose
 
-    useEffect(viewComposer, [values.body.text]);
+    useEffect(viewComposer, [values.body.value]);
 
     const onFocus = () => {
-        if (values.body.text.length !== 0) {
+        if (!isBodyTextEmpty(values.body.value)) {
             viewComposer();
         }
         dispatch(bottomMenuHide());
     }
 
     const onBlur = () => {
-        if (values.body.text.trim().length === 0) {
+        if (isBodyTextEmpty(values.body.value)) {
             dispatch(bottomMenuShow());
         }
     }
@@ -100,5 +103,8 @@ function viewComposer() {
         setTimeout(() => scrollIntoView(composer, {scrollMode: "if-needed", block: "nearest"}));
     }
 }
+
+const isBodyTextEmpty = (text: string | Scripture) =>
+    typeof text === "string" ? isHtmlEmpty(text) : isScriptureEmpty(text);
 
 export default withFormik(commentComposeLogic)(CommentCompose);
