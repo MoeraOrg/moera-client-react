@@ -145,12 +145,10 @@ export default function VisualEditor({
                     onSubmit={onSubmit}
                     onBlur={onBlur}
                 />
-                {!topPanel &&
-                    (panelMode !== "none" ?
-                        <RichTextEditorShortPanel children={children}/>
-                    :
-                        children
-                    )
+                {!topPanel && panelMode !== "none" ?
+                    <RichTextEditorShortPanel children={children}/>
+                :
+                    children
                 }
                 {!noMedia &&
                     <RichTextEditorDropzone value={value} hiding={panelMode === "none"} nodeName={nodeName}/>

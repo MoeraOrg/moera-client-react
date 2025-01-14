@@ -71,12 +71,10 @@ export function MarkdownEditor({
                 onUrls={onUrls}
                 ref={textArea}
             />
-            {!topPanel &&
-                (format !== "plain-text" && panelMode !== "none" ?
-                    <RichTextEditorShortPanel children={children}/>
-                :
-                    children
-                )
+            {!topPanel &&format !== "plain-text" && panelMode !== "none" ?
+                <RichTextEditorShortPanel children={children}/>
+            :
+                children
             }
             {!noMedia &&
                 <RichTextEditorDropzone value={value} hiding={panelMode === "none"} nodeName={nodeName}/>
