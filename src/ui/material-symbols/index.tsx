@@ -33,6 +33,7 @@ import { ReactComponent as msFormatQuoteOff } from "ui/material-symbols/format_q
 import { ReactComponent as msFunction } from "ui/material-symbols/function.isvg";
 import { ReactComponent as msKeyboardArrowDown } from "ui/material-symbols/keyboard_arrow_down.isvg";
 import { ReactComponent as msKeyboardArrowUp } from "ui/material-symbols/keyboard_arrow_up.isvg";
+import { ReactComponent as msLink } from "ui/material-symbols/link.isvg";
 import { ReactComponent as msMediaLink } from "ui/material-symbols/media_link.isvg";
 import { ReactComponent as msMoreHoriz } from "ui/material-symbols/more_horiz.isvg";
 import { ReactComponent as msMoreVert } from "ui/material-symbols/more_vert.isvg";
@@ -83,6 +84,7 @@ export {
     msFormatListNumbered,
     msFormatQuote,
     msFormatQuoteOff,
+    msLink,
     msKeyboardArrowDown,
     msKeyboardArrowUp,
     msMediaLink,

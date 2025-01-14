@@ -2,6 +2,10 @@
     margin-bottom: .25rem;
 }
 
+.entry-link-selector .dropdown-toggle::after {
+    vertical-align: middle;
+}
+
 .entry-link-selector .popover {
     max-height: 21rem;
     overflow-y: auto;
@@ -20,15 +24,21 @@
 }
 
 .entry-link-selector .item {
+    display: flex;
     line-height: normal;
-    text-indent: -1.5em;
     cursor: pointer;
-    padding: .25em .5em .25em 2em;
+    padding: .25em .6em;
+    gap: .5em;
     white-space: normal;
     width: 100%;
     max-height: 5em;
     overflow-y: hidden;
     overflow-wrap: break-word;
+}
+
+.entry-link-selector .item SVG {
+    position: relative;
+    top: -.2em;
 }
 
 .entry-link-selector .item:hover {

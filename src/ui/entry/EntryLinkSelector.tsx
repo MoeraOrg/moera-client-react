@@ -1,10 +1,9 @@
 import React from 'react';
 // @ts-ignore
 import shortenUrl from 'shorten-url';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
+import { Icon, msLink } from "ui/material-symbols";
 import { useButtonPopper } from "ui/hook";
 import { Button, useModalDialog } from "ui/control";
 import "./EntryLinkSelector.css";
@@ -37,17 +36,16 @@ export default function EntryLinkSelector({urls, onSelect, disabled}: Props) {
     return (
         <div className="entry-link-selector">
             <div ref={setButtonRef} className="btn-group">
-                <Button variant="outline-secondary" size="sm" className="dropdown-toggle" disabled={disabled}
+                <Button variant="tool" size="sm" className="dropdown-toggle" active={visible} disabled={disabled}
                         onClick={onToggle}>
-                    {t("links") + " "}
-                    <span className="badge bg-info text-light">{uniqueUrls.length}</span>
+                    {t("links")} ({uniqueUrls.length})
                 </Button>
                 {visible &&
                     <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                          className="fade dropdown-menu popover shadow-sm show">
                         {uniqueUrls.map(url =>
                             <div key={url} className="item" onClick={onClick(url)}>
-                                <FontAwesomeIcon icon={faLink}/>
+                                <Icon icon={msLink} width={15} height={15}/>
                                 {" " + shortenUrl(url, 75)}
                             </div>
                         )}
