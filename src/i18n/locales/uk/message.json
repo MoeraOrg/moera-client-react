@@ -63,6 +63,7 @@
   "caption-optional": "Підпис під картинкою (за бажанням)",
   "careful-grant-access": "Будь ласка, будьте обережні та не надавайте доступ незнайомим додаткам.",
   "change": "Змінити",
+  "change-author-name": "Змінити ім'я автора",
   "change-date-time": "Змінити дату/час",
   "change-date-time-ellipsis": "Змінити дату/час...",
   "change-friend-groups": "Змінити групи {gender, select, female {подруги} other {друга}} {name}",
@@ -495,7 +496,6 @@
   "post-preview": "Перегляд поста",
   "preparing": "Підготовка...",
   "preserve-formatting": "Зберегти форматування",
-  "preview": "Перегляд",
   "previous-image": "Попередня картинка",
   "principal-title": {
     "admin": "Адміністратору",

@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { useField } from 'formik';
 
 import { composePreview } from "state/compose/actions";
-import { Icon, msKeyboardArrowDown, msKeyboardArrowUp, msPreview, msSchedule } from "ui/material-symbols";
+import { Icon, msBadge, msKeyboardArrowDown, msKeyboardArrowUp, msPreview, msSchedule } from "ui/material-symbols";
 import { Button, DropdownMenu } from "ui/control";
 import ChangePublishDateDialog from "ui/compose/ChangePublishDateDialog";
+import ChangeFullNameDialog from "ui/compose/ChangeFullNameDialog";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./ComposeSubmitButton.css";
 
@@ -18,8 +19,10 @@ interface Props {
 
 export default function ComposeSubmitButton({loading, update, disabled}: Props) {
     const [showChangePublishDateDialog, setShowChangePublishDateDialog] = React.useState<boolean>(false);
-    const [, {value: publishAtDefault}] = useField<Date>("publishAtDefault");
+    const [, {value: defaultPublishAt}] = useField<Date>("publishAtDefault");
     const [, {value: publishAt}, {setValue: setPublishAt}] = useField<Date>("publishAt");
+    const [showChangeFullNameDialog, setShowChangeFullNameDialog] = React.useState<boolean>(false);
+    const [, {value: fullName, initialValue: defaultFullName}, {setValue: setFullName}] = useField<string>("fullName");
 
     const dispatch = useDispatch();
     const {t} = useTranslation();
@@ -35,6 +38,17 @@ export default function ComposeSubmitButton({loading, update, disabled}: Props) 
 
         if (ok && publishAt != null) {
             setPublishAt(publishAt);
+        }
+    }
+
+    const onChangeFullName = () =>
+        setShowChangeFullNameDialog(true);
+
+    const onChangeFullNameSubmit = (ok: boolean, fullName?: string) => {
+        setShowChangeFullNameDialog(false);
+
+        if (ok && fullName != null) {
+            setFullName(fullName);
         }
     }
 
@@ -54,6 +68,9 @@ export default function ComposeSubmitButton({loading, update, disabled}: Props) 
                         show: !disabled
                     },
                     {
+                        divider: true
+                    },
+                    {
                         icon: msSchedule,
                         title: t("change-date-time"),
                         nodeName: REL_CURRENT,
@@ -61,13 +78,25 @@ export default function ComposeSubmitButton({loading, update, disabled}: Props) 
                         onClick: onChangePublishDate,
                         show: !update
                     },
+                    {
+                        icon: msBadge,
+                        title: t("change-author-name"),
+                        nodeName: REL_CURRENT,
+                        href: "/",
+                        onClick: onChangeFullName,
+                        show: true
+                    },
                 ]} className="btn btn-primary submit-menu-button">
                     {visible => <Icon icon={visible ? msKeyboardArrowUp : msKeyboardArrowDown}/>}
                 </DropdownMenu>
             </div>
             {showChangePublishDateDialog &&
-                <ChangePublishDateDialog publishAt={publishAt} defaultPublishAt={publishAtDefault}
+                <ChangePublishDateDialog publishAt={publishAt} defaultPublishAt={defaultPublishAt}
                                          onSubmit={onChangePublishDateSubmit}/>
+            }
+            {showChangeFullNameDialog &&
+                <ChangeFullNameDialog fullName={fullName} defaultFullName={defaultFullName ?? ""}
+                                      onSubmit={onChangeFullNameSubmit}/>
             }
         </>
     );

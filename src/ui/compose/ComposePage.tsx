@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { PrincipalValue, SourceFormat } from "api";
 import { ClientState } from "state/state";
-import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { isAtHomeNode } from "state/node/selectors";
 import { composeConflictClose } from "state/compose/actions";
@@ -24,7 +24,6 @@ import { RichTextField } from "ui/control/richtexteditor";
 import { Page } from "ui/page/Page";
 import PageHeader from "ui/page/PageHeader";
 import Jump from "ui/navigation/Jump";
-import ComposeFullName from "ui/compose/ComposeFullName";
 import ComposeViewPrincipal from "ui/compose/ComposeViewPrincipal";
 import ComposeDrafts from "ui/compose/drafts/ComposeDrafts";
 import ComposeFeatures from "ui/compose/features/ComposeFeatures";
@@ -32,6 +31,7 @@ import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
 import ComposePreviewDialog from "ui/compose/ComposePreviewDialog";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./ComposePage.css";
+import NodeName from "ui/nodename/NodeName";
 
 type Props = ComposePageProps & FormikProps<ComposePageValues>;
 
@@ -42,6 +42,7 @@ function ComposePageInner(props: Props) {
     const formId = useSelector((state: ClientState) => state.compose.formId);
     const loadingContent = useSelector((state: ClientState) =>
         state.compose.loadingPosting || state.compose.loadingDraft);
+    const ownerName = useSelector(getHomeOwnerName);
     const atHomeNode = useSelector(isAtHomeNode);
     const postAllowed = features?.post ?? atHomeNode;
     const conflict = useSelector((state: ClientState) => state.compose.conflict);
@@ -93,7 +94,8 @@ function ComposePageInner(props: Props) {
                             <div className="info">
                                 <AvatarField name="avatar" size={56} disabled={!ready}/>
                                 <div className="body">
-                                    <ComposeFullName/>
+                                    <NodeName name={ownerName} fullName={values.fullName} linked={false} popup={false}
+                                              className="ms-2"/>
                                     <ComposeViewPrincipal/>
                                 </div>
                             </div>

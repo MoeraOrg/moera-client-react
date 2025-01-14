@@ -18,6 +18,7 @@ interface Props {
     fullName?: string | null;
     avatar?: AvatarImage | null;
     avatarNodeName?: RelNodeName | string;
+    className?: string;
     verified?: boolean;
     correct?: boolean;
     linked?: boolean;
@@ -25,7 +26,7 @@ interface Props {
 }
 
 export default function NodeName({
-    name, fullName, avatar, avatarNodeName, verified = false, correct = false, linked = true, popup = true
+    name, fullName, avatar, avatarNodeName, className, verified = false, correct = false, linked = true, popup = true
 }: Props) {
     const details = useSelector((state: ClientState) => getNamingNameDetails(state, name));
     const mode = useSelector((state: ClientState) => getSetting(state, "full-name.display") as NameDisplayMode);
@@ -38,7 +39,8 @@ export default function NodeName({
         "node-name", {
             "correct": verified && correct,
             "incorrect": verified && !correct
-        }
+        },
+        className
     );
     linked = linked && (!details.loaded || details.nodeUri != null);
     return (

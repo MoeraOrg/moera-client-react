@@ -63,6 +63,7 @@
   "caption-optional": "Podpis pod obrazkiem (opcjonalnie)",
   "careful-grant-access": "Proszę zachować ostrożność i nie udzielać dostępu aplikacjom, których nie znasz.",
   "change": "Zmień",
+  "change-author-name": "Zmień imię autora",
   "change-date-time": "Zmień datę/czas",
   "change-date-time-ellipsis": "Zmień datę/czas...",
   "change-friend-groups": "Zmień grupy znajomego {name}",
@@ -495,7 +496,6 @@
   "post-preview": "Podgląd posta",
   "preparing": "Przygotowywanie...",
   "preserve-formatting": "Zachowaj formatowanie",
-  "preview": "Podgląd",
   "previous-image": "Poprzednie zdjęcie",
   "principal-title": {
     "admin": "Administrator",
