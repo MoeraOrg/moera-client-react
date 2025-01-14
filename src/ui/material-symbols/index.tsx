@@ -42,6 +42,7 @@ import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
 import { ReactComponent as msSatellite } from "ui/material-symbols/satellite.isvg";
 import { ReactComponent as msSend } from "ui/material-symbols/send.isvg";
 import { ReactComponent as msSentimentSatisfied } from "ui/material-symbols/sentiment_satisfied.isvg";
+import { ReactComponent as msSchedule } from "ui/material-symbols/schedule.isvg";
 import { ReactComponent as msStrikethroughS } from "ui/material-symbols/strikethrough_s.isvg";
 import { ReactComponent as msSubscript } from "ui/material-symbols/subscript.isvg";
 import { ReactComponent as msSuperscript } from "ui/material-symbols/superscript.isvg";
@@ -92,6 +93,7 @@ export {
     msSatellite,
     msSend,
     msSentimentSatisfied,
+    msSchedule,
     msStrikethroughS,
     msSubscript,
     msSuperscript,

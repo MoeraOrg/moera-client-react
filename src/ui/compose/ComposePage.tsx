@@ -25,7 +25,6 @@ import { Page } from "ui/page/Page";
 import PageHeader from "ui/page/PageHeader";
 import Jump from "ui/navigation/Jump";
 import ComposeFullName from "ui/compose/ComposeFullName";
-import ComposePublishAt from "ui/compose/ComposePublishAt";
 import ComposeViewPrincipal from "ui/compose/ComposeViewPrincipal";
 import ComposeDrafts from "ui/compose/drafts/ComposeDrafts";
 import ComposeFeatures from "ui/compose/features/ComposeFeatures";
@@ -95,7 +94,6 @@ function ComposePageInner(props: Props) {
                                 <AvatarField name="avatar" size={56} disabled={!ready}/>
                                 <div className="body">
                                     <ComposeFullName/>
-                                    <ComposePublishAt/>
                                     <ComposeViewPrincipal/>
                                 </div>
                             </div>
