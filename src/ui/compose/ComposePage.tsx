@@ -18,6 +18,7 @@ import {
     ComposePageValues
 } from "ui/compose/posting-compose";
 import { useIsTinyScreen } from "ui/hook/media-query";
+import NodeName from "ui/nodename/NodeName";
 import { ConflictWarning, Loading } from "ui/control";
 import { AvatarField, InputField } from "ui/control/field";
 import { RichTextField } from "ui/control/richtexteditor";
@@ -31,7 +32,6 @@ import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
 import ComposePreviewDialog from "ui/compose/ComposePreviewDialog";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./ComposePage.css";
-import NodeName from "ui/nodename/NodeName";
 
 type Props = ComposePageProps & FormikProps<ComposePageValues>;
 
