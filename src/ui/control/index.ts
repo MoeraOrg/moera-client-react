@@ -18,6 +18,7 @@ export { EmojiListDialog } from "ui/control/EmojiListDialog";
 export { EmojiListInput } from "ui/control/EmojiListInput";
 export { EmojiSelector } from "ui/control/EmojiSelector";
 export { FormGroup } from "ui/control/FormGroup";
+export type { FormGroupStyle } from "ui/control/FormGroup";
 export { Label } from "ui/control/Label";
 export { LabelButton } from "ui/control/LabelButton";
 export { Loading } from "ui/control/Loading";

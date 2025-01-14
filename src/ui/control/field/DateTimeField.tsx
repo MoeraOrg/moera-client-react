@@ -1,9 +1,8 @@
 import React, { Suspense } from 'react';
 
-import { FormGroup, Wrapper } from "ui/control";
+import { FormGroup, FormGroupStyle, Wrapper } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import FieldError from "ui/control/field/FieldError";
-import { FormGroupStyle } from "ui/control/FormGroup";
 import { useIsTinyScreen } from "ui/hook/media-query";
 import "./DateTimeField.css";
 

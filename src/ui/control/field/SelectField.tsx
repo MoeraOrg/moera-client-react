@@ -4,8 +4,7 @@ import composeRefs from '@seznam/compose-react-refs';
 import { TOptions } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
-import { FormGroup, Wrapper } from "ui/control";
-import { FormGroupStyle } from "ui/control/FormGroup";
+import { FormGroup, FormGroupStyle, Wrapper } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import FieldError from "ui/control/field/FieldError";
 

@@ -2,7 +2,7 @@ import React, { ForwardedRef, forwardRef, useEffect, useRef } from 'react';
 import cx from 'classnames';
 import composeRefs from '@seznam/compose-react-refs';
 
-import { FormGroup, Wrapper } from "ui/control";
+import { FormGroup, FormGroupStyle, Wrapper } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import FieldError from "ui/control/field/FieldError";
 
@@ -13,8 +13,10 @@ interface Props {
     disabled?: boolean;
     maxLength?: number;
     horizontal?: boolean;
+    layout?: FormGroupStyle;
     groupClassName?: string;
     labelClassName?: string;
+    inputClassName?: string;
     col?: string;
     autoFocus?: boolean;
     anyValue?: boolean;
@@ -27,8 +29,9 @@ interface Props {
 
 function InputFieldImpl(
     {
-        name, title, placeholder, disabled, maxLength, horizontal = false, groupClassName, labelClassName, col,
-        autoFocus, anyValue, className, autoComplete, noFeedback = false, initialValue, defaultValue
+        name, title, placeholder, disabled, maxLength, horizontal = false, layout, groupClassName, labelClassName,
+        inputClassName, col, autoFocus, anyValue, className, autoComplete, noFeedback = false, initialValue,
+        defaultValue
     }: Props,
     ref: ForwardedRef<HTMLInputElement>
 ) {
@@ -48,6 +51,7 @@ function InputFieldImpl(
             title={title}
             name={name}
             horizontal={horizontal}
+            layout={layout}
             labelClassName={labelClassName}
             groupClassName={groupClassName}
             undo={undo}
@@ -65,7 +69,9 @@ function InputFieldImpl(
                             "is-valid": !anyValue && touched && !error,
                             "is-invalid": !anyValue && touched && error,
                             [className!]: !!className
-                        })}
+                        },
+                        inputClassName
+                    )}
                     placeholder={placeholder}
                     autoComplete={autoComplete}
                     disabled={disabled}

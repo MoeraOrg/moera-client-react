@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { LabelButton, Wrapper } from "ui/control";
 import SetDefaultButton from "ui/control/field/SetDefaultButton";
 
-interface Props {
+export interface LabelProps {
     title?: string;
     titleHtml?: string;
     name?: string;
@@ -24,7 +24,7 @@ interface Props {
 
 export function Label({
     title, titleHtml, name, htmlFor, className, horizontal, checkbox, undo, reset, setting, onUndo, onReset, children
-}: Props) {
+}: LabelProps) {
     const {t} = useTranslation();
 
     return (

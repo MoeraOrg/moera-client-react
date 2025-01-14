@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { EmojiListInput, FormGroup, Wrapper } from "ui/control";
-import { FormGroupStyle } from "ui/control/FormGroup";
+import { EmojiListInput, FormGroup, FormGroupStyle, Wrapper } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import FieldError from "ui/control/field/FieldError";
 
