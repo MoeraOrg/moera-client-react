@@ -88,11 +88,11 @@ export default function FeedPosting({nodeName, posting, story}: FeedPostingProps
             </div>
             <PostingSubject posting={posting} preview={true}/>
             <Content nodeName={nodeName} posting={posting}/>
+            <EntryGallery postingId={posting.id} nodeName={nodeName} media={posting.media ?? null}
+                          onExpand={() => dispatch(goToPosting(posting.id, null, true))}/>
             <EntryLinkPreviews nodeName={nodeName}
                                linkPreviews={posting.bodyPreview?.linkPreviews ?? posting.body.linkPreviews}
                                limit={2} media={posting.media ?? null}/>
-            <EntryGallery postingId={posting.id} nodeName={nodeName} media={posting.media ?? null}
-                          onExpand={() => dispatch(goToPosting(posting.id, null, true))}/>
             <div className="reactions-line">
                 <PostingReactions nodeName={nodeName} postingId={posting.id} reactions={posting.reactions}/>
                 <PostingComments postingId={posting.id} totalComments={posting.totalComments}/>

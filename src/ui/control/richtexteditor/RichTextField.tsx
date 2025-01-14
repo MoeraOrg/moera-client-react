@@ -113,22 +113,19 @@ export function RichTextField({
                     noVideo={noVideo}
                     nodeName={nodeName}
                     forceImageCompress={forceImageCompress}
-                >
-                    <>
-                        {!noFeedback && touched && <FieldError error={(error as any)?.text}/>}
-                        {urlsField != null && linkPreviewsField != null &&
-                            <RichTextLinkPreviews
-                                name={linkPreviewsField}
-                                urlsField={urlsField}
-                                nodeName={nodeName}
-                                features={features}
-                                small={linkPreviewsSmall}
-                                disabled={disabled}
-                            />
-                        }
-                        {children}
-                    </>
-                </RichTextEditor>
+                    children={children}
+                />
+                {!noFeedback && touched && <FieldError error={(error as any)?.text}/>}
+                {urlsField != null && linkPreviewsField != null &&
+                    <RichTextLinkPreviews
+                        name={linkPreviewsField}
+                        urlsField={urlsField}
+                        nodeName={nodeName}
+                        features={features}
+                        small={linkPreviewsSmall}
+                        disabled={disabled}
+                    />
+                }
             </>
         </FormGroup>
     );

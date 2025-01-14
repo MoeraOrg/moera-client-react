@@ -38,10 +38,10 @@ export default function GlanceComment() {
                     <EntryHtml postingId={comment.postingId} commentId={comment.id} html={comment.body.text}
                                nodeName={receiverName ?? REL_CURRENT} media={comment.media}/>
                 </div>
-                <EntryLinkPreviews nodeName={receiverName ?? REL_CURRENT} linkPreviews={comment.body.linkPreviews}
-                                   media={comment.media ?? null}/>
                 <EntryGallery postingId={comment.postingId} commentId={comment.id}
                               nodeName={receiverName ?? REL_CURRENT} media={comment.media ?? null}/>
+                <EntryLinkPreviews nodeName={receiverName ?? REL_CURRENT} linkPreviews={comment.body.linkPreviews}
+                                   media={comment.media ?? null}/>
                 <div className="reactions-line">
                     <div className="comment-buttons"/>
                     <div className="reactions"/>

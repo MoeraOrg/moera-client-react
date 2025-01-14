@@ -111,7 +111,7 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, feature
     const media: MediaAttachment[] = value.media.map(media => ({media, embedded: true}));
 
     return (
-        <>
+        <div className="mt-3">
             <EntryLinkSelector urls={urls.filter(url => value.status[url] === "deleted")} onSelect={onRestore}
                                disabled={disabled}/>
             {value.previews.map((preview, index) =>
@@ -122,7 +122,7 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, feature
                                   editing disabled={disabled} onUpdate={onUpdate(preview.url)}
                                   onDelete={onDelete(preview.url)}/>
             )}
-        </>
+        </div>
     );
 }
 

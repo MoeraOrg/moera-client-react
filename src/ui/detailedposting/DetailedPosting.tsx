@@ -90,14 +90,14 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
             <PostingSubject posting={posting} preview={false}/>
             <EntryHtml className="content" postingId={posting.id} html={posting.body.text} nodeName={REL_CURRENT}
                        media={posting.media}/>
-            <EntryLinkPreviews nodeName={REL_CURRENT} linkPreviews={posting.body.linkPreviews}
-                               media={posting.media ?? null}/>
             {!expanded &&
                 <div id="posting-gallery" className="gallery-collapsed">
                     <EntryGallery postingId={posting.id} nodeName={REL_CURRENT} media={posting.media ?? null}
                                   onExpand={onExpand}/>
                 </div>
             }
+            <EntryLinkPreviews nodeName={REL_CURRENT} linkPreviews={posting.body.linkPreviews}
+                               media={posting.media ?? null}/>
             <div className="reactions-line">
                 <PostingReactions nodeName={REL_CURRENT} postingId={posting.id} reactions={posting.reactions}/>
                 <PostingComments postingId={posting.id} totalComments={posting.totalComments}/>

@@ -78,10 +78,10 @@ export default function Comment({comment, previousId, focused}: Props) {
                             <CommentVisibility comment={comment}/>
                         </div>
                         <CommentContent comment={comment} previousId={previousId} receiverName={realOwnerName}/>
-                        <EntryLinkPreviews nodeName={realOwnerName} linkPreviews={comment.body.linkPreviews} limit={2}
-                                           media={comment.media ?? null} small/>
                         <EntryGallery postingId={realPostingId} commentId={comment.id} nodeName={realOwnerName}
                                       media={comment.media ?? null}/>
+                        <EntryLinkPreviews nodeName={realOwnerName} linkPreviews={comment.body.linkPreviews} limit={2}
+                                           media={comment.media ?? null} small/>
                         <div className="reactions-line">
                             {comment.signature == null && <div className="unsigned">{t("unsigned")}</div>}
                             {connectedToHome && comment.signature != null &&
