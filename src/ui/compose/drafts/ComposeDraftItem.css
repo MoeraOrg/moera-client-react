@@ -66,7 +66,7 @@
 
 @media only screen and (max-width: 575px) {
     .draft-selector .dropdown-item .content {
-        max-width: calc(100vw - 4.3rem);
+        max-width: calc(100vw - 6rem);
     }
 }
 
