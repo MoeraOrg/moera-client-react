@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { AvatarInfo, FundraiserInfo, PrincipalValue, ProfileInfo } from "api";
+import { AvatarInfo, FundraiserInfo, PrincipalValue, ProfileInfo, SourceFormat } from "api";
 import { ClientState } from "state/state";
+import { getSetting } from "state/settings/selectors";
 import { profileEditCancel, profileEditConflictClose, profileUpdate } from "state/profile/actions";
 import { useIsTinyScreen } from "ui/hook/media-query";
 import { Button, ConflictWarning, Loading } from "ui/control";
@@ -21,6 +22,7 @@ import "./ProfileEditor.css";
 
 interface OuterProps {
     profile: ProfileInfo;
+    srcFormatDefault: SourceFormat;
 }
 
 interface Values {
@@ -82,7 +84,7 @@ function ProfileEditorInner(props: Props) {
                             title={t("bio")}
                             name="bioSrc"
                             placeholder={t("write-anything")}
-                            format="markdown"
+                            format={props.srcFormatDefault}
                             anyValue
                             noMedia
                         />
@@ -106,7 +108,7 @@ const profileEditorLogic = {
         title: props.profile.title || "",
         gender: props.profile.gender || "",
         email: props.profile.email || "",
-        bioSrc: new RichTextValue(props.profile.bioSrc || "", "markdown"),
+        bioSrc: new RichTextValue(props.profile.bioSrc || "", props.profile.bioSrcFormat ?? props.srcFormatDefault),
         avatar: props.profile.avatar ?? null,
         fundraisers: props.profile.fundraisers ?? [],
         viewEmail: props.profile.operations?.viewEmail ?? "admin"
@@ -143,7 +145,7 @@ const profileEditorLogic = {
             gender: values.gender.trim(),
             email: values.email.trim(),
             bioSrc: values.bioSrc.toText(true),
-            bioSrcFormat: "markdown",
+            bioSrcFormat: formik.props.srcFormatDefault,
             avatarId: values.avatar ? values.avatar.id : null,
             fundraisers: values.fundraisers,
             operations: {
@@ -159,6 +161,8 @@ const ProfileEditorOuter = withFormik(profileEditorLogic)(ProfileEditorInner);
 
 export default function ProfileEditor() {
     const profile = useSelector((state: ClientState) => state.profile.profile);
+    const srcFormatDefault = useSelector((state: ClientState) =>
+        getSetting(state, "src-format.default") as SourceFormat);
 
-    return <ProfileEditorOuter profile={profile}/>;
+    return <ProfileEditorOuter profile={profile} srcFormatDefault={srcFormatDefault}/>;
 }

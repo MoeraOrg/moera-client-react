@@ -683,7 +683,7 @@
           "yes": "Zrezygnuj z subskrypcji"
         },
         "clock_offset": "Przesunięcie zegara od czasu rzeczywistego (w godzinach)",
-        "comment_body-src-format_default": "Domyślne formatowanie tekstu komentarza",
+        "comment_body-src-format_default": "Formatowanie tekstu komentarza (domyślne)",
         "comment_body-src-format_default-items": {
           "html--visual": "Edytor wizualny",
           "plain-text": "Bez formatowania"
@@ -756,6 +756,11 @@
           "ask": "Zapytaj",
           "html": "Wklej z tagami",
           "text": "Wklej tylko tekst"
+        },
+        "src-format_default": "Formatowanie profilu i innych tekstów (domyślnie)",
+        "src-format_default-items": {
+          "html--visual": "Edytor wizualny",
+          "plain-text": "Bez formatowania"
         }
       }
     },

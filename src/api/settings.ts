@@ -574,6 +574,32 @@ const META: ClientSettingMetaInfo[] = [
             ]
         }
     },
+    {
+        name: "src-format.default",
+        type: "string",
+        defaultValue: "html/visual",
+        modifiers: {
+            format: "select",
+            items: [
+                {
+                    title: "No formatting",
+                    value: "plain-text"
+                },
+                {
+                    title: "HTML",
+                    value: "html"
+                },
+                {
+                    title: "Markdown",
+                    value: "markdown"
+                },
+                {
+                    title: "Visual editor",
+                    value: "html/visual"
+                }
+            ]
+        }
+    },
 ];
 
 function collectMetaMap(map: Map<string, ClientSettingMetaInfo>, metadata: ClientSettingMetaInfo[]) {

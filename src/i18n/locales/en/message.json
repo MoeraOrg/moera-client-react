@@ -683,7 +683,7 @@
           "yes": "Unsubscribe"
         },
         "clock_offset": "Clock offset from the real time (in hours)",
-        "comment_body-src-format_default": "Default comment text formatting",
+        "comment_body-src-format_default": "Comment text formatting (default)",
         "comment_body-src-format_default-items": {
           "html--visual": "Visual editor",
           "plain-text": "No formatting"
@@ -756,6 +756,11 @@
           "ask": "Ask",
           "html": "Paste with tags",
           "text": "Paste text only"
+        },
+        "src-format_default": "Formatting of profile and other texts (default)",
+        "src-format_default-items": {
+          "html--visual": "Visual editor",
+          "plain-text": "No formatting"
         }
       }
     },
