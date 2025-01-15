@@ -31,7 +31,8 @@ export default [
 
 function* blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>) {
     const {
-        nodeName, formattedName, entryNodeName, entryPostingId, prevBlockedUsers, blockedOperations, deadline, reasonSrc
+        nodeName, formattedName, entryNodeName, entryPostingId, prevBlockedUsers, blockedOperations, deadline,
+        reasonSrc, reasonSrcFormat
     } = action.payload;
     const {homeOwnerName} = action.context;
 
@@ -49,7 +50,8 @@ function* blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>) {
                 entryNodeName: targetNodeName,
                 entryPostingId: targetPostingId,
                 deadline,
-                reasonSrc
+                reasonSrc,
+                reasonSrcFormat
             }))
         );
         yield* put(blockDialogSubmitted(nodeName).causedBy(action));

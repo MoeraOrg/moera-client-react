@@ -4,7 +4,7 @@ import { Form, FormikBag, FormikProps, useFormikContext, withFormik } from 'form
 import { add, getUnixTime } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { BlockedOperation, BlockedUserInfo } from "api";
+import { BlockedOperation, BlockedUserInfo, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
@@ -52,6 +52,7 @@ interface OuterProps {
     entryPostingId: string | null;
     prevBlocked: BlockedUserInfo[];
     nameDisplayMode: NameDisplayMode;
+    srcFormatDefault: SourceFormat;
 }
 
 interface Values {
@@ -65,7 +66,7 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function BlockDialogInner({entryNodeName}: Props) {
+function BlockDialogInner({entryNodeName, srcFormatDefault}: Props) {
     const homeOwnerName = useSelector(getHomeOwnerName);
     const dispatch = useDispatch();
     const {values, isSubmitting} = useFormikContext<Values>();
@@ -129,7 +130,13 @@ function BlockDialogInner({entryNodeName}: Props) {
                             }
                             <details open={values.reasonOpen}>
                                 <summary>{t("blocking-reason")}</summary>
-                                <RichTextField name="reason" format="markdown" anyValue noMedia panelMode="bottom"/>
+                                <RichTextField
+                                    name="reason"
+                                    format={srcFormatDefault}
+                                    anyValue
+                                    noMedia
+                                    panelMode="bottom"
+                                />
                             </details>
                         </>
                     }
@@ -163,7 +170,10 @@ const blockDialogLogic = {
         const formattedName = formatFullName(props.nodeName, props.fullName, props.nameDisplayMode);
         const level = blockingLevel(props.prevBlocked.map(bu => bu.blockedOperation));
         const days = daysTillDeadline(props.prevBlocked);
-        const reason = new RichTextValue(props.prevBlocked[0]?.reasonSrc ?? "", "markdown");
+        const reason = new RichTextValue(
+            props.prevBlocked[0]?.reasonSrc ?? "",
+            props.prevBlocked[0]?.reasonSrcFormat ?? props.srcFormatDefault
+        );
         return {
             formattedName,
             level,
@@ -181,7 +191,7 @@ const blockDialogLogic = {
         const deadline = values.temporary ? getUnixTime(add(new Date(), {days: values.days})) : null;
         store.dispatch(blockDialogSubmit(
             nodeName, values.formattedName, entryNodeName, entryPostingId, prevBlocked,
-            BLOCKED_OPERATIONS[values.level], deadline, values.reason.text
+            BLOCKED_OPERATIONS[values.level], deadline, values.reason.text, formik.props.srcFormatDefault
         ));
         formik.setSubmitting(false);
     }
@@ -198,8 +208,10 @@ export default function BlockDialog() {
     const prevBlocked = useSelector((state: ClientState) => state.blockDialog.prevBlocked);
     const nameDisplayMode = useSelector((state: ClientState) =>
         getSetting(state, "full-name.display")) as NameDisplayMode;
+    const srcFormatDefault = useSelector((state: ClientState) =>
+        getSetting(state, "src-format.default") as SourceFormat);
 
     return <BlockDialogOuter nodeName={nodeName} fullName={fullName} entryNodeName={entryNodeName}
                              entryPostingId={entryPostingId} prevBlocked={prevBlocked}
-                             nameDisplayMode={nameDisplayMode}/>;
+                             nameDisplayMode={nameDisplayMode} srcFormatDefault={srcFormatDefault}/>;
 }

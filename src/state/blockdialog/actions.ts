@@ -1,5 +1,5 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
-import { BlockedOperation, BlockedUserInfo } from "api";
+import { BlockedOperation, BlockedUserInfo, SourceFormat } from "api";
 
 export type OpenBlockDialogAction = ActionWithPayload<"OPEN_BLOCK_DIALOG", {
     nodeName: string;
@@ -27,17 +27,18 @@ export type BlockDialogSubmitAction = ActionWithPayload<"BLOCK_DIALOG_SUBMIT", {
     blockedOperations: BlockedOperation[];
     deadline: number | null;
     reasonSrc: string;
+    reasonSrcFormat: SourceFormat;
 }>;
 export const blockDialogSubmit = (
     nodeName: string, formattedName: string, entryNodeName: string | null, entryPostingId: string | null,
     prevBlockedUsers: BlockedUserInfo[], blockedOperations: BlockedOperation[], deadline: number | null,
-    reasonSrc: string
+    reasonSrc: string, reasonSrcFormat: SourceFormat
 ): BlockDialogSubmitAction =>
     actionWithPayload(
         "BLOCK_DIALOG_SUBMIT",
         {
             nodeName, formattedName, entryNodeName, entryPostingId, prevBlockedUsers, blockedOperations, deadline,
-            reasonSrc
+            reasonSrc, reasonSrcFormat
         }
     );
 
