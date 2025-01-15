@@ -18,3 +18,39 @@ export function htmlToMarkdown(html?: string | null): string | null {
         .replace(/\n\s*\n/g, "\n\n")
         .trim()
 }
+
+// TODO not correctly supported: spoilers, blockquotes, KaTeX, mentions
+export async function markdownToHtml(markdown: string): Promise<string>;
+export async function markdownToHtml(markdown?: null): Promise<null>;
+export async function markdownToHtml(markdown?: string | null): Promise<string | null>;
+export async function markdownToHtml(markdown?: string | null): Promise<string | null> {
+    if (markdown == null) {
+        return null;
+    }
+
+    const [
+        { default: MarkdownIt },
+        { default: MarkdownItSub },
+        { default: MarkdownItSup },
+        { full: MarkdownItEmoji },
+        { default: MarkdownItDeflist }
+    ] = await Promise.all([
+        import("markdown-it"),
+        // @ts-ignore
+        import("markdown-it-sub"),
+        // @ts-ignore
+        import("markdown-it-sup"),
+        import("markdown-it-emoji"),
+        // @ts-ignore
+        import("markdown-it-deflist"),
+    ]);
+
+    const md = new MarkdownIt({
+        html: true,
+        linkify: true,
+    }).use(MarkdownItSub)
+        .use(MarkdownItSup)
+        .use(MarkdownItEmoji)
+        .use(MarkdownItDeflist);
+    return md.render(markdown);
+}

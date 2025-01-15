@@ -3,7 +3,7 @@ import cx from 'classnames';
 
 import { PostingFeatures, SourceFormat, VerifiedMediaFile } from "api";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
-import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
+import { htmlToMarkdown, markdownToHtml } from "ui/control/richtexteditor/markdown/markdown-html";
 import { MarkdownEditor, MarkdownEditorProps } from "ui/control/richtexteditor/markdown/MarkdownEditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import {
@@ -52,11 +52,12 @@ export function RichTextEditor({
     };
 
     useEffect(() => {
-        const convertedValue = convertFormat(value.value, value.format, format);
-        if (convertedValue !== value.value) {
-            textRef.current = convertedValue;
-            onChange?.(new RichTextValue(convertedValue, format, mediaRef.current), true);
-        }
+        convertFormat(value.value, value.format, format).then(convertedValue => {
+            if (convertedValue !== value.value) {
+                textRef.current = convertedValue;
+                onChange?.(new RichTextValue(convertedValue, format, mediaRef.current), true);
+            }
+        });
     }, [format, onChange, value.format, value.value]);
 
     return (
@@ -130,12 +131,13 @@ export function RichTextEditor({
     );
 }
 
-function convertFormat(value: string | Scripture, prevFormat: SourceFormat, format: SourceFormat): string | Scripture {
+async function convertFormat(
+    value: string | Scripture, prevFormat: SourceFormat, format: SourceFormat
+): Promise<string | Scripture> {
     if (prevFormat === format) {
         return value;
     }
 
-    // TODO convert Markdown markup to HTML
     switch (format) {
         case "plain-text":
             switch (prevFormat) {
@@ -160,8 +162,9 @@ function convertFormat(value: string | Scripture, prevFormat: SourceFormat, form
         case "html":
             switch (prevFormat) {
                 case "plain-text":
-                case "markdown":
                     return prettyHtml(linefeedsToHtml(value as string));
+                case "markdown":
+                    return prettyHtml(await markdownToHtml(value as string));
                 case "html/visual":
                     return prettyHtml(scriptureToHtml(value as Scripture));
             }
@@ -169,8 +172,9 @@ function convertFormat(value: string | Scripture, prevFormat: SourceFormat, form
         case "html/visual":
             switch (prevFormat) {
                 case "plain-text":
-                case "markdown":
                     return normalizeDocument(safeImportScripture(linefeedsToHtml(value as string)));
+                case "markdown":
+                    return normalizeDocument(safeImportScripture(await markdownToHtml(value as string)));
                 case "html":
                     return normalizeDocument(safeImportScripture(value as string));
             }

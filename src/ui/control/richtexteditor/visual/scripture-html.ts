@@ -28,7 +28,7 @@ import {
     isScriptureRegularInline,
     isScriptureSimpleBlock,
     isScriptureSuperBlock,
-    isScriptureText,
+    isScriptureText, isScriptureVoid,
     isScriptureVoidBlock,
     Scripture,
     ScriptureDescendant,
@@ -649,6 +649,11 @@ function scriptureCleanup(scripture: Scripture): Scripture {
             }
         }
         if (isScriptureElement(node)) {
+            if (isScriptureVoid(node)) {
+                node.children = [createScriptureText("")];
+                output.push(node);
+                continue;
+            }
             node.children = scriptureCleanup(node.children as Scripture);
             if (!isSignificant(node.children)) {
                 continue;
