@@ -160,9 +160,6 @@ function MarkdownArea(
             const theTextArea = textArea.current;
             theTextArea.addEventListener("input", onInput);
             theTextArea.addEventListener("paste", onPaste);
-            if (autoFocus) {
-                theTextArea.focus();
-            }
 
             return () => {
                 theTextArea.removeEventListener("input", onInput);
