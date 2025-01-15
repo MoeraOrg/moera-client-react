@@ -12,7 +12,7 @@ export function SelectedImages({files, onDelete}: Props) {
     const [filesData, setFilesData] = React.useState<string[]>([]);
 
     useEffect(() => {
-        Promise.all(files.map(readFileAsDataUrl)).then(setFilesData);
+        Promise.all(files.map(readFileAsUrl)).then(setFilesData);
     }, [files]);
 
     return (
@@ -33,11 +33,14 @@ export function SelectedImages({files, onDelete}: Props) {
     );
 }
 
-function readFileAsDataUrl(file: File): Promise<string> {
+function readFileAsUrl(file: File): Promise<string> {
     return new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
+        reader.onload = () => {
+            const blob = new Blob([reader.result as ArrayBuffer], {type: file.type});
+            resolve(URL.createObjectURL(blob));
+        }
         reader.onerror = () => reject(reader.error);
-        reader.readAsDataURL(file);
+        reader.readAsArrayBuffer(file);
     });
 }
