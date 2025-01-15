@@ -201,7 +201,9 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
     }
 
     const formatMention = (typeOnCancel: boolean) => {
-        if (inMention) {
+        const [, path] = findWrappingElement(editor, "mention") ?? [null, null];
+        if (path != null) {
+            editor.unwrapNodes({at: path});
             return;
         }
 
