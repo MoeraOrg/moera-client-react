@@ -12,14 +12,17 @@ import "./DropdownMenu.css";
 interface Props {
     content?: ReactNode;
     items?: MenuItem[];
-    className?: string | null;
+    className?: string;
+    dropdownClassName?: string;
     disabled?: boolean;
     parentOverlayId?: string;
     onDialogOpened?: () => void;
     children?: React.ReactNode | ((visible: boolean) => React.ReactNode);
 }
 
-export function DropdownMenu({content, items, className, disabled, parentOverlayId, onDialogOpened, children}: Props) {
+export function DropdownMenu({
+    content, items, className, dropdownClassName, disabled, parentOverlayId, onDialogOpened, children
+}: Props) {
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex, overlayId
     } = useButtonPopper("bottom-end", {parentOverlayId});
@@ -43,7 +46,7 @@ export function DropdownMenu({content, items, className, disabled, parentOverlay
             </button>
             {visible &&
                 <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
-                     className="fade dropdown-menu shadow-sm show">
+                     className={cx("fade dropdown-menu shadow-sm show", dropdownClassName)}>
                     {content}
                     {items && <DropdownMenuItems items={items}/>}
                 </div>

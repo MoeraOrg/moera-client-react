@@ -86,7 +86,7 @@ export default function ComposeSubmitButton({loading, update, disabled}: Props) 
                         onClick: onChangeFullName,
                         show: true
                     },
-                ]} className="btn btn-primary submit-menu-button">
+                ]} className="btn btn-primary submit-menu-button" dropdownClassName="border border-primary">
                     {visible => <Icon icon={visible ? msKeyboardArrowUp : msKeyboardArrowDown}/>}
                 </DropdownMenu>
             </div>
