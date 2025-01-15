@@ -31,7 +31,7 @@ import "./CommentComposePanel.css";
 
 function CommentComposePanel() {
     const {openLocalFiles, copyImage} = useRichTextEditorMedia();
-    const {supportsMedia, supportsVideo, formatEmoji, formatVideo} = useRichTextEditorCommands();
+    const {focus, supportsMedia, supportsVideo, formatEmoji, formatVideo} = useRichTextEditorCommands();
 
     const ready = useSelector(isCommentComposerReady);
     const draft = useSelector((state: ClientState) => state.detailedPosting.compose.draft);
@@ -45,7 +45,11 @@ function CommentComposePanel() {
             message: t("forget-unfinished-comment"),
             yes: t("forget"),
             no: t("cancel"),
-            onYes: commentComposeCancel(),
+            onYes: () => {
+                focus();
+                return commentComposeCancel();
+            },
+            onNo: () => focus(),
             variant: "danger"
         }));
         e.preventDefault();

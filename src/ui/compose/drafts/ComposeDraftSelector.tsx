@@ -6,8 +6,9 @@ import cx from 'classnames';
 import { ClientState } from "state/state";
 import { composeDraftListItemDelete, composeDraftSelect } from "state/compose/actions";
 import { isComposeReady } from "state/compose/selectors";
-import { Button, Loading, LoadingInline } from "ui/control";
 import { useButtonPopper } from "ui/hook";
+import { Button, Loading, LoadingInline } from "ui/control";
+import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import ComposeDraftItem from "ui/compose/drafts/ComposeDraftItem";
 import ComposeNewPost from "ui/compose/drafts/ComposeNewPost";
 import "./ComposeDraftSelector.css";
@@ -20,6 +21,7 @@ export default function ComposeDraftSelector() {
     const loadingDraftList = useSelector((state: ClientState) => state.compose.loadingDraftList);
     const loadedDraftList = useSelector((state: ClientState) => state.compose.loadedDraftList);
     useSelector((state: ClientState) => state.pulse.pulse); // To force re-rendering only
+    const {focus} = useRichTextEditorCommands();
     const dispatch = useDispatch();
 
     const {
@@ -32,9 +34,13 @@ export default function ComposeDraftSelector() {
         if (id !== draftId) {
             dispatch(composeDraftSelect(id));
         }
+        focus();
    };
 
-    const onDelete = (id: string) => dispatch(composeDraftListItemDelete(id, true));
+    const onDelete = (id: string) => {
+        dispatch(composeDraftListItemDelete(id, true));
+        focus();
+    }
 
     if (postingId != null) {
         return null;
