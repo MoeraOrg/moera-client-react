@@ -126,7 +126,7 @@ const META: ClientSettingMetaInfo[] = [
     {
         name: "comment.body-src-format.default",
         type: "string",
-        defaultValue: "markdown",
+        defaultValue: "html/visual",
         modifiers: {
             format: "select",
             items: [
@@ -310,7 +310,7 @@ const META: ClientSettingMetaInfo[] = [
     {
         name: "posting.body-src-format.default",
         type: "string",
-        defaultValue: "markdown",
+        defaultValue: "html/visual",
         internal: true
     },
     {

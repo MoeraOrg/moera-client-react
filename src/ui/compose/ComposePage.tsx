@@ -108,7 +108,7 @@ function ComposePageInner(props: Props) {
                             name="body"
                             placeholder={t("whats-new")}
                             disabled={!ready || beingPosted}
-                            format={values.bodyFormat ?? "markdown"}
+                            format={values.bodyFormat}
                             smileysEnabled={smileysEnabled}
                             features={features}
                             nodeName={REL_CURRENT}
