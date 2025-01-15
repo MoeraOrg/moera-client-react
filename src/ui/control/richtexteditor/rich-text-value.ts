@@ -7,6 +7,7 @@ import { notNull } from "util/misc";
 
 export class RichTextValue {
 
+    readonly format: SourceFormat;
     readonly value: string | Scripture;
     readonly media?: (VerifiedMediaFile | null)[] | null;
 
@@ -14,6 +15,7 @@ export class RichTextValue {
         if (format === "html/visual") {
             value = htmlToScripture(value, false, media?.filter(notNull));
         }
+        this.format = format;
         this.value = value;
         this.media = media;
     }

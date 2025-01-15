@@ -248,6 +248,31 @@ export function htmlToEmoji(html: string): string {
             (g0, g1) => String.fromCodePoint(...(g1.split("_").map((v: string) => parseInt(v, 16)))));
 }
 
+export function linefeedsToHtml(text: string | null | undefined): string {
+    if (!text) {
+        return "";
+    }
+    return text
+        .replace(/\s*\n\s*\n\s*/g, "<p>")
+        .replace(/\s*\n\s*/g, "<br>");
+}
+
+export function htmlToLinefeeds(html: string | null | undefined): string {
+    if (!html) {
+        return "";
+    }
+    return html
+        .replace(/\n*<p(\s[^>]*)?>\n*/gi, "\n\n")
+        .replace(/<\/p>/gi, "")
+        .replace(/\n*<br\s*\/?>\n*/gi, "\n");
+}
+
+export function prettyHtml(html: string): string {
+    return html
+        .replace(/<br\/?>(?!\n)/g, "<br/>\n")
+        .replace(/<\/p>(?!\n)/g, "</p>\n");
+}
+
 type ReplacementLevel = "none" | "basic" | "all";
 
 export function containsTags(html: string, replacementLevel: ReplacementLevel): boolean {

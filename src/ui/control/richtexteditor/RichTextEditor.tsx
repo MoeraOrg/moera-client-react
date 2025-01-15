@@ -1,14 +1,21 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import cx from 'classnames';
 
-import { PostingFeatures, VerifiedMediaFile } from "api";
+import { PostingFeatures, SourceFormat, VerifiedMediaFile } from "api";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
+import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
 import { MarkdownEditor, MarkdownEditorProps } from "ui/control/richtexteditor/markdown/MarkdownEditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
+import {
+    normalizeDocument,
+    safeImportScripture,
+    scriptureToHtml
+} from "ui/control/richtexteditor/visual/scripture-html";
 import VisualEditor, { VisualEditorProps } from "ui/control/richtexteditor/visual/VisualEditor";
 import RichTextEditorDialogs from "ui/control/richtexteditor/dialog/RichTextEditorDialogs";
 import RichTextEditorMedia from "ui/control/richtexteditor/media/RichTextEditorMedia";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
+import { htmlToLinefeeds, linefeedsToHtml, prettyHtml } from "util/html";
 import "./RichTextEditor.css";
 
 type Props = {
@@ -20,7 +27,7 @@ type Props = {
     noEmbeddedMedia?: boolean | null;
     noMedia?: boolean | null;
     noVideo?: boolean | null;
-    onChange?: (value: RichTextValue) => void;
+    onChange?: (value: RichTextValue, converted: boolean) => void;
     children?: ReactNode;
 } & Omit<MarkdownEditorProps, "onChange"> & Omit<VisualEditorProps, "onChange">;
 
@@ -36,13 +43,21 @@ export function RichTextEditor({
 
     const onTextChange = (text: string | Scripture) => {
         textRef.current = text;
-        onChange?.(new RichTextValue(text, format, mediaRef.current));
-    }
+        onChange?.(new RichTextValue(text, format, mediaRef.current), false);
+    };
 
     const onMediaChange = (media: (VerifiedMediaFile | null)[]) => {
         mediaRef.current = media;
-        onChange?.(new RichTextValue(textRef.current ?? "", format, media));
-    }
+        onChange?.(new RichTextValue(textRef.current ?? "", format, media), false);
+    };
+
+    useEffect(() => {
+        const convertedValue = convertFormat(value.value, value.format, format);
+        if (convertedValue !== value.value) {
+            textRef.current = convertedValue;
+            onChange?.(new RichTextValue(convertedValue, format, mediaRef.current), true);
+        }
+    }, [format, onChange, value.format, value.value]);
 
     return (
         <div className={cx("rich-text-editor", className)}>
@@ -113,4 +128,53 @@ export function RichTextEditor({
             </RichTextEditorDialogs>
         </div>
     );
+}
+
+function convertFormat(value: string | Scripture, prevFormat: SourceFormat, format: SourceFormat): string | Scripture {
+    if (prevFormat === format) {
+        return value;
+    }
+
+    // TODO convert Markdown markup to HTML
+    switch (format) {
+        case "plain-text":
+            switch (prevFormat) {
+                case "markdown":
+                    return value;
+                case "html":
+                    return htmlToLinefeeds(value as string);
+                case "html/visual":
+                    return htmlToLinefeeds(scriptureToHtml(value as Scripture));
+            }
+            break;
+        case "markdown":
+            switch (prevFormat) {
+                case "plain-text":
+                    return value;
+                case "html":
+                    return htmlToMarkdown(value as string);
+                case "html/visual":
+                    return htmlToMarkdown(scriptureToHtml(value as Scripture));
+            }
+            break;
+        case "html":
+            switch (prevFormat) {
+                case "plain-text":
+                case "markdown":
+                    return prettyHtml(linefeedsToHtml(value as string));
+                case "html/visual":
+                    return prettyHtml(scriptureToHtml(value as Scripture));
+            }
+            break;
+        case "html/visual":
+            switch (prevFormat) {
+                case "plain-text":
+                case "markdown":
+                    return normalizeDocument(safeImportScripture(linefeedsToHtml(value as string)));
+                case "html":
+                    return normalizeDocument(safeImportScripture(value as string));
+            }
+    }
+
+    return value;
 }

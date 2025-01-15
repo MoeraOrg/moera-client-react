@@ -38,7 +38,7 @@ import {
 } from "ui/control/richtexteditor/visual/scripture";
 import { findStandardSize, getImageDimensions } from "ui/control/richtexteditor/media/rich-text-image";
 import * as Browser from "ui/browser";
-import { htmlEntities, htmlToEmoji, safeImportHtml, unhtmlEntities } from "util/html";
+import { htmlEntities, htmlToEmoji, linefeedsToHtml, safeImportHtml, unhtmlEntities } from "util/html";
 import { isNumericString, notNull } from "util/misc";
 
 export function htmlToScripture(
@@ -255,15 +255,6 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
 
 export const safeImportScripture = (html: string | null | undefined): Scripture =>
     htmlToScripture(htmlToEmoji(linefeedsToHtml(safeImportHtml(html?.replaceAll("\n", " ")))), true);
-
-function linefeedsToHtml(html: string | null | undefined): string {
-    if (!html) {
-        return "";
-    }
-    return html
-        .replaceAll("\n\n", "<p>")
-        .replaceAll("\n", "<br>");
-}
 
 export function scriptureToHtml(scripture?: Scripture | null | undefined): string {
     if (!scripture) { // null, undefined, "", []
@@ -518,6 +509,10 @@ function closeAllTags(context: ScriptureToHtmlContext): void {
 }
 
 // NOTE: normalization functions modify the scripture passed to their input
+
+export function normalizeDocument(nodes: Descendant[]): Scripture {
+    return normalizeBlocks(nodes);
+}
 
 function normalizeFragment(nodes: Descendant[]): Scripture {
     const hasBlocks = nodes.some(d => isScriptureElement(d) && isScriptureBlock(d));

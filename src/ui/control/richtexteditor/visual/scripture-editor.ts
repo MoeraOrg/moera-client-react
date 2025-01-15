@@ -36,6 +36,7 @@ import {
 import { safeImportScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { smileyReplacer, TextReplacementFunction } from "util/text";
 import { URL_PATTERN } from "util/url";
+import { linefeedsToHtml } from "util/html";
 
 interface WrappingElementOptions {
     at?: Path;
@@ -123,8 +124,7 @@ export function withScripture<T extends DOMEditor>(
             return true;
         }
 
-        const html = text.replace(/\s*\n\s*\n\s*/g, "<p>").replace(/\s*\n\s*/g, "<br>");
-        editor.insertFragment(safeImportScripture(html));
+        editor.insertFragment(safeImportScripture(linefeedsToHtml(text)));
 
         return true;
     };

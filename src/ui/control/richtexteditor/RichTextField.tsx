@@ -62,9 +62,9 @@ export function RichTextField({
 
     // useCallback() and setFieldValue() (not setValue()) is mandatory here
     const onChange = useCallback(
-        (v: RichTextValue) => {
+        (v: RichTextValue, converted: boolean) => {
             setFieldValue(name, v);
-            setTouched(true, false);
+            setTouched(!converted, false);
         },
         [name, setFieldValue, setTouched]
     );
