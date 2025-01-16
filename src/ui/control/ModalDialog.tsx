@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { useSelector } from 'react-redux';
 import cx from 'classnames';
 
+import { tTitle } from "i18n";
 import { getFeedWidth } from "state/settings/selectors";
 import { CloseButton, Loading, ModalDialogContext } from "ui/control";
 import { useOverlay } from "ui/overlays/overlays";
@@ -55,7 +56,7 @@ export function ModalDialog({
                         {loading && <Loading overlay large/>}
                         {title &&
                             <div className="modal-header">
-                                <h4 className="modal-title">{title}</h4>
+                                <h4 className="modal-title">{tTitle(title)}</h4>
                                 {onClose &&
                                     <CloseButton onClick={onClose}/>
                                 }

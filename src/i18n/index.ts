@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import ICU from 'i18next-icu';
 import { enUS, pl, ru, uk } from 'date-fns/locale'
+import { titleCase } from 'title-case';
 
 import message_en from "i18n/locales/en/message.json";
 import message_pl from "i18n/locales/pl/message.json";
@@ -48,13 +49,14 @@ export function findPreferredLanguage(): string {
     return "en";
 }
 
-export function getDateFnsLocale(): Locale {
-    return DATE_FNS_LOCALES[i18n.language] ?? enUS;
-}
+export const getDateFnsLocale = (): Locale =>
+    DATE_FNS_LOCALES[i18n.language] ?? enUS;
 
-export function tGender(gender: string | null | undefined): string {
-    return gender != null ? gender.toLowerCase() : "";
-}
+export const tGender = (gender: string | null | undefined): string =>
+    gender != null ? gender.toLowerCase() : "";
+
+export const tTitle = (text: string): string =>
+    i18n.language.startsWith("en") ? titleCase(text, {locale: i18n.language}) : text;
 
 i18n.use(initReactI18next)
     .use(ICU)

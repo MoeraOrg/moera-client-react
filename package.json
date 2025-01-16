@@ -79,6 +79,7 @@
     "slate-history": "^0.110.3",
     "slate-react": "^0.112.0",
     "stream-browserify": "^3.0.0",
+    "title-case": "^4.3.2",
     "twemoji-parser": "^14.0.0",
     "uri-js": "^4.4.1",
     "workbox-broadcast-update": "^7.0.0",
