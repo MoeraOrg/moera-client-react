@@ -19,7 +19,7 @@ import { containsTags, safeImportHtml } from "util/html";
 import { insertText } from "util/ui";
 import { mentionName } from "util/names";
 
-const MENTION_START = /(^|\s)@$/;
+const MENTION_START = /(^|[\s(])@$/;
 
 export interface MarkdownAreaProps {
     name: string;

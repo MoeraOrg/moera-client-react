@@ -192,7 +192,7 @@ export default function VisualTextArea({
                 const node = Node.get(editor, editor.selection.anchor.path);
                 if (isScriptureText(node)) {
                     const offset = editor.selection.anchor.offset;
-                    if (offset === 0 || /\s/.test(node.text.charAt(offset - 1))) {
+                    if (offset === 0 || /[\s(]/.test(node.text.charAt(offset - 1))) {
                         formatMention(true);
                         event.preventDefault();
                     }
