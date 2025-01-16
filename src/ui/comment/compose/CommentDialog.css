@@ -11,8 +11,13 @@
     margin-right: .25rem;
 }
 
-.comment-dialog .modal-footer .draft-saver {
-    color: var(--bs-gray-500);
+.comment-dialog .rich-text-editor-image-list {
+    max-height: 16rem;
+}
+
+.comment-dialog .modal-footer .draft-status {
+    color: var(--bs-gray-400);
+    margin-inline-end: 1em;
 }
 
 @media only screen and (min-width: 576px) {

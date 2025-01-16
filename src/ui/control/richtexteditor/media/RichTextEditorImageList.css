@@ -3,4 +3,5 @@
     display: flex;
     gap: .5rem;
     flex-wrap: wrap;
+    overflow-y: auto;
 }

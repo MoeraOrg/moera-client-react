@@ -21,6 +21,7 @@ import {
 } from "state/detailedposting/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { getPostingFeatures } from "state/compose/selectors";
+import { Icon, msCloudDone, msCloudUpload } from "ui/material-symbols";
 import NodeName from "ui/nodename/NodeName";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
 import { AvatarField } from "ui/control/field";
@@ -89,6 +90,7 @@ function CommentDialogInner(props: Props) {
                     <RichTextField
                         name="body"
                         rows={5}
+                        maxHeight="max(100vh - 45rem)"
                         features={features}
                         nodeName={receiverName ?? REL_CURRENT}
                         forceImageCompress
@@ -107,10 +109,10 @@ function CommentDialogInner(props: Props) {
                 </div>
                 <div className="modal-footer">
                     {ready &&
-                        <div className="draft-saver me-2">
-                            {!unsaved && saving && t("draft-saving")}
-                            {!unsaved && saved && t("draft-saved")}
-                        </div>
+                        <span className="draft-status">
+                            {!unsaved && saving && <Icon icon={msCloudUpload} width={20} height={20}/>}
+                            {!unsaved && saved && <Icon icon={msCloudDone} width={20} height={20}/>}
+                        </span>
                     }
                     <Button variant="secondary" disabled={!ready || beingPosted} onClick={onCancel}>
                         {t("cancel")}
