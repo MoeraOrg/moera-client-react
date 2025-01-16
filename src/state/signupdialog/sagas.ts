@@ -1,4 +1,4 @@
-import { call, put, select } from 'typed-redux-saga';
+import { call, delay, put, select } from 'typed-redux-saga';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import PROVIDERS, { Provider } from "providers";
@@ -125,6 +125,7 @@ function* signUpSaga(action: WithContext<SignUpAction>) {
 
     if (stage <= SIGN_UP_STAGE_PROFILE) {
         try {
+            yield* call(waitForConnection, rootLocation);
             if (email) {
                 yield* call(Node.updateProfile, action, rootLocation, {email});
             }
@@ -144,6 +145,7 @@ function* signUpSaga(action: WithContext<SignUpAction>) {
 
     if (stage <= SIGN_UP_STAGE_NAME) {
         try {
+            yield* call(waitForConnection, rootLocation);
             const free = yield* call(Naming.isFree, action, name);
             if (!free) {
                 onError("name", "Name is already taken");
@@ -158,6 +160,18 @@ function* signUpSaga(action: WithContext<SignUpAction>) {
             yield* put(signUpFailed(SIGN_UP_STAGE_NAME).causedBy(action));
             yield* put(errorThrown(e));
         }
+    }
+}
+
+function* waitForConnection(rootLocation: string) {
+    // FIXME ugly, but there is no way yet to wait for an event
+    for (let i = 0; i < 5; i++) {
+        const homeLocation = yield* select(getHomeRootLocation);
+        console.log("Waiting for connection", i, homeLocation, rootLocation);
+        if (homeLocation === rootLocation) {
+            break;
+        }
+        yield* delay(1000);
     }
 }
 
