@@ -15,7 +15,7 @@ export default function SettingsItemPassword() {
     return (
         <>
             <Button variant="outline-primary" onClick={() => dispatch(settingsChangePasswordDialogOpen())}>
-                {t("change-password-ellipsis")}
+                {t("change-password")}
             </Button>
             {showChangePasswordDialog && <ChangePasswordDialog/>}
         </>

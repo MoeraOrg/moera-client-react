@@ -188,7 +188,7 @@ export default function SubscribeButtonMenu({nodeName, feedName}: Props) {
                 divider: true
             },
             {
-                title: t("ask-ellipsis"),
+                title: t("ask"),
                 nodeName,
                 href: "/",
                 onClick: onAskDialog,
@@ -196,7 +196,7 @@ export default function SubscribeButtonMenu({nodeName, feedName}: Props) {
                 show: !blocked && !blockedBy
             },
             {
-                title: t("hide-ellipsis"),
+                title: t("hide"),
                 nodeName,
                 href: "/",
                 onClick: onHideDialog,
@@ -211,7 +211,7 @@ export default function SubscribeButtonMenu({nodeName, feedName}: Props) {
                 show: blockedCaption != null
             },
             {
-                title: !blocked ? t("block-ellipsis") : t("blocking-ellipsis"),
+                title: !blocked ? t("block") : t("blocking"),
                 nodeName,
                 href: "/",
                 onClick: onBlockDialog,

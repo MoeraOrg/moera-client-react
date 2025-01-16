@@ -46,7 +46,7 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
             {showMenu &&
                 <DropdownMenu items={[
                     {
-                        title: t("edit-ellipsis"),
+                        title: t("edit"),
                         nodeName: REL_CURRENT,
                         href: "/",
                         onClick: onEdit,

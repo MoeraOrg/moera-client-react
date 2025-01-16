@@ -26,7 +26,7 @@ export default function PageShareButton({href}: Props) {
         return (
             <DropdownMenu className="page-share" items={[
                 {
-                    title: t("share-ellipsis"),
+                    title: t("share"),
                     nodeName: REL_CURRENT,
                     href,
                     onClick: onShare,

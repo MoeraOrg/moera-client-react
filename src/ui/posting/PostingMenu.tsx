@@ -171,14 +171,14 @@ function PostingMenuItems({posting, story, detailed}: Props) {
                 show: true
             },
             {
-                title: t("share-ellipsis"),
+                title: t("share"),
                 nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onShare,
                 show: true
             },
             {
-                title: t("reply-ellipsis"),
+                title: t("reply"),
                 nodeName: REL_HOME,
                 href: "/compose",
                 onClick: onReply,
@@ -202,7 +202,7 @@ function PostingMenuItems({posting, story, detailed}: Props) {
                 divider: true
             },
             {
-                title: t("edit-ellipsis"),
+                title: t("edit"),
                 nodeName: REL_HOME,
                 href: `/compose?id=${postingId}`,
                 show: postingEditable
@@ -215,7 +215,7 @@ function PostingMenuItems({posting, story, detailed}: Props) {
                 show: story != null && storyEditable
             },
             {
-                title: t("change-date-time-ellipsis"),
+                title: t("change-date-time"),
                 nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onChangeDate,
@@ -273,7 +273,7 @@ function PostingMenuItems({posting, story, detailed}: Props) {
                 show: googlePlaySheriff && googlePlayGoverned && googlePlayProhibited
             },
             {
-                title: t("report-sheriff-ellipsis"),
+                title: t("report-sheriff"),
                 nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onHideInGooglePlay,

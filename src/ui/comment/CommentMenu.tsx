@@ -163,7 +163,7 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
                 show: true
             },
             {
-                title: t("share-ellipsis"),
+                title: t("share"),
                 nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onShare,
@@ -173,7 +173,7 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
                 divider: true
             },
             {
-                title: t("edit-ellipsis"),
+                title: t("edit"),
                 nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onEdit,
@@ -211,7 +211,7 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
                 show: !hideable && unhideable
             },
             {
-                title: t("kick-ellipsis"),
+                title: t("kick-discussion"),
                 nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onBlockDialog,
@@ -235,7 +235,7 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
                 show: googlePlaySheriff && googlePlayGoverned && !googlePlayPostingProhibited && googlePlayProhibited
             },
             {
-                title: t("report-sheriff-ellipsis"),
+                title: t("report-sheriff"),
                 nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onHideInGooglePlay,

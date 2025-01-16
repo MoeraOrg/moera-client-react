@@ -86,14 +86,14 @@ export default function PeopleSelectedButton() {
                 divider: true
             },
             {
-                title: t("ask-ellipsis"),
+                title: t("ask"),
                 nodeName: REL_CURRENT,
                 href: "/people",
                 onClick: onAskDialog,
                 show: summary.notSubscribedToMe || summary.notFriendOfs
             },
             {
-                title: t("hide-ellipsis"),
+                title: t("hide"),
                 nodeName: REL_CURRENT,
                 href: "/people",
                 onClick: onHideDialog,

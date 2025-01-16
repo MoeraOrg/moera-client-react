@@ -67,7 +67,7 @@ function LightBoxShareItems({mediaNodeName, mediaHref}: Props) {
     return (
         <DropdownMenuItems items={[
             {
-                title: t("share-ellipsis"),
+                title: t("share"),
                 nodeName: nodeName,
                 href: href,
                 onClick: onShare,
