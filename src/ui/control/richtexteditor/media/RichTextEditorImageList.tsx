@@ -27,9 +27,10 @@ interface Props {
     value: RichTextValue;
     className?: string;
     nodeName: RelNodeName | string;
+    noEmbeddedMedia?: boolean | null;
 }
 
-export default function RichTextEditorImageList({value, className, nodeName}: Props) {
+export default function RichTextEditorImageList({value, className, nodeName, noEmbeddedMedia}: Props) {
     const {reorderImage} = useRichTextEditorMedia();
 
     const mouseSensor = useSensor(PointerSensor, {
@@ -73,7 +74,8 @@ export default function RichTextEditorImageList({value, className, nodeName}: Pr
                     <div className={cx("rich-text-editor-image-list", className)}>
                         {mediaList.map(media =>
                             <UploadedImage key={media.id} media={media} nodeName={nodeName}
-                                           dragged={dragged?.id === media.id} showMenu={!dragged}/>
+                                           dragged={dragged?.id === media.id} showMenu={!dragged}
+                                           noEmbeddedMedia={noEmbeddedMedia}/>
                         )}
                     </div>
                 }

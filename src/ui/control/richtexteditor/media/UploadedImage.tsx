@@ -10,19 +10,20 @@ import { openImageEditDialog } from "state/imageeditdialog/actions";
 import { Icon, msMoreVert } from "ui/material-symbols";
 import { DropdownMenu, useModalDialog } from "ui/control";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
+import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import AttachedImage from "ui/control/richtexteditor/media/AttachedImage";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import "./UploadedImage.css";
-import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 
 interface Props {
     media: VerifiedMediaFile;
     nodeName: RelNodeName | string;
     dragged?: boolean | null;
     showMenu?: boolean | null;
+    noEmbeddedMedia?: boolean | null;
 }
 
-export default function UploadedImage({media, nodeName, dragged = false, showMenu = true}: Props) {
+export default function UploadedImage({media, nodeName, dragged = false, showMenu = true, noEmbeddedMedia}: Props) {
     const sortable = useSortable({id: media.id});
     const sortableStyle = {
         transform: CSS.Transform.toString(sortable.transform),
@@ -57,7 +58,7 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
                         nodeName: REL_CURRENT,
                         href: "/",
                         onClick: () => embedImage(media),
-                        show: true
+                        show: !noEmbeddedMedia
                     },
                     {
                         divider: true

@@ -14,19 +14,14 @@ import {
 import VisualEditor, { VisualEditorProps } from "ui/control/richtexteditor/visual/VisualEditor";
 import RichTextEditorDialogs from "ui/control/richtexteditor/dialog/RichTextEditorDialogs";
 import RichTextEditorMedia from "ui/control/richtexteditor/media/RichTextEditorMedia";
-import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
+import { REL_CURRENT } from "util/rel-node-name";
 import { htmlToLinefeeds, linefeedsToHtml, prettyHtml } from "util/html";
 import "./RichTextEditor.css";
 
 type Props = {
     className?: string;
     features: PostingFeatures | null;
-    nodeName?: RelNodeName | string;
     forceImageCompress?: boolean;
-    noComplexBlocks?: boolean | null;
-    noEmbeddedMedia?: boolean | null;
-    noMedia?: boolean | null;
-    noVideo?: boolean | null;
     onChange?: (value: RichTextValue, converted: boolean) => void;
     children?: ReactNode;
 } & Omit<MarkdownEditorProps, "onChange"> & Omit<VisualEditorProps, "onChange">;

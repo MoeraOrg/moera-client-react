@@ -151,7 +151,8 @@ export default function VisualEditor({
                     children
                 }
                 {!noMedia &&
-                    <RichTextEditorDropzone value={value} hiding={panelMode === "none"} nodeName={nodeName}/>
+                    <RichTextEditorDropzone value={value} hiding={panelMode === "none"} nodeName={nodeName}
+                                            noEmbeddedMedia={noEmbeddedMedia}/>
                 }
             </VisualEditorCommands>
         </Slate>

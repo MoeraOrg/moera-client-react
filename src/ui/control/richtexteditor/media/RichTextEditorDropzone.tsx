@@ -41,9 +41,10 @@ interface Props {
     value: RichTextValue;
     hiding?: boolean;
     nodeName: RelNodeName | string;
+    noEmbeddedMedia?: boolean | null;
 }
 
-export default function RichTextEditorDropzone({value, hiding = false, nodeName}: Props) {
+export default function RichTextEditorDropzone({value, hiding = false, nodeName, noEmbeddedMedia}: Props) {
     const tinyScreen = useIsTinyScreen();
     const {
         getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, downloading, copyImage,
@@ -72,7 +73,8 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName}
                 "rich-text-editor-dropzone",
                 {"d-none": hidden, "drag-accept": isDragAccept, "drag-reject": isDragReject}
             )} {...getRootProps()}>
-                <RichTextEditorImageList value={value} className={hiding ? "pb-3" : undefined} nodeName={nodeName}/>
+                <RichTextEditorImageList value={value} className={hiding ? "pb-3" : undefined} nodeName={nodeName}
+                                         noEmbeddedMedia={noEmbeddedMedia}/>
                 <div className="upload">
                     {uploadProgress.length > 0 ?
                         t("uploading-files", {...progressSummary})
