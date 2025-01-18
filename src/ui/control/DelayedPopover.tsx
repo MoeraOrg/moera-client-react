@@ -1,11 +1,11 @@
-import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Modifier, usePopper } from 'react-popper';
 import PopperJS from '@popperjs/core';
 import cx from 'classnames';
 
 import { PopoverContext } from "ui/control";
 import { OverlayZIndex, useOverlay } from "ui/overlays/overlays";
+import { createPortalIfNeeded } from "util/ui";
 
 export type DelayedPopoverElement = (ref: (dom: Element | null) => void) => any;
 
@@ -265,11 +265,4 @@ function isInElements(event: MouseEvent, selector: string) {
         }
     }
     return false;
-}
-
-function createPortalIfNeeded(children: ReactNode, container?: Element | DocumentFragment | null, key?: null | string) {
-    if (container == null) {
-        return children;
-    }
-    return ReactDOM.createPortal(children, container, key);
 }

@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useButtonPopper } from "ui/hook";
 import { DropdownMenuContext, MenuItem } from "ui/control/dropdownmenu/dropdown-menu-types";
 import { DropdownMenuItems } from "ui/control/dropdownmenu/DropdownMenuItems";
+import { createPortalIfNeeded } from "util/ui";
 import "./DropdownMenu.css";
 
 interface Props {
@@ -16,12 +17,13 @@ interface Props {
     dropdownClassName?: string;
     disabled?: boolean;
     parentOverlayId?: string;
+    menuContainer?: Element | DocumentFragment | null;
     onDialogOpened?: () => void;
     children?: React.ReactNode | ((visible: boolean) => React.ReactNode);
 }
 
 export function DropdownMenu({
-    content, items, className, dropdownClassName, disabled, parentOverlayId, onDialogOpened, children
+    content, items, className, dropdownClassName, disabled, parentOverlayId, onDialogOpened, menuContainer, children
 }: Props) {
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex, overlayId
@@ -44,13 +46,14 @@ export function DropdownMenu({
                     (children ?? <FontAwesomeIcon icon={faChevronDown} className="chevron"/>)
                 }
             </button>
-            {visible &&
+            {visible && createPortalIfNeeded(
                 <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                      className={cx("fade dropdown-menu shadow-sm show", dropdownClassName)}>
                     {content}
                     {items && <DropdownMenuItems items={items}/>}
-                </div>
-            }
+                </div>,
+                menuContainer
+            )}
         </DropdownMenuContext.Provider>
     );
 }

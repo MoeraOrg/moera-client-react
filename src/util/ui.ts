@@ -1,6 +1,8 @@
 import * as Base64js from 'base64-js';
 
 import { isSpaces } from "util/misc";
+import { ReactNode } from "react";
+import ReactDOM from "react-dom";
 
 export function randomId(len: number = 16): string {
     let buf = new Uint8Array(len);
@@ -202,4 +204,13 @@ export function isElementCompletelyVisible(element: Element): boolean {
     } else {
         return rect.bottom >= 0 && rect.bottom < viewHeight && rect.top >= 0 && rect.top < viewHeight;
     }
+}
+
+export function createPortalIfNeeded(
+    children: ReactNode, container?: Element | DocumentFragment | null, key?: null | string
+) {
+    if (container == null) {
+        return children;
+    }
+    return ReactDOM.createPortal(children, container, key);
 }

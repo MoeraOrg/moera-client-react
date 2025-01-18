@@ -69,7 +69,7 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
                         onClick: () => deleteImage(media.id),
                         show: true
                     }
-                ]}>
+                ]} menuContainer={document.getElementById("modal-root")}>
                     <Icon icon={msMoreVert} width={12} height={12}/>
                 </DropdownMenu>
             }
