@@ -1,0 +1,9 @@
+.undo-redo.btn-group {
+    display: flex;
+    gap: .25rem;
+    margin-left: 1rem;
+}
+
+.rich-text-editor-short-panel .undo-redo .rich-text-editor-button {
+    padding: 0;
+}

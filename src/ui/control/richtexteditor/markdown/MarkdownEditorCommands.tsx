@@ -429,10 +429,15 @@ export default function MarkdownEditorCommands({
         );
     }
 
+    const undo = () => {};
+
+    const redo = () => {};
+
     return (
         <RichTextEditorCommandsContext.Provider value={{
-            enableHeading: true, supportsComplexBlocks: !noComplexBlocks, supportsEmbeddedMedia: !noEmbeddedMedia,
-            supportsMedia: !noMedia, supportsVideo: false, supportsClear: false,
+            enableHeading: true, enableUndo: false, enableRedo: false,
+            supportsComplexBlocks: !noComplexBlocks, supportsEmbeddedMedia: !noEmbeddedMedia, supportsMedia: !noMedia,
+            supportsVideo: false, supportsClear: false, supportsUndoRedo: false,
             inBold: false, inItalic: false, inStrikeout: false, inLink: false,
             inSpoilerInline: false, inSpoilerBlock: false, inSpoiler: false, inMention: false, inBlockquote: false,
             inList: false, inUnorderedList: false, inOrderedList: false, headingLevel: 0, inVoid: false, inFold: false,
@@ -441,7 +446,7 @@ export default function MarkdownEditorCommands({
             focus, resetSelection, formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention,
             formatHorizontalRule, formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent,
             formatHeading, formatVideo, formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock,
-            formatFormula, formatMark, formatClear, formatImage, embedImage,
+            formatFormula, formatMark, formatClear, formatImage, embedImage, undo, redo,
         }}>
             {children}
         </RichTextEditorCommandsContext.Provider>

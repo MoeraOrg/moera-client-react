@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Editor, Element, Node, Path, PathRef, Range, Transforms } from 'slate';
 import { ReactEditor, useSlateSelector, useSlateStatic } from 'slate-react';
+import { HistoryEditor } from 'slate-history';
 
 import { NodeName, VerifiedMediaFile } from "api";
 import {
@@ -74,7 +75,7 @@ interface Props {
 }
 
 export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, children}: Props) {
-    const editor = useSlateStatic() as ReactEditor;
+    const editor = useSlateStatic() as ReactEditor & HistoryEditor;
     const {
         bold: inBold = false, italic: inItalic = false, strikeout: inStrikeout = false, code: inCode = false,
         supsub = 0, mark: inMark = false,
@@ -106,6 +107,8 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
     );
     const inImageEmbedded = image != null && image.href != null;
     const inImageAttached = image != null && image.mediaFile != null;
+    const enableUndo = editor.history.undos.length > 0;
+    const enableRedo = editor.history.redos.length > 0;
 
     const {
         showLinkDialog, showSpoilerDialog, showMentionDialog, showVideoDialog, showFoldDialog, showFormulaDialog
@@ -583,17 +586,22 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
         );
     }
 
+    const undo = () => editor.undo();
+
+    const redo = () => editor.redo();
+
     return (
         <RichTextEditorCommandsContext.Provider value={{
-            enableHeading, supportsComplexBlocks: !noComplexBlocks, supportsEmbeddedMedia: !noEmbeddedMedia,
-            supportsMedia: !noMedia, supportsVideo: !noVideo, supportsClear: true,
+            enableHeading, enableUndo, enableRedo,
+            supportsComplexBlocks: !noComplexBlocks, supportsEmbeddedMedia: !noEmbeddedMedia, supportsMedia: !noMedia,
+            supportsVideo: !noVideo, supportsClear: true, supportsUndoRedo: true,
             inBold, inItalic, inStrikeout, inLink, inSpoilerInline, inSpoilerBlock, inSpoiler, inMention, inBlockquote,
             inList, inUnorderedList, inOrderedList, headingLevel, inVoid, inFold, inCode, inSubscript, inSuperscript,
             inCodeBlock, inFormula, inMark, inImageEmbedded, inImageAttached,
             focus, resetSelection, formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention,
             formatHorizontalRule, formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent,
             formatHeading, formatVideo, formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock,
-            formatFormula, formatMark, formatClear, formatImage, embedImage,
+            formatFormula, formatMark, formatClear, formatImage, embedImage, undo, redo
         }}>
             {children}
         </RichTextEditorCommandsContext.Provider>

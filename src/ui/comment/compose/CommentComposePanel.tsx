@@ -81,7 +81,7 @@ function CommentComposePanel() {
                     <RichTextEditorEmojiButton iconSize={20} onSelect={formatEmoji}/>
                 }
                 <span className="formatting-menu-button">
-                    <FormattingMenuButton iconSize={20}/>
+                    <FormattingMenuButton/>
                 </span>
             </div>
             <div className="right-pane">

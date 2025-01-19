@@ -40,6 +40,7 @@ import { ReactComponent as msMoreVert } from "ui/material-symbols/more_vert.isvg
 import { ReactComponent as msOpenInNew } from "ui/material-symbols/open_in_new.isvg";
 import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_library.isvg";
 import { ReactComponent as msPreview } from "ui/material-symbols/preview.isvg";
+import { ReactComponent as msRedo } from "ui/material-symbols/redo.isvg";
 import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
 import { ReactComponent as msSatellite } from "ui/material-symbols/satellite.isvg";
 import { ReactComponent as msSend } from "ui/material-symbols/send.isvg";
@@ -93,6 +94,7 @@ export {
     msOpenInNew,
     msPhotoLibrary,
     msPreview,
+    msRedo,
     msReport,
     msSatellite,
     msSend,

@@ -30,11 +30,7 @@ import FormattingHeadingButton from "ui/control/richtexteditor/formatting-menu/F
 import FormattingOtherButton from "ui/control/richtexteditor/formatting-menu/FormattingOtherButton";
 import "./FormattingMenuButton.css";
 
-interface Props {
-    iconSize?: number;
-}
-
-export default function FormattingMenuButton({iconSize}: Props) {
+export default function FormattingMenuButton() {
     const {
         supportsComplexBlocks, supportsClear,
         inBold, inItalic, inStrikeout, inSpoiler, inOrderedList, inUnorderedList, inList, inBlockquote, inMention,
@@ -57,7 +53,7 @@ export default function FormattingMenuButton({iconSize}: Props) {
 
     return (
         <span className={visible ? "dropup" : undefined}>
-            <RichTextEditorButton className="selector dropdown-toggle" icon={msFormatSize} iconSize={iconSize}
+            <RichTextEditorButton className="selector dropdown-toggle" icon={msFormatSize} iconSize={20}
                                   title={t("text-formatting")} onClick={onClick} ref={setButtonRef}/>
             {visible && ReactDOM.createPortal(
                 <DropdownMenuContext.Provider value={{hide, overlayId}}>

@@ -5,11 +5,14 @@ import { RICH_TEXT_EDITOR_KEYS } from "ui/control/richtexteditor/rich-text-edito
 
 export interface RichTextEditorCommandsInterface {
     enableHeading: boolean;
+    enableUndo: boolean;
+    enableRedo: boolean;
     supportsComplexBlocks: boolean;
     supportsEmbeddedMedia: boolean;
     supportsMedia: boolean;
     supportsVideo: boolean;
     supportsClear: boolean;
+    supportsUndoRedo: boolean;
 
     inBold: boolean;
     inItalic: boolean;
@@ -61,15 +64,20 @@ export interface RichTextEditorCommandsInterface {
     formatClear: () => void;
     formatImage: (embedded?: boolean) => void;
     embedImage: (mediaFile: VerifiedMediaFile) => void;
+    undo: () => void;
+    redo: () => void;
 }
 
 export const RichTextEditorCommandsContext = createContext<RichTextEditorCommandsInterface>({
     enableHeading: true,
+    enableUndo: true,
+    enableRedo: true,
     supportsComplexBlocks: true,
     supportsEmbeddedMedia: true,
     supportsMedia: true,
     supportsVideo: true,
     supportsClear: true,
+    supportsUndoRedo: true,
 
     inBold: false,
     inItalic: false,
@@ -121,6 +129,8 @@ export const RichTextEditorCommandsContext = createContext<RichTextEditorCommand
     formatClear: () => {},
     formatImage: () => {},
     embedImage: () => {},
+    undo: () => {},
+    redo: () => {},
 });
 
 type RichTextEditorCommands = RichTextEditorCommandsInterface & {
