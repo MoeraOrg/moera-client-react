@@ -6,7 +6,7 @@ export const NameHelp = () => {
 
     return (
         <div className="dialog-help">
-            {t("name-help") + " "}<b>!</b> <b>%</b> <b>&</b> <b>*</b> <b>-</b> <b>.</b> <b>?</b>
+            {t("name-help") + " "}<b>!</b> <b>*</b> <b>-</b> <b>.</b>
         </div>
     );
 }
