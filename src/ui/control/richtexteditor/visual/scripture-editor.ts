@@ -36,7 +36,7 @@ import {
 import { safeImportScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { smileyReplacer, TextReplacementFunction } from "util/text";
 import { URL_PATTERN } from "util/url";
-import { linefeedsToHtml } from "util/html";
+import { containsTags, linefeedsToHtml } from "util/html";
 
 interface WrappingElementOptions {
     at?: Path;
@@ -103,7 +103,7 @@ export function withScripture<T extends DOMEditor>(
         }
 
         const html = data.getData("text/html");
-        if (html) {
+        if (html && containsTags(html, "none")) {
             editor.insertFragment(safeImportScripture(html));
             return true;
         }
