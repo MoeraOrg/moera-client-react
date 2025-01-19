@@ -2,7 +2,7 @@
 import charCategory from 'general-category';
 
 export const NAME_MAX_LENGTH = 127;
-export const NAME_PUNCTUATION_ALLOWED ="!%&*-.?";
+export const NAME_PUNCTUATION_ALLOWED ="!*-.";
 
 const LATIN_CHARS = /^[A-Za-z]+$/;
 const DIGITS = /^[0-9]+$/;
@@ -52,9 +52,6 @@ function isNameCharacterValid(c: string): boolean {
         case "Sc":
         case "So":
             return true;
-
-        case "Sm":
-            return c !== "~";
 
         case "Po":
         case "Pd":
