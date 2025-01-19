@@ -107,7 +107,7 @@ export function mediaImageTagAttributes(
     if (mediaFile.directPath) {
         mediaLocation = mediaPrefix + mediaFile.directPath;
         const preview = mediaImageFindLargerPreview(mediaFile.previews, targetWidth);
-        src = rootPage + "/media/" + preview?.directPath ?? mediaFile.directPath;
+        src = rootPage + "/media/" + (preview?.directPath ?? mediaFile.directPath);
     } else {
         const auth = !isPublic && carte != null ? "carte:" + carte : null;
         mediaLocation = urlWithParameters(mediaPrefix + mediaFile.path, {auth});

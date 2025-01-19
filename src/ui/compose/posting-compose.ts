@@ -288,7 +288,7 @@ export const composePageLogic = {
                 ? props.posting.operations?.addComment ?? "signed"
                 : props.commentAdditionDefault;
         const hideComments = props.draft != null
-            ? (props.draft.commentOperations?.view ?? "public") === "private" ?? props.commentsHideDefault
+            ? (props.draft.commentOperations?.view ?? "public") === "private"
             : props.posting != null
                 ? (props.posting.commentOperations?.view ?? "public") === "private"
                 : props.commentsHideDefault;
