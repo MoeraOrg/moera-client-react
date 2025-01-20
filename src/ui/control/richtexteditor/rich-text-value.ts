@@ -31,13 +31,8 @@ export class RichTextValue {
     }
 
     toText(smileysEnabled: boolean = false): string {
-        let text: string;
-        if (typeof this.value !== "string") {
-            text = scriptureToHtml(this.value);
-        } else {
-            text = this.value;
-        }
-        return (smileysEnabled ? replaceSmileys(text) : text).trim();
+        const value = smileysEnabled ? replaceSmileys(this.value) : this.value;
+        return typeof value !== "string" ? scriptureToHtml(value) : value.trim();
     }
 
     orderedMediaListWithDigests(): MediaWithDigest[] | null {

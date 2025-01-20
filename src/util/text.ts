@@ -1,4 +1,13 @@
+import cloneDeep from 'lodash.clonedeep';
+
 import { SMILEY_LIKE, SMILEYS } from "smileys";
+import {
+    isScriptureBlock,
+    isScriptureElement,
+    isScriptureText,
+    isScriptureVoidBlock,
+    Scripture
+} from "ui/control/richtexteditor/visual/scripture";
 import { unhtmlEntitiesMinimal } from "util/html";
 import { URL_PATTERN } from "util/url";
 
@@ -37,8 +46,29 @@ export function smileyReplacer(removeEscapes: boolean = true): TextReplacementFu
     };
 }
 
-export function replaceSmileys(text: string, removeEscapes: boolean = true): string {
-    return text.replace(SMILEY_LIKE, smileyReplacer(removeEscapes))
+export function replaceSmileys(text: string, removeEscapes?: boolean): string;
+export function replaceSmileys(text: Scripture, removeEscapes?: boolean): Scripture;
+export function replaceSmileys(text: string | Scripture, removeEscapes?: boolean): string | Scripture;
+export function replaceSmileys(text: string | Scripture, removeEscapes: boolean = true): string | Scripture {
+    if (typeof text === "string") {
+        return text.replace(SMILEY_LIKE, smileyReplacer(removeEscapes))
+    } else {
+        return text.map(node => {
+            if (isScriptureText(node)) {
+                return {
+                    ...node,
+                    text: node.text.replace(SMILEY_LIKE, smileyReplacer(removeEscapes))
+                };
+            } else if (isScriptureElement(node) && isScriptureBlock(node) && !isScriptureVoidBlock(node)) {
+                return {
+                    ...node,
+                    children: replaceSmileys(node.children as Scripture, removeEscapes)
+                };
+            } else {
+                return cloneDeep(node);
+            }
+        });
+    }
 }
 
 export function ellipsize(text: null | undefined, len: number): null;
