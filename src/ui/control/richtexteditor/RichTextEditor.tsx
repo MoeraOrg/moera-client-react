@@ -15,7 +15,7 @@ import VisualEditor, { VisualEditorProps } from "ui/control/richtexteditor/visua
 import RichTextEditorDialogs from "ui/control/richtexteditor/dialog/RichTextEditorDialogs";
 import RichTextEditorMedia from "ui/control/richtexteditor/media/RichTextEditorMedia";
 import { REL_CURRENT } from "util/rel-node-name";
-import { htmlToLinefeeds, linefeedsToHtml, prettyHtml } from "util/html";
+import { htmlToLinefeeds, plainTextToHtml, prettyHtml } from "util/html";
 import "./RichTextEditor.css";
 
 type Props = {
@@ -157,7 +157,7 @@ async function convertFormat(
         case "html":
             switch (prevFormat) {
                 case "plain-text":
-                    return prettyHtml(linefeedsToHtml(value as string));
+                    return prettyHtml(plainTextToHtml(value as string));
                 case "markdown":
                     return prettyHtml(await markdownToHtml(value as string));
                 case "html/visual":
@@ -167,7 +167,7 @@ async function convertFormat(
         case "html/visual":
             switch (prevFormat) {
                 case "plain-text":
-                    return normalizeDocument(safeImportScripture(linefeedsToHtml(value as string)));
+                    return normalizeDocument(safeImportScripture(plainTextToHtml(value as string)));
                 case "markdown":
                     return normalizeDocument(safeImportScripture(await markdownToHtml(value as string)));
                 case "html":

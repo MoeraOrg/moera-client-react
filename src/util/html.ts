@@ -6,6 +6,7 @@ import { MediaAttachment, PrivateMediaFileInfo } from "api";
 import { twemojiUrl } from "util/twemoji";
 import { mediaHashStrip, mediaImageSize } from "util/media-images";
 import { isNumericString, notNull } from "util/misc";
+import { URL_PATTERN } from "util/url";
 
 let prefixIndex = 0;
 
@@ -271,6 +272,22 @@ export function prettyHtml(html: string): string {
     return html
         .replace(/<br\/?>(?!\n)/g, "<br/>\n")
         .replace(/<\/p>(?!\n)/g, "</p>\n");
+}
+
+const URLS = new RegExp("(?<!\\S)" + URL_PATTERN, "g");
+
+function urlsToHtml(text: string | null | undefined): string {
+    if (!text) {
+        return "";
+    }
+    return text.replace(URLS, (url: string) => `<a href="${url}">${url}</a>`);
+}
+
+export function plainTextToHtml(text: string | null | undefined): string {
+    if (!text) {
+        return "";
+    }
+    return linefeedsToHtml(urlsToHtml(htmlEntities(text)));
 }
 
 type ReplacementLevel = "none" | "basic" | "all";

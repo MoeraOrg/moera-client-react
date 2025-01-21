@@ -14,6 +14,7 @@ import {
     Transforms
 } from 'slate';
 import { DOMEditor } from 'slate-dom';
+import cloneDeep from 'lodash.clonedeep';
 
 import { SMILEY_LIKE } from "smileys";
 import {
@@ -22,6 +23,7 @@ import {
     createScriptureText,
     isLinkElement,
     isParagraphElement,
+    isScriptureBlock,
     isScriptureElement,
     isScriptureInline,
     isScriptureKnown,
@@ -29,6 +31,7 @@ import {
     isScriptureSuperBlock,
     isScriptureText,
     isScriptureVoid,
+    isScriptureVoidBlock,
     Scripture,
     ScriptureElement,
     ScriptureElementType
@@ -36,7 +39,7 @@ import {
 import { safeImportScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { smileyReplacer, TextReplacementFunction } from "util/text";
 import { URL_PATTERN } from "util/url";
-import { containsTags, linefeedsToHtml } from "util/html";
+import { containsTags, plainTextToHtml } from "util/html";
 
 interface WrappingElementOptions {
     at?: Path;
@@ -104,7 +107,7 @@ export function withScripture<T extends DOMEditor>(
 
         const html = data.getData("text/html");
         if (html && containsTags(html, "none")) {
-            editor.insertFragment(safeImportScripture(html));
+            editor.insertFragment(importReplaceUrls(safeImportScripture(html)));
             return true;
         }
 
@@ -113,18 +116,7 @@ export function withScripture<T extends DOMEditor>(
 
     scriptureEditor.insertTextData = (data: DataTransfer): boolean => {
         const text = data.getData("text/plain");
-
-        const m = text.match(new RegExp("^(\\s*)(" + URL_PATTERN + ")(\\s*)$"));
-        if (m) {
-            editor.insertFragment([
-                createScriptureText(m[1]),
-                createLinkElement(m[2], [createScriptureText(m[2])]),
-                createScriptureText(m[3] || " ")
-            ]);
-            return true;
-        }
-
-        editor.insertFragment(safeImportScripture(linefeedsToHtml(text)));
+        editor.insertFragment(safeImportScripture(plainTextToHtml(text)));
 
         return true;
     };
@@ -237,6 +229,42 @@ export function withScripture<T extends DOMEditor>(
     };
 
     return scriptureEditor;
+}
+
+const URLS = new RegExp("(?<!\\S)" + URL_PATTERN, "g");
+
+function importReplaceUrls(scripture: Scripture): Scripture {
+    return ([] as Scripture).concat(...scripture.map(node => {
+        if (isScriptureText(node)) {
+            const subs: [boolean, string][] = [];
+            let tail = 0;
+            while (true) {
+                const match = URLS.exec(node.text);
+                if (match == null) {
+                    break;
+                }
+                subs.push([false, node.text.substring(tail, match.index)]);
+                subs.push([true, match[0]]);
+                tail = match.index + match[0].length;
+            }
+            if (subs.length === 0) {
+                return node;
+            }
+            subs.push([false, node.text.substring(tail)]);
+            return subs.map(([isUrl, text]) =>
+                isUrl ? createLinkElement(text, [createScriptureText(text)]) : createScriptureText(text)
+            );
+        } else if (
+            isScriptureElement(node) && isScriptureBlock(node) && !isScriptureVoidBlock(node) && !isLinkElement(node)
+        ) {
+            return {
+                ...node,
+                children: importReplaceUrls(node.children as Scripture)
+            };
+        } else {
+            return cloneDeep(node);
+        }
+    }));
 }
 
 export function scriptureExtractUrls(scripture: Scripture): string[] {
