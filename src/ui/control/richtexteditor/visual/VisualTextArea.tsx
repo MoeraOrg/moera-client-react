@@ -234,7 +234,10 @@ export default function VisualTextArea({
                 insertHtml = `<blockquote>${html}</blockquote>`;
             }
         }
-        editor.insertFragment(safeImportScripture(insertHtml));
+        editor.insertFragment([
+            ...safeImportScripture(insertHtml),
+            createParagraphElement([createScriptureText(" ")])
+        ]);
     }, [editor]);
 
     useEffect(() => {
