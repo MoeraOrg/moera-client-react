@@ -712,6 +712,7 @@
         "language-items": {
           "auto": "Automatycznie"
         },
+        "link_new-window": "Otwieraj linki zewnętrzne w nowej karcie",
         "naming_location": "Lokalizacja serwera nazw",
         "news-button_target-story": "Przycisk \"Twoje aktualności\" otwiera",
         "news-button_target-story-items": {

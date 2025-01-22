@@ -712,6 +712,7 @@
         "language-items": {
           "auto": "Automatically"
         },
+        "link_new-window": "Open external links in a new tab",
         "naming_location": "Naming server location",
         "news-button_target-story": "\"Your news\" button opens",
         "news-button_target-story-items": {

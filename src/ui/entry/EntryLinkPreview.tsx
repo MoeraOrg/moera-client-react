@@ -13,6 +13,9 @@ import { interceptLinkClick } from "ui/entry/link-click-intercept";
 import { ellipsize } from "util/text";
 import { RelNodeName } from "util/rel-node-name";
 import "./EntryLinkPreview.css";
+import { useSelector } from "react-redux";
+import { ClientState } from "state/state";
+import { getSetting } from "state/settings/selectors";
 
 interface Props {
     nodeName: RelNodeName | string;
@@ -102,6 +105,8 @@ interface FrameProps {
 }
 
 function Frame({editing, className, url, children, onEdit, onDelete}: FrameProps) {
+    const openInNewWindow = useSelector((state: ClientState) => getSetting(state, "link.new-window") as boolean);
+
     if (editing) {
         return (
             <div className={className} title="Edit">
@@ -114,7 +119,9 @@ function Frame({editing, className, url, children, onEdit, onDelete}: FrameProps
         const onClick = (event: React.MouseEvent) => interceptLinkClick(event);
 
         return (
-            <a className={className} href={url} onClick={onClick}>{children}</a>
+            <a className={className} href={url} onClick={onClick} target={openInNewWindow ? "_blank" : undefined}>
+                {children}
+            </a>
         );
     }
 }

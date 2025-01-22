@@ -712,6 +712,7 @@
         "language-items": {
           "auto": "Автоматично"
         },
+        "link_new-window": "Відкривати зовнішні посилання в новій вкладці",
         "naming_location": "Місцезнаходження сервера імен",
         "news-button_target-story": "Кнопка \"ваші новини\" відкриває",
         "news-button_target-story-items": {

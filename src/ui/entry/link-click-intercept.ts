@@ -1,12 +1,13 @@
 import React from 'react';
 import * as URI from 'uri-js';
 
+import store from "state/store";
 import { initFromLocation, initFromNodeLocation, newLocation } from "state/navigation/actions";
+import { getSetting } from "state/settings/selectors";
 import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
-import store from "state/store";
 
-export function interceptLinkClick(event: MouseEvent | React.MouseEvent) {
+export function interceptLinkClick(event: MouseEvent | React.MouseEvent): void {
     if (event.currentTarget == null) {
         return;
     }
@@ -16,6 +17,7 @@ export function interceptLinkClick(event: MouseEvent | React.MouseEvent) {
     }
     const parts = URI.parse(URI.normalize(href));
     if (parts.scheme !== "https" || parts.host == null) {
+        openLink(href);
         return;
     }
 
@@ -34,7 +36,8 @@ export function interceptLinkClick(event: MouseEvent | React.MouseEvent) {
         headers: {
             "X-Accept-Moera": "1.0"
         },
-        referrerPolicy: "no-referrer"
+        referrerPolicy: "no-referrer",
+        signal: AbortSignal.timeout(1000)
     }).then(response => {
         const headers = response.headers;
         if (headers && headers.has("X-Moera")) {
@@ -43,18 +46,27 @@ export function interceptLinkClick(event: MouseEvent | React.MouseEvent) {
                 Browser.getLocation(rootPage, parts.path, parts.query, parts.fragment, headers.get("X-Moera"));
             jump(name, rootLocation, path, query, hash);
         } else {
-            window.location.href = href;
+            openLink(href);
         }
     }).catch(() => {
-        window.location.href = href;
+        openLink(href);
     });
     event.preventDefault();
+}
+
+function openLink(href: string): void {
+    const openInNewWindow = getSetting(store.getState(), "link.new-window") as boolean;
+    if (!openInNewWindow) {
+        window.location.href = href;
+    } else {
+        window.open(href, "_blank");
+    }
 }
 
 function jump(
     nodeName: string | null, rootLocation: string | null | undefined, path: string | null, query: string | null,
     hash: string | null
-) {
+): void {
     if (rootLocation != null) {
         store.dispatch(newLocation());
         store.dispatch(initFromLocation(nodeName, rootLocation, path, query, hash));

@@ -600,6 +600,12 @@ const META: ClientSettingMetaInfo[] = [
             ]
         }
     },
+    {
+        name: "link.new-window",
+        type: "bool",
+        defaultValue: "false",
+        modifiers: {}
+    },
 ];
 
 function collectMetaMap(map: Map<string, ClientSettingMetaInfo>, metadata: ClientSettingMetaInfo[]) {

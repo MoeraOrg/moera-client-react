@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import 'katex/dist/katex.min.css';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
@@ -14,6 +14,8 @@ import MrSpoiler from "ui/entry/MrSpoiler";
 import { isNumericString, notNull } from "util/misc";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { mediaHashStrip } from "util/media-images";
+import { ClientState } from "state/state";
+import { getSetting } from "state/settings/selectors";
 
 interface Props {
     className?: string;
@@ -28,6 +30,8 @@ interface Props {
 export default function EntryHtml({
     className, postingId, commentId, html, nodeName = REL_CURRENT, media, onClick
 }: Props) {
+    const openInNewWindow = useSelector((state: ClientState) => getSetting(state, "link.new-window") as boolean);
+
     const dom = useRef<HTMLDivElement>(null);
     const mediaMap: Map<string, PrivateMediaFileInfo> = new Map(
         (media ?? [])
@@ -153,6 +157,9 @@ export default function EntryHtml({
             const name = node.getAttribute("data-nodename");
             if (!name) {
                 node.addEventListener("click", interceptLinkClick);
+                if (openInNewWindow) {
+                    node.setAttribute("target", "_blank");
+                }
             }
         });
 
@@ -161,10 +168,11 @@ export default function EntryHtml({
                 const name = node.getAttribute("data-nodename");
                 if (!name) {
                     node.removeEventListener("click", interceptLinkClick);
+                    node.removeAttribute("target");
                 }
             });
         }
-    }, [html]);
+    }, [html, openInNewWindow]);
 
     return <div ref={dom} className={className} style={{fontSize: "var(--posting-font-magnitude)"}} onClick={onClick}
                 dangerouslySetInnerHTML={{__html: html ?? ""}}/>
