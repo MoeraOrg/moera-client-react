@@ -50,7 +50,7 @@ export default function VisualTextArea({
     const textArea = useRef<HTMLDivElement>(null);
     const {
         inBlockquote, inList, headingLevel, inVoid, inCodeBlock, inFormula, inImageEmbedded, inImageAttached,
-        formatMention, formatFormula, formatImage, handleHotKeys,
+        focus, formatMention, formatFormula, formatImage, handleHotKeys,
     } = useRichTextEditorCommands();
 
     const [isSubmitKey, isHardEnter, isSoftEnter] = useMemo(() => {
@@ -234,11 +234,16 @@ export default function VisualTextArea({
                 insertHtml = `<blockquote>${html}</blockquote>`;
             }
         }
-        editor.insertFragment([
-            ...safeImportScripture(insertHtml),
-            createParagraphElement([createScriptureText(" ")])
-        ]);
-    }, [editor]);
+
+        if (insertHtml) {
+            editor.insertFragment([
+                ...safeImportScripture(insertHtml),
+                createParagraphElement([createScriptureText("")])
+            ]);
+        }
+
+        focus();
+    }, [editor, focus]);
 
     useEffect(() => {
         if (commentQuote) {

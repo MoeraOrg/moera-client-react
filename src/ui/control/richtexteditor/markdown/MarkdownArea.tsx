@@ -51,7 +51,7 @@ function MarkdownArea(
 ) {
     const pasteRich = useSelector((state: ClientState) => getSetting(state, "rich-text-editor.paste-rich") as string);
     const dispatch = useDispatch();
-    const {formatMention, handleHotKeys} = useRichTextEditorCommands();
+    const {focus, formatMention, handleHotKeys} = useRichTextEditorCommands();
     const {pasteImage} = useRichTextEditorMedia();
 
     const textArea = useRef<HTMLTextAreaElement>(null);
@@ -188,7 +188,9 @@ function MarkdownArea(
                 insertText(textArea.current, `>>>\n${text}\n>>>\n`);
             }
         }
-    }, []);
+
+        focus();
+    }, [focus]);
 
     useEffect(() => {
         if (commentQuote) {

@@ -766,9 +766,7 @@ function* commentReplySaga(action: CommentReplyAction) {
 
     if (!replied) {
         yield* put(commentRepliedToSet(commentId, ownerName, ownerFullName, heading).causedBy(action));
-        if (html) {
-            document.dispatchEvent(uiEventCommentQuote(html));
-        }
+        document.dispatchEvent(uiEventCommentQuote(html || undefined));
     } else {
         if (html) {
             if (ownerName !== repliedToName) {
