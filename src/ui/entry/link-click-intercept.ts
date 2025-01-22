@@ -56,7 +56,7 @@ export function interceptLinkClick(event: MouseEvent | React.MouseEvent): void {
 
 function openLink(href: string): void {
     const openInNewWindow = getSetting(store.getState(), "link.new-window") as boolean;
-    if (!openInNewWindow) {
+    if (!openInNewWindow || Browser.isAndroidApp()) {
         window.location.href = href;
     } else {
         window.open(href, "_blank");
