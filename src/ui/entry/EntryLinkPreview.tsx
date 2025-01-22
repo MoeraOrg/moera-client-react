@@ -119,7 +119,8 @@ function Frame({editing, className, url, children, onEdit, onDelete}: FrameProps
         const onClick = (event: React.MouseEvent) => interceptLinkClick(event);
 
         return (
-            <a className={className} href={url} onClick={onClick} target={openInNewWindow ? "_blank" : undefined}>
+            <a className={className} href={url} onClick={onClick} target={openInNewWindow ? "_blank" : undefined}
+               rel="noreferrer">
                 {children}
             </a>
         );
