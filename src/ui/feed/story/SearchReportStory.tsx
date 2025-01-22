@@ -6,6 +6,7 @@ import StoryMenu from "ui/story/StoryMenu";
 import StoryPin from "ui/story/StoryPin";
 import StorySubject from "ui/story/StorySubject";
 import StoryDate from "ui/story/StoryDate";
+import { interceptLinkClick } from "ui/entry/link-click-intercept";
 
 const COLLAPSED_LENGTH = 5;
 
@@ -17,6 +18,8 @@ interface Props {
 export default function SearchReportStory({feedName, story}: Props) {
     const [expanded, setExpanded] = useState<boolean>(false);
     const {t} = useTranslation();
+
+    const onClick = (event: React.MouseEvent) => interceptLinkClick(event);
 
     const onExpandClick = () => setExpanded(!expanded);
 
@@ -38,7 +41,7 @@ export default function SearchReportStory({feedName, story}: Props) {
                     {clicks.map((page, index) =>
                         (index < COLLAPSED_LENGTH || expanded) &&
                             <li key={index}>
-                                <a href={page.href}>{page.heading ?? t("blog.itself")}</a> &mdash;
+                                <a href={page.href} onClick={onClick}>{page.heading ?? t("blog.itself")}</a> &mdash;
                                 {" " + t("visits", {count: page.clicks})}
                             </li>
                     )}
