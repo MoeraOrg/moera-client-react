@@ -64,21 +64,19 @@ function CommentComposePanel() {
     return (
         <div className="comment-compose-panel">
             <div className="left-pane">
-                <RichTextEditorButton icon={msDelete} iconSize={20} className={cx("delete", {"invisible": notReady})}
+                <RichTextEditorButton icon={msDelete} className={cx("delete", {"invisible": notReady})}
                                       title={t("cancel")} onClick={onCancel}/>
                 {supportsMedia &&
-                    <RichTextEditorButton icon={msPhotoLibrary} iconSize={20} title={t("image")}
-                                          command={() => openLocalFiles()}/>
+                    <RichTextEditorButton icon={msPhotoLibrary} title={t("image")} command={() => openLocalFiles()}/>
                 }
                 {supportsVideo &&
                     <RichTextEditorButton icon={msMediaLink} title={t("video-internet")} command={formatVideo}/>
                 }
                 {supportsMedia && !tinyScreen &&
-                    <RichTextEditorButton icon={msFileSave} iconSize={20} title={t("copy-image-from-internet")}
-                                          command={copyImage}/>
+                    <RichTextEditorButton icon={msFileSave} title={t("copy-image-from-internet")} command={copyImage}/>
                 }
                 {!Browser.isMobile() &&
-                    <RichTextEditorEmojiButton iconSize={20} onSelect={formatEmoji}/>
+                    <RichTextEditorEmojiButton onSelect={formatEmoji}/>
                 }
                 <span className="formatting-menu-button">
                     <FormattingMenuButton/>
@@ -87,13 +85,13 @@ function CommentComposePanel() {
             <div className="right-pane">
             {ready &&
                     <span className="draft-status">
-                        {!unsaved && saving && <Icon icon={msCloudUpload} width={20} height={20}/>}
-                        {!unsaved && saved && <Icon icon={msCloudDone} width={20} height={20}/>}
+                        {!unsaved && saving && <Icon icon={msCloudUpload}/>}
+                        {!unsaved && saved && <Icon icon={msCloudDone}/>}
                     </span>
                 }
                 {!beingPosted ?
-                    <RichTextEditorButton icon={msSend} iconSize={20} className="submit" disabled={notReady}
-                                          title={t("add-comment")} onClick={() => submitForm()}/>
+                    <RichTextEditorButton icon={msSend} className="submit" disabled={notReady} title={t("add-comment")}
+                                          onClick={() => submitForm()}/>
                 :
                     <LoadingInline/>
                 }
