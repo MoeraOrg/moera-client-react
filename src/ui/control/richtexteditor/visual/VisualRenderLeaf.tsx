@@ -17,6 +17,7 @@ export default function VisualRenderLeaf(props: RenderLeafProps) {
                 verticalAlign: leaf.supsub ? "baseline" : undefined,
                 top: leaf.supsub && leaf.supsub > 0 ? "-.5em" : undefined,
                 bottom: leaf.supsub && leaf.supsub < 0 ? "-.25em" : undefined,
+                fontFamily: leaf.code ? "var(--bs-font-monospace)" : undefined,
                 fontSize: leaf.code ? ".875em" : (leaf.supsub ? ".75em" : undefined),
                 fontWeight: leaf.bold ? "bold" : undefined,
                 fontStyle: leaf.italic ? "italic" : undefined,
