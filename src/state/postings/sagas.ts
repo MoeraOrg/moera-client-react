@@ -117,8 +117,14 @@ function* postingVerifySaga(action: WithContext<PostingVerifyAction>) {
 function* postingOperationsUpdateSaga(action: WithContext<PostingOperationsUpdateAction>) {
     const {id, nodeName, operations} = action.payload;
     try {
-        const posting = yield* call(Node.updatePosting, action, nodeName, id, {operations});
-        yield* put(postingOperationsUpdated(id, nodeName, posting.operations ?? {}).causedBy(action));
+        let posting = yield* select(state => getPosting(state, id, nodeName));
+        if (posting == null) {
+            return;
+        }
+        const originName = posting.receiverName ?? absoluteNodeName(nodeName, action.context);
+        const originId = posting.receiverPostingId ?? id;
+        posting = yield* call(Node.updatePosting, action, originName, originId, {operations});
+        yield* put(postingOperationsUpdated(originId, originName, posting.operations ?? {}).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
     }
