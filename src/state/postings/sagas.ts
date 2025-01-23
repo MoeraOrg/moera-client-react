@@ -2,7 +2,7 @@ import { call, put, select } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
-import { Node } from "api";
+import { Node, ReactionTotalsInfo } from "api";
 import { errorThrown } from "state/error/actions";
 import { ClientAction } from "state/action";
 import {
@@ -187,18 +187,24 @@ function* postingReactionsReloadSaga(action: WithContext<PostingReactionsReloadA
 }
 
 function* postingReactionDeleteSaga(action: WithContext<PostingReactionDeleteAction>) {
-    const {id, nodeName} = action.payload;
+    let {id, nodeName} = action.payload;
     const {ownerName, homeOwnerName} = action.context;
 
     if (homeOwnerName == null) {
         return;
     }
 
+    nodeName = absoluteNodeName(nodeName, action.context)
+
     try {
-        let totals = yield* call(Node.deletePostingReaction, action, nodeName, id, homeOwnerName);
         const posting = yield* select(state => getPosting(state, id, nodeName));
         if (ownerName == null || posting == null) {
             return;
+        }
+
+        let totals: ReactionTotalsInfo = {entryId: id, positive: [], negative: []};
+        if ((posting.receiverName == null && posting.receiverPostingId == null) || nodeName === homeOwnerName) {
+            totals = yield* call(Node.deletePostingReaction, action, nodeName, id, homeOwnerName);
         }
         if (posting.receiverName != null && posting.receiverPostingId != null) {
             totals = yield* call(Node.deletePostingReaction, action,
@@ -206,7 +212,7 @@ function* postingReactionDeleteSaga(action: WithContext<PostingReactionDeleteAct
         }
         yield* put(postingReactionSet(id, null, totals, nodeName).causedBy(action));
         yield* call(Node.deleteRemotePostingReaction, action, REL_HOME,
-            posting.receiverName ?? absoluteNodeName(nodeName, action.context), posting.receiverPostingId ?? id);
+            posting.receiverName ?? nodeName, posting.receiverPostingId ?? id);
     } catch (e) {
         yield* put(errorThrown(e));
     }
