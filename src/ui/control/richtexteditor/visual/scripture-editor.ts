@@ -40,6 +40,7 @@ import { safeImportScripture } from "ui/control/richtexteditor/visual/scripture-
 import { smileyReplacer, TextReplacementFunction } from "util/text";
 import { URL_PATTERN } from "util/url";
 import { containsTags, plainTextToHtml } from "util/html";
+import { importQuirks } from "util/import-quirks";
 
 interface WrappingElementOptions {
     at?: Path;
@@ -107,7 +108,7 @@ export function withScripture<T extends DOMEditor>(
 
         const html = data.getData("text/html");
         if (html && containsTags(html, "none")) {
-            editor.insertFragment(importReplaceUrls(safeImportScripture(html)));
+            editor.insertFragment(importReplaceUrls(safeImportScripture(importQuirks(html))));
             return true;
         }
 

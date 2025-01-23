@@ -18,6 +18,7 @@ import { extractUrls, replaceSmileys } from "util/text";
 import { containsTags, safeImportHtml } from "util/html";
 import { insertText } from "util/ui";
 import { mentionName } from "util/names";
+import { importQuirks } from "util/import-quirks";
 
 const MENTION_START = /(^|[\s(])@$/;
 
@@ -107,7 +108,7 @@ function MarkdownArea(
 
         let content: string | null;
         if (mode === "html") {
-            content = safeImportHtml(html);
+            content = safeImportHtml(importQuirks(html));
             if (format === "markdown") {
                 content = htmlToMarkdown(content);
             }
