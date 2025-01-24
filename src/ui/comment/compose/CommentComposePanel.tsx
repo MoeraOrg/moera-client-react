@@ -15,12 +15,10 @@ import {
     msDelete,
     msFileSave,
     msMediaLink,
-    msPhotoLibrary,
-    msSend
+    msPhotoLibrary
 } from "ui/material-symbols";
 import * as Browser from "ui/browser";
 import { useIsTinyScreen } from "ui/hook/media-query";
-import { LoadingInline } from "ui/control";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEditorButton";
@@ -28,6 +26,7 @@ import RichTextEditorEmojiButton from "ui/control/richtexteditor/panel/RichTextE
 import FormattingMenuButton from "ui/control/richtexteditor/formatting-menu/FormattingMenuButton";
 import { areImagesUploaded, areValuesEmpty, CommentComposeValues } from "ui/comment/compose/comment-compose";
 import { useCommentDraftSaver } from "ui/comment/compose/comment-draft-saver";
+import CommentSubmitButton from "ui/comment/compose/CommentSubmitButton";
 import "./CommentComposePanel.css";
 
 function CommentComposePanel() {
@@ -89,12 +88,7 @@ function CommentComposePanel() {
                         {!unsaved && saved && <Icon icon={msCloudDone}/>}
                     </span>
                 }
-                {!beingPosted ?
-                    <RichTextEditorButton icon={msSend} className="submit" disabled={notReady} title={t("add-comment")}
-                                          onClick={() => submitForm()}/>
-                :
-                    <LoadingInline/>
-                }
+                <CommentSubmitButton disabled={notReady} beingPosted={beingPosted} onClick={() => submitForm()}/>
             </div>
         </div>
     );

@@ -1,0 +1,39 @@
+.comment-compose-panel .submit {
+    text-wrap: nowrap;
+    height: 2em;
+    padding: .15em .15em 1.7em .15em;
+}
+
+@media only screen and (max-width: 409px) {
+    .comment-compose-panel .submit:not(:disabled) {
+        background-color: transparent;
+        border: none;
+        color: var(--bs-primary);
+    }
+
+    .comment-compose-panel .submit:hover:not(:disabled) {
+        background-color: var(--highlight-primary);
+    }
+}
+
+.comment-compose-panel .submit:disabled {
+    background-color: transparent;
+    border: none;
+    color: var(--bs-gray-400);
+}
+
+.comment-compose-panel .submit .title {
+    display: none;
+    padding-left: .5rem;
+    padding-right: .25rem;
+}
+
+@media only screen and (min-width: 410px) {
+    .comment-compose-panel .submit:not(:disabled) {
+        padding-right: .3em;
+    }
+
+    .comment-compose-panel .submit:not(:disabled) .title {
+        display: inline;
+    }
+}

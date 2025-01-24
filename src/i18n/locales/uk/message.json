@@ -2,7 +2,6 @@
   "access-google-play-sheriff-granted": "Доступ шерифу Google Play дозволено",
   "access-granted": "Доступ надано",
   "access-request-not-valid": "Запит на доступ недійсний",
-  "add-comment": "Відправити",
   "add-comments-need": "Щоб коментувати, вам треба <0>{signup}</0> або <1>{connect}</1>",
   "add-connection": "Додати акаунт",
   "add-donation": "Додати донат",

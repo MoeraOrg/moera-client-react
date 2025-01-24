@@ -15,24 +15,12 @@
     margin-inline-end: .75em;
 }
 
-.comment-compose-panel .right-pane .rich-text-editor-button {
-    margin-inline-start: .75em;
-}
-
 .comment-compose-panel .rich-text-editor-button.delete {
     color: var(--bs-danger);
 }
 
 .comment-compose-panel .rich-text-editor-button.delete:hover {
     background-color: var(--highlight-red);
-}
-
-.comment-compose-panel .rich-text-editor-button.submit:not(:disabled) {
-    color: var(--bs-primary);
-}
-
-.comment-compose-panel .rich-text-editor-button.submit:hover:not(:disabled) {
-    background-color: var(--highlight-primary);
 }
 
 .comment-compose-panel .formatting-menu-button {
@@ -51,5 +39,5 @@
 
 .comment-compose-panel .draft-status {
     color: var(--bs-gray-400);
-    margin-inline-end: .5em;
+    margin-inline-end: .75em;
 }
