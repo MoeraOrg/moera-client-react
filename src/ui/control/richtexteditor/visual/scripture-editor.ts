@@ -33,6 +33,7 @@ import {
     isScriptureVoid,
     isScriptureVoidBlock,
     Scripture,
+    SCRIPTURE_REGULAR_INLINE_TYPES,
     ScriptureElement,
     ScriptureElementType
 } from "ui/control/richtexteditor/visual/scripture";
@@ -85,7 +86,10 @@ export type ScriptureEditor<T extends DOMEditor> = T & {
 export function withScripture<T extends DOMEditor>(
     editor: T, pasteImage: (data: DataTransfer) => boolean
 ): ScriptureEditor<T> {
-    const {isInline, isVoid, insertData, insertFragmentData, insertText, normalizeNode, apply} = editor;
+    const {
+        isInline, isVoid, insertData, insertFragmentData, insertText, deleteBackward, deleteForward, deleteFragment,
+        normalizeNode, apply
+    } = editor;
 
     const scriptureEditor = editor as ScriptureEditor<T>;
 
@@ -128,6 +132,35 @@ export function withScripture<T extends DOMEditor>(
             const point = editor.selection.anchor;
             scriptureReplaceUrl(editor, point);
         }
+    }
+
+    const unwrapEmptyInlines = (): void => {
+        if (editor.selection != null) {
+            const [leaf, leafPath] = editor.leaf(editor.selection);
+            if (leaf.text === "") {
+                const [inline, inlinePath] = findWrappingElement(
+                    editor, SCRIPTURE_REGULAR_INLINE_TYPES, {at: leafPath}
+                ) ?? [null, null];
+                if (inline != null) {
+                    Transforms.unwrapNodes(editor, {at: inlinePath});
+                }
+            }
+        }
+    }
+
+    scriptureEditor.deleteBackward = (...args: Parameters<typeof deleteBackward>): void => {
+        deleteBackward(...args);
+        unwrapEmptyInlines();
+    }
+
+    scriptureEditor.deleteForward = (...args: Parameters<typeof deleteForward>): void => {
+        deleteForward(...args);
+        unwrapEmptyInlines();
+    }
+
+    scriptureEditor.deleteFragment = (...args: Parameters<typeof deleteFragment>): void => {
+        deleteFragment(...args);
+        unwrapEmptyInlines();
     }
 
     scriptureEditor.normalizeNode = (entry: NodeEntry, options?: { operation?: Operation }) => {
