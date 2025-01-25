@@ -283,11 +283,50 @@ function urlsToHtml(text: string | null | undefined): string {
     return text.replace(URLS, (url: string) => `<a href="${url}">${url}</a>`);
 }
 
+function strikeoutToHtml(text: string | null | undefined): string {
+    if (!text || !text.includes("\u0336")) {
+        return text ?? "";
+    }
+
+    let output = "";
+    let inStrikeout = false;
+    let lastChar: string | null = null;
+    for (let i = 0; i < text.length; i++) {
+        if (text[i] === "\u0336") {
+            if (!inStrikeout) {
+                output += "<s>";
+                inStrikeout = true;
+            }
+            if (lastChar != null) {
+                output += lastChar;
+            }
+            lastChar = null;
+        } else {
+            if (inStrikeout) {
+                output += "</s>";
+                inStrikeout = false;
+            }
+            if (lastChar != null) {
+                output += lastChar;
+            }
+            lastChar = text[i];
+        }
+    }
+    if (inStrikeout) {
+        output += "</s>";
+    }
+    if (lastChar != null) {
+        output += lastChar;
+    }
+
+    return output;
+}
+
 export function plainTextToHtml(text: string | null | undefined): string {
     if (!text) {
         return "";
     }
-    return linefeedsToHtml(urlsToHtml(htmlEntities(text)));
+    return linefeedsToHtml(strikeoutToHtml(urlsToHtml(htmlEntities(text))));
 }
 
 type ReplacementLevel = "none" | "basic" | "all";
