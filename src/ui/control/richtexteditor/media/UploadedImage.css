@@ -29,3 +29,16 @@
     line-height: 1;
     cursor: pointer;
 }
+
+.rich-text-editor-uploaded-image .too-large {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: var(--bs-danger);
+    color: white;
+    font-size: 75%;
+    text-align: center;
+    padding: .25em;
+    border-bottom-left-radius: .5rem;
+    border-bottom-right-radius: .5rem;
+}

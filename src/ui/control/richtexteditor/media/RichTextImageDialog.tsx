@@ -39,6 +39,7 @@ type Props = {
     compressDefault?: boolean;
     descriptionSrcFormat?: SourceFormat;
     smileysEnabled?: boolean;
+    mediaMaxSize?: number;
 } & RichTextEditorDialogProps<RichTextImageValues>;
 
 type BodyProps = RichTextEditorDialogBodyProps<Props>;
@@ -56,11 +57,12 @@ const mapPropsToValues = (props: Props): RichTextImageValues => ({
 });
 
 function RichTextImageDialog({
-    mediaFiles, insert, nodeName = REL_CURRENT, forceCompress, descriptionSrcFormat, smileysEnabled, onSubmit,
-    okButtonRef
+    mediaFiles, insert, nodeName = REL_CURRENT, forceCompress, descriptionSrcFormat, smileysEnabled, mediaMaxSize,
+    onSubmit, okButtonRef
 }: BodyProps) {
     const [, {value: files}, {setValue: setFiles}] = useField<File[] | null>("files");
     const [, {value: standardSize}] = useField<RichTextImageStandardSize>("standardSize");
+    const [, {value: compress}] = useField<boolean>("compress");
     const {submitForm} = useFormikContext<RichTextImageValues>();
     const {t} = useTranslation();
 
@@ -75,12 +77,20 @@ function RichTextImageDialog({
         }
     }, [files, insert, mediaFiles, okButtonRef]);
 
+    useEffect(() => {
+        if (okButtonRef.current != null) {
+            const valid = compress || mediaMaxSize == null || files == null
+                || files.every(file => file.size <= mediaMaxSize);
+            okButtonRef.current.disabled = !valid;
+        }
+    }, [compress, files, mediaMaxSize, okButtonRef]);
+
     const onDelete = (index: number, e: React.MouseEvent) => {
         if (files != null) {
             if (files.length === 1 && index === 0) {
                 onSubmit(false, {});
             } else {
-                setFiles(files.filter((_, i) => i !== index));
+                setFiles(files.toSpliced(index, 1));
             }
         }
         e.preventDefault();
@@ -89,7 +99,7 @@ function RichTextImageDialog({
     return (
         <>
             {files != null &&
-                <SelectedImages files={files} onDelete={onDelete}/>
+                <SelectedImages files={files} maxSize={compress ? undefined : mediaMaxSize} onDelete={onDelete}/>
             }
             {mediaFiles != null &&
                 <div className="rich-text-editor-image-list pt-0 mb-3">

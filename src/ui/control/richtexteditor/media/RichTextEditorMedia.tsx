@@ -278,16 +278,29 @@ export default function RichTextEditorMedia({
             {children}
             <input {...getInputProps()}/>
             {imageDialog &&
-                <RichTextImageDialog files={imageDialogFiles} mediaFiles={imageDialogMediaFiles} href={imageDialogHref}
-                                     insert={imageDialogInsert} nodeName={nodeName} forceCompress={forceCompress}
-                                     compressDefault={compressDefault.current} descriptionSrcFormat={srcFormat}
-                                     smileysEnabled={smileysEnabled} prevValues={imageDialogPrevValues}
-                                     onSubmit={imageDialogOnSubmit}/>
+                <RichTextImageDialog
+                    files={imageDialogFiles}
+                    mediaFiles={imageDialogMediaFiles}
+                    href={imageDialogHref}
+                    insert={imageDialogInsert}
+                    nodeName={nodeName}
+                    forceCompress={forceCompress}
+                    compressDefault={compressDefault.current}
+                    descriptionSrcFormat={srcFormat}
+                    smileysEnabled={smileysEnabled}
+                    mediaMaxSize={features?.mediaMaxSize}
+                    prevValues={imageDialogPrevValues}
+                    onSubmit={imageDialogOnSubmit}
+                />
             }
             {copyImageShow &&
-                <RichTextCopyImageDialog forceCompress={forceCompress} compressDefault={compressDefault.current}
-                                         descriptionSrcFormat={srcFormat} smileysEnabled={smileysEnabled}
-                                         onSubmit={submitCopyImage}/>
+                <RichTextCopyImageDialog
+                    forceCompress={forceCompress}
+                    compressDefault={compressDefault.current}
+                    descriptionSrcFormat={srcFormat}
+                    smileysEnabled={smileysEnabled}
+                    onSubmit={submitCopyImage}
+                />
             }
         </RichTextEditorMediaContext.Provider>
     );

@@ -6,20 +6,18 @@ import i18n from 'i18next';
 
 import { Node, PostingFeatures, PrivateMediaFileInfo } from "api";
 import { ClientAction } from "state/action";
+import { WithContext } from "state/action-types";
 import { messageBox } from "state/messagebox/actions";
 import { errorThrown } from "state/error/actions";
 import { readAsArrayBuffer } from "util/read-file";
 import { RelNodeName } from "util/rel-node-name";
-import { WithContext } from "state/action-types";
+import { formatMib } from "util/info-quantity";
 
 export interface VerifiedMediaFile extends PrivateMediaFileInfo {
     digest?: string | null;
 }
 
 type ImageUploadProgressHandler = (loaded: number, total: number) => void;
-
-const formatMb = (size: number): string =>
-    (size / 1024 / 1024).toLocaleString("en-US", {maximumFractionDigits: 2}) + "Mb";
 
 type ImageUploadResult<T> = Generator<CallEffect | PutEffect<any>, T>;
 
@@ -41,8 +39,8 @@ export function* imageUpload(
                 if (file.size > features.mediaMaxSize) {
                     yield* put(messageBox(i18n.t("upload-too-large", {
                         name: file.name,
-                        size: formatMb(file.size),
-                        maxSize: formatMb(features.mediaMaxSize)
+                        size: formatMib(file.size),
+                        maxSize: formatMib(features.mediaMaxSize)
                     })));
                     return null;
                 }
