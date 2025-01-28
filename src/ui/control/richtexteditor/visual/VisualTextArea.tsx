@@ -176,7 +176,7 @@ export default function VisualTextArea({
                 range.collapse(true);
                 const bottom = range.getBoundingClientRect().bottom - textArea.current.getBoundingClientRect().top;
                 if (bottom > textArea.current.clientHeight) {
-                    textArea.current.scrollTop += bottom - textArea.current.clientHeight;
+                    textArea.current.scrollTop += bottom - textArea.current.clientHeight + 8;
                 }
             }
         }
