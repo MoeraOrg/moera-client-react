@@ -22,8 +22,8 @@ import {
     scriptureReplaceSmileys,
     scriptureReplaceUrl
 } from "ui/control/richtexteditor/visual/scripture-editor";
-import "./VisualTextArea.css";
 import { htmlEntities } from "util/html";
+import "./VisualTextArea.css";
 
 export interface VisualTextAreaProps {
     name: string;
@@ -39,8 +39,6 @@ export interface VisualTextAreaProps {
     onSubmit?: () => void;
     onBlur?: (event: React.FocusEvent) => void;
 }
-
-const isBackspace = isHotkey("Backspace");
 
 export default function VisualTextArea({
     name, rows, minHeight, maxHeight, placeholder, autoFocus, disabled, smileysEnabled, commentQuote, submitKey,
@@ -140,39 +138,6 @@ export default function VisualTextArea({
             } else {
                 editor.insertText("\n");
                 event.preventDefault();
-            }
-        }
-
-        if (isBackspace(event) && editor.selection != null && Range.isCollapsed(editor.selection)) {
-            const [, blockPath] = findWrappingElement(editor, [
-                "blockquote", "spoiler-block", "details"
-            ]) ?? [null, null];
-            if (blockPath != null) {
-                const [, path] = findWrappingElement(editor, ["paragraph", "heading"]) ?? [null, null];
-                if (path != null && path.length > blockPath.length && editor.isStart(editor.selection.anchor, path)) {
-                    editor.liftNodes();
-                    event.preventDefault();
-                }
-            }
-
-            if (inList) {
-                const [listItem, path] = findWrappingElement<ListItemElement>(editor, "list-item") ?? [null, null];
-                if (path != null && editor.isStart(editor.selection.anchor, path)) {
-                    if (listItem.level > 1) {
-                        editor.setNodes(createListItemElement(listItem.ordered, listItem.level - 1, []));
-                    } else {
-                        editor.setNodes(createParagraphElement([]));
-                    }
-                    event.preventDefault();
-                }
-            }
-
-            if (inCodeBlock) {
-                const [, path] = findWrappingElement(editor, "code-block") ?? [null, null];
-                if (path != null && editor.isStart(editor.selection.anchor, path)) {
-                    editor.setNodes(createParagraphElement([]));
-                    event.preventDefault();
-                }
             }
         }
 

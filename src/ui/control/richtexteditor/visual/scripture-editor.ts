@@ -11,6 +11,7 @@ import {
     Path,
     Range,
     Text as SlateText,
+    TextUnit,
     Transforms
 } from 'slate';
 import { DOMEditor } from 'slate-dom';
@@ -19,6 +20,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { SMILEY_LIKE } from "smileys";
 import {
     createLinkElement,
+    createListItemElement,
     createParagraphElement,
     createScriptureText,
     isLinkElement,
@@ -32,6 +34,7 @@ import {
     isScriptureText,
     isScriptureVoid,
     isScriptureVoidBlock,
+    ListItemElement,
     Scripture,
     SCRIPTURE_REGULAR_INLINE_TYPES,
     ScriptureElement,
@@ -148,8 +151,37 @@ export function withScripture<T extends DOMEditor>(
         }
     }
 
-    scriptureEditor.deleteBackward = (...args: Parameters<typeof deleteBackward>): void => {
-        deleteBackward(...args);
+    scriptureEditor.deleteBackward = (unit: TextUnit): void => {
+        if (unit === "character" && editor.selection != null && Range.isCollapsed(editor.selection)) {
+            const [, blockPath] = findWrappingElement(editor, [
+                "blockquote", "spoiler-block", "details"
+            ]) ?? [null, null];
+            if (blockPath != null) {
+                const [, path] = findWrappingElement(editor, ["paragraph", "heading"]) ?? [null, null];
+                if (path != null && path.length > blockPath.length && editor.isStart(editor.selection.anchor, path)) {
+                    editor.liftNodes();
+                    return;
+                }
+            }
+
+            const [listItem, listItemPath] = findWrappingElement<ListItemElement>(editor, "list-item") ?? [null, null];
+            if (listItemPath != null && editor.isStart(editor.selection.anchor, listItemPath)) {
+                if (listItem.level > 1) {
+                    editor.setNodes(createListItemElement(listItem.ordered, listItem.level - 1, []));
+                } else {
+                    editor.setNodes(createParagraphElement([]));
+                }
+                return;
+            }
+
+            const [, codeBlockPath] = findWrappingElement(editor, "code-block") ?? [null, null];
+            if (codeBlockPath != null && editor.isStart(editor.selection.anchor, codeBlockPath)) {
+                editor.setNodes(createParagraphElement([]));
+                return;
+            }
+        }
+
+        deleteBackward(unit);
         unwrapEmptyInlines();
     }
 
