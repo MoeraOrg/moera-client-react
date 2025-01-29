@@ -126,9 +126,9 @@ export default function VisualTextArea({
                         }
                     }
                 }
+                editor.insertBreak();
+                event.preventDefault();
             }
-            editor.insertBreak();
-            event.preventDefault();
         }
         if (isSoftEnter(event)) {
             if (inVoid && editor.selection != null && Range.isCollapsed(editor.selection)) {
