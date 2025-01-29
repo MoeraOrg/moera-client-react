@@ -138,4 +138,5 @@ interface Window {
     loadedAvatars?: Map<string, string>;
     overlays: import("ui/overlays/overlays").OverlaysManager;
     store: Store<ClientState, ClientAction>;
+    middleware: StoreMiddleware;
 }

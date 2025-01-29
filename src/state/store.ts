@@ -126,6 +126,7 @@ import quickTipsTriggers from "state/quicktips/triggers";
 import refreshTriggers from "state/refresh/triggers";
 
 import { collectExecutors, invokeExecutors } from "state/executor";
+import { createStoreMiddleware } from "state/store-middleware";
 
 const reducers = combineReducers({
     pulse,
@@ -268,6 +269,7 @@ function* combinedSaga() {
 
 export default function initStore(): void {
     const sagaMiddleware = createSagaMiddleware();
-    window.store = legacy_createStore(combinedReducer, applyMiddleware(sagaMiddleware));
+    window.middleware = createStoreMiddleware();
+    window.store = legacy_createStore(combinedReducer, applyMiddleware(sagaMiddleware, window.middleware));
     sagaMiddleware.run(combinedSaga);
 }
