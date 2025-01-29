@@ -266,6 +266,8 @@ function* combinedSaga() {
     yield* invokeExecutors(executors);
 }
 
-const sagaMiddleware = createSagaMiddleware();
-export default legacy_createStore(combinedReducer, applyMiddleware(sagaMiddleware));
-sagaMiddleware.run(combinedSaga);
+export default function initStore(): void {
+    const sagaMiddleware = createSagaMiddleware();
+    window.store = legacy_createStore(combinedReducer, applyMiddleware(sagaMiddleware));
+    sagaMiddleware.run(combinedSaga);
+}

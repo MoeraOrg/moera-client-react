@@ -3,12 +3,12 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { AvatarInfo } from "api";
+import { dispatch } from "state/store-sagas";
 import { ExtStoryInfo } from "state/feeds/state";
 import { reminderAvatarUpdate } from "state/stories/actions";
 import AvatarEditor from "ui/profile/edit/avatar/AvatarEditor";
 import StoryMenu from "ui/story/StoryMenu";
 import StoryPin from "ui/story/StoryPin";
-import store from "state/store";
 
 interface OuterProps {
     feedName: string;
@@ -54,7 +54,7 @@ const reminderAvatarStoryLogic = {
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         if (values.avatar != null) {
-            store.dispatch(reminderAvatarUpdate(values.avatar.id));
+            dispatch(reminderAvatarUpdate(values.avatar.id));
         }
     }
 

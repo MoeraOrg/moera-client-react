@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 import { GrantInfo, Scope } from "api";
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { settingsGrantsDialogClose, settingsGrantsDialogConfirm } from "state/settings/actions";
-import store from "state/store";
 import { Button, ModalDialog } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 import PermissionSelector from "ui/settings/PermissionSelector";
@@ -55,7 +55,7 @@ const tokenLogic = {
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         const revoke = (formik.props.grant?.scope ?? []).filter(sc => !values.scopes.includes(sc));
-        store.dispatch(settingsGrantsDialogConfirm(formik.props.nodeName, revoke));
+        dispatch(settingsGrantsDialogConfirm(formik.props.nodeName, revoke));
         formik.setSubmitting(false);
     }
 

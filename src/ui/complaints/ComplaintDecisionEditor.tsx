@@ -6,12 +6,12 @@ import cx from 'classnames';
 
 import { SHERIFF_ORDER_REASON_CODES, SheriffComplaintDecisionText, SheriffOrderReason } from "api";
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { complaintsDecisionPost } from "state/complaints/actions";
 import { ExtComplaintGroupInfo } from "state/complaints/state";
 import { Button } from "ui/control";
 import { CheckboxField, SelectField, SelectFieldChoice } from "ui/control/field";
 import { RichTextValue, RichTextField } from "ui/control/richtexteditor";
-import store from "state/store";
 import "./ComplaintDecisionEditor.css";
 
 type DecisionCode = "choose" | "reject" | SheriffOrderReason;
@@ -84,7 +84,7 @@ const complaintDecisionEditorLogic = {
         }
 
         formik.setStatus("submitted");
-        store.dispatch(complaintsDecisionPost(id, decision));
+        dispatch(complaintsDecisionPost(id, decision));
         formik.setSubmitting(false);
     }
 

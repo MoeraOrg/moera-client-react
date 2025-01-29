@@ -4,10 +4,10 @@ import { Form, FormikBag, FormikErrors, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { ownerSwitch } from "state/node/actions";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
-import store from "state/store";
 import "./WelcomeNavigator.css";
 
 interface Values {
@@ -46,7 +46,7 @@ const welcomeNavigatorLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<{}, Values>): void {
-        store.dispatch(ownerSwitch(values.ownerName.trim()));
+        dispatch(ownerSwitch(values.ownerName.trim()));
         formik.setSubmitting(false);
     }
 

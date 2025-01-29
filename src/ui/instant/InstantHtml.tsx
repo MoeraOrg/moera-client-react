@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { Provider, useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
-import store from "state/store";
 import { getSetting } from "state/settings/selectors";
 import { ExtStoryInfo } from "state/feeds/state";
 import InstantMention from "ui/instant/InstantMention";
@@ -33,7 +32,7 @@ export default function InstantHtml({story}: Props) {
 
             const fullName = (node as HTMLSpanElement).innerText;
             createRoot(span).render(
-                <Provider store={store}>
+                <Provider store={window.store}>
                     <InstantMention name={name} fullName={fullName} mode={mode}/>
                 </Provider>
             );

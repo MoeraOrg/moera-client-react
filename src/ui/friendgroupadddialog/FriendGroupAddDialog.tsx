@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next';
 
 import { PrincipalValue } from "api";
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { closeFriendGroupAddDialog, friendGroupAdd } from "state/friendgroupadddialog/actions";
 import { Button, ModalDialog } from "ui/control";
 import { InputField, PrincipalField } from "ui/control/field";
-import store from "state/store";
 
 interface Values {
     title: string;
@@ -61,7 +61,7 @@ const friendGroupAddDialogLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<{}, Values>): void {
-        store.dispatch(friendGroupAdd(values.title, values.view));
+        dispatch(friendGroupAdd(values.title, values.view));
         formik.setSubmitting(false);
     }
 

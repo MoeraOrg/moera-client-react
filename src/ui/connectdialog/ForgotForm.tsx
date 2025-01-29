@@ -4,10 +4,10 @@ import { FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { connectDialogResetPassword, connectDialogSetForm } from "state/connectdialog/actions";
 import { InputField } from "ui/control/field";
 import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
-import store from "state/store";
 
 interface OuterProps {
     location: string;
@@ -59,7 +59,7 @@ const forgotFormLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        store.dispatch(connectDialogResetPassword(values.location.trim()));
+        dispatch(connectDialogResetPassword(values.location.trim()));
         formik.setSubmitting(false);
     }
 

@@ -4,7 +4,7 @@ import { FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { NamingRules } from "api";
-import store from "state/store";
+import { dispatch } from "state/store-sagas";
 import { connectToHome } from "state/home/actions";
 import { connectDialogSetForm } from "state/connectdialog/actions";
 import { ConnectDialogForm } from "state/connectdialog/state";
@@ -78,7 +78,7 @@ const connectFormLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        store.dispatch(connectToHome(values.location.trim(), false, "admin", values.password));
+        dispatch(connectToHome(values.location.trim(), false, "admin", values.password));
         formik.setSubmitting(false);
     }
 

@@ -4,6 +4,7 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
@@ -14,7 +15,6 @@ import { closeImageEditDialog, imageEditDialogPost } from "state/imageeditdialog
 import { Button, ModalDialog } from "ui/control";
 import { RichTextField, RichTextValue } from "ui/control/richtexteditor";
 import { mediaImageTagAttributes } from "util/media-images";
-import store from "state/store";
 import "./ImageEditDialog.css";
 
 interface OuterProps {
@@ -97,7 +97,7 @@ const logic = {
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.setStatus("submitted");
-        store.dispatch(imageEditDialogPost({
+        dispatch(imageEditDialogPost({
             ownerName: formik.props.homeOwnerName,
             ownerFullName: formik.props.homeOwnerFullName,
             bodySrc: JSON.stringify({

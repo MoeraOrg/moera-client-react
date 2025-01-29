@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { AvatarInfo, FundraiserInfo, PrincipalValue, ProfileInfo, SourceFormat } from "api";
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { getSetting } from "state/settings/selectors";
 import { profileEditCancel, profileEditConflictClose, profileUpdate } from "state/profile/actions";
 import { useIsTinyScreen } from "ui/hook/media-query";
@@ -17,7 +18,6 @@ import AvatarEditor from "ui/profile/edit/avatar/AvatarEditor";
 import DonateField from "ui/profile/edit/donate/DonateField";
 import { longGender } from "util/names";
 import { isEmail } from "util/misc";
-import store from "state/store";
 import "./ProfileEditor.css";
 
 interface OuterProps {
@@ -139,7 +139,7 @@ const profileEditorLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        store.dispatch(profileUpdate({
+        dispatch(profileUpdate({
             fullName: values.fullName.trim(),
             title: values.title.trim(),
             gender: values.gender.trim(),

@@ -3,13 +3,13 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import i18n from 'i18next';
 
 import { ClientSettingMetaInfo, SettingInfo, SettingMetaInfo, SettingTypes, SettingValue } from "api";
+import { dispatch } from "state/store-sagas";
 import { messageBox } from "state/messagebox/actions";
 import { settingsUpdate } from "state/settings/actions";
 import { useSettingsResetForm, useSettingsSheetResize } from "ui/settings/settings-hooks";
 import { Item } from "ui/settings/settings-menu";
 import { SettingsSheetItems, toFieldName } from "ui/settings/SettingsSheetItems";
 import SettingsButtons from "ui/settings/SettingsButtons";
-import store from "state/store";
 import "./SettingsSheet.css";
 
 interface OuterProps {
@@ -88,9 +88,9 @@ const settingsSheetLogic = {
         });
 
         if (hasErrors) {
-            store.dispatch(messageBox(i18n.t("settings-incorrect-values")));
+            dispatch(messageBox(i18n.t("settings-incorrect-values")));
         } else {
-            store.dispatch(settingsUpdate(settingsToUpdate));
+            dispatch(settingsUpdate(settingsToUpdate));
         }
 
         formik.setSubmitting(false);

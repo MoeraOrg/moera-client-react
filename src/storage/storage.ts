@@ -1,6 +1,6 @@
 import { AvatarImage, BlockedUserInfo, CarteInfo, CLIENT_SETTINGS_PREFIX } from "api";
-import store from "state/store";
 import { ClientAction } from "state/action";
+import { dispatch, select } from "state/store-sagas";
 import { cartesSet } from "state/cartes/actions";
 import { getCartesListTtl } from "state/cartes/selectors";
 import {
@@ -21,23 +21,23 @@ function loadedData(data: Access.StoredData): void {
     }
 
     if (data.roots != null) {
-        store.dispatch(connectionsSet(data.roots));
+        dispatch(connectionsSet(data.roots));
     }
 
     if (data.settings != null) {
-        store.dispatch(settingsClientValuesSet(
+        dispatch(settingsClientValuesSet(
             data.settings.map(([name, value]) => ({name: CLIENT_SETTINGS_PREFIX + name, value}))));
     }
 
     if (data.names != null) {
         const serverUrl = Access.findNameServerUrl(data.settings) ?? Access.DEFAULT_NAMING_SERVER;
-        store.dispatch(namingNamesSwitchServer(serverUrl));
-        store.dispatch(namingNamesPopulate(serverUrl, data.names));
+        dispatch(namingNamesSwitchServer(serverUrl));
+        dispatch(namingNamesPopulate(serverUrl, data.names));
     }
 
     if (data.invisibleUsers != null) {
         const {checksum, blockedUsers} = data.invisibleUsers;
-        store.dispatch(homeInvisibleUsersLoaded(checksum, blockedUsers.map(([id, nodeName]) => ({
+        dispatch(homeInvisibleUsersLoaded(checksum, blockedUsers.map(([id, nodeName]) => ({
             id,
             blockedOperation: "visibility",
             nodeName,
@@ -53,10 +53,10 @@ function loadedData(data: Access.StoredData): void {
     const {
         location, nodeName, fullName = null, avatar = null, login = null, token = null, permissions
     } = data.home || {};
-    const home = getHomeConnectionData(store.getState())
+    const home = select(getHomeConnectionData);
     if (location != null && token != null) {
         if (location !== home.location || login !== home.login || token !== home.token) {
-            store.dispatch(connectedToHome({
+            dispatch(connectedToHome({
                 location,
                 login,
                 token,
@@ -71,9 +71,9 @@ function loadedData(data: Access.StoredData): void {
             }));
         }
     } else {
-        store.dispatch(cartesSet(data.cartesIp ?? null, data.cartes ?? [], 0));
+        dispatch(cartesSet(data.cartesIp ?? null, data.cartes ?? [], 0));
         if (location != null && token == null) {
-            store.dispatch(disconnectedFromHome());
+            dispatch(disconnectedFromHome());
         }
     }
 }
@@ -82,7 +82,7 @@ export function loadData(): void {
     const data = Access.loadData();
     loadedData(data);
     if (data.home?.location == null) {
-        store.dispatch(homeReady());
+        dispatch(homeReady());
     }
 }
 
@@ -91,7 +91,7 @@ export function storeConnectionData(location: string, nodeName: string | null, f
 ): void {
     window.Android?.connectedToHome(location + "/moera", token, nodeName);
     const roots = Access.storeData({home: {location, nodeName, fullName, avatar, login, token, permissions}});
-    store.dispatch(connectionsSet(roots));
+    dispatch(connectionsSet(roots));
 }
 
 export function storeCartesData(cartesIp: string | null, cartes: CarteInfo[] | null): void {
@@ -127,6 +127,6 @@ export function storeName(serverUrl: string, name: string, nodeUri: string, upda
 
 export function reloadNames(cause: ClientAction | null, serverUrl: string) {
     const names = Access.loadNames(serverUrl);
-    store.dispatch(namingNamesSwitchServer(serverUrl).causedBy(cause));
-    store.dispatch(namingNamesPopulate(serverUrl, names).causedBy(cause));
+    dispatch(namingNamesSwitchServer(serverUrl).causedBy(cause));
+    dispatch(namingNamesPopulate(serverUrl, names).causedBy(cause));
 }

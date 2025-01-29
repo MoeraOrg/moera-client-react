@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { PrincipalValue } from "api";
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { getSettingNode } from "state/settings/selectors";
 import {
     peopleSelectedFriendshipSetVisibility,
@@ -14,7 +15,6 @@ import {
 import { closePeopleHideDialog } from "state/peoplehidedialog/actions";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField } from "ui/control/field";
-import store from "state/store";
 
 interface OuterProps {
     nodeName: string | null;
@@ -74,15 +74,15 @@ const peopleSelectedHideDialogLogic = {
 
         formik.setStatus("submitted");
         if (!subscriptionsHidden && values.hideMySubscription !== null) {
-            store.dispatch(peopleSelectedSubscriptionSetVisibility(!values.hideMySubscription));
+            dispatch(peopleSelectedSubscriptionSetVisibility(!values.hideMySubscription));
         }
         if (!subscribersHidden && values.hideSubscriptionToMe !== null) {
-            store.dispatch(peopleSelectedSubscriberSetVisibility(!values.hideSubscriptionToMe));
+            dispatch(peopleSelectedSubscriberSetVisibility(!values.hideSubscriptionToMe));
         }
         if (!friendsHidden && values.hideFriend !== null) {
-            store.dispatch(peopleSelectedFriendshipSetVisibility(!values.hideFriend));
+            dispatch(peopleSelectedFriendshipSetVisibility(!values.hideFriend));
         }
-        store.dispatch(closePeopleHideDialog());
+        dispatch(closePeopleHideDialog());
         formik.setSubmitting(false);
     }
 

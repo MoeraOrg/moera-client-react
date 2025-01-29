@@ -137,4 +137,5 @@ interface Window {
     loadedImages?: Set<string>;
     loadedAvatars?: Map<string, string>;
     overlays: import("ui/overlays/overlays").OverlaysManager;
+    store: Store<ClientState, ClientAction>;
 }

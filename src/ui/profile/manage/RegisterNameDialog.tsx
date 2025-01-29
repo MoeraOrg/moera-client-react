@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next';
 
 import { NamingRules } from "api";
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { registerName, registerNameDialogCancel } from "state/nodename/actions";
 import { Button, ModalDialog, NameHelp } from "ui/control";
 import { InputField } from "ui/control/field";
-import store from "state/store";
 
 interface Values {
     name: string;
@@ -61,7 +61,7 @@ const registerNameDialogLogic = {
     validateOnChange: false,
 
     handleSubmit(values: Values, formik: FormikBag<{}, Values>): void {
-        store.dispatch(registerName(
+        dispatch(registerName(
             values.name.trim(),
             () => formik.setFieldError("name", "name-already-taken")));
         formik.setSubmitting(false);

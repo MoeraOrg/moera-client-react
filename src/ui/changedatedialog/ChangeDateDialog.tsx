@@ -5,10 +5,10 @@ import { fromUnixTime, getUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { closeChangeDateDialog, storyChangeDate } from "state/changedatedialog/actions";
 import { Button, ModalDialog } from "ui/control";
 import { DateTimeField } from "ui/control/field";
-import store from "state/store";
 
 interface OuterProps {
     storyId: string | null;
@@ -50,7 +50,7 @@ const changeDateDialogLogic = {
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         if (formik.props.storyId != null) {
-            store.dispatch(storyChangeDate(formik.props.storyId, getUnixTime(values.publishedAt)));
+            dispatch(storyChangeDate(formik.props.storyId, getUnixTime(values.publishedAt)));
         }
         formik.setSubmitting(false);
     }

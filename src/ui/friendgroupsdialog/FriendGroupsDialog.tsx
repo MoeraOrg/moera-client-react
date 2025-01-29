@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { tGender } from "i18n";
 import { FriendGroupInfo, PrincipalValue } from "api";
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { getHomeFriendGroups } from "state/home/selectors";
 import { NodeCardState } from "state/nodecards/state";
 import { getNodeCard } from "state/nodecards/selectors";
@@ -16,7 +17,6 @@ import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, InputField, PrincipalField } from "ui/control/field";
 import { NameDisplayMode } from "ui/types";
 import { formatFullName } from "util/names";
-import store from "state/store";
 import "./FriendGroupsDialog.css";
 
 interface OuterProps {
@@ -131,12 +131,12 @@ const friendGroupsDialogLogic = {
             const view: PrincipalValue = prevGroups != null && prevGroups.length > 0
                 ? (prevGroups[0].operations?.view ?? "public")
                 : "public";
-            store.dispatch(nodeChangeFriendGroups(formik.props.nodeName, values.groups, view,
+            dispatch(nodeChangeFriendGroups(formik.props.nodeName, values.groups, view,
                 values.addedGroups.map(g => parseInt(g)), values.addedGroupTitles, values.addedGroupView));
         } else {
-            store.dispatch(closeFriendGroupsDialog());
+            dispatch(closeFriendGroupsDialog());
             const excludedGroups = values.touchedGroups.filter(g => !values.addedGroups.includes(g));
-            store.dispatch(peopleSelectedChangeFriendGroups(values.groups, excludedGroups,
+            dispatch(peopleSelectedChangeFriendGroups(values.groups, excludedGroups,
                 values.addedGroups.map(g => parseInt(g)), values.addedGroupTitles, values.addedGroupView));
         }
         formik.setSubmitting(false);

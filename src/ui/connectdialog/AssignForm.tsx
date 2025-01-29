@@ -2,10 +2,10 @@ import React from 'react';
 import { FormikBag, FormikErrors, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
+import { dispatch } from "state/store-sagas";
 import { connectToHome } from "state/home/actions";
 import { InputField } from "ui/control/field";
 import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
-import store from "state/store";
 
 interface OuterProps {
     location: string;
@@ -58,7 +58,7 @@ const assignFormLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        store.dispatch(connectToHome(values.location.trim(), true, "admin", values.password));
+        dispatch(connectToHome(values.location.trim(), true, "admin", values.password));
         formik.setSubmitting(false);
     }
 

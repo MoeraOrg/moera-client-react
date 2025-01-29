@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import PROVIDERS from "providers";
 import { NamingRules } from "api";
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { isConnectedToHome } from "state/home/selectors";
 import { getSetting, getSettingMeta } from "state/settings/selectors";
 import {
@@ -28,7 +29,6 @@ import { Button, ModalDialog, NameHelp } from "ui/control";
 import { CheckboxField, InputField, SelectField, SelectFieldChoice } from "ui/control/field";
 import DomainField from "ui/signupdialog/DomainField";
 import { isEmail } from "util/misc";
-import store from "state/store";
 
 const PROVIDER_CHOICES = (Browser.isDevMode() ? PROVIDERS : PROVIDERS.filter(p => !p.dev))
     .map(p => ({title: p.title, value: p.name}));
@@ -289,7 +289,7 @@ const signUpDialogLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        store.dispatch(signUp(values.language, values.provider, values.name.trim(),
+        dispatch(signUp(values.language, values.provider, values.name.trim(),
             values.autoDomain && formik.props.stage <= SIGN_UP_STAGE_DOMAIN ? null : values.domain.trim(),
             values.password, values.email, values.googlePlayAllowed,
             (fieldName, message) => formik.setFieldError(fieldName, message)));

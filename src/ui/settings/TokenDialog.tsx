@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Scope, TokenInfo } from "api";
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { settingsTokensCreate, settingsTokensDialogClose, settingsTokensUpdate } from "state/settings/actions";
-import store from "state/store";
 import { Button, ModalDialog } from "ui/control";
 import { InputField } from "ui/control/field";
 import PermissionSelector from "ui/settings/PermissionSelector";
@@ -73,12 +73,12 @@ const tokenLogic = {
         let name: string | null = values.name.trim();
         name = name.length > 0 ? name : null;
         if (formik.props.token == null) {
-            store.dispatch(settingsTokensCreate(
+            dispatch(settingsTokensCreate(
                 values.password.trim(), name, values.scopes,
                 () => formik.setFieldError("password", "password-incorrect")
             ));
         } else {
-            store.dispatch(settingsTokensUpdate(formik.props.token.id, name, values.scopes));
+            dispatch(settingsTokensUpdate(formik.props.token.id, name, values.scopes));
         }
         formik.setSubmitting(false);
     }

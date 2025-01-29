@@ -4,6 +4,7 @@ import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { getNodeCard } from "state/nodecards/selectors";
 import { getSetting } from "state/settings/selectors";
 import { askDialogSend, closeAskDialog } from "state/askdialog/actions";
@@ -11,7 +12,6 @@ import { Button, ModalDialog } from "ui/control";
 import { InputField, SelectField, SelectFieldChoice } from "ui/control/field";
 import { NameDisplayMode } from "ui/types";
 import { formatFullName } from "util/names";
-import store from "state/store";
 
 interface OuterProps {
     nodeName: string;
@@ -103,9 +103,9 @@ const askDialogLogic = {
         formik.setStatus("submitted");
         if (formik.props.nodeName != null) {
             if (values.subject === "s:subscribe") {
-                store.dispatch(askDialogSend(formik.props.nodeName, "subscribe", null, values.message));
+                dispatch(askDialogSend(formik.props.nodeName, "subscribe", null, values.message));
             } else {
-                store.dispatch(askDialogSend(formik.props.nodeName, "friend", values.subject, values.message));
+                dispatch(askDialogSend(formik.props.nodeName, "friend", values.subject, values.message));
             }
         }
         formik.setSubmitting(false);

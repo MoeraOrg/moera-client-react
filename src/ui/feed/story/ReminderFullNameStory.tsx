@@ -2,13 +2,13 @@ import React, { useRef } from 'react';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { dispatch } from "state/store-sagas";
 import { ExtStoryInfo } from "state/feeds/state";
 import { reminderFullNameUpdate } from "state/stories/actions";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
 import StoryMenu from "ui/story/StoryMenu";
 import StoryPin from "ui/story/StoryPin";
-import store from "state/store";
 
 const NAME_EXAMPLES = [
     {name: "harrp", full: "Harry Potter"},
@@ -64,7 +64,7 @@ const reminderFullNameStoryLogic = {
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        store.dispatch(reminderFullNameUpdate(values.fullName));
+        dispatch(reminderFullNameUpdate(values.fullName));
     }
 
 };

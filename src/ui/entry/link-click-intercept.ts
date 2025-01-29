@@ -1,7 +1,7 @@
 import React from 'react';
 import * as URI from 'uri-js';
 
-import store from "state/store";
+import { dispatch, select } from "state/store-sagas";
 import { initFromLocation, initFromNodeLocation, newLocation } from "state/navigation/actions";
 import { getSetting } from "state/settings/selectors";
 import * as Browser from "ui/browser";
@@ -55,7 +55,7 @@ export function interceptLinkClick(event: MouseEvent | React.MouseEvent): void {
 }
 
 function openLink(href: string): void {
-    const openInNewWindow = getSetting(store.getState(), "link.new-window") as boolean;
+    const openInNewWindow = getSetting(select(), "link.new-window") as boolean;
     if (!openInNewWindow || Browser.isAndroidApp()) {
         window.location.href = href;
     } else {
@@ -68,9 +68,9 @@ function jump(
     hash: string | null
 ): void {
     if (rootLocation != null) {
-        store.dispatch(newLocation());
-        store.dispatch(initFromLocation(nodeName, rootLocation, path, query, hash));
+        dispatch(newLocation());
+        dispatch(initFromLocation(nodeName, rootLocation, path, query, hash));
     } else if (nodeName != null) {
-        store.dispatch(initFromNodeLocation(nodeName, path, query, hash, null));
+        dispatch(initFromNodeLocation(nodeName, path, query, hash, null));
     }
 }

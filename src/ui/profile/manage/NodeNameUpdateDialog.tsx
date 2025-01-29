@@ -6,11 +6,11 @@ import { useTranslation } from 'react-i18next';
 
 import { NamingRules, NodeName } from "api";
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { nodeNameUpdate, nodeNameUpdateDialogCancel } from "state/nodename/actions";
 import { Button, ModalDialog } from "ui/control";
 import { InputField } from "ui/control/field";
 import { range } from "util/misc";
-import store from "state/store";
 import "./NodeNameUpdateDialog.css";
 
 interface ColumnProps {
@@ -118,7 +118,7 @@ const nodeNameUpdateDialogLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        store.dispatch(nodeNameUpdate(
+        dispatch(nodeNameUpdate(
             NodeName.expand(values.name.trim()),
             values.mnemonic.map(v => v.trim().toLowerCase())));
         formik.setSubmitting(false);

@@ -4,10 +4,10 @@ import { Form, FormikBag, FormikErrors, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { settingsChangePassword, settingsChangePasswordDialogClose } from "state/settings/actions";
 import { Button, ModalDialog } from "ui/control";
 import { InputField } from "ui/control/field";
-import store from "state/store";
 
 interface Values {
     oldPassword: string;
@@ -66,7 +66,7 @@ const changePasswordLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<{}, Values>): void {
-        store.dispatch(settingsChangePassword(values.oldPassword.trim(), values.password.trim(),
+        dispatch(settingsChangePassword(values.oldPassword.trim(), values.password.trim(),
             () => formik.setFieldError("oldPassword", "password-incorrect")));
         formik.setSubmitting(false);
     }

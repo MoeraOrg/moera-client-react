@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { FriendGroupDetails, PrincipalValue, SubscriberInfo, SubscriptionInfo } from "api";
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { isPrincipalIn } from "state/node/selectors";
 import { getSettingNode } from "state/settings/selectors";
 import { feedSubscriberSetVisibility, feedSubscriptionSetVisibility } from "state/feeds/actions";
@@ -14,7 +15,6 @@ import { friendshipSetVisibility } from "state/people/actions";
 import { closePeopleHideDialog } from "state/peoplehidedialog/actions";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField } from "ui/control/field";
-import store from "state/store";
 
 interface Values {
     hideMySubscription: boolean;
@@ -99,17 +99,17 @@ const peopleHideDialogLogic = {
         formik.setStatus("submitted");
         if (subscription?.id != null && !subscriptionsHidden
                 && values.hideMySubscription !== peopleHideDialogLogic.isSubscriptionHidden(subscription)) {
-            store.dispatch(feedSubscriptionSetVisibility(subscription?.id, !values.hideMySubscription));
+            dispatch(feedSubscriptionSetVisibility(subscription?.id, !values.hideMySubscription));
         }
         if (subscriber?.id != null && !subscribersHidden && feedName != null
                 && values.hideSubscriptionToMe !== peopleHideDialogLogic.isSubscriberHidden(subscriber)) {
-            store.dispatch(feedSubscriberSetVisibility(subscriber?.id, feedName, !values.hideSubscriptionToMe));
+            dispatch(feedSubscriberSetVisibility(subscriber?.id, feedName, !values.hideSubscriptionToMe));
         }
         if (friendGroups != null && friendGroups.length > 0 && !friendsHidden && nodeName != null
                 && values.hideFriend !== peopleHideDialogLogic.isFriendHidden(friendGroups)) {
-            store.dispatch(friendshipSetVisibility(nodeName, !values.hideFriend));
+            dispatch(friendshipSetVisibility(nodeName, !values.hideFriend));
         }
-        store.dispatch(closePeopleHideDialog());
+        dispatch(closePeopleHideDialog());
         formik.setSubmitting(false);
     }
 

@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next';
 
 import { AskSubject } from "api";
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { closeAskDialog } from "state/askdialog/actions";
 import { peopleSelectedAsk } from "state/people/actions";
 import { Button, ModalDialog } from "ui/control";
 import { InputField, SelectField, SelectFieldChoice } from "ui/control/field";
-import store from "state/store";
 
 const SUBJECTS: SelectFieldChoice[] = [
     {title: "choose-request", value: "s:select"},
@@ -70,9 +70,9 @@ const askSelectedDialogLogic = {
 
     handleSubmit(values: Values, formik: FormikBag<{}, Values>): void {
         formik.setStatus("submitted");
-        store.dispatch(closeAskDialog());
+        dispatch(closeAskDialog());
         const subject: AskSubject = values.subject === "s:subscribe" ? "subscribe" : "friend";
-        store.dispatch(peopleSelectedAsk(subject, values.message));
+        dispatch(peopleSelectedAsk(subject, values.message));
         formik.setSubmitting(false);
     }
 

@@ -3,6 +3,7 @@ import i18n from 'i18next';
 
 import { CLIENT_SETTINGS_PREFIX, Node } from "api";
 import { WithContext } from "state/action-types";
+import { dispatch } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
 import {
     ProfileAvatarCreateAction,
@@ -29,7 +30,6 @@ import { executor } from "state/executor";
 import { messageBox } from "state/messagebox/actions";
 import { getAvatars } from "state/profile/selectors";
 import { settingsUpdate } from "state/settings/actions";
-import store from "state/store";
 import { homeIntroduced } from "state/init-selectors";
 import { REL_CURRENT } from "util/rel-node-name";
 
@@ -71,7 +71,7 @@ function* profileImageUploadSaga(action: WithContext<ProfileImageUploadAction>) 
             action,
             REL_CURRENT,
             action.payload.file,
-            (loaded: number, total: number) => store.dispatch(profileImageUploadProgress(loaded, total))
+            (loaded: number, total: number) => dispatch(profileImageUploadProgress(loaded, total))
         );
         if (width < 100 || height < 100) {
             yield* put(messageBox(i18n.t("avatar-too-small")).causedBy(action));

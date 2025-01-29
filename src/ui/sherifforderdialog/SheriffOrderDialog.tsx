@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { SHERIFF_ORDER_REASON_CODES, SheriffOrderReason } from "api";
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { closeSheriffOrderDialog, sheriffOrderDialogSubmit } from "state/sherifforderdialog/actions";
@@ -15,7 +16,6 @@ import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, SelectField, SelectFieldChoice } from "ui/control/field";
 import { RichTextField, RichTextValue } from "ui/control/richtexteditor";
 import { formatFullName } from "util/names";
-import store from "state/store";
 
 const REASON_CODES: SelectFieldChoice[] = SHERIFF_ORDER_REASON_CODES.map(code => ({
     title: `sheriff-order-reason.${code}`,
@@ -107,7 +107,7 @@ const sheriffOrderDialogLogic = {
 
         formik.setStatus("submitted");
         if (target != null) {
-            store.dispatch(sheriffOrderDialogSubmit(
+            dispatch(sheriffOrderDialogSubmit(
                 target, values.reasonCode, values.reasonDetails.text, values.anonymous));
         }
         formik.setSubmitting(false);

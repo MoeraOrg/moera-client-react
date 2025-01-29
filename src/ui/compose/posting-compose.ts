@@ -14,7 +14,7 @@ import {
     SourceFormat,
     StoryAttributes
 } from "api";
-import store from "state/store";
+import { dispatch } from "state/store-sagas";
 import { composePost } from "state/compose/actions";
 import { DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import { settingsUpdate } from "state/settings/actions";
@@ -361,7 +361,7 @@ export const composePageLogic = {
 
     handleSubmit(values: ComposePageValues, formik: FormikBag<ComposePageProps, ComposePageValues>): void {
         formik.setStatus("submitted");
-        store.dispatch(composePost(
+        dispatch(composePost(
             formik.props.postingId,
             valuesToPostingText(values, formik.props),
             {hideComments: values.hideCommentsDefault}
@@ -374,7 +374,7 @@ export const composePageLogic = {
             });
         }
         if (settings.length > 0) {
-            store.dispatch(settingsUpdate(settings));
+            dispatch(settingsUpdate(settings));
         }
 
         formik.setSubmitting(false);

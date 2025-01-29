@@ -3,12 +3,12 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
+import { dispatch } from "state/store-sagas";
 import { settingsUpdate } from "state/settings/actions";
 import { CheckboxField } from "ui/control/field";
 import { useSettingsResetForm, useSettingsSheetResize } from "ui/settings/settings-hooks";
 import SettingsButtons from "ui/settings/SettingsButtons";
 import { deserializeSheriffs, serializeSheriffs } from "util/sheriff";
-import store from "state/store";
 import "./SettingsSheet.css";
 
 interface OuterProps {
@@ -51,7 +51,7 @@ const settingsModerationSheetLogic = {
         if (values.googlePlayAllowed) {
             sheriffs.push(SHERIFF_GOOGLE_PLAY_TIMELINE);
         }
-        store.dispatch(settingsUpdate([{name: "sheriffs.timeline", value: serializeSheriffs(sheriffs)}]));
+        dispatch(settingsUpdate([{name: "sheriffs.timeline", value: serializeSheriffs(sheriffs)}]));
         formik.setSubmitting(false);
     }
 

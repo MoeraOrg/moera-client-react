@@ -11,7 +11,7 @@ import {
     SourceFormat,
     VerifiedMediaFile
 } from "api";
-import store from "state/store";
+import { dispatch } from "state/store-sagas";
 import { commentPost } from "state/detailedposting/actions";
 import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
@@ -167,7 +167,7 @@ export const commentComposeLogic = {
         const commentText = valuesToCommentText(values, formik.props);
         const commentSourceText = valuesToCommentSourceText(values, formik.props);
         if (formik.props.receiverPostingId != null && commentText != null) {
-            store.dispatch(commentPost(
+            dispatch(commentPost(
                 formik.props.receiverPostingId,
                 formik.props.comment != null ? formik.props.comment.id : null,
                 commentText,

@@ -4,13 +4,13 @@ import { Form, FormikBag, withFormik } from 'formik';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { isConnectedToHome } from "state/home/selectors";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { settingsDeleteNodeRequestCancel, settingsDeleteNodeRequestSend } from "state/settings/actions";
 import { Button, Loading } from "ui/control";
 import { TextField } from "ui/control/field";
 import { useSettingsSheetResize } from "ui/settings/settings-hooks";
-import store from "state/store";
 
 interface Values {
     message: string;
@@ -82,7 +82,7 @@ const settingsRemovalSheetLogic = {
     }),
 
     handleSubmit(values: Values, formik: FormikBag<{}, Values>): void {
-        store.dispatch(settingsDeleteNodeRequestSend(values.message.trim()));
+        dispatch(settingsDeleteNodeRequestSend(values.message.trim()));
         formik.setSubmitting(false);
     }
 

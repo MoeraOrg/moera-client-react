@@ -6,6 +6,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { BlockedOperation, BlockedUserInfo, SourceFormat } from "api";
 import { ClientState } from "state/state";
+import { dispatch } from 'state/store-sagas';
 import { getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { blockDialogSubmit, closeBlockDialog } from "state/blockdialog/actions";
@@ -14,7 +15,6 @@ import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, NumberField, RadioField } from "ui/control/field";
 import { RichTextValue, RichTextField } from "ui/control/richtexteditor";
 import { formatFullName } from "util/names";
-import store from "state/store";
 import "./BlockDialog.css";
 
 type BlockingLevel = "none" | "ignore" | "comments" | "reactions" | "hide";
@@ -189,7 +189,7 @@ const blockDialogLogic = {
 
         formik.setStatus("submitted");
         const deadline = values.temporary ? getUnixTime(add(new Date(), {days: values.days})) : null;
-        store.dispatch(blockDialogSubmit(
+        dispatch(blockDialogSubmit(
             nodeName, values.formattedName, entryNodeName, entryPostingId, prevBlocked,
             BLOCKED_OPERATIONS[values.level], deadline, values.reason.text, formik.props.srcFormatDefault
         ));

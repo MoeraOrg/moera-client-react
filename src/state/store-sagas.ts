@@ -1,8 +1,11 @@
 import { ClientState } from "state/state";
-import store from "state/store";
+import { ClientAction } from "state/action";
 
 export function select<T>(selector: (state: ClientState) => T): T;
 export function select(): ClientState;
 export function select<T>(selector?: (state: ClientState) => T): T | ClientState {
-    return selector ? selector(store.getState()) : store.getState();
+    return selector ? selector(window.store.getState()) : window.store.getState();
 }
+
+export const dispatch = (action: ClientAction): void =>
+    window.store.dispatch(action);

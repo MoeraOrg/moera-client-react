@@ -4,7 +4,6 @@ import { Provider, useSelector } from 'react-redux';
 import 'katex/dist/katex.min.css';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
-import store from "state/store";
 import { BlockMath, InlineMath } from "ui/katex";
 import NodeNameMention from "ui/nodename/NodeNameMention";
 import Jump from "ui/navigation/Jump";
@@ -58,14 +57,14 @@ export default function EntryHtml({
                 const text = (node as HTMLElement).innerText;
                 const fullName = text.startsWith("@") ? text.substring(1) : text;
                 createRoot(span).render(
-                    <Provider store={store}>
+                    <Provider store={window.store}>
                         <NodeNameMention name={name} fullName={fullName} text={text}/>
                     </Provider>
                 );
             } else {
                 const html = node.innerHTML;
                 createRoot(span).render(
-                    <Provider store={store}>
+                    <Provider store={window.store}>
                         <Jump nodeName={name ?? undefined} href={href}>
                             <span dangerouslySetInnerHTML={{__html: html}}/>
                         </Jump>
@@ -93,7 +92,7 @@ export default function EntryHtml({
                 node.replaceWith(span);
 
                 createRoot(span).render(
-                    <Provider store={store}>
+                    <Provider store={window.store}>
                         <EntryImage postingId={postingId} commentId={commentId} nodeName={nodeName ?? null}
                                     mediaFile={mediaFile} width={width} height={height} alt={alt} title={title}/>
                     </Provider>
@@ -126,7 +125,7 @@ export default function EntryHtml({
             const html = node.innerHTML;
 
             createRoot(node).render(
-                <Provider store={store}>
+                <Provider store={window.store}>
                     <MrSpoiler title={title}><span dangerouslySetInnerHTML={{__html: html}}/></MrSpoiler>
                 </Provider>
             );
@@ -136,7 +135,7 @@ export default function EntryHtml({
             const html = node.innerHTML;
 
             createRoot(node).render(
-                <Provider store={store}>
+                <Provider store={window.store}>
                     <MrSpoiler title={title}><span dangerouslySetInnerHTML={{__html: html}}/></MrSpoiler>
                 </Provider>
             );
