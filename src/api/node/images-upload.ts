@@ -1,5 +1,3 @@
-import { call, put } from 'typed-redux-saga';
-import { CallEffect, PutEffect } from 'redux-saga/effects';
 import * as Base64js from 'base64-js';
 import imageCompression from 'browser-image-compression';
 import i18n from 'i18next';
@@ -7,6 +5,7 @@ import i18n from 'i18next';
 import { Node, PostingFeatures, PrivateMediaFileInfo } from "api";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
+import { dispatch } from "state/store-sagas";
 import { messageBox } from "state/messagebox/actions";
 import { errorThrown } from "state/error/actions";
 import { readAsArrayBuffer } from "util/read-file";
@@ -19,17 +18,15 @@ export interface VerifiedMediaFile extends PrivateMediaFileInfo {
 
 type ImageUploadProgressHandler = (loaded: number, total: number) => void;
 
-type ImageUploadResult<T> = Generator<CallEffect | PutEffect<any>, T>;
-
-export function* imageUpload(
+export async function imageUpload(
     caller: WithContext<ClientAction>, features: PostingFeatures | null, nodeName: RelNodeName | string,
     clientNodeName: string, file: File, compress: boolean, onProgress?: ImageUploadProgressHandler
-): ImageUploadResult<VerifiedMediaFile | null> {
+): Promise<VerifiedMediaFile | null> {
     try {
         if (features != null) {
             if (compress) {
                 if (file.size > features.imageRecommendedSize) {
-                    file = yield* call(imageCompression, file, {
+                    file = await imageCompression(file, {
                         maxSizeMB: features.imageRecommendedSize / 1024 / 1024,
                         maxWidthOrHeight: features.imageRecommendedPixels,
                         preserveExif: true
@@ -37,7 +34,7 @@ export function* imageUpload(
                 }
             } else {
                 if (file.size > features.mediaMaxSize) {
-                    yield* put(messageBox(i18n.t("upload-too-large", {
+                    dispatch(messageBox(i18n.t("upload-too-large", {
                         name: file.name,
                         size: formatMib(file.size),
                         maxSize: formatMib(features.mediaMaxSize)
@@ -49,15 +46,14 @@ export function* imageUpload(
 
         let digest: string | null = null;
         if (window.crypto.subtle) {
-            const fileContent = yield* call(readAsArrayBuffer, file);
-            digest = Base64js.fromByteArray(new Uint8Array(
-                yield* call([window.crypto.subtle, window.crypto.subtle.digest], "SHA-256", fileContent)));
+            const fileContent = await readAsArrayBuffer(file);
+            digest = Base64js.fromByteArray(new Uint8Array(await window.crypto.subtle.digest("SHA-256", fileContent)));
         }
 
-        const mediaFile = yield* call(Node.uploadPrivateMedia, caller, nodeName, clientNodeName, file, onProgress);
+        const mediaFile = await Node.uploadPrivateMedia(caller, nodeName, clientNodeName, file, onProgress);
         return {...mediaFile, digest};
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
         return null;
     }
 }
