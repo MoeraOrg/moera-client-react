@@ -4,9 +4,7 @@ import i18n from 'i18next';
 
 import { formatSchemaErrors, HomeNotConnectedError, NameResolvingError, NodeApiError, NodeError } from "api";
 import { validateSchema } from "api/node/safe";
-import { retryFetch } from "api/fetch-timeout";
-import { xhrFetch } from "api/node/xhr";
-import { ProgressHandler } from "api/fetcher";
+import { fetcher, ProgressHandler } from "api/fetcher";
 import { CausedError } from "api/error";
 import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
@@ -87,7 +85,6 @@ export function* callApi<T>({
     };
 
     let cartesRenewed = false;
-    const fetcher = onProgress != null ? xhrFetch : retryFetch;
     while (true) {
         const authSuccess = yield* call(authorize, headers, rootLocation, auth);
         if (!authSuccess && !cartesRenewed) {

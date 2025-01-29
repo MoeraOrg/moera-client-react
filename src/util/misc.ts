@@ -73,3 +73,6 @@ export function arrayMove<T>(array: T[], from: number, to: number): T[] {
 }
 
 export const notNull = <T>(value: T | null | undefined): value is T => value != null;
+
+export const delay = (ms: number): Promise<void> =>
+    new Promise(resolve => setTimeout(resolve, ms));

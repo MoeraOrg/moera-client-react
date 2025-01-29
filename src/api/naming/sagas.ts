@@ -3,7 +3,7 @@ import { CallEffect, PutEffect, SelectEffect } from 'redux-saga/effects';
 
 import { formatSchemaErrors, NamingApi, NamingError } from "api";
 import { RegisteredNameInfo } from "api/naming/api-types";
-import { retryFetch } from "api/fetch-timeout";
+import { fetcher } from "api/fetcher";
 import { BasicValidateFunction, isSchemaValid } from "api/schema";
 import { ClientAction } from "state/action";
 import { getSetting } from "state/settings/selectors";
@@ -58,7 +58,7 @@ function* fetchNaming(method: string, params: any[], exception: CallException): 
     const location = (yield* select(state => getSetting(state, "naming.location"))) as string;
     let response;
     try {
-        response = yield* call(retryFetch, location, {
+        response = yield* call(fetcher, location, {
             method: "POST",
             headers: {
                 "Accept": "application/json",
