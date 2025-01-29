@@ -504,13 +504,13 @@ def generate_sagas(api: Any, structs: dict[str, Structure], afile: TextIO) -> No
                         result += '[]'
                         result_schema += 'Array'
 
-            afile.write('\nexport function* {name}(\n{params}\n): CallApiResult<{result}> {{\n\n'
+            afile.write('\nexport async function {name}(\n{params}\n): Promise<{result}> {{\n\n'
                         .format(name=request['function'], params=comma_wrap(params, 1), result=result))
             if flag_name is not None:
                 items = ', '.join('"%s": with%s' % (flag, flag.capitalize()) for flag in flags)
                 afile.write(f'    const {flag_js_name} = commaSeparatedFlags({{{items}}});\n')
             afile.write(f'    const location = {location};\n')
-            afile.write(f'    return yield* callApi<{result}>({{\n')
+            afile.write(f'    return callApi<{result}>({{\n')
             decode_bodies = ''
             if result_body:
                 decode_bodies = ', decodeBodies: true'
@@ -536,7 +536,7 @@ export const NODE_API_SCHEMAS = {
 
 PREAMBLE_SAGAS = '''// This file is generated
 
-import { callApi, CallApiResult, ErrorFilter } from "api/node/call";
+import { callApi, ErrorFilter } from "api/node/call";
 import * as API from "api/node/api-types";
 import { ProgressHandler } from 'api/fetcher';
 import { ClientAction } from "state/action";

@@ -1,15 +1,13 @@
-import { apply, call, put, select } from 'typed-redux-saga';
-import { CallEffect, PutEffect, SelectEffect, TakeEffect } from 'redux-saga/effects';
 import i18n from 'i18next';
 
 import { formatSchemaErrors, HomeNotConnectedError, NameResolvingError, NodeApiError, NodeError } from "api";
 import { validateSchema } from "api/node/safe";
 import { fetcher, ProgressHandler } from "api/fetcher";
 import { CausedError } from "api/error";
-import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { errorAuthInvalid } from "state/error/actions";
+import { barrier, dispatch, select } from "state/store-sagas";
 import { messageBox } from "state/messagebox/actions";
 import { cartesLoad } from "state/cartes/actions";
 import { getNodeRootLocation, getToken } from "state/node/selectors";
@@ -23,7 +21,6 @@ import {
 import { getNodeUri } from "state/naming/sagas";
 import * as Browser from "ui/browser";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
-import { peek } from "util/saga-effects";
 import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/url";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "HEAD" | "OPTIONS";
@@ -45,9 +42,7 @@ export interface CallApiParams {
     onProgress?: ProgressHandler;
 }
 
-export type CallApiResult<T> = Generator<CallEffect | PutEffect<any> | SelectEffect | TakeEffect, T>;
-
-export function* callApi<T>({
+export async function callApi<T>({
     caller,
     location,
     nodeName = REL_CURRENT,
@@ -58,12 +53,12 @@ export function* callApi<T>({
     decodeBodies: decode = false,
     errorFilter = false,
     onProgress
-}: CallApiParams):  CallApiResult<T> {
+}: CallApiParams): Promise <T> {
     let rootLocation: string | null = null;
     let rootApi = "";
     let errorTitle = "";
     try {
-        ({rootLocation, rootApi, errorTitle} = yield* call(selectApi, caller, nodeName));
+        ({rootLocation, rootApi, errorTitle} = await selectApi(caller, nodeName));
     } catch (e) {
         if (e instanceof HomeNotConnectedError) {
             e.setQuery(method ?? "", location);
@@ -86,17 +81,17 @@ export function* callApi<T>({
 
     let cartesRenewed = false;
     while (true) {
-        const authSuccess = yield* call(authorize, headers, rootLocation, auth);
+        const authSuccess = authorize(headers, rootLocation, auth);
         if (!authSuccess && !cartesRenewed) {
-            yield* put(cartesLoad().causedBy(caller));
-            yield* peek("CARTES_LOADED");
+            dispatch(cartesLoad().causedBy(caller));
+            await barrier("CARTES_LOADED");
             cartesRenewed = true;
             continue;
         }
 
         let response: Response;
         try {
-            response = yield* call(fetcher, apiUrl(rootApi, location, method), {
+            response = await fetcher(apiUrl(rootApi, location, method), {
                 method,
                 headers,
                 body: encodeBody(body),
@@ -109,9 +104,9 @@ export function* callApi<T>({
         let data: any;
         try {
             if (schema === "blob" && response.ok) {
-                data = yield* apply(response, "blob", []);
+                data = await response.blob();
             } else {
-                data = yield* apply(response, "json", []);
+                data = await response.json();
             }
         } catch (e) {
             if (!response.ok) {
@@ -122,21 +117,21 @@ export function* callApi<T>({
         }
 
         if (!response.ok) {
-            const {valid} = yield* call(validateSchema, "Result", data, false);
+            const {valid} = await validateSchema("Result", data, false);
             if (!valid) {
                 throw exception("Server returned error status");
             }
             if (data.errorCode === "authentication.invalid") {
-                yield* put(errorAuthInvalid().causedBy(caller));
+                dispatch(errorAuthInvalid().causedBy(caller));
                 throw new NodeApiError(data.errorCode, data.message, caller);
             }
             if (data.errorCode === "authentication.blocked") {
-                yield* put(messageBox(i18n.t("sorry-you-banned")).causedBy(caller));
+                dispatch(messageBox(i18n.t("sorry-you-banned")).causedBy(caller));
                 throw new NodeApiError(data.errorCode, data.message, caller);
             }
             if (data.errorCode.startsWith("carte.") && !cartesRenewed) {
-                yield* put(cartesLoad().causedBy(caller));
-                yield* peek("CARTES_LOADED");
+                dispatch(cartesLoad().causedBy(caller));
+                await barrier("CARTES_LOADED");
                 cartesRenewed = true;
                 continue;
             }
@@ -147,7 +142,7 @@ export function* callApi<T>({
             }
         }
         if (schema !== "blob") {
-            const result = yield* call(validateSchema, schema, data, decode);
+            const result = await validateSchema(schema, data, decode);
             const {valid, errors} = result;
             if (!valid) {
                 throw exception("Server returned incorrect response", formatSchemaErrors(errors));
@@ -165,14 +160,14 @@ interface ApiSelection {
     errorTitle: string;
 }
 
-export function* selectApi(
+export async function selectApi(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string
-): Generator<CallEffect | SelectEffect, ApiSelection> {
+): Promise<ApiSelection> {
     let ownerNameOrUrl: string, homeOwnerNameOrUrl: string;
     if (caller != null) {
         ({ownerNameOrUrl, homeOwnerNameOrUrl} = caller.context);
     } else {
-        ({ownerNameOrUrl, homeOwnerNameOrUrl} = yield* select(getRelNodeNameContext));
+        ({ownerNameOrUrl, homeOwnerNameOrUrl} = select(getRelNodeNameContext));
     }
     if (nodeName instanceof RelNodeName) {
         const isHome = nodeName.isHomeNode();
@@ -185,13 +180,13 @@ export function* selectApi(
     let root;
     let errorTitle = "";
     if (nodeName === ownerNameOrUrl) {
-        root = yield* select(state => ({
+        root = select(state => ({
             location: getNodeRootLocation(state),
             api: state.node.root.api
         }));
         errorTitle = "Node access error";
     } else if (nodeName === homeOwnerNameOrUrl) {
-        root = yield* select(state => ({
+        root = select(state => ({
             connected: isConnectedToHome(state),
             location: getHomeRootLocation(state),
             api: state.home.root.api
@@ -209,7 +204,7 @@ export function* selectApi(
             };
             errorTitle = "Home access error";
         } else {
-            const nodeUri = yield* call(getNodeUri, caller, nodeName);
+            const nodeUri = await getNodeUri(caller, nodeName);
             root = nodeUri != null ?
                 {
                     location: nodeUrlToLocation(nodeUri),
@@ -224,30 +219,26 @@ export function* selectApi(
         }
     }
 
-    return {rootLocation: root.location, rootApi: root.api, errorTitle};
+    return {rootLocation: root.location, rootApi: root.api!, errorTitle};
 }
 
-function* authorize(
+function authorize(
     headers: Partial<Record<string, string>>, rootLocation: string | null, auth: boolean | string
-): Generator<SelectEffect, boolean> {
+): boolean {
     if (auth === false) {
         return true;
     }
-    const token = auth === true ? yield* select((state: ClientState) => getToken(state, rootLocation)) : auth;
+    const token = auth === true ? select(state => getToken(state, rootLocation)) : auth;
     if (token != null) {
         headers["Authorization"] = `Bearer token:${token}`;
         return true;
     }
-    const carte = yield* select(getCurrentAllCarte);
+    const carte = select(getCurrentAllCarte);
     if (carte != null) {
         headers["Authorization"] = `Bearer carte:${carte}`;
         return true;
     }
-    const connected = yield* select((state: ClientState) => isConnectedToHome(state) && isHomeOwnerNameSet(state));
-    if (!connected) {
-        return true;
-    }
-    return false;
+    return !select(state => isConnectedToHome(state) && isHomeOwnerNameSet(state));
 }
 
 function apiUrl(rootApi: string, location: string, method: HttpMethod): string {

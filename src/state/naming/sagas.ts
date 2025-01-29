@@ -6,6 +6,7 @@ import { executor } from "state/executor";
 import { namingInitialized } from "state/init-selectors";
 import { ClientAction } from "state/action";
 import { ClientState } from "state/state";
+import { dispatch, select as storeSelect } from "state/store-sagas"; // FIXME temporary rename
 import { getComments, getDetailedPosting } from "state/detailedposting/selectors";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { getOwnerName, getOwnerNameOrUrl } from "state/node/selectors";
@@ -52,8 +53,8 @@ function* namingNameLoadSaga(action: NamingNameLoadAction) {
     yield* call(fetchName, action, action.payload.name, false);
 }
 
-export function* getNodeUri(caller: ClientAction | null, nodeName: string) {
-    return (yield* call(getNameDetails, caller, nodeName)).nodeUri;
+export async function getNodeUri(caller: ClientAction | null, nodeName: string): Promise<string | null> {
+    return (await getNameDetails(caller, nodeName)).nodeUri;
 }
 
 export interface NameInfo {
@@ -65,28 +66,29 @@ export interface NameInfo {
     nodeUri: string | null;
 }
 
-export function* getNameDetails(caller: ClientAction | null, nodeName: string, includeSimilar: boolean = false) {
-    const {serverUrl, details} = yield* select((state: ClientState) => ({
+export async function getNameDetails(
+    caller: ClientAction | null, nodeName: string, includeSimilar: boolean = false
+): Promise<NameInfo> {
+    const {serverUrl, details} = storeSelect(state => ({
         serverUrl: getSetting(state, "naming.location") as string,
         details: getNamingNameDetails(state, nodeName)
     }));
     if (details.loaded) {
         if (details.nodeUri != null && now() - details.accessed >= NAME_USAGE_UPDATE_PERIOD) {
             Storage.storeName(serverUrl, nodeName, details.nodeUri, details.updated);
-            yield* put(namingNamesUsed([nodeName]).causedBy(caller));
+            dispatch(namingNamesUsed([nodeName]).causedBy(caller));
         }
         return {nodeName, ...details};
     }
-    return yield* call(fetchName, caller, nodeName, includeSimilar);
+    return fetchName(caller, nodeName, includeSimilar);
 }
 
 const fetching = new Map<string, PromiseResolver<NameInfo>[]>();
 
-function* fetchName(caller: ClientAction | null, nodeName: string, includeSimilar: boolean) {
+async function fetchName(caller: ClientAction | null, nodeName: string, includeSimilar: boolean): Promise<NameInfo> {
     nodeName = NodeName.expand(nodeName);
     if (!includeSimilar && fetching.has(nodeName)) {
-        const promise = new Promise<NameInfo>(resolve => fetching.get(nodeName)!.push(resolve));
-        return yield* call(() => promise);
+        return new Promise<NameInfo>(resolve => fetching.get(nodeName)!.push(resolve));
     }
 
     let nodeNameFound: string = nodeName;
@@ -97,25 +99,25 @@ function* fetchName(caller: ClientAction | null, nodeName: string, includeSimila
             if (!includeSimilar) {
                 fetching.set(nodeName, []);
             }
-            const current = yield* call(Naming.getCurrent, caller, name, generation);
+            const current = await Naming.getCurrent(caller, name, generation);
             if (current?.nodeUri != null) {
                 nodeNameFound = new RegisteredName(current.name, current.generation).format();
                 nodeUri = current.nodeUri;
             } else if (includeSimilar) {
-                const similar = yield* call(Naming.getSimilar, caller, name);
+                const similar = await Naming.getSimilar(caller, name);
                 if (similar?.nodeUri != null) {
                     nodeNameFound = new RegisteredName(similar.name, similar.generation).format();
                     nodeUri = similar.nodeUri;
                 }
             }
             if (nodeUri) {
-                const serverUrl = (yield* select(state => getSetting(state, "naming.location"))) as string;
+                const serverUrl = storeSelect(state => getSetting(state, "naming.location")) as string;
                 Storage.storeName(serverUrl, nodeNameFound, nodeUri, now());
-                yield* put(namingNameLoaded(serverUrl, nodeNameFound, nodeUri, now()).causedBy(caller));
+                dispatch(namingNameLoaded(serverUrl, nodeNameFound, nodeUri, now()).causedBy(caller));
             }
         }
     } catch (e) {
-        yield* put(namingNameLoadFailed(nodeName).causedBy(caller));
+        dispatch(namingNameLoadFailed(nodeName).causedBy(caller));
     }
 
     const info = {nodeName: nodeNameFound, accessed: 0, updated: 0, loading: false, loaded: true, nodeUri};

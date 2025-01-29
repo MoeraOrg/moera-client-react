@@ -1,6 +1,6 @@
 // This file is generated
 
-import { callApi, CallApiResult, ErrorFilter } from "api/node/call";
+import { callApi, ErrorFilter } from "api/node/call";
 import * as API from "api/node/api-types";
 import { ProgressHandler } from 'api/fetcher';
 import { ClientAction } from "state/action";
@@ -9,2042 +9,2042 @@ import { RelNodeName } from "util/rel-node-name";
 import { urlWithParameters, ut } from "util/url";
 import { commaSeparatedFlags } from "util/misc";
 
-export function* searchActivityReactions(
+export async function searchActivityReactions(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.ActivityReactionFilter,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.ActivityReactionInfo[]> {
+): Promise<API.ActivityReactionInfo[]> {
 
     const location = "/activity/reactions/search";
-    return yield* callApi<API.ActivityReactionInfo[]>({
+    return callApi<API.ActivityReactionInfo[]>({
         caller, nodeName, method: "POST", location, body: filter, auth, schema: "ActivityReactionInfoArray",
         errorFilter
     });
 }
 
-export function* getRemotePostingVerificationStatus(
+export async function getRemotePostingVerificationStatus(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.RemotePostingVerificationInfo> {
+): Promise<API.RemotePostingVerificationInfo> {
 
     const location = ut`/async-operations/remote-posting-verification/${id}`;
-    return yield* callApi<API.RemotePostingVerificationInfo>({
+    return callApi<API.RemotePostingVerificationInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "RemotePostingVerificationInfo", errorFilter
     });
 }
 
-export function* getRemoteReactionVerificationStatus(
+export async function getRemoteReactionVerificationStatus(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.RemoteReactionVerificationInfo> {
+): Promise<API.RemoteReactionVerificationInfo> {
 
     const location = ut`/async-operations/remote-reaction-verification/${id}`;
-    return yield* callApi<API.RemoteReactionVerificationInfo>({
+    return callApi<API.RemoteReactionVerificationInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "RemoteReactionVerificationInfo", errorFilter
     });
 }
 
-export function* getAvatars(
+export async function getAvatars(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false
-): CallApiResult<API.AvatarInfo[]> {
+): Promise<API.AvatarInfo[]> {
 
     const location = "/avatars";
-    return yield* callApi<API.AvatarInfo[]>({
+    return callApi<API.AvatarInfo[]>({
         caller, nodeName, method: "GET", location, schema: "AvatarInfoArray", errorFilter
     });
 }
 
-export function* createAvatar(
+export async function createAvatar(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, avatar: API.AvatarAttributes,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.AvatarInfo> {
+): Promise<API.AvatarInfo> {
 
     const location = "/avatars";
-    return yield* callApi<API.AvatarInfo>({
+    return callApi<API.AvatarInfo>({
         caller, nodeName, method: "POST", location, body: avatar, auth, schema: "AvatarInfo", errorFilter
     });
 }
 
-export function* getAvatar(
+export async function getAvatar(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.AvatarInfo> {
+): Promise<API.AvatarInfo> {
 
     const location = ut`/avatars/${id}`;
-    return yield* callApi<API.AvatarInfo>({
+    return callApi<API.AvatarInfo>({
         caller, nodeName, method: "GET", location, schema: "AvatarInfo", errorFilter
     });
 }
 
-export function* deleteAvatar(
+export async function deleteAvatar(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/avatars/${id}`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* reorderAvatars(
+export async function reorderAvatars(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, order: API.AvatarsOrdered,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.AvatarOrdinal[]> {
+): Promise<API.AvatarOrdinal[]> {
 
     const location = "/avatars/reorder";
-    return yield* callApi<API.AvatarOrdinal[]>({
+    return callApi<API.AvatarOrdinal[]>({
         caller, nodeName, method: "POST", location, body: order, auth, schema: "AvatarOrdinalArray",
         errorFilter
     });
 }
 
-export function* blockInstant(
+export async function blockInstant(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, instant: API.BlockedInstantAttributes,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.BlockedInstantInfo> {
+): Promise<API.BlockedInstantInfo> {
 
     const location = "/blocked-instants";
-    return yield* callApi<API.BlockedInstantInfo>({
+    return callApi<API.BlockedInstantInfo>({
         caller, nodeName, method: "POST", location, body: instant, auth, schema: "BlockedInstantInfo",
         errorFilter
     });
 }
 
-export function* getBlockedInstant(
+export async function getBlockedInstant(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.BlockedInstantInfo> {
+): Promise<API.BlockedInstantInfo> {
 
     const location = ut`/blocked-instants/${id}`;
-    return yield* callApi<API.BlockedInstantInfo>({
+    return callApi<API.BlockedInstantInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "BlockedInstantInfo", errorFilter
     });
 }
 
-export function* unblockInstant(
+export async function unblockInstant(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/blocked-instants/${id}`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* searchBlockedInstants(
+export async function searchBlockedInstants(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.BlockedInstantFilter,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.BlockedInstantInfo[]> {
+): Promise<API.BlockedInstantInfo[]> {
 
     const location = "/blocked-instants/search";
-    return yield* callApi<API.BlockedInstantInfo[]>({
+    return callApi<API.BlockedInstantInfo[]>({
         caller, nodeName, method: "POST", location, body: filter, auth, schema: "BlockedInstantInfoArray",
         errorFilter
     });
 }
 
-export function* blockUser(
+export async function blockUser(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, user: API.BlockedUserAttributes,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.BlockedUserInfo> {
+): Promise<API.BlockedUserInfo> {
 
     const location = "/people/blocked-users";
-    return yield* callApi<API.BlockedUserInfo>({
+    return callApi<API.BlockedUserInfo>({
         caller, nodeName, method: "POST", location, body: user, auth, schema: "BlockedUserInfo", errorFilter
     });
 }
 
-export function* getBlockedUser(
+export async function getBlockedUser(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.BlockedUserInfo> {
+): Promise<API.BlockedUserInfo> {
 
     const location = ut`/people/blocked-users/${id}`;
-    return yield* callApi<API.BlockedUserInfo>({
+    return callApi<API.BlockedUserInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "BlockedUserInfo", errorFilter
     });
 }
 
-export function* unblockUser(
+export async function unblockUser(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/people/blocked-users/${id}`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* searchBlockedUsers(
+export async function searchBlockedUsers(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.BlockedUserFilter,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.BlockedUserInfo[]> {
+): Promise<API.BlockedUserInfo[]> {
 
     const location = "/people/blocked-users/search";
-    return yield* callApi<API.BlockedUserInfo[]>({
+    return callApi<API.BlockedUserInfo[]>({
         caller, nodeName, method: "POST", location, body: filter, auth, schema: "BlockedUserInfoArray",
         errorFilter
     });
 }
 
-export function* getBlockedUsersChecksums(
+export async function getBlockedUsersChecksums(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
-): CallApiResult<API.BlockedUsersChecksums> {
+): Promise<API.BlockedUsersChecksums> {
 
     const location = "/people/blocked-users/checksums";
-    return yield* callApi<API.BlockedUsersChecksums>({
+    return callApi<API.BlockedUsersChecksums>({
         caller, nodeName, method: "GET", location, auth, schema: "BlockedUsersChecksums", errorFilter
     });
 }
 
-export function* getBlockedByUser(
+export async function getBlockedByUser(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.BlockedByUserInfo> {
+): Promise<API.BlockedByUserInfo> {
 
     const location = ut`/people/blocked-by-users/${id}`;
-    return yield* callApi<API.BlockedByUserInfo>({
+    return callApi<API.BlockedByUserInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "BlockedByUserInfo", errorFilter
     });
 }
 
-export function* searchBlockedByUsers(
+export async function searchBlockedByUsers(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.BlockedByUserFilter,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.BlockedByUserInfo[]> {
+): Promise<API.BlockedByUserInfo[]> {
 
     const location = "/people/blocked-by-users/search";
-    return yield* callApi<API.BlockedByUserInfo[]>({
+    return callApi<API.BlockedByUserInfo[]>({
         caller, nodeName, method: "POST", location, body: filter, auth, schema: "BlockedByUserInfoArray",
         errorFilter
     });
 }
 
-export function* createCartes(
+export async function createCartes(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, attributes: API.CarteAttributes,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.CarteSet> {
+): Promise<API.CarteSet> {
 
     const location = "/cartes";
-    return yield* callApi<API.CarteSet>({
+    return callApi<API.CarteSet>({
         caller, nodeName, method: "POST", location, body: attributes, auth, schema: "CarteSet", errorFilter
     });
 }
 
-export function* verifyCarte(
+export async function verifyCarte(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, clientCarte: API.ClientCarte,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.CarteVerificationInfo> {
+): Promise<API.CarteVerificationInfo> {
 
     const location = "/cartes/verify";
-    return yield* callApi<API.CarteVerificationInfo>({
+    return callApi<API.CarteVerificationInfo>({
         caller, nodeName, method: "POST", location, body: clientCarte, auth, schema: "CarteVerificationInfo",
         errorFilter
     });
 }
 
-export function* getCommentsSlice(
+export async function getCommentsSlice(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
     after: number | null = null, before: number | null = null, limit: number | null = null,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.CommentsSliceInfo> {
+): Promise<API.CommentsSliceInfo> {
 
     const location = urlWithParameters(ut`/postings/${postingId}/comments`, {after, before, limit});
-    return yield* callApi<API.CommentsSliceInfo>({
+    return callApi<API.CommentsSliceInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "CommentsSliceInfo", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* createComment(
+export async function createComment(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
     comment: API.CommentText, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.CommentCreated> {
+): Promise<API.CommentCreated> {
 
     const location = ut`/postings/${postingId}/comments`;
-    return yield* callApi<API.CommentCreated>({
+    return callApi<API.CommentCreated>({
         caller, nodeName, method: "POST", location, body: comment, auth, schema: "CommentCreated",
         decodeBodies: true, errorFilter
     });
 }
 
-export function* getComment(
+export async function getComment(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     withSource: boolean = false, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.CommentInfo> {
+): Promise<API.CommentInfo> {
 
     const include = commaSeparatedFlags({"source": withSource});
     const location = urlWithParameters(ut`/postings/${postingId}/comments/${commentId}`, {include});
-    return yield* callApi<API.CommentInfo>({
+    return callApi<API.CommentInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "CommentInfo", decodeBodies: true, errorFilter
     });
 }
 
-export function* updateAllComments(
+export async function updateAllComments(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
     attributes: API.CommentMassAttributes, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/postings/${postingId}/comments`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "PUT", location, body: attributes, auth, schema: "Result", errorFilter
     });
 }
 
-export function* updateComment(
+export async function updateComment(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     comment: API.CommentText, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.CommentInfo> {
+): Promise<API.CommentInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}`;
-    return yield* callApi<API.CommentInfo>({
+    return callApi<API.CommentInfo>({
         caller, nodeName, method: "PUT", location, body: comment, auth, schema: "CommentInfo",
         decodeBodies: true, errorFilter
     });
 }
 
-export function* deleteComment(
+export async function deleteComment(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.CommentTotalInfo> {
+): Promise<API.CommentTotalInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}`;
-    return yield* callApi<API.CommentTotalInfo>({
+    return callApi<API.CommentTotalInfo>({
         caller, nodeName, method: "DELETE", location, auth, schema: "CommentTotalInfo", errorFilter
     });
 }
 
-export function* getPostingsAttachedToComment(
+export async function getPostingsAttachedToComment(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.PostingInfo[]> {
+): Promise<API.PostingInfo[]> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/attached`;
-    return yield* callApi<API.PostingInfo[]>({
+    return callApi<API.PostingInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "PostingInfoArray", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* getCommentRevisions(
+export async function getCommentRevisions(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.CommentRevisionInfo[]> {
+): Promise<API.CommentRevisionInfo[]> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/revisions`;
-    return yield* callApi<API.CommentRevisionInfo[]>({
+    return callApi<API.CommentRevisionInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "CommentRevisionInfoArray", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* getCommentRevision(
+export async function getCommentRevision(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     id: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.CommentRevisionInfo> {
+): Promise<API.CommentRevisionInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/revisions/${id}`;
-    return yield* callApi<API.CommentRevisionInfo>({
+    return callApi<API.CommentRevisionInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "CommentRevisionInfo", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* createCommentReaction(
+export async function createCommentReaction(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     reaction: API.ReactionDescription, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.ReactionCreated> {
+): Promise<API.ReactionCreated> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions`;
-    return yield* callApi<API.ReactionCreated>({
+    return callApi<API.ReactionCreated>({
         caller, nodeName, method: "POST", location, body: reaction, auth, schema: "ReactionCreated",
         errorFilter
     });
 }
 
-export function* updateCommentReaction(
+export async function updateCommentReaction(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     ownerName: string, reaction: API.ReactionOverride, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.ReactionInfo> {
+): Promise<API.ReactionInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`;
-    return yield* callApi<API.ReactionInfo>({
+    return callApi<API.ReactionInfo>({
         caller, nodeName, method: "PUT", location, body: reaction, auth, schema: "ReactionInfo", errorFilter
     });
 }
 
-export function* getCommentReactionsSlice(
+export async function getCommentReactionsSlice(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     negative: boolean | null = null, emoji: number | null = null, before: number | null = null,
     limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.ReactionsSliceInfo> {
+): Promise<API.ReactionsSliceInfo> {
 
     const location = urlWithParameters(
         ut`/postings/${postingId}/comments/${commentId}/reactions`,
         {negative, emoji, before, limit}
     );
-    return yield* callApi<API.ReactionsSliceInfo>({
+    return callApi<API.ReactionsSliceInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "ReactionsSliceInfo", errorFilter
     });
 }
 
-export function* getCommentReaction(
+export async function getCommentReaction(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     ownerName: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.ReactionInfo> {
+): Promise<API.ReactionInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`;
-    return yield* callApi<API.ReactionInfo>({
+    return callApi<API.ReactionInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "ReactionInfo", errorFilter
     });
 }
 
-export function* deleteAllCommentReactions(
+export async function deleteAllCommentReactions(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* deleteCommentReaction(
+export async function deleteCommentReaction(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     ownerName: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.ReactionTotalsInfo> {
+): Promise<API.ReactionTotalsInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`;
-    return yield* callApi<API.ReactionTotalsInfo>({
+    return callApi<API.ReactionTotalsInfo>({
         caller, nodeName, method: "DELETE", location, auth, schema: "ReactionTotalsInfo", errorFilter
     });
 }
 
-export function* getCommentReactionTotals(
+export async function getCommentReactionTotals(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, commentId: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.ReactionTotalsInfo> {
+): Promise<API.ReactionTotalsInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reaction-totals`;
-    return yield* callApi<API.ReactionTotalsInfo>({
+    return callApi<API.ReactionTotalsInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "ReactionTotalsInfo", errorFilter
     });
 }
 
-export function* getContacts(
+export async function getContacts(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, query: string | null = null,
     limit: number | null = null, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.ContactInfo[]> {
+): Promise<API.ContactInfo[]> {
 
     const location = urlWithParameters(ut`/people/contacts`, {query, limit});
-    return yield* callApi<API.ContactInfo[]>({
+    return callApi<API.ContactInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "ContactInfoArray", errorFilter
     });
 }
 
-export function* checkCredentials(
+export async function checkCredentials(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false
-): CallApiResult<API.CredentialsCreated> {
+): Promise<API.CredentialsCreated> {
 
     const location = "/credentials";
-    return yield* callApi<API.CredentialsCreated>({
+    return callApi<API.CredentialsCreated>({
         caller, nodeName, method: "GET", location, schema: "CredentialsCreated", errorFilter
     });
 }
 
-export function* createCredentials(
+export async function createCredentials(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, credentials: API.Credentials,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = "/credentials";
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "POST", location, body: credentials, schema: "Result", errorFilter
     });
 }
 
-export function* updateCredentials(
+export async function updateCredentials(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, credentials: API.CredentialsChange,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = "/credentials";
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "PUT", location, body: credentials, schema: "Result", errorFilter
     });
 }
 
-export function* deleteCredentials(
+export async function deleteCredentials(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = "/credentials";
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* resetCredentials(
+export async function resetCredentials(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false
-): CallApiResult<API.EmailHint> {
+): Promise<API.EmailHint> {
 
     const location = "/credentials/reset";
-    return yield* callApi<API.EmailHint>({
+    return callApi<API.EmailHint>({
         caller, nodeName, method: "POST", location, schema: "EmailHint", errorFilter
     });
 }
 
-export function* getDeletedPostings(
+export async function getDeletedPostings(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, page: number | null = null,
     limit: number | null = null, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.PostingInfo[]> {
+): Promise<API.PostingInfo[]> {
 
     const location = urlWithParameters(ut`/deleted-postings`, {page, limit});
-    return yield* callApi<API.PostingInfo[]>({
+    return callApi<API.PostingInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "PostingInfoArray", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* getDeletedPosting(
+export async function getDeletedPosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.PostingInfo> {
+): Promise<API.PostingInfo> {
 
     const location = ut`/deleted-postings/${id}`;
-    return yield* callApi<API.PostingInfo>({
+    return callApi<API.PostingInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "PostingInfo", decodeBodies: true, errorFilter
     });
 }
 
-export function* restoreDeletedPosting(
+export async function restoreDeletedPosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.PostingInfo> {
+): Promise<API.PostingInfo> {
 
     const location = ut`/deleted-postings/${id}/restore`;
-    return yield* callApi<API.PostingInfo>({
+    return callApi<API.PostingInfo>({
         caller, nodeName, method: "POST", location, auth, schema: "PostingInfo", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* getDeletePostingRevisions(
+export async function getDeletePostingRevisions(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
     limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.PostingRevisionInfo[]> {
+): Promise<API.PostingRevisionInfo[]> {
 
     const location = urlWithParameters(ut`/deleted-postings/${postingId}/revisions`, {limit});
-    return yield* callApi<API.PostingRevisionInfo[]>({
+    return callApi<API.PostingRevisionInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "PostingRevisionInfoArray", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* getDeletedPostingRevision(
+export async function getDeletedPostingRevision(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.PostingRevisionInfo> {
+): Promise<API.PostingRevisionInfo> {
 
     const location = ut`/deleted-postings/${postingId}/revisions/${id}`;
-    return yield* callApi<API.PostingRevisionInfo>({
+    return callApi<API.PostingRevisionInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "PostingRevisionInfo", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* restoreDeletedPostingRevision(
+export async function restoreDeletedPostingRevision(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.PostingRevisionInfo> {
+): Promise<API.PostingRevisionInfo> {
 
     const location = ut`/postings/${postingId}/revisions/${id}/restore`;
-    return yield* callApi<API.PostingRevisionInfo>({
+    return callApi<API.PostingRevisionInfo>({
         caller, nodeName, method: "POST", location, auth, schema: "PostingRevisionInfo", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* getDomains(
+export async function getDomains(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
-): CallApiResult<API.DomainInfo[]> {
+): Promise<API.DomainInfo[]> {
 
     const location = "/domains";
-    return yield* callApi<API.DomainInfo[]>({
+    return callApi<API.DomainInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "DomainInfoArray", errorFilter
     });
 }
 
-export function* getDomain(
+export async function getDomain(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.DomainInfo> {
+): Promise<API.DomainInfo> {
 
     const location = ut`/domains/${name}`;
-    return yield* callApi<API.DomainInfo>({
+    return callApi<API.DomainInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "DomainInfo", errorFilter
     });
 }
 
-export function* createDomain(
+export async function createDomain(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, domain: API.DomainAttributes,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.DomainInfo> {
+): Promise<API.DomainInfo> {
 
     const location = "/domains";
-    return yield* callApi<API.DomainInfo>({
+    return callApi<API.DomainInfo>({
         caller, nodeName, method: "POST", location, body: domain, auth, schema: "DomainInfo", errorFilter
     });
 }
 
-export function* updateDomain(
+export async function updateDomain(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string,
     domain: API.DomainAttributes, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.DomainInfo> {
+): Promise<API.DomainInfo> {
 
     const location = ut`/domains/${name}`;
-    return yield* callApi<API.DomainInfo>({
+    return callApi<API.DomainInfo>({
         caller, nodeName, method: "PUT", location, body: domain, auth, schema: "DomainInfo", errorFilter
     });
 }
 
-export function* deleteDomain(
+export async function deleteDomain(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/domains/${name}`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* isDomainAvailable(
+export async function isDomainAvailable(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.DomainAvailable> {
+): Promise<API.DomainAvailable> {
 
     const location = urlWithParameters(ut`/domains/available`, {nodeName: remoteNodeName});
-    return yield* callApi<API.DomainAvailable>({
+    return callApi<API.DomainAvailable>({
         caller, nodeName, method: "GET", location, schema: "DomainAvailable", errorFilter
     });
 }
 
-export function* getDrafts(
+export async function getDrafts(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, draftType: API.DraftType,
     remoteNodeName: string, postingId: string | null = null, commentId: string | null = null, page: number | null = null,
     limit: number | null = null, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.DraftInfo[]> {
+): Promise<API.DraftInfo[]> {
 
     const location = urlWithParameters(
         ut`/drafts`,
         {draftType, nodeName: remoteNodeName, postingId, commentId, page, limit}
     );
-    return yield* callApi<API.DraftInfo[]>({
+    return callApi<API.DraftInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "DraftInfoArray", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* createDraft(
+export async function createDraft(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, draft: API.DraftText,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.DraftInfo> {
+): Promise<API.DraftInfo> {
 
     const location = "/drafts";
-    return yield* callApi<API.DraftInfo>({
+    return callApi<API.DraftInfo>({
         caller, nodeName, method: "POST", location, body: draft, auth, schema: "DraftInfo", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* getDraft(
+export async function getDraft(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.DraftInfo> {
+): Promise<API.DraftInfo> {
 
     const location = ut`/drafts/${id}`;
-    return yield* callApi<API.DraftInfo>({
+    return callApi<API.DraftInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "DraftInfo", decodeBodies: true, errorFilter
     });
 }
 
-export function* updateDraft(
+export async function updateDraft(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string, draft: API.DraftText,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.DraftInfo> {
+): Promise<API.DraftInfo> {
 
     const location = ut`/drafts/${id}`;
-    return yield* callApi<API.DraftInfo>({
+    return callApi<API.DraftInfo>({
         caller, nodeName, method: "PUT", location, body: draft, auth, schema: "DraftInfo", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* deleteDraft(
+export async function deleteDraft(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/drafts/${id}`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* getFeatures(
+export async function getFeatures(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: boolean | string = true
-): CallApiResult<API.Features> {
+): Promise<API.Features> {
 
     const location = "/features";
-    return yield* callApi<API.Features>({
+    return callApi<API.Features>({
         caller, nodeName, method: "GET", location, auth, schema: "Features", errorFilter
     });
 }
 
-export function* getFeeds(
+export async function getFeeds(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: boolean | string = true
-): CallApiResult<API.FeedInfo[]> {
+): Promise<API.FeedInfo[]> {
 
     const location = "/feeds";
-    return yield* callApi<API.FeedInfo[]>({
+    return callApi<API.FeedInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "FeedInfoArray", errorFilter
     });
 }
 
-export function* getFeedGeneral(
+export async function getFeedGeneral(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, feedName: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.FeedInfo> {
+): Promise<API.FeedInfo> {
 
     const location = ut`/feeds/${feedName}`;
-    return yield* callApi<API.FeedInfo>({
+    return callApi<API.FeedInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "FeedInfo", errorFilter
     });
 }
 
-export function* getFeedStatus(
+export async function getFeedStatus(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, feedName: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.FeedStatus> {
+): Promise<API.FeedStatus> {
 
     const location = ut`/feeds/${feedName}/status`;
-    return yield* callApi<API.FeedStatus>({
+    return callApi<API.FeedStatus>({
         caller, nodeName, method: "GET", location, auth, schema: "FeedStatus", errorFilter
     });
 }
 
-export function* updateFeedStatus(
+export async function updateFeedStatus(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, feedName: string,
     change: API.FeedStatusChange, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.FeedStatus> {
+): Promise<API.FeedStatus> {
 
     const location = ut`/feeds/${feedName}/status`;
-    return yield* callApi<API.FeedStatus>({
+    return callApi<API.FeedStatus>({
         caller, nodeName, method: "PUT", location, body: change, auth, schema: "FeedStatus", errorFilter
     });
 }
 
-export function* getFeedSlice(
+export async function getFeedSlice(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, feedName: string,
     after: number | null = null, before: number | null = null, limit: number | null = null,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.FeedSliceInfo> {
+): Promise<API.FeedSliceInfo> {
 
     const location = urlWithParameters(ut`/feeds/${feedName}/stories`, {after, before, limit});
-    return yield* callApi<API.FeedSliceInfo>({
+    return callApi<API.FeedSliceInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "FeedSliceInfo", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* getFriendGroups(
+export async function getFriendGroups(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: boolean | string = true
-): CallApiResult<API.FriendGroupInfo[]> {
+): Promise<API.FriendGroupInfo[]> {
 
     const location = "/people/friends/groups";
-    return yield* callApi<API.FriendGroupInfo[]>({
+    return callApi<API.FriendGroupInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "FriendGroupInfoArray", errorFilter
     });
 }
 
-export function* getFriendGroup(
+export async function getFriendGroup(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.FriendGroupInfo> {
+): Promise<API.FriendGroupInfo> {
 
     const location = ut`/people/friends/groups/${id}`;
-    return yield* callApi<API.FriendGroupInfo>({
+    return callApi<API.FriendGroupInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "FriendGroupInfo", errorFilter
     });
 }
 
-export function* createFriendGroup(
+export async function createFriendGroup(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string,
     friendGroup: API.FriendGroupDescription, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.FriendGroupInfo> {
+): Promise<API.FriendGroupInfo> {
 
     const location = "/people/friends/groups";
-    return yield* callApi<API.FriendGroupInfo>({
+    return callApi<API.FriendGroupInfo>({
         caller, nodeName, method: "POST", location, body: friendGroup, auth, schema: "FriendGroupInfo",
         errorFilter
     });
 }
 
-export function* updateFriendGroup(
+export async function updateFriendGroup(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     friendGroup: API.FriendGroupDescription, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.FriendGroupInfo> {
+): Promise<API.FriendGroupInfo> {
 
     const location = ut`/people/friends/groups/${id}`;
-    return yield* callApi<API.FriendGroupInfo>({
+    return callApi<API.FriendGroupInfo>({
         caller, nodeName, method: "PUT", location, body: friendGroup, auth, schema: "FriendGroupInfo",
         errorFilter
     });
 }
 
-export function* deleteFriendGroup(
+export async function deleteFriendGroup(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/people/friends/groups/${id}`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* getFriends(
+export async function getFriends(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, groupId: string | null = null,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.FriendInfo[]> {
+): Promise<API.FriendInfo[]> {
 
     const location = urlWithParameters(ut`/people/friends`, {groupId});
-    return yield* callApi<API.FriendInfo[]>({
+    return callApi<API.FriendInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "FriendInfoArray", errorFilter
     });
 }
 
-export function* getFriend(
+export async function getFriend(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.FriendInfo> {
+): Promise<API.FriendInfo> {
 
     const location = ut`/people/friends/${name}`;
-    return yield* callApi<API.FriendInfo>({
+    return callApi<API.FriendInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "FriendInfo", errorFilter
     });
 }
 
-export function* updateFriends(
+export async function updateFriends(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, friends: API.FriendDescription[],
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.FriendInfo[]> {
+): Promise<API.FriendInfo[]> {
 
     const location = "/people/friends";
-    return yield* callApi<API.FriendInfo[]>({
+    return callApi<API.FriendInfo[]>({
         caller, nodeName, method: "PUT", location, body: friends, auth, schema: "FriendInfoArray", errorFilter
     });
 }
 
-export function* getFriendOfs(
+export async function getFriendOfs(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: boolean | string = true
-): CallApiResult<API.FriendOfInfo[]> {
+): Promise<API.FriendOfInfo[]> {
 
     const location = "/people/friend-ofs";
-    return yield* callApi<API.FriendOfInfo[]>({
+    return callApi<API.FriendOfInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "FriendOfInfoArray", errorFilter
     });
 }
 
-export function* getFriendOf(
+export async function getFriendOf(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.FriendOfInfo> {
+): Promise<API.FriendOfInfo> {
 
     const location = ut`/people/friend-ofs/${name}`;
-    return yield* callApi<API.FriendOfInfo>({
+    return callApi<API.FriendOfInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "FriendOfInfo", errorFilter
     });
 }
 
-export function* getAllGrants(
+export async function getAllGrants(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
-): CallApiResult<API.GrantInfo[]> {
+): Promise<API.GrantInfo[]> {
 
     const location = "/grants";
-    return yield* callApi<API.GrantInfo[]>({
+    return callApi<API.GrantInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "GrantInfoArray", errorFilter
     });
 }
 
-export function* getGrant(
+export async function getGrant(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.GrantInfo> {
+): Promise<API.GrantInfo> {
 
     const location = ut`/grants/${remoteNodeName}`;
-    return yield* callApi<API.GrantInfo>({
+    return callApi<API.GrantInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "GrantInfo", errorFilter
     });
 }
 
-export function* grantOrRevoke(
+export async function grantOrRevoke(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     change: API.GrantChange, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.GrantInfo> {
+): Promise<API.GrantInfo> {
 
     const location = ut`/grants/${remoteNodeName}`;
-    return yield* callApi<API.GrantInfo>({
+    return callApi<API.GrantInfo>({
         caller, nodeName, method: "PUT", location, body: change, auth, schema: "GrantInfo", errorFilter
     });
 }
 
-export function* revokeAll(
+export async function revokeAll(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/grants/${remoteNodeName}`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* uploadAdminMedia(
+export async function uploadAdminMedia(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, file: File,
     onProgress?: ProgressHandler, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.PrivateMediaFileInfo> {
+): Promise<API.PrivateMediaFileInfo> {
 
     const location = "/media/private";
-    return yield* callApi<API.PrivateMediaFileInfo>({
+    return callApi<API.PrivateMediaFileInfo>({
         caller, nodeName, method: "POST", location, body: file, onProgress, auth, schema: "PrivateMediaFileInfo",
         errorFilter
     });
 }
 
-export function* uploadPrivateMedia(
+export async function uploadPrivateMedia(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, clientName: string, file: File,
     onProgress?: ProgressHandler, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.PrivateMediaFileInfo> {
+): Promise<API.PrivateMediaFileInfo> {
 
     const location = ut`/media/private/${clientName}`;
-    return yield* callApi<API.PrivateMediaFileInfo>({
+    return callApi<API.PrivateMediaFileInfo>({
         caller, nodeName, method: "POST", location, body: file, onProgress, auth, schema: "PrivateMediaFileInfo",
         errorFilter
     });
 }
 
-export function* getPrivateMedia(
+export async function getPrivateMedia(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     width: number | null = null, download: boolean | null = null, errorFilter: ErrorFilter = false,
     auth: boolean | string = true
-): CallApiResult<Blob> {
+): Promise<Blob> {
 
     const location = urlWithParameters(ut`/media/private/${id}/data`, {width, download});
-    return yield* callApi<Blob>({
+    return callApi<Blob>({
         caller, nodeName, method: "GET", location, auth, schema: "blob", errorFilter
     });
 }
 
-export function* getPrivateMediaInfo(
+export async function getPrivateMediaInfo(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.PrivateMediaFileInfo> {
+): Promise<API.PrivateMediaFileInfo> {
 
     const location = ut`/media/private/${id}/info`;
-    return yield* callApi<API.PrivateMediaFileInfo>({
+    return callApi<API.PrivateMediaFileInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "PrivateMediaFileInfo", errorFilter
     });
 }
 
-export function* getPrivateMediaParentEntry(
+export async function getPrivateMediaParentEntry(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.EntryInfo[]> {
+): Promise<API.EntryInfo[]> {
 
     const location = ut`/media/private/${id}/parent`;
-    return yield* callApi<API.EntryInfo[]>({
+    return callApi<API.EntryInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "EntryInfoArray", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* uploadPublicMedia(
+export async function uploadPublicMedia(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, file: File,
     onProgress?: ProgressHandler, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.PublicMediaFileInfo> {
+): Promise<API.PublicMediaFileInfo> {
 
     const location = "/media/public";
-    return yield* callApi<API.PublicMediaFileInfo>({
+    return callApi<API.PublicMediaFileInfo>({
         caller, nodeName, method: "POST", location, body: file, onProgress, auth, schema: "PublicMediaFileInfo",
         errorFilter
     });
 }
 
-export function* getPublicMedia(
+export async function getPublicMedia(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     width: number | null = null, download: boolean | null = null, errorFilter: ErrorFilter = false
-): CallApiResult<Blob> {
+): Promise<Blob> {
 
     const location = urlWithParameters(ut`/media/public/${id}/data`, {width, download});
-    return yield* callApi<Blob>({
+    return callApi<Blob>({
         caller, nodeName, method: "GET", location, schema: "blob", errorFilter
     });
 }
 
-export function* getPublicMediaInfo(
+export async function getPublicMediaInfo(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.PublicMediaFileInfo> {
+): Promise<API.PublicMediaFileInfo> {
 
     const location = ut`/media/public/${id}/info`;
-    return yield* callApi<API.PublicMediaFileInfo>({
+    return callApi<API.PublicMediaFileInfo>({
         caller, nodeName, method: "GET", location, schema: "PublicMediaFileInfo", errorFilter
     });
 }
 
-export function* getNodeName(
+export async function getNodeName(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: boolean | string = true
-): CallApiResult<API.NodeNameInfo> {
+): Promise<API.NodeNameInfo> {
 
     const location = "/node-name";
-    return yield* callApi<API.NodeNameInfo>({
+    return callApi<API.NodeNameInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "NodeNameInfo", errorFilter
     });
 }
 
-export function* createNodeName(
+export async function createNodeName(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, nameToRegister: API.NameToRegister,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.RegisteredNameSecret> {
+): Promise<API.RegisteredNameSecret> {
 
     const location = "/node-name";
-    return yield* callApi<API.RegisteredNameSecret>({
+    return callApi<API.RegisteredNameSecret>({
         caller, nodeName, method: "POST", location, body: nameToRegister, auth, schema: "RegisteredNameSecret",
         errorFilter
     });
 }
 
-export function* updateNodeName(
+export async function updateNodeName(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, secret: API.RegisteredNameSecret,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = "/node-name";
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "PUT", location, body: secret, auth, schema: "Result", errorFilter
     });
 }
 
-export function* deleteNodeName(
+export async function deleteNodeName(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = "/node-name";
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* getStoredMnemonic(
+export async function getStoredMnemonic(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
-): CallApiResult<API.KeyMnemonic> {
+): Promise<API.KeyMnemonic> {
 
     const location = "/node-name/mnemonic";
-    return yield* callApi<API.KeyMnemonic>({
+    return callApi<API.KeyMnemonic>({
         caller, nodeName, method: "GET", location, auth, schema: "KeyMnemonic", errorFilter
     });
 }
 
-export function* storeMnemonic(
+export async function storeMnemonic(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, mnemonic: API.KeyMnemonic,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = "/node-name/mnemonic";
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "POST", location, body: mnemonic, auth, schema: "Result", errorFilter
     });
 }
 
-export function* deleteStoredMnemonic(
+export async function deleteStoredMnemonic(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = "/node-name/mnemonic";
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* sendNotification(
+export async function sendNotification(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, packet: API.NotificationPacket,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = "/notifications";
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "POST", location, body: packet, schema: "Result", errorFilter
     });
 }
 
-export function* getPeopleGeneral(
+export async function getPeopleGeneral(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: boolean | string = true
-): CallApiResult<API.PeopleGeneralInfo> {
+): Promise<API.PeopleGeneralInfo> {
 
     const location = "/people";
-    return yield* callApi<API.PeopleGeneralInfo>({
+    return callApi<API.PeopleGeneralInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "PeopleGeneralInfo", errorFilter
     });
 }
 
-export function* registerPlugin(
+export async function registerPlugin(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, plugin: API.PluginDescription,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.PluginInfo> {
+): Promise<API.PluginInfo> {
 
     const location = "/plugins";
-    return yield* callApi<API.PluginInfo>({
+    return callApi<API.PluginInfo>({
         caller, nodeName, method: "POST", location, body: plugin, auth, schema: "PluginInfo", errorFilter
     });
 }
 
-export function* getPlugins(
+export async function getPlugins(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: boolean | string = true
-): CallApiResult<API.PluginInfo[]> {
+): Promise<API.PluginInfo[]> {
 
     const location = "/plugins";
-    return yield* callApi<API.PluginInfo[]>({
+    return callApi<API.PluginInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "PluginInfoArray", errorFilter
     });
 }
 
-export function* getPlugin(
+export async function getPlugin(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, pluginName: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.PluginInfo> {
+): Promise<API.PluginInfo> {
 
     const location = ut`/plugins/${pluginName}`;
-    return yield* callApi<API.PluginInfo>({
+    return callApi<API.PluginInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "PluginInfo", errorFilter
     });
 }
 
-export function* unregisterPlugin(
+export async function unregisterPlugin(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, pluginName: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/plugins/${pluginName}`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* createPosting(
+export async function createPosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, posting: API.PostingText,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.PostingInfo> {
+): Promise<API.PostingInfo> {
 
     const location = "/postings";
-    return yield* callApi<API.PostingInfo>({
+    return callApi<API.PostingInfo>({
         caller, nodeName, method: "POST", location, body: posting, auth, schema: "PostingInfo",
         decodeBodies: true, errorFilter
     });
 }
 
-export function* updatePosting(
+export async function updatePosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string, posting: API.PostingText,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.PostingInfo> {
+): Promise<API.PostingInfo> {
 
     const location = ut`/postings/${id}`;
-    return yield* callApi<API.PostingInfo>({
+    return callApi<API.PostingInfo>({
         caller, nodeName, method: "PUT", location, body: posting, auth, schema: "PostingInfo",
         decodeBodies: true, errorFilter
     });
 }
 
-export function* getPosting(
+export async function getPosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     withSource: boolean = false, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.PostingInfo> {
+): Promise<API.PostingInfo> {
 
     const include = commaSeparatedFlags({"source": withSource});
     const location = urlWithParameters(ut`/postings/${id}`, {include});
-    return yield* callApi<API.PostingInfo>({
+    return callApi<API.PostingInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "PostingInfo", decodeBodies: true, errorFilter
     });
 }
 
-export function* deletePosting(
+export async function deletePosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/postings/${id}`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* getPostingsAttachedToPosting(
+export async function getPostingsAttachedToPosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.PostingInfo[]> {
+): Promise<API.PostingInfo[]> {
 
     const location = ut`/postings/${id}/attached`;
-    return yield* callApi<API.PostingInfo[]>({
+    return callApi<API.PostingInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "PostingInfoArray", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* getPostingRevisions(
+export async function getPostingRevisions(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
     limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.PostingRevisionInfo[]> {
+): Promise<API.PostingRevisionInfo[]> {
 
     const location = urlWithParameters(ut`/postings/${postingId}/revisions`, {limit});
-    return yield* callApi<API.PostingRevisionInfo[]>({
+    return callApi<API.PostingRevisionInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "PostingRevisionInfoArray", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* getPostingRevision(
+export async function getPostingRevision(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.PostingRevisionInfo> {
+): Promise<API.PostingRevisionInfo> {
 
     const location = ut`/postings/${postingId}/revisions/${id}`;
-    return yield* callApi<API.PostingRevisionInfo>({
+    return callApi<API.PostingRevisionInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "PostingRevisionInfo", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* restorePostingRevision(
+export async function restorePostingRevision(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.PostingRevisionInfo> {
+): Promise<API.PostingRevisionInfo> {
 
     const location = ut`/postings/${postingId}/revisions/${id}/restore`;
-    return yield* callApi<API.PostingRevisionInfo>({
+    return callApi<API.PostingRevisionInfo>({
         caller, nodeName, method: "POST", location, auth, schema: "PostingRevisionInfo", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* createPostingReaction(
+export async function createPostingReaction(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
     reaction: API.ReactionDescription, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.ReactionCreated> {
+): Promise<API.ReactionCreated> {
 
     const location = ut`/postings/${postingId}/reactions`;
-    return yield* callApi<API.ReactionCreated>({
+    return callApi<API.ReactionCreated>({
         caller, nodeName, method: "POST", location, body: reaction, auth, schema: "ReactionCreated",
         errorFilter
     });
 }
 
-export function* getPostingReactionsSlice(
+export async function getPostingReactionsSlice(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
     negative: boolean | null = null, emoji: number | null = null, before: number | null = null,
     limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.ReactionsSliceInfo> {
+): Promise<API.ReactionsSliceInfo> {
 
     const location = urlWithParameters(
         ut`/postings/${postingId}/reactions`,
         {negative, emoji, before, limit}
     );
-    return yield* callApi<API.ReactionsSliceInfo>({
+    return callApi<API.ReactionsSliceInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "ReactionsSliceInfo", errorFilter
     });
 }
 
-export function* updatePostingReaction(
+export async function updatePostingReaction(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, ownerName: string,
     reaction: API.ReactionOverride, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.ReactionInfo> {
+): Promise<API.ReactionInfo> {
 
     const location = ut`/postings/${postingId}/reactions/${ownerName}`;
-    return yield* callApi<API.ReactionInfo>({
+    return callApi<API.ReactionInfo>({
         caller, nodeName, method: "PUT", location, body: reaction, auth, schema: "ReactionInfo", errorFilter
     });
 }
 
-export function* getPostingReaction(
+export async function getPostingReaction(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, ownerName: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.ReactionInfo> {
+): Promise<API.ReactionInfo> {
 
     const location = ut`/postings/${postingId}/reactions/${ownerName}`;
-    return yield* callApi<API.ReactionInfo>({
+    return callApi<API.ReactionInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "ReactionInfo", errorFilter
     });
 }
 
-export function* deleteAllPostingReactions(
+export async function deleteAllPostingReactions(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/postings/${postingId}/reactions`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* deletePostingReaction(
+export async function deletePostingReaction(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string, ownerName: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.ReactionTotalsInfo> {
+): Promise<API.ReactionTotalsInfo> {
 
     const location = ut`/postings/${postingId}/reactions/${ownerName}`;
-    return yield* callApi<API.ReactionTotalsInfo>({
+    return callApi<API.ReactionTotalsInfo>({
         caller, nodeName, method: "DELETE", location, auth, schema: "ReactionTotalsInfo", errorFilter
     });
 }
 
-export function* searchPostingReactions(
+export async function searchPostingReactions(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.ReactionsFilter,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.ReactionInfo[]> {
+): Promise<API.ReactionInfo[]> {
 
     const location = "/postings/reactions/search";
-    return yield* callApi<API.ReactionInfo[]>({
+    return callApi<API.ReactionInfo[]>({
         caller, nodeName, method: "POST", location, body: filter, auth, schema: "ReactionInfoArray",
         errorFilter
     });
 }
 
-export function* getPostingReactionTotals(
+export async function getPostingReactionTotals(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.ReactionTotalsInfo> {
+): Promise<API.ReactionTotalsInfo> {
 
     const location = ut`/postings/${postingId}/reaction-totals`;
-    return yield* callApi<API.ReactionTotalsInfo>({
+    return callApi<API.ReactionTotalsInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "ReactionTotalsInfo", errorFilter
     });
 }
 
-export function* searchPostingReactionTotals(
+export async function searchPostingReactionTotals(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.ReactionTotalsFilter,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.ReactionTotalsInfo[]> {
+): Promise<API.ReactionTotalsInfo[]> {
 
     const location = "/postings/reaction-totals/search";
-    return yield* callApi<API.ReactionTotalsInfo[]>({
+    return callApi<API.ReactionTotalsInfo[]>({
         caller, nodeName, method: "POST", location, body: filter, auth, schema: "ReactionTotalsInfoArray",
         errorFilter
     });
 }
 
-export function* getProfile(
+export async function getProfile(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, withSource: boolean = false,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.ProfileInfo> {
+): Promise<API.ProfileInfo> {
 
     const include = commaSeparatedFlags({"source": withSource});
     const location = urlWithParameters(ut`/profile`, {include});
-    return yield* callApi<API.ProfileInfo>({
+    return callApi<API.ProfileInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "ProfileInfo", errorFilter
     });
 }
 
-export function* updateProfile(
+export async function updateProfile(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, profile: API.ProfileAttributes,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.ProfileInfo> {
+): Promise<API.ProfileInfo> {
 
     const location = "/profile";
-    return yield* callApi<API.ProfileInfo>({
+    return callApi<API.ProfileInfo>({
         caller, nodeName, method: "PUT", location, body: profile, auth, schema: "ProfileInfo", errorFilter
     });
 }
 
-export function* getDeleteNodeRequestStatus(
+export async function getDeleteNodeRequestStatus(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
-): CallApiResult<API.DeleteNodeStatus> {
+): Promise<API.DeleteNodeStatus> {
 
     const location = "/provider/delete-node";
-    return yield* callApi<API.DeleteNodeStatus>({
+    return callApi<API.DeleteNodeStatus>({
         caller, nodeName, method: "GET", location, auth, schema: "DeleteNodeStatus", errorFilter
     });
 }
 
-export function* sendDeleteNodeRequest(
+export async function sendDeleteNodeRequest(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, deleteNodeText: API.DeleteNodeText,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.DeleteNodeStatus> {
+): Promise<API.DeleteNodeStatus> {
 
     const location = "/provider/delete-node";
-    return yield* callApi<API.DeleteNodeStatus>({
+    return callApi<API.DeleteNodeStatus>({
         caller, nodeName, method: "POST", location, body: deleteNodeText, auth, schema: "DeleteNodeStatus",
         errorFilter
     });
 }
 
-export function* cancelDeleteNodeRequest(
+export async function cancelDeleteNodeRequest(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
-): CallApiResult<API.DeleteNodeStatus> {
+): Promise<API.DeleteNodeStatus> {
 
     const location = "/provider/delete-node";
-    return yield* callApi<API.DeleteNodeStatus>({
+    return callApi<API.DeleteNodeStatus>({
         caller, nodeName, method: "DELETE", location, auth, schema: "DeleteNodeStatus", errorFilter
     });
 }
 
-export function* proxyMedia(
+export async function proxyMedia(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, url: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<Blob> {
+): Promise<Blob> {
 
     const location = urlWithParameters(ut`/proxy/media`, {url});
-    return yield* callApi<Blob>({
+    return callApi<Blob>({
         caller, nodeName, method: "GET", location, auth, schema: "blob", errorFilter
     });
 }
 
-export function* proxyLinkPreview(
+export async function proxyLinkPreview(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, url: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.LinkPreviewInfo> {
+): Promise<API.LinkPreviewInfo> {
 
     const location = urlWithParameters(ut`/proxy/link-preview`, {url});
-    return yield* callApi<API.LinkPreviewInfo>({
+    return callApi<API.LinkPreviewInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "LinkPreviewInfo", errorFilter
     });
 }
 
-export function* registerAtPushRelay(
+export async function registerAtPushRelay(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string,
     attributes: API.PushRelayClientAttributes, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = "/push-relay";
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "POST", location, body: attributes, auth, schema: "Result", errorFilter
     });
 }
 
-export function* askRemoteNode(
+export async function askRemoteNode(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     details: API.AskDescription, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/ask`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "POST", location, body: details, auth, schema: "Result", errorFilter
     });
 }
 
-export function* createRemoteComment(
+export async function createRemoteComment(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     postingId: string, comment: API.CommentSourceText, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "POST", location, body: comment, auth, schema: "Result", errorFilter
     });
 }
 
-export function* updateRemoteComment(
+export async function updateRemoteComment(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     postingId: string, commentId: string, comment: API.CommentSourceText, errorFilter: ErrorFilter = false,
     auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "PUT", location, body: comment, auth, schema: "Result", errorFilter
     });
 }
 
-export function* deleteRemoteComment(
+export async function deleteRemoteComment(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     postingId: string, commentId: string, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* verifyRemoteComment(
+export async function verifyRemoteComment(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     postingId: string, commentId: string, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.AsyncOperationCreated> {
+): Promise<API.AsyncOperationCreated> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/verify`;
-    return yield* callApi<API.AsyncOperationCreated>({
+    return callApi<API.AsyncOperationCreated>({
         caller, nodeName, method: "POST", location, auth, schema: "AsyncOperationCreated", errorFilter
     });
 }
 
-export function* createRemoteCommentReaction(
+export async function createRemoteCommentReaction(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     postingId: string, commentId: string, reaction: API.ReactionAttributes, errorFilter: ErrorFilter = false,
     auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "POST", location, body: reaction, auth, schema: "Result", errorFilter
     });
 }
 
-export function* deleteRemoteCommentReaction(
+export async function deleteRemoteCommentReaction(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     postingId: string, commentId: string, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* verifyRemoteCommentReaction(
+export async function verifyRemoteCommentReaction(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     postingId: string, commentId: string, ownerName: string, errorFilter: ErrorFilter = false,
     auth: true | string = true
-): CallApiResult<API.AsyncOperationCreated> {
+): Promise<API.AsyncOperationCreated> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions/${ownerName}/verify`;
-    return yield* callApi<API.AsyncOperationCreated>({
+    return callApi<API.AsyncOperationCreated>({
         caller, nodeName, method: "POST", location, auth, schema: "AsyncOperationCreated", errorFilter
     });
 }
 
-export function* createRemotePosting(
+export async function createRemotePosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     posting: API.PostingSourceText, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "POST", location, body: posting, auth, schema: "Result", errorFilter
     });
 }
 
-export function* updateRemotePosting(
+export async function updateRemotePosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     postingId: string, posting: API.PostingSourceText, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "PUT", location, body: posting, auth, schema: "Result", errorFilter
     });
 }
 
-export function* deleteRemotePosting(
+export async function deleteRemotePosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     postingId: string, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* verifyRemotePosting(
+export async function verifyRemotePosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.AsyncOperationCreated> {
+): Promise<API.AsyncOperationCreated> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${id}/verify`;
-    return yield* callApi<API.AsyncOperationCreated>({
+    return callApi<API.AsyncOperationCreated>({
         caller, nodeName, method: "POST", location, auth, schema: "AsyncOperationCreated", errorFilter
     });
 }
 
-export function* verifyRemotePostingRevision(
+export async function verifyRemotePostingRevision(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string, id: string,
     revisionId: string, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.AsyncOperationCreated> {
+): Promise<API.AsyncOperationCreated> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${id}/revisions/${revisionId}/verify`;
-    return yield* callApi<API.AsyncOperationCreated>({
+    return callApi<API.AsyncOperationCreated>({
         caller, nodeName, method: "POST", location, auth, schema: "AsyncOperationCreated", errorFilter
     });
 }
 
-export function* createRemotePostingReaction(
+export async function createRemotePostingReaction(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     postingId: string, reaction: API.ReactionAttributes, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/reactions`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "POST", location, body: reaction, auth, schema: "Result", errorFilter
     });
 }
 
-export function* deleteRemotePostingReaction(
+export async function deleteRemotePostingReaction(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     postingId: string, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/reactions`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* verifyRemotePostingReaction(
+export async function verifyRemotePostingReaction(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     postingId: string, ownerName: string, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.AsyncOperationCreated> {
+): Promise<API.AsyncOperationCreated> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/reactions/${ownerName}/verify`;
-    return yield* callApi<API.AsyncOperationCreated>({
+    return callApi<API.AsyncOperationCreated>({
         caller, nodeName, method: "POST", location, auth, schema: "AsyncOperationCreated", errorFilter
     });
 }
 
-export function* createRemoteSheriffOrder(
+export async function createRemoteSheriffOrder(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     sheriffOrder: API.SheriffOrderAttributes, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/sheriff/orders`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "POST", location, body: sheriffOrder, auth, schema: "Result", errorFilter
     });
 }
 
-export function* getRemoteSheriffOrder(
+export async function getRemoteSheriffOrder(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string, id: string,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.SheriffOrderInfo> {
+): Promise<API.SheriffOrderInfo> {
 
     const location = ut`/nodes/${remoteNodeName}/sheriff/orders/${id}`;
-    return yield* callApi<API.SheriffOrderInfo>({
+    return callApi<API.SheriffOrderInfo>({
         caller, nodeName, method: "GET", location, schema: "SheriffOrderInfo", errorFilter
     });
 }
 
-export function* updateSettings(
+export async function updateSettings(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, settings: API.SettingInfo[],
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = "/settings";
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "PUT", location, body: settings, auth, schema: "Result", errorFilter
     });
 }
 
-export function* getClientSettings(
+export async function getClientSettings(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, prefix: string | null = null,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.SettingInfo[]> {
+): Promise<API.SettingInfo[]> {
 
     const location = urlWithParameters(ut`/settings/client`, {prefix});
-    return yield* callApi<API.SettingInfo[]>({
+    return callApi<API.SettingInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "SettingInfoArray", errorFilter
     });
 }
 
-export function* getNodeSettings(
+export async function getNodeSettings(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, prefix: string | null = null,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.SettingInfo[]> {
+): Promise<API.SettingInfo[]> {
 
     const location = urlWithParameters(ut`/settings/node`, {prefix});
-    return yield* callApi<API.SettingInfo[]>({
+    return callApi<API.SettingInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "SettingInfoArray", errorFilter
     });
 }
 
-export function* getNodeSettingsMetadata(
+export async function getNodeSettingsMetadata(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, prefix: string | null = null,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.SettingMetaInfo[]> {
+): Promise<API.SettingMetaInfo[]> {
 
     const location = urlWithParameters(ut`/settings/node/metadata`, {prefix});
-    return yield* callApi<API.SettingMetaInfo[]>({
+    return callApi<API.SettingMetaInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "SettingMetaInfoArray", errorFilter
     });
 }
 
-export function* updateNodeSettingsMetadata(
+export async function updateNodeSettingsMetadata(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, metadata: API.SettingMetaAttributes[],
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = "/settings/node/metadata";
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "PUT", location, body: metadata, auth, schema: "Result", errorFilter
     });
 }
 
-export function* getSheriffComplaintGroupsSlice(
+export async function getSheriffComplaintGroupsSlice(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, after: number | null = null,
     before: number | null = null, limit: number | null = null, status: API.SheriffComplaintStatus | null = null,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.SheriffComplaintGroupsSliceInfo> {
+): Promise<API.SheriffComplaintGroupsSliceInfo> {
 
     const location = urlWithParameters(ut`/sheriff/complaints/groups`, {after, before, limit, status});
-    return yield* callApi<API.SheriffComplaintGroupsSliceInfo>({
+    return callApi<API.SheriffComplaintGroupsSliceInfo>({
         caller, nodeName, method: "GET", location, schema: "SheriffComplaintGroupsSliceInfo", errorFilter
     });
 }
 
-export function* getSheriffComplaintGroup(
+export async function getSheriffComplaintGroup(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.SheriffComplaintGroupInfo> {
+): Promise<API.SheriffComplaintGroupInfo> {
 
     const location = ut`/sheriff/complaints/groups/${id}`;
-    return yield* callApi<API.SheriffComplaintGroupInfo>({
+    return callApi<API.SheriffComplaintGroupInfo>({
         caller, nodeName, method: "GET", location, schema: "SheriffComplaintGroupInfo", errorFilter
     });
 }
 
-export function* getSheriffComplaintsByGroup(
+export async function getSheriffComplaintsByGroup(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.SheriffComplaintInfo[]> {
+): Promise<API.SheriffComplaintInfo[]> {
 
     const location = ut`/sheriff/complaints/groups/${id}/complaints`;
-    return yield* callApi<API.SheriffComplaintInfo[]>({
+    return callApi<API.SheriffComplaintInfo[]>({
         caller, nodeName, method: "GET", location, schema: "SheriffComplaintInfoArray", errorFilter
     });
 }
 
-export function* updateSheriffComplaintGroup(
+export async function updateSheriffComplaintGroup(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     decision: API.SheriffComplaintDecisionText, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.SheriffComplaintGroupInfo> {
+): Promise<API.SheriffComplaintGroupInfo> {
 
     const location = ut`/sheriff/complaints/groups/${id}`;
-    return yield* callApi<API.SheriffComplaintGroupInfo>({
+    return callApi<API.SheriffComplaintGroupInfo>({
         caller, nodeName, method: "PUT", location, body: decision, auth, schema: "SheriffComplaintGroupInfo",
         errorFilter
     });
 }
 
-export function* createSheriffComplaint(
+export async function createSheriffComplaint(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, complaint: API.SheriffComplaintText,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.SheriffComplaintInfo> {
+): Promise<API.SheriffComplaintInfo> {
 
     const location = "/sheriff/complaints";
-    return yield* callApi<API.SheriffComplaintInfo>({
+    return callApi<API.SheriffComplaintInfo>({
         caller, nodeName, method: "POST", location, body: complaint, auth, schema: "SheriffComplaintInfo",
         errorFilter
     });
 }
 
-export function* createSheriffOrder(
+export async function createSheriffOrder(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, sheriffOrder: API.SheriffOrderDetails,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = "/sheriff/orders";
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "POST", location, body: sheriffOrder, schema: "Result", errorFilter
     });
 }
 
-export function* getStory(
+export async function getStory(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.StoryInfo> {
+): Promise<API.StoryInfo> {
 
     const location = ut`/stories/${id}`;
-    return yield* callApi<API.StoryInfo>({
+    return callApi<API.StoryInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "StoryInfo", decodeBodies: true, errorFilter
     });
 }
 
-export function* updateStory(
+export async function updateStory(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string, story: API.StoryAttributes,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.StoryInfo> {
+): Promise<API.StoryInfo> {
 
     const location = ut`/stories/${id}`;
-    return yield* callApi<API.StoryInfo>({
+    return callApi<API.StoryInfo>({
         caller, nodeName, method: "PUT", location, body: story, auth, schema: "StoryInfo", decodeBodies: true,
         errorFilter
     });
 }
 
-export function* deleteStory(
+export async function deleteStory(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/stories/${id}`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* getSubscribers(
+export async function getSubscribers(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string | null = null,
     type: API.SubscriptionType | null = null, feedName: string | null = null, entryId: string | null = null,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.SubscriberInfo[]> {
+): Promise<API.SubscriberInfo[]> {
 
     const location = urlWithParameters(
         ut`/people/subscribers`,
         {nodeName: remoteNodeName, type, feedName, entryId}
     );
-    return yield* callApi<API.SubscriberInfo[]>({
+    return callApi<API.SubscriberInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "SubscriberInfoArray", errorFilter
     });
 }
 
-export function* createSubscriber(
+export async function createSubscriber(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, subscriber: API.SubscriberDescription,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.SubscriberInfo> {
+): Promise<API.SubscriberInfo> {
 
     const location = "/people/subscribers";
-    return yield* callApi<API.SubscriberInfo>({
+    return callApi<API.SubscriberInfo>({
         caller, nodeName, method: "POST", location, body: subscriber, auth, schema: "SubscriberInfo",
         errorFilter
     });
 }
 
-export function* getSubscriber(
+export async function getSubscriber(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.SubscriberInfo> {
+): Promise<API.SubscriberInfo> {
 
     const location = ut`/people/subscribers/${id}`;
-    return yield* callApi<API.SubscriberInfo>({
+    return callApi<API.SubscriberInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "SubscriberInfo", errorFilter
     });
 }
 
-export function* updateSubscriber(
+export async function updateSubscriber(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     subscriber: API.SubscriberOverride, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.SubscriberInfo> {
+): Promise<API.SubscriberInfo> {
 
     const location = ut`/people/subscribers/${id}`;
-    return yield* callApi<API.SubscriberInfo>({
+    return callApi<API.SubscriberInfo>({
         caller, nodeName, method: "PUT", location, body: subscriber, auth, schema: "SubscriberInfo",
         errorFilter
     });
 }
 
-export function* deleteSubscriber(
+export async function deleteSubscriber(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.ContactInfo> {
+): Promise<API.ContactInfo> {
 
     const location = ut`/people/subscribers/${id}`;
-    return yield* callApi<API.ContactInfo>({
+    return callApi<API.ContactInfo>({
         caller, nodeName, method: "DELETE", location, auth, schema: "ContactInfo", errorFilter
     });
 }
 
-export function* getSubscriptions(
+export async function getSubscriptions(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string | null = null,
     type: API.SubscriptionType | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.SubscriptionInfo[]> {
+): Promise<API.SubscriptionInfo[]> {
 
     const location = urlWithParameters(ut`/people/subscriptions`, {nodeName: remoteNodeName, type});
-    return yield* callApi<API.SubscriptionInfo[]>({
+    return callApi<API.SubscriptionInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "SubscriptionInfoArray", errorFilter
     });
 }
 
-export function* createSubscription(
+export async function createSubscription(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string,
     subscription: API.SubscriptionDescription, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.SubscriptionInfo> {
+): Promise<API.SubscriptionInfo> {
 
     const location = "/people/subscriptions";
-    return yield* callApi<API.SubscriptionInfo>({
+    return callApi<API.SubscriptionInfo>({
         caller, nodeName, method: "POST", location, body: subscription, auth, schema: "SubscriptionInfo",
         errorFilter
     });
 }
 
-export function* updateSubscription(
+export async function updateSubscription(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     subscription: API.SubscriptionOverride, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.SubscriptionInfo> {
+): Promise<API.SubscriptionInfo> {
 
     const location = ut`/people/subscriptions/${id}`;
-    return yield* callApi<API.SubscriptionInfo>({
+    return callApi<API.SubscriptionInfo>({
         caller, nodeName, method: "PUT", location, body: subscription, auth, schema: "SubscriptionInfo",
         errorFilter
     });
 }
 
-export function* deleteSubscription(
+export async function deleteSubscription(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.ContactInfo> {
+): Promise<API.ContactInfo> {
 
     const location = ut`/people/subscriptions/${id}`;
-    return yield* callApi<API.ContactInfo>({
+    return callApi<API.ContactInfo>({
         caller, nodeName, method: "DELETE", location, auth, schema: "ContactInfo", errorFilter
     });
 }
 
-export function* searchSubscriptions(
+export async function searchSubscriptions(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.SubscriptionFilter,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
-): CallApiResult<API.SubscriptionInfo[]> {
+): Promise<API.SubscriptionInfo[]> {
 
     const location = "/people/subscriptions/search";
-    return yield* callApi<API.SubscriptionInfo[]>({
+    return callApi<API.SubscriptionInfo[]>({
         caller, nodeName, method: "POST", location, body: filter, auth, schema: "SubscriptionInfoArray",
         errorFilter
     });
 }
 
-export function* getTokens(
+export async function getTokens(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true
-): CallApiResult<API.TokenInfo[]> {
+): Promise<API.TokenInfo[]> {
 
     const location = "/tokens";
-    return yield* callApi<API.TokenInfo[]>({
+    return callApi<API.TokenInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "TokenInfoArray", errorFilter
     });
 }
 
-export function* createToken(
+export async function createToken(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, token: API.TokenAttributes,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.TokenInfo> {
+): Promise<API.TokenInfo> {
 
     const location = "/tokens";
-    return yield* callApi<API.TokenInfo>({
+    return callApi<API.TokenInfo>({
         caller, nodeName, method: "POST", location, body: token, schema: "TokenInfo", errorFilter
     });
 }
 
-export function* getTokenInfo(
+export async function getTokenInfo(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.TokenInfo> {
+): Promise<API.TokenInfo> {
 
     const location = ut`/tokens/${id}`;
-    return yield* callApi<API.TokenInfo>({
+    return callApi<API.TokenInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "TokenInfo", errorFilter
     });
 }
 
-export function* updateToken(
+export async function updateToken(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string, update: API.TokenUpdate,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.TokenInfo> {
+): Promise<API.TokenInfo> {
 
     const location = ut`/tokens/${id}`;
-    return yield* callApi<API.TokenInfo>({
+    return callApi<API.TokenInfo>({
         caller, nodeName, method: "PUT", location, body: update, auth, schema: "TokenInfo", errorFilter
     });
 }
 
-export function* deleteToken(
+export async function deleteToken(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/tokens/${id}`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* getUserListGeneral(
+export async function getUserListGeneral(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.UserListInfo> {
+): Promise<API.UserListInfo> {
 
     const location = ut`/user-lists/${name}`;
-    return yield* callApi<API.UserListInfo>({
+    return callApi<API.UserListInfo>({
         caller, nodeName, method: "GET", location, schema: "UserListInfo", errorFilter
     });
 }
 
-export function* getUserListSlice(
+export async function getUserListSlice(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string,
     after: number | null = null, before: number | null = null, limit: number | null = null,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.UserListSliceInfo> {
+): Promise<API.UserListSliceInfo> {
 
     const location = urlWithParameters(ut`/user-lists/${name}/items`, {after, before, limit});
-    return yield* callApi<API.UserListSliceInfo>({
+    return callApi<API.UserListSliceInfo>({
         caller, nodeName, method: "GET", location, schema: "UserListSliceInfo", errorFilter
     });
 }
 
-export function* getUserListItem(
+export async function getUserListItem(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string, remoteNodeName: string,
     errorFilter: ErrorFilter = false
-): CallApiResult<API.UserListItemInfo> {
+): Promise<API.UserListItemInfo> {
 
     const location = ut`/user-lists/${name}/items/${remoteNodeName}`;
-    return yield* callApi<API.UserListItemInfo>({
+    return callApi<API.UserListItemInfo>({
         caller, nodeName, method: "GET", location, schema: "UserListItemInfo", errorFilter
     });
 }
 
-export function* createUserListItem(
+export async function createUserListItem(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string,
     item: API.UserListItemAttributes, errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.UserListItemInfo> {
+): Promise<API.UserListItemInfo> {
 
     const location = ut`/user-lists/${name}/items`;
-    return yield* callApi<API.UserListItemInfo>({
+    return callApi<API.UserListItemInfo>({
         caller, nodeName, method: "POST", location, body: item, auth, schema: "UserListItemInfo", errorFilter
     });
 }
 
-export function* deleteUserListItem(
+export async function deleteUserListItem(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, name: string, remoteNodeName: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
-): CallApiResult<API.Result> {
+): Promise<API.Result> {
 
     const location = ut`/user-lists/${name}/items/${remoteNodeName}`;
-    return yield* callApi<API.Result>({
+    return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
-export function* whoAmI(
+export async function whoAmI(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false
-): CallApiResult<API.WhoAmI> {
+): Promise<API.WhoAmI> {
 
     const location = "/whoami";
-    return yield* callApi<API.WhoAmI>({
+    return callApi<API.WhoAmI>({
         caller, nodeName, method: "GET", location, schema: "WhoAmI", errorFilter
     });
 }
