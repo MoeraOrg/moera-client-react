@@ -2,7 +2,7 @@ import { ClientState } from "state/state";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 
-import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { applyMiddleware, combineReducers, legacy_createStore } from 'redux';
 import getContext from "state/context";
 import pulse from "state/pulse/reducer";
 import error from "state/error/reducer";
@@ -267,5 +267,5 @@ function* combinedSaga() {
 }
 
 const sagaMiddleware = createSagaMiddleware();
-export default createStore(combinedReducer, applyMiddleware(sagaMiddleware));
+export default legacy_createStore(combinedReducer, applyMiddleware(sagaMiddleware));
 sagaMiddleware.run(combinedSaga);
