@@ -1,29 +1,25 @@
-import { apply, call, select } from 'typed-redux-saga';
-import { CallEffect, PutEffect, SelectEffect } from 'redux-saga/effects';
-
 import { formatSchemaErrors, NamingApi, NamingError } from "api";
 import { RegisteredNameInfo } from "api/naming/api-types";
 import { fetcher } from "api/fetcher";
 import { BasicValidateFunction, isSchemaValid } from "api/schema";
 import { ClientAction } from "state/action";
 import { getSetting } from "state/settings/selectors";
+import { select } from "state/store-sagas";
 
 let callId = 1;
 
 type CallException = (e: any, details?: string | null) => NamingError;
 
-export type CallNamingParams<T> = {
+type CallNamingParams<T> = {
     caller: ClientAction | null,
     method: string;
     params: any[];
     schema: BasicValidateFunction<T>;
 };
 
-export type CallNamingResult<T> = Generator<CallEffect | PutEffect<any> | SelectEffect, T>;
-
-function* callNaming<T>({caller, method, params, schema}: CallNamingParams<T>): CallNamingResult<T | null> {
+async function callNaming<T>({caller, method, params, schema}: CallNamingParams<T>): Promise<T | null> {
     const exception: CallException = (e, details = null) => new NamingError(method, e, details, caller);
-    const data = yield* fetchNaming(method, params, exception);
+    const data = await fetchNaming(method, params, exception);
     if (!isSchemaValid(NamingApi.ObjectResult, data)) {
         throw exception("Response format incorrect", formatSchemaErrors(NamingApi.ObjectResult.errors));
     }
@@ -42,9 +38,9 @@ export type CallNamingBooleanParams = {
     params: any[];
 };
 
-function* callNamingBoolean({caller, method, params}: CallNamingBooleanParams): CallNamingResult<boolean> {
+async function callNamingBoolean({caller, method, params}: CallNamingBooleanParams): Promise<boolean> {
     const exception: CallException = (e, details = null) => new NamingError(method, e, details, caller);
-    const data = yield* fetchNaming(method, params, exception);
+    const data = await fetchNaming(method, params, exception);
     if (!isSchemaValid(NamingApi.BooleanResult, data)) {
         throw exception("Response format incorrect", formatSchemaErrors(NamingApi.BooleanResult.errors));
     }
@@ -54,11 +50,11 @@ function* callNamingBoolean({caller, method, params}: CallNamingBooleanParams): 
     return data.result;
 }
 
-function* fetchNaming(method: string, params: any[], exception: CallException): any {
-    const location = (yield* select(state => getSetting(state, "naming.location"))) as string;
+async function fetchNaming(method: string, params: any[], exception: CallException): Promise<any> {
+    const location = select(state => getSetting(state, "naming.location") as string);
     let response;
     try {
-        response = yield* call(fetcher, location, {
+        response = await fetcher(location, {
             method: "POST",
             headers: {
                 "Accept": "application/json",
@@ -79,7 +75,7 @@ function* fetchNaming(method: string, params: any[], exception: CallException): 
     }
     let data;
     try {
-        data = yield* apply(response, "json", []);
+        data = await response.json();
     } catch (e) {
         throw exception("Server returned empty result");
     }
@@ -92,18 +88,18 @@ function* fetchNaming(method: string, params: any[], exception: CallException): 
     return data;
 }
 
-export function* getCurrent(
+export async function getCurrent(
     caller: ClientAction | null, name: string, generation: number
-): CallNamingResult<RegisteredNameInfo | null> {
-    return yield* callNaming({
+): Promise<RegisteredNameInfo | null> {
+    return await callNaming({
         caller, method: "getCurrent", params: [name, generation], schema: NamingApi.RegisteredNameInfo
     });
 }
 
-export function* getSimilar(caller: ClientAction | null, name: string): CallNamingResult<RegisteredNameInfo | null> {
-    return yield* callNaming({caller, method: "getSimilar", params: [name], schema: NamingApi.RegisteredNameInfo});
+export async function getSimilar(caller: ClientAction | null, name: string): Promise<RegisteredNameInfo | null> {
+    return await callNaming({caller, method: "getSimilar", params: [name], schema: NamingApi.RegisteredNameInfo});
 }
 
-export function* isFree(caller: ClientAction | null, name: string): CallNamingResult<boolean> {
-    return yield* callNamingBoolean({caller, method: "isFree", params: [name]});
+export async function isFree(caller: ClientAction | null, name: string): Promise<boolean> {
+    return await callNamingBoolean({caller, method: "isFree", params: [name]});
 }
