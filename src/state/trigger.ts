@@ -1,9 +1,8 @@
-import { put, select, takeEvery } from 'typed-redux-saga';
-
 import getContext from "state/context";
 import { ClientAction, ClientActionType } from "state/action";
 import { ClientState } from "state/state";
 import { WithContext } from "state/action-types";
+import { StoreMiddlewareApi } from "state/store-middleware";
 
 /*
  * Trigger:
@@ -32,7 +31,7 @@ export type Trigger = {
     signal: ClientActionType | ClientActionType[];
 } & TriggerFilteredAction;
 
-type TriggerMap = Map<ClientActionType, TriggerFilteredAction[]>;
+export type TriggerMap = Map<ClientActionType, TriggerFilteredAction[]>;
 
 export function trigger<T extends ClientAction>(
     signal: T["type"], filter: boolean | TriggerFilter<T>, action: ClientAction | TriggerAction<T>
@@ -81,32 +80,30 @@ export function collectTriggers(...lists: (Trigger | Trigger[])[]): TriggerMap {
     return triggers;
 }
 
-function* triggersSaga(triggers: TriggerMap, action: WithContext<ClientAction>) {
+export function invokeTriggers(
+    triggers: TriggerMap, action: WithContext<ClientAction>, storeApi: StoreMiddlewareApi
+): void {
     const signal = action.type;
     const list = triggers.get(signal);
     if (list === undefined) {
         return;
     }
-    action.context = yield* select(getContext);
+    action.context = getContext(storeApi.getState());
     for (const trigger of list) {
         let enabled;
         if (typeof(trigger.filter) === "function") {
-            enabled = !!(yield* select(trigger.filter, action));
+            enabled = trigger.filter(storeApi.getState(), action);
         } else {
             enabled = trigger.filter;
         }
         if (enabled) {
             if (typeof(trigger.action) === "function") {
-                yield* put(trigger.action(action).causedBy(action));
+                storeApi.dispatch(trigger.action(action).causedBy(action));
             } else {
-                yield* put(trigger.action.causedBy(action));
+                storeApi.dispatch(trigger.action.causedBy(action));
             }
         }
     }
-}
-
-export function* invokeTriggers(triggers: TriggerMap) {
-    yield* takeEvery([...triggers.keys()], triggersSaga, triggers);
 }
 
 export function inv<T extends ClientAction>(func: TriggerFilter<T>): TriggerFilter<T> {

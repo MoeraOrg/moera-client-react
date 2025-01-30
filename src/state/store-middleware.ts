@@ -1,10 +1,11 @@
-import { Middleware } from 'redux';
+import { Dispatch, Middleware, MiddlewareAPI } from 'redux';
 
 import { ClientState } from "state/state";
 import { ClientAction, ClientActionType } from "state/action";
 import { WithContext } from "state/action-types";
 import getContext from "state/context";
-import { BarrierCondition, select } from "state/store-sagas";
+import { BarrierCondition } from "state/store-sagas";
+import { invokeTriggers, TriggerMap } from "state/trigger";
 
 interface Barrier {
     actions: ClientActionType[];
@@ -12,11 +13,13 @@ interface Barrier {
     resolve: () => void | PromiseLike<void>;
 }
 
+export type StoreMiddlewareApi = MiddlewareAPI<Dispatch<ClientAction>, ClientState>;
+
 export interface StoreMiddleware extends Middleware<{}, ClientState> {
     barrier: (actions: ClientActionType[], condition: BarrierCondition) => Promise<void>;
 }
 
-export function createStoreMiddleware(): StoreMiddleware {
+export function createStoreMiddleware(triggers: TriggerMap): StoreMiddleware {
     const barriers = new Map<ClientActionType, Barrier[]>();
 
     const addBarrier = (actions: ClientActionType[], condition: BarrierCondition): Promise<void> => {
@@ -52,9 +55,13 @@ export function createStoreMiddleware(): StoreMiddleware {
     }
 
     const middleware: StoreMiddleware = storeApi => next => (action: WithContext<ClientAction>) => {
-        action.context = select(getContext);
+        const result = next(action);
+
+        action.context = getContext(storeApi.getState());
         resolveBarriers(storeApi.getState(), action);
-        return next(action);
+        invokeTriggers(triggers, action, storeApi);
+
+        return result;
     }
     middleware.barrier = addBarrier;
 

@@ -96,7 +96,7 @@ import flashBoxExecutors from "state/flashbox/sagas";
 import signUpDialogExecutors from "state/signupdialog/sagas";
 import refreshExecutors from "state/refresh/sagas";
 
-import { collectTriggers, invokeTriggers } from "state/trigger";
+import { collectTriggers } from "state/trigger";
 import homeTriggers from "state/home/triggers";
 import cartesTriggers from "state/cartes/triggers";
 import navigationTriggers from "state/navigation/triggers";
@@ -263,13 +263,12 @@ function* combinedSaga() {
     yield* spawn(signalPostInitSaga);
     yield* spawn(pulseSaga);
 
-    yield* invokeTriggers(triggers);
     yield* invokeExecutors(executors);
 }
 
 export default function initStore(): void {
     const sagaMiddleware = createSagaMiddleware();
-    window.middleware = createStoreMiddleware();
-    window.store = legacy_createStore(combinedReducer, applyMiddleware(sagaMiddleware, window.middleware));
+    window.middleware = createStoreMiddleware(triggers);
+    window.store = legacy_createStore(combinedReducer, applyMiddleware(window.middleware, sagaMiddleware));
     sagaMiddleware.run(combinedSaga);
 }
