@@ -1,4 +1,3 @@
-import getContext from "state/context";
 import { ClientAction, ClientActionType } from "state/action";
 import { ClientState } from "state/state";
 import { WithContext } from "state/action-types";
@@ -88,7 +87,6 @@ export function invokeTriggers(
     if (list === undefined) {
         return;
     }
-    action.context = getContext(storeApi.getState());
     for (const trigger of list) {
         let enabled;
         if (typeof(trigger.filter) === "function") {

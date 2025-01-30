@@ -3,7 +3,7 @@ import { Dispatch, Middleware, MiddlewareAPI } from 'redux';
 import { ClientState } from "state/state";
 import { ClientAction, ClientActionType } from "state/action";
 import { WithContext } from "state/action-types";
-import getContext from "state/context";
+import { DynamicActionContext } from "state/context";
 import { BarrierCondition } from "state/store-sagas";
 import { invokeTriggers, TriggerMap } from "state/trigger";
 
@@ -57,7 +57,7 @@ export function createStoreMiddleware(triggers: TriggerMap): StoreMiddleware {
     const middleware: StoreMiddleware = storeApi => next => (action: WithContext<ClientAction>) => {
         const result = next(action);
 
-        action.context = getContext(storeApi.getState());
+        action.context = new DynamicActionContext();
         resolveBarriers(storeApi.getState(), action);
         invokeTriggers(triggers, action, storeApi);
 
