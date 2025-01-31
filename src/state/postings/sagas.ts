@@ -1,10 +1,12 @@
-import { call, put, select } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
 import { Node, ReactionTotalsInfo } from "api";
 import { errorThrown } from "state/error/actions";
 import { ClientAction } from "state/action";
+import { dispatch, select } from "state/store-sagas";
+import { homeIntroduced } from "state/init-barriers";
+import { executor } from "state/executor";
 import {
     EntryReactionAttributes,
     PostingCommentAddedBlockAction,
@@ -38,7 +40,6 @@ import {
     postingVerifyFailed
 } from "state/postings/actions";
 import { WithContext } from "state/action-types";
-import { ClientState } from "state/state";
 import { flashBox } from "state/flashbox/actions";
 import {
     getPosting,
@@ -51,8 +52,6 @@ import { fillBlockedOperations } from "state/blockedoperations/sagas";
 import { getNodeUri } from "state/naming/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
 import { isConnectedToHome } from "state/home/selectors";
-import { homeIntroduced } from "state/init-selectors";
-import { executor } from "state/executor";
 import * as Browser from "ui/browser";
 import { toAvatarDescription } from "util/avatar";
 import { absoluteNodeName, REL_HOME, RelNodeName } from "util/rel-node-name";
@@ -60,139 +59,146 @@ import { notNull } from "util/misc";
 
 export default [
     executor("POSTING_DELETE", payload => payload.id, postingDeleteSaga),
-    executor("POSTING_LOAD", payload => payload.id, postingLoadSaga, homeIntroduced),
+    executor("POSTING_LOAD", payload => payload.id, postingLoadSaga),
     executor("POSTING_VERIFY", payload => payload.id, postingVerifySaga),
     executor("POSTING_OPERATIONS_UPDATE", payload => payload.id, postingOperationsUpdateSaga),
-    executor("POSTING_REACT", null, postingReactSaga, homeIntroduced),
+    executor("POSTING_REACT", null, postingReactSaga),
     executor("POSTING_REACTION_LOAD", payload => payload.id, postingReactionLoadSaga),
     executor("POSTING_REACTIONS_RELOAD", "", postingReactionsReloadSaga),
-    executor("POSTING_REACTION_DELETE", payload => payload.id, postingReactionDeleteSaga, homeIntroduced),
+    executor("POSTING_REACTION_DELETE", payload => payload.id, postingReactionDeleteSaga),
     executor("POSTING_COPY_LINK", payload => payload.id, postingCopyLinkSaga),
-    executor("POSTING_COMMENTS_SUBSCRIBE", payload => payload.id, postingCommentsSubscribeSaga, homeIntroduced),
-    executor("POSTING_COMMENTS_UNSUBSCRIBE", payload => payload.id, postingCommentsUnsubscribeSaga, homeIntroduced),
-    executor("POSTING_COMMENT_ADDED_BLOCK", payload => payload.id, postingCommentAddedBlockSaga, homeIntroduced),
-    executor("POSTING_COMMENT_ADDED_UNBLOCK", payload => payload.id, postingCommentAddedUnblockSaga, homeIntroduced)
+    executor("POSTING_COMMENTS_SUBSCRIBE", payload => payload.id, postingCommentsSubscribeSaga),
+    executor("POSTING_COMMENTS_UNSUBSCRIBE", payload => payload.id, postingCommentsUnsubscribeSaga),
+    executor("POSTING_COMMENT_ADDED_BLOCK", payload => payload.id, postingCommentAddedBlockSaga),
+    executor("POSTING_COMMENT_ADDED_UNBLOCK", payload => payload.id, postingCommentAddedUnblockSaga)
 ];
 
-function* postingDeleteSaga(action: WithContext<PostingDeleteAction>) {
+async function postingDeleteSaga(action: WithContext<PostingDeleteAction>): Promise<void> {
     const {id, nodeName} = action.payload;
-    const posting = yield* select(getPosting, id, nodeName);
+    const posting = getPosting(select(), id, nodeName);
     if (posting == null) {
         return;
     }
     try {
-        yield* call(Node.deletePosting, action, nodeName, id);
-        yield* put(postingDeleted(posting.id, posting.feedReferences ?? [], nodeName).causedBy(action));
+        await Node.deletePosting(action, nodeName, id);
+        dispatch(postingDeleted(posting.id, posting.feedReferences ?? [], nodeName).causedBy(action));
     } catch (e) {
-        yield* put(postingDeleteFailed(id, nodeName).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(postingDeleteFailed(id, nodeName).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* postingLoadSaga(action: WithContext<PostingLoadAction>) {
+async function postingLoadSaga(action: WithContext<PostingLoadAction>): Promise<void> {
+    await homeIntroduced();
     const {id, nodeName} = action.payload;
     try {
-        const posting = yield* call(Node.getPosting, action, nodeName, id, false, ["posting.not-found"]);
-        yield* call(fillActivityReaction, action, posting);
-        yield* call(fillBlockedOperations, action, posting);
-        yield* put(postingSet(posting, nodeName).causedBy(action));
-        yield* call(fillSubscription, action, posting);
+        const posting = await Node.getPosting(action, nodeName, id, false, ["posting.not-found"]);
+        await fillActivityReaction(action, posting);
+        await fillBlockedOperations(action, posting);
+        dispatch(postingSet(posting, nodeName).causedBy(action));
+        await fillSubscription(action, posting);
     } catch (e) {
-        yield* put(postingLoadFailed(id, nodeName).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(postingLoadFailed(id, nodeName).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* postingVerifySaga(action: WithContext<PostingVerifyAction>) {
+async function postingVerifySaga(action: WithContext<PostingVerifyAction>): Promise<void> {
     const {id, nodeName} = action.payload;
     const targetNodeName = absoluteNodeName(nodeName, action.context);
     try {
-        yield* call(Node.verifyRemotePosting, action, REL_HOME, targetNodeName, id);
+        await Node.verifyRemotePosting(action, REL_HOME, targetNodeName, id);
     } catch (e) {
-        yield* put(postingVerifyFailed(id, nodeName).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(postingVerifyFailed(id, nodeName).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* postingOperationsUpdateSaga(action: WithContext<PostingOperationsUpdateAction>) {
+async function postingOperationsUpdateSaga(action: WithContext<PostingOperationsUpdateAction>): Promise<void> {
     const {id, nodeName, operations} = action.payload;
     try {
-        let posting = yield* select(state => getPosting(state, id, nodeName));
+        let posting = select(state => getPosting(state, id, nodeName));
         if (posting == null) {
             return;
         }
         const originName = posting.receiverName ?? absoluteNodeName(nodeName, action.context);
         const originId = posting.receiverPostingId ?? id;
-        posting = yield* call(Node.updatePosting, action, originName, originId, {operations});
-        yield* put(postingOperationsUpdated(originId, originName, posting.operations ?? {}).causedBy(action));
+        posting = await Node.updatePosting(action, originName, originId, {operations});
+        dispatch(postingOperationsUpdated(originId, originName, posting.operations ?? {}).causedBy(action));
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* postingReactSaga(action: WithContext<PostingReactAction>) {
+async function postingReactSaga(action: WithContext<PostingReactAction>): Promise<void> {
+    await homeIntroduced();
     const {id, negative, emoji, nodeName} = action.payload;
     const {ownerName, homeOwnerName, homeOwnerFullName, homeOwnerGender, homeOwnerAvatar} = action.context;
     try {
-        const created = yield* call(Node.createPostingReaction, action, nodeName, id, {
+        const created = await Node.createPostingReaction(action, nodeName, id, {
             ownerName: homeOwnerName, ownerFullName: homeOwnerFullName, ownerGender: homeOwnerGender,
             ownerAvatar: toAvatarDescription(homeOwnerAvatar), negative, emoji
         });
-        yield* put(postingReactionSet(id, {negative, emoji}, created.totals, nodeName).causedBy(action));
-        const posting = yield* select(state => getPosting(state, id, nodeName));
+        dispatch(postingReactionSet(id, {negative, emoji}, created.totals, nodeName).causedBy(action));
+        const posting = select(state => getPosting(state, id, nodeName));
         if (ownerName != null && posting != null) {
-            yield* call(Node.createRemotePostingReaction, action, REL_HOME,
+            await Node.createRemotePostingReaction(
+                action, REL_HOME,
                 posting.receiverName ?? absoluteNodeName(nodeName, action.context), posting.receiverPostingId ?? id,
-                {negative, emoji});
+                {negative, emoji}
+            );
         }
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* postingReactionLoadSaga(action: WithContext<PostingReactionLoadAction>) {
+async function postingReactionLoadSaga(action: WithContext<PostingReactionLoadAction>): Promise<void> {
     const {id, nodeName} = action.payload;
     const {homeOwnerName} = action.context;
     try {
         let reaction = null;
         if (homeOwnerName != null) {
-            const {negative, emoji} = yield* call(Node.getPostingReaction, action, nodeName, id, homeOwnerName);
+            const {negative, emoji} = await Node.getPostingReaction(action, nodeName, id, homeOwnerName);
             reaction = negative != null && emoji != null ? {negative, emoji} : null;
         }
-        const totals = yield* call(Node.getPostingReactionTotals, action, nodeName, id);
-        yield* put(postingReactionSet(id, reaction, totals, nodeName).causedBy(action));
+        const totals = await Node.getPostingReactionTotals(action, nodeName, id);
+        dispatch(postingReactionSet(id, reaction, totals, nodeName).causedBy(action));
     } catch (e) {
         if (Browser.isDevMode()) {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* postingReactionsReloadSaga(action: WithContext<PostingReactionsReloadAction>) {
+async function postingReactionsReloadSaga(action: WithContext<PostingReactionsReloadAction>): Promise<void> {
     const {homeOwnerName} = action.context;
-    const {postingsState, connectedToHome} = yield* select((state: ClientState) => ({
+    const {postingsState, connectedToHome} = select(state => ({
         postingsState: state.postings,
         connectedToHome: isConnectedToHome(state)
     }));
     for (const nodeName of Object.keys(postingsState)) {
         const ids = Object.keys(postingsState[nodeName] ?? {});
         if (connectedToHome) {
-            const infos = yield* call(Node.searchPostingReactions, action, nodeName, {ownerName: homeOwnerName, ids});
+            const infos = await Node.searchPostingReactions(
+                action, nodeName, {ownerName: homeOwnerName, postings: ids}
+            );
             const reactions = infos
                 .map(info => ({entryId: info.postingId, negative: info.negative, emoji: info.emoji}))
                 .filter((attr): attr is EntryReactionAttributes => attr.negative != null && attr.emoji != null);
-            const totals = yield* call(Node.searchPostingReactionTotals, action, nodeName, {postings: ids});
-            put(postingsReactionSet(reactions, totals, nodeName).causedBy(action));
+            const totals = await Node.searchPostingReactionTotals(action, nodeName, {postings: ids});
+            dispatch(postingsReactionSet(reactions, totals, nodeName).causedBy(action));
         } else {
             const totals = ids
                 .map(id => postingsState[nodeName]![id]!.posting.reactions)
                 .filter(notNull);
-            put(postingsReactionSet([], totals, nodeName).causedBy(action))
+            dispatch(postingsReactionSet([], totals, nodeName).causedBy(action))
         }
     }
 }
 
-function* postingReactionDeleteSaga(action: WithContext<PostingReactionDeleteAction>) {
+async function postingReactionDeleteSaga(action: WithContext<PostingReactionDeleteAction>): Promise<void> {
+    await homeIntroduced();
     let {id, nodeName} = action.payload;
     const {ownerName, homeOwnerName} = action.context;
 
@@ -203,35 +209,39 @@ function* postingReactionDeleteSaga(action: WithContext<PostingReactionDeleteAct
     nodeName = absoluteNodeName(nodeName, action.context)
 
     try {
-        const posting = yield* select(state => getPosting(state, id, nodeName));
+        const posting = select(state => getPosting(state, id, nodeName));
         if (ownerName == null || posting == null) {
             return;
         }
 
         let totals: ReactionTotalsInfo = {entryId: id, positive: [], negative: []};
         if ((posting.receiverName == null && posting.receiverPostingId == null) || nodeName === homeOwnerName) {
-            totals = yield* call(Node.deletePostingReaction, action, nodeName, id, homeOwnerName);
+            totals = await Node.deletePostingReaction(action, nodeName, id, homeOwnerName);
         }
         if (posting.receiverName != null && posting.receiverPostingId != null) {
-            totals = yield* call(Node.deletePostingReaction, action,
-                posting.receiverName, posting.receiverPostingId, homeOwnerName);
+            totals = await Node.deletePostingReaction(
+                action, posting.receiverName, posting.receiverPostingId, homeOwnerName
+            );
         }
-        yield* put(postingReactionSet(id, null, totals, nodeName).causedBy(action));
-        yield* call(Node.deleteRemotePostingReaction, action, REL_HOME,
-            posting.receiverName ?? nodeName, posting.receiverPostingId ?? id);
+        dispatch(postingReactionSet(id, null, totals, nodeName).causedBy(action));
+        await Node.deleteRemotePostingReaction(
+            action, REL_HOME, posting.receiverName ?? nodeName, posting.receiverPostingId ?? id
+        );
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-export function* postingGetLink(action: WithContext<ClientAction>, id: string, nodeName: RelNodeName | string) {
-    const posting = yield* select(getPosting, id, nodeName);
+export async function postingGetLink(
+    action: WithContext<ClientAction>, id: string, nodeName: RelNodeName | string
+): Promise<string> {
+    const posting = getPosting(select(), id, nodeName);
     const targetNode = posting?.receiverName ?? absoluteNodeName(nodeName, action.context);
     if (targetNode && posting?.receiverDeletedAt == null) {
-        const nodeUri = yield* call(getNodeUri, action, targetNode);
+        const nodeUri = await getNodeUri(action, targetNode);
         return Browser.universalLocation(null, targetNode, nodeUri, `/post/${posting?.receiverPostingId ?? id}`);
     } else {
-        const {ownerName, rootLocation} = yield* select((state: ClientState) => ({
+        const {ownerName, rootLocation} = select(state => ({
             ownerName: getOwnerName(state),
             rootLocation: getNodeRootLocation(state)
         }));
@@ -239,100 +249,104 @@ export function* postingGetLink(action: WithContext<ClientAction>, id: string, n
     }
 }
 
-function* postingCopyLinkSaga(action: WithContext<PostingCopyLinkAction>) {
+async function postingCopyLinkSaga(action: WithContext<PostingCopyLinkAction>): Promise<void> {
     const {id, nodeName} = action.payload;
     try {
-        const href = yield* call(postingGetLink, action, id, nodeName);
-        yield* call(clipboardCopy, href);
+        const href = await postingGetLink(action, id, nodeName);
+        await clipboardCopy(href);
         if (!Browser.isAndroidBrowser()) {
-            yield* put(flashBox(i18n.t("link-copied")).causedBy(action));
+            dispatch(flashBox(i18n.t("link-copied")).causedBy(action));
         }
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* postingCommentsSubscribeSaga(action: WithContext<PostingCommentsSubscribeAction>) {
+async function postingCommentsSubscribeSaga(action: WithContext<PostingCommentsSubscribeAction>): Promise<void> {
+    await homeIntroduced();
     const {id, nodeName} = action.payload;
-    const {posting, ownerName} = yield* select(state => ({
+    const {posting, ownerName} = select(state => ({
         posting: getPosting(state, id, nodeName),
         ownerName: getOwnerName(state)
     }));
     if (posting == null || ownerName == null) {
-        yield* put(postingCommentsSubscribeFailed(id, nodeName).causedBy(action));
+        dispatch(postingCommentsSubscribeFailed(id, nodeName).causedBy(action));
         return;
     }
     const remoteNodeName = posting.receiverName ?? absoluteNodeName(nodeName, action.context);
     const remotePostingId = posting.receiverPostingId ?? id;
     try {
-        const subscription = yield* call(Node.createSubscription, action, REL_HOME,
-            {type: "posting-comments" as const, remoteNodeName, remotePostingId});
-        yield* put(postingCommentsSubscribed(id, subscription.id, nodeName).causedBy(action));
+        const subscription = await Node.createSubscription(
+            action, REL_HOME, {type: "posting-comments" as const, remoteNodeName, remotePostingId}
+        );
+        dispatch(postingCommentsSubscribed(id, subscription.id, nodeName).causedBy(action));
     } catch (e) {
-        yield* put(postingCommentsSubscribeFailed(id, nodeName).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(postingCommentsSubscribeFailed(id, nodeName).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* postingCommentsUnsubscribeSaga(action: WithContext<PostingCommentsUnsubscribeAction>) {
+async function postingCommentsUnsubscribeSaga(action: WithContext<PostingCommentsUnsubscribeAction>): Promise<void> {
+    await homeIntroduced();
     const {id, nodeName} = action.payload;
-    const {posting, ownerName, subscriptionId} = yield* select(state => ({
+    const {posting, ownerName, subscriptionId} = select(state => ({
         posting: getPosting(state, id, nodeName),
         ownerName: getOwnerName(state),
         subscriptionId: getPostingCommentsSubscriptionId(state, id, nodeName)
     }));
     if (posting == null || ownerName == null) {
-        yield* put(postingCommentsUnsubscribeFailed(id, nodeName).causedBy(action));
+        dispatch(postingCommentsUnsubscribeFailed(id, nodeName).causedBy(action));
         return;
     }
     try {
         if (subscriptionId != null) {
-            yield* call(Node.deleteSubscription, action, REL_HOME, subscriptionId);
+            await Node.deleteSubscription(action, REL_HOME, subscriptionId);
         }
-        yield* put(postingCommentsUnsubscribed(id, nodeName).causedBy(action));
+        dispatch(postingCommentsUnsubscribed(id, nodeName).causedBy(action));
     } catch (e) {
-        yield* put(postingCommentsUnsubscribeFailed(id, nodeName).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(postingCommentsUnsubscribeFailed(id, nodeName).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* postingCommentAddedBlockSaga(action: WithContext<PostingCommentAddedBlockAction>) {
+async function postingCommentAddedBlockSaga(action: WithContext<PostingCommentAddedBlockAction>): Promise<void> {
+    await homeIntroduced();
     const {id, nodeName} = action.payload;
-    const {posting} = yield* select(state => ({
-        posting: getPosting(state, id, nodeName)
-    }));
+    const posting = getPosting(select(), id, nodeName);
     if (posting == null) {
-        yield* put(postingCommentAddedBlockFailed(id, nodeName).causedBy(action));
+        dispatch(postingCommentAddedBlockFailed(id, nodeName).causedBy(action));
         return;
     }
     const postingId = posting.receiverPostingId ?? id;
     try {
-        const blockedInstant = yield* call(Node.blockInstant, action, REL_HOME,
-            {storyType: "comment-added" as const, entryId: postingId});
-        yield* put(postingCommentAddedBlocked(id, blockedInstant.id, nodeName).causedBy(action));
+        const blockedInstant = await Node.blockInstant(
+            action, REL_HOME, {storyType: "comment-added" as const, entryId: postingId}
+        );
+        dispatch(postingCommentAddedBlocked(id, blockedInstant.id, nodeName).causedBy(action));
     } catch (e) {
-        yield* put(postingCommentAddedBlockFailed(id, nodeName).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(postingCommentAddedBlockFailed(id, nodeName).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* postingCommentAddedUnblockSaga(action: WithContext<PostingCommentAddedUnblockAction>) {
+async function postingCommentAddedUnblockSaga(action: WithContext<PostingCommentAddedUnblockAction>): Promise<void> {
+    await homeIntroduced();
     const {id, nodeName} = action.payload;
-    const {posting, instantBlockId} = yield* select(state => ({
+    const {posting, instantBlockId} = select(state => ({
         posting: getPosting(state, id, nodeName),
         instantBlockId: getPostingCommentAddedInstantBlockId(state, id, nodeName)
     }));
     if (posting == null) {
-        yield* put(postingCommentAddedUnblockFailed(id, nodeName).causedBy(action));
+        dispatch(postingCommentAddedUnblockFailed(id, nodeName).causedBy(action));
         return;
     }
     try {
         if (instantBlockId != null) {
-            yield* call(Node.unblockInstant, action, REL_HOME, instantBlockId);
+            await Node.unblockInstant(action, REL_HOME, instantBlockId);
         }
-        yield* put(postingCommentAddedUnblocked(id, nodeName).causedBy(action));
+        dispatch(postingCommentAddedUnblocked(id, nodeName).causedBy(action));
     } catch (e) {
-        yield* put(postingCommentAddedUnblockFailed(id, nodeName).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(postingCommentAddedUnblockFailed(id, nodeName).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }

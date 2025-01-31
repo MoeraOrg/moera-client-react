@@ -1,4 +1,3 @@
-import { call, put, select } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
@@ -16,10 +15,10 @@ import {
 } from "api";
 import { WithContext } from "state/action-types";
 import { executor } from "state/executor";
-import { homeIntroduced } from "state/init-selectors";
+import { dispatch, select } from "state/store-sagas";
+import { homeIntroduced } from "state/init-barriers";
 import { errorThrown } from "state/error/actions";
 import { ClientAction } from "state/action";
-import { ClientState } from "state/state";
 import {
     closeCommentDialog,
     CommentComposeCancelAction,
@@ -113,16 +112,16 @@ import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { notNull } from "util/misc";
 
 export default [
-    executor("DETAILED_POSTING_LOAD", "", detailedPostingLoadSaga, homeIntroduced),
-    executor("DETAILED_POSTING_LOAD_ATTACHED", "", detailedPostingLoadAttachedSaga, homeIntroduced),
-    executor("COMMENTS_RECEIVER_SWITCH", "", commentsReceiverSwitchSaga, homeIntroduced),
-    executor("COMMENTS_RECEIVER_FEATURES_LOAD", "", commentsReceiverFeaturesLoadSaga, homeIntroduced),
-    executor("COMMENTS_LOAD_ALL", "", commentsLoadAllSaga, homeIntroduced),
-    executor("COMMENTS_PAST_SLICE_LOAD", "", commentsPastSliceLoadSaga, homeIntroduced),
-    executor("COMMENTS_FUTURE_SLICE_LOAD", "", commentsFutureSliceLoadSaga, homeIntroduced),
-    executor("COMMENTS_UPDATE", "", commentsUpdateSaga, homeIntroduced),
-    executor("COMMENTS_BLOCKED_USERS_LOAD", "", commentsBlockedUsersLoadSaga, homeIntroduced),
-    executor("COMMENT_LOAD", payload => payload.commentId, commentLoadSaga, homeIntroduced),
+    executor("DETAILED_POSTING_LOAD", "", detailedPostingLoadSaga),
+    executor("DETAILED_POSTING_LOAD_ATTACHED", "", detailedPostingLoadAttachedSaga),
+    executor("COMMENTS_RECEIVER_SWITCH", "", commentsReceiverSwitchSaga),
+    executor("COMMENTS_RECEIVER_FEATURES_LOAD", "", commentsReceiverFeaturesLoadSaga),
+    executor("COMMENTS_LOAD_ALL", "", commentsLoadAllSaga),
+    executor("COMMENTS_PAST_SLICE_LOAD", "", commentsPastSliceLoadSaga),
+    executor("COMMENTS_FUTURE_SLICE_LOAD", "", commentsFutureSliceLoadSaga),
+    executor("COMMENTS_UPDATE", "", commentsUpdateSaga),
+    executor("COMMENTS_BLOCKED_USERS_LOAD", "", commentsBlockedUsersLoadSaga),
+    executor("COMMENT_LOAD", payload => payload.commentId, commentLoadSaga),
     executor("COMMENT_POST", null, commentPostSaga),
     executor("COMMENT_DRAFT_LOAD", "", commentDraftLoadSaga),
     executor("COMMENT_DRAFT_SAVE", "", commentDraftSaveSaga),
@@ -135,48 +134,40 @@ export default [
     executor("COMMENT_DIALOG_COMMENT_LOAD", "", commentDialogCommentLoadSaga),
     executor("COMMENT_DIALOG_COMMENT_RESET", "", commentDialogCommentResetSaga),
     executor("COMMENT_VERIFY", payload => payload.commentId, commentVerifySaga),
-    executor("COMMENT_REACT", null, commentReactSaga, homeIntroduced),
-    executor(
-        "COMMENT_REACTION_LOAD",
-        payload => `${payload.id}:${payload.postingId}`,
-        commentReactionLoadSaga,
-        homeIntroduced
-    ),
-    executor(
-        "COMMENT_REACTION_DELETE",
-        payload => `${payload.id}:${payload.postingId}`,
-        commentReactionDeleteSaga,
-        homeIntroduced
-    ),
+    executor("COMMENT_REACT", null, commentReactSaga),
+    executor("COMMENT_REACTION_LOAD", payload => `${payload.id}:${payload.postingId}`, commentReactionLoadSaga),
+    executor("COMMENT_REACTION_DELETE", payload => `${payload.id}:${payload.postingId}`, commentReactionDeleteSaga),
     executor("COMMENT_REPLY", "", commentReplySaga),
     executor("GLANCE_COMMENT_LOAD", null, glanceCommentLoadSaga)
 ];
 
-function* detailedPostingLoadSaga(action: WithContext<DetailedPostingLoadAction>) {
-    const id = yield* select(getDetailedPostingId);
+async function detailedPostingLoadSaga(action: WithContext<DetailedPostingLoadAction>): Promise<void> {
+    await homeIntroduced();
+    const id = select(getDetailedPostingId);
     if (id == null) {
-        yield* put(detailedPostingLoadFailed().causedBy(action));
+        dispatch(detailedPostingLoadFailed().causedBy(action));
         return;
     }
 
     try {
-        const posting = yield* call(Node.getPosting, action, REL_CURRENT, id, false, ["posting.not-found"]);
-        yield* call(fillActivityReaction, action, posting)
-        yield* call(fillBlockedOperations, action, posting)
-        yield* put(detailedPostingLoaded(posting).causedBy(action));
-        yield* call(fillSubscription, action, posting)
+        const posting = await Node.getPosting(action, REL_CURRENT, id, false, ["posting.not-found"]);
+        await fillActivityReaction(action, posting);
+        await fillBlockedOperations(action, posting);
+        dispatch(detailedPostingLoaded(posting).causedBy(action));
+        await fillSubscription(action, posting);
     } catch (e) {
-        yield* put(detailedPostingLoadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(detailedPostingLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* detailedPostingLoadAttachedSaga(action: WithContext<DetailedPostingLoadAttachedAction>) {
-    const id = yield* select(getDetailedPostingId);
+async function detailedPostingLoadAttachedSaga(action: WithContext<DetailedPostingLoadAttachedAction>): Promise<void> {
+    await homeIntroduced();
+    const id = select(getDetailedPostingId);
     if (id == null) {
         return;
     }
-    const loaded = yield* select(state => {
+    const loaded = select(state => {
         const media = getPosting(state, id, REL_CURRENT)?.media;
         if (media == null) {
             return true;
@@ -189,23 +180,24 @@ function* detailedPostingLoadAttachedSaga(action: WithContext<DetailedPostingLoa
             .every(p => isPostingCached(state, p, REL_CURRENT));
     });
     if (loaded) {
-        yield* put(detailedPostingLoadedAttached().causedBy(action));
+        dispatch(detailedPostingLoadedAttached().causedBy(action));
         return;
     }
 
     try {
-        const postings = yield* call(Node.getPostingsAttachedToPosting, action, REL_CURRENT, id);
-        yield* call(fillActivityReactionsInPostings, action, postings);
-        yield* call(fillBlockedOperationsInPostings, action, postings);
-        yield* put(postingsSet(postings, REL_CURRENT).causedBy(action));
-        yield* put(detailedPostingLoadedAttached().causedBy(action));
+        const postings = await Node.getPostingsAttachedToPosting(action, REL_CURRENT, id);
+        await fillActivityReactionsInPostings(action, postings);
+        await fillBlockedOperationsInPostings(action, postings);
+        dispatch(postingsSet(postings, REL_CURRENT).causedBy(action));
+        dispatch(detailedPostingLoadedAttached().causedBy(action));
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* commentsReceiverSwitchSaga(action: CommentsReceiverSwitchAction) {
-    const {ownerName, ownerFullName, posting} = yield* select(state => ({
+async function commentsReceiverSwitchSaga(action: CommentsReceiverSwitchAction): Promise<void> {
+    await homeIntroduced();
+    const {ownerName, ownerFullName, posting} = select(state => ({
         ownerName: getOwnerName(state),
         ownerFullName: getOwnerFullName(state),
         posting: getDetailedPosting(state)
@@ -216,94 +208,101 @@ function* commentsReceiverSwitchSaga(action: CommentsReceiverSwitchAction) {
     const receiverName = posting.receiverName ?? ownerName;
     const receiverFullName = posting.receiverFullName ?? ownerFullName;
     const receiverPostingId = posting.receiverPostingId ?? posting.id;
-    yield* put(commentsReceiverSwitched(receiverName, receiverFullName, receiverPostingId).causedBy(action));
+    dispatch(commentsReceiverSwitched(receiverName, receiverFullName, receiverPostingId).causedBy(action));
 }
 
-function* commentsReceiverFeaturesLoadSaga(action: WithContext<CommentsReceiverFeaturesLoadAction>) {
-    const nodeName = yield* select(getCommentsReceiverName);
+async function commentsReceiverFeaturesLoadSaga(
+    action: WithContext<CommentsReceiverFeaturesLoadAction>
+): Promise<void> {
+    await homeIntroduced();
+    const nodeName = select(getCommentsReceiverName);
     if (nodeName == null) {
         return;
     }
     try {
-        const features = yield* call(Node.getFeatures, action, nodeName);
-        yield* put(commentsReceiverFeaturesLoaded(nodeName, features).causedBy(action));
+        const features = await Node.getFeatures(action, nodeName);
+        dispatch(commentsReceiverFeaturesLoaded(nodeName, features).causedBy(action));
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* commentsLoadAllSaga(action: WithContext<CommentsLoadAllAction>) {
-    let {receiverName, receiverPostingId, before, after} = yield* select(getCommentsState);
+async function commentsLoadAllSaga(action: WithContext<CommentsLoadAllAction>): Promise<void> {
+    await homeIntroduced();
+    let {receiverName, receiverPostingId, before, after} = select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
         return;
     }
     try {
         while (after > Number.MIN_SAFE_INTEGER) {
-            const slice = yield* call(Node.getCommentsSlice, action, receiverName, receiverPostingId, null, after, 20);
-            yield* put(commentsPastSliceSet(
+            const slice = await Node.getCommentsSlice(action, receiverName, receiverPostingId, null, after, 20);
+            dispatch(commentsPastSliceSet(
                 receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total,
                 slice.totalInPast, slice.totalInFuture, null
             ).causedBy(action));
             after = slice.after;
         }
         while (before < Number.MAX_SAFE_INTEGER) {
-            const slice = yield* call(Node.getCommentsSlice, action, receiverName, receiverPostingId, before, null, 20);
-            yield* put(commentsFutureSliceSet(
+            const slice = await Node.getCommentsSlice(action, receiverName, receiverPostingId, before, null, 20);
+            dispatch(commentsFutureSliceSet(
                 receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total,
                 slice.totalInPast, slice.totalInFuture, null
             ).causedBy(action));
             before = slice.before;
         }
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* commentsPastSliceLoadSaga(action: WithContext<CommentsPastSliceLoadAction>) {
-    const {receiverName, receiverPostingId, after} = yield* select(getCommentsState);
+async function commentsPastSliceLoadSaga(action: WithContext<CommentsPastSliceLoadAction>): Promise<void> {
+    await homeIntroduced();
+    const {receiverName, receiverPostingId, after} = select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
-        yield* put(commentsPastSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
+        dispatch(commentsPastSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
         return;
     }
     try {
-        const slice = yield* call(Node.getCommentsSlice, action, receiverName, receiverPostingId, null, after, 20);
-        yield* put(commentsPastSliceSet(
+        const slice = await Node.getCommentsSlice(action, receiverName, receiverPostingId, null, after, 20);
+        dispatch(commentsPastSliceSet(
             receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total,
             slice.totalInPast, slice.totalInFuture, action.payload.anchor
         ).causedBy(action));
     } catch (e) {
-        yield* put(commentsPastSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(commentsPastSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* commentsFutureSliceLoadSaga(action: WithContext<CommentsFutureSliceLoadAction>) {
-    const {receiverName, receiverPostingId, before} = yield* select(getCommentsState);
+async function commentsFutureSliceLoadSaga(action: WithContext<CommentsFutureSliceLoadAction>): Promise<void> {
+    await homeIntroduced();
+    const {receiverName, receiverPostingId, before} = select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
-        yield* put(commentsFutureSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
+        dispatch(commentsFutureSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
         return;
     }
     try {
-        const slice = yield* call(Node.getCommentsSlice, action, receiverName, receiverPostingId, before, null, 20);
-        yield* put(commentsFutureSliceSet(
+        const slice = await Node.getCommentsSlice(action, receiverName, receiverPostingId, before, null, 20);
+        dispatch(commentsFutureSliceSet(
             receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total, slice.totalInPast,
             slice.totalInFuture, action.payload.anchor
         ).causedBy(action));
     } catch (e) {
-        yield* put(commentsFutureSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(commentsFutureSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* commentsUpdateSaga(action: WithContext<CommentsUpdateAction>) {
-    let {receiverName, receiverPostingId, before, after} = yield* select(getCommentsState);
+async function commentsUpdateSaga(action: WithContext<CommentsUpdateAction>): Promise<void> {
+    await homeIntroduced();
+    let {receiverName, receiverPostingId, before, after} = select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
         return;
     }
     try {
         while (before > after) {
-            const slice = yield* call(Node.getCommentsSlice, action, receiverName, receiverPostingId, after, null, 20);
-            yield* put(commentsSliceUpdate(
+            const slice = await Node.getCommentsSlice(action, receiverName, receiverPostingId, after, null, 20);
+            dispatch(commentsSliceUpdate(
                 receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total,
                 slice.totalInPast, slice.totalInFuture
             ).causedBy(action));
@@ -313,19 +312,20 @@ function* commentsUpdateSaga(action: WithContext<CommentsUpdateAction>) {
             after = slice.before;
         }
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* commentsBlockedUsersLoadSaga(action: WithContext<CommentsBlockedUsersLoadAction>) {
+async function commentsBlockedUsersLoadSaga(action: WithContext<CommentsBlockedUsersLoadAction>): Promise<void> {
+    await homeIntroduced();
     const {homeOwnerName} = action.context;
 
-    const {receiverName, receiverPostingId} = yield* select(state => ({
+    const {receiverName, receiverPostingId} = select(state => ({
         receiverName: getCommentsReceiverName(state),
         receiverPostingId: getCommentsReceiverPostingId(state)
     }));
     if (receiverName == null || receiverPostingId == null || homeOwnerName == null) {
-        yield* put(commentsBlockedUsersLoadFailed().causedBy(action));
+        dispatch(commentsBlockedUsersLoadFailed().causedBy(action));
         return;
     }
 
@@ -334,90 +334,94 @@ function* commentsBlockedUsersLoadSaga(action: WithContext<CommentsBlockedUsersL
     const entryPostingId = receiverName === homeOwnerName ? null : receiverPostingId;
 
     try {
-        const blocked = yield* call(Node.searchBlockedUsers, action, REL_HOME, {
+        const blocked = await Node.searchBlockedUsers(action, REL_HOME, {
             entryId,
             entryNodeName,
             entryPostingId,
             strict: true
         });
-        yield* put(commentsBlockedUsersLoaded(receiverName, receiverPostingId, blocked).causedBy(action));
+        dispatch(commentsBlockedUsersLoaded(receiverName, receiverPostingId, blocked).causedBy(action));
     } catch (e) {
-        yield* put(commentsBlockedUsersLoadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(commentsBlockedUsersLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* commentLoadSaga(action: WithContext<CommentLoadAction>) {
+async function commentLoadSaga(action: WithContext<CommentLoadAction>): Promise<void> {
+    await homeIntroduced();
     const {commentId} = action.payload;
 
-    const {receiverName, receiverPostingId} = yield* select(getCommentsState);
+    const {receiverName, receiverPostingId} = select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
         return;
     }
     try {
-        const comment = yield* call(Node.getComment, action, receiverName, receiverPostingId, commentId, false,
+        const comment = await Node.getComment(action, receiverName, receiverPostingId, commentId, false,
             ["comment.not-found"]);
-        yield* put(commentSet(receiverName, comment).causedBy(action));
+        dispatch(commentSet(receiverName, comment).causedBy(action));
     } catch (e) {
-        yield* put(commentLoadFailed(receiverName, receiverPostingId, commentId).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(commentLoadFailed(receiverName, receiverPostingId, commentId).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* commentPostSaga(action: WithContext<CommentPostAction>) {
+async function commentPostSaga(action: WithContext<CommentPostAction>): Promise<void> {
     const {commentId, postingId, commentText, commentSourceText} = action.payload;
 
-    const {receiverName, receiverPostingId} = yield* select(getCommentsState);
+    const {receiverName, receiverPostingId} = select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
         return;
     }
     try {
         let comment;
         if (commentId == null) {
-            yield* put(postingCommentCountUpdate(receiverPostingId, receiverName, 1).causedBy(action));
-            const created = yield* call(Node.createComment, action, receiverName, receiverPostingId, commentText);
-            yield* put(postingCommentsSet(postingId, created.total, REL_CURRENT).causedBy(action));
+            dispatch(postingCommentCountUpdate(receiverPostingId, receiverName, 1).causedBy(action));
+            const created = await Node.createComment(action, receiverName, receiverPostingId, commentText);
+            dispatch(postingCommentsSet(postingId, created.total, REL_CURRENT).causedBy(action));
             comment = created.comment;
         } else {
-            comment = yield* call(Node.updateComment, action, receiverName, receiverPostingId, commentId, commentText);
+            comment = await Node.updateComment(action, receiverName, receiverPostingId, commentId, commentText);
         }
-        yield* put(commentSet(receiverName, comment).causedBy(action));
+        dispatch(commentSet(receiverName, comment).causedBy(action));
 
-        const draftId = yield* select((state: ClientState) =>
+        const draftId = select(state =>
             (commentId == null ? state.detailedPosting.compose.draft : state.detailedPosting.commentDialog.draft)?.id);
 
-        yield* put(commentPosted(receiverName, receiverPostingId, comment.id, comment.moment).causedBy(action));
+        dispatch(commentPosted(receiverName, receiverPostingId, comment.id, comment.moment).causedBy(action));
 
         if (draftId != null) {
-            yield* call(Node.deleteDraft, action, REL_HOME, draftId, ["draft.not-found"]);
+            await Node.deleteDraft(action, REL_HOME, draftId, ["draft.not-found"]);
         }
 
         if (receiverName !== commentText.ownerName) {
-            yield* call(Node.updateRemoteComment, action, REL_HOME, receiverName, receiverPostingId, comment.id,
-                commentSourceText);
+            await Node.updateRemoteComment(
+                action, REL_HOME, receiverName, receiverPostingId, comment.id, commentSourceText
+            );
         }
     } catch (e) {
-        yield* put(commentPostFailed(receiverName, receiverPostingId).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(commentPostFailed(receiverName, receiverPostingId).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* loadRemoteMediaAttachments(
+async function loadRemoteMediaAttachments(
     action: WithContext<ClientAction>, nodeName: string, attachments: MediaAttachment[] | null
-) {
+): Promise<void> {
     if (attachments != null) {
         for (const attachment of attachments) {
             if (attachment.media == null && attachment.remoteMedia != null) {
-                attachment.media = yield* call(Node.getPrivateMediaInfo, action, nodeName, attachment.remoteMedia.id);
+                attachment.media = await Node.getPrivateMediaInfo(action, nodeName, attachment.remoteMedia.id);
             }
         }
     }
 }
 
-function* loadRepliedTo(action: WithContext<ClientAction>, nodeName: string, postingId: string, id: string) {
-    let repliedToComment: CommentInfo | null = yield* select(state => getComment(state, id));
+async function loadRepliedTo(
+    action: WithContext<ClientAction>, nodeName: string, postingId: string, id: string
+): Promise<RepliedTo | null> {
+    let repliedToComment: CommentInfo | null = select(state => getComment(state, id));
     if (repliedToComment == null) {
-        repliedToComment = yield* call(Node.getComment, action, nodeName, postingId, id, false, ["comment.not-found"]);
+        repliedToComment = await Node.getComment(action, nodeName, postingId, id, false, ["comment.not-found"]);
     }
     if (repliedToComment != null && repliedToComment.digest != null) {
         return {
@@ -433,10 +437,10 @@ function* loadRepliedTo(action: WithContext<ClientAction>, nodeName: string, pos
     }
 }
 
-function* commentDraftLoadSaga(action: WithContext<CommentDraftLoadAction>) {
+async function commentDraftLoadSaga(action: WithContext<CommentDraftLoadAction>): Promise<void> {
     const {isDialog} = action.payload;
 
-    const {nodeName, postingId, commentId} = yield* select((state: ClientState) => ({
+    const {nodeName, postingId, commentId} = select(state => ({
         nodeName: getCommentsState(state).receiverName,
         postingId: getCommentsState(state).receiverPostingId,
         commentId: isDialog ? state.detailedPosting.commentDialog.commentId : null
@@ -448,33 +452,33 @@ function* commentDraftLoadSaga(action: WithContext<CommentDraftLoadAction>) {
 
     try {
         const draftType: DraftType = commentId != null ? "comment-update" : "new-comment";
-        const drafts = yield* call(Node.getDrafts, action, REL_HOME, draftType, nodeName, postingId, commentId)
+        const drafts = await Node.getDrafts(action, REL_HOME, draftType, nodeName, postingId, commentId)
         const draft = drafts.length > 0 ? drafts[0] : null;
         if (draft != null) {
-            yield* call(loadRemoteMediaAttachments, action, nodeName, draft.media ?? null);
-            yield* put(commentDraftLoaded(draft).causedBy(action));
+            await loadRemoteMediaAttachments(action, nodeName, draft.media ?? null);
+            dispatch(commentDraftLoaded(draft).causedBy(action));
 
             let repliedTo: RepliedTo | null = null;
             if (commentId == null && draft.repliedToId != null) {
-                repliedTo = yield* call(loadRepliedTo, action, nodeName, postingId, draft.repliedToId);
+                repliedTo = await loadRepliedTo(action, nodeName, postingId, draft.repliedToId);
             }
             if (repliedTo != null) {
-                yield* put(commentRepliedToSet(
+                dispatch(commentRepliedToSet(
                     repliedTo.id, repliedTo.name, repliedTo.fullName ?? null, repliedTo.heading ?? ""
                 ).causedBy(action));
             } else {
-                yield* put(commentRepliedToUnset().causedBy(action));
+                dispatch(commentRepliedToUnset().causedBy(action));
             }
         } else {
-            yield* put(commentDraftAbsent(nodeName, postingId, commentId).causedBy(action));
+            dispatch(commentDraftAbsent(nodeName, postingId, commentId).causedBy(action));
         }
     } catch (e) {
-        yield* put(commentDraftLoadFailed(nodeName, postingId, commentId).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(commentDraftLoadFailed(nodeName, postingId, commentId).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* commentDraftSaveSaga(action: WithContext<CommentDraftSaveAction>) {
+async function commentDraftSaveSaga(action: WithContext<CommentDraftSaveAction>): Promise<void> {
     const {draftId, draftText, formId} = action.payload;
 
     if (draftText.receiverPostingId == null) {
@@ -484,49 +488,49 @@ function* commentDraftSaveSaga(action: WithContext<CommentDraftSaveAction>) {
     try {
         let draft: DraftInfo;
         if (draftId == null) {
-            draft = yield* call(Node.createDraft, action, REL_HOME, draftText);
+            draft = await Node.createDraft(action, REL_HOME, draftText);
         } else {
-            draft = yield* call(Node.updateDraft, action, REL_HOME, draftId, draftText, ["draft.not-found"]);
+            draft = await Node.updateDraft(action, REL_HOME, draftId, draftText, ["draft.not-found"]);
         }
-        yield* put(commentDraftSaved(
+        dispatch(commentDraftSaved(
             draftText.receiverName, draftText.receiverPostingId, draftText.receiverCommentId ?? null, draft, formId
         ).causedBy(action));
     } catch (e) {
-        yield* put(commentDraftSaveFailed(
+        dispatch(commentDraftSaveFailed(
             draftText.receiverName, draftText.receiverPostingId, draftText.receiverCommentId ?? null
         ).causedBy(action));
         if (!(e instanceof NodeApiError)) {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* commentDraftDeleteSaga(action: WithContext<CommentDraftDeleteAction>) {
+async function commentDraftDeleteSaga(action: WithContext<CommentDraftDeleteAction>): Promise<void> {
     const {draft} = action.payload;
 
     if (draft?.id == null) {
         return;
     }
 
-    yield* call(Node.deleteDraft, action, REL_HOME, draft.id, ["draft.not-found"]);
+    await Node.deleteDraft(action, REL_HOME, draft.id, ["draft.not-found"]);
     if (draft.receiverPostingId != null) {
-        yield* put(commentDraftDeleted(draft.receiverName, draft.receiverPostingId).causedBy(action));
+        dispatch(commentDraftDeleted(draft.receiverName, draft.receiverPostingId).causedBy(action));
     }
 }
 
-function* commentComposeCancelSaga(action: WithContext<CommentComposeCancelAction>) {
-    const draftId = yield* select(state => state.detailedPosting.compose.draft?.id);
+async function commentComposeCancelSaga(action: WithContext<CommentComposeCancelAction>): Promise<void> {
+    const draftId = select(state => state.detailedPosting.compose.draft?.id);
 
     if (draftId != null) {
-        yield* call(Node.deleteDraft, action, REL_HOME, draftId, ["draft.not-found"]);
+        await Node.deleteDraft(action, REL_HOME, draftId, ["draft.not-found"]);
     }
-    yield* put(commentComposeCancelled().causedBy(action));
+    dispatch(commentComposeCancelled().causedBy(action));
 }
 
-function* commentDeleteSaga(action: WithContext<CommentDeleteAction>) {
+async function commentDeleteSaga(action: WithContext<CommentDeleteAction>): Promise<void> {
     const {commentId} = action.payload;
 
-    const {postingId, receiverName, receiverPostingId} = yield* select((state: ClientState) => ({
+    const {postingId, receiverName, receiverPostingId} = select(state => ({
         postingId: getDetailedPostingId(state),
         receiverName: getCommentsState(state).receiverName,
         receiverPostingId: getCommentsState(state).receiverPostingId
@@ -534,24 +538,24 @@ function* commentDeleteSaga(action: WithContext<CommentDeleteAction>) {
     if (receiverName == null || receiverPostingId == null || postingId == null) {
         return;
     }
-    yield* put(postingCommentCountUpdate(receiverPostingId, receiverName, -1).causedBy(action));
+    dispatch(postingCommentCountUpdate(receiverPostingId, receiverName, -1).causedBy(action));
     try {
-        const info = yield* call(Node.deleteComment, action, receiverName, receiverPostingId, commentId);
-        yield* put(commentDeleted(receiverName, receiverPostingId, commentId).causedBy(action));
-        yield* put(postingCommentsSet(postingId, info.total, REL_CURRENT).causedBy(action));
-        yield* call(Node.deleteRemoteComment, action, REL_HOME, receiverName, receiverPostingId, commentId);
+        const info = await Node.deleteComment(action, receiverName, receiverPostingId, commentId);
+        dispatch(commentDeleted(receiverName, receiverPostingId, commentId).causedBy(action));
+        dispatch(postingCommentsSet(postingId, info.total, REL_CURRENT).causedBy(action));
+        await Node.deleteRemoteComment(action, REL_HOME, receiverName, receiverPostingId, commentId);
     } catch (e) {
-        yield* put(commentDeleteFailed(receiverName, receiverPostingId, commentId).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(commentDeleteFailed(receiverName, receiverPostingId, commentId).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* commentSetVisibilitySaga(action: WithContext<CommentSetVisibilityAction>) {
+async function commentSetVisibilitySaga(action: WithContext<CommentSetVisibilityAction>): Promise<void> {
     const {commentId, visible} = action.payload;
 
     const {
         receiverName, receiverPostingId, isOwner, ownerVisible, isSenior, seniorVisible
-    } = yield* select((state: ClientState) => ({
+    } = select(state => ({
         receiverName: getCommentsState(state).receiverName,
         receiverPostingId: getCommentsState(state).receiverPostingId,
         isOwner: isPermitted("edit", getComment(state, commentId), "owner", state),
@@ -580,47 +584,47 @@ function* commentSetVisibilitySaga(action: WithContext<CommentSetVisibilityActio
     }
 
     try {
-        const comment = yield* call(Node.updateComment, action, receiverName, receiverPostingId, commentId, commentText);
-        yield* put(commentSet(receiverName, comment).causedBy(action));
+        const comment = await Node.updateComment(action, receiverName, receiverPostingId, commentId, commentText);
+        dispatch(commentSet(receiverName, comment).causedBy(action));
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* focusedCommentLoadSaga(action: WithContext<FocusedCommentLoadAction>) {
-    const {receiverName, receiverPostingId, focusedCommentId} = yield* select(getCommentsState);
+async function focusedCommentLoadSaga(action: WithContext<FocusedCommentLoadAction>): Promise<void> {
+    const {receiverName, receiverPostingId, focusedCommentId} = select(getCommentsState);
     if (receiverName == null || receiverPostingId == null || focusedCommentId == null) {
         return;
     }
     try {
-        const comment = yield* call(Node.getComment, action, receiverName, receiverPostingId, focusedCommentId, false,
+        const comment = await Node.getComment(action, receiverName, receiverPostingId, focusedCommentId, false,
             ["comment.not-found"]);
-        yield* put(focusedCommentLoaded(receiverName, comment).causedBy(action));
+        dispatch(focusedCommentLoaded(receiverName, comment).causedBy(action));
     } catch (e) {
-        yield* put(focusedCommentLoadFailed(receiverName, receiverPostingId).causedBy(action));
+        dispatch(focusedCommentLoadFailed(receiverName, receiverPostingId).causedBy(action));
         if (!(e instanceof NodeApiError) || e.errorCode !== "comment.not-found") {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         } else {
-            yield* put(flashBox(i18n.t("comment-not-found")).causedBy(action));
+            dispatch(flashBox(i18n.t("comment-not-found")).causedBy(action));
         }
     }
 }
 
-function* commentCopyLinkSaga(action: WithContext<CommentCopyLinkAction>) {
+async function commentCopyLinkSaga(action: WithContext<CommentCopyLinkAction>): Promise<void> {
     const {id, postingId} = action.payload;
     try {
-        const href = yield* call(postingGetLink, action, postingId, REL_CURRENT);
-        yield* call(clipboardCopy, `${href}?comment=${id}`);
+        const href = await postingGetLink(action, postingId, REL_CURRENT);
+        await clipboardCopy(`${href}?comment=${id}`);
         if (!Browser.isAndroidBrowser()) {
-            yield* put(flashBox(i18n.t("link-copied")).causedBy(action));
+            dispatch(flashBox(i18n.t("link-copied")).causedBy(action));
         }
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* commentDialogCommentLoadSaga(action: WithContext<CommentDialogCommentLoadAction>) {
-    const {receiverName, receiverPostingId, commentId} = yield* select(state => ({
+async function commentDialogCommentLoadSaga(action: WithContext<CommentDialogCommentLoadAction>): Promise<void> {
+    const {receiverName, receiverPostingId, commentId} = select(state => ({
         receiverName: getCommentsState(state).receiverName,
         receiverPostingId: getCommentsState(state).receiverPostingId,
         commentId: getCommentDialogCommentId(state)
@@ -629,45 +633,46 @@ function* commentDialogCommentLoadSaga(action: WithContext<CommentDialogCommentL
         return;
     }
     try {
-        const comment = yield* call(Node.getComment, action, receiverName, receiverPostingId, commentId, true,
-            ["comment.not-found"]);
-        yield* put(commentDialogCommentLoaded(comment).causedBy(action));
+        const comment = await Node.getComment(
+            action, receiverName, receiverPostingId, commentId, true, ["comment.not-found"]
+        );
+        dispatch(commentDialogCommentLoaded(comment).causedBy(action));
     } catch (e) {
-        yield* put(commentDialogCommentLoadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(commentDialogCommentLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* commentDialogCommentResetSaga(action: WithContext<CommentDialogCommentResetAction>) {
+async function commentDialogCommentResetSaga(action: WithContext<CommentDialogCommentResetAction>): Promise<void> {
     const {draftId, closeDialog} = action.payload;
 
     if (closeDialog) {
-        yield* put(closeCommentDialog().causedBy(action));
+        dispatch(closeCommentDialog().causedBy(action));
     }
     if (draftId != null) {
-        yield* call(Node.deleteDraft, action, REL_HOME, draftId, ["draft.not-found"]);
+        await Node.deleteDraft(action, REL_HOME, draftId, ["draft.not-found"]);
     }
 }
 
-function* commentVerifySaga(action: WithContext<CommentVerifyAction>) {
-    const {receiverName, receiverPostingId} = yield* select(getCommentsState);
+async function commentVerifySaga(action: WithContext<CommentVerifyAction>): Promise<void> {
+    const {receiverName, receiverPostingId} = select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
         return;
     }
     try {
-        yield* call(Node.verifyRemoteComment, action, REL_HOME, receiverName, receiverPostingId,
-            action.payload.commentId);
+        await Node.verifyRemoteComment(action, REL_HOME, receiverName, receiverPostingId, action.payload.commentId);
     } catch (e) {
-        yield* put(commentVerifyFailed(receiverName, receiverPostingId, action.payload.commentId).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(commentVerifyFailed(receiverName, receiverPostingId, action.payload.commentId).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* commentReactSaga(action: WithContext<CommentReactAction>) {
+async function commentReactSaga(action: WithContext<CommentReactAction>): Promise<void> {
+    await homeIntroduced();
     const {id, negative, emoji} = action.payload;
     const {homeOwnerName, homeOwnerFullName, homeOwnerGender, homeOwnerAvatar} = action.context;
 
-    const {seniorName, comments: {receiverName, receiverPostingId}, seniorReaction} = yield* select(state => ({
+    const {seniorName, comments: {receiverName, receiverPostingId}, seniorReaction} = select(state => ({
         seniorName: getDetailedPosting(state)?.ownerName,
         comments: getCommentsState(state),
         seniorReaction: getComment(state, id)?.seniorReaction
@@ -676,27 +681,32 @@ function* commentReactSaga(action: WithContext<CommentReactAction>) {
         return;
     }
     try {
-        const created = yield* call(Node.createCommentReaction, action, receiverName, receiverPostingId, id,
-            {ownerName: homeOwnerName, ownerFullName: homeOwnerFullName, ownerGender: homeOwnerGender,
-             ownerAvatar: toAvatarDescription(homeOwnerAvatar), negative, emoji});
+        const created = await Node.createCommentReaction(
+            action, receiverName, receiverPostingId, id, {
+                ownerName: homeOwnerName, ownerFullName: homeOwnerFullName, ownerGender: homeOwnerGender,
+                ownerAvatar: toAvatarDescription(homeOwnerAvatar), negative, emoji
+            }
+        );
         const seniorAttributes = seniorName !== homeOwnerName
             ? extractAttributes(seniorReaction)
             : {negative, emoji};
-        yield* put(commentReactionSet(
+        dispatch(commentReactionSet(
             receiverName, id, receiverPostingId, {negative, emoji}, seniorAttributes, created.totals
         ).causedBy(action));
-        yield* call(Node.createRemoteCommentReaction, action, REL_HOME, receiverName, receiverPostingId, id,
-            {negative, emoji});
+        await Node.createRemoteCommentReaction(
+            action, REL_HOME, receiverName, receiverPostingId, id, {negative, emoji}
+        );
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* commentReactionLoadSaga(action: WithContext<CommentReactionLoadAction>) {
+async function commentReactionLoadSaga(action: WithContext<CommentReactionLoadAction>): Promise<void> {
+    await homeIntroduced();
     const {id} = action.payload;
     const {homeOwnerName} = action.context;
 
-    const {seniorName, comments: {receiverName, receiverPostingId}} = yield* select(state => ({
+    const {seniorName, comments: {receiverName, receiverPostingId}} = select(state => ({
         seniorName: getDetailedPosting(state)?.ownerName,
         comments: getCommentsState(state)
     }));
@@ -705,25 +715,26 @@ function* commentReactionLoadSaga(action: WithContext<CommentReactionLoadAction>
     }
     try {
         const reaction = extractAttributes(
-            yield* call(Node.getCommentReaction, action, receiverName, receiverPostingId, id, homeOwnerName));
+            await Node.getCommentReaction(action, receiverName, receiverPostingId, id, homeOwnerName));
         const seniorReaction = extractAttributes(
-            yield* call(Node.getCommentReaction, action, receiverName, receiverPostingId, id, seniorName));
-        const totals = yield* call(Node.getCommentReactionTotals, action, receiverName, receiverPostingId, id);
-        yield* put(commentReactionSet(
+            await Node.getCommentReaction(action, receiverName, receiverPostingId, id, seniorName));
+        const totals = await Node.getCommentReactionTotals(action, receiverName, receiverPostingId, id);
+        dispatch(commentReactionSet(
             receiverName, id, receiverPostingId, reaction, seniorReaction, totals
         ).causedBy(action));
     } catch (e) {
         if (Browser.isDevMode()) {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* commentReactionDeleteSaga(action: WithContext<CommentReactionDeleteAction>) {
+async function commentReactionDeleteSaga(action: WithContext<CommentReactionDeleteAction>): Promise<void> {
+    await homeIntroduced();
     const {id} = action.payload;
     const {homeOwnerName} = action.context;
 
-    const {seniorName, comments: {receiverName, receiverPostingId}, seniorReaction} = yield* select(state => ({
+    const {seniorName, comments: {receiverName, receiverPostingId}, seniorReaction} = select(state => ({
         seniorName: getDetailedPosting(state)?.ownerName,
         comments: getCommentsState(state),
         seniorReaction: getComment(state, id)?.seniorReaction
@@ -732,17 +743,17 @@ function* commentReactionDeleteSaga(action: WithContext<CommentReactionDeleteAct
         return;
     }
     try {
-        const totals = yield* call(Node.deleteCommentReaction, action, receiverName, receiverPostingId, id,
+        const totals = await Node.deleteCommentReaction(action, receiverName, receiverPostingId, id,
             homeOwnerName);
         const seniorAttributes = seniorName !== homeOwnerName
             ? extractAttributes(seniorReaction)
             : null;
-        yield* put(commentReactionSet(
+        dispatch(commentReactionSet(
             receiverName, id, receiverPostingId, null, seniorAttributes, totals
         ).causedBy(action));
-        yield* call(Node.deleteRemoteCommentReaction, action, REL_HOME, receiverName, receiverPostingId, id);
+        await Node.deleteRemoteCommentReaction(action, REL_HOME, receiverName, receiverPostingId, id);
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
@@ -754,10 +765,10 @@ function extractAttributes(reactionInfo: ReactionInfo | null | undefined): React
     return negative != null && emoji != null ? {negative, emoji} : null;
 }
 
-function* commentReplySaga(action: CommentReplyAction) {
+function commentReplySaga(action: CommentReplyAction): void {
     const {commentId, ownerName, ownerFullName, heading} = action.payload;
 
-    const {replied, repliedToName} = yield* select(state => ({
+    const {replied, repliedToName} = select(state => ({
         replied: isCommentComposerReplied(state),
         repliedToName: getCommentComposerRepliedToName(state)
     }));
@@ -765,7 +776,7 @@ function* commentReplySaga(action: CommentReplyAction) {
     const html = getWindowSelectionHtml();
 
     if (!replied) {
-        yield* put(commentRepliedToSet(commentId, ownerName, ownerFullName, heading).causedBy(action));
+        dispatch(commentRepliedToSet(commentId, ownerName, ownerFullName, heading).causedBy(action));
         document.dispatchEvent(uiEventCommentQuote(html || undefined));
     } else {
         if (html) {
@@ -778,11 +789,11 @@ function* commentReplySaga(action: CommentReplyAction) {
             document.dispatchEvent(uiEventCommentQuote(undefined, ownerName, ownerFullName));
         }
     }
-    yield* put(commentsScrollToComposer().causedBy(action));
+    dispatch(commentsScrollToComposer().causedBy(action));
 }
 
-function* glanceCommentLoadSaga(action: WithContext<GlanceCommentLoadAction>) {
-    const {receiverName, receiverPostingId, commentId, comment} = yield* select(
+async function glanceCommentLoadSaga(action: WithContext<GlanceCommentLoadAction>): Promise<void> {
+    const {receiverName, receiverPostingId, commentId, comment} = select(
         state => {
             const comments = getCommentsState(state);
             return {
@@ -798,16 +809,17 @@ function* glanceCommentLoadSaga(action: WithContext<GlanceCommentLoadAction>) {
         return;
     }
     if (comment != null) {
-        yield* put(glanceCommentLoaded(receiverName, comment).causedBy(action));
+        dispatch(glanceCommentLoaded(receiverName, comment).causedBy(action));
         return;
     }
 
     try {
-        const comment = yield* call(Node.getComment, action, receiverName, receiverPostingId, commentId, false,
-            ["comment.not-found"]);
-        yield* put(glanceCommentLoaded(receiverName, comment).causedBy(action));
+        const comment = await Node.getComment(
+            action, receiverName, receiverPostingId, commentId, false, ["comment.not-found"]
+        );
+        dispatch(glanceCommentLoaded(receiverName, comment).causedBy(action));
     } catch (e) {
-        yield* put(glanceCommentLoadFailed(receiverName, receiverPostingId).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(glanceCommentLoadFailed(receiverName, receiverPostingId).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }

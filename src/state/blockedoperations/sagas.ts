@@ -1,26 +1,29 @@
-import { call, select } from 'typed-redux-saga';
-
 import { BlockedByUserFilter, BlockedOperation, Node, PostingInfo, StoryInfo } from "api";
-import { isConnectedToHome } from "state/home/selectors";
-import { isAtHomeNode } from "state/node/selectors";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
+import { select } from "state/store-sagas";
+import { isConnectedToHome } from "state/home/selectors";
+import { isAtHomeNode } from "state/node/selectors";
 import { REL_HOME } from "util/rel-node-name";
 import { notNull } from "util/misc";
 
-export function* fillBlockedOperationsInStories(caller: WithContext<ClientAction> | null, stories: StoryInfo[]) {
+export async function fillBlockedOperationsInStories(
+    caller: WithContext<ClientAction> | null, stories: StoryInfo[]
+): Promise<void> {
     const postings: PostingInfo[] = stories
         .map(t => t.posting)
         .filter(notNull)
         .filter(p => p.receiverName != null && p.receiverPostingId != null);
-    yield* call(fillBlockedOperationsInPostings, caller, postings);
+    await fillBlockedOperationsInPostings(caller, postings);
 }
 
-export function* fillBlockedOperationsInPostings(caller: WithContext<ClientAction> | null, postings: PostingInfo[]) {
+export async function fillBlockedOperationsInPostings(
+    caller: WithContext<ClientAction> | null, postings: PostingInfo[]
+): Promise<void> {
     if (postings.length === 0) {
         return;
     }
-    const toBeFilled = yield* select(state => isConnectedToHome(state) && !isAtHomeNode(state));
+    const toBeFilled = select(state => isConnectedToHome(state) && !isAtHomeNode(state));
     if (!toBeFilled) {
         return;
     }
@@ -28,7 +31,7 @@ export function* fillBlockedOperationsInPostings(caller: WithContext<ClientActio
         blockedOperations: ["comment", "reaction"],
         postings: postings.map(p => ({nodeName: p.receiverName!, postingId: p.receiverPostingId!}))
     };
-    const blockedByUsers = yield* call(Node.searchBlockedByUsers, caller, REL_HOME, filter);
+    const blockedByUsers = await Node.searchBlockedByUsers(caller, REL_HOME, filter);
     if (blockedByUsers.length === 0) {
         return;
     }
@@ -48,11 +51,13 @@ export function* fillBlockedOperationsInPostings(caller: WithContext<ClientActio
     });
 }
 
-export function* fillBlockedOperations(caller: WithContext<ClientAction> | null, posting: PostingInfo) {
+export async function fillBlockedOperations(
+    caller: WithContext<ClientAction> | null, posting: PostingInfo
+): Promise<void> {
     if (posting.receiverName == null || posting.receiverPostingId == null) {
         return;
     }
-    const toBeFilled = yield* select(state => isConnectedToHome(state) && !isAtHomeNode(state));
+    const toBeFilled = select(state => isConnectedToHome(state) && !isAtHomeNode(state));
     if (!toBeFilled) {
         return;
     }
@@ -60,7 +65,7 @@ export function* fillBlockedOperations(caller: WithContext<ClientAction> | null,
         blockedOperations: ["comment", "reaction"],
         postings: [{nodeName: posting.receiverName, postingId: posting.receiverPostingId}]
     };
-    const blockedByUsers = yield* call(Node.searchBlockedByUsers, caller, REL_HOME, filter);
+    const blockedByUsers = await Node.searchBlockedByUsers(caller, REL_HOME, filter);
     blockedByUsers.forEach(bbu => addBlockedOperation(posting, bbu.blockedOperation));
 }
 

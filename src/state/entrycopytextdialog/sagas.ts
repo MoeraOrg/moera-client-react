@@ -1,9 +1,9 @@
-import { call, put, select } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
 import { executor } from "state/executor";
+import { dispatch, select } from "state/store-sagas";
 import { EntryCopyTextAction, openEntryCopyTextDialog } from "state/entrycopytextdialog/actions";
 import { flashBox } from "state/flashbox/actions";
 import { getNamingNameRoot } from "state/naming/selectors";
@@ -19,7 +19,7 @@ export default [
     executor("ENTRY_COPY_TEXT", null, entryCopyTextSaga)
 ];
 
-function* entryCopyTextSaga(action: EntryCopyTextAction) {
+async function entryCopyTextSaga(action: EntryCopyTextAction): Promise<void> {
     let {body: {text}, mode, nodeName, media} = action.payload;
 
     if (!text) {
@@ -33,7 +33,7 @@ function* entryCopyTextSaga(action: EntryCopyTextAction) {
     }
 
     if (mode === "ask") {
-        yield* put(openEntryCopyTextDialog(action.payload.body, nodeName, media).causedBy(action));
+        dispatch(openEntryCopyTextDialog(action.payload.body, nodeName, media).causedBy(action));
         return;
     }
 
@@ -41,7 +41,7 @@ function* entryCopyTextSaga(action: EntryCopyTextAction) {
     if (mode === "text") {
         text = clearHtml(text);
     } else {
-        const {rootPage, carte} = yield* select(state => ({
+        const {rootPage, carte} = select(state => ({
             rootPage: getNamingNameRoot(state, nodeName),
             carte: getCurrentViewMediaCarte(state)
         }));
@@ -49,9 +49,9 @@ function* entryCopyTextSaga(action: EntryCopyTextAction) {
             text = replaceMediaUrls(text, rootPage, carte, media);
         }
     }
-    yield* call(clipboardCopy, text);
+    await clipboardCopy(text);
     if (!Browser.isAndroidBrowser()) {
-        yield* put(flashBox(i18n.t("text-copied")).causedBy(action));
+        dispatch(flashBox(i18n.t("text-copied")).causedBy(action));
     }
 }
 

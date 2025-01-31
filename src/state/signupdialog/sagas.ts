@@ -1,11 +1,10 @@
-import { call, delay, put, select } from 'typed-redux-saga';
-
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import PROVIDERS, { Provider } from "providers";
 import { CLIENT_SETTINGS_PREFIX, Naming, Node, NodeApiError, SettingInfo } from "api";
 import { Storage } from "storage";
 import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";
+import { barrier, dispatch, select } from "state/store-sagas";
 import { connectedToHome, homeOwnerSet } from "state/home/actions";
 import { registerNameSucceeded } from "state/nodename/actions";
 import {
@@ -26,6 +25,7 @@ import { executor } from "state/executor";
 import { serializeSheriffs } from "util/sheriff";
 import { rootUrl } from "util/url";
 import { REL_HOME } from "util/rel-node-name";
+import { ClientState } from "state/state";
 
 export default [
     executor("SIGN_UP", "", signUpSaga),
@@ -42,25 +42,25 @@ function getProvider(name: string): Provider {
     return provider;
 }
 
-function* signUpSaga(action: WithContext<SignUpAction>) {
+async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
     const {
         language, provider: providerName, name, domain, password, email, googlePlayAllowed, onError
     } = action.payload;
 
-    const stage = yield* select(state => state.signUpDialog.stage);
+    const stage = select().signUpDialog.stage;
     const provider = getProvider(providerName);
 
     let nodeDomainName;
     if (!domain) {
         try {
-            const domain = yield* call(Node.isDomainAvailable, action, provider.controller, name);
+            const domain = await Node.isDomainAvailable(action, provider.controller, name);
             nodeDomainName = domain.name;
         } catch (e) {
-            yield* put(signUpFailed(SIGN_UP_STAGE_DOMAIN).causedBy(action));
+            dispatch(signUpFailed(SIGN_UP_STAGE_DOMAIN).causedBy(action));
             if (e instanceof NodeApiError) {
                 onError("domain", e.message);
             } else {
-                yield* put(errorThrown(e));
+                dispatch(errorThrown(e));
             }
             return;
         }
@@ -70,14 +70,16 @@ function* signUpSaga(action: WithContext<SignUpAction>) {
 
     if (stage <= SIGN_UP_STAGE_DOMAIN) {
         try {
-            yield* call(Node.createDomain, action, provider.controller, {name: nodeDomainName},
-                ["domain.already-exists", "domainInfo.name.blank", "domainInfo.name.wrong-hostname"]);
+            await Node.createDomain(
+                action, provider.controller, {name: nodeDomainName},
+                ["domain.already-exists", "domainInfo.name.blank", "domainInfo.name.wrong-hostname"]
+            );
         } catch (e) {
-            yield* put(signUpFailed(SIGN_UP_STAGE_DOMAIN).causedBy(action));
+            dispatch(signUpFailed(SIGN_UP_STAGE_DOMAIN).causedBy(action));
             if (e instanceof NodeApiError) {
                 onError("domain", e.message);
             } else {
-                yield* put(errorThrown(e));
+                dispatch(errorThrown(e));
             }
             return;
         }
@@ -88,13 +90,12 @@ function* signUpSaga(action: WithContext<SignUpAction>) {
 
     if (stage <= SIGN_UP_STAGE_PASSWORD) {
         try {
-            yield* call(Node.createCredentials, action, rootLocation, {login, password},
-                ["credentials.already-created"]);
+            await Node.createCredentials(action, rootLocation, {login, password}, ["credentials.already-created"]);
         } catch (e) {
             if (!(e instanceof NodeApiError)) {
-                yield* put(errorThrown(e));
+                dispatch(errorThrown(e));
             }
-            yield* put(signUpFailed(SIGN_UP_STAGE_PASSWORD).causedBy(action));
+            dispatch(signUpFailed(SIGN_UP_STAGE_PASSWORD).causedBy(action));
             return;
         }
     }
@@ -102,19 +103,20 @@ function* signUpSaga(action: WithContext<SignUpAction>) {
     if (stage <= SIGN_UP_STAGE_CONNECT) {
         let info;
         try {
-            info = yield* call(Node.createToken, action, rootLocation, {login, password},
-                ["credentials.login-incorrect", "credentials.not-created"]);
+            info = await Node.createToken(
+                action, rootLocation, {login, password}, ["credentials.login-incorrect", "credentials.not-created"]
+            );
         } catch (e) {
             if (!(e instanceof NodeApiError)) {
-                yield* put(errorThrown(e));
+                dispatch(errorThrown(e));
             }
-            yield* put(signUpFailed(SIGN_UP_STAGE_CONNECT).causedBy(action));
+            dispatch(signUpFailed(SIGN_UP_STAGE_CONNECT).causedBy(action));
             return;
         }
 
         Storage.storeConnectionData(rootLocation, null, null, null, login, info.token, info.permissions);
-        const homeLocation = yield* select(getHomeRootLocation);
-        yield* put(connectedToHome({
+        const homeLocation = select(getHomeRootLocation);
+        dispatch(connectedToHome({
             location: rootLocation,
             login,
             token: info.token,
@@ -125,90 +127,86 @@ function* signUpSaga(action: WithContext<SignUpAction>) {
 
     if (stage <= SIGN_UP_STAGE_PROFILE) {
         try {
-            yield* call(waitForConnection, rootLocation);
+            await connectionEstablished(rootLocation);
             if (email) {
-                yield* call(Node.updateProfile, action, rootLocation, {email});
+                await Node.updateProfile(action, rootLocation, {email});
             }
             const settings: SettingInfo[] = [{name: CLIENT_SETTINGS_PREFIX + "language", value: language}];
             if (googlePlayAllowed) {
                 settings.push({name: "sheriffs.timeline", value: serializeSheriffs([SHERIFF_GOOGLE_PLAY_TIMELINE])});
             }
-            yield* call(Node.updateSettings, action, rootLocation, settings);
+            await Node.updateSettings(action, rootLocation, settings);
         } catch (e) {
             if (!(e instanceof NodeApiError)) {
-                yield* put(errorThrown(e));
+                dispatch(errorThrown(e));
             }
-            yield* put(signUpFailed(SIGN_UP_STAGE_PROFILE).causedBy(action));
+            dispatch(signUpFailed(SIGN_UP_STAGE_PROFILE).causedBy(action));
             return;
         }
     }
 
     if (stage <= SIGN_UP_STAGE_NAME) {
         try {
-            yield* call(waitForConnection, rootLocation);
-            const free = yield* call(Naming.isFree, action, name);
+            await connectionEstablished(rootLocation);
+            const free = await Naming.isFree(action, name);
             if (!free) {
                 onError("name", "Name is already taken");
-                yield* put(signUpFailed(SIGN_UP_STAGE_NAME).causedBy(action));
+                dispatch(signUpFailed(SIGN_UP_STAGE_NAME).causedBy(action));
                 return;
             }
-            const secret = yield* call(Node.createNodeName, action, REL_HOME, {name});
-            yield* put(homeOwnerSet(null, true, null, null).causedBy(action));
-            yield* put(signedUp().causedBy(action));
-            yield* put(registerNameSucceeded(secret.name, secret.mnemonic!).causedBy(action));
+            const secret = await Node.createNodeName(action, REL_HOME, {name});
+            dispatch(homeOwnerSet(null, true, null, null).causedBy(action));
+            dispatch(signedUp().causedBy(action));
+            dispatch(registerNameSucceeded(secret.name, secret.mnemonic!).causedBy(action));
         } catch (e) {
-            yield* put(signUpFailed(SIGN_UP_STAGE_NAME).causedBy(action));
-            yield* put(errorThrown(e));
+            dispatch(signUpFailed(SIGN_UP_STAGE_NAME).causedBy(action));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* waitForConnection(rootLocation: string) {
-    // FIXME ugly, but there is no way yet to wait for an event
-    for (let i = 0; i < 5; i++) {
-        const homeLocation = yield* select(getHomeRootLocation);
-        console.log("Waiting for connection", i, homeLocation, rootLocation);
-        if (homeLocation === rootLocation) {
-            break;
-        }
-        yield* delay(1000);
+async function connectionEstablished(rootLocation: string): Promise<void> {
+    const condition = (state: ClientState) => getHomeRootLocation(state) === rootLocation;
+
+    if (!condition(select())) {
+        await barrier("*", condition);
     }
 }
 
-function* signUpNameVerifySaga(action: SignUpNameVerifyAction) {
+async function signUpNameVerifySaga(action: SignUpNameVerifyAction): Promise<void> {
     const {name, onVerify} = action.payload;
 
     try {
-        const free = yield* call(Naming.isFree, action, name);
+        const free = await Naming.isFree(action, name);
         onVerify(name, free);
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* signUpFindDomainSaga(action: WithContext<SignUpFindDomainAction>) {
+async function signUpFindDomainSaga(action: WithContext<SignUpFindDomainAction>): Promise<void> {
     const {provider, name, onFound} = action.payload;
 
     try {
-        const domain = yield* call(Node.isDomainAvailable, action, getProvider(provider).controller, name);
+        const domain = await Node.isDomainAvailable(action, getProvider(provider).controller, name);
         onFound(provider, name, domain.name);
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* signUpDomainVerifySaga(action: WithContext<SignUpDomainVerifyAction>) {
+async function signUpDomainVerifySaga(action: WithContext<SignUpDomainVerifyAction>): Promise<void> {
     const {provider: providerName, name, onVerify} = action.payload;
 
     const provider = getProvider(providerName);
     const domain = name + "." + provider.domain;
 
     try {
-        yield* call(Node.getDomain, action, provider.controller, domain, ["domain.not-found"], false);
+        await Node.getDomain(action, provider.controller, domain, ["domain.not-found"], false);
         onVerify(name, false);
     } catch (e) {
         if (!(e instanceof NodeApiError)) {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         }
         onVerify(name, true);
     }

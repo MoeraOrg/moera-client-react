@@ -11,11 +11,13 @@ export function select<T>(selector?: (state: ClientState) => T): T | ClientState
 export const dispatch = (action: ClientAction): void =>
     window.store.dispatch(action);
 
+export type BarrierActionType = ClientActionType | "*";
+
 export type BarrierCondition = true | ((state: ClientState, signal: WithContext<ClientAction>) => boolean);
 
 export function barrier(
-    actions: ClientActionType | ClientActionType[], condition: BarrierCondition = true
-): Promise<void> {
+    actions: BarrierActionType | BarrierActionType[], condition: BarrierCondition = true, timeoutMs?: number
+): Promise<boolean> {
     actions = Array.isArray(actions) ? actions : [actions];
-    return window.middleware.barrier(actions, condition);
+    return window.middleware.barrier(actions, condition, timeoutMs);
 }

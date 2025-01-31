@@ -1,7 +1,6 @@
-import { call, put, select } from 'typed-redux-saga';
-
 import { DraftText, Node, NodeName, PostingInfo, PrincipalValue, SourceFormat } from "api";
 import { WithContext } from "state/action-types";
+import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
 import { PostingReplyAction, postingReplyFailed } from "state/postingreply/actions";
 import { getPosting } from "state/postings/selectors";
@@ -22,13 +21,13 @@ export default [
     executor("POSTING_REPLY", "", postingReplySaga)
 ];
 
-function* postingReplySaga(action: WithContext<PostingReplyAction>) {
+async function postingReplySaga(action: WithContext<PostingReplyAction>): Promise<void> {
     const {
         posting, nodeRootPage, homeOwnerName, homeRootPage, homeRootLocation, subjectPrefix, preambleTemplate,
         preambleTemplateHtml, quoteAll, visibilityDefault, sourceFormatDefault, commentsVisibilityDefault,
         commentAdditionDefault, reactionsEnabledDefault, reactionsNegativeEnabledDefault, reactionsPositiveDefault,
         reactionsNegativeDefault, reactionsVisibleDefault, reactionTotalsVisibleDefault
-    } = yield* select(state => ({
+    } = select(state => ({
             posting: getPosting(state, state.postingReply.postingId, REL_CURRENT),
             nodeRootPage: getNodeRootPage(state),
             homeOwnerName: getHomeOwnerName(state),
@@ -69,7 +68,7 @@ function* postingReplySaga(action: WithContext<PostingReplyAction>) {
                     `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(posting.ownerName)}" data-href="/">`
                     + `${htmlEntities(name)}</a>`;
                 const preamble = preambleTemplateHtml
-                    .replace("%POST%", yield* call(postingHref, action, posting, nodeRootPage))
+                    .replace("%POST%", await postingHref(action, posting, nodeRootPage))
                     .replace("%USER%", mention);
                 if (sourceFormatDefault === "html/visual") {
                     text = html ? `<p>${preamble}</p><blockquote>${html}</blockquote>` : `<p>${preamble}</p>`
@@ -82,7 +81,7 @@ function* postingReplySaga(action: WithContext<PostingReplyAction>) {
             case "plain-text":
             case "markdown": {
                 const preamble = preambleTemplate
-                    .replace("%POST%", yield* call(postingHref, action, posting, nodeRootPage))
+                    .replace("%POST%", await postingHref(action, posting, nodeRootPage))
                     .replace("%USER%", mentionName(posting.ownerName, posting.ownerFullName));
                 text = htmlToMarkdown(html) ?? "";
                 text = text ? `${preamble}\n>>>\n${text}\n>>>\n` : `${preamble}\n`
@@ -113,23 +112,23 @@ function* postingReplySaga(action: WithContext<PostingReplyAction>) {
                 addNegativeReaction: reactionsNegativeEnabledDefault ? "public" : "none"
             }
         };
-        const draft = yield* call(Node.createDraft, action, REL_HOME, draftText);
+        const draft = await Node.createDraft(action, REL_HOME, draftText);
         if (nodeRootPage !== homeRootPage) {
             if (homeRootLocation != null) {
-                yield* put(initFromLocation(
+                dispatch(initFromLocation(
                     homeOwnerName, homeRootLocation, "/compose", `?draft=${draft.id}`, null
                 ).causedBy(action))
             }
         } else {
-            yield* put(goToLocation("/compose", `?draft=${draft.id}`, null).causedBy(action))
+            dispatch(goToLocation("/compose", `?draft=${draft.id}`, null).causedBy(action))
         }
     } catch (e) {
-        yield* put(postingReplyFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(postingReplyFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function replySubject(subject?: string | null, subjectPrefix?: string | null) {
+function replySubject(subject?: string | null, subjectPrefix?: string | null): string | null | undefined {
     if (!subject || !subjectPrefix) {
         return subject;
     }
@@ -144,11 +143,11 @@ function replySubject(subject?: string | null, subjectPrefix?: string | null) {
     return subjectPrefix + "[" + (parseInt(m[1]) + 1) + "] " + m[2];
 }
 
-function* postingHref(action: PostingReplyAction, posting: PostingInfo, rootNodePage: string) {
+async function postingHref(action: PostingReplyAction, posting: PostingInfo, rootNodePage: string): Promise<string> {
     if (posting.receiverName == null) {
         return `${rootNodePage}/post/${posting.id}`;
     } else {
-        const rootReceiverPage = yield* call(getNodeUri, action, posting.receiverName);
+        const rootReceiverPage = await getNodeUri(action, posting.receiverName);
         return `${rootReceiverPage}/post/${posting.receiverPostingId}`;
     }
 }

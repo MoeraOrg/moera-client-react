@@ -104,11 +104,11 @@ export const isAndroidGooglePlay = (): boolean =>
 export const isMac = (): boolean =>
     userAgentOs === "mac";
 
-export function changeLanguage(lang: string | null | undefined) {
+export async function changeLanguage(lang: string | null | undefined): Promise<void> {
     if (window.Android && window.Android.getApiVersion() >= 2) {
         window.Android.changeLanguage(lang ?? findPreferredLanguage());
     }
-    i18n.changeLanguage(lang ?? undefined);
+    await i18n.changeLanguage(lang ?? undefined);
 }
 
 export function disableBodyScroll(): void {

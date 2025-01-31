@@ -1,17 +1,17 @@
-import { delay, put } from 'typed-redux-saga';
-
 import { FlashBoxAction, flashBoxClose, flashBoxDismiss } from "state/flashbox/actions";
 import { executor } from "state/executor";
+import { dispatch } from "state/store-sagas";
+import { delay } from "util/misc";
 
 export default [
     executor("FLASH_BOX", null, flashBoxSaga)
 ];
 
-function* flashBoxSaga(action: FlashBoxAction) {
+async function flashBoxSaga(action: FlashBoxAction): Promise<void> {
     const {short} = action.payload;
 
-    yield* delay(!short ? 1500 : 1000);
-    yield* put(flashBoxDismiss().causedBy(action));
-    yield* delay(1000);
-    yield* put(flashBoxClose().causedBy(action));
+    await delay(!short ? 1500 : 1000);
+    dispatch(flashBoxDismiss().causedBy(action));
+    await delay(1000);
+    dispatch(flashBoxClose().causedBy(action));
 }

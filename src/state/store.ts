@@ -51,8 +51,6 @@ import signUpDialog from "state/signupdialog/reducer";
 import quickTips from "state/quicktips/reducer";
 import refresh from "state/refresh/reducer";
 
-import createSagaMiddleware from 'redux-saga';
-import { spawn } from 'typed-redux-saga';
 import { pulseSaga, signalPostInitSaga } from "state/pulse/sagas";
 import navigationExecutors from "state/navigation/sagas";
 import errorExecutors from "state/error/sagas";
@@ -259,16 +257,9 @@ const executors = collectExecutors(
     refreshExecutors
 );
 
-function* combinedSaga() {
-    yield* spawn(signalPostInitSaga);
-    yield* spawn(pulseSaga);
-
-    yield* invokeExecutors(executors);
-}
-
 export default function initStore(): void {
-    const sagaMiddleware = createSagaMiddleware();
-    window.middleware = createStoreMiddleware(triggers);
-    window.store = legacy_createStore(combinedReducer, applyMiddleware(window.middleware, sagaMiddleware));
-    sagaMiddleware.run(combinedSaga);
+    window.middleware = createStoreMiddleware(triggers, executors);
+    window.store = legacy_createStore(combinedReducer, applyMiddleware(window.middleware));
+    signalPostInitSaga();
+    pulseSaga();
 }

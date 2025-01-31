@@ -1,15 +1,14 @@
-import { call, put, select } from 'typed-redux-saga';
-
 import { Node, PostingInfo, StoryInfo } from "api";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
+import { dispatch, select } from "state/store-sagas";
 import { getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
 import { postingSubscriptionSet } from "state/postings/actions";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { notNull } from "util/misc";
 
-export function* fillSubscriptions(action: WithContext<ClientAction>, stories: StoryInfo[]) {
-    const {connectedToHome, homeOwnerName} = yield* select(state => ({
+export async function fillSubscriptions(action: WithContext<ClientAction>, stories: StoryInfo[]): Promise<void> {
+    const {connectedToHome, homeOwnerName} = select(state => ({
         connectedToHome: isConnectedToHome(state),
         homeOwnerName: getHomeOwnerName(state)
     }));
@@ -33,21 +32,22 @@ export function* fillSubscriptions(action: WithContext<ClientAction>, stories: S
     }
 
     const remotePostings = postings.map(t => ({nodeName: t.nodeName!, postingId: t.postingId!}));
-    const subscriptions = yield* call(Node.searchSubscriptions, action, REL_HOME,
-        {type: "posting-comments" as const, postings: remotePostings});
+    const subscriptions = await Node.searchSubscriptions(
+        action, REL_HOME, {type: "posting-comments" as const, postings: remotePostings}
+    );
     const subscriptionMap = new Map(subscriptions.map(sr => [`${sr.remoteNodeName} ${sr.remotePostingId}`, sr]));
 
     for (const t of postings) {
         const key = `${t.nodeName} ${t.postingId}`;
         const subscription = subscriptionMap.get(key);
         if (subscription != null) {
-            yield* put(postingSubscriptionSet(t.id, "posting-comments", subscription.id, REL_CURRENT).causedBy(action));
+            dispatch(postingSubscriptionSet(t.id, "posting-comments", subscription.id, REL_CURRENT).causedBy(action));
         }
     }
 }
 
-export function* fillSubscription(action: WithContext<ClientAction>, posting: PostingInfo) {
-    const {connectedToHome, homeOwnerName} = yield* select(state => ({
+export async function fillSubscription(action: WithContext<ClientAction>, posting: PostingInfo): Promise<void> {
+    const {connectedToHome, homeOwnerName} = select(state => ({
         connectedToHome: isConnectedToHome(state),
         homeOwnerName: getHomeOwnerName(state)
     }));
@@ -60,9 +60,10 @@ export function* fillSubscription(action: WithContext<ClientAction>, posting: Po
         return;
     }
     const remotePostings = [{nodeName, postingId}];
-    const subscriptions = yield* call(Node.searchSubscriptions, action, REL_HOME,
-        {type: "posting-comments" as const, postings: remotePostings});
+    const subscriptions = await Node.searchSubscriptions(
+        action, REL_HOME, {type: "posting-comments" as const, postings: remotePostings}
+    );
     for (const subscription of subscriptions) {
-        yield* put(postingSubscriptionSet(posting.id, "posting-comments", subscription.id, REL_CURRENT).causedBy(action));
+        dispatch(postingSubscriptionSet(posting.id, "posting-comments", subscription.id, REL_CURRENT).causedBy(action));
     }
 }

@@ -1,9 +1,7 @@
-import { call, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
 import { Node, NodeApiError, selectApi } from "api";
 import { Storage } from "storage";
-import { ClientState } from "state/state";
 import { getNodeUri } from "state/naming/sagas";
 import { messageBox } from "state/messagebox/actions";
 import {
@@ -16,6 +14,7 @@ import {
 } from "state/home/actions";
 import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";
+import { dispatch, select } from "state/store-sagas";
 import { getHomeConnectionData, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
 import { isAtNode } from "state/node/selectors";
 import { goHomeLocation } from "state/navigation/actions";
@@ -29,10 +28,10 @@ export default [
     executor("HOME_OWNER_VERIFY", null, homeOwnerVerifySaga)
 ];
 
-function* connectToHomeFailure(action: WithContext<ConnectToHomeAction>, error: any) {
+function connectToHomeFailure(action: WithContext<ConnectToHomeAction>, error: any): void {
     const {location, login} = action.payload;
 
-    yield* put(connectionToHomeFailed().causedBy(action));
+    dispatch(connectionToHomeFailed().causedBy(action));
     let message = typeof(error) === "string" ? error : error.message;
     if (error instanceof NodeApiError) {
         switch (error.errorCode) {
@@ -41,7 +40,7 @@ function* connectToHomeFailure(action: WithContext<ConnectToHomeAction>, error: 
                 break;
             case "credentials.reset-token-expired":
                 message = i18n.t("reset-token-expired");
-                yield* put(connectDialogSetForm(location, login, "forgot").causedBy(action));
+                dispatch(connectDialogSetForm(location, login, "forgot").causedBy(action));
                 break;
             case "credentials.login-incorrect":
                 message = i18n.t("login-incorrect");
@@ -50,35 +49,38 @@ function* connectToHomeFailure(action: WithContext<ConnectToHomeAction>, error: 
                 break;
         }
     }
-    yield* put(messageBox(message).causedBy(action));
+    dispatch(messageBox(message).causedBy(action));
 }
 
-function* connectToHomeSaga(action: WithContext<ConnectToHomeAction>) {
+async function connectToHomeSaga(action: WithContext<ConnectToHomeAction>): Promise<void> {
     const {location, assign, login, password, oldPassword, resetToken} = action.payload;
 
     let info;
     try {
         if (assign) {
-            yield* call(Node.createCredentials, action, location, {login, password}, ["credentials.already-created"]);
+            await Node.createCredentials(action, location, {login, password}, ["credentials.already-created"]);
         } else if (oldPassword || resetToken) {
-            yield* call(Node.updateCredentials, action, location, {token: resetToken, oldPassword, login, password},
-                ["credentials.wrong-reset-token", "credentials.reset-token-expired", "credentials.login-incorrect"]);
+            await Node.updateCredentials(
+                action, location, {token: resetToken, oldPassword, login, password},
+                ["credentials.wrong-reset-token", "credentials.reset-token-expired", "credentials.login-incorrect"]
+            );
         }
-        info = yield* call(Node.createToken, action, location, {login, password},
-            ["credentials.login-incorrect", "credentials.not-created"]);
+        info = await Node.createToken(
+            action, location, {login, password}, ["credentials.login-incorrect", "credentials.not-created"]
+        );
     } catch (e) {
-        yield* call(connectToHomeFailure, action, e);
+        connectToHomeFailure(action, e);
         return;
     }
 
-    const nodeUrl = normalizeUrl((yield* call(selectApi, action, location)).rootLocation);
+    const nodeUrl = normalizeUrl((await selectApi(action, location)).rootLocation);
     if (nodeUrl == null) {
-        yield* call(connectToHomeFailure, action, "Node URL not found");
+        connectToHomeFailure(action, "Node URL not found");
         return;
     }
     Storage.storeConnectionData(nodeUrl, null, null, null, login, info.token, info.permissions);
-    const homeLocation = yield* select(getHomeRootLocation);
-    yield* put(connectedToHome({
+    const homeLocation = select(getHomeRootLocation);
+    dispatch(connectedToHome({
         location: nodeUrl,
         login,
         token: info.token,
@@ -86,22 +88,21 @@ function* connectToHomeSaga(action: WithContext<ConnectToHomeAction>) {
         connectionSwitch: homeLocation != null && nodeUrl !== homeLocation
     }).causedBy(action));
 
-    const atNode = yield* select(isAtNode);
+    const atNode = select(isAtNode);
     if (!atNode) {
-        yield* put(goHomeLocation("/news", null, null));
+        dispatch(goHomeLocation("/news", null, null));
     }
 }
 
-function* homeOwnerVerifySaga(action: WithContext<HomeOwnerVerifyAction>) {
+async function homeOwnerVerifySaga(action: WithContext<HomeOwnerVerifyAction>): Promise<void> {
     try {
-        const {nodeName = null, nodeNameChanging, fullName = null, avatar = null} =
-            yield* call(Node.whoAmI, action, REL_HOME);
-        yield* put(homeOwnerSet(nodeName, nodeNameChanging ?? false, fullName, avatar).causedBy(action));
+        const {nodeName = null, nodeNameChanging, fullName = null, avatar = null} = await Node.whoAmI(action, REL_HOME);
+        dispatch(homeOwnerSet(nodeName, nodeNameChanging ?? false, fullName, avatar).causedBy(action));
 
         const {
             connection: {location, login, token, permissions},
             homeRootPage
-        } = yield* select((state: ClientState) => ({
+        } = select(state => ({
             connection: getHomeConnectionData(state),
             homeRootPage: getHomeRootPage(state)
         }));
@@ -112,10 +113,10 @@ function* homeOwnerVerifySaga(action: WithContext<HomeOwnerVerifyAction>) {
         if (nodeName == null) {
             return;
         }
-        const nodeUri = normalizeUrl(yield* call(getNodeUri, action, nodeName));
+        const nodeUri = normalizeUrl(await getNodeUri(action, nodeName));
         const correct = normalizeUrl(nodeUri) === homeRootPage;
-        yield* put(homeOwnerVerified(nodeName, correct).causedBy(action));
+        dispatch(homeOwnerVerified(nodeName, correct).causedBy(action));
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }

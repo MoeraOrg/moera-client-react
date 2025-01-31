@@ -1,5 +1,3 @@
-import { call, put, select } from 'typed-redux-saga';
-
 import { Node } from "api";
 import { Storage } from "storage";
 import {
@@ -9,8 +7,9 @@ import {
     homeFriendGroupsLoaded, HomeInvisibleUsersLoadAction,
     homeInvisibleUsersLoaded
 } from "state/home/actions";
-import { homeIntroduced } from "state/init-selectors";
+import { homeIntroduced } from "state/init-barriers";
 import { WithContext } from "state/action-types";
+import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
 import { getHomeInvisibleUsersChecksum } from "state/home/selectors";
 import { executor } from "state/executor";
@@ -18,43 +17,45 @@ import { REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("HOME_AVATARS_LOAD", "", homeAvatarsLoadSaga),
-    executor("HOME_FRIEND_GROUPS_LOAD", "", homeFriendGroupsLoadSaga, homeIntroduced),
-    executor("HOME_INVISIBLE_USERS_LOAD", "", homeInvisibleUsersLoadSaga, homeIntroduced)
+    executor("HOME_FRIEND_GROUPS_LOAD", "", homeFriendGroupsLoadSaga),
+    executor("HOME_INVISIBLE_USERS_LOAD", "", homeInvisibleUsersLoadSaga)
 ];
 
-function* homeAvatarsLoadSaga(action: WithContext<HomeAvatarsLoadAction>) {
+async function homeAvatarsLoadSaga(action: WithContext<HomeAvatarsLoadAction>): Promise<void> {
     try {
-        const avatars = yield* call(Node.getAvatars, action, REL_HOME);
-        yield* put(homeAvatarsLoaded(avatars).causedBy(action));
+        const avatars = await Node.getAvatars(action, REL_HOME);
+        dispatch(homeAvatarsLoaded(avatars).causedBy(action));
     } catch (e) {
-        yield* put(homeAvatarsLoadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(homeAvatarsLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* homeFriendGroupsLoadSaga(action: WithContext<HomeFriendGroupsLoadAction>) {
+async function homeFriendGroupsLoadSaga(action: WithContext<HomeFriendGroupsLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const friendGroups = yield* call(Node.getFriendGroups, action, REL_HOME);
-        yield* put(homeFriendGroupsLoaded(friendGroups).causedBy(action));
+        const friendGroups = await Node.getFriendGroups(action, REL_HOME);
+        dispatch(homeFriendGroupsLoaded(friendGroups).causedBy(action));
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* homeInvisibleUsersLoadSaga(action: WithContext<HomeInvisibleUsersLoadAction>) {
-    const prevChecksum = yield* select(getHomeInvisibleUsersChecksum);
+async function homeInvisibleUsersLoadSaga(action: WithContext<HomeInvisibleUsersLoadAction>): Promise<void> {
+    await homeIntroduced();
+    const prevChecksum = select(getHomeInvisibleUsersChecksum);
     try {
-        const checksums = yield* call(Node.getBlockedUsersChecksums, action, REL_HOME);
+        const checksums = await Node.getBlockedUsersChecksums(action, REL_HOME);
         if (checksums.visibility === prevChecksum) {
             return;
         }
-        const blockedUsers = yield* call(Node.searchBlockedUsers, action, REL_HOME, {
+        const blockedUsers = await Node.searchBlockedUsers(action, REL_HOME, {
             blockedOperations: ["visibility" as const],
             strict: true
         });
-        yield* put(homeInvisibleUsersLoaded(checksums.visibility, blockedUsers).causedBy(action));
+        dispatch(homeInvisibleUsersLoaded(checksums.visibility, blockedUsers).causedBy(action));
         Storage.storeInvisibleUsers(checksums.visibility, blockedUsers);
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }

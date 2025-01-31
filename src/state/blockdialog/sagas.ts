@@ -1,4 +1,3 @@
-import { all, call, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
 import { executor } from "state/executor";
@@ -14,7 +13,7 @@ import {
     BlockedUserUnsubscribeAction
 } from "state/blockdialog/actions";
 import { blockedUsersAdded, blockedUsersDeleted } from "state/blockedoperations/actions";
-import { ClientState } from "state/state";
+import { dispatch, select } from "state/store-sagas";
 import { getSetting } from "state/settings/selectors";
 import { ClientAction } from "state/action";
 import { feedUnsubscribe } from "state/feeds/actions";
@@ -29,7 +28,7 @@ export default [
     executor("BLOCKED_USER_UNSUBSCRIBE", "", blockedUserUnsubscribeSaga)
 ];
 
-function* blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>) {
+async function blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>): Promise<void> {
     const {
         nodeName, formattedName, entryNodeName, entryPostingId, prevBlockedUsers, blockedOperations, deadline,
         reasonSrc, reasonSrcFormat
@@ -41,9 +40,9 @@ function* blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>) {
     const targetPostingId = entryNodeName == null || entryNodeName === homeOwnerName ? null : entryPostingId;
 
     try {
-        yield* all(prevBlockedUsers.map(blockedUser => call(deleteBlockedUserIfExists, action, blockedUser.id)));
-        const blockedUsers = yield* all(
-            blockedOperations.map(blockedOperation => call(Node.blockUser, action, REL_HOME, {
+        await Promise.all(prevBlockedUsers.map(blockedUser => deleteBlockedUserIfExists(action, blockedUser.id)));
+        const blockedUsers = await Promise.all(
+            blockedOperations.map(blockedOperation => Node.blockUser(action, REL_HOME, {
                 blockedOperation,
                 nodeName,
                 entryId: ownEntryId,
@@ -54,41 +53,39 @@ function* blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>) {
                 reasonSrcFormat
             }))
         );
-        yield* put(blockDialogSubmitted(nodeName).causedBy(action));
+        dispatch(blockDialogSubmitted(nodeName).causedBy(action));
 
         if (prevBlockedUsers.length > 0) {
-            yield* put(blockedUsersDeleted(prevBlockedUsers).causedBy(action));
+            dispatch(blockedUsersDeleted(prevBlockedUsers).causedBy(action));
         }
         if (blockedUsers.length > 0) {
-            yield* put(blockedUsersAdded(blockedUsers).causedBy(action));
-            yield* put(blockedUserUnfriend(nodeName, formattedName).causedBy(action));
+            dispatch(blockedUsersAdded(blockedUsers).causedBy(action));
+            dispatch(blockedUserUnfriend(nodeName, formattedName).causedBy(action));
         }
     } catch (e) {
-        yield* put(blockDialogSubmitFailed().causedBy(action));
+        dispatch(blockDialogSubmitFailed().causedBy(action));
     }
 }
 
-function* deleteBlockedUserIfExists(action: WithContext<BlockDialogSubmitAction>, id: string) {
+async function deleteBlockedUserIfExists(action: WithContext<BlockDialogSubmitAction>, id: string): Promise<void> {
     try {
-        return yield* call(Node.unblockUser, action, REL_HOME, id, ["blocked-user.not-found"]);
+        await Node.unblockUser(action, REL_HOME, id, ["blocked-user.not-found"]);
     } catch (e) {
         if (!(e instanceof NodeApiError)) {
             throw e;
         }
-        return null;
     }
 }
 
-function* blockedUserUnfriendSaga(action: WithContext<BlockedUserUnfriendAction>) {
+async function blockedUserUnfriendSaga(action: WithContext<BlockedUserUnfriendAction>): Promise<void> {
     const {nodeName, formattedName} = action.payload;
 
-    const {groups} = yield* call(Node.getFriend, action, REL_HOME, nodeName);
+    const {groups} = await Node.getFriend(action, REL_HOME, nodeName);
     if (groups?.find(g => g.title === "t:friends") == null) {
         return;
     }
 
-    const unfriend = yield* select((state: ClientState) =>
-        getSetting(state, "blocked-users.unfriend-on-block") as string);
+    const unfriend = select(state => getSetting(state, "blocked-users.unfriend-on-block") as string);
 
     if (unfriend === "ask") {
         const onYes = (dontShowAgain: boolean): ClientAction[] => {
@@ -116,7 +113,7 @@ function* blockedUserUnfriendSaga(action: WithContext<BlockedUserUnfriendAction>
             return actions;
         }
 
-        yield* put(confirmBox({
+        dispatch(confirmBox({
             message: i18n.t("still-friend-blocked-user", {name: formattedName}),
             onYes,
             onNo,
@@ -124,22 +121,21 @@ function* blockedUserUnfriendSaga(action: WithContext<BlockedUserUnfriendAction>
             dontShowAgainBox: true
         }).causedBy(action));
     } else if (unfriend === "yes") {
-        yield* put(friendshipUpdate(nodeName, null).causedBy(action));
+        dispatch(friendshipUpdate(nodeName, null).causedBy(action));
     }
 }
 
-function* blockedUserUnsubscribeSaga(action: WithContext<BlockedUserUnsubscribeAction>) {
+async function blockedUserUnsubscribeSaga(action: WithContext<BlockedUserUnsubscribeAction>): Promise<void> {
     const {nodeName, formattedName} = action.payload;
 
-    const subscriptions = yield* call(Node.getSubscriptions, action, REL_HOME, nodeName, "feed" as const,
+    const subscriptions = await Node.getSubscriptions(action, REL_HOME, nodeName, "feed" as const,
         ["authentication.required"]);
     const subscriptionId = subscriptions.find(s => s.remoteFeedName === "timeline")?.id;
     if (subscriptionId == null) {
         return;
     }
 
-    const unsubscribe = yield* select((state: ClientState) =>
-        getSetting(state, "blocked-users.unsubscribe-on-block") as string);
+    const unsubscribe = select(state => getSetting(state, "blocked-users.unsubscribe-on-block") as string);
 
     if (unsubscribe === "ask") {
         const onYes = (dontShowAgain: boolean): ClientAction[] => {
@@ -163,7 +159,7 @@ function* blockedUserUnsubscribeSaga(action: WithContext<BlockedUserUnsubscribeA
             }
         }
 
-        yield* put(confirmBox({
+        dispatch(confirmBox({
             message: i18n.t("still-subscribed-blocked-user", {name: formattedName}),
             onYes,
             onNo,
@@ -171,6 +167,6 @@ function* blockedUserUnsubscribeSaga(action: WithContext<BlockedUserUnsubscribeA
             dontShowAgainBox: true
         }).causedBy(action));
     } else if (unsubscribe === "yes") {
-        yield* put(feedUnsubscribe(nodeName, "timeline", subscriptionId).causedBy(action));
+        dispatch(feedUnsubscribe(nodeName, "timeline", subscriptionId).causedBy(action));
     }
 }

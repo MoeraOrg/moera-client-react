@@ -7,7 +7,7 @@ export const postingReply = (id: string): PostingReplyAction =>
     actionWithPayload("POSTING_REPLY", {id});
 
 export type PostingReplyFailedAction = ActionWithoutPayload<"POSTING_REPLY_FAILED">;
-export const postingReplyFailed = () =>
+export const postingReplyFailed = (): PostingReplyFailedAction =>
     actionWithoutPayload("POSTING_REPLY_FAILED");
 
 export type PostingReplyAnyAction =

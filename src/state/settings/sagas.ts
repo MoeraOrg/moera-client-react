@@ -1,4 +1,3 @@
-import { call, put, select } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
@@ -12,9 +11,10 @@ import {
     SettingInfo
 } from "api";
 import { Storage } from "storage";
-import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
-import { homeIntroduced } from "state/init-selectors";
+import { WithContext } from "state/action-types";
+import { dispatch, select } from "state/store-sagas";
+import { homeIntroduced } from "state/init-barriers";
 import {
     settingsChangedPassword,
     SettingsChangePasswordAction,
@@ -69,7 +69,6 @@ import {
     settingsUpdateSucceeded,
     SettingsUpdateSucceededAction
 } from "state/settings/actions";
-import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import { executor } from "state/executor";
 import { getSetting, getSettingsClient, getSettingsClientMeta } from "state/settings/selectors";
@@ -80,47 +79,49 @@ import * as Browser from "ui/browser";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("SETTINGS_NODE_VALUES_LOAD", "", settingsNodeValuesLoadSaga, homeIntroduced),
-    executor("SETTINGS_NODE_META_LOAD", "", settingsNodeMetaLoadSaga, homeIntroduced),
-    executor("SETTINGS_CLIENT_VALUES_LOAD", "", settingsClientValuesLoadSaga, homeIntroduced),
+    executor("SETTINGS_NODE_VALUES_LOAD", "", settingsNodeValuesLoadSaga),
+    executor("SETTINGS_NODE_META_LOAD", "", settingsNodeMetaLoadSaga),
+    executor("SETTINGS_CLIENT_VALUES_LOAD", "", settingsClientValuesLoadSaga),
     executor("SETTINGS_CLIENT_VALUES_LOADED", "", settingsClientValuesLoadedSaga),
     executor("SETTINGS_CLIENT_VALUES_SET", "", settingsClientValuesSetSaga),
     executor("SETTINGS_UPDATE", null, settingsUpdateSaga),
     executor("SETTINGS_UPDATE_SUCCEEDED", null, settingsUpdateSucceededSaga),
     executor("SETTINGS_CHANGE_PASSWORD", "", settingsChangePasswordSaga),
-    executor("SETTINGS_MNEMONIC_LOAD", "", settingsMnemonicLoadSaga, homeIntroduced),
-    executor("SETTINGS_GRANTS_LOAD", "", settingsGrantsLoadSaga, homeIntroduced),
+    executor("SETTINGS_MNEMONIC_LOAD", "", settingsMnemonicLoadSaga),
+    executor("SETTINGS_GRANTS_LOAD", "", settingsGrantsLoadSaga),
     executor("SETTINGS_GRANTS_DIALOG_CONFIRM", payload => payload.nodeName, settingsGrantsDialogConfirmSaga),
     executor("SETTINGS_GRANTS_DELETE", payload => payload.nodeName, settingsGrantsDeleteSaga),
-    executor("SETTINGS_TOKENS_LOAD", "", settingsTokensLoadSaga, homeIntroduced),
+    executor("SETTINGS_TOKENS_LOAD", "", settingsTokensLoadSaga),
     executor("SETTINGS_TOKENS_CREATE", null, settingsTokensCreateSaga),
     executor("SETTINGS_TOKENS_UPDATE", payload => payload.id, settingsTokensUpdateSaga),
     executor("SETTINGS_TOKENS_DELETE", payload => payload.id, settingsTokensDeleteSaga),
     executor("SETTINGS_TOKENS_NEW_TOKEN_COPY", null, settingsTokensNewTokenCopySaga),
-    executor("SETTINGS_PLUGINS_LOAD", "", settingsPluginsLoadSaga, homeIntroduced),
+    executor("SETTINGS_PLUGINS_LOAD", "", settingsPluginsLoadSaga),
     executor("SETTINGS_PLUGINS_DELETE", payload => payload.name, settingsPluginsDeleteSaga),
     executor("SETTINGS_DELETE_NODE_REQUEST_LOAD", "", settingsDeleteNodeRequestLoadSaga),
     executor("SETTINGS_DELETE_NODE_REQUEST_SEND", "", settingsDeleteNodeRequestSendSaga),
     executor("SETTINGS_DELETE_NODE_REQUEST_CANCEL", "", settingsDeleteNodeRequestCancelSaga)
 ];
 
-function* settingsNodeValuesLoadSaga(action: WithContext<SettingsNodeValuesLoadAction>) {
+async function settingsNodeValuesLoadSaga(action: WithContext<SettingsNodeValuesLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const settings = yield* call(Node.getNodeSettings, action, REL_HOME);
-        yield* put(settingsNodeValuesLoaded(settings).causedBy(action));
+        const settings = await Node.getNodeSettings(action, REL_HOME);
+        dispatch(settingsNodeValuesLoaded(settings).causedBy(action));
     } catch (e) {
-        yield* put(settingsNodeValuesLoadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(settingsNodeValuesLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* settingsNodeMetaLoadSaga(action: WithContext<SettingsNodeMetaLoadAction>) {
+async function settingsNodeMetaLoadSaga(action: WithContext<SettingsNodeMetaLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const metadata = yield* call(Node.getNodeSettingsMetadata, action, REL_HOME);
-        yield* put(settingsNodeMetaLoaded(metadata).causedBy(action));
+        const metadata = await Node.getNodeSettingsMetadata(action, REL_HOME);
+        dispatch(settingsNodeMetaLoaded(metadata).causedBy(action));
     } catch (e) {
-        yield* put(settingsNodeMetaLoadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(settingsNodeMetaLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
@@ -132,13 +133,14 @@ function isDeviceSetting(meta: Map<string, ClientSettingMetaInfo>, name: string)
     return meta.get(name)?.scope === "device";
 }
 
-function* storeSettings() {
-    Storage.storeSettings(yield* select(getSettingsClient));
+function storeSettings(): void {
+    Storage.storeSettings(select(getSettingsClient));
 }
 
-function* settingsClientValuesLoadSaga(action: WithContext<SettingsClientValuesLoadAction>) {
+async function settingsClientValuesLoadSaga(action: WithContext<SettingsClientValuesLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        let settings = yield* call(Node.getClientSettings, action, REL_HOME, CLIENT_SETTINGS_PREFIX);
+        let settings = await Node.getClientSettings(action, REL_HOME, CLIENT_SETTINGS_PREFIX);
         if (window.Android) {
             const mobileData = window.Android.loadSettings();
             if (mobileData != null) {
@@ -148,254 +150,272 @@ function* settingsClientValuesLoadSaga(action: WithContext<SettingsClientValuesL
                 settings = settings.concat(mobileSettings);
             }
         }
-        const clientMeta = yield* select(getSettingsClientMeta);
+        const clientMeta = select(getSettingsClientMeta);
         settings = settings.filter(t => !isDeviceSetting(clientMeta, t.name));
-        yield* put(settingsClientValuesLoaded(settings).causedBy(action));
+        dispatch(settingsClientValuesLoaded(settings).causedBy(action));
     } catch (e) {
         if (e instanceof HomeNotConnectedError) {
-            yield* put(settingsClientValuesLoaded([]).causedBy(action));
+            dispatch(settingsClientValuesLoaded([]).causedBy(action));
         } else {
-            yield* put(settingsClientValuesLoadFailed().causedBy(action));
-            yield* put(errorThrown(e));
+            dispatch(settingsClientValuesLoadFailed().causedBy(action));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* settingsClientValuesLoadedSaga(action: SettingsClientValuesLoadedAction) {
-    let lang = yield* select((state: ClientState) => getSetting(state, "language") as string);
+async function settingsClientValuesLoadedSaga(action: SettingsClientValuesLoadedAction): Promise<void> {
+    let lang = select(state => getSetting(state, "language") as string);
     if (lang === "auto") {
         lang = findPreferredLanguage();
     }
     if (lang !== i18n.language) {
-        yield* call(Browser.changeLanguage, lang);
-        yield* put(settingsLanguageChanged().causedBy(action));
+        await Browser.changeLanguage(lang);
+        dispatch(settingsLanguageChanged().causedBy(action));
     }
-    yield* call(storeSettings);
+    storeSettings();
 }
 
-function* updateLanguage(action: ClientAction, settings: SettingInfo[]) {
+async function updateLanguage(action: ClientAction, settings: SettingInfo[]): Promise<void> {
     let lang = settings.find(st => st.name === CLIENT_SETTINGS_PREFIX + "language")?.value;
     if (lang != null) {
         if (lang === "auto") {
             lang = findPreferredLanguage();
         }
         if (lang !== i18n.language) {
-            yield* call(Browser.changeLanguage, lang);
-            yield* put(settingsLanguageChanged().causedBy(action));
+            await Browser.changeLanguage(lang);
+            dispatch(settingsLanguageChanged().causedBy(action));
         }
     }
 }
 
-function* settingsClientValuesSetSaga(action: SettingsClientValuesSetAction) {
+async function settingsClientValuesSetSaga(action: SettingsClientValuesSetAction): Promise<void> {
     const {settings} = action.payload;
 
-    yield* call(updateLanguage, action, settings);
+    await updateLanguage(action, settings);
 }
 
-function* settingsUpdateSaga(action: WithContext<SettingsUpdateAction>) {
+async function settingsUpdateSaga(action: WithContext<SettingsUpdateAction>): Promise<void> {
     const {settings, onSuccess} = action.payload;
 
-    yield* call(updateLanguage, action, settings);
+    await updateLanguage(action, settings);
 
-    const clientMeta = yield* select(getSettingsClientMeta);
+    const clientMeta = select(getSettingsClientMeta);
     const toHome = settings
         .filter(t => !isMobileSetting(clientMeta, t.name) && !isDeviceSetting(clientMeta, t.name));
     const toMobile = settings
         .filter(t => isMobileSetting(clientMeta, t.name))
         .map(t => ({name: t.name.substring(CLIENT_SETTINGS_PREFIX.length), value: t.value}));
     try {
-        yield* call(Node.updateSettings, action, REL_HOME, toHome);
+        await Node.updateSettings(action, REL_HOME, toHome);
         if (window.Android && toMobile.length > 0) {
             window.Android.storeSettings(JSON.stringify(toMobile));
         }
-        yield* put(settingsUpdateSucceeded(settings, onSuccess).causedBy(action));
-        yield* call(storeSettings);
+        dispatch(settingsUpdateSucceeded(settings, onSuccess).causedBy(action));
+        storeSettings();
     } catch (e) {
-        yield* put(settingsUpdateFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(settingsUpdateFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function settingsUpdateSucceededSaga(action: SettingsUpdateSucceededAction) {
+function settingsUpdateSucceededSaga(action: SettingsUpdateSucceededAction): void {
     if (action.payload.onSuccess != null) {
         action.payload.onSuccess();
     }
 }
 
-function* settingsChangePasswordSaga(action: WithContext<SettingsChangePasswordAction>) {
+async function settingsChangePasswordSaga(action: WithContext<SettingsChangePasswordAction>): Promise<void> {
     const {oldPassword, password, onLoginIncorrect} = action.payload;
 
     try {
-        yield* call(Node.updateCredentials, action, REL_HOME, {oldPassword, login: "admin", password},
-            ["credentials.wrong-reset-token", "credentials.reset-token-expired", "credentials.login-incorrect"]);
-        yield* put(settingsChangedPassword().causedBy(action));
+        await Node.updateCredentials(
+            action, REL_HOME, {oldPassword, login: "admin", password},
+            ["credentials.wrong-reset-token", "credentials.reset-token-expired", "credentials.login-incorrect"]
+        );
+        dispatch(settingsChangedPassword().causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError && e.errorCode === "credentials.login-incorrect" && onLoginIncorrect != null) {
             onLoginIncorrect();
         } else {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         }
-        yield* put(settingsChangePasswordFailed().causedBy(action));
+        dispatch(settingsChangePasswordFailed().causedBy(action));
     }
 }
 
-function* settingsMnemonicLoadSaga(action: WithContext<SettingsMnemonicLoadAction>) {
+async function settingsMnemonicLoadSaga(action: WithContext<SettingsMnemonicLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const keyMnemonic = yield* call(Node.getStoredMnemonic, action, REL_HOME);
+        const keyMnemonic = await Node.getStoredMnemonic(action, REL_HOME);
         if (action.context.homeOwnerName != null) {
             const name = NodeName.shorten(action.context.homeOwnerName);
-            yield* put(mnemonicOpen(name, keyMnemonic.mnemonic).causedBy(action));
+            dispatch(mnemonicOpen(name, keyMnemonic.mnemonic).causedBy(action));
         }
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* settingsGrantsLoadSaga(action: WithContext<SettingsGrantsLoadAction>) {
+async function settingsGrantsLoadSaga(action: WithContext<SettingsGrantsLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const grants = yield* call(Node.getAllGrants, action, REL_HOME);
-        yield* put(settingsGrantsLoaded(grants).causedBy(action));
+        const grants = await Node.getAllGrants(action, REL_HOME);
+        dispatch(settingsGrantsLoaded(grants).causedBy(action));
     } catch (e) {
-        yield* put(settingsGrantsLoadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(settingsGrantsLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* settingsGrantsDialogConfirmSaga(action: WithContext<SettingsGrantsDialogConfirmAction>) {
+async function settingsGrantsDialogConfirmSaga(action: WithContext<SettingsGrantsDialogConfirmAction>): Promise<void> {
     const {nodeName, revoke} = action.payload;
 
     try {
-        const info = yield* call(Node.grantOrRevoke, action, REL_HOME, nodeName, {scope: revoke, revoke: true});
-        yield* put(settingsGrantsDialogConfirmed(nodeName, info.scope).causedBy(action));
+        const info = await Node.grantOrRevoke(action, REL_HOME, nodeName, {scope: revoke, revoke: true});
+        dispatch(settingsGrantsDialogConfirmed(nodeName, info.scope).causedBy(action));
     } catch (e) {
-        yield* put(settingsGrantsDialogConfirmFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(settingsGrantsDialogConfirmFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* settingsGrantsDeleteSaga(action: WithContext<SettingsGrantsDeleteAction>) {
+async function settingsGrantsDeleteSaga(action: WithContext<SettingsGrantsDeleteAction>): Promise<void> {
     const {nodeName} = action.payload;
 
     try {
-        yield* call(Node.revokeAll, action, REL_HOME, nodeName);
-        yield* put(settingsGrantsDeleted(nodeName).causedBy(action));
+        await Node.revokeAll(action, REL_HOME, nodeName);
+        dispatch(settingsGrantsDeleted(nodeName).causedBy(action));
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* settingsTokensLoadSaga(action: WithContext<SettingsTokensLoadAction>) {
+async function settingsTokensLoadSaga(action: WithContext<SettingsTokensLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const tokens = yield* call(Node.getTokens, action, REL_HOME);
-        yield* put(settingsTokensLoaded(tokens).causedBy(action));
+        const tokens = await Node.getTokens(action, REL_HOME);
+        dispatch(settingsTokensLoaded(tokens).causedBy(action));
     } catch (e) {
-        yield* put(settingsTokensLoadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(settingsTokensLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* settingsTokensCreateSaga(action: WithContext<SettingsTokensCreateAction>) {
+async function settingsTokensCreateSaga(action: WithContext<SettingsTokensCreateAction>): Promise<void> {
     const {password, name, permissions, onLoginIncorrect} = action.payload;
 
     try {
-        const token = yield* call(Node.createToken, action, REL_HOME, {login: "admin", password, name, permissions},
-            ["credentials.login-incorrect", "credentials.not-created"]);
-        yield* put(settingsTokensCreated(token).causedBy(action));
+        const token = await Node.createToken(
+            action, REL_HOME, {login: "admin", password, name, permissions},
+            ["credentials.login-incorrect", "credentials.not-created"]
+        );
+        dispatch(settingsTokensCreated(token).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError && e.errorCode === "credentials.login-incorrect" && onLoginIncorrect != null) {
             onLoginIncorrect();
         } else {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         }
-        yield* put(settingsTokensCreateFailed().causedBy(action));
+        dispatch(settingsTokensCreateFailed().causedBy(action));
     }
 }
 
-function* settingsTokensUpdateSaga(action: WithContext<SettingsTokensUpdateAction>) {
+async function settingsTokensUpdateSaga(action: WithContext<SettingsTokensUpdateAction>): Promise<void> {
     const {id, name, permissions} = action.payload;
 
     try {
-        const token = yield* call(Node.updateToken, action, REL_HOME, id, {name, permissions});
-        yield* put(settingsTokensUpdated(token).causedBy(action));
+        const token = await Node.updateToken(action, REL_HOME, id, {name, permissions});
+        dispatch(settingsTokensUpdated(token).causedBy(action));
     } catch (e) {
-        yield* put(settingsTokensUpdateFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(settingsTokensUpdateFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* settingsTokensDeleteSaga(action: WithContext<SettingsTokensDeleteAction>) {
+async function settingsTokensDeleteSaga(action: WithContext<SettingsTokensDeleteAction>): Promise<void> {
     const {id} = action.payload;
 
     try {
-        yield* call(Node.deleteToken, action, REL_HOME, id);
-        yield* put(settingsTokensDeleted(id).causedBy(action));
+        await Node.deleteToken(action, REL_HOME, id);
+        dispatch(settingsTokensDeleted(id).causedBy(action));
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* settingsTokensNewTokenCopySaga(action: SettingsTokensNewTokenCopyAction) {
-    const token = yield* select(state => state.settings.tokens.dialog.newToken);
-    yield* call(clipboardCopy, token.token);
+async function settingsTokensNewTokenCopySaga(action: SettingsTokensNewTokenCopyAction): Promise<void> {
+    const token = select().settings.tokens.dialog.newToken;
+    if (token == null) {
+        return;
+    }
+    await clipboardCopy(token.token);
     if (!Browser.isAndroidBrowser()) {
-        yield* put(flashBox(i18n.t("token-copied")).causedBy(action));
+        dispatch(flashBox(i18n.t("token-copied")).causedBy(action));
     }
 }
 
-function* settingsPluginsLoadSaga(action: WithContext<SettingsPluginsLoadAction>) {
+async function settingsPluginsLoadSaga(action: WithContext<SettingsPluginsLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const plugins = yield* call(Node.getPlugins, action, REL_HOME);
-        yield* put(settingsPluginsLoaded(plugins).causedBy(action));
+        const plugins = await Node.getPlugins(action, REL_HOME);
+        dispatch(settingsPluginsLoaded(plugins).causedBy(action));
     } catch (e) {
-        yield* put(settingsPluginsLoadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(settingsPluginsLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* settingsPluginsDeleteSaga(action: WithContext<SettingsPluginsDeleteAction>) {
+async function settingsPluginsDeleteSaga(action: WithContext<SettingsPluginsDeleteAction>): Promise<void> {
     const {name, tokenId} = action.payload;
 
     try {
-        yield* call(Node.deleteToken, action, REL_HOME, tokenId);
-        yield* put(settingsTokensDeleted(tokenId).causedBy(action));
-        yield* call(Node.unregisterPlugin, action, REL_HOME, name);
-        yield* put(settingsPluginsDeleted(name).causedBy(action));
+        await Node.deleteToken(action, REL_HOME, tokenId);
+        dispatch(settingsTokensDeleted(tokenId).causedBy(action));
+        await Node.unregisterPlugin(action, REL_HOME, name);
+        dispatch(settingsPluginsDeleted(name).causedBy(action));
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* settingsDeleteNodeRequestLoadSaga(action: WithContext<SettingsDeleteNodeRequestLoadAction>) {
+async function settingsDeleteNodeRequestLoadSaga(
+    action: WithContext<SettingsDeleteNodeRequestLoadAction>
+): Promise<void> {
     try {
-        const status = yield* call(Node.getDeleteNodeRequestStatus, action, REL_HOME);
-        yield* put(settingsDeleteNodeRequestLoaded(status.requested).causedBy(action));
+        const status = await Node.getDeleteNodeRequestStatus(action, REL_HOME);
+        dispatch(settingsDeleteNodeRequestLoaded(status.requested).causedBy(action));
     } catch (e) {
-        yield* put(settingsDeleteNodeRequestLoadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(settingsDeleteNodeRequestLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* settingsDeleteNodeRequestSendSaga(action: WithContext<SettingsDeleteNodeRequestSendAction>) {
+async function settingsDeleteNodeRequestSendSaga(
+    action: WithContext<SettingsDeleteNodeRequestSendAction>
+): Promise<void> {
     try {
-        const status = yield* call(Node.sendDeleteNodeRequest, action, REL_HOME, {message: action.payload.message},
-            ["delete-node.no-email"]);
-        yield* put(settingsDeleteNodeRequestStatusSet(status.requested).causedBy(action));
+        const status = await Node.sendDeleteNodeRequest(
+            action, REL_HOME, {message: action.payload.message}, ["delete-node.no-email"]
+        );
+        dispatch(settingsDeleteNodeRequestStatusSet(status.requested).causedBy(action));
     } catch (e) {
-        yield* put(settingsDeleteNodeRequestUpdateFailed().causedBy(action));
+        dispatch(settingsDeleteNodeRequestUpdateFailed().causedBy(action));
         if (e instanceof NodeApiError) {
-            yield* put(messageBox(i18n.t("set-email-provider-contact")));
+            dispatch(messageBox(i18n.t("set-email-provider-contact")));
         } else {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* settingsDeleteNodeRequestCancelSaga(action: WithContext<SettingsDeleteNodeRequestCancelAction>) {
+async function settingsDeleteNodeRequestCancelSaga(
+    action: WithContext<SettingsDeleteNodeRequestCancelAction>
+): Promise<void> {
     try {
-        const status = yield* call(Node.cancelDeleteNodeRequest, action, REL_HOME);
-        yield* put(settingsDeleteNodeRequestStatusSet(status.requested).causedBy(action));
+        const status = await Node.cancelDeleteNodeRequest(action, REL_HOME);
+        dispatch(settingsDeleteNodeRequestStatusSet(status.requested).causedBy(action));
     } catch (e) {
-        yield* put(settingsDeleteNodeRequestUpdateFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(settingsDeleteNodeRequestUpdateFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }

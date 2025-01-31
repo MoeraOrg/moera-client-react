@@ -1,22 +1,20 @@
-import { call, put, select } from 'typed-redux-saga';
-
 import { BlockedByUserInfo, BlockedUserInfo, Node } from "api";
-import { ClientState } from "state/state";
+import { WithContext } from "state/action-types";
 import { executor } from "state/executor";
+import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
 import {
     BlockingDetailsDialogLoadAction,
     blockingDetailsDialogLoaded,
     blockingDetailsDialogLoadFailed
 } from "state/blockingdetailsdialog/actions";
-import { WithContext } from "state/action-types";
 
 export default [
     executor("BLOCKING_DETAILS_DIALOG_LOAD", "", blockingDetailsDialogLoadSaga)
 ];
 
-function* blockingDetailsDialogLoadSaga(action: WithContext<BlockingDetailsDialogLoadAction>) {
-    const {nodeName, remoteNodeName, remotePostingId, by} = yield* select((state: ClientState) => ({
+async function blockingDetailsDialogLoadSaga(action: WithContext<BlockingDetailsDialogLoadAction>): Promise<void> {
+    const {nodeName, remoteNodeName, remotePostingId, by} = select(state => ({
         nodeName: state.blockingDetailsDialog.nodeName,
         remoteNodeName: state.blockingDetailsDialog.remoteNodeName,
         remotePostingId: state.blockingDetailsDialog.remotePostingId,
@@ -24,27 +22,27 @@ function* blockingDetailsDialogLoadSaga(action: WithContext<BlockingDetailsDialo
     }));
 
     if (nodeName == null) {
-        yield* put(blockingDetailsDialogLoadFailed().causedBy(action));
+        dispatch(blockingDetailsDialogLoadFailed().causedBy(action));
         return;
     }
 
     try {
         let blocked: (BlockedUserInfo | BlockedByUserInfo)[];
         if (!by) {
-            blocked = yield* call(Node.searchBlockedUsers, action, nodeName, {
+            blocked = await Node.searchBlockedUsers(action, nodeName, {
                 blockedOperations: ["reaction" as const, "comment" as const],
                 nodeName: remoteNodeName
             })
         } else {
             const postings = remoteNodeName != null ? [{nodeName: remoteNodeName, postingId: remotePostingId}] : [];
-            blocked = yield* call(Node.searchBlockedByUsers, action, nodeName, {
+            blocked = await Node.searchBlockedByUsers(action, nodeName, {
                 postings,
                 strict: true
             });
         }
-        yield* put(blockingDetailsDialogLoaded(blocked).causedBy(action));
+        dispatch(blockingDetailsDialogLoaded(blocked).causedBy(action));
     } catch (e) {
-        yield* put(blockingDetailsDialogLoadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(blockingDetailsDialogLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }

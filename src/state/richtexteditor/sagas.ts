@@ -1,8 +1,7 @@
-import { call, put, spawn } from 'typed-redux-saga';
-
 import { Node, PostingText } from "api";
 import { imageUpload } from "api/node/images-upload";
 import { WithContext } from "state/action-types";
+import { dispatch } from "state/store-sagas";
 import { RichTextEditorImageCopyAction, RichTextEditorImagesUploadAction } from "state/richtexteditor/actions";
 import { postingSet } from "state/postings/actions";
 import { errorThrown } from "state/error/actions";
@@ -14,7 +13,9 @@ export default [
     executor("RICH_TEXT_EDITOR_IMAGE_COPY", null, richTextEditorImageCopySaga)
 ];
 
-function* richTextEditorImageUpload(action: WithContext<RichTextEditorImagesUploadAction>, index: number) {
+async function richTextEditorImageUpload(
+    action: WithContext<RichTextEditorImagesUploadAction>, index: number
+): Promise<void> {
     const {
         features, nodeName, files, compress, onSuccess, onProgress, onFailure, captionSrc, captionSrcFormat
     } = action.payload;
@@ -25,8 +26,10 @@ function* richTextEditorImageUpload(action: WithContext<RichTextEditorImagesUplo
         return;
     }
 
-    const mediaFile = yield* call(imageUpload, action, features, nodeName, homeOwnerName, files[index], compress,
-        (loaded: number, total: number) => onProgress(index, loaded, total));
+    const mediaFile = await imageUpload(
+        action, features, nodeName, homeOwnerName, files[index], compress,
+        (loaded: number, total: number) => onProgress(index, loaded, total)
+    );
     if (mediaFile != null) {
         if (captionSrc != null && mediaFile.postingId != null) {
             const postingText: PostingText = {
@@ -35,8 +38,8 @@ function* richTextEditorImageUpload(action: WithContext<RichTextEditorImagesUplo
                 bodySrc: captionSrc,
                 bodySrcFormat: captionSrcFormat || "markdown"
             };
-            const posting = yield* call(Node.updatePosting, action, nodeName, mediaFile.postingId, postingText);
-            yield* put(postingSet(posting, REL_CURRENT).causedBy(action));
+            const posting = await Node.updatePosting(action, nodeName, mediaFile.postingId, postingText);
+            dispatch(postingSet(posting, REL_CURRENT).causedBy(action));
 
             const remoteNodeName = absoluteNodeName(nodeName, action.context);
             if (remoteNodeName != null && remoteNodeName !== postingText.ownerName) {
@@ -45,7 +48,7 @@ function* richTextEditorImageUpload(action: WithContext<RichTextEditorImagesUplo
                     bodySrcFormat: postingText.bodySrcFormat,
                     acceptedReactions: postingText.acceptedReactions
                 }
-                yield* call(Node.updateRemotePosting, action, REL_HOME, remoteNodeName, mediaFile.postingId, sourceText);
+                await Node.updateRemotePosting(action, REL_HOME, remoteNodeName, mediaFile.postingId, sourceText);
             }
         }
         onSuccess(index, mediaFile);
@@ -54,19 +57,19 @@ function* richTextEditorImageUpload(action: WithContext<RichTextEditorImagesUplo
     }
 }
 
-function* richTextEditorImagesUploadSaga(action: WithContext<RichTextEditorImagesUploadAction>) {
+function richTextEditorImagesUploadSaga(action: WithContext<RichTextEditorImagesUploadAction>): void {
     for (let i = 0; i < action.payload.files.length; i++) {
-        yield* spawn(richTextEditorImageUpload, action, i);
+        richTextEditorImageUpload(action, i);
     }
 }
 
-function* richTextEditorImageCopySaga(action: WithContext<RichTextEditorImageCopyAction>) {
+async function richTextEditorImageCopySaga(action: WithContext<RichTextEditorImageCopyAction>): Promise<void> {
     const {url, onSuccess, onFailure} = action.payload;
     try {
-        const blob = yield* call(Node.proxyMedia, action, REL_HOME, url);
+        const blob = await Node.proxyMedia(action, REL_HOME, url);
         onSuccess(new File([blob], "moera-editor.img", {type: blob.type}));
     } catch (e) {
         onFailure();
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }

@@ -1,7 +1,6 @@
-import { call, put } from 'typed-redux-saga';
-
 import { Node } from "api";
 import { WithContext } from "state/action-types";
+import { dispatch } from "state/store-sagas";
 import { storyUpdated } from "state/stories/actions";
 import { errorThrown } from "state/error/actions";
 import { closeChangeDateDialog, StoryChangeDateAction, storyChangeDateFailed } from "state/changedatedialog/actions";
@@ -12,14 +11,14 @@ export default [
     executor("STORY_CHANGE_DATE", null, storyChangeDateSaga)
 ];
 
-function* storyChangeDateSaga(action: WithContext<StoryChangeDateAction>) {
+async function storyChangeDateSaga(action: WithContext<StoryChangeDateAction>): Promise<void> {
     const {id, publishedAt} = action.payload;
     try {
-        const story = yield* call(Node.updateStory, action, REL_CURRENT, id, {publishAt: publishedAt});
-        yield* put(closeChangeDateDialog().causedBy(action));
-        yield* put(storyUpdated(REL_CURRENT, story).causedBy(action));
+        const story = await Node.updateStory(action, REL_CURRENT, id, {publishAt: publishedAt});
+        dispatch(closeChangeDateDialog().causedBy(action));
+        dispatch(storyUpdated(REL_CURRENT, story).causedBy(action));
     } catch (e) {
-        yield* put(storyChangeDateFailed().causedBy(action))
-        yield* put(errorThrown(e));
+        dispatch(storyChangeDateFailed().causedBy(action))
+        dispatch(errorThrown(e));
     }
 }

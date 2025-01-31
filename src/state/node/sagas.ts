@@ -1,11 +1,10 @@
-import { call, put, select } from 'typed-redux-saga';
 import * as URI from 'uri-js';
 import i18n from 'i18next';
 
 import { Node, NodeName } from "api";
 import { executor } from "state/executor";
-import { ClientState } from "state/state";
-import { homeIntroduced, namingInitialized } from "state/init-selectors";
+import { homeIntroduced, namingInitialized } from "state/init-barriers";
+import { dispatch, select } from "state/store-sagas";
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import {
@@ -28,24 +27,25 @@ import { REL_CURRENT } from "util/rel-node-name";
 
 export default [
     executor("OWNER_LOAD", "", ownerLoadSaga),
-    executor("OWNER_VERIFY", null, ownerVerifySaga, namingInitialized),
+    executor("OWNER_VERIFY", null, ownerVerifySaga),
     executor("OWNER_SWITCH", payload => payload.name, ownerSwitchSaga),
-    executor("NODE_FEATURES_LOAD", "", nodeFeaturesLoadSaga, homeIntroduced)
+    executor("NODE_FEATURES_LOAD", "", nodeFeaturesLoadSaga)
 ];
 
-function* ownerLoadSaga(action: WithContext<OwnerLoadAction>) {
+async function ownerLoadSaga(action: WithContext<OwnerLoadAction>): Promise<void> {
     try {
         const {
             nodeName = null, nodeNameChanging = false, fullName = null, gender = null, title = null, avatar = null
-        } = yield* call(Node.whoAmI, action, REL_CURRENT);
-        yield* put(ownerSet(nodeName, nodeNameChanging, fullName, gender, title, avatar).causedBy(action));
+        } = await Node.whoAmI(action, REL_CURRENT);
+        dispatch(ownerSet(nodeName, nodeNameChanging, fullName, gender, title, avatar).causedBy(action));
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* ownerVerifySaga(action: OwnerVerifyAction) {
-    const {rootPage, ownerName} = yield* select(state => ({
+async function ownerVerifySaga(action: OwnerVerifyAction): Promise<void> {
+    await namingInitialized();
+    const {rootPage, ownerName} = select(state => ({
         rootPage: getNodeRootPage(state),
         ownerName: getOwnerName(state)
     }));
@@ -53,16 +53,16 @@ function* ownerVerifySaga(action: OwnerVerifyAction) {
         return;
     }
     try {
-        const nodeUri = normalizeUrl(yield* call(getNodeUri, action, ownerName));
+        const nodeUri = normalizeUrl(await getNodeUri(action, ownerName));
         const correct = normalizeUrl(nodeUri) === rootPage;
-        yield* put(ownerVerified(ownerName, correct).causedBy(action));
+        dispatch(ownerVerified(ownerName, correct).causedBy(action));
         if (nodeUri && !correct) {
-            const href = yield* select((state: ClientState) => state.navigation.location);
+            const href = select().navigation.location;
             const {scheme, host, port} = URI.parse(nodeUri);
             if (scheme != null && host != null) {
                 const rootLocation = rootUrl(scheme, host, port);
                 const {path = null, query = null, fragment = null} = URI.parse(href);
-                yield* put(confirmBox({
+                dispatch(confirmBox({
                     message: i18n.t("blog-moved", {name: NodeName.shorten(ownerName), location: rootLocation}),
                     yes: i18n.t("open"),
                     no: i18n.t("cancel"),
@@ -71,38 +71,39 @@ function* ownerVerifySaga(action: OwnerVerifyAction) {
             }
         }
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* ownerSwitchSaga(action: WithContext<OwnerSwitchAction>) {
+async function ownerSwitchSaga(action: WithContext<OwnerSwitchAction>): Promise<void> {
     if (action.payload.name === action.context.ownerName) {
-        yield* put(ownerSwitchClose().causedBy(action));
+        dispatch(ownerSwitchClose().causedBy(action));
         return;
     }
 
     try {
-        const info = yield* call(getNameDetails, action, action.payload.name, true);
+        const info = await getNameDetails(action, action.payload.name, true);
         if (info && info.nodeName && info.nodeUri) {
             const {scheme, host, port, path = null} = URI.parse(info.nodeUri);
             if (scheme != null && host != null) {
                 const rootLocation = rootUrl(scheme, host, port);
-                yield* put(initFromLocation(info.nodeName, rootLocation, path, null, null).causedBy(action));
+                dispatch(initFromLocation(info.nodeName, rootLocation, path, null, null).causedBy(action));
             }
         } else {
-            yield* put(ownerSwitchFailed().causedBy(action));
+            dispatch(ownerSwitchFailed().causedBy(action));
         }
     } catch (e) {
-        yield* put(ownerSwitchFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(ownerSwitchFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* nodeFeaturesLoadSaga(action: WithContext<NodeFeaturesLoadAction>) {
+async function nodeFeaturesLoadSaga(action: WithContext<NodeFeaturesLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const features = yield* call(Node.getFeatures, action, REL_CURRENT);
-        yield* put(nodeFeaturesLoaded(features).causedBy(action));
+        const features = await Node.getFeatures(action, REL_CURRENT);
+        dispatch(nodeFeaturesLoaded(features).causedBy(action));
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }

@@ -1,28 +1,32 @@
 import { Dispatch, Middleware, MiddlewareAPI } from 'redux';
 
 import { ClientState } from "state/state";
-import { ClientAction, ClientActionType } from "state/action";
+import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { DynamicActionContext } from "state/context";
-import { BarrierCondition } from "state/store-sagas";
+import { BarrierActionType, BarrierCondition } from "state/store-sagas";
 import { invokeTriggers, TriggerMap } from "state/trigger";
+import { ExecutorMap, invokeExecutor } from "state/executor";
 
 interface Barrier {
-    actions: ClientActionType[];
+    actions: BarrierActionType[];
     condition: BarrierCondition;
-    resolve: () => void | PromiseLike<void>;
+    resolve: (succeeded: boolean) => void | PromiseLike<boolean>;
+    timeout?: number | NodeJS.Timeout;
 }
 
 export type StoreMiddlewareApi = MiddlewareAPI<Dispatch<ClientAction>, ClientState>;
 
 export interface StoreMiddleware extends Middleware<{}, ClientState> {
-    barrier: (actions: ClientActionType[], condition: BarrierCondition) => Promise<void>;
+    barrier: (actions: BarrierActionType[], condition: BarrierCondition, timeoutMs?: number) => Promise<boolean>;
 }
 
-export function createStoreMiddleware(triggers: TriggerMap): StoreMiddleware {
-    const barriers = new Map<ClientActionType, Barrier[]>();
+export function createStoreMiddleware(triggers: TriggerMap, executors: ExecutorMap): StoreMiddleware {
+    const barriers = new Map<BarrierActionType, Barrier[]>();
 
-    const addBarrier = (actions: ClientActionType[], condition: BarrierCondition): Promise<void> => {
+    const addBarrier = (
+        actions: BarrierActionType[], condition: BarrierCondition, timeoutMs?: number
+    ): Promise<boolean> => {
         return new Promise(resolve => {
             const barrier: Barrier = {actions, condition, resolve};
             for (const action of actions) {
@@ -30,10 +34,17 @@ export function createStoreMiddleware(triggers: TriggerMap): StoreMiddleware {
                 list.push(barrier);
                 barriers.set(action, list);
             }
+            if (timeoutMs != null) {
+                barrier.timeout = setTimeout(() => deleteBarrier(barrier), timeoutMs);
+            }
         });
     }
 
     const deleteBarrier = (barrier: Barrier): void => {
+        if (barrier.timeout != null) {
+            barrier.resolve(false);
+            clearTimeout(barrier.timeout);
+        }
         for (const action of barrier.actions) {
             const list = barriers.get(action) ?? [];
             const index = list.indexOf(barrier);
@@ -45,10 +56,10 @@ export function createStoreMiddleware(triggers: TriggerMap): StoreMiddleware {
     }
 
     const resolveBarriers = (state: ClientState, action: WithContext<ClientAction>): void => {
-        const list = barriers.get(action.type) ?? [];
+        const list = (barriers.get(action.type) ?? []).concat(barriers.get("*") ?? []);
         for (const barrier of list) {
             if (barrier.condition === true || barrier.condition(state, action)) {
-                barrier.resolve();
+                barrier.resolve(true);
                 deleteBarrier(barrier);
             }
         }
@@ -60,6 +71,7 @@ export function createStoreMiddleware(triggers: TriggerMap): StoreMiddleware {
         action.context = new DynamicActionContext();
         resolveBarriers(storeApi.getState(), action);
         invokeTriggers(triggers, action, storeApi);
+        invokeExecutor(executors, action, storeApi);
 
         return result;
     }

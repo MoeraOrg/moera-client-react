@@ -1,10 +1,8 @@
-import { call, put, select } from 'typed-redux-saga';
-
 import { Naming, Node } from "api";
 import { executor } from "state/executor";
-import { homeIntroduced } from "state/init-selectors";
+import { homeIntroduced } from "state/init-barriers";
 import { WithContext } from "state/action-types";
-import { ClientState } from "state/state";
+import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
 import {
     MnemonicCloseAction,
@@ -22,66 +20,67 @@ import {
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("NODE_NAME_LOAD", "", nodeNameLoadSaga, homeIntroduced),
+    executor("NODE_NAME_LOAD", "", nodeNameLoadSaga),
     executor("REGISTER_NAME", payload => payload.name, registerNameSaga),
     executor("NODE_NAME_UPDATE", null, nodeNameUpdateSaga),
     executor("MNEMONIC_CLOSE", null, mnemonicCloseSaga),
 ];
 
-function* nodeNameLoadSaga(action: WithContext<NodeNameLoadAction>) {
+async function nodeNameLoadSaga(action: WithContext<NodeNameLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const info = yield* call(Node.getNodeName, action, REL_HOME, false);
-        yield* put(nodeNameSet(info).causedBy(action));
+        const info = await Node.getNodeName(action, REL_HOME, false);
+        dispatch(nodeNameSet(info).causedBy(action));
     } catch (e) {
-        yield* put(nodeNameLoadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(nodeNameLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* registerNameSaga(action: WithContext<RegisterNameAction>) {
+async function registerNameSaga(action: WithContext<RegisterNameAction>): Promise<void> {
     const {name, onNameTaken} = action.payload;
     try {
-        const free = yield* call(Naming.isFree, action, name);
+        const free = await Naming.isFree(action, name);
         if (!free) {
             onNameTaken();
-            yield* put(registerNameFailed().causedBy(action));
+            dispatch(registerNameFailed().causedBy(action));
             return;
         }
-        const secret = yield* call(Node.createNodeName, action, REL_HOME, {name});
-        yield* put(registerNameSucceeded(secret.name, secret.mnemonic!).causedBy(action));
+        const secret = await Node.createNodeName(action, REL_HOME, {name});
+        dispatch(registerNameSucceeded(secret.name, secret.mnemonic!).causedBy(action));
     } catch (e) {
-        yield* put(registerNameFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(registerNameFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* nodeNameUpdateSaga(action: WithContext<NodeNameUpdateAction>) {
+async function nodeNameUpdateSaga(action: WithContext<NodeNameUpdateAction>): Promise<void> {
     const {name, mnemonic} = action.payload;
     try {
-        yield* call(Node.updateNodeName, action, REL_HOME, {name, mnemonic});
-        yield* put(nodeNameUpdateSucceeded().causedBy(action));
+        await Node.updateNodeName(action, REL_HOME, {name, mnemonic});
+        dispatch(nodeNameUpdateSucceeded().causedBy(action));
     } catch (e) {
-        yield* put(nodeNameUpdateFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(nodeNameUpdateFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* mnemonicCloseSaga(action: WithContext<MnemonicCloseAction>) {
+async function mnemonicCloseSaga(action: WithContext<MnemonicCloseAction>): Promise<void> {
     const {store} = action.payload;
 
-    const {stored, mnemonic} = yield* select((state: ClientState) => ({
+    const {stored, mnemonic} = select(state => ({
         stored: state.nodeName.storedMnemonic,
         mnemonic: state.nodeName.mnemonic
     }));
 
     try {
         if (store && !stored && mnemonic != null) {
-            yield* call(Node.storeMnemonic, action, REL_HOME, {mnemonic});
+            await Node.storeMnemonic(action, REL_HOME, {mnemonic});
         } else if (!store && stored) {
-            yield* call(Node.deleteStoredMnemonic, action, REL_HOME);
+            await Node.deleteStoredMnemonic(action, REL_HOME);
         }
-        yield* put(mnemonicClosed(store).causedBy(action));
+        dispatch(mnemonicClosed(store).causedBy(action));
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }

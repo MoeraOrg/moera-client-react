@@ -1,58 +1,45 @@
-import { Action } from 'redux';
-import { call, flush, put, select, takeEvery } from 'typed-redux-saga';
-import { buffers, channel, Channel } from 'redux-saga';
-
-import getContext from "state/context";
 import { ClientAction, ClientActionType } from "state/action";
 import { ActionContext, WithContext } from "state/action-types";
-import { ClientState } from "state/state";
+import { StoreMiddlewareApi } from "state/store-middleware";
 
 type PayloadExtractor<T> = (payload: T, context: ActionContext | null) => string;
 
 type PayloadToKey = PayloadExtractor<any> | string | null;
 
-type ExecutorSaga<T extends ClientAction> = (action: WithContext<T>) => any;
-
-type ExecuteCondition = (state: ClientState) => boolean;
-
-type ExecuteConditionPayload<T> = (state: ClientState, payload: T) => boolean;
+type ExecutorSaga<T extends ClientAction> = (action: WithContext<T>) => Promise<void> | void;
 
 export interface Executor {
     action: ClientActionType;
     payloadToKey: PayloadToKey;
     saga: ExecutorSaga<any>;
-    condition: ExecuteConditionPayload<any> | null;
 }
 
 export interface ExecutorState {
     payloadToKey: PayloadToKey;
     saga: ExecutorSaga<any>;
-    condition: ExecuteConditionPayload<any> | null;
     running: Set<string>;
 }
 
 export type ExecutorMap = Map<ClientActionType, ExecutorState>;
 
-const postponingChannel: Channel<WithContext<Action<string>>> = channel(buffers.expanding(10));
-
 export function executor<T extends ClientAction>(
-    action: T["type"], payloadToKey: string | null, saga: ExecutorSaga<T>,
-    condition?: ExecuteCondition | null): Executor;
+    action: T["type"], payloadToKey: string | null, saga: ExecutorSaga<T>
+): Executor;
 export function executor<T extends ClientAction & {payload: any}>(
-    action: T["type"], payloadToKey: PayloadExtractor<T["payload"]> | string | null, saga: ExecutorSaga<T>,
-    condition?: ExecuteConditionPayload<T["payload"]> | null): Executor;
-export function executor(action: ClientActionType, payloadToKey: PayloadToKey,
-                         saga: ExecutorSaga<any>, condition: ExecuteConditionPayload<any> | null = null): Executor {
-    return {action, payloadToKey, saga, condition};
+    action: T["type"], payloadToKey: PayloadExtractor<T["payload"]> | string | null, saga: ExecutorSaga<T>
+): Executor;
+export function executor(
+    action: ClientActionType, payloadToKey: PayloadToKey, saga: ExecutorSaga<any>
+): Executor {
+    return {action, payloadToKey, saga};
 }
 
 function addExecutor(executors: ExecutorMap, executor: Executor): void {
-    const {action, payloadToKey, saga, condition} = executor;
+    const {action, payloadToKey, saga} = executor;
 
     executors.set(action, {
         payloadToKey,
         saga,
-        condition,
         running: new Set()
     })
 }
@@ -71,26 +58,13 @@ export function collectExecutors(...lists: Executor[] | Executor[][]): ExecutorM
     return executors;
 }
 
-function* executorsSaga(executors: ExecutorMap, action: WithContext<ClientAction>) {
+export async function invokeExecutor(
+    executors: ExecutorMap, action: WithContext<ClientAction>, storeApi: StoreMiddlewareApi
+): Promise<void> {
     const signal = action.type;
     const executor = executors.get(signal);
     if (executor === undefined) {
         return;
-    }
-
-    action.context = yield* select(getContext);
-
-    if (executor.condition != null) {
-        const condition = executor.condition;
-        let payload: any = null;
-        if ("payload" in action) {
-            payload = action.payload;
-        }
-        const ready = yield* select((state: ClientState) => condition(state, payload));
-        if (!ready) {
-            yield* put(postponingChannel, action);
-            return;
-        }
     }
 
     let key = null;
@@ -113,7 +87,7 @@ function* executorsSaga(executors: ExecutorMap, action: WithContext<ClientAction
     }
 
     try {
-        yield* call(executor.saga, action);
+        await executor.saga(action);
     } catch (e) {
         console.error("Error running saga for action", action);
         console.error(e);
@@ -121,21 +95,4 @@ function* executorsSaga(executors: ExecutorMap, action: WithContext<ClientAction
     if (key != null) {
         executor.running.delete(key);
     }
-}
-
-function* flushPostponedSaga() {
-    const context = yield* select(getContext);
-    const actions = yield* flush(postponingChannel);
-    for (const action of actions) {
-        action.context = context;
-        yield* put(action);
-    }
-}
-
-export function* invokeExecutors(executors: ExecutorMap) {
-    yield* takeEvery([...executors.keys()], executorsSaga, executors);
-    yield* takeEvery(
-        ["HOME_READY", "SETTINGS_CLIENT_VALUES_LOADED", "NODE_READY"],
-        flushPostponedSaga
-    );
 }

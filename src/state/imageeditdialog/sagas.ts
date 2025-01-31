@@ -1,7 +1,8 @@
-import { call, put, select } from 'typed-redux-saga';
-
 import { Node } from "api";
+import { WithContext } from "state/action-types";
+import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
+import { executor } from "state/executor";
 import {
     ImageEditDialogLoadAction,
     imageEditDialogLoaded,
@@ -11,10 +12,7 @@ import {
     imageEditDialogPostSucceeded
 } from "state/imageeditdialog/actions";
 import { postingSet } from "state/postings/actions";
-import { ClientState } from "state/state";
-import { executor } from "state/executor";
 import { fillActivityReaction } from "state/activityreactions/sagas";
-import { WithContext } from "state/action-types";
 import { absoluteNodeName, REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
@@ -22,46 +20,46 @@ export default [
     executor("IMAGE_EDIT_DIALOG_POST", "", imageEditDialogPostSaga)
 ];
 
-function* imageEditDialogLoadSaga(action: WithContext<ImageEditDialogLoadAction>) {
-    const {id, nodeName} = yield* select((state: ClientState) => ({
+async function imageEditDialogLoadSaga(action: WithContext<ImageEditDialogLoadAction>): Promise<void> {
+    const {id, nodeName} = select(state => ({
         id: state.imageEditDialog.media?.postingId,
         nodeName: state.imageEditDialog.nodeName
     }));
 
     if (id == null) {
-        yield* put(imageEditDialogLoaded().causedBy(action));
+        dispatch(imageEditDialogLoaded().causedBy(action));
         return;
     }
 
     try {
-        const posting = yield* call(Node.getPosting, action, nodeName, id, true, ["posting.not-found"]);
-        yield* call(fillActivityReaction, action, posting);
-        yield* put(postingSet(posting, REL_CURRENT).causedBy(action));
-        yield* put(imageEditDialogLoaded().causedBy(action));
+        const posting = await Node.getPosting(action, nodeName, id, true, ["posting.not-found"]);
+        await fillActivityReaction(action, posting);
+        dispatch(postingSet(posting, REL_CURRENT).causedBy(action));
+        dispatch(imageEditDialogLoaded().causedBy(action));
     } catch (e) {
-        yield* put(imageEditDialogLoadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(imageEditDialogLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* imageEditDialogPostSaga(action: WithContext<ImageEditDialogPostAction>) {
+async function imageEditDialogPostSaga(action: WithContext<ImageEditDialogPostAction>): Promise<void> {
     const {postingText} = action.payload;
 
-    const {id, nodeName} = yield* select((state: ClientState) => ({
+    const {id, nodeName} = select(state => ({
         id: state.imageEditDialog.media?.postingId,
         nodeName: state.imageEditDialog.nodeName
     }));
 
     if (id == null) {
-        yield* put(imageEditDialogPostFailed().causedBy(action));
+        dispatch(imageEditDialogPostFailed().causedBy(action));
         return;
     }
 
     try {
-        const posting = yield* call(Node.updatePosting, action, nodeName, id, postingText);
-        yield* put(imageEditDialogPostSucceeded().causedBy(action));
-        yield* call(fillActivityReaction, action, posting);
-        yield* put(postingSet(posting, REL_CURRENT).causedBy(action));
+        const posting = await Node.updatePosting(action, nodeName, id, postingText);
+        dispatch(imageEditDialogPostSucceeded().causedBy(action));
+        await fillActivityReaction(action, posting);
+        dispatch(postingSet(posting, REL_CURRENT).causedBy(action));
 
         const remoteNodeName = absoluteNodeName(nodeName, action.context);
         if (remoteNodeName != null && remoteNodeName !== postingText.ownerName) {
@@ -70,10 +68,10 @@ function* imageEditDialogPostSaga(action: WithContext<ImageEditDialogPostAction>
                 bodySrcFormat: postingText.bodySrcFormat,
                 acceptedReactions: postingText.acceptedReactions
             }
-            yield* call(Node.updateRemotePosting, action, REL_HOME, remoteNodeName, id, sourceText);
+            await Node.updateRemotePosting(action, REL_HOME, remoteNodeName, id, sourceText);
         }
     } catch (e) {
-        yield* put(imageEditDialogPostFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(imageEditDialogPostFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }

@@ -1,5 +1,3 @@
-import { call, put, select } from 'typed-redux-saga';
-
 import { Node } from "api";
 import { imageUpload } from "api/node/images-upload";
 import {
@@ -11,6 +9,7 @@ import {
     linkPreviewLoadFailed
 } from "state/linkpreviews/actions";
 import { WithContext } from "state/action-types";
+import { dispatch, select } from "state/store-sagas";
 import { executor } from "state/executor";
 import { getLinkPreviewInfo } from "state/linkpreviews/selectors";
 import { randomId } from "util/ui";
@@ -21,42 +20,42 @@ export default [
     executor("LINK_PREVIEW_IMAGE_UPLOAD", payload => payload.url, linkPreviewImageUploadSaga)
 ];
 
-function* linkPreviewLoadSaga(action: WithContext<LinkPreviewLoadAction>) {
+async function linkPreviewLoadSaga(action: WithContext<LinkPreviewLoadAction>): Promise<void> {
     const {url} = action.payload;
     try {
-        const info = yield* call(Node.proxyLinkPreview, action, REL_HOME, url);
+        const info = await Node.proxyLinkPreview(action, REL_HOME, url);
         info.url = url; // canonical URL may differ, so we should force consistency throughout the app
-        yield* put(linkPreviewLoaded(url, info).causedBy(action));
+        dispatch(linkPreviewLoaded(url, info).causedBy(action));
     } catch (e) {
-        yield* put(linkPreviewLoadFailed(url).causedBy(action));
+        dispatch(linkPreviewLoadFailed(url).causedBy(action));
     }
 }
 
-function* linkPreviewImageUploadSaga(action: WithContext<LinkPreviewImageUploadAction>) {
+async function linkPreviewImageUploadSaga(action: WithContext<LinkPreviewImageUploadAction>): Promise<void> {
     const {url, nodeName, features} = action.payload;
     const {homeOwnerName} = action.context;
 
     if (homeOwnerName == null) {
-        yield* put(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
+        dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
         return;
     }
 
-    const imageUrl = yield* select(state => getLinkPreviewInfo(state, url)?.imageUrl);
+    const imageUrl = select(state => getLinkPreviewInfo(state, url)?.imageUrl);
     if (imageUrl == null) {
-        yield* put(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
+        dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
         return;
     }
 
     try {
-        const blob = yield* call(Node.proxyMedia, action, REL_HOME, imageUrl);
+        const blob = await Node.proxyMedia(action, REL_HOME, imageUrl);
         const file = new File([blob], `moera-lp-${randomId()}.img`, {type: blob.type});
-        const mediaFile = yield* call(imageUpload, action, features, nodeName, homeOwnerName, file, true);
+        const mediaFile = await imageUpload(action, features, nodeName, homeOwnerName, file, true);
         if (mediaFile != null) {
-            yield* put(linkPreviewImageUploaded(url, nodeName, mediaFile).causedBy(action));
+            dispatch(linkPreviewImageUploaded(url, nodeName, mediaFile).causedBy(action));
         } else {
-            yield* put(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
+            dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
         }
     } catch (e) {
-        yield* put(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
+        dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
     }
 }

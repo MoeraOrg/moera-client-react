@@ -1,4 +1,3 @@
-import { call, put } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
@@ -10,6 +9,7 @@ import {
     SharePageCopyLinkAction
 } from "state/sharedialog/actions";
 import { WithContext } from "state/action-types";
+import { dispatch } from "state/store-sagas";
 import { executor } from "state/executor";
 import { getNodeUri } from "state/naming/sagas";
 import { messageBox } from "state/messagebox/actions";
@@ -25,7 +25,7 @@ export default [
     executor("SHARE_PAGE_COPY_LINK", null, sharePageCopyLinkSaga)
 ];
 
-function* share(action: ShareDialogPrepareAction, url: string, text: string) {
+function share(action: ShareDialogPrepareAction, url: string, text: string): void {
     if (window.Android) {
         window.Android.share(url, text);
         return;
@@ -37,43 +37,43 @@ function* share(action: ShareDialogPrepareAction, url: string, text: string) {
             return;
         }
     }
-    yield* put(openShareDialog(text, url).causedBy(action));
+    dispatch(openShareDialog(text, url).causedBy(action));
 }
 
-function* shareDialogPrepareSaga(action: WithContext<ShareDialogPrepareAction>) {
+async function shareDialogPrepareSaga(action: WithContext<ShareDialogPrepareAction>): Promise<void> {
     let {nodeName, href} = action.payload;
 
     nodeName = absoluteNodeName(nodeName, action.context);
     const text = hasWindowSelection() ? (htmlToMarkdown(getWindowSelectionHtml()) ?? "") : "";
 
-    const nodeUri = yield* call(getNodeUri, action, nodeName);
+    const nodeUri = await getNodeUri(action, nodeName);
     if (nodeUri == null) {
-        yield* put(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName).causedBy(action));
+        dispatch(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName).causedBy(action));
         return;
     }
     const url = Browser.universalLocation(null, nodeName, nodeUri, href);
-    yield* call(share, action, url, text);
+    share(action, url, text);
 }
 
-function* shareDialogCopyLinkSaga(action: ShareDialogCopyLinkAction) {
-    yield* put(closeShareDialog().causedBy(action));
-    yield* call(clipboardCopy, action.payload.url);
+async function shareDialogCopyLinkSaga(action: ShareDialogCopyLinkAction): Promise<void> {
+    dispatch(closeShareDialog().causedBy(action));
+    await clipboardCopy(action.payload.url);
     if (!Browser.isAndroidBrowser()) {
-        yield* put(flashBox(i18n.t("link-copied")).causedBy(action));
+        dispatch(flashBox(i18n.t("link-copied")).causedBy(action));
     }
 }
 
-function* sharePageCopyLinkSaga(action: WithContext<SharePageCopyLinkAction>) {
+async function sharePageCopyLinkSaga(action: WithContext<SharePageCopyLinkAction>): Promise<void> {
     let {nodeName, href} = action.payload;
 
     nodeName = absoluteNodeName(nodeName, action.context);
-    const nodeUri = yield* call(getNodeUri, action, nodeName);
+    const nodeUri = await getNodeUri(action, nodeName);
     if (nodeUri == null) {
-        yield* put(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName).causedBy(action));
+        dispatch(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName).causedBy(action));
         return;
     }
-    yield* call(clipboardCopy, Browser.universalLocation(null, nodeName, nodeUri, href));
+    await clipboardCopy(Browser.universalLocation(null, nodeName, nodeUri, href));
     if (!Browser.isAndroidBrowser()) {
-        yield* put(flashBox(i18n.t("link-copied")).causedBy(action));
+        dispatch(flashBox(i18n.t("link-copied")).causedBy(action));
     }
 }

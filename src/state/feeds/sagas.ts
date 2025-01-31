@@ -1,4 +1,3 @@
-import { call, delay, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
 import { Node, PrincipalValue, StoryInfo } from "api";
@@ -38,7 +37,8 @@ import {
 } from "state/feeds/actions";
 import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";
-import { homeIntroduced } from "state/init-selectors";
+import { dispatch, select } from "state/store-sagas";
+import { homeIntroduced } from "state/init-barriers";
 import { executor } from "state/executor";
 import { StoryAddedAction, storySatisfy, StoryUpdatedAction } from "state/stories/actions";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
@@ -48,54 +48,24 @@ import { fillSubscriptions } from "state/subscriptions/sagas";
 import { flashBox } from "state/flashbox/actions";
 import { getInstantTypeDetails } from "ui/instant/instant-types";
 import { absoluteNodeName, REL_HOME } from "util/rel-node-name";
+import { delay } from "util/misc";
 
 export default [
     executor(
         "FEED_GENERAL_LOAD",
         (payload, context) => `${context?.homeOwnerName}:${payload.nodeName}:${payload.feedName}`,
-        feedGeneralLoadSaga,
-        homeIntroduced
+        feedGeneralLoadSaga
     ),
-    executor(
-        "FEED_SUBSCRIBE",
-        payload => `${payload.nodeName}:${payload.feedName}`,
-        feedSubscribeSaga,
-        homeIntroduced
-    ),
-    executor(
-        "FEED_UNSUBSCRIBE",
-        payload => `${payload.nodeName}:${payload.feedName}`,
-        feedUnsubscribeSaga,
-        homeIntroduced
-    ),
-    executor(
-        "FEED_SUBSCRIBER_SET_VISIBILITY",
-        payload => payload.subscriberId,
-        feedSubscriberSetVisibilitySaga,
-        homeIntroduced
-    ),
-    executor(
-        "FEED_SUBSCRIPTION_SET_VISIBILITY",
-        payload => payload.subscriptionId,
-        feedSubscriptionSetVisibilitySaga,
-        homeIntroduced
-    ),
-    executor(
-        "FEED_STATUS_LOAD",
-        payload => `${payload.nodeName}:${payload.feedName}`,
-        feedStatusLoadSaga,
-        homeIntroduced
-    ),
+    executor("FEED_SUBSCRIBE", payload => `${payload.nodeName}:${payload.feedName}`, feedSubscribeSaga),
+    executor("FEED_UNSUBSCRIBE", payload => `${payload.nodeName}:${payload.feedName}`, feedUnsubscribeSaga),
+    executor("FEED_SUBSCRIBER_SET_VISIBILITY", payload => payload.subscriberId, feedSubscriberSetVisibilitySaga),
+    executor("FEED_SUBSCRIPTION_SET_VISIBILITY", payload => payload.subscriptionId, feedSubscriptionSetVisibilitySaga),
+    executor("FEED_STATUS_LOAD", payload => `${payload.nodeName}:${payload.feedName}`, feedStatusLoadSaga),
     executor("FEED_STATUS_UPDATE", payload => `${payload.nodeName}:${payload.feedName}`, feedStatusUpdateSaga),
-    executor("FEED_PAST_SLICE_LOAD", null, feedPastSliceLoadSaga, homeIntroduced),
-    executor("FEED_FUTURE_SLICE_LOAD", null, feedFutureSliceLoadSaga, homeIntroduced),
-    executor(
-        "FEED_STATUS_SET",
-        payload => `${payload.nodeName}:${payload.feedName}`,
-        feedStatusSetSaga,
-        homeIntroduced
-    ),
-    executor("FEEDS_UPDATE", "", feedsUpdateSaga, homeIntroduced),
+    executor("FEED_PAST_SLICE_LOAD", null, feedPastSliceLoadSaga),
+    executor("FEED_FUTURE_SLICE_LOAD", null, feedFutureSliceLoadSaga),
+    executor("FEED_STATUS_SET", payload => `${payload.nodeName}:${payload.feedName}`, feedStatusSetSaga),
+    executor("FEEDS_UPDATE", "", feedsUpdateSaga),
     executor("FEED_PAST_SLICE_SET", null, feedExecuteSliceButtonsActions),
     executor("FEED_FUTURE_SLICE_SET", null, feedExecuteSliceButtonsActions),
     executor("FEED_SLICE_UPDATE", null, feedExecuteSliceButtonsActions),
@@ -103,49 +73,54 @@ export default [
     executor("STORY_UPDATED", null, feedExecuteButtonsActions)
 ];
 
-function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {
+async function feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>): Promise<void> {
+    await homeIntroduced();
     let {nodeName, feedName} = action.payload;
     nodeName = absoluteNodeName(nodeName, action.context);
     try {
-        const info = yield* call(Node.getFeedGeneral, action, nodeName, feedName);
-        yield* put(feedGeneralSet(nodeName, feedName, info).causedBy(action));
+        const info = await Node.getFeedGeneral(action, nodeName, feedName);
+        dispatch(feedGeneralSet(nodeName, feedName, info).causedBy(action));
     } catch (e) {
-        yield* put(feedGeneralLoadFailed(nodeName, feedName).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(feedGeneralLoadFailed(nodeName, feedName).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* feedSubscribeSaga(action: WithContext<FeedSubscribeAction>) {
+async function feedSubscribeSaga(action: WithContext<FeedSubscribeAction>): Promise<void> {
+    await homeIntroduced();
     const {nodeName, feedName, storyId} = action.payload;
     try {
-        const subscription = yield* call(Node.createSubscription, action, REL_HOME,
-            {type: "feed" as const, feedName: "news", remoteNodeName: nodeName, remoteFeedName: feedName});
-        yield* put(flashBox(i18n.t("you-subscribed")).causedBy(action));
-        yield* put(feedSubscribed(nodeName, subscription).causedBy(action));
+        const subscription = await Node.createSubscription(
+            action, REL_HOME,
+            {type: "feed" as const, feedName: "news", remoteNodeName: nodeName, remoteFeedName: feedName}
+        );
+        dispatch(flashBox(i18n.t("you-subscribed")).causedBy(action));
+        dispatch(feedSubscribed(nodeName, subscription).causedBy(action));
         if (storyId != null) {
-            yield* put(storySatisfy(REL_HOME, "instant", storyId).causedBy(action));
+            dispatch(storySatisfy(REL_HOME, "instant", storyId).causedBy(action));
         }
     } catch (e) {
-        yield* put(feedSubscribeFailed(nodeName, feedName).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(feedSubscribeFailed(nodeName, feedName).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* feedUnsubscribeSaga(action: WithContext<FeedUnsubscribeAction>) {
+async function feedUnsubscribeSaga(action: WithContext<FeedUnsubscribeAction>): Promise<void> {
+    await homeIntroduced();
     const {nodeName, feedName, subscriptionId} = action.payload;
     try {
-        const contact = yield* call(Node.deleteSubscription, action, REL_HOME, subscriptionId);
-        yield* put(flashBox(i18n.t("you-no-longer-subscribed")).causedBy(action));
-        yield* put(feedUnsubscribed(nodeName, feedName, contact).causedBy(action));
+        const contact = await Node.deleteSubscription(action, REL_HOME, subscriptionId);
+        dispatch(flashBox(i18n.t("you-no-longer-subscribed")).causedBy(action));
+        dispatch(feedUnsubscribed(nodeName, feedName, contact).causedBy(action));
     } catch (e) {
-        yield* put(feedUnsubscribeFailed(nodeName, feedName).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(feedUnsubscribeFailed(nodeName, feedName).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-export function* nodeFeedSubscriberSetVisibility(
+export async function nodeFeedSubscriberSetVisibility(
     action: WithContext<ClientAction>, subscriberId: string, visible: boolean
-) {
+): Promise<void> {
     const {homeOwnerName} = action.context;
 
     if (homeOwnerName == null) { // Should not be called in any case
@@ -153,23 +128,27 @@ export function* nodeFeedSubscriberSetVisibility(
     }
 
     const view: PrincipalValue = visible ? "unset" : "private";
-    const subscriber = yield* call(Node.updateSubscriber, action, REL_HOME, subscriberId, {adminOperations: {view}});
-    yield* put(feedSubscriberUpdated(homeOwnerName, subscriber).causedBy(action));
+    const subscriber = await Node.updateSubscriber(action, REL_HOME, subscriberId, {adminOperations: {view}});
+    dispatch(feedSubscriberUpdated(homeOwnerName, subscriber).causedBy(action));
 
     if (subscriber.feedName == null) {
         return;
     }
 
-    const subscriptions = yield* call(Node.searchSubscriptions, action, REL_HOME,
-        {type: "feed" as const, feeds: [{nodeName: subscriber.nodeName, feedName: subscriber.feedName}]});
+    const subscriptions = await Node.searchSubscriptions(
+        action, REL_HOME,
+        {type: "feed" as const, feeds: [{nodeName: subscriber.nodeName, feedName: subscriber.feedName}]}
+    );
     if (subscriptions.length > 0) {
-        const subscription = yield* call(Node.updateSubscription, action, subscriber.nodeName, subscriptions[0].id,
-            {operations: {view}});
-        yield* put(feedSubscriptionUpdated(subscriber.nodeName, subscription).causedBy(action));
+        const subscription = await Node.updateSubscription(
+            action, subscriber.nodeName, subscriptions[0].id, {operations: {view}}
+        );
+        dispatch(feedSubscriptionUpdated(subscriber.nodeName, subscription).causedBy(action));
     }
 }
 
-function* feedSubscriberSetVisibilitySaga(action: WithContext<FeedSubscriberSetVisibilityAction>) {
+async function feedSubscriberSetVisibilitySaga(action: WithContext<FeedSubscriberSetVisibilityAction>): Promise<void> {
+    await homeIntroduced();
     const {subscriberId, visible} = action.payload;
     const {homeOwnerName} = action.context;
 
@@ -178,15 +157,15 @@ function* feedSubscriberSetVisibilitySaga(action: WithContext<FeedSubscriberSetV
     }
 
     try {
-        yield* call(nodeFeedSubscriberSetVisibility, action, subscriberId, visible);
+        await nodeFeedSubscriberSetVisibility(action, subscriberId, visible);
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-export function* nodeFeedSubscriptionSetVisibility(
+export async function nodeFeedSubscriptionSetVisibility(
     action: WithContext<ClientAction>, subscriptionId: string, visible: boolean
-) {
+): Promise<void> {
     const {homeOwnerName} = action.context;
 
     if (homeOwnerName == null) { // Should not be called in any case
@@ -194,11 +173,14 @@ export function* nodeFeedSubscriptionSetVisibility(
     }
 
     const view: PrincipalValue = visible ? "public" : "private";
-    const subscription = yield* call(Node.updateSubscription, action, REL_HOME, subscriptionId, {operations: {view}});
-    yield* put(feedSubscriptionUpdated(homeOwnerName, subscription).causedBy(action));
+    const subscription = await Node.updateSubscription(action, REL_HOME, subscriptionId, {operations: {view}});
+    dispatch(feedSubscriptionUpdated(homeOwnerName, subscription).causedBy(action));
 }
 
-function* feedSubscriptionSetVisibilitySaga(action: WithContext<FeedSubscriptionSetVisibilityAction>) {
+async function feedSubscriptionSetVisibilitySaga(
+    action: WithContext<FeedSubscriptionSetVisibilityAction>
+): Promise<void> {
+    await homeIntroduced();
     const {subscriptionId, visible} = action.payload;
     const {homeOwnerName} = action.context;
 
@@ -207,147 +189,152 @@ function* feedSubscriptionSetVisibilitySaga(action: WithContext<FeedSubscription
     }
 
     try {
-        yield* call(nodeFeedSubscriptionSetVisibility, action, subscriptionId, visible);
+        await nodeFeedSubscriptionSetVisibility(action, subscriptionId, visible);
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* feedStatusLoadSaga(action: WithContext<FeedStatusLoadAction>) {
+async function feedStatusLoadSaga(action: WithContext<FeedStatusLoadAction>): Promise<void> {
+    await homeIntroduced();
     let {nodeName, feedName} = action.payload;
     nodeName = absoluteNodeName(nodeName, action.context);
     try {
-        const status = yield* call(Node.getFeedStatus, action, nodeName, feedName);
-        yield* put(feedStatusSet(nodeName, feedName, status).causedBy(action));
+        const status = await Node.getFeedStatus(action, nodeName, feedName);
+        dispatch(feedStatusSet(nodeName, feedName, status).causedBy(action));
     } catch (e) {
-        yield* put(feedStatusLoadFailed(nodeName, feedName).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(feedStatusLoadFailed(nodeName, feedName).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* feedStatusUpdateSaga(action: WithContext<FeedStatusUpdateAction>) {
+async function feedStatusUpdateSaga(action: WithContext<FeedStatusUpdateAction>): Promise<void> {
     let {nodeName, feedName, viewed, read, before} = action.payload;
     nodeName = absoluteNodeName(nodeName, action.context);
 
-    yield* put(feedStatusUpdated(nodeName, feedName, viewed, read, before).causedBy(action));
+    dispatch(feedStatusUpdated(nodeName, feedName, viewed, read, before).causedBy(action));
     if (nodeName === action.context.homeOwnerName) {
         try {
-            const status = yield* call(Node.updateFeedStatus, action, nodeName, feedName, {viewed, read, before});
-            yield* put(feedStatusSet(nodeName, feedName, status).causedBy(action));
+            const status = await Node.updateFeedStatus(action, nodeName, feedName, {viewed, read, before});
+            dispatch(feedStatusSet(nodeName, feedName, status).causedBy(action));
         } catch (e) {
-            yield* put(feedStatusUpdateFailed(nodeName, feedName).causedBy(action));
+            dispatch(feedStatusUpdateFailed(nodeName, feedName).causedBy(action));
         }
     }
 }
 
-function* feedPastSliceLoadSaga(action: WithContext<FeedPastSliceLoadAction>) {
+async function feedPastSliceLoadSaga(action: WithContext<FeedPastSliceLoadAction>): Promise<void> {
+    await homeIntroduced();
     let {nodeName, feedName} = action.payload;
     nodeName = absoluteNodeName(nodeName, action.context);
     try {
-        const before = (yield* select(state => getFeedState(state, nodeName, feedName))).after;
-        const slice = yield* call(Node.getFeedSlice, action, nodeName, feedName, null, before, 20);
-        yield* call(fillActivityReactionsInStories, action, slice.stories);
-        yield* call(fillBlockedOperationsInStories, action, slice.stories);
-        yield* put(feedPastSliceSet(
+        const before = (select(state => getFeedState(state, nodeName, feedName))).after;
+        const slice = await Node.getFeedSlice(action, nodeName, feedName, null, before, 20);
+        await fillActivityReactionsInStories(action, slice.stories);
+        await fillBlockedOperationsInStories(action, slice.stories);
+        dispatch(feedPastSliceSet(
             nodeName, feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
         ).causedBy(action));
-        yield* call(fillSubscriptions, action, slice.stories);
+        await fillSubscriptions(action, slice.stories);
     } catch (e) {
-        yield* put(feedPastSliceLoadFailed(nodeName, feedName).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(feedPastSliceLoadFailed(nodeName, feedName).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* feedFutureSliceLoadSaga(action: WithContext<FeedFutureSliceLoadAction>) {
+async function feedFutureSliceLoadSaga(action: WithContext<FeedFutureSliceLoadAction>): Promise<void> {
+    await homeIntroduced();
     let {nodeName, feedName} = action.payload;
     nodeName = absoluteNodeName(nodeName, action.context);
     try {
-        const after = (yield* select(state => getFeedState(state, nodeName, feedName))).before;
-        const slice = yield* call(Node.getFeedSlice, action, nodeName, feedName, after, null, 20);
-        yield* call(fillActivityReactionsInStories, action, slice.stories);
-        yield* call(fillBlockedOperationsInStories, action, slice.stories);
-        yield* put(feedFutureSliceSet(
+        const after = (select(state => getFeedState(state, nodeName, feedName))).before;
+        const slice = await Node.getFeedSlice(action, nodeName, feedName, after, null, 20);
+        await fillActivityReactionsInStories(action, slice.stories);
+        await fillBlockedOperationsInStories(action, slice.stories);
+        dispatch(feedFutureSliceSet(
             nodeName, feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
         ).causedBy(action));
-        yield* call(fillSubscriptions, action, slice.stories);
+        await fillSubscriptions(action, slice.stories);
     } catch (e) {
-        yield* put(feedFutureSliceLoadFailed(nodeName, feedName).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(feedFutureSliceLoadFailed(nodeName, feedName).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* feedStatusSetSaga(action: WithContext<FeedStatusSetAction>) {
+async function feedStatusSetSaga(action: WithContext<FeedStatusSetAction>): Promise<void> {
+    await homeIntroduced();
     let {nodeName, feedName} = action.payload;
     nodeName = absoluteNodeName(nodeName, action.context);
-    yield* delay(5000); // Wait for events to make updates, so re-fetching may not be needed
-    const feedState = yield* select(state => getFeedState(state, nodeName, feedName));
+    await delay(5000); // Wait for events to make updates, so re-fetching may not be needed
+    const feedState = select(state => getFeedState(state, nodeName, feedName));
     if (feedState.status.lastMoment != null && feedState.before >= Number.MAX_SAFE_INTEGER
         && feedState.stories.length > 0 && feedState.status.lastMoment > feedState.stories[0].moment
     ) {
-        yield* call(feedUpdateSlice, action, nodeName, feedName, Number.MAX_SAFE_INTEGER, feedState.stories[0].moment);
+        await feedUpdateSlice(action, nodeName, feedName, Number.MAX_SAFE_INTEGER, feedState.stories[0].moment);
     }
 }
 
-function* feedsUpdateSaga(action: WithContext<FeedsUpdateAction>) {
-    const feeds = yield* select(getAllFeeds);
+async function feedsUpdateSaga(action: WithContext<FeedsUpdateAction>): Promise<void> {
+    await homeIntroduced();
+    const feeds = select(getAllFeeds);
     for (const {nodeName, feedName} of feeds) {
         window.Android?.log(`Updating feed "${feedName}" on node "${nodeName}"`); // FIXME temporary
         try {
-            const status = yield* call(Node.getFeedStatus, action, nodeName, feedName);
-            yield* put(feedStatusSet(nodeName, feedName, status).causedBy(action));
+            const status = await Node.getFeedStatus(action, nodeName, feedName);
+            dispatch(feedStatusSet(nodeName, feedName, status).causedBy(action));
         } catch (e) {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         }
-        let {before, after} = yield* select(state => getFeedState(state, nodeName, feedName));
-        yield* call(feedUpdateSlice, action, nodeName, feedName, before, after);
+        let {before, after} = select(state => getFeedState(state, nodeName, feedName));
+        await feedUpdateSlice(action, nodeName, feedName, before, after);
     }
 }
 
-function* feedUpdateSlice(
+async function feedUpdateSlice(
     action: WithContext<ClientAction>, nodeName: string, feedName: string, before: number, after: number
-) {
+): Promise<void> {
     try {
         while (before > after && after < Number.MAX_SAFE_INTEGER) {
-            const slice = yield* call(Node.getFeedSlice, action, nodeName, feedName, after, null, 20);
-            yield* call(fillActivityReactionsInStories, action, slice.stories);
-            yield* put(feedSliceUpdate(
+            const slice = await Node.getFeedSlice(action, nodeName, feedName, after, null, 20);
+            await fillActivityReactionsInStories(action, slice.stories);
+            dispatch(feedSliceUpdate(
                 nodeName, feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
             ).causedBy(action));
-            yield* call(fillSubscriptions, action, slice.stories);
+            await fillSubscriptions(action, slice.stories);
             if (after === slice.before) {
                 break;
             }
             after = slice.before;
         }
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* feedExecuteSliceButtonsActions(
+function feedExecuteSliceButtonsActions(
     action: WithContext<FeedPastSliceSetAction | FeedFutureSliceSetAction | FeedSliceUpdateAction>
-) {
+): void {
     for (const story of action.payload.stories) {
-        yield* executeStoryButtonsActions(story, action);
+        executeStoryButtonsActions(story, action);
     }
 }
 
-function* feedExecuteButtonsActions(action: WithContext<StoryAddedAction | StoryUpdatedAction>) {
+function feedExecuteButtonsActions(action: WithContext<StoryAddedAction | StoryUpdatedAction>): void {
     const {story} = action.payload;
-    yield* executeStoryButtonsActions(story, action);
+    executeStoryButtonsActions(story, action);
 }
 
-function* executeStoryButtonsActions(story: StoryInfo, cause: WithContext<ClientAction>) {
+function executeStoryButtonsActions(story: StoryInfo, cause: WithContext<ClientAction>): void {
     const details = getInstantTypeDetails(story.storyType);
     if (details?.buttonsAction != null) {
         const storyActions = details.buttonsAction(story, cause.context);
         if (storyActions != null) {
             if (Array.isArray(storyActions)) {
                 for (const storyAction of storyActions) {
-                    yield* put(storyAction.causedBy(cause));
+                    dispatch(storyAction.causedBy(cause));
                 }
             } else {
-                yield* put(storyActions.causedBy(cause));
+                dispatch(storyActions.causedBy(cause));
             }
         }
     }

@@ -1,12 +1,9 @@
-import { call, put, select } from 'typed-redux-saga';
-
 import { Naming, NodeName, RegisteredName } from "api";
 import { Storage } from "storage";
 import { executor } from "state/executor";
-import { namingInitialized } from "state/init-selectors";
+import { namingInitialized } from "state/init-barriers";
 import { ClientAction } from "state/action";
-import { ClientState } from "state/state";
-import { dispatch, select as storeSelect } from "state/store-sagas"; // FIXME temporary rename
+import { dispatch, select } from "state/store-sagas";
 import { getComments, getDetailedPosting } from "state/detailedposting/selectors";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { getOwnerName, getOwnerNameOrUrl } from "state/node/selectors";
@@ -31,26 +28,28 @@ const NAME_USAGE_UPDATE_PERIOD = 60;
 const MAX_NAMES_SIZE = 500;
 
 export default [
-    executor("NAMING_NAMES_USED", null, namingNamesUsedSaga, namingInitialized),
-    executor("NAMING_NAME_LOAD", payload => payload.name, namingNameLoadSaga, namingInitialized),
+    executor("NAMING_NAMES_USED", null, namingNamesUsedSaga),
+    executor("NAMING_NAME_LOAD", payload => payload.name, namingNameLoadSaga),
     executor("NAMING_NAMES_MAINTENANCE", "", namingNamesMaintenanceSaga),
     executor("NAMING_NAMES_RELOAD", "", namingNamesReloadSaga)
 ];
 
-function* namingNamesUsedSaga(action: NamingNamesUsedAction) {
+async function namingNamesUsedSaga(action: NamingNamesUsedAction): Promise<void> {
+    await namingInitialized();
     const {names} = action.payload;
 
     if (!names || names.length === 0) {
         return;
     }
-    const toBeLoaded = yield* select(state => getNamingNamesToBeLoaded(state, names));
+    const toBeLoaded = select(state => getNamingNamesToBeLoaded(state, names));
     for (const name of toBeLoaded) {
-        yield* put(namingNameLoad(name).causedBy(action));
+        dispatch(namingNameLoad(name).causedBy(action));
     }
 }
 
-function* namingNameLoadSaga(action: NamingNameLoadAction) {
-    yield* call(fetchName, action, action.payload.name, false);
+async function namingNameLoadSaga(action: NamingNameLoadAction): Promise<void> {
+    await namingInitialized();
+    await fetchName(action, action.payload.name, false);
 }
 
 export async function getNodeUri(caller: ClientAction | null, nodeName: string): Promise<string | null> {
@@ -69,7 +68,7 @@ export interface NameInfo {
 export async function getNameDetails(
     caller: ClientAction | null, nodeName: string, includeSimilar: boolean = false
 ): Promise<NameInfo> {
-    const {serverUrl, details} = storeSelect(state => ({
+    const {serverUrl, details} = select(state => ({
         serverUrl: getSetting(state, "naming.location") as string,
         details: getNamingNameDetails(state, nodeName)
     }));
@@ -111,7 +110,7 @@ async function fetchName(caller: ClientAction | null, nodeName: string, includeS
                 }
             }
             if (nodeUri) {
-                const serverUrl = storeSelect(state => getSetting(state, "naming.location")) as string;
+                const serverUrl = select(state => getSetting(state, "naming.location")) as string;
                 Storage.storeName(serverUrl, nodeNameFound, nodeUri, now());
                 dispatch(namingNameLoaded(serverUrl, nodeNameFound, nodeUri, now()).causedBy(caller));
             }
@@ -128,12 +127,12 @@ async function fetchName(caller: ClientAction | null, nodeName: string, includeS
     return info;
 }
 
-function* namingNamesMaintenanceSaga(action: NamingNamesMaintenanceAction) {
-    const used = yield* call(getUsedNames);
+function namingNamesMaintenanceSaga(action: NamingNamesMaintenanceAction): void {
+    const used = getUsedNames();
     if (used.size > 0) {
-        yield* put(namingNamesUsed(Array.from(used)).causedBy(action));
+        dispatch(namingNamesUsed(Array.from(used)).causedBy(action));
     }
-    const details = yield* select(state => state.naming.names);
+    const details = select(state => state.naming.names);
     const names = Object.keys(details);
     if (names.length <= MAX_NAMES_SIZE) {
         return;
@@ -142,20 +141,20 @@ function* namingNamesMaintenanceSaga(action: NamingNamesMaintenanceAction) {
     if (unused.length === 0) {
         return;
     }
-    unused.sort((a, b) => details[a].accessed - details[b].accessed);
+    unused.sort((a, b) => details[a]!.accessed - details[b]!.accessed);
     const purgeSize = Math.min(unused.length, names.length - MAX_NAMES_SIZE);
-    yield* put(namingNamesPurge(unused.splice(0, purgeSize)).causedBy(action));
+    dispatch(namingNamesPurge(unused.splice(0, purgeSize)).causedBy(action));
 }
 
-function* getUsedNames() {
+function getUsedNames(): Set<string> {
     let used = new Set<string>();
 
-    const {feeds, postings} = yield* select((state: ClientState) => ({
+    const {feeds, postings} = select(state => ({
         feeds: getAllFeeds(state),
         postings: state.postings[getOwnerNameOrUrl(state)] ?? {}
     }));
     for (const {nodeName, feedName} of feeds) {
-        const stories = yield* select(state => getFeedState(state, nodeName, feedName).stories)
+        const stories = select(state => getFeedState(state, nodeName, feedName).stories)
         stories.forEach(story => {
             if (story.remoteNodeName) {
                 used.add(story.remoteNodeName);
@@ -170,7 +169,7 @@ function* getUsedNames() {
         });
     }
 
-    const posting = yield* select(getDetailedPosting);
+    const posting = select(getDetailedPosting);
     if (posting != null) {
         used.add(posting.ownerName);
         if (posting.receiverName) {
@@ -178,18 +177,18 @@ function* getUsedNames() {
         }
     }
 
-    const comments = yield* select(getComments);
+    const comments = select(getComments);
     comments.forEach(comment => used.add(comment.ownerName));
 
-    const reactions = yield* select(getReactionsDialogItems);
+    const reactions = select(getReactionsDialogItems);
     reactions.forEach(reaction => used.add(reaction.ownerName!));
 
-    let name = yield* select(getHomeOwnerName);
+    let name = select(getHomeOwnerName);
     if (name) {
         used.add(name);
     }
 
-    name = yield* select(getOwnerName);
+    name = select(getOwnerName);
     if (name != null) {
         used.add(name);
     }
@@ -197,8 +196,8 @@ function* getUsedNames() {
     return used;
 }
 
-function* namingNamesReloadSaga(action: NamingNamesReloadAction) {
-    const {namingLocation, serverUrl} = yield* select((state: ClientState) => ({
+function namingNamesReloadSaga(action: NamingNamesReloadAction): void {
+    const {namingLocation, serverUrl} = select(state => ({
         namingLocation: getSetting(state, "naming.location") as string,
         serverUrl: state.naming.serverUrl
     }));

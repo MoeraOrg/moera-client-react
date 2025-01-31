@@ -1,4 +1,3 @@
-import { delay, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
 import { NodeApiError, VerboseError } from "api";
@@ -9,13 +8,15 @@ import { messageBox } from "state/messagebox/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { getHomeRootLocation } from "state/home/selectors";
 import { executor } from "state/executor";
+import { dispatch, select } from "state/store-sagas";
+import { delay } from "util/misc";
 
 export default [
     executor("ERROR_THROWN", "", errorThrownSaga),
     executor("ERROR_AUTH_INVALID", "", errorAuthInvalidSaga)
 ];
 
-function* errorThrownSaga(action: ErrorThrownAction) {
+async function errorThrownSaga(action: ErrorThrownAction): Promise<void> {
     const err = action.payload.e;
     if (err instanceof NodeApiError) {
         return;
@@ -51,16 +52,16 @@ function* errorThrownSaga(action: ErrorThrownAction) {
         return;
     }
 
-    yield* delay(1000);
-    yield* put(errorShow(message ?? "", messageVerbose));
-    yield* delay(10000);
-    yield* put(errorDismiss());
+    await delay(1000);
+    dispatch(errorShow(message ?? "", messageVerbose));
+    await delay(10000);
+    dispatch(errorDismiss());
 }
 
-function* errorAuthInvalidSaga() {
-    const location = yield* select(getHomeRootLocation);
+function errorAuthInvalidSaga(): void {
+    const location = select(getHomeRootLocation);
     if (location != null) {
         Storage.deleteData(location);
-        yield* put(messageBox(i18n.t("disconnected-from-home"), openConnectDialog()));
+        dispatch(messageBox(i18n.t("disconnected-from-home"), openConnectDialog()));
     }
 }

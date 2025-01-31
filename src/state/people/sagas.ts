@@ -1,4 +1,3 @@
-import { call, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
 import {
@@ -54,8 +53,8 @@ import {
 } from "state/people/actions";
 import { executor } from "state/executor";
 import { ClientAction } from "state/action";
-import { ClientState } from "state/state";
-import { homeIntroduced } from "state/init-selectors";
+import { dispatch, select } from "state/store-sagas";
+import { homeIntroduced } from "state/init-barriers";
 import { getHomeFriendsId } from "state/home/selectors";
 import { getNodeFriendGroups, isPrincipalIn } from "state/node/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
@@ -85,13 +84,13 @@ import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("PEOPLE_GO_TO_DEFAULT_TAB", "", peopleGoToDefaultTabSaga),
-    executor("PEOPLE_GENERAL_LOAD", "", peopleGeneralLoadSaga, homeIntroduced),
-    executor("SUBSCRIBERS_LOAD", "", subscribersLoadSaga, homeIntroduced),
-    executor("SUBSCRIPTIONS_LOAD", "", subscriptionsLoadSaga, homeIntroduced),
-    executor("FRIENDS_LOAD", "", friendsLoadSaga, homeIntroduced),
-    executor("FRIEND_OFS_LOAD", "", friendOfsLoadSaga, homeIntroduced),
-    executor("BLOCKED_LOAD", "", blockedLoadSaga, homeIntroduced),
-    executor("BLOCKED_BY_LOAD", "", blockedByLoadSaga, homeIntroduced),
+    executor("PEOPLE_GENERAL_LOAD", "", peopleGeneralLoadSaga),
+    executor("SUBSCRIBERS_LOAD", "", subscribersLoadSaga),
+    executor("SUBSCRIPTIONS_LOAD", "", subscriptionsLoadSaga),
+    executor("FRIENDS_LOAD", "", friendsLoadSaga),
+    executor("FRIEND_OFS_LOAD", "", friendOfsLoadSaga),
+    executor("BLOCKED_LOAD", "", blockedLoadSaga),
+    executor("BLOCKED_BY_LOAD", "", blockedByLoadSaga),
     executor("FRIENDSHIP_UPDATE", payload => payload.nodeName, friendshipUpdateSaga),
     executor("FRIENDSHIP_SET_VISIBILITY", payload => payload.nodeName, friendshipSetVisibilitySaga),
     executor("PEOPLE_SELECTED_SUBSCRIBE", "", peopleSelectedSubscribeSaga),
@@ -105,8 +104,8 @@ export default [
     executor("PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS", "", peopleSelectedChangeFriendGroupsSaga)
 ];
 
-function* peopleGoToDefaultTabSaga(action: PeopleGoToDefaultTabAction) {
-    const {loaded, tab, friendGroups, ...visible} = yield* select(state => ({
+function peopleGoToDefaultTabSaga(action: PeopleGoToDefaultTabAction): void {
+    const {loaded, tab, friendGroups, ...visible} = select(state => ({
         loaded: state.people.loadedGeneral,
         tab: getPeopleTab(state),
         subscribers: isSubscribersVisible(state) || isSubscribersTotalVisible(state),
@@ -171,135 +170,147 @@ function* peopleGoToDefaultTabSaga(action: PeopleGoToDefaultTabAction) {
     } else {
         return;
     }
-    yield* put(peopleGoToTab(targetTab).causedBy(action));
+    dispatch(peopleGoToTab(targetTab).causedBy(action));
 }
 
-function* peopleGeneralLoadSaga(action: WithContext<PeopleGeneralLoadAction>) {
+async function peopleGeneralLoadSaga(action: WithContext<PeopleGeneralLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const info = yield* call(Node.getPeopleGeneral, action, REL_CURRENT);
-        yield* put(peopleGeneralLoaded(info).causedBy(action));
+        const info = await Node.getPeopleGeneral(action, REL_CURRENT);
+        dispatch(peopleGeneralLoaded(info).causedBy(action));
     } catch (e) {
-        yield* put(peopleGeneralLoadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(peopleGeneralLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* subscribersLoadSaga(action: WithContext<SubscribersLoadAction>) {
+async function subscribersLoadSaga(action: WithContext<SubscribersLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const subscribers = yield* call(Node.getSubscribers, action, REL_CURRENT, null, "feed" as const, null, null,
-            ["authentication.required"]);
-        yield* put(subscribersLoaded(subscribers).causedBy(action));
+        const subscribers = await Node.getSubscribers(
+            action, REL_CURRENT, null, "feed" as const, null, null, ["authentication.required"]
+        );
+        dispatch(subscribersLoaded(subscribers).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError) {
-            yield* put(subscribersLoaded([]).causedBy(action));
+            dispatch(subscribersLoaded([]).causedBy(action));
         } else {
-            yield* put(subscribersLoadFailed().causedBy(action));
-            yield* put(errorThrown(e));
+            dispatch(subscribersLoadFailed().causedBy(action));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* subscriptionsLoadSaga(action: WithContext<SubscriptionsLoadAction>) {
+async function subscriptionsLoadSaga(action: WithContext<SubscriptionsLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const subscriptions = yield* call(Node.getSubscriptions, action, REL_CURRENT, null, "feed" as const,
-            ["authentication.required"]);
-        yield* put(subscriptionsLoaded(subscriptions).causedBy(action));
+        const subscriptions = await Node.getSubscriptions(
+            action, REL_CURRENT, null, "feed" as const, ["authentication.required"]
+        );
+        dispatch(subscriptionsLoaded(subscriptions).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError) {
-            yield* put(subscriptionsLoaded([]).causedBy(action));
+            dispatch(subscriptionsLoaded([]).causedBy(action));
         } else {
-            yield* put(subscriptionsLoadFailed().causedBy(action));
-            yield* put(errorThrown(e));
+            dispatch(subscriptionsLoadFailed().causedBy(action));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* friendsLoadSaga(action: WithContext<FriendsLoadAction>) {
+async function friendsLoadSaga(action: WithContext<FriendsLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const friends = yield* call(Node.getFriends, action, REL_CURRENT);
-        yield* put(friendsLoaded(friends).causedBy(action));
+        const friends = await Node.getFriends(action, REL_CURRENT);
+        dispatch(friendsLoaded(friends).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError) {
-            yield* put(friendsLoaded([]).causedBy(action));
+            dispatch(friendsLoaded([]).causedBy(action));
         } else {
-            yield* put(friendsLoadFailed().causedBy(action));
-            yield* put(errorThrown(e));
+            dispatch(friendsLoadFailed().causedBy(action));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* friendOfsLoadSaga(action: WithContext<FriendOfsLoadAction>) {
+async function friendOfsLoadSaga(action: WithContext<FriendOfsLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const friendOfs = yield* call(Node.getFriendOfs, action, REL_CURRENT);
-        yield* put(friendOfsLoaded(friendOfs).causedBy(action));
+        const friendOfs = await Node.getFriendOfs(action, REL_CURRENT);
+        dispatch(friendOfsLoaded(friendOfs).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError) {
-            yield* put(friendOfsLoaded([]).causedBy(action));
+            dispatch(friendOfsLoaded([]).causedBy(action));
         } else {
-            yield* put(friendOfsLoadFailed().causedBy(action));
-            yield* put(errorThrown(e));
+            dispatch(friendOfsLoadFailed().causedBy(action));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* blockedLoadSaga(action: WithContext<BlockedLoadAction>) {
+async function blockedLoadSaga(action: WithContext<BlockedLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const blocked = yield* call(Node.searchBlockedUsers, action, REL_CURRENT,
-            {blockedOperations: ["comment" as const, "reaction" as const, "visibility" as const]});
-        yield* put(blockedLoaded(blocked).causedBy(action));
+        const blocked = await Node.searchBlockedUsers(
+            action, REL_CURRENT, {blockedOperations: ["comment" as const, "reaction" as const, "visibility" as const]}
+        );
+        dispatch(blockedLoaded(blocked).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError) {
-            yield* put(blockedLoaded([]).causedBy(action));
+            dispatch(blockedLoaded([]).causedBy(action));
         } else {
-            yield* put(blockedLoadFailed().causedBy(action));
-            yield* put(errorThrown(e));
+            dispatch(blockedLoadFailed().causedBy(action));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* blockedByLoadSaga(action: WithContext<BlockedByLoadAction>) {
+async function blockedByLoadSaga(action: WithContext<BlockedByLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const blockedBy = yield* call(Node.searchBlockedByUsers, action, REL_CURRENT, {strict: true});
-        yield* put(blockedByLoaded(blockedBy).causedBy(action));
+        const blockedBy = await Node.searchBlockedByUsers(action, REL_CURRENT, {strict: true});
+        dispatch(blockedByLoaded(blockedBy).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError) {
-            yield* put(blockedByLoaded([]).causedBy(action));
+            dispatch(blockedByLoaded([]).causedBy(action));
         } else {
-            yield* put(blockedByLoadFailed().causedBy(action));
-            yield* put(errorThrown(e));
+            dispatch(blockedByLoadFailed().causedBy(action));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* friendshipUpdateSaga(action: WithContext<FriendshipUpdateAction>) {
+async function friendshipUpdateSaga(action: WithContext<FriendshipUpdateAction>): Promise<void> {
     const {nodeName, friendGroups, storyId} = action.payload;
 
     try {
-        const friends = yield* call(Node.updateFriends, action, REL_HOME,
-            [{nodeName, groups: friendGroups?.map(id => ({id})) ?? null}]);
+        const friends = await Node.updateFriends(
+            action, REL_HOME, [{nodeName, groups: friendGroups?.map(id => ({id})) ?? null}]
+        );
         if (friends.length > 0) {
-            yield* put(friendshipUpdated(friends[0]).causedBy(action));
+            dispatch(friendshipUpdated(friends[0]).causedBy(action));
         }
         if (storyId != null) {
-            yield* put(storySatisfy(REL_HOME, "instant", storyId).causedBy(action));
+            dispatch(storySatisfy(REL_HOME, "instant", storyId).causedBy(action));
         }
         if (friendGroups != null && friendGroups.length > 0) {
-            yield* call(subscribeToFriend, action, nodeName);
+            await subscribeToFriend(action, nodeName);
         }
     } catch (e) {
-        yield* put(friendshipUpdateFailed(nodeName).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(friendshipUpdateFailed(nodeName).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* subscribeToFriend(action: WithContext<FriendshipUpdateAction>, nodeName: string) {
-    const subscriptions = yield* call(Node.getSubscriptions, action, REL_HOME, nodeName, "feed" as const,
-        ["authentication.required"]);
+async function subscribeToFriend(action: WithContext<FriendshipUpdateAction>, nodeName: string): Promise<void> {
+    const subscriptions = await Node.getSubscriptions(
+        action, REL_HOME, nodeName, "feed" as const, ["authentication.required"]
+    );
     if (subscriptions.length > 0) {
         return;
     }
 
-    const add = yield* select((state: ClientState) => getSetting(state, "friends.subscribe-on-add") as string);
+    const add = select(state => getSetting(state, "friends.subscribe-on-add") as string);
 
     if (add === "ask") {
         const onYes = (dontShowAgain: boolean): ClientAction[] => {
@@ -323,120 +334,126 @@ function* subscribeToFriend(action: WithContext<FriendshipUpdateAction>, nodeNam
             }
         }
 
-        yield* put(confirmBox({
+        dispatch(confirmBox({
             message: i18n.t("not-subscribed-friend"), onYes, onNo, variant: "primary", dontShowAgainBox: true
         }).causedBy(action));
     } else if (add === "yes") {
-        yield* put(feedSubscribe(nodeName, "timeline").causedBy(action));
+        dispatch(feedSubscribe(nodeName, "timeline").causedBy(action));
     }
 }
 
-function* friendshipSetVisibilitySaga(action: WithContext<FriendshipSetVisibilityAction>) {
+async function friendshipSetVisibilitySaga(action: WithContext<FriendshipSetVisibilityAction>): Promise<void> {
     const {nodeName, visible} = action.payload;
 
     const view: PrincipalValue = visible ? "public" : "private";
-    const nodeCard = yield* select(state => getNodeCard(state, nodeName));
+    const nodeCard = select(state => getNodeCard(state, nodeName));
 
     if (nodeCard == null || !nodeCard.friendship.loaded) {
         return;
     }
 
     try {
-        const friends = yield* call(Node.updateFriends, action, REL_HOME,
-            [{nodeName, groups: nodeCard.friendship.groups?.map(({id}) => ({id, operations: {view}})) ?? null}]);
+        const friends = await Node.updateFriends(
+            action, REL_HOME,
+            [{nodeName, groups: nodeCard.friendship.groups?.map(({id}) => ({id, operations: {view}})) ?? null}]
+        );
         if (friends.length > 0) {
-            yield* put(friendshipUpdated(friends[0]).causedBy(action));
+            dispatch(friendshipUpdated(friends[0]).causedBy(action));
         }
     } catch (e) {
-        yield* put(friendshipUpdateFailed(nodeName).causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(friendshipUpdateFailed(nodeName).causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* peopleSelectedSubscribeSaga(action: WithContext<PeopleSelectedSubscribeAction>) {
-    const contacts = (yield* select(getPeopleSelectedContacts)).filter(c => !c.hasFeedSubscription);
-    yield* put(openProgressBox(0, contacts.length).causedBy(action));
+async function peopleSelectedSubscribeSaga(action: WithContext<PeopleSelectedSubscribeAction>): Promise<void> {
+    const contacts = select(getPeopleSelectedContacts).filter(c => !c.hasFeedSubscription);
+    dispatch(openProgressBox(0, contacts.length).causedBy(action));
     let done = 0;
     for (const contact of contacts) {
         try {
-            const subscription = yield* call(Node.createSubscription, action, REL_HOME,
-                {type: "feed" as const, feedName: "news", remoteNodeName: contact.nodeName, remoteFeedName: "timeline"});
-            yield* put(feedSubscribed(contact.nodeName, subscription).causedBy(action));
-            yield* put(updateProgressBox(++done, contacts.length).causedBy(action));
+            const subscription = await Node.createSubscription(
+                action, REL_HOME,
+                {type: "feed" as const, feedName: "news", remoteNodeName: contact.nodeName, remoteFeedName: "timeline"}
+            );
+            dispatch(feedSubscribed(contact.nodeName, subscription).causedBy(action));
+            dispatch(updateProgressBox(++done, contacts.length).causedBy(action));
         } catch (e) {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         }
     }
-    yield* put(closeProgressBox().causedBy(action));
+    dispatch(closeProgressBox().causedBy(action));
 }
 
-function* peopleSelectedUnsubscribeSaga(action: WithContext<PeopleSelectedUnsubscribeAction>) {
-    const contacts = yield* select(getPeopleSelectedContacts);
+async function peopleSelectedUnsubscribeSaga(action: WithContext<PeopleSelectedUnsubscribeAction>): Promise<void> {
+    const contacts = select(getPeopleSelectedContacts);
     const remoteFeeds: RemoteFeed[] = contacts
         .filter(c => c.hasFeedSubscription)
         .map(c => ({nodeName: c.nodeName, feedName: "timeline"}));
-    yield* put(openProgressBox().causedBy(action));
+    dispatch(openProgressBox().causedBy(action));
     let subscriptions: SubscriptionInfo[] = [];
     try {
         subscriptions = (
-            yield* call(Node.searchSubscriptions, action, REL_HOME, {type: "feed" as const, feeds: remoteFeeds})
+            await Node.searchSubscriptions(action, REL_HOME, {type: "feed" as const, feeds: remoteFeeds})
         ).filter(sr => isPrincipalIn("delete", sr, "admin", "admin"));
     } catch (e) {
-        yield* put(errorThrown(e));
-        yield* put(closeProgressBox().causedBy(action));
+        dispatch(errorThrown(e));
+        dispatch(closeProgressBox().causedBy(action));
         return;
     }
-    yield* put(updateProgressBox(0, subscriptions.length).causedBy(action));
+    dispatch(updateProgressBox(0, subscriptions.length).causedBy(action));
     let done = 0;
     for (const subscription of subscriptions) {
         try {
-            const contact = yield* call(Node.deleteSubscription, action, REL_HOME, subscription.id);
-            yield* put(feedUnsubscribed(subscription.remoteNodeName, "timeline", contact).causedBy(action));
-            yield* put(updateProgressBox(++done, subscriptions.length).causedBy(action));
+            const contact = await Node.deleteSubscription(action, REL_HOME, subscription.id);
+            dispatch(feedUnsubscribed(subscription.remoteNodeName, "timeline", contact).causedBy(action));
+            dispatch(updateProgressBox(++done, subscriptions.length).causedBy(action));
         } catch (e) {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         }
     }
-    yield* put(closeProgressBox().causedBy(action));
+    dispatch(closeProgressBox().causedBy(action));
 }
 
-function* updateSelectedFriendship(action: WithContext<ClientAction>, friendDescriptions: FriendDescription[]) {
+async function updateSelectedFriendship(
+    action: WithContext<ClientAction>, friendDescriptions: FriendDescription[]
+): Promise<void> {
     try {
-        yield* put(openProgressBox(0, friendDescriptions.length).causedBy(action));
-        const friends = yield* call(Node.updateFriends, action, REL_HOME, friendDescriptions);
+        dispatch(openProgressBox(0, friendDescriptions.length).causedBy(action));
+        const friends = await Node.updateFriends(action, REL_HOME, friendDescriptions);
         let done = 0;
         for (const friend of friends) {
-            yield* put(friendshipUpdated(friend).causedBy(action));
-            yield* put(updateProgressBox(++done, friends.length).causedBy(action));
+            dispatch(friendshipUpdated(friend).causedBy(action));
+            dispatch(updateProgressBox(++done, friends.length).causedBy(action));
         }
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
-    yield* put(closeProgressBox().causedBy(action));
+    dispatch(closeProgressBox().causedBy(action));
 }
 
-function* peopleSelectedFriendSaga(action: WithContext<PeopleSelectedFriendAction>) {
-    const friendsId = (yield* select(getHomeFriendsId));
+async function peopleSelectedFriendSaga(action: WithContext<PeopleSelectedFriendAction>): Promise<void> {
+    const friendsId = select(getHomeFriendsId);
     if (friendsId == null) {
         return;
     }
-    const friendDescriptions: FriendDescription[] = (yield* select(getPeopleSelectedContacts))
+    const friendDescriptions: FriendDescription[] = select(getPeopleSelectedContacts)
         .filter(c => !c.hasFriend)
         .map(c => ({nodeName: c.nodeName, groups: [{id: friendsId}]}));
-    yield* call(updateSelectedFriendship, action, friendDescriptions);
+    await updateSelectedFriendship(action, friendDescriptions);
 }
 
-function* peopleSelectedUnfriendSaga(action: WithContext<PeopleSelectedUnfriendAction>) {
-    const friendDescriptions: FriendDescription[] = (yield* select(getPeopleSelectedContacts))
+async function peopleSelectedUnfriendSaga(action: WithContext<PeopleSelectedUnfriendAction>): Promise<void> {
+    const friendDescriptions: FriendDescription[] = select(getPeopleSelectedContacts)
         .filter(c => c.hasFriend)
         .map(c => ({nodeName: c.nodeName, groups: []}));
-    yield* call(updateSelectedFriendship, action, friendDescriptions);
+    await updateSelectedFriendship(action, friendDescriptions);
 }
 
-function* peopleSelectedAskSaga(action: WithContext<PeopleSelectedAskAction>) {
+async function peopleSelectedAskSaga(action: WithContext<PeopleSelectedAskAction>): Promise<void> {
     const {subject, message} = action.payload;
 
-    let contacts = yield* select(getPeopleSelectedContacts);
+    let contacts = select(getPeopleSelectedContacts);
     switch (subject) {
         case "subscribe":
             contacts = contacts.filter(c => !c.hasFeedSubscriber);
@@ -448,30 +465,34 @@ function* peopleSelectedAskSaga(action: WithContext<PeopleSelectedAskAction>) {
     if (contacts.length === 0) {
         return;
     }
-    yield* put(openProgressBox(0, contacts.length).causedBy(action));
+    dispatch(openProgressBox(0, contacts.length).causedBy(action));
     try {
         let done = 0;
         for (const contact of contacts) {
-            const features = yield* call(Node.getFeatures, action, contact.nodeName);
+            const features = await Node.getFeatures(action, contact.nodeName);
             if (features.ask != null && features.ask.includes(subject)) {
                 let friendsId = null;
                 if (subject === "friend") {
                     friendsId = features.friendGroups?.available.find(fg => fg.title === "t:friends")?.id ?? null;
                 }
                 if (subject === "subscribe" || friendsId != null) {
-                    yield* call(Node.askRemoteNode, action, REL_HOME, contact.nodeName,
-                        {subject, friendGroupId: friendsId, message});
+                    await Node.askRemoteNode(
+                        action, REL_HOME, contact.nodeName,
+                        {subject, friendGroupId: friendsId, message}
+                    );
                 }
             }
-            yield* put(updateProgressBox(++done, contacts.length).causedBy(action));
+            dispatch(updateProgressBox(++done, contacts.length).causedBy(action));
         }
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
-    yield* put(closeProgressBox().causedBy(action));
+    dispatch(closeProgressBox().causedBy(action));
 }
 
-function* peopleSelectedSubscriberSetVisibilitySaga(action: WithContext<PeopleSelectedSubscriberSetVisibilityAction>) {
+async function peopleSelectedSubscriberSetVisibilitySaga(
+    action: WithContext<PeopleSelectedSubscriberSetVisibilityAction>
+): Promise<void> {
     const {visible} = action.payload;
     const {homeOwnerName} = action.context;
 
@@ -479,30 +500,31 @@ function* peopleSelectedSubscriberSetVisibilitySaga(action: WithContext<PeopleSe
         return;
     }
 
-    const contacts = (yield* select(getPeopleSelectedContacts)).filter(c => c.hasFeedSubscriber);
+    const contacts = select(getPeopleSelectedContacts).filter(c => c.hasFeedSubscriber);
     if (contacts.length === 0) {
         return;
     }
-    yield* put(openProgressBox(0, contacts.length).causedBy(action));
+    dispatch(openProgressBox(0, contacts.length).causedBy(action));
     try {
         let done = 0;
         for (const contact of contacts) {
-            let subscriber = (yield* call(Node.getSubscribers, action, REL_HOME, contact.nodeName, "feed" as const,
-                null, null, ["authentication.required"]))?.[0];
+            let subscriber = (await Node.getSubscribers(
+                action, REL_HOME, contact.nodeName, "feed" as const, null, null, ["authentication.required"])
+            )?.[0];
             if (subscriber != null) {
-                yield* call(nodeFeedSubscriberSetVisibility, action, subscriber.id, visible, homeOwnerName);
+                await nodeFeedSubscriberSetVisibility(action, subscriber.id, visible);
             }
-            yield* put(updateProgressBox(++done, contacts.length).causedBy(action));
+            dispatch(updateProgressBox(++done, contacts.length).causedBy(action));
         }
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
-    yield* put(closeProgressBox().causedBy(action));
+    dispatch(closeProgressBox().causedBy(action));
 }
 
-function* peopleSelectedSubscriptionSetVisibilitySaga(
+async function peopleSelectedSubscriptionSetVisibilitySaga(
     action: WithContext<PeopleSelectedSubscriptionSetVisibilityAction>
-) {
+): Promise<void> {
     const {visible} = action.payload;
     const {homeOwnerName} = action.context;
 
@@ -510,28 +532,31 @@ function* peopleSelectedSubscriptionSetVisibilitySaga(
         return;
     }
 
-    const contacts = (yield* select(getPeopleSelectedContacts)).filter(c => c.hasFeedSubscription);
+    const contacts = select(getPeopleSelectedContacts).filter(c => c.hasFeedSubscription);
     if (contacts.length === 0) {
         return;
     }
-    yield* put(openProgressBox(0, contacts.length).causedBy(action));
+    dispatch(openProgressBox(0, contacts.length).causedBy(action));
     try {
         let done = 0;
         for (const contact of contacts) {
-            let subscription = (yield* call(Node.getSubscriptions, action, REL_HOME, contact.nodeName, "feed" as const,
-                ["authentication.required"]))?.[0];
+            let subscription = (await Node.getSubscriptions(
+                action, REL_HOME, contact.nodeName, "feed" as const, ["authentication.required"])
+            )?.[0];
             if (subscription != null) {
-                yield* call(nodeFeedSubscriptionSetVisibility, action, subscription.id, visible, homeOwnerName);
+                await nodeFeedSubscriptionSetVisibility(action, subscription.id, visible);
             }
-            yield* put(updateProgressBox(++done, contacts.length).causedBy(action));
+            dispatch(updateProgressBox(++done, contacts.length).causedBy(action));
         }
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
-    yield* put(closeProgressBox().causedBy(action));
+    dispatch(closeProgressBox().causedBy(action));
 }
 
-function* peopleSelectedFriendshipSetVisibilitySaga(action: WithContext<PeopleSelectedFriendshipSetVisibilityAction>) {
+async function peopleSelectedFriendshipSetVisibilitySaga(
+    action: WithContext<PeopleSelectedFriendshipSetVisibilityAction>
+): Promise<void> {
     const {visible} = action.payload;
     const {homeOwnerName} = action.context;
 
@@ -539,30 +564,34 @@ function* peopleSelectedFriendshipSetVisibilitySaga(action: WithContext<PeopleSe
         return;
     }
 
-    const contacts = (yield* select(getPeopleSelectedContacts)).filter(c => c.hasFriend);
+    const contacts = select(getPeopleSelectedContacts).filter(c => c.hasFriend);
     if (contacts.length === 0) {
         return;
     }
-    yield* put(openProgressBox(0, contacts.length).causedBy(action));
+    dispatch(openProgressBox(0, contacts.length).causedBy(action));
     const view: PrincipalValue = visible ? "public" : "private";
     try {
         let done = 0;
         for (const contact of contacts) {
-            const {groups} = yield* call(Node.getFriend, action, REL_HOME, contact.nodeName);
-            const friends = yield* call(Node.updateFriends, action, REL_HOME,
-                [{nodeName: contact.nodeName, groups: groups?.map(({id}) => ({id, operations: {view}})) ?? null}]);
+            const {groups} = await Node.getFriend(action, REL_HOME, contact.nodeName);
+            const friends = await Node.updateFriends(
+                action, REL_HOME,
+                [{nodeName: contact.nodeName, groups: groups?.map(({id}) => ({id, operations: {view}})) ?? null}]
+            );
             if (friends.length > 0) {
-                yield* put(friendshipUpdated(friends[0]).causedBy(action));
+                dispatch(friendshipUpdated(friends[0]).causedBy(action));
             }
-            yield* put(updateProgressBox(++done, contacts.length).causedBy(action));
+            dispatch(updateProgressBox(++done, contacts.length).causedBy(action));
         }
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
-    yield* put(closeProgressBox().causedBy(action));
+    dispatch(closeProgressBox().causedBy(action));
 }
 
-function* peopleSelectedChangeFriendGroupsSaga(action: WithContext<PeopleSelectedChangeFriendGroupsAction>) {
+async function peopleSelectedChangeFriendGroupsSaga(
+    action: WithContext<PeopleSelectedChangeFriendGroupsAction>
+): Promise<void> {
     const {includedGroups, excludedGroups, addedGroups, addedGroupTitles, addedGroupView} = action.payload;
     const {homeOwnerName} = action.context;
 
@@ -570,50 +599,53 @@ function* peopleSelectedChangeFriendGroupsSaga(action: WithContext<PeopleSelecte
         return;
     }
 
-    const contacts = (yield* select(getPeopleSelectedContacts)).filter(c => c.hasFriend);
+    const contacts = select(getPeopleSelectedContacts).filter(c => c.hasFriend);
     if (contacts.length === 0) {
         return;
     }
 
     const progressTotal = addedGroupTitles.length + contacts.length;
-    yield* put(openProgressBox(0, progressTotal).causedBy(action));
+    dispatch(openProgressBox(0, progressTotal).causedBy(action));
     const added: FriendGroupInfo[] = [];
     try {
         for (let i = 0; i < addedGroupTitles.length; i++) {
             if (!addedGroupTitles[i]) {
-                yield* put(updateProgressBox(i + 1, progressTotal).causedBy(action));
+                dispatch(updateProgressBox(i + 1, progressTotal).causedBy(action));
                 continue;
             }
-            const group = yield* call(Node.createFriendGroup, action, REL_HOME,
-                {title: addedGroupTitles[i], operations: {view: addedGroupView[i]}});
+            const group = await Node.createFriendGroup(
+                action, REL_HOME,
+                {title: addedGroupTitles[i], operations: {view: addedGroupView[i]}}
+            );
             added.push(group);
             if (addedGroups.includes(i)) {
                 includedGroups.push(group.id);
             }
-            yield* put(updateProgressBox(i + 1, progressTotal).causedBy(action));
+            dispatch(updateProgressBox(i + 1, progressTotal).causedBy(action));
         }
         let done = 0;
         for (const contact of contacts) {
-            const {groups} = yield* call(Node.getFriend, action, REL_HOME, contact.nodeName);
+            const {groups} = await Node.getFriend(action, REL_HOME, contact.nodeName);
             if (groups != null && groups.length > 0) {
                 const newGroups = groups
                     .filter(gr => !excludedGroups.includes(gr.id))
                     .map(({id, operations}) => ({id, operations}));
                 const view: PrincipalValue = groups[0].operations?.view ?? "public";
                 includedGroups.forEach(id => newGroups.push({id, operations: {view}}));
-                const friends = yield* call(Node.updateFriends, action, REL_HOME,
-                    [{nodeName: contact.nodeName, groups: newGroups}]);
+                const friends = await Node.updateFriends(
+                    action, REL_HOME, [{nodeName: contact.nodeName, groups: newGroups}]
+                );
                 if (friends.length > 0) {
-                    yield* put(friendshipUpdated(friends[0]).causedBy(action));
+                    dispatch(friendshipUpdated(friends[0]).causedBy(action));
                 }
             }
-            yield* put(updateProgressBox(addedGroupTitles.length + (++done), progressTotal).causedBy(action));
+            dispatch(updateProgressBox(addedGroupTitles.length + (++done), progressTotal).causedBy(action));
         }
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
-    yield* put(closeProgressBox().causedBy(action));
+    dispatch(closeProgressBox().causedBy(action));
     for (const group of added) {
-        yield* put(friendGroupAdded(homeOwnerName, group).causedBy(action));
+        dispatch(friendGroupAdded(homeOwnerName, group).causedBy(action));
     }
 }

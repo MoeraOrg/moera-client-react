@@ -1,9 +1,9 @@
-import { call, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
 import { CLIENT_SETTINGS_PREFIX, Node } from "api";
 import { WithContext } from "state/action-types";
-import { dispatch } from "state/store-sagas";
+import { homeIntroduced } from "state/init-barriers";
+import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
 import {
     ProfileAvatarCreateAction,
@@ -30,11 +30,10 @@ import { executor } from "state/executor";
 import { messageBox } from "state/messagebox/actions";
 import { getAvatars } from "state/profile/selectors";
 import { settingsUpdate } from "state/settings/actions";
-import { homeIntroduced } from "state/init-selectors";
 import { REL_CURRENT } from "util/rel-node-name";
 
 export default [
-    executor("PROFILE_LOAD", "", profileLoadSaga, homeIntroduced),
+    executor("PROFILE_LOAD", "", profileLoadSaga),
     executor("PROFILE_UPDATE", null, profileUpdateSaga),
     executor("PROFILE_IMAGE_UPLOAD", null, profileImageUploadSaga),
     executor("PROFILE_AVATARS_LOAD", "", profileAvatarsLoadSaga),
@@ -43,96 +42,96 @@ export default [
     executor("PROFILE_AVATARS_REORDER", "", profileAvatarsReorderSaga)
 ];
 
-function* profileLoadSaga(action: WithContext<ProfileLoadAction>) {
+async function profileLoadSaga(action: WithContext<ProfileLoadAction>): Promise<void> {
+    await homeIntroduced();
     try {
-        const profile = yield* call(Node.getProfile, action, REL_CURRENT, true);
-        yield* put(profileSet(profile).causedBy(action));
+        const profile = await Node.getProfile(action, REL_CURRENT, true);
+        dispatch(profileSet(profile).causedBy(action));
     } catch (e) {
-        yield* put(profileLoadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(profileLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* profileUpdateSaga(action: WithContext<ProfileUpdateAction>) {
+async function profileUpdateSaga(action: WithContext<ProfileUpdateAction>): Promise<void> {
     try {
-        const profile = yield* call(Node.updateProfile, action, REL_CURRENT, action.payload.profile);
-        yield* put(profileUpdateSucceeded().causedBy(action));
-        yield* put(profileSet(profile).causedBy(action));
+        const profile = await Node.updateProfile(action, REL_CURRENT, action.payload.profile);
+        dispatch(profileUpdateSucceeded().causedBy(action));
+        dispatch(profileSet(profile).causedBy(action));
     } catch (e) {
-        yield* put(profileUpdateFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(profileUpdateFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* profileImageUploadSaga(action: WithContext<ProfileImageUploadAction>) {
+async function profileImageUploadSaga(action: WithContext<ProfileImageUploadAction>): Promise<void> {
     try {
-        const {id, path, width, height, orientation} = yield* call(
-            Node.uploadPublicMedia,
+        const {id, path, width, height, orientation} = await Node.uploadPublicMedia(
             action,
             REL_CURRENT,
             action.payload.file,
             (loaded: number, total: number) => dispatch(profileImageUploadProgress(loaded, total))
         );
         if (width < 100 || height < 100) {
-            yield* put(messageBox(i18n.t("avatar-too-small")).causedBy(action));
-            yield* put(profileImageUploadFailed().causedBy(action));
+            dispatch(messageBox(i18n.t("avatar-too-small")).causedBy(action));
+            dispatch(profileImageUploadFailed().causedBy(action));
         } else {
-            yield* put(profileImageUploaded(id, path, width, height, orientation).causedBy(action));
+            dispatch(profileImageUploaded(id, path, width, height, orientation).causedBy(action));
         }
     } catch (e) {
-        yield* put(profileImageUploadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(profileImageUploadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* profileAvatarsLoadSaga(action: WithContext<ProfileAvatarsLoadAction>) {
+async function profileAvatarsLoadSaga(action: WithContext<ProfileAvatarsLoadAction>): Promise<void> {
     try {
-        const avatars = yield* call(Node.getAvatars, action, REL_CURRENT);
-        yield* put(profileAvatarsLoaded(avatars).causedBy(action));
+        const avatars = await Node.getAvatars(action, REL_CURRENT);
+        dispatch(profileAvatarsLoaded(avatars).causedBy(action));
     } catch (e) {
-        yield* put(profileAvatarsLoadFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(profileAvatarsLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* profileAvatarCreateSaga(action: WithContext<ProfileAvatarCreateAction>) {
+async function profileAvatarCreateSaga(action: WithContext<ProfileAvatarCreateAction>): Promise<void> {
     try {
-        const avatar = yield* call(Node.createAvatar, action, REL_CURRENT, action.payload.avatar);
-        yield* put(profileAvatarCreated(avatar).causedBy(action));
-        const onCreate = yield* select(state => state.profile.avatarEditDialog.onCreate);
+        const avatar = await Node.createAvatar(action, REL_CURRENT, action.payload.avatar);
+        dispatch(profileAvatarCreated(avatar).causedBy(action));
+        const onCreate = select().profile.avatarEditDialog.onCreate;
         if (onCreate) {
             onCreate(avatar);
         }
-        yield* put(settingsUpdate([{
+        dispatch(settingsUpdate([{
             name: CLIENT_SETTINGS_PREFIX + "avatar.shape.default",
             value: avatar.shape ?? null
         }]).causedBy(action));
     } catch (e) {
-        yield* put(profileAvatarCreateFailed().causedBy(action));
-        yield* put(errorThrown(e));
+        dispatch(profileAvatarCreateFailed().causedBy(action));
+        dispatch(errorThrown(e));
     }
 }
 
-function* profileAvatarDeleteSaga(action: WithContext<ProfileAvatarDeleteAction>) {
+async function profileAvatarDeleteSaga(action: WithContext<ProfileAvatarDeleteAction>): Promise<void> {
     const {id, onDeleted} = action.payload;
 
     try {
-        yield* call(Node.deleteAvatar, action, REL_CURRENT, id);
-        yield* put(profileAvatarDeleted(id).causedBy(action));
+        await Node.deleteAvatar(action, REL_CURRENT, id);
+        dispatch(profileAvatarDeleted(id).causedBy(action));
         if (onDeleted) {
             onDeleted(id);
         }
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* profileAvatarsReorderSaga(action: WithContext<ProfileAvatarsReorderAction>) {
-    const ids = yield* select(state => getAvatars(state).map(av => av.id));
+async function profileAvatarsReorderSaga(action: WithContext<ProfileAvatarsReorderAction>): Promise<void> {
+    const ids = select(state => getAvatars(state).map(av => av.id));
     ids.reverse();
     try {
-        yield* call(Node.reorderAvatars, action, REL_CURRENT, {ids});
+        await Node.reorderAvatars(action, REL_CURRENT, {ids});
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }

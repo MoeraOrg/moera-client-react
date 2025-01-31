@@ -6,7 +6,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { BlockedOperation, BlockedUserInfo, SourceFormat } from "api";
 import { ClientState } from "state/state";
-import { dispatch } from 'state/store-sagas';
+import { dispatch } from "state/store-sagas";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { blockDialogSubmit, closeBlockDialog } from "state/blockdialog/actions";

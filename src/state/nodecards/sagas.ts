@@ -1,11 +1,21 @@
-import { all, call, put, select } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE, SHERIFF_USER_LIST_HIDE } from "sheriffs";
-import { HomeNotConnectedError, NameResolvingError, Node, NodeApiError } from "api";
+import {
+    BlockedByUserInfo,
+    BlockedUserInfo,
+    FriendGroupDetails,
+    HomeNotConnectedError,
+    NameResolvingError,
+    Node,
+    NodeApiError,
+    SubscriberInfo,
+    SubscriptionInfo
+} from "api";
 import { executor } from "state/executor";
-import { mutuallyIntroduced } from "state/init-selectors";
+import { mutuallyIntroduced } from "state/init-barriers";
+import { dispatch, select } from "state/store-sagas";
 import {
     nodeCardBlockingLoad,
     NodeCardBlockingLoadAction,
@@ -49,216 +59,229 @@ import { mentionName } from "util/names";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("NODE_CARD_PREPARE_OWNERS", "", nodeCardPrepareOwnersSaga, mutuallyIntroduced),
-    executor("NODE_CARD_PREPARE", payload => payload.nodeName, nodeCardPrepareSaga, mutuallyIntroduced),
-    executor("NODE_CARD_DETAILS_LOAD", payload => payload.nodeName, nodeCardDetailsLoadSaga, mutuallyIntroduced),
-    executor("NODE_CARD_PEOPLE_LOAD", payload => payload.nodeName, nodeCardPeopleLoadSaga, mutuallyIntroduced),
-    executor("NODE_CARD_STORIES_LOAD", payload => payload.nodeName, nodeCardStoriesLoadSaga, mutuallyIntroduced),
-    executor(
-        "NODE_CARD_SUBSCRIPTION_LOAD",
-        payload => payload.nodeName,
-        nodeCardSubscriptionLoadSaga,
-        mutuallyIntroduced
-    ),
-    executor("NODE_CARD_FRIENDSHIP_LOAD", payload => payload.nodeName, nodeCardFriendshipLoadSaga, mutuallyIntroduced),
-    executor("NODE_CARD_BLOCKING_LOAD", payload => payload.nodeName, nodeCardBlockingLoadSaga, mutuallyIntroduced),
-    executor(
-        "NODE_CARD_SHERIFF_LIST_LOAD",
-        payload => payload.nodeName,
-        nodeCardSheriffListLoadSaga,
-        mutuallyIntroduced
-    ),
+    executor("NODE_CARD_PREPARE_OWNERS", "", nodeCardPrepareOwnersSaga),
+    executor("NODE_CARD_PREPARE", payload => payload.nodeName, nodeCardPrepareSaga),
+    executor("NODE_CARD_DETAILS_LOAD", payload => payload.nodeName, nodeCardDetailsLoadSaga),
+    executor("NODE_CARD_PEOPLE_LOAD", payload => payload.nodeName, nodeCardPeopleLoadSaga),
+    executor("NODE_CARD_STORIES_LOAD", payload => payload.nodeName, nodeCardStoriesLoadSaga),
+    executor("NODE_CARD_SUBSCRIPTION_LOAD", payload => payload.nodeName, nodeCardSubscriptionLoadSaga),
+    executor("NODE_CARD_FRIENDSHIP_LOAD", payload => payload.nodeName, nodeCardFriendshipLoadSaga),
+    executor("NODE_CARD_BLOCKING_LOAD", payload => payload.nodeName, nodeCardBlockingLoadSaga),
+    executor("NODE_CARD_SHERIFF_LIST_LOAD", payload => payload.nodeName, nodeCardSheriffListLoadSaga),
     executor("NODE_CARD_COPY_MENTION", "", nodeCardCopyMention),
     executor("SHERIFF_LIST_ADD", payload => payload.nodeName, sheriffListAddSaga),
     executor("SHERIFF_LIST_DELETE", payload => payload.nodeName, sheriffListDeleteSaga)
 ];
 
-function* nodeCardPrepareOwnersSaga(action: WithContext<NodeCardPrepareOwnersAction>) {
+async function nodeCardPrepareOwnersSaga(action: WithContext<NodeCardPrepareOwnersAction>): Promise<void> {
+    await mutuallyIntroduced();
     const {ownerNameOrUrl, homeOwnerNameOrUrl} = action.context;
     if (ownerNameOrUrl) {
-        yield* put(nodeCardPrepare(ownerNameOrUrl).causedBy(action));
+        dispatch(nodeCardPrepare(ownerNameOrUrl).causedBy(action));
     }
     if (homeOwnerNameOrUrl && homeOwnerNameOrUrl !== ownerNameOrUrl) {
-        yield* put(nodeCardPrepare(homeOwnerNameOrUrl).causedBy(action));
+        dispatch(nodeCardPrepare(homeOwnerNameOrUrl).causedBy(action));
     }
 }
 
-function* nodeCardPrepareSaga(action: WithContext<NodeCardPrepareAction>) {
+async function nodeCardPrepareSaga(action: WithContext<NodeCardPrepareAction>): Promise<void> {
+    await mutuallyIntroduced();
     const {nodeName} = action.payload;
     const {homeOwnerName} = action.context;
-    const card = yield* select(getNodeCard, nodeName);
+    const card = getNodeCard(select(), nodeName);
     if (card == null || (!card.details.loaded && !card.details.loading)) {
-        yield* put(nodeCardDetailsLoad(nodeName).causedBy(action));
+        dispatch(nodeCardDetailsLoad(nodeName).causedBy(action));
     }
     if (card == null || (!card.people.loaded && !card.people.loading)) {
-        yield* put(nodeCardPeopleLoad(nodeName).causedBy(action));
+        dispatch(nodeCardPeopleLoad(nodeName).causedBy(action));
     }
     if (card == null || (!card.stories.loaded && !card.stories.loading)) {
-        yield* put(nodeCardStoriesLoad(nodeName).causedBy(action));
+        dispatch(nodeCardStoriesLoad(nodeName).causedBy(action));
     }
     if (card == null || (!card.subscription.loaded && !card.subscription.loading)) {
-        yield* put(nodeCardSubscriptionLoad(nodeName).causedBy(action));
+        dispatch(nodeCardSubscriptionLoad(nodeName).causedBy(action));
     }
     if (card == null || (!card.friendship.loaded && !card.friendship.loading)) {
-        yield* put(nodeCardFriendshipLoad(nodeName).causedBy(action));
+        dispatch(nodeCardFriendshipLoad(nodeName).causedBy(action));
     }
     if (card == null || (!card.blocking.loaded && !card.blocking.loading)) {
-        yield* put(nodeCardBlockingLoad(nodeName).causedBy(action));
+        dispatch(nodeCardBlockingLoad(nodeName).causedBy(action));
     }
     if (homeOwnerName === SHERIFF_GOOGLE_PLAY_TIMELINE
         && (card == null || (!card.sheriffList.loaded && !card.sheriffList.loading))) {
 
-        yield* put(nodeCardSheriffListLoad(nodeName).causedBy(action));
+        dispatch(nodeCardSheriffListLoad(nodeName).causedBy(action));
     }
 }
 
-function* nodeCardDetailsLoadSaga(action: WithContext<NodeCardDetailsLoadAction>) {
+async function nodeCardDetailsLoadSaga(action: WithContext<NodeCardDetailsLoadAction>): Promise<void> {
+    await mutuallyIntroduced();
     const {nodeName} = action.payload;
     try {
-        const profile = yield* call(Node.getProfile, action, nodeName);
-        yield* put(nodeCardDetailsSet(nodeName, profile).causedBy(action));
+        const profile = await Node.getProfile(action, nodeName);
+        dispatch(nodeCardDetailsSet(nodeName, profile).causedBy(action));
     } catch (e) {
-        yield* put(nodeCardDetailsLoadFailed(nodeName).causedBy(action));
+        dispatch(nodeCardDetailsLoadFailed(nodeName).causedBy(action));
         if (!(e instanceof NameResolvingError)) {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* nodeCardPeopleLoadSaga(action: WithContext<NodeCardPeopleLoadAction>) {
+async function nodeCardPeopleLoadSaga(action: WithContext<NodeCardPeopleLoadAction>): Promise<void> {
+    await mutuallyIntroduced();
     const {nodeName} = action.payload;
     try {
-        const info = yield* call(Node.getPeopleGeneral, action, nodeName);
-        yield* put(nodeCardPeopleSet(
+        const info = await Node.getPeopleGeneral(action, nodeName);
+        dispatch(nodeCardPeopleSet(
             nodeName, info.feedSubscribersTotal ?? null, info.feedSubscriptionsTotal ?? null
         ).causedBy(action));
     } catch (e) {
-        yield* put(nodeCardPeopleLoadFailed(nodeName).causedBy(action));
+        dispatch(nodeCardPeopleLoadFailed(nodeName).causedBy(action));
         if (!(e instanceof NameResolvingError)) {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* nodeCardStoriesLoadSaga(action: WithContext<NodeCardStoriesLoadAction>) {
+async function nodeCardStoriesLoadSaga(action: WithContext<NodeCardStoriesLoadAction>): Promise<void> {
+    await mutuallyIntroduced();
     const {nodeName} = action.payload;
     try {
-        const {total, lastCreatedAt = null} = yield* call(Node.getFeedGeneral, action, nodeName, "timeline");
-        yield* put(nodeCardStoriesSet(nodeName, total, lastCreatedAt).causedBy(action));
+        const {total, lastCreatedAt = null} = await Node.getFeedGeneral(action, nodeName, "timeline");
+        dispatch(nodeCardStoriesSet(nodeName, total, lastCreatedAt).causedBy(action));
     } catch (e) {
-        yield* put(nodeCardDetailsLoadFailed(nodeName).causedBy(action));
+        dispatch(nodeCardDetailsLoadFailed(nodeName).causedBy(action));
         if (!(e instanceof NameResolvingError)) {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* nodeCardSubscriptionLoadSaga(action: WithContext<NodeCardSubscriptionLoadAction>) {
+async function nodeCardSubscriptionLoadSaga(action: WithContext<NodeCardSubscriptionLoadAction>): Promise<void> {
+    await mutuallyIntroduced();
     const {nodeName} = action.payload;
     try {
-        const {subscriber, subscription} = yield* all({
-            subscriber: call(loadSubscriber, action, nodeName),
-            subscription: call(loadSubscription, action, nodeName)
-        });
-        yield* put(nodeCardSubscriptionSet(nodeName, subscriber ?? null, subscription ?? null).causedBy(action));
+        const [subscriber, subscription] = await Promise.all([
+            loadSubscriber(action, nodeName),
+            loadSubscription(action, nodeName)
+        ]);
+        dispatch(nodeCardSubscriptionSet(nodeName, subscriber ?? null, subscription ?? null).causedBy(action));
     } catch (e) {
-        yield* put(nodeCardSubscriptionLoadFailed(nodeName).causedBy(action));
+        dispatch(nodeCardSubscriptionLoadFailed(nodeName).causedBy(action));
         if (!(e instanceof NameResolvingError) && !(e instanceof HomeNotConnectedError)) {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* loadSubscriber(action: WithContext<NodeCardSubscriptionLoadAction>, nodeName: string) {
+async function loadSubscriber(
+    action: WithContext<NodeCardSubscriptionLoadAction>, nodeName: string
+): Promise<SubscriberInfo | null> {
     const {homeOwnerName} = action.context;
     if (homeOwnerName == null || nodeName === homeOwnerName) {
         return null;
     }
-    const subscribers = yield* call(Node.getSubscribers, action, REL_HOME, nodeName, "feed" as const, null, null,
-        ["authentication.required"]);
+    const subscribers = await Node.getSubscribers(
+        action, REL_HOME, nodeName, "feed" as const, null, null, ["authentication.required"]
+    );
     return subscribers?.[0];
 }
 
-function* loadSubscription(action: WithContext<NodeCardSubscriptionLoadAction>, nodeName: string) {
+async function loadSubscription(
+    action: WithContext<NodeCardSubscriptionLoadAction>, nodeName: string
+): Promise<SubscriptionInfo | null> {
     const {homeOwnerName} = action.context;
     if (homeOwnerName == null || nodeName === homeOwnerName) {
         return null;
     }
-    const subscriptions = yield* call(Node.getSubscriptions, action, REL_HOME, nodeName, "feed" as const,
-        ["authentication.required"]);
+    const subscriptions = await Node.getSubscriptions(
+        action, REL_HOME, nodeName, "feed" as const, ["authentication.required"]
+    );
     return subscriptions?.[0];
 }
 
-function* nodeCardFriendshipLoadSaga(action: WithContext<NodeCardFriendshipLoadAction>) {
+async function nodeCardFriendshipLoadSaga(action: WithContext<NodeCardFriendshipLoadAction>): Promise<void> {
+    await mutuallyIntroduced();
     const {nodeName} = action.payload;
     try {
-        const {groups, remoteGroups} = yield* all({
-            groups: call(loadFriendGroups, action, nodeName),
-            remoteGroups: call(loadRemoteFriendGroups, action, nodeName)
-        });
-        yield* put(nodeCardFriendshipSet(nodeName, groups ?? null, remoteGroups ?? null).causedBy(action));
+        const [groups, remoteGroups] = await Promise.all([
+            loadFriendGroups(action, nodeName),
+            loadRemoteFriendGroups(action, nodeName)
+        ]);
+        dispatch(nodeCardFriendshipSet(nodeName, groups ?? null, remoteGroups ?? null).causedBy(action));
     } catch (e) {
-        yield* put(nodeCardFriendshipLoadFailed(nodeName).causedBy(action));
+        dispatch(nodeCardFriendshipLoadFailed(nodeName).causedBy(action));
         if (!(e instanceof NameResolvingError) && !(e instanceof HomeNotConnectedError)) {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* loadFriendGroups(action: WithContext<NodeCardFriendshipLoadAction>, nodeName: string) {
+async function loadFriendGroups(
+    action: WithContext<NodeCardFriendshipLoadAction>, nodeName: string
+): Promise<FriendGroupDetails[] | null | undefined> {
     const {homeOwnerName} = action.context;
     if (!homeOwnerName || !nodeName || nodeName === homeOwnerName) {
         return null;
     }
-    const {groups} = yield* call(Node.getFriend, action, REL_HOME, nodeName);
+    const {groups} = await Node.getFriend(action, REL_HOME, nodeName);
     return groups;
 }
 
-function* loadRemoteFriendGroups(action: WithContext<NodeCardFriendshipLoadAction>, nodeName: string) {
+async function loadRemoteFriendGroups(
+    action: WithContext<NodeCardFriendshipLoadAction>, nodeName: string
+): Promise<FriendGroupDetails[] | null | undefined> {
     const {homeOwnerName} = action.context;
     if (!homeOwnerName || !nodeName || nodeName === homeOwnerName) {
         return null;
     }
-    const {groups} = yield* call(Node.getFriend, action, nodeName, homeOwnerName);
+    const {groups} = await Node.getFriend(action, nodeName, homeOwnerName);
     return groups;
 }
 
-function* nodeCardBlockingLoadSaga(action: WithContext<NodeCardBlockingLoadAction>) {
+async function nodeCardBlockingLoadSaga(action: WithContext<NodeCardBlockingLoadAction>): Promise<void> {
+    await mutuallyIntroduced();
     const {nodeName} = action.payload;
     try {
-        const {blocked, blockedBy} = yield* all({
-            blocked: call(loadBlocked, action, nodeName),
-            blockedBy: call(loadBlockedBy, action, nodeName)
-        });
-        yield* put(nodeCardBlockingSet(nodeName, blocked ?? null, blockedBy ?? null).causedBy(action));
+        const [blocked, blockedBy] = await Promise.all([
+            loadBlocked(action, nodeName),
+            loadBlockedBy(action, nodeName)
+        ]);
+        dispatch(nodeCardBlockingSet(nodeName, blocked ?? null, blockedBy ?? null).causedBy(action));
     } catch (e) {
-        yield* put(nodeCardBlockingLoadFailed(nodeName).causedBy(action));
+        dispatch(nodeCardBlockingLoadFailed(nodeName).causedBy(action));
         if (!(e instanceof NameResolvingError) && !(e instanceof HomeNotConnectedError)) {
-            yield* put(errorThrown(e));
+            dispatch(errorThrown(e));
         }
     }
 }
 
-function* loadBlocked(action: WithContext<NodeCardBlockingLoadAction>, nodeName: string) {
+async function loadBlocked(
+    action: WithContext<NodeCardBlockingLoadAction>, nodeName: string
+): Promise<BlockedUserInfo[] | null> {
     const {homeOwnerName} = action.context;
     if (homeOwnerName == null || nodeName === homeOwnerName) {
         return null;
     }
-    return yield* call(Node.searchBlockedUsers, action, REL_HOME, {
+    return Node.searchBlockedUsers(action, REL_HOME, {
         nodeName,
         blockedOperations: ["comment" as const, "reaction" as const, "visibility" as const]
     });
 }
 
-function* loadBlockedBy(action: WithContext<NodeCardBlockingLoadAction>, nodeName: string) {
+async function loadBlockedBy(
+    action: WithContext<NodeCardBlockingLoadAction>, nodeName: string
+): Promise<BlockedByUserInfo[] | null> {
     const {homeOwnerName} = action.context;
     if (homeOwnerName == null || nodeName === homeOwnerName) {
         return null;
     }
-    return yield* call(Node.searchBlockedByUsers, action, REL_HOME, {postings: [{nodeName}]});
+    return Node.searchBlockedByUsers(action, REL_HOME, {postings: [{nodeName}]});
 }
 
-function* nodeCardSheriffListLoadSaga(action: WithContext<NodeCardSheriffListLoadAction>) {
+async function nodeCardSheriffListLoadSaga(action: WithContext<NodeCardSheriffListLoadAction>): Promise<void> {
+    await mutuallyIntroduced();
     const {nodeName} = action.payload;
 
     if (nodeName.search(/[/:]/g) >= 0) {
@@ -268,46 +291,45 @@ function* nodeCardSheriffListLoadSaga(action: WithContext<NodeCardSheriffListLoa
     }
 
     try {
-        yield* call(Node.getUserListItem, action, REL_HOME, SHERIFF_USER_LIST_HIDE, nodeName,
-            ["user-list-item.not-found"]);
-        yield* put(nodeCardSheriffListSet(nodeName, true).causedBy(action));
+        await Node.getUserListItem(action, REL_HOME, SHERIFF_USER_LIST_HIDE, nodeName, ["user-list-item.not-found"]);
+        dispatch(nodeCardSheriffListSet(nodeName, true).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError && e.errorCode === "user-list-item.not-found") {
-            yield* put(nodeCardSheriffListSet(nodeName, false).causedBy(action));
+            dispatch(nodeCardSheriffListSet(nodeName, false).causedBy(action));
         } else {
-            yield* put(nodeCardBlockingLoadFailed(nodeName).causedBy(action));
+            dispatch(nodeCardBlockingLoadFailed(nodeName).causedBy(action));
             if (!(e instanceof NameResolvingError) && !(e instanceof HomeNotConnectedError)) {
-                yield* put(errorThrown(e));
+                dispatch(errorThrown(e));
             }
         }
     }
 }
 
-function* nodeCardCopyMention(action: NodeCardCopyMentionAction) {
-    yield* call(clipboardCopy, mentionName(action.payload.nodeName, action.payload.fullName));
+async function nodeCardCopyMention(action: NodeCardCopyMentionAction): Promise<void> {
+    await clipboardCopy(mentionName(action.payload.nodeName, action.payload.fullName));
     if (!Browser.isAndroidBrowser()) {
-        yield* put(flashBox(i18n.t("mention-copied")).causedBy(action));
+        dispatch(flashBox(i18n.t("mention-copied")).causedBy(action));
     }
 }
 
-function* sheriffListAddSaga(action: WithContext<SheriffListAddAction>) {
+async function sheriffListAddSaga(action: WithContext<SheriffListAddAction>): Promise<void> {
     const {nodeName} = action.payload;
     try {
-        yield* call(Node.createUserListItem, action, REL_HOME, SHERIFF_USER_LIST_HIDE, {nodeName});
-        yield* put(nodeCardSheriffListSet(nodeName, true).causedBy(action));
-        yield* put(flashBox(i18n.t("content-hidden-in-google-play")).causedBy(action));
+        await Node.createUserListItem(action, REL_HOME, SHERIFF_USER_LIST_HIDE, {nodeName});
+        dispatch(nodeCardSheriffListSet(nodeName, true).causedBy(action));
+        dispatch(flashBox(i18n.t("content-hidden-in-google-play")).causedBy(action));
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
 
-function* sheriffListDeleteSaga(action: WithContext<SheriffListDeleteAction>) {
+async function sheriffListDeleteSaga(action: WithContext<SheriffListDeleteAction>): Promise<void> {
     const {nodeName} = action.payload;
     try {
-        yield* call(Node.deleteUserListItem, action, REL_HOME, SHERIFF_USER_LIST_HIDE, nodeName);
-        yield* put(nodeCardSheriffListSet(nodeName, false).causedBy(action));
-        yield* put(flashBox(i18n.t("content-unhidden-in-google-play")).causedBy(action));
+        await Node.deleteUserListItem(action, REL_HOME, SHERIFF_USER_LIST_HIDE, nodeName);
+        dispatch(nodeCardSheriffListSet(nodeName, false).causedBy(action));
+        dispatch(flashBox(i18n.t("content-unhidden-in-google-play")).causedBy(action));
     } catch (e) {
-        yield* put(errorThrown(e));
+        dispatch(errorThrown(e));
     }
 }
