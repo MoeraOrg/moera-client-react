@@ -3,6 +3,8 @@ import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 
 import { applyMiddleware, combineReducers, legacy_createStore } from 'redux';
+import { createStoreMiddleware } from "state/store-middleware";
+
 import getContext from "state/context";
 import pulse from "state/pulse/reducer";
 import error from "state/error/reducer";
@@ -51,6 +53,7 @@ import signUpDialog from "state/signupdialog/reducer";
 import quickTips from "state/quicktips/reducer";
 import refresh from "state/refresh/reducer";
 
+import { collectExecutors } from "state/executor";
 import { pulseSaga, signalPostInitSaga } from "state/pulse/sagas";
 import navigationExecutors from "state/navigation/sagas";
 import errorExecutors from "state/error/sagas";
@@ -122,9 +125,6 @@ import sheriffOrderDetailsDialogTriggers from "state/sherifforderdetailsdialog/t
 import signUpDialogTriggers from "state/signupdialog/triggers";
 import quickTipsTriggers from "state/quicktips/triggers";
 import refreshTriggers from "state/refresh/triggers";
-
-import { collectExecutors, invokeExecutors } from "state/executor";
-import { createStoreMiddleware } from "state/store-middleware";
 
 const reducers = combineReducers({
     pulse,
