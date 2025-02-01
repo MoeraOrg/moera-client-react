@@ -124,7 +124,8 @@ async function retryFetch(url: string, options: FetcherOptions): Promise<Respons
     for (let i = 0; i < limit; i++) {
         try {
             return await fetch(url, {signal, ...options});
-        } catch (exception) {
+        } catch (e) {
+            exception = e;
         }
         await delay(RETRY_DELAY);
     }
