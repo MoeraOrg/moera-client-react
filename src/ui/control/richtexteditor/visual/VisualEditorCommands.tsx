@@ -436,12 +436,8 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
                 }
             }
         } else {
-            for (
-                const [node, path] of Node.elements(editor, {
-                from: editor.selection.anchor.path,
-                to: editor.selection.focus.path
-            })
-                ) {
+            const [start, end] = Range.edges(editor.selection);
+            for (const [node, path] of Node.elements(editor, {from: start.path, to: end.path})) {
                 if (!isScriptureElement(node) || isParagraphElement(node)) {
                     continue;
                 }
