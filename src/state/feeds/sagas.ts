@@ -278,7 +278,6 @@ async function feedsUpdateSaga(action: WithContext<FeedsUpdateAction>): Promise<
     await homeIntroduced();
     const feeds = select(getAllFeeds);
     for (const {nodeName, feedName} of feeds) {
-        window.Android?.log(`Updating feed "${feedName}" on node "${nodeName}"`); // FIXME temporary
         try {
             const status = await Node.getFeedStatus(action, nodeName, feedName);
             dispatch(feedStatusSet(nodeName, feedName, status).causedBy(action));
