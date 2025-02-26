@@ -266,7 +266,7 @@ async function loadBlocked(
     }
     return Node.searchBlockedUsers(action, REL_HOME, {
         nodeName,
-        blockedOperations: ["comment" as const, "reaction" as const, "visibility" as const]
+        blockedOperations: ["comment" as const, "reaction" as const, "visibility" as const, "instant" as const]
     });
 }
 
