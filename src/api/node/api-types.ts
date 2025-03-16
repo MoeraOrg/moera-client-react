@@ -56,7 +56,7 @@ export type StoryType = "asked-to-friend" | "asked-to-subscribe" | "blocked-user
     | "sheriff-complaint-decided" | "sheriff-marked" | "sheriff-unmarked" | "subscriber-added" | "subscriber-deleted"
     | "unblocked-user" | "unblocked-user-in-posting";
 
-export type SubscriptionReason = "user" | "mention" | "comment";
+export type SubscriptionReason = "user" | "mention" | "comment" | "auto";
 
 export type SubscriptionType = "feed" | "posting" | "posting-comments" | "profile" | "user-list";
 
@@ -74,6 +74,7 @@ export interface CommentOperations {
     viewNegativeReactionRatios?: PrincipalValue | null;
     addReaction?: PrincipalValue | null;
     addNegativeReaction?: PrincipalValue | null;
+    overrideReaction?: PrincipalValue | null;
 }
 
 export interface ContactOperations {
@@ -420,6 +421,8 @@ export interface FeedWithStatus {
     feedName: string;
     notViewed: number;
     notRead: number;
+    notViewedMoment?: number | null;
+    notReadMoment?: number | null;
 }
 
 export interface FriendGroupAssignment {
@@ -1194,6 +1197,7 @@ export interface CommentSourceText {
     acceptedReactions?: AcceptedReactions | null;
     repliedToId?: string | null;
     operations?: CommentOperations | null;
+    reactionOperations?: ReactionOperations | null;
     seniorOperations?: CommentOperations | null;
 }
 
@@ -1357,6 +1361,8 @@ export interface PostingSourceText {
     acceptedReactions?: AcceptedReactions | null;
     operations?: PostingOperations | null;
     commentOperations?: CommentOperations | null;
+    reactionOperations?: ReactionOperations | null;
+    commentReactionOperations?: ReactionOperations | null;
 }
 
 export interface PostingText {
@@ -1393,6 +1399,7 @@ export interface SettingDescriptor {
     defaultValue?: string | null;
     internal?: boolean | null;
     privileged?: boolean | null;
+    encrypted?: boolean | null;
     title?: string | null;
     modifiers?: SettingTypeModifiers | null;
 }

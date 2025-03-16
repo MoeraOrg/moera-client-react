@@ -133,7 +133,9 @@ def generate_operations(operations: Any, tfile: TextIO, sfile: TextIO) -> None:
 JS_TYPES = {
     'String': 'string',
     'String[]': 'string[]',
+    'short': 'number',
     'int': 'number',
+    'long': 'number',
     'float': 'number',
     'boolean': 'boolean',
     'timestamp': 'number',
@@ -154,7 +156,9 @@ def to_js_type(api_type: str) -> str:
 SCHEMA_TYPES = {
     'String': ('string', False),
     'String[]': ('string', True),
+    'short': ('integer', False),
     'int': ('integer', False),
+    'long': ('integer', False),
     'float': ('number', False),
     'boolean': ('boolean', False),
     'timestamp': ('integer', False),

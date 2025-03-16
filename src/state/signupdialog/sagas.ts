@@ -72,7 +72,7 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
         try {
             await Node.createDomain(
                 action, provider.controller, {name: nodeDomainName},
-                ["domain.already-exists", "domainInfo.name.blank", "domainInfo.name.wrong-hostname"]
+                ["domain.already-exists", "domain.name.blank", "domain.name.invalid-domain"]
             );
         } catch (e) {
             dispatch(signUpFailed(SIGN_UP_STAGE_DOMAIN).causedBy(action));

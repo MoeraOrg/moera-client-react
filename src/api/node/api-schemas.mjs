@@ -51,6 +51,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "overrideReaction": {
+                    type: "string",
+                    nullable: true
+                },
             },
             additionalProperties: false
         },
@@ -960,6 +964,14 @@ export const NODE_API_SCHEMAS = {
                 },
                 "notRead": {
                     type: "integer"
+                },
+                "notViewedMoment": {
+                    type: "integer",
+                    nullable: true
+                },
+                "notReadMoment": {
+                    type: "integer",
+                    nullable: true
                 },
             },
             required: [
