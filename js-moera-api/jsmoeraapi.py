@@ -214,14 +214,15 @@ class Interface:
                 else:
                     assert isinstance(s_type, tuple)
                     t, array = s_type
+            constraints = field_constraints(field)
             if t is not None:
                 if array:
                     schema_array(sfile, 4, t, struct=struct, nullable=optional, default=default,
-                                 min_items=field.get('min-items'), max_items=field.get('max-items'),
-                                 min=field.get('min'), max=field.get('max'))
+                                 min_items=constraints.get('min-items'), max_items=constraints.get('max-items'),
+                                 min=constraints.get('min'), max=constraints.get('max'))
                 else:
                     schema_type(sfile, 4, t, struct=struct, nullable=optional, default=default,
-                                min=field.get('min'), max=field.get('max'))
+                                min=constraints.get('min'), max=constraints.get('max'))
             sfile.write(',\n')
         sfile.write(f'{ind(3)}}},\n')
         if len(required) > 0:
@@ -236,6 +237,27 @@ class Interface:
             sfile.write(f'\n{ind(2)}{class_name}Array: ')
             schema_array(sfile, 2, class_name, struct=True)
             sfile.write(',\n')
+
+
+def field_constraints(field: Any) -> dict:
+    if 'constraints' not in field:
+        return {}
+
+    result = {}
+    for constraint in field['constraints']:
+        if 'value' in constraint:
+            cons = constraint['value']
+            if 'min' in cons:
+                result['min'] = cons['min']
+            if 'max' in cons:
+                result['max'] = cons['max']
+        if 'items' in constraint:
+            cons = constraint['items']
+            if 'min' in cons:
+                result['min-items'] = cons['min']
+            if 'max' in cons:
+                result['max-items'] = cons['max']
+    return result
 
 
 class Structure(Interface):
