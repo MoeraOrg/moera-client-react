@@ -114,7 +114,7 @@ async function retryFetch(url: string, options: FetcherOptions): Promise<Respons
         limit = 1;
         const largeBody = options.body instanceof Blob
             || (typeof (options.body) === "string" && options.body.length > LARGE_BODY_MIN);
-        signal = largeBody ? AbortSignal.timeout(UPDATE_TIMEOUT) : null;
+        signal = AbortSignal.timeout(largeBody ? UPDATE_TIMEOUT : FETCH_TIMEOUT);
     } else {
         limit = RETRY_LIMIT;
         signal = AbortSignal.timeout(FETCH_TIMEOUT);
