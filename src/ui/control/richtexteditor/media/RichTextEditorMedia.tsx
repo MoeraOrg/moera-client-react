@@ -118,7 +118,11 @@ export default function RichTextEditorMedia({
     const onInsertRef = useRef<OnInsertHandler | undefined>();
 
     const openUploadImages = (files: File[]) => {
-        if (forceCompress && onInsertRef.current == null && files.length > 0) {
+        if (files.length === 0) {
+            return;
+        }
+
+        if (forceCompress && onInsertRef.current == null) {
             uploadImages(files, true);
             return;
         }
