@@ -248,8 +248,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return immutable.set(state, "comments.loadingPast", true);
 
         case "COMMENTS_PAST_SLICE_LOAD_FAILED":
-            if (action.payload.nodeName !== state.comments.receiverName
-                || action.payload.postingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
             return immutable.set(state, "comments.loadingPast", false);
@@ -258,15 +260,19 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return immutable.set(state, "comments.loadingFuture", true);
 
         case "COMMENTS_FUTURE_SLICE_LOAD_FAILED":
-            if (action.payload.nodeName !== state.comments.receiverName
-                || action.payload.postingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
             return immutable.set(state, "comments.loadingFuture", false);
 
         case "COMMENTS_PAST_SLICE_SET": {
-            if (action.payload.nodeName !== state.comments.receiverName
-                || action.payload.postingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
             const istate = immutable.wrap(state);
@@ -290,8 +296,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
         }
 
         case "COMMENTS_FUTURE_SLICE_SET": {
-            if (action.payload.nodeName !== state.comments.receiverName
-                || action.payload.postingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
             const istate = immutable.wrap(state);
@@ -315,8 +323,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
         }
 
         case "COMMENTS_SLICE_UPDATE": {
-            if (action.payload.nodeName !== state.comments.receiverName
-                || action.payload.postingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
             const istate = immutable.wrap(state);
@@ -393,8 +403,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return immutable.set(state, "comments.loadingBlockedUsers", true);
 
         case "COMMENTS_BLOCKED_USERS_LOADED":
-            if (action.payload.receiverName !== state.comments.receiverName
-                || action.payload.receiverPostingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.receiverName !== state.comments.receiverName
+                || action.payload.receiverPostingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
             return immutable.assign(state, "comments", {
@@ -430,8 +442,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             }
 
         case "COMMENT_POSTED": {
-            if (action.payload.nodeName !== state.comments.receiverName
-                || action.payload.postingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
 
@@ -473,12 +487,16 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
         }
 
         case "COMMENT_DRAFT_LOADED": {
-            if (action.payload.draft.receiverName !== state.comments.receiverName
-                || action.payload.draft.receiverPostingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.draft.receiverName !== state.comments.receiverName
+                || action.payload.draft.receiverPostingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
-            if (action.payload.draft.receiverCommentId != null
-                && action.payload.draft.receiverCommentId !== state.commentDialog.commentId) {
+            if (
+                action.payload.draft.receiverCommentId != null
+                && action.payload.draft.receiverCommentId !== state.commentDialog.commentId
+            ) {
                 return state;
             }
 
@@ -496,8 +514,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
         }
 
         case "COMMENT_DRAFT_LOAD_FAILED": {
-            if (action.payload.nodeName !== state.comments.receiverName
-                || action.payload.postingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
             if (action.payload.commentId != null && action.payload.commentId !== state.commentDialog.commentId) {
@@ -518,8 +538,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
         }
 
         case "COMMENT_DRAFT_ABSENT": {
-            if (action.payload.nodeName !== state.comments.receiverName
-                || action.payload.postingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
             if (action.payload.commentId != null && action.payload.commentId !== state.commentDialog.commentId) {
@@ -539,8 +561,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
         }
 
         case "COMMENT_DRAFT_SAVE": {
-            if (action.payload.draftText.receiverName !== state.comments.receiverName
-                || action.payload.draftText.receiverPostingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.draftText.receiverName !== state.comments.receiverName
+                || action.payload.draftText.receiverPostingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
 
@@ -552,8 +576,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
         }
 
         case "COMMENT_DRAFT_SAVED": {
-            if (action.payload.nodeName !== state.comments.receiverName
-                || action.payload.postingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
 
@@ -566,8 +592,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
         }
 
         case "COMMENT_DRAFT_SAVE_FAILED": {
-            if (action.payload.nodeName !== state.comments.receiverName
-                || action.payload.postingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
 
@@ -579,8 +607,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
         }
 
         case "COMMENT_DRAFT_DELETED": {
-            if (action.payload.nodeName !== state.comments.receiverName
-                || action.payload.postingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
 
@@ -619,8 +649,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
         }
 
         case "COMMENT_DELETED": {
-            if (action.payload.nodeName !== state.comments.receiverName
-                || action.payload.postingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
             const index = state.comments.comments.findIndex(c => c.id === action.payload.commentId);
@@ -631,8 +663,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
         }
 
         case "COMMENT_DELETE_FAILED": {
-            if (action.payload.nodeName !== state.comments.receiverName
-                || action.payload.postingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
             const index = state.comments.comments.findIndex(c => c.id === action.payload.commentId);
@@ -645,9 +679,11 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
         case "EVENT_RECEIVER_COMMENT_DELETED": {
             const {id, postingId, moment} = action.payload;
 
-            if (state.comments.receiverPostingId !== postingId
+            if (
+                state.comments.receiverPostingId !== postingId
                 || moment > state.comments.before
-                || moment <= state.comments.after) {
+                || moment <= state.comments.after
+            ) {
                 return state;
             }
             const index = state.comments.comments.findIndex(c => c.id === id);
@@ -674,8 +710,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return immutable.set(state, "comments.loadingFocusedComment", true);
 
         case "FOCUSED_COMMENT_LOAD_FAILED":
-            if (action.payload.nodeName !== state.comments.receiverName
-                || action.payload.postingId !== state.comments.receiverPostingId) {
+            if (
+                action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId
+            ) {
                 return state;
             }
             return immutable.assign(state, "comments", {
