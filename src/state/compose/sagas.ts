@@ -41,7 +41,7 @@ export default [
     executor("COMPOSE_POSTING_LOAD", "", composePostingLoadSaga),
     executor("COMPOSE_POST", null, composePostSaga),
     executor("COMPOSE_DRAFT_LOAD", "", composeDraftLoadSaga),
-    executor("COMPOSE_DRAFT_SAVE", "", composeDraftSaveSaga),
+    executor("COMPOSE_DRAFT_SAVE", null, composeDraftSaveSaga),
     executor("COMPOSE_DRAFT_DELETE", "", composeDraftDeleteSaga),
     executor("COMPOSE_DRAFT_LIST_LOAD", "", composeDraftListLoadSaga),
     executor("COMPOSE_DRAFT_LIST_ITEM_RELOAD", payload => payload.id, composeDraftListItemReloadSaga),

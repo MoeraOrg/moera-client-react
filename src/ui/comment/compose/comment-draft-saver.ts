@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
@@ -59,44 +60,59 @@ export function useCommentDraftSaver(commentId: string | null): DraftSavingState
         getSetting(state, "comment.body-src-format.default") as SourceFormat);
     const dispatch = useDispatch();
 
-    const toText = (values: CommentComposeValues): CommentText | null =>
-        valuesToCommentText(
-            values,
-            {
-                ownerName, ownerFullName, ownerGender, smileysEnabled, sourceFormatDefault, reactionsPositiveDefault,
-                reactionsNegativeDefault, repliedToId
-            }
-        );
+    const toText = useCallback(
+        (values: CommentComposeValues): CommentText | null =>
+            valuesToCommentText(
+                values,
+                {
+                    ownerName, ownerFullName, ownerGender, smileysEnabled, sourceFormatDefault,
+                    reactionsPositiveDefault, reactionsNegativeDefault, repliedToId
+                }
+            ),
+        [
+            ownerName, ownerFullName, ownerGender, smileysEnabled, sourceFormatDefault, reactionsPositiveDefault,
+            reactionsNegativeDefault, repliedToId
+        ]
+    );
 
-    const isChanged = (commentText: CommentText): boolean => isCommentTextChanged(commentText, comment);
+    const isChanged = useCallback(
+        (commentText: CommentText): boolean => isCommentTextChanged(commentText, comment),
+        [comment]
+    );
 
-    const save = (text: CommentText, values: CommentComposeValues): void => {
-        if (ownerName != null && receiverPostingId != null) {
-            const media = new Map(
-                (values.body.media ?? [])
-                    .concat(values.linkPreviews.media)
-                    .filter(notNull)
-                    .map(rm => [rm.id, rm])
-            );
-            dispatch(commentDraftSave(
-                draft?.id ?? null,
-                toDraftText(receiverName ?? ownerName, receiverPostingId, commentId, repliedToId, text, media),
-                formId
-            ));
-        }
-    };
+    const save = useCallback(
+        (text: CommentText, values: CommentComposeValues): void => {
+            if (ownerName != null && receiverPostingId != null) {
+                const media = new Map(
+                    (values.body.media ?? [])
+                        .concat(values.linkPreviews.media)
+                        .filter(notNull)
+                        .map(rm => [rm.id, rm])
+                );
+                dispatch(commentDraftSave(
+                    draft?.id ?? null,
+                    toDraftText(receiverName ?? ownerName, receiverPostingId, commentId, repliedToId, text, media),
+                    formId
+                ));
+            }
+        },
+        [ownerName, receiverPostingId, draft?.id, receiverName, commentId, repliedToId, formId, dispatch]
+    );
 
-    const drop = (): void => {
-        if (commentId != null) {
-            if (draft?.id != null) {
-                dispatch(commentDialogCommentReset(draft.id, false));
+    const drop = useCallback(
+        (): void => {
+            if (commentId != null) {
+                if (draft?.id != null) {
+                    dispatch(commentDialogCommentReset(draft.id, false));
+                }
+            } else {
+                if (draft != null) {
+                    dispatch(commentDraftDelete(draft));
+                }
             }
-        } else {
-            if (draft != null) {
-                dispatch(commentDraftDelete(draft));
-            }
-        }
-    }
+        },
+        [commentId, draft, dispatch]
+    );
 
     return useDraftSaver({
         toText, isChanged, save, drop,

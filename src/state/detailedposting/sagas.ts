@@ -124,7 +124,7 @@ export default [
     executor("COMMENT_LOAD", payload => payload.commentId, commentLoadSaga),
     executor("COMMENT_POST", null, commentPostSaga),
     executor("COMMENT_DRAFT_LOAD", "", commentDraftLoadSaga),
-    executor("COMMENT_DRAFT_SAVE", "", commentDraftSaveSaga),
+    executor("COMMENT_DRAFT_SAVE", null, commentDraftSaveSaga),
     executor("COMMENT_DRAFT_DELETE", "", commentDraftDeleteSaga),
     executor("COMMENT_COMPOSE_CANCEL", "", commentComposeCancelSaga),
     executor("COMMENT_DELETE", payload => payload.commentId, commentDeleteSaga),

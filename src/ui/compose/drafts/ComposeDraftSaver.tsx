@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
@@ -49,32 +49,47 @@ export default function ComposeDraftSaver() {
         getSetting(state, "avatar.shape.default") as string);
     const dispatch = useDispatch();
 
-    const toText = (values: ComposePageValues): PostingText =>
-        valuesToPostingText(values, {gender, postingId, features, smileysEnabled, newsFeedEnabled, avatarShapeDefault});
+    const toText = useCallback(
+        (values: ComposePageValues): PostingText =>
+            valuesToPostingText(
+                values,
+                {gender, postingId, features, smileysEnabled, newsFeedEnabled, avatarShapeDefault}
+            ),
+        [avatarShapeDefault, features, gender, newsFeedEnabled, postingId, smileysEnabled]
+    );
 
-    const isChanged = (postingText: PostingText): boolean => isPostingTextChanged(postingText, posting);
+    const isChanged = useCallback(
+        (postingText: PostingText): boolean => isPostingTextChanged(postingText, posting),
+        [posting]
+    );
 
-    const save = (text: PostingText, values: ComposePageValues): void => {
-        if (ownerName != null) {
-            const media = new Map(
-                (values.body.media ?? [])
-                    .concat(values.linkPreviews.media)
-                    .filter(notNull)
-                    .map(rm => [rm.id, rm])
-            );
-            dispatch(composeDraftSave(draftId, toDraftText(ownerName, postingId, text, media)));
-        }
-    }
-
-    const drop = (): void => {
-        if (draftId != null) {
-            if (postingId == null) {
-                dispatch(composeDraftListItemDelete(draftId, false));
-            } else {
-                dispatch(composeUpdateDraftDelete(false));
+    const save = useCallback(
+        (text: PostingText, values: ComposePageValues): void => {
+            if (ownerName != null) {
+                const media = new Map(
+                    (values.body.media ?? [])
+                        .concat(values.linkPreviews.media)
+                        .filter(notNull)
+                        .map(rm => [rm.id, rm])
+                );
+                dispatch(composeDraftSave(draftId, toDraftText(ownerName, postingId, text, media)));
             }
-        }
-    }
+        },
+        [ownerName, draftId, postingId, dispatch]
+    );
+
+    const drop = useCallback(
+        (): void => {
+            if (draftId != null) {
+                if (postingId == null) {
+                    dispatch(composeDraftListItemDelete(draftId, false));
+                } else {
+                    dispatch(composeUpdateDraftDelete(false));
+                }
+            }
+        },
+        [draftId, postingId, dispatch]
+    );
 
     const {unsaved, saving, saved} = useDraftSaver({
         toText, isChanged, save, drop,
