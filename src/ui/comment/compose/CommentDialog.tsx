@@ -144,11 +144,21 @@ export default function CommentDialog() {
         getSetting(state, "comment.body-src-format.default") as SourceFormat);
     const smileysEnabled = useSelector((state: ClientState) => getSetting(state, "comment.smileys.enabled") as boolean);
 
-    return <CommentDialogOuter avatarDefault={avatarDefault} receiverPostingId={receiverPostingId} comment={comment}
-                               draft={draft} ownerName={ownerName} ownerFullName={ownerFullName}
-                               ownerGender={ownerGender} smileysEnabled={smileysEnabled}
-                               sourceFormatDefault={sourceFormatDefault}
-                               reactionsPositiveDefault={reactionsPositiveDefault}
-                               reactionsNegativeDefault={reactionsNegativeDefault}
-                               repliedToId={comment?.repliedTo?.id ?? null}/>;
+    return (
+        <CommentDialogOuter
+            avatarDefault={avatarDefault}
+            receiverPostingId={receiverPostingId}
+            comment={comment}
+            draft={draft}
+            formId={null}
+            ownerName={ownerName}
+            ownerFullName={ownerFullName}
+            ownerGender={ownerGender}
+            smileysEnabled={smileysEnabled}
+            sourceFormatDefault={sourceFormatDefault}
+            reactionsPositiveDefault={reactionsPositiveDefault}
+            reactionsNegativeDefault={reactionsNegativeDefault}
+            repliedToId={comment?.repliedTo?.id ?? null}
+        />
+    );
 }

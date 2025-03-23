@@ -122,6 +122,7 @@ export function isCommentTextChanged(commentText: CommentText, comment: CommentI
 }
 
 export interface CommentComposeProps extends PropsToValuesProps, ValuesToCommentTextProps {
+    formId: number | null;
     receiverPostingId: string | null;
 }
 
@@ -171,7 +172,8 @@ export const commentComposeLogic = {
                 formik.props.receiverPostingId,
                 formik.props.comment != null ? formik.props.comment.id : null,
                 commentText,
-                commentSourceText
+                commentSourceText,
+                formik.props.formId
             ));
         }
         formik.setSubmitting(false);

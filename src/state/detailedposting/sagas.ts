@@ -15,7 +15,7 @@ import {
 } from "api";
 import { WithContext } from "state/action-types";
 import { executor } from "state/executor";
-import { dispatch, select } from "state/store-sagas";
+import { barrier, dispatch, select } from "state/store-sagas";
 import { homeIntroduced } from "state/init-barriers";
 import { errorThrown } from "state/error/actions";
 import { ClientAction } from "state/action";
@@ -39,6 +39,7 @@ import {
     commentDraftLoadFailed,
     CommentDraftSaveAction,
     commentDraftSaved,
+    CommentDraftSavedAction,
     commentDraftSaveFailed,
     CommentLoadAction,
     commentLoadFailed,
@@ -366,7 +367,7 @@ async function commentLoadSaga(action: WithContext<CommentLoadAction>): Promise<
 }
 
 async function commentPostSaga(action: WithContext<CommentPostAction>): Promise<void> {
-    const {commentId, postingId, commentText, commentSourceText} = action.payload;
+    const {commentId, postingId, commentText, commentSourceText, formId} = action.payload;
 
     const {receiverName, receiverPostingId} = select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
@@ -385,12 +386,15 @@ async function commentPostSaga(action: WithContext<CommentPostAction>): Promise<
         dispatch(commentSet(receiverName, comment).causedBy(action));
 
         const draftId = select(state =>
-            (commentId == null ? state.detailedPosting.compose.draft : state.detailedPosting.commentDialog.draft)?.id);
+            (commentId == null ? state.detailedPosting.compose.draft : state.detailedPosting.commentDialog.draft)?.id
+        );
 
-        dispatch(commentPosted(receiverName, receiverPostingId, comment.id, comment.moment).causedBy(action));
+        dispatch(commentPosted(receiverName, receiverPostingId, comment.id, comment.moment, formId).causedBy(action));
 
         if (draftId != null) {
             await Node.deleteDraft(action, REL_HOME, draftId, ["draft.not-found"]);
+        } else {
+            deleteObsoleteDraft(receiverName, receiverPostingId, commentId, formId);
         }
 
         if (receiverName !== commentText.ownerName) {
@@ -402,6 +406,22 @@ async function commentPostSaga(action: WithContext<CommentPostAction>): Promise<
         dispatch(commentPostFailed(receiverName, receiverPostingId).causedBy(action));
         dispatch(errorThrown(e));
     }
+}
+
+async function deleteObsoleteDraft(
+    nodeName: string, postingId: string, commentId: string | null, formId: number | null
+): Promise<void> {
+    const action = await barrier<CommentDraftSavedAction>("COMMENT_DRAFT_SAVED", true, 5000);
+    if (
+        action == null
+        || action.payload.nodeName !== nodeName
+        || action.payload.postingId !== postingId
+        || action.payload.commentId !== commentId
+        || action.payload.formId !== formId
+    ) {
+        return;
+    }
+    await Node.deleteDraft(action, REL_HOME, action.payload.draft.id, ["draft.not-found"]);
 }
 
 async function loadRemoteMediaAttachments(

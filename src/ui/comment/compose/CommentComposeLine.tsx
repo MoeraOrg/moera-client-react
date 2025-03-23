@@ -33,16 +33,21 @@ export default function CommentComposeLine() {
             })
     );
     const discussionClosed = useSelector((state: ClientState) =>
-        isPrincipalIn("addComment", getDetailedPosting(state), "signed", "none"));
+        isPrincipalIn("addComment", getDetailedPosting(state), "signed", "none")
+    );
     const receiverPostingId = useSelector(getCommentsReceiverPostingId);
     const draft = useSelector((state: ClientState) => state.detailedPosting.compose.draft);
+    const formId = useSelector((state: ClientState) => state.detailedPosting.compose.formId);
     const repliedToId = useSelector(getCommentComposerRepliedToId);
     const reactionsPositiveDefault = useSelector((state: ClientState) =>
-        getSetting(state, "comment.reactions.positive.default") as string);
+        getSetting(state, "comment.reactions.positive.default") as string
+    );
     const reactionsNegativeDefault = useSelector((state: ClientState) =>
-        getSetting(state, "comment.reactions.negative.default") as string);
+        getSetting(state, "comment.reactions.negative.default") as string
+    );
     const sourceFormatDefault = useSelector((state: ClientState) =>
-        getSetting(state, "comment.body-src-format.default") as SourceFormat);
+        getSetting(state, "comment.body-src-format.default") as SourceFormat
+    );
     const smileysEnabled = useSelector((state: ClientState) => getSetting(state, "comment.smileys.enabled") as boolean);
     const dispatch = useDispatch();
     const {t} = useTranslation();
@@ -74,11 +79,21 @@ export default function CommentComposeLine() {
 
     return (
         <Suspense fallback={null}>
-            <CommentCompose avatarDefault={avatarDefault} receiverPostingId={receiverPostingId} comment={null}
-                            draft={draft} ownerName={ownerName} ownerFullName={ownerFullName} ownerGender={ownerGender}
-                            smileysEnabled={smileysEnabled} sourceFormatDefault={sourceFormatDefault}
-                            reactionsPositiveDefault={reactionsPositiveDefault}
-                            reactionsNegativeDefault={reactionsNegativeDefault} repliedToId={repliedToId}/>
+            <CommentCompose
+                avatarDefault={avatarDefault}
+                receiverPostingId={receiverPostingId}
+                comment={null}
+                draft={draft}
+                formId={formId}
+                ownerName={ownerName}
+                ownerFullName={ownerFullName}
+                ownerGender={ownerGender}
+                smileysEnabled={smileysEnabled}
+                sourceFormatDefault={sourceFormatDefault}
+                reactionsPositiveDefault={reactionsPositiveDefault}
+                reactionsNegativeDefault={reactionsNegativeDefault}
+                repliedToId={repliedToId}
+            />
         </Suspense>
     );
 }

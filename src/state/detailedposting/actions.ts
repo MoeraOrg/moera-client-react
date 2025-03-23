@@ -302,22 +302,25 @@ export type CommentPostAction = ActionWithPayload<"COMMENT_POST", {
     commentId: string | null;
     commentText: CommentText;
     commentSourceText: CommentSourceText;
+    formId: number | null;
 }>;
 export const commentPost = (
-    postingId: string, commentId: string | null, commentText: CommentText, commentSourceText: CommentSourceText
+    postingId: string, commentId: string | null, commentText: CommentText, commentSourceText: CommentSourceText,
+    formId: number | null
 ): CommentPostAction =>
-    actionWithPayload("COMMENT_POST", {postingId, commentId, commentText, commentSourceText});
+    actionWithPayload("COMMENT_POST", {postingId, commentId, commentText, commentSourceText, formId});
 
 export type CommentPostedAction = ActionWithPayload<"COMMENT_POSTED", {
     nodeName: string;
     postingId: string;
     commentId: string;
     moment: number;
+    formId: number | null;
 }>;
 export const commentPosted = (
-    nodeName: string, postingId: string, commentId: string, moment: number
+    nodeName: string, postingId: string, commentId: string, moment: number, formId: number | null
 ): CommentPostedAction =>
-    actionWithPayload("COMMENT_POSTED", {nodeName, postingId, commentId, moment});
+    actionWithPayload("COMMENT_POSTED", {nodeName, postingId, commentId, moment, formId});
 
 export type CommentPostFailedAction = ActionWithPayload<"COMMENT_POST_FAILED", {
     nodeName: string;

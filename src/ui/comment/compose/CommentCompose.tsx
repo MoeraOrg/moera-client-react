@@ -27,13 +27,12 @@ import "./CommentCompose.css";
 type Props = CommentComposeProps & FormikProps<CommentComposeValues>;
 
 function CommentCompose(props: Props) {
-    const {sourceFormatDefault, smileysEnabled, values, resetForm, submitForm} = props;
+    const {sourceFormatDefault, smileysEnabled, formId, values, resetForm, submitForm} = props;
 
     const ready = useSelector(isCommentComposerReady);
     const receiverName = useSelector(getCommentsReceiverName);
     const receiverPostingId = useSelector(getCommentsReceiverPostingId);
     const loadedDraft = useSelector((state: ClientState) => state.detailedPosting.compose.loadedDraft);
-    const formId = useSelector((state: ClientState) => state.detailedPosting.compose.formId);
     const beingPosted = useSelector((state: ClientState) => state.detailedPosting.compose.beingPosted);
     const submitKey = useSelector((state: ClientState) => getSetting(state, "comment.submit-key") as string);
     const features = useSelector(getPostingFeatures);

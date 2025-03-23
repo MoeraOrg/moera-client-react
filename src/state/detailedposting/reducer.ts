@@ -583,6 +583,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                 return state;
             }
 
+            if (action.payload.commentId == null && action.payload.formId !== state.compose.formId) {
+                return state;
+            }
+
             const property = action.payload.commentId != null ? "commentDialog" : "compose";
             return immutable.assign(state, property, {
                 draft: action.payload.draft,

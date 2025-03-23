@@ -11,14 +11,16 @@ import { ExecutorMap, invokeExecutor } from "state/executor";
 interface Barrier {
     actions: BarrierActionType[];
     condition: BarrierCondition;
-    resolve: (succeeded: boolean) => void | PromiseLike<boolean>;
+    resolve: (action: WithContext<ClientAction> | null) => void | PromiseLike<WithContext<ClientAction> | null>;
     timeout?: number | NodeJS.Timeout;
 }
 
 export type StoreMiddlewareApi = MiddlewareAPI<Dispatch<ClientAction>, ClientState>;
 
 export interface StoreMiddleware extends Middleware<{}, ClientState> {
-    barrier: (actions: BarrierActionType[], condition: BarrierCondition, timeoutMs?: number) => Promise<boolean>;
+    barrier: (
+        actions: BarrierActionType[], condition: BarrierCondition, timeoutMs?: number
+    ) => Promise<ClientAction | null>;
 }
 
 export function createStoreMiddleware(triggers: TriggerMap, executors: ExecutorMap): StoreMiddleware {
@@ -26,7 +28,7 @@ export function createStoreMiddleware(triggers: TriggerMap, executors: ExecutorM
 
     const addBarrier = (
         actions: BarrierActionType[], condition: BarrierCondition, timeoutMs?: number
-    ): Promise<boolean> => {
+    ): Promise<ClientAction | null> => {
         return new Promise(resolve => {
             const barrier: Barrier = {actions, condition, resolve};
             for (const action of actions) {
@@ -42,7 +44,7 @@ export function createStoreMiddleware(triggers: TriggerMap, executors: ExecutorM
 
     const deleteBarrier = (barrier: Barrier): void => {
         if (barrier.timeout != null) {
-            barrier.resolve(false);
+            barrier.resolve(null);
             clearTimeout(barrier.timeout);
         }
         for (const action of barrier.actions) {
@@ -59,7 +61,7 @@ export function createStoreMiddleware(triggers: TriggerMap, executors: ExecutorM
         const list = (barriers.get(action.type) ?? []).concat(barriers.get("*") ?? []);
         for (const barrier of list) {
             if (barrier.condition === true || barrier.condition(state, action)) {
-                barrier.resolve(true);
+                barrier.resolve(action);
                 deleteBarrier(barrier);
             }
         }
