@@ -1,3 +1,7 @@
+.complaint H4 A:hover {
+    text-decoration: underline;
+}
+
 .complaint .status.processing {
     color: var(--verifying);
 }
