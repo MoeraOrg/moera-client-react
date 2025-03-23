@@ -1,3 +1,4 @@
+import { MutableRefObject } from 'react';
 import {
     BaseEditor,
     BaseElement,
@@ -87,7 +88,7 @@ export type ScriptureEditor<T extends DOMEditor> = T & {
 }
 
 export function withScripture<T extends DOMEditor>(
-    editor: T, pasteImage: (data: DataTransfer) => boolean
+    editor: T, pasteImageRef: MutableRefObject<(data: DataTransfer) => boolean>
 ): ScriptureEditor<T> {
     const {
         isInline, isVoid, insertData, insertFragmentData, insertText, deleteBackward, deleteForward, deleteFragment,
@@ -103,7 +104,7 @@ export function withScripture<T extends DOMEditor>(
         (isScriptureElement(element) && isScriptureVoid(element)) || isVoid(element);
 
     scriptureEditor.insertData = (data: DataTransfer): void => {
-        if (!pasteImage(data)) {
+        if (pasteImageRef.current != null && !pasteImageRef.current(data)) {
             insertData(data);
         }
     };

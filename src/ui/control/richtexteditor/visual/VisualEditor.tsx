@@ -43,8 +43,10 @@ export default function VisualEditor({
     onSubmit, onUrls, onBlur, children
 }: VisualEditorProps) {
     const {pasteImage} = useRichTextEditorMedia();
+    const pasteImageRef = useRef(pasteImage);
+    pasteImageRef.current = pasteImage;
     const [editor] = useState(
-        () => withScripture(withHistory(withReact(createEditor(), "x-scripture-fragment")), pasteImage)
+        () => withScripture(withHistory(withReact(createEditor(), "x-scripture-fragment")), pasteImageRef)
     );
 
     useEffect(() => {
