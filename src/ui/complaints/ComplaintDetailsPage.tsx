@@ -35,7 +35,7 @@ export default function ComplaintsListPage() {
     if (complaintGroup?.remotePostingId != null) {
         href = `/post/${complaintGroup.remotePostingId}`;
         if (complaintGroup.remoteCommentId != null) {
-            href += `comment=${complaintGroup.remoteCommentId}`;
+            href += `?comment=${complaintGroup.remoteCommentId}`;
         }
     }
 
