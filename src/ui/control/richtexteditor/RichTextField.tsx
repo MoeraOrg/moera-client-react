@@ -91,7 +91,8 @@ export function RichTextField({
                             "is-valid": !anyValue && touched && !error,
                             "is-invalid": !anyValue && touched && error,
                             [className!]: !!className
-                        })}
+                        }
+                    )}
                     autoFocus={autoFocus}
                     autoComplete={autoComplete}
                     minHeight={minHeight}
