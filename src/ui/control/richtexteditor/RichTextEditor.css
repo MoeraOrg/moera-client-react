@@ -4,6 +4,10 @@
     border: 0;
 }
 
+.rich-text-editor TEXTAREA::placeholder {
+    color: var(--bs-gray-400);
+}
+
 .rich-text-editor TEXTAREA, .rich-text-editor .visual-text-area {
     display: block;
     width: 100%;
