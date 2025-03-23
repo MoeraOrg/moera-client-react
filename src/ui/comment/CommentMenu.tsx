@@ -43,7 +43,8 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
     const posting = useSelector(getDetailedPosting);
     const blockedUsers = useSelector(getCommentsBlockedUsers);
     const commentOverridable = useSelector((state: ClientState) =>
-        isPermitted("overrideComment", posting, "owner", state));
+        isPermitted("overrideComment", posting, "owner", state)
+    );
 
     const options: Partial<IsPermittedOptions> = {
         objectSourceName: receiverName,
@@ -51,7 +52,8 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
     };
     const commentEditable = useSelector((state: ClientState) => isPermitted("edit", comment, "owner", state, options));
     const commentDeletable = useSelector((state: ClientState) =>
-        isPermitted("delete", comment, "private", state, options));
+        isPermitted("delete", comment, "private", state, options)
+    );
 
     const dispatch = useDispatch();
     const {t} = useTranslation();
@@ -140,11 +142,17 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
     };
 
     const commentHref = `/post/${postingId}?comment=${comment.id}`;
-    const hideable = (commentEditable && isPrincipalIn("view", comment, "public", "public", {useOperations: "owner"}))
-        || (commentOverridable && !commentEditable
-            && isPrincipalIn("view", comment, "unset", ["unset", "public"], {useOperations: "senior"}));
-    const unhideable = (commentEditable
-            && isPrincipalIn("view", comment, "public", "private", {useOperations: "owner"}))
+    const hideable =
+        (commentEditable && isPrincipalIn("view", comment, "public", "public", {useOperations: "owner"}))
+        || (
+            commentOverridable && !commentEditable
+            && isPrincipalIn("view", comment, "unset", ["unset", "public"], {useOperations: "senior"})
+        );
+    const unhideable =
+        (
+            commentEditable
+            && isPrincipalIn("view", comment, "public", "private", {useOperations: "owner"})
+        )
         || (commentOverridable && isPrincipalIn("view", comment, "unset", "private", {useOperations: "senior"}));
     return (
         <DropdownMenuItems items={[
@@ -215,7 +223,7 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
                 nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onBlockDialog,
-                show: comment.ownerName !== homeOwnerName
+                show: comment.ownerName !== homeOwnerName && receiverName === homeOwnerName
             },
             {
                 divider: true
