@@ -25,7 +25,7 @@ clientsClaim();
 // @ts-ignore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ignored = self.__WB_MANIFEST;
-// precacheAndRoute(self.__WB_MANIFEST);
+// precacheAndRoute(self.__WB _ MANIFEST);
 
 registerRoute(
     ({request, url}) =>
