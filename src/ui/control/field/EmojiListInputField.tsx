@@ -21,10 +21,10 @@ interface Props {
     setting?: string;
 }
 
-export function EmojiListInputField({name, title, disabled, horizontal = false, layout, groupClassName, labelClassName,
-                                     col, noFeedback = false, initialValue, defaultValue, negative, advanced,
-                                     setting}: Props) {
-
+export function EmojiListInputField({
+    name, title, disabled, horizontal = false, layout, groupClassName, labelClassName, col, noFeedback = false,
+    initialValue, defaultValue, negative, advanced, setting
+}: Props) {
     const [{value}, {touched, error}, {setValue}, {undo, reset, onUndo, onReset}] =
         useUndoableField<string>(name, initialValue, defaultValue);
 

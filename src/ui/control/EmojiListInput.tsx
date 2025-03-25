@@ -46,7 +46,8 @@ export function EmojiListInput({className, negative, value, advanced, disabled, 
             }
             {editing &&
                 <EmojiListDialog negative={negative} value={value} advanced={advanced}
-                                 onConfirm={editingConfirmed} onCancel={editingCancelled}/>}
+                                 onConfirm={editingConfirmed} onCancel={editingCancelled}/>
+            }
         </div>
     );
 }
