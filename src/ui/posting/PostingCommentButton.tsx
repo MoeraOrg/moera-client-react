@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
 
-import { uiEventCommentQuote } from "state/detailedposting/events";
+import { uiEventCommentQuote } from "ui/ui-events";
 import Jump from "ui/navigation/Jump";
 import { getWindowSelectionHtml } from "util/ui";
 

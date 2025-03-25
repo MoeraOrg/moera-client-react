@@ -1,11 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { Node, Path, Range } from 'slate';
+import { Path, Range } from 'slate';
 import { Editable, ReactEditor, useSlateStatic } from 'slate-react';
 import isHotkey from 'is-hotkey';
 
 import { NodeName } from "api";
-import { UI_EVENT_COMMENT_QUOTE, UiEventCommentQuote } from "state/detailedposting/events";
 import * as Browser from "ui/browser";
+import {
+    UI_EVENT_COMMENT_QUOTE,
+    UI_EVENT_OPEN_MENTION,
+    UiEventCommentQuote,
+    UiEventOpenMention
+} from "ui/ui-events";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { safeImportScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
@@ -152,19 +157,6 @@ export default function VisualTextArea({
             }
         }
 
-        if (event.key === "@") {
-            if (editor.selection != null) {
-                const node = Node.get(editor, editor.selection.anchor.path);
-                if (isScriptureText(node)) {
-                    const offset = editor.selection.anchor.offset;
-                    if (offset === 0 || /[\s(]/.test(node.text.charAt(offset - 1))) {
-                        formatMention(true);
-                        event.preventDefault();
-                    }
-                }
-            }
-        }
-
         if (handleHotKeys(event)) {
             event.preventDefault();
         }
@@ -220,6 +212,19 @@ export default function VisualTextArea({
             }
         }
     }, [commentQuote, onCommentQuote]);
+
+    const onOpenMention = useCallback((event: UiEventOpenMention) => {
+        formatMention(true);
+    }, [formatMention]);
+
+    useEffect(() => {
+        // @ts-ignore
+        document.addEventListener(UI_EVENT_OPEN_MENTION, onOpenMention);
+        return () => {
+            // @ts-ignore
+            document.removeEventListener(UI_EVENT_OPEN_MENTION, onOpenMention);
+        }
+    }, [onOpenMention]);
 
     return (
         <Editable

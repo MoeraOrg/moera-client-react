@@ -56,7 +56,11 @@ import {
 import { RichTextEditorCommandsContext } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { useRichTextEditorDialogs } from "ui/control/richtexteditor/dialog/rich-text-editor-dialogs-context";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
-import { findWrappingElement, isSelectionInElement } from "ui/control/richtexteditor/visual/scripture-editor";
+import {
+    findWrappingElement,
+    isSelectionInElement,
+    ScriptureEditor
+} from "ui/control/richtexteditor/visual/scripture-editor";
 import { RichTextLinkValues } from "ui/control/richtexteditor/dialog/RichTextLinkDialog";
 import { RichTextSpoilerValues } from "ui/control/richtexteditor/dialog/RichTextSpoilerDialog";
 import { RichTextVideoValues } from "ui/control/richtexteditor/dialog/RichTextVideoDialog";
@@ -75,7 +79,7 @@ interface Props {
 }
 
 export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, children}: Props) {
-    const editor = useSlateStatic() as ReactEditor & HistoryEditor;
+    const editor = useSlateStatic() as ScriptureEditor<ReactEditor & HistoryEditor>;
     const {
         bold: inBold = false, italic: inItalic = false, strikeout: inStrikeout = false, code: inCode = false,
         supsub = 0, mark: inMark = false,
@@ -222,7 +226,7 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
                 }
                 editor.insertText(" ");
             } else if (typeOnCancel) {
-                editor.insertText(nodeName ? mentionName(nodeName) : "@");
+                editor.insertText(nodeName ? mentionName(nodeName) : "@", {noHotKeys: true});
             }
             focus();
         });

@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next';
 
 import { CLIENT_SETTINGS_PREFIX, SourceFormat } from "api";
 import { ClientState } from "state/state";
-import { UI_EVENT_COMMENT_QUOTE, UiEventCommentQuote } from "state/detailedposting/events";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
 import * as Browser from "ui/browser";
+import { UI_EVENT_COMMENT_QUOTE, UiEventCommentQuote } from "ui/ui-events";
 import { TextareaAutosize } from "ui/control";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import MarkdownPasteDialog, { RichTextPasteMode } from "ui/control/richtexteditor/markdown/MarkdownPasteDialog";

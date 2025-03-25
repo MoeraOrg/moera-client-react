@@ -97,7 +97,6 @@ import {
     getDetailedPostingId,
     isCommentComposerReplied
 } from "state/detailedposting/selectors";
-import { uiEventCommentQuote } from "state/detailedposting/events";
 import { fillActivityReaction, fillActivityReactionsInPostings } from "state/activityreactions/sagas";
 import { fillBlockedOperations, fillBlockedOperationsInPostings } from "state/blockedoperations/sagas";
 import { postingCommentCountUpdate, postingCommentsSet, postingsSet } from "state/postings/actions";
@@ -107,6 +106,7 @@ import { getOwnerFullName, getOwnerName, isPermitted, isPrincipalIn } from "stat
 import { flashBox } from "state/flashbox/actions";
 import { fillSubscription } from "state/subscriptions/sagas";
 import * as Browser from "ui/browser";
+import { uiEventCommentQuote } from "ui/ui-events";
 import { toAvatarDescription } from "util/avatar";
 import { getWindowSelectionHtml } from "util/ui";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";

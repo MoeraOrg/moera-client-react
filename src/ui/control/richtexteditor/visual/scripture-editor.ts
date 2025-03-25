@@ -6,6 +6,7 @@ import {
     BasePoint,
     Descendant,
     Element as SlateElement,
+    Node,
     Node as SlateNode,
     NodeEntry,
     Operation,
@@ -20,6 +21,7 @@ import { DOMEditor } from 'slate-dom';
 import cloneDeep from 'lodash.clonedeep';
 
 import { SMILEY_LIKE } from "smileys";
+import { uiEventOpenMention } from "ui/ui-events";
 import {
     createLinkElement,
     createListItemElement,
@@ -81,7 +83,13 @@ export const isSelectionInElement = (
 
 export type EditorChangeListener = (operation: BaseOperation) => void;
 
+interface ScriptureEditorInsertTextOptions extends TextInsertTextOptions {
+    noHotKeys?: boolean;
+}
+
 export type ScriptureEditor<T extends DOMEditor> = T & {
+    insertText(text: string, options?: ScriptureEditorInsertTextOptions): void;
+
     changeListeners: EditorChangeListener[];
 
     addChangeListener(listener: EditorChangeListener): void;
@@ -89,7 +97,8 @@ export type ScriptureEditor<T extends DOMEditor> = T & {
 }
 
 export function withScripture<T extends DOMEditor>(
-    editor: T, pasteImageRef: MutableRefObject<(data: DataTransfer) => boolean>
+    editor: T,
+    pasteImageRef: MutableRefObject<(data: DataTransfer) => boolean>
 ): ScriptureEditor<T> {
     const {
         isInline, isVoid, insertData, insertFragmentData, insertText, deleteBackward, deleteForward, deleteFragment,
@@ -131,11 +140,23 @@ export function withScripture<T extends DOMEditor>(
         return true;
     };
 
-    scriptureEditor.insertText = (text: string, options?: TextInsertTextOptions): void => {
+    scriptureEditor.insertText = (text: string, options?: ScriptureEditorInsertTextOptions): void => {
         insertText(text, options);
-        if (text.endsWith(" ") && editor.selection != null && Range.isCollapsed(editor.selection)) {
-            const point = editor.selection.anchor;
-            scriptureReplaceUrl(editor, point);
+        if (!options?.noHotKeys && editor.selection != null && Range.isCollapsed(editor.selection)) {
+            if (text.endsWith(" ")) {
+                const point = editor.selection.anchor;
+                scriptureReplaceUrl(editor, point);
+            }
+            if (text.endsWith("@")) {
+                const node = Node.get(editor, editor.selection.anchor.path);
+                if (isScriptureText(node)) {
+                    const offset = editor.selection.anchor.offset;
+                    if (offset <= 1 || /[\s(]/.test(node.text.charAt(offset - 2))) {
+                        editor.deleteBackward("character");
+                        document.dispatchEvent(uiEventOpenMention());
+                    }
+                }
+            }
         }
     }
 

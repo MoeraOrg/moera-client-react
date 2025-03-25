@@ -14,3 +14,10 @@ export const uiEventCommentQuote = (
     new CustomEvent(UI_EVENT_COMMENT_QUOTE, {
         detail: {html, ownerName, ownerFullName}
     });
+
+export const UI_EVENT_OPEN_MENTION = "openMention";
+
+export type UiEventOpenMention = CustomEvent<undefined>;
+
+export const uiEventOpenMention = (): UiEventOpenMention =>
+    new CustomEvent(UI_EVENT_OPEN_MENTION);
