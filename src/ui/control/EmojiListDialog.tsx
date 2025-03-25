@@ -60,7 +60,7 @@ export function EmojiListDialog({negative, value, advanced, onConfirm, onCancel}
     );
     const [other, setOther] = useState<boolean>(() => new EmojiList(value).other());
 
-    const mainEmojis = negative ? MAIN_POSITIVE_REACTIONS : MAIN_NEGATIVE_REACTIONS;
+    const mainEmojis = !negative ? MAIN_POSITIVE_REACTIONS : MAIN_NEGATIVE_REACTIONS;
 
     const otherEmojis = useMemo<number[]>(
         () => {
