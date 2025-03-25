@@ -84,6 +84,8 @@ export default function VisualEditor({
         updateUrlsTimeout.current = setTimeout(updateUrls, 1500);
     }, [updateUrls]);
 
+    const scriptureChangeTimeout = useRef<number | NodeJS.Timeout | null>(null);
+
     const onEditorChange = useCallback((operation: BaseOperation) => {
         switch (operation.type) {
             case "remove_node":
@@ -101,7 +103,15 @@ export default function VisualEditor({
                 }
                 break;
         }
-    }, [delayedUpdateUrls, updateUrls]);
+
+        // A dirty hack to work around the issue when onScriptureChange is not called on Android after some changes
+        // (for example, removal of the whole content)
+        scriptureChangeTimeout.current = setTimeout(() => {
+            if (onChange != null) {
+                onChange(editor.children as Scripture);
+            }
+        }, 200);
+    }, [delayedUpdateUrls, editor.children, onChange, updateUrls]);
 
     useEffect(() => {
         editor.addChangeListener(onEditorChange);
@@ -110,6 +120,9 @@ export default function VisualEditor({
 
     // useCallback() is mandatory here
     const onScriptureChange = useCallback((content: Scripture) => {
+        if (scriptureChangeTimeout.current != null) {
+            clearTimeout(scriptureChangeTimeout.current);
+        }
         if (onChange != null) {
             onChange(content);
         }
