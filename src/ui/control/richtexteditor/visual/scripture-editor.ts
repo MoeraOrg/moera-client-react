@@ -15,6 +15,7 @@ import {
     TextUnit,
     Transforms
 } from 'slate';
+import { TextInsertTextOptions } from "slate/dist/interfaces/transforms/text";
 import { DOMEditor } from 'slate-dom';
 import cloneDeep from 'lodash.clonedeep';
 
@@ -130,8 +131,8 @@ export function withScripture<T extends DOMEditor>(
         return true;
     };
 
-    scriptureEditor.insertText = (text: string): void => {
-        insertText(text);
+    scriptureEditor.insertText = (text: string, options?: TextInsertTextOptions): void => {
+        insertText(text, options);
         if (text.endsWith(" ") && editor.selection != null && Range.isCollapsed(editor.selection)) {
             const point = editor.selection.anchor;
             scriptureReplaceUrl(editor, point);

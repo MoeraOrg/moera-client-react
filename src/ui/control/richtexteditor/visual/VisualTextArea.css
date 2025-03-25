@@ -12,7 +12,8 @@
     color: var(--bs-gray-600);
 }
 
-.visual-text-area A {
+.visual-text-area A, .visual-text-area .link {
+    color: var(--bs-link-color);
     text-decoration: underline;
 }
 

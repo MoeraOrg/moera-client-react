@@ -8,15 +8,17 @@ import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { getImageDimensions } from "ui/control/richtexteditor/media/rich-text-image";
 import { isScriptureElement } from "ui/control/richtexteditor/visual/scripture";
+import { isSignificant } from "ui/control/richtexteditor/visual/scripture-html";
 import OpenLink from "ui/control/richtexteditor/visual/OpenLink";
 import PreloadedImage from "ui/posting/PreloadedImage";
 import { BlockMath, InlineMath } from "ui/katex";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import { mediaImageTagAttributes } from "util/media-images";
-import { isSignificant } from "ui/control/richtexteditor/visual/scripture-html";
 
 export default function VisualRenderElement(props: RenderElementProps) {
     const {element, attributes, children} = props;
 
+    const tinyScreen = useIsTinyScreen();
     const rootPage = useSelector(getNodeRootPage);
     const carte = useSelector(getCurrentViewMediaCarte);
     const {formatFormula, formatImage} = useRichTextEditorCommands();
@@ -32,9 +34,9 @@ export default function VisualRenderElement(props: RenderElementProps) {
                 return <p {...attributes}>{children}</p>;
             case "link":
                 return (
-                    <a href={element.href} {...attributes}>
-                        {children}{isSignificant(element.children) && <OpenLink href={element.href}/>}
-                    </a>
+                    <span className="link" {...attributes}>
+                        {children}{!tinyScreen && isSignificant(element.children) && <OpenLink href={element.href}/>}
+                    </span>
                 );
             case "spoiler":
                 return <span className="spoiler" {...attributes}>{children}</span>;
