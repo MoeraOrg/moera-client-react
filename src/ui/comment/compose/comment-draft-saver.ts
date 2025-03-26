@@ -47,17 +47,22 @@ export function useCommentDraftSaver(commentId: string | null): DraftSavingState
                 : getCommentDialogComment(state)?.repliedTo?.id ?? null
     );
     const comment = useSelector((state: ClientState) =>
-        commentId != null ? state.detailedPosting.commentDialog.comment : null);
+        commentId != null ? state.detailedPosting.commentDialog.comment : null
+    );
     const formId = useSelector((state: ClientState) => commentId != null ? null : state.detailedPosting.compose.formId);
     const draft = useSelector((state: ClientState) =>
-        commentId == null ? state.detailedPosting.compose.draft : state.detailedPosting.commentDialog.draft);
+        commentId == null ? state.detailedPosting.compose.draft : state.detailedPosting.commentDialog.draft
+    );
     const smileysEnabled = useSelector((state: ClientState) => getSetting(state, "comment.smileys.enabled") as boolean);
     const reactionsPositiveDefault = useSelector((state: ClientState) =>
-        getSetting(state, "comment.reactions.positive.default") as string);
+        getSetting(state, "comment.reactions.positive.default") as string
+    );
     const reactionsNegativeDefault = useSelector((state: ClientState) =>
-        getSetting(state, "comment.reactions.negative.default") as string);
+        getSetting(state, "comment.reactions.negative.default") as string
+    );
     const sourceFormatDefault = useSelector((state: ClientState) =>
-        getSetting(state, "comment.body-src-format.default") as SourceFormat);
+        getSetting(state, "comment.body-src-format.default") as SourceFormat
+    );
     const dispatch = useDispatch();
 
     const toText = useCallback(

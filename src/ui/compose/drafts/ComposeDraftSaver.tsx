@@ -42,11 +42,14 @@ export default function ComposeDraftSaver() {
     const posting = useSelector((state: ClientState) => state.compose.posting);
     const draftId = useSelector((state: ClientState) => state.compose.draftId);
     const smileysEnabled = useSelector((state: ClientState) =>
-        getSetting(state, "posting.smileys.enabled") as boolean);
+        getSetting(state, "posting.smileys.enabled") as boolean
+    );
     const newsFeedEnabled = useSelector((state: ClientState) =>
-        getSetting(state, "posting.feed.news.enabled") as boolean);
+        getSetting(state, "posting.feed.news.enabled") as boolean
+    );
     const avatarShapeDefault = useSelector((state: ClientState) =>
-        getSetting(state, "avatar.shape.default") as string);
+        getSetting(state, "avatar.shape.default") as string
+    );
     const dispatch = useDispatch();
 
     const toText = useCallback(
