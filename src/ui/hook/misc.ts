@@ -18,9 +18,11 @@ export function useDebounce<T>(value: T, delay: number): [T, React.Dispatch<Reac
     return [debouncedValue, setDebouncedValue];
 }
 
-export function useThrottle<T>(value: T, interval: number, timeout: number): T {
-    const [throttledValue, setThrottledValue] = React.useState<T>(value);
+export function useThrottle<T>(initialValue: T, value: T, interval: number, timeout: number): T {
+    const [throttledValue, setThrottledValue] = React.useState<T>(initialValue);
     const lastUpdated = React.useRef<number | null>(null);
+
+    React.useEffect(() => setThrottledValue(initialValue), [initialValue]);
 
     React.useEffect(() => {
         const now = Date.now();

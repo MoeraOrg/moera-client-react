@@ -29,7 +29,7 @@ export function useDraftSaver<Text, Values>({
 
     const {status, values, initialValues} = useFormikContext<Values>();
     const [savedValues, setSavedValues] = useState<Values>(initialValues);
-    const unsavedValues = useThrottle(values, 1500, 5000);
+    const unsavedValues = useThrottle(initialValues, values, 1500, 5000);
     const savingValues = useRef<Values | null>(null);
 
     useEffect(() => setSavedValues(initialValues), [initialValues]);
