@@ -41,6 +41,7 @@ import {
     commentDraftSaved,
     CommentDraftSavedAction,
     commentDraftSaveFailed,
+    commentLoad,
     CommentLoadAction,
     commentLoadFailed,
     CommentPostAction,
@@ -110,7 +111,7 @@ import { uiEventCommentQuote } from "ui/ui-events";
 import { toAvatarDescription } from "util/avatar";
 import { getWindowSelectionHtml } from "util/ui";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
-import { notNull } from "util/misc";
+import { delay, notNull } from "util/misc";
 
 export default [
     executor("DETAILED_POSTING_LOAD", "", detailedPostingLoadSaga),
@@ -357,8 +358,9 @@ async function commentLoadSaga(action: WithContext<CommentLoadAction>): Promise<
         return;
     }
     try {
-        const comment = await Node.getComment(action, receiverName, receiverPostingId, commentId, false,
-            ["comment.not-found"]);
+        const comment = await Node.getComment(
+            action, receiverName, receiverPostingId, commentId, false, ["comment.not-found"]
+        );
         dispatch(commentSet(receiverName, comment).causedBy(action));
     } catch (e) {
         dispatch(commentLoadFailed(receiverName, receiverPostingId, commentId).causedBy(action));
@@ -402,6 +404,10 @@ async function commentPostSaga(action: WithContext<CommentPostAction>): Promise<
                 action, REL_HOME, receiverName, receiverPostingId, comment.id, commentSourceText
             );
         }
+
+        if (comment.signature == null) {
+            refreshComment(receiverName, receiverPostingId, comment.id);
+        }
     } catch (e) {
         dispatch(commentPostFailed(receiverName, receiverPostingId).causedBy(action));
         dispatch(errorThrown(e));
@@ -422,6 +428,20 @@ async function deleteObsoleteDraft(
         return;
     }
     await Node.deleteDraft(action, REL_HOME, action.payload.draft.id, ["draft.not-found"]);
+}
+
+async function refreshComment(commentReceiverName: string, commentPostingId: string, commentId: string): Promise<void> {
+    await delay(3000);
+
+    const {receiverName, receiverPostingId} = select(getCommentsState);
+    if (commentReceiverName !== receiverName || commentPostingId !== receiverPostingId) {
+        return;
+    }
+
+    const comment = select(state => getComment(state, commentId));
+    if (comment != null && comment.signature == null) {
+        dispatch(commentLoad(commentId));
+    }
 }
 
 async function loadRemoteMediaAttachments(
