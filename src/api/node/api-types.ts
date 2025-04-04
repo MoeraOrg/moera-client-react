@@ -28,6 +28,8 @@ export type Scope = "none" | "identify" | "other" | "view-media" | "view-content
     | "view-profile" | "update-profile" | "sheriff" | "view-settings" | "update-settings" | "subscribe" | "tokens"
     | "user-lists" | "grant" | "upload-public-media" | "upload-private-media" | "view-all" | "all";
 
+export type SearchContentUpdateType = "profile";
+
 export type SearchEngine = "google";
 
 export type SettingType = "bool" | "int" | "string" | "json" | "Duration" | "PrivateKey" | "PublicKey" | "Timestamp"
@@ -58,7 +60,7 @@ export type StoryType = "asked-to-friend" | "asked-to-subscribe" | "blocked-user
 
 export type SubscriptionReason = "user" | "mention" | "comment" | "auto";
 
-export type SubscriptionType = "feed" | "posting" | "posting-comments" | "profile" | "user-list";
+export type SubscriptionType = "feed" | "posting" | "posting-comments" | "profile" | "search" | "user-list";
 
 export type VerificationStatus = "running" | "correct" | "incorrect" | "error";
 
@@ -786,6 +788,14 @@ export interface Result {
 
 export interface SheriffMark {
     sheriffName: string;
+}
+
+export interface SearchNodeInfo {
+    nodeName: string;
+    fullName?: string | null;
+    title?: string | null;
+    avatar?: AvatarImage | null;
+    closeness: number;
 }
 
 export interface SettingInfo {

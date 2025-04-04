@@ -2073,6 +2073,50 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
+        SearchNodeInfo: {
+            type: "object",
+            properties: {
+                "nodeName": {
+                    type: "string"
+                },
+                "fullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "title": {
+                    type: "string",
+                    nullable: true
+                },
+                "avatar": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+                "closeness": {
+                    type: "number"
+                },
+            },
+            required: [
+                "nodeName",
+                "closeness",
+            ],
+            additionalProperties: false
+        },
+
+        SearchNodeInfoArray: {
+            type: "array",
+            items: {
+                $ref: "node#/definitions/SearchNodeInfo"
+            }
+        },
+
         SettingInfo: {
             type: "object",
             properties: {
