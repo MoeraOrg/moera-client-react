@@ -36,7 +36,7 @@ export default (state: ContactsState = initialState, action: ClientAction): Cont
             const {nodeName} = action.payload;
             const hasName = state.contacts.find(c => c.nodeName === nodeName) != null;
             if (!hasName) {
-                return immutable.set(state, "contacts", [...state.contacts, {nodeName, closeness: 0}]);
+                return immutable.set(state, "contacts", [...state.contacts, {nodeName, distance: 3}]);
             }
             return state;
         }

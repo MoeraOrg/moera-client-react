@@ -1025,7 +1025,7 @@ return errors === 0;
 export const BlockedByUserAddedEvent = validate17;
 const schema19 = {"type":"object","properties":{"type":{"type":"string"},"blockedByUser":{"$ref":"node#/definitions/BlockedByUserInfo"}},"required":["type","blockedByUser"],"additionalProperties":false};
 const schema20 = {"type":"object","properties":{"id":{"type":"string"},"blockedOperation":{"type":"string"},"contact":{"anyOf":[{"$ref":"node#/definitions/ContactInfo","type":"object","nullable":true},{"type":"null"}]},"nodeName":{"type":"string"},"postingId":{"type":"string","nullable":true},"createdAt":{"type":"integer"},"deadline":{"type":"integer","nullable":true},"reason":{"type":"string","nullable":true}},"required":["id","blockedOperation","nodeName","createdAt"],"additionalProperties":false};
-const schema21 = {"type":"object","properties":{"nodeName":{"type":"string"},"fullName":{"type":"string","nullable":true},"gender":{"type":"string","nullable":true},"avatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"closeness":{"type":"number"},"hasFeedSubscriber":{"type":"boolean","nullable":true},"hasFeedSubscription":{"type":"boolean","nullable":true},"hasFriend":{"type":"boolean","nullable":true},"hasFriendOf":{"type":"boolean","nullable":true},"hasBlock":{"type":"boolean","nullable":true},"hasBlockBy":{"type":"boolean","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]},"ownerOperations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]},"adminOperations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]}},"required":["nodeName","closeness"],"additionalProperties":false};
+const schema21 = {"type":"object","properties":{"nodeName":{"type":"string"},"fullName":{"type":"string","nullable":true},"gender":{"type":"string","nullable":true},"avatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"distance":{"type":"number"},"hasFeedSubscriber":{"type":"boolean","nullable":true},"hasFeedSubscription":{"type":"boolean","nullable":true},"hasFriend":{"type":"boolean","nullable":true},"hasFriendOf":{"type":"boolean","nullable":true},"hasBlock":{"type":"boolean","nullable":true},"hasBlockBy":{"type":"boolean","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]},"ownerOperations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]},"adminOperations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]}},"required":["nodeName","distance"],"additionalProperties":false};
 const schema22 = {"type":"object","properties":{"mediaId":{"type":"string"},"path":{"type":"string"},"width":{"type":"integer","nullable":true},"height":{"type":"integer","nullable":true},"shape":{"type":"string","nullable":true}},"required":["mediaId","path"],"additionalProperties":false};
 const schema23 = {"type":"object","properties":{"viewFeedSubscriber":{"type":"string","nullable":true},"viewFeedSubscription":{"type":"string","nullable":true},"viewFriend":{"type":"string","nullable":true},"viewFriendOf":{"type":"string","nullable":true},"viewBlock":{"type":"string","nullable":true},"viewBlockBy":{"type":"string","nullable":true}},"additionalProperties":false};
 const func2 = Object.prototype.hasOwnProperty;
@@ -1036,7 +1036,7 @@ let errors = 0;
 if(errors === 0){
 if(data && typeof data == "object" && !Array.isArray(data)){
 let missing0;
-if(((data.nodeName === undefined) && (missing0 = "nodeName")) || ((data.closeness === undefined) && (missing0 = "closeness"))){
+if(((data.nodeName === undefined) && (missing0 = "nodeName")) || ((data.distance === undefined) && (missing0 = "distance"))){
 validate19.errors = [{instancePath,schemaPath:"#/required",keyword:"required",params:{missingProperty: missing0},message:"must have required property '"+missing0+"'"}];
 return false;
 }
@@ -1538,8 +1538,8 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.closeness !== undefined){
-let data9 = data.closeness;
+if(data.distance !== undefined){
+let data9 = data.distance;
 const _errs33 = errors;
 if(!((typeof data9 == "number") && (isFinite(data9)))){
 let dataType10 = typeof data9;
@@ -1557,14 +1557,14 @@ if(dataType10 == "boolean" || data9 === null
 coerced10 = +data9;
 }
 else {
-validate19.errors = [{instancePath:instancePath+"/closeness",schemaPath:"#/properties/closeness/type",keyword:"type",params:{type: "number"},message:"must be number"}];
+validate19.errors = [{instancePath:instancePath+"/distance",schemaPath:"#/properties/distance/type",keyword:"type",params:{type: "number"},message:"must be number"}];
 return false;
 }
 }
 if(coerced10 !== undefined){
 data9 = coerced10;
 if(data !== undefined){
-data["closeness"] = coerced10;
+data["distance"] = coerced10;
 }
 }
 }

@@ -41,7 +41,7 @@ function prepareContact(state: PeopleState, istate: WrappedObject<PeopleState>, 
     let contact = state.contacts[nodeName];
     if (contact == null) {
         contact = {
-            contact: {nodeName, closeness: 0},
+            contact: {nodeName, distance: 3},
             subscriber: null,
             subscription: null,
             friend: null,

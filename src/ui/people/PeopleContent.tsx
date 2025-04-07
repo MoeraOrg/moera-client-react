@@ -5,7 +5,7 @@ import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import {
     getPeopleContactsByAlpha,
-    getPeopleContactsByCloseness,
+    getPeopleContactsByDistance,
     getPeopleContactsMaxInTabs,
     getPeopleContactsTotal
 } from "state/people/selectors";
@@ -21,7 +21,7 @@ export default function PeopleContent() {
     const loadingGeneral = useSelector((state: ClientState) => state.people.loadingGeneral);
     const contacts = useSelector(
         (state: ClientState) =>
-            state.people.sortAlpha ? getPeopleContactsByAlpha(state) : getPeopleContactsByCloseness(state)
+            state.people.sortAlpha ? getPeopleContactsByAlpha(state) : getPeopleContactsByDistance(state)
     );
     const contactsTotal = useSelector(getPeopleContactsTotal);
     const contactsMax = useSelector(getPeopleContactsMaxInTabs);

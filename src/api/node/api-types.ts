@@ -339,7 +339,7 @@ export interface ContactInfo {
     fullName?: string | null;
     gender?: string | null;
     avatar?: AvatarImage | null;
-    closeness: number;
+    distance: number;
     hasFeedSubscriber?: boolean | null;
     hasFeedSubscription?: boolean | null;
     hasFriend?: boolean | null;
@@ -795,7 +795,7 @@ export interface SearchNodeInfo {
     fullName?: string | null;
     title?: string | null;
     avatar?: AvatarImage | null;
-    closeness: number;
+    distance: number;
 }
 
 export interface SettingInfo {

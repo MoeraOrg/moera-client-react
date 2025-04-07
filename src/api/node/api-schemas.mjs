@@ -717,7 +717,7 @@ export const NODE_API_SCHEMAS = {
                         }
                     ]
                 },
-                "closeness": {
+                "distance": {
                     type: "number"
                 },
                 "hasFeedSubscriber": {
@@ -783,7 +783,7 @@ export const NODE_API_SCHEMAS = {
             },
             required: [
                 "nodeName",
-                "closeness",
+                "distance",
             ],
             additionalProperties: false
         },
@@ -2099,13 +2099,13 @@ export const NODE_API_SCHEMAS = {
                         }
                     ]
                 },
-                "closeness": {
+                "distance": {
                     type: "number"
                 },
             },
             required: [
                 "nodeName",
-                "closeness",
+                "distance",
             ],
             additionalProperties: false
         },

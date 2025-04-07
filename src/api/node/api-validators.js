@@ -6578,7 +6578,7 @@ return errors === 0;
 }
 
 export const ContactInfo = validate41;
-const schema46 = {"type":"object","properties":{"nodeName":{"type":"string"},"fullName":{"type":"string","nullable":true},"gender":{"type":"string","nullable":true},"avatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"closeness":{"type":"number"},"hasFeedSubscriber":{"type":"boolean","nullable":true},"hasFeedSubscription":{"type":"boolean","nullable":true},"hasFriend":{"type":"boolean","nullable":true},"hasFriendOf":{"type":"boolean","nullable":true},"hasBlock":{"type":"boolean","nullable":true},"hasBlockBy":{"type":"boolean","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]},"ownerOperations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]},"adminOperations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]}},"required":["nodeName","closeness"],"additionalProperties":false};
+const schema46 = {"type":"object","properties":{"nodeName":{"type":"string"},"fullName":{"type":"string","nullable":true},"gender":{"type":"string","nullable":true},"avatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"distance":{"type":"number"},"hasFeedSubscriber":{"type":"boolean","nullable":true},"hasFeedSubscription":{"type":"boolean","nullable":true},"hasFriend":{"type":"boolean","nullable":true},"hasFriendOf":{"type":"boolean","nullable":true},"hasBlock":{"type":"boolean","nullable":true},"hasBlockBy":{"type":"boolean","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]},"ownerOperations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]},"adminOperations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]}},"required":["nodeName","distance"],"additionalProperties":false};
 
 function validate41(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
 let vErrors = null;
@@ -6586,7 +6586,7 @@ let errors = 0;
 if(errors === 0){
 if(data && typeof data == "object" && !Array.isArray(data)){
 let missing0;
-if(((data.nodeName === undefined) && (missing0 = "nodeName")) || ((data.closeness === undefined) && (missing0 = "closeness"))){
+if(((data.nodeName === undefined) && (missing0 = "nodeName")) || ((data.distance === undefined) && (missing0 = "distance"))){
 validate41.errors = [{instancePath,schemaPath:"#/required",keyword:"required",params:{missingProperty: missing0},message:"must have required property '"+missing0+"'"}];
 return false;
 }
@@ -7088,8 +7088,8 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.closeness !== undefined){
-let data9 = data.closeness;
+if(data.distance !== undefined){
+let data9 = data.distance;
 const _errs33 = errors;
 if(!((typeof data9 == "number") && (isFinite(data9)))){
 let dataType10 = typeof data9;
@@ -7107,14 +7107,14 @@ if(dataType10 == "boolean" || data9 === null
 coerced10 = +data9;
 }
 else {
-validate41.errors = [{instancePath:instancePath+"/closeness",schemaPath:"#/properties/closeness/type",keyword:"type",params:{type: "number"},message:"must be number"}];
+validate41.errors = [{instancePath:instancePath+"/distance",schemaPath:"#/properties/distance/type",keyword:"type",params:{type: "number"},message:"must be number"}];
 return false;
 }
 }
 if(coerced10 !== undefined){
 data9 = coerced10;
 if(data !== undefined){
-data["closeness"] = coerced10;
+data["distance"] = coerced10;
 }
 }
 }
@@ -22368,7 +22368,7 @@ return errors === 0;
 }
 
 export const SearchNodeInfo = validate100;
-const schema117 = {"type":"object","properties":{"nodeName":{"type":"string"},"fullName":{"type":"string","nullable":true},"title":{"type":"string","nullable":true},"avatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"closeness":{"type":"number"}},"required":["nodeName","closeness"],"additionalProperties":false};
+const schema117 = {"type":"object","properties":{"nodeName":{"type":"string"},"fullName":{"type":"string","nullable":true},"title":{"type":"string","nullable":true},"avatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"distance":{"type":"number"}},"required":["nodeName","distance"],"additionalProperties":false};
 
 function validate100(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
 let vErrors = null;
@@ -22376,14 +22376,14 @@ let errors = 0;
 if(errors === 0){
 if(data && typeof data == "object" && !Array.isArray(data)){
 let missing0;
-if(((data.nodeName === undefined) && (missing0 = "nodeName")) || ((data.closeness === undefined) && (missing0 = "closeness"))){
+if(((data.nodeName === undefined) && (missing0 = "nodeName")) || ((data.distance === undefined) && (missing0 = "distance"))){
 validate100.errors = [{instancePath,schemaPath:"#/required",keyword:"required",params:{missingProperty: missing0},message:"must have required property '"+missing0+"'"}];
 return false;
 }
 else {
 const _errs1 = errors;
 for(const key0 in data){
-if(!(((((key0 === "nodeName") || (key0 === "fullName")) || (key0 === "title")) || (key0 === "avatar")) || (key0 === "closeness"))){
+if(!(((((key0 === "nodeName") || (key0 === "fullName")) || (key0 === "title")) || (key0 === "avatar")) || (key0 === "distance"))){
 delete data[key0];
 }
 }
@@ -22878,8 +22878,8 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.closeness !== undefined){
-let data9 = data.closeness;
+if(data.distance !== undefined){
+let data9 = data.distance;
 const _errs33 = errors;
 if(!((typeof data9 == "number") && (isFinite(data9)))){
 let dataType10 = typeof data9;
@@ -22897,14 +22897,14 @@ if(dataType10 == "boolean" || data9 === null
 coerced10 = +data9;
 }
 else {
-validate100.errors = [{instancePath:instancePath+"/closeness",schemaPath:"#/properties/closeness/type",keyword:"type",params:{type: "number"},message:"must be number"}];
+validate100.errors = [{instancePath:instancePath+"/distance",schemaPath:"#/properties/distance/type",keyword:"type",params:{type: "number"},message:"must be number"}];
 return false;
 }
 }
 if(coerced10 !== undefined){
 data9 = coerced10;
 if(data !== undefined){
-data["closeness"] = coerced10;
+data["distance"] = coerced10;
 }
 }
 }

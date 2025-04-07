@@ -172,20 +172,20 @@ function reorderNames(names: NameListItem[], query: string | null): NameListItem
 
 const getNames = createSelector(
     [getContacts, getNamesInComments],
-    (contacts, comments) => {
+    (contacts, usedNames) => {
         const contactNames = new Set(contacts.map(c => c.nodeName));
-        const commentMap = new Map(comments.map(c => [c.nodeName, c]));
+        const usedNamesMap = new Map(usedNames.map(c => [c.nodeName, c]));
         const result = cloneDeep(contacts);
         for (const c of result) {
-            if (commentMap.has(c.nodeName)) {
-                c.closeness += 1000 * commentMap.get(c.nodeName)!.count;
+            if (usedNamesMap.has(c.nodeName)) {
+                c.distance -= usedNamesMap.get(c.nodeName)!.count / 100;
             }
         }
-        comments
+        usedNames
             .filter(c => !contactNames.has(c.nodeName))
-            .map(({nodeName, fullName, avatar, count}) => ({nodeName, fullName, avatar, closeness: count * 1000}))
+            .map(({nodeName, fullName, avatar, count}) => ({nodeName, fullName, avatar, distance: 3 - count / 100}))
             .forEach(c => result.push(c));
-        result.sort((c1, c2) => c2.closeness - c1.closeness);
+        result.sort((c1, c2) => c1.distance - c2.distance);
         return result;
     }
 );
