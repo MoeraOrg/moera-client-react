@@ -14,14 +14,15 @@ export interface ActionWithPayload<T, P> extends ActionWithoutPayload<T> {
 }
 
 export interface ActionContext {
-    ownerName: string | null,
-    ownerNameOrUrl: string,
-    ownerFullName: string | null,
-    homeOwnerName: string | null,
-    homeOwnerNameOrUrl: string,
-    homeOwnerFullName: string | null,
-    homeOwnerGender: string | null,
-    homeOwnerAvatar: AvatarImage | null
+    ownerName: string | null;
+    ownerNameOrUrl: string;
+    ownerFullName: string | null;
+    homeOwnerName: string | null;
+    homeOwnerNameOrUrl: string;
+    homeOwnerFullName: string | null;
+    homeOwnerGender: string | null;
+    homeOwnerAvatar: AvatarImage | null;
+    searchName: string;
 }
 
 export type WithContext<T extends Action> = T & {

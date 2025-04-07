@@ -750,6 +750,7 @@
           "html": "Paste with tags",
           "text": "Paste text only"
         },
+        "search_node-name": "Search engine node name",
         "src-format_default": "Formatting of profile and other texts (default)",
         "src-format_default-items": {
           "html--visual": "Visual editor",

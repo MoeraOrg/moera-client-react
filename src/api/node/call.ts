@@ -163,15 +163,15 @@ interface ApiSelection {
 export async function selectApi(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string
 ): Promise<ApiSelection> {
-    let ownerNameOrUrl: string, homeOwnerNameOrUrl: string;
+    let ownerNameOrUrl: string, homeOwnerNameOrUrl: string, searchName: string;
     if (caller != null) {
-        ({ownerNameOrUrl, homeOwnerNameOrUrl} = caller.context);
+        ({ownerNameOrUrl, homeOwnerNameOrUrl, searchName} = caller.context);
     } else {
-        ({ownerNameOrUrl, homeOwnerNameOrUrl} = select(getRelNodeNameContext));
+        ({ownerNameOrUrl, homeOwnerNameOrUrl, searchName} = select(getRelNodeNameContext));
     }
     if (nodeName instanceof RelNodeName) {
         const isHome = nodeName.isHomeNode();
-        nodeName = nodeName.absolute({ownerNameOrUrl, homeOwnerNameOrUrl});
+        nodeName = nodeName.absolute({ownerNameOrUrl, homeOwnerNameOrUrl, searchName});
         if (nodeName === "" && isHome) {
             throw new HomeNotConnectedError(caller);
         }

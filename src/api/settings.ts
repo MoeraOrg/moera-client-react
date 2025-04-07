@@ -606,6 +606,11 @@ const META: ClientSettingMetaInfo[] = [
         defaultValue: "false",
         modifiers: {}
     },
+    {
+        name: "search.node-name",
+        type: "string",
+        defaultValue: "search_0"
+    },
 ];
 
 function collectMetaMap(map: Map<string, ClientSettingMetaInfo>, metadata: ClientSettingMetaInfo[]) {

@@ -750,6 +750,7 @@
           "html": "Wklej z tagami",
           "text": "Wklej tylko tekst"
         },
+        "search_node-name": "Nazwa węzła wyszukiwarki",
         "src-format_default": "Formatowanie profilu i innych tekstów (domyślnie)",
         "src-format_default-items": {
           "html--visual": "Edytor wizualny",

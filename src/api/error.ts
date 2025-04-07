@@ -95,5 +95,6 @@ export class NameResolvingError extends CausedError {
 function extractNodeName(nodeName: RelNodeName | string, cause: WithContext<ClientAction> | null): string {
     const ownerNameOrUrl = cause?.context.ownerNameOrUrl ?? "unresolvable current node";
     const homeOwnerNameOrUrl = cause?.context.homeOwnerNameOrUrl ?? "unresolvable home node";
-    return absoluteNodeName(nodeName, {ownerNameOrUrl, homeOwnerNameOrUrl});
+    const searchName = cause?.context.searchName ?? "unresolvable search node";
+    return absoluteNodeName(nodeName, {ownerNameOrUrl, homeOwnerNameOrUrl, searchName});
 }
