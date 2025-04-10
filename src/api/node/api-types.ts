@@ -28,7 +28,8 @@ export type Scope = "none" | "identify" | "other" | "view-media" | "view-content
     | "view-profile" | "update-profile" | "sheriff" | "view-settings" | "update-settings" | "subscribe" | "tokens"
     | "user-lists" | "grant" | "upload-public-media" | "upload-private-media" | "view-all" | "all";
 
-export type SearchContentUpdateType = "profile";
+export type SearchContentUpdateType = "block" | "friend" | "profile" | "subscribe" | "unblock" | "unfriend"
+    | "unsubscribe";
 
 export type SearchEngine = "google";
 

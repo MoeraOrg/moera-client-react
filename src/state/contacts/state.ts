@@ -1,4 +1,4 @@
-import { ContactInfo } from "api";
+import { SearchNodeInfo } from "api";
 
 interface ContactsQueryState {
     loading: boolean;
@@ -7,5 +7,5 @@ interface ContactsQueryState {
 
 export interface ContactsState {
     queries: Partial<Record<string, ContactsQueryState>>;
-    contacts: ContactInfo[];
+    contacts: SearchNodeInfo[];
 }

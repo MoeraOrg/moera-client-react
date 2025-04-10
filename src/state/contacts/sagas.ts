@@ -6,7 +6,7 @@ import { errorThrown } from "state/error/actions";
 import { ContactsLoadAction, contactsLoaded, contactsLoadFailed, contactsNameFound } from "state/contacts/actions";
 import { getNameDetails } from "state/naming/sagas";
 import { hasContactsName } from "state/contacts/selectors";
-import { REL_HOME } from "util/rel-node-name";
+import { REL_SEARCH } from "util/rel-node-name";
 
 export default [
     executor("CONTACTS_LOAD", payload => payload.query, contactsLoadSaga)
@@ -16,7 +16,7 @@ async function contactsLoadSaga(action: WithContext<ContactsLoadAction>): Promis
     const {query} = action.payload;
     try {
         contactsFindName(action, query);
-        const contact = await Node.getContacts(action, REL_HOME, query, 25);
+        const contact = await Node.searchNodes(action, REL_SEARCH, query, 25);
         dispatch(contactsLoaded(query, contact).causedBy(action));
     } catch (e) {
         dispatch(contactsLoadFailed(query).causedBy(action));

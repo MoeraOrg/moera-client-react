@@ -1,5 +1,5 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
-import { ContactInfo } from "api";
+import { SearchNodeInfo } from "api";
 
 export type ContactsPrepareAction = ActionWithPayload<"CONTACTS_PREPARE", {
     query: string;
@@ -15,9 +15,9 @@ export const contactsLoad = (query: string): ContactsLoadAction =>
 
 export type ContactsLoadedAction = ActionWithPayload<"CONTACTS_LOADED", {
     query: string;
-    contacts: ContactInfo[];
+    contacts: SearchNodeInfo[];
 }>;
-export const contactsLoaded = (query: string, contacts: ContactInfo[]): ContactsLoadedAction =>
+export const contactsLoaded = (query: string, contacts: SearchNodeInfo[]): ContactsLoadedAction =>
     actionWithPayload("CONTACTS_LOADED", {query, contacts});
 
 export type ContactsNameFoundAction = ActionWithPayload<"CONTACTS_NAME_FOUND", {
