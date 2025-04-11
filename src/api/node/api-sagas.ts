@@ -1653,12 +1653,12 @@ export async function getRemoteSheriffOrder(
 
 export async function searchNodes(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, query: string | null = null,
-    limit: number | null = null, errorFilter: ErrorFilter = false
+    limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): Promise<API.SearchNodeInfo[]> {
 
     const location = urlWithParameters(ut`/search/nodes`, {query, limit});
     return callApi<API.SearchNodeInfo[]>({
-        caller, nodeName, method: "GET", location, schema: "SearchNodeInfoArray", errorFilter
+        caller, nodeName, method: "GET", location, auth, schema: "SearchNodeInfoArray", errorFilter
     });
 }
 
