@@ -799,6 +799,20 @@ export interface SearchNodeInfo {
     distance: number;
 }
 
+export interface SearchBlockUpdate {
+    nodeName: string;
+    blockedOperation: BlockedOperation;
+}
+
+export interface SearchFriendUpdate {
+    nodeName: string;
+}
+
+export interface SearchSubscriptionUpdate {
+    nodeName: string;
+    feedName: string;
+}
+
 export interface SettingInfo {
     name: string;
     value?: string | null;
