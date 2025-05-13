@@ -347,7 +347,7 @@ export function containsTags(html: string, replacementLevel: ReplacementLevel): 
 }
 
 export const clearHtml = (html: string | null | undefined): string =>
-    unhtmlEntities(html).replace(/<\/?[a-z][^>]*>/gi, "").trim();
+    unhtmlEntities(html?.replace(/<\/?[a-z][^>]*>/gi, "")).trim();
 
 export const htmlEntities = (s: string | null | undefined): string =>
     HtmlEntities.encode(s);
