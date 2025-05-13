@@ -28,10 +28,13 @@ export type Scope = "none" | "identify" | "other" | "view-media" | "view-content
     | "view-profile" | "update-profile" | "sheriff" | "view-settings" | "update-settings" | "subscribe" | "tokens"
     | "user-lists" | "grant" | "upload-public-media" | "upload-private-media" | "view-all" | "all";
 
-export type SearchContentUpdateType = "block" | "friend" | "profile" | "subscribe" | "unblock" | "unfriend"
-    | "unsubscribe";
+export type SearchContentUpdateType = "block" | "comment-add" | "comment-update" | "comment-delete" | "friend"
+    | "profile" | "posting-add" | "posting-update" | "posting-delete" | "reaction-add" | "reaction-delete"
+    | "reactions-delete-all" | "subscribe" | "unblock" | "unfriend" | "unsubscribe";
 
 export type SearchEngine = "google";
+
+export type SearchEntryType = "all" | "posting" | "comment";
 
 export type SettingType = "bool" | "int" | "string" | "json" | "Duration" | "PrivateKey" | "PublicKey" | "Timestamp"
     | "UUID" | "Principal";
@@ -149,6 +152,10 @@ export interface ProfileOperations {
 export interface ReactionOperations {
     view?: PrincipalValue | null;
     delete?: PrincipalValue | null;
+}
+
+export interface SearchEntryOperations {
+    view?: PrincipalValue | null;
 }
 
 export interface StoryOperations {
@@ -791,6 +798,35 @@ export interface SheriffMark {
     sheriffName: string;
 }
 
+export interface SearchBlockUpdate {
+    nodeName: string;
+    blockedOperation: BlockedOperation;
+}
+
+export interface SearchCommentUpdate {
+    postingId: string;
+    commentId: string;
+}
+
+export interface SearchFriendUpdate {
+    nodeName: string;
+}
+
+export interface SearchHashtagFilter {
+    entryType?: SearchEntryType | null;
+    hashtags: string[];
+    publisherName?: string | null;
+    inNewsfeed?: boolean | null;
+    owners?: string[] | null;
+    minImageCount?: number | null;
+    maxImageCount?: number | null;
+    videoPresent?: boolean | null;
+    sheriffName?: string | null;
+    after?: number | null;
+    before?: number | null;
+    limit?: number | null;
+}
+
 export interface SearchNodeInfo {
     nodeName: string;
     fullName?: string | null;
@@ -799,18 +835,50 @@ export interface SearchNodeInfo {
     distance: number;
 }
 
-export interface SearchBlockUpdate {
+export interface SearchPostingUpdate {
+    feedName: string;
+    storyId: string;
+    publishedAt: number;
     nodeName: string;
-    blockedOperation: BlockedOperation;
+    postingId: string;
 }
 
-export interface SearchFriendUpdate {
-    nodeName: string;
+export interface SearchReactionUpdate {
+    postingId: string;
+    commentId: string;
+    ownerName: string;
+}
+
+export interface SearchRepliedTo {
+    id: string;
+    revisionId?: string | null;
+    name: string;
+    fullName?: string | null;
+    avatar?: AvatarImage | null;
+    heading?: string | null;
 }
 
 export interface SearchSubscriptionUpdate {
     nodeName: string;
     feedName: string;
+}
+
+export interface SearchTextFilter {
+    entryType?: SearchEntryType | null;
+    text: string;
+    hashtags?: string[] | null;
+    publisherName?: string | null;
+    inNewsfeed?: boolean | null;
+    owners?: string[] | null;
+    repliedTo?: string[] | null;
+    minImageCount?: number | null;
+    maxImageCount?: number | null;
+    videoPresent?: boolean | null;
+    createdAfter?: number | null;
+    createdBefore?: number | null;
+    sheriffName?: string | null;
+    page?: number | null;
+    limit?: number | null;
 }
 
 export interface SettingInfo {
@@ -958,9 +1026,19 @@ export interface SheriffOrderInfo {
     reasonCode?: SheriffOrderReason | null;
     reasonDetails?: string | null;
     createdAt: number;
+    moment: number;
     signature: string;
     signatureVersion: number;
     complaintGroupId?: string | null;
+}
+
+export interface SheriffOrdersSliceInfo {
+    before: number;
+    after: number;
+    orders: SheriffOrderInfo[];
+    total: number;
+    totalInPast: number;
+    totalInFuture: number;
 }
 
 export interface StoryAttributes {
@@ -1417,6 +1495,44 @@ export interface ReactionCreated {
     reaction?: ReactionInfo | null;
     totals: ReactionTotalsInfo;
 }
+
+export interface SearchEntryInfoBase<B> {
+    nodeName: string;
+    postingId: string;
+    commentId?: string | null;
+    ownerName: string;
+    ownerFullName?: string | null;
+    ownerAvatar?: AvatarImage | null;
+    bodyPreview: B;
+    heading: string;
+    imageCount?: number | null;
+    videoPresent?: boolean | null;
+    repliedTo?: SearchRepliedTo | null;
+    createdAt: number;
+    operations?: SearchEntryOperations | null;
+    moment: number;
+}
+
+export type EncodedSearchEntryInfo = SearchEntryInfoBase<string>;
+export type SearchEntryInfo = SearchEntryInfoBase<Body>;
+
+export interface SearchHashtagSliceInfoBase<B> {
+    before: number;
+    after: number;
+    entries: SearchEntryInfoBase<B>[];
+}
+
+export type EncodedSearchHashtagSliceInfo = SearchHashtagSliceInfoBase<string>;
+export type SearchHashtagSliceInfo = SearchHashtagSliceInfoBase<Body>;
+
+export interface SearchTextPageInfoBase<B> {
+    page: number;
+    total: number;
+    entries: SearchEntryInfoBase<B>[];
+}
+
+export type EncodedSearchTextPageInfo = SearchTextPageInfoBase<string>;
+export type SearchTextPageInfo = SearchTextPageInfoBase<Body>;
 
 export interface SettingDescriptor {
     name: string;

@@ -21,6 +21,17 @@ export async function searchActivityReactions(
     });
 }
 
+export async function getRemoteSheriffOrdersSlice(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, after: number | null = null,
+    before: number | null = null, limit: number | null = null, errorFilter: ErrorFilter = false
+): Promise<API.SheriffOrdersSliceInfo> {
+
+    const location = urlWithParameters(ut`/activity/sheriff/orders`, {after, before, limit});
+    return callApi<API.SheriffOrdersSliceInfo>({
+        caller, nodeName, method: "GET", location, schema: "SheriffOrdersSliceInfo", errorFilter
+    });
+}
+
 export async function getRemotePostingVerificationStatus(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: true | string = true
@@ -1659,6 +1670,30 @@ export async function searchNodes(
     const location = urlWithParameters(ut`/search/nodes`, {query, limit});
     return callApi<API.SearchNodeInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "SearchNodeInfoArray", errorFilter
+    });
+}
+
+export async function searchEntriesByHashtag(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.SearchHashtagFilter,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
+): Promise<API.SearchHashtagSliceInfo> {
+
+    const location = "/search/entries/by-hashtag";
+    return callApi<API.SearchHashtagSliceInfo>({
+        caller, nodeName, method: "POST", location, body: filter, auth, schema: "SearchHashtagSliceInfo",
+        decodeBodies: true, errorFilter
+    });
+}
+
+export async function searchEntriesByText(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.SearchTextFilter,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
+): Promise<API.SearchTextPageInfo> {
+
+    const location = "/search/entries/by-text";
+    return callApi<API.SearchTextPageInfo>({
+        caller, nodeName, method: "POST", location, body: filter, auth, schema: "SearchTextPageInfo",
+        decodeBodies: true, errorFilter
     });
 }
 

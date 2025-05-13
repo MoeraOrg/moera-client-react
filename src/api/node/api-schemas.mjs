@@ -293,6 +293,17 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
+        SearchEntryOperations: {
+            type: "object",
+            properties: {
+                "view": {
+                    type: "string",
+                    nullable: true
+                },
+            },
+            additionalProperties: false
+        },
+
         StoryOperations: {
             type: "object",
             properties: {
@@ -2117,6 +2128,47 @@ export const NODE_API_SCHEMAS = {
             }
         },
 
+        SearchRepliedTo: {
+            type: "object",
+            properties: {
+                "id": {
+                    type: "string"
+                },
+                "revisionId": {
+                    type: "string",
+                    nullable: true
+                },
+                "name": {
+                    type: "string"
+                },
+                "fullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "avatar": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+                "heading": {
+                    type: "string",
+                    nullable: true
+                },
+            },
+            required: [
+                "id",
+                "name",
+            ],
+            additionalProperties: false
+        },
+
         SettingInfo: {
             type: "object",
             properties: {
@@ -2461,6 +2513,9 @@ export const NODE_API_SCHEMAS = {
                 "createdAt": {
                     type: "integer"
                 },
+                "moment": {
+                    type: "integer"
+                },
                 "signature": {
                     type: "string"
                 },
@@ -2479,8 +2534,45 @@ export const NODE_API_SCHEMAS = {
                 "feedName",
                 "category",
                 "createdAt",
+                "moment",
                 "signature",
                 "signatureVersion",
+            ],
+            additionalProperties: false
+        },
+
+        SheriffOrdersSliceInfo: {
+            type: "object",
+            properties: {
+                "before": {
+                    type: "integer"
+                },
+                "after": {
+                    type: "integer"
+                },
+                "orders": {
+                    type: "array",
+                    items: {
+                        $ref: "node#/definitions/SheriffOrderInfo"
+                    }
+                },
+                "total": {
+                    type: "integer"
+                },
+                "totalInPast": {
+                    type: "integer"
+                },
+                "totalInFuture": {
+                    type: "integer"
+                },
+            },
+            required: [
+                "before",
+                "after",
+                "orders",
+                "total",
+                "totalInPast",
+                "totalInFuture",
             ],
             additionalProperties: false
         },
@@ -3913,6 +4005,143 @@ export const NODE_API_SCHEMAS = {
             },
             required: [
                 "totals",
+            ],
+            additionalProperties: false
+        },
+
+        SearchEntryInfo: {
+            type: "object",
+            properties: {
+                "nodeName": {
+                    type: "string"
+                },
+                "postingId": {
+                    type: "string"
+                },
+                "commentId": {
+                    type: "string",
+                    nullable: true
+                },
+                "ownerName": {
+                    type: "string"
+                },
+                "ownerFullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "ownerAvatar": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+                "bodyPreview": {
+                    type: "string"
+                },
+                "heading": {
+                    type: "string"
+                },
+                "imageCount": {
+                    type: "integer",
+                    nullable: true
+                },
+                "videoPresent": {
+                    type: "boolean",
+                    nullable: true
+                },
+                "repliedTo": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/SearchRepliedTo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+                "createdAt": {
+                    type: "integer"
+                },
+                "operations": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/SearchEntryOperations",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+                "moment": {
+                    type: "integer"
+                },
+            },
+            required: [
+                "nodeName",
+                "postingId",
+                "ownerName",
+                "bodyPreview",
+                "heading",
+                "createdAt",
+                "moment",
+            ],
+            additionalProperties: false
+        },
+
+        SearchHashtagSliceInfo: {
+            type: "object",
+            properties: {
+                "before": {
+                    type: "integer"
+                },
+                "after": {
+                    type: "integer"
+                },
+                "entries": {
+                    type: "array",
+                    items: {
+                        $ref: "node#/definitions/SearchEntryInfo"
+                    }
+                },
+            },
+            required: [
+                "before",
+                "after",
+                "entries",
+            ],
+            additionalProperties: false
+        },
+
+        SearchTextPageInfo: {
+            type: "object",
+            properties: {
+                "page": {
+                    type: "integer"
+                },
+                "total": {
+                    type: "integer"
+                },
+                "entries": {
+                    type: "array",
+                    items: {
+                        $ref: "node#/definitions/SearchEntryInfo"
+                    }
+                },
+            },
+            required: [
+                "page",
+                "total",
+                "entries",
             ],
             additionalProperties: false
         },
