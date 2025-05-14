@@ -47,25 +47,6 @@ export default (state: ContactsState = initialState, action: ClientAction): Cont
         case "CONTACTS_UNSET":
             return cloneDeep(initialState);
 
-            // FIXME events are not coming from Search
-        case "EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED": {
-            const index = state.contacts.findIndex(c => c.nodeName === action.payload.name);
-            if (index >= 0) {
-                return immutable.update(state, ["contacts", index],
-                        c => ({...c, fullName: action.payload.fullName}));
-            }
-            return state;
-        }
-
-        case "EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED": {
-            const index = state.contacts.findIndex(c => c.nodeName === action.payload.name);
-            if (index >= 0) {
-                return immutable.update(state, ["contacts", index],
-                    c => ({...c, avatar: cloneDeep(action.payload.avatar)}));
-            }
-            return state;
-        }
-
         default:
             return state;
     }
