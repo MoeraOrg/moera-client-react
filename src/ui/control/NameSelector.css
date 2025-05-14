@@ -4,6 +4,7 @@
     max-height: 18em;
     overflow-y: auto;
     overscroll-behavior-y: none;
+    overflow-x: hidden;
 }
 
 .name-select .item {
