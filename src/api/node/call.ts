@@ -50,7 +50,7 @@ export async function callApi<T>({
     auth = false,
     body = null,
     schema,
-    decodeBodies: decode = false,
+    decodeBodies = false,
     errorFilter = false,
     onProgress
 }: CallApiParams): Promise <T> {
@@ -142,7 +142,7 @@ export async function callApi<T>({
             }
         }
         if (schema !== "blob") {
-            const result = await validateSchema(schema, data, decode);
+            const result = await validateSchema(schema, data, decodeBodies);
             const {valid, errors} = result;
             if (!valid) {
                 throw exception("Server returned incorrect response", formatSchemaErrors(errors));
