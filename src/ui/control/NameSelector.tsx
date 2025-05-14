@@ -24,6 +24,10 @@ interface Props {
     submitOnEscape?: boolean;
 }
 
+/*
+ * USER-[handleChange]->query-[debounce]->queryToLoad-[contactsPrepare]->REDUX
+ * REDUX-[getNames]->contactNames-[namesListQuery]->names-[reorderNames]->searchList->RENDER
+ */
 export function NameSelector({defaultQuery = "", onChange, onSubmit, submitOnEscape = false}: Props) {
     const contactNames = useSelector(getNames);
     const homeName = useSelector(getHomeOwnerName);
@@ -50,7 +54,7 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit, submitOnEsc
         }
     }, [listDom, searchList])
 
-    const [queryToLoad] = useDebounce(query, 500);
+    const [queryToLoad] = useDebounce(query, 250);
     useEffect(() => {
         dispatch(contactsPrepare(queryToLoad ?? ""));
     }, [dispatch, queryToLoad]);
@@ -157,7 +161,8 @@ function reorderNames(names: NameListItem[], query: string | null): NameListItem
     if (!query) {
         return names;
     }
-    const index = names.findIndex(nm => nm.nodeName === query);
+    const expandedQuery = NodeName.expand(query);
+    const index = names.findIndex(nm => nm.nodeName === expandedQuery);
     if (index < 0) {
         return [{nodeName: query}, ...names];
     }
