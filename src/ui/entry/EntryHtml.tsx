@@ -15,6 +15,8 @@ import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { mediaHashStrip } from "util/media-images";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
+import { wrapHashtags } from "ui/entry/wrap-hashtags";
+import { ut } from "util/url";
 
 interface Props {
     className?: string;
@@ -44,6 +46,8 @@ export default function EntryHtml({
             return;
         }
 
+        wrapHashtags(dom.current);
+
         dom.current.querySelectorAll("a[data-nodename]").forEach(node => {
             const name = node.getAttribute("data-nodename");
             const href = node.getAttribute("data-href");
@@ -71,6 +75,14 @@ export default function EntryHtml({
                     </Provider>
                 );
             }
+        });
+        dom.current.querySelectorAll("span[data-hashtag]").forEach(node => {
+            const hashtag = node.getAttribute("data-hashtag");
+            createRoot(node).render(
+                <Provider store={window.store}>
+                    <Jump href={ut`/search?query=${hashtag}`}>{hashtag}</Jump>
+                </Provider>
+            );
         });
         dom.current.querySelectorAll("img").forEach(node => {
             const src = node.getAttribute("src");

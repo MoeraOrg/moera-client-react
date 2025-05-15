@@ -7,7 +7,7 @@ import { htmlEntities, replaceEmojis, safePreviewHtml } from "util/html";
 import { ellipsize } from "util/text";
 
 const MAX_SHORT_TITLE = 120;
-const HASHTAGS = /^(?:\s*#[\p{L}\d]+\s*)+$/gu;
+const HASHTAGS = /^(?:\s*#[\p{L}\p{Nd}_]+\s*)+$/gu;
 
 const initialState: SearchState = {
     mode: "fulltext",
