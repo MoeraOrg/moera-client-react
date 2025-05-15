@@ -9,6 +9,7 @@ import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
 import SearchEntry from "ui/search/SearchEntry";
 import NothingFound from "ui/search/NothingFound";
+import "./SearchPage.css";
 
 export default function SearchPage() {
     const query = useSelector(getSearchQuery);
@@ -22,7 +23,7 @@ export default function SearchPage() {
             <PageHeader>
                 <h2>{t("search")}{query ? ": " + query : ""}</h2>
             </PageHeader>
-            <Page>
+            <Page className="search-page">
                 {loaded && entries.length > 0 ?
                     entries.map(entry =>
                         <SearchEntry entry={entry} key={entry.moment}/>
