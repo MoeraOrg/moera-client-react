@@ -12,6 +12,7 @@ import ProfilePage from "ui/profile/ProfilePage";
 import DetailedPostingPage from "ui/detailedposting/DetailedPostingPage";
 import NewsPage from "ui/feed/NewsPage";
 import GooglePlayProhibitedPage from "ui/page/GooglePlayProhibitedPage";
+import SearchPage from "ui/search/SearchPage";
 import { REL_CURRENT } from "util/rel-node-name";
 
 const ComposePage = React.lazy(() => import("ui/compose/ComposePage"));
@@ -71,6 +72,8 @@ export default function CurrentPage() {
                     <ComplaintsPage/>
                 </Suspense>
             );
+        case "search":
+            return <SearchPage/>;
         default:
             return null;
     }

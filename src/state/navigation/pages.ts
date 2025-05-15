@@ -8,4 +8,5 @@ export type Page =
     | "people"
     | "complaints"
     | "removal"
-    | "grant";
+    | "grant"
+    | "search";

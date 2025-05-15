@@ -29,6 +29,7 @@ import changeDateDialog from "state/changedatedialog/reducer";
 import people from "state/people/reducer";
 import nodeCards from "state/nodecards/reducer";
 import contacts from "state/contacts/reducer";
+import search from "state/search/reducer";
 import grant from "state/grant/reducer";
 import shareDialog from "state/sharedialog/reducer";
 import sourceDialog from "state/sourcedialog/reducer";
@@ -78,6 +79,7 @@ import changeDateDialogExecutors from "state/changedatedialog/sagas";
 import peopleExecutors from "state/people/sagas";
 import nodeCardsExecutors from "state/nodecards/sagas";
 import contactsExecutors from "state/contacts/sagas";
+import searchExecutors from "state/search/sagas";
 import grantExecutors from "state/grant/sagas";
 import shareDialogExecutors from "state/sharedialog/sagas";
 import sourceDialogExecutors from "state/sourcedialog/sagas";
@@ -115,6 +117,7 @@ import reactionsDialogTriggers from "state/reactionsdialog/triggers";
 import peopleTriggers from "state/people/triggers";
 import nodeCardsTriggers from "state/nodecards/triggers";
 import contactsTriggers from "state/contacts/triggers";
+import searchTriggers from "state/search/triggers";
 import grantTriggers from "state/grant/triggers";
 import imageEditDialogTriggers from "state/imageeditdialog/triggers";
 import lightBoxTriggers from "state/lightbox/triggers";
@@ -150,6 +153,7 @@ const reducers = combineReducers({
     people,
     nodeCards,
     contacts,
+    search,
     grant,
     shareDialog,
     sourceDialog,
@@ -201,6 +205,7 @@ const triggers = collectTriggers(
     peopleTriggers,
     nodeCardsTriggers,
     contactsTriggers,
+    searchTriggers,
     grantTriggers,
     imageEditDialogTriggers,
     lightBoxTriggers,
@@ -237,6 +242,7 @@ const executors = collectExecutors(
     peopleExecutors,
     nodeCardsExecutors,
     contactsExecutors,
+    searchExecutors,
     grantExecutors,
     shareDialogExecutors,
     sourceDialogExecutors,

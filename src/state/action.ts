@@ -39,6 +39,7 @@ import { QuickTipsAnyAction } from "state/quicktips/actions";
 import { ReactionsDialogAnyAction } from "state/reactionsdialog/actions";
 import { RefreshAnyAction } from "state/refresh/actions";
 import { RichTextEditorAnyAction } from "state/richtexteditor/actions";
+import { SearchAnyAction } from "state/search/actions";
 import { SettingsAnyAction } from "state/settings/actions";
 import { ShareDialogAnyAction } from "state/sharedialog/actions";
 import { SheriffOrderDialogAnyAction } from "state/sherifforderdialog/actions";
@@ -91,6 +92,7 @@ export type ClientAction =
     | ReactionsDialogAnyAction
     | RefreshAnyAction
     | RichTextEditorAnyAction
+    | SearchAnyAction
     | SettingsAnyAction
     | ShareDialogAnyAction
     | SheriffOrderDialogAnyAction

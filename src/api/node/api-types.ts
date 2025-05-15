@@ -1504,6 +1504,7 @@ export interface SearchEntryInfoBase<B> {
     ownerFullName?: string | null;
     ownerAvatar?: AvatarImage | null;
     bodyPreview: B;
+    bodyFormat?: BodyFormat | null;
     heading: string;
     imageCount?: number | null;
     videoPresent?: boolean | null;

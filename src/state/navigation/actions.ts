@@ -1,6 +1,6 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { Page } from "state/navigation/pages";
-import { Scope } from "../../api";
+import { Scope } from "api";
 
 export type InitFromNodeLocationAction = ActionWithPayload<"INIT_FROM_NODE_LOCATION", {
     nodeName: string;
@@ -97,6 +97,12 @@ export const goToGrant = (
 ): GoToGrantAction =>
     goToPage("grant", {clientName, carte, scope, redirectUri});
 
+export type GoToSearchAction = GoToPageAction<"search", {
+    query: string;
+}>;
+export const goToSearch = (query: string): GoToSearchAction =>
+    goToPage("search", {query});
+
 export type GoToPageAnyAction =
     GoToProfileAction
     | GoToTimelineAction
@@ -107,7 +113,8 @@ export type GoToPageAnyAction =
     | GoToPeopleAction
     | GoToComplaintsAction
     | GoToRemovalAction
-    | GoToGrantAction;
+    | GoToGrantAction
+    | GoToSearchAction;
 
 export type NewLocationAction = ActionWithoutPayload<"NEW_LOCATION">;
 export const newLocation = (): NewLocationAction =>

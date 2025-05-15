@@ -8,6 +8,7 @@ import {
     isAtPeoplePage,
     isAtProfilePage,
     isAtRemovalPage,
+    isAtSearchPage,
     isAtSettingsPage,
     isAtTimelinePage
 } from "state/navigation/selectors";
@@ -19,6 +20,7 @@ import { build as peopleBuild, transform as peopleTransform } from "location/peo
 import { build as postBuild, transform as postTransform } from "location/post";
 import { build as profileBuild, transform as profileTransform } from "location/profile";
 import { build as removalBuild, transform as removalTransform } from "location/removal";
+import { build as searchBuild, transform as searchTransform } from "location/search";
 import { build as settingsBuild, transform as settingsTransform } from "location/settings";
 import { build as timelineBuild, transform as timelineTransform } from "location/timeline";
 import { build as mediaBuild } from "location/media";
@@ -61,6 +63,9 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (dstInfo.directories[0] === "grant") {
         return grantTransform(srcInfo, dstInfo);
     }
+    if (dstInfo.directories[0] === "search") {
+        return searchTransform(srcInfo, dstInfo);
+    }
     return [];
 }
 
@@ -97,6 +102,9 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     }
     if (isAtGrantPage(state)) {
         return grantBuild(state, info);
+    }
+    if (isAtSearchPage(state)) {
+        return searchBuild(state, info);
     }
     return info;
 }

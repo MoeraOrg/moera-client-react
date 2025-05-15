@@ -41,6 +41,10 @@ export function isAtGrantPage(state: ClientState): boolean {
     return state.navigation.page === "grant";
 }
 
+export function isAtSearchPage(state: ClientState): boolean {
+    return state.navigation.page === "search";
+}
+
 export function isBottomMenuVisible(state: ClientState): boolean {
     return state.navigation.bottomMenuVisible;
 }

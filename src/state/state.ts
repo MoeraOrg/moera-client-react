@@ -36,6 +36,7 @@ import { PulseState } from "state/pulse/state";
 import { QuickTipsState } from "state/quicktips/state";
 import { ReactionsDialogState } from "state/reactionsdialog/state";
 import { RefreshState } from "state/refresh/state";
+import { SearchState } from "state/search/state";
 import { SettingsState } from "state/settings/state";
 import { ShareDialogState } from "state/sharedialog/state";
 import { SheriffOrderDialogState } from "state/sherifforderdialog/state";
@@ -85,6 +86,7 @@ export interface ClientState {
     quickTips: QuickTipsState;
     reactionsDialog: ReactionsDialogState;
     refresh: RefreshState;
+    search: SearchState;
     settings: SettingsState;
     shareDialog: ShareDialogState;
     sheriffOrderDialog: SheriffOrderDialogState;

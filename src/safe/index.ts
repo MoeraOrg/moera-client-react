@@ -20,11 +20,13 @@ import {
     EncodedFeedSliceInfo,
     EncodedPostingInfo,
     EncodedPostingRevisionInfo,
+    EncodedSearchEntryInfo, EncodedSearchHashtagSliceInfo, EncodedSearchTextPageInfo,
     EncodedStoryInfo,
     EntryInfo,
     FeedSliceInfo,
     PostingInfo,
     PostingRevisionInfo,
+    SearchEntryInfo,
     SourceFormat,
     StoryInfo
 } from "api";
@@ -84,10 +86,11 @@ function decodeBody(encoded: string, format: BodyFormat | SourceFormat | null): 
 }
 
 type Entities = Partial<PostingInfo | PostingRevisionInfo | CommentInfo | CommentRevisionInfo | StoryInfo
-    | CommentCreated | DraftInfo | FeedSliceInfo | CommentsSliceInfo | EntryInfo>;
+    | CommentCreated | DraftInfo | FeedSliceInfo | CommentsSliceInfo | EntryInfo | SearchEntryInfo>;
 type EncodedEntities = Partial<EncodedPostingInfo | EncodedPostingRevisionInfo | EncodedCommentInfo
     | EncodedCommentRevisionInfo | EncodedStoryInfo | EncodedCommentCreated | EncodedDraftInfo | EncodedFeedSliceInfo
-    | EncodedCommentsSliceInfo | EncodedEntryInfo>;
+    | EncodedCommentsSliceInfo | EncodedEntryInfo | EncodedSearchEntryInfo | EncodedSearchHashtagSliceInfo
+    | EncodedSearchTextPageInfo>;
 
 function decodeBodies(data: EncodedEntities[]): Entities[];
 function decodeBodies(data: EncodedEntities): Entities;
@@ -101,7 +104,10 @@ function decodeBodies(data: EncodedEntities | EncodedEntities[]): Entities | Ent
         decoded.stories = data.stories.map(p => decodeBodies(p));
     }
     if ("comments" in data && data.comments != null) {
-        decoded.comments = data.comments.map(p => decodeBodies(p));
+        decoded.comments = data.comments.map(c => decodeBodies(c));
+    }
+    if ("entries" in data && data.entries != null) {
+        decoded.entries = data.entries.map(e => decodeBodies(e));
     }
     if ("comment" in data && data.comment != null) {
         decoded.comment = decodeBodies(data.comment);

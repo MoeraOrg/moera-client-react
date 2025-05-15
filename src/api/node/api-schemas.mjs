@@ -4044,6 +4044,10 @@ export const NODE_API_SCHEMAS = {
                 "bodyPreview": {
                     type: "string"
                 },
+                "bodyFormat": {
+                    type: "string",
+                    nullable: true
+                },
                 "heading": {
                     type: "string"
                 },
