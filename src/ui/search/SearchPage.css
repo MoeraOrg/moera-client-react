@@ -1,3 +1,9 @@
 .search-page {
     padding-bottom: 1rem;
 }
+
+@media only screen and (max-width: 575px) {
+    .search-page {
+        padding-bottom: 2rem;
+    }
+}

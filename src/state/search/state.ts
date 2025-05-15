@@ -13,4 +13,7 @@ export interface SearchState {
     loading: boolean;
     loaded: boolean;
     entries: ExtSearchEntryInfo[];
+    after: number;
+    nextPage: number;
+    total: number;
 }

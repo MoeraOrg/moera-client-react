@@ -1,6 +1,6 @@
 import * as immutable from 'object-path-immutable';
 
-import { SearchEntryInfo } from "api";
+import { SearchEntryInfo, SearchHashtagSliceInfo, SearchTextPageInfo } from "api";
 import { ClientAction } from "state/action";
 import { ExtSearchEntryInfo, SearchState } from "state/search/state";
 import { htmlEntities, replaceEmojis, safePreviewHtml } from "util/html";
@@ -14,7 +14,10 @@ const initialState: SearchState = {
     query: "",
     loading: false,
     loaded: false,
-    entries: []
+    entries: [],
+    after: Number.MAX_SAFE_INTEGER,
+    nextPage: 0,
+    total: 0
 }
 
 function safeguard(entry: SearchEntryInfo): ExtSearchEntryInfo {
@@ -40,13 +43,21 @@ export default (state: SearchState = initialState, action: ClientAction): Search
                 entries: []
             };
 
-        case "SEARCH_LOADED":
-            return {
-                ...state,
+        case "SEARCH_LOADED": {
+            const istate = immutable.wrap(state);
+            istate.assign([], {
                 loading: false,
                 loaded: true,
-                entries: action.payload.entries.map(safeguard)
-            };
+                entries: state.entries.concat(action.payload.results.entries.map(safeguard))
+            });
+            if (state.mode === "hashtag") {
+                istate.set("after", (action.payload.results as SearchHashtagSliceInfo).after);
+            } else {
+                istate.set("nextPage", (action.payload.results as SearchTextPageInfo).page + 1);
+                istate.set("total", (action.payload.results as SearchTextPageInfo).total);
+            }
+            return istate.value();
+        }
 
         case "SEARCH_LOAD_FAILED":
             return {
