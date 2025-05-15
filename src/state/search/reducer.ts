@@ -22,7 +22,7 @@ export default (state: SearchState = initialState, action: ClientAction): Search
         case "SEARCH_LOADED":
             return {
                 ...state,
-                loading: true,
+                loading: false,
                 loaded: true,
                 entries: action.payload.entries
             };

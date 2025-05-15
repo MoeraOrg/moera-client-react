@@ -1,0 +1,17 @@
+.search-nothing-found {
+    padding-bottom: 6rem;
+}
+
+.search-nothing-found .caption {
+    font-weight: 600;
+    font-size: 2.25rem;
+    line-height: 125%;
+    color: var(--bs-gray-800);
+    margin-bottom: .25rem;
+}
+
+.search-nothing-found .instructions {
+    font-weight: 400;
+    line-height: 150%;
+    color: var(--bs-gray-600);
+}
