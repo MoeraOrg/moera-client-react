@@ -1,7 +1,7 @@
 import { Body, PostingInfo } from "api";
 import { VerificationStatus } from "state/state-types";
 
-interface ExtBody extends Body {
+export interface ExtBody extends Body {
     previewText?: string;
     subjectHtml?: string;
 }

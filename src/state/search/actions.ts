@@ -1,4 +1,4 @@
-import { actionWithPayload, ActionWithPayload } from "state/action-types";
+import { ActionWithoutPayload, actionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { SearchEntryInfo } from "api";
 
 export type SearchLoadAction = ActionWithPayload<"SEARCH_LOAD", {
@@ -14,11 +14,9 @@ export type SearchLoadedAction = ActionWithPayload<"SEARCH_LOADED", {
 export const searchLoaded = (query: string, entries: SearchEntryInfo[]): SearchLoadedAction =>
     actionWithPayload("SEARCH_LOADED", {query, entries});
 
-export type SearchLoadFailedAction = ActionWithPayload<"SEARCH_LOAD_FAILED", {
-    query: string;
-}>;
-export const searchLoadFailed = (query: string): SearchLoadFailedAction =>
-    actionWithPayload("SEARCH_LOAD_FAILED", {query});
+export type SearchLoadFailedAction = ActionWithoutPayload<"SEARCH_LOAD_FAILED">;
+export const searchLoadFailed = (): SearchLoadFailedAction =>
+    actionWithoutPayload("SEARCH_LOAD_FAILED");
 
 export type SearchAnyAction =
     SearchLoadAction

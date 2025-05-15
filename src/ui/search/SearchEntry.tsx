@@ -3,18 +3,22 @@ import { useTranslation } from 'react-i18next';
 
 import { tTitle } from "i18n";
 import { SearchEntryInfo } from "api";
+import { ExtSearchEntryInfo } from "state/search/state";
 import { AvatarWithPopup, Principal } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
+import StorySubject from "ui/story/StorySubject";
 import StoryDate from "ui/story/StoryDate";
 import EntryHtml from "ui/entry/EntryHtml";
 import Jump from "ui/navigation/Jump";
 
 interface Props {
-    entry: SearchEntryInfo;
+    entry: ExtSearchEntryInfo;
 }
 
 export default function SearchEntry({entry}: Props) {
     const {t} = useTranslation();
+
+    const href = getEntryLink(entry);
 
     return (
         <div className="posting entry preview" data-moment={entry.moment}>
@@ -26,16 +30,17 @@ export default function SearchEntry({entry}: Props) {
                         <NodeName name={entry.ownerName} fullName={entry.ownerFullName} avatar={entry.ownerAvatar}/>
                     </span>
                     <br/>
-                    <StoryDate publishedAt={entry.createdAt} nodeName={entry.nodeName} href={getEntryLink(entry)}/>
+                    <StoryDate publishedAt={entry.createdAt} nodeName={entry.nodeName} href={href}/>
                     <span className="visibility">
                         &middot;
                         <Principal value={entry.operations?.view ?? "public"}/>
                     </span>
                 </div>
             </div>
+            <StorySubject subjectHtml={entry.bodyPreview.subjectHtml} href={href}/>
             <div className="content">
                 <EntryHtml html={entry.bodyPreview.text}/>
-                <Jump nodeName={entry.nodeName} href={getEntryLink(entry)} className="btn btn-link read-more">
+                <Jump nodeName={entry.nodeName} href={href} className="btn btn-link read-more">
                     {tTitle(t(entry.commentId == null ? "view-post" : "view-comment"))}
                 </Jump>
             </div>
