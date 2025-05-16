@@ -126,6 +126,7 @@
   "copy-text": "Копіювати текст",
   "copy-with-formatting": "Копіювати текст із форматуванням",
   "count-comments": "{count} {count, plural, one {коментар} few {коментарі} other {коментарів}}",
+  "count-images": "\uD83D\uDDBC️ {count} {count, plural, one {зображення} few {зображення} other {зображень}}",
   "count-more": "Ще {count}",
   "count-new": "{count} {count, plural, one {новий} other {нових}}",
   "count-posts": "<0>{count}</0> {count, plural, one {пост} few {поста} other {постів}}",

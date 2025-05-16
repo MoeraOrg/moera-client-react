@@ -7,3 +7,14 @@
         padding-bottom: 2rem;
     }
 }
+
+.search-page .search-images {
+    color: var(--bs-gray-600);
+    font-size: 110%;
+}
+
+.search-page .search-images B {
+    position: relative;
+    top: .1em;
+    margin-right: .25em;
+}

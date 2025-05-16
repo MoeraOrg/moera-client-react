@@ -10,6 +10,7 @@ import StorySubject from "ui/story/StorySubject";
 import StoryDate from "ui/story/StoryDate";
 import EntryHtml from "ui/entry/EntryHtml";
 import Jump from "ui/navigation/Jump";
+import { replaceEmojis } from "util/html";
 
 interface Props {
     entry: ExtSearchEntryInfo;
@@ -19,6 +20,9 @@ export default function SearchEntry({entry}: Props) {
     const {t} = useTranslation();
 
     const href = getEntryLink(entry);
+    const imagesCountHtml = entry.imageCount != null && entry.imageCount > 0
+        ? replaceEmojis(t("count-images", {count: entry.imageCount}))
+        : null;
 
     return (
         <div className="posting entry preview" data-moment={entry.moment}>
@@ -40,6 +44,9 @@ export default function SearchEntry({entry}: Props) {
             <StorySubject subjectHtml={entry.bodyPreview.subjectHtml} href={href}/>
             <div className="content">
                 <EntryHtml html={entry.bodyPreview.text}/>
+                {imagesCountHtml &&
+                    <p className="search-images" dir="auto" dangerouslySetInnerHTML={{__html: imagesCountHtml}}/>
+                }
                 <Jump nodeName={entry.nodeName} href={href} className="btn btn-link read-more">
                     {tTitle(t(entry.commentId == null ? "view-post" : "view-comment"))}
                 </Jump>

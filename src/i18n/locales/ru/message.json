@@ -126,6 +126,7 @@
   "copy-text": "Копировать текст",
   "copy-with-formatting": "Копировать текст с форматированием",
   "count-comments": "{count} {count, plural, one {комментарий} few {комментария} other {комментариев}}",
+  "count-images": "\uD83D\uDDBC️ {count} {count, plural, one {картинка} few {картинки} other {картинок}}",
   "count-more": "Ещё {count}",
   "count-new": "{count} {count, plural, one {новый} other {новых}}",
   "count-posts": "<0>{count}</0> {count, plural, one {пост} few {поста} other {постов}}",
