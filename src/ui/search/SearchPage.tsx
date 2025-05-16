@@ -5,11 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { getSearchQuery, hasSearchMoreResults } from "state/search/selectors";
 import { Loading } from "ui/control";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
 import SearchEntry from "ui/search/SearchEntry";
 import SearchShowMore from "ui/search/SearchShowMore";
 import NothingFound from "ui/search/NothingFound";
+import { ellipsize } from "util/text";
 import "./SearchPage.css";
 
 export default function SearchPage() {
@@ -18,12 +20,13 @@ export default function SearchPage() {
     const loading = useSelector((state: ClientState) => state.search.loading);
     const loaded = useSelector((state: ClientState) => state.search.loaded);
     const moreResults = useSelector(hasSearchMoreResults);
+    const tinyScreen = useIsTinyScreen();
     const {t} = useTranslation();
 
     return (
         <>
             <PageHeader>
-                <h2>{t("search")}{query ? ": " + query : ""}</h2>
+                <h2>{t("search")}{query ? ": " + ellipsize(query, tinyScreen ? 16 : 40) : ""}</h2>
             </PageHeader>
             <Page className="search-page">
                 {loaded && entries.length > 0 ?
