@@ -11,6 +11,7 @@ const HASHTAGS = /^(?:\s*#[\p{L}\p{Nd}_]+\s*)+$/gu;
 
 const initialState: SearchState = {
     mode: "fulltext",
+    tab: "content",
     query: "",
     loading: false,
     loaded: false,
@@ -38,6 +39,7 @@ export default (state: SearchState = initialState, action: ClientAction): Search
                 ...state,
                 mode: action.payload.query.match(HASHTAGS) ? "hashtag" : "fulltext",
                 query: action.payload.query,
+                tab: action.payload.tab,
                 loading: true,
                 loaded: false,
                 entries: []

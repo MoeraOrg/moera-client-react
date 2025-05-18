@@ -121,8 +121,7 @@ BLOCKQUOTE BLOCKQUOTE:last-child, BLOCKQUOTE P:last-child {
 .content-panel {
     display: flow-root;
     background-color: white;
-    border: var(--bs-gray-400) 1px solid;
-    border-radius: .25rem;
+    border-radius: .5rem;
     padding: 1rem;
 }
 

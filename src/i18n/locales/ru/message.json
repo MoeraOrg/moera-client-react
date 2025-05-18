@@ -630,6 +630,13 @@
     "view-settings": "Просматривать настройки"
   },
   "search": "Поиск",
+  "search-tab": {
+    "comments": "Комментарии",
+    "content": "Весь контент",
+    "own-blog": "Мой блог",
+    "people": "Люди",
+    "postings": "Посты"
+  },
   "secret-code": "Секретный код",
   "secret-words": "Секретные слова",
   "select": "Выбрать",

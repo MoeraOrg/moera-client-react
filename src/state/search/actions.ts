@@ -1,11 +1,13 @@
 import { ActionWithoutPayload, actionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { SearchHashtagSliceInfo, SearchTextPageInfo } from "api";
+import { SearchTab } from "state/search/state";
 
 export type SearchLoadAction = ActionWithPayload<"SEARCH_LOAD", {
     query: string;
+    tab: SearchTab;
 }>;
-export const searchLoad = (query: string): SearchLoadAction =>
-    actionWithPayload("SEARCH_LOAD", {query});
+export const searchLoad = (query: string, tab: SearchTab): SearchLoadAction =>
+    actionWithPayload("SEARCH_LOAD", {query, tab});
 
 export type SearchLoadedAction = ActionWithPayload<"SEARCH_LOADED", {
     results: SearchHashtagSliceInfo | SearchTextPageInfo;

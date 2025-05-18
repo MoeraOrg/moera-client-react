@@ -8,6 +8,7 @@ import { Loading } from "ui/control";
 import { useIsTinyScreen } from "ui/hook/media-query";
 import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
+import SearchTabs from "ui/search/SearchTabs";
 import SearchEntry from "ui/search/SearchEntry";
 import SearchShowMore from "ui/search/SearchShowMore";
 import NothingFound from "ui/search/NothingFound";
@@ -29,6 +30,7 @@ export default function SearchPage() {
                 <h2>{t("search")}{query ? ": " + ellipsize(query, tinyScreen ? 16 : 40) : ""}</h2>
             </PageHeader>
             <Page className="search-page">
+                <SearchTabs/>
                 {loaded && entries.length > 0 ?
                     <>
                         {entries.map(entry =>

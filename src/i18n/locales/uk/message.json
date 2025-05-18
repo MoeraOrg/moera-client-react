@@ -630,6 +630,13 @@
     "view-settings": "Переглядати налаштування"
   },
   "search": "Пошук",
+  "search-tab": {
+    "comments": "Коментарі",
+    "content": "Весь вміст",
+    "own-blog": "Мій блог",
+    "people": "Люди",
+    "postings": "Пости"
+  },
   "secret-code": "Секретний код",
   "secret-words": "Секретні слова",
   "select": "Обрати",

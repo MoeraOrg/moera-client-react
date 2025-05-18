@@ -630,6 +630,13 @@
     "view-settings": "Wyświetl ustawienia"
   },
   "search": "Szukaj",
+  "search-tab": {
+    "comments": "Komentarze",
+    "content": "Cała zawartość",
+    "own-blog": "Mój blog",
+    "people": "Ludzie",
+    "postings": "Posty"
+  },
   "secret-code": "Kod tajny",
   "secret-words": "Tajne słowa",
   "select": "Wybierz",

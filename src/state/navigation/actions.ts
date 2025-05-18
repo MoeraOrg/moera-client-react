@@ -1,6 +1,7 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
-import { Page } from "state/navigation/pages";
 import { Scope } from "api";
+import { Page } from "state/navigation/pages";
+import { SearchTab } from "state/search/state";
 
 export type InitFromNodeLocationAction = ActionWithPayload<"INIT_FROM_NODE_LOCATION", {
     nodeName: string;
@@ -99,9 +100,10 @@ export const goToGrant = (
 
 export type GoToSearchAction = GoToPageAction<"search", {
     query: string;
+    tab: SearchTab;
 }>;
-export const goToSearch = (query: string): GoToSearchAction =>
-    goToPage("search", {query});
+export const goToSearch = (query: string, tab: SearchTab): GoToSearchAction =>
+    goToPage("search", {query, tab});
 
 export type GoToPageAnyAction =
     GoToProfileAction

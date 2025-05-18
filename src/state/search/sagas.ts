@@ -1,11 +1,13 @@
 import { executor } from "state/executor";
-import { Node, SearchHashtagFilter, SearchTextFilter } from "api";
+import { Node, SearchEntryType, SearchHashtagFilter, SearchTextFilter } from "api";
+import { homeIntroduced } from "state/init-barriers";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
 import { SearchLoadAction, searchLoaded, searchLoadFailed, SearchLoadMoreAction } from "state/search/actions";
-import { getSearchQuery, SEARCH_PAGE_SIZE } from "state/search/selectors";
+import { SearchTab } from "state/search/state";
+import { getSearchMode, getSearchQuery, getSearchTab, SEARCH_PAGE_SIZE } from "state/search/selectors";
 import { REL_SEARCH } from "util/rel-node-name";
 
 export default [
@@ -14,25 +16,43 @@ export default [
 ];
 
 async function searchLoadSaga(action: WithContext<SearchLoadAction>): Promise<void> {
-    const {query} = action.payload;
+    const {query, tab} = action.payload;
 
-    await load(query, Number.MAX_SAFE_INTEGER, 0, action);
+    await homeIntroduced();
+    await load(query, tab, Number.MAX_SAFE_INTEGER, 0, action);
 }
 
 async function searchLoadMoreSaga(action: WithContext<SearchLoadMoreAction>): Promise<void> {
     const query = select(getSearchQuery);
+    const tab = select(getSearchTab);
     const after = select(state => state.search.after);
     const nextPage = select(state => state.search.nextPage);
 
-    await load(query, after, nextPage, action);
+    await load(query, tab, after, nextPage, action);
 }
 
-async function load(query: string, before: number, nextPage: number, action: WithContext<ClientAction>) {
-    const mode = select(state => state.search.mode);
+async function load(
+    query: string, tab: SearchTab, before: number, nextPage: number, action: WithContext<ClientAction>
+) {
+    const mode = select(getSearchMode);
+    let entryType: SearchEntryType = "all";
+    switch (tab) {
+        case "postings":
+        case "own-blog":
+            entryType = "posting";
+            break;
+        case "comments":
+            entryType = "comment";
+            break;
+    }
+    const publisherName = tab === "own-blog" ? action.context.homeOwnerName : null;
+
     try {
         if (mode === "hashtag") {
             const filter: SearchHashtagFilter = {
+                entryType,
                 hashtags: query.split(/\s+/).filter(x => x.startsWith("#")),
+                publisherName,
                 before,
                 limit: SEARCH_PAGE_SIZE
             }
@@ -40,7 +60,9 @@ async function load(query: string, before: number, nextPage: number, action: Wit
             dispatch(searchLoaded(slice).causedBy(action));
         } else {
             const filter: SearchTextFilter = {
+                entryType,
                 text: query,
+                publisherName,
                 page: nextPage,
                 limit: SEARCH_PAGE_SIZE
             }
