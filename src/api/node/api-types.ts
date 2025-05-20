@@ -827,12 +827,25 @@ export interface SearchHashtagFilter {
     limit?: number | null;
 }
 
+export interface SearchNodeFilter {
+    query: string;
+    sheriffName?: string | null;
+    page?: number | null;
+    limit?: number | null;
+}
+
 export interface SearchNodeInfo {
     nodeName: string;
     fullName?: string | null;
     title?: string | null;
     avatar?: AvatarImage | null;
     distance: number;
+}
+
+export interface SearchNodePageInfo {
+    page: number;
+    total: number;
+    nodes: SearchNodeInfo[];
 }
 
 export interface SearchPostingUpdate {

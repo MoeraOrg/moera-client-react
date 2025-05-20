@@ -1,5 +1,5 @@
 import { ActionWithoutPayload, actionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
-import { SearchHashtagSliceInfo, SearchTextPageInfo } from "api";
+import { SearchHashtagSliceInfo, SearchNodePageInfo, SearchTextPageInfo } from "api";
 import { SearchTab } from "state/search/state";
 
 export type SearchLoadAction = ActionWithPayload<"SEARCH_LOAD", {
@@ -9,11 +9,23 @@ export type SearchLoadAction = ActionWithPayload<"SEARCH_LOAD", {
 export const searchLoad = (query: string, tab: SearchTab): SearchLoadAction =>
     actionWithPayload("SEARCH_LOAD", {query, tab});
 
-export type SearchLoadedAction = ActionWithPayload<"SEARCH_LOADED", {
-    results: SearchHashtagSliceInfo | SearchTextPageInfo;
+export type SearchHashtagLoadedAction = ActionWithPayload<"SEARCH_HASHTAG_LOADED", {
+    slice: SearchHashtagSliceInfo;
 }>;
-export const searchLoaded = (results: SearchHashtagSliceInfo | SearchTextPageInfo): SearchLoadedAction =>
-    actionWithPayload("SEARCH_LOADED", {results});
+export const searchHashtagLoaded = (slice: SearchHashtagSliceInfo): SearchHashtagLoadedAction =>
+    actionWithPayload("SEARCH_HASHTAG_LOADED", {slice});
+
+export type SearchTextLoadedAction = ActionWithPayload<"SEARCH_TEXT_LOADED", {
+    page: SearchTextPageInfo;
+}>;
+export const searchTextLoaded = (page: SearchTextPageInfo): SearchTextLoadedAction =>
+    actionWithPayload("SEARCH_TEXT_LOADED", {page});
+
+export type SearchPeopleLoadedAction = ActionWithPayload<"SEARCH_PEOPLE_LOADED", {
+    page: SearchNodePageInfo;
+}>;
+export const searchPeopleLoaded = (page: SearchNodePageInfo): SearchPeopleLoadedAction =>
+    actionWithPayload("SEARCH_PEOPLE_LOADED", {page});
 
 export type SearchLoadFailedAction = ActionWithoutPayload<"SEARCH_LOAD_FAILED">;
 export const searchLoadFailed = (): SearchLoadFailedAction =>
@@ -25,6 +37,8 @@ export const searchLoadMore = (): SearchLoadMoreAction =>
 
 export type SearchAnyAction =
     SearchLoadAction
-    | SearchLoadedAction
+    | SearchHashtagLoadedAction
+    | SearchTextLoadedAction
+    | SearchPeopleLoadedAction
     | SearchLoadFailedAction
     | SearchLoadMoreAction;

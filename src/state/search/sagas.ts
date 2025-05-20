@@ -1,13 +1,21 @@
 import { executor } from "state/executor";
-import { Node, SearchEntryType, SearchHashtagFilter, SearchTextFilter } from "api";
+import { Node, SearchEntryType, SearchHashtagFilter, SearchNodeFilter, SearchTextFilter } from "api";
 import { homeIntroduced } from "state/init-barriers";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
-import { SearchLoadAction, searchLoaded, searchLoadFailed, SearchLoadMoreAction } from "state/search/actions";
+import {
+    searchHashtagLoaded,
+    SearchLoadAction,
+    searchLoadFailed,
+    SearchLoadMoreAction,
+    searchPeopleLoaded,
+    searchTextLoaded
+} from "state/search/actions";
 import { SearchTab } from "state/search/state";
 import { getSearchMode, getSearchQuery, getSearchTab, SEARCH_PAGE_SIZE } from "state/search/selectors";
+import { nodeCardPrepare } from "state/nodecards/actions";
 import { REL_SEARCH } from "util/rel-node-name";
 
 export default [
@@ -57,17 +65,28 @@ async function load(
                 limit: SEARCH_PAGE_SIZE
             }
             const slice = await Node.searchEntriesByHashtag(action, REL_SEARCH, filter);
-            dispatch(searchLoaded(slice).causedBy(action));
+            dispatch(searchHashtagLoaded(slice).causedBy(action));
         } else {
-            const filter: SearchTextFilter = {
-                entryType,
-                text: query,
-                publisherName,
-                page: nextPage,
-                limit: SEARCH_PAGE_SIZE
+            if (tab === "people") {
+                const filter: SearchNodeFilter = {
+                    query,
+                    page: nextPage,
+                    limit: SEARCH_PAGE_SIZE
+                }
+                const page = await Node.searchNodes(action, REL_SEARCH, filter);
+                dispatch(searchPeopleLoaded(page).causedBy(action));
+                page.nodes.forEach(node => dispatch(nodeCardPrepare(node.nodeName).causedBy(action)));
+            } else {
+                const filter: SearchTextFilter = {
+                    entryType,
+                    text: query,
+                    publisherName,
+                    page: nextPage,
+                    limit: SEARCH_PAGE_SIZE
+                }
+                const page = await Node.searchEntriesByText(action, REL_SEARCH, filter);
+                dispatch(searchTextLoaded(page).causedBy(action));
             }
-            const page = await Node.searchEntriesByText(action, REL_SEARCH, filter);
-            dispatch(searchLoaded(page).causedBy(action));
         }
     } catch (e) {
         dispatch(searchLoadFailed().causedBy(action));

@@ -1,6 +1,6 @@
 import * as immutable from 'object-path-immutable';
 
-import { SearchEntryInfo, SearchHashtagSliceInfo, SearchTextPageInfo } from "api";
+import { SearchEntryInfo } from "api";
 import { ClientAction } from "state/action";
 import { ExtSearchEntryInfo, SearchState } from "state/search/state";
 import { htmlEntities, replaceEmojis, safePreviewHtml } from "util/html";
@@ -16,6 +16,7 @@ const initialState: SearchState = {
     loading: false,
     loaded: false,
     entries: [],
+    nodes: [],
     after: Number.MAX_SAFE_INTEGER,
     nextPage: 0,
     total: 0
@@ -42,24 +43,39 @@ export default (state: SearchState = initialState, action: ClientAction): Search
                 tab: action.payload.tab,
                 loading: true,
                 loaded: false,
-                entries: []
+                entries: [],
+                nodes: []
             };
 
-        case "SEARCH_LOADED": {
-            const istate = immutable.wrap(state);
-            istate.assign([], {
+        case "SEARCH_HASHTAG_LOADED":
+            return {
+                ...state,
                 loading: false,
                 loaded: true,
-                entries: state.entries.concat(action.payload.results.entries.map(safeguard))
-            });
-            if (state.mode === "hashtag") {
-                istate.set("after", (action.payload.results as SearchHashtagSliceInfo).after);
-            } else {
-                istate.set("nextPage", (action.payload.results as SearchTextPageInfo).page + 1);
-                istate.set("total", (action.payload.results as SearchTextPageInfo).total);
-            }
-            return istate.value();
-        }
+                entries: state.entries.concat(action.payload.slice.entries.map(safeguard)),
+                after: action.payload.slice.after
+            };
+
+        case "SEARCH_TEXT_LOADED":
+            return {
+                ...state,
+                loading: false,
+                loaded: true,
+                entries: state.entries.concat(action.payload.page.entries.map(safeguard)),
+                nextPage: action.payload.page.page + 1,
+                total: action.payload.page.total
+            };
+
+        case "SEARCH_PEOPLE_LOADED":
+            return {
+                ...state,
+                loading: false,
+                loaded: true,
+                nodes: state.nodes.concat(action.payload.page.nodes),
+                nextPage: action.payload.page.page + 1,
+                // an empty result means there are no more results
+                total: action.payload.page.nodes.length > 0 ? action.payload.page.total : state.nodes.length
+            };
 
         case "SEARCH_LOAD_FAILED":
             return {

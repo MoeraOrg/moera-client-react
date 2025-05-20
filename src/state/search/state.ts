@@ -1,4 +1,4 @@
-import { SearchEntryInfo } from "api";
+import { SearchEntryInfo, SearchNodeInfo } from "api";
 import { ExtBody } from "state/postings/state";
 
 export type SearchMode = "hashtag" | "fulltext";
@@ -16,6 +16,7 @@ export interface SearchState {
     loading: boolean;
     loaded: boolean;
     entries: ExtSearchEntryInfo[];
+    nodes: SearchNodeInfo[];
     after: number;
     nextPage: number;
     total: number;

@@ -16,7 +16,7 @@ async function contactsLoadSaga(action: WithContext<ContactsLoadAction>): Promis
     const {query} = action.payload;
     try {
         contactsFindName(action, query);
-        const contact = await Node.searchNodes(action, REL_SEARCH, query, 25);
+        const contact = await Node.searchNodeSuggestions(action, REL_SEARCH, query, null, 25);
         dispatch(contactsLoaded(query, contact).causedBy(action));
     } catch (e) {
         dispatch(contactsLoadFailed(query).causedBy(action));

@@ -1,5 +1,6 @@
 .subscribe-button {
     margin-left: 1rem;
+    text-wrap: nowrap;
 }
 
 .subscribe-button.btn-outline-secondary:hover {
