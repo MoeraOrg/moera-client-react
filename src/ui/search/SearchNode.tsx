@@ -21,7 +21,7 @@ export default function SearchNode({node}: Props) {
                 <span className="raw-node-name">{NodeNameFormat.shorten(node.nodeName)}</span><br/>
                 <span className="title">{node.title}</span>
             </div>
-            <div className="subscribe">
+            <div className="person-subscribe">
                 <SubscribeButton nodeName={node.nodeName} feedName="timeline"/>
             </div>
         </>

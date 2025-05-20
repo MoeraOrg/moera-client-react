@@ -26,6 +26,10 @@
     grid-row-gap: 1rem;
 }
 
+.search-page .nodes .person-avatar {
+    padding-top: .25rem;
+}
+
 .search-page .nodes .node-name {
     line-height: 150%;
 }
@@ -39,4 +43,9 @@
 .search-page .nodes .title {
     font-size: .88rem;
     line-height: 143%;
+}
+
+.search-page .nodes .person-subscribe {
+    padding-top: .25rem;
+    text-align: right;
 }
