@@ -3,7 +3,7 @@ import i18n from 'i18next';
 import { formatSchemaErrors, HomeNotConnectedError, NameResolvingError, NodeApiError, NodeError } from "api";
 import { validateSchema } from "api/node/safe";
 import { fetcher, ProgressHandler } from "api/fetcher";
-import { CausedError } from "api/error";
+import { CausedError, NodeConnectionError } from "api/error";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { errorAuthInvalid } from "state/error/actions";
@@ -98,6 +98,9 @@ export async function callApi<T>({
                 onProgress
             });
         } catch (e) {
+            if (e instanceof TypeError) {
+                throw new NodeConnectionError(caller);
+            }
             throw exception(e);
         }
 

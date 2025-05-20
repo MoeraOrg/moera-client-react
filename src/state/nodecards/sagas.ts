@@ -7,7 +7,6 @@ import {
     BlockedUserInfo,
     FriendGroupDetails,
     HomeNotConnectedError,
-    NameResolvingError,
     Node,
     NodeApiError,
     SubscriberInfo,
@@ -122,9 +121,7 @@ async function nodeCardDetailsLoadSaga(action: WithContext<NodeCardDetailsLoadAc
         dispatch(nodeCardDetailsSet(nodeName, profile).causedBy(action));
     } catch (e) {
         dispatch(nodeCardDetailsLoadFailed(nodeName).causedBy(action));
-        if (!(e instanceof NameResolvingError)) {
-            dispatch(errorThrown(e));
-        }
+        dispatch(errorThrown(e));
     }
 }
 
@@ -138,9 +135,7 @@ async function nodeCardPeopleLoadSaga(action: WithContext<NodeCardPeopleLoadActi
         ).causedBy(action));
     } catch (e) {
         dispatch(nodeCardPeopleLoadFailed(nodeName).causedBy(action));
-        if (!(e instanceof NameResolvingError)) {
-            dispatch(errorThrown(e));
-        }
+        dispatch(errorThrown(e));
     }
 }
 
@@ -152,9 +147,7 @@ async function nodeCardStoriesLoadSaga(action: WithContext<NodeCardStoriesLoadAc
         dispatch(nodeCardStoriesSet(nodeName, total, lastCreatedAt).causedBy(action));
     } catch (e) {
         dispatch(nodeCardDetailsLoadFailed(nodeName).causedBy(action));
-        if (!(e instanceof NameResolvingError)) {
-            dispatch(errorThrown(e));
-        }
+        dispatch(errorThrown(e));
     }
 }
 
@@ -169,7 +162,7 @@ async function nodeCardSubscriptionLoadSaga(action: WithContext<NodeCardSubscrip
         dispatch(nodeCardSubscriptionSet(nodeName, subscriber ?? null, subscription ?? null).causedBy(action));
     } catch (e) {
         dispatch(nodeCardSubscriptionLoadFailed(nodeName).causedBy(action));
-        if (!(e instanceof NameResolvingError) && !(e instanceof HomeNotConnectedError)) {
+        if (!(e instanceof HomeNotConnectedError)) {
             dispatch(errorThrown(e));
         }
     }
@@ -212,7 +205,7 @@ async function nodeCardFriendshipLoadSaga(action: WithContext<NodeCardFriendship
         dispatch(nodeCardFriendshipSet(nodeName, groups ?? null, remoteGroups ?? null).causedBy(action));
     } catch (e) {
         dispatch(nodeCardFriendshipLoadFailed(nodeName).causedBy(action));
-        if (!(e instanceof NameResolvingError) && !(e instanceof HomeNotConnectedError)) {
+        if (!(e instanceof HomeNotConnectedError)) {
             dispatch(errorThrown(e));
         }
     }
@@ -251,7 +244,7 @@ async function nodeCardBlockingLoadSaga(action: WithContext<NodeCardBlockingLoad
         dispatch(nodeCardBlockingSet(nodeName, blocked ?? null, blockedBy ?? null).causedBy(action));
     } catch (e) {
         dispatch(nodeCardBlockingLoadFailed(nodeName).causedBy(action));
-        if (!(e instanceof NameResolvingError) && !(e instanceof HomeNotConnectedError)) {
+        if (!(e instanceof HomeNotConnectedError)) {
             dispatch(errorThrown(e));
         }
     }
@@ -298,7 +291,7 @@ async function nodeCardSheriffListLoadSaga(action: WithContext<NodeCardSheriffLi
             dispatch(nodeCardSheriffListSet(nodeName, false).causedBy(action));
         } else {
             dispatch(nodeCardBlockingLoadFailed(nodeName).causedBy(action));
-            if (!(e instanceof NameResolvingError) && !(e instanceof HomeNotConnectedError)) {
+            if (!(e instanceof HomeNotConnectedError)) {
                 dispatch(errorThrown(e));
             }
         }

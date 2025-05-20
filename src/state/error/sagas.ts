@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 
-import { NodeApiError, VerboseError } from "api";
-import { CausedError } from "api/error";
+import { NameResolvingError, NodeApiError, VerboseError } from "api";
+import { CausedError, NodeConnectionError } from "api/error";
 import { Storage } from "storage";
 import { errorDismiss, errorShow, ErrorThrownAction } from "state/error/actions";
 import { messageBox } from "state/messagebox/actions";
@@ -49,6 +49,9 @@ async function errorThrownSaga(action: ErrorThrownAction): Promise<void> {
     }
 
     if (document.visibilityState !== "visible") {
+        return;
+    }
+    if (err instanceof NodeConnectionError || err instanceof NameResolvingError) {
         return;
     }
 

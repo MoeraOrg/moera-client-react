@@ -8,7 +8,7 @@ function extractMessage(messageOrError: any): string {
         return "Request timeout";
     }
     if (messageOrError instanceof Error) {
-        return messageOrError.message
+        return messageOrError.constructor.name + ": " + messageOrError.message
     }
     return String(messageOrError);
 }
@@ -46,6 +46,14 @@ export class NodeError extends VerboseError {
         const message = (title ? `${title}: ` : "") + extractMessage(messageOrError);
         const messageVerbose = `${method} ${rootApi}${location}: ${message}` + (details ? `: ${details}` : "");
         super(message, messageVerbose, cause);
+    }
+
+}
+
+export class NodeConnectionError extends CausedError {
+
+    constructor(cause: WithContext<ClientAction> | null = null) {
+        super("Node connection error", cause);
     }
 
 }
