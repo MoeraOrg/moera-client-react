@@ -71,7 +71,7 @@ async function fetchNaming(method: string, params: any[], exception: CallExcepti
         throw exception(e);
     }
     if (!response.ok) {
-        throw exception("Server returned error status");
+        throw exception("Server returned error status", await response.text());
     }
     let data;
     try {
@@ -101,5 +101,5 @@ export async function getSimilar(caller: ClientAction | null, name: string): Pro
 }
 
 export async function isFree(caller: ClientAction | null, name: string): Promise<boolean> {
-    return await callNamingBoolean({caller, method: "isFree", params: [name]});
+    return await callNamingBoolean({caller, method: "isFree", params: [name, 0]});
 }
