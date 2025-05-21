@@ -2,3 +2,13 @@
     overflow-x: hidden;
     white-space: nowrap;
 }
+
+#owner-switcher .search-icon {
+    color: var(--status-icon);
+}
+
+@media only screen and (min-width: 576px) {
+    #owner-switcher .search-icon {
+        margin-right: 1rem;
+    }
+}

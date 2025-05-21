@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
+import { Icon, msSearch } from "ui/material-symbols";
 import NodeName from "ui/nodename/NodeName";
 import "./OwnerName.css";
 
@@ -24,6 +25,7 @@ export default function OwnerName() {
             :
                 <span id="owner-name" className="navbar-text">{changing ? "\u22ef" : t("no-name-set")}</span>
             }
+            <span className="search-icon"><Icon icon={msSearch} size={18}/></span>
         </>
     );
 }

@@ -7,12 +7,6 @@
     cursor: text;
 }
 
-@media only screen and (min-width: 576px) {
-    #owner-name {
-        margin-right: .7rem;
-    }
-}
-
 #owner-name:hover {
     border-color: var(--status-icon);
 }
