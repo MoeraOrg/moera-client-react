@@ -230,7 +230,7 @@ export function safeImportHtml(html: string | null | undefined): string {
     if (!html) {
         return "";
     }
-    return sanitizeHtml(html, SAFE_IMPORT_HTML_SETTINGS)
+    return sanitizeHtml(strikeoutToHtml(html), SAFE_IMPORT_HTML_SETTINGS)
         .replace(/([^>\s])\s*\n\s*([^<\s])/g, "$1 $2")
         .replace(/<div(\s[^>]*)?>/gi, "\n")
         .replace(/<\/div>/gi, "")
