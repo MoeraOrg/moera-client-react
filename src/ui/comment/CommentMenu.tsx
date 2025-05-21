@@ -25,7 +25,6 @@ import { shareDialogPrepare } from "state/sharedialog/actions";
 import { openBlockDialog } from "state/blockdialog/actions";
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
-import * as Browser from "ui/browser";
 import { REL_CURRENT } from "util/rel-node-name";
 
 interface Props {
@@ -247,7 +246,7 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
                 nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onHideInGooglePlay,
-                show: Browser.isAndroidGooglePlay() && !googlePlaySheriff
+                show: !googlePlaySheriff
             }
         ]}/>
     );

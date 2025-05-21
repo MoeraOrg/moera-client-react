@@ -33,7 +33,6 @@ import { hasInvisibleComments, isCommentsShowInvisible } from "state/detailedpos
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
 import { MinimalStoryInfo } from "ui/types";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
-import * as Browser from "ui/browser";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import "ui/entry/EntryMenu.css";
 
@@ -277,7 +276,7 @@ function PostingMenuItems({posting, story, detailed}: Props) {
                 nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onHideInGooglePlay,
-                show: Browser.isAndroidGooglePlay() && !googlePlaySheriff
+                show: !googlePlaySheriff
             }
         ]}/>
     );
