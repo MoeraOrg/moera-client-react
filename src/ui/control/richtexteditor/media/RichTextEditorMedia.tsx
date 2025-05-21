@@ -8,7 +8,6 @@ import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { richTextEditorImageCopy, richTextEditorImagesUpload } from "state/richtexteditor/actions";
 import * as Browser from "ui/browser";
-import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import {
     OnInsertHandler,
     RichTextEditorMediaContext,
@@ -21,7 +20,6 @@ import RichTextImageDialog, { RichTextImageValues } from "ui/control/richtextedi
 import RichTextCopyImageDialog, {
     RichTextCopyImageValues
 } from "ui/control/richtexteditor/dialog/RichTextCopyImageDialog";
-import { isHtmlEmpty } from "util/html";
 import { RelNodeName } from "util/rel-node-name";
 import { mediaImageExtensions } from "util/media-images";
 import { arrayMove } from "util/misc";
@@ -42,13 +40,12 @@ interface Props {
     nodeName: RelNodeName | string;
     forceCompress?: boolean;
     srcFormat: SourceFormat;
-    smileysEnabled?: boolean;
     onChange?: ChangeHandler;
     children: ReactNode;
 }
 
 export default function RichTextEditorMedia({
-    value, features, nodeName, forceCompress = false, srcFormat, smileysEnabled, onChange, children
+    value, features, nodeName, forceCompress = false, srcFormat, onChange, children
 }: Props) {
     const compressImages = useSelector((state: ClientState) =>
         getSetting(state, "posting.media.compress.default") as boolean);
@@ -97,19 +94,17 @@ export default function RichTextEditorMedia({
     }
 
     const uploadImages = (
-        files: File[], compress: boolean, description?: RichTextValue, onInsert?: OnInsertHandler,
+        files: File[], compress: boolean, onInsert?: OnInsertHandler,
         standardSize?: RichTextImageStandardSize, customWidth?: number | null, customHeight?: number | null,
         caption?: string
     ) => {
         if (files.length > 0) {
             setUploadProgress(files.map(file => ({status: "loading", loaded: 0, total: file.size})));
             imageUploadStarted(files.length);
-            const descriptionSrcText = description?.toText(smileysEnabled);
-            const descriptionSrc = !isHtmlEmpty(descriptionSrcText) ? JSON.stringify({text: descriptionSrcText}) : null;
             dispatch(richTextEditorImagesUpload(
                 nodeName, files, features, compress,
                 onImageUploadSuccess(onInsert, standardSize, customWidth, customHeight, caption), onImageUploadFailure,
-                onImageUploadProgress, descriptionSrc, srcFormat
+                onImageUploadProgress, null, srcFormat
             ));
         }
     };
@@ -136,9 +131,7 @@ export default function RichTextEditorMedia({
             null,
             (
                 ok: boolean | null,
-                {
-                    files, compress, description, standardSize, customWidth, customHeight, caption
-                }: Partial<RichTextImageValues>
+                {files, compress, standardSize, customWidth, customHeight, caption}: Partial<RichTextImageValues>
             ) => {
                 showImageDialog(false);
 
@@ -150,7 +143,7 @@ export default function RichTextEditorMedia({
                     compressDefault.current = compress;
                 }
                 uploadImages(
-                    files, compress ?? compressDefault.current, description, onInsertRef.current, standardSize,
+                    files, compress ?? compressDefault.current, onInsertRef.current, standardSize,
                     customWidth, customHeight, caption
                 );
             }
@@ -251,9 +244,9 @@ export default function RichTextEditorMedia({
         setCopyImageShow(true);
     }
 
-    const onImageDownloadSuccess = (description: RichTextValue | undefined) => (file: File) => {
+    const onImageDownloadSuccess = (file: File) => {
         setDownloading(false);
-        uploadImages([file], compressDefault.current, description);
+        uploadImages([file], compressDefault.current);
     }
 
     const onImageDownloadFailure = () => {
@@ -270,7 +263,7 @@ export default function RichTextEditorMedia({
         }
         setDownloading(true);
         dispatch(
-            richTextEditorImageCopy(values.url, onImageDownloadSuccess(values.description), onImageDownloadFailure)
+            richTextEditorImageCopy(values.url, onImageDownloadSuccess, onImageDownloadFailure)
         );
     }
 
@@ -290,8 +283,6 @@ export default function RichTextEditorMedia({
                     nodeName={nodeName}
                     forceCompress={forceCompress}
                     compressDefault={compressDefault.current}
-                    descriptionSrcFormat={srcFormat}
-                    smileysEnabled={smileysEnabled}
                     mediaMaxSize={features?.mediaMaxSize}
                     prevValues={imageDialogPrevValues}
                     onSubmit={imageDialogOnSubmit}
@@ -301,8 +292,6 @@ export default function RichTextEditorMedia({
                 <RichTextCopyImageDialog
                     forceCompress={forceCompress}
                     compressDefault={compressDefault.current}
-                    descriptionSrcFormat={srcFormat}
-                    smileysEnabled={smileysEnabled}
                     onSubmit={submitCopyImage}
                 />
             }

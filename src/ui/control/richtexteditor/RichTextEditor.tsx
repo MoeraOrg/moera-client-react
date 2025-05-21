@@ -64,7 +64,6 @@ export function RichTextEditor({
                     nodeName={nodeName}
                     forceCompress={forceImageCompress}
                     srcFormat={format}
-                    smileysEnabled={smileysEnabled}
                     onChange={onMediaChange}
                 >
                     {format.endsWith("/visual") ?

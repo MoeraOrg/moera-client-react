@@ -1,12 +1,10 @@
 import React, { useEffect } from 'react';
-import { useField, useFormikContext } from 'formik';
+import { useField } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { SourceFormat, VerifiedMediaFile } from "api";
+import { VerifiedMediaFile } from "api";
 import { CheckboxField, InputField, NumberField, SelectField } from "ui/control/field";
-import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { RichTextImageStandardSize, STANDARD_SIZES } from "ui/control/richtexteditor/media/rich-text-image";
-import { RichTextField } from "ui/control/richtexteditor/RichTextField";
 import UploadedImage from "ui/control/richtexteditor/media/UploadedImage";
 import {
     richTextEditorDialog,
@@ -22,7 +20,6 @@ export interface RichTextImageValues {
     mediaFiles?: VerifiedMediaFile[] | null;
     href?: string | null;
     compress?: boolean;
-    description?: RichTextValue;
     standardSize?: RichTextImageStandardSize;
     customWidth?: number | null;
     customHeight?: number | null;
@@ -37,8 +34,6 @@ type Props = {
     nodeName?: RelNodeName | string;
     forceCompress?: boolean;
     compressDefault?: boolean;
-    descriptionSrcFormat?: SourceFormat;
-    smileysEnabled?: boolean;
     mediaMaxSize?: number;
 } & RichTextEditorDialogProps<RichTextImageValues>;
 
@@ -49,7 +44,6 @@ const mapPropsToValues = (props: Props): RichTextImageValues => ({
     mediaFiles: props.prevValues?.mediaFiles ?? props.mediaFiles,
     href: props.prevValues?.href ?? props.href,
     compress: props.compressDefault ?? true,
-    description: props.prevValues?.description ?? new RichTextValue("", props.descriptionSrcFormat ?? "markdown"),
     standardSize: props.prevValues?.standardSize ?? "large",
     customWidth: props.prevValues?.customWidth,
     customHeight: props.prevValues?.customHeight,
@@ -57,13 +51,11 @@ const mapPropsToValues = (props: Props): RichTextImageValues => ({
 });
 
 function RichTextImageDialog({
-    mediaFiles, insert, nodeName = REL_CURRENT, forceCompress, descriptionSrcFormat, smileysEnabled, mediaMaxSize,
-    onSubmit, okButtonRef
+    mediaFiles, insert, nodeName = REL_CURRENT, forceCompress, mediaMaxSize, onSubmit, okButtonRef
 }: BodyProps) {
     const [, {value: files}, {setValue: setFiles}] = useField<File[] | null>("files");
     const [, {value: standardSize}] = useField<RichTextImageStandardSize>("standardSize");
     const [, {value: compress}] = useField<boolean>("compress");
-    const {submitForm} = useFormikContext<RichTextImageValues>();
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -110,24 +102,6 @@ function RichTextImageDialog({
             }
             {files == null && mediaFiles == null &&
                 <InputField name="href" title={t("link")} anyValue autoFocus/>
-            }
-            {!insert && files?.length === 1 &&
-                <RichTextField
-                    name="description"
-                    format={descriptionSrcFormat ?? "markdown"}
-                    maxHeight="14em"
-                    className="mt-3"
-                    placeholder={t("description-optional")}
-                    smileysEnabled={smileysEnabled}
-                    noComplexBlocks
-                    noEmbeddedMedia
-                    noMedia
-                    noVideo
-                    anyValue
-                    autoFocus
-                    submitKey="enter"
-                    onSubmit={submitForm}
-                />
             }
             {files != null && !forceCompress &&
                 <CheckboxField title={t("compress-images")} name="compress" groupClassName="mt-3 mb-0" anyValue/>
