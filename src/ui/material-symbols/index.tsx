@@ -43,6 +43,7 @@ import { ReactComponent as msPreview } from "ui/material-symbols/preview.isvg";
 import { ReactComponent as msRedo } from "ui/material-symbols/redo.isvg";
 import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
 import { ReactComponent as msSatellite } from "ui/material-symbols/satellite.isvg";
+import { ReactComponent as msSearch } from "ui/material-symbols/search.isvg";
 import { ReactComponent as msSend } from "ui/material-symbols/send.isvg";
 import { ReactComponent as msSentimentSatisfied } from "ui/material-symbols/sentiment_satisfied.isvg";
 import { ReactComponent as msSchedule } from "ui/material-symbols/schedule.isvg";
@@ -97,6 +98,7 @@ export {
     msRedo,
     msReport,
     msSatellite,
+    msSearch,
     msSend,
     msSentimentSatisfied,
     msSchedule,

@@ -5,28 +5,26 @@ import { createSelector } from 'reselect';
 import cloneDeep from 'lodash.clonedeep';
 import deepEqual from 'react-fast-compare';
 
-import { NodeName } from "api";
 import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
 import { getNamesInComments } from "state/detailedposting/selectors";
 import { useSuggestions } from "ui/hook/suggestions";
 import { NameSuggestion } from "ui/control/NameSuggestion";
-import { NameListItem, namesListQuery } from "util/names-list";
+import { nameListInsertFirst, NameListItem, namesListQuery } from "util/names-list";
 import "./NameSelector.css";
 
 interface Props {
     defaultQuery?: string;
     onChange?: (query: string | null) => void;
     onSubmit: (success: boolean, result: NameListItem) => void;
-    submitOnEscape?: boolean;
 }
 
 /*
  * USER-[handleChange]->...->[runQuery]->REDUX
  * REDUX-[getNames]->contactNames-[namesListQuery]->names-[reorderNames]->searchList->RENDER
  */
-export function NameSelector({defaultQuery = "", onChange, onSubmit, submitOnEscape = false}: Props) {
+export function NameSelector({defaultQuery = "", onChange, onSubmit}: Props) {
     const contactNames = useSelector(getNames);
     const homeName = useSelector(getHomeOwnerName);
     const homeAvatar = useSelector(getHomeOwnerAvatar);
@@ -42,14 +40,14 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit, submitOnEsc
         preprocessQuery: trimQuery,
         runQuery: query => dispatch(contactsPrepare(query)),
         onSubmit: (query, success, result) => onSubmit(success, result ?? {nodeName: query, fullName: ""}),
-        submitOnEscape,
+        submitOnEscape: false,
         inputDom,
         listDom
     });
 
     useEffect(() => {
         setSearchList(list => {
-            const newNames = reorderNames(namesListQuery(contactNames, query), query);
+            const newNames = nameListInsertFirst(namesListQuery(contactNames, query), query);
             return deepEqual(list, newNames) ? list : newNames;
         });
         if (onChange) {
@@ -83,24 +81,6 @@ function trimQuery(text: string | null | undefined): string | null {
         return null;
     }
     return text.startsWith("@") ? text.substring(1) : text;
-}
-
-function reorderNames(names: NameListItem[], query: string | null): NameListItem[] {
-    if (!query) {
-        return names;
-    }
-    const expandedQuery = NodeName.expand(query);
-    const index = names.findIndex(nm => nm.nodeName === expandedQuery);
-    if (index < 0) {
-        return [{nodeName: query}, ...names];
-    }
-    if (index === 0) { // Already at the first place
-        return names;
-    }
-    const list = names.slice();
-    const t = list.splice(index, 1);
-    list.unshift(...t);
-    return list;
 }
 
 const getNames = createSelector(

@@ -41,8 +41,10 @@ export class VerboseError extends CausedError {
 
 export class NodeError extends VerboseError {
 
-    constructor(method: string, rootApi: string, location: string, title: string | null, messageOrError: Error | string,
-                details: string | null = null, cause: ClientAction | null = null) {
+    constructor(
+        method: string, rootApi: string, location: string, title: string | null, messageOrError: Error | string,
+        details: string | null = null, cause: ClientAction | null = null
+    ) {
         const message = (title ? `${title}: ` : "") + extractMessage(messageOrError);
         const messageVerbose = `${method} ${rootApi}${location}: ${message}` + (details ? `: ${details}` : "");
         super(message, messageVerbose, cause);
@@ -60,8 +62,9 @@ export class NodeConnectionError extends CausedError {
 
 export class NamingError extends VerboseError {
 
-    constructor(method: string, messageOrError: Error | string, details: string | null = null,
-                cause: ClientAction | null = null) {
+    constructor(
+        method: string, messageOrError: Error | string, details: string | null = null, cause: ClientAction | null = null
+    ) {
         const message = "Naming service access error: " + extractMessage(messageOrError);
         const messageVerbose = `${method}(): ${message}` + (details ? `: ${details}` : "");
         super(message, messageVerbose, cause);

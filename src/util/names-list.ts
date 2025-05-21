@@ -1,6 +1,6 @@
 import regexEscape from 'escape-string-regexp';
 
-import { AvatarImage } from "api";
+import { AvatarImage, NodeName } from "api";
 
 const ARRANGEMENT_DEPTH = 5;
 
@@ -69,4 +69,22 @@ function hasArrangement(values: (number | undefined)[][]) {
             indexes[i] = 0;
         }
     }
+}
+
+export function nameListInsertFirst(names: NameListItem[], nodeName: string | null): NameListItem[] {
+    if (!nodeName) {
+        return names;
+    }
+    const expandedNodeName = NodeName.expand(nodeName);
+    const index = names.findIndex(nm => nm.nodeName === expandedNodeName);
+    if (index < 0) {
+        return [{nodeName}, ...names];
+    }
+    if (index === 0) { // Already at the first place
+        return names;
+    }
+    const list = names.slice();
+    const t = list.splice(index, 1);
+    list.unshift(...t);
+    return list;
 }
