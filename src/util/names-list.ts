@@ -27,6 +27,7 @@ export function nameListItemMatch(item: NameListItem, regexes: RegExp[]): boolea
         return true;
     }
 
+    regexes.forEach(regex => regex.lastIndex = 0);
     const nodeName = item.nodeName ?? "";
     const haystack = item.fullName ? item.fullName + " " + nodeName: nodeName;
     const allFound = regexes.every(regex => regex.test(haystack));

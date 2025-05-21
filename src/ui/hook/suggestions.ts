@@ -16,7 +16,7 @@ interface UseSuggestionsOptions<L> {
 
 interface UseSuggestionsResult<L> {
     searchList: L[];
-    setSearchList: (list: L[]) => void;
+    setSearchList: (list: L[] | ((update: L[]) => L[])) => void;
     selectedIndex: number;
     query: string | null;
     handleKeyDown: (event: React.KeyboardEvent) => void;

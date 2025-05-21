@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 import { createSelector } from 'reselect';
@@ -32,8 +32,6 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit, submitOnEsc
     const homeAvatar = useSelector(getHomeOwnerAvatar);
     const dispatch = useDispatch();
 
-    const [names, setNames] = useState<NameListItem[]>([]);
-
     const inputDom = useRef<HTMLInputElement>(null);
     const listDom = useRef<HTMLDivElement>(null);
 
@@ -50,19 +48,14 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit, submitOnEsc
     });
 
     useEffect(() => {
-        setNames(names => {
-            const newNames = namesListQuery(contactNames, query);
-            return deepEqual(names, newNames) ? names : newNames;
+        setSearchList(list => {
+            const newNames = reorderNames(namesListQuery(contactNames, query), query);
+            return deepEqual(list, newNames) ? list : newNames;
         });
         if (onChange) {
             onChange(query);
         }
-    }, [contactNames, onChange, query]);
-
-    useEffect(() =>
-        setSearchList(reorderNames(names, query)),
-        [names, query, setSearchList]
-    );
+    }, [contactNames, onChange, query, setSearchList]);
 
     return (
         <>
