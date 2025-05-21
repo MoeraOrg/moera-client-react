@@ -1,0 +1,20 @@
+.name-suggestion {
+    display: grid;
+    grid-template-columns: calc(44px + .5rem) auto;
+}
+
+.name-suggestion .avatar-cell {
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+}
+
+.name-suggestion .full-name {
+    font-weight: 600;
+    line-height: 150%;
+}
+
+.name-suggestion .name {
+    font-size: .88rem;
+    line-height: 143%;
+    color: var(--bs-gray-600);
+}

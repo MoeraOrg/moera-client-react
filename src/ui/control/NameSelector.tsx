@@ -10,9 +10,8 @@ import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
 import { getNamesInComments } from "state/detailedposting/selectors";
-import { Avatar } from "ui/control/Avatar";
 import { useSuggestions } from "ui/hook/suggestions";
-import { mentionName } from "util/names";
+import { NameSuggestion } from "ui/control/NameSuggestion";
 import { NameListItem, namesListQuery } from "util/names-list";
 import "./NameSelector.css";
 
@@ -71,16 +70,15 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit, submitOnEsc
                    onKeyDown={handleKeyDown} onChange={handleChange}/>
             <div className={cx("name-select", {"d-none": searchList.length === 0})} ref={listDom}>
                 {searchList.map((item, index) =>
-                    <div key={index} data-index={index}
-                         className={cx("item", {"selected": index === selectedIndex})}
-                         onClick={handleClick(index)}>
-                        <Avatar avatar={item.nodeName !== homeName ? item.avatar : homeAvatar} ownerName={item.nodeName}
-                                size={40}/>
-                        <div className="body">
-                            <div className="full-name">{item.fullName || NodeName.shorten(item.nodeName)}</div>
-                            <div className="name">{mentionName(item.nodeName)}</div>
-                        </div>
-                    </div>
+                    <NameSuggestion
+                        key={index}
+                        className={cx("item", {"selected": index === selectedIndex})}
+                        index={index}
+                        nodeName={item.nodeName}
+                        fullName={item.fullName}
+                        avatar={item.nodeName !== homeName ? item.avatar : homeAvatar}
+                        onClick={handleClick}
+                    />
                 )}
             </div>
         </>

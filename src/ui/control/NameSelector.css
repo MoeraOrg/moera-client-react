@@ -1,7 +1,7 @@
 .name-select {
     border: solid 1px var(--bs-gray-400);
     border-radius: 5px;
-    max-height: 18em;
+    max-height: 19em;
     overflow-y: auto;
     overscroll-behavior-y: none;
     overflow-x: hidden;
@@ -10,7 +10,6 @@
 .name-select .item {
     padding: .25em .5em;
     cursor: pointer;
-    display: flex;
 }
 
 .name-select .item.selected, .name-select .item.selected:hover {
@@ -20,23 +19,6 @@
 
 .name-select .item:hover {
     background-color: var(--highlight);
-}
-
-.name-select .item ~ .item {
-    border-top: dotted 1px var(--bs-gray-200);
-}
-
-.name-select .item .body {
-    flex: auto;
-    margin-left: .5rem;
-}
-
-.name-select .item .full-name {
-    font-weight: bold;
-}
-
-.name-select .item .name {
-    color: var(--bs-gray-500);
 }
 
 .name-select .item.selected .name {

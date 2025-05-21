@@ -27,6 +27,7 @@ export { ModalDialog } from "ui/control/ModalDialog";
 export { ModalDialogContext, useModalDialog } from "ui/control/modal-dialog-context";
 export { NameHelp } from "ui/control/NameHelp";
 export { NameSelector } from "ui/control/NameSelector";
+export { NameSuggestion } from "ui/control/NameSuggestion";
 export { Popover } from "ui/control/Popover";
 export { PopoverContext, usePopover } from "ui/control/popover-context";
 export type { PopoverInterface } from "ui/control/popover-context";
