@@ -32,7 +32,7 @@ export function RichTextEditorButtonImpl(
     return (
         <button type="button" className={cx("rich-text-editor-button", className, {active})} disabled={disabled}
                 title={hotkey ? `${title} (${hotkey})` : title} onClick={onClick ?? onCommandClick} ref={ref}>
-            {icon && <Icon icon={icon} width={iconSize} height={iconSize}/>}
+            {icon && <Icon icon={icon} size={iconSize}/>}
         </button>
     );
 }

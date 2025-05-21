@@ -13,10 +13,10 @@ const FormattingSubmenuButton = (
     ref: ForwardedRef<HTMLButtonElement>
 ) => (
     <button className="formatting-menu-item dropdown-item" ref={ref} {...props}>
-        <div className="icon"><Icon icon={icon} width={20} height={20}/></div>
+        <div className="icon"><Icon icon={icon} size={20}/></div>
         <div className="title">{title}</div>
         <div className="hotkey">
-            <Icon icon={expanded ? msKeyboardArrowDown : msChevronRight} width={20} height={20}/>
+            <Icon icon={expanded ? msKeyboardArrowDown : msChevronRight} size={20}/>
         </div>
     </button>
 );

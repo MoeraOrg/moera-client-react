@@ -116,9 +116,8 @@ interface IconProps {
     icon: MaterialSymbol;
     fill?: string;
     className?: string;
-    height?: number | string;
-    width?: number | string;
+    size?: number | string;
 }
 
-export const Icon = ({icon, fill, className, height, width}: IconProps) =>
-    React.createElement(icon, {fill: fill ?? "currentColor", className, height: height ?? 24, width: width ?? 24});
+export const Icon = ({icon, fill, className, size}: IconProps) =>
+    React.createElement(icon, {fill: fill ?? "currentColor", className, height: size ?? 24, width: size ?? 24});

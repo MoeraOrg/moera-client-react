@@ -18,7 +18,7 @@ export default function OpenLink({href}: Props) {
 
     return (
         <button type="button" className="open-link" title={t("open-link")} contentEditable={false} onClick={onClick}>
-            <Icon icon={msOpenInNew} width={16} height={16}/>
+            <Icon icon={msOpenInNew} size={16}/>
         </button>
     );
 }

@@ -110,8 +110,8 @@ function CommentDialogInner(props: Props) {
                 <div className="modal-footer">
                     {ready &&
                         <span className="draft-status">
-                            {!unsaved && saving && <Icon icon={msCloudUpload} width={20} height={20}/>}
-                            {!unsaved && saved && <Icon icon={msCloudDone} width={20} height={20}/>}
+                            {!unsaved && saving && <Icon icon={msCloudUpload} size={20}/>}
+                            {!unsaved && saved && <Icon icon={msCloudDone} size={20}/>}
                         </span>
                     }
                     <Button variant="secondary" disabled={!ready || beingPosted} onClick={onCancel}>

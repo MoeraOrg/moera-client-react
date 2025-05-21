@@ -40,7 +40,7 @@ export function SelectedImages({files, maxSize, onDelete}: Props) {
                     return (
                         <div key={index} className="rich-text-editor-uploaded-image" title={title}>
                             <button type="button" className="menu" onClick={e => onDelete(index, e)}>
-                                <Icon icon={msClose} width={12} height={12}/>
+                                <Icon icon={msClose} size={12}/>
                             </button>
                             {fileData.tooLarge && <div className="too-large">{t("large-image")}</div>}
                             <img className="thumbnail" src={fileData.url} alt=""/>

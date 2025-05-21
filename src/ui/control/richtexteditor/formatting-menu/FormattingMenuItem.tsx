@@ -38,7 +38,7 @@ export function FormattingMenuItemImpl(
     return (
         <button className={cx("formatting-menu-item dropdown-item", className, {"engaged": active})} disabled={disabled}
                 onClick={onClick ?? onCommandClick} ref={ref}>
-            <div className="icon">{icon && <Icon icon={icon} width={iconSize} height={iconSize}/>}</div>
+            <div className="icon">{icon && <Icon icon={icon} size={iconSize}/>}</div>
             <div className="title">{title}</div>
             <div className="hotkey">{hotkey && !tinyScreen ? hotkey : ""}</div>
         </button>

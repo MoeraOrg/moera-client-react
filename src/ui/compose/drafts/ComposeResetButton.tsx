@@ -53,13 +53,13 @@ export default function ComposeResetButton() {
         return (
             <Button variant="tool" className="reset-button" title={t("delete-draft")} disabled={!ready}
                     onClick={onClick}>
-                <Icon icon={msDelete} height={20} width={20}/>
+                <Icon icon={msDelete} size={20}/>
             </Button>
         );
     } else {
         return (
             <Button variant="tool" className="reset-button pe-3" disabled={!ready} onClick={onClick}>
-                <Icon icon={msUndo} height={20} width={20}/>
+                <Icon icon={msUndo} size={20}/>
                 {" " + t("undo")}
             </Button>
         );

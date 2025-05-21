@@ -101,7 +101,7 @@ export default function OwnerNavigator() {
                                      onClick={handleClick(index)}
                                 >
                                     <div className="icon-cell">
-                                        <Icon icon={msSearch} width={20} height={20}/>
+                                        <Icon icon={msSearch} size={20}/>
                                     </div>
                                     <div className="body">
                                         {t("search")}: {query}
@@ -113,7 +113,7 @@ export default function OwnerNavigator() {
                 )}
             </div>
             <Button variant="secondary" size="sm" loading={switching} onClick={onButtonClick}>
-                <Icon icon={msSearch} width={20} height={20}/>
+                <Icon icon={msSearch} size={20}/>
             </Button>
         </div>
     );

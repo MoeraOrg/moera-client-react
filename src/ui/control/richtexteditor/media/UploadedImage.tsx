@@ -71,7 +71,7 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
                         show: true
                     }
                 ]} menuContainer={document.getElementById("modal-root")}>
-                    <Icon icon={msMoreVert} width={12} height={12}/>
+                    <Icon icon={msMoreVert} size={12}/>
                 </DropdownMenu>
             }
             <div ref={sortable.setNodeRef} style={sortableStyle}{...sortable.attributes} {...sortable.listeners}>

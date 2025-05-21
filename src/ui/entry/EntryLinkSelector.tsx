@@ -45,7 +45,7 @@ export default function EntryLinkSelector({urls, onSelect, disabled}: Props) {
                          className="fade dropdown-menu popover shadow-sm show">
                         {uniqueUrls.map(url =>
                             <div key={url} className="item" onClick={onClick(url)}>
-                                <Icon icon={msLink} width={15} height={15}/>
+                                <Icon icon={msLink} size={15}/>
                                 {" " + shortenUrl(url, 75)}
                             </div>
                         )}
