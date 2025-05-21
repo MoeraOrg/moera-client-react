@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { VerifiedMediaFile } from "api";
 import { openImageEditDialog } from "state/imageeditdialog/actions";
-import { Icon, msMoreVert } from "ui/material-symbols";
+import { Icon, msMoreVert12 } from "ui/material-symbols";
 import { DropdownMenu, useModalDialog } from "ui/control";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
@@ -71,7 +71,7 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
                         show: true
                     }
                 ]} menuContainer={document.getElementById("modal-root")}>
-                    <Icon icon={msMoreVert} size={12}/>
+                    <Icon icon={msMoreVert12} size={12}/>
                 </DropdownMenu>
             }
             <div ref={sortable.setNodeRef} style={sortableStyle}{...sortable.attributes} {...sortable.listeners}>

@@ -6,6 +6,7 @@ import { ReactComponent as msAlternateEmail } from "ui/material-symbols/alternat
 import { ReactComponent as msBadge } from "ui/material-symbols/badge.isvg";
 import { ReactComponent as msChevronRight } from "ui/material-symbols/chevron_right.isvg";
 import { ReactComponent as msClose } from "ui/material-symbols/close.isvg";
+import { ReactComponent as msClose12 } from "ui/material-symbols/close12.isvg";
 import { ReactComponent as msCloudDone } from "ui/material-symbols/cloud_done.isvg";
 import { ReactComponent as msCloudUpload } from "ui/material-symbols/cloud_upload.isvg";
 import { ReactComponent as msCode } from "ui/material-symbols/code.isvg";
@@ -37,6 +38,7 @@ import { ReactComponent as msLink } from "ui/material-symbols/link.isvg";
 import { ReactComponent as msMediaLink } from "ui/material-symbols/media_link.isvg";
 import { ReactComponent as msMoreHoriz } from "ui/material-symbols/more_horiz.isvg";
 import { ReactComponent as msMoreVert } from "ui/material-symbols/more_vert.isvg";
+import { ReactComponent as msMoreVert12 } from "ui/material-symbols/more_vert12.isvg";
 import { ReactComponent as msOpenInNew } from "ui/material-symbols/open_in_new.isvg";
 import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_library.isvg";
 import { ReactComponent as msPreview } from "ui/material-symbols/preview.isvg";
@@ -61,6 +63,7 @@ export {
     msBadge,
     msChevronRight,
     msClose,
+    msClose12,
     msCloudDone,
     msCloudUpload,
     msCode,
@@ -92,6 +95,7 @@ export {
     msMediaLink,
     msMoreHoriz,
     msMoreVert,
+    msMoreVert12,
     msOpenInNew,
     msPhotoLibrary,
     msPreview,

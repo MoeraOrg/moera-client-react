@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, msClose } from "ui/material-symbols";
+import { Icon, msClose12 } from "ui/material-symbols";
 import { Loading } from "ui/control/Loading";
 import { formatMib } from "util/info-quantity";
 
@@ -40,7 +40,7 @@ export function SelectedImages({files, maxSize, onDelete}: Props) {
                     return (
                         <div key={index} className="rich-text-editor-uploaded-image" title={title}>
                             <button type="button" className="menu" onClick={e => onDelete(index, e)}>
-                                <Icon icon={msClose} size={12}/>
+                                <Icon icon={msClose12} size={12}/>
                             </button>
                             {fileData.tooLarge && <div className="too-large">{t("large-image")}</div>}
                             <img className="thumbnail" src={fileData.url} alt=""/>
