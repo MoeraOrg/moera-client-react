@@ -18,7 +18,7 @@ export default [
 
 async function errorThrownSaga(action: ErrorThrownAction): Promise<void> {
     const err = action.payload.e;
-    if (err instanceof NodeApiError) {
+    if (err instanceof NodeApiError && !err.errorCode.startsWith("carte.")) {
         return;
     }
 
@@ -51,7 +51,7 @@ async function errorThrownSaga(action: ErrorThrownAction): Promise<void> {
     if (document.visibilityState !== "visible") {
         return;
     }
-    if (err instanceof NodeConnectionError || err instanceof NameResolvingError) {
+    if (err instanceof NodeConnectionError || err instanceof NameResolvingError || err instanceof NodeApiError) {
         return;
     }
 

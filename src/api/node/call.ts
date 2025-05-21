@@ -98,7 +98,7 @@ export async function callApi<T>({
                 onProgress
             });
         } catch (e) {
-            if (e instanceof TypeError) {
+            if (e instanceof TypeError || e instanceof DOMException) {
                 throw new NodeConnectionError(caller);
             }
             throw exception(e);
@@ -132,11 +132,15 @@ export async function callApi<T>({
                 dispatch(messageBox(i18n.t("sorry-you-banned")).causedBy(caller));
                 throw new NodeApiError(data.errorCode, data.message, caller);
             }
-            if (data.errorCode.startsWith("carte.") && !cartesRenewed) {
-                dispatch(cartesLoad().causedBy(caller));
-                await barrier("CARTES_LOADED");
-                cartesRenewed = true;
-                continue;
+            if (data.errorCode.startsWith("carte.")) {
+                if (!cartesRenewed) {
+                    dispatch(cartesLoad().causedBy(caller));
+                    await barrier("CARTES_LOADED");
+                    cartesRenewed = true;
+                    continue;
+                } else {
+                    throw new NodeApiError(data.errorCode, data.message, caller);
+                }
             }
             if (isErrorCodeAllowed(data.errorCode, errorFilter)) {
                 throw new NodeApiError(data.errorCode, data.message, caller);
