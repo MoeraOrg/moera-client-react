@@ -1,18 +1,17 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 import { createSelector } from 'reselect';
 import cloneDeep from 'lodash.clonedeep';
 import deepEqual from 'react-fast-compare';
-import scrollIntoView from 'scroll-into-view-if-needed';
 
 import { NodeName } from "api";
 import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
 import { getNamesInComments } from "state/detailedposting/selectors";
-import { useDebounce } from "ui/hook";
 import { Avatar } from "ui/control/Avatar";
+import { useSuggestions } from "ui/hook/suggestions";
 import { mentionName } from "util/names";
 import { NameListItem, namesListQuery } from "util/names-list";
 import "./NameSelector.css";
@@ -25,7 +24,7 @@ interface Props {
 }
 
 /*
- * USER-[handleChange]->query-[debounce]->queryToLoad-[contactsPrepare]->REDUX
+ * USER-[handleChange]->...->[runQuery]->REDUX
  * REDUX-[getNames]->contactNames-[namesListQuery]->names-[reorderNames]->searchList->RENDER
  */
 export function NameSelector({defaultQuery = "", onChange, onSubmit, submitOnEscape = false}: Props) {
@@ -34,38 +33,22 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit, submitOnEsc
     const homeAvatar = useSelector(getHomeOwnerAvatar);
     const dispatch = useDispatch();
 
-    const [selectedIndex, setSelectedIndex] = useState(-1);
-    const selectedName = useRef<string | null>(null);
     const [names, setNames] = useState<NameListItem[]>([]);
-    const [query, setQuery] = useState<string | null>(null);
-    const [searchList, setSearchList] = useState<NameListItem[]>([]);
 
     const inputDom = useRef<HTMLInputElement>(null);
     const listDom = useRef<HTMLDivElement>(null);
 
-    const selectIndex = useCallback((index: number) => {
-        setSelectedIndex(index);
-        selectedName.current = searchList[index]?.nodeName;
-        if (listDom.current != null && index >= 0) {
-            const item = listDom.current.querySelector(`.item[data-index="${index}"]`);
-            if (item != null) {
-                setTimeout(() => scrollIntoView(item, {scrollMode: "if-needed", block: "nearest"}));
-            }
-        }
-    }, [listDom, searchList])
-
-    const [queryToLoad] = useDebounce(query, 250);
-    useEffect(() => {
-        dispatch(contactsPrepare(queryToLoad ?? ""));
-    }, [dispatch, queryToLoad]);
-
-    useEffect(() => {
-        if (inputDom.current) {
-            inputDom.current.focus();
-            inputDom.current.select();
-        }
-        setQuery(defaultQuery);
-    }, [defaultQuery, inputDom]);
+    const {
+        searchList, setSearchList, selectedIndex, query, handleKeyDown, handleChange, handleClick
+    } = useSuggestions<NameListItem>({
+        defaultQuery,
+        preprocessQuery: trimQuery,
+        runQuery: query => dispatch(contactsPrepare(query)),
+        onSubmit: (query, success, result) => onSubmit(success, result ?? {nodeName: query, fullName: ""}),
+        submitOnEscape,
+        inputDom,
+        listDom
+    });
 
     useEffect(() => {
         setNames(names => {
@@ -79,54 +62,8 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit, submitOnEsc
 
     useEffect(() =>
         setSearchList(reorderNames(names, query)),
-        [names, query]
+        [names, query, setSearchList]
     );
-
-    useEffect(() =>
-        selectIndex(searchList.findIndex(item => item.nodeName === selectedName.current)),
-        [searchList, selectIndex]
-    );
-
-    const handleSubmit = (success: boolean, index: number) => {
-        if (onSubmit) {
-            if (index >= 0 && index < searchList.length) {
-                onSubmit(success, searchList[index]);
-            } else {
-                onSubmit(success, {nodeName: query, fullName: null});
-            }
-        }
-    }
-
-    const handleClose = () => {
-        if (submitOnEscape) {
-            handleSubmit(false, -1);
-        }
-    }
-
-    const handleKeyDown = (event: React.KeyboardEvent) => {
-        switch (event.key) {
-            case "Escape":
-            case "Esc":
-                handleClose();
-                break;
-            case "ArrowUp":
-                selectIndex(Math.max(0, selectedIndex - 1));
-                break;
-            case "ArrowDown":
-                selectIndex(Math.min(selectedIndex + 1, searchList.length - 1));
-                break;
-            case "Enter":
-                handleSubmit(true, selectedIndex);
-                break;
-            default:
-                return;
-        }
-        event.preventDefault();
-    }
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setQuery(trimQuery(event.target.value));
-
-    const handleClick = (index: number) => () => handleSubmit(true, index);
 
     return (
         <>
