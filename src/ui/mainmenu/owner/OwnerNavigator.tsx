@@ -63,7 +63,10 @@ export default function OwnerNavigator() {
 
     useEffect(() => {
         setSearchList(list => {
-            const newNames: SearchListItem[] = namesListQuery(contactNames, query)
+            const newNames: SearchListItem[] = namesListQuery(
+                contactNames.sort((c1, c2) => c1.distance - c2.distance),
+                query
+            )
                 .map(item => ({type: "name" as const, ...item}));
             if (query) {
                 if (newNames.length > 5) {
