@@ -86,7 +86,7 @@ export default function EntryHtml({
         });
         dom.current.querySelectorAll("img").forEach(node => {
             const src = node.getAttribute("src");
-            const mediaFile = src != null && src.startsWith("hash:")
+            const mediaFile = src?.startsWith("hash:")
                 ? mediaMap.get(mediaHashStrip(src.substring(5)))
                 : null;
             if (mediaFile != null) {
@@ -109,6 +109,8 @@ export default function EntryHtml({
                                     mediaFile={mediaFile} width={width} height={height} alt={alt} title={title}/>
                     </Provider>
                 );
+            } else if (src?.startsWith("hash:")) {
+                node.remove();
             } else {
                 const width = node.getAttribute("width");
                 const height = node.getAttribute("height");
