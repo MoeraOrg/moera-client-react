@@ -9,7 +9,6 @@ import { ClientState } from "state/state";
 import { getNodeCard, isNodeCardAnyLoaded, isNodeCardAnyLoading } from "state/nodecards/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import { useIsTinyScreen } from "ui/hook/media-query";
-import CopyMentionButton from "ui/nodename/CopyMentionButton";
 import { Avatar, DonateButton, Loading, SubscribeButton, usePopover } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import { mentionName, shortGender } from "util/names";
@@ -98,7 +97,6 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
                 </Jump>
             </div>
             <div className="buttons">
-                <CopyMentionButton nodeName={nodeName} fullName={card.details.profile.fullName ?? fullName ?? null}/>
                 {(homeOwnerName != null && nodeName !== homeOwnerName && (card.subscription.loaded ?? false)) &&
                     <SubscribeButton nodeName={nodeName} feedName="timeline" onDialogOpened={hidePopover}/>
                 }

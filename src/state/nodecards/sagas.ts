@@ -1,4 +1,3 @@
-import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE, SHERIFF_USER_LIST_HIDE } from "sheriffs";
@@ -20,7 +19,6 @@ import {
     NodeCardBlockingLoadAction,
     nodeCardBlockingLoadFailed,
     nodeCardBlockingSet,
-    NodeCardCopyMentionAction,
     nodeCardDetailsLoad,
     NodeCardDetailsLoadAction,
     nodeCardDetailsLoadFailed,
@@ -53,8 +51,6 @@ import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import { flashBox } from "state/flashbox/actions";
 import { getNodeCard } from "state/nodecards/selectors";
-import * as Browser from "ui/browser";
-import { mentionName } from "util/names";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
@@ -67,7 +63,6 @@ export default [
     executor("NODE_CARD_FRIENDSHIP_LOAD", payload => payload.nodeName, nodeCardFriendshipLoadSaga),
     executor("NODE_CARD_BLOCKING_LOAD", payload => payload.nodeName, nodeCardBlockingLoadSaga),
     executor("NODE_CARD_SHERIFF_LIST_LOAD", payload => payload.nodeName, nodeCardSheriffListLoadSaga),
-    executor("NODE_CARD_COPY_MENTION", "", nodeCardCopyMention),
     executor("SHERIFF_LIST_ADD", payload => payload.nodeName, sheriffListAddSaga),
     executor("SHERIFF_LIST_DELETE", payload => payload.nodeName, sheriffListDeleteSaga)
 ];
@@ -295,13 +290,6 @@ async function nodeCardSheriffListLoadSaga(action: WithContext<NodeCardSheriffLi
                 dispatch(errorThrown(e));
             }
         }
-    }
-}
-
-async function nodeCardCopyMention(action: NodeCardCopyMentionAction): Promise<void> {
-    await clipboardCopy(mentionName(action.payload.nodeName, action.payload.fullName));
-    if (!Browser.isAndroidBrowser()) {
-        dispatch(flashBox(i18n.t("mention-copied")).causedBy(action));
     }
 }
 

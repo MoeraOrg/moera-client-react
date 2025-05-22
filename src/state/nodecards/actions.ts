@@ -174,13 +174,6 @@ export type NodeCardsRefreshAction = ActionWithoutPayload<"NODE_CARDS_REFRESH">;
 export const nodeCardsRefresh = (): NodeCardsRefreshAction =>
     actionWithoutPayload("NODE_CARDS_REFRESH");
 
-export type NodeCardCopyMentionAction = ActionWithPayload<"NODE_CARD_COPY_MENTION", {
-    nodeName: string;
-    fullName: string | null;
-}>;
-export const nodeCardCopyMention = (nodeName: string, fullName: string | null): NodeCardCopyMentionAction =>
-    actionWithPayload("NODE_CARD_COPY_MENTION", {nodeName, fullName});
-
 export type SheriffListAddAction = ActionWithPayload<"SHERIFF_LIST_ADD", {
     nodeName: string;
 }>;
@@ -219,6 +212,5 @@ export type NodeCardsAnyAction =
     | NodeCardSheriffListSetAction
     | NodeCardsClientSwitchAction
     | NodeCardsRefreshAction
-    | NodeCardCopyMentionAction
     | SheriffListAddAction
     | SheriffListDeleteAction;
