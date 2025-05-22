@@ -16,6 +16,7 @@ export function wrapHashtags(root: HTMLElement): void {
                     }
                 } else {
                     const text = node.nodeValue;
+                    HASHTAG.lastIndex = 0;
                     if (!text || !HASHTAG.test(text)) {
                         return NodeFilter.FILTER_REJECT;
                     }
@@ -40,6 +41,7 @@ export function wrapHashtags(root: HTMLElement): void {
             return;
         }
 
+        console.log("...", text);
         HASHTAG.lastIndex = 0;
         let match: RegExpExecArray | null;
         let lastIndex = 0;

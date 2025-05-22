@@ -369,6 +369,7 @@ function scriptureReplace(editor: BaseEditor, pattern: RegExp, replacer: TextRep
     const textNodes = SlateNode.texts(editor, {pass: node => isScriptureText(node) && node.text.length > 0});
     for (const [{text}, path] of textNodes) {
         let delta = 0;
+        pattern.lastIndex = 0;
         while (true) {
             const match = pattern.exec(text);
             if (match == null) {
