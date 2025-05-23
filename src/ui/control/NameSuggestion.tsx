@@ -11,11 +11,11 @@ interface Props {
     nodeName?: string | null;
     fullName?: string | null;
     avatar?: AvatarImage | null;
-    onClick?: (index: number) => void;
+    onClick?: (index: number) => () => void;
 }
 
 export const NameSuggestion = ({className, index, nodeName, fullName, avatar, onClick}: Props) => (
-    <div data-index={index} className={cx("name-suggestion", className)} onClick={() => onClick && onClick(index)}>
+    <div data-index={index} className={cx("name-suggestion", className)} onClick={onClick ? onClick(index) : undefined}>
         <div className="avatar-cell">
             <Avatar avatar={avatar} ownerName={nodeName} size={40}/>
         </div>
