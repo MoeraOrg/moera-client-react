@@ -41,7 +41,6 @@ export function wrapHashtags(root: HTMLElement): void {
             return;
         }
 
-        console.log("...", text);
         HASHTAG.lastIndex = 0;
         let match: RegExpExecArray | null;
         let lastIndex = 0;
