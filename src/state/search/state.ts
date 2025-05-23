@@ -20,4 +20,5 @@ export interface SearchState {
     after: number;
     nextPage: number;
     total: number;
+    scrollPosition: number;
 }

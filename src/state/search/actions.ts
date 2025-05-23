@@ -35,10 +35,22 @@ export type SearchLoadMoreAction = ActionWithoutPayload<"SEARCH_LOAD_MORE">;
 export const searchLoadMore = (): SearchLoadMoreAction =>
     actionWithoutPayload("SEARCH_LOAD_MORE");
 
+export type SearchScrolledAction = ActionWithPayload<"SEARCH_SCROLLED", {
+    position: number;
+}>;
+export const searchScrolled = (position: number): SearchScrolledAction =>
+    actionWithPayload("SEARCH_SCROLLED", {position});
+
+export type SearchRestoreScrollAction = ActionWithoutPayload<"SEARCH_RESTORE_SCROLL">;
+export const searchRestoreScroll = (): SearchRestoreScrollAction =>
+    actionWithoutPayload("SEARCH_RESTORE_SCROLL");
+
 export type SearchAnyAction =
     SearchLoadAction
     | SearchHashtagLoadedAction
     | SearchTextLoadedAction
     | SearchPeopleLoadedAction
     | SearchLoadFailedAction
-    | SearchLoadMoreAction;
+    | SearchLoadMoreAction
+    | SearchScrolledAction
+    | SearchRestoreScrollAction;

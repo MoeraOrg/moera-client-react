@@ -20,7 +20,8 @@ import { REL_SEARCH } from "util/rel-node-name";
 
 export default [
     executor("SEARCH_LOAD", null, searchLoadSaga),
-    executor("SEARCH_LOAD_MORE", null, searchLoadMoreSaga)
+    executor("SEARCH_LOAD_MORE", null, searchLoadMoreSaga),
+    executor("SEARCH_RESTORE_SCROLL", null, searchRestoreScrollSaga)
 ];
 
 async function searchLoadSaga(action: WithContext<SearchLoadAction>): Promise<void> {
@@ -92,4 +93,9 @@ async function load(
         dispatch(searchLoadFailed().causedBy(action));
         dispatch(errorThrown(e));
     }
+}
+
+function searchRestoreScrollSaga(): void {
+    const position = select(state => state.search.scrollPosition);
+    setTimeout(() => window.scrollTo(0, position), 100);
 }

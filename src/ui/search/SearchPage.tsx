@@ -1,10 +1,12 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { searchScrolled } from "state/search/actions";
 import { getSearchQuery, getSearchTab, hasSearchMoreResults } from "state/search/selectors";
 import { Loading } from "ui/control";
+import { useDebounce } from "ui/hook";
 import { useIsTinyScreen } from "ui/hook/media-query";
 import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
@@ -25,7 +27,20 @@ export default function SearchPage() {
     const loaded = useSelector((state: ClientState) => state.search.loaded);
     const moreResults = useSelector(hasSearchMoreResults);
     const tinyScreen = useIsTinyScreen();
+    const [scrollPosition, setScrollPosition] = useDebounce(0, 250);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
+
+    useEffect(() => {
+        dispatch(searchScrolled(scrollPosition))
+    }, [dispatch, scrollPosition]);
+
+    const onScroll = useCallback(() => setScrollPosition(window.scrollY), [setScrollPosition]);
+
+    useEffect(() => {
+        window.addEventListener("scroll", onScroll);
+        return () => window.removeEventListener("scroll", onScroll);
+    }, [dispatch, onScroll]);
 
     const hasContent = loaded && (tab === "people" ? nodes.length > 0 : entries.length > 0);
 

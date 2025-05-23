@@ -19,7 +19,8 @@ const initialState: SearchState = {
     nodes: [],
     after: Number.MAX_SAFE_INTEGER,
     nextPage: 0,
-    total: 0
+    total: 0,
+    scrollPosition: 0
 }
 
 function safeguard(entry: SearchEntryInfo): ExtSearchEntryInfo {
@@ -82,6 +83,12 @@ export default (state: SearchState = initialState, action: ClientAction): Search
                 ...state,
                 loading: false
             };
+
+        case "SEARCH_SCROLLED":
+            return {
+                ...state,
+                scrollPosition: action.payload.position
+            }
 
         default:
             return state;
