@@ -41,7 +41,7 @@ export default function SearchEntry({entry}: Props) {
                     </span>
                 </div>
             </div>
-            <StorySubject subjectHtml={entry.bodyPreview.subjectHtml} href={href}/>
+            <StorySubject subjectHtml={entry.bodyPreview.subjectHtml} nodeName={entry.nodeName} href={href}/>
             <div className="content">
                 <EntryHtml html={entry.bodyPreview.text}/>
                 {imagesCountHtml &&
