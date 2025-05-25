@@ -72,11 +72,11 @@ async function profileImageUploadSaga(action: WithContext<ProfileImageUploadActi
             action.payload.file,
             (loaded: number, total: number) => dispatch(profileImageUploadProgress(loaded, total))
         );
-        if (width < 100 || height < 100) {
+        if (width == null || width < 100 || height == null || height < 100) {
             dispatch(messageBox(i18n.t("avatar-too-small")).causedBy(action));
             dispatch(profileImageUploadFailed().causedBy(action));
         } else {
-            dispatch(profileImageUploaded(id, path, width, height, orientation).causedBy(action));
+            dispatch(profileImageUploaded(id, path, width, height, orientation ?? 1).causedBy(action));
         }
     } catch (e) {
         dispatch(profileImageUploadFailed().causedBy(action));

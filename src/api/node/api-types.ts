@@ -639,9 +639,9 @@ export interface ProfileInfo {
 export interface PublicMediaFileInfo {
     id: string;
     path: string;
-    width: number;
-    height: number;
-    orientation: number;
+    width?: number | null;
+    height?: number | null;
+    orientation?: number | null;
     size: number;
 }
 
@@ -1521,6 +1521,7 @@ export interface SearchEntryInfoBase<B> {
     heading: string;
     imageCount?: number | null;
     videoPresent?: boolean | null;
+    mediaPreview?: PublicMediaFileInfo | null;
     repliedTo?: SearchRepliedTo | null;
     createdAt: number;
     operations?: SearchEntryOperations | null;

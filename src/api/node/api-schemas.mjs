@@ -1641,15 +1641,15 @@ export const NODE_API_SCHEMAS = {
                 },
                 "width": {
                     type: "integer",
-                    default: 0
+                    nullable: true
                 },
                 "height": {
                     type: "integer",
-                    default: 0
+                    nullable: true
                 },
                 "orientation": {
                     type: "integer",
-                    default: 1
+                    nullable: true
                 },
                 "size": {
                     type: "integer"
@@ -1658,9 +1658,6 @@ export const NODE_API_SCHEMAS = {
             required: [
                 "id",
                 "path",
-                "width",
-                "height",
-                "orientation",
                 "size",
             ],
             additionalProperties: false
@@ -4082,6 +4079,18 @@ export const NODE_API_SCHEMAS = {
                 "videoPresent": {
                     type: "boolean",
                     nullable: true
+                },
+                "mediaPreview": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/PublicMediaFileInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "repliedTo": {
                     anyOf: [
