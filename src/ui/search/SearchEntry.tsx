@@ -9,6 +9,7 @@ import NodeName from "ui/nodename/NodeName";
 import StorySubject from "ui/story/StorySubject";
 import StoryDate from "ui/story/StoryDate";
 import EntryHtml from "ui/entry/EntryHtml";
+import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
 import Jump from "ui/navigation/Jump";
 import { replaceEmojis } from "util/html";
 
@@ -47,6 +48,8 @@ export default function SearchEntry({entry}: Props) {
                 {imagesCountHtml &&
                     <p className="search-images" dir="auto" dangerouslySetInnerHTML={{__html: imagesCountHtml}}/>
                 }
+                <EntryLinkPreviews nodeName={entry.nodeName} linkPreviews={entry.bodyPreview?.linkPreviews}
+                                   limit={2} media={null}/>
                 <Jump nodeName={entry.nodeName} href={href} className="btn btn-link read-more">
                     {tTitle(t(entry.commentId == null ? "view-post" : "view-comment"))}
                 </Jump>
