@@ -82,6 +82,9 @@ export function useSuggestions<L>({
                     handleSubmit(false, -1);
                 }
                 break;
+            case "@":
+                handleSubmit(false, -1);
+                break;
             case "ArrowUp":
                 selectIndex(Math.max(0, selectedIndex - 1));
                 break;
