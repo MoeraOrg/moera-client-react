@@ -2,6 +2,7 @@ import { ClientState } from "state/state";
 import { NameState } from "state/naming/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { getHomeRootPage } from "state/home/selectors";
+import { getSetting } from "state/settings/selectors";
 import { RelNodeName } from "util/rel-node-name";
 import { now } from "util/misc";
 
@@ -40,7 +41,18 @@ export function getNamingNameNodeUri(state: ClientState, name?: string | null): 
 }
 
 export function getNamingNameRoot(state: ClientState, nodeName: RelNodeName | string): string | null {
-    return nodeName instanceof RelNodeName
-        ? (nodeName.isCurrentNode() ? getNodeRootPage(state) : getHomeRootPage(state))
-        : getNamingNameNodeUri(state, nodeName);
+    if (nodeName instanceof RelNodeName) {
+        if (nodeName.isCurrentNode()) {
+            return getNodeRootPage(state);
+        }
+        if (nodeName.isHomeNode()) {
+            return getHomeRootPage(state);
+        }
+        if (nodeName.isSearchNode()) {
+            return getNamingNameNodeUri(state, getSetting(state, "search.node-name") as string);
+        }
+        return null;
+    } else {
+        return getNamingNameNodeUri(state, nodeName);
+    }
 }

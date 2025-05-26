@@ -10,7 +10,7 @@ import { openLightBox } from "state/lightbox/actions";
 import Jump from "ui/navigation/Jump";
 import PreloadedImage from "ui/posting/PreloadedImage";
 import { mediaImageTagAttributes } from "util/media-images";
-import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
+import { RelNodeName } from "util/rel-node-name";
 import { urlWithParameters, ut } from "util/url";
 import "./EntryImage.css";
 
@@ -40,7 +40,7 @@ export default function EntryImage({
 
     const onNear = () => {
         if (postingId != null) {
-            dispatch(openLightBox(nodeName ?? REL_CURRENT, postingId, commentId ?? null, mediaFile.id));
+            dispatch(openLightBox(nodeName, postingId, commentId ?? null, mediaFile.id));
         }
     }
 
@@ -54,8 +54,8 @@ export default function EntryImage({
     }
 
     return (
-        <Jump href={href} onNear={onNear} className={cx("entry-image", {"counted": count != null && count > 0})}
-              style={style}>
+        <Jump nodeName={nodeName} href={href} onNear={onNear}
+              className={cx("entry-image", {"counted": count != null && count > 0})} style={style}>
             {(count != null && count > 0) && <div className="count">+{count}</div>}
             <PreloadedImage src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}
                             alt={alt ?? undefined} title={title ?? undefined}/>

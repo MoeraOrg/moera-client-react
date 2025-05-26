@@ -126,7 +126,7 @@
   "copy-text": "Copy text",
   "copy-with-formatting": "Copy text with formatting",
   "count-comments": "{count} {count, plural, one {comment} other {comments}}",
-  "count-images": "\uD83D\uDDBC️ {count} {count, plural, one {image} other {images}}",
+  "count-images": "{count} {count, plural, one {image} other {images}}",
   "count-more": "{count} more",
   "count-new": "{count} new",
   "count-posts": "<0>{count}</0> {count, plural, one {post} other {posts}}",

@@ -126,7 +126,7 @@
   "copy-text": "Kopiuj tekst",
   "copy-with-formatting": "Kopiuj tekst z formatowaniem",
   "count-comments": "{count} {count, plural, one {komentarz} few {komentarze} many {komentarzy} other {komentarzy}}",
-  "count-images": "\uD83D\uDDBC️ {count} {count, plural, one {obraz} few {obrazy} many {obrazów} other {obrazów}}",
+  "count-images": "{count} {count, plural, one {obraz} few {obrazy} many {obrazów} other {obrazów}}",
   "count-more": "{count} więcej",
   "count-new": "{count} nowy",
   "count-posts": "<0>{count}</0> {count, plural, one {post} few {posty} many {postów} other {postów}}",

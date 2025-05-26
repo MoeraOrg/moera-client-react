@@ -1522,6 +1522,7 @@ export interface SearchEntryInfoBase<B> {
     imageCount?: number | null;
     videoPresent?: boolean | null;
     mediaPreview?: PublicMediaFileInfo | null;
+    mediaPreviewId?: string | null;
     repliedTo?: SearchRepliedTo | null;
     createdAt: number;
     operations?: SearchEntryOperations | null;

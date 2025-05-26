@@ -4092,6 +4092,10 @@ export const NODE_API_SCHEMAS = {
                         }
                     ]
                 },
+                "mediaPreviewId": {
+                    type: "string",
+                    nullable: true
+                },
                 "repliedTo": {
                     anyOf: [
                         {

@@ -1,0 +1,19 @@
+.search-images {
+    color: var(--bs-gray-600);
+    font-size: 110%;
+}
+
+.search-images B {
+    position: relative;
+    top: .1em;
+    margin-right: .25em;
+}
+
+.search-images .preview {
+    display: inline-block;
+    margin-right: .5rem;
+}
+
+.search-images .preview IMG {
+    object-fit: contain;
+}
