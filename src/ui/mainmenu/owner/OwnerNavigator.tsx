@@ -39,7 +39,9 @@ export default function OwnerNavigator() {
                     break;
                 case "search":
                     dispatch(ownerSwitchClose());
-                    dispatch(goToSearch(query ?? "", "content"));
+                    if (query) {
+                        dispatch(goToSearch(query, "content"));
+                    }
                     break;
             }
         } else {
