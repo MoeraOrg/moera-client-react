@@ -11,7 +11,7 @@ export interface NameListItem {
 }
 
 export function namesListQuery(list: NameListItem[], query: string | null): NameListItem[] {
-    if (query == null) {
+    if (!query) {
         return list.slice();
     }
     const regexes = nameListQueryToRegexes(query);
