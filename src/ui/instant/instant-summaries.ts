@@ -10,6 +10,10 @@ function formatReaction(reaction: StorySummaryReaction | null | undefined): stri
     if (emoji === 0x1f620) {
         emoji = 0x1f92c;
     }
+    if (emoji === 0x1f643) {
+        emoji = 0x1f921;
+    }
+
     return String.fromCodePoint(emoji) + " " + formatNodeName(reaction);
 }
 

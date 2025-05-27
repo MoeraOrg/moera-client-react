@@ -140,7 +140,7 @@ export const REACTION_EMOJIS: ReactionEmojis = {
         },
         0x1f643: {
             title: "reaction-title.absurd",
-            color: "#ffcc4d"
+            color: "#e8c580"
         },
         0x1f61c: {
             title: "reaction-title.bebe",

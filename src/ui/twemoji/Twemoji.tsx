@@ -110,6 +110,9 @@ export default function Twemoji({code, title = ""}: Props) {
             return <FontAwesomeIcon icon={faThumbsDown} color="#2078f4" title={title}/>;
         case "1f620":
             emoji = "1f92c";
+            break;
+        case "1f643":
+            emoji = "1f921";
     }
     if (CACHED.has(emoji)) {
         return React.createElement(CACHED.get(emoji)!, {title, className: "twemoji"});
