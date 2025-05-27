@@ -632,6 +632,7 @@
   "search-tab": {
     "comments": "Comments",
     "content": "All content",
+    "current-blog": "This blog",
     "own-blog": "My blog",
     "people": "People",
     "postings": "Posts"

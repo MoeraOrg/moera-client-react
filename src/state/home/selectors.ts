@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import { AvatarImage, BlockedUserInfo, FriendGroupInfo } from "api";
 import { ClientState } from "state/state";
 import { getOwnerNameOrUrl, getToken } from "state/node/selectors";
-import { getSetting } from "state/settings/selectors";
+import { getSearchNodeName } from "state/search/selectors";
 import { NodeCardState } from "state/nodecards/state";
 import { getNodeCard } from "state/nodecards/selectors";
 import * as Browser from "ui/browser";
@@ -47,7 +47,7 @@ export function getHomeOwnerNameOrUrl(state: ClientState): string {
 export const getRelNodeNameContext = createSelector(
     getOwnerNameOrUrl,
     getHomeOwnerNameOrUrl,
-    (state: ClientState) => getSetting(state, "search.node-name") as string,
+    getSearchNodeName,
     (ownerNameOrUrl, homeOwnerNameOrUrl, searchName) => ({ownerNameOrUrl, homeOwnerNameOrUrl, searchName})
 );
 

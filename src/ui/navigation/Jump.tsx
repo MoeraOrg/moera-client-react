@@ -7,10 +7,10 @@ import { getNamingNameDetails } from "state/naming/selectors";
 import { getHomeOwnerNameOrUrl, getHomeRootPage } from "state/home/selectors";
 import { getNodeRootPage, getOwnerNameOrUrl } from "state/node/selectors";
 import { goToLocation, initFromLocation, initFromNodeLocation } from "state/navigation/actions";
+import { getSearchNodeName } from "state/search/selectors";
 import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
 import { absoluteNodeName, REL_CURRENT, RelNodeName } from "util/rel-node-name";
-import { getSetting } from "state/settings/selectors";
 
 export type JumpCallback = (href: string, callback: () => void) => void | null;
 
@@ -35,7 +35,7 @@ function Jump(
     const rootPage = useSelector(getNodeRootPage);
     const homeOwnerNameOrUrl = useSelector(getHomeOwnerNameOrUrl);
     const homeRootPage = useSelector(getHomeRootPage);
-    const searchName = useSelector((state: ClientState) => getSetting(state, "search.node-name") as string);
+    const searchName = useSelector(getSearchNodeName);
     const nodeOwnerName = absoluteNodeName(nodeName, {ownerNameOrUrl, homeOwnerNameOrUrl, searchName});
     const details = useSelector((state: ClientState) => getNamingNameDetails(state, nodeOwnerName));
     const dispatch = useDispatch();

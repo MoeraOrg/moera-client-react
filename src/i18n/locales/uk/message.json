@@ -632,6 +632,7 @@
   "search-tab": {
     "comments": "Коментарі",
     "content": "Весь вміст",
+    "current-blog": "Цей блог",
     "own-blog": "Мій блог",
     "people": "Люди",
     "postings": "Пости"

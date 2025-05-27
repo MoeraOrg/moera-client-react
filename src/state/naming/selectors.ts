@@ -2,7 +2,7 @@ import { ClientState } from "state/state";
 import { NameState } from "state/naming/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { getHomeRootPage } from "state/home/selectors";
-import { getSetting } from "state/settings/selectors";
+import { getSearchNodeName } from "state/search/selectors";
 import { RelNodeName } from "util/rel-node-name";
 import { now } from "util/misc";
 
@@ -49,7 +49,7 @@ export function getNamingNameRoot(state: ClientState, nodeName: RelNodeName | st
             return getHomeRootPage(state);
         }
         if (nodeName.isSearchNode()) {
-            return getNamingNameNodeUri(state, getSetting(state, "search.node-name") as string);
+            return getNamingNameNodeUri(state, getSearchNodeName(state));
         }
         return null;
     } else {

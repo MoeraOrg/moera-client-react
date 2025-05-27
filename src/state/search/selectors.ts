@@ -1,5 +1,6 @@
 import { ClientState } from "state/state";
 import { SearchMode, SearchTab } from "state/search/state";
+import { getSetting } from "state/settings/selectors";
 
 export const SEARCH_PAGE_SIZE = 20;
 
@@ -19,3 +20,6 @@ export function hasSearchMoreResults(state: ClientState): boolean {
     return (state.search.mode === "hashtag" && state.search.after > Number.MIN_SAFE_INTEGER)
         || (state.search.mode === "fulltext" && state.search.nextPage * SEARCH_PAGE_SIZE < state.search.total);
 }
+
+export const getSearchNodeName = (state: ClientState) =>
+    getSetting(state, "search.node-name") as string;

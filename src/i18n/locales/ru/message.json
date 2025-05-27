@@ -632,6 +632,7 @@
   "search-tab": {
     "comments": "Комментарии",
     "content": "Весь контент",
+    "current-blog": "Этот блог",
     "own-blog": "Мой блог",
     "people": "Люди",
     "postings": "Посты"

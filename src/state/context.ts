@@ -10,7 +10,7 @@ import {
     getHomeOwnerName,
     getHomeOwnerNameOrUrl
 } from "state/home/selectors";
-import { getSetting } from "state/settings/selectors";
+import { getSearchNodeName } from "state/search/selectors";
 
 export class DynamicActionContext implements ActionContext {
 
@@ -47,7 +47,7 @@ export class DynamicActionContext implements ActionContext {
     }
 
     get searchName(): string {
-        return select(state => getSetting(state, "search.node-name") as string);
+        return select(getSearchNodeName);
     }
 
 }
@@ -76,6 +76,6 @@ export default function getContext(state?: ClientState | null): ActionContext {
         homeOwnerFullName: getHomeOwnerFullName(state),
         homeOwnerGender: getHomeOwnerGender(state),
         homeOwnerAvatar: getHomeOwnerAvatar(state),
-        searchName: getSetting(state, "search.node-name") as string
+        searchName: getSearchNodeName(state)
     }
 }

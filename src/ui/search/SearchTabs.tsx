@@ -3,16 +3,19 @@ import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
 import { tTitle } from "i18n";
-import { isConnectedToHome } from "state/home/selectors";
+import { getHomeOwnerName } from "state/home/selectors";
+import { getOwnerName } from "state/node/selectors";
 import { SearchTab } from "state/search/state";
 import { searchLoad } from "state/search/actions";
-import { getSearchMode, getSearchQuery, getSearchTab } from "state/search/selectors";
+import { getSearchMode, getSearchNodeName, getSearchQuery, getSearchTab } from "state/search/selectors";
 import "./SearchTabs.css";
 
-const TABS: SearchTab[] = ["people", "content", "postings", "comments", "own-blog"];
+const TABS: SearchTab[] = ["people", "content", "postings", "comments", "current-blog", "own-blog"];
 
 export default function SearchTabs() {
-    const connectedToHome = useSelector(isConnectedToHome);
+    const ownerName = useSelector(getOwnerName);
+    const homeOwnerName = useSelector(getHomeOwnerName);
+    const searchNodeName = useSelector(getSearchNodeName);
     const mode = useSelector(getSearchMode);
     const query = useSelector(getSearchQuery);
     const tab = useSelector(getSearchTab);
@@ -30,7 +33,8 @@ export default function SearchTabs() {
                     tab !== tabName
                     && (
                         (mode === "hashtag" && tabName === "people")
-                        || (!connectedToHome && tabName === "own-blog")
+                        || ((ownerName === homeOwnerName || ownerName === searchNodeName) && tabName === "current-blog")
+                        || (homeOwnerName == null && tabName === "own-blog")
                     );
                 if (invisible) {
                     return null;

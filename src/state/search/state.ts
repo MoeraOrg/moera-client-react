@@ -3,7 +3,7 @@ import { ExtBody } from "state/postings/state";
 
 export type SearchMode = "hashtag" | "fulltext";
 
-export type SearchTab = "people" | "content" | "postings" | "comments" | "own-blog";
+export type SearchTab = "people" | "content" | "postings" | "comments" | "current-blog" | "own-blog";
 
 export interface ExtSearchEntryInfo extends SearchEntryInfo {
     bodyPreview: ExtBody;

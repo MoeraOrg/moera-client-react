@@ -48,13 +48,16 @@ async function load(
     switch (tab) {
         case "postings":
         case "own-blog":
+        case "current-blog":
             entryType = "posting";
             break;
         case "comments":
             entryType = "comment";
             break;
     }
-    const publisherName = tab === "own-blog" ? action.context.homeOwnerName : null;
+    const publisherName = tab === "own-blog"
+        ? action.context.homeOwnerName
+        : (tab === "current-blog" ? action.context.ownerName : null);
 
     try {
         if (mode === "hashtag") {
