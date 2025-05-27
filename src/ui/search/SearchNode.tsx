@@ -20,7 +20,7 @@ export default function SearchNode({node}: Props) {
                                  avatar={node.avatar} size={40}/>
             </div>
             <div className="person-details">
-                <NodeName name={node.nodeName} fullName={node.fullName}/><br/>
+                <NodeName name={node.nodeName} fullName={node.fullName} display="full-name"/><br/>
                 <span className="raw-node-name">{NodeNameFormat.shorten(node.nodeName)}</span><br/>
                 <span className="title">{node.title}</span>
             </div>

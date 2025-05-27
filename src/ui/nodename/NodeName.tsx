@@ -23,10 +23,12 @@ interface Props {
     correct?: boolean;
     linked?: boolean;
     popup?: boolean;
+    display?: NameDisplayMode;
 }
 
 export default function NodeName({
-    name, fullName, avatar, avatarNodeName, className, verified = false, correct = false, linked = true, popup = true
+    name, fullName, avatar, avatarNodeName, className, verified = false, correct = false, linked = true, popup = true,
+    display
 }: Props) {
     const details = useSelector((state: ClientState) => getNamingNameDetails(state, name));
     const mode = useSelector((state: ClientState) => getSetting(state, "full-name.display") as NameDisplayMode);
@@ -49,11 +51,11 @@ export default function NodeName({
             {ref =>
                 linked ?
                     <Jump className={klass} nodeName={name} href="/" ref={ref}>
-                        <NodeNameText name={name} fullName={fullName} mode={mode}/>
+                        <NodeNameText name={name} fullName={fullName} mode={display ?? mode}/>
                     </Jump>
                 :
                     <span className={klass} ref={ref}>
-                        <NodeNameText name={name} fullName={fullName} mode={mode}/>
+                        <NodeNameText name={name} fullName={fullName} mode={display ?? mode}/>
                     </span>
             }
         </NodeNamePopup>
