@@ -43,3 +43,20 @@
 .search-tabs .tab.active:hover {
     background-color: transparent;
 }
+
+.search-tabs .filter {
+    flex: none;
+    background-color: transparent;
+    border-radius: .25rem;
+    border: none;
+    padding: .25rem;
+    margin-left: auto;
+    margin-bottom: .25rem;
+    color: var(--bs-gray-600);
+    transition: background-color .15s ease-in-out;
+}
+
+.search-tabs .filter:hover {
+    background-color: var(--highlight);
+    transition: background-color .15s ease-in-out;
+}

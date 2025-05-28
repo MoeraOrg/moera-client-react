@@ -53,6 +53,7 @@ import { ReactComponent as msStrikethroughS } from "ui/material-symbols/striketh
 import { ReactComponent as msSubscript } from "ui/material-symbols/subscript.isvg";
 import { ReactComponent as msSuperscript } from "ui/material-symbols/superscript.isvg";
 import { ReactComponent as msTitle } from "ui/material-symbols/title.isvg";
+import { ReactComponent as msTune } from "ui/material-symbols/tune.isvg";
 import { ReactComponent as msUndo } from "ui/material-symbols/undo.isvg";
 import { ReactComponent as msVideoLibrary } from "ui/material-symbols/video_library.isvg";
 
@@ -110,6 +111,7 @@ export {
     msSubscript,
     msSuperscript,
     msTitle,
+    msTune,
     msUndo,
     msVideoLibrary,
 };

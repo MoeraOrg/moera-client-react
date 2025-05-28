@@ -107,8 +107,9 @@ const sheriffOrderDialogLogic = {
 
         formik.setStatus("submitted");
         if (target != null) {
-            dispatch(sheriffOrderDialogSubmit(
-                target, values.reasonCode, values.reasonDetails.text, values.anonymous));
+            dispatch(
+                sheriffOrderDialogSubmit(target, values.reasonCode, values.reasonDetails.text, values.anonymous)
+            );
         }
         formik.setSubmitting(false);
     }

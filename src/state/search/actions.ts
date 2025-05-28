@@ -1,13 +1,14 @@
 import { ActionWithoutPayload, actionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { SearchHashtagSliceInfo, SearchNodePageInfo, SearchTextPageInfo } from "api";
-import { SearchTab } from "state/search/state";
+import { SearchFilter, SearchTab } from "state/search/state";
 
 export type SearchLoadAction = ActionWithPayload<"SEARCH_LOAD", {
     query: string;
     tab: SearchTab;
+    filter: SearchFilter;
 }>;
-export const searchLoad = (query: string, tab: SearchTab): SearchLoadAction =>
-    actionWithPayload("SEARCH_LOAD", {query, tab});
+export const searchLoad = (query: string, tab: SearchTab, filter: SearchFilter): SearchLoadAction =>
+    actionWithPayload("SEARCH_LOAD", {query, tab, filter});
 
 export type SearchHashtagLoadedAction = ActionWithPayload<"SEARCH_HASHTAG_LOADED", {
     slice: SearchHashtagSliceInfo;
@@ -45,6 +46,14 @@ export type SearchRestoreScrollAction = ActionWithoutPayload<"SEARCH_RESTORE_SCR
 export const searchRestoreScroll = (): SearchRestoreScrollAction =>
     actionWithoutPayload("SEARCH_RESTORE_SCROLL");
 
+export type SearchOpenFilterDialogAction = ActionWithoutPayload<"SEARCH_OPEN_FILTER_DIALOG">;
+export const searchOpenFilterDialog = (): SearchOpenFilterDialogAction =>
+    actionWithoutPayload("SEARCH_OPEN_FILTER_DIALOG");
+
+export type SearchCloseFilterDialogAction = ActionWithoutPayload<"SEARCH_CLOSE_FILTER_DIALOG">;
+export const searchCloseFilterDialog = (): SearchCloseFilterDialogAction =>
+    actionWithoutPayload("SEARCH_CLOSE_FILTER_DIALOG");
+
 export type SearchAnyAction =
     SearchLoadAction
     | SearchHashtagLoadedAction
@@ -53,4 +62,6 @@ export type SearchAnyAction =
     | SearchLoadFailedAction
     | SearchLoadMoreAction
     | SearchScrolledAction
-    | SearchRestoreScrollAction;
+    | SearchRestoreScrollAction
+    | SearchOpenFilterDialogAction
+    | SearchCloseFilterDialogAction;

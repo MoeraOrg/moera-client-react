@@ -15,6 +15,7 @@ import SearchNode from "ui/search/SearchNode";
 import SearchEntry from "ui/search/SearchEntry";
 import SearchShowMore from "ui/search/SearchShowMore";
 import NothingFound from "ui/search/NothingFound";
+import SearchFilterDialog from "ui/search/SearchFilterDialog";
 import { ellipsize } from "util/text";
 import "./SearchPage.css";
 
@@ -26,6 +27,7 @@ export default function SearchPage() {
     const loading = useSelector((state: ClientState) => state.search.loading);
     const loaded = useSelector((state: ClientState) => state.search.loaded);
     const moreResults = useSelector(hasSearchMoreResults);
+    const showFilters = useSelector((state: ClientState) => state.search.showFilters);
     const tinyScreen = useIsTinyScreen();
     const [scrollPosition, setScrollPosition] = useDebounce(0, 250);
     const dispatch = useDispatch();
@@ -71,6 +73,7 @@ export default function SearchPage() {
                         {loading ? <Loading/> : <NothingFound/>}
                     </div>
                 }
+                {showFilters && <SearchFilterDialog/>}
             </Page>
         </>
     );

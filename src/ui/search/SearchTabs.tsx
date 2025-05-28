@@ -6,8 +6,10 @@ import { tTitle } from "i18n";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getOwnerName } from "state/node/selectors";
 import { SearchTab } from "state/search/state";
-import { searchLoad } from "state/search/actions";
+import { emptySearchFilter } from "state/search/empty";
+import { searchLoad, searchOpenFilterDialog } from "state/search/actions";
 import { getSearchMode, getSearchNodeName, getSearchQuery, getSearchTab } from "state/search/selectors";
+import { Icon, msTune } from "ui/material-symbols";
 import "./SearchTabs.css";
 
 const TABS: SearchTab[] = ["people", "content", "postings", "comments", "current-blog", "own-blog"];
@@ -23,8 +25,10 @@ export default function SearchTabs() {
     const {t} = useTranslation();
 
     const onClick = (tab: SearchTab) => () => {
-        dispatch(searchLoad(query, tab));
+        dispatch(searchLoad(query, tab, emptySearchFilter));
     }
+
+    const onFilterClick = () => dispatch(searchOpenFilterDialog());
 
     return (
         <div className="search-tabs">
@@ -45,6 +49,9 @@ export default function SearchTabs() {
                     </button>
                 );
             })}
+            <button className="filter" title={t("filters")} onClick={onFilterClick}>
+                <Icon icon={msTune}/>
+            </button>
         </div>
     );
 }

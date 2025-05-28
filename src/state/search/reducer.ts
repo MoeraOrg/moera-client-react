@@ -3,6 +3,7 @@ import * as immutable from 'object-path-immutable';
 import { SearchEntryInfo } from "api";
 import { ClientAction } from "state/action";
 import { ExtSearchEntryInfo, SearchState } from "state/search/state";
+import { emptySearchFilter } from "state/search/empty";
 import { htmlEntities, replaceEmojis, safePreviewHtml } from "util/html";
 import { ellipsize } from "util/text";
 
@@ -13,6 +14,7 @@ const initialState: SearchState = {
     mode: "fulltext",
     tab: "content",
     query: "",
+    filter: emptySearchFilter,
     loading: false,
     loaded: false,
     entries: [],
@@ -20,7 +22,8 @@ const initialState: SearchState = {
     after: Number.MAX_SAFE_INTEGER,
     nextPage: 0,
     total: 0,
-    scrollPosition: 0
+    scrollPosition: 0,
+    showFilters: false
 }
 
 function safeguard(entry: SearchEntryInfo): ExtSearchEntryInfo {
@@ -88,7 +91,19 @@ export default (state: SearchState = initialState, action: ClientAction): Search
             return {
                 ...state,
                 scrollPosition: action.payload.position
-            }
+            };
+
+        case "SEARCH_OPEN_FILTER_DIALOG":
+            return {
+                ...state,
+                showFilters: true
+            };
+
+        case "SEARCH_CLOSE_FILTER_DIALOG":
+            return {
+                ...state,
+                showFilters: false
+            };
 
         default:
             return state;
