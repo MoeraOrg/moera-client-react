@@ -45,6 +45,7 @@ export default (state: SearchState = initialState, action: ClientAction): Search
                 mode: action.payload.query.match(HASHTAGS) ? "hashtag" : "fulltext",
                 query: action.payload.query,
                 tab: action.payload.tab,
+                filter: action.payload.filter,
                 loading: true,
                 loaded: false,
                 entries: [],

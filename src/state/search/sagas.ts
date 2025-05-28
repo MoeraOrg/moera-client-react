@@ -14,7 +14,7 @@ import {
     searchTextLoaded
 } from "state/search/actions";
 import { SearchTab } from "state/search/state";
-import { getSearchMode, getSearchQuery, getSearchTab, SEARCH_PAGE_SIZE } from "state/search/selectors";
+import { getSearchFilter, getSearchMode, getSearchQuery, getSearchTab, SEARCH_PAGE_SIZE } from "state/search/selectors";
 import { nodeCardPrepare } from "state/nodecards/actions";
 import { REL_SEARCH } from "util/rel-node-name";
 
@@ -44,11 +44,13 @@ async function load(
     query: string, tab: SearchTab, before: number, nextPage: number, action: WithContext<ClientAction>
 ) {
     const mode = select(getSearchMode);
-    let entryType: SearchEntryType = "all";
+    const filter = select(getSearchFilter);
+    let entryType: SearchEntryType = filter.entryType;
     switch (tab) {
+        case "content":
+            entryType = "all";
+            break;
         case "postings":
-        case "own-blog":
-        case "current-blog":
             entryType = "posting";
             break;
         case "comments":

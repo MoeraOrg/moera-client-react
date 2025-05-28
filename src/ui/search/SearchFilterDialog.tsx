@@ -1,34 +1,81 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
+import { SearchEntryType } from "api";
 import { dispatch } from "state/store-sagas";
-import { searchCloseFilterDialog } from "state/search/actions";
+import { searchCloseFilterDialog, searchLoad } from "state/search/actions";
+import { SearchFilter, SearchMode, SearchTab } from "state/search/state";
+import { getSearchFilter, getSearchMode, getSearchQuery, getSearchTab } from "state/search/selectors";
 import { Button, ModalDialog } from "ui/control";
-import { CheckboxField } from "ui/control/field";
+import { SelectField, SelectFieldChoice } from "ui/control/field";
+import "./SearchFilterDialog.css";
+
+const ENTRY_TYPES: SelectFieldChoice[] = [
+    {title: "any", value: "all"},
+    {title: "postings", value: "posting"},
+    {title: "comments", value: "comment"}
+];
+
+type FilterField = "entryType";
+
+const ENABLED_FIELDS: Record<SearchTab, Record<SearchMode, FilterField[]>> = {
+    "people": {
+        "hashtag": [],
+        "fulltext": []
+    },
+    "content": {
+        "hashtag": [],
+        "fulltext": []
+    },
+    "postings": {
+        "hashtag": [],
+        "fulltext": []
+    },
+    "comments": {
+        "hashtag": [],
+        "fulltext": []
+    },
+    "current-blog": {
+        "hashtag": ["entryType"],
+        "fulltext": ["entryType"]
+    },
+    "own-blog": {
+        "hashtag": ["entryType"],
+        "fulltext": ["entryType"]
+    }
+}
 
 interface OuterProps {
-    // Define any props required for SearchFilterDialog here, or leave empty for now
+    tab: SearchTab;
+    query: string;
+    filter: SearchFilter;
 }
 
 interface Values {
-    isSelected: boolean;
+    entryType: string;
 }
 
 type Props = OuterProps & FormikProps<Values>;
 
-function SearchFilterDialogInner({}: Props) {
+function SearchFilterDialogInner({tab}: Props) {
+    const mode = useSelector(getSearchMode);
     const dispatch = useDispatch();
-    const { t } = useTranslation();
+    const {t} = useTranslation();
 
     const onClose = () => dispatch(searchCloseFilterDialog());
 
+    const enabledFields = ENABLED_FIELDS[tab][mode];
+
     return (
-        <ModalDialog title={t("filters")} onClose={onClose}>
+        <ModalDialog className="search-filter-dialog" title={t("filters")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
-                    <CheckboxField name="isSelected" title={t("select-option")}/>
+                    {enabledFields.includes("entryType") &&
+                        <SelectField name="entryType" title={t("type-content")} choices={ENTRY_TYPES} horizontal
+                                     anyValue/>
+                    }
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
@@ -41,11 +88,16 @@ function SearchFilterDialogInner({}: Props) {
 
 const searchFilterDialogLogic = {
 
-    mapPropsToValues: (): Values => ({
-        isSelected: false
+    mapPropsToValues: (props: OuterProps): Values => ({
+        entryType: props.filter.entryType
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
+        const filter: SearchFilter = {
+            ...formik.props.filter,
+            entryType: values.entryType as SearchEntryType
+        }
+        dispatch(searchLoad(formik.props.query, formik.props.tab, filter));
         dispatch(searchCloseFilterDialog());
         formik.setSubmitting(false);
     }
@@ -55,5 +107,9 @@ const searchFilterDialogLogic = {
 const SearchFilterDialogOuter = withFormik(searchFilterDialogLogic)(SearchFilterDialogInner);
 
 export default function SearchFilterDialog() {
-    return <SearchFilterDialogOuter/>;
+    const tab = useSelector(getSearchTab);
+    const query = useSelector(getSearchQuery);
+    const filter = useSelector(getSearchFilter);
+
+    return <SearchFilterDialogOuter tab={tab} query={query} filter={filter}/>;
 }

@@ -1,5 +1,5 @@
 import { ClientState } from "state/state";
-import { SearchMode, SearchTab } from "state/search/state";
+import { SearchFilter, SearchMode, SearchTab } from "state/search/state";
 import { getSetting } from "state/settings/selectors";
 
 export const SEARCH_PAGE_SIZE = 20;
@@ -14,6 +14,10 @@ export function getSearchQuery(state: ClientState): string {
 
 export function getSearchTab(state: ClientState): SearchTab {
     return state.search.tab;
+}
+
+export function getSearchFilter(state: ClientState): SearchFilter {
+    return state.search.filter;
 }
 
 export function hasSearchMoreResults(state: ClientState): boolean {
