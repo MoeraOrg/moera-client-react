@@ -45,6 +45,7 @@ async function load(
 ) {
     const mode = select(getSearchMode);
     const filter = select(getSearchFilter);
+
     let entryType: SearchEntryType = filter.entryType;
     switch (tab) {
         case "content":
@@ -60,6 +61,13 @@ async function load(
     const publisherName = tab === "own-blog"
         ? action.context.homeOwnerName
         : (tab === "current-blog" ? action.context.ownerName : null);
+    const inNewsfeed = tab === "own-blog" ? filter.inNewsfeed : undefined;
+    const owners = action.context.homeOwnerName && filter.ownedByMe ? [action.context.homeOwnerName] : undefined;
+    const repliedTo = action.context.homeOwnerName && filter.repliedToMe && entryType !== "posting"
+        ? [action.context.homeOwnerName]
+        : undefined;
+    const minImageCount = filter.minImageCount ?? undefined;
+    const videoPresent = filter.videoPresent;
 
     try {
         if (mode === "hashtag") {
@@ -67,6 +75,10 @@ async function load(
                 entryType,
                 hashtags: query.split(/\s+/).filter(x => x.startsWith("#")),
                 publisherName,
+                inNewsfeed,
+                owners,
+                minImageCount,
+                videoPresent,
                 before,
                 limit: SEARCH_PAGE_SIZE
             }
@@ -87,6 +99,11 @@ async function load(
                     entryType,
                     text: query,
                     publisherName,
+                    inNewsfeed,
+                    owners,
+                    repliedTo,
+                    minImageCount,
+                    videoPresent,
                     page: nextPage,
                     limit: SEARCH_PAGE_SIZE
                 }

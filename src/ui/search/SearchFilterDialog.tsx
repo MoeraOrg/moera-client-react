@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, FormikBag, FormikProps, withFormik } from 'formik';
+import { Form, FormikBag, FormikProps, useField, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { SearchEntryType } from "api";
@@ -9,16 +9,10 @@ import { searchCloseFilterDialog, searchLoad } from "state/search/actions";
 import { SearchFilter, SearchMode, SearchTab } from "state/search/state";
 import { getSearchFilter, getSearchMode, getSearchQuery, getSearchTab } from "state/search/selectors";
 import { Button, ModalDialog } from "ui/control";
-import { SelectField, SelectFieldChoice } from "ui/control/field";
+import { CheckboxField, SelectField, SelectFieldChoice, SelectFieldChoiceBase } from "ui/control/field";
 import "./SearchFilterDialog.css";
 
-const ENTRY_TYPES: SelectFieldChoice[] = [
-    {title: "any", value: "all"},
-    {title: "postings", value: "posting"},
-    {title: "comments", value: "comment"}
-];
-
-type FilterField = "entryType";
+type FilterField = "entryType" | "inNewsfeed" | "ownedByMe" | "repliedToMe" | "minImageCount" | "videoPresent";
 
 const ENABLED_FIELDS: Record<SearchTab, Record<SearchMode, FilterField[]>> = {
     "people": {
@@ -26,26 +20,60 @@ const ENABLED_FIELDS: Record<SearchTab, Record<SearchMode, FilterField[]>> = {
         "fulltext": []
     },
     "content": {
-        "hashtag": [],
-        "fulltext": []
+        "hashtag": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent"],
+        "fulltext": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent"]
     },
     "postings": {
-        "hashtag": [],
-        "fulltext": []
+        "hashtag": ["ownedByMe", "minImageCount", "videoPresent"],
+        "fulltext": ["ownedByMe", "minImageCount", "videoPresent"]
     },
     "comments": {
-        "hashtag": [],
-        "fulltext": []
+        "hashtag": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent"],
+        "fulltext": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent"]
     },
     "current-blog": {
-        "hashtag": ["entryType"],
-        "fulltext": ["entryType"]
+        "hashtag": ["entryType", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent"],
+        "fulltext": ["entryType", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent"]
     },
     "own-blog": {
-        "hashtag": ["entryType"],
-        "fulltext": ["entryType"]
+        "hashtag": ["entryType", "inNewsfeed", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent"],
+        "fulltext": ["entryType", "inNewsfeed", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent"]
     }
 }
+
+type BooleanString = "false" | "true";
+
+const toBooleanString = (value: boolean): BooleanString => value ? "true" : "false";
+
+const toBoolean = (value: BooleanString): boolean => value === "true";
+
+const ENTRY_TYPES: SelectFieldChoiceBase<SearchEntryType>[] = [
+    {title: "any", value: "all"},
+    {title: "postings", value: "posting"},
+    {title: "comments", value: "comment"}
+];
+
+const WHERE: SelectFieldChoiceBase<BooleanString>[] = [
+    {title: "in-blog", value: "false"},
+    {title: "in-newsfeed", value: "true"}
+];
+
+const AUTHOR: SelectFieldChoiceBase<BooleanString>[] = [
+    {title: "anybody", value: "false"},
+    {title: "i", value: "true"}
+];
+
+const IMAGE_NUMBER: SelectFieldChoice[] = [
+    {title: "not-matter", value: "0"},
+    {title: "present", value: "1"},
+    {title: "several", value: "2"},
+    {title: "many", value: "6"}
+]
+
+const VIDEO: SelectFieldChoiceBase<BooleanString>[] = [
+    {title: "not-matter", value: "false"},
+    {title: "present", value: "true"}
+];
 
 interface OuterProps {
     tab: SearchTab;
@@ -54,28 +82,89 @@ interface OuterProps {
 }
 
 interface Values {
-    entryType: string;
+    entryType: SearchEntryType;
+    inNewsfeed: BooleanString;
+    ownedByMe: BooleanString;
+    repliedToMe: boolean;
+    minImageCount: string;
+    videoPresent: BooleanString;
 }
 
 type Props = OuterProps & FormikProps<Values>;
 
 function SearchFilterDialogInner({tab}: Props) {
     const mode = useSelector(getSearchMode);
+    const [, {value: entryType}] = useField<SearchEntryType>("entryType");
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const onClose = () => dispatch(searchCloseFilterDialog());
 
-    const enabledFields = ENABLED_FIELDS[tab][mode];
+    const includesComments =
+        tab === "content"
+        || tab === "comments"
+        || ((tab === "own-blog" || tab === "current-blog") && entryType !== "posting");
 
     return (
         <ModalDialog className="search-filter-dialog" title={t("filters")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
-                    {enabledFields.includes("entryType") &&
-                        <SelectField name="entryType" title={t("type-content")} choices={ENTRY_TYPES} horizontal
-                                     anyValue/>
-                    }
+                    {ENABLED_FIELDS[tab][mode].map(fieldName =>
+                        <React.Fragment key={fieldName}>
+                            {fieldName === "entryType" &&
+                                <SelectField
+                                    name="entryType"
+                                    title={t("type-content")}
+                                    choices={ENTRY_TYPES}
+                                    horizontal
+                                    anyValue
+                                />
+                            }
+                            {fieldName === "inNewsfeed" &&
+                                <SelectField
+                                    name="inNewsfeed"
+                                    title={t("where-look")}
+                                    choices={WHERE}
+                                    horizontal
+                                    anyValue
+                                />
+                            }
+                            {fieldName === "ownedByMe" &&
+                                <SelectField
+                                    name="ownedByMe"
+                                    title={t("author")}
+                                    choices={AUTHOR}
+                                    horizontal
+                                    anyValue
+                                />
+                            }
+                            {fieldName === "repliedToMe" && includesComments &&
+                                <CheckboxField
+                                    name="repliedToMe"
+                                    title={t("reply-my-comment")}
+                                    anyValue
+                                />
+                            }
+                            {fieldName === "minImageCount" &&
+                                <SelectField
+                                    name="minImageCount"
+                                    title={t("images")}
+                                    choices={IMAGE_NUMBER}
+                                    horizontal
+                                    anyValue
+                                />
+                            }
+                            {fieldName === "videoPresent" &&
+                                <SelectField
+                                    name="videoPresent"
+                                    title={t("video")}
+                                    choices={VIDEO}
+                                    horizontal
+                                    anyValue
+                                />
+                            }
+                        </React.Fragment>
+                    )}
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
@@ -89,13 +178,23 @@ function SearchFilterDialogInner({tab}: Props) {
 const searchFilterDialogLogic = {
 
     mapPropsToValues: (props: OuterProps): Values => ({
-        entryType: props.filter.entryType
+        entryType: props.filter.entryType,
+        inNewsfeed: toBooleanString(props.filter.inNewsfeed),
+        ownedByMe: toBooleanString(props.filter.ownedByMe),
+        repliedToMe: props.filter.repliedToMe,
+        minImageCount: (props.filter.minImageCount ?? 0).toString(),
+        videoPresent: toBooleanString(props.filter.videoPresent)
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         const filter: SearchFilter = {
             ...formik.props.filter,
-            entryType: values.entryType as SearchEntryType
+            entryType: values.entryType,
+            inNewsfeed: toBoolean(values.inNewsfeed),
+            ownedByMe: toBoolean(values.ownedByMe),
+            repliedToMe: values.repliedToMe,
+            minImageCount: values.minImageCount === "0" ? null : parseInt(values.minImageCount),
+            videoPresent: toBoolean(values.videoPresent)
         }
         dispatch(searchLoad(formik.props.query, formik.props.tab, filter));
         dispatch(searchCloseFilterDialog());
