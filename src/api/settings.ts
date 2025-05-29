@@ -611,6 +611,17 @@ const META: ClientSettingMetaInfo[] = [
         type: "string",
         defaultValue: "search_0"
     },
+    {
+        name: "search.sheriff-name",
+        type: "string",
+        defaultValue: "google-play-sheriff_0"
+    },
+    {
+        name: "search.safe-search.default",
+        type: "bool",
+        defaultValue: "true",
+        modifiers: {}
+    },
 ];
 
 function collectMetaMap(map: Map<string, ClientSettingMetaInfo>, metadata: ClientSettingMetaInfo[]) {

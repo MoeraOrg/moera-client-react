@@ -16,7 +16,7 @@ export interface SearchFilter {
     repliedToMe: boolean;
     minImageCount: number | null;
     videoPresent: boolean;
-    safeSearch: boolean;
+    safeSearch: boolean | null;
     afterDate: Date | null;
     beforeDate: Date | null;
 }

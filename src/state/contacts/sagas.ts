@@ -7,6 +7,7 @@ import { ContactsLoadAction, contactsLoaded, contactsLoadFailed, contactsNameFou
 import { getNameDetails } from "state/naming/sagas";
 import { hasContactsName } from "state/contacts/selectors";
 import { REL_SEARCH } from "util/rel-node-name";
+import { getSetting } from "state/settings/selectors";
 
 export default [
     executor("CONTACTS_LOAD", payload => payload.query, contactsLoadSaga)
@@ -14,9 +15,14 @@ export default [
 
 async function contactsLoadSaga(action: WithContext<ContactsLoadAction>): Promise<void> {
     const {query} = action.payload;
+
+    const sheriffName = select(state => getSetting(state, "search.sheriff-name") as string);
+    const safeSearchDefault = select(state => getSetting(state, "search.safe-search.default") as boolean);
+    const sheriff = safeSearchDefault && sheriffName ? sheriffName : null;
+
     try {
         contactsFindName(action, query);
-        const contact = await Node.searchNodeSuggestions(action, REL_SEARCH, query, null, 25);
+        const contact = await Node.searchNodeSuggestions(action, REL_SEARCH, query, sheriff, 25);
         dispatch(contactsLoaded(query, contact).causedBy(action));
     } catch (e) {
         dispatch(contactsLoadFailed(query).causedBy(action));

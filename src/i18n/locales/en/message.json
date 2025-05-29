@@ -606,6 +606,7 @@
   "retype-password": "Please type the password again",
   "rotate-left": "Rotate left",
   "rotate-right": "Rotate right",
+  "safe-search": "Safe search",
   "save": "Save",
   "scope": {
     "add-comment": "Create comments signed by your name",
@@ -774,6 +775,8 @@
           "text": "Paste text only"
         },
         "search_node-name": "Search engine node name",
+        "search_safe-search_default": "Safe search by default",
+        "search_sheriff-name": "Safe search sheriff name",
         "src-format_default": "Formatting of profile and other texts (default)",
         "src-format_default-items": {
           "html--visual": "Visual editor",

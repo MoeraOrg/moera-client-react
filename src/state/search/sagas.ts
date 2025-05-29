@@ -17,6 +17,7 @@ import { SearchTab } from "state/search/state";
 import { getSearchFilter, getSearchMode, getSearchQuery, getSearchTab, SEARCH_PAGE_SIZE } from "state/search/selectors";
 import { nodeCardPrepare } from "state/nodecards/actions";
 import { REL_SEARCH } from "util/rel-node-name";
+import { getSetting } from "state/settings/selectors";
 
 export default [
     executor("SEARCH_LOAD", null, searchLoadSaga),
@@ -45,6 +46,8 @@ async function load(
 ) {
     const mode = select(getSearchMode);
     const filter = select(getSearchFilter);
+    const sheriffNameDefault = select(state => getSetting(state, "search.sheriff-name") as string);
+    const safeSearchDefault = select(state => getSetting(state, "search.safe-search.default") as boolean);
 
     let entryType: SearchEntryType = filter.entryType;
     switch (tab) {
@@ -68,6 +71,7 @@ async function load(
         : undefined;
     const minImageCount = filter.minImageCount ?? undefined;
     const videoPresent = filter.videoPresent;
+    const sheriffName = (filter.safeSearch ?? safeSearchDefault) && sheriffNameDefault ? sheriffNameDefault : undefined;
 
     try {
         if (mode === "hashtag") {
@@ -79,6 +83,7 @@ async function load(
                 owners,
                 minImageCount,
                 videoPresent,
+                sheriffName,
                 before,
                 limit: SEARCH_PAGE_SIZE
             }
@@ -88,6 +93,7 @@ async function load(
             if (tab === "people") {
                 const filter: SearchNodeFilter = {
                     query,
+                    sheriffName,
                     page: nextPage,
                     limit: SEARCH_PAGE_SIZE
                 }
@@ -104,6 +110,7 @@ async function load(
                     repliedTo,
                     minImageCount,
                     videoPresent,
+                    sheriffName,
                     page: nextPage,
                     limit: SEARCH_PAGE_SIZE
                 }

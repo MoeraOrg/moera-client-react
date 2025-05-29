@@ -11,33 +11,40 @@ import { getSearchFilter, getSearchMode, getSearchQuery, getSearchTab } from "st
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, SelectField, SelectFieldChoice, SelectFieldChoiceBase } from "ui/control/field";
 import "./SearchFilterDialog.css";
+import { ClientState } from "state/state";
+import { getSetting } from "state/settings/selectors";
 
-type FilterField = "entryType" | "inNewsfeed" | "ownedByMe" | "repliedToMe" | "minImageCount" | "videoPresent";
+type FilterField =
+    "entryType" | "inNewsfeed" | "ownedByMe" | "repliedToMe" | "minImageCount" | "videoPresent" | "safeSearch";
 
 const ENABLED_FIELDS: Record<SearchTab, Record<SearchMode, FilterField[]>> = {
     "people": {
-        "hashtag": [],
-        "fulltext": []
+        "hashtag": ["safeSearch"],
+        "fulltext": ["safeSearch"]
     },
     "content": {
-        "hashtag": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent"],
-        "fulltext": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent"]
+        "hashtag": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch"],
+        "fulltext": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch"]
     },
     "postings": {
-        "hashtag": ["ownedByMe", "minImageCount", "videoPresent"],
-        "fulltext": ["ownedByMe", "minImageCount", "videoPresent"]
+        "hashtag": ["ownedByMe", "minImageCount", "videoPresent", "safeSearch"],
+        "fulltext": ["ownedByMe", "minImageCount", "videoPresent", "safeSearch"]
     },
     "comments": {
-        "hashtag": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent"],
-        "fulltext": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent"]
+        "hashtag": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch"],
+        "fulltext": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch"]
     },
     "current-blog": {
-        "hashtag": ["entryType", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent"],
-        "fulltext": ["entryType", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent"]
+        "hashtag": ["entryType", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch"],
+        "fulltext": ["entryType", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch"]
     },
     "own-blog": {
-        "hashtag": ["entryType", "inNewsfeed", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent"],
-        "fulltext": ["entryType", "inNewsfeed", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent"]
+        "hashtag": [
+            "entryType", "inNewsfeed", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch"
+        ],
+        "fulltext": [
+            "entryType", "inNewsfeed", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch"
+        ]
     }
 }
 
@@ -79,6 +86,7 @@ interface OuterProps {
     tab: SearchTab;
     query: string;
     filter: SearchFilter;
+    safeSearchDefault: boolean;
 }
 
 interface Values {
@@ -88,12 +96,14 @@ interface Values {
     repliedToMe: boolean;
     minImageCount: string;
     videoPresent: BooleanString;
+    safeSearch: boolean;
 }
 
 type Props = OuterProps & FormikProps<Values>;
 
 function SearchFilterDialogInner({tab}: Props) {
     const mode = useSelector(getSearchMode);
+    const sheriffName = useSelector((state: ClientState) => getSetting(state, "search.sheriff-name") as string);
     const [, {value: entryType}] = useField<SearchEntryType>("entryType");
     const dispatch = useDispatch();
     const {t} = useTranslation();
@@ -163,6 +173,13 @@ function SearchFilterDialogInner({tab}: Props) {
                                     anyValue
                                 />
                             }
+                            {fieldName === "safeSearch" && sheriffName &&
+                                <CheckboxField
+                                    name="safeSearch"
+                                    title={t("safe-search")}
+                                    anyValue
+                                />
+                            }
                         </React.Fragment>
                     )}
                 </div>
@@ -183,7 +200,8 @@ const searchFilterDialogLogic = {
         ownedByMe: toBooleanString(props.filter.ownedByMe),
         repliedToMe: props.filter.repliedToMe,
         minImageCount: (props.filter.minImageCount ?? 0).toString(),
-        videoPresent: toBooleanString(props.filter.videoPresent)
+        videoPresent: toBooleanString(props.filter.videoPresent),
+        safeSearch: props.filter.safeSearch ?? props.safeSearchDefault
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
@@ -194,7 +212,8 @@ const searchFilterDialogLogic = {
             ownedByMe: toBoolean(values.ownedByMe),
             repliedToMe: values.repliedToMe,
             minImageCount: values.minImageCount === "0" ? null : parseInt(values.minImageCount),
-            videoPresent: toBoolean(values.videoPresent)
+            videoPresent: toBoolean(values.videoPresent),
+            safeSearch: values.safeSearch
         }
         dispatch(searchLoad(formik.props.query, formik.props.tab, filter));
         dispatch(searchCloseFilterDialog());
@@ -209,6 +228,9 @@ export default function SearchFilterDialog() {
     const tab = useSelector(getSearchTab);
     const query = useSelector(getSearchQuery);
     const filter = useSelector(getSearchFilter);
+    const safeSearchDefault = useSelector((state: ClientState) =>
+        getSetting(state, "search.safe-search.default") as boolean
+    );
 
-    return <SearchFilterDialogOuter tab={tab} query={query} filter={filter}/>;
+    return <SearchFilterDialogOuter tab={tab} query={query} filter={filter} safeSearchDefault={safeSearchDefault}/>;
 }

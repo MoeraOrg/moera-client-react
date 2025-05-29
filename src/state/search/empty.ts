@@ -7,7 +7,7 @@ export const emptySearchFilter: SearchFilter = {
     repliedToMe: false,
     minImageCount: null,
     videoPresent: false,
-    safeSearch: true,
+    safeSearch: null,
     afterDate: null,
     beforeDate: null
 };

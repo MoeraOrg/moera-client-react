@@ -606,6 +606,7 @@
   "retype-password": "Proszę ponownie wprowadzić hasło",
   "rotate-left": "Obróć w lewo",
   "rotate-right": "Obróć w prawo",
+  "safe-search": "Bezpieczne wyszukiwanie",
   "save": "Zapisz",
   "scope": {
     "add-comment": "Utwórz komentarze podpisane Twoim imieniem",
@@ -774,6 +775,8 @@
           "text": "Wklej tylko tekst"
         },
         "search_node-name": "Nazwa węzła wyszukiwarki",
+        "search_safe-search_default": "Bezpieczne wyszukiwanie domyślnie",
+        "search_sheriff-name": "Nazwisko szeryfa bezpiecznego wyszukiwania",
         "src-format_default": "Formatowanie profilu i innych tekstów (domyślnie)",
         "src-format_default-items": {
           "html--visual": "Edytor wizualny",
