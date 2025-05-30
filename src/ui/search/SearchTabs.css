@@ -46,6 +46,7 @@
 
 .search-tabs .filter {
     flex: none;
+    position: relative;
     background-color: transparent;
     border-radius: .25rem;
     border: none;
@@ -59,4 +60,14 @@
 .search-tabs .filter:hover {
     background-color: var(--highlight);
     transition: background-color .15s ease-in-out;
+}
+
+.search-tabs .filter .indicator {
+    position: absolute;
+    top: .15rem;
+    right: 0;
+    width: .5rem;
+    height: .45rem;
+    background-color: var(--bs-primary);
+    border-radius: 50%;
 }

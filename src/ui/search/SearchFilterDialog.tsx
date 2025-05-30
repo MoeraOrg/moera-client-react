@@ -237,7 +237,7 @@ const searchFilterDialogLogic = {
             repliedToMe: values.repliedToMe,
             minImageCount: values.minImageCount === "0" ? null : parseInt(values.minImageCount),
             videoPresent: toBoolean(values.videoPresent),
-            safeSearch: values.safeSearch,
+            safeSearch: values.safeSearch === formik.props.safeSearchDefault ? null : values.safeSearch,
             beforeDate: values.beforeDate,
             datePeriod: values.datePeriod
         }

@@ -1,14 +1,22 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
+import deepEqual from 'react-fast-compare';
 
 import { tTitle } from "i18n";
+import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getOwnerName } from "state/node/selectors";
 import { SearchTab } from "state/search/state";
 import { emptySearchFilter } from "state/search/empty";
 import { searchLoad, searchOpenFilterDialog } from "state/search/actions";
-import { getSearchMode, getSearchNodeName, getSearchQuery, getSearchTab } from "state/search/selectors";
+import {
+    getSearchFilter,
+    getSearchMode,
+    getSearchNodeName,
+    getSearchQuery,
+    getSearchTab
+} from "state/search/selectors";
 import { Icon, msTune } from "ui/material-symbols";
 import "./SearchTabs.css";
 
@@ -21,6 +29,7 @@ export default function SearchTabs() {
     const mode = useSelector(getSearchMode);
     const query = useSelector(getSearchQuery);
     const tab = useSelector(getSearchTab);
+    const filterActive = useSelector((state: ClientState) => !deepEqual(getSearchFilter(state), emptySearchFilter));
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -50,6 +59,7 @@ export default function SearchTabs() {
                 );
             })}
             <button className="filter" title={t("filters")} onClick={onFilterClick}>
+                {filterActive && <div className="indicator"/>}
                 <Icon icon={msTune}/>
             </button>
         </div>
