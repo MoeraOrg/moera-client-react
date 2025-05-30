@@ -1,19 +1,20 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, FormikBag, FormikProps, useField, withFormik } from 'formik';
+import { Form, FormikBag, FormikProps, useFormikContext, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import { endOfDay, startOfDay, subDays, subMonths, subWeeks, subYears } from 'date-fns';
 
 import { SearchEntryType } from "api";
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { getSetting } from "state/settings/selectors";
 import { searchCloseFilterDialog, searchLoad } from "state/search/actions";
+import { emptySearchFilter } from "state/search/empty";
 import { SearchFilter, SearchFilterBeforeDate, SearchFilterDatePeriod, SearchTab } from "state/search/state";
 import { getSearchFilter, getSearchMode, getSearchQuery, getSearchTab } from "state/search/selectors";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, SelectField, SelectFieldChoice, SelectFieldChoiceBase } from "ui/control/field";
 import "./SearchFilterDialog.css";
+import deepEqual from "react-fast-compare";
 
 type FilterField =
     "entryType" | "inNewsfeed" | "ownedByMe" | "repliedToMe" | "minImageCount" | "videoPresent" | "safeSearch"
@@ -105,19 +106,23 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function SearchFilterDialogInner({tab}: Props) {
+function SearchFilterDialogInner({tab, filter, safeSearchDefault}: Props) {
     const mode = useSelector(getSearchMode);
     const sheriffName = useSelector((state: ClientState) => getSetting(state, "search.sheriff-name") as string);
-    const [, {value: entryType}] = useField<SearchEntryType>("entryType");
+    const {values, setValues} = useFormikContext<Values>();
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const onClose = () => dispatch(searchCloseFilterDialog());
 
+    const resetDisabled = deepEqual(valuesTofilter(values, safeSearchDefault), emptySearchFilter);
+
+    const onReset = () => setValues(filterToValues(emptySearchFilter, safeSearchDefault));
+
     const includesComments =
         tab === "content"
         || tab === "comments"
-        || ((tab === "own-blog" || tab === "current-blog") && entryType !== "posting");
+        || ((tab === "own-blog" || tab === "current-blog") && values.entryType !== "posting");
 
     return (
         <ModalDialog className="search-filter-dialog" title={t("filters")} onClose={onClose}>
@@ -206,6 +211,9 @@ function SearchFilterDialogInner({tab}: Props) {
                     )}
                 </div>
                 <div className="modal-footer">
+                    <Button variant="outline-secondary" className="me-auto" disabled={resetDisabled} onClick={onReset}>
+                        {t("clear-filters")}
+                    </Button>
                     <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
                     <Button variant="primary" type="submit">{t("ok")}</Button>
                 </div>
@@ -214,33 +222,36 @@ function SearchFilterDialogInner({tab}: Props) {
     );
 }
 
+const filterToValues = (filter: SearchFilter, safeSearchDefault: boolean): Values => ({
+    entryType: filter.entryType,
+    inNewsfeed: toBooleanString(filter.inNewsfeed),
+    ownedByMe: toBooleanString(filter.ownedByMe),
+    repliedToMe: filter.repliedToMe,
+    minImageCount: (filter.minImageCount ?? 0).toString(),
+    videoPresent: toBooleanString(filter.videoPresent),
+    safeSearch: filter.safeSearch ?? safeSearchDefault,
+    beforeDate: filter.beforeDate,
+    datePeriod: filter.datePeriod
+});
+
+const valuesTofilter = (values: Values, safeSearchDefault: boolean): SearchFilter => ({
+    entryType: values.entryType,
+    inNewsfeed: toBoolean(values.inNewsfeed),
+    ownedByMe: toBoolean(values.ownedByMe),
+    repliedToMe: values.repliedToMe,
+    minImageCount: values.minImageCount === "0" ? null : parseInt(values.minImageCount),
+    videoPresent: toBoolean(values.videoPresent),
+    safeSearch: values.safeSearch === safeSearchDefault ? null : values.safeSearch,
+    beforeDate: values.beforeDate,
+    datePeriod: values.datePeriod
+});
+
 const searchFilterDialogLogic = {
 
-    mapPropsToValues: (props: OuterProps): Values => ({
-        entryType: props.filter.entryType,
-        inNewsfeed: toBooleanString(props.filter.inNewsfeed),
-        ownedByMe: toBooleanString(props.filter.ownedByMe),
-        repliedToMe: props.filter.repliedToMe,
-        minImageCount: (props.filter.minImageCount ?? 0).toString(),
-        videoPresent: toBooleanString(props.filter.videoPresent),
-        safeSearch: props.filter.safeSearch ?? props.safeSearchDefault,
-        beforeDate: props.filter.beforeDate,
-        datePeriod: props.filter.datePeriod
-    }),
+    mapPropsToValues: (props: OuterProps): Values => filterToValues(props.filter, props.safeSearchDefault),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        const filter: SearchFilter = {
-            ...formik.props.filter,
-            entryType: values.entryType,
-            inNewsfeed: toBoolean(values.inNewsfeed),
-            ownedByMe: toBoolean(values.ownedByMe),
-            repliedToMe: values.repliedToMe,
-            minImageCount: values.minImageCount === "0" ? null : parseInt(values.minImageCount),
-            videoPresent: toBoolean(values.videoPresent),
-            safeSearch: values.safeSearch === formik.props.safeSearchDefault ? null : values.safeSearch,
-            beforeDate: values.beforeDate,
-            datePeriod: values.datePeriod
-        }
+        const filter = valuesTofilter(values, formik.props.safeSearchDefault);
         dispatch(searchLoad(formik.props.query, formik.props.tab, filter));
         dispatch(searchCloseFilterDialog());
         formik.setSubmitting(false);
