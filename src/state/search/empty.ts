@@ -8,6 +8,6 @@ export const emptySearchFilter: SearchFilter = {
     minImageCount: null,
     videoPresent: false,
     safeSearch: null,
-    afterDate: null,
-    beforeDate: null
+    beforeDate: "now",
+    datePeriod: "any"
 };

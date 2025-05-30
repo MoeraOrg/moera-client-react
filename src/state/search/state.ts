@@ -9,6 +9,10 @@ export interface ExtSearchEntryInfo extends SearchEntryInfo {
     bodyPreview: ExtBody;
 }
 
+export type SearchFilterBeforeDate = "now" | "yesterday" | "week" | "month" | "3-months" | "year";
+
+export type SearchFilterDatePeriod = "any" | "today" | "yesterday" | "week" | "month" | "3-months" | "year" | "year+";
+
 export interface SearchFilter {
     entryType: SearchEntryType;
     inNewsfeed: boolean;
@@ -17,8 +21,8 @@ export interface SearchFilter {
     minImageCount: number | null;
     videoPresent: boolean;
     safeSearch: boolean | null;
-    afterDate: Date | null;
-    beforeDate: Date | null;
+    beforeDate: SearchFilterBeforeDate;
+    datePeriod: SearchFilterDatePeriod;
 }
 
 export interface SearchState {

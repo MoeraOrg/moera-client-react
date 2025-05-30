@@ -1,3 +1,5 @@
+import { endOfDay, getUnixTime, startOfDay, subDays, subMonths, subWeeks, subYears } from 'date-fns';
+
 import { executor } from "state/executor";
 import { Node, SearchEntryType, SearchHashtagFilter, SearchNodeFilter, SearchTextFilter } from "api";
 import { homeIntroduced } from "state/init-barriers";
@@ -13,11 +15,11 @@ import {
     searchPeopleLoaded,
     searchTextLoaded
 } from "state/search/actions";
-import { SearchTab } from "state/search/state";
+import { SearchFilterBeforeDate, SearchFilterDatePeriod, SearchTab } from "state/search/state";
 import { getSearchFilter, getSearchMode, getSearchQuery, getSearchTab, SEARCH_PAGE_SIZE } from "state/search/selectors";
 import { nodeCardPrepare } from "state/nodecards/actions";
-import { REL_SEARCH } from "util/rel-node-name";
 import { getSetting } from "state/settings/selectors";
+import { REL_SEARCH } from "util/rel-node-name";
 
 export default [
     executor("SEARCH_LOAD", null, searchLoadSaga),
@@ -40,6 +42,50 @@ async function searchLoadMoreSaga(action: WithContext<SearchLoadMoreAction>): Pr
 
     await load(query, tab, after, nextPage, action);
 }
+
+const getBeforeDate = (value: SearchFilterBeforeDate): Date => {
+    const now = new Date();
+    switch (value) {
+        case "now":
+            return now;
+        case "yesterday":
+            return subDays(now, 1);
+        case "week":
+            return subWeeks(now, 1);
+        case "month":
+            return subMonths(now, 1);
+        case "3-months":
+            return subMonths(now, 3);
+        case "year":
+            return subYears(now, 1);
+    }
+};
+
+const getDatePeriod = (value: SearchFilterDatePeriod): [Date | undefined, Date | undefined] => {
+    const now = new Date();
+    switch (value) {
+        case "any":
+            return [undefined, undefined];
+        case "today":
+            return [startOfDay(now), undefined];
+        case "yesterday":
+            const yesterday = subDays(now, 1);
+            return [startOfDay(yesterday), endOfDay(yesterday)];
+        case "week":
+            return [startOfDay(subWeeks(now, 1)), undefined];
+        case "month":
+            return [startOfDay(subMonths(now, 1)), undefined];
+        case "3-months":
+            return [startOfDay(subMonths(now, 3)), undefined];
+        case "year":
+            return [startOfDay(subYears(now, 1)), undefined];
+        case "year+":
+            return [undefined, startOfDay(subYears(now, 1))];
+    }
+};
+
+const toUnixTime = (date: Date | undefined): number | undefined =>
+    date ? getUnixTime(date) : undefined;
 
 async function load(
     query: string, tab: SearchTab, before: number, nextPage: number, action: WithContext<ClientAction>
@@ -75,7 +121,10 @@ async function load(
 
     try {
         if (mode === "hashtag") {
-            const filter: SearchHashtagFilter = {
+            if (before >= Number.MAX_SAFE_INTEGER && filter.beforeDate !== "now") {
+                before = getUnixTime(getBeforeDate(filter.beforeDate)) * 1000;
+            }
+            const searchFilter: SearchHashtagFilter = {
                 entryType,
                 hashtags: query.split(/\s+/).filter(x => x.startsWith("#")),
                 publisherName,
@@ -87,21 +136,22 @@ async function load(
                 before,
                 limit: SEARCH_PAGE_SIZE
             }
-            const slice = await Node.searchEntriesByHashtag(action, REL_SEARCH, filter);
+            const slice = await Node.searchEntriesByHashtag(action, REL_SEARCH, searchFilter);
             dispatch(searchHashtagLoaded(slice).causedBy(action));
         } else {
             if (tab === "people") {
-                const filter: SearchNodeFilter = {
+                const searchFilter: SearchNodeFilter = {
                     query,
                     sheriffName,
                     page: nextPage,
                     limit: SEARCH_PAGE_SIZE
                 }
-                const page = await Node.searchNodes(action, REL_SEARCH, filter);
+                const page = await Node.searchNodes(action, REL_SEARCH, searchFilter);
                 dispatch(searchPeopleLoaded(page).causedBy(action));
                 page.nodes.forEach(node => dispatch(nodeCardPrepare(node.nodeName).causedBy(action)));
             } else {
-                const filter: SearchTextFilter = {
+                const [createdAfter, createdBefore] = getDatePeriod(filter.datePeriod);
+                const searchFilter: SearchTextFilter = {
                     entryType,
                     text: query,
                     publisherName,
@@ -111,10 +161,12 @@ async function load(
                     minImageCount,
                     videoPresent,
                     sheriffName,
+                    createdBefore: toUnixTime(createdBefore),
+                    createdAfter: toUnixTime(createdAfter),
                     page: nextPage,
                     limit: SEARCH_PAGE_SIZE
                 }
-                const page = await Node.searchEntriesByText(action, REL_SEARCH, filter);
+                const page = await Node.searchEntriesByText(action, REL_SEARCH, searchFilter);
                 dispatch(searchTextLoaded(page).causedBy(action));
             }
         }

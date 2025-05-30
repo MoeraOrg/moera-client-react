@@ -2,50 +2,32 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, useField, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
+import { endOfDay, startOfDay, subDays, subMonths, subWeeks, subYears } from 'date-fns';
 
 import { SearchEntryType } from "api";
+import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
+import { getSetting } from "state/settings/selectors";
 import { searchCloseFilterDialog, searchLoad } from "state/search/actions";
-import { SearchFilter, SearchMode, SearchTab } from "state/search/state";
+import { SearchFilter, SearchFilterBeforeDate, SearchFilterDatePeriod, SearchTab } from "state/search/state";
 import { getSearchFilter, getSearchMode, getSearchQuery, getSearchTab } from "state/search/selectors";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, SelectField, SelectFieldChoice, SelectFieldChoiceBase } from "ui/control/field";
 import "./SearchFilterDialog.css";
-import { ClientState } from "state/state";
-import { getSetting } from "state/settings/selectors";
 
 type FilterField =
-    "entryType" | "inNewsfeed" | "ownedByMe" | "repliedToMe" | "minImageCount" | "videoPresent" | "safeSearch";
+    "entryType" | "inNewsfeed" | "ownedByMe" | "repliedToMe" | "minImageCount" | "videoPresent" | "safeSearch"
+    | "period";
 
-const ENABLED_FIELDS: Record<SearchTab, Record<SearchMode, FilterField[]>> = {
-    "people": {
-        "hashtag": ["safeSearch"],
-        "fulltext": ["safeSearch"]
-    },
-    "content": {
-        "hashtag": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch"],
-        "fulltext": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch"]
-    },
-    "postings": {
-        "hashtag": ["ownedByMe", "minImageCount", "videoPresent", "safeSearch"],
-        "fulltext": ["ownedByMe", "minImageCount", "videoPresent", "safeSearch"]
-    },
-    "comments": {
-        "hashtag": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch"],
-        "fulltext": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch"]
-    },
-    "current-blog": {
-        "hashtag": ["entryType", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch"],
-        "fulltext": ["entryType", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch"]
-    },
-    "own-blog": {
-        "hashtag": [
-            "entryType", "inNewsfeed", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch"
-        ],
-        "fulltext": [
-            "entryType", "inNewsfeed", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch"
-        ]
-    }
+const ENABLED_FIELDS: Record<SearchTab, FilterField[]> = {
+    "people": ["safeSearch"],
+    "content": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch", "period"],
+    "postings": ["ownedByMe", "minImageCount", "videoPresent", "safeSearch", "period"],
+    "comments": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch", "period"],
+    "current-blog": ["entryType", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch", "period"],
+    "own-blog": [
+        "entryType", "inNewsfeed", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch", "period"
+    ]
 }
 
 type BooleanString = "false" | "true";
@@ -75,11 +57,31 @@ const IMAGE_NUMBER: SelectFieldChoice[] = [
     {title: "present", value: "1"},
     {title: "several", value: "2"},
     {title: "many", value: "6"}
-]
+];
 
 const VIDEO: SelectFieldChoiceBase<BooleanString>[] = [
     {title: "not-matter", value: "false"},
     {title: "present", value: "true"}
+];
+
+const BEFORE_DATE: SelectFieldChoiceBase<SearchFilterBeforeDate>[] = [
+    {title: "not-matter", value: "now"},
+    {title: "yesterday", value: "yesterday"},
+    {title: "week-ago", value: "week"},
+    {title: "month-ago", value: "month"},
+    {title: "three-months-ago", value: "3-months"},
+    {title: "year-ago", value: "year"}
+];
+
+const DATE_PERIOD: SelectFieldChoiceBase<SearchFilterDatePeriod>[] = [
+    {title: "not-matter", value: "any"},
+    {title: "today", value: "today"},
+    {title: "yesterday", value: "yesterday"},
+    {title: "this-week", value: "week"},
+    {title: "this-month", value: "month"},
+    {title: "last-three-months", value: "3-months"},
+    {title: "this-year", value: "year"},
+    {title: "more-year", value: "year+"}
 ];
 
 interface OuterProps {
@@ -97,6 +99,8 @@ interface Values {
     minImageCount: string;
     videoPresent: BooleanString;
     safeSearch: boolean;
+    beforeDate: SearchFilterBeforeDate;
+    datePeriod: SearchFilterDatePeriod;
 }
 
 type Props = OuterProps & FormikProps<Values>;
@@ -119,7 +123,7 @@ function SearchFilterDialogInner({tab}: Props) {
         <ModalDialog className="search-filter-dialog" title={t("filters")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
-                    {ENABLED_FIELDS[tab][mode].map(fieldName =>
+                    {ENABLED_FIELDS[tab].map(fieldName =>
                         <React.Fragment key={fieldName}>
                             {fieldName === "entryType" &&
                                 <SelectField
@@ -180,6 +184,24 @@ function SearchFilterDialogInner({tab}: Props) {
                                     anyValue
                                 />
                             }
+                            {fieldName === "period" && mode === "hashtag" &&
+                                <SelectField
+                                    name="beforeDate"
+                                    title={t("date")}
+                                    choices={BEFORE_DATE}
+                                    horizontal
+                                    anyValue
+                                />
+                            }
+                            {fieldName === "period" && mode === "fulltext" &&
+                                <SelectField
+                                    name="datePeriod"
+                                    title={t("date")}
+                                    choices={DATE_PERIOD}
+                                    horizontal
+                                    anyValue
+                                />
+                            }
                         </React.Fragment>
                     )}
                 </div>
@@ -201,7 +223,9 @@ const searchFilterDialogLogic = {
         repliedToMe: props.filter.repliedToMe,
         minImageCount: (props.filter.minImageCount ?? 0).toString(),
         videoPresent: toBooleanString(props.filter.videoPresent),
-        safeSearch: props.filter.safeSearch ?? props.safeSearchDefault
+        safeSearch: props.filter.safeSearch ?? props.safeSearchDefault,
+        beforeDate: props.filter.beforeDate,
+        datePeriod: props.filter.datePeriod
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
@@ -213,7 +237,9 @@ const searchFilterDialogLogic = {
             repliedToMe: values.repliedToMe,
             minImageCount: values.minImageCount === "0" ? null : parseInt(values.minImageCount),
             videoPresent: toBoolean(values.videoPresent),
-            safeSearch: values.safeSearch
+            safeSearch: values.safeSearch,
+            beforeDate: values.beforeDate,
+            datePeriod: values.datePeriod
         }
         dispatch(searchLoad(formik.props.query, formik.props.tab, filter));
         dispatch(searchCloseFilterDialog());
