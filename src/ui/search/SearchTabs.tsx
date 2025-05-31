@@ -33,31 +33,35 @@ export default function SearchTabs() {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const onClick = (tab: SearchTab) => () => {
-        dispatch(searchLoad(query, tab, emptySearchFilter));
-    }
+    const onClick = (tab: SearchTab) => () => dispatch(searchLoad(query, tab, emptySearchFilter));
 
     const onFilterClick = () => dispatch(searchOpenFilterDialog());
 
     return (
         <div className="search-tabs">
-            {TABS.map(tabName => {
-                const invisible =
-                    tab !== tabName
-                    && (
-                        (mode === "hashtag" && tabName === "people")
-                        || ((ownerName === homeOwnerName || ownerName === searchNodeName) && tabName === "current-blog")
-                        || (homeOwnerName == null && tabName === "own-blog")
+            <div className="tab-scroller">
+                {TABS.map(tabName => {
+                    const invisible =
+                        tab !== tabName
+                        && (
+                            (mode === "hashtag" && tabName === "people")
+                            || (
+                                (ownerName === homeOwnerName || ownerName === searchNodeName)
+                                && tabName === "current-blog"
+                            )
+                            || (homeOwnerName == null && tabName === "own-blog")
+                        );
+                    if (invisible) {
+                        return null;
+                    }
+                    return (
+                        <button key={tabName} className={cx("tab", {"active": tabName === tab})}
+                                onClick={onClick(tabName)}>
+                            {tTitle(t("search-tab." + tabName))}
+                        </button>
                     );
-                if (invisible) {
-                    return null;
-                }
-                return (
-                    <button key={tabName} className={cx("tab", {"active": tabName === tab})} onClick={onClick(tabName)}>
-                        {tTitle(t("search-tab." + tabName))}
-                    </button>
-                );
-            })}
+                })}
+            </div>
             <button className="filter" title={t("filters")} onClick={onFilterClick}>
                 {filterActive && <div className="indicator"/>}
                 <Icon icon={msTune}/>

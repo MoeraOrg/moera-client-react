@@ -2,9 +2,16 @@
     display: flex;
     background-color: white;
     border-radius: .5rem;
-    padding: .25rem 1.5rem 0 1.5rem;
+    padding: 0 1.5rem;
     margin-bottom: 1rem;
     flex-wrap: nowrap;
+}
+
+.search-tabs .tab-scroller {
+    flex: auto;
+    display: flex;
+    flex-wrap: nowrap;
+    padding-top: .25rem;
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: none;
@@ -51,8 +58,7 @@
     border-radius: .25rem;
     border: none;
     padding: .25rem;
-    margin-left: auto;
-    margin-bottom: .25rem;
+    margin: .25rem -.25rem .25rem .75rem;
     color: var(--bs-gray-600);
     transition: background-color .15s ease-in-out;
 }
