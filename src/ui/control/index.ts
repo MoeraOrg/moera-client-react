@@ -17,6 +17,7 @@ export type { EmojiOnClick, EmojiProps } from "ui/control/EmojiChoice";
 export { EmojiListDialog } from "ui/control/EmojiListDialog";
 export { EmojiListInput } from "ui/control/EmojiListInput";
 export { EmojiSelector } from "ui/control/EmojiSelector";
+export { FeedTopBox } from "ui/control/FeedTopBox";
 export { FormGroup } from "ui/control/FormGroup";
 export type { FormGroupStyle } from "ui/control/FormGroup";
 export { Label } from "ui/control/Label";

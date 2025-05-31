@@ -5,9 +5,10 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { searchScrolled } from "state/search/actions";
 import { getSearchQuery, getSearchTab, hasSearchMoreResults } from "state/search/selectors";
-import { Loading } from "ui/control";
+import { FeedTopBox, Loading } from "ui/control";
 import { useDebounce } from "ui/hook";
 import { useIsTinyScreen } from "ui/hook/media-query";
+import { Icon, msArrowUpward } from "ui/material-symbols";
 import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
 import SearchTabs from "ui/search/SearchTabs";
@@ -44,12 +45,23 @@ export default function SearchPage() {
         return () => window.removeEventListener("scroll", onScroll);
     }, [dispatch, onScroll]);
 
+    const onTop = () => {
+        window.scrollTo(0, 0);
+    }
+
     const hasContent = loaded && (tab === "people" ? nodes.length > 0 : entries.length > 0);
 
     return (
         <>
             <PageHeader>
                 <h2>{t("search")}{query ? ": " + ellipsize(query, tinyScreen ? 16 : 40) : ""}</h2>
+                <FeedTopBox>
+                    {scrollPosition > 50 &&
+                        <div className="feed-top-button" onClick={onTop}>
+                            <Icon icon={msArrowUpward} size={16}/><span className="title">{t("top")}</span>
+                        </div>
+                    }
+                </FeedTopBox>
             </PageHeader>
             <Page className="search-page">
                 <SearchTabs/>

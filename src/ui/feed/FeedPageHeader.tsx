@@ -3,13 +3,12 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { getOwnerAvatar, getOwnerName } from "state/node/selectors";
-import { Avatar } from "ui/control";
+import { Avatar, FeedTopBox } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import PageHeader from "ui/page/PageHeader";
 import PageShareButton from "ui/page/PageShareButton";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import FeedGotoButton from "ui/feed/FeedGotoButton";
-import FeedTopBox from "ui/feed/FeedTopBox";
 import FeedTopButton from "ui/feed/FeedTopButton";
 import FeedSkipPinnedButton from "ui/feed/FeedSkipPinnedButton";
 import { useIsTinyScreen } from "ui/hook/media-query";

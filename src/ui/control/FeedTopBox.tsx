@@ -6,10 +6,8 @@ interface Props {
     children?: ReactNode;
 }
 
-const FeedTopBox = ({children}: Props) => (
+export const FeedTopBox = ({children}: Props) => (
     <div className="feed-top-box">
         {children}
     </div>
 );
-
-export default FeedTopBox;
