@@ -20,27 +20,35 @@
 }
 
 .feed-top-button {
-    background-color: var(--bs-gray-100);
-    color: var(--bs-info);
+    background-color: var(--primary-50);
+    color: var(--primary-600);
     display: inline-block;
-    padding: .2rem .7rem;
+    padding: .15rem .8rem .4rem .5rem;
     border-radius: 1em;
-    box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14),
-                0 1px 10px 0 rgba(0, 0, 0, .12),
-                0 2px 4px -1px rgba(0, 0, 0, .2);
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, .16);
     cursor: pointer;
     font-size: .875rem;
     font-weight: 400;
 }
 
 .feed-top-button:hover {
-    background-color: var(--bs-info);
-    border-color: var(--bs-info);
+    background-color: var(--primary-600);
+    border-color: var(--primary-600);
+    color: white;
+}
+
+.feed-top-button .title {
+    position: relative;
+    top: .1em;
+    color: var(--primary-800);
+}
+
+.feed-top-button:hover .title {
     color: white;
 }
 
 .feed-top-button .new {
-    background-color: var(--bs-primary);
+    background-color: var(--bs-blue);
     color: white;
     font-weight: bold;
     padding: .15em .35em .15em .3em;

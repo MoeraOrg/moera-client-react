@@ -1,10 +1,9 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { feedScrollToAnchor } from "state/feeds/actions";
+import { Icon, msArrowUpward } from "ui/material-symbols";
 import { RelNodeName } from "util/rel-node-name";
 
 interface Props {
@@ -50,7 +49,7 @@ export default function FeedTopButton({nodeName, feedName, atTop, totalAfterTop,
 
     return (
         <div className="feed-top-button" onClick={onClick}>
-            <FontAwesomeIcon icon={faArrowUp}/>{title}
+            <Icon icon={msArrowUpward} size={16}/><span className="title">{title}</span>
             {news > 0 && <span className="new">{t("count-new", {count: news})}</span>}
         </div>
     );
