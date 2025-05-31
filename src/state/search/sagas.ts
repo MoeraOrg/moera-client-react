@@ -16,7 +16,14 @@ import {
     searchTextLoaded
 } from "state/search/actions";
 import { SearchFilterBeforeDate, SearchFilterDatePeriod, SearchTab } from "state/search/state";
-import { getSearchFilter, getSearchMode, getSearchQuery, getSearchTab, SEARCH_PAGE_SIZE } from "state/search/selectors";
+import {
+    getSafeSearchDefault,
+    getSearchFilter,
+    getSearchMode,
+    getSearchQuery,
+    getSearchTab,
+    SEARCH_PAGE_SIZE
+} from "state/search/selectors";
 import { nodeCardPrepare } from "state/nodecards/actions";
 import { getSetting } from "state/settings/selectors";
 import { REL_SEARCH } from "util/rel-node-name";
@@ -93,7 +100,7 @@ async function load(
     const mode = select(getSearchMode);
     const filter = select(getSearchFilter);
     const sheriffNameDefault = select(state => getSetting(state, "search.sheriff-name") as string);
-    const safeSearchDefault = select(state => getSetting(state, "search.safe-search.default") as boolean);
+    const safeSearchDefault = select(getSafeSearchDefault);
 
     let entryType: SearchEntryType = filter.entryType;
     switch (tab) {

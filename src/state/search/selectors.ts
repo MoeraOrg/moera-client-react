@@ -25,5 +25,8 @@ export function hasSearchMoreResults(state: ClientState): boolean {
         || (state.search.mode === "fulltext" && state.search.nextPage * SEARCH_PAGE_SIZE < state.search.total);
 }
 
-export const getSearchNodeName = (state: ClientState) =>
+export const getSearchNodeName = (state: ClientState): string =>
     getSetting(state, "search.node-name") as string;
+
+export const getSafeSearchDefault = (state: ClientState): boolean =>
+    getSetting(state, "search.safe-search.default") as boolean;

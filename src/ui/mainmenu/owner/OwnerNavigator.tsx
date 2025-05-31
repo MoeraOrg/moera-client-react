@@ -10,6 +10,7 @@ import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { goToSearch } from "state/navigation/actions";
 import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
+import { emptySearchFilter } from "state/search/empty";
 import { Button, NameSuggestion } from "ui/control";
 import { Icon, msSearch } from "ui/material-symbols";
 import { useSuggestions } from "ui/hook/suggestions";
@@ -40,7 +41,7 @@ export default function OwnerNavigator() {
                 case "search":
                     dispatch(ownerSwitchClose());
                     if (query) {
-                        dispatch(goToSearch(query, "content"));
+                        dispatch(goToSearch(query, "content", emptySearchFilter));
                     }
                     break;
             }

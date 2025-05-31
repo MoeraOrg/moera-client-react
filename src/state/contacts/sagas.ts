@@ -6,8 +6,9 @@ import { errorThrown } from "state/error/actions";
 import { ContactsLoadAction, contactsLoaded, contactsLoadFailed, contactsNameFound } from "state/contacts/actions";
 import { getNameDetails } from "state/naming/sagas";
 import { hasContactsName } from "state/contacts/selectors";
-import { REL_SEARCH } from "util/rel-node-name";
 import { getSetting } from "state/settings/selectors";
+import { getSafeSearchDefault } from "state/search/selectors";
+import { REL_SEARCH } from "util/rel-node-name";
 
 export default [
     executor("CONTACTS_LOAD", payload => payload.query, contactsLoadSaga)
@@ -17,7 +18,7 @@ async function contactsLoadSaga(action: WithContext<ContactsLoadAction>): Promis
     const {query} = action.payload;
 
     const sheriffName = select(state => getSetting(state, "search.sheriff-name") as string);
-    const safeSearchDefault = select(state => getSetting(state, "search.safe-search.default") as boolean);
+    const safeSearchDefault = select(getSafeSearchDefault);
     const sheriff = safeSearchDefault && sheriffName ? sheriffName : null;
 
     try {

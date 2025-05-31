@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, useFormikContext, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
+import deepEqual from 'react-fast-compare';
 
 import { SearchEntryType } from "api";
 import { ClientState } from "state/state";
@@ -10,11 +11,17 @@ import { getSetting } from "state/settings/selectors";
 import { searchCloseFilterDialog, searchLoad } from "state/search/actions";
 import { emptySearchFilter } from "state/search/empty";
 import { SearchFilter, SearchFilterBeforeDate, SearchFilterDatePeriod, SearchTab } from "state/search/state";
-import { getSearchFilter, getSearchMode, getSearchQuery, getSearchTab } from "state/search/selectors";
+import {
+    getSafeSearchDefault,
+    getSearchFilter,
+    getSearchMode,
+    getSearchQuery,
+    getSearchTab
+} from "state/search/selectors";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, SelectField, SelectFieldChoice, SelectFieldChoiceBase } from "ui/control/field";
+import { BooleanString, toBoolean, toBooleanString } from "util/bool-string";
 import "./SearchFilterDialog.css";
-import deepEqual from "react-fast-compare";
 
 type FilterField =
     "entryType" | "inNewsfeed" | "ownedByMe" | "repliedToMe" | "minImageCount" | "videoPresent" | "safeSearch"
@@ -30,12 +37,6 @@ const ENABLED_FIELDS: Record<SearchTab, FilterField[]> = {
         "entryType", "inNewsfeed", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch", "period"
     ]
 }
-
-type BooleanString = "false" | "true";
-
-const toBooleanString = (value: boolean): BooleanString => value ? "true" : "false";
-
-const toBoolean = (value: BooleanString): boolean => value === "true";
 
 const ENTRY_TYPES: SelectFieldChoiceBase<SearchEntryType>[] = [
     {title: "any", value: "all"},
@@ -106,7 +107,7 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function SearchFilterDialogInner({tab, filter, safeSearchDefault}: Props) {
+function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
     const mode = useSelector(getSearchMode);
     const sheriffName = useSelector((state: ClientState) => getSetting(state, "search.sheriff-name") as string);
     const {values, setValues} = useFormikContext<Values>();
@@ -272,9 +273,7 @@ export default function SearchFilterDialog() {
     const tab = useSelector(getSearchTab);
     const query = useSelector(getSearchQuery);
     const filter = useSelector(getSearchFilter);
-    const safeSearchDefault = useSelector((state: ClientState) =>
-        getSetting(state, "search.safe-search.default") as boolean
-    );
+    const safeSearchDefault = useSelector(getSafeSearchDefault);
 
     return <SearchFilterDialogOuter tab={tab} query={query} filter={filter} safeSearchDefault={safeSearchDefault}/>;
 }
