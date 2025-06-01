@@ -101,9 +101,10 @@ async function nodeCardPrepareSaga(action: WithContext<NodeCardPrepareAction>): 
     if (card == null || (!card.blocking.loaded && !card.blocking.loading)) {
         dispatch(nodeCardBlockingLoad(nodeName).causedBy(action));
     }
-    if (homeOwnerName === SHERIFF_GOOGLE_PLAY_TIMELINE
-        && (card == null || (!card.sheriffList.loaded && !card.sheriffList.loading))) {
-
+    if (
+        homeOwnerName === SHERIFF_GOOGLE_PLAY_TIMELINE
+        && (card == null || (!card.sheriffList.loaded && !card.sheriffList.loading))
+    ) {
         dispatch(nodeCardSheriffListLoad(nodeName).causedBy(action));
     }
 }

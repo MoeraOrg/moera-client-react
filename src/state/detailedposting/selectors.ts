@@ -314,8 +314,9 @@ export function isCommentSheriffMarked(comment: CommentInfo | null, sheriffName:
     return isSheriffMarked(comment, sheriffName);
 }
 
-export function isCommentSheriffProhibited(posting: PostingInfo | null, comment: CommentInfo | null,
-                                           sheriffName: string | null): boolean {
+export function isCommentSheriffProhibited(
+    posting: PostingInfo | null, comment: CommentInfo | null, sheriffName: string | null
+): boolean {
     return isPostingSheriffProhibited(posting, sheriffName) || isCommentSheriffMarked(comment, sheriffName);
 }
 
@@ -326,8 +327,12 @@ export interface NameUsage {
     count: number;
 }
 
-function putName(names: Map<string, NameUsage>, nodeName: string, fullName: string | null | undefined,
-                 avatar: AvatarImage | null | undefined): void {
+function putName(
+    names: Map<string, NameUsage>,
+    nodeName: string,
+    fullName: string | null | undefined,
+    avatar: AvatarImage | null | undefined
+): void {
     if (!names.has(nodeName)) {
         names.set(nodeName, {nodeName, fullName: fullName ?? null, avatar: avatar ?? null, count: 1});
     } else {
