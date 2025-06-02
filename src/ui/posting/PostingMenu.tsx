@@ -45,19 +45,24 @@ interface Props {
 function PostingMenuItems({posting, story, detailed}: Props) {
     const homeOwnerName = useSelector(getHomeOwnerName);
     const commentsSubscriptionId = useSelector((state: ClientState) =>
-        getPostingCommentsSubscriptionId(state, posting.id, REL_CURRENT));
+        getPostingCommentsSubscriptionId(state, posting.id, REL_CURRENT)
+    );
     const commentAddedInstantBlockId = useSelector((state: ClientState) =>
-        getPostingCommentAddedInstantBlockId(state, posting.id, REL_CURRENT));
+        getPostingCommentAddedInstantBlockId(state, posting.id, REL_CURRENT)
+    );
     const containsInvisibleComments = useSelector((state: ClientState) =>
-        (detailed ?? false) && hasInvisibleComments(state));
+        (detailed ?? false) && hasInvisibleComments(state)
+    );
     const showInvisibleComments = useSelector((state: ClientState) =>
-        (detailed ?? false) && isCommentsShowInvisible(state));
+        (detailed ?? false) && isCommentsShowInvisible(state)
+    );
     const postingEditable = useSelector((state: ClientState) => isPermitted("edit", posting, "owner", state));
     const postingDeletable = useSelector((state: ClientState) => isPermitted("delete", posting, "private", state));
     const storyEditable = useSelector((state: ClientState) => isPermitted("edit", story, "admin", state));
     const googlePlayGoverned = isPostingSheriff(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);
     const googlePlaySheriff = useSelector((state: ClientState) =>
-        getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE);
+        getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE
+    );
     const googlePlayProhibited = isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);
     const dispatch = useDispatch();
     const {t} = useTranslation();
@@ -262,14 +267,14 @@ function PostingMenuItems({posting, story, detailed}: Props) {
                 nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onHideInGooglePlay,
-                show: googlePlaySheriff && googlePlayGoverned && !googlePlayProhibited
+                show: googlePlaySheriff && (!googlePlayProhibited || !googlePlayGoverned)
             },
             {
                 title: t("unhide-in-google-play"),
                 nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onUnhideInGooglePlay,
-                show: googlePlaySheriff && googlePlayGoverned && googlePlayProhibited
+                show: googlePlaySheriff && (googlePlayProhibited || googlePlayGoverned)
             },
             {
                 title: t("report-sheriff"),

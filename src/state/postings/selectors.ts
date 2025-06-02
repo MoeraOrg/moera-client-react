@@ -88,8 +88,9 @@ interface FullPostingId {
     postingId: string;
 }
 
-export function findPostingIdsByRemote(postings: PostingsState, remoteNodeName: string | null,
-                                       remotePostingId: string | null): FullPostingId[] {
+export function findPostingIdsByRemote(
+    postings: PostingsState, remoteNodeName: string | null, remotePostingId: string | null
+): FullPostingId[] {
     const ids: FullPostingId[] = [];
     for (let nodeName of Object.keys(postings)) {
         const nodePostings = postings[nodeName];
@@ -116,7 +117,8 @@ export function isPostingSheriffMarked(posting: PostingInfo | null | undefined, 
     return isSheriffMarked(posting, sheriffName);
 }
 
-export function isPostingSheriffProhibited(posting: PostingInfo | null | undefined,
-                                           sheriffName: string | null): boolean {
+export function isPostingSheriffProhibited(
+    posting: PostingInfo | null | undefined, sheriffName: string | null
+): boolean {
     return !isPostingSheriff(posting, sheriffName) || isPostingSheriffMarked(posting, sheriffName);
 }

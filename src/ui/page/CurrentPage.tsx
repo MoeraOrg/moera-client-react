@@ -5,7 +5,7 @@ import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
 import { isDetailedPostingPositioned } from "state/detailedposting/selectors";
 import { isGooglePlayHiding } from "state/node/selectors";
-import { isFeedGeneralReady, isFeedSheriffProhibited } from "state/feeds/selectors";
+import { isFeedGeneralReady, isFeedSheriff, isFeedSheriffMarked } from "state/feeds/selectors";
 import { Loading } from "ui/control";
 import TimelinePage from "ui/feed/TimelinePage";
 import ProfilePage from "ui/profile/ProfilePage";
@@ -26,7 +26,10 @@ export default function CurrentPage() {
     const googlePlayProhibited = useSelector(
         (state: ClientState) => isGooglePlayHiding(state)
             && isFeedGeneralReady(state, REL_CURRENT, "timeline")
-            && isFeedSheriffProhibited(state, REL_CURRENT, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE)
+            && (
+                !isFeedSheriff(state, REL_CURRENT, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE)
+                || isFeedSheriffMarked(state, REL_CURRENT, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE)
+            )
     );
 
     useEffect(() => {

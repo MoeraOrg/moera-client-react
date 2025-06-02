@@ -74,7 +74,7 @@ export default function DetailedPostingPage() {
                     <div className="posting-not-found">
                         <FontAwesomeIcon className="icon" icon={faFrown} size="3x"/>
                         <div className="message">
-                            {posting == null || posting.parentMediaId != null
+                            {!googlePlayProhibited
                                 ? t("posting-not-found")
                                 : t("content-not-accessible-android")
                             }

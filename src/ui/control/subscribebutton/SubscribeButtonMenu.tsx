@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
+import { tGender } from "i18n";
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
 import { getHomeFriendsId, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
@@ -10,7 +11,7 @@ import { getOwnerName, isPrincipalIn } from "state/node/selectors";
 import { sheriffListAdd, sheriffListDelete } from "state/nodecards/actions";
 import { getNodeCard } from "state/nodecards/selectors";
 import { feedSubscribe, feedUnsubscribe } from "state/feeds/actions";
-import { isFeedSheriff, isFeedSheriffProhibited } from "state/feeds/selectors";
+import { isFeedSheriff, isFeedSheriffMarked } from "state/feeds/selectors";
 import { friendshipUpdate } from "state/people/actions";
 import { openFriendGroupsDialog } from "state/friendgroupsdialog/actions";
 import { openAskDialog } from "state/askdialog/actions";
@@ -19,7 +20,6 @@ import { openBlockDialog } from "state/blockdialog/actions";
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { Button, DropdownMenuItems } from "ui/control";
-import { tGender } from "i18n";
 import { REL_CURRENT } from "util/rel-node-name";
 
 interface Props {
@@ -33,11 +33,14 @@ export default function SubscribeButtonMenu({nodeName, feedName}: Props) {
     const friendsId = useSelector(getHomeFriendsId);
     const ownerName = useSelector(getOwnerName);
     const googlePlayGoverned = useSelector((state: ClientState) =>
-        isFeedSheriff(state, REL_CURRENT, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE));
+        isFeedSheriff(state, REL_CURRENT, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE)
+    );
     const googlePlaySheriff = useSelector((state: ClientState) =>
-        getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE);
-    const googlePlayProhibited = useSelector((state: ClientState) =>
-        isFeedSheriffProhibited(state, REL_CURRENT, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE));
+        getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE
+    );
+    const googlePlayMarked = useSelector((state: ClientState) =>
+        isFeedSheriffMarked(state, REL_CURRENT, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE)
+    );
     const dispatch = useDispatch();
 
     const fullName = card?.details.profile.fullName ?? null;
@@ -222,8 +225,12 @@ export default function SubscribeButtonMenu({nodeName, feedName}: Props) {
                 divider: true
             },
             {
+                caption: t("not-accept-sheriff-governance"),
+                show: nodeName === ownerName && googlePlaySheriff && !googlePlayGoverned
+            },
+            {
                 caption: t("banned-android-google-play"),
-                show: nodeName === ownerName && googlePlaySheriff && googlePlayGoverned && googlePlayProhibited
+                show: nodeName === ownerName && googlePlaySheriff && googlePlayMarked
             },
             {
                 caption: t("banned-content-android-google-play"),
@@ -234,14 +241,14 @@ export default function SubscribeButtonMenu({nodeName, feedName}: Props) {
                 nodeName,
                 href: "/",
                 onClick: onHideInGooglePlay,
-                show: nodeName === ownerName && googlePlaySheriff && googlePlayGoverned && !googlePlayProhibited
+                show: nodeName === ownerName && googlePlaySheriff && (!googlePlayMarked || !googlePlayGoverned)
             },
             {
                 title: t("unhide-in-google-play"),
                 nodeName,
                 href: "/",
                 onClick: onUnhideInGooglePlay,
-                show: nodeName === ownerName && googlePlaySheriff && googlePlayGoverned && googlePlayProhibited
+                show: nodeName === ownerName && googlePlaySheriff && (googlePlayMarked || !googlePlayGoverned)
             },
             {
                 title: t("hide-content-in-google-play"),

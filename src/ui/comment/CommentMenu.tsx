@@ -232,14 +232,16 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
                 nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onHideInGooglePlay,
-                show: googlePlaySheriff && googlePlayGoverned && !googlePlayPostingProhibited && !googlePlayProhibited
+                show: googlePlaySheriff
+                    && ((!googlePlayPostingProhibited && !googlePlayProhibited) || !googlePlayGoverned)
             },
             {
                 title: t("unhide-in-google-play"),
                 nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onUnhideInGooglePlay,
-                show: googlePlaySheriff && googlePlayGoverned && !googlePlayPostingProhibited && googlePlayProhibited
+                show: googlePlaySheriff
+                    && ((!googlePlayPostingProhibited && googlePlayProhibited) || !googlePlayGoverned)
             },
             {
                 title: t("report-sheriff"),

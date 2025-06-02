@@ -13,7 +13,8 @@ interface Props {
 
 export default function CommentSheriffVisibility({comment}: Props) {
     const invisible = useSelector((state: ClientState) =>
-        isCommentSheriffProhibited(getDetailedPosting(state), comment, SHERIFF_GOOGLE_PLAY_TIMELINE));
+        isCommentSheriffProhibited(getDetailedPosting(state), comment, SHERIFF_GOOGLE_PLAY_TIMELINE)
+    );
 
     return invisible ? <SheriffInvisible/> : null;
 }

@@ -67,13 +67,6 @@ export function isFeedSheriffMarked(
     return isSheriffMarked(feed, sheriffName);
 }
 
-export function isFeedSheriffProhibited(
-    state: ClientState, nodeName: RelNodeName | string, feedName: string, sheriffName: string | null
-): boolean {
-    return !isFeedSheriff(state, nodeName, feedName, sheriffName)
-        || isFeedSheriffMarked(state, nodeName, feedName, sheriffName);
-}
-
 export function isFeedStatusToBeLoaded(state: ClientState, nodeName: RelNodeName | string, feedName: string): boolean {
     const feed = getFeedState(state, nodeName, feedName);
     return !feed.loadedStatus && !feed.loadingStatus;

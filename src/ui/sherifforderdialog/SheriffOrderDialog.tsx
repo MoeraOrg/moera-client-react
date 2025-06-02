@@ -38,7 +38,8 @@ function SheriffOrderDialogInner({target}: Props) {
     const submitting = useSelector((state: ClientState) => state.sheriffOrderDialog.submitting);
     const isSheriff = useSelector((state: ClientState) => getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE);
     const nameDisplayMode = useSelector((state: ClientState) =>
-        getSetting(state, "full-name.display") as NameDisplayMode);
+        getSetting(state, "full-name.display") as NameDisplayMode
+    );
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
