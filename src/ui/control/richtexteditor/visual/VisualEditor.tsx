@@ -102,6 +102,8 @@ export default function VisualEditor({
                     setTimeout(() => updateUrls());
                 }
                 break;
+            case "set_selection":
+                return; // do not call onChange()
         }
 
         // A dirty hack to work around the issue when onScriptureChange is not called on Android after some changes
