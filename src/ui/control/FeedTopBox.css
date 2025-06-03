@@ -48,6 +48,8 @@
 }
 
 .feed-top-button .new {
+    position: relative;
+    top: .1em;
     background-color: var(--bs-blue);
     color: white;
     font-weight: bold;
