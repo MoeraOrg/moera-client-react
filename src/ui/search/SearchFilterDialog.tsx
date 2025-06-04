@@ -192,6 +192,7 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                 <CheckboxField
                                     name="safeSearch"
                                     title={t("safe-search")}
+                                    setting="search.safe-search.default"
                                     anyValue
                                 />
                             }
