@@ -53,11 +53,18 @@
     text-align: center;
 }
 
-#owner-navigator .name-select .item.selected .icon-cell, #owner-navigator .name-select .item.selected:hover .icon-cell {
-    color: white;
-}
-
 #owner-navigator .name-select .search-item .body {
     line-height: 150%;
     overflow-x: hidden;
+}
+
+#owner-navigator .name-select .item .body {
+    color: var(--bs-body-color);
+}
+
+#owner-navigator .name-select .item.selected .icon-cell,
+#owner-navigator .name-select .item.selected:hover .icon-cell,
+#owner-navigator .name-select .item.selected .body,
+#owner-navigator .name-select .item.selected:hover .body {
+    color: white;
 }

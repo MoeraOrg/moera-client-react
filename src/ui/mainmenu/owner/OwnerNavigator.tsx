@@ -4,23 +4,23 @@ import { useTranslation } from 'react-i18next';
 import deepEqual from 'react-fast-compare';
 import cx from 'classnames';
 
-import { ClientState } from "state/state";
 import { ownerSwitch, ownerSwitchClose } from "state/node/actions";
 import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { goToSearch } from "state/navigation/actions";
 import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
 import { emptySearchFilter } from "state/search/empty";
-import { Button, NameSuggestion } from "ui/control";
+import { NameSuggestion } from "ui/control";
 import { Icon, msSearch } from "ui/material-symbols";
+import Jump from "ui/navigation/Jump";
 import { useSuggestions } from "ui/hook/suggestions";
 import { NameListItem, namesListQuery } from "util/names-list";
+import { ut } from "util/url";
 import "./OwnerNavigator.css";
 
 type SearchListItem = {type: "name"} & NameListItem | {type: "search"};
 
 export default function OwnerNavigator() {
-    const switching = useSelector((state: ClientState) => state.node.owner.switching);
     const contactNames = useSelector(getContacts);
     const homeName = useSelector(getHomeOwnerName);
     const homeAvatar = useSelector(getHomeOwnerAvatar);
@@ -50,8 +50,9 @@ export default function OwnerNavigator() {
         }
     }
 
-    const onButtonClick = () => {
-        onSubmit(true, {type: "search"});
+    const onButtonClick = (_: string, performJump: () => void) => {
+        dispatch(ownerSwitchClose());
+        performJump();
     }
 
     const {
@@ -102,9 +103,11 @@ export default function OwnerNavigator() {
                         {item.type === "search" &&
                             <>
                                 {searchList.length > 1 && <hr/>}
-                                <div data-index={index}
-                                     className={cx("search-item", "item", {"selected": selectedIndex === index})}
-                                     onClick={handleClick(index)}
+                                <Jump
+                                    data-index={index}
+                                    className={cx("search-item", "item", {"selected": selectedIndex === index})}
+                                    href={ut`/search?query=${query}`}
+                                    onNear={handleClick(index)} onFar={handleClick(index)}
                                 >
                                     <div className="icon-cell">
                                         <Icon icon={msSearch} size={20}/>
@@ -112,15 +115,16 @@ export default function OwnerNavigator() {
                                     <div className="body">
                                         {t("search")}: {query}
                                     </div>
-                                </div>
+                                </Jump>
                             </>
                         }
                     </>
                 )}
             </div>
-            <Button variant="secondary" size="sm" loading={switching} onClick={onButtonClick}>
+            <Jump href={ut`/search?query=${query}`} className="btn btn-secondary btn-sm"
+                  onNear={onButtonClick} onFar={onButtonClick}>
                 <Icon icon={msSearch} size={20}/>
-            </Button>
+            </Jump>
         </div>
     );
 }

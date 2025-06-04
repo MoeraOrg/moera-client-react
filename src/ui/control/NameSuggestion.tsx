@@ -3,6 +3,7 @@ import cx from 'classnames';
 
 import { AvatarImage, NodeName } from "api";
 import { Avatar } from "ui/control/Avatar";
+import Jump from "ui/navigation/Jump";
 import "./NameSuggestion.css";
 
 interface Props {
@@ -15,7 +16,14 @@ interface Props {
 }
 
 export const NameSuggestion = ({className, index, nodeName, fullName, avatar, onClick}: Props) => (
-    <div data-index={index} className={cx("name-suggestion", className)} onClick={onClick ? onClick(index) : undefined}>
+    <Jump
+        data-index={index}
+        className={cx("name-suggestion", className)}
+        nodeName={nodeName ?? undefined}
+        href="/"
+        onNear={onClick ? onClick(index) : undefined}
+        onFar={onClick ? onClick(index) : undefined}
+    >
         <div className="avatar-cell">
             <Avatar avatar={avatar} ownerName={nodeName} size={40}/>
         </div>
@@ -23,5 +31,5 @@ export const NameSuggestion = ({className, index, nodeName, fullName, avatar, on
             <span className="full-name">{fullName || NodeName.shorten(nodeName)}</span><br/>
             <span className="name">{NodeName.shorten(nodeName)}</span>
         </div>
-    </div>
+    </Jump>
 );
