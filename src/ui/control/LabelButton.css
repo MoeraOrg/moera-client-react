@@ -2,12 +2,13 @@
     color: var(--bs-gray-500);
     background-color: transparent;
     border: none;
-    border-radius: 3px;
-    padding-left: 0.3rem;
-    padding-right: 0.3rem;
+    border-radius: .5em;
+    padding-left: .2em;
+    padding-right: .2em;
     cursor: pointer;
-    align-self: center;
     line-height: 1.1;
+    position: relative;
+    top: -.05em;
 }
 
 .form-label-button:hover {

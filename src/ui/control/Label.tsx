@@ -1,8 +1,8 @@
 import React from 'react';
 import cx from 'classnames';
-import { faBackspace, faUndoAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
+import { msBackspaceFilled16, msRestartAlt16 } from "ui/material-symbols";
 import { LabelButton, Wrapper } from "ui/control";
 import SetDefaultButton from "ui/control/field/SetDefaultButton";
 
@@ -50,11 +50,12 @@ export function Label({
             }
             <Wrapper className={cx({"ms-2 align-self-center": (undo || reset || setting) && horizontal && children})}>
                 {undo &&
-                    <LabelButton icon={faUndoAlt} className="form-label-button-undo" title={t("undo")} onClick={onUndo}/>
+                    <LabelButton icon={msRestartAlt16} className="form-label-button-undo" title={t("undo")}
+                                 onClick={onUndo}/>
                 }
                 {reset &&
-                    <LabelButton icon={faBackspace} className="form-label-button-reset" title={t("reset-to-default")}
-                                 onClick={onReset}/>
+                    <LabelButton icon={msBackspaceFilled16} className="form-label-button-reset"
+                                 title={t("reset-to-default")} onClick={onReset}/>
                 }
                 {(name && setting != null) &&
                     <SetDefaultButton name={name} setting={setting}/>

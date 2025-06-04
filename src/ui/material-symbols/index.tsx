@@ -4,6 +4,7 @@ import { ReactComponent as msAddBox } from "ui/material-symbols/add_box.isvg";
 import { ReactComponent as msAddLink } from "ui/material-symbols/add_link.isvg";
 import { ReactComponent as msAlternateEmail } from "ui/material-symbols/alternate_email.isvg";
 import { ReactComponent as msArrowUpward } from "ui/material-symbols/arrow_upward.isvg";
+import { ReactComponent as msBackspaceFilled16 } from "ui/material-symbols/backspace_filled16.isvg";
 import { ReactComponent as msBadge } from "ui/material-symbols/badge.isvg";
 import { ReactComponent as msChevronRight } from "ui/material-symbols/chevron_right.isvg";
 import { ReactComponent as msClose } from "ui/material-symbols/close.isvg";
@@ -45,11 +46,13 @@ import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_libr
 import { ReactComponent as msPreview } from "ui/material-symbols/preview.isvg";
 import { ReactComponent as msRedo } from "ui/material-symbols/redo.isvg";
 import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
+import { ReactComponent as msRestartAlt16 } from "ui/material-symbols/restart_alt16.isvg";
 import { ReactComponent as msSatellite } from "ui/material-symbols/satellite.isvg";
 import { ReactComponent as msSearch } from "ui/material-symbols/search.isvg";
 import { ReactComponent as msSend } from "ui/material-symbols/send.isvg";
 import { ReactComponent as msSentimentSatisfied } from "ui/material-symbols/sentiment_satisfied.isvg";
 import { ReactComponent as msSchedule } from "ui/material-symbols/schedule.isvg";
+import { ReactComponent as msStarFilled16 } from "ui/material-symbols/star_filled16.isvg";
 import { ReactComponent as msStrikethroughS } from "ui/material-symbols/strikethrough_s.isvg";
 import { ReactComponent as msSubscript } from "ui/material-symbols/subscript.isvg";
 import { ReactComponent as msSuperscript } from "ui/material-symbols/superscript.isvg";
@@ -63,6 +66,7 @@ export {
     msAddLink,
     msAlternateEmail,
     msArrowUpward,
+    msBackspaceFilled16,
     msBadge,
     msChevronRight,
     msClose,
@@ -104,11 +108,13 @@ export {
     msPreview,
     msRedo,
     msReport,
+    msRestartAlt16,
     msSatellite,
     msSearch,
     msSend,
     msSentimentSatisfied,
     msSchedule,
+    msStarFilled16,
     msStrikethroughS,
     msSubscript,
     msSuperscript,

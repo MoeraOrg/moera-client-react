@@ -1,12 +1,11 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import cx from 'classnames';
 
+import { Icon, MaterialSymbol } from "ui/material-symbols";
 import "./LabelButton.css";
 
 interface Props {
-    icon: IconProp;
+    icon: MaterialSymbol;
     className?: string;
     title: string;
     onClick?: () => void;
@@ -14,6 +13,6 @@ interface Props {
 
 export const LabelButton = ({icon, className, title, onClick}: Props) => (
     <button className={cx("form-label-button", className)} title={title} onClick={onClick}>
-        <FontAwesomeIcon icon={icon} size="sm"/>
+        <Icon icon={icon} size="16"/>
     </button>
 );

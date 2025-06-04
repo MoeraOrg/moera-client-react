@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useField } from 'formik';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { CLIENT_SETTINGS_PREFIX, SettingTypes, SettingValue } from "api";
 import { ClientState } from "state/state";
 import { getSetting, getSettingMeta } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
+import { msStarFilled16 } from "ui/material-symbols";
 import { LabelButton } from "ui/control/LabelButton";
 
 interface Props {
@@ -38,6 +38,6 @@ export default function SetDefaultButton({name, setting}: Props) {
         }]));
     };
 
-    return <LabelButton icon={faStar} title={t("set-as-default")} className="form-label-button-default"
+    return <LabelButton icon={msStarFilled16} title={t("set-as-default")} className="form-label-button-default"
                         onClick={onSetDefault}/>
 }
