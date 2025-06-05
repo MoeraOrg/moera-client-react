@@ -85,6 +85,12 @@ export type SearchHistoryAddAction = ActionWithPayload<"SEARCH_HISTORY_ADD", {
 export const searchHistoryAdd = (history: SearchHistoryInfo): SearchHistoryAddAction =>
     actionWithPayload("SEARCH_HISTORY_ADD", {history});
 
+export type SearchHistoryDeleteAction = ActionWithPayload<"SEARCH_HISTORY_DELETE", {
+    query: string;
+}>;
+export const searchHistoryDelete = (query: string): SearchHistoryDeleteAction =>
+    actionWithPayload("SEARCH_HISTORY_DELETE", {query});
+
 export type SearchHistoryUnsetAction = ActionWithoutPayload<"SEARCH_HISTORY_UNSET">;
 export const searchHistoryUnset = (): SearchHistoryUnsetAction =>
     actionWithoutPayload("SEARCH_HISTORY_UNSET");
@@ -104,5 +110,6 @@ export type SearchAnyAction =
     | SearchHistoryLoadAction
     | SearchHistoryLoadedAction
     | SearchHistoryLoadFailedAction
+    | SearchHistoryDeleteAction
     | SearchHistoryAddAction
     | SearchHistoryUnsetAction;

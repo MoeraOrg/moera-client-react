@@ -10,10 +10,10 @@ import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { goToSearch } from "state/navigation/actions";
 import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
-import { searchHistoryPrepare } from "state/search/actions";
+import { searchHistoryDelete, searchHistoryPrepare } from "state/search/actions";
 import { emptySearchFilter } from "state/search/empty";
 import { NameSuggestion } from "ui/control";
-import { Icon, msHistory, msSearch } from "ui/material-symbols";
+import { Icon, msCancel, msHistory, msSearch } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
 import { useSuggestions } from "ui/hook/suggestions";
 import { NameListItem, namesListQuery } from "util/names-list";
@@ -75,6 +75,16 @@ export default function OwnerNavigator() {
         listDom
     });
 
+    const onHistoryDelete = (index: number) => (event: React.MouseEvent) => {
+        const item = searchList[index];
+        if (item.type === "history") {
+            dispatch(searchHistoryDelete(item.query));
+            setSearchList(list => list.toSpliced(index, 1));
+        }
+        event.stopPropagation();
+        event.preventDefault();
+    }
+
     useEffect(() => {
         setSearchList(list => {
             const newList: SearchListItem[] = [];
@@ -126,6 +136,9 @@ export default function OwnerNavigator() {
                                     </div>
                                     <div className="body">
                                         {item.query}
+                                    </div>
+                                    <div className="icon-cell" title={t("delete")} onClick={onHistoryDelete(index)}>
+                                        <Icon icon={msCancel} size={16}/>
                                     </div>
                                 </Jump>
                                 {(index + 1 < searchList.length && searchList[index + 1].type === "name") && <hr/>}

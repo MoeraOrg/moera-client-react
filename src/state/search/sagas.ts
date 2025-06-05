@@ -10,6 +10,7 @@ import { errorThrown } from "state/error/actions";
 import {
     searchHashtagLoaded,
     searchHistoryAdd,
+    SearchHistoryDeleteAction,
     SearchHistoryLoadAction,
     searchHistoryLoaded,
     searchHistoryLoadFailed,
@@ -36,7 +37,8 @@ export default [
     executor("SEARCH_LOAD", null, searchLoadSaga),
     executor("SEARCH_LOAD_MORE", null, searchLoadMoreSaga),
     executor("SEARCH_RESTORE_SCROLL", null, searchRestoreScrollSaga),
-    executor("SEARCH_HISTORY_LOAD", payload => payload.query, searchHistoryLoadSaga)
+    executor("SEARCH_HISTORY_LOAD", payload => payload.query, searchHistoryLoadSaga),
+    executor("SEARCH_HISTORY_DELETE", payload => payload.query, searchHistoryDeleteSaga)
 ];
 
 async function searchLoadSaga(action: WithContext<SearchLoadAction>): Promise<void> {
@@ -51,7 +53,7 @@ async function searchLoadSaga(action: WithContext<SearchLoadAction>): Promise<vo
 
 async function saveToHistory(query: string, action: WithContext<ClientAction>): Promise<void> {
     try {
-        const history = await Node.saveSearchHistory(action, REL_HOME, {query});
+        const history = await Node.saveToSearchHistory(action, REL_HOME, {query});
         dispatch(searchHistoryAdd(history));
     } catch (e) {
         // ignore
@@ -211,5 +213,13 @@ async function searchHistoryLoadSaga(action: WithContext<SearchHistoryLoadAction
         dispatch(searchHistoryLoaded(action.payload.query, history).causedBy(action));
     } catch (e) {
         dispatch(searchHistoryLoadFailed(action.payload.query).causedBy(action));
+    }
+}
+
+async function searchHistoryDeleteSaga(action: WithContext<SearchHistoryDeleteAction>): Promise<void> {
+    try {
+        await Node.deleteFromSearchHistory(action, REL_HOME, action.payload.query);
+    } catch (e) {
+        dispatch(errorThrown(e));
     }
 }

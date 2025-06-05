@@ -43,7 +43,7 @@
 
 #owner-navigator .name-select .search-item {
     display: grid;
-    grid-template-columns: calc(44px + .5rem) auto;
+    grid-template-columns: calc(44px + .5rem) auto calc(44px + .5rem);
     padding-top: .25rem;
     padding-bottom: .25rem;
 }

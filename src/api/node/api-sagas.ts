@@ -32,7 +32,7 @@ export async function getSearchHistory(
     });
 }
 
-export async function saveSearchHistory(
+export async function saveToSearchHistory(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, historyText: API.SearchHistoryText,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): Promise<API.SearchHistoryInfo> {
@@ -41,6 +41,17 @@ export async function saveSearchHistory(
     return callApi<API.SearchHistoryInfo>({
         caller, nodeName, method: "POST", location, body: historyText, auth, schema: "SearchHistoryInfo",
         errorFilter
+    });
+}
+
+export async function deleteFromSearchHistory(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, query: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.Result> {
+
+    const location = urlWithParameters(ut`/activity/search`, {query});
+    return callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 

@@ -6,6 +6,7 @@ import { ReactComponent as msAlternateEmail } from "ui/material-symbols/alternat
 import { ReactComponent as msArrowUpward } from "ui/material-symbols/arrow_upward.isvg";
 import { ReactComponent as msBackspaceFilled16 } from "ui/material-symbols/backspace_filled16.isvg";
 import { ReactComponent as msBadge } from "ui/material-symbols/badge.isvg";
+import { ReactComponent as msCancel } from "ui/material-symbols/cancel.isvg";
 import { ReactComponent as msChevronRight } from "ui/material-symbols/chevron_right.isvg";
 import { ReactComponent as msClose } from "ui/material-symbols/close.isvg";
 import { ReactComponent as msClose12 } from "ui/material-symbols/close12.isvg";
@@ -69,6 +70,7 @@ export {
     msArrowUpward,
     msBackspaceFilled16,
     msBadge,
+    msCancel,
     msChevronRight,
     msClose,
     msClose12,
