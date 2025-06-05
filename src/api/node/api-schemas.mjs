@@ -2081,6 +2081,30 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
+        SearchHistoryInfo: {
+            type: "object",
+            properties: {
+                "query": {
+                    type: "string"
+                },
+                "createdAt": {
+                    type: "integer"
+                },
+            },
+            required: [
+                "query",
+                "createdAt",
+            ],
+            additionalProperties: false
+        },
+
+        SearchHistoryInfoArray: {
+            type: "array",
+            items: {
+                $ref: "node#/definitions/SearchHistoryInfo"
+            }
+        },
+
         SearchNodeInfo: {
             type: "object",
             properties: {

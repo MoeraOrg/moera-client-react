@@ -16,7 +16,7 @@
     position: fixed;
     top: 2.55rem;
     width: min(30rem, 100vw - 1rem);
-    max-height: 23em;
+    max-height: 30em;
     padding-top: .25rem;
     padding-bottom: .25rem;
     background-color: white;

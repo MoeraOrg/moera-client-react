@@ -21,6 +21,29 @@ export async function searchActivityReactions(
     });
 }
 
+export async function getSearchHistory(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, prefix: string | null = null,
+    limit: number | null = null, errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.SearchHistoryInfo[]> {
+
+    const location = urlWithParameters(ut`/activity/search`, {prefix, limit});
+    return callApi<API.SearchHistoryInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "SearchHistoryInfoArray", errorFilter
+    });
+}
+
+export async function saveSearchHistory(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, historyText: API.SearchHistoryText,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.SearchHistoryInfo> {
+
+    const location = "/activity/search";
+    return callApi<API.SearchHistoryInfo>({
+        caller, nodeName, method: "POST", location, body: historyText, auth, schema: "SearchHistoryInfo",
+        errorFilter
+    });
+}
+
 export async function getRemoteSheriffOrdersSlice(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, after: number | null = null,
     before: number | null = null, limit: number | null = null, errorFilter: ErrorFilter = false

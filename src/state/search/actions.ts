@@ -1,5 +1,5 @@
 import { ActionWithoutPayload, actionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
-import { SearchHashtagSliceInfo, SearchNodePageInfo, SearchTextPageInfo } from "api";
+import { SearchHashtagSliceInfo, SearchHistoryInfo, SearchNodePageInfo, SearchTextPageInfo } from "api";
 import { SearchFilter, SearchTab } from "state/search/state";
 
 export type SearchLoadAction = ActionWithPayload<"SEARCH_LOAD", {
@@ -54,6 +54,41 @@ export type SearchCloseFilterDialogAction = ActionWithoutPayload<"SEARCH_CLOSE_F
 export const searchCloseFilterDialog = (): SearchCloseFilterDialogAction =>
     actionWithoutPayload("SEARCH_CLOSE_FILTER_DIALOG");
 
+export type SearchHistoryPrepareAction = ActionWithPayload<"SEARCH_HISTORY_PREPARE", {
+    query: string;
+}>;
+export const searchHistoryPrepare = (query: string): SearchHistoryPrepareAction =>
+    actionWithPayload("SEARCH_HISTORY_PREPARE", {query});
+
+export type SearchHistoryLoadAction = ActionWithPayload<"SEARCH_HISTORY_LOAD", {
+    query: string;
+}>;
+export const searchHistoryLoad = (query: string): SearchHistoryLoadAction =>
+    actionWithPayload("SEARCH_HISTORY_LOAD", {query});
+
+export type SearchHistoryLoadedAction = ActionWithPayload<"SEARCH_HISTORY_LOADED", {
+    query: string;
+    history: SearchHistoryInfo[];
+}>;
+export const searchHistoryLoaded = (query: string, history: SearchHistoryInfo[]): SearchHistoryLoadedAction =>
+    actionWithPayload("SEARCH_HISTORY_LOADED", {query, history});
+
+export type SearchHistoryLoadFailedAction = ActionWithPayload<"SEARCH_HISTORY_LOAD_FAILED", {
+    query: string;
+}>;
+export const searchHistoryLoadFailed = (query: string): SearchHistoryLoadFailedAction =>
+    actionWithPayload("SEARCH_HISTORY_LOAD_FAILED", {query});
+
+export type SearchHistoryAddAction = ActionWithPayload<"SEARCH_HISTORY_ADD", {
+    history: SearchHistoryInfo;
+}>;
+export const searchHistoryAdd = (history: SearchHistoryInfo): SearchHistoryAddAction =>
+    actionWithPayload("SEARCH_HISTORY_ADD", {history});
+
+export type SearchHistoryUnsetAction = ActionWithoutPayload<"SEARCH_HISTORY_UNSET">;
+export const searchHistoryUnset = (): SearchHistoryUnsetAction =>
+    actionWithoutPayload("SEARCH_HISTORY_UNSET");
+
 export type SearchAnyAction =
     SearchLoadAction
     | SearchHashtagLoadedAction
@@ -64,4 +99,10 @@ export type SearchAnyAction =
     | SearchScrolledAction
     | SearchRestoreScrollAction
     | SearchOpenFilterDialogAction
-    | SearchCloseFilterDialogAction;
+    | SearchCloseFilterDialogAction
+    | SearchHistoryPrepareAction
+    | SearchHistoryLoadAction
+    | SearchHistoryLoadedAction
+    | SearchHistoryLoadFailedAction
+    | SearchHistoryAddAction
+    | SearchHistoryUnsetAction;

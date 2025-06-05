@@ -2,8 +2,15 @@ import { trigger } from "state/trigger";
 import { ClientState } from "state/state";
 import { GoToSearchAction, updateLocation } from "state/navigation/actions";
 import { isAtSearchPage } from "state/navigation/selectors";
-import { searchLoad, searchRestoreScroll } from "state/search/actions";
-import { getSearchQuery, getSearchTab } from "state/search/selectors";
+import {
+    searchHistoryLoad,
+    SearchHistoryPrepareAction,
+    searchHistoryUnset,
+    searchLoad,
+    searchRestoreScroll
+} from "state/search/actions";
+import { getSearchQuery, getSearchTab, isSearchHistoryQueryToBeLoaded } from "state/search/selectors";
+import { isConnectedToHome } from "state/home/selectors";
 
 function isSameQuery(signal: GoToSearchAction, state: ClientState) {
     return signal.payload.details.query === getSearchQuery(state)
@@ -22,5 +29,12 @@ export default [
         (state: ClientState, signal: GoToSearchAction) => isAtSearchPage(state) && isSameQuery(signal, state),
         searchRestoreScroll
     ),
-    trigger("SEARCH_LOAD", true, updateLocation)
+    trigger("SEARCH_LOAD", true, updateLocation),
+    trigger(
+        "SEARCH_HISTORY_PREPARE",
+        (state, signal: SearchHistoryPrepareAction) =>
+            isConnectedToHome(state) && isSearchHistoryQueryToBeLoaded(state, signal.payload.query),
+        signal => searchHistoryLoad(signal.payload.query)
+    ),
+    trigger("HOME_READY", true, searchHistoryUnset)
 ];

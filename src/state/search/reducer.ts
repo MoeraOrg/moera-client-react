@@ -3,7 +3,7 @@ import * as immutable from 'object-path-immutable';
 import { SearchEntryInfo } from "api";
 import { ClientAction } from "state/action";
 import { ExtSearchEntryInfo, SearchState } from "state/search/state";
-import { emptySearchFilter } from "state/search/empty";
+import { emptyHistoryQuery, emptySearchFilter } from "state/search/empty";
 import { htmlEntities, replaceEmojis, safePreviewHtml } from "util/html";
 import { ellipsize } from "util/text";
 
@@ -23,7 +23,9 @@ const initialState: SearchState = {
     nextPage: 0,
     total: 0,
     scrollPosition: 0,
-    showFilters: false
+    showFilters: false,
+    historyQueries: {},
+    history: []
 }
 
 function safeguard(entry: SearchEntryInfo): ExtSearchEntryInfo {
@@ -104,6 +106,44 @@ export default (state: SearchState = initialState, action: ClientAction): Search
             return {
                 ...state,
                 showFilters: false
+            };
+
+        case "SEARCH_HISTORY_LOAD":
+            if (state.historyQueries[action.payload.query]) {
+                return immutable.set(state, ["historyQueries", action.payload.query, "loading"], true);
+            } else {
+                return immutable.assign(
+                    state,
+                    ["historyQueries", action.payload.query],
+                    {...emptyHistoryQuery, loading: true}
+                );
+            }
+
+        case "SEARCH_HISTORY_LOADED": {
+            const istate = immutable.wrap(state);
+            istate.assign(["historyQueries", action.payload.query], {loading: false, loaded: true});
+            const queries = new Set(action.payload.history.map(h => h.query));
+            istate.set("history", state.history.filter(h => !queries.has(h.query)).concat(action.payload.history));
+            return istate.value();
+        }
+
+        case "SEARCH_HISTORY_LOAD_FAILED":
+            return immutable.set(state, ["historyQueries", action.payload.query, "loading"], false);
+
+        case "SEARCH_HISTORY_ADD": {
+            const istate = immutable.wrap(state);
+            istate.set(
+                "history",
+                state.history.filter(h => h.query !== action.payload.history.query).concat([action.payload.history])
+            );
+            return istate.value();
+        }
+
+        case "SEARCH_HISTORY_UNSET":
+            return {
+                ...state,
+                historyQueries: {},
+                history: []
             };
 
         default:

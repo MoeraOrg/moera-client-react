@@ -34,6 +34,7 @@ import { ReactComponent as msFormatListNumbered } from "ui/material-symbols/form
 import { ReactComponent as msFormatQuote } from "ui/material-symbols/format_quote.isvg";
 import { ReactComponent as msFormatQuoteOff } from "ui/material-symbols/format_quote_off.isvg";
 import { ReactComponent as msFunction } from "ui/material-symbols/function.isvg";
+import { ReactComponent as msHistory } from "ui/material-symbols/history.isvg";
 import { ReactComponent as msKeyboardArrowDown } from "ui/material-symbols/keyboard_arrow_down.isvg";
 import { ReactComponent as msKeyboardArrowUp } from "ui/material-symbols/keyboard_arrow_up.isvg";
 import { ReactComponent as msLink } from "ui/material-symbols/link.isvg";
@@ -96,6 +97,7 @@ export {
     msFormatListNumbered,
     msFormatQuote,
     msFormatQuoteOff,
+    msHistory,
     msLink,
     msKeyboardArrowDown,
     msKeyboardArrowUp,

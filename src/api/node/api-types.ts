@@ -827,6 +827,15 @@ export interface SearchHashtagFilter {
     limit?: number | null;
 }
 
+export interface SearchHistoryInfo {
+    query: string;
+    createdAt: number;
+}
+
+export interface SearchHistoryText {
+    query: string;
+}
+
 export interface SearchNodeFilter {
     query: string;
     sheriffName?: string | null;

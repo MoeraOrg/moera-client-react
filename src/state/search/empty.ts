@@ -1,4 +1,4 @@
-import { SearchFilter } from "state/search/state";
+import { SearchFilter, SearchHistoryQueryState } from "state/search/state";
 
 export const emptySearchFilter: SearchFilter = {
     entryType: "posting",
@@ -11,3 +11,8 @@ export const emptySearchFilter: SearchFilter = {
     beforeDate: "now",
     datePeriod: "any"
 };
+
+export const emptyHistoryQuery: SearchHistoryQueryState = {
+    loading: false,
+    loaded: false
+}

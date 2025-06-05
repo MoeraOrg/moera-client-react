@@ -30,3 +30,8 @@ export const getSearchNodeName = (state: ClientState): string =>
 
 export const getSafeSearchDefault = (state: ClientState): boolean =>
     getSetting(state, "search.safe-search.default") as boolean;
+
+export function isSearchHistoryQueryToBeLoaded(state: ClientState, query: string): boolean {
+    const info = state.search.historyQueries[query];
+    return info == null || (!info.loaded && !info.loading);
+}

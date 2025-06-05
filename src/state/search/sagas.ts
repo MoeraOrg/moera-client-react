@@ -9,6 +9,10 @@ import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
 import {
     searchHashtagLoaded,
+    searchHistoryAdd,
+    SearchHistoryLoadAction,
+    searchHistoryLoaded,
+    searchHistoryLoadFailed,
     SearchLoadAction,
     searchLoadFailed,
     SearchLoadMoreAction,
@@ -26,12 +30,13 @@ import {
 } from "state/search/selectors";
 import { nodeCardPrepare } from "state/nodecards/actions";
 import { getSetting } from "state/settings/selectors";
-import { REL_SEARCH } from "util/rel-node-name";
+import { REL_HOME, REL_SEARCH } from "util/rel-node-name";
 
 export default [
     executor("SEARCH_LOAD", null, searchLoadSaga),
     executor("SEARCH_LOAD_MORE", null, searchLoadMoreSaga),
-    executor("SEARCH_RESTORE_SCROLL", null, searchRestoreScrollSaga)
+    executor("SEARCH_RESTORE_SCROLL", null, searchRestoreScrollSaga),
+    executor("SEARCH_HISTORY_LOAD", payload => payload.query, searchHistoryLoadSaga)
 ];
 
 async function searchLoadSaga(action: WithContext<SearchLoadAction>): Promise<void> {
@@ -39,6 +44,18 @@ async function searchLoadSaga(action: WithContext<SearchLoadAction>): Promise<vo
 
     await homeIntroduced();
     await load(query, tab, Number.MAX_SAFE_INTEGER, 0, action);
+    if (query) {
+        saveToHistory(query, action);
+    }
+}
+
+async function saveToHistory(query: string, action: WithContext<ClientAction>): Promise<void> {
+    try {
+        const history = await Node.saveSearchHistory(action, REL_HOME, {query});
+        dispatch(searchHistoryAdd(history));
+    } catch (e) {
+        // ignore
+    }
 }
 
 async function searchLoadMoreSaga(action: WithContext<SearchLoadMoreAction>): Promise<void> {
@@ -186,4 +203,13 @@ async function load(
 function searchRestoreScrollSaga(): void {
     const position = select(state => state.search.scrollPosition);
     setTimeout(() => window.scrollTo(0, position), 100);
+}
+
+async function searchHistoryLoadSaga(action: WithContext<SearchHistoryLoadAction>): Promise<void> {
+    try {
+        const history = await Node.getSearchHistory(action, REL_HOME, action.payload.query, 15);
+        dispatch(searchHistoryLoaded(action.payload.query, history).causedBy(action));
+    } catch (e) {
+        dispatch(searchHistoryLoadFailed(action.payload.query).causedBy(action));
+    }
 }

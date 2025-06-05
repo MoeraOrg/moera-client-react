@@ -20,8 +20,11 @@ export default (state: ContactsState = initialState, action: ClientAction): Cont
             if (state.queries[action.payload.query]) {
                 return immutable.set(state, ["queries", action.payload.query, "loading"], true);
             } else {
-                return immutable.assign(state, ["queries", action.payload.query],
-                    {...emptyQuery, loading: true});
+                return immutable.assign(
+                    state,
+                    ["queries", action.payload.query],
+                    {...emptyQuery, loading: true}
+                );
             }
 
         case "CONTACTS_LOADED": {

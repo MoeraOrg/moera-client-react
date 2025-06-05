@@ -1,4 +1,4 @@
-import { SearchEntryInfo, SearchEntryType, SearchNodeInfo } from "api";
+import { SearchEntryInfo, SearchEntryType, SearchHistoryInfo, SearchNodeInfo } from "api";
 import { ExtBody } from "state/postings/state";
 
 export type SearchMode = "hashtag" | "fulltext";
@@ -25,6 +25,11 @@ export interface SearchFilter {
     datePeriod: SearchFilterDatePeriod;
 }
 
+export interface SearchHistoryQueryState {
+    loading: boolean;
+    loaded: boolean;
+}
+
 export interface SearchState {
     mode: SearchMode;
     tab: SearchTab;
@@ -39,4 +44,6 @@ export interface SearchState {
     total: number;
     scrollPosition: number;
     showFilters: boolean;
+    historyQueries: Partial<Record<string, SearchHistoryQueryState>>;
+    history: SearchHistoryInfo[];
 }
