@@ -141,3 +141,19 @@ BLOCKQUOTE BLOCKQUOTE:last-child, BLOCKQUOTE P:last-child {
         padding-bottom: 3rem;
     }
 }
+
+.react-datepicker {
+    line-height: var(--bs-body-line-height);
+}
+
+.react-datepicker-popper {
+    z-index: var(--zindex-popover);
+}
+
+.react-datepicker__navigation-icon {
+    line-height: 20px;
+}
+
+.react-datepicker__portal .react-datepicker__navigation-icon {
+    line-height: 12px;
+}

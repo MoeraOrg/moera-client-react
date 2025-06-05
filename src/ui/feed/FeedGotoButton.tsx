@@ -52,14 +52,17 @@ export default function FeedGotoButton({nodeName, feedName, atBottom}: Props) {
             :
                 <Suspense fallback={<Loading/>}>
                     <CloseButton onClick={deactivate}/>
-                    <DatePicker selected={fromUnixTime(timestamp >= 0 ? timestamp : 0)}
-                                onChange={v => {
-                                    if (v instanceof Date) {
-                                        goToTimestamp(v);
-                                    }
-                                }}
-                                dateFormat="dd-MM-yyyy"
-                                withPortal={tinyScreen}/>
+                    <DatePicker
+                        selected={fromUnixTime(timestamp >= 0 ? timestamp : 0)}
+                        onChange={v => {
+                            if (v instanceof Date) {
+                                goToTimestamp(v);
+                            }
+                        }}
+                        dateFormat="dd-MM-yyyy"
+                        showYearDropdown
+                        withPortal={tinyScreen}
+                    />
                     <Button variant="outline-info" size="sm" className="ms-2" invisible={atBottom} onClick={toBottom}>
                         <FontAwesomeIcon icon={faArrowDown}/>&nbsp;{t("bottom")}
                     </Button>

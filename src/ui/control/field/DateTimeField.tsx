@@ -4,7 +4,6 @@ import { FormGroup, FormGroupStyle, Wrapper } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import FieldError from "ui/control/field/FieldError";
 import { useIsTinyScreen } from "ui/hook/media-query";
-import "./DateTimeField.css";
 
 const DatePicker = React.lazy(() => import('react-datepicker'));
 
@@ -58,6 +57,7 @@ export const DateTimeField = ({
                         }}
                         onBlur={onBlur}
                         autoFocus={autoFocus}
+                        showYearDropdown
                         showTimeSelect
                         timeFormat="HH:mm"
                         timeIntervals={15}
