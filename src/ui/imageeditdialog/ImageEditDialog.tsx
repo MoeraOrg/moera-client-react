@@ -55,14 +55,14 @@ function ImageEditDialogInner(props: Props) {
     const onClose = () => dispatch(closeImageEditDialog());
 
     const {
-        src, srcSet, sizes, width: imageWidth, height: imageHeight
+        src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
     } = mediaImageTagAttributes(rootPage, media, carte, 800);
 
     return (
         <ModalDialog title={t("edit-image")} parentOverlayId={parentOverlayId} loading={loading} onClose={onClose}>
             <Form>
                 <div className="modal-body image-edit-dialog">
-                    <img className="preview" alt="" src={src} srcSet={srcSet} sizes={sizes}
+                    <img className="preview" alt={alt ?? ""} src={src} srcSet={srcSet} sizes={sizes}
                          width={imageWidth} height={imageHeight}/>
                     <RichTextField
                         name="caption"

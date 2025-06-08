@@ -94,6 +94,7 @@ export interface MediaImageTagAttributes {
     sizes: string;
     width: number;
     height: number;
+    alt?: string;
 }
 
 export function mediaImageTagAttributes(
@@ -116,8 +117,9 @@ export function mediaImageTagAttributes(
     const srcSet = mediaSources(mediaLocation, mediaPrefix, mediaFile.previews);
     const sizes = mediaSizes(mediaFile.previews ?? []);
     const [imageWidth, imageHeight] = mediaImageSize(targetWidth, width, height, mediaFile, false);
+    const alt = mediaFile.textContent || undefined;
 
-    return {src, srcSet, sizes, width: imageWidth, height: imageHeight};
+    return {src, srcSet, sizes, width: imageWidth, height: imageHeight, alt};
 }
 
 const HASH_URI_PATTERN = /["' (]hash:([A-Za-z0-9_-]+={0,2})["' )]/g;

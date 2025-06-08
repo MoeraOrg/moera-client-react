@@ -33,13 +33,13 @@ export default function EntryLinkPreviewImage({nodeName, mediaFile, loading}: Pr
     }
 
     const {
-        src, srcSet, sizes, width: imageWidth, height: imageHeight
+        src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
     } = mediaImageTagAttributes(rootPage, mediaFile, carte, 800);
 
     const vertical = tinyScreen ? imageHeight > imageWidth * 0.55 : imageHeight > imageWidth;
 
     return (
-        <PreloadedImage src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}
+        <PreloadedImage src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight} alt={alt}
                         className={vertical ? "vertical" : undefined}/>
     );
 }

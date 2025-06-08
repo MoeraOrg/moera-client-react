@@ -606,6 +606,7 @@ export interface PrivateMediaFileInfo {
     height: number;
     orientation: number;
     size: number;
+    textContent?: string | null;
     postingId?: string | null;
     previews?: MediaFilePreviewInfo[] | null;
     operations?: PrivateMediaFileOperations | null;

@@ -35,7 +35,7 @@ export default function EntryImage({
     const dispatch = useDispatch();
 
     const {
-        src, srcSet, sizes, width: imageWidth, height: imageHeight
+        src, srcSet, sizes, width: imageWidth, height: imageHeight, alt: imageAlt
     } = mediaImageTagAttributes(rootPage, mediaFile, carte, 900, width, height);
 
     const onNear = () => {
@@ -58,7 +58,7 @@ export default function EntryImage({
               className={cx("entry-image", {"counted": count != null && count > 0})} style={style}>
             {(count != null && count > 0) && <div className="count">+{count}</div>}
             <PreloadedImage src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}
-                            alt={alt ?? undefined} title={title ?? undefined}/>
+                            alt={alt ?? imageAlt ?? undefined} title={title ?? undefined}/>
         </Jump>
     );
 }

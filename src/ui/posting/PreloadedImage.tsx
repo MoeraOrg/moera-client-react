@@ -32,10 +32,10 @@ export default function PreloadedImage({src, srcSet, sizes, width, height, alt, 
     return (
         <>
             {!loaded &&
-                <img width={width} height={height} alt={alt} title={title} style={style}
+                <img width={width} height={height} alt={alt ?? ""} title={title} style={style}
                      className="preload-placeholder"/>
             }
-            <img src={src} srcSet={srcSet} sizes={sizes} width={width} height={height} alt={alt} title={title}
+            <img src={src} srcSet={srcSet} sizes={sizes} width={width} height={height} alt={alt ?? ""} title={title}
                  className={className} style={loaded ? style : {display: "none"}} onLoad={onLoad}/>
         </>
     );

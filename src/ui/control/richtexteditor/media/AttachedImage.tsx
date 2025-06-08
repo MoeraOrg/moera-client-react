@@ -20,13 +20,13 @@ export default function AttachedImage({media, nodeName, dragging = false, onClic
     const carte = useSelector(getCurrentViewMediaCarte);
 
     const {
-        src, srcSet, sizes, width: imageWidth, height: imageHeight
+        src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
     } = mediaImageTagAttributes(rootPage, media, carte, 150, 150, 150);
 
     const cursor: React.CSSProperties["cursor"] = dragging ? "grabbing" : (onClick ? "pointer" : "default");
 
     return (
-        <img className="thumbnail" alt="" src={src} srcSet={srcSet} sizes={sizes}
+        <img className="thumbnail" alt={alt ?? ""} src={src} srcSet={srcSet} sizes={sizes}
              width={imageWidth} height={imageHeight} draggable={false} style={{cursor}} onClick={onClick}/>
     );
 }

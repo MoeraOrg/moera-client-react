@@ -1527,6 +1527,10 @@ export const NODE_API_SCHEMAS = {
                 "size": {
                     type: "integer"
                 },
+                "textContent": {
+                    type: "string",
+                    nullable: true
+                },
                 "postingId": {
                     type: "string",
                     nullable: true

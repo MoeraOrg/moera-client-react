@@ -122,14 +122,14 @@ export default function VisualRenderElement(props: RenderElementProps) {
                     );
                 } else if (element.mediaFile != null) {
                     const {
-                        src, srcSet, sizes, width: imageWidth, height: imageHeight
+                        src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
                     } = mediaImageTagAttributes(rootPage, element.mediaFile, carte, 900, width, height);
                     return (
                         <span className="image-attached" {...attributes} contentEditable={false}
                               onClick={onImageClick}>
                             {children}
                             <PreloadedImage src={src} srcSet={srcSet} sizes={sizes}
-                                            width={imageWidth} height={imageHeight} alt=""/>
+                                            width={imageWidth} height={imageHeight} alt={alt ?? ""}/>
                         </span>
                     );
                 } else {
@@ -164,7 +164,7 @@ export default function VisualRenderElement(props: RenderElementProps) {
                     );
                 } else if (element.mediaFile != null) {
                     const {
-                        src, srcSet, sizes, width: imageWidth, height: imageHeight
+                        src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
                     } = mediaImageTagAttributes(rootPage, element.mediaFile, carte, 900, width, height);
                     return (
                         <div className="figure-image-attached" {...attributes} contentEditable={false}
@@ -172,7 +172,7 @@ export default function VisualRenderElement(props: RenderElementProps) {
                             {children}
                             <figure>
                                 <PreloadedImage src={src} srcSet={srcSet} sizes={sizes}
-                                                width={imageWidth} height={imageHeight} alt=""/>
+                                                width={imageWidth} height={imageHeight} alt={alt ?? ""}/>
                                 <figcaption>{element.caption}</figcaption>
                             </figure>
                         </div>
