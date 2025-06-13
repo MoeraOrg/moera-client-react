@@ -47,7 +47,7 @@ export function wrapHashtags(root: HTMLElement): void {
         const fragment = document.createDocumentFragment();
 
         while ((match = HASHTAG.exec(text)) !== null) {
-            const index = match.index > 0 ? match.index + 1 : 0;
+            const index = !match[0].startsWith("#") ? match.index + 1 : 0;
             if (index > lastIndex) {
                 fragment.appendChild(document.createTextNode(text.slice(lastIndex, index)));
             }
