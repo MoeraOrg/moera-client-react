@@ -55,7 +55,7 @@
 
 #owner-navigator .name-select .search-item .body {
     position: relative;
-    top: .1em;
+    top: .05em;
     color: var(--bs-gray-600);
     line-height: 150%;
     overflow-x: hidden;
