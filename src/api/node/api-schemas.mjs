@@ -3370,6 +3370,10 @@ export const NODE_API_SCHEMAS = {
                 "heading": {
                     type: "string"
                 },
+                "description": {
+                    type: "string",
+                    nullable: true
+                },
                 "createdAt": {
                     type: "integer"
                 },
@@ -3685,6 +3689,10 @@ export const NODE_API_SCHEMAS = {
                 "heading": {
                     type: "string"
                 },
+                "description": {
+                    type: "string",
+                    nullable: true
+                },
                 "updateInfo": {
                     anyOf: [
                         {
@@ -3951,6 +3959,10 @@ export const NODE_API_SCHEMAS = {
                 },
                 "heading": {
                     type: "string"
+                },
+                "description": {
+                    type: "string",
+                    nullable: true
                 },
                 "updateInfo": {
                     anyOf: [
@@ -4491,6 +4503,10 @@ export const NODE_API_SCHEMAS = {
                 },
                 "heading": {
                     type: "string"
+                },
+                "description": {
+                    type: "string",
+                    nullable: true
                 },
                 "repliedTo": {
                     anyOf: [

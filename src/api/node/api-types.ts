@@ -28,8 +28,9 @@ export type Scope = "none" | "identify" | "other" | "view-media" | "view-content
     | "view-profile" | "update-profile" | "sheriff" | "view-settings" | "update-settings" | "subscribe" | "tokens"
     | "user-lists" | "grant" | "upload-public-media" | "upload-private-media" | "view-all" | "all";
 
-export type SearchContentUpdateType = "block" | "comment-add" | "comment-update" | "comment-delete" | "friend"
-    | "profile" | "posting-add" | "posting-update" | "posting-delete" | "reaction-add" | "reaction-delete"
+export type SearchContentUpdateType = "block" | "comment-add" | "comment-update" | "comment-update-heading"
+    | "comment-update-media-text" | "comment-delete" | "friend" | "profile" | "posting-add" | "posting-update"
+    | "posting-update-heading" | "posting-update-media-text" | "posting-delete" | "reaction-add" | "reaction-delete"
     | "reactions-delete-all" | "subscribe" | "unblock" | "unfriend" | "unsubscribe";
 
 export type SearchEngine = "google";
@@ -804,6 +805,19 @@ export interface SearchBlockUpdate {
     blockedOperation: BlockedOperation;
 }
 
+export interface SearchCommentHeadingUpdate {
+    postingId: string;
+    commentId: string;
+    heading: string;
+}
+
+export interface SearchCommentMediaTextUpdate {
+    postingId: string;
+    commentId: string;
+    mediaId: string;
+    textContent: string;
+}
+
 export interface SearchCommentUpdate {
     postingId: string;
     commentId: string;
@@ -856,6 +870,17 @@ export interface SearchNodePageInfo {
     page: number;
     total: number;
     nodes: SearchNodeInfo[];
+}
+
+export interface SearchPostingHeadingUpdate {
+    postingId: string;
+    heading: string;
+}
+
+export interface SearchPostingMediaTextUpdate {
+    postingId: string;
+    mediaId: string;
+    textContent: string;
 }
 
 export interface SearchPostingUpdate {
@@ -1302,6 +1327,7 @@ export interface CommentRevisionInfoBase<B> {
     body: B;
     bodyFormat?: BodyFormat | null;
     heading: string;
+    description?: string | null;
     createdAt: number;
     deletedAt?: number | null;
     deadline?: number | null;
@@ -1420,6 +1446,7 @@ export interface PostingInfoBase<B> {
     bodyFormat?: BodyFormat | null;
     media?: MediaAttachment[] | null;
     heading: string;
+    description?: string | null;
     updateInfo?: UpdateInfo | null;
     createdAt: number;
     editedAt?: number | null;
@@ -1464,6 +1491,7 @@ export interface PostingRevisionInfoBase<B> {
     bodyFormat?: BodyFormat | null;
     media?: MediaAttachment[] | null;
     heading: string;
+    description?: string | null;
     updateInfo?: UpdateInfo | null;
     createdAt: number;
     deletedAt?: number | null;
@@ -1618,6 +1646,7 @@ export interface CommentInfoBase<B> {
     bodyFormat?: BodyFormat | null;
     media?: MediaAttachment[] | null;
     heading: string;
+    description?: string | null;
     repliedTo?: RepliedTo | null;
     moment: number;
     createdAt: number;

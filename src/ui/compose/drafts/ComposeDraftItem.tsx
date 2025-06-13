@@ -33,8 +33,8 @@ export default function ComposeDraftItem({draft, current, onSelect, onDelete}: P
     const editDate = fromUnixTime(draft.editedAt ?? draft.createdAt);
 
     const text = useMemo(
-        () => draft.text ? draft.text.replaceAll("<p>", "").replaceAll("</p>", " ") : t("no-text"),
-        [draft.text, t]
+        () => getDraftText(draft) || t("no-text"),
+        [draft, t]
     );
 
     return (
@@ -53,4 +53,26 @@ export default function ComposeDraftItem({draft, current, onSelect, onDelete}: P
             </Button>
         </div>
     );
+}
+
+function getDraftText(draft: ExtDraftInfo): string {
+    let text = (draft.text ?? "").replaceAll("<p>", "").replaceAll("</p>", " ").trim();
+    if (draft.media) {
+        const linkMedia = new Set(draft.body.linkPreviews?.map(lp => lp.imageHash));
+        let hasGallery = false;
+        for (const media of draft.media) {
+            if (media.media?.hash == null || linkMedia.has(media.media.hash)) {
+                continue;
+            }
+            if (media.media.textContent) {
+                text += " " + media.media.textContent;
+            } else {
+                hasGallery = true;
+            }
+        }
+        if (hasGallery) {
+            text += " " + String.fromCodePoint(0x1f5bc);
+        }
+    }
+    return text.trim();
 }
