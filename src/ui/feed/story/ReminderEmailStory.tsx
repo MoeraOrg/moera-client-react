@@ -8,7 +8,7 @@ import { reminderEmailUpdate } from "state/stories/actions";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
 import StoryMenu from "ui/story/StoryMenu";
-import StoryPin from "ui/story/StoryPin";
+import StoryBadges from "ui/story/StoryBadges";
 
 interface OuterProps {
     feedName: string;
@@ -27,7 +27,7 @@ function ReminderEmailStoryInner({feedName, story, values, isSubmitting}: Props)
     return (
         <>
             <StoryMenu story={{...story, feedName}}/>
-            <StoryPin pinned={story.pinned}/>
+            <StoryBadges pinned={story.pinned}/>
             <div className="content me-3">
                 <p>
                     <Trans i18nKey="recommend-set-email">

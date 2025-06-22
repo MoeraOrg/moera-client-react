@@ -7,7 +7,7 @@ import { ExtStoryInfo } from "state/feeds/state";
 import { reminderSheriffAllow } from "state/stories/actions";
 import { Button } from "ui/control";
 import StoryMenu from "ui/story/StoryMenu";
-import StoryPin from "ui/story/StoryPin";
+import StoryBadges from "ui/story/StoryBadges";
 
 interface Props {
     feedName: string;
@@ -29,7 +29,7 @@ function ReminderSheriffAllowStory({feedName, story}: Props) {
     return (
         <>
             <StoryMenu story={{...story, feedName}}/>
-            <StoryPin pinned={story.pinned}/>
+            <StoryBadges pinned={story.pinned}/>
             <div className="content me-3">
                 <p>
                     <Trans i18nKey="do-want-allow-android-google-play">

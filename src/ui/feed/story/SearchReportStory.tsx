@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ExtStoryInfo } from "state/feeds/state";
 import StoryMenu from "ui/story/StoryMenu";
-import StoryPin from "ui/story/StoryPin";
+import StoryBadges from "ui/story/StoryBadges";
 import StorySubject from "ui/story/StorySubject";
 import StoryDate from "ui/story/StoryDate";
 import { interceptLinkClick } from "ui/entry/link-click-intercept";
@@ -28,7 +28,7 @@ export default function SearchReportStory({feedName, story}: Props) {
     return (
         <>
             <StoryMenu story={{...story, feedName}}/>
-            <StoryPin pinned={story.pinned}/>
+            <StoryBadges pinned={story.pinned}/>
             <div className="owner-line">
                 <div className="owner-info">
                     <StoryDate publishedAt={story.publishedAt}/>

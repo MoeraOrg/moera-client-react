@@ -8,7 +8,7 @@ import { reminderFullNameUpdate } from "state/stories/actions";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
 import StoryMenu from "ui/story/StoryMenu";
-import StoryPin from "ui/story/StoryPin";
+import StoryBadges from "ui/story/StoryBadges";
 
 const NAME_EXAMPLES = [
     {name: "harrp", full: "Harry Potter"},
@@ -34,7 +34,7 @@ function ReminderFullNameStoryInner({feedName, story, values, isSubmitting}: Pro
     return (
         <>
             <StoryMenu story={{...story, feedName}}/>
-            <StoryPin pinned={story.pinned}/>
+            <StoryBadges pinned={story.pinned}/>
             <div className="content me-3">
                 <p>
                     <Trans i18nKey="why-not-set-full-name" values={example.current}>

@@ -10,7 +10,7 @@ import { isPermitted } from "state/node/selectors";
 import { goToPosting } from "state/navigation/actions";
 import { MinimalStoryInfo } from "ui/types";
 import PostingMenu from "ui/posting/PostingMenu";
-import StoryPin from "ui/story/StoryPin";
+import StoryBadges from "ui/story/StoryBadges";
 import PostingDate from "ui/posting/PostingDate";
 import PostingUpdated from "ui/posting/PostingUpdated";
 import PostingVisibility from "ui/posting/PostingVisibility";
@@ -68,7 +68,7 @@ export default function FeedPosting({nodeName, posting, story}: FeedPostingProps
     return (
         <>
             <PostingMenu posting={posting} story={story}/>
-            <StoryPin pinned={story.pinned}/>
+            <StoryBadges pinned={story.pinned} recommended={posting.recommended}/>
             <div className="owner-line">
                 <PostingAvatar posting={posting}/>
                 <div className="owner-info">

@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faThumbtack } from '@fortawesome/free-solid-svg-icons';
 
 import { feedScrollToAnchor } from "state/feeds/actions";
+import { Icon, msArrowDownward, msKeepFilled16 } from "ui/material-symbols";
 import { RelNodeName } from "util/rel-node-name";
 import { PINNED_TIME } from "util/misc";
 import { getPageHeaderHeight } from "util/ui";
@@ -46,9 +45,9 @@ export default function FeedSkipPinnedButton({nodeName, feedName}: Props) {
     };
 
     return (
-        <div className="feed-top-button ms-2" onClick={onClick}>
-            <FontAwesomeIcon icon={faThumbtack} size="sm"/>
-            <FontAwesomeIcon icon={faArrowDown} className="ms-1"/>
+        <div className="feed-top-button ms-2 pe-2" onClick={onClick}>
+            <Icon icon={msKeepFilled16} size={16}/>
+            <Icon icon={msArrowDownward} size={16}/>
         </div>
     );
 }

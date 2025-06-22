@@ -8,7 +8,7 @@ import { ExtStoryInfo } from "state/feeds/state";
 import { reminderAvatarUpdate } from "state/stories/actions";
 import AvatarEditor from "ui/profile/edit/avatar/AvatarEditor";
 import StoryMenu from "ui/story/StoryMenu";
-import StoryPin from "ui/story/StoryPin";
+import StoryBadges from "ui/story/StoryBadges";
 
 interface OuterProps {
     feedName: string;
@@ -29,7 +29,7 @@ function ReminderAvatarStoryInner({feedName, story, submitForm}: Props) {
     return (
         <>
             <StoryMenu story={{...story, feedName}}/>
-            <StoryPin pinned={story.pinned}/>
+            <StoryBadges pinned={story.pinned}/>
             <div className="content me-3">
                 <p>
                     <Trans i18nKey="why-not-set-avatar">

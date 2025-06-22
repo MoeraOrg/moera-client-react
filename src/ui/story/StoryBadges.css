@@ -1,0 +1,13 @@
+.posting .badges-line {
+    font-size: .8rem;
+    margin-bottom: .75rem;
+}
+
+.posting .badges-line .pinned {
+    padding-left: .3em;
+    margin-right: .5em;
+}
+
+.posting .badges-line .recommended {
+    padding-bottom: .5em;
+}

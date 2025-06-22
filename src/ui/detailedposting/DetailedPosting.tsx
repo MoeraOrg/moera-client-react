@@ -9,7 +9,7 @@ import { isPermitted } from "state/node/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import { MinimalStoryInfo } from "ui/types";
 import PostingMenu from "ui/posting/PostingMenu";
-import StoryPin from "ui/story/StoryPin";
+import StoryBadges from "ui/story/StoryBadges";
 import PostingDate from "ui/posting/PostingDate";
 import PostingUpdated from "ui/posting/PostingUpdated";
 import PostingVisibility from "ui/posting/PostingVisibility";
@@ -69,7 +69,7 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
     return (
         <div className="posting entry mt-2">
             <PostingMenu posting={posting} story={story} detailed/>
-            <StoryPin pinned={story != null && story.pinned}/>
+            <StoryBadges pinned={story != null && story.pinned} recommended={posting.recommended}/>
             <div className="owner-line">
                 <PostingAvatar posting={posting}/>
                 <div className="owner-info">

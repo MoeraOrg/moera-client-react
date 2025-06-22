@@ -3,6 +3,7 @@ import * as React from 'react';
 import { ReactComponent as msAddBox } from "ui/material-symbols/add_box.isvg";
 import { ReactComponent as msAddLink } from "ui/material-symbols/add_link.isvg";
 import { ReactComponent as msAlternateEmail } from "ui/material-symbols/alternate_email.isvg";
+import { ReactComponent as msArrowDownward } from "ui/material-symbols/arrow_downward.isvg";
 import { ReactComponent as msArrowUpward } from "ui/material-symbols/arrow_upward.isvg";
 import { ReactComponent as msBackspaceFilled16 } from "ui/material-symbols/backspace_filled16.isvg";
 import { ReactComponent as msBadge } from "ui/material-symbols/badge.isvg";
@@ -36,6 +37,7 @@ import { ReactComponent as msFormatQuote } from "ui/material-symbols/format_quot
 import { ReactComponent as msFormatQuoteOff } from "ui/material-symbols/format_quote_off.isvg";
 import { ReactComponent as msFunction } from "ui/material-symbols/function.isvg";
 import { ReactComponent as msHistory } from "ui/material-symbols/history.isvg";
+import { ReactComponent as msKeepFilled16 } from "ui/material-symbols/keep_filled16.isvg";
 import { ReactComponent as msKeyboardArrowDown } from "ui/material-symbols/keyboard_arrow_down.isvg";
 import { ReactComponent as msKeyboardArrowUp } from "ui/material-symbols/keyboard_arrow_up.isvg";
 import { ReactComponent as msLink } from "ui/material-symbols/link.isvg";
@@ -67,6 +69,7 @@ export {
     msAddBox,
     msAddLink,
     msAlternateEmail,
+    msArrowDownward,
     msArrowUpward,
     msBackspaceFilled16,
     msBadge,
@@ -100,6 +103,7 @@ export {
     msFormatQuote,
     msFormatQuoteOff,
     msHistory,
+    msKeepFilled16,
     msLink,
     msKeyboardArrowDown,
     msKeyboardArrowUp,
