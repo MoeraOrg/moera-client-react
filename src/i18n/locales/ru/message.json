@@ -813,6 +813,7 @@
       "instants": {
         "prioritize": "Сортировать уведомления в соответствии с их важностью"
       },
+      "instants_prioritize": "Сортировать уведомления по важности",
       "instants_viewed_lifetime": "Стирать просмотренные уведомления через",
       "media_max-size": "Максимальный размер загружаемых медиафайлов",
       "media_preview-gain": "Фактор эффективности предпросмотра медиа",
@@ -839,9 +840,23 @@
       "push_client_max-number": "Максимальное число клиентов, получающих пуш-уведомления",
       "push_notification_lifetime": "Удалять неполученные пуш-уведомления через",
       "reaction_deleted_lifetime": "Стирать удалённые реакции через",
+      "recommendations_frequency": "Количество рекомендаций",
+      "recommendations_frequency-items": {
+        "less": "Меньше",
+        "more": "Больше",
+        "much-less": "Гораздо меньше",
+        "much-more": "Гораздо больше",
+        "none": "Выключены",
+        "normal": "Среднее"
+      },
+      "recommendations_safe": "Безопасные рекомендации",
+      "recommendations_sheriff": "Шериф, проверяющий рекомендации на безопасность",
+      "recommendations_source": "Используемый сервис рекомендаций",
       "remote-comment-verification_lifetime": "Хранить результаты верификации комментария в течение",
       "remote-posting-verification_lifetime": "Хранить результаты верификации поста в течение",
       "remote-reaction-verification_lifetime": "Хранить результаты верификации реакции в течение",
+      "search_known": "Известные поисковые системы, которым автоматически разрешено получать уведомления",
+      "search_max-unknown": "Максимальное число неизвестных поисковых систем, которые могут получать уведомления",
       "subscribers_view": "Список подписчиков виден",
       "subscribers_view-total": "Число подписчиков видно",
       "subscription_auto_forced": "Не разрешать отписываться от автоматической подписки",

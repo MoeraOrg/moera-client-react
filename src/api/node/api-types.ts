@@ -727,6 +727,19 @@ export interface ReactionOverride {
     majorOperations?: ReactionOperations | null;
 }
 
+export interface RecommendedPostingInfo {
+    nodeName: string;
+    postingId: string;
+    ownerName: string;
+    ownerFullName?: string | null;
+    ownerAvatar?: AvatarImage | null;
+    heading: string;
+    totalPositiveReactions: number;
+    lastDayPositiveReactions: number;
+    totalComments: number;
+    lastDayComments: number;
+}
+
 export interface RegisteredNameSecret {
     name: string;
     mnemonic?: string[] | null;
@@ -940,14 +953,9 @@ export interface SettingMetaAttributes {
     privileged?: boolean | null;
 }
 
-export interface SettingTypeModifiers {
-    format?: string | null;
-    min?: string | null;
-    max?: string | null;
-    multiline?: boolean | null;
-    never?: boolean | null;
-    always?: boolean | null;
-    principals?: PrincipalFlag[] | null;
+export interface SettingValueChoice {
+    title: string;
+    value: string;
 }
 
 export interface SheriffComplaintDecisionText {
@@ -1476,6 +1484,7 @@ export interface PostingInfoBase<B> {
     reactions?: ReactionTotalsInfo | null;
     sources?: PostingSourceInfo[] | null;
     totalComments?: number | null;
+    recommended?: boolean | null;
 }
 
 export type EncodedPostingInfo = PostingInfoBase<string>;
@@ -1588,24 +1597,15 @@ export interface SearchTextPageInfoBase<B> {
 export type EncodedSearchTextPageInfo = SearchTextPageInfoBase<string>;
 export type SearchTextPageInfo = SearchTextPageInfoBase<Body>;
 
-export interface SettingDescriptor {
-    name: string;
-    type: SettingType;
-    defaultValue?: string | null;
-    internal?: boolean | null;
-    privileged?: boolean | null;
-    encrypted?: boolean | null;
-    title?: string | null;
-    modifiers?: SettingTypeModifiers | null;
-}
-
-export interface SettingMetaInfo {
-    name: string;
-    type: SettingType;
-    defaultValue?: string | null;
-    privileged?: boolean | null;
-    title: string;
-    modifiers?: SettingTypeModifiers | null;
+export interface SettingTypeModifiers {
+    format?: string | null;
+    min?: string | null;
+    max?: string | null;
+    multiline?: boolean | null;
+    never?: boolean | null;
+    always?: boolean | null;
+    items?: SettingValueChoice[] | null;
+    principals?: PrincipalFlag[] | null;
 }
 
 export interface StorySummaryData {
@@ -1720,25 +1720,24 @@ export interface EntryInfoBase<B> {
 export type EncodedEntryInfo = EntryInfoBase<string>;
 export type EntryInfo = EntryInfoBase<Body>;
 
-export interface PluginDescription {
+export interface SettingDescriptor {
     name: string;
+    type: SettingType;
+    defaultValue?: string | null;
+    internal?: boolean | null;
+    privileged?: boolean | null;
+    encrypted?: boolean | null;
     title?: string | null;
-    description?: string | null;
-    location?: string | null;
-    acceptedEvents?: string[] | null;
-    options?: SettingDescriptor[] | null;
+    modifiers?: SettingTypeModifiers | null;
 }
 
-export interface PluginInfo {
-    nodeId: string;
-    local: boolean;
+export interface SettingMetaInfo {
     name: string;
-    title?: string | null;
-    description?: string | null;
-    location?: string | null;
-    acceptedEvents?: string[] | null;
-    settings?: SettingMetaInfo[] | null;
-    tokenId?: string | null;
+    type: SettingType;
+    defaultValue?: string | null;
+    privileged?: boolean | null;
+    title: string;
+    modifiers?: SettingTypeModifiers | null;
 }
 
 export interface StoryInfoBase<B> {
@@ -1790,6 +1789,27 @@ export interface FeedSliceInfoBase<B> {
 
 export type EncodedFeedSliceInfo = FeedSliceInfoBase<string>;
 export type FeedSliceInfo = FeedSliceInfoBase<Body>;
+
+export interface PluginDescription {
+    name: string;
+    title?: string | null;
+    description?: string | null;
+    location?: string | null;
+    acceptedEvents?: string[] | null;
+    options?: SettingDescriptor[] | null;
+}
+
+export interface PluginInfo {
+    nodeId: string;
+    local: boolean;
+    name: string;
+    title?: string | null;
+    description?: string | null;
+    location?: string | null;
+    acceptedEvents?: string[] | null;
+    settings?: SettingMetaInfo[] | null;
+    tokenId?: string | null;
+}
 
 export interface PushContentBase<B> {
     type: PushContentType;

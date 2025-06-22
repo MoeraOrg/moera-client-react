@@ -813,6 +813,7 @@
       "instants": {
         "prioritize": "Arrange notifications according to their importance"
       },
+      "instants_prioritize": "Arrange notifications according to their importance",
       "instants_viewed_lifetime": "Purge viewed notifications after",
       "media_max-size": "Maximal size of an uploaded media",
       "media_preview-gain": "Media preview gain factor",
@@ -839,9 +840,23 @@
       "push_client_max-number": "Maximal number of clients receiving push notifications",
       "push_notification_lifetime": "Delete not received push notifications after",
       "reaction_deleted_lifetime": "Purge deleted reactions after",
+      "recommendations_frequency": "Number of recommendations",
+      "recommendations_frequency-items": {
+        "less": "Less",
+        "more": "More",
+        "much-less": "Much less",
+        "much-more": "Much more",
+        "none": "Off",
+        "normal": "Moderate"
+      },
+      "recommendations_safe": "Safe recommendations",
+      "recommendations_sheriff": "Sheriff supervising the recommendations for safety",
+      "recommendations_source": "Recommendation service to use",
       "remote-comment-verification_lifetime": "Comment verification information lifetime",
       "remote-posting-verification_lifetime": "Post verification information lifetime",
       "remote-reaction-verification_lifetime": "Reaction verification information lifetime",
+      "search_known": "Known search engines that are automatically allowed to receive notifications",
+      "search_max-unknown": "Maximal number of unknown search engines that may receive notifications",
       "subscribers_view": "List of subscribers is visible to",
       "subscribers_view-total": "Number of subscribers is visible to",
       "subscription_auto_forced": "Do not allow to unsubscribe from the automatic subscription",

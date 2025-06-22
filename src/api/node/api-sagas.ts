@@ -1495,6 +1495,83 @@ export async function registerAtPushRelay(
     });
 }
 
+export async function getRecommendedPostings(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, sheriff: string | null = null,
+    limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
+): Promise<API.RecommendedPostingInfo[]> {
+
+    const location = urlWithParameters(ut`/recommendations/postings`, {sheriff, limit});
+    return callApi<API.RecommendedPostingInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "RecommendedPostingInfoArray", errorFilter
+    });
+}
+
+export async function getRecommendedPostingsForReading(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, sheriff: string | null = null,
+    limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
+): Promise<API.RecommendedPostingInfo[]> {
+
+    const location = urlWithParameters(ut`/recommendations/postings/reading`, {sheriff, limit});
+    return callApi<API.RecommendedPostingInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "RecommendedPostingInfoArray", errorFilter
+    });
+}
+
+export async function getRecommendedPostingsForCommenting(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, sheriff: string | null = null,
+    limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
+): Promise<API.RecommendedPostingInfo[]> {
+
+    const location = urlWithParameters(ut`/recommendations/postings/commenting`, {sheriff, limit});
+    return callApi<API.RecommendedPostingInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "RecommendedPostingInfoArray", errorFilter
+    });
+}
+
+export async function acceptRecommendedPosting(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    postingId: string, errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.Result> {
+
+    const location = ut`/recommendations/postings/accepted/${remoteNodeName}/${postingId}`;
+    return callApi<API.Result>({
+        caller, nodeName, method: "POST", location, auth, schema: "Result", errorFilter
+    });
+}
+
+export async function rejectRecommendedPosting(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    postingId: string, errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.Result> {
+
+    const location = ut`/recommendations/postings/rejected/${remoteNodeName}/${postingId}`;
+    return callApi<API.Result>({
+        caller, nodeName, method: "POST", location, auth, schema: "Result", errorFilter
+    });
+}
+
+export async function excludeNodeFromRecommendations(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.Result> {
+
+    const location = ut`/recommendations/nodes/excluded/${remoteNodeName}`;
+    return callApi<API.Result>({
+        caller, nodeName, method: "POST", location, auth, schema: "Result", errorFilter
+    });
+}
+
+export async function allowNodeInRecommendations(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.Result> {
+
+    const location = ut`/recommendations/nodes/excluded/${remoteNodeName}`;
+    return callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
+    });
+}
+
 export async function askRemoteNode(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     details: API.AskDescription, errorFilter: ErrorFilter = false, auth: true | string = true

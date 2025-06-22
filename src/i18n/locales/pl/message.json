@@ -813,6 +813,7 @@
       "instants": {
         "prioritize": "Uporządkuj powiadomienia zgodnie z ich ważnością"
       },
+      "instants_prioritize": "Uporządkuj powiadomienia zgodnie z ich ważnością",
       "instants_viewed_lifetime": "Usuń wyświetlone powiadomienia po",
       "media_max-size": "Maksymalny rozmiar przesłanego pliku multimedialnego",
       "media_preview-gain": "Współczynnik powiększenia podglądu pliku multimedialnego",
@@ -839,9 +840,23 @@
       "push_client_max-number": "Maksymalna liczba klientów odbierających powiadomienia push",
       "push_notification_lifetime": "Usuń nieodebrane powiadomienia push po",
       "reaction_deleted_lifetime": "Usuń usunięte reakcje po",
+      "recommendations_frequency": "Liczba rekomendacji",
+      "recommendations_frequency-items": {
+        "less": "Mniej",
+        "more": "Więcej",
+        "much-less": "Znacznie mniej",
+        "much-more": "Dużo więcej",
+        "none": "Wyłączony",
+        "normal": "Umiarkowany"
+      },
+      "recommendations_safe": "Bezpieczne rekomendacje",
+      "recommendations_sheriff": "Szeryf sprawdzający referencje dotyczące bezpieczeństwa",
+      "recommendations_source": "Usługa rekomendacji do użycia",
       "remote-comment-verification_lifetime": "Okres ważności informacji weryfikacyjnych dla komentarzy",
       "remote-posting-verification_lifetime": "Okres ważności informacji weryfikacyjnych dla postów",
       "remote-reaction-verification_lifetime": "Okres ważności informacji weryfikacyjnych dla reakcji",
+      "search_known": "Znane wyszukiwarki, które automatycznie mogą otrzymywać powiadomienia",
+      "search_max-unknown": "Maksymalna liczba nieznanych wyszukiwarek, które mogą otrzymywać powiadomienia",
       "subscribers_view": "Lista subskrybentów jest widoczna dla",
       "subscribers_view-total": "Liczba subskrybentów jest widoczna dla",
       "subscription_auto_forced": "Nie zezwalaj na rezygnację z automatycznej subskrypcji",
