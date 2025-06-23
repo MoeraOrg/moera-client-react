@@ -33,13 +33,15 @@ import {
     FeedsUpdateAction,
     FeedUnsubscribeAction,
     feedUnsubscribed,
-    feedUnsubscribeFailed
+    feedUnsubscribeFailed,
+    RecommendationDontAction
 } from "state/feeds/actions";
 import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { homeIntroduced } from "state/init-barriers";
 import { executor } from "state/executor";
+import { getSettingNode } from "state/settings/selectors";
 import { StoryAddedAction, storySatisfy, StoryUpdatedAction } from "state/stories/actions";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { fillActivityReactionsInStories } from "state/activityreactions/sagas";
@@ -70,7 +72,8 @@ export default [
     executor("FEED_FUTURE_SLICE_SET", null, feedExecuteSliceButtonsActions),
     executor("FEED_SLICE_UPDATE", null, feedExecuteSliceButtonsActions),
     executor("STORY_ADDED", null, feedExecuteButtonsActions),
-    executor("STORY_UPDATED", null, feedExecuteButtonsActions)
+    executor("STORY_UPDATED", null, feedExecuteButtonsActions),
+    executor("RECOMMENDATION_DONT", null, recommendationDontSaga)
 ];
 
 async function feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>): Promise<void> {
@@ -336,5 +339,21 @@ function executeStoryButtonsActions(story: StoryInfo, cause: WithContext<ClientA
                 dispatch(storyActions.causedBy(cause));
             }
         }
+    }
+}
+
+async function recommendationDontSaga(action: WithContext<RecommendationDontAction>): Promise<void> {
+    await homeIntroduced();
+    const {receiverName, deleteAll} = action.payload;
+
+    const sourceName = select(state => getSettingNode(state, "recommendations.source") as string);
+    try {
+        await Node.excludeNodeFromRecommendations(action, sourceName, receiverName);
+        dispatch(flashBox(i18n.t("recommendation-settings-updated")).causedBy(action));
+        if (deleteAll) {
+            Node.deleteFeedStories(action, REL_HOME, "news", "posting-added", receiverName, true);
+        }
+    } catch (e) {
+        dispatch(errorThrown(e));
     }
 }

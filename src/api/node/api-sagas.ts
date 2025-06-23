@@ -811,6 +811,18 @@ export async function getFeedSlice(
     });
 }
 
+export async function deleteFeedStories(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, feedName: string,
+    type: API.StoryType | null = null, receiver: string | null = null, recommended: boolean | null = null,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.Result> {
+
+    const location = urlWithParameters(ut`/feeds/${feedName}/stories`, {type, receiver, recommended});
+    return callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
+    });
+}
+
 export async function getFriendGroups(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: boolean | string = true

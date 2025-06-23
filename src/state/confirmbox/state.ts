@@ -14,6 +14,7 @@ export interface ConfirmBoxState {
     onNo: ConfirmBoxButtonAction | null,
     onCancel: ConfirmBoxButtonAction | null,
     variant: string,
+    dontShowAgain: string | null;
     dontShowAgainBox: boolean;
     parentOverlayId: string | undefined;
 }

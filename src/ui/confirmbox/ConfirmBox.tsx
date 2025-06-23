@@ -10,8 +10,10 @@ import { Button, Checkbox, ModalDialog } from "ui/control";
 import { htmlEntities } from "util/html";
 
 export default function ConfirmBox() {
-    const {message, yes, no, cancel, onYes, onNo, onCancel, variant, dontShowAgainBox, parentOverlayId} =
-        useSelector((state: ClientState) => state.confirmBox);
+    const {
+        message, yes, no, cancel, onYes, onNo, onCancel, variant, dontShowAgain: dontAskAgain, dontShowAgainBox,
+        parentOverlayId
+    } = useSelector((state: ClientState) => state.confirmBox);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -61,7 +63,7 @@ export default function ConfirmBox() {
                         <Checkbox name="dont-show-again" id="dont-show-again" checked={dontShowAgain} value={1}
                                   onChange={onDontShowAgainChange}/>
                         {" "}
-                        <label htmlFor="dont-show-again">{t("dont-ask-again")}</label>
+                        <label htmlFor="dont-show-again">{dontAskAgain ?? t("dont-ask-again")}</label>
                     </>
                 }
             </div>

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
-import { PostingInfo } from "api";
+import { NodeName, PostingInfo } from "api";
 import { ClientState } from "state/state";
 import { confirmBox } from "state/confirmbox/actions";
 import {
@@ -31,6 +31,7 @@ import {
 import { commentsShowInvisibleSet } from "state/detailedposting/actions";
 import { hasInvisibleComments, isCommentsShowInvisible } from "state/detailedposting/selectors";
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
+import { recommendationDont } from "state/feeds/actions";
 import { MinimalStoryInfo } from "ui/types";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
@@ -115,6 +116,21 @@ function PostingMenuItems({posting, story, detailed}: Props) {
     const onPin = () => dispatch(storyPinningUpdate(story.id, !story.pinned));
 
     const onChangeDate = () => dispatch(openChangeDateDialog(story.id, story.publishedAt));
+
+    const onDontRecommend = () => {
+        dispatch(confirmBox({
+            message: t(
+                "dont-recommend-user",
+                {name: posting.receiverFullName || NodeName.shorten(posting.receiverName)}
+            ),
+            yes: t("dont-recommend"),
+            no: t("cancel"),
+            onYes: deleteAll => posting.receiverName ? recommendationDont(posting.receiverName, deleteAll) : null,
+            variant: "danger",
+            dontShowAgain: t("delete-all-his-recommended", {gender: posting.receiverGender}),
+            dontShowAgainBox: true
+        }));
+    }
 
     const onViewSource = () => {
         if (posting.receiverName == null) {
@@ -224,6 +240,22 @@ function PostingMenuItems({posting, story, detailed}: Props) {
                 href: postingHref,
                 onClick: onChangeDate,
                 show: posting.receiverName == null && storyEditable
+            },
+            {
+                divider: true
+            },
+            {
+                title: t("dont-recommend"),
+                nodeName: REL_CURRENT,
+                href: postingHref,
+                onClick: onDontRecommend,
+                show: posting.recommended ?? false
+            },
+            {
+                title: t("tune-recommendations"),
+                nodeName: REL_HOME,
+                href: "/settings/node#news",
+                show: posting.recommended ?? false
             },
             {
                 divider: true

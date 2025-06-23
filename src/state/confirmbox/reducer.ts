@@ -11,6 +11,7 @@ const initialState: ConfirmBoxState = {
     onNo: null,
     onCancel: null,
     variant: "primary",
+    dontShowAgain: null,
     dontShowAgainBox: false,
     parentOverlayId: undefined
 };

@@ -10,6 +10,7 @@ export interface ConfirmBoxAttributes {
     onNo?: ConfirmBoxButtonAction;
     onCancel?: ConfirmBoxButtonAction;
     variant?: string;
+    dontShowAgain?: string;
     dontShowAgainBox?: boolean;
     parentOverlayId?: string | undefined;
 }
