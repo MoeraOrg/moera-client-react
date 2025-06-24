@@ -73,6 +73,7 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             chapter("general", null, [
                 option("posting.subject.present"),
                 option("posting.max-size"),
+                option("posting.published.notification.age"),
                 option("posting.revealed.notification.age"),
             ]),
             chapter("media", null, [
@@ -83,11 +84,15 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             ]),
         ]),
         sheet("news", [
-            option("news.lifetime"),
-            option("news.purge-pinned"),
-            option("posting.picked.hide-on-delete"),
-            option("recommendations.frequency"),
-            option("recommendations.safe"),
+            chapter("general", null, [
+                option("news.lifetime"),
+                option("news.purge-pinned"),
+                option("posting.picked.hide-on-delete"),
+            ]),
+            chapter("recommendations", null, [
+                option("recommendations.frequency"),
+                option("recommendations.safe"),
+            ]),
         ]),
         sheet("security", [
             chapter("password", null, [
