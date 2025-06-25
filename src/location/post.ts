@@ -10,7 +10,8 @@ import { REL_CURRENT } from "util/rel-node-name";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     const postingId = dstInfo.directories[1];
-    const commentId = dstInfo.hash ? dstInfo.hash : dstInfo.parameters["comment"];
+    const hash = dstInfo.hash?.includes("_fn-") || dstInfo.hash?.includes("_fnref-") ? null : dstInfo.hash;
+    const commentId = hash || dstInfo.parameters["comment"];
     const actions: ClientAction[] = [goToPosting(postingId, commentId)];
     const mediaId = dstInfo.parameters["media"];
     if (mediaId != null) {

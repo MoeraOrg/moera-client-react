@@ -167,6 +167,11 @@ export default function EntryHtml({
         }
 
         root.querySelectorAll("a").forEach(node => {
+            const href = node.getAttribute("href");
+            if (!href || href.startsWith("#")) {
+                return;
+            }
+
             const name = node.getAttribute("data-nodename");
             if (!name) {
                 node.addEventListener("click", interceptLinkClick);
