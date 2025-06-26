@@ -2,11 +2,11 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
+import { format, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import { PostingInfo, PrincipalValue } from "api";
-import { getDateFnsLocale } from "i18n";
+import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
 import { postingOperationsUpdate } from "state/postings/actions";
 import { getSetting } from "state/settings/selectors";
@@ -32,7 +32,7 @@ export default function PostingVisibility({posting, editable}: Props) {
     if (posting.receiverDeletedAt != null) {
         const date = fromUnixTime(posting.receiverDeletedAt);
         deletionDate = timeRelative
-            ? formatDistanceToNow(date, {locale: getDateFnsLocale()})
+            ? tDistanceToNow(date, t)
             : format(date, "dd-MM-yyyy HH:mm")
     }
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
+import { format, formatISO, fromUnixTime } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { AvatarImage, NodeName } from "api";
-import { getDateFnsLocale } from "i18n";
+import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
 import { getNodeCard, isNodeCardAnyLoaded, isNodeCardAnyLoading } from "state/nodecards/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
@@ -82,7 +82,7 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
                             {`, ${t("last-post")} `}
                             <time dateTime={formatISO(storiesLastDate)}
                                   title={format(storiesLastDate, "dd-MM-yyyy HH:mm")}>
-                                {formatDistanceToNow(storiesLastDate, {addSuffix: true, locale: getDateFnsLocale()})}
+                                {tDistanceToNow(storiesLastDate, t, {ago: true})}
                             </time>
                         </>
                     }

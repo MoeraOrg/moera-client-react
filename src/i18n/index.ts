@@ -1,7 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import ICU from 'i18next-icu';
-import { enUS, pl, ru, uk } from 'date-fns/locale'
 import { titleCase } from 'title-case';
 
 import message_en from "i18n/locales/en/message.json";
@@ -28,13 +27,6 @@ const LANGUAGE_RESOURCES = {
 
 const LANGUAGES_SUPPORTED: string[] = ["en", "pl", "ru", "uk"];
 
-const DATE_FNS_LOCALES: Partial<Record<string, Locale>> = {
-    "en": enUS,
-    "pl": pl,
-    "ru": ru,
-    "uk": uk
-}
-
 export function findPreferredLanguage(): string {
     for (const language of navigator.languages) {
         const lang = language.toLowerCase();
@@ -48,9 +40,6 @@ export function findPreferredLanguage(): string {
     }
     return "en";
 }
-
-export const getDateFnsLocale = (): Locale =>
-    DATE_FNS_LOCALES[i18n.language] ?? enUS;
 
 export const tGender = (gender: string | null | undefined): string =>
     gender != null ? gender.toLowerCase() : "";

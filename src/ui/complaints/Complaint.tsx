@@ -1,9 +1,9 @@
 import React from 'react';
 import { useSelector } from "react-redux";
-import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
+import { format, formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
-import { getDateFnsLocale } from "i18n";
+import { tDistanceToNow } from "i18n/time";
 import { isAtHomeNode } from "state/node/selectors";
 import { ExtComplaintInfo } from "state/complaints/state";
 import NodeName from "ui/nodename/NodeName";
@@ -25,7 +25,7 @@ export default function Complaint({complaint}: Props) {
                 <NodeName name={complaint.ownerName} fullName={complaint.ownerFullName}/>
             </span>
             <span className="date">
-                <time dateTime={formatISO(date)} title={formatDistanceToNow(date, {locale: getDateFnsLocale()})}>
+                <time dateTime={formatISO(date)} title={tDistanceToNow(date, t)}>
                     {format(date, "dd-MM-yyyy HH:mm")}
                 </time>
             </span>

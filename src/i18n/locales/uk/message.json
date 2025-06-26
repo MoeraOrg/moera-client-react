@@ -963,6 +963,28 @@
   "this-week": "Цього тижня",
   "this-year": "Цього року",
   "three-months-ago": "3 місяці тому",
+  "time": {
+    "ago": "тому",
+    "day": {
+      "short": "дн"
+    },
+    "hour": {
+      "short": "год"
+    },
+    "minute": {
+      "short": "хв"
+    },
+    "month": {
+      "short": "міс"
+    },
+    "now": "зараз",
+    "week": {
+      "short": "тиж"
+    },
+    "year": {
+      "short": "р"
+    }
+  },
   "title": "Заголовок",
   "today": "Сьогодні",
   "token-copied": "Токен скопійований до буфера обміну",

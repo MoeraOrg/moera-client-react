@@ -963,6 +963,28 @@
   "this-week": "W tym tygodniu",
   "this-year": "W tym roku",
   "three-months-ago": "3 miesiące temu",
+  "time": {
+    "ago": "temu",
+    "day": {
+      "short": "d"
+    },
+    "hour": {
+      "short": "godz"
+    },
+    "minute": {
+      "short": "min"
+    },
+    "month": {
+      "short": "mies"
+    },
+    "now": "teraz",
+    "week": {
+      "short": "tydz"
+    },
+    "year": {
+      "short": "r"
+    }
+  },
   "title": "Tytuł",
   "today": "Dzisiaj",
   "token-copied": "Token skopiowany do schowka",

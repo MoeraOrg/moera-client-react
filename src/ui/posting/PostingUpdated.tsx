@@ -1,9 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
+import { format, formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
-import { getDateFnsLocale } from "i18n";
+import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 
@@ -34,7 +34,7 @@ export default function PostingUpdated({createdAt, editedAt, publishedAt}: Props
             {" "}({t("posting-updated-at")} {
                 timeRelative ?
                     <abbr title={format(date, "dd-MM-yyyy HH:mm")}>
-                        {formatDistanceToNow(date, {locale: getDateFnsLocale()})}
+                        {tDistanceToNow(date, t)}
                     </abbr>
                 :
                     (editedSoon ? format(date, "HH:mm") : format(date, "dd-MM-yyyy HH:mm"))

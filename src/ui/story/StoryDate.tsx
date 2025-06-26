@@ -1,8 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
-import { getDateFnsLocale } from 'i18n';
+import { useTranslation } from 'react-i18next';
+import { format, formatISO, fromUnixTime } from 'date-fns';
 
+import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import Jump from "ui/navigation/Jump";
@@ -17,15 +18,16 @@ function StoryDateText({date}: StoryDateTextProps) {
     const timeRelative = useSelector((state: ClientState) => getSetting(state, "posting.time.relative") as boolean);
     useSelector((state: ClientState) =>
         getSetting(state, "posting.time.relative") ? state.pulse.pulse : null); // To force re-rendering only
+    const {t} = useTranslation();
 
     return (
         <>{
             timeRelative ?
                 <time dateTime={formatISO(date)} title={format(date, "dd-MM-yyyy HH:mm")}>
-                    {formatDistanceToNow(date, {locale: getDateFnsLocale()})}
+                    {tDistanceToNow(date, t)}
                 </time>
-                :
-                <time dateTime={formatISO(date)} title={formatDistanceToNow(date, {locale: getDateFnsLocale()})}>
+            :
+                <time dateTime={formatISO(date)} title={tDistanceToNow(date, t)}>
                     {format(date, "dd-MM-yyyy HH:mm")}
                 </time>
         }</>

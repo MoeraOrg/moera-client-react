@@ -963,6 +963,28 @@
   "this-week": "На этой неделе",
   "this-year": "В этом году",
   "three-months-ago": "3 месяца назад",
+  "time": {
+    "ago": "назад",
+    "day": {
+      "short": "дн"
+    },
+    "hour": {
+      "short": "ч"
+    },
+    "minute": {
+      "short": "мин"
+    },
+    "month": {
+      "short": "мес"
+    },
+    "now": "сейчас",
+    "week": {
+      "short": "нед"
+    },
+    "year": {
+      "short": "г"
+    }
+  },
   "title": "Заголовок",
   "today": "Сегодня",
   "token-copied": "Токен скопирован в буфер обмена",

@@ -963,6 +963,28 @@
   "this-week": "This week",
   "this-year": "This year",
   "three-months-ago": "3 months ago",
+  "time": {
+    "ago": "ago",
+    "day": {
+      "short": "d"
+    },
+    "hour": {
+      "short": "hr"
+    },
+    "minute": {
+      "short": "min"
+    },
+    "month": {
+      "short": "mo"
+    },
+    "now": "now",
+    "week": {
+      "short": "wk"
+    },
+    "year": {
+      "short": "yr"
+    }
+  },
   "title": "Title",
   "today": "Today",
   "token-copied": "Token copied to the clipboard",

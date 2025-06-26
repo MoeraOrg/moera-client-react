@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons';
-import { formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
+import { formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
-import { getDateFnsLocale } from "i18n";
+import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
 import { isHomeGooglePlayHiding } from "state/home/selectors";
 import { storyReadingUpdate } from "state/stories/actions";
@@ -77,7 +77,7 @@ export default function InstantStory({story, lastNew, hide}: Props) {
             }
             <div className="footer">
                 <time className="date" dateTime={formatISO(publishDate)}>
-                    {formatDistanceToNow(publishDate, {locale: getDateFnsLocale()})}
+                    {tDistanceToNow(publishDate, t)}
                 </time>
             </div>
             {buttons && React.createElement(buttons, {story, hide})}

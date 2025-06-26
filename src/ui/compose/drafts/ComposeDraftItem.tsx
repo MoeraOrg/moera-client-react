@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import cx from 'classnames';
 import LinesEllipsis from 'react-lines-ellipsis';
-import { formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
+import { formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
-import { getDateFnsLocale } from "i18n";
+import { tDistanceToNow } from "i18n/time";
 import { ExtDraftInfo } from "state/compose/state";
 import { Button } from "ui/control";
 import { Icon, msDelete } from "ui/material-symbols";
@@ -45,7 +45,7 @@ export default function ComposeDraftItem({draft, current, onSelect, onDelete}: P
                     <LinesEllipsis text={text} maxLine="3"/>
                 </div>
                 <time className="edited" dateTime={formatISO(editDate)}>
-                    {formatDistanceToNow(editDate, {locale: getDateFnsLocale()})}
+                    {tDistanceToNow(editDate, t)}
                 </time>
             </div>
             <Button variant="tool" className="draft-delete" title={t("delete-draft")} onClick={handleDelete}>

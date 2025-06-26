@@ -1,8 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
+import { useTranslation } from 'react-i18next';
+import { format, formatISO, fromUnixTime } from 'date-fns';
 
-import { getDateFnsLocale } from "i18n";
+import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
 import Jump from "ui/navigation/Jump";
 import { RelNodeName } from "util/rel-node-name";
@@ -17,12 +18,13 @@ interface Props {
 
 export default function CommentDate({nodeName, postingId, commentId, createdAt}: Props) {
     useSelector((state: ClientState) => state.pulse.pulse); // To force re-rendering only
+    const {t} = useTranslation();
 
     const date = fromUnixTime(createdAt);
     return (
         <Jump nodeName={nodeName} href={`/post/${postingId}?comment=${commentId}`} className="date">
             <time dateTime={formatISO(date)} title={format(date, "dd-MM-yyyy HH:mm")}>
-                {formatDistanceToNow(date, {locale: getDateFnsLocale()})}
+                {tDistanceToNow(date, t)}
             </time>
         </Jump>
     );
