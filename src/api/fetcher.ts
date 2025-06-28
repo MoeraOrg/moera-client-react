@@ -41,6 +41,10 @@ class XhrResponse implements Response {
         return Promise.resolve(new Blob());
     }
 
+    bytes(): Promise<Uint8Array> {
+        return Promise.resolve(new Uint8Array());
+    }
+
     clone(): Response {
         return new XhrResponse(this.xhr, this.url);
     }
