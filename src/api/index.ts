@@ -29,8 +29,12 @@ export type { SettingValue } from "api/setting-types";
 export {
     MAIN_NEGATIVE_REACTIONS,
     MAIN_NEGATIVE_REACTIONS_SET,
+    ADDITIONAL_NEGATIVE_REACTIONS,
+    ADDITIONAL_NEGATIVE_REACTIONS_SET,
     MAIN_POSITIVE_REACTIONS,
     MAIN_POSITIVE_REACTIONS_SET,
+    ADDITIONAL_POSITIVE_REACTIONS,
+    ADDITIONAL_POSITIVE_REACTIONS_SET,
     REACTION_EMOJIS
 } from "api/node/reaction-emojis";
 export { SHERIFF_ORDER_REASON_CODES } from "api/node/sheriff-order-reason-codes";

@@ -111,6 +111,10 @@ export const REACTION_EMOJIS: ReactionEmojis = {
         0x1f971: {
             title: "reaction-title.tired",
             color: "#ffcc4d"
+        },
+        0x1f631: {
+            title: "reaction-title.horror",
+            color: "#bdddf4"
         }
     },
     negative: {
@@ -162,7 +166,16 @@ export const MAIN_POSITIVE_REACTIONS: number[] = [
 ];
 export const MAIN_POSITIVE_REACTIONS_SET: Set<number> = new Set(MAIN_POSITIVE_REACTIONS);
 
+export const ADDITIONAL_POSITIVE_REACTIONS: number[] = [
+    0x1f37f, 0x1f525, 0x1f48e, 0x1f970, 0x1f923, 0x1fac2, 0x1f971, 0x1f631, 0x1f64f, 0x1f62d, 0x1f49d, 0x1f9f8, 0x1f379,
+    0x1f60c
+];
+export const ADDITIONAL_POSITIVE_REACTIONS_SET: Set<number> = new Set(ADDITIONAL_POSITIVE_REACTIONS);
+
 export const MAIN_NEGATIVE_REACTIONS: number[] = [
     0x1f4a4, 0x1f44e, 0x1f4a9, 0x2694, 0x23f3, 0x1f3a9, 0x1f643, 0x1f61c, 0x1f494, 0x1f47f
 ];
 export const MAIN_NEGATIVE_REACTIONS_SET: Set<number> = new Set(MAIN_NEGATIVE_REACTIONS);
+
+export const ADDITIONAL_NEGATIVE_REACTIONS: number[] = [];
+export const ADDITIONAL_NEGATIVE_REACTIONS_SET: Set<number> = new Set(ADDITIONAL_NEGATIVE_REACTIONS);
