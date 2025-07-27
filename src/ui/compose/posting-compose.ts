@@ -143,7 +143,7 @@ export const valuesToPostingText = (values: ComposePageValues, props: ValuesToPo
     }),
     bodySrcFormat: values.bodyFormat,
     media: (values.body.orderedMediaList() ?? []).concat(values.linkPreviews.media.map(vm => vm.id)),
-    acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
+    rejectedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
     publications: buildPublications(values, props),
     updateInfo: {
         important: values.updateImportant,
@@ -302,16 +302,12 @@ export const composePageLogic = {
             : props.posting != null
                 ? (props.posting.operations?.addNegativeReaction ?? "signed") !== "none"
                 : props.reactionsNegativeEnabledDefault;
-        const reactionsPositive = props.draft != null
-            ? props.draft.acceptedReactions?.positive ?? ""
-            : props.posting != null
-                ? props.posting.acceptedReactions?.positive ?? ""
-                : props.reactionsPositiveDefault;
-        const reactionsNegative = props.draft != null
-            ? props.draft.acceptedReactions?.negative ?? ""
-            : props.posting != null
-                ? props.posting.acceptedReactions?.negative ?? ""
-                : props.reactionsNegativeDefault;
+        const reactionsPositive =
+            (props.draft != null ? props.draft.rejectedReactions?.positive : props.posting?.rejectedReactions?.positive)
+            ?? props.reactionsPositiveDefault;
+        const reactionsNegative =
+            (props.draft != null ? props.draft.rejectedReactions?.negative : props.posting?.rejectedReactions?.negative)
+            ?? props.reactionsNegativeDefault;
         const reactionsVisible = props.draft != null
             ? (props.draft.operations?.viewReactions ?? "public") === "public"
             : props.posting != null

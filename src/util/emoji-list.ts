@@ -40,3 +40,10 @@ export default class EmojiList {
     }
 
 }
+
+export function parseRejectedList(rejected: string | null | undefined): number[] {
+    if (!rejected) {
+        return [];
+    }
+    return rejected.split(" ").map(s => s.trim()).filter(s => !!s && s !== "*").map(s => parseInt("0x" + s));
+}

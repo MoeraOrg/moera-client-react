@@ -27,11 +27,14 @@ export default function CommentButtons({nodeName, postingId, comment}: Props) {
     };
     const homeOwnerName = useSelector(getHomeOwnerName);
     const enableSelf = useSelector((state: ClientState) =>
-        getSetting(state, "comment.reactions.self.enabled") as boolean);
+        getSetting(state, "comment.reactions.self.enabled") as boolean
+    );
     const reactionsEnabled = useSelector((state: ClientState) =>
-        isPermitted("addReaction", comment, "public", state, options));
+        isPermitted("addReaction", comment, "public", state, options)
+    );
     const reactionsNegativeEnabled = useSelector((state: ClientState) =>
-        isPermitted("addNegativeReaction", comment, "signed", state, options));
+        isPermitted("addNegativeReaction", comment, "signed", state, options)
+    );
     const {t} = useTranslation();
 
     const cr = comment.clientReaction || {} as ClientReactionInfo;
@@ -40,12 +43,24 @@ export default function CommentButtons({nodeName, postingId, comment}: Props) {
     const hideNegative = hideAll || !reactionsNegativeEnabled || (cr.emoji != null && !cr.negative);
     return (
         <div className="comment-buttons">
-            <CommentReactionButton icon={faThumbsUp} caption={t("support")} invisible={hidePositive} id={comment.id}
-                                   negative={false} emoji={!cr.negative ? cr.emoji : null}
-                                   accepted={comment.acceptedReactions?.positive ?? ""}/>
-            <CommentReactionButton icon={faThumbsDown} caption={t("oppose")} invisible={hideNegative} id={comment.id}
-                                   negative={true} emoji={cr.negative ? cr.emoji : null}
-                                   accepted={comment.acceptedReactions?.negative ?? ""}/>
+            <CommentReactionButton
+                icon={faThumbsUp}
+                caption={t("support")}
+                invisible={hidePositive}
+                id={comment.id}
+                negative={false}
+                emoji={!cr.negative ? cr.emoji : null}
+                rejected={comment.rejectedReactions?.positive}
+            />
+            <CommentReactionButton
+                icon={faThumbsDown}
+                caption={t("oppose")}
+                invisible={hideNegative}
+                id={comment.id}
+                negative={true}
+                emoji={cr.negative ? cr.emoji : null}
+                rejected={comment.rejectedReactions?.negative}
+            />
             <CommentReplyButton id={comment.id} ownerName={comment.ownerName}
                                 ownerFullName={comment.ownerFullName ?? null} heading={comment.heading}/>
             <CommentShareButton nodeName={nodeName} postingId={postingId} commentId={comment.id}/>

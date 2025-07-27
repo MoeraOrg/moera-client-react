@@ -14,10 +14,10 @@ interface Props {
     id: string;
     negative: boolean;
     emoji: number | null;
-    accepted: string;
+    rejected?: string | null;
 }
 
-export default function CommentReactionButton({icon, caption, invisible, id, negative, emoji, accepted}: Props) {
+export default function CommentReactionButton({icon, caption, invisible, id, negative, emoji, rejected}: Props) {
     const postingId = useSelector(getCommentsReceiverPostingId);
     const dispatch = useDispatch();
 
@@ -29,8 +29,16 @@ export default function CommentReactionButton({icon, caption, invisible, id, neg
     const onReactionDelete = () => dispatch(commentReactionDelete(id, postingId));
 
     return (
-        <ReactionButton icon={icon} emoji={emoji} caption={caption} className="comment-button" negative={negative}
-                        accepted={accepted} invisible={invisible} onReactionAdd={onReactionAdd}
-                        onReactionDelete={onReactionDelete}/>
+        <ReactionButton
+            icon={icon}
+            emoji={emoji}
+            caption={caption}
+            className="comment-button"
+            negative={negative}
+            rejected={rejected}
+            invisible={invisible}
+            onReactionAdd={onReactionAdd}
+            onReactionDelete={onReactionDelete}
+        />
     );
 }

@@ -66,7 +66,7 @@ async function imageEditDialogPostSaga(action: WithContext<ImageEditDialogPostAc
             const sourceText = {
                 bodySrc: postingText.bodySrc,
                 bodySrcFormat: postingText.bodySrcFormat,
-                acceptedReactions: postingText.acceptedReactions
+                rejectedReactions: postingText.rejectedReactions
             }
             await Node.updateRemotePosting(action, REL_HOME, remoteNodeName, id, sourceText);
         }

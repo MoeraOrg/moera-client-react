@@ -1,0 +1,10 @@
+.emoji-selector .choice.expand {
+    padding: 0;
+    color: var(--primary-600);
+    filter: opacity(60%);
+}
+
+.emoji-selector .choice.expand:hover {
+    transform: none;
+    filter: opacity(100%);
+}

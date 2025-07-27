@@ -62,7 +62,7 @@ export function valuesToCommentText(values: CommentComposeValues, props: ValuesT
         }),
         bodySrcFormat: props.sourceFormatDefault,
         media: (values.body.orderedMediaList() ?? []).concat(values.linkPreviews.media.map(vm => vm.id)),
-        acceptedReactions: {positive: props.reactionsPositiveDefault, negative: props.reactionsNegativeDefault},
+        rejectedReactions: {positive: props.reactionsPositiveDefault, negative: props.reactionsNegativeDefault},
         repliedToId: props.repliedToId
     };
 }
@@ -77,7 +77,7 @@ function valuesToCommentSourceText(values: CommentComposeValues, props: ValuesTo
         bodySrcFormat: props.sourceFormatDefault,
         media: (values.body.orderedMediaListWithDigests() ?? [])
             .concat(values.linkPreviews.media.map(vm => ({id: vm.id, digest: vm.digest}))),
-        acceptedReactions: {positive: props.reactionsPositiveDefault, negative: props.reactionsNegativeDefault},
+        rejectedReactions: {positive: props.reactionsPositiveDefault, negative: props.reactionsNegativeDefault},
         repliedToId: props.repliedToId
     };
 }

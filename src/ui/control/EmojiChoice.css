@@ -1,15 +1,3 @@
-.emoji-selector .choice IMG {
-    vertical-align: baseline;
-}
-
-.emoji-selector .choice .twemoji {
-    vertical-align: baseline;
-}
-
-.emoji-selector .choice .svg-inline--fa {
-    vertical-align: .125em;
-}
-
 .emoji-selector .choice {
     flex: none;
     position: relative;
@@ -18,11 +6,14 @@
     text-align: center;
     padding-top: .6rem;
     padding-bottom: .3rem;
+    border: none;
+    background-color: transparent;
+    transition: .15s all ease-in-out;
 }
 
 .emoji-selector .choice:hover {
-    background-color: var(--highlight);
-    border-radius: 5px;
+    transform: scale(1.3);
+    transition: .15s all ease-in;
 }
 
 .emoji-selector .choice.dimmed {
@@ -33,11 +24,14 @@
     filter: opacity(60%);
 }
 
-.emoji-selector .choice .marker {
-    position: absolute;
-    z-index: var(--zindex-text-overlay);
-    right: 0;
-    top: 0;
-    font-size: 0.8rem;
-    color: var(--bs-primary);
+.emoji-selector .choice IMG {
+    vertical-align: baseline;
+}
+
+.emoji-selector .choice .twemoji {
+    vertical-align: baseline;
+}
+
+.emoji-selector .choice .svg-inline--fa {
+    vertical-align: .125em;
 }

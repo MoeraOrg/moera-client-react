@@ -174,11 +174,6 @@ export interface SubscriptionOperations {
     delete?: PrincipalValue | null;
 }
 
-export interface AcceptedReactions {
-    positive: string;
-    negative: string;
-}
-
 export interface AskDescription {
     subject: AskSubject;
     friendGroupId?: string | null;
@@ -333,10 +328,6 @@ export interface ClientReactionInfo {
     emoji: number;
     createdAt: number;
     deadline?: number | null;
-}
-
-export interface CommentMassAttributes {
-    seniorOperations?: CommentOperations | null;
 }
 
 export interface CommentTotalInfo {
@@ -744,6 +735,11 @@ export interface RegisteredNameSecret {
     name: string;
     mnemonic?: string[] | null;
     secret?: string | null;
+}
+
+export interface RejectedReactions {
+    positive?: string | null;
+    negative?: string | null;
 }
 
 export interface RemoteFeed {
@@ -1326,6 +1322,11 @@ export interface Body {
     linkPreviews?: LinkPreview[] | null;
 }
 
+export interface CommentMassAttributes {
+    seniorOperations?: CommentOperations | null;
+    seniorRejectedReactions?: RejectedReactions | null;
+}
+
 export interface CommentRevisionInfoBase<B> {
     id: string;
     postingRevisionId: string;
@@ -1354,7 +1355,8 @@ export interface CommentSourceText {
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
     media?: MediaWithDigest[] | null;
-    acceptedReactions?: AcceptedReactions | null;
+    rejectedReactions?: RejectedReactions | null;
+    seniorRejectedReactions?: RejectedReactions | null;
     repliedToId?: string | null;
     operations?: CommentOperations | null;
     reactionOperations?: ReactionOperations | null;
@@ -1373,7 +1375,8 @@ export interface CommentText {
     bodyFormat?: BodyFormat | null;
     media?: string[] | null;
     createdAt?: number | null;
-    acceptedReactions?: AcceptedReactions | null;
+    rejectedReactions?: RejectedReactions | null;
+    seniorRejectedReactions?: RejectedReactions | null;
     repliedToId?: string | null;
     signature?: string | null;
     signatureVersion?: number | null;
@@ -1390,7 +1393,8 @@ export interface DraftText {
     repliedToId?: string | null;
     ownerFullName?: string | null;
     ownerAvatar?: AvatarDescription | null;
-    acceptedReactions?: AcceptedReactions | null;
+    rejectedReactions?: RejectedReactions | null;
+    commentRejectedReactions?: RejectedReactions | null;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
     media?: RemoteMedia[] | null;
@@ -1479,7 +1483,8 @@ export interface PostingInfoBase<B> {
     blockedCommentOperations?: BlockedEntryOperation[] | null;
     sheriffs?: string[] | null;
     sheriffMarks?: SheriffMark[] | null;
-    acceptedReactions?: AcceptedReactions | null;
+    rejectedReactions?: RejectedReactions | null;
+    commentRejectedReactions?: RejectedReactions | null;
     clientReaction?: ClientReactionInfo | null;
     reactions?: ReactionTotalsInfo | null;
     sources?: PostingSourceInfo[] | null;
@@ -1521,7 +1526,8 @@ export interface PostingSourceText {
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
     media?: MediaWithDigest[] | null;
-    acceptedReactions?: AcceptedReactions | null;
+    rejectedReactions?: RejectedReactions | null;
+    commentRejectedReactions?: RejectedReactions | null;
     operations?: PostingOperations | null;
     commentOperations?: CommentOperations | null;
     reactionOperations?: ReactionOperations | null;
@@ -1540,7 +1546,8 @@ export interface PostingText {
     bodyFormat?: BodyFormat | null;
     media?: string[] | null;
     createdAt?: number | null;
-    acceptedReactions?: AcceptedReactions | null;
+    rejectedReactions?: RejectedReactions | null;
+    commentRejectedReactions?: RejectedReactions | null;
     publications?: StoryAttributes[] | null;
     updateInfo?: UpdateInfo | null;
     signature?: string | null;
@@ -1663,7 +1670,9 @@ export interface CommentInfoBase<B> {
     seniorOperations?: CommentOperations | null;
     blockedOperations?: BlockedEntryOperation[] | null;
     sheriffMarks?: SheriffMark[] | null;
-    acceptedReactions?: AcceptedReactions | null;
+    rejectedReactions?: RejectedReactions | null;
+    ownerRejectedReactions?: RejectedReactions | null;
+    seniorRejectedReactions?: RejectedReactions | null;
     clientReaction?: ClientReactionInfo | null;
     seniorReaction?: ClientReactionInfo | null;
     reactions?: ReactionTotalsInfo | null;
@@ -1696,7 +1705,8 @@ export interface DraftInfoBase<B> {
     deadline?: number | null;
     ownerFullName?: string | null;
     ownerAvatar?: AvatarImage | null;
-    acceptedReactions?: AcceptedReactions | null;
+    rejectedReactions?: RejectedReactions | null;
+    commentRejectedReactions?: RejectedReactions | null;
     bodySrc?: B | null;
     bodySrcFormat?: SourceFormat | null;
     body: B;

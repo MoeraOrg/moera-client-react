@@ -349,23 +349,6 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
-        AcceptedReactions: {
-            type: "object",
-            properties: {
-                "positive": {
-                    type: "string"
-                },
-                "negative": {
-                    type: "string"
-                },
-            },
-            required: [
-                "positive",
-                "negative",
-            ],
-            additionalProperties: false
-        },
-
         AsyncOperationCreated: {
             type: "object",
             properties: {
@@ -1971,6 +1954,21 @@ export const NODE_API_SCHEMAS = {
             required: [
                 "name",
             ],
+            additionalProperties: false
+        },
+
+        RejectedReactions: {
+            type: "object",
+            properties: {
+                "positive": {
+                    type: "string",
+                    nullable: true
+                },
+                "negative": {
+                    type: "string",
+                    nullable: true
+                },
+            },
             additionalProperties: false
         },
 
@@ -3896,10 +3894,22 @@ export const NODE_API_SCHEMAS = {
                     },
                     nullable: true
                 },
-                "acceptedReactions": {
+                "rejectedReactions": {
                     anyOf: [
                         {
-                            $ref: "node#/definitions/AcceptedReactions",
+                            $ref: "node#/definitions/RejectedReactions",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+                "commentRejectedReactions": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/RejectedReactions",
                             type: "object",
                             nullable: true
                         },
@@ -4659,10 +4669,34 @@ export const NODE_API_SCHEMAS = {
                     },
                     nullable: true
                 },
-                "acceptedReactions": {
+                "rejectedReactions": {
                     anyOf: [
                         {
-                            $ref: "node#/definitions/AcceptedReactions",
+                            $ref: "node#/definitions/RejectedReactions",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+                "ownerRejectedReactions": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/RejectedReactions",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+                "seniorRejectedReactions": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/RejectedReactions",
                             type: "object",
                             nullable: true
                         },
@@ -4812,10 +4846,22 @@ export const NODE_API_SCHEMAS = {
                         }
                     ]
                 },
-                "acceptedReactions": {
+                "rejectedReactions": {
                     anyOf: [
                         {
-                            $ref: "node#/definitions/AcceptedReactions",
+                            $ref: "node#/definitions/RejectedReactions",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+                "commentRejectedReactions": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/RejectedReactions",
                             type: "object",
                             nullable: true
                         },

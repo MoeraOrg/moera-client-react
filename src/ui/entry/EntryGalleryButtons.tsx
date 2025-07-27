@@ -18,21 +18,32 @@ interface Props {
 export default function EntryGalleryButtons({posting, mediaId}: Props) {
     const homeOwnerName = useSelector(getHomeOwnerName);
     const enableSelf = useSelector((state: ClientState) =>
-        getSetting(state, "posting.reactions.self.enabled") as boolean);
+        getSetting(state, "posting.reactions.self.enabled") as boolean
+    );
     const {t} = useTranslation();
 
     const cr = posting.clientReaction || {} as ClientReactionInfo;
     const hide = posting.ownerName === homeOwnerName && !enableSelf && !cr.emoji;
     return (
         <div className="gallery-buttons">
-            <PostingReactionButton icon={faThumbsUp} caption={t("support")}
-                                   invisible={hide || (cr.emoji != null && cr.negative)} id={posting.id}
-                                   negative={false} emoji={!cr.negative ? cr.emoji : null}
-                                   accepted={posting.acceptedReactions?.positive ?? ""}/>
-            <PostingReactionButton icon={faThumbsDown} caption={t("oppose")}
-                                   invisible={hide || (cr.emoji != null && !cr.negative)} id={posting.id}
-                                   negative={true} emoji={cr.negative ? cr.emoji : null}
-                                   accepted={posting.acceptedReactions?.negative ?? ""}/>
+            <PostingReactionButton
+                icon={faThumbsUp}
+                caption={t("support")}
+                invisible={hide || (cr.emoji != null && cr.negative)}
+                id={posting.id}
+                negative={false}
+                emoji={!cr.negative ? cr.emoji : null}
+                rejected={posting.rejectedReactions?.positive}
+            />
+            <PostingReactionButton
+                icon={faThumbsDown}
+                caption={t("oppose")}
+                invisible={hide || (cr.emoji != null && !cr.negative)}
+                id={posting.id}
+                negative={true}
+                emoji={cr.negative ? cr.emoji : null}
+                rejected={posting.rejectedReactions?.negative}
+            />
             <EntryGalleryShareButton postingId={posting.id} postingReceiverName={posting.receiverName}
                                      postingReceiverPostingId={posting.receiverPostingId} mediaId={mediaId}/>
         </div>

@@ -20,6 +20,7 @@ interface Props {
     parentOverlayId?: string;
     onPreparePopper?: () => void;
     onShow?: () => boolean;
+    onHide?: () => void;
     element: DelayedPopoverElement;
     popoverContainer?: Element | DocumentFragment | null;
     children: React.ReactNode;
@@ -31,7 +32,7 @@ type TouchLocus = "none" | "touch" | "lock";
 
 export function DelayedPopover({
     placement, arrow, className, styles = "popover", disabled, clickable, sticky, parentOverlayId, onPreparePopper,
-    onShow, element, popoverContainer, children
+    onShow, onHide, element, popoverContainer, children
 }: Props) {
     // Such usage of useState() is counter-intuitive, but required by react-popper
     const [buttonRef, setButtonRef] = useState<Element | null>(null);
@@ -69,12 +70,15 @@ export function DelayedPopover({
             return;
         }
         // setTimeout() is needed here to dismiss the popup only after handling the click on elements inside the popup
-        setTimeout(() => setPopup(false));
+        setTimeout(() => {
+            setPopup(false);
+            onHide && onHide();
+        });
         if (getTouch() !== "none") {
             setLocus("out");
             setTouch("none");
         }
-    }, [overlayId, disabled, getTouch, setLocus, setTouch]);
+    }, [disabled, overlayId, getTouch, onHide, setLocus, setTouch]);
 
     const show = useCallback(() => {
         if (onShow && !onShow()) {

@@ -1,19 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { createSelector } from 'reselect';
 
 import {
+    ADDITIONAL_NEGATIVE_REACTIONS,
+    ADDITIONAL_POSITIVE_REACTIONS,
     MAIN_NEGATIVE_REACTIONS,
-    MAIN_NEGATIVE_REACTIONS_SET,
-    MAIN_POSITIVE_REACTIONS,
-    MAIN_POSITIVE_REACTIONS_SET
+    MAIN_POSITIVE_REACTIONS
 } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { DelayedPopover, EmojiProps, EmojiSelector, ReactionEmojiButton, useDropdownMenu } from "ui/control";
 import { useLightBox } from "ui/lightbox/lightbox-context";
-import EmojiList from "util/emoji-list";
+import EmojiList, { parseRejectedList } from "util/emoji-list";
 
 interface Props {
     icon: IconProp,
@@ -21,66 +21,35 @@ interface Props {
     caption?: string;
     className?: string;
     negative: boolean;
-    accepted: string;
+    rejected?: string | null;
     invisible: boolean;
     onReactionAdd: (negative: boolean, emoji: number) => void;
     onReactionDelete: () => void;
 }
 
 export function ReactionButton(props: Props) {
-    const {emoji, negative, accepted, invisible, onReactionAdd, onReactionDelete} = props;
-
-    const availableList = useSelector((state: ClientState) =>
-        !negative ? getAvailableReactionsPositive(state) : getAvailableReactionsNegative(state));
+    const {emoji, negative, rejected, invisible, onReactionAdd, onReactionDelete} = props;
 
     const pastEmoji = useRef<number | null>(null);
-    const [reactions, setReactions] = useState<EmojiProps[]>([]);
 
-    useEffect(() => {
-        const acceptedList = new EmojiList(accepted);
+    const [expanded, setExpanded] = useState<boolean>(false);
+    const onExpandClick = () => setExpanded(!expanded);
 
-        const mainReactions = !negative ? MAIN_POSITIVE_REACTIONS : MAIN_NEGATIVE_REACTIONS;
-        const mainReactionsSet = !negative ? MAIN_POSITIVE_REACTIONS_SET : MAIN_NEGATIVE_REACTIONS_SET;
-        const main = mainReactions.map(
-            r => ({
-                emoji: r,
-                invisible: (!acceptedList.recommends(r) && !availableList.recommends(r))
-                    || !acceptedList.includes(r) || !availableList.includes(r),
-                dimmed: !acceptedList.recommends(r)
-            } as EmojiProps)
-        );
-        const additionalNode = acceptedList.recommended()
-            .filter(r => !mainReactionsSet.has(r))
-            .filter(r => availableList.includes(r))
-            .map(r => ({emoji: r} as EmojiProps));
-        const additionalClient = availableList.recommended()
-            .filter(r => !mainReactionsSet.has(r))
-            .filter(r => acceptedList.includes(r) && !acceptedList.recommends(r))
-            .map(r => ({emoji: r, dimmed: true} as EmojiProps));
-        setReactions(main.concat(additionalNode, additionalClient));
-    }, [availableList, accepted, negative]);
-
-    const getDefaultEmoji = (): number | null => {
-        const thumbsEmoji = negative ? 0x1f44e : 0x1f44d;
-        const thumbs = reactions.find(r => r.emoji === thumbsEmoji);
-
-        if (thumbs && !thumbs.invisible && !thumbs.dimmed) {
-            return thumbsEmoji;
-        }
-        const first = reactions.find(r => !r.invisible && !r.dimmed);
-        if (first) {
-            return first.emoji;
-        }
-
-        if (thumbs && !thumbs.invisible) {
-            return thumbsEmoji;
-        }
-        const second = reactions.find(r => !r.invisible);
-        return second ? second.emoji : null;
-    }
+    const availableList = useSelector((state: ClientState) =>
+        !negative ? getAvailableReactionsPositive(state) : getAvailableReactionsNegative(state)
+    );
+    const rejectedSet = useMemo(() => new Set(parseRejectedList(rejected)), [rejected]);
+    const mainReactions = useMemo<EmojiProps[]>(
+        () => toReactionList(!negative ? MAIN_POSITIVE_REACTIONS : MAIN_NEGATIVE_REACTIONS, rejectedSet),
+        [negative, rejectedSet]
+    );
+    const additionalReactions = useMemo<EmojiProps[]>(
+        () => toReactionList(!negative ? ADDITIONAL_POSITIVE_REACTIONS : ADDITIONAL_NEGATIVE_REACTIONS, rejectedSet),
+        [negative, rejectedSet]
+    );
 
     const defaultReactionAdd = () => {
-        const emoji = getDefaultEmoji();
+        const emoji = getDefaultEmoji(negative, mainReactions) ?? getDefaultEmoji(negative, additionalReactions);
         if (emoji != null) {
             onReactionAdd(negative, emoji);
         }
@@ -96,7 +65,10 @@ export function ReactionButton(props: Props) {
 
     const show = (): boolean => pastEmoji.current === emoji;
 
-    const buttonInvisible = invisible || reactions.every(r => r.invisible);
+    const hide = () => setExpanded(false);
+
+    const buttonInvisible = invisible
+        || (mainReactions.every(r => r.invisible) && additionalReactions.every(r => r.invisible));
 
     const {overlayId: lightBoxOverlayId} = useLightBox();
     const {overlayId: menuOverlayId} = useDropdownMenu();
@@ -107,8 +79,10 @@ export function ReactionButton(props: Props) {
             placement="top"
             arrow
             parentOverlayId={parentOverlayId}
+            clickable
             onPreparePopper={preparePopper}
             onShow={show}
+            onHide={hide}
             element={ref =>
                 <ReactionEmojiButton
                     {...props}
@@ -121,10 +95,20 @@ export function ReactionButton(props: Props) {
         >
             <EmojiSelector
                 negative={negative}
-                reactions={reactions}
+                reactions={mainReactions}
                 fixedWidth={true}
                 onClick={reactionAdd}
+                expand={expanded}
+                onExpand={onExpandClick}
             />
+            {expanded &&
+                <EmojiSelector
+                    negative={negative}
+                    reactions={additionalReactions}
+                    fixedWidth={true}
+                    onClick={reactionAdd}
+                />
+            }
         </DelayedPopover>
     );
 }
@@ -140,3 +124,25 @@ const getAvailableReactionsNegative = createSelector(
     (state: ClientState) => getSetting(state, "reactions.negative.available") as string,
     available => new EmojiList(available)
 );
+
+function getDefaultEmoji(negative: boolean, reactions: EmojiProps[]): number | null {
+    const thumbsEmoji = negative ? 0x1f44e : 0x1f44d;
+    const thumbs = reactions.find(r => r.emoji === thumbsEmoji);
+
+    if (thumbs && !thumbs.invisible && !thumbs.dimmed) {
+        return thumbsEmoji;
+    }
+    const first = reactions.find(r => !r.invisible && !r.dimmed);
+    if (first) {
+        return first.emoji;
+    }
+
+    if (thumbs && !thumbs.invisible) {
+        return thumbsEmoji;
+    }
+    const second = reactions.find(r => !r.invisible);
+    return second ? second.emoji : null;
+}
+
+const toReactionList = (reactions: number[], rejected: Set<number>) =>
+    reactions.map(emoji => ({emoji, invisible: rejected.has(emoji)} as EmojiProps));

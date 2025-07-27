@@ -16,10 +16,12 @@ import "./LightBoxReactions.css";
 export default function LightBoxReactions() {
     const nodeName = useSelector(getLightBoxNodeName);
     const posting = useSelector((state: ClientState) =>
-        getPosting(state, getLightBoxMediaPostingId(state), nodeName));
+        getPosting(state, getLightBoxMediaPostingId(state), nodeName)
+    );
     const homeOwnerName = useSelector(getHomeOwnerName);
     const enableSelf = useSelector((state: ClientState) =>
-        getSetting(state, "posting.reactions.self.enabled") as boolean);
+        getSetting(state, "posting.reactions.self.enabled") as boolean
+    );
     const dispatch = useDispatch();
 
     if (posting == null) {
@@ -37,18 +39,28 @@ export default function LightBoxReactions() {
         <div className="lightbox-reactions">
             <PostingReactions nodeName={nodeName} postingId={posting.id} reactions={posting.reactions}/>
             {!hide &&
-                <ReactionButton icon={faThumbsUp} className="lightbox-reaction-button positive"
-                                invisible={cr.emoji != null && cr.negative} negative={false}
-                                emoji={!cr.negative ? cr.emoji : null}
-                                accepted={posting.acceptedReactions?.positive ?? ""}
-                                onReactionAdd={onReactionAdd} onReactionDelete={onReactionDelete}/>
+                <ReactionButton
+                    icon={faThumbsUp}
+                    className="lightbox-reaction-button positive"
+                    invisible={cr.emoji != null && cr.negative}
+                    negative={false}
+                    emoji={!cr.negative ? cr.emoji : null}
+                    rejected={posting.rejectedReactions?.positive}
+                    onReactionAdd={onReactionAdd}
+                    onReactionDelete={onReactionDelete}
+                />
             }
             {!hide &&
-                <ReactionButton icon={faThumbsDown} className="lightbox-reaction-button negative"
-                                invisible={cr.emoji != null && !cr.negative} negative={true}
-                                emoji={cr.negative ? cr.emoji : null}
-                                accepted={posting.acceptedReactions?.negative ?? ""}
-                                onReactionAdd={onReactionAdd} onReactionDelete={onReactionDelete}/>
+                <ReactionButton
+                    icon={faThumbsDown}
+                    className="lightbox-reaction-button negative"
+                    invisible={cr.emoji != null && !cr.negative}
+                    negative={true}
+                    emoji={cr.negative ? cr.emoji : null}
+                    rejected={posting.rejectedReactions?.negative}
+                    onReactionAdd={onReactionAdd}
+                    onReactionDelete={onReactionDelete}
+                />
             }
         </div>
     );

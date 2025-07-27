@@ -14,16 +14,23 @@ interface Props {
     id: string;
     negative: boolean;
     emoji: number | null;
-    accepted: string;
+    rejected?: string | null;
 }
 
-export default function PostingReactionButton({icon, caption, invisible, id, negative, emoji, accepted}: Props) {
+export default function PostingReactionButton({icon, caption, invisible, id, negative, emoji, rejected}: Props) {
     const dispatch = useDispatch();
 
     return (
-        <ReactionButton icon={icon} emoji={emoji} caption={caption} className="posting-button" negative={negative}
-                        accepted={accepted} invisible={invisible}
-                        onReactionAdd={(negative, emoji) => dispatch(postingReact(id, negative, emoji, REL_CURRENT))}
-                        onReactionDelete={() => dispatch(postingReactionDelete(id, REL_CURRENT))}/>
+        <ReactionButton
+            icon={icon}
+            emoji={emoji}
+            caption={caption}
+            className="posting-button"
+            negative={negative}
+            rejected={rejected}
+            invisible={invisible}
+            onReactionAdd={(negative, emoji) => dispatch(postingReact(id, negative, emoji, REL_CURRENT))}
+            onReactionDelete={() => dispatch(postingReactionDelete(id, REL_CURRENT))}
+        />
     );
 }

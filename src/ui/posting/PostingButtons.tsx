@@ -31,13 +31,17 @@ export default function PostingButtons({posting, story, menu = false}: Props) {
     const connectedToHome = useSelector(isConnectedToHome);
     const homeOwnerName = useSelector(getHomeOwnerName);
     const enableSelf = useSelector((state: ClientState) =>
-        getSetting(state, "posting.reactions.self.enabled") as boolean);
+        getSetting(state, "posting.reactions.self.enabled") as boolean
+    );
     const commentsVisible = useSelector((state: ClientState) =>
-        isPermitted("viewComments", posting, "public", state, options));
+        isPermitted("viewComments", posting, "public", state, options)
+    );
     const reactionsEnabled = useSelector((state: ClientState) =>
-        isPermitted("addReaction", posting, "signed", state, options));
+        isPermitted("addReaction", posting, "signed", state, options)
+    );
     const reactionsNegativeEnabled = useSelector((state: ClientState) =>
-        isPermitted("addNegativeReaction", posting, "signed", state, options));
+        isPermitted("addNegativeReaction", posting, "signed", state, options)
+    );
     const {t} = useTranslation();
 
     const showButtons = connectedToHome && posting.receiverDeletedAt == null;
@@ -53,14 +57,24 @@ export default function PostingButtons({posting, story, menu = false}: Props) {
         <div className={cx("posting-buttons", {"with-menu": menu})}>
             {(connectedToHome && posting.receiverDeletedAt == null) &&
                 <>
-                    <PostingReactionButton icon={faThumbsUp} caption={t("support")}
-                                           invisible={hidePositive} id={posting.id} negative={false}
-                                           emoji={!cr.negative ? cr.emoji : null}
-                                           accepted={posting.acceptedReactions?.positive ?? ""}/>
-                    <PostingReactionButton icon={faThumbsDown} caption={t("oppose")}
-                                           invisible={hideNegative} id={posting.id} negative={true}
-                                           emoji={cr.negative ? cr.emoji : null}
-                                           accepted={posting.acceptedReactions?.negative ?? ""}/>
+                    <PostingReactionButton
+                        icon={faThumbsUp}
+                        caption={t("support")}
+                        invisible={hidePositive}
+                        id={posting.id}
+                        negative={false}
+                        emoji={!cr.negative ? cr.emoji : null}
+                        rejected={posting.rejectedReactions?.positive}
+                    />
+                    <PostingReactionButton
+                        icon={faThumbsDown}
+                        caption={t("oppose")}
+                        invisible={hideNegative}
+                        id={posting.id}
+                        negative={true}
+                        emoji={cr.negative ? cr.emoji : null}
+                        rejected={posting.rejectedReactions?.negative}
+                    />
                     <PostingCommentButton postingId={posting.id} invisible={!commentsVisible}/>
                     <PostingShareButton postingId={posting.id} postingReceiverName={posting.receiverName}
                                         postingReceiverPostingId={posting.receiverPostingId}/>

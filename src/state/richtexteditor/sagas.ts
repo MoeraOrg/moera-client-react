@@ -46,7 +46,7 @@ async function richTextEditorImageUpload(
                 const sourceText = {
                     bodySrc: postingText.bodySrc,
                     bodySrcFormat: postingText.bodySrcFormat,
-                    acceptedReactions: postingText.acceptedReactions
+                    rejectedReactions: postingText.rejectedReactions
                 }
                 await Node.updateRemotePosting(action, REL_HOME, remoteNodeName, mediaFile.postingId, sourceText);
             }

@@ -94,7 +94,7 @@ async function postingReplySaga(action: WithContext<PostingReplyAction>): Promis
             receiverName: homeOwnerName,
             bodySrc: JSON.stringify({subject, text}),
             bodySrcFormat: sourceFormatDefault,
-            acceptedReactions: {
+            rejectedReactions: {
                 positive: reactionsPositiveDefault,
                 negative: reactionsNegativeDefault
             },

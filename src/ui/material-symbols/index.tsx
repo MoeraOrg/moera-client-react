@@ -17,6 +17,8 @@ import { ReactComponent as msCode } from "ui/material-symbols/code.isvg";
 import { ReactComponent as msCodeBlocks } from "ui/material-symbols/code_blocks.isvg";
 import { ReactComponent as msDelete } from "ui/material-symbols/delete.isvg";
 import { ReactComponent as msExpandCircleDown } from "ui/material-symbols/expand_circle_down.isvg";
+import { ReactComponent as msExpandCircleDownFilled40 } from "ui/material-symbols/expand_circle_down_filled40.isvg";
+import { ReactComponent as msExpandCircleUpFilled40 } from "ui/material-symbols/expand_circle_up_filled40.isvg";
 import { ReactComponent as msFileSave } from "ui/material-symbols/file_save.isvg";
 import { ReactComponent as msFormatBold } from "ui/material-symbols/format_bold.isvg";
 import { ReactComponent as msFormatClear } from "ui/material-symbols/format_clear.isvg";
@@ -83,6 +85,8 @@ export {
     msCodeBlocks,
     msDelete,
     msExpandCircleDown,
+    msExpandCircleDownFilled40,
+    msExpandCircleUpFilled40,
     msFileSave,
     msFormatBold,
     msFormatClear,
