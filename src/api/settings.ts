@@ -396,6 +396,12 @@ const META: ClientSettingMetaInfo[] = [
         }
     },
     {
+        name: "reactions.expand-all",
+        type: "bool",
+        defaultValue: "false",
+        modifiers: {}
+    },
+    {
         name: "share.social-buttons.usage",
         type: "json",
         defaultValue: "{}",

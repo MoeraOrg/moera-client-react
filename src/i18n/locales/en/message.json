@@ -780,6 +780,7 @@
         "posting_time_relative": "Show relative time in posts",
         "posting_visibility_default": "Post visibility by default",
         "principal_public_disabled": "Disable \"Public\" access level",
+        "reactions_expand-all": "Always show the full list of reactions",
         "reactions_negative_disabled": "Usable \"Oppose\" reactions",
         "reactions_positive_disabled": "Usable \"Support\" reactions",
         "rich-text-editor_link-previews_max-automatic": "Maximal number of link previews created automatically",

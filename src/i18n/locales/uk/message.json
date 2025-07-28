@@ -780,6 +780,7 @@
         "posting_time_relative": "Показувати у постах відносний час",
         "posting_visibility_default": "Пости видно (за замовчуванням)",
         "principal_public_disabled": "Вимкнути рівень доступу \"Для всіх\"",
+        "reactions_expand-all": "Завжди показувати повний список реакцій",
         "reactions_negative_disabled": "Несхвальні реакції, якими користуюсь",
         "reactions_positive_disabled": "Схвальні реакції, якими користуюсь",
         "rich-text-editor_link-previews_max-automatic": "Максимальна кількість посилань, для яких автоматично створюється перегляд",

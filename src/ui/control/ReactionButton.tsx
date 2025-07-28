@@ -50,7 +50,8 @@ export function ReactionButton(props: Props) {
         [disabledList, negative, rejectedSet]
     );
 
-    const expandAlways = mainReactions.length === 0 || additionalReactions.length === 0;
+    const expandAll = useSelector((state: ClientState) => getSetting(state, "reactions.expand-all") as boolean);
+    const expandAlways = expandAll || mainReactions.length === 0 || additionalReactions.length === 0;
 
     const defaultReactionAdd = () => {
         const emoji = getDefaultEmoji(negative, mainReactions) ?? getDefaultEmoji(negative, additionalReactions);

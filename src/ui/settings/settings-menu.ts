@@ -204,6 +204,7 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
         sheet("reactions", [
             option(CLIENT_SETTINGS_PREFIX + "reactions.positive.disabled"),
             option(CLIENT_SETTINGS_PREFIX + "reactions.negative.disabled"),
+            option(CLIENT_SETTINGS_PREFIX + "reactions.expand-all"),
         ]),
         sheet("other"),
     ],
