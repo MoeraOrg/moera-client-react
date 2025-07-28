@@ -17,13 +17,12 @@ interface Props {
     initialValue?: string | null;
     defaultValue?: string | null;
     negative: boolean;
-    advanced?: boolean;
     setting?: string;
 }
 
 export function EmojiListInputField({
     name, title, disabled, horizontal = false, layout, groupClassName, labelClassName, col, noFeedback = false,
-    initialValue, defaultValue, negative, advanced, setting
+    initialValue, defaultValue, negative, setting
 }: Props) {
     const [{value}, {touched, error}, {setValue}, {undo, reset, onUndo, onReset}] =
         useUndoableField<string>(name, initialValue, defaultValue);
@@ -43,8 +42,13 @@ export function EmojiListInputField({
             onReset={onReset}
         >
             <Wrapper className={col}>
-                <EmojiListInput className="form-control" negative={negative} value={value} advanced={advanced}
-                                disabled={disabled} onChange={v => setValue(v)}/>
+                <EmojiListInput
+                    className="form-control"
+                    negative={negative}
+                    value={value}
+                    disabled={disabled}
+                    onChange={v => setValue(v)}
+                />
                 {!noFeedback && touched && <FieldError error={error}/>}
             </Wrapper>
         </FormGroup>

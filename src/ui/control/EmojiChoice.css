@@ -17,11 +17,11 @@
 }
 
 .emoji-selector .choice.dimmed {
-    filter: opacity(20%);
+    filter: grayscale(80%) opacity(20%);
 }
 
 .emoji-selector .choice.dimmed:hover {
-    filter: opacity(60%);
+    filter: grayscale(40%) opacity(60%);
 }
 
 .emoji-selector .choice IMG {
@@ -34,4 +34,20 @@
 
 .emoji-selector .choice .svg-inline--fa {
     vertical-align: .125em;
+}
+
+.emoji-selector .choice.other {
+    padding: 0;
+    color: var(--primary-600);
+}
+
+.emoji-selector .choice.expand {
+    padding: 0;
+    color: var(--primary-600);
+    filter: opacity(60%);
+}
+
+.emoji-selector .choice.expand:hover {
+    transform: none;
+    filter: opacity(100%);
 }

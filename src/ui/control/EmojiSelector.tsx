@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { EmojiChoice, EmojiOnClick, EmojiProps } from "ui/control";
-import { ReactionExpandButton } from "ui/control/ReactionExpandButton";
+import { Icon, msExpandCircleDownFilled40, msExpandCircleUpFilled40 } from "ui/material-symbols";
 import "./EmojiSelector.css";
 
 interface Props {
@@ -15,6 +16,8 @@ interface Props {
 }
 
 export function EmojiSelector({negative, reactions, fixedWidth, autoFocus, onClick, expand, onExpand}: Props) {
+    const {t} = useTranslation();
+
     const domRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -36,7 +39,9 @@ export function EmojiSelector({negative, reactions, fixedWidth, autoFocus, onCli
                 />
             )}
             {expand != null && onExpand != null &&
-                <ReactionExpandButton expanded={expand} onClick={onExpand}/>
+                <button className="choice expand" onClick={() => onExpand()} title={expand ? t("less") : t("more")}>
+                    <Icon icon={expand ? msExpandCircleUpFilled40 : msExpandCircleDownFilled40} size="40"/>
+                </button>
             }
         </div>
     );

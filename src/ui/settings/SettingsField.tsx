@@ -170,14 +170,6 @@ export default function SettingsField({name, fieldName, titleName, meta, initial
                         return <EmojiListInputField name={fieldName} title={title} disabled={disabled}
                                                     groupClassName={groupClassName} negative={true}
                                                     initialValue={initialValue} defaultValue={defaultValue}/>;
-                    case "emoji-list-positive-advanced":
-                        return <EmojiListInputField name={fieldName} title={title} disabled={disabled}
-                                                    groupClassName={groupClassName} negative={false} advanced={true}
-                                                    initialValue={initialValue} defaultValue={defaultValue}/>;
-                    case "emoji-list-negative-advanced":
-                        return <EmojiListInputField name={fieldName} title={title} disabled={disabled}
-                                                    groupClassName={groupClassName} negative={true} advanced={true}
-                                                    initialValue={initialValue} defaultValue={defaultValue}/>;
                 }
             } else if (modifiers.multiline) {
                 return <TextField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}

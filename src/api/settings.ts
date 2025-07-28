@@ -386,7 +386,7 @@ const META: ClientSettingMetaInfo[] = [
             + "0x1f48e,0x1f37f,0x1f62b,0x1f49d,0x1f62d,0x1f9f8,0x2708,0x1f379,0x1f64f,0x1f60c,0x1f917,0x1f525,0x1f923,"
             + "0x1f970,0x1f971,0x1fac2",
         modifiers: {
-            format: "emoji-list-positive-advanced"
+            format: "emoji-list-positive"
         }
     },
     {
@@ -394,7 +394,7 @@ const META: ClientSettingMetaInfo[] = [
         type: "string",
         defaultValue: "+0x1f4a4,+0x1f44e,+0x1f4a9,+0x2694,+0x23f3,+0x1f3a9,+0x1f643,+0x1f61c,+0x1f494,+0x1f47f",
         modifiers: {
-            format: "emoji-list-negative-advanced"
+            format: "emoji-list-negative"
         }
     },
     {

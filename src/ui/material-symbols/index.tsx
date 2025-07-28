@@ -38,6 +38,7 @@ import { ReactComponent as msFormatListNumbered } from "ui/material-symbols/form
 import { ReactComponent as msFormatQuote } from "ui/material-symbols/format_quote.isvg";
 import { ReactComponent as msFormatQuoteOff } from "ui/material-symbols/format_quote_off.isvg";
 import { ReactComponent as msFunction } from "ui/material-symbols/function.isvg";
+import { ReactComponent as msHelpFilled40 } from "ui/material-symbols/help_filled40.isvg";
 import { ReactComponent as msHistory } from "ui/material-symbols/history.isvg";
 import { ReactComponent as msKeepFilled16 } from "ui/material-symbols/keep_filled16.isvg";
 import { ReactComponent as msKeyboardArrowDown } from "ui/material-symbols/keyboard_arrow_down.isvg";
@@ -101,6 +102,7 @@ export {
     msFormatItalic,
     msFormatSize,
     msFunction,
+    msHelpFilled40,
     msHorizontalRule,
     msFormatListBulleted,
     msFormatListNumbered,

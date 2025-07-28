@@ -1,37 +1,30 @@
 import React, { useMemo, useState } from 'react';
 import * as immutable from 'object-path-immutable';
-import cx from 'classnames';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCertificate } from '@fortawesome/free-solid-svg-icons';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import {
+    ADDITIONAL_NEGATIVE_REACTIONS,
+    ADDITIONAL_POSITIVE_REACTIONS,
     MAIN_NEGATIVE_REACTIONS,
-    MAIN_NEGATIVE_REACTIONS_SET,
     MAIN_POSITIVE_REACTIONS,
-    MAIN_POSITIVE_REACTIONS_SET,
     REACTION_EMOJIS
 } from "api";
 import { Button, EmojiProps, EmojiSelector, ModalDialog, useModalDialog } from "ui/control";
 import EmojiList from "util/emoji-list";
 import "./EmojiListDialog.css";
 
-const StarMarker = () => <span className="marker"><FontAwesomeIcon icon={faCertificate}/></span>;
-
 interface Props {
     negative: boolean;
     value: string;
-    advanced?: boolean;
     onConfirm: (emojis: string) => void;
     onCancel: () => void;
 }
 
 interface Marks {
     dimmed: boolean;
-    marked: boolean;
 }
 
-export function EmojiListDialog({negative, value, advanced, onConfirm, onCancel}: Props) {
+export function EmojiListDialog({negative, value, onConfirm, onCancel}: Props) {
     const {t} = useTranslation();
 
     const allEmojis = useMemo<number[]>(
@@ -40,35 +33,24 @@ export function EmojiListDialog({negative, value, advanced, onConfirm, onCancel}
         [negative]
     );
 
-    const [choice, setChoice] = useState<Partial<Record<number, Marks>>>(
+    const [choice, setChoice] = useState<Record<number, Marks>>(
         () => {
             const list = new EmojiList(value);
             return (
                 allEmojis
-                    .reduce<Partial<Record<number, Marks>>>(
+                    .reduce<Record<number, Marks>>(
                         (m, emoji) => {
-                            m[emoji] = {
-                                dimmed: !list.includesExplicitly(emoji),
-                                marked: advanced === true && list.recommends(emoji)
-                            };
+                            m[emoji] = {dimmed: list.includesExplicitly(emoji)};
                             return m;
                         },
-                        {}
+                        {0: {dimmed: list.other()}}
                     )
             )
         }
     );
-    const [other, setOther] = useState<boolean>(() => new EmojiList(value).other());
-
     const mainEmojis = !negative ? MAIN_POSITIVE_REACTIONS : MAIN_NEGATIVE_REACTIONS;
 
-    const otherEmojis = useMemo<number[]>(
-        () => {
-            const mainReactionsSet = !negative ? MAIN_POSITIVE_REACTIONS_SET : MAIN_NEGATIVE_REACTIONS_SET;
-            return allEmojis.filter(emoji => !mainReactionsSet.has(emoji))
-        },
-        [negative, allEmojis]
-    );
+    const otherEmojis = (!negative ? ADDITIONAL_POSITIVE_REACTIONS : ADDITIONAL_NEGATIVE_REACTIONS).concat([0]);
 
     const mainReactions = useMemo<EmojiProps[]>(
         () => mainEmojis.map(emoji => ({emoji, ...choice[emoji]})),
@@ -80,49 +62,23 @@ export function EmojiListDialog({negative, value, advanced, onConfirm, onCancel}
         [otherEmojis, choice]
     );
 
-    const onOtherClick = () => setOther(!other);
-
-    const switchAll = (dimmed: boolean) => {
+    const switchAll = (emojis: number[], dimmed: boolean) => {
         let im = immutable.wrap(choice);
-        for (let emoji of mainEmojis) {
+        for (let emoji of emojis) {
             im = im.set([emoji, "dimmed"], dimmed);
         }
         setChoice(im.value);
     }
 
-    const onSelectAll = () => switchAll(false);
+    const onEnableAll = (emojis: number[]) => () => switchAll(emojis, false);
 
-    const onUnselectAll = () => switchAll(true);
+    const onDisableAll = (emojis: number[]) => () => switchAll(emojis, true);
 
     const toggle = (marks: Marks): Marks => {
         if (marks == null) {
-            return {
-                dimmed: true,
-                marked: false
-            }
+            return {dimmed: true};
         }
-        if (advanced) {
-            if (marks.marked) {
-                return {
-                    dimmed: false,
-                    marked: false
-                }
-            }
-            if (marks.dimmed) {
-                return {
-                    dimmed: false,
-                    marked: true
-                }
-            }
-            return {
-                dimmed: true,
-                marked: false
-            }
-        }
-        return {
-            dimmed: !marks.dimmed,
-            marked: marks.marked
-        }
+        return {dimmed: !marks.dimmed};
     };
 
     const onClick = (_: boolean, emoji: number) => {
@@ -131,17 +87,12 @@ export function EmojiListDialog({negative, value, advanced, onConfirm, onCancel}
     };
 
     const onConfirmHandler = () => {
-        const emojis = allEmojis.filter(emoji => !choice[emoji]?.dimmed);
-        let value: string[];
-        if (advanced) {
-            value = emojis.map(emoji => (choice[emoji]?.marked ? "+0x" : "0x") + Number(emoji).toString(16))
-        } else {
-            value = emojis.map(emoji => "+0x" + Number(emoji).toString(16));
-            if (other) {
-                value.push("*");
-            }
+        const emojis = allEmojis.filter(emoji => emoji !== 0 && choice[emoji]?.dimmed);
+        const value = emojis.map(emoji => Number(emoji).toString(16));
+        if (choice[0]?.dimmed) {
+            value.push("*");
         }
-        onConfirm(value.join(","));
+        onConfirm(value.join(" "));
     };
 
     const {overlayId: parentOverlayId} = useModalDialog();
@@ -149,48 +100,31 @@ export function EmojiListDialog({negative, value, advanced, onConfirm, onCancel}
     return (
         <ModalDialog parentOverlayId={parentOverlayId} onClose={onCancel}>
             <div className="emoji-list-dialog modal-body">
-                {advanced ?
-                    <div className="help">
-                        <Trans i18nKey="only-selected-allowed-star-preferred">
-                            <StarMarker/>
-                        </Trans>
-                    </div>
-                :
-                    <div className="text-end">
-                        <button type="button"
-                                className={cx(
-                                    "btn",
-                                    "btn-sm",
-                                    {
-                                        "btn-outline-primary": other,
-                                        "btn-outline-secondary": !other
-                                    }
-                                )}
-                                onClick={onOtherClick}>
-                            {other ? t("selected-preferred") : t("only-selected-allowed")}
-                        </button>
-                    </div>
-                }
+                <div className="help">
+                    {t("click-disable-enable")}
+                </div>
                 <h5 className="mt-3">
-                    {additionalReactions.length > 0 && "Main"}
-                    {advanced ||
-                        <div className={cx("btn-group", {"ms-3": additionalReactions.length > 0})}>
-                            <button type="button" className="btn btn-sm btn-outline-secondary"
-                                    onClick={onSelectAll}>{t("select-all")}</button>
-                            <button type="button" className="btn btn-sm btn-outline-secondary"
-                                    onClick={onUnselectAll}>{t("unselect-all")}</button>
-                        </div>
-                    }
+                    {t("main")}
+                    <div className="btn-group ms-3">
+                        <button type="button" className="btn btn-sm btn-outline-secondary"
+                                onClick={onEnableAll(mainEmojis)}>{t("enable-all")}</button>
+                        <button type="button" className="btn btn-sm btn-outline-secondary"
+                                onClick={onDisableAll(mainEmojis)}>{t("disable-all")}</button>
+                    </div>
                 </h5>
                 <EmojiSelector negative={negative} reactions={mainReactions} fixedWidth={true} onClick={onClick}
                                autoFocus/>
-                {additionalReactions.length > 0 &&
-                    <>
-                        <h5 className="mt-3">{t("additional")}</h5>
-                        <EmojiSelector negative={negative} reactions={additionalReactions} fixedWidth={false}
-                                       onClick={onClick}/>
-                    </>
-                }
+                <h5 className="mt-3">
+                    {t("additional")}
+                    <div className="btn-group ms-3">
+                        <button type="button" className="btn btn-sm btn-outline-secondary"
+                                onClick={onEnableAll(otherEmojis)}>{t("enable-all")}</button>
+                        <button type="button" className="btn btn-sm btn-outline-secondary"
+                                onClick={onDisableAll(otherEmojis)}>{t("disable-all")}</button>
+                    </div>
+                </h5>
+                <EmojiSelector negative={negative} reactions={additionalReactions} fixedWidth={false}
+                               onClick={onClick}/>
             </div>
             <div className="modal-footer">
                 <Button variant="secondary" onClick={onCancel}>{t("cancel")}</Button>
