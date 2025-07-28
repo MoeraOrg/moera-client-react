@@ -50,6 +50,8 @@ export function ReactionButton(props: Props) {
         [disabledList, negative, rejectedSet]
     );
 
+    const expandAlways = mainReactions.length === 0 || additionalReactions.length === 0;
+
     const defaultReactionAdd = () => {
         const emoji = getDefaultEmoji(negative, mainReactions) ?? getDefaultEmoji(negative, additionalReactions);
         if (emoji != null) {
@@ -100,10 +102,10 @@ export function ReactionButton(props: Props) {
                 reactions={mainReactions}
                 fixedWidth={true}
                 onClick={reactionAdd}
-                expand={expanded}
+                expand={expandAlways ? undefined : expanded}
                 onExpand={onExpandClick}
             />
-            {expanded &&
+            {(expandAlways || expanded) &&
                 <EmojiSelector
                     negative={negative}
                     reactions={additionalReactions}
@@ -146,7 +148,32 @@ function getDefaultEmoji(negative: boolean, reactions: EmojiProps[]): number | n
     return second ? second.emoji : null;
 }
 
-const toReactionList = (reactions: number[], disabled: EmojiList, rejected: Set<number>) =>
-    reactions
+function toReactionList(reactions: number[], disabled: EmojiList, rejected: Set<number>) {
+    const list = reactions
         .filter(emoji => !disabled.includesExplicitly(emoji))
         .map(emoji => ({emoji, invisible: rejected.has(emoji)} as EmojiProps));
+    if (list.length === 0 || list.every(r => r.invisible)) {
+        return [];
+    }
+
+    let start: number | null = null;
+    let i = 0;
+    while (i < list.length) {
+        if (start != null && i - start === 5) {
+            list.splice(start, 5);
+            i -= 5;
+            start = null;
+        }
+        if (list[i].invisible) {
+            start = start ?? i;
+        } else {
+            start = null;
+        }
+        i++;
+    }
+    if (start != null && list.length - start === 5) {
+        list.splice(start, 5);
+    }
+
+    return list;
+}
