@@ -40,10 +40,10 @@ export default function CommentComposeLine() {
     const formId = useSelector((state: ClientState) => state.detailedPosting.compose.formId);
     const repliedToId = useSelector(getCommentComposerRepliedToId);
     const reactionsPositiveDefault = useSelector((state: ClientState) =>
-        getSetting(state, "comment.reactions.positive.default") as string
+        getSetting(state, "comment.reactions-disabled.positive.default") as string
     );
     const reactionsNegativeDefault = useSelector((state: ClientState) =>
-        getSetting(state, "comment.reactions.negative.default") as string
+        getSetting(state, "comment.reactions-disabled.negative.default") as string
     );
     const sourceFormatDefault = useSelector((state: ClientState) =>
         getSetting(state, "comment.body-src-format.default") as SourceFormat

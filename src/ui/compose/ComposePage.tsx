@@ -173,10 +173,10 @@ export default function ComposePage() {
         getSetting(state, "posting.reactions.negative.enabled.default") as boolean
     );
     const reactionsPositiveDefault = useSelector((state: ClientState) =>
-        getSetting(state, "posting.reactions.positive.default") as string
+        getSetting(state, "posting.reactions-disabled.positive.default") as string
     );
     const reactionsNegativeDefault = useSelector((state: ClientState) =>
-        getSetting(state, "posting.reactions.negative.default") as string
+        getSetting(state, "posting.reactions-disabled.negative.default") as string
     );
     const reactionsVisibleDefault = useSelector((state: ClientState) =>
         getSetting(state, "posting.reactions.visible.default") as boolean

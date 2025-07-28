@@ -43,8 +43,8 @@ async function postingReplySaga(action: WithContext<PostingReplyAction>): Promis
             commentAdditionDefault: getSetting(state, "posting.comments.addition.default") as PrincipalValue,
             reactionsEnabledDefault: getSetting(state, "posting.reactions.enabled.default") as boolean,
             reactionsNegativeEnabledDefault: getSetting(state, "posting.reactions.negative.enabled.default") as boolean,
-            reactionsPositiveDefault: getSetting(state, "posting.reactions.positive.default") as string,
-            reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default") as string,
+            reactionsPositiveDefault: getSetting(state, "posting.reactions-disabled.positive.default") as string,
+            reactionsNegativeDefault: getSetting(state, "posting.reactions-disabled.negative.default") as string,
             reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default") as boolean,
             reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default") as boolean
         }));

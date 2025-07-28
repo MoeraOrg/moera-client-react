@@ -30,7 +30,7 @@ export default function ComposeReactions() {
                         labelClassName="col-md-3"
                         col="col-md-8"
                         negative={false}
-                        setting="posting.reactions.positive.default"
+                        setting="posting.reactions-disabled.positive.default"
                     />
                     <CheckboxField
                         title={t("enable-oppose-reactions")}
@@ -49,7 +49,7 @@ export default function ComposeReactions() {
                             labelClassName="col-md-3"
                             col="col-md-8"
                             negative={true}
-                            setting="posting.reactions.negative.default"
+                            setting="posting.reactions-disabled.negative.default"
                         />
                     }
                     <CheckboxField

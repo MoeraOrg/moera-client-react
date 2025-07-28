@@ -39,9 +39,20 @@ export function EmojiSelector({negative, reactions, fixedWidth, autoFocus, onCli
                 />
             )}
             {expand != null && onExpand != null &&
-                <button className="choice expand" onClick={() => onExpand()} title={expand ? t("less") : t("more")}>
-                    <Icon icon={expand ? msExpandCircleUpFilled40 : msExpandCircleDownFilled40} size="40"/>
-                </button>
+                <>
+                    {Array(4 - reactions.length % 5).fill(0).map((_, i) =>
+                        <EmojiChoice
+                            key={i}
+                            negative={negative}
+                            emoji={0}
+                            invisible
+                            onClick={() => {}}
+                        />
+                    )}
+                    <button className="choice expand" onClick={() => onExpand()} title={expand ? t("less") : t("more")}>
+                        <Icon icon={expand ? msExpandCircleUpFilled40 : msExpandCircleDownFilled40} size="40"/>
+                    </button>
+                </>
             }
         </div>
     );

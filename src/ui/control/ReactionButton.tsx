@@ -35,17 +35,19 @@ export function ReactionButton(props: Props) {
     const [expanded, setExpanded] = useState<boolean>(false);
     const onExpandClick = () => setExpanded(!expanded);
 
-    const availableList = useSelector((state: ClientState) =>
-        !negative ? getAvailableReactionsPositive(state) : getAvailableReactionsNegative(state)
+    const disabledList = useSelector((state: ClientState) =>
+        !negative ? getDisabledReactionsPositive(state) : getDisabledReactionsNegative(state)
     );
     const rejectedSet = useMemo(() => new Set(parseRejectedList(rejected)), [rejected]);
     const mainReactions = useMemo<EmojiProps[]>(
-        () => toReactionList(!negative ? MAIN_POSITIVE_REACTIONS : MAIN_NEGATIVE_REACTIONS, rejectedSet),
-        [negative, rejectedSet]
+        () => toReactionList(!negative ? MAIN_POSITIVE_REACTIONS : MAIN_NEGATIVE_REACTIONS, disabledList, rejectedSet),
+        [disabledList, negative, rejectedSet]
     );
     const additionalReactions = useMemo<EmojiProps[]>(
-        () => toReactionList(!negative ? ADDITIONAL_POSITIVE_REACTIONS : ADDITIONAL_NEGATIVE_REACTIONS, rejectedSet),
-        [negative, rejectedSet]
+        () => toReactionList(
+            !negative ? ADDITIONAL_POSITIVE_REACTIONS : ADDITIONAL_NEGATIVE_REACTIONS, disabledList, rejectedSet
+        ),
+        [disabledList, negative, rejectedSet]
     );
 
     const defaultReactionAdd = () => {
@@ -115,13 +117,13 @@ export function ReactionButton(props: Props) {
 
 // createSelector() has only one memoized value per selector, so we need two of them
 
-const getAvailableReactionsPositive = createSelector(
-    (state: ClientState) => getSetting(state, "reactions.positive.available") as string,
+const getDisabledReactionsPositive = createSelector(
+    (state: ClientState) => getSetting(state, "reactions.positive.disabled") as string,
     available => new EmojiList(available)
 );
 
-const getAvailableReactionsNegative = createSelector(
-    (state: ClientState) => getSetting(state, "reactions.negative.available") as string,
+const getDisabledReactionsNegative = createSelector(
+    (state: ClientState) => getSetting(state, "reactions.negative.disabled") as string,
     available => new EmojiList(available)
 );
 
@@ -144,5 +146,7 @@ function getDefaultEmoji(negative: boolean, reactions: EmojiProps[]): number | n
     return second ? second.emoji : null;
 }
 
-const toReactionList = (reactions: number[], rejected: Set<number>) =>
-    reactions.map(emoji => ({emoji, invisible: rejected.has(emoji)} as EmojiProps));
+const toReactionList = (reactions: number[], disabled: EmojiList, rejected: Set<number>) =>
+    reactions
+        .filter(emoji => !disabled.includesExplicitly(emoji))
+        .map(emoji => ({emoji, invisible: rejected.has(emoji)} as EmojiProps));
