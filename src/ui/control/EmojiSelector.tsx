@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { EmojiChoice, EmojiOnClick, EmojiProps } from "ui/control";
+import { EmojiChoice, EmojiOnClick, EmojiProps, usePopover } from "ui/control";
 import { Icon, msExpandCircleDownFilled40, msExpandCircleUpFilled40 } from "ui/material-symbols";
 import "./EmojiSelector.css";
 
@@ -16,6 +16,7 @@ interface Props {
 }
 
 export function EmojiSelector({negative, reactions, fixedWidth, autoFocus, onClick, expand, onExpand}: Props) {
+    const {update: updatePopover} = usePopover();
     const {t} = useTranslation();
 
     const domRef = useRef<HTMLDivElement>(null);
@@ -25,6 +26,12 @@ export function EmojiSelector({negative, reactions, fixedWidth, autoFocus, onCli
             domRef.current.focus();
         }
     }, [domRef, autoFocus]);
+
+    useLayoutEffect(() => {
+        if (expand != null) {
+            updatePopover();
+        }
+    }, [expand, updatePopover]);
 
     return (
         <div className="emoji-selector" tabIndex={-1} style={{width: fixedWidth ? "15rem" : "auto"}} ref={domRef}>
