@@ -283,7 +283,7 @@ function urlsToHtml(text: string | null | undefined): string {
     return text.replace(URLS, (url: string) => `<a href="${url}">${url}</a>`);
 }
 
-function strikeoutToHtml(text: string | null | undefined): string {
+export function strikeoutToHtml(text: string | null | undefined): string {
     if (!text || !text.includes("\u0336")) {
         return text ?? "";
     }
@@ -302,7 +302,7 @@ function strikeoutToHtml(text: string | null | undefined): string {
             }
             lastChar = null;
         } else {
-            if (inStrikeout) {
+            if (inStrikeout && lastChar != null) {
                 output += "</s>";
                 inStrikeout = false;
             }

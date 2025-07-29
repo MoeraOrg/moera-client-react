@@ -15,7 +15,7 @@ import MarkdownPasteDialog, { RichTextPasteMode } from "ui/control/richtextedito
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
 import { extractUrls, replaceSmileys } from "util/text";
-import { containsTags, safeImportHtml } from "util/html";
+import { containsTags, safeImportHtml, strikeoutToHtml } from "util/html";
 import { insertText } from "util/ui";
 import { mentionName } from "util/names";
 import { importQuirks } from "util/import-quirks";
@@ -108,7 +108,7 @@ function MarkdownArea(
 
         let content: string | null;
         if (mode === "html") {
-            content = safeImportHtml(importQuirks(html));
+            content = safeImportHtml(strikeoutToHtml(importQuirks(html)));
             if (format === "markdown") {
                 content = htmlToMarkdown(content);
             }
