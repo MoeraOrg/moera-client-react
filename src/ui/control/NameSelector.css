@@ -24,3 +24,12 @@
 .name-select .item.selected .name {
     color: var(--bs-gray-100);
 }
+
+.name-select .item .body {
+    color: var(--bs-body-color);
+}
+
+.name-select .item.selected .body,
+.name-select .item.selected:hover .body {
+    color: white;
+}
