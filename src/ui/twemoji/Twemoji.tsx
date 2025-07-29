@@ -43,6 +43,7 @@ import { ReactComponent as Twemoji1f62e } from "./1f62e.isvg";
 import { ReactComponent as Twemoji1f631 } from "./1f631.isvg";
 import { ReactComponent as Twemoji1f643 } from "./1f643.isvg";
 import { ReactComponent as Twemoji1f64f } from "./1f64f.isvg";
+import { ReactComponent as Twemoji1f914 } from "./1f914.isvg";
 import { ReactComponent as Twemoji1f917 } from "./1f917.isvg";
 import { ReactComponent as Twemoji1f921 } from "./1f921.isvg";
 import { ReactComponent as Twemoji1f923 } from "./1f923.isvg";
@@ -93,6 +94,7 @@ const CACHED = new Map([
     ["1f631", Twemoji1f631],
     ["1f643", Twemoji1f643],
     ["1f64f", Twemoji1f64f],
+    ["1f914", Twemoji1f914],
     ["1f917", Twemoji1f917],
     ["1f921", Twemoji1f921],
     ["1f923", Twemoji1f923],
@@ -120,6 +122,9 @@ export default function Twemoji({code, title = ""}: Props) {
             return <FontAwesomeIcon icon={faThumbsUp} color="#2078f4" title={title}/>;
         case "1f44e":
             return <FontAwesomeIcon icon={faThumbsDown} color="#2078f4" title={title}/>;
+        case "1f4a1":
+            emoji = "1f914";
+            break;
         case "1f620":
             emoji = "1f92c";
             break;
