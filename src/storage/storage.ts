@@ -26,7 +26,8 @@ function loadedData(data: Access.StoredData): void {
 
     if (data.settings != null) {
         dispatch(settingsClientValuesSet(
-            data.settings.map(([name, value]) => ({name: CLIENT_SETTINGS_PREFIX + name, value}))));
+            data.settings.map(([name, value]) => ({name: CLIENT_SETTINGS_PREFIX + name, value}))
+        ));
     }
 
     if (data.names != null) {
