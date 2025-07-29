@@ -14,6 +14,7 @@ import { faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { ReactComponent as Twemoji23f3 } from "./23f3.isvg";
 import { ReactComponent as Twemoji2694 } from "./2694.isvg";
 import { ReactComponent as Twemoji2708 } from "./2708.isvg";
+import { ReactComponent as Twemoji274c } from "./274c.isvg";
 import { ReactComponent as Twemoji1f379 } from "./1f379.isvg";
 import { ReactComponent as Twemoji1f37f } from "./1f37f.isvg";
 import { ReactComponent as Twemoji1f381 } from "./1f381.isvg";
@@ -29,6 +30,7 @@ import { ReactComponent as Twemoji1f4a4 } from "./1f4a4.isvg";
 import { ReactComponent as Twemoji1f4a9 } from "./1f4a9.isvg";
 import { ReactComponent as Twemoji1f4af } from "./1f4af.isvg";
 import { ReactComponent as Twemoji1f525 } from "./1f525.isvg";
+import { ReactComponent as Twemoji1f595 } from "./1f595.isvg";
 import { ReactComponent as Twemoji1f600 } from "./1f600.isvg";
 import { ReactComponent as Twemoji1f60c } from "./1f60c.isvg";
 import { ReactComponent as Twemoji1f60d } from "./1f60d.isvg";
@@ -49,6 +51,9 @@ import { ReactComponent as Twemoji1f92c } from "./1f92c.isvg";
 import { ReactComponent as Twemoji1f92e } from "./1f92e.isvg";
 import { ReactComponent as Twemoji1f970 } from "./1f970.isvg";
 import { ReactComponent as Twemoji1f971 } from "./1f971.isvg";
+import { ReactComponent as Twemoji1f984 } from "./1f984.isvg";
+import { ReactComponent as Twemoji1f986 } from "./1f986.isvg";
+import { ReactComponent as Twemoji1f9ef } from "./1f9ef.isvg";
 import { ReactComponent as Twemoji1f9f8 } from "./1f9f8.isvg";
 import { ReactComponent as Twemoji1fac2 } from "./1fac2.isvg";
 
@@ -59,6 +64,7 @@ const CACHED = new Map([
     ["23f3", Twemoji23f3],
     ["2694", Twemoji2694],
     ["2708", Twemoji2708],
+    ["274c", Twemoji274c],
     ["1f379", Twemoji1f379],
     ["1f37f", Twemoji1f37f],
     ["1f381", Twemoji1f381],
@@ -74,6 +80,7 @@ const CACHED = new Map([
     ["1f4a9", Twemoji1f4a9],
     ["1f4af", Twemoji1f4af],
     ["1f525", Twemoji1f525],
+    ["1f595", Twemoji1f595],
     ["1f600", Twemoji1f600],
     ["1f60c", Twemoji1f60c],
     ["1f60d", Twemoji1f60d],
@@ -94,6 +101,9 @@ const CACHED = new Map([
     ["1f92e", Twemoji1f92e],
     ["1f970", Twemoji1f970],
     ["1f971", Twemoji1f971],
+    ["1f984", Twemoji1f984],
+    ["1f986", Twemoji1f986],
+    ["1f9ef", Twemoji1f9ef],
     ["1f9f8", Twemoji1f9f8],
     ["1fac2", Twemoji1fac2]
 ]);
