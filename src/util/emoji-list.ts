@@ -1,37 +1,24 @@
 export default class EmojiList {
 
     #other: boolean;
-    #included: number[];
-    #includedSet: Set<number>;
+    #included: Set<number>;
 
-    constructor(str: string) {
-        const list = str ? str.split(" ").map(s => s.trim()) : [];
+    constructor(str: string | null | undefined) {
+        const list = str ? str.split(" ").map(s => s.trim()).filter(s => !!s) : [];
         this.#other = list.includes("*");
-        this.#included = list.filter(s => s !== "*").map(v => parseInt("0x" + v));
-        this.#includedSet = new Set(this.#included);
+        this.#included = new Set(list.filter(s => s !== "*").map(v => parseInt("0x" + v)));
     }
 
     other(): boolean {
         return this.#other;
     }
 
-    included(): number[] {
+    included(): Set<number> {
         return this.#included;
     }
 
     includes(emoji: number): boolean {
-        return this.#other || this.#includedSet.has(emoji);
+        return this.#included.has(emoji);
     }
 
-    includesExplicitly(emoji: number): boolean {
-        return this.#includedSet.has(emoji);
-    }
-
-}
-
-export function parseRejectedList(rejected: string | null | undefined): number[] {
-    if (!rejected) {
-        return [];
-    }
-    return rejected.split(" ").map(s => s.trim()).filter(s => !!s && s !== "*").map(s => parseInt("0x" + s));
 }

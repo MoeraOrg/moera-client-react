@@ -13,7 +13,7 @@ import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { DelayedPopover, EmojiProps, EmojiSelector, ReactionEmojiButton, useDropdownMenu } from "ui/control";
 import { useLightBox } from "ui/lightbox/lightbox-context";
-import EmojiList, { parseRejectedList } from "util/emoji-list";
+import EmojiList from "util/emoji-list";
 
 interface Props {
     icon: IconProp,
@@ -38,7 +38,7 @@ export function ReactionButton(props: Props) {
     const disabledList = useSelector((state: ClientState) =>
         !negative ? getDisabledReactionsPositive(state) : getDisabledReactionsNegative(state)
     );
-    const rejectedSet = useMemo(() => new Set(parseRejectedList(rejected)), [rejected]);
+    const rejectedSet = useMemo(() => new EmojiList(rejected).included(), [rejected]);
     const mainReactions = useMemo<EmojiProps[]>(
         () => toReactionList(!negative ? MAIN_POSITIVE_REACTIONS : MAIN_NEGATIVE_REACTIONS, disabledList, rejectedSet),
         [disabledList, negative, rejectedSet]
@@ -151,7 +151,7 @@ function getDefaultEmoji(negative: boolean, reactions: EmojiProps[]): number | n
 
 function toReactionList(reactions: number[], disabled: EmojiList, rejected: Set<number>) {
     const list = reactions
-        .filter(emoji => !disabled.includesExplicitly(emoji))
+        .filter(emoji => !disabled.includes(emoji))
         .map(emoji => ({emoji, invisible: rejected.has(emoji)} as EmojiProps));
     if (list.length === 0 || list.every(r => r.invisible)) {
         return [];

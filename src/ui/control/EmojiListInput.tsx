@@ -38,7 +38,7 @@ export function EmojiListInput({className, negative, value, disabled, onChange}:
     return (
         <div className={cx(className, "emoji-list-input")}>
             <div className="content" onClick={edit}>
-                {all.filter(e => !list.includesExplicitly(e)).map(e => <Twemoji key={e} code={e}/>)}
+                {all.filter(e => !list.includes(e)).map(e => <Twemoji key={e} code={e}/>)}
             </div>
             {!disabled &&
                 <div className="button" onClick={edit}>

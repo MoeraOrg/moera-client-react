@@ -40,7 +40,7 @@ export function EmojiListDialog({negative, value, onConfirm, onCancel}: Props) {
                 allEmojis
                     .reduce<Record<number, Marks>>(
                         (m, emoji) => {
-                            m[emoji] = {dimmed: list.includesExplicitly(emoji)};
+                            m[emoji] = {dimmed: list.includes(emoji)};
                             return m;
                         },
                         {0: {dimmed: list.other()}}
