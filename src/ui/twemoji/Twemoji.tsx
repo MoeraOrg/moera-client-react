@@ -122,6 +122,7 @@ export default function Twemoji({code, title = ""}: Props) {
             return <FontAwesomeIcon icon={faThumbsUp} color="#2078f4" title={title}/>;
         case "1f44e":
             return <FontAwesomeIcon icon={faThumbsDown} color="#2078f4" title={title}/>;
+        // Do not forget to change formatReaction() function in instant-summaries.ts
         case "1f4a1":
             emoji = "1f914";
             break;
