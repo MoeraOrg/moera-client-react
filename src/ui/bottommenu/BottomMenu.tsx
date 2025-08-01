@@ -11,7 +11,6 @@ import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { Button, Loading } from "ui/control";
 import { useActiveElement } from "ui/hook";
-import QuickTipsButton from "ui/quicktips/QuickTipsButton";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
 import NewsButton from "ui/mainmenu/connectionstatus/NewsButton";
 import InstantButton from "ui/instant/InstantButton";
@@ -62,7 +61,6 @@ export default function BottomMenu() {
     return (
         <div id="bottom-menu" className={className}>
             <NewPostButton/>
-            <QuickTipsButton/>
             <SettingsButton/>
             <HomeButton/>
             <InstantButton/>

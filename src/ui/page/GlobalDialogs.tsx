@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
 import MnemonicDialog from "ui/profile/manage/MnemonicDialog";
-import QuickTips from "ui/quicktips/QuickTips";
 import MessageBox from "ui/messagebox/MessageBox";
 import ConfirmBox from "ui/confirmbox/ConfirmBox";
 import FlashBox from "ui/flashbox/FlashBox";
@@ -15,7 +14,6 @@ const ShareDialog = React.lazy(() => import("ui/sharedialog/ShareDialog"));
 export default function GlobalDialogs() {
     const showSignUpDialog = useSelector((state: ClientState) => state.signUpDialog.show);
     const showMnemonicDialog = useSelector((state: ClientState) => !!state.nodeName.mnemonic);
-    const showQuickTips = useSelector((state: ClientState) => state.quickTips.show);
     const showMessageBox = useSelector((state: ClientState) => state.messageBox.show);
     const showConfirmBox = useSelector((state: ClientState) => state.confirmBox.show);
     const showFlashBox = useSelector((state: ClientState) => state.flashBox.show);
@@ -31,7 +29,6 @@ export default function GlobalDialogs() {
                 {showSignUpDialog && <SignUpDialog/>}
             </Suspense>
             {showMnemonicDialog && <MnemonicDialog/>}
-            {showQuickTips && <QuickTips/>}
             {showMessageBox && <MessageBox/>}
             {showConfirmBox && <ConfirmBox/>}
             {showFlashBox && <FlashBox/>}

@@ -51,7 +51,6 @@ import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
 import progressBox from "state/progressbox/reducer";
 import signUpDialog from "state/signupdialog/reducer";
-import quickTips from "state/quicktips/reducer";
 import refresh from "state/refresh/reducer";
 
 import { collectExecutors } from "state/executor";
@@ -126,7 +125,6 @@ import blockingDetailsDialogTriggers from "state/blockingdetailsdialog/triggers"
 import blockedOperationsTriggers from "state/blockedoperations/triggers";
 import sheriffOrderDetailsDialogTriggers from "state/sherifforderdetailsdialog/triggers";
 import signUpDialogTriggers from "state/signupdialog/triggers";
-import quickTipsTriggers from "state/quicktips/triggers";
 import refreshTriggers from "state/refresh/triggers";
 
 const reducers = combineReducers({
@@ -175,7 +173,6 @@ const reducers = combineReducers({
     flashBox,
     progressBox,
     signUpDialog,
-    quickTips,
     refresh
 });
 
@@ -214,7 +211,6 @@ const triggers = collectTriggers(
     blockedOperationsTriggers,
     sheriffOrderDetailsDialogTriggers,
     signUpDialogTriggers,
-    quickTipsTriggers,
     refreshTriggers
 );
 

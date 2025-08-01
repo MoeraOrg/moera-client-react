@@ -33,7 +33,6 @@ import { PostingsState } from "state/postings/state";
 import { ProfileState } from "state/profile/state";
 import { ProgressBoxState } from "state/progressbox/state";
 import { PulseState } from "state/pulse/state";
-import { QuickTipsState } from "state/quicktips/state";
 import { ReactionsDialogState } from "state/reactionsdialog/state";
 import { RefreshState } from "state/refresh/state";
 import { SearchState } from "state/search/state";
@@ -83,7 +82,6 @@ export interface ClientState {
     profile: ProfileState;
     progressBox: ProgressBoxState;
     pulse: PulseState;
-    quickTips: QuickTipsState;
     reactionsDialog: ReactionsDialogState;
     refresh: RefreshState;
     search: SearchState;

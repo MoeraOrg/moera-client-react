@@ -10,7 +10,6 @@ import { openSignUpDialog } from "state/signupdialog/actions";
 import { Button, Loading } from "ui/control";
 import { useIsTinyScreen } from "ui/hook/media-query";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
-import QuickTipsButton from "ui/quicktips/QuickTipsButton";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
 import NewsButton from "ui/mainmenu/connectionstatus/NewsButton";
 import InstantButton from "ui/instant/InstantButton";
@@ -53,7 +52,6 @@ function ConnectionButtons() {
     }
     return (
         <span className="d-none d-lg-inline">
-            <QuickTipsButton/>
             <NewPostButton/>
             <NewsButton/>
             <InstantButton/>
