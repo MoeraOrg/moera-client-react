@@ -6,3 +6,15 @@
 .posting > .owner-line .visibility .principal {
     padding-left: .4rem;
 }
+
+.posting > .owner-line .visibility .principal svg {
+    font-size: 1.2em;
+}
+
+.posting > .owner-line .visibility .principal-select .principal {
+    padding-left: .1rem;
+}
+
+.posting > .owner-line .visibility .principal-select .principal svg {
+    font-size: 1.2em;
+}

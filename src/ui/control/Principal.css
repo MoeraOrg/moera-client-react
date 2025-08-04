@@ -3,9 +3,14 @@
     color: var(--bs-gray-500);
 }
 
+.principal svg {
+    vertical-align: -.2em;
+    font-size: 1.4em;
+}
+
 .principal .caption {
     font-size: .9rem;
-    font-weight: bold;
+    font-weight: 400;
 }
 
 .principal.senior {

@@ -1,51 +1,64 @@
 .principal-select {
     display: inline-block;
+}
+
+.principal-select .btn {
+    display: block;
     font-size: .8rem;
     background-color: transparent;
-    color: var(--bs-gray-600);
-    cursor: pointer;
     padding: .1rem .2rem;
-    border: none;
+    border-color: transparent;
     border-radius: .4rem;
 }
 
-.principal-select.long {
+.principal-select.long .btn {
     border: solid 1px var(--bs-gray-400);
     border-radius: .75rem;
     padding: .1rem .4rem;
 }
 
-.principal-select:hover {
-    color: var(--bs-gray-800);
+.principal-select .btn.active, .principal-select.long .btn.active {
+    border-color: var(--bs-btn-active-border-color);
+}
+
+.principal-select .btn:hover {
     background-color: var(--highlight);
 }
 
-.principal-select:disabled, .principal-select:disabled:hover {
+.principal-select .btn:disabled, .principal-select .btn:disabled:hover {
     cursor: auto;
-    color: var(--bs-gray-600);
     background-color: var(--bs-gray-400);
 }
 
-.principal-select .principal {
-    margin-right: .25rem;
+.principal-select .btn .principal {
     color: var(--bs-gray-600);
 }
 
-.principal-select:hover .principal {
+.principal-select.long .btn .principal {
     color: var(--bs-gray-800);
 }
 
-.principal-select:disabled:hover .principal {
-    color: var(--bs-gray-600);
+.principal-select.long .btn .principal svg {
+    vertical-align: -.18em;
 }
 
-.principal-select .chevron {
-    font-size: .5rem;
-    vertical-align: middle;
+.principal-select .btn:disabled .principal {
+    color: var(--bs-gray-800);
 }
 
-.principal-select.long .chevron {
-    font-size: .6rem;
+.principal-select .dropdown-toggle::after {
+    font-size: 1rem;
+    vertical-align: .1em;
+}
+
+.principal-select .dropdown-menu {
+    border-color: var(--primary-600);
+}
+
+.principal-select .dropdown-item svg {
+    font-size: 1.2em;
+    vertical-align: -.2em;
+    line-height: 1.5;
 }
 
 .form-group .principal-select {

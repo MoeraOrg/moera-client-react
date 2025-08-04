@@ -1,12 +1,11 @@
 import { useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { PrincipalValue } from "api";
 import { getNodeFriendGroups } from "state/node/selectors";
 import { getPrincipalDisplay } from "ui/control/principal-display";
+import { Icon, MaterialSymbol } from "ui/material-symbols";
 import "./Principal.css";
 
 interface Props {
@@ -15,7 +14,7 @@ interface Props {
     long?: boolean | null;
     className?: string | null;
     comment?: string | null;
-    icons?: Partial<Record<PrincipalValue, IconProp>> | null;
+    icons?: Partial<Record<PrincipalValue, MaterialSymbol>> | null;
     titles?: Partial<Record<PrincipalValue, string>> | null;
 }
 
@@ -38,13 +37,13 @@ export function Principal({value, defaultValue, long, className, comment, icons,
     if (long) {
         return (
             <span className={cx("principal", className)}>
-                <FontAwesomeIcon icon={icon}/> <span className="caption">{title}</span>
+                <Icon icon={icon} size="1em"/> <span className="caption">{title}</span>
             </span>
         );
     } else {
         return (
             <span className={cx("principal", className)} title={title}>
-                <FontAwesomeIcon icon={icon}/>
+                <Icon icon={icon} size="1em"/>
             </span>
         );
     }

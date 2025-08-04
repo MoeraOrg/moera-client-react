@@ -11,8 +11,8 @@ import { ClientState } from "state/state";
 import { postingOperationsUpdate } from "state/postings/actions";
 import { getSetting } from "state/settings/selectors";
 import { Principal, PrincipalSelect } from "ui/control";
-import "./PostingVisibility.css";
 import { REL_CURRENT } from "util/rel-node-name";
+import "./PostingVisibility.css";
 
 interface Props {
     posting: PostingInfo;

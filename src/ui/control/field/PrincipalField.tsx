@@ -1,16 +1,16 @@
 import React from 'react';
 import cx from 'classnames';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { PrincipalFlag, PrincipalValue } from "api";
 import { FormGroup, PrincipalSelect } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import FieldError from "ui/control/field/FieldError";
+import { MaterialSymbol } from "ui/material-symbols";
 
 interface Props {
     name: string;
     values?: PrincipalFlag[] | null;
-    icons?: Partial<Record<PrincipalValue, IconProp>> | null;
+    icons?: Partial<Record<PrincipalValue, MaterialSymbol>> | null;
     titles?: Partial<Record<PrincipalValue, string>> | null;
     caption?: string | null;
     long?: boolean | null;

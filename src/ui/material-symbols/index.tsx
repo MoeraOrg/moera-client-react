@@ -7,6 +7,7 @@ import { ReactComponent as msArrowDownward } from "ui/material-symbols/arrow_dow
 import { ReactComponent as msArrowUpward } from "ui/material-symbols/arrow_upward.isvg";
 import { ReactComponent as msBackspaceFilled16 } from "ui/material-symbols/backspace_filled16.isvg";
 import { ReactComponent as msBadge } from "ui/material-symbols/badge.isvg";
+import { ReactComponent as msBlock } from "ui/material-symbols/block.isvg";
 import { ReactComponent as msCancel } from "ui/material-symbols/cancel.isvg";
 import { ReactComponent as msChevronRight } from "ui/material-symbols/chevron_right.isvg";
 import { ReactComponent as msClose } from "ui/material-symbols/close.isvg";
@@ -32,6 +33,8 @@ import { ReactComponent as msFormatIndentIncrease } from "ui/material-symbols/fo
 import { ReactComponent as msFormatInkHighlighter } from "ui/material-symbols/format_ink_highlighter.isvg";
 import { ReactComponent as msFormatItalic } from "ui/material-symbols/format_italic.isvg";
 import { ReactComponent as msFormatSize } from "ui/material-symbols/format_size.isvg";
+import { ReactComponent as msGroup } from "ui/material-symbols/group.isvg";
+import { ReactComponent as msGroups } from "ui/material-symbols/groups.isvg";
 import { ReactComponent as msHorizontalRule } from "ui/material-symbols/horizontal_rule.isvg";
 import { ReactComponent as msFormatListBulleted } from "ui/material-symbols/format_list_bulleted.isvg";
 import { ReactComponent as msFormatListNumbered } from "ui/material-symbols/format_list_numbered.isvg";
@@ -44,13 +47,16 @@ import { ReactComponent as msKeepFilled16 } from "ui/material-symbols/keep_fille
 import { ReactComponent as msKeyboardArrowDown } from "ui/material-symbols/keyboard_arrow_down.isvg";
 import { ReactComponent as msKeyboardArrowUp } from "ui/material-symbols/keyboard_arrow_up.isvg";
 import { ReactComponent as msLink } from "ui/material-symbols/link.isvg";
+import { ReactComponent as msLock } from "ui/material-symbols/lock.isvg";
 import { ReactComponent as msMediaLink } from "ui/material-symbols/media_link.isvg";
 import { ReactComponent as msMoreHoriz } from "ui/material-symbols/more_horiz.isvg";
 import { ReactComponent as msMoreVert } from "ui/material-symbols/more_vert.isvg";
 import { ReactComponent as msMoreVert12 } from "ui/material-symbols/more_vert12.isvg";
 import { ReactComponent as msOpenInNew } from "ui/material-symbols/open_in_new.isvg";
+import { ReactComponent as msPersonBook } from "ui/material-symbols/person_book.isvg";
 import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_library.isvg";
 import { ReactComponent as msPreview } from "ui/material-symbols/preview.isvg";
+import { ReactComponent as msPublic } from "ui/material-symbols/public.isvg";
 import { ReactComponent as msRedo } from "ui/material-symbols/redo.isvg";
 import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
 import { ReactComponent as msRestartAlt16 } from "ui/material-symbols/restart_alt16.isvg";
@@ -59,6 +65,7 @@ import { ReactComponent as msSearch } from "ui/material-symbols/search.isvg";
 import { ReactComponent as msSend } from "ui/material-symbols/send.isvg";
 import { ReactComponent as msSentimentSatisfied } from "ui/material-symbols/sentiment_satisfied.isvg";
 import { ReactComponent as msSchedule } from "ui/material-symbols/schedule.isvg";
+import { ReactComponent as msShieldPerson } from "ui/material-symbols/shield_person.isvg";
 import { ReactComponent as msStarFilled16 } from "ui/material-symbols/star_filled16.isvg";
 import { ReactComponent as msStrikethroughS } from "ui/material-symbols/strikethrough_s.isvg";
 import { ReactComponent as msSubscript } from "ui/material-symbols/subscript.isvg";
@@ -66,7 +73,9 @@ import { ReactComponent as msSuperscript } from "ui/material-symbols/superscript
 import { ReactComponent as msTitle } from "ui/material-symbols/title.isvg";
 import { ReactComponent as msTune } from "ui/material-symbols/tune.isvg";
 import { ReactComponent as msUndo } from "ui/material-symbols/undo.isvg";
+import { ReactComponent as msVerifiedUser } from "ui/material-symbols/verified_user.isvg";
 import { ReactComponent as msVideoLibrary } from "ui/material-symbols/video_library.isvg";
+import { ReactComponent as msVisibility } from "ui/material-symbols/visibility.isvg";
 
 export {
     msAddBox,
@@ -76,6 +85,7 @@ export {
     msArrowUpward,
     msBackspaceFilled16,
     msBadge,
+    msBlock,
     msCancel,
     msChevronRight,
     msClose,
@@ -102,6 +112,8 @@ export {
     msFormatItalic,
     msFormatSize,
     msFunction,
+    msGroup,
+    msGroups,
     msHelpFilled40,
     msHorizontalRule,
     msFormatListBulleted,
@@ -111,6 +123,7 @@ export {
     msHistory,
     msKeepFilled16,
     msLink,
+    msLock,
     msKeyboardArrowDown,
     msKeyboardArrowUp,
     msMediaLink,
@@ -118,8 +131,10 @@ export {
     msMoreVert,
     msMoreVert12,
     msOpenInNew,
+    msPersonBook,
     msPhotoLibrary,
     msPreview,
+    msPublic,
     msRedo,
     msReport,
     msRestartAlt16,
@@ -128,6 +143,7 @@ export {
     msSend,
     msSentimentSatisfied,
     msSchedule,
+    msShieldPerson,
     msStarFilled16,
     msStrikethroughS,
     msSubscript,
@@ -135,7 +151,9 @@ export {
     msTitle,
     msTune,
     msUndo,
+    msVerifiedUser,
     msVideoLibrary,
+    msVisibility,
 };
 
 export type MaterialSymbol = React.FunctionComponent<React.SVGProps<SVGSVGElement> & { title?: string }>;

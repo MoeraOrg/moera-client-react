@@ -63,8 +63,12 @@ export default function ComposeDraftSelector() {
                 }
             </Button>
             {visible &&
-                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
-                     className="fade dropdown-menu popover shadow-sm show">
+                <div
+                    ref={setPopperRef}
+                    style={{...popperStyles, zIndex: zIndex?.widget}}
+                    {...popperAttributes}
+                    className="fade dropdown-menu popover shadow-sm show"
+                >
                     <ComposeNewPost/>
                     {draftList.map(draft =>
                         <ComposeDraftItem key={draft.id} draft={draft} current={draftId === draft.id}

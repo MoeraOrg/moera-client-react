@@ -1,8 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
@@ -11,15 +8,16 @@ import { FriendGroupInfo, PrincipalFlag, PrincipalValue } from "api";
 import { ClientState } from "state/state";
 import { getNodeFriendGroups } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
-import { Principal, useModalDialog } from "ui/control";
+import { Button, Principal, useModalDialog } from "ui/control";
 import { getPrincipalDisplay, PrincipalDisplay } from "ui/control/principal-display";
+import { Icon, MaterialSymbol } from "ui/material-symbols";
 import { useButtonPopper } from "ui/hook";
 import "./PrincipalSelect.css";
 
 interface Props {
     value: PrincipalValue | null | undefined;
     values? : PrincipalFlag[] | null;
-    icons?: Partial<Record<PrincipalValue, IconProp>> | null;
+    icons?: Partial<Record<PrincipalValue, MaterialSymbol>> | null;
     titles?: Partial<Record<PrincipalValue, string>> | null;
     caption?: string | null;
     long?: boolean | null;
@@ -36,7 +34,7 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
     const {overlayId: parentOverlayId} = useModalDialog();
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
-    } = useButtonPopper("bottom-end", {parentOverlayId});
+    } = useButtonPopper("bottom-start", {parentOverlayId});
 
     const {t} = useTranslation();
 
@@ -44,32 +42,39 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
 
     const principalValues = getValues(values, friendGroups, publicDisabled && value !== "public", t);
     return (
-        <>
-            <button className={cx("principal-select", className, {long})} ref={setButtonRef} aria-label={t("select")}
-                    onClick={onToggle} disabled={disabled ?? undefined}>
+        <div ref={setButtonRef} className={cx("principal-select", className, {long, "dropup": visible})}
+             aria-label={t("select")}>
+            <Button variant="tool" className="dropdown-toggle" active={visible} disabled={disabled ?? undefined}
+                    onClick={onToggle}>
                 <Principal value={value} long={long} icons={icons} titles={titles}/>
-                <FontAwesomeIcon icon={faChevronDown} className="chevron"/>
-            </button>
+            </Button>
             {visible &&
-                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
-                     className="fade dropdown-menu shadow-sm show">
+                <div
+                    ref={setPopperRef}
+                    style={{...popperStyles, zIndex: zIndex?.widget}}
+                    {...popperAttributes}
+                    className="fade dropdown-menu shadow-sm show"
+                >
                     {caption && <div className="caption">{caption}</div>}
                     {principalValues.map(({value: v, icon, title}) =>
-                        <div key={v} className="dropdown-item" onClick={onClick(v)}>
-                            <FontAwesomeIcon icon={faCheck} className={cx({"invisible": v !== value})}/>{" "}
-                            <FontAwesomeIcon icon={icons?.[v] ?? icon} fixedWidth/>&nbsp;&nbsp;{titles?.[v] ?? title}
+                        <div key={v} className={cx("dropdown-item", {"active": v === value})} onClick={onClick(v)}>
+                            <Icon icon={icons?.[v] ?? icon} size="1em"/>&nbsp;&nbsp;{titles?.[v] ?? title}
                         </div>
                     )}
                 </div>
             }
-        </>
+        </div>
     );
 }
 
 type ItemValue = {value: PrincipalValue} & PrincipalDisplay;
 
-function getValues(flags: PrincipalFlag[] | null | undefined, friendGroups: FriendGroupInfo[], publicDisabled: boolean,
-                   t: TFunction): ItemValue[] {
+function getValues(
+    flags: PrincipalFlag[] | null | undefined,
+    friendGroups: FriendGroupInfo[],
+    publicDisabled: boolean,
+    t: TFunction
+): ItemValue[] {
     if (flags == null) {
         return [];
     }
