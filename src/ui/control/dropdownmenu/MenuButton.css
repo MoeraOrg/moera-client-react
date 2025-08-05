@@ -6,6 +6,12 @@
     height: 2.1em;
 }
 
+@media only screen and (max-width: 575px) {
+    .menu-button {
+        padding: .25em .4em;
+    }
+}
+
 .menu-button svg {
     vertical-align: -.1em;
 }
