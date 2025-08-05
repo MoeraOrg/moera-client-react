@@ -12,6 +12,10 @@ $nav-tabs-link-active-color:  $gray-800;
 $nav-link-color:              $gray-600;
 $nav-link-hover-color:        $gray-700;
 
+$popover-border-width:        0;
+$popover-border-radius:       1rem;
+$popover-box-shadow:          0 12px 16px 0 rgba(0, 0, 0, 0.16);
+
 @import "~bootstrap/scss/maps";
 @import "~bootstrap/scss/mixins";
 @import "~bootstrap/scss/utilities";

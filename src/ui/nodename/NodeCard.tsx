@@ -8,10 +8,9 @@ import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
 import { getNodeCard, isNodeCardAnyLoaded, isNodeCardAnyLoading } from "state/nodecards/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
-import { useIsTinyScreen } from "ui/hook/media-query";
-import { Avatar, DonateButton, Loading, SubscribeButton, usePopover } from "ui/control";
+import { Avatar, DonateButton, SubscribeButton, usePopover } from "ui/control";
 import Jump from "ui/navigation/Jump";
-import { mentionName, shortGender } from "util/names";
+import { shortGender } from "util/names";
 import { RelNodeName } from "util/rel-node-name";
 import "./NodeCard.css";
 
@@ -27,7 +26,6 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
     const anyLoaded = useSelector((state: ClientState) => isNodeCardAnyLoaded(state, nodeName));
     const anyLoading = useSelector((state: ClientState) => isNodeCardAnyLoading(state, nodeName));
     const homeOwnerName = useSelector(getHomeOwnerName);
-    const tinyScreen = useIsTinyScreen();
     const {t} = useTranslation();
 
     const {hide: hidePopover} = usePopover();
@@ -40,7 +38,8 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
         );
     }
 
-    const realFullName = card.details.profile.fullName ?? (fullName || NodeName.shorten(nodeName));
+    const shortNodeName = NodeName.shorten(nodeName);
+    const realFullName = card.details.profile.fullName ?? (fullName || shortNodeName);
     const realAvatar =  card.details.profile.avatar ?? avatar ?? null;
     const realAvatarNodeName = card.details.profile.avatar != null ? nodeName : avatarNodeName;
     const gender = shortGender(card.details.profile.gender ?? "male", t);
@@ -56,8 +55,7 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
         <div className="node-card">
             <div className="main">
                 <Jump nodeName={nodeName} href="/profile" title={t("profile")} className="avatar-link">
-                    <Avatar avatar={realAvatar} ownerName={nodeName} size={tinyScreen ? 64 : 100}
-                            nodeName={realAvatarNodeName}/>
+                    <Avatar avatar={realAvatar} ownerName={nodeName} size={72} nodeName={realAvatarNodeName}/>
                 </Jump>
                 <div className="body">
                     {realFullName &&
@@ -67,12 +65,18 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
                         </div>
                     }
                     <div>
-                        <Jump className="name" nodeName={nodeName} href="/">{mentionName(nodeName)}</Jump>
+                        <Jump className="name" nodeName={nodeName} href="/">{shortNodeName}</Jump>
                     </div>
                     {title && <div className="title">{title}</div>}
                 </div>
             </div>
-            <div className="stories">
+            <div className="people">
+                <Jump className="counter" nodeName={nodeName} href="/people/subscribers">
+                    <Trans i18nKey="count-subscribers" values={{count: subscribersTotal}}><em/></Trans>
+                </Jump>
+                <Jump className="counter" nodeName={nodeName} href="/people/subscriptions">
+                    <Trans i18nKey="count-subscriptions" values={{count: subscriptionsTotal}}><em/></Trans>
+                </Jump>
                 <span className="counter">
                     <Trans i18nKey="count-posts" values={{count: storiesTotal}}><em/></Trans>
                     {storiesLastDate &&
@@ -86,14 +90,6 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
                     }
                 </span>
             </div>
-            <div className="people">
-                <Jump className="counter" nodeName={nodeName} href="/people/subscribers">
-                    <Trans i18nKey="count-subscribers" values={{count: subscribersTotal}}><em/></Trans>
-                </Jump>
-                <Jump className="counter" nodeName={nodeName} href="/people/subscriptions">
-                    <Trans i18nKey="count-subscriptions" values={{count: subscriptionsTotal}}><em/></Trans>
-                </Jump>
-            </div>
             <div className="buttons">
                 <div>
                     <DonateButton name={nodeName} fullName={fullName ?? null} fundraisers={fundraisers ?? null}
@@ -103,7 +99,6 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
                     <SubscribeButton nodeName={nodeName} feedName="timeline" onDialogOpened={hidePopover}/>
                 }
             </div>
-            {anyLoading && <Loading/>}
         </div>
     );
 }

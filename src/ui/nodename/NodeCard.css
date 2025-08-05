@@ -1,10 +1,10 @@
 .node-card {
-    padding-top: .5em;
+    padding: .25rem .25rem .5rem .25rem;
 }
 
 @media only screen and (max-width: 575px) {
     .node-card {
-        width: 300px;
+        width: 350px;
     }
 }
 
@@ -26,16 +26,25 @@
 
 .node-card .avatar-link {
     flex: none;
-    margin-right: .5em;
+    margin-right: 1.7rem;
 }
 
 .node-card .body {
     flex: auto;
+    overflow: hidden;
+}
+
+.node-card .body DIV {
+    text-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .node-card .full-name {
-    font-weight: bold;
-    font-size: 150%;
+    font-weight: 600;
+    font-size: 1.29rem;
+    line-height: 133%;
+    color: var(--bs-gray-800);
 }
 
 .node-card .gender {
@@ -45,20 +54,14 @@
 
 .node-card .name {
     color: var(--bs-gray-600);
-    margin-top: -.2em;
+    font-size: 1rem;
+    line-height: 143%;
 }
 
 .node-card .title {
-    font-size: larger;
-    margin-top: .2em;
-}
-
-.node-card .stories {
-    margin-top: .5em;
-}
-
-.node-card .stories TIME {
-    text-decoration: underline dotted;
+    font-size: 1rem;
+    line-height: 143%;
+    color: var(--bs-gray-800);
 }
 
 .node-card .people {
@@ -67,17 +70,27 @@
 
 .node-card .counter {
     display: inline-block;
-    margin-right: 1em;
-    color: black;
+    margin-right: 1.14rem;
+    font-size: .86rem;
+    line-height: 133%;
+    color: var(--bs-gray-800);
 }
 
 .node-card .counter EM {
-    font-weight: bold;
+    display: block;
+    font-weight: 600;
+    font-size: 1.14rem;
     font-style: normal;
+    line-height: 150%;
+}
+
+.node-card .counter TIME {
+    text-decoration: underline dotted;
+    color: var(--primary-800);
 }
 
 .node-card .buttons {
-    margin-top: .75em;
+    margin-top: .85rem;
     display: flex;
     justify-content: space-between;
     width: 100%;
