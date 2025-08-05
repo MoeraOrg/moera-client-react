@@ -38,8 +38,14 @@ export function DropdownMenu({
 
     return (
         <DropdownMenuContext.Provider value={{hide, onDialogOpened, overlayId}}>
-            <button type="button" className={cx("menu", className)} disabled={disabled} ref={setButtonRef}
-                    aria-label={t("menu")} onClick={onToggle}>
+            <button
+                type="button"
+                className={cx("menu", className)}
+                disabled={disabled}
+                ref={setButtonRef}
+                aria-label={t("menu")}
+                onClick={onToggle}
+            >
                 {typeof children === "function" ?
                     children(visible)
                 :
@@ -47,8 +53,12 @@ export function DropdownMenu({
                 }
             </button>
             {visible && createPortalIfNeeded(
-                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
-                     className={cx("fade dropdown-menu shadow-sm show", dropdownClassName)}>
+                <div
+                    ref={setPopperRef}
+                    style={{...popperStyles, zIndex: zIndex?.widget}}
+                    {...popperAttributes}
+                    className={cx("fade dropdown-menu shadow-sm show", dropdownClassName)}
+                >
                     {content}
                     {items && <DropdownMenuItems items={items}/>}
                 </div>,

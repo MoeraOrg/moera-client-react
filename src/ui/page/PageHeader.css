@@ -41,11 +41,15 @@
     margin-right: .25em;
 }
 
-#page-header H2 .btn {
+#page-header H2 > .btn {
     margin-bottom: .25em;
 }
 
-#page-header .btn {
+#page-header H2 .subscribe-button {
+    vertical-align: .25em;
+}
+
+#page-header > .btn {
     margin-left: .5rem;
 }
 

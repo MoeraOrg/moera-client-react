@@ -1,10 +1,24 @@
 .subscribe-button {
     margin-left: 1rem;
+    font-size: 1rem;
     text-wrap: nowrap;
 }
 
-.subscribe-button.btn-outline-secondary:hover {
-    color: white;
-    background-color: var(--bs-danger);
-    border-color: var(--bs-danger);
+.subscribe-button .status {
+    border-radius: 1.5rem;
+    padding: .5rem .75rem;
+    font-weight: 400;
+    font-size: .88rem;
+    line-height: 1;
+}
+
+.subscribe-button SPAN.status {
+    background-color: var(--primary-50);
+    color: var(--primary-800);
+}
+
+.subscribe-button SPAN.status.blocked {
+    color: var(--bs-danger);
+    background-color: var(--bs-danger-bg-subtle);
+    border-color: transparent;
 }
