@@ -5,11 +5,12 @@
 }
 
 .subscribe-button .status {
-    border-radius: 1.5rem;
-    padding: .5rem .75rem;
+    border-radius: 1.5em;
+    padding: .5em .75em;
     font-weight: 400;
-    font-size: .88rem;
+    font-size: .88em;
     line-height: 1;
+    margin-right: -.25em;
 }
 
 .subscribe-button SPAN.status {

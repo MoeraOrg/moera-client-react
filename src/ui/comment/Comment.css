@@ -85,16 +85,6 @@
     padding-top: 0;
 }
 
-@media (any-hover: hover) {
-    .comment .chevron {
-        visibility: hidden;
-    }
-
-    .comment:hover .chevron {
-        visibility: visible;
-    }
-}
-
 @media only screen and (min-width: 576px) {
     .comment A.link-preview, .comment DIV.link-preview {
         width: 400px;

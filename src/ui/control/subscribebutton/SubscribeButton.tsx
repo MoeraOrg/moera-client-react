@@ -7,9 +7,8 @@ import { ClientState } from "state/state";
 import { getHomeOwnerGender } from "state/home/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
 import { feedSubscribe } from "state/feeds/actions";
-import { Button, DropdownMenu, useModalDialog, usePopover } from "ui/control";
+import { Button, DropdownMenu, MenuButton, useModalDialog, usePopover } from "ui/control";
 import SubscribeButtonMenu from "ui/control/subscribebutton/SubscribeButtonMenu";
-import MenuButton from "ui/control/dropdownmenu/MenuButton";
 import { tGender } from "i18n";
 import "./SubscribeButton.css";
 

@@ -8,10 +8,8 @@ interface Props {
     active?: boolean;
 }
 
-const MenuButton = ({active}: Props) => (
+export const MenuButton = ({active}: Props) => (
     <div className={cx("menu-button", {active})}>
         <Icon icon={msMoreVert} size="1em"/>
     </div>
 );
-
-export default MenuButton;

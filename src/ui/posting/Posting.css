@@ -86,6 +86,14 @@
     padding-top: 0;
 }
 
+.posting > .menu {
+    top: .2rem;
+}
+
+.posting > .menu .menu-button svg {
+    vertical-align: -.2em;
+}
+
 .posting > .reactions-line {
     display: flex;
     justify-content: space-between;

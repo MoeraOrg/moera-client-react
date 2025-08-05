@@ -6,20 +6,29 @@
     height: 2.1em;
 }
 
-@media only screen and (max-width: 575px) {
-    .menu-button {
-        padding: .25em .4em;
-    }
-}
-
 .menu-button svg {
     vertical-align: -.1em;
 }
 
 .menu-button.active {
     border: 1px solid var(--bs-gray-400);
+    padding-top: .25em;
 }
 
 .menu-button:hover {
     background-color: var(--highlight);
+}
+
+@media only screen and (max-width: 575px) {
+    .menu-button {
+        padding: .25em .4em;
+    }
+
+    .menu-button svg {
+        vertical-align: -.2em;
+    }
+
+    .menu-button.active {
+        padding-top: .2em;
+    }
 }

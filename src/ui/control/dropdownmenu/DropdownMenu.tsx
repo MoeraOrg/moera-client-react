@@ -1,12 +1,11 @@
 import React, { ReactNode } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { useButtonPopper } from "ui/hook";
 import { DropdownMenuContext, MenuItem } from "ui/control/dropdownmenu/dropdown-menu-types";
 import { DropdownMenuItems } from "ui/control/dropdownmenu/DropdownMenuItems";
+import { MenuButton } from "ui/control/dropdownmenu/MenuButton";
 import { createPortalIfNeeded } from "util/ui";
 import "./DropdownMenu.css";
 
@@ -49,7 +48,7 @@ export function DropdownMenu({
                 {typeof children === "function" ?
                     children(visible)
                 :
-                    (children ?? <FontAwesomeIcon icon={faChevronDown} className="chevron"/>)
+                    (children ?? <MenuButton active={visible}/>)
                 }
             </button>
             {visible && createPortalIfNeeded(

@@ -24,6 +24,7 @@ export { Label } from "ui/control/Label";
 export { LabelButton } from "ui/control/LabelButton";
 export { Loading } from "ui/control/Loading";
 export { LoadingInline } from "ui/control/LoadingInline";
+export { MenuButton } from "ui/control/dropdownmenu/MenuButton";
 export { ModalDialog } from "ui/control/ModalDialog";
 export { ModalDialogContext, useModalDialog } from "ui/control/modal-dialog-context";
 export { NameHelp } from "ui/control/NameHelp";

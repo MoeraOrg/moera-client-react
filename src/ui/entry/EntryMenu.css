@@ -1,18 +1,9 @@
 .entry .menu {
     position: absolute;
-    top: .2rem;
+    top: -.2rem;
     right: .4rem;
     background-color: transparent;
     border: 0;
-}
-
-.entry .menu .chevron {
-    color: var(--bs-gray-500);
-    cursor: pointer;
-}
-
-.entry .menu .chevron:hover {
-    color: var(--bs-gray-800);
 }
 
 .entry .menu .no-actions {
