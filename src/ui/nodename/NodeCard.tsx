@@ -70,8 +70,6 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
                         <Jump className="name" nodeName={nodeName} href="/">{mentionName(nodeName)}</Jump>
                     </div>
                     {title && <div className="title">{title}</div>}
-                    <DonateButton name={nodeName} fullName={fullName ?? null} fundraisers={fundraisers ?? null}
-                                  styles="small"/>
                 </div>
             </div>
             <div className="stories">
@@ -97,6 +95,10 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
                 </Jump>
             </div>
             <div className="buttons">
+                <div>
+                    <DonateButton name={nodeName} fullName={fullName ?? null} fundraisers={fundraisers ?? null}
+                                  styles="small"/>
+                </div>
                 {(homeOwnerName != null && nodeName !== homeOwnerName && (card.subscription.loaded ?? false)) &&
                     <SubscribeButton nodeName={nodeName} feedName="timeline" onDialogOpened={hidePopover}/>
                 }

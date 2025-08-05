@@ -78,6 +78,7 @@
 
 .node-card .buttons {
     margin-top: .75em;
-    text-align: right;
+    display: flex;
+    justify-content: space-between;
     width: 100%;
 }
