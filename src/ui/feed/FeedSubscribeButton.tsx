@@ -11,10 +11,9 @@ import { RelNodeName } from "util/rel-node-name";
 interface Props {
     nodeName: RelNodeName | string;
     feedName: string;
-    small?: boolean | null;
 }
 
-export default function FeedSubscribeButton({nodeName, feedName, small}: Props) {
+export default function FeedSubscribeButton({nodeName, feedName}: Props) {
     const show = useSelector((state: ClientState) =>
         isOwnerNameSet(state) && !isAtHomeNode(state) && isConnectedToHome(state) && isHomeOwnerNameSet(state));
     const ownerName = useSelector(getOwnerName);
@@ -29,7 +28,7 @@ export default function FeedSubscribeButton({nodeName, feedName, small}: Props) 
     return (
         <>
             {(generalReady && (subscription?.loaded ?? false)) &&
-                <SubscribeButton nodeName={ownerName} feedName={feedName} small={small}/>
+                <SubscribeButton nodeName={ownerName} feedName={feedName}/>
             }
             {(generalLoading || subscription?.loading) && <Loading/>}
         </>

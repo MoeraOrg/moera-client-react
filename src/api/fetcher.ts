@@ -1,3 +1,5 @@
+import pLimit from 'p-limit';
+
 import { delay } from "util/misc";
 
 class XhrResponse implements Response {
@@ -110,6 +112,7 @@ const UPDATE_TIMEOUT = 60000; // ms
 const RETRY_DELAY = 1000; // ms
 const RETRY_LIMIT = 3;
 const LARGE_BODY_MIN = 65536;
+const parallelLimit = pLimit(50);
 
 async function retryFetch(url: string, options: FetcherOptions): Promise<Response> {
     let limit: number;
@@ -138,5 +141,5 @@ async function retryFetch(url: string, options: FetcherOptions): Promise<Respons
 }
 
 export async function fetcher(url: string, options: FetcherOptions): Promise<Response> {
-    return options.onProgress != null ? xhrFetch(url, options) : retryFetch(url, options);
+    return options.onProgress != null ? xhrFetch(url, options) : parallelLimit(() => retryFetch(url, options));
 }

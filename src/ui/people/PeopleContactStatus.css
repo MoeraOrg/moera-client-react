@@ -1,0 +1,10 @@
+.people-page .person .contact-status {
+    font-size: .75rem;
+    font-weight: normal;
+    color: var(--bs-gray-600);
+    margin-left: .5rem;
+    border: 1px solid var(--bs-gray-600);
+    border-radius: .75rem;
+    padding: .1rem .5rem;
+    vertical-align: .15rem;
+}

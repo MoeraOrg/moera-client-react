@@ -1,35 +1,25 @@
 .people-page .person {
-    margin-bottom: .3rem;
-    margin-right: 1rem;
-    padding: .1rem .5rem .1rem .1rem;
-    border-radius: 5px;
-    width: min(15rem, 95vw);
-    display: inline-flex;
-    flex-direction: column;
-    gap: .25rem;
+    margin-bottom: .5rem;
+    padding: .25rem .5rem .25rem .25rem;
+    border-radius: .25rem;
+    display: flex;
 }
 
 .people-page .person:hover {
     background-color: var(--highlight);
 }
 
-.people-page .person .details {
-    display: flex;
-    align-items: center;
-    flex: auto;
+.people-page .person .avatar {
+    margin: .25rem .5rem .25rem 0;
 }
 
-.people-page .person .details .avatar {
-    margin-right: .5rem;
-}
-
-.people-page .person .details .avatar-selector {
+.people-page .person .avatar-selector {
     position: relative;
     cursor: pointer;
     margin: 0;
 }
 
-.people-page .person .details .avatar-selector .selection {
+.people-page .person .avatar-selector .selection {
     position: absolute;
     background: white;
     border: solid 1px var(--bs-primary);
@@ -41,14 +31,28 @@
     bottom: 0;
 }
 
-.people-page .person .details .avatar-selector .selection.selected {
+.people-page .person .avatar-selector .selection.selected {
     background-color: var(--bs-primary);
     color: white;
     font-size: .6em;
 }
 
-.people-page .person .details .node-name {
+.people-page .person .details {
     flex: auto;
+}
+
+.people-page .person .details .full-name {
+    display: block;
+    font-weight: 600;
+    font-size: 1.14rem;
+    line-height: 150%;
+    color: var(--bs-gray-800);
+}
+
+.people-page .person .details .name {
+    display: block;
+    color: var(--bs-gray-600);
+    line-height: 143%;
 }
 
 .people-page .person .blocking-details {

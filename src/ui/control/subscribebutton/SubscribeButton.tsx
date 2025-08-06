@@ -4,25 +4,27 @@ import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import { getHomeOwnerGender } from "state/home/selectors";
+import { getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
 import { feedSubscribe } from "state/feeds/actions";
+import { openBlockingDetailsDialog } from "state/blockingdetailsdialog/actions";
 import { Button, DropdownMenu, MenuButton, useModalDialog, usePopover } from "ui/control";
 import SubscribeButtonMenu from "ui/control/subscribebutton/SubscribeButtonMenu";
 import { tGender } from "i18n";
 import "./SubscribeButton.css";
 
 interface Props {
-    small?: boolean | null;
     nodeName: string;
     feedName: string;
     onDialogOpened?: () => void;
 }
 
-export function SubscribeButton({small, nodeName, feedName, onDialogOpened}: Props) {
+export function SubscribeButton({nodeName, feedName, onDialogOpened}: Props) {
     const card = useSelector((state: ClientState) => getNodeCard(state, nodeName));
+    const homeOwnerName = useSelector(getHomeOwnerName);
     const homeGender = useSelector(getHomeOwnerGender);
 
+    const loaded = card?.subscription.loaded && card?.friendship.loaded && card?.blocking.loaded;
     const subscriber = card?.subscription.subscriber;
     const subscription = card?.subscription.subscription;
     const friendGroups = card?.friendship.groups;
@@ -58,14 +60,30 @@ export function SubscribeButton({small, nodeName, feedName, onDialogOpened}: Pro
     const parentOverlayId = popoverOverlayId ?? dialogOverlayId;
     const dispatch = useDispatch();
 
+    if (nodeName === homeOwnerName) {
+        return null;
+    }
+
     const onSubscribe = () => dispatch(feedSubscribe(nodeName, feedName));
+
+    const onBlockingDetails = () => {
+        if (homeOwnerName != null) {
+            dispatch(openBlockingDetailsDialog(homeOwnerName, nodeName, null, null, !blocked && blockedBy));
+        }
+    }
 
     return (
         <span className="subscribe-button">
-            {caption ?
-                <span className={cx("status", {blocked: blocked || blockedBy})}>{caption}</span>
-            :
-                <Button variant="primary" className="status" onClick={onSubscribe}>{t("subscribe")}</Button>
+            {loaded &&
+                (caption ?
+                    (blocked || blockedBy ?
+                        <button className="status blocked" onClick={onBlockingDetails}>{caption}</button>
+                    :
+                        <span className="status">{caption}</span>
+                    )
+                :
+                    <Button variant="primary" className="status" onClick={onSubscribe}>{t("subscribe")}</Button>
+                )
             }
             <DropdownMenu
                 className="btn btn-sm"
