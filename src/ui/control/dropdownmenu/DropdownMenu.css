@@ -20,3 +20,7 @@
 .dropdown-menu A.dropdown-item:hover {
     text-decoration: none;
 }
+
+.border-primary-600 {
+    border-color: var(--primary-600);
+}

@@ -51,10 +51,6 @@
     vertical-align: .1em;
 }
 
-.principal-select .dropdown-menu {
-    border-color: var(--primary-600);
-}
-
 .principal-select .dropdown-item svg {
     font-size: 1.2em;
     vertical-align: -.2em;

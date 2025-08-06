@@ -67,7 +67,7 @@ export default function ComposeDraftSelector() {
                     ref={setPopperRef}
                     style={{...popperStyles, zIndex: zIndex?.widget}}
                     {...popperAttributes}
-                    className="fade dropdown-menu popover shadow-sm show"
+                    className="fade dropdown-menu border-primary-600 shadow-sm show"
                 >
                     <ComposeNewPost/>
                     {draftList.map(draft =>

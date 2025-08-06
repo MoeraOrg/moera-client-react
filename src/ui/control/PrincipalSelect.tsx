@@ -53,7 +53,7 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
                     ref={setPopperRef}
                     style={{...popperStyles, zIndex: zIndex?.widget}}
                     {...popperAttributes}
-                    className="fade dropdown-menu shadow-sm show"
+                    className="fade dropdown-menu border-primary-600 shadow-sm show"
                 >
                     {caption && <div className="caption">{caption}</div>}
                     {principalValues.map(({value: v, icon, title}) =>
