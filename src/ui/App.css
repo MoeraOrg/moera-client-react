@@ -112,20 +112,6 @@ BLOCKQUOTE BLOCKQUOTE:last-child, BLOCKQUOTE P:last-child {
     float: right;
 }
 
-.nav.nav-pills .nav-link.active:hover {
-    background-color: var(--bs-primary);
-}
-
-.nav.nav-pills .nav-link:hover {
-    background-color: var(--highlight-blue);
-    cursor: pointer;
-}
-
-.nav.nav-pills .nav-link A:hover {
-    text-decoration: none;
-    color: var(--bs-primary);
-}
-
 .content-panel {
     display: flow-root;
     background-color: white;

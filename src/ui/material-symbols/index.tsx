@@ -34,6 +34,7 @@ import { ReactComponent as msFormatInkHighlighter } from "ui/material-symbols/fo
 import { ReactComponent as msFormatItalic } from "ui/material-symbols/format_italic.isvg";
 import { ReactComponent as msFormatSize } from "ui/material-symbols/format_size.isvg";
 import { ReactComponent as msGroup } from "ui/material-symbols/group.isvg";
+import { ReactComponent as msGroupAdd } from "ui/material-symbols/group_add.isvg";
 import { ReactComponent as msGroups } from "ui/material-symbols/groups.isvg";
 import { ReactComponent as msHorizontalRule } from "ui/material-symbols/horizontal_rule.isvg";
 import { ReactComponent as msFormatListBulleted } from "ui/material-symbols/format_list_bulleted.isvg";
@@ -113,6 +114,7 @@ export {
     msFormatSize,
     msFunction,
     msGroup,
+    msGroupAdd,
     msGroups,
     msHelpFilled40,
     msHorizontalRule,

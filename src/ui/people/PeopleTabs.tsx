@@ -1,17 +1,15 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { ClientState } from "state/state";
 import { getNodeFriendGroups, isAtHomeNode } from "state/node/selectors";
 import { peopleGoToTab } from "state/people/actions";
 import { openFriendGroupAddDialog } from "state/friendgroupadddialog/actions";
 import { PeopleTab } from "state/people/state";
-import { Button } from "ui/control";
+import { Tabs } from "ui/control";
 import { getFriendGroupTitle } from "ui/control/principal-display";
-import PeopleTabsItem from "ui/people/PeopleTabsItem";
+import { msGroupAdd, msLock } from "ui/material-symbols";
 import "./PeopleTabs.css";
 
 interface PeopleTabsProps {
@@ -33,63 +31,93 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
     const viewBlocked = useSelector((state: ClientState) => state.people.operations.viewBlocked ?? "public");
     const viewBlockedBy = useSelector((state: ClientState) => state.people.operations.viewBlockedBy ?? "admin");
     const friendGroups = useSelector(getNodeFriendGroups);
+    const friendsGroupId = friendGroups.find(fg => fg.title === "t:friends")?.id;
+    const inFriendGroup = friendGroups.some(({id}) => id === active);
     const atHome = useSelector(isAtHomeNode);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const goToTab = (tab: string) => dispatch(peopleGoToTab(tab));
+    const goToTab = (tab: PeopleTab) => dispatch(peopleGoToTab(tab));
+
+    const onAdd = () => dispatch(openFriendGroupAddDialog());
 
     return (
-        <ul className="nav nav-pills flex-md-column people-tabs">
-            {subscribersTotal != null &&
-                <PeopleTabsItem name="subscribers" title={t("subscribers")} principal={viewSubscribers}
-                                total={subscribersTotal} loaded={loadedGeneral} active={active}
-                                peopleGoToTab={goToTab}/>
+        <>
+            <Tabs<PeopleTab>
+                tabs={[
+                    {
+                        title: t("subscribers"),
+                        value: "subscribers",
+                        visible: subscribersTotal != null,
+                        count: loadedGeneral ? subscribersTotal: undefined,
+                        principal: viewSubscribers
+                    },
+                    {
+                        title: t("subscriptions"),
+                        value: "subscriptions",
+                        visible: subscriptionsTotal != null,
+                        count: loadedGeneral ? subscriptionsTotal: undefined,
+                        principal: viewSubscriptions
+                    },
+                    {
+                        title: t("friend-groups.friends"),
+                        value: friendsGroupId ?? "",
+                        active: inFriendGroup,
+                        visible: friendsTotal != null && friendGroups.length > 0,
+                        count: loadedGeneral ? friendsTotal?.[friendsGroupId ?? 0] ?? 0: undefined,
+                        principal: viewFriends
+                    },
+                    {
+                        title: t("in-friends"),
+                        value: "friend-ofs",
+                        visible: friendOfsTotal != null,
+                        count: loadedGeneral ? friendOfsTotal: undefined,
+                        principal: viewFriendOfs
+                    },
+                    {
+                        title: t("blocked-plural"),
+                        value: "blocked",
+                        visible: blockedTotal != null,
+                        count: loadedGeneral ? blockedTotal: undefined,
+                        principal: viewBlocked
+                    },
+                    {
+                        title: t("in-blocked-plural"),
+                        value: "blocked-by",
+                        visible: blockedByTotal != null,
+                        count: loadedGeneral ? blockedByTotal: undefined,
+                        principal: viewBlockedBy
+                    }
+                ]}
+                style="pills"
+                className="people-tabs mb-3"
+                value={active}
+                onChange={goToTab}
+                principalIcons={{"admin": msLock}}
+            />
+            {inFriendGroup &&
+                <Tabs<string>
+                    tabs={friendGroups.map(friendGroup => ({
+                        title: friendGroup.title !== "t:friends" ? getFriendGroupTitle(friendGroup.title, t) : t("all"),
+                        value: friendGroup.id,
+                        count: friendsTotal?.[friendGroup.id] ?? 0,
+                        principal: friendGroup.title !== "t:friends"
+                            ? friendGroup.operations?.view ?? "public"
+                            : "public"
+                    }))}
+                    className="mb-3"
+                    scroll={friendGroups.length > 4}
+                    value={active}
+                    onChange={goToTab}
+                    principalIcons={{"admin": msLock}}
+                    principalTitles={{
+                        "private": t("friend-group-visibility.private"),
+                        "admin": t("friend-group-visibility.admin")
+                    }}
+                    addIcon={atHome ? msGroupAdd : undefined}
+                    onAdd={onAdd}
+                />
             }
-            {subscriptionsTotal != null &&
-                <PeopleTabsItem name="subscriptions" title={t("subscriptions")} principal={viewSubscriptions}
-                                total={subscriptionsTotal} loaded={loadedGeneral} active={active}
-                                peopleGoToTab={goToTab}/>
-            }
-            {friendsTotal != null &&
-                friendGroups.map(friendGroup => {
-                    const title = getFriendGroupTitle(friendGroup.title, t);
-                    const principal = friendGroup.title !== "t:friends"
-                        ? friendGroup.operations?.view ?? "public"
-                        : viewFriends;
-                    const principalTitles = friendGroup.title !== "t:friends"
-                        ? {
-                              "private": t("friend-group-visibility.private"),
-                              "admin": t("friend-group-visibility.admin")
-                          }
-                        :
-                          null;
-                    const total = friendsTotal[friendGroup.id] ?? 0;
-                    return <PeopleTabsItem name={friendGroup.id} title={title} principal={principal}
-                                           principalTitles={principalTitles} total={total} loaded={loadedGeneral}
-                                           active={active} peopleGoToTab={goToTab} key={friendGroup.id}/>;
-                })
-            }
-            {friendOfsTotal != null &&
-                <PeopleTabsItem name="friend-ofs" title={t("in-friends")} principal={viewFriendOfs}
-                                total={friendOfsTotal} loaded={loadedGeneral} active={active}
-                                peopleGoToTab={goToTab}/>
-            }
-            {blockedTotal != null &&
-                <PeopleTabsItem name="blocked" title={t("blocked-plural")} principal={viewBlocked}
-                                total={blockedTotal} loaded={loadedGeneral} active={active}
-                                peopleGoToTab={goToTab}/>
-            }
-            {blockedByTotal != null &&
-                <PeopleTabsItem name="blocked-by" title={t("in-blocked-plural")} principal={viewBlockedBy}
-                                total={blockedByTotal} loaded={loadedGeneral} active={active}
-                                peopleGoToTab={goToTab}/>
-            }
-            {atHome &&
-                <Button variant="outline-info" size="sm" onClick={() => dispatch(openFriendGroupAddDialog())}>
-                    <FontAwesomeIcon icon={faPlus}/>{" "}{t("add-friend-group")}
-                </Button>
-            }
-        </ul>
+        </>
     );
 }

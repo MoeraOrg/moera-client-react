@@ -6,15 +6,56 @@
     cursor: default;
 }
 
+.nav-pills .nav-link.active .principal {
+    color: var(--bs-nav-pills-link-active-color);
+}
+
+.nav.nav-pills .nav-link.active:hover {
+    background-color: var(--bs-primary);
+}
+
+.nav.nav-pills .nav-link:hover {
+    background-color: var(--highlight-blue);
+    cursor: pointer;
+}
+
+.nav.nav-pills .nav-link A:hover {
+    text-decoration: none;
+    color: var(--bs-primary);
+}
+
+.nav.nav-tabs .nav-item, .nav.nav-pills .nav-item {
+    text-wrap: nowrap;
+}
+
+.nav.nav-tabs.scroll, .nav.nav-pills.scroll {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
 @media only screen and (max-width: 575px) {
-    .nav.nav-tabs {
-        flex-wrap: nowrap;
+    .nav.nav-tabs, .nav.nav-pills {
         overflow-x: auto;
-        overflow-y: hidden;
         scrollbar-width: none;
     }
+}
 
-    .nav.nav-tabs .nav-item {
-        text-wrap: nowrap;
-    }
+.nav.nav-tabs .nav-link .badge, .nav.nav-pills .nav-link .badge {
+    background-color: var(--bs-gray-100);
+    color: var(--bs-gray-600);
+    margin-left: .75em;
+    vertical-align: .075em;
+}
+
+.nav.nav-tabs .nav-link.active.add-tab {
+    cursor: pointer;
+    margin-left: 1rem;
+    padding-bottom: .4rem;
+    color: var(--bs-nav-link-color);
+}
+
+.nav.nav-tabs .nav-link.active.add-tab:hover {
+    background-color: var(--highlight);
+    color: var(--bs-nav-tabs-link-active-color);
 }

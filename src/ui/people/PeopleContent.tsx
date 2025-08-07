@@ -8,17 +8,19 @@ import {
     getPeopleContactsByAlpha,
     getPeopleContactsByDistance,
     getPeopleContactsMaxInTabs,
-    getPeopleContactsTotal
+    getPeopleContactsTotal,
+    isPeopleContactsLoading
 } from "state/people/selectors";
 import * as Browser from "ui/browser";
+import { Loading } from "ui/control";
 import PeopleSelectionPanel from "ui/people/PeopleSelectionPanel";
 import PeoplePerson from "ui/people/PeoplePerson";
-import PeoplePageTitle from "ui/people/PeoplePageTitle";
 import { nameListItemMatch } from "util/names-list";
 
 export default function PeopleContent() {
     const atHome = useSelector(isAtHomeNode);
     const loadingGeneral = useSelector((state: ClientState) => state.people.loadingGeneral);
+    const loadingContacts = useSelector(isPeopleContactsLoading);
     const contacts = useSelector(
         (state: ClientState) =>
             state.people.sortAlpha ? getPeopleContactsByAlpha(state) : getPeopleContactsByDistance(state)
@@ -39,8 +41,8 @@ export default function PeopleContent() {
             {(atHome && !loadingGeneral && contactsTotal > 0 && (Browser.isDevMode() || contactsMax > 12)) &&
                 <PeopleSelectionPanel/>
             }
-            <PeoplePageTitle/>
             {found}
+            {loadingContacts && <Loading/>}
         </div>
     );
 }
