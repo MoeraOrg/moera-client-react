@@ -1,10 +1,10 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
-import { BlockedByUserInfo, BlockedUserInfo, ContactInfo, FriendInfo } from "api";
+import { BlockedByUserInfo, BlockedUserInfo, ContactInfo, ContactWithRelationships, FriendInfo } from "api";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
-import { ContactState, PeopleState } from "state/people/state";
+import { PeopleState } from "state/people/state";
 import { nameListQueryToRegexes } from "util/names-list";
 
 const initialState: PeopleState = {
@@ -37,7 +37,9 @@ const initialState: PeopleState = {
     sortAlpha: false
 };
 
-function prepareContact(state: PeopleState, istate: WrappedObject<PeopleState>, nodeName: string): ContactState {
+function prepareContact(
+    state: PeopleState, istate: WrappedObject<PeopleState>, nodeName: string
+): ContactWithRelationships {
     let contact = state.contacts[nodeName];
     if (contact == null) {
         contact = {

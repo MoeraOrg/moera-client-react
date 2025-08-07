@@ -57,6 +57,7 @@ import { dispatch, select } from "state/store-sagas";
 import { homeIntroduced } from "state/init-barriers";
 import { getHomeFriendsId } from "state/home/selectors";
 import { getNodeFriendGroups, isPrincipalIn } from "state/node/selectors";
+import { nodeCardsPreload } from "state/nodecards/actions";
 import { getNodeCard } from "state/nodecards/selectors";
 import { storySatisfy } from "state/stories/actions";
 import {
@@ -81,7 +82,6 @@ import { confirmBox } from "state/confirmbox/actions";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
-import { nodeCardPrepare } from "state/nodecards/actions";
 
 export default [
     executor("PEOPLE_GO_TO_DEFAULT_TAB", "", peopleGoToDefaultTabSaga),
@@ -192,7 +192,7 @@ async function subscribersLoadSaga(action: WithContext<SubscribersLoadAction>): 
             action, REL_CURRENT, null, "feed" as const, null, null, ["authentication.required"]
         );
         dispatch(subscribersLoaded(subscribers).causedBy(action));
-        subscribers.forEach(node => dispatch(nodeCardPrepare(node.nodeName).causedBy(action)));
+        dispatch(nodeCardsPreload(subscribers.map(sr => sr.nodeName)).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError) {
             dispatch(subscribersLoaded([]).causedBy(action));
@@ -210,7 +210,7 @@ async function subscriptionsLoadSaga(action: WithContext<SubscriptionsLoadAction
             action, REL_CURRENT, null, "feed" as const, ["authentication.required"]
         );
         dispatch(subscriptionsLoaded(subscriptions).causedBy(action));
-        subscriptions.forEach(node => dispatch(nodeCardPrepare(node.remoteNodeName).causedBy(action)));
+        dispatch(nodeCardsPreload(subscriptions.map(sr => sr.remoteNodeName)).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError) {
             dispatch(subscriptionsLoaded([]).causedBy(action));
@@ -226,7 +226,7 @@ async function friendsLoadSaga(action: WithContext<FriendsLoadAction>): Promise<
     try {
         const friends = await Node.getFriends(action, REL_CURRENT);
         dispatch(friendsLoaded(friends).causedBy(action));
-        friends.forEach(node => dispatch(nodeCardPrepare(node.nodeName).causedBy(action)));
+        dispatch(nodeCardsPreload(friends.map(fr => fr.nodeName)).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError) {
             dispatch(friendsLoaded([]).causedBy(action));
@@ -242,7 +242,7 @@ async function friendOfsLoadSaga(action: WithContext<FriendOfsLoadAction>): Prom
     try {
         const friendOfs = await Node.getFriendOfs(action, REL_CURRENT);
         dispatch(friendOfsLoaded(friendOfs).causedBy(action));
-        friendOfs.forEach(node => dispatch(nodeCardPrepare(node.remoteNodeName).causedBy(action)));
+        dispatch(nodeCardsPreload(friendOfs.map(fr => fr.remoteNodeName)).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError) {
             dispatch(friendOfsLoaded([]).causedBy(action));
@@ -260,7 +260,7 @@ async function blockedLoadSaga(action: WithContext<BlockedLoadAction>): Promise<
             action, REL_CURRENT, {blockedOperations: ["comment" as const, "reaction" as const, "visibility" as const]}
         );
         dispatch(blockedLoaded(blocked).causedBy(action));
-        blocked.forEach(node => dispatch(nodeCardPrepare(node.nodeName).causedBy(action)));
+        dispatch(nodeCardsPreload(blocked.map(b => b.nodeName)).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError) {
             dispatch(blockedLoaded([]).causedBy(action));
@@ -276,7 +276,7 @@ async function blockedByLoadSaga(action: WithContext<BlockedByLoadAction>): Prom
     try {
         const blockedBy = await Node.searchBlockedByUsers(action, REL_CURRENT, {strict: true});
         dispatch(blockedByLoaded(blockedBy).causedBy(action));
-        blockedBy.forEach(node => dispatch(nodeCardPrepare(node.nodeName).causedBy(action)));
+        dispatch(nodeCardsPreload(blockedBy.map(b => b.nodeName)).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError) {
             dispatch(blockedByLoaded([]).causedBy(action));

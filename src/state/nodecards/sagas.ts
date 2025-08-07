@@ -12,7 +12,7 @@ import {
     SubscriptionInfo
 } from "api";
 import { executor } from "state/executor";
-import { mutuallyIntroduced } from "state/init-barriers";
+import { homeIntroduced, mutuallyIntroduced } from "state/init-barriers";
 import { dispatch, select } from "state/store-sagas";
 import {
     nodeCardBlockingLoad,
@@ -37,6 +37,8 @@ import {
     nodeCardSheriffListLoad,
     NodeCardSheriffListLoadAction,
     nodeCardSheriffListSet,
+    nodeCardsPrefill,
+    NodeCardsPreloadAction,
     nodeCardStoriesLoad,
     NodeCardStoriesLoadAction,
     nodeCardStoriesSet,
@@ -50,6 +52,7 @@ import {
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import { flashBox } from "state/flashbox/actions";
+import { NodeCardState } from "state/nodecards/state";
 import { getNodeCard } from "state/nodecards/selectors";
 import { REL_HOME } from "util/rel-node-name";
 
@@ -62,6 +65,7 @@ export default [
     executor("NODE_CARD_SUBSCRIPTION_LOAD", payload => payload.nodeName, nodeCardSubscriptionLoadSaga),
     executor("NODE_CARD_FRIENDSHIP_LOAD", payload => payload.nodeName, nodeCardFriendshipLoadSaga),
     executor("NODE_CARD_BLOCKING_LOAD", payload => payload.nodeName, nodeCardBlockingLoadSaga),
+    executor("NODE_CARDS_PRELOAD", null, nodeCardPreloadSaga),
     executor("NODE_CARD_SHERIFF_LIST_LOAD", payload => payload.nodeName, nodeCardSheriffListLoadSaga),
     executor("SHERIFF_LIST_ADD", payload => payload.nodeName, sheriffListAddSaga),
     executor("SHERIFF_LIST_DELETE", payload => payload.nodeName, sheriffListDeleteSaga)
@@ -267,6 +271,32 @@ async function loadBlockedBy(
         return null;
     }
     return Node.searchBlockedByUsers(action, REL_HOME, {postings: [{nodeName}]});
+}
+
+async function nodeCardPreloadSaga(action: WithContext<NodeCardsPreloadAction>): Promise<void> {
+    await homeIntroduced();
+
+    const nodeNames = action.payload.nodeNames
+        .map(nodeName => [nodeName, getNodeCard(select(), nodeName)] as [string, NodeCardState | null])
+        .filter(([_, card]) =>
+            card == null || !card.subscription.loaded || !card.friendship.loaded || !card.blocking.loaded
+        )
+        .map(([nodeName]) => nodeName);
+
+    if (nodeNames.length === 0) {
+        return;
+    }
+
+    try {
+        const contacts = await Node.fetchContacts(action, REL_HOME, {nodeNames});
+        if (contacts.length > 0) {
+            dispatch(nodeCardsPrefill(contacts).causedBy(action));
+        }
+    } catch (e) {
+        if (!(e instanceof HomeNotConnectedError)) {
+            dispatch(errorThrown(e));
+        }
+    }
 }
 
 async function nodeCardSheriffListLoadSaga(action: WithContext<NodeCardSheriffListLoadAction>): Promise<void> {

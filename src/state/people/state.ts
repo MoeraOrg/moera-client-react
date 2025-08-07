@@ -1,27 +1,8 @@
-import {
-    BlockedByUserInfo,
-    BlockedUserInfo,
-    ContactInfo,
-    FriendInfo,
-    FriendOfInfo,
-    PrincipalValue,
-    SubscriberInfo,
-    SubscriptionInfo
-} from "api";
+import { ContactWithRelationships, PrincipalValue } from "api";
 
 export type PeopleTab = "subscribers" | "subscriptions" | "friend-ofs" | "blocked" | "blocked-by" | string;
 
-export interface ContactState {
-    contact: ContactInfo;
-    subscriber: SubscriberInfo | null;
-    subscription: SubscriptionInfo | null;
-    friend: FriendInfo | null;
-    friendOf: FriendOfInfo | null;
-    blocked: BlockedUserInfo[] | null;
-    blockedBy: BlockedByUserInfo[] | null;
-}
-
-type ContactsState = Partial<Record<string, ContactState>>;
+type ContactsState = Partial<Record<string, ContactWithRelationships>>;
 
 export interface PeopleState {
     tab: PeopleTab;

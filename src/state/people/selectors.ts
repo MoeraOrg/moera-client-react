@@ -2,11 +2,12 @@ import { createSelector } from 'reselect';
 
 import { ClientState } from "state/state";
 import { isPermitted } from "state/node/selectors";
-import { ContactState, PeopleTab } from "state/people/state";
+import { PeopleTab } from "state/people/state";
 import {
     BlockedByUserInfo,
     BlockedUserInfo,
     ContactInfo,
+    ContactWithRelationships,
     FriendInfo,
     FriendOfInfo,
     SubscriberInfo,
@@ -114,21 +115,21 @@ export function isFriendOfsTotalVisible(state: ClientState): boolean {
     return isPermitted("viewFriendOfsTotal", state.people, "public", state);
 }
 
-type SubscriberContactState = ContactState & { subscriber: SubscriberInfo };
+type SubscriberContactState = ContactWithRelationships & { subscriber: SubscriberInfo };
 
 export function getPeopleSubscribers(state: ClientState): SubscriberContactState[] {
     return Object.values(state.people.contacts)
         .filter((contact): contact is SubscriberContactState => contact?.subscriber != null);
 }
 
-type SubscriptionContactState = ContactState & { subscription: SubscriptionInfo };
+type SubscriptionContactState = ContactWithRelationships & { subscription: SubscriptionInfo };
 
 export function getPeopleSubscriptions(state: ClientState): SubscriptionContactState[] {
     return Object.values(state.people.contacts)
         .filter((contact): contact is SubscriptionContactState => contact?.subscription != null);
 }
 
-type FriendContactState = ContactState & { friend: FriendInfo };
+type FriendContactState = ContactWithRelationships & { friend: FriendInfo };
 
 export function getPeopleFriends(state: ClientState, friendGroupId: string): FriendContactState[] {
     return Object.values(state.people.contacts)
@@ -136,21 +137,21 @@ export function getPeopleFriends(state: ClientState, friendGroupId: string): Fri
             && contact.friend.groups?.find(fg => fg.id === friendGroupId) != null);
 }
 
-type FriendOfContactState = ContactState & { friendOf: FriendOfInfo };
+type FriendOfContactState = ContactWithRelationships & { friendOf: FriendOfInfo };
 
 export function getPeopleFriendOfs(state: ClientState): FriendOfContactState[] {
     return Object.values(state.people.contacts)
         .filter((contact): contact is FriendOfContactState => contact?.friendOf != null);
 }
 
-type BlockedContactState = ContactState & { blocked: BlockedUserInfo[] };
+type BlockedContactState = ContactWithRelationships & { blocked: BlockedUserInfo[] };
 
 export function getPeopleBlocked(state: ClientState): BlockedContactState[] {
     return Object.values(state.people.contacts)
         .filter((contact): contact is BlockedContactState => contact?.blocked != null && contact.blocked.length > 0);
 }
 
-type BlockedByContactState = ContactState & { blockedBy: BlockedByUserInfo[] };
+type BlockedByContactState = ContactWithRelationships & { blockedBy: BlockedByUserInfo[] };
 
 export function getPeopleBlockedBy(state: ClientState): BlockedByContactState[] {
     return Object.values(state.people.contacts)
@@ -175,7 +176,7 @@ export function isPeopleContactsLoading(state: ClientState): boolean {
     }
 }
 
-export function getPeopleContacts(state: ClientState): ContactState[] {
+export function getPeopleContacts(state: ClientState): ContactWithRelationships[] {
     const tab = getPeopleTab(state);
     switch (tab) {
         case "subscribers":

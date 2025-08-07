@@ -334,6 +334,10 @@ export interface CommentTotalInfo {
     total: number;
 }
 
+export interface ContactFilter {
+    nodeNames: string[];
+}
+
 export interface ContactInfo {
     nodeName: string;
     fullName?: string | null;
@@ -1383,6 +1387,16 @@ export interface CommentText {
     operations?: CommentOperations | null;
     reactionOperations?: ReactionOperations | null;
     seniorOperations?: CommentOperations | null;
+}
+
+export interface ContactWithRelationships {
+    contact: ContactInfo;
+    subscriber?: SubscriberInfo | null;
+    subscription?: SubscriptionInfo | null;
+    friend?: FriendInfo | null;
+    friendOf?: FriendOfInfo | null;
+    blocked?: BlockedUserInfo[] | null;
+    blockedBy?: BlockedByUserInfo[] | null;
 }
 
 export interface DraftText {

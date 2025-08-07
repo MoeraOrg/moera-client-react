@@ -2,12 +2,12 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { ContactState } from "state/people/state";
+import { ContactWithRelationships } from "api";
 import { getPeopleTab } from "state/people/selectors";
 import "./PeopleContactStatus.css";
 
 interface Props {
-    contact: ContactState;
+    contact: ContactWithRelationships;
 }
 
 export default function PeopleContactStatus({contact}: Props) {

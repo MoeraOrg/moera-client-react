@@ -338,6 +338,44 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 .value();
         }
 
+        case "NODE_CARDS_PREFILL": {
+            const {contacts} = action.payload;
+            const istate = immutable.wrap(state);
+            for (const contact of contacts) {
+                const nodeName = contact.contact.nodeName;
+                let card = state.cards[nodeName];
+                if (card == null) {
+                    card = cloneDeep(emptyCard);
+                    istate.set(["cards", nodeName], card);
+                }
+                if (!card.subscription.loading && !card.subscription.loaded) {
+                    istate.assign(["cards", nodeName, "subscription"], {
+                        loading: false,
+                        loaded: true,
+                        subscriber: contact.subscriber,
+                        subscription: contact.subscription
+                    });
+                }
+                if (!card.friendship.loading && !card.friendship.loaded) {
+                    istate.assign(["cards", nodeName, "friendship"], {
+                        loading: false,
+                        loaded: true,
+                        groups: contact.friend?.groups ?? null,
+                        remoteGroups: contact.friendOf?.groups ?? null
+                    });
+                }
+                if (!card.blocking.loading && !card.blocking.loaded) {
+                    istate.assign(["cards", nodeName, "blocking"], {
+                        loading: false,
+                        loaded: true,
+                        blocked: contact.blocked ?? null,
+                        blockedBy: contact.blockedBy ?? null
+                    });
+                }
+            }
+            return istate.value();
+        }
+
         case "NODE_CARD_SHERIFF_LIST_LOAD": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate

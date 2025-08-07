@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
+import { ContactWithRelationships } from "api";
 import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import {
@@ -9,7 +10,6 @@ import {
     getPeopleContactsMaxInTabs,
     getPeopleContactsTotal
 } from "state/people/selectors";
-import { ContactState } from "state/people/state";
 import * as Browser from "ui/browser";
 import PeopleSelectionPanel from "ui/people/PeopleSelectionPanel";
 import PeoplePerson from "ui/people/PeoplePerson";
@@ -45,7 +45,7 @@ export default function PeopleContent() {
     );
 }
 
-function matchesSearch(contactState: ContactState, searchRegexes: RegExp[]): boolean {
+function matchesSearch(contactState: ContactWithRelationships, searchRegexes: RegExp[]): boolean {
     const {nodeName, fullName} = contactState.contact;
     return nameListItemMatch({nodeName, fullName}, searchRegexes);
 }

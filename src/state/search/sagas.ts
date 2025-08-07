@@ -29,7 +29,7 @@ import {
     getSearchTab,
     SEARCH_PAGE_SIZE
 } from "state/search/selectors";
-import { nodeCardPrepare } from "state/nodecards/actions";
+import { nodeCardsPreload } from "state/nodecards/actions";
 import { getSetting } from "state/settings/selectors";
 import { REL_HOME, REL_SEARCH } from "util/rel-node-name";
 
@@ -174,7 +174,7 @@ async function load(
                 }
                 const page = await Node.searchNodes(action, REL_SEARCH, searchFilter);
                 dispatch(searchPeopleLoaded(page).causedBy(action));
-                page.nodes.forEach(node => dispatch(nodeCardPrepare(node.nodeName).causedBy(action)));
+                dispatch(nodeCardsPreload(page.nodes.map(node => node.nodeName)).causedBy(action));
             } else {
                 const [createdAfter, createdBefore] = getDatePeriod(filter.datePeriod);
                 const searchFilter: SearchTextFilter = {

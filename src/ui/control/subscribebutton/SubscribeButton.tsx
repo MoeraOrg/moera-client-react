@@ -46,8 +46,8 @@ export function SubscribeButton({nodeName, feedName, onDialogOpened}: Props) {
         ? (friendOf ? t("mutual-friends") : t("friend"))
         : (friendOf ? t("in-friends") : null)
 
-    const blocked = blockedList != null && blockedList.length > 0;
-    const blockedBy = blockedByList != null && blockedByList.length > 0;
+    const blocked = blockedList != null && blockedList.filter(b => b.blockedOperation !== "instant").length > 0;
+    const blockedBy = blockedByList != null && blockedByList.filter(b => b.blockedOperation !== "instant").length > 0;
     const blockedCaption = blocked
         ? t("blocked")
         : (blockedBy ? t("in-blocked") : null)

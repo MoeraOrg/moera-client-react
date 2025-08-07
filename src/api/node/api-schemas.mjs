@@ -3481,6 +3481,88 @@ export const NODE_API_SCHEMAS = {
             }
         },
 
+        ContactWithRelationships: {
+            type: "object",
+            properties: {
+                "contact": {
+                    $ref: "node#/definitions/ContactInfo"
+                },
+                "subscriber": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/SubscriberInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+                "subscription": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/SubscriptionInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+                "friend": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/FriendInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+                "friendOf": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/FriendOfInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+                "blocked": {
+                    type: "array",
+                    items: {
+                        $ref: "node#/definitions/BlockedUserInfo"
+                    },
+                    nullable: true
+                },
+                "blockedBy": {
+                    type: "array",
+                    items: {
+                        $ref: "node#/definitions/BlockedByUserInfo"
+                    },
+                    nullable: true
+                },
+            },
+            required: [
+                "contact",
+            ],
+            additionalProperties: false
+        },
+
+        ContactWithRelationshipsArray: {
+            type: "array",
+            items: {
+                $ref: "node#/definitions/ContactWithRelationships"
+            }
+        },
+
         Features: {
             type: "object",
             properties: {

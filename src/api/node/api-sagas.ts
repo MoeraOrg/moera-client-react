@@ -491,6 +491,18 @@ export async function getContacts(
     });
 }
 
+export async function fetchContacts(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, filter: API.ContactFilter,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.ContactWithRelationships[]> {
+
+    const location = "/people/contacts/fetch";
+    return callApi<API.ContactWithRelationships[]>({
+        caller, nodeName, method: "POST", location, body: filter, auth, schema: "ContactWithRelationshipsArray",
+        errorFilter
+    });
+}
+
 export async function checkCredentials(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false
 ): Promise<API.CredentialsCreated> {

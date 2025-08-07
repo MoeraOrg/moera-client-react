@@ -1,7 +1,7 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import {
     BlockedByUserInfo,
-    BlockedUserInfo,
+    BlockedUserInfo, ContactWithRelationships,
     FriendGroupDetails,
     ProfileInfo,
     SubscriberInfo,
@@ -147,6 +147,18 @@ export const nodeCardBlockingSet = (
 ): NodeCardBlockingSetAction =>
     actionWithPayload("NODE_CARD_BLOCKING_SET", {nodeName, blocked, blockedBy});
 
+export type NodeCardsPreloadAction = ActionWithPayload<"NODE_CARDS_PRELOAD", {
+    nodeNames: string[];
+}>;
+export const nodeCardsPreload = (nodeNames: string[]): NodeCardsPreloadAction =>
+    actionWithPayload("NODE_CARDS_PRELOAD", {nodeNames});
+
+export type NodeCardsPrefillAction = ActionWithPayload<"NODE_CARDS_PREFILL", {
+    contacts: ContactWithRelationships[];
+}>;
+export const nodeCardsPrefill = (contacts: ContactWithRelationships[]): NodeCardsPrefillAction =>
+    actionWithPayload("NODE_CARDS_PREFILL", {contacts});
+
 export type NodeCardSheriffListLoadAction = ActionWithPayload<"NODE_CARD_SHERIFF_LIST_LOAD", {
     nodeName: string;
 }>;
@@ -207,6 +219,8 @@ export type NodeCardsAnyAction =
     | NodeCardBlockingLoadAction
     | NodeCardBlockingLoadFailedAction
     | NodeCardBlockingSetAction
+    | NodeCardsPreloadAction
+    | NodeCardsPrefillAction
     | NodeCardSheriffListLoadAction
     | NodeCardSheriffListLoadFailedAction
     | NodeCardSheriffListSetAction

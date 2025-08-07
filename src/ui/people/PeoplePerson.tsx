@@ -4,11 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 
-import { NodeName } from "api";
+import { ContactWithRelationships, NodeName } from "api";
 import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import { peopleSelectToggle } from "state/people/actions";
-import { ContactState } from "state/people/state";
 import { getPeopleTab } from "state/people/selectors";
 import { Avatar, AvatarWithPopup, Principal, SubscribeButton } from "ui/control";
 import Jump from "ui/navigation/Jump";
@@ -17,7 +16,7 @@ import PeopleContactStatus from "ui/people/PeopleContactStatus";
 import "./PeoplePerson.css";
 
 interface Props {
-    contact: ContactState;
+    contact: ContactWithRelationships;
 }
 
 export default function PeoplePerson({contact}: Props) {
