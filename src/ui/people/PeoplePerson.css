@@ -55,20 +55,3 @@
     color: var(--bs-gray-600);
     line-height: 143%;
 }
-
-.people-page .person .blocking-details {
-    flex: none;
-    font-size: .875em;
-    color: var(--incorrect);
-    border: 0;
-    background: transparent;
-    text-align: left;
-}
-
-.people-page .person .blocking-details .caption {
-    margin-left: .5em;
-}
-
-.people-page .person .blocking-details:hover .caption {
-    text-decoration: underline;
-}
