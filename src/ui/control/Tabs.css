@@ -6,7 +6,7 @@
     cursor: default;
 }
 
-.nav-pills .nav-link.active .principal {
+.nav.nav-pills .nav-link.active .principal {
     color: var(--bs-nav-pills-link-active-color);
 }
 
@@ -36,7 +36,9 @@
 
 @media only screen and (max-width: 575px) {
     .nav.nav-tabs, .nav.nav-pills {
+        flex-wrap: nowrap;
         overflow-x: auto;
+        overflow-y: hidden;
         scrollbar-width: none;
     }
 }
