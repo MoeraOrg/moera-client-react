@@ -10,9 +10,10 @@ import { isAtHomeNode } from "state/node/selectors";
 import { peopleSelectToggle } from "state/people/actions";
 import { getPeopleTab } from "state/people/selectors";
 import { Avatar, AvatarWithPopup, Principal, SubscribeButton } from "ui/control";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import Jump from "ui/navigation/Jump";
 import SubscriberVisibility from "ui/people/SubscriberVisibility";
-import PeopleContactStatus from "ui/people/PeopleContactStatus";
+import PeopleContactStatuses from "ui/people/PeopleContactStatuses";
 import "./PeoplePerson.css";
 
 interface Props {
@@ -24,6 +25,7 @@ export default function PeoplePerson({contact}: Props) {
     const selecting = useSelector((state: ClientState) => state.people.selecting);
     const selected = useSelector((state: ClientState) => state.people.selected[contact.contact.nodeName] ?? false);
     const tab = useSelector(getPeopleTab);
+    const tinyScreen = useIsTinyScreen();
     const dispatch = useDispatch();
 
     const onSelectClick = () => dispatch(peopleSelectToggle(contact.contact.nodeName));
@@ -52,13 +54,14 @@ export default function PeoplePerson({contact}: Props) {
                     {tab === "subscriptions" && contact.subscription != null &&
                         <Principal value={contact.subscription.operations?.view ?? "public"} defaultValue="public"/>
                     }
-                    {!atHome && <PeopleContactStatus contact={contact}/>}
+                    {!atHome && !tinyScreen && <PeopleContactStatuses contact={contact}/>}
                 </Jump>
                 <Jump className="name" nodeName={contact.contact.nodeName} href="/">
                     {shortNodeName}
                 </Jump>
             </div>
             <SubscribeButton nodeName={contact.contact.nodeName} feedName="timeline"/>
+            {!atHome && tinyScreen && <PeopleContactStatuses contact={contact}/>}
         </div>
     );
 }

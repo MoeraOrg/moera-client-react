@@ -10,7 +10,7 @@ interface Props {
     contact: ContactWithRelationships;
 }
 
-export default function PeopleContactStatus({contact}: Props) {
+export default function PeopleContactStatuses({contact}: Props) {
     const tab = useSelector(getPeopleTab);
     const {t} = useTranslation();
 
@@ -63,10 +63,10 @@ export default function PeopleContactStatus({contact}: Props) {
     }
 
     return (
-        <>
+        <div className="contact-statuses">
             {statuses.map(status =>
                 <span key={status} className="contact-status">{t(status)}</span>
             )}
-        </>
+        </div>
     );
 }

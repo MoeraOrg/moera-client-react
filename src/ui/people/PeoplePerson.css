@@ -2,11 +2,22 @@
     margin-bottom: .5rem;
     padding: .25rem .5rem .25rem .25rem;
     border-radius: .25rem;
-    display: flex;
+    display: grid;
+    grid-template-columns: min-content auto auto;
+}
+
+@media only screen and (max-width: 575px) {
+    .people-page .person {
+        padding-right: 0;
+    }
 }
 
 .people-page .person:hover {
     background-color: var(--highlight);
+}
+
+.people-page .person .avatar-selector,  .people-page .person > .avatar {
+    grid-area: 1 / 1 / 2 / 2;
 }
 
 .people-page .person .avatar {
@@ -40,6 +51,8 @@
 
 .people-page .person .details {
     flex: auto;
+    grid-area: 1 / 2 / 2 / 3;
+    overflow-x: hidden;
 }
 
 .people-page .person .details .full-name {
@@ -48,10 +61,23 @@
     font-size: 1.14rem;
     line-height: 150%;
     color: var(--bs-gray-800);
+    overflow-x: hidden;
+    text-overflow: ellipsis;
 }
 
 .people-page .person .details .name {
     display: block;
     color: var(--bs-gray-600);
     line-height: 143%;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+.people-page .person .subscribe-button {
+    grid-area: 1 / 3 / 2 / 4;
+    justify-self: end;
+}
+
+.people-page .person .contact-statuses {
+    grid-area: 2 / 2 / 3 / 4;
 }
