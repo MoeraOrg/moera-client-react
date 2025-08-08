@@ -89,7 +89,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                         principal: viewBlockedBy
                     }
                 ]}
-                style="pills"
+                tabStyle="pills"
                 className="people-tabs mb-3"
                 value={active}
                 onChange={goToTab}

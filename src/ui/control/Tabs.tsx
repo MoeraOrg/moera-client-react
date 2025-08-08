@@ -20,7 +20,7 @@ export interface TabDescription<V = any> {
 interface Props<V> {
     className?: string;
     tabs: TabDescription<V>[];
-    style?: TabStyle;
+    tabStyle?: TabStyle;
     scroll?: boolean;
     value: V;
     onChange?: (value: V) => void;
@@ -32,11 +32,11 @@ interface Props<V> {
 }
 
 export function Tabs<V = any>({
-    className, tabs, style = "tabs", scroll, value: selected, onChange, principalIcons, principalTitles, addIcon,
+    className, tabs, tabStyle = "tabs", scroll, value: selected, onChange, principalIcons, principalTitles, addIcon,
     addTitle, onAdd
 }: Props<V>) {
     return (
-        <ul className={cx("nav", "nav-" + style, {scroll}, className)}>
+        <ul className={cx("nav", "nav-" + tabStyle, {scroll}, className)}>
             {tabs
                 .filter(({visible}) => visible !== false)
                 .map(({title, value, active, count, principal}, index) =>
