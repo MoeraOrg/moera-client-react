@@ -80,6 +80,7 @@ import { ReactComponent as msUndo } from "ui/material-symbols/undo.isvg";
 import { ReactComponent as msVerifiedUser } from "ui/material-symbols/verified_user.isvg";
 import { ReactComponent as msVideoLibrary } from "ui/material-symbols/video_library.isvg";
 import { ReactComponent as msVisibility } from "ui/material-symbols/visibility.isvg";
+import { ReactComponent as msVolunteerActivism } from "ui/material-symbols/volunteer_activism.isvg";
 
 export {
     msAddBox,
@@ -162,6 +163,7 @@ export {
     msVerifiedUser,
     msVideoLibrary,
     msVisibility,
+    msVolunteerActivism,
 };
 
 export type MaterialSymbol = React.FunctionComponent<React.SVGProps<SVGSVGElement> & { title?: string }>;

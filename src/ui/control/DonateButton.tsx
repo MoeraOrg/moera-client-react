@@ -1,7 +1,5 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHandHoldingHeart } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
@@ -9,6 +7,7 @@ import { FundraiserInfo } from "api";
 import { openDonateDialog } from "state/donatedialog/actions";
 import { Button, usePopover } from "ui/control";
 import * as Browser from "ui/browser";
+import { Icon, msVolunteerActivism } from "ui/material-symbols";
 
 interface Props {
     name: string | null;
@@ -43,7 +42,7 @@ export function DonateButton({name, fullName, fundraisers, styles = "large", cla
                 title={styles === "icon" ? t("donate") : undefined}
                 className={cx(className, {"border-0": styles === "icon"})}
                 onClick={onClick}>
-            <FontAwesomeIcon icon={faHandHoldingHeart}/>
+            <Icon icon={msVolunteerActivism} size="1.5em"/>
             {styles !== "icon" ? " " + t("donate") : ""}
         </Button>
     );
