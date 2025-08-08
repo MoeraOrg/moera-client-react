@@ -39,7 +39,7 @@ export function DropdownMenu({
         <DropdownMenuContext.Provider value={{hide, onDialogOpened, overlayId}}>
             <button
                 type="button"
-                className={cx("menu", className)}
+                className={cx("menu", {active: visible}, className)}
                 disabled={disabled}
                 ref={setButtonRef}
                 aria-label={t("menu")}

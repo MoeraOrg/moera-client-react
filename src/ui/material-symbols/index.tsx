@@ -4,6 +4,7 @@ import { ReactComponent as msAddBox } from "ui/material-symbols/add_box.isvg";
 import { ReactComponent as msAddLink } from "ui/material-symbols/add_link.isvg";
 import { ReactComponent as msAlternateEmail } from "ui/material-symbols/alternate_email.isvg";
 import { ReactComponent as msArrowDownward } from "ui/material-symbols/arrow_downward.isvg";
+import { ReactComponent as msArrowSelectorToolFilled } from "ui/material-symbols/arrow_selector_tool_filled.isvg";
 import { ReactComponent as msArrowUpward } from "ui/material-symbols/arrow_upward.isvg";
 import { ReactComponent as msBackspaceFilled16 } from "ui/material-symbols/backspace_filled16.isvg";
 import { ReactComponent as msBadge } from "ui/material-symbols/badge.isvg";
@@ -67,6 +68,8 @@ import { ReactComponent as msSend } from "ui/material-symbols/send.isvg";
 import { ReactComponent as msSentimentSatisfied } from "ui/material-symbols/sentiment_satisfied.isvg";
 import { ReactComponent as msSchedule } from "ui/material-symbols/schedule.isvg";
 import { ReactComponent as msShieldPerson } from "ui/material-symbols/shield_person.isvg";
+import { ReactComponent as msSort } from "ui/material-symbols/sort.isvg";
+import { ReactComponent as msSortByAlpha } from "ui/material-symbols/sort_by_alpha.isvg";
 import { ReactComponent as msStarFilled16 } from "ui/material-symbols/star_filled16.isvg";
 import { ReactComponent as msStrikethroughS } from "ui/material-symbols/strikethrough_s.isvg";
 import { ReactComponent as msSubscript } from "ui/material-symbols/subscript.isvg";
@@ -83,6 +86,7 @@ export {
     msAddLink,
     msAlternateEmail,
     msArrowDownward,
+    msArrowSelectorToolFilled,
     msArrowUpward,
     msBackspaceFilled16,
     msBadge,
@@ -146,6 +150,8 @@ export {
     msSentimentSatisfied,
     msSchedule,
     msShieldPerson,
+    msSort,
+    msSortByAlpha,
     msStarFilled16,
     msStrikethroughS,
     msSubscript,

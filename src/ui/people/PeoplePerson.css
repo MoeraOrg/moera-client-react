@@ -21,18 +21,19 @@
 
 .people-page .person .avatar-selector .selection {
     position: absolute;
-    background: white;
-    border: solid 1px var(--bs-primary);
+    background: rgba(0, 0, 0, .1);
+    border: solid 2px white;
     border-radius: 50%;
     padding: 0;
-    width: 1rem;
-    height: 1rem;
-    right: .5rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    right: .25rem;
     bottom: 0;
 }
 
 .people-page .person .avatar-selector .selection.selected {
     background-color: var(--bs-primary);
+    border: 0;
     color: white;
     font-size: .6em;
 }

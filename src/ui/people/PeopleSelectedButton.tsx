@@ -43,7 +43,7 @@ export default function PeopleSelectedButton() {
     const onHideDialog = () => dispatch(openPeopleHideDialog(null, null));
 
     return (
-        <DropdownMenu className="btn btn-sm btn-primary ms-1" items={[
+        <DropdownMenu className="btn btn-tool dropdown-toggle ms-1" dropdownClassName="border-primary-600" items={[
             {
                 title: t("subscribe"),
                 nodeName: REL_CURRENT,
@@ -101,7 +101,6 @@ export default function PeopleSelectedButton() {
             }
         ]}>
             {t("count-selected", {count: totalSelected}) + " "}
-            <FontAwesomeIcon icon={faChevronDown}/>
         </DropdownMenu>
     )
 }
