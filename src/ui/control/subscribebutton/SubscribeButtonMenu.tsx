@@ -149,7 +149,7 @@ export default function SubscribeButtonMenu({nodeName, feedName}: Props) {
                 nodeName,
                 href: "/",
                 onClick: onSubscribe,
-                show: !subscribed && friendCaption != null
+                show: !subscribed && (subscribedToMe || friendCaption != null)
             },
             {
                 title: t("unsubscribe"),
