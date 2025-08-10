@@ -1,10 +1,9 @@
 #instants .sentinel {
     text-align: center;
-    color: var(--bs-primary);
-    border-top: 1px solid var(--bs-gray-200);
-    cursor: pointer;
 }
 
-#instants .sentinel:hover {
-    background-color: var(--highlight);
+#instants .sentinel .btn {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    margin-top: .5rem;
 }

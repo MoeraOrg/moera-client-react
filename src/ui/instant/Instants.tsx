@@ -43,7 +43,7 @@ export default function Instants({instantBorder}: Props) {
     }
 
     const onReadAll = () => {
-        if (stories == null || stories.length === 0) {
+        if (stories.length === 0) {
             return;
         }
         dispatch(feedStatusUpdate(REL_HOME, "instant", null, true, stories[0].moment));
@@ -65,11 +65,12 @@ export default function Instants({instantBorder}: Props) {
                     </React.Fragment>
                 )}
                 <InstantsSentinel loading={loadingPast} title={t("load-more")} margin="0px 0px 100px 0px"
-                              visible={after > Number.MIN_SAFE_INTEGER} onSentinel={onSentinelPast} onClick={loadPast}/>
+                                  visible={after > Number.MIN_SAFE_INTEGER} onSentinel={onSentinelPast}
+                                  onClick={loadPast}/>
             </div>
             <div className="footer">
                 <div className="build-number">rev {BUILD_NUMBER}</div>
-                <div className="action" onClick={onReadAll}>{t("mark-all-read")}</div>
+                {stories.length > 0 && <button className="action" onClick={onReadAll}>{t("mark-all-read")}</button>}
             </div>
         </div>
     );

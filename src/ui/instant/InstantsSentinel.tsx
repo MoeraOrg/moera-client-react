@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 
-import { Loading } from "ui/control";
+import { Button, Loading } from "ui/control";
 import { useIntersect } from "ui/hook";
 import "./InstantsSentinel.css";
 
@@ -18,8 +18,10 @@ export default function InstantsSentinel({visible, loading, title, margin, onSen
     const sentinel = useIntersect(onSentinel, {rootMargin: margin});
 
     return (
-        <div className={cx({"sentinel": !loading && visible})} ref={sentinel} onClick={onClick}>
-            {!loading && visible && title}
+        <div className={cx({"sentinel": !loading && visible})} ref={sentinel}>
+            {!loading && visible &&
+                <Button variant="outline-primary" size="sm" onClick={onClick}>{title}</Button>
+            }
             {loading && <Loading/>}
         </div>
     );

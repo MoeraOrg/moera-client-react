@@ -42,9 +42,7 @@
 }
 
 #instants > .footer {
-    padding-top: .25rem;
-    padding-left: .75rem;
-    padding-right: .75rem;
+    padding: .75rem .75rem 0 .75rem;
     margin-top: 1rem;
     margin-bottom: -.25rem;
     border-top: 1px solid var(--bs-gray-100);
@@ -61,7 +59,8 @@
 #instants .action {
     color: var(--secondary-600);
     font-size: 1rem;
-    cursor: pointer;
+    border: 0;
+    background-color: transparent;
 }
 
 #instants .action:hover {
