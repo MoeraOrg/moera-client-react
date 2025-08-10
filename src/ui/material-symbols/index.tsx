@@ -19,7 +19,9 @@ import { ReactComponent as msCloudDone } from "ui/material-symbols/cloud_done.is
 import { ReactComponent as msCloudUpload } from "ui/material-symbols/cloud_upload.isvg";
 import { ReactComponent as msCode } from "ui/material-symbols/code.isvg";
 import { ReactComponent as msCodeBlocks } from "ui/material-symbols/code_blocks.isvg";
+import { ReactComponent as msComment } from "ui/material-symbols/comment.isvg";
 import { ReactComponent as msDelete } from "ui/material-symbols/delete.isvg";
+import { ReactComponent as msError } from "ui/material-symbols/error.isvg";
 import { ReactComponent as msExpandCircleDown } from "ui/material-symbols/expand_circle_down.isvg";
 import { ReactComponent as msExpandCircleDownFilled40 } from "ui/material-symbols/expand_circle_down_filled40.isvg";
 import { ReactComponent as msExpandCircleUpFilled40 } from "ui/material-symbols/expand_circle_up_filled40.isvg";
@@ -35,33 +37,43 @@ import { ReactComponent as msFormatIndentDecrease } from "ui/material-symbols/fo
 import { ReactComponent as msFormatIndentIncrease } from "ui/material-symbols/format_indent_increase.isvg";
 import { ReactComponent as msFormatInkHighlighter } from "ui/material-symbols/format_ink_highlighter.isvg";
 import { ReactComponent as msFormatItalic } from "ui/material-symbols/format_italic.isvg";
-import { ReactComponent as msFormatSize } from "ui/material-symbols/format_size.isvg";
-import { ReactComponent as msGroup } from "ui/material-symbols/group.isvg";
-import { ReactComponent as msGroupAdd } from "ui/material-symbols/group_add.isvg";
-import { ReactComponent as msGroups } from "ui/material-symbols/groups.isvg";
-import { ReactComponent as msHorizontalRule } from "ui/material-symbols/horizontal_rule.isvg";
 import { ReactComponent as msFormatListBulleted } from "ui/material-symbols/format_list_bulleted.isvg";
 import { ReactComponent as msFormatListNumbered } from "ui/material-symbols/format_list_numbered.isvg";
 import { ReactComponent as msFormatQuote } from "ui/material-symbols/format_quote.isvg";
 import { ReactComponent as msFormatQuoteOff } from "ui/material-symbols/format_quote_off.isvg";
+import { ReactComponent as msFormatSize } from "ui/material-symbols/format_size.isvg";
 import { ReactComponent as msFunction } from "ui/material-symbols/function.isvg";
+import { ReactComponent as msGroup } from "ui/material-symbols/group.isvg";
+import { ReactComponent as msGroupAdd } from "ui/material-symbols/group_add.isvg";
+import { ReactComponent as msGroupOff } from "ui/material-symbols/group_off.isvg";
+import { ReactComponent as msGroups } from "ui/material-symbols/groups.isvg";
 import { ReactComponent as msHelpFilled40 } from "ui/material-symbols/help_filled40.isvg";
 import { ReactComponent as msHistory } from "ui/material-symbols/history.isvg";
+import { ReactComponent as msHorizontalRule } from "ui/material-symbols/horizontal_rule.isvg";
+import { ReactComponent as msInkPen } from "ui/material-symbols/ink_pen.isvg";
 import { ReactComponent as msKeepFilled16 } from "ui/material-symbols/keep_filled16.isvg";
 import { ReactComponent as msKeyboardArrowDown } from "ui/material-symbols/keyboard_arrow_down.isvg";
 import { ReactComponent as msKeyboardArrowUp } from "ui/material-symbols/keyboard_arrow_up.isvg";
 import { ReactComponent as msLink } from "ui/material-symbols/link.isvg";
+import { ReactComponent as msLiveHelp } from "ui/material-symbols/live_help.isvg";
 import { ReactComponent as msLock } from "ui/material-symbols/lock.isvg";
 import { ReactComponent as msMediaLink } from "ui/material-symbols/media_link.isvg";
 import { ReactComponent as msMoreHoriz } from "ui/material-symbols/more_horiz.isvg";
 import { ReactComponent as msMoreVert } from "ui/material-symbols/more_vert.isvg";
 import { ReactComponent as msMoreVert12 } from "ui/material-symbols/more_vert12.isvg";
 import { ReactComponent as msOpenInNew } from "ui/material-symbols/open_in_new.isvg";
+import { ReactComponent as msPartlyCloudyDay } from "ui/material-symbols/partly_cloudy_day.isvg";
+import { ReactComponent as msPerson } from "ui/material-symbols/person.isvg";
 import { ReactComponent as msPersonBook } from "ui/material-symbols/person_book.isvg";
+import { ReactComponent as msPersonCancel } from "ui/material-symbols/person_cancel.isvg";
+import { ReactComponent as msPersonCheck } from "ui/material-symbols/person_check.isvg";
+import { ReactComponent as msPersonOff } from "ui/material-symbols/person_off.isvg";
+import { ReactComponent as msPersonSearch } from "ui/material-symbols/person_search.isvg";
 import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_library.isvg";
 import { ReactComponent as msPreview } from "ui/material-symbols/preview.isvg";
 import { ReactComponent as msPublic } from "ui/material-symbols/public.isvg";
 import { ReactComponent as msRedo } from "ui/material-symbols/redo.isvg";
+import { ReactComponent as msReplySolid } from "ui/material-symbols/reply-solid.isvg"; // FontAwesome
 import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
 import { ReactComponent as msRestartAlt16 } from "ui/material-symbols/restart_alt16.isvg";
 import { ReactComponent as msSatellite } from "ui/material-symbols/satellite.isvg";
@@ -82,6 +94,7 @@ import { ReactComponent as msUndo } from "ui/material-symbols/undo.isvg";
 import { ReactComponent as msVerifiedUser } from "ui/material-symbols/verified_user.isvg";
 import { ReactComponent as msVideoLibrary } from "ui/material-symbols/video_library.isvg";
 import { ReactComponent as msVisibility } from "ui/material-symbols/visibility.isvg";
+import { ReactComponent as msVisibilityOff } from "ui/material-symbols/visibility_off.isvg";
 import { ReactComponent as msVolunteerActivism } from "ui/material-symbols/volunteer_activism.isvg";
 
 export {
@@ -104,7 +117,9 @@ export {
     msCloudUpload,
     msCode,
     msCodeBlocks,
+    msComment,
     msDelete,
+    msError,
     msExpandCircleDown,
     msExpandCircleDownFilled40,
     msExpandCircleUpFilled40,
@@ -120,20 +135,23 @@ export {
     msFormatIndentIncrease,
     msFormatInkHighlighter,
     msFormatItalic,
-    msFormatSize,
-    msFunction,
-    msGroup,
-    msGroupAdd,
-    msGroups,
-    msHelpFilled40,
-    msHorizontalRule,
     msFormatListBulleted,
     msFormatListNumbered,
     msFormatQuote,
     msFormatQuoteOff,
+    msFormatSize,
+    msFunction,
+    msGroup,
+    msGroupAdd,
+    msGroupOff,
+    msGroups,
+    msHelpFilled40,
     msHistory,
+    msHorizontalRule,
+    msInkPen,
     msKeepFilled16,
     msLink,
+    msLiveHelp,
     msLock,
     msKeyboardArrowDown,
     msKeyboardArrowUp,
@@ -142,11 +160,18 @@ export {
     msMoreVert,
     msMoreVert12,
     msOpenInNew,
+    msPartlyCloudyDay,
+    msPerson,
     msPersonBook,
+    msPersonCancel,
+    msPersonCheck,
+    msPersonOff,
+    msPersonSearch,
     msPhotoLibrary,
     msPreview,
     msPublic,
     msRedo,
+    msReplySolid,
     msReport,
     msRestartAlt16,
     msSatellite,
@@ -167,6 +192,7 @@ export {
     msVerifiedUser,
     msVideoLibrary,
     msVisibility,
+    msVisibilityOff,
     msVolunteerActivism,
 };
 
