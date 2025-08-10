@@ -12,6 +12,7 @@ import InstantsSentinel from "ui/instant/InstantsSentinel";
 import { REL_HOME } from "util/rel-node-name";
 import { BUILD_NUMBER } from "build-number";
 import "./Instants.css";
+import NoInstants from "ui/instant/NoInstants";
 
 interface Props {
     instantBorder: number;
@@ -58,12 +59,16 @@ export default function Instants({instantBorder}: Props) {
                 </button>
             </div>
             <div className="content">
-                {stories.map(story =>
-                    <React.Fragment key={story.moment}>
-                        <InstantStory story={story} hide={hide}/>
-                        {story.moment === instantBorder && <hr/>}
-                    </React.Fragment>
-                )}
+                {stories.length === 0 && after <= Number.MIN_SAFE_INTEGER ?
+                    <NoInstants/>
+                :
+                    stories.map(story =>
+                        <React.Fragment key={story.moment}>
+                            <InstantStory story={story} hide={hide}/>
+                            {story.moment === instantBorder && <hr/>}
+                        </React.Fragment>
+                    )
+                }
                 <InstantsSentinel loading={loadingPast} title={t("load-more")} margin="0px 0px 100px 0px"
                                   visible={after > Number.MIN_SAFE_INTEGER} onSentinel={onSentinelPast}
                                   onClick={loadPast}/>

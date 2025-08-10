@@ -1,0 +1,19 @@
+.no-instants {
+    padding-bottom: 1.5rem;
+    text-align: center;
+}
+
+.no-instants .caption {
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 150%;
+    color: var(--bs-gray-900);
+    margin-bottom: .25rem;
+}
+
+.no-instants .instructions {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 143%;
+    color: var(--bs-gray-600);
+}
