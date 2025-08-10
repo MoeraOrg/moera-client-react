@@ -1,8 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons';
 import { formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
@@ -14,6 +12,7 @@ import { ExtStoryInfo } from "state/feeds/state";
 import { getSetting } from "state/settings/selectors";
 import Jump from "ui/navigation/Jump";
 import { Avatar } from "ui/control";
+import { Icon, msCircleFilled } from "ui/material-symbols";
 import { getInstantTarget, getInstantTypeDetails } from "ui/instant/instant-types";
 import InstantHtml from "ui/instant/InstantHtml";
 import { REL_HOME } from "util/rel-node-name";
@@ -21,11 +20,10 @@ import "./InstantStory.css";
 
 interface Props {
     story: ExtStoryInfo;
-    lastNew: boolean;
     hide: () => void;
 }
 
-export default function InstantStory({story, lastNew, hide}: Props) {
+export default function InstantStory({story, hide}: Props) {
     useSelector((state: ClientState) => state.pulse.pulse); // To force re-rendering only
     const profileLink = useSelector((state: ClientState) => getSetting(state, "instants.profile-link") as boolean);
     const googlePlayHiding = useSelector(isHomeGooglePlayHiding);
@@ -49,17 +47,24 @@ export default function InstantStory({story, lastNew, hide}: Props) {
     const publishDate = fromUnixTime(story.publishedAt);
 
     return (
-        <div className={cx("instant", {"unread": !story.read, "last-new": lastNew})}>
+        <div className={cx("instant", {"unread": !story.read})}>
             {!googlePlayHiding || !story.hideSheriffMarked ?
                 <>
                     {(profileLink && story.summaryNodeName != null) &&
                         <Jump nodeName={story.summaryNodeName} href="/profile" className="outer cells-avatar"/>
                     }
+                    {!profileLink &&
+                        <Jump nodeName={nodeName} href={href} readId={readId} onNear={onJump} onFar={onJump}
+                              className="outer cells-avatar"/>
+                    }
                     <Jump nodeName={nodeName} href={href} readId={readId} onNear={onJump} onFar={onJump}
-                          className={cx("outer", {"cells-summary": profileLink, "cells-all": !profileLink})}/>
+                          className="outer cells-summary"/>
+                    <Jump nodeName={nodeName} href={href} readId={readId} onNear={onJump} onFar={onJump}
+                          className="outer cells-date"/>
+
                     <div className="summary-avatar">
                         <Avatar avatar={story.summaryAvatar} ownerName={story.summaryNodeName} nodeName={REL_HOME}
-                                size={36}/>
+                                size={40}/>
                     </div>
                     <div className="summary">
                         <InstantHtml story={story}/>
@@ -68,24 +73,25 @@ export default function InstantStory({story, lastNew, hide}: Props) {
             :
                 <>
                     <div className="summary-avatar">
-                        <Avatar avatar={null} ownerName={null} size={36}/>
+                        <Avatar avatar={null} ownerName={null} size={40}/>
                     </div>
                     <div className="summary">
                         {t("content-not-accessible-android")}
                     </div>
                 </>
             }
+            {buttons && React.createElement(buttons, {story, hide})}
             <div className="footer">
                 <time className="date" dateTime={formatISO(publishDate)}>
                     {tDistanceToNow(publishDate, t)}
                 </time>
             </div>
-            {buttons && React.createElement(buttons, {story, hide})}
             <div className="sidebar">
-                <span className="envelope" title={story.read ? t("mark-unread") : t("mark-read")}
-                      onClick={onEnvelope}>
-                    <FontAwesomeIcon icon={story.read ? faEnvelopeOpen : faEnvelope}/>
-                </span>
+                {!story.read &&
+                    <span className="envelope" title={t("mark-read")} onClick={onEnvelope}>
+                        <Icon icon={msCircleFilled} size={12}/>
+                    </span>
+                }
             </div>
         </div>
     );

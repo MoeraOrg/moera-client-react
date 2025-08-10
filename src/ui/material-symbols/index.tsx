@@ -10,7 +10,9 @@ import { ReactComponent as msBackspaceFilled16 } from "ui/material-symbols/backs
 import { ReactComponent as msBadge } from "ui/material-symbols/badge.isvg";
 import { ReactComponent as msBlock } from "ui/material-symbols/block.isvg";
 import { ReactComponent as msCancel } from "ui/material-symbols/cancel.isvg";
+import { ReactComponent as msCheck } from "ui/material-symbols/check.isvg";
 import { ReactComponent as msChevronRight } from "ui/material-symbols/chevron_right.isvg";
+import { ReactComponent as msCircleFilled } from "ui/material-symbols/circle_filled.isvg";
 import { ReactComponent as msClose } from "ui/material-symbols/close.isvg";
 import { ReactComponent as msClose12 } from "ui/material-symbols/close12.isvg";
 import { ReactComponent as msCloudDone } from "ui/material-symbols/cloud_done.isvg";
@@ -93,7 +95,9 @@ export {
     msBadge,
     msBlock,
     msCancel,
+    msCheck,
     msChevronRight,
+    msCircleFilled,
     msClose,
     msClose12,
     msCloudDone,

@@ -80,6 +80,7 @@ export function Popover({
                         {...attributes.popper}
                         className={cx(
                             "popover",
+                            "shadow",
                             "fade",
                             `bs-popover-${state?.placement}`, // activates Bootstrap style for .popover-arrow
                             {"show": visible},

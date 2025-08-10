@@ -6,6 +6,7 @@ import { ClientState } from "state/state";
 import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
 import { usePopover } from "ui/control";
+import { Icon, msClose } from "ui/material-symbols";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
 import { REL_HOME } from "util/rel-node-name";
@@ -52,18 +53,23 @@ export default function Instants({instantBorder}: Props) {
         <div id="instants">
             <div className="header">
                 <div className="title">{t("instants")}</div>
-                <div className="action" onClick={onReadAll}>{t("mark-all-read")}</div>
+                <button className="close" onClick={hide}>
+                    <Icon icon={msClose} size={16}/>
+                </button>
             </div>
             <div className="content">
                 {stories.map(story =>
-                    <InstantStory key={story.moment} story={story} hide={hide}
-                                  lastNew={story.moment === instantBorder}/>
+                    <React.Fragment key={story.moment}>
+                        <InstantStory story={story} hide={hide}/>
+                        {story.moment === instantBorder && <hr/>}
+                    </React.Fragment>
                 )}
                 <InstantsSentinel loading={loadingPast} title={t("load-more")} margin="0px 0px 100px 0px"
                               visible={after > Number.MIN_SAFE_INTEGER} onSentinel={onSentinelPast} onClick={loadPast}/>
             </div>
             <div className="footer">
                 <div className="build-number">rev {BUILD_NUMBER}</div>
+                <div className="action" onClick={onReadAll}>{t("mark-all-read")}</div>
             </div>
         </div>
     );

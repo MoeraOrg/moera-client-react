@@ -1,10 +1,10 @@
 import { useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import { storySatisfy } from "state/stories/actions";
 import { ExtStoryInfo } from "state/feeds/state";
 import { Button } from "ui/control";
+import { Icon, msCheck } from "ui/material-symbols";
 import { REL_HOME } from "util/rel-node-name";
 
 export interface InstantStoryButtonsProps {
@@ -39,11 +39,11 @@ export function InstantStoryButtons({story, ready, accepting, accepted, acceptTi
                         <Button variant="primary" size="sm" compact loading={accepting} onClick={onAccept}>
                             {acceptTitle}
                         </Button>
-                        <Button variant="secondary" size="sm" compact onClick={onIgnore}>{t("ignore")}</Button>
+                        <Button variant="outline-secondary" size="sm" compact onClick={onIgnore}>{t("ignore")}</Button>
                     </>
             :
                 <span className="message">
-                    <span className="check"><FontAwesomeIcon icon="check"/></span>
+                    <span className="check"><Icon icon={msCheck} size={16}/></span>
                     {acceptedTitle}
                 </span>
             }

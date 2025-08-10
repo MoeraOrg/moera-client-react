@@ -41,8 +41,7 @@ export default function InstantButton() {
 
     return (
         <Suspense fallback={<InstantBell/>}>
-            <Popover element={InstantBell} className="instant-popover" detached offset={[0, 10]}
-                     onToggle={onToggle}>
+            <Popover element={InstantBell} className="instant-popover" detached offset={[0, 10]} onToggle={onToggle}>
                 <Instants instantBorder={border}/>
             </Popover>
         </Suspense>
