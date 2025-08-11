@@ -88,6 +88,8 @@ import { ReactComponent as msStarFilled16 } from "ui/material-symbols/star_fille
 import { ReactComponent as msStrikethroughS } from "ui/material-symbols/strikethrough_s.isvg";
 import { ReactComponent as msSubscript } from "ui/material-symbols/subscript.isvg";
 import { ReactComponent as msSuperscript } from "ui/material-symbols/superscript.isvg";
+import { ReactComponent as msThumbsDownSolid } from "ui/material-symbols/thumbs-down-solid.isvg"; // FontAwesome
+import { ReactComponent as msThumbsUpSolid } from "ui/material-symbols/thumbs-up-solid.isvg"; // FontAwesome
 import { ReactComponent as msTitle } from "ui/material-symbols/title.isvg";
 import { ReactComponent as msTune } from "ui/material-symbols/tune.isvg";
 import { ReactComponent as msUndo } from "ui/material-symbols/undo.isvg";
@@ -186,6 +188,8 @@ export {
     msStrikethroughS,
     msSubscript,
     msSuperscript,
+    msThumbsDownSolid,
+    msThumbsUpSolid,
     msTitle,
     msTune,
     msUndo,
@@ -203,7 +207,8 @@ interface IconProps {
     fill?: string;
     className?: string;
     size?: number | string;
+    title?: string;
 }
 
-export const Icon = ({icon, fill, className, size}: IconProps) =>
-    React.createElement(icon, {fill: fill ?? "currentColor", className, height: size ?? 24, width: size ?? 24});
+export const Icon = ({icon, fill, className, size, title}: IconProps) =>
+    React.createElement(icon, {fill: fill ?? "currentColor", className, height: size ?? 24, width: size ?? 24, title});

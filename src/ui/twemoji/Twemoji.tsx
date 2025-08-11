@@ -1,5 +1,4 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 /*
  * Emoji graphics by Twemoji https://twemoji.twitter.com/
@@ -8,8 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
  * Code licensed under the MIT License: http://opensource.org/licenses/MIT
  * Graphics licensed under CC-BY 4.0: https://creativecommons.org/licenses/by/4.0/
  */
-
-import { faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 import { ReactComponent as Twemoji23f3 } from "./23f3.isvg";
 import { ReactComponent as Twemoji2694 } from "./2694.isvg";
@@ -58,6 +55,7 @@ import { ReactComponent as Twemoji1f9ef } from "./1f9ef.isvg";
 import { ReactComponent as Twemoji1f9f8 } from "./1f9f8.isvg";
 import { ReactComponent as Twemoji1fac2 } from "./1fac2.isvg";
 
+import { Icon, msThumbsDownSolid, msThumbsUpSolid } from "ui/material-symbols";
 import { twemojiUrl } from "util/twemoji";
 import "./Twemoji.css";
 
@@ -119,9 +117,9 @@ export default function Twemoji({code, title = ""}: Props) {
     let emoji = typeof(code) === "string" ? code : Number(code).toString(16);
     switch (emoji) {
         case "1f44d":
-            return <FontAwesomeIcon icon={faThumbsUp} color="#2078f4" title={title}/>;
+            return <Icon icon={msThumbsUpSolid} fill="#2078f4" title={title} className="twemoji"/>;
         case "1f44e":
-            return <FontAwesomeIcon icon={faThumbsDown} color="#2078f4" title={title}/>;
+            return <Icon icon={msThumbsDownSolid} fill="#2078f4" title={title} className="twemoji"/>;
         // Do not forget to change formatReaction() function in instant-summaries.ts
         case "1f4a1":
             emoji = "1f914";
