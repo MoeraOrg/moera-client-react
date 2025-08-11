@@ -1,4 +1,5 @@
 import React, { MouseEventHandler, useState } from 'react';
+import { useSelector } from 'react-redux';
 import * as URI from 'uri-js';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,6 +7,8 @@ import { faCircle, faPen } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
+import { ClientState } from "state/state";
+import { getSetting } from "state/settings/selectors";
 import { DeleteButton } from "ui/control";
 import EntryLinkPreviewImage from "ui/entry/EntryLinkPreviewImage";
 import EntryLinkPreviewEditDialog, { EntryLinkPreviewEditValues } from "ui/entry/EntryLinkPreviewEditDialog";
@@ -13,9 +16,6 @@ import { interceptLinkClick } from "ui/entry/link-click-intercept";
 import { ellipsize } from "util/text";
 import { RelNodeName } from "util/rel-node-name";
 import "./EntryLinkPreview.css";
-import { useSelector } from "react-redux";
-import { ClientState } from "state/state";
-import { getSetting } from "state/settings/selectors";
 
 interface Props {
     nodeName: RelNodeName | string;
