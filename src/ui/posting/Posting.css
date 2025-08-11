@@ -1,9 +1,8 @@
 .posting {
     position: relative;
-    border: var(--bs-gray-400) 1px solid;
-    border-radius: .25rem;
+    border-radius: 1rem;
     margin-bottom: 1rem;
-    padding: .5rem;
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
 }
 
 .posting:not(.not-viewed) {
@@ -17,10 +16,8 @@
 
 @media only screen and (max-width: 575px) {
     .posting {
-        border-left-width: 0;
-        border-right-width: 0;
-        border-radius: 0;
-        margin-bottom: .5rem;
+        margin-bottom: .75rem;
+        padding: 1rem 1rem .5rem 1rem;
     }
 }
 
@@ -87,7 +84,15 @@
 }
 
 .posting > .menu {
-    top: .2rem;
+    top: 1.2rem;
+    right: 1.2rem;
+}
+
+@media only screen and (max-width: 575px) {
+    .posting > .menu {
+        top: .5rem;
+        right: .5rem;
+    }
 }
 
 .posting > .menu .menu-button svg {
@@ -98,4 +103,5 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    margin-top: .75rem;
 }

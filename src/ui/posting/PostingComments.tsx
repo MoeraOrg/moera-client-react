@@ -1,8 +1,7 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
+import { Icon, msCommentRegular } from "ui/material-symbols";
 import { useIsTinyScreen } from "ui/hook/media-query";
 import Jump from "ui/navigation/Jump";
 import "./PostingComments.css";
@@ -24,7 +23,8 @@ export default function PostingComments({postingId, totalComments}: Props) {
     return (
         <div className="posting-comments">
             <Jump className="total-comments" href={`/post/${postingId}#comments`}>
-                <FontAwesomeIcon icon={faComment}/>{" "}&nbsp;{commentsText}
+                <Icon icon={msCommentRegular} size="1.2em"/>
+                <span className="caption">{commentsText}</span>
             </Jump>
         </div>
     );

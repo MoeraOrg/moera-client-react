@@ -77,6 +77,7 @@ export default function PostingButtons({posting, story, menu = false}: Props) {
                     />
                     <PostingShareButton postingId={posting.id} postingReceiverName={posting.receiverName}
                                         postingReceiverPostingId={posting.receiverPostingId}/>
+                    <div className="divider"/>
                     <PostingCommentButton postingId={posting.id} invisible={!commentsVisible}/>
                 </>
             }

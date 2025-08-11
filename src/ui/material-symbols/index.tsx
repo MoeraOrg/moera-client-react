@@ -20,6 +20,7 @@ import { ReactComponent as msCloudUpload } from "ui/material-symbols/cloud_uploa
 import { ReactComponent as msCode } from "ui/material-symbols/code.isvg";
 import { ReactComponent as msCodeBlocks } from "ui/material-symbols/code_blocks.isvg";
 import { ReactComponent as msComment } from "ui/material-symbols/comment.isvg";
+import { ReactComponent as msCommentRegular } from "ui/material-symbols/comment-regular.isvg"; // FontAwesome
 import { ReactComponent as msDelete } from "ui/material-symbols/delete.isvg";
 import { ReactComponent as msError } from "ui/material-symbols/error.isvg";
 import { ReactComponent as msExpandCircleDown } from "ui/material-symbols/expand_circle_down.isvg";
@@ -123,6 +124,7 @@ export {
     msCode,
     msCodeBlocks,
     msComment,
+    msCommentRegular,
     msDelete,
     msError,
     msExpandCircleDown,

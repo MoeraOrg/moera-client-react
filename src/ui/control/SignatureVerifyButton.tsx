@@ -22,7 +22,7 @@ export function SignatureVerifyButton({status, onVerify}: Props) {
                     title={t("verify-signature")}
                     onClick={onVerify}
                 >
-                    <Icon icon={msPerson} size="1.2em"/>
+                    <Icon icon={msPerson} size="1.1em"/>
                 </span>
             );
         case "running":
@@ -31,7 +31,7 @@ export function SignatureVerifyButton({status, onVerify}: Props) {
                     className="signature-verify-button signature-verify-running"
                     title={t("signature-verification-in-progress")}
                 >
-                    <Icon icon={msPersonSearch} size="1.2em"/>
+                    <Icon icon={msPersonSearch} size="1.1em"/>
                 </span>
             );
         case "correct":
@@ -40,7 +40,7 @@ export function SignatureVerifyButton({status, onVerify}: Props) {
                     className="signature-verify-button signature-verify-correct"
                     title={t("signature-correct")}
                 >
-                    <Icon icon={msPersonCheck} size="1.2em"/>
+                    <Icon icon={msPersonCheck} size="1.1em"/>
                 </span>
             );
         case "incorrect":
@@ -49,7 +49,7 @@ export function SignatureVerifyButton({status, onVerify}: Props) {
                     className="signature-verify-button signature-verify-incorrect"
                     title={t("signature-incorrect")}
                 >
-                    <Icon icon={msPersonCancel} size="1.2em"/>
+                    <Icon icon={msPersonCancel} size="1.1em"/>
                 </span>
             );
     }

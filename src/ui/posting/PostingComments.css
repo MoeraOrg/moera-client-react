@@ -9,6 +9,14 @@
     padding: .4rem 1rem;
 }
 
-.posting .total-comments:hover {
+.posting .total-comments svg {
+    vertical-align: -.25rem;
+}
+
+.posting .total-comments .caption {
+    margin-inline-start: .5em;
+}
+
+.posting .total-comments:hover .caption {
     text-decoration: underline;
 }

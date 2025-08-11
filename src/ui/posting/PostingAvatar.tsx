@@ -9,7 +9,7 @@ interface Props {
 
 const PostingAvatar = ({posting}: Props) => (
     <AvatarWithPopup ownerName={posting.ownerName} ownerFullName={posting.ownerFullName} avatar={posting.ownerAvatar}
-                     size={48}/>
+                     size={40}/>
 );
 
 export default PostingAvatar;

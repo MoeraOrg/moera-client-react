@@ -1,24 +1,42 @@
 .posting-button, A.posting-button {
-    flex: auto;
     max-width: 225px;
     text-align: center;
     text-decoration: none;
-    color: var(--bs-gray-800);
-    padding: .3rem;
-    margin-right: .3rem;
+    padding: .25rem 2.25rem;
+    color: var(--bs-gray-600);
     cursor: pointer;
-    font-size: 1.3rem;
+    font-size: 1rem;
     background-color: transparent;
     border: none;
+    border-radius: .5rem;
+    transition: background-color, color .15s ease-in;
     user-select: none;
+}
+
+@media only screen and (min-width: 576px) {
+    .posting-button, A.posting-button {
+        padding: .25rem 1rem;
+        margin-left: -.75rem;
+        margin-right: 1.5rem;
+    }
+
+    .posting-button:last-child, A.posting-button:last-child {
+        margin-right: -.75rem;
+    }
 }
 
 .posting-button:hover, A.posting-button:hover {
     background-color: var(--highlight);
+    color: var(--bs-gray-800);
+    transition: background-color, color .15s ease-in;
 }
 
 .entry A.posting-button:hover {
     text-decoration: none;
+}
+
+.posting-button svg {
+    vertical-align: -.25rem;
 }
 
 .posting-button .caption {
@@ -28,6 +46,10 @@
 }
 
 @media only screen and (max-width: 575px) {
+    .posting-button, A.posting-button {
+        font-size: 1.2rem;
+    }
+
     .posting-button .caption {
         display: none;
     }
