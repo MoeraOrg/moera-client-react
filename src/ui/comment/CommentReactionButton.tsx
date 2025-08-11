@@ -1,14 +1,14 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { commentReact, commentReactionDelete } from "state/detailedposting/actions";
 import { getCommentsReceiverPostingId } from "state/detailedposting/selectors";
 import { ReactionButton } from "ui/control";
+import { MaterialSymbol } from "ui/material-symbols";
 import "./CommentButton.css";
 
 interface Props {
-    icon: IconProp;
+    icon: MaterialSymbol;
     caption: string;
     invisible: boolean;
     id: string;

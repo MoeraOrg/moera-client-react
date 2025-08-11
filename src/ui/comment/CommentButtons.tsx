@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { faThumbsDown, faThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ClientReactionInfo, CommentInfo } from "api";
@@ -9,6 +8,7 @@ import { getHomeOwnerName } from "state/home/selectors";
 import { isPermitted, IsPermittedOptions } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getCommentsReceiverFeatures } from "state/detailedposting/selectors";
+import { msThumbDown, msThumbUp } from "ui/material-symbols";
 import CommentReactionButton from "ui/comment/CommentReactionButton";
 import CommentReplyButton from "ui/comment/CommentReplyButton";
 import CommentShareButton from "ui/comment/CommentShareButton";
@@ -44,7 +44,7 @@ export default function CommentButtons({nodeName, postingId, comment}: Props) {
     return (
         <div className="comment-buttons">
             <CommentReactionButton
-                icon={faThumbsUp}
+                icon={msThumbUp}
                 caption={t("support")}
                 invisible={hidePositive}
                 id={comment.id}
@@ -53,7 +53,7 @@ export default function CommentButtons({nodeName, postingId, comment}: Props) {
                 rejected={comment.rejectedReactions?.positive}
             />
             <CommentReactionButton
-                icon={faThumbsDown}
+                icon={msThumbDown}
                 caption={t("oppose")}
                 invisible={hideNegative}
                 id={comment.id}

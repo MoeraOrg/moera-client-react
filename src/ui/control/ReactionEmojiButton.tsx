@@ -1,12 +1,12 @@
 import React, { ForwardedRef, forwardRef, MouseEventHandler } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { REACTION_EMOJIS } from "api";
 import { EmojiButton } from "ui/control";
+import { MaterialSymbol } from "ui/material-symbols";
 
 interface Props {
-    icon?: IconProp;
+    icon?: MaterialSymbol;
     emoji?: number | null;
     negative?: boolean;
     caption?: string;

@@ -1,12 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { faThumbsDown, faThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ClientReactionInfo, PostingInfo } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
+import { msThumbDown, msThumbUp } from "ui/material-symbols";
 import PostingReactionButton from "ui/posting/PostingReactionButton";
 import EntryGalleryShareButton from "ui/entry/EntryGalleryShareButton";
 
@@ -27,7 +27,7 @@ export default function EntryGalleryButtons({posting, mediaId}: Props) {
     return (
         <div className="gallery-buttons">
             <PostingReactionButton
-                icon={faThumbsUp}
+                icon={msThumbUp}
                 caption={t("support")}
                 invisible={hide || (cr.emoji != null && cr.negative)}
                 id={posting.id}
@@ -36,7 +36,7 @@ export default function EntryGalleryButtons({posting, mediaId}: Props) {
                 rejected={posting.rejectedReactions?.positive}
             />
             <PostingReactionButton
-                icon={faThumbsDown}
+                icon={msThumbDown}
                 caption={t("oppose")}
                 invisible={hide || (cr.emoji != null && !cr.negative)}
                 id={posting.id}

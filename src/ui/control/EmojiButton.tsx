@@ -1,12 +1,11 @@
 import React, { ForwardedRef, forwardRef, MouseEventHandler } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import cx from 'classnames';
 
+import { Icon, MaterialSymbol } from "ui/material-symbols";
 import Twemoji from "ui/twemoji/Twemoji";
 
 interface Props {
-    icon?: IconProp | null;
+    icon?: MaterialSymbol | null;
     emoji?: number | null;
     caption?: string;
     color?: string | null;
@@ -21,7 +20,7 @@ const EmojiButton = forwardRef((
 ) => (
     <button className={cx(className, {"invisible": invisible})} style={color ? {color} : undefined} onClick={onClick}
             ref={ref}>
-        {icon && <FontAwesomeIcon icon={icon}/>}
+        {icon && <Icon icon={icon} size="1.2em"/>}
         {emoji && <Twemoji code={emoji}/>}
         <span className="caption">{caption}</span>
     </button>

@@ -1,6 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { createSelector } from 'reselect';
 
 import {
@@ -12,11 +11,12 @@ import {
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { DelayedPopover, EmojiProps, EmojiSelector, ReactionEmojiButton, useDropdownMenu } from "ui/control";
+import { MaterialSymbol } from "ui/material-symbols";
 import { useLightBox } from "ui/lightbox/lightbox-context";
 import EmojiList from "util/emoji-list";
 
 interface Props {
-    icon: IconProp,
+    icon: MaterialSymbol,
     emoji: number | null;
     caption?: string;
     className?: string;

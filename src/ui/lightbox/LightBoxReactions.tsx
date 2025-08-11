@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { faThumbsDown, faThumbsUp } from '@fortawesome/free-regular-svg-icons';
 
 import { ClientReactionInfo } from "api";
 import { ClientState } from "state/state";
@@ -10,6 +9,7 @@ import { getLightBoxMediaPostingId, getLightBoxNodeName } from "state/lightbox/s
 import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ReactionButton } from "ui/control";
+import { msThumbDown, msThumbUp } from "ui/material-symbols";
 import PostingReactions from "ui/posting/PostingReactions";
 import "./LightBoxReactions.css";
 
@@ -40,7 +40,7 @@ export default function LightBoxReactions() {
             <PostingReactions nodeName={nodeName} postingId={posting.id} reactions={posting.reactions}/>
             {!hide &&
                 <ReactionButton
-                    icon={faThumbsUp}
+                    icon={msThumbUp}
                     className="lightbox-reaction-button positive"
                     invisible={cr.emoji != null && cr.negative}
                     negative={false}
@@ -52,7 +52,7 @@ export default function LightBoxReactions() {
             }
             {!hide &&
                 <ReactionButton
-                    icon={faThumbsDown}
+                    icon={msThumbDown}
                     className="lightbox-reaction-button negative"
                     invisible={cr.emoji != null && !cr.negative}
                     negative={true}

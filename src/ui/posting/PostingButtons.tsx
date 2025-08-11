@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { faThumbsDown, faThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
@@ -11,6 +10,7 @@ import { isPermitted, IsPermittedOptions } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getCommentsReceiverFeatures, getCommentsReceiverName } from "state/detailedposting/selectors";
 import { MinimalStoryInfo } from "ui/types";
+import { msThumbDown, msThumbUp } from "ui/material-symbols";
 import PostingReactionButton from "ui/posting/PostingReactionButton";
 import PostingCommentButton from "ui/posting/PostingCommentButton";
 import PostingShareButton from "ui/posting/PostingShareButton";
@@ -58,7 +58,7 @@ export default function PostingButtons({posting, story, menu = false}: Props) {
             {(connectedToHome && posting.receiverDeletedAt == null) &&
                 <>
                     <PostingReactionButton
-                        icon={faThumbsUp}
+                        icon={msThumbUp}
                         caption={t("support")}
                         invisible={hidePositive}
                         id={posting.id}
@@ -67,7 +67,7 @@ export default function PostingButtons({posting, story, menu = false}: Props) {
                         rejected={posting.rejectedReactions?.positive}
                     />
                     <PostingReactionButton
-                        icon={faThumbsDown}
+                        icon={msThumbDown}
                         caption={t("oppose")}
                         invisible={hideNegative}
                         id={posting.id}
@@ -75,9 +75,9 @@ export default function PostingButtons({posting, story, menu = false}: Props) {
                         emoji={cr.negative ? cr.emoji : null}
                         rejected={posting.rejectedReactions?.negative}
                     />
-                    <PostingCommentButton postingId={posting.id} invisible={!commentsVisible}/>
                     <PostingShareButton postingId={posting.id} postingReceiverName={posting.receiverName}
                                         postingReceiverPostingId={posting.receiverPostingId}/>
+                    <PostingCommentButton postingId={posting.id} invisible={!commentsVisible}/>
                 </>
             }
             {menu && <PostingMenu posting={posting} story={story} detailed/>}

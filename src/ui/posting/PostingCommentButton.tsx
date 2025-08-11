@@ -1,8 +1,7 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
 
+import { Icon, msComment } from "ui/material-symbols";
 import { uiEventCommentQuote } from "ui/ui-events";
 import Jump from "ui/navigation/Jump";
 import { getWindowSelectionHtml } from "util/ui";
@@ -26,7 +25,7 @@ export default function PostingCommentButton({postingId, invisible}: Props) {
             <span className="posting-button"/>
         :
             <Jump className="posting-button" href={`/post/${postingId}#comment-add`} onNear={onJump}>
-                <FontAwesomeIcon icon={faComment}/>
+                <Icon icon={msComment} size="1.2em"/>
                 <span className="caption">{t("comment-button")}</span>
             </Jump>
     );

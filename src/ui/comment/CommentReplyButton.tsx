@@ -1,10 +1,9 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faReply } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { commentReply } from "state/detailedposting/actions";
+import { Icon, msReplySolid } from "ui/material-symbols";
 
 interface Props {
     id: string;
@@ -21,7 +20,7 @@ export default function CommentReplyButton({id, ownerName, ownerFullName, headin
 
     return (
         <button className="comment-button" onClick={onClick}>
-            <FontAwesomeIcon icon={faReply}/>
+            <Icon icon={msReplySolid} size="1.2em"/>
             <span className="caption">{t("reply")}</span>
         </button>
     );

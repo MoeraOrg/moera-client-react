@@ -1,10 +1,9 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { shareDialogPrepare } from "state/sharedialog/actions";
+import { Icon, msShare } from "ui/material-symbols";
 import { urlWithParameters, ut } from "util/url";
 import { REL_CURRENT } from "util/rel-node-name";
 
@@ -31,7 +30,7 @@ export default function EntryGalleryShareButton({
 
     return (
         <button className="posting-button" onClick={onClick}>
-            <FontAwesomeIcon icon={faShareAlt}/>
+            <Icon icon={msShare} size="1.2em"/>
             <span className="caption">{t("share")}</span>
         </button>
     );

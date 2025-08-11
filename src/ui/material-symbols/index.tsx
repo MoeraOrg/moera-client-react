@@ -81,6 +81,7 @@ import { ReactComponent as msSearch } from "ui/material-symbols/search.isvg";
 import { ReactComponent as msSend } from "ui/material-symbols/send.isvg";
 import { ReactComponent as msSentimentSatisfied } from "ui/material-symbols/sentiment_satisfied.isvg";
 import { ReactComponent as msSchedule } from "ui/material-symbols/schedule.isvg";
+import { ReactComponent as msShare } from "ui/material-symbols/share.isvg";
 import { ReactComponent as msShieldPerson } from "ui/material-symbols/shield_person.isvg";
 import { ReactComponent as msSort } from "ui/material-symbols/sort.isvg";
 import { ReactComponent as msSortByAlpha } from "ui/material-symbols/sort_by_alpha.isvg";
@@ -88,6 +89,8 @@ import { ReactComponent as msStarFilled16 } from "ui/material-symbols/star_fille
 import { ReactComponent as msStrikethroughS } from "ui/material-symbols/strikethrough_s.isvg";
 import { ReactComponent as msSubscript } from "ui/material-symbols/subscript.isvg";
 import { ReactComponent as msSuperscript } from "ui/material-symbols/superscript.isvg";
+import { ReactComponent as msThumbDown } from "ui/material-symbols/thumb_down.isvg";
+import { ReactComponent as msThumbUp } from "ui/material-symbols/thumb_up.isvg";
 import { ReactComponent as msThumbsDownSolid } from "ui/material-symbols/thumbs-down-solid.isvg"; // FontAwesome
 import { ReactComponent as msThumbsUpSolid } from "ui/material-symbols/thumbs-up-solid.isvg"; // FontAwesome
 import { ReactComponent as msTitle } from "ui/material-symbols/title.isvg";
@@ -180,6 +183,7 @@ export {
     msSearch,
     msSend,
     msSentimentSatisfied,
+    msShare,
     msSchedule,
     msShieldPerson,
     msSort,
@@ -188,6 +192,8 @@ export {
     msStrikethroughS,
     msSubscript,
     msSuperscript,
+    msThumbDown,
+    msThumbUp,
     msThumbsDownSolid,
     msThumbsUpSolid,
     msTitle,
