@@ -26,6 +26,7 @@
 
 .nav.nav-tabs .nav-item, .nav.nav-pills .nav-item {
     text-wrap: nowrap;
+    user-select: none;
 }
 
 .nav.nav-tabs.scroll, .nav.nav-pills.scroll {
