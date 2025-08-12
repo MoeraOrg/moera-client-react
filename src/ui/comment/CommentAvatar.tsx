@@ -11,7 +11,7 @@ interface Props {
 }
 
 const CommentAvatar = ({ownerName, ownerFullName, avatar, nodeName}: Props) => (
-    <AvatarWithPopup ownerName={ownerName} ownerFullName={ownerFullName} avatar={avatar} nodeName={nodeName} size={36}/>
+    <AvatarWithPopup ownerName={ownerName} ownerFullName={ownerFullName} avatar={avatar} nodeName={nodeName} size={32}/>
 );
 
 export default CommentAvatar;

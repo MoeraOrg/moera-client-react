@@ -1,19 +1,21 @@
 .comment-button, A.comment-button {
     text-decoration: none;
-    color: var(--comment-button);
+    color: var(--bs-gray-600);
     cursor: pointer;
     background-color: transparent;
     border: none;
-    font-size: .8rem;
+    border-radius: .5em;
+    font-size: .75rem;
+}
+
+.comment-button:hover, A.comment-button:hover {
+    color: var(--bs-gray-800);
+    background-color: var(--highlight);
 }
 
 @media only screen and (min-width: 576px) {
     .comment-button, A.comment-button {
         margin-right: .3rem;
-    }
-
-    .comment-button:hover, A.comment-button:hover {
-        text-decoration: underline;
     }
 
     .comment-button .caption, A.comment-button .caption {
@@ -24,10 +26,6 @@
 @media only screen and (max-width: 575px) {
     .comment-button, A.comment-button {
         padding: 0 1rem;
-    }
-
-    .comment-button:hover, A.comment-button:hover {
-        background-color: var(--highlight-blue);
     }
 
     .comment-button .caption, A.comment-button .caption {

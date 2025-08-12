@@ -36,8 +36,7 @@
 .reactions .senior-positive, .reactions .senior-negative {
     border-radius: 1em;
     font-size: 1.3em;
-    box-shadow: 2px 2px 3px rgba(0, 0, 0, .12);
-    padding: .45em .5em .5em .5em;
+    padding: .35em .4em .4em .4em;
 }
 
 .reactions .senior-positive:hover, .reactions .senior-negative:hover {
@@ -47,11 +46,9 @@
 .reactions .senior-positive {
     color: var(--correct);
     background-color: var(--reactions-positive);
-    border: solid 1px var(--reactions-positive-border);
 }
 
 .reactions .senior-negative {
     color: var(--incorrect);
     background-color: var(--reactions-negative);
-    border: solid 1px var(--reactions-negative-border);
 }

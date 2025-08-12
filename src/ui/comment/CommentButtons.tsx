@@ -12,7 +12,6 @@ import { msThumbDown, msThumbUp } from "ui/material-symbols";
 import CommentReactionButton from "ui/comment/CommentReactionButton";
 import CommentReplyButton from "ui/comment/CommentReplyButton";
 import CommentShareButton from "ui/comment/CommentShareButton";
-import "./CommentButtons.css";
 
 interface Props {
     nodeName: string;

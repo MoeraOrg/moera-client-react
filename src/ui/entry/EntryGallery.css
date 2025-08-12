@@ -7,6 +7,10 @@
     width: 100%;
 }
 
+.comment .gallery {
+    margin-bottom: .25rem;
+}
+
 @media only screen and (min-width: 576px) {
     .comment .gallery {
         width: calc(min(var(--feed-width), 100vw) * 0.5);

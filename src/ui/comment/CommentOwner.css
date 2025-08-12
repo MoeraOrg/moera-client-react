@@ -1,18 +1,24 @@
 .comment .owner-line {
     margin-bottom: 0;
-    padding-right: 1.7rem;
+    width: calc(100% - 3.5rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .comment .owner {
     font-weight: bold;
-    margin-left: .3em;
-    margin-right: .5em;
+    margin: 0 .5em;
 }
 
 .comment .owner > A {
-    color: var(--node-name);
+    color: var(--bs-gray-900);
 }
 
 .comment.topic-starter .owner > A {
-    color: var(--node-name-ts);
+    color: var(--primary-800);
+}
+
+.comment .owner-line .owner .signature-verify-button {
+    vertical-align: .12em;
 }

@@ -61,35 +61,37 @@ export default function Comment({comment, previousId, focused}: Props) {
             :
                 <>
                     <CommentMenu comment={comment} nodeName={realOwnerName} postingId={postingId}/>
-                    <CommentAvatar ownerName={comment.ownerName} ownerFullName={comment.ownerFullName}
-                                   avatar={comment.ownerAvatar} nodeName={realOwnerName}/>
-                    <div className="details">
-                        <div className="owner-line">
+                    <div className="owner-line">
+                        <span>
+                            <CommentAvatar ownerName={comment.ownerName} ownerFullName={comment.ownerFullName}
+                                           avatar={comment.ownerAvatar} nodeName={realOwnerName}/>
                             <CommentOwner comment={comment} nodeName={realOwnerName}/>
                             {comment.invisible && <CommentInvisible/>}
                             {isSheriff &&
                                 <CommentSheriffVisibility comment={comment}/>
                             }
+                        </span>
+                        <span>
+                            <CommentVisibility comment={comment}/>
                             <CommentDate nodeName={realOwnerName} postingId={realPostingId} commentId={comment.id}
                                          createdAt={comment.createdAt}/>
                             {comment.totalRevisions > 1 &&
                                 <CommentUpdated createdAt={comment.createdAt} editedAt={comment.editedAt}/>
                             }
-                            <CommentVisibility comment={comment}/>
-                        </div>
-                        <CommentContent comment={comment} previousId={previousId} receiverName={realOwnerName}/>
-                        <EntryGallery postingId={realPostingId} commentId={comment.id} nodeName={realOwnerName}
-                                      media={comment.media ?? null}/>
-                        <EntryLinkPreviews nodeName={realOwnerName} linkPreviews={comment.body.linkPreviews} limit={2}
-                                           media={comment.media ?? null} small/>
-                        <div className="reactions-line">
-                            {comment.signature == null && <div className="unsigned">{t("unsigned")}</div>}
-                            {connectedToHome && comment.signature != null &&
-                                <CommentButtons nodeName={realOwnerName} postingId={realPostingId} comment={comment}/>
-                            }
-                            <CommentReactions commentId={comment.id} reactions={comment.reactions ?? null}
-                                              seniorReaction={comment.seniorReaction ?? null}/>
-                        </div>
+                        </span>
+                    </div>
+                    <CommentContent comment={comment} previousId={previousId} receiverName={realOwnerName}/>
+                    <EntryGallery postingId={realPostingId} commentId={comment.id} nodeName={realOwnerName}
+                                  media={comment.media ?? null}/>
+                    <EntryLinkPreviews nodeName={realOwnerName} linkPreviews={comment.body.linkPreviews} limit={2}
+                                       media={comment.media ?? null} small/>
+                    <div className="reactions-line">
+                        {comment.signature == null && <div className="unsigned">{t("unsigned")}</div>}
+                        {connectedToHome && comment.signature != null &&
+                            <CommentButtons nodeName={realOwnerName} postingId={realPostingId} comment={comment}/>
+                        }
+                        <CommentReactions commentId={comment.id} reactions={comment.reactions ?? null}
+                                          seniorReaction={comment.seniorReaction ?? null}/>
                     </div>
                 </>
             }

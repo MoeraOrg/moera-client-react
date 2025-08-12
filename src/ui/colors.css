@@ -42,7 +42,6 @@
     --incorrect: var(--bs-red);
     --correct-light: var(--green-light);
     --node-name: #385898;
-    --node-name-ts: #389858;
 
     --status-icon: rgba(255, 255, 255, .5);
     --status-icon-highlight: rgba(255, 255, 255, .75);
@@ -50,8 +49,6 @@
 
     --reactions-positive: #e9fce5;
     --reactions-negative: #feeff0;
-    --reactions-positive-border: #cddfc9;
-    --reactions-negative-border: #e1d3d4;
     --comments: #f8faff;
     --comment-button: #385898;
 }
