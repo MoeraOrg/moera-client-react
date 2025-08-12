@@ -74,6 +74,7 @@ import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_libr
 import { ReactComponent as msPreview } from "ui/material-symbols/preview.isvg";
 import { ReactComponent as msPublic } from "ui/material-symbols/public.isvg";
 import { ReactComponent as msRedo } from "ui/material-symbols/redo.isvg";
+import { ReactComponent as msRepeat } from "ui/material-symbols/repeat.isvg";
 import { ReactComponent as msReplySolid } from "ui/material-symbols/reply-solid.isvg"; // FontAwesome
 import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
 import { ReactComponent as msRestartAlt16 } from "ui/material-symbols/restart_alt16.isvg";
@@ -178,6 +179,7 @@ export {
     msPreview,
     msPublic,
     msRedo,
+    msRepeat,
     msReplySolid,
     msReport,
     msRestartAlt16,

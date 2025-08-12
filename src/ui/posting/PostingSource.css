@@ -1,8 +1,10 @@
 A.posting-source {
-    color: var(--bs-info);
+    color: var(--bs-gray-500);
     margin-right: .3em;
+    position: relative;
+    top: -.1em;
 }
 
 A.posting-source:hover {
-    text-decoration: underline;
+    color: var(--bs-gray-800);
 }

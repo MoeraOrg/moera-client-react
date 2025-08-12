@@ -1,7 +1,5 @@
 .posting-sources .title {
-    font-size: smaller;
-    font-weight: bold;
-    border-bottom: solid 1px var(--bs-gray-800);
+    font-weight: 600;
     color: var(--bs-gray-800);
     margin-bottom: .3em;
 }
