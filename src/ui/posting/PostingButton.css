@@ -23,6 +23,10 @@
     .posting-button:last-child, A.posting-button:last-child {
         margin-right: -.75rem;
     }
+
+    .posting-button.invisible, A.posting-button.invisible {
+        display: none;
+    }
 }
 
 .posting-button:hover, A.posting-button:hover {
