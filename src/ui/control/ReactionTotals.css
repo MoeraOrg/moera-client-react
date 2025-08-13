@@ -29,7 +29,6 @@
 }
 
 .reactions .positive:hover, .reactions .negative:hover {
-    text-decoration: underline;
     cursor: pointer;
 }
 
