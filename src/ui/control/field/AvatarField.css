@@ -9,21 +9,6 @@
     cursor: default;
 }
 
-.avatar-field .icon {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: rgba(255, 255, 255, .8);
-    border: 1px solid rgba(0, 0, 0, .1);
-    border-radius: .25rem;
-    padding: .1rem .25rem 0 .25rem;
-    font-size: .6rem;
-}
-
-.avatar-field.disabled .icon {
-    display: none;
-}
-
 .avatar-field .selector {
     margin: .15rem;
     display: flex;
