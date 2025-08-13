@@ -14,10 +14,10 @@
 }
 
 #comment-compose .content {
-    margin-left: .5rem;
+    margin-left: .75rem;
     margin-bottom: .5rem;
     flex: 1 1 0;
-    max-width: calc(100% - 36px - 1rem);
+    max-width: calc(100% - 32px - 1.25rem);
 }
 
 #comment-compose .content .form-group {

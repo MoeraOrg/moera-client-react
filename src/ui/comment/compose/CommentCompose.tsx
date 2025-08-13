@@ -63,7 +63,7 @@ function CommentCompose(props: Props) {
     return (
         <div id="comment-compose" onFocus={onFocus} onBlur={onBlur}>
             <Form>
-                <AvatarField name="avatar" size={36} disabled={!ready || beingPosted}/>
+                <AvatarField name="avatar" size={32} disabled={!ready || beingPosted}/>
                 <div className="content">
                     <CommentComposeRepliedTo disabled={!ready || beingPosted}/>
                     <RichTextField
