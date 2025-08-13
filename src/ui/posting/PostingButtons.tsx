@@ -54,7 +54,7 @@ export default function PostingButtons({posting, story, menu = false}: Props) {
     const hidePositive = hideAll || (cr.emoji != null && cr.negative);
     const hideNegative = hideAll || !reactionsNegativeEnabled || (cr.emoji != null && !cr.negative);
     return (
-        <div className={cx("posting-buttons", {"with-menu": menu})}>
+        <div className="posting-buttons">
             {(connectedToHome && posting.receiverDeletedAt == null) &&
                 <>
                     <PostingReactionButton

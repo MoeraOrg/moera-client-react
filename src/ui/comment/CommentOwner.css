@@ -1,6 +1,6 @@
 .comment .owner-line {
     margin-bottom: 0;
-    width: calc(100% - 3.5rem);
+    width: calc(100% - 2.85rem);
     display: flex;
     justify-content: space-between;
     align-items: center;
