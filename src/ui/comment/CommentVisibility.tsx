@@ -24,8 +24,8 @@ export default function CommentVisibility({comment}: Props) {
     if (seniorView !== "unset" && (isSenior || seniorView !== "public")) {
         return (
             <span className="visibility">
-                &middot;
                 <Principal value={view} className="senior" comment={t("set-by-post-owner")}/>
+                &middot;
             </span>
         );
     }

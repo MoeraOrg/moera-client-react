@@ -17,7 +17,8 @@ interface StoryDateTextProps {
 function StoryDateText({date}: StoryDateTextProps) {
     const timeRelative = useSelector((state: ClientState) => getSetting(state, "posting.time.relative") as boolean);
     useSelector((state: ClientState) =>
-        getSetting(state, "posting.time.relative") ? state.pulse.pulse : null); // To force re-rendering only
+        getSetting(state, "posting.time.relative") ? state.pulse.pulse : null
+    ); // To force re-rendering only
     const {t} = useTranslation();
 
     return (

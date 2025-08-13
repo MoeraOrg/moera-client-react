@@ -17,7 +17,8 @@
 
 @media only screen and (min-width: 576px) {
     .comment-button, A.comment-button {
-        margin-right: .3rem;
+        margin-left: -.25rem;
+        margin-right: .55rem;
     }
 
     .comment-button.invisible, A.comment-button.invisible {

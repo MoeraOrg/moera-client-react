@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import cx from 'classnames';
 
 import { ClientReactionInfo, PostingInfo } from "api";
 import { ClientState } from "state/state";
