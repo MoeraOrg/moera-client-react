@@ -13,6 +13,8 @@
 .replied-to .icon {
     color: var(--bs-gray-500);
     margin-right: .7em;
+    position: relative;
+    top: -.25em;
 }
 
 .replied-to .node-name {
@@ -48,7 +50,6 @@
 }
 
 .glance-comment-popover {
-    width: max-content;
     max-height: 33vh;
     overflow: auto;
     overscroll-behavior: none;
@@ -56,12 +57,25 @@
 
 @media only screen and (min-width: 992px) {
     .glance-comment-popover {
-        max-width: calc(var(--feed-width) - 2rem);
+        width: calc(var(--feed-width) - 2rem);
     }
 }
 
 @media only screen and (max-width: 991px) {
     .glance-comment-popover {
-        max-width: calc(100vw - 4rem);
+        width: calc(100vw - 4rem);
     }
+}
+
+.glance-comment-popover .comment {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.glance-comment-popover .comment .owner-line {
+    width: 100%;
+}
+
+.glance-comment-popover .comment .owner {
+    margin-left: 0;
 }

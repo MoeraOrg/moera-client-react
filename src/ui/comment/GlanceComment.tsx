@@ -26,26 +26,26 @@ export default function GlanceComment() {
 
     return (
         <div className={cx("comment", "entry", {"single-emoji": comment.singleEmoji})}>
-            <div className="details">
-                <div className="owner-line">
-                    <CommentOwner comment={comment} popup={false}/>
+            <div className="owner-line">
+                <CommentOwner comment={comment} popup={false}/>
+                <span>
                     <CommentDate postingId={postingId} commentId={comment.id} createdAt={comment.createdAt}/>
                     {comment.totalRevisions > 1 &&
                         <CommentUpdated createdAt={comment.createdAt} editedAt={comment.editedAt}/>
                     }
-                </div>
-                <div className="content">
-                    <EntryHtml postingId={comment.postingId} commentId={comment.id} html={comment.body.text}
-                               nodeName={receiverName ?? REL_CURRENT} media={comment.media}/>
-                </div>
-                <EntryGallery postingId={comment.postingId} commentId={comment.id}
-                              nodeName={receiverName ?? REL_CURRENT} media={comment.media ?? null}/>
-                <EntryLinkPreviews nodeName={receiverName ?? REL_CURRENT} linkPreviews={comment.body.linkPreviews}
-                                   media={comment.media ?? null}/>
-                <div className="reactions-line">
-                    <div className="comment-buttons"/>
-                    <div className="reactions"/>
-                </div>
+                </span>
+            </div>
+            <div className="content">
+                <EntryHtml postingId={comment.postingId} commentId={comment.id} html={comment.body.text}
+                           nodeName={receiverName ?? REL_CURRENT} media={comment.media}/>
+            </div>
+            <EntryGallery postingId={comment.postingId} commentId={comment.id}
+                          nodeName={receiverName ?? REL_CURRENT} media={comment.media ?? null}/>
+            <EntryLinkPreviews nodeName={receiverName ?? REL_CURRENT} linkPreviews={comment.body.linkPreviews}
+                               media={comment.media ?? null}/>
+            <div className="reactions-line">
+                <div className="comment-buttons"/>
+                <div className="reactions"/>
             </div>
         </div>
     );

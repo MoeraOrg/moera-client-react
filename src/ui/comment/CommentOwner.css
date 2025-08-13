@@ -15,7 +15,7 @@
     color: var(--bs-gray-900);
 }
 
-.comment.topic-starter .owner > A {
+.comment.topic-starter > .owner-line .owner > A {
     color: var(--primary-800);
 }
 

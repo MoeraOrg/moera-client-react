@@ -1,7 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faReply } from '@fortawesome/free-solid-svg-icons';
 
 import { ClientState } from "state/state";
 import { glanceComment } from "state/detailedposting/actions";
@@ -11,6 +9,7 @@ import * as Browser from "ui/browser";
 import NodeName from "ui/nodename/NodeName";
 import Jump from "ui/navigation/Jump";
 import { DelayedPopover } from "ui/control";
+import { Icon, msReplySolid } from "ui/material-symbols";
 import GlanceComment from "ui/comment/GlanceComment";
 import "./RepliedTo.css";
 
@@ -49,12 +48,14 @@ export default function RepliedTo({
     return (
         <div className="replied-to">
             {unset && <button className="unset" disabled={disabled} onClick={onUnsetClick}>&times;</button>}
+            <Jump href={`/post/${postingId}?comment=${commentId}`}>
+                <span className="icon"><Icon icon={msReplySolid} size="1.2em"/></span>
+                <NodeName name={ownerName} fullName={ownerFullName} linked={false}/>
+            </Jump>
             <DelayedPopover placement="top" className="glance-comment-popover" onPreparePopper={onPreparePopper}
                             disabled={!popperEnabled} element={
                 ref =>
                     <Jump href={`/post/${postingId}?comment=${commentId}`} ref={ref}>
-                        <span className="icon"><FontAwesomeIcon icon={faReply}/></span>
-                        <NodeName name={ownerName} fullName={ownerFullName} linked={false}/>
                         <span className="heading" dangerouslySetInnerHTML={{__html: headingHtml}}/>
                     </Jump>
             }>
