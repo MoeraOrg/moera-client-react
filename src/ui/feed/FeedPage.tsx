@@ -43,7 +43,8 @@ export default function FeedPage({nodeName, feedName, visible, title, shareable}
     const totalPinned = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).status.totalPinned);
     const notViewed = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).status.notViewed);
     const notViewedMoment = useSelector((state: ClientState) =>
-        getFeedState(state, nodeName, feedName).status.notViewedMoment);
+        getFeedState(state, nodeName, feedName).status.notViewedMoment
+    );
     const anchor = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).anchor);
     const atHomeNode = useSelector(isAtHomeNode);
     const dispatch = useDispatch();
@@ -150,14 +151,26 @@ export default function FeedPage({nodeName, feedName, visible, title, shareable}
         return total > 0 ? total : 0;
     }, [stories, topmostMoment, totalInFuture, totalPinned]);
 
+    const momentAbove = useMemo(() => getMomentAbove(topmostMoment), [topmostMoment]);
+
     if (stories.length === 0 && !loadingFuture && !loadingPast
         && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER) {
 
         return (
             <>
                 <FeedTitle/>
-                <FeedPageHeader nodeName={nodeName} feedName={feedName} title={title} empty atTop={true} atBottom={true}
-                                totalAfterTop={0} notViewed={0} notViewedMoment={null}/>
+                <FeedPageHeader
+                    nodeName={nodeName}
+                    feedName={feedName}
+                    title={title}
+                    empty
+                    atTop={true}
+                    atBottom={true}
+                    totalAfterTop={0}
+                    notViewed={0}
+                    notViewedMoment={null}
+                    momentAbove={null}
+                />
                 <div className="no-postings">{t("nothing-yet")}</div>
             </>
         );
@@ -166,23 +179,49 @@ export default function FeedPage({nodeName, feedName, visible, title, shareable}
     return (
         <>
             <FeedTitle/>
-            <FeedPageHeader nodeName={nodeName} feedName={feedName} title={title} shareable={shareable}
-                            atTop={atTop && before >= Number.MAX_SAFE_INTEGER}
-                            atBottom={atBottom && after <= Number.MIN_SAFE_INTEGER}
-                            totalAfterTop={totalAfterTop}
-                            notViewed={notViewed ?? 0} notViewedMoment={notViewedMoment ?? null}/>
+            <FeedPageHeader
+                nodeName={nodeName}
+                feedName={feedName}
+                title={title}
+                shareable={shareable}
+                atTop={atTop && before >= Number.MAX_SAFE_INTEGER}
+                atBottom={atBottom && after <= Number.MIN_SAFE_INTEGER}
+                totalAfterTop={totalAfterTop}
+                notViewed={notViewed ?? 0}
+                notViewedMoment={notViewedMoment ?? null}
+                momentAbove={momentAbove}
+            />
             <Page>
                 <div className="central-pane">
-                    <FeedSentinel loading={loadingFuture} title={t("load-newer-posts")} margin="50% 0px 0px 0px"
-                                  visible={before < Number.MAX_SAFE_INTEGER} onSentinel={onSentinelFuture}
-                                  onBoundary={onBoundaryFuture} onClick={loadFuture}/>
+                    <FeedSentinel
+                        loading={loadingFuture}
+                        title={t("load-newer-posts")}
+                        margin="50% 0px 0px 0px"
+                        visible={before < Number.MAX_SAFE_INTEGER}
+                        onSentinel={onSentinelFuture}
+                        onBoundary={onBoundaryFuture}
+                        onClick={loadFuture}
+                    />
                     {stories.map(({story, posting, deleting}) =>
-                        <FeedStory key={story.moment} nodeName={nodeName} posting={posting} feedName={feedName}
-                                   story={story} deleting={deleting}/>
+                        <FeedStory
+                            key={story.moment}
+                            nodeName={nodeName}
+                            posting={posting}
+                            feedName={feedName}
+                            story={story}
+                            deleting={deleting}
+                        />
                     )}
-                    <FeedSentinel bottom loading={loadingPast} title={t("load-older-posts")} margin="0px 0px 50% 0px"
-                                  visible={after > Number.MIN_SAFE_INTEGER} onSentinel={onSentinelPast}
-                                  onBoundary={onBoundaryPast} onClick={loadPast}/>
+                    <FeedSentinel
+                        bottom
+                        loading={loadingPast}
+                        title={t("load-older-posts")}
+                        margin="0px 0px 50% 0px"
+                        visible={after > Number.MIN_SAFE_INTEGER}
+                        onSentinel={onSentinelPast}
+                        onBoundary={onBoundaryPast}
+                        onClick={loadPast}
+                    />
                     {after <= Number.MIN_SAFE_INTEGER &&
                         <div className="feed-end">&mdash; {t("reached-bottom")} &mdash;</div>
                     }
@@ -235,6 +274,23 @@ function getTopmostMoment(): number {
         }
     }
     return Number.MAX_SAFE_INTEGER;
+}
+
+function getMomentAbove(moment: number): number | null {
+    const postings = document.getElementsByClassName("posting");
+    let momentAbove = null;
+    for (let i = 0; i < postings.length; i++) {
+        const posting = postings.item(i) as HTMLElement;
+        if (posting == null) {
+            continue;
+        }
+        const thisMoment = postingMoment(posting);
+        if (thisMoment === moment) {
+            break;
+        }
+        momentAbove = thisMoment;
+    }
+    return momentAbove;
 }
 
 function getPostingAt(moment: number): HTMLElement | null {

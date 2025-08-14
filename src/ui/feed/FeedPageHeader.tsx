@@ -25,11 +25,12 @@ interface Props {
     totalAfterTop: number;
     notViewed: number;
     notViewedMoment: number | null;
+    momentAbove: number | null;
 }
 
 export default function FeedPageHeader({
     nodeName, feedName, title, empty = false, shareable = false, atTop, atBottom, totalAfterTop, notViewed,
-    notViewedMoment
+    notViewedMoment, momentAbove
 }: Props) {
     const avatar = useSelector(getOwnerAvatar);
     const ownerName = useSelector(getOwnerName);
@@ -65,8 +66,15 @@ export default function FeedPageHeader({
                 {!empty && <FeedGotoButton nodeName={nodeName} feedName={feedName} atBottom={atBottom}/>}
             </div>
             <FeedTopBox>
-                <FeedTopButton nodeName={nodeName} feedName={feedName} atTop={atTop} totalAfterTop={totalAfterTop}
-                               notViewed={notViewed} notViewedMoment={notViewedMoment}/>
+                <FeedTopButton
+                    nodeName={nodeName}
+                    feedName={feedName}
+                    atTop={atTop}
+                    totalAfterTop={totalAfterTop}
+                    notViewed={notViewed}
+                    notViewedMoment={notViewedMoment}
+                    momentAbove={momentAbove}
+                />
                 <FeedSkipPinnedButton nodeName={nodeName} feedName={feedName}/>
             </FeedTopBox>
         </PageHeader>

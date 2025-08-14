@@ -13,9 +13,12 @@ interface Props {
     totalAfterTop: number;
     notViewed: number;
     notViewedMoment: number | null;
+    momentAbove: number | null;
 }
 
-export default function FeedTopButton({nodeName, feedName, atTop, totalAfterTop, notViewed, notViewedMoment}: Props) {
+export default function FeedTopButton({
+    nodeName, feedName, atTop, totalAfterTop, notViewed, notViewedMoment, momentAbove
+}: Props) {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -40,9 +43,12 @@ export default function FeedTopButton({nodeName, feedName, atTop, totalAfterTop,
     }
 
     const onClick = (event: React.MouseEvent) => {
-        const moment = notViewedMoment != null && notViewed < totalAfterTop
-            ? notViewedMoment
-            : Number.MAX_SAFE_INTEGER;
+        const moment =
+            notViewedMoment != null
+            && notViewed < totalAfterTop
+            && (momentAbove == null || momentAbove !== notViewedMoment)
+                ? notViewedMoment
+                : Number.MAX_SAFE_INTEGER;
         dispatch(feedScrollToAnchor(nodeName, feedName, moment));
         event.preventDefault();
     };
