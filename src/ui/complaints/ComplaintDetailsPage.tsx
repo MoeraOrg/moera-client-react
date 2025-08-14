@@ -51,7 +51,7 @@ export default function ComplaintsListPage() {
                 </h2>
             </PageHeader>
             <Page>
-                <div className="complaint content-panel">
+                <div className="central-pane complaint content-panel">
                     {loadingGroup && <Loading/>}
                     {complaintGroup != null &&
                         <>

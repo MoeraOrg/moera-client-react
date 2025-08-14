@@ -64,27 +64,29 @@ export default function SearchPage() {
                 </FeedTopBox>
             </PageHeader>
             <Page className="search-page">
-                <SearchTabs/>
-                {hasContent ?
-                    <>
-                        {tab === "people" ?
-                            <div className="content-panel nodes">
-                                {nodes.map((node, index) =>
-                                    <SearchNode node={node} key={index}/>
-                                )}
-                            </div>
-                        :
-                            entries.map(entry =>
-                                <SearchEntry entry={entry} key={entry.moment}/>
-                            )
-                        }
-                        {moreResults && <SearchShowMore loading={loading}/>}
-                    </>
-                :
-                    <div className="content-panel text-center">
-                        {loading ? <Loading/> : <NothingFound/>}
-                    </div>
-                }
+                <div className="central-pane">
+                    <SearchTabs/>
+                    {hasContent ?
+                        <>
+                            {tab === "people" ?
+                                <div className="content-panel nodes">
+                                    {nodes.map((node, index) =>
+                                        <SearchNode node={node} key={index}/>
+                                    )}
+                                </div>
+                            :
+                                entries.map(entry =>
+                                    <SearchEntry entry={entry} key={entry.moment}/>
+                                )
+                            }
+                            {moreResults && <SearchShowMore loading={loading}/>}
+                        </>
+                    :
+                        <div className="content-panel text-center">
+                            {loading ? <Loading/> : <NothingFound/>}
+                        </div>
+                    }
+                </div>
                 {showFilters && <SearchFilterDialog/>}
             </Page>
         </>

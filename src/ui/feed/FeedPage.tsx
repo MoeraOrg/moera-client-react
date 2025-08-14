@@ -172,19 +172,21 @@ export default function FeedPage({nodeName, feedName, visible, title, shareable}
                             totalAfterTop={totalAfterTop}
                             notViewed={notViewed ?? 0} notViewedMoment={notViewedMoment ?? null}/>
             <Page>
-                <FeedSentinel loading={loadingFuture} title={t("load-newer-posts")} margin="50% 0px 0px 0px"
-                              visible={before < Number.MAX_SAFE_INTEGER} onSentinel={onSentinelFuture}
-                              onBoundary={onBoundaryFuture} onClick={loadFuture}/>
-                {stories.map(({story, posting, deleting}) =>
-                    <FeedStory key={story.moment} nodeName={nodeName} posting={posting} feedName={feedName}
-                               story={story} deleting={deleting}/>
-                )}
-                <FeedSentinel bottom loading={loadingPast} title={t("load-older-posts")} margin="0px 0px 50% 0px"
-                              visible={after > Number.MIN_SAFE_INTEGER} onSentinel={onSentinelPast}
-                              onBoundary={onBoundaryPast} onClick={loadPast}/>
-                {after <= Number.MIN_SAFE_INTEGER &&
-                    <div className="feed-end">&mdash; {t("reached-bottom")} &mdash;</div>
-                }
+                <div className="central-pane">
+                    <FeedSentinel loading={loadingFuture} title={t("load-newer-posts")} margin="50% 0px 0px 0px"
+                                  visible={before < Number.MAX_SAFE_INTEGER} onSentinel={onSentinelFuture}
+                                  onBoundary={onBoundaryFuture} onClick={loadFuture}/>
+                    {stories.map(({story, posting, deleting}) =>
+                        <FeedStory key={story.moment} nodeName={nodeName} posting={posting} feedName={feedName}
+                                   story={story} deleting={deleting}/>
+                    )}
+                    <FeedSentinel bottom loading={loadingPast} title={t("load-older-posts")} margin="0px 0px 50% 0px"
+                                  visible={after > Number.MIN_SAFE_INTEGER} onSentinel={onSentinelPast}
+                                  onBoundary={onBoundaryPast} onClick={loadPast}/>
+                    {after <= Number.MIN_SAFE_INTEGER &&
+                        <div className="feed-end">&mdash; {t("reached-bottom")} &mdash;</div>
+                    }
+                </div>
             </Page>
         </>
     );

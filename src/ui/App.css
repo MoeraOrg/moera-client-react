@@ -86,19 +86,6 @@ BLOCKQUOTE BLOCKQUOTE:last-child, BLOCKQUOTE P:last-child {
     min-width: 1.3em;
 }
 
-.container {
-    max-width: var(--feed-width);
-    padding-left: .25rem;
-    padding-right: .25rem;
-}
-
-@media only screen and (max-width: 575px) {
-    .container {
-        padding-left: 0;
-        padding-right: 0;
-    }
-}
-
 .dialog-help {
     border: solid 1px cornsilk;
     border-radius: 5px;

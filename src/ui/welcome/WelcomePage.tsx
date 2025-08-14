@@ -12,16 +12,18 @@ export default function WelcomePage() {
 
     return (
         <Page className="welcome">
-            <div className="title">{t("welcome")}</div>
-            <WelcomeNavigator/>
-            <div className="discover">
-                <Jump className="btn btn-primary btn-sm" nodeName="moera-activity-blog_0"
-                      nodeUri="https://moera-activity-blog.moera.blog/moera"
-                      href="/post/9f838e8f-d419-4c89-8908-06ae029d2482">
-                    {t("find-more-people")}
-                </Jump>
+            <div className="central-pane">
+                <div className="title">{t("welcome")}</div>
+                <WelcomeNavigator/>
+                <div className="discover">
+                    <Jump className="btn btn-primary btn-sm" nodeName="moera-activity-blog_0"
+                          nodeUri="https://moera-activity-blog.moera.blog/moera"
+                          href="/post/9f838e8f-d419-4c89-8908-06ae029d2482">
+                        {t("find-more-people")}
+                    </Jump>
+                </div>
+                <Invitation/>
             </div>
-            <Invitation/>
         </Page>
     );
 }

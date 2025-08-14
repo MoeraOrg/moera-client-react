@@ -61,7 +61,7 @@ function ProfileEditorInner(props: Props) {
                 <h2>{t("edit-profile")} {loading && <Loading/>}</h2>
             </PageHeader>
             <Page>
-                <div className="profile-editor content-panel">
+                <div className="central-pane profile-editor content-panel">
                     <Form>
                         {conflict &&
                             <ConflictWarning text={t("profile-edited-conflict")}

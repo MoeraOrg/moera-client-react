@@ -62,25 +62,27 @@ export default function DetailedPostingPage() {
         <>
             <DetailedPostingPageHeader story={story} href={href} feedTitle={feedTitle}/>
             <Page>
-                {(postingReady && story) &&
-                    <DetailedPosting posting={posting} story={story} deleting={deleting}/>
-                }
-                {!postingReady && loading &&
-                    <div className="posting">
-                        <Loading/>
-                    </div>
-                }
-                {!postingReady && !loading &&
-                    <div className="posting-not-found">
-                        <FontAwesomeIcon className="icon" icon={faFrown} size="3x"/>
-                        <div className="message">
-                            {!googlePlayProhibited
-                                ? t("posting-not-found")
-                                : t("content-not-accessible-android")
-                            }
+                <div className="central-pane">
+                    {(postingReady && story) &&
+                        <DetailedPosting posting={posting} story={story} deleting={deleting}/>
+                    }
+                    {!postingReady && loading &&
+                        <div className="posting">
+                            <Loading/>
                         </div>
-                    </div>
-                }
+                    }
+                    {!postingReady && !loading &&
+                        <div className="posting-not-found">
+                            <FontAwesomeIcon className="icon" icon={faFrown} size="3x"/>
+                            <div className="message">
+                                {!googlePlayProhibited
+                                    ? t("posting-not-found")
+                                    : t("content-not-accessible-android")
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
             </Page>
         </>
     );

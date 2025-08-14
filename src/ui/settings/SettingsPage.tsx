@@ -25,17 +25,19 @@ export default function SettingsPage() {
                 <h2>{t("your-settings")}</h2>
             </PageHeader>
             <Page>
-                <SettingsConflicts/>
-                <SettingsTabs/>
-                <div className="row settings-notebook">
-                    {visible &&
-                        <>
-                            <SettingsMenu/>
-                            <div className="col-md-10">
-                                <SettingsTabContent tab={tab}/>
-                            </div>
-                        </>
-                    }
+                <div className="centralright-pane">
+                    <SettingsConflicts/>
+                    <SettingsTabs/>
+                    <div className="row settings-notebook">
+                        {visible &&
+                            <>
+                                <SettingsMenu/>
+                                <div className="col-md-10">
+                                    <SettingsTabContent tab={tab}/>
+                                </div>
+                            </>
+                        }
+                    </div>
                 </div>
             </Page>
         </>

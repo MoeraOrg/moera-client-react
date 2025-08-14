@@ -8,7 +8,7 @@ export default function GooglePlayProhibitedPage() {
 
     return (
         <Page>
-            <div className="no-postings">{t("content-not-accessible-android")}</div>
+            <div className="central-pane no-postings">{t("content-not-accessible-android")}</div>
         </Page>
     );
 }
