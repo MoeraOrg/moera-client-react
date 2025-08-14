@@ -1,16 +1,17 @@
 import React, { Suspense, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { endOfDay, fromUnixTime, getUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
+import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { getFeedAtTimestamp } from "state/feeds/selectors";
 import { feedScrollToAnchor } from "state/feeds/actions";
 import { Button, CloseButton, Loading } from "ui/control";
+import { Icon, msArrowDownward, msCalendarMonth } from "ui/material-symbols";
 import { useIsTinyScreen } from "ui/hook/media-query";
 import { RelNodeName } from "util/rel-node-name";
+import "./FeedGotoButton.css";
 
 const DatePicker = React.lazy(() => import('react-datepicker'));
 
@@ -46,9 +47,11 @@ export default function FeedGotoButton({nodeName, feedName, atBottom}: Props) {
     };
 
     return (
-        <>
+        <span className={cx("feed-goto-button", {"active": active})}>
             {!active ?
-                <Button variant="outline-info" size="sm" onClick={activate}>{t("go-to")}</Button>
+                <Button variant="silent" size="sm" className="goto" onClick={activate}>
+                    <Icon icon={msCalendarMonth}/>&nbsp;{t("go-to")}
+                </Button>
             :
                 <Suspense fallback={<Loading/>}>
                     <CloseButton onClick={deactivate}/>
@@ -63,11 +66,12 @@ export default function FeedGotoButton({nodeName, feedName, atBottom}: Props) {
                         showYearDropdown
                         withPortal={tinyScreen}
                     />
-                    <Button variant="outline-info" size="sm" className="ms-2" invisible={atBottom} onClick={toBottom}>
-                        <FontAwesomeIcon icon={faArrowDown}/>&nbsp;{t("bottom")}
+                    <Button variant="outline-primary" size="sm" className="bottom" invisible={atBottom}
+                            onClick={toBottom}>
+                        <Icon icon={msArrowDownward} size={16}/><span className="caption">&nbsp;{t("bottom")}</span>
                     </Button>
                 </Suspense>
             }
-        </>
+        </span>
     );
 }

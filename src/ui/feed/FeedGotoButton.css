@@ -1,0 +1,63 @@
+.feed-goto-button {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.feed-goto-button.active {
+    margin-top: .25rem;
+    position: relative;
+}
+
+.feed-goto-button .goto svg {
+    vertical-align: -.5em;
+}
+
+.feed-goto-button .btn-close {
+    position: absolute;
+    left: 6.7rem;
+    z-index: var(--zindex-text-overlay);
+    font-size: 60%;
+}
+
+.feed-goto-button .bottom svg {
+    vertical-align: -.3em;
+}
+
+@media only screen and (max-width: 575px) {
+    #page-header.hidden .feed-goto-button .bottom {
+        display: none;
+    }
+
+    .feed-goto-button .bottom {
+        position: fixed;
+        top: 7rem;
+        right: 1rem;
+        border-radius: .5rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: white;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .3), 0 4px 8px 3px rgba(0, 0, 0, .15);
+        z-index: var(--zindex-feed-top-button);
+    }
+
+    .feed-goto-button .bottom svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: -.5em;
+    }
+
+    .feed-goto-button .bottom .caption {
+        display: none;
+    }
+}
+
+.feed-goto-button DIV:has(> .react-datepicker__input-container) {
+    line-height: 1.5;
+    margin-left: .5rem;
+    margin-right: .5rem;
+}
+
+.feed-goto-button .react-datepicker__input-container INPUT {
+    width: 7.5em;
+}

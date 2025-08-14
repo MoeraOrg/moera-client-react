@@ -80,8 +80,3 @@
 #page-header .page-header-buttons BUTTON {
     white-space: nowrap;
 }
-
-#page-header .react-datepicker-wrapper {
-    line-height: 1.5;
-    margin-left: .5rem;
-}

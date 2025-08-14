@@ -9,6 +9,7 @@ import { ReactComponent as msArrowUpward } from "ui/material-symbols/arrow_upwar
 import { ReactComponent as msBackspaceFilled16 } from "ui/material-symbols/backspace_filled16.isvg";
 import { ReactComponent as msBadge } from "ui/material-symbols/badge.isvg";
 import { ReactComponent as msBlock } from "ui/material-symbols/block.isvg";
+import { ReactComponent as msCalendarMonth } from "ui/material-symbols/calendar_month.isvg";
 import { ReactComponent as msCancel } from "ui/material-symbols/cancel.isvg";
 import { ReactComponent as msCheck } from "ui/material-symbols/check.isvg";
 import { ReactComponent as msChevronRight } from "ui/material-symbols/chevron_right.isvg";
@@ -114,6 +115,7 @@ export {
     msBackspaceFilled16,
     msBadge,
     msBlock,
+    msCalendarMonth,
     msCancel,
     msCheck,
     msChevronRight,
