@@ -1,4 +1,4 @@
 .twemoji {
     height: 1.2em;
-    width: 1.2em;
+    width: calc(1.2em + 1px);
 }
