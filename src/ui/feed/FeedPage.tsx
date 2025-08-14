@@ -223,7 +223,10 @@ export default function FeedPage({nodeName, feedName, visible, title, shareable}
                         onClick={loadPast}
                     />
                     {after <= Number.MIN_SAFE_INTEGER &&
-                        <div className="feed-end">&mdash; {t("reached-bottom")} &mdash;</div>
+                        <>
+                            <div className="feed-end">{t("reached-bottom")}</div>
+                            <div className="feed-after-end"/>
+                        </>
                     }
                 </div>
             </Page>

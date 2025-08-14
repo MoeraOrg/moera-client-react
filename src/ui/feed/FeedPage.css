@@ -7,17 +7,16 @@
 }
 
 .feed-end {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
     text-align: center;
-    font-size: x-large;
-    font-style: italic;
-    font-weight: bold;
-    color: var(--bs-gray-400);
-    padding-bottom: 1rem;
+    font-size: .875rem;
+    color: var(--bs-gray-600);
 }
 
 @media only screen and (max-width: 575px) {
-    .feed-end {
-        font-size: large;
-        padding-bottom: 2rem;
+    .feed-after-end {
+        height: 4rem;
     }
 }
