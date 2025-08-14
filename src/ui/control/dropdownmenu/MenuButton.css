@@ -4,6 +4,7 @@
     padding: .3em .4em;
     width: 2.1em;
     height: 2.1em;
+    transition: background-color, color .15s ease-in;
 }
 
 .menu-button svg {
@@ -17,6 +18,7 @@
 
 .menu-button:hover {
     background-color: var(--highlight);
+    transition: background-color, color .15s ease-in;
 }
 
 @media only screen and (max-width: 575px) {
