@@ -1,9 +1,13 @@
 .comment .owner-line {
     margin-bottom: 0;
-    width: calc(100% - 2.85rem);
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.comment:has(.menu) > .owner-line {
+    width: calc(100% - 2.85rem);
 }
 
 .comment .owner {
