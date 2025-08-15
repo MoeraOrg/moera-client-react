@@ -1,4 +1,10 @@
+.settings-sheet-form {
+    display: contents;
+}
+
 .settings-sheet {
+    grid-column: 2;
+    grid-row: 3;
     overflow-y: auto;
     padding-right: .2rem;
 }

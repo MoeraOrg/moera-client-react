@@ -3,25 +3,34 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import SettingsTab from "ui/settings/SettingsTab";
-import "./SettingsTabs.css";
 import { isConnectedToHome } from "state/home/selectors";
+import { SettingsTabId } from "state/settings/state";
+import { Tabs } from "ui/control";
+import "./SettingsTabs.css";
 
 export default function SettingsTabs() {
     const connectedToHome = useSelector(isConnectedToHome);
     const loadingNodeValues = useSelector((state: ClientState) => state.settings.node.loadingValues);
     const loadingNodeMeta = useSelector((state: ClientState) => state.settings.node.loadingMeta);
     const loadingClientValues = useSelector((state: ClientState) => state.settings.client.loadingValues);
+    const tab = useSelector((state: ClientState) => state.settings.tab);
     const {t} = useTranslation();
 
     return (
-        <ul className="nav nav-tabs settings-tabs">
-            <SettingsTab name="client" title={t("my-client")} href={"/settings/client"}
-                         loading={loadingClientValues}/>
-            {connectedToHome &&
-                <SettingsTab name="node" title={t("my-node")} href={"/settings/node"}
-                             loading={loadingNodeValues || loadingNodeMeta}/>
+        <Tabs<SettingsTabId> tabs={[
+            {
+                title: t("my-client"),
+                value: "client",
+                href: "/settings/client",
+                loading: loadingClientValues
+            },
+            {
+                title: t("my-node"),
+                value: "node",
+                href: "/settings/node",
+                visible: connectedToHome,
+                loading: loadingNodeValues || loadingNodeMeta
             }
-        </ul>
+        ]} value={tab} className="settings-tabs"/>
     );
 }

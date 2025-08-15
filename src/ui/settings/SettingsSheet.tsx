@@ -29,7 +29,7 @@ function SettingsSheet(props: Props) {
     useSettingsResetForm(settingsSheetLogic, props);
 
     return (
-        <Form>
+        <Form className="settings-sheet-form">
             <div className="settings-sheet" style={{maxHeight: sheetMaxHeight}}>
                 <SettingsSheetItems items={items} valuesMap={valuesMap} metaMap={metaMap}/>
             </div>

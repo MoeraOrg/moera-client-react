@@ -1,3 +1,8 @@
+:root {
+    --nav-pills-link-hover-bg: var(--highlight-blue);
+    --nav-pills-link-active-hover-bg: var(--bs-primary);
+}
+
 .nav.nav-tabs .nav-link {
     cursor: pointer;
 }
@@ -11,17 +16,21 @@
 }
 
 .nav.nav-pills .nav-link.active:hover {
-    background-color: var(--bs-primary);
+    background-color: var(--nav-pills-link-active-hover-bg);
 }
 
 .nav.nav-pills .nav-link:hover {
-    background-color: var(--highlight-blue);
+    background-color: var(--nav-pills-link-hover-bg);
     cursor: pointer;
+}
+
+.nav.nav-pills .nav-link A {
+    color: var(--bs-nav-link-color);
 }
 
 .nav.nav-pills .nav-link A:hover {
     text-decoration: none;
-    color: var(--bs-primary);
+    color: var(--bs-nav-link-hover-color);
 }
 
 .nav.nav-tabs .nav-item, .nav.nav-pills .nav-item {

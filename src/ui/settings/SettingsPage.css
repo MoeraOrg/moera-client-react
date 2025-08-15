@@ -1,10 +1,22 @@
 .settings-notebook {
     background-color: white;
-    padding: .5rem;
-    border-left: var(--bs-gray-400) 1px solid;
-    border-right: var(--bs-gray-400) 1px solid;
-    border-bottom: var(--bs-gray-400) 1px solid;
-    border-radius: .25rem;
+    margin: 1rem 1rem 1rem 0;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    display: grid;
+    grid-template-columns: 15.5rem minmax(0, 50rem) auto;
+    grid-template-rows: min-content min-content auto min-content;
+}
+
+.settings-notebook .settings-title {
+    grid-column: 1 / 4;
+    grid-row: 1;
+    font-family: var(--font-messages), sans-serif;
+    font-weight: 600;
+    font-size: 2rem;
+    line-height: 125%;
+    color: var(--bs-gray-900);
+    margin-bottom: 2rem;
 }
 
 .settings-notebook .form-check {
@@ -12,11 +24,7 @@
 }
 
 @media only screen and (max-width: 575px) {
-    .row.settings-notebook {
-        margin-left: 0;
-        margin-right: 0;
-        border-left-width: 0;
-        border-right-width: 0;
+    .settings-notebook {
         border-radius: 0;
     }
 }

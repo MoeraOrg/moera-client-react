@@ -1,15 +1,5 @@
-.settings-tabs .nav-link.active {
-    font-weight: bold;
-}
-
-.settings-tabs .nav-link.active:hover {
-    background-color: white;
-}
-
-.settings-tabs .nav-link {
-    color: var(--bs-gray-800);
-}
-
-.settings-tabs .nav-link:hover {
-    background-color: var(--highlight);
+.settings-tabs {
+    grid-column: 1 / 4;
+    grid-row: 2;
+    margin-bottom: 2rem;
 }

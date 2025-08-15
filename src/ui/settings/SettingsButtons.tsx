@@ -14,10 +14,10 @@ export default function SettingsButtons() {
 
     return (
         <div className="settings-buttons">
-            <Button variant="secondary" className="col-sm-2 col-5" disabled={!dirty} onClick={handleReset}>
+            <Button variant="outline-secondary" disabled={!dirty} onClick={handleReset}>
                 {t("cancel")}
             </Button>
-            <Button variant="primary" type="submit" className="col-sm-2 col-5" disabled={!dirty} loading={updating}
+            <Button variant="primary" type="submit" disabled={!dirty} loading={updating}
                     compact>
                 {t("save")}
             </Button>

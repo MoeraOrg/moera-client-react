@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { Page } from "ui/page/Page";
-import PageHeader from "ui/page/PageHeader";
 import SettingsConflicts from "ui/settings/SettingsConflicts";
 import SettingsTabs from "ui/settings/SettingsTabs";
 import SettingsMenu from "ui/settings/SettingsMenu";
@@ -21,20 +20,16 @@ export default function SettingsPage() {
 
     return (
         <>
-            <PageHeader>
-                <h2>{t("your-settings")}</h2>
-            </PageHeader>
             <Page>
                 <div className="centralright-pane">
-                    <SettingsConflicts/>
-                    <SettingsTabs/>
-                    <div className="row settings-notebook">
+                    <div className="settings-notebook">
+                        <div className="settings-title">{t("your-settings")}</div>
+                        <SettingsConflicts/>
+                        <SettingsTabs/>
                         {visible &&
                             <>
                                 <SettingsMenu/>
-                                <div className="col-md-10">
-                                    <SettingsTabContent tab={tab}/>
-                                </div>
+                                <SettingsTabContent tab={tab}/>
                             </>
                         }
                     </div>
