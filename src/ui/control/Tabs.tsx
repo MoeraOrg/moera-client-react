@@ -3,18 +3,21 @@ import cx from 'classnames';
 
 import { PrincipalValue } from "api";
 import { Icon, MaterialSymbol } from "ui/material-symbols";
-import { Principal } from "ui/control";
+import { Loading, Principal } from "ui/control";
+import Jump from "ui/navigation/Jump";
 import "./Tabs.css";
 
 type TabStyle = "tabs" | "pills";
 
 export interface TabDescription<V = any> {
     title: string;
-    value: V;
+    value?: V;
+    href?: string;
     active?: boolean;
     visible?: boolean;
     count?: number | null;
     principal?: PrincipalValue | null;
+    loading?: boolean;
 }
 
 interface Props<V> {
@@ -39,16 +42,18 @@ export function Tabs<V = any>({
         <ul className={cx("nav", "nav-" + tabStyle, {scroll}, className)}>
             {tabs
                 .filter(({visible}) => visible !== false)
-                .map(({title, value, active, count, principal}, index) =>
-                    <li key={index} className="nav-item" onClick={() => onChange && onChange(value)}>
-                        <span className={cx("nav-link", {"active": active ?? value === selected})} aria-current="page">
+                .map(({title, value, href, active, count, principal, loading}, index) =>
+                    <li key={index} className="nav-item">
+                        <TabLink active={active ?? value === selected} href={href}
+                                 onClick={onChange && value != null ? () => onChange(value) : undefined}>
                             {title}
                             {principal &&
                                 <>{" "}<Principal value={principal} defaultValue="public" icons={principalIcons}
                                                   titles={principalTitles}/></>
                             }
                             {count != null && <span className="badge">{count}</span>}
-                        </span>
+                            {loading && <>{" "}<Loading/></>}
+                        </TabLink>
                     </li>
                 )
             }
@@ -61,5 +66,34 @@ export function Tabs<V = any>({
                 </li>
             }
         </ul>
+    );
+}
+
+interface TabLinkProps {
+    active: boolean;
+    href?: string;
+    onClick?: () => void;
+    children?: React.ReactNode;
+}
+
+function TabLink({active, href, onClick, children}: TabLinkProps) {
+    if (active) {
+        return (
+            <span className="nav-link active" aria-current="page">
+                {children}
+            </span>
+        );
+    }
+    if (href == null) {
+        return (
+            <span className="nav-link" aria-current="page" onClick={onClick}>
+                {children}
+            </span>
+        );
+    }
+    return (
+        <Jump className="nav-link" href={href} onNear={onClick} onFar={onClick}>
+            {children}
+        </Jump>
     );
 }

@@ -48,6 +48,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                     {
                         title: t("subscribers"),
                         value: "subscribers",
+                        href: "/people/subscribers",
                         visible: subscribersTotal != null,
                         count: loadedGeneral ? subscribersTotal: undefined,
                         principal: viewSubscribers
@@ -55,6 +56,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                     {
                         title: t("subscriptions"),
                         value: "subscriptions",
+                        href: "/people/subscriptions",
                         visible: subscriptionsTotal != null,
                         count: loadedGeneral ? subscriptionsTotal: undefined,
                         principal: viewSubscriptions
@@ -62,6 +64,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                     {
                         title: t("friend-groups.friends"),
                         value: friendsGroupId ?? "",
+                        href: `/people/${friendsGroupId ?? ""}`,
                         active: inFriendGroup,
                         visible: friendsTotal != null && friendGroups.length > 0,
                         count: loadedGeneral ? friendsTotal?.[friendsGroupId ?? 0] ?? 0: undefined,
@@ -70,6 +73,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                     {
                         title: t("in-friends"),
                         value: "friend-ofs",
+                        href: "/people/friend-ofs",
                         visible: friendOfsTotal != null,
                         count: loadedGeneral ? friendOfsTotal: undefined,
                         principal: viewFriendOfs
@@ -77,6 +81,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                     {
                         title: t("blocked-plural"),
                         value: "blocked",
+                        href: "/people/blocked",
                         visible: blockedTotal != null,
                         count: loadedGeneral ? blockedTotal: undefined,
                         principal: viewBlocked
@@ -84,6 +89,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                     {
                         title: t("in-blocked-plural"),
                         value: "blocked-by",
+                        href: "/people/blocked-by",
                         visible: blockedByTotal != null,
                         count: loadedGeneral ? blockedByTotal: undefined,
                         principal: viewBlockedBy
@@ -100,6 +106,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                     tabs={friendGroups.map(friendGroup => ({
                         title: friendGroup.title !== "t:friends" ? getFriendGroupTitle(friendGroup.title, t) : t("all"),
                         value: friendGroup.id,
+                        href: `/people/${friendGroup.id}`,
                         count: friendsTotal?.[friendGroup.id] ?? 0,
                         principal: friendGroup.title !== "t:friends"
                             ? friendGroup.operations?.view ?? "public"
