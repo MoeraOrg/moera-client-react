@@ -224,7 +224,7 @@ async function subscriptionsLoadSaga(action: WithContext<SubscriptionsLoadAction
 async function friendsLoadSaga(action: WithContext<FriendsLoadAction>): Promise<void> {
     await homeIntroduced();
     try {
-        const friends = await Node.getFriends(action, REL_CURRENT);
+        const friends = await Node.getFriends(action, REL_CURRENT, null, ["authentication.required"]);
         dispatch(friendsLoaded(friends).causedBy(action));
         dispatch(nodeCardsPreload(friends.map(fr => fr.nodeName)).causedBy(action));
     } catch (e) {
@@ -240,7 +240,7 @@ async function friendsLoadSaga(action: WithContext<FriendsLoadAction>): Promise<
 async function friendOfsLoadSaga(action: WithContext<FriendOfsLoadAction>): Promise<void> {
     await homeIntroduced();
     try {
-        const friendOfs = await Node.getFriendOfs(action, REL_CURRENT);
+        const friendOfs = await Node.getFriendOfs(action, REL_CURRENT, ["authentication.required"]);
         dispatch(friendOfsLoaded(friendOfs).causedBy(action));
         dispatch(nodeCardsPreload(friendOfs.map(fr => fr.remoteNodeName)).causedBy(action));
     } catch (e) {
@@ -257,7 +257,8 @@ async function blockedLoadSaga(action: WithContext<BlockedLoadAction>): Promise<
     await homeIntroduced();
     try {
         const blocked = await Node.searchBlockedUsers(
-            action, REL_CURRENT, {blockedOperations: ["comment" as const, "reaction" as const, "visibility" as const]}
+            action, REL_CURRENT, {blockedOperations: ["comment" as const, "reaction" as const, "visibility" as const]},
+            ["authentication.required"]
         );
         dispatch(blockedLoaded(blocked).causedBy(action));
         dispatch(nodeCardsPreload(blocked.map(b => b.nodeName)).causedBy(action));
@@ -274,7 +275,9 @@ async function blockedLoadSaga(action: WithContext<BlockedLoadAction>): Promise<
 async function blockedByLoadSaga(action: WithContext<BlockedByLoadAction>): Promise<void> {
     await homeIntroduced();
     try {
-        const blockedBy = await Node.searchBlockedByUsers(action, REL_CURRENT, {strict: true});
+        const blockedBy = await Node.searchBlockedByUsers(
+            action, REL_CURRENT, {strict: true}, ["authentication.required"]
+        );
         dispatch(blockedByLoaded(blockedBy).causedBy(action));
         dispatch(nodeCardsPreload(blockedBy.map(b => b.nodeName)).causedBy(action));
     } catch (e) {
