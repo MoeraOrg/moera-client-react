@@ -4,7 +4,7 @@
     padding: 1.5rem;
     border-radius: 1rem;
     display: grid;
-    grid-template-columns: 15.5rem minmax(0, 50rem) auto;
+    grid-template-columns: 15.5rem minmax(0, 45rem) auto;
     grid-template-rows: min-content min-content auto min-content;
 }
 

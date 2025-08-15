@@ -6,7 +6,7 @@
     grid-column: 2;
     grid-row: 3;
     overflow-y: auto;
-    padding-right: .2rem;
+    padding-right: 1rem;
 }
 
 .settings-sheet .chapter {
