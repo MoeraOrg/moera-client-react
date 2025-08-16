@@ -1,6 +1,5 @@
 .settings-buttons {
-    grid-column: 2 / 4;
-    grid-row: 4;
+    grid-area: buttons;
     text-align: right;
     padding-top: 1.5rem;
 }

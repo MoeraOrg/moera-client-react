@@ -5,12 +5,16 @@
     border-radius: 1rem;
     display: grid;
     grid-template-columns: 15.5rem minmax(0, 45rem) auto;
-    grid-template-rows: min-content min-content auto min-content;
+    grid-template-rows: min-content min-content auto 3.875rem;
+    grid-template-areas:
+        "title title title"
+        "tabs tabs tabs"
+        "menu sheet sheet"
+        "menu buttons buttons";
 }
 
 .settings-notebook .settings-title {
-    grid-column: 1 / 4;
-    grid-row: 1;
+    grid-area: title;
     font-family: var(--font-messages), sans-serif;
     font-weight: 600;
     font-size: 2rem;

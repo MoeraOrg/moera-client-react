@@ -28,7 +28,7 @@ function SettingsModerationSheet(props: Props) {
     useSettingsResetForm(settingsModerationSheetLogic, props);
 
     return (
-        <Form>
+        <Form className="settings-sheet-form">
             <div className="settings-sheet" style={{maxHeight: sheetMaxHeight}}>
                 <CheckboxField name="googlePlayAllowed" title={t("want-allow-android-google-play")} anyValue/>
             </div>

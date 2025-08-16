@@ -1,6 +1,5 @@
 .settings-menu {
-    grid-column: 1;
-    grid-row: 3 / 5;
+    grid-area: menu;
     width: calc(100% - 3rem);
     --bs-nav-link-color: var(--bs-gray-900);
     --bs-nav-link-hover-color: var(--bs-gray-900);

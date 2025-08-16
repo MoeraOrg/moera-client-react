@@ -1,5 +1,4 @@
 .settings-tabs {
-    grid-column: 1 / 4;
-    grid-row: 2;
+    grid-area: tabs;
     margin-bottom: 2rem;
 }
