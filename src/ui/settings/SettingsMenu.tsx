@@ -16,20 +16,23 @@ export default function SettingsMenu() {
     const {t} = useTranslation();
 
     return (
-        <Tabs<string>
-            tabStyle="pills"
-            className="flex-column settings-menu"
-            arrow={msKeyboardArrowRight}
-            tabs={
-                getSheets(tab).map(sh => ({
-                    title: t(`setting.sheet.${sh.name}`),
-                    value: sh.name,
-                    href: `/settings/${tab}#${sh.name}`,
-                    className: sh.navClass
-                }))
-            }
-            value={sheetName}
-            onChange={(name) => dispatch(settingsGoToSheet(name))}
-        />
+        <>
+            <div className="settings-menu-spacer"/>
+            <Tabs<string>
+                tabStyle="pills"
+                className="flex-column settings-menu"
+                arrow={msKeyboardArrowRight}
+                tabs={
+                    getSheets(tab).map(sh => ({
+                        title: t(`setting.sheet.${sh.name}`),
+                        value: sh.name,
+                        href: `/settings/${tab}#${sh.name}`,
+                        className: sh.navClass
+                    }))
+                }
+                value={sheetName}
+                onChange={(name) => dispatch(settingsGoToSheet(name))}
+            />
+        </>
     );
 }

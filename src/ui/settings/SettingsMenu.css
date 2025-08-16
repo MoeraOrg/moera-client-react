@@ -17,6 +17,20 @@
     }
 }
 
+@media only screen and (max-width: 575px) {
+    .settings-menu-spacer {
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 576px) {
+    .settings-menu-spacer {
+        grid-area: menu;
+        width: calc(100% - 1.5rem);
+        border-right: 1px solid var(--bs-border-color);
+    }
+}
+
 .nav.nav-pills .nav-link.nav-danger A {
     color: var(--bs-danger);
 }
