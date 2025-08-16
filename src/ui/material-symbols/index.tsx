@@ -55,6 +55,7 @@ import { ReactComponent as msHorizontalRule } from "ui/material-symbols/horizont
 import { ReactComponent as msInkPen } from "ui/material-symbols/ink_pen.isvg";
 import { ReactComponent as msKeepFilled16 } from "ui/material-symbols/keep_filled16.isvg";
 import { ReactComponent as msKeyboardArrowDown } from "ui/material-symbols/keyboard_arrow_down.isvg";
+import { ReactComponent as msKeyboardArrowRight } from "ui/material-symbols/keyboard_arrow_right.isvg";
 import { ReactComponent as msKeyboardArrowUp } from "ui/material-symbols/keyboard_arrow_up.isvg";
 import { ReactComponent as msLink } from "ui/material-symbols/link.isvg";
 import { ReactComponent as msLiveHelp } from "ui/material-symbols/live_help.isvg";
@@ -164,6 +165,7 @@ export {
     msLiveHelp,
     msLock,
     msKeyboardArrowDown,
+    msKeyboardArrowRight,
     msKeyboardArrowUp,
     msMediaLink,
     msMoreHoriz,

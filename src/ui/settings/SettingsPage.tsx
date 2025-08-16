@@ -23,7 +23,7 @@ export default function SettingsPage() {
             <Page>
                 <div className="centralright-pane">
                     <div className="settings-notebook">
-                        <div className="settings-title">{t("your-settings")}</div>
+                        <div className="settings-title">{t("settings")}</div>
                         <SettingsConflicts/>
                         <SettingsTabs/>
                         {visible &&

@@ -1,6 +1,7 @@
 :root {
     --nav-pills-link-hover-bg: var(--highlight-blue);
     --nav-pills-link-active-hover-bg: var(--bs-primary);
+    --nav-link-arrow-color: var(--bs-nav-link-color);
 }
 
 .nav.nav-tabs .nav-link {
@@ -31,6 +32,17 @@
 .nav.nav-pills .nav-link A:hover {
     text-decoration: none;
     color: var(--bs-nav-link-hover-color);
+}
+
+.nav.nav-pills .nav-link .arrow-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5em;
+}
+
+.nav.nav-pills .nav-link .arrow-wrapper svg {
+    color: var(--nav-link-arrow-color);
 }
 
 .nav.nav-tabs .nav-item, .nav.nav-pills .nav-item {

@@ -9,6 +9,7 @@
     --bs-nav-pills-link-active-bg: var(--bs-gray-200);
     --nav-pills-link-hover-bg: var(--bs-gray-100);
     --nav-pills-link-active-hover-bg: var(--bs-gray-200);
+    --nav-link-arrow-color: var(--bs-gray-600);
 }
 
 @media only screen and (max-width: 575px) {
@@ -27,4 +28,9 @@
 
 .nav.nav-pills .nav-link.nav-danger.active {
     background-color: var(--bs-danger);
+    color: white;
+}
+
+.nav.nav-pills .nav-link.nav-danger.active .arrow-wrapper svg {
+    color: white;
 }
