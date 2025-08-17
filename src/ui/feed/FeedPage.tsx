@@ -192,7 +192,7 @@ export default function FeedPage({nodeName, feedName, visible, title, shareable}
                 momentAbove={momentAbove}
             />
             <Page>
-                <div className="central-pane">
+                <div className="page-central-pane">
                     <FeedSentinel
                         loading={loadingFuture}
                         title={t("load-newer-posts")}

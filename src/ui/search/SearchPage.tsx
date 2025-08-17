@@ -64,7 +64,7 @@ export default function SearchPage() {
                 </FeedTopBox>
             </PageHeader>
             <Page className="search-page">
-                <div className="central-pane">
+                <div className="page-central-pane">
                     <SearchTabs/>
                     {hasContent ?
                         <>

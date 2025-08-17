@@ -16,7 +16,7 @@ export default function GrantPage() {
                 <h2>{t("grant-access")}</h2>
             </PageHeader>
             <Page>
-                <div className="central-pane row content-panel grant-page">
+                <div className="page-central-pane row content-panel grant-page">
                     <GrantContent/>
                 </div>
             </Page>

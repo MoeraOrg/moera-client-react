@@ -14,7 +14,7 @@ export default function RemovalPage() {
                 <h2>{t("delete-account-moera")}</h2>
             </PageHeader>
             <Page>
-                <div className="central-pane row content-panel">
+                <div className="page-central-pane row content-panel">
                     <SettingsRemovalSheet/>
                 </div>
             </Page>

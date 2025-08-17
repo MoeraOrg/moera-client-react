@@ -25,7 +25,7 @@ export default function SettingsPage() {
     return (
         <>
             <Page>
-                <div className="centralright-pane">
+                <div className="page-centralright-pane">
                     <SettingsConflicts/>
                     <div className="settings-notebook-switcher">
                         <div className={`settings-notebook ${side}-side`}>

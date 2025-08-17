@@ -12,7 +12,7 @@ export default function WelcomePage() {
 
     return (
         <Page className="welcome">
-            <div className="central-pane">
+            <div className="page-central-pane">
                 <div className="title">{t("welcome")}</div>
                 <WelcomeNavigator/>
                 <div className="discover">

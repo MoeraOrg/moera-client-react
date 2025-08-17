@@ -62,7 +62,7 @@ export default function DetailedPostingPage() {
         <>
             <DetailedPostingPageHeader story={story} href={href} feedTitle={feedTitle}/>
             <Page>
-                <div className="central-pane">
+                <div className="page-central-pane">
                     {(postingReady && story) &&
                         <DetailedPosting posting={posting} story={story} deleting={deleting}/>
                     }

@@ -82,7 +82,7 @@ function ComposePageInner(props: Props) {
                 </h2>
             </PageHeader>
             <Page className="compose-page">
-                <div className="central-pane composer">
+                <div className="page-central-pane composer">
                     <Form>
                         {(!postAllowed && !postWarningClosed) &&
                             <ConflictWarning text={t("post-not-allowed")} onClose={postWarningClose}/>

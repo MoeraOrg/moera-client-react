@@ -36,7 +36,7 @@ export default function PeoplePage() {
                 </h2>
             </PageHeader>
             <Page>
-                <div className="central-pane people-page content-panel">
+                <div className="page-central-pane people-page content-panel">
                     <PeopleTabs active={tab}/>
                     <PeopleContent/>
                 </div>

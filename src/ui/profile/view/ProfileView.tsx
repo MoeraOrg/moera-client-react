@@ -49,7 +49,7 @@ export default function ProfileView() {
                 </h2>
             </PageHeader>
             <Page>
-                <div className="central-pane profile-view content-panel">
+                <div className="page-central-pane profile-view content-panel">
                     <Avatar avatar={profile?.avatar} ownerName={ownerName} size={200}/>
                     {loading && <Loading/>}
                     <div className="full-name">

@@ -34,7 +34,7 @@ export default function ComplaintsListPage() {
                 <h2>{t("complaints")}</h2>
             </PageHeader>
             <Page>
-                <div className="central-pane complaints content-panel">
+                <div className="page-central-pane complaints content-panel">
                     <div className="navigator">
                         <div className="total">{`${t("total-colon")} ${total}`}</div>
                         <Button variant={inboxOnly ? "primary" : "outline-secondary"} size="sm" title={t("only-new")}
