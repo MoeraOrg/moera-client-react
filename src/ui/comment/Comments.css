@@ -1,3 +1,7 @@
+#comments {
+    padding-left: .25rem;
+}
+
 #comments.disabled {
     font-style: italic;
     text-align: center;
