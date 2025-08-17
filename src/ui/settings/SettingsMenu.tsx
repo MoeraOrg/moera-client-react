@@ -6,6 +6,7 @@ import { ClientState } from "state/state";
 import { settingsGoToSheet } from "state/settings/actions";
 import { Tabs } from "ui/control";
 import { msKeyboardArrowRight } from "ui/material-symbols";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import { getActualSheetName, getActualTab, getSheets } from "ui/settings/settings-menu";
 import "./SettingsMenu.css";
 
@@ -16,6 +17,7 @@ interface Props {
 export default function SettingsMenu({onSelect}: Props) {
     const tab = useSelector((state: ClientState) => getActualTab(state.settings.tab));
     const sheetName = useSelector((state: ClientState) => getActualSheetName(state.settings.tab, state.settings.sheet));
+    const tinyScreen = useIsTinyScreen();
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -39,7 +41,7 @@ export default function SettingsMenu({onSelect}: Props) {
                         className: sh.navClass
                     }))
                 }
-                value={sheetName}
+                value={!tinyScreen ? sheetName : ""}
                 onChange={onChange}
             />
         </>

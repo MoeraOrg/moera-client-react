@@ -9,6 +9,10 @@
     cursor: pointer;
 }
 
+.nav.nav-tabs .nav-link.active {
+    cursor: default;
+}
+
 .nav.nav-pills .nav-link.active .principal {
     color: var(--bs-nav-pills-link-active-color);
 }

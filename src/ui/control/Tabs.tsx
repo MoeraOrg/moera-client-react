@@ -90,7 +90,7 @@ interface TabLinkProps {
 function TabLink({active, href, onClick, className, children}: TabLinkProps) {
     if (active) {
         return (
-            <span className={cx("nav-link", "active", className)} aria-current="page" onClick={onClick}>
+            <span className={cx("nav-link", "active", className)} aria-current="page">
                 {children}
             </span>
         );
