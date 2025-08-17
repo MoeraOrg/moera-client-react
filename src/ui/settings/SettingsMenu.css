@@ -32,19 +32,13 @@
     }
 }
 
-.nav.nav-pills .nav-link.nav-danger A {
-    color: var(--bs-danger);
-}
-
-.nav.nav-pills .nav-link.nav-danger:hover {
-    background-color: var(--highlight-red);
-}
-
-.nav.nav-pills .nav-link.nav-danger.active {
-    background-color: var(--bs-danger);
-    color: white;
-}
-
-.nav.nav-pills .nav-link.nav-danger.active .arrow-wrapper svg {
-    color: white;
+.nav.nav-pills .nav-link.nav-danger {
+    --bs-nav-link-color: var(--bs-danger);
+    --bs-nav-link-hover-color: var(--bs-danger);
+    --bs-nav-pills-link-active-color: white;
+    --bs-nav-pills-link-active-bg: var(--bs-danger);
+    --nav-pills-link-hover-bg: var(--highlight-red);
+    --nav-pills-link-active-hover-bg: var(--bs-danger);
+    --nav-link-arrow-color: transparent;
+    --nav-link-active-arrow-color: transparent;
 }

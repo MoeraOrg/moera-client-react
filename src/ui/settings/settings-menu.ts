@@ -141,7 +141,7 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
         ]),
         sheet("addons"),
         sheet("other"),
-        sheet("removal", undefined, "nav-danger mt-md-4"),
+        sheet("removal", undefined, "nav-danger mt-4"),
     ],
     "client": [
         sheet("appearance", [

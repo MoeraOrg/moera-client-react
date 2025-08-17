@@ -27,9 +27,11 @@ export default function SettingsTabContent({tab}: Props) {
     const otherItems = useSelector((state: ClientState) => getOtherItems(state, tab));
     const addonsItems = useSelector(getAddonsItems);
     const clientValues = useSelector((state: ClientState) =>
-        tab === "node" ? state.settings.node.values : state.settings.client.values);
+        tab === "node" ? state.settings.node.values : state.settings.client.values
+    );
     const clientMeta = useSelector((state: ClientState) =>
-        tab === "node" ? state.settings.node.meta : state.settings.client.meta);
+        tab === "node" ? state.settings.node.meta : state.settings.client.meta
+    );
 
     if (sheet == null) {
         return null;
