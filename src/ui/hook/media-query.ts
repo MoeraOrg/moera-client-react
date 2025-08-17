@@ -1,6 +1,6 @@
 import { useCallback, useSyncExternalStore } from 'react';
 
-export function useMediaQuery(query: string) {
+export function useMediaQuery(query: string): boolean {
     const subscribe = useCallback(
         (onStoreChange: () => void) => {
             const matchMedia = window.matchMedia(query);
@@ -18,6 +18,6 @@ export function useMediaQuery(query: string) {
     return useSyncExternalStore(subscribe, getSnapshot);
 }
 
-export function useIsTinyScreen() {
+export function useIsTinyScreen(): boolean {
     return useMediaQuery("(max-width: 575px)");
 }

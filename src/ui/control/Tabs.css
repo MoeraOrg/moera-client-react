@@ -45,26 +45,28 @@
     user-select: none;
 }
 
-.nav.nav-tabs.scroll, .nav.nav-pills.scroll {
+.nav.nav-tabs, .nav.nav-pills {
     flex-wrap: nowrap;
+}
+
+.nav.nav-tabs.scroll-always, .nav.nav-pills.scroll-always {
     overflow-x: auto;
     overflow-y: hidden;
 }
 
-.nav.nav-tabs.scroll.flex-column, .nav.nav-pills.scroll.flex-column {
+.nav.nav-tabs.scroll-always.flex-column, .nav.nav-pills.scroll-always.flex-column {
     overflow-x: hidden;
     overflow-y: auto;
 }
 
 @media only screen and (max-width: 575px) {
-    .nav.nav-tabs, .nav.nav-pills {
-        flex-wrap: nowrap;
+    .nav.nav-tabs.scroll-mobile, .nav.nav-pills.scroll-mobile {
         overflow-x: auto;
         overflow-y: hidden;
         scrollbar-width: none;
     }
 
-    .nav.nav-tabs.flex-column, .nav.nav-pills.flex-column {
+    .nav.nav-tabs.scroll-mobile.flex-column, .nav.nav-pills.scroll-mobile.flex-column {
         overflow-x: hidden;
         overflow-y: auto;
     }

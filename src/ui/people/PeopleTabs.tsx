@@ -9,6 +9,7 @@ import { openFriendGroupAddDialog } from "state/friendgroupadddialog/actions";
 import { PeopleTab } from "state/people/state";
 import { Tabs } from "ui/control";
 import { getFriendGroupTitle } from "ui/control/principal-display";
+import { useMediaQuery } from "ui/hook/media-query";
 import { msGroupAdd, msLock } from "ui/material-symbols";
 import "./PeopleTabs.css";
 
@@ -34,6 +35,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
     const friendsGroupId = friendGroups.find(fg => fg.title === "t:friends")?.id;
     const inFriendGroup = friendGroups.some(({id}) => id === active);
     const atHome = useSelector(isAtHomeNode);
+    const smallScreen = useMediaQuery("(max-width: 1435px)");
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -97,6 +99,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                 ]}
                 tabStyle="pills"
                 className="people-tabs mb-3"
+                scroll={smallScreen ? "always" : "mobile"}
                 value={active}
                 onChange={goToTab}
                 principalIcons={{"admin": msLock}}
@@ -113,7 +116,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                             : "public"
                     }))}
                     className="mb-3"
-                    scroll={friendGroups.length > 4}
+                    scroll={friendGroups.length > 4 || smallScreen ? "always" : "mobile"}
                     value={active}
                     onChange={goToTab}
                     principalIcons={{"admin": msLock}}

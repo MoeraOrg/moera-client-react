@@ -31,6 +31,6 @@ export default function SettingsTabs() {
                 visible: connectedToHome,
                 loading: loadingNodeValues || loadingNodeMeta
             }
-        ]} value={tab} className="settings-tabs"/>
+        ]} value={tab} className="settings-tabs" scroll="never"/>
     );
 }
