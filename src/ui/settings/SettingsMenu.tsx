@@ -9,11 +9,20 @@ import { msKeyboardArrowRight } from "ui/material-symbols";
 import { getActualSheetName, getActualTab, getSheets } from "ui/settings/settings-menu";
 import "./SettingsMenu.css";
 
-export default function SettingsMenu() {
+interface Props {
+    onSelect: () => void;
+}
+
+export default function SettingsMenu({onSelect}: Props) {
     const tab = useSelector((state: ClientState) => getActualTab(state.settings.tab));
     const sheetName = useSelector((state: ClientState) => getActualSheetName(state.settings.tab, state.settings.sheet));
     const dispatch = useDispatch();
     const {t} = useTranslation();
+
+    const onChange = (name: string) => {
+        dispatch(settingsGoToSheet(name));
+        onSelect();
+    };
 
     return (
         <>
@@ -31,7 +40,7 @@ export default function SettingsMenu() {
                     }))
                 }
                 value={sheetName}
-                onChange={(name) => dispatch(settingsGoToSheet(name))}
+                onChange={onChange}
             />
         </>
     );

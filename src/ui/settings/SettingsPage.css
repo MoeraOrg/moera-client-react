@@ -13,6 +13,40 @@
         "menu buttons buttons";
 }
 
+@media only screen and (max-width: 575px) {
+    .settings-notebook-switcher {
+        width: 100vw;
+        height: min-content;
+        overflow-x: hidden;
+    }
+
+    .settings-notebook {
+        margin: 0;
+        padding: 0 1rem 1rem 1rem;
+        border-radius: 0;
+        width: 200vw;
+        height: calc(100vh - 5.5rem);
+        grid-template-columns: calc(100vw - 1rem) calc(100vw - 1rem);
+        grid-template-rows: 4.6rem .5rem auto 3.875rem;
+        grid-template-areas:
+        "tabs back"
+        "tabs sheet"
+        "menu sheet"
+        "menu buttons";
+        position: relative;
+    }
+
+    .settings-notebook.menu-side {
+        left: 0;
+        transition: left .15s ease-in-out;
+    }
+
+    .settings-notebook.sheet-side {
+        left: -100vw;
+        transition: left .15s ease-in-out;
+    }
+}
+
 .settings-notebook .settings-title {
     grid-area: title;
     font-family: var(--font-messages), sans-serif;
@@ -23,12 +57,12 @@
     margin-bottom: 2rem;
 }
 
-.settings-notebook .form-check {
-    padding-left: 1.75em;
+@media only screen and (max-width: 575px) {
+    .settings-notebook .settings-title {
+        display: none;
+    }
 }
 
-@media only screen and (max-width: 575px) {
-    .settings-notebook {
-        border-radius: 0;
-    }
+.settings-notebook .form-check {
+    padding-left: 1.75em;
 }

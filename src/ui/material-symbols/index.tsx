@@ -3,6 +3,7 @@ import * as React from 'react';
 import { ReactComponent as msAddBox } from "ui/material-symbols/add_box.isvg";
 import { ReactComponent as msAddLink } from "ui/material-symbols/add_link.isvg";
 import { ReactComponent as msAlternateEmail } from "ui/material-symbols/alternate_email.isvg";
+import { ReactComponent as msArrowBack } from "ui/material-symbols/arrow_back.isvg";
 import { ReactComponent as msArrowDownward } from "ui/material-symbols/arrow_downward.isvg";
 import { ReactComponent as msArrowSelectorToolFilled } from "ui/material-symbols/arrow_selector_tool_filled.isvg";
 import { ReactComponent as msArrowUpward } from "ui/material-symbols/arrow_upward.isvg";
@@ -110,6 +111,7 @@ export {
     msAddBox,
     msAddLink,
     msAlternateEmail,
+    msArrowBack,
     msArrowDownward,
     msArrowSelectorToolFilled,
     msArrowUpward,

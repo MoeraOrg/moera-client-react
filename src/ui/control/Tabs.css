@@ -4,12 +4,8 @@
     --nav-link-arrow-color: var(--bs-nav-link-color);
 }
 
-.nav.nav-tabs .nav-link {
+.nav.nav-tabs .nav-link, .nav.nav-pills .nav-link {
     cursor: pointer;
-}
-
-.nav.nav-tabs .nav-link.active {
-    cursor: default;
 }
 
 .nav.nav-pills .nav-link.active .principal {
@@ -22,7 +18,6 @@
 
 .nav.nav-pills .nav-link:hover {
     background-color: var(--nav-pills-link-hover-bg);
-    cursor: pointer;
 }
 
 .nav.nav-pills .nav-link A {
@@ -56,12 +51,22 @@
     overflow-y: hidden;
 }
 
+.nav.nav-tabs.scroll.flex-column, .nav.nav-pills.scroll.flex-column {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
 @media only screen and (max-width: 575px) {
     .nav.nav-tabs, .nav.nav-pills {
         flex-wrap: nowrap;
         overflow-x: auto;
         overflow-y: hidden;
         scrollbar-width: none;
+    }
+
+    .nav.nav-tabs.flex-column, .nav.nav-pills.flex-column {
+        overflow-x: hidden;
+        overflow-y: auto;
     }
 }
 

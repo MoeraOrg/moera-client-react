@@ -9,6 +9,13 @@
     padding-right: 1rem;
 }
 
+@media only screen and (max-width: 575px) {
+    .settings-sheet {
+        width: calc(100% - 1rem);
+        padding-left: 1rem;
+    }
+}
+
 .settings-sheet .chapter {
     margin-bottom: 2rem;
     padding-top: .5rem;

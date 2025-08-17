@@ -7,31 +7,38 @@ import { isConnectedToHome } from "state/home/selectors";
 import { Page } from "ui/page/Page";
 import SettingsConflicts from "ui/settings/SettingsConflicts";
 import SettingsTabs from "ui/settings/SettingsTabs";
+import SettingsBack from "ui/settings/SettingsBack";
 import SettingsMenu from "ui/settings/SettingsMenu";
 import SettingsTabContent from "ui/settings/SettingsTabContent";
 import "./SettingsPage.css";
 
+type NotebookSide = "menu" | "sheet";
+
 export default function SettingsPage() {
     const connectedToHome = useSelector(isConnectedToHome);
     const tab = useSelector((state: ClientState) => state.settings.tab);
+    const [side, setSide] = React.useState<NotebookSide>("menu");
     const {t} = useTranslation();
 
-    const visible = connectedToHome || tab !== "node";
+    const visible = connectedToHome || tab === "client";
 
     return (
         <>
             <Page>
                 <div className="centralright-pane">
-                    <div className="settings-notebook">
-                        <div className="settings-title">{t("settings")}</div>
-                        <SettingsConflicts/>
-                        <SettingsTabs/>
-                        {visible &&
-                            <>
-                                <SettingsMenu/>
-                                <SettingsTabContent tab={tab}/>
-                            </>
-                        }
+                    <SettingsConflicts/>
+                    <div className="settings-notebook-switcher">
+                        <div className={`settings-notebook ${side}-side`}>
+                            <div className="settings-title">{t("settings")}</div>
+                            <SettingsTabs/>
+                            {visible &&
+                                <>
+                                    <SettingsBack onBack={() => setSide("menu")}/>
+                                    <SettingsMenu onSelect={() => setSide("sheet")}/>
+                                    <SettingsTabContent tab={tab}/>
+                                </>
+                            }
+                        </div>
                     </div>
                 </div>
             </Page>
