@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { Page } from "ui/page/Page";
+import { useOverlay } from "ui/overlays/overlays";
 import SettingsConflicts from "ui/settings/SettingsConflicts";
 import SettingsTabs from "ui/settings/SettingsTabs";
 import SettingsBack from "ui/settings/SettingsBack";
@@ -18,6 +19,17 @@ export default function SettingsPage() {
     const connectedToHome = useSelector(isConnectedToHome);
     const tab = useSelector((state: ClientState) => state.settings.tab);
     const [side, setSide] = React.useState<NotebookSide>("menu");
+    const notebookRef = useRef<HTMLDivElement>(null);
+    useOverlay(
+        notebookRef,
+        {
+            visible: side === "sheet",
+            onClose: () => setSide("menu"),
+            closeOnClick: false,
+            closeOnSelect: false,
+            closeOnEscape: false
+        }
+    )
     const {t} = useTranslation();
 
     const visible = connectedToHome || tab === "client";
@@ -28,7 +40,7 @@ export default function SettingsPage() {
                 <div className="page-centralright-pane">
                     <SettingsConflicts/>
                     <div className="settings-notebook-switcher">
-                        <div className={`settings-notebook ${side}-side`}>
+                        <div className={`settings-notebook ${side}-side`} ref={notebookRef}>
                             <div className="settings-title">{t("settings")}</div>
                             <SettingsTabs/>
                             {visible &&
