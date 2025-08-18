@@ -13,7 +13,8 @@ function sum(reactionTotals: ReactionTotalInfo[]): number {
 function topEmojis(reactionTotals: ReactionTotalInfo[]) {
     const actual = reactionTotals.filter(rt => rt.total == null || rt.total > 0);
     actual.sort((rt1, rt2) =>
-        rt1.total != null && rt2.total != null ? rt2.total - rt1.total : (rt2.share ?? 0) - (rt1.share ?? 0));
+        rt1.total != null && rt2.total != null ? rt2.total - rt1.total : (rt2.share ?? 0) - (rt1.share ?? 0)
+    );
     return actual.slice(0, 3).map(rt => Number(rt.emoji).toString(16));
 }
 
@@ -67,9 +68,10 @@ export function ReactionTotals({reactions, seniorReaction, seniorName, seniorFul
     const negativeTotal = sum(negative);
     const positiveTopEmojis = topEmojis(positive);
     const negativeTopEmojis = topEmojis(negative);
-    if (positiveTotal === 0 && negativeTotal === 0
-        && positiveTopEmojis.length === 0 && negativeTopEmojis.length === 0 && seniorReaction == null) {
-
+    if (
+        positiveTotal === 0 && negativeTotal === 0
+        && positiveTopEmojis.length === 0 && negativeTopEmojis.length === 0 && seniorReaction == null
+    ) {
         return <div className="reactions"/>;
     }
 
