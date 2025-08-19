@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Property } from 'csstype';
 import { FormikProps, FormikValues, WithFormikConfig } from 'formik';
@@ -44,7 +44,7 @@ export function useSettingsResetForm<Props extends SettingsResetFormProps, Value
     }, [homeOwnerName, resetForm, formId]); // 'props' are missing on purpose
 }
 
-function calcListMaxHeight() {
+function calcListMaxHeight(): Property.MaxHeight {
     const sheetElement = document.getElementsByClassName("settings-sheet").item(0);
     if (sheetElement == null) {
         return "none";
@@ -57,4 +57,20 @@ function calcListMaxHeight() {
     const bottomHeight = buttonsElement.getBoundingClientRect().height + 75;
     const maxHeight = window.innerHeight - topHeight - bottomHeight;
     return `${maxHeight}px`;
+}
+
+export function useDisableScrollX<T extends HTMLElement>(ref: React.RefObject<T>): void {
+    const resetScroll = useCallback(() => {
+        if (ref.current?.scrollLeft !== 0) {
+            ref.current?.scrollTo(0, 0);
+        }
+    }, [ref]);
+
+    useEffect(() => {
+        const switcher = ref.current;
+        if (switcher != null) {
+            switcher.addEventListener("scroll", resetScroll);
+            return () => switcher.removeEventListener("scroll", resetScroll);
+        }
+    }, [resetScroll, ref]);
 }

@@ -6,6 +6,7 @@ import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { Page } from "ui/page/Page";
 import { useOverlay } from "ui/overlays/overlays";
+import { useDisableScrollX } from "ui/settings/settings-hooks";
 import SettingsConflicts from "ui/settings/SettingsConflicts";
 import SettingsTabs from "ui/settings/SettingsTabs";
 import SettingsBack from "ui/settings/SettingsBack";
@@ -19,9 +20,9 @@ export default function SettingsPage() {
     const connectedToHome = useSelector(isConnectedToHome);
     const tab = useSelector((state: ClientState) => state.settings.tab);
     const [side, setSide] = React.useState<NotebookSide>("menu");
-    const notebookRef = useRef<HTMLDivElement>(null);
+    const switcherRef = useRef<HTMLDivElement>(null);
     useOverlay(
-        notebookRef,
+        switcherRef,
         {
             visible: side === "sheet",
             onClose: () => setSide("menu"),
@@ -32,6 +33,9 @@ export default function SettingsPage() {
     )
     const {t} = useTranslation();
 
+    // For an unknown reason, the scroll position may be non-zero after the page is loaded or tab switched
+    useDisableScrollX(switcherRef);
+
     const visible = connectedToHome || tab === "client";
 
     return (
@@ -39,8 +43,8 @@ export default function SettingsPage() {
             <Page>
                 <div className="page-centralright-pane">
                     <SettingsConflicts/>
-                    <div className="settings-notebook-switcher">
-                        <div className={`settings-notebook ${side}-side`} ref={notebookRef}>
+                    <div className="settings-notebook-switcher" ref={switcherRef}>
+                        <div className={`settings-notebook ${side}-side`}>
                             <div className="settings-title">{t("settings")}</div>
                             <SettingsTabs/>
                             {visible &&
