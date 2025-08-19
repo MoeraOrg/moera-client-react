@@ -16,16 +16,16 @@ export default function Navigation() {
     const title = useSelector((state: ClientState) => state.navigation.title);
     const canonicalUrl = useSelector((state: ClientState) => state.navigation.canonicalUrl);
     const noIndex = useSelector((state: ClientState) => state.navigation.noIndex);
-    const update = useSelector((state: ClientState) => state.navigation.update);
+    const create = useSelector((state: ClientState) => state.navigation.create);
     const locked = useSelector((state: ClientState) => state.navigation.locked);
     const count = useSelector(getInstantCount);
     const dispatch = useDispatch();
 
-    const currentNodeName = useRef<string | null>(null);
-    const currentRootLocation = useRef<string | null>(null);
-    const currentLocation = useRef<string | null>(null);
+    const stack = useRef<string[]>([]);
 
     const popState = useCallback((event: PopStateEvent) => {
+        stack.current.pop();
+
         const {name, rootLocation: root, path = null, query = null, hash = null} = Browser.parseDocumentLocation();
         if (root === rootLocation) {
             dispatch(goToLocation(path, query, hash));
@@ -82,24 +82,27 @@ export default function Navigation() {
     }, [messageReceived, popState]);
 
     useEffect(() => {
-        if (!locked
-            && (nodeName !== currentNodeName.current
-                || rootLocation !== currentRootLocation.current
-                || location !== currentLocation.current)
-            && nodeName && rootLocation != null && location != null
-        ) {
-            const url = Browser.universalLocation(Browser.getRootLocation(), nodeName, rootLocation, location);
-            const data = {location: url};
-            if (update) {
-                window.history.pushState(data, "", url);
-            } else {
-                window.history.replaceState(data, "", url);
-            }
-            window.Android?.locationChanged(url, location);
-            currentRootLocation.current = rootLocation;
-            currentLocation.current = location;
+        if (locked || !nodeName || rootLocation == null || location == null) {
+            return;
         }
-    }, [dispatch, location, locked, nodeName, rootLocation, update]);
+
+        const url = Browser.universalLocation(Browser.getRootLocation(), nodeName, rootLocation, location);
+        if ((!create && stack.current.length === 0) || (create && stack.current[stack.current.length - 1] === url)) {
+            return;
+        }
+
+        const data = {location: url};
+        if (create) {
+            stack.current.push(url);
+            window.history.pushState(data, "", url);
+        } else {
+            if (stack.current.length > 0) {
+                stack.current[stack.current.length - 1] = url;
+            }
+            window.history.replaceState(data, "", url);
+        }
+        window.Android?.locationChanged(url, location);
+    }, [dispatch, location, locked, nodeName, rootLocation, create]);
 
     useEffect(() => {
         const counter = count > 0 ? `(${count}) ` : "";

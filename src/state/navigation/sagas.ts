@@ -45,7 +45,7 @@ function transformation(
     for (let a of actions) {
         dispatch(a.causedBy(caller));
     }
-    changeLocation(null);
+    changeLocation(null, caller);
     dispatch(locationUnlock().causedBy(caller));
 }
 
@@ -86,17 +86,17 @@ function goToLocationSaga(action: GoToLocationAction): void {
 }
 
 function newLocationSaga(action: NewLocationAction): void {
-    changeLocation(action);
+    changeLocation(action.type, action);
 }
 
 function updateLocationSaga(action: UpdateLocationAction): void {
-    changeLocation(action);
+    changeLocation(action.type, action);
 }
 
-function changeLocation(action: NewLocationAction | UpdateLocationAction | null): void {
+function changeLocation(actionType: "NEW_LOCATION" | "UPDATE_LOCATION" | null, caller: ClientAction): void {
     const info = locationBuild(select(), new LocationInfo());
-    const update = action == null || action.type === "NEW_LOCATION";
-    dispatch(locationSet(info.toUrl(), info.title, info.canonicalUrl, info.noIndexPage, update).causedBy(action));
+    const create = actionType == null || actionType === "NEW_LOCATION";
+    dispatch(locationSet(info.toUrl(), info.title, info.canonicalUrl, info.noIndexPage, create).causedBy(caller));
 }
 
 async function goHomeLocationSaga(action: GoHomeLocationAction): Promise<void> {
