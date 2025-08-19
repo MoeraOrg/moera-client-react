@@ -24,6 +24,7 @@ import { ReactComponent as msCodeBlocks } from "ui/material-symbols/code_blocks.
 import { ReactComponent as msComment } from "ui/material-symbols/comment.isvg";
 import { ReactComponent as msCommentRegular } from "ui/material-symbols/comment-regular.isvg"; // FontAwesome
 import { ReactComponent as msDelete } from "ui/material-symbols/delete.isvg";
+import { ReactComponent as msEdit } from "ui/material-symbols/edit.isvg";
 import { ReactComponent as msError } from "ui/material-symbols/error.isvg";
 import { ReactComponent as msExpandCircleDown } from "ui/material-symbols/expand_circle_down.isvg";
 import { ReactComponent as msExpandCircleDownFilled40 } from "ui/material-symbols/expand_circle_down_filled40.isvg";
@@ -66,6 +67,7 @@ import { ReactComponent as msMoreHoriz } from "ui/material-symbols/more_horiz.is
 import { ReactComponent as msMoreVert } from "ui/material-symbols/more_vert.isvg";
 import { ReactComponent as msMoreVert12 } from "ui/material-symbols/more_vert12.isvg";
 import { ReactComponent as msOpenInNew } from "ui/material-symbols/open_in_new.isvg";
+import { ReactComponent as msPaid } from "ui/material-symbols/paid.isvg";
 import { ReactComponent as msPartlyCloudyDay } from "ui/material-symbols/partly_cloudy_day.isvg";
 import { ReactComponent as msPerson } from "ui/material-symbols/person.isvg";
 import { ReactComponent as msPersonBook } from "ui/material-symbols/person_book.isvg";
@@ -132,6 +134,7 @@ export {
     msComment,
     msCommentRegular,
     msDelete,
+    msEdit,
     msError,
     msExpandCircleDown,
     msExpandCircleDownFilled40,
@@ -174,6 +177,7 @@ export {
     msMoreVert,
     msMoreVert12,
     msOpenInNew,
+    msPaid,
     msPartlyCloudyDay,
     msPerson,
     msPersonBook,

@@ -27,4 +27,5 @@ export interface ProfileState {
     avatarEditDialog: AvatarEditDialogState;
     conflict: boolean;
     updating: boolean;
+    formId: number;
 }

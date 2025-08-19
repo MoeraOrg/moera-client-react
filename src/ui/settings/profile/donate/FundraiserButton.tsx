@@ -1,11 +1,10 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 import { FundraiserInfo } from "api";
+import { Icon, msEdit } from "ui/material-symbols";
 
 interface Props {
     index: number;
@@ -22,10 +21,10 @@ export default function FundraiserButton({index, fundraiser, dragged, onClick}: 
     };
 
     return (
-        <button className={cx("fundraiser", {"dragged": dragged})} onClick={onClick} ref={sortable.setNodeRef}
-                style={sortableStyle}{...sortable.attributes} {...sortable.listeners}>
-            {fundraiser.title}
-            <FontAwesomeIcon className="icon" icon={faPen}/>
+        <button className={cx("btn", "btn-tool", "fundraiser", {"dragged": dragged})} onClick={onClick}
+                ref={sortable.setNodeRef} style={sortableStyle}{...sortable.attributes} {...sortable.listeners}>
+            <span className="me-2">{fundraiser.title}</span>
+            <Icon icon={msEdit} size={14}/>
         </button>
     );
 }

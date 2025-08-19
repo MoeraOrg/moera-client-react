@@ -37,10 +37,11 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function SettingsProfileSheetInner(props: Props) {
-    const {profile, resetForm} = props;
+    const {resetForm} = props;
 
     const loaded = useSelector((state: ClientState) => state.profile.loaded);
     const updating = useSelector((state: ClientState) => state.profile.updating);
+    const formId = useSelector((state: ClientState) => state.profile.formId);
     const tinyScreen = useIsTinyScreen();
     const sheetMaxHeight = useSettingsSheetResize();
     const {t} = useTranslation();
@@ -49,7 +50,7 @@ function SettingsProfileSheetInner(props: Props) {
         const values = settingsProfileSheetLogic.mapPropsToValues(props);
         resetForm({values});
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loaded, profile.bioSrc, resetForm]); // 'props' are missing on purpose
+    }, [loaded, formId, resetForm]); // 'props' are missing on purpose
 
     return (
         <Form className="settings-sheet-form">
@@ -57,6 +58,14 @@ function SettingsProfileSheetInner(props: Props) {
                 <AvatarEditor name="avatar"/>
                 <InputField title={t("full-name")} name="fullName" maxLength={96} anyValue autoFocus/>
                 <InputField title={t("title")} name="title" maxLength={120}/>
+                <RichTextField
+                    title={t("bio")}
+                    name="bioSrc"
+                    placeholder={t("write-anything")}
+                    format={props.srcFormatDefault}
+                    anyValue
+                    noMedia
+                />
                 <ComboboxField title={t("gender")} name="gender" col="col-sm-6" data={["Male", "Female"]}
                                textField={g => longGender(g, t)}/>
                 <div className="row">
@@ -67,14 +76,6 @@ function SettingsProfileSheetInner(props: Props) {
                                     long={!tinyScreen}
                                     groupClassName="col-sm-6 col-2 align-self-end pb-1"/>
                 </div>
-                <RichTextField
-                    title={t("bio")}
-                    name="bioSrc"
-                    placeholder={t("write-anything")}
-                    format={props.srcFormatDefault}
-                    anyValue
-                    noMedia
-                />
                 <DonateField title={t("donate")} name="fundraisers"/>
             </div>
             <SettingsButtons updating={updating}/>

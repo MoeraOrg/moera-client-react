@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import * as immutable from 'object-path-immutable';
 import {
     DndContext,
@@ -18,9 +16,11 @@ import { SortableContext } from '@dnd-kit/sortable';
 import { useTranslation } from 'react-i18next';
 
 import { FundraiserInfo } from "api";
+import { Icon, msPaid } from "ui/material-symbols";
 import FundraiserButton from "ui/settings/profile/donate/FundraiserButton";
 import FundraiserDialog from "ui/settings/profile/donate/FundraiserDialog";
-import "ui/settings/profile/donate/DonateEditor.css";
+import "./DonateEditor.css";
+import { Button } from "ui/control";
 
 interface Props {
     value: FundraiserInfo[];
@@ -110,7 +110,7 @@ export default function DonateEditor({value, setValue}: Props) {
                 {ReactDOM.createPortal(
                     <DragOverlay zIndex={1080} dropAnimation={null}>
                         {dragged != null &&
-                            <span className="fundraiser-overlay">
+                            <span className="btn btn-tool fundraiser-overlay">
                                 {value[dragged].title}
                             </span>
                         }
@@ -118,10 +118,10 @@ export default function DonateEditor({value, setValue}: Props) {
                     document.querySelector("#modal-root")!
                 )}
             </DndContext>
-            <button className="new-fundraiser" onClick={onClick(null)}>
-                <FontAwesomeIcon className="icon" icon={faPlus}/>
+            <Button variant="primary" className="new-fundraiser" onClick={onClick(null)}>
+                <Icon className="icon" icon={msPaid} size={16}/>
                 {t("add-donation-button")}
-            </button>
+            </Button>
             {showDialog &&
                 <FundraiserDialog fundraiser={selected != null ? value[selected] : null} onSubmit={onSubmitDialog}
                                   onCancel={onCancelDialog} onDelete={onDelete}/>

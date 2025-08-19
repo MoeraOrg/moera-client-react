@@ -1,7 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { useField } from 'formik';
 
 import { AvatarInfo } from "api";
@@ -14,10 +12,11 @@ import {
     profileOpenAvatarEditDialog
 } from "state/profile/actions";
 import { useButtonPopper } from "ui/hook";
-import { Avatar } from "ui/control";
+import { Avatar, Button } from "ui/control";
+import { Icon, msEdit } from "ui/material-symbols";
 import AvatarSelector from "ui/settings/profile/avatar/AvatarSelector";
 import AvatarEditDialog from "ui/settings/profile/avatar/AvatarEditDialog";
-import "ui/settings/profile/avatar/AvatarEditor.css";
+import "./AvatarEditor.css";
 
 interface Props {
     name: string;
@@ -74,7 +73,7 @@ export default function AvatarEditor({name, onChange}: Props) {
         <>
             <div className="avatar-editor">
                 <div ref={setButtonRef} onClick={onEdit}>
-                    <div className="icon"><FontAwesomeIcon icon={faPen}/></div>
+                    <Button variant="silent-round" className="icon"><Icon icon={msEdit} size={20}/></Button>
                     <Avatar avatar={value} ownerName={nodeName} size={200}/>
                 </div>
                 {visible &&

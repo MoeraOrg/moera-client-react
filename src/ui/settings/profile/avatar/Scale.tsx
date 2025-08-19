@@ -4,7 +4,7 @@ import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from "ui/control";
-import "ui/settings/profile/avatar/Scale.css";
+import "./Scale.css";
 
 interface Props {
     max?: number;

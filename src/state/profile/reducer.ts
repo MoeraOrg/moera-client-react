@@ -26,7 +26,8 @@ const emptyProfile = {
         loading: false,
         loaded: false,
         avatars: []
-    }
+    },
+    formId: 0
 }
 
 const emptyAvatarEditDialog = {
@@ -73,13 +74,15 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
                     ...cloneDeep(action.payload.profile)
                 },
                 loading: false,
-                loaded: true
+                loaded: true,
+                formId: state.formId + 1
             };
 
         case "PROFILE_UNSET":
             return {
                 ...state,
-                ...cloneDeep(emptyProfile)
+                ...cloneDeep(emptyProfile),
+                formId: state.formId + 1
             };
 
         case "PROFILE_EDIT_CONFLICT":
