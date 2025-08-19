@@ -6,7 +6,7 @@ import { AvatarInfo } from "api";
 import { dispatch } from "state/store-sagas";
 import { ExtStoryInfo } from "state/feeds/state";
 import { reminderAvatarUpdate } from "state/stories/actions";
-import AvatarEditor from "ui/profile/edit/avatar/AvatarEditor";
+import AvatarEditor from "ui/settings/profile/avatar/AvatarEditor";
 import StoryMenu from "ui/story/StoryMenu";
 import StoryBadges from "ui/story/StoryBadges";
 

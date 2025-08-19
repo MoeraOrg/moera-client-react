@@ -5,7 +5,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faCircle, faSquare } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
 
-import "./AvatarShape.css";
+import "ui/settings/profile/avatar/AvatarShape.css";
 
 type Shape = "circle" | "square";
 const SHAPE_ICONS: Record<Shape, IconProp> = {

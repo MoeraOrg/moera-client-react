@@ -7,6 +7,7 @@ import {
     isAtSettingsNodeTab,
     isSettingsAtAddonsSheet,
     isSettingsAtApplicationsSheet,
+    isSettingsAtProfileSheet,
     isSettingsAtRemovalSheet,
     isSettingsClientValuesToBeLoaded,
     isSettingsDeleteNodeRequestToBeLoaded,
@@ -40,6 +41,8 @@ import {
 import { isConnectedToHome } from "state/home/selectors";
 import { newLocation, updateLocation } from "state/navigation/actions";
 import { flashBox } from "state/flashbox/actions";
+import { profileEditConflict, profileLoad } from "state/profile/actions";
+import { isProfileLoaded, isProfileToBeLoaded } from "state/profile/selectors";
 
 export default [
     trigger("SETTINGS_GO_TO_TAB", conj(isConnectedToHome, isSettingsNodeValuesToBeLoaded), settingsNodeValuesLoad),
@@ -96,5 +99,16 @@ export default [
         ),
         settingsDeleteNodeRequestLoad
     ),
-    trigger("HOME_READY", inv(isConnectedToHome), settingsDeleteNodeRequestUnset)
+    trigger("HOME_READY", inv(isConnectedToHome), settingsDeleteNodeRequestUnset),
+    trigger(
+        ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_SHEET"],
+        conj(isConnectedToHome, isAtSettingsPage, isSettingsAtProfileSheet, isProfileToBeLoaded),
+        profileLoad
+    ),
+    trigger("EVENT_NODE_PROFILE_UPDATED", conj(isAtSettingsPage, isSettingsAtProfileSheet), profileEditConflict),
+    trigger(
+        "EVENT_NODE_PROFILE_UPDATED",
+        conj(isAtSettingsPage, inv(isSettingsAtProfileSheet), isProfileLoaded),
+        profileLoad
+    ),
 ];

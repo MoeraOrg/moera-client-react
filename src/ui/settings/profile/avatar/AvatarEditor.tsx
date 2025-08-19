@@ -15,9 +15,9 @@ import {
 } from "state/profile/actions";
 import { useButtonPopper } from "ui/hook";
 import { Avatar } from "ui/control";
-import AvatarSelector from "ui/profile/edit/avatar/AvatarSelector";
-import AvatarEditDialog from "ui/profile/edit/avatar/AvatarEditDialog";
-import "./AvatarEditor.css";
+import AvatarSelector from "ui/settings/profile/avatar/AvatarSelector";
+import AvatarEditDialog from "ui/settings/profile/avatar/AvatarEditDialog";
+import "ui/settings/profile/avatar/AvatarEditor.css";
 
 interface Props {
     name: string;

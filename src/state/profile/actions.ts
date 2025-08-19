@@ -20,14 +20,6 @@ export type ProfileUnsetAction = ActionWithoutPayload<"PROFILE_UNSET">;
 export const profileUnset = (): ProfileUnsetAction =>
     actionWithoutPayload("PROFILE_UNSET");
 
-export type ProfileEditAction = ActionWithoutPayload<"PROFILE_EDIT">;
-export const profileEdit = (): ProfileEditAction =>
-    actionWithoutPayload("PROFILE_EDIT");
-
-export type ProfileEditCancelAction = ActionWithoutPayload<"PROFILE_EDIT_CANCEL">;
-export const profileEditCancel = (): ProfileEditCancelAction =>
-    actionWithoutPayload("PROFILE_EDIT_CANCEL");
-
 export type ProfileEditConflictAction = ActionWithoutPayload<"PROFILE_EDIT_CONFLICT">;
 export const profileEditConflict = (): ProfileEditConflictAction =>
     actionWithoutPayload("PROFILE_EDIT_CONFLICT");
@@ -151,8 +143,6 @@ export type ProfileAnyAction =
     | ProfileLoadFailedAction
     | ProfileSetAction
     | ProfileUnsetAction
-    | ProfileEditAction
-    | ProfileEditCancelAction
     | ProfileEditConflictAction
     | ProfileEditConflictCloseAction
     | ProfileUpdateAction

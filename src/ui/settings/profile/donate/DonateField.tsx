@@ -4,7 +4,7 @@ import { useField } from 'formik';
 import { FundraiserInfo } from "api";
 import { FormGroup } from "ui/control";
 import FieldError from "ui/control/field/FieldError";
-import DonateEditor from "ui/profile/edit/donate/DonateEditor";
+import DonateEditor from "ui/settings/profile/donate/DonateEditor";
 
 interface Props {
     name: string;

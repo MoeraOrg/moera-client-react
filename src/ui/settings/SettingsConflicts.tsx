@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { profileEditConflictClose } from "state/profile/actions";
 import {
     settingsClientConflictClose,
     settingsNodeConflictClose,
@@ -12,6 +13,7 @@ import { ConflictWarning } from "ui/control";
 
 export default function SettingsConflicts() {
     const tab = useSelector((state: ClientState) => state.settings.tab);
+    const profileConflict = useSelector((state: ClientState) => state.profile.conflict);
     const nodeConflict = useSelector((state: ClientState) => state.settings.node.conflict);
     const clientConflict = useSelector((state: ClientState) => state.settings.client.conflict);
     const pluginsConflict = useSelector((state: ClientState) => state.settings.plugins.conflict);
@@ -20,6 +22,10 @@ export default function SettingsConflicts() {
 
     return (
         <>
+            {(tab === "profile" && profileConflict) &&
+                <ConflictWarning text={t("profile-edited-conflict")}
+                                 onClose={() => dispatch(profileEditConflictClose())}/>
+            }
             {(tab === "node" && nodeConflict) &&
                 <ConflictWarning text={t("node-settings-changed-conflict")}
                                  onClose={() => dispatch(settingsNodeConflictClose())}/>

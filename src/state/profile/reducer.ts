@@ -42,9 +42,8 @@ const emptyAvatarEditDialog = {
     onCreate: null
 };
 
-const initialState = {
+const initialState: ProfileState = {
     ...cloneDeep(emptyProfile),
-    editing: false,
     avatarEditDialog: {
         ...emptyAvatarEditDialog
     },
@@ -83,13 +82,6 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
                 ...cloneDeep(emptyProfile)
             };
 
-        case "PROFILE_EDIT":
-            return {
-                ...state,
-                editing: true,
-                conflict: false
-            };
-
         case "PROFILE_EDIT_CONFLICT":
             return {
                 ...state,
@@ -108,11 +100,9 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
                 updating: true
             };
 
-        case "PROFILE_EDIT_CANCEL":
         case "PROFILE_UPDATE_SUCCEEDED":
             return {
                 ...state,
-                editing: false,
                 conflict: false,
                 updating: false
             };

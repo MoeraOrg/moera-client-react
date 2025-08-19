@@ -12,10 +12,10 @@ import { profileAvatarCreate, profileCloseAvatarEditDialog, profileImageUpload }
 import { getNodeRootPage } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ClientState } from "state/state";
-import Rotate from "ui/profile/edit/avatar/Rotate";
-import AvatarShape from "ui/profile/edit/avatar/AvatarShape";
-import Scale from "ui/profile/edit/avatar/Scale";
-import "./AvatarEditDialog.css";
+import Rotate from "ui/settings/profile/avatar/Rotate";
+import AvatarShape from "ui/settings/profile/avatar/AvatarShape";
+import Scale from "ui/settings/profile/avatar/Scale";
+import "ui/settings/profile/avatar/AvatarEditDialog.css";
 
 export default function AvatarEditDialog() {
     const imageUploading = useSelector((state: ClientState) => state.profile.avatarEditDialog.imageUploading);

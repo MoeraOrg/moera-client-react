@@ -4,30 +4,15 @@ import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import { getNodeRootLocation } from "state/node/selectors";
 import { goToProfile } from "state/navigation/actions";
-import { profileEdit, profileEditCancel } from "state/profile/actions";
-import { isProfileEditing } from "state/profile/selectors";
 import { LocationInfo } from "location/LocationInfo";
 import { atOwner } from "util/names";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
-    let actions = [];
-    if (srcInfo.directories[0] !== "profile") {
-        actions.push(goToProfile());
-        srcInfo = srcInfo.withPath("/profile").withNoQuery();
-    }
-    if (dstInfo.parameters["edit"] === "true" && srcInfo.parameters["edit"] !== "true") {
-        actions.push(profileEdit());
-    }
-    if (dstInfo.parameters["edit"] !== "true" && srcInfo.parameters["edit"] === "true") {
-        actions.push(profileEditCancel());
-    }
-    return actions;
+    return [goToProfile()];
 }
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
     info = info.sub("profile");
     info = info.withCanonicalUrl(getNodeRootLocation(state) + info.toUrl());
-    const editing = isProfileEditing(state);
-    info = editing ? info.withParameter("edit", "true") : info;
-    return info.withTitle((!editing ? i18n.t("profile") : i18n.t("edit-profile")) + atOwner(state));
+    return info.withTitle(i18n.t("profile") + atOwner(state));
 }

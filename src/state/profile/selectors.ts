@@ -2,8 +2,12 @@ import { AvatarInfo } from "api";
 import { ClientState } from "state/state";
 import { getOwnerCard, isPermitted } from "state/node/selectors";
 
-export function isProfileEditing(state: ClientState): boolean {
-    return state.profile.editing;
+export function isProfileToBeLoaded(state: ClientState): boolean {
+    return !state.profile.loaded && !state.profile.loading;
+}
+
+export function isProfileLoaded(state: ClientState): boolean {
+    return state.profile.loaded;
 }
 
 export function isProfileEditable(state: ClientState): boolean {

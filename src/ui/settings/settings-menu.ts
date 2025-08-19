@@ -68,6 +68,12 @@ export function text(text: string, marginBottom?: number): Text {
 }
 
 const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
+    "profile": [
+        sheet("profile"),
+        sheet("language", [
+            option(CLIENT_SETTINGS_PREFIX + "language"),
+        ]),
+    ],
     "node": [
         sheet("posting", [
             chapter("general", null, [
@@ -220,7 +226,7 @@ export function getSheet(tab: SettingsTabId, sheetName: string): Sheet | null {
 }
 
 export function getActualTab(tab: SettingsTabId): SettingsTabId {
-    return MENU_ITEMS[tab] ? tab : "client";
+    return MENU_ITEMS[tab] ? tab : "profile";
 }
 
 export function getActualSheetName(tab: SettingsTabId, sheetName: string): string {

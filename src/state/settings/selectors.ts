@@ -47,6 +47,10 @@ export function isSettingsAtRemovalSheet(state: ClientState): boolean {
     return state.settings.tab === "node" && state.settings.sheet === "removal";
 }
 
+export function isSettingsAtProfileSheet(state: ClientState): boolean {
+    return state.settings.tab === "profile" && state.settings.sheet === "profile";
+}
+
 export function isSettingsGrantsToBeLoaded(state: ClientState): boolean {
     return !state.settings.grants.loaded && !state.settings.grants.loading;
 }

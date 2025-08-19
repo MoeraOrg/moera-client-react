@@ -15,21 +15,21 @@ export default function ManagementMenu() {
             {
                 title: t("update-current-name"),
                 nodeName: REL_CURRENT,
-                href: "/profile?edit=true",
+                href: "/profile",
                 onClick: () => dispatch(nodeNameUpdateDialog(false)),
                 show: true
             },
             {
                 title: t("register-different-name"),
                 nodeName: REL_CURRENT,
-                href: "/profile?edit=true",
+                href: "/profile",
                 onClick: () => dispatch(registerNameDialog()),
                 show: true
             },
             {
                 title: t("transfer-existing-name"),
                 nodeName: REL_CURRENT,
-                href: "/profile?edit=true",
+                href: "/profile",
                 onClick: () => dispatch(nodeNameUpdateDialog(true)),
                 show: true
             }

@@ -62,8 +62,8 @@ const emptySettings = {
 };
 
 const initialState: SettingsState = {
-    tab: "client" as const,
-    sheet: "appearance",
+    tab: "profile" as const,
+    sheet: "profile",
     ...emptySettings,
     formId: 0
 };
@@ -73,7 +73,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
         case "SETTINGS_GO_TO_TAB":
             return immutable.wrap(state)
                 .set("tab", action.payload.tab)
-                .set("sheet", "appearance")
+                .set("sheet", "profile")
                 .set("node.conflict", false)
                 .set("client.conflict", false)
                 .set("plugins.conflict", false)

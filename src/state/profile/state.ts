@@ -24,7 +24,6 @@ export interface ProfileState {
         loaded: boolean;
         avatars: AvatarInfo[];
     };
-    editing: boolean;
     avatarEditDialog: AvatarEditDialogState;
     conflict: boolean;
     updating: boolean;

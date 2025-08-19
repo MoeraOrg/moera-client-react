@@ -18,8 +18,8 @@ import cx from 'classnames';
 
 import { AvatarInfo } from "api";
 import { Avatar, Loading } from "ui/control";
-import AvatarSelectorItem from "ui/profile/edit/avatar/AvatarSelectorItem";
-import "./AvatarSelector.css";
+import AvatarSelectorItem from "ui/settings/profile/avatar/AvatarSelectorItem";
+import "ui/settings/profile/avatar/AvatarSelector.css";
 
 interface Props {
     nodeName: string | null;

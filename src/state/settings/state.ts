@@ -1,6 +1,7 @@
 import { ClientSettingMetaInfo, GrantInfo, PluginInfo, SettingMetaInfo, TokenInfo } from "api";
 
-export type SettingsTabId = "node" | "client";
+// Do not forget to update SETTINGS_TABS in location/settings.ts
+export type SettingsTabId = "profile" | "node" | "client";
 
 export interface SettingsState {
     tab: SettingsTabId;

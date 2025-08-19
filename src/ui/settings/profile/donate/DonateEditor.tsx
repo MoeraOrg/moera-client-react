@@ -18,9 +18,9 @@ import { SortableContext } from '@dnd-kit/sortable';
 import { useTranslation } from 'react-i18next';
 
 import { FundraiserInfo } from "api";
-import FundraiserButton from "ui/profile/edit/donate/FundraiserButton";
-import FundraiserDialog from "ui/profile/edit/donate/FundraiserDialog";
-import "./DonateEditor.css";
+import FundraiserButton from "ui/settings/profile/donate/FundraiserButton";
+import FundraiserDialog from "ui/settings/profile/donate/FundraiserDialog";
+import "ui/settings/profile/donate/DonateEditor.css";
 
 interface Props {
     value: FundraiserInfo[];

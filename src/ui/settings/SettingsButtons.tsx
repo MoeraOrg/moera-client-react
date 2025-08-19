@@ -7,7 +7,11 @@ import { ClientState } from "state/state";
 import { Button } from "ui/control";
 import "./SettingsButtons.css";
 
-export default function SettingsButtons() {
+interface Props {
+    updating?: boolean;
+}
+
+export default function SettingsButtons({updating: customUpdating}: Props) {
     const updating = useSelector((state: ClientState) => state.settings.updating);
     const {dirty, handleReset} = useFormikContext();
     const {t} = useTranslation();
@@ -17,8 +21,7 @@ export default function SettingsButtons() {
             <Button variant="outline-secondary" disabled={!dirty} onClick={handleReset}>
                 {t("cancel")}
             </Button>
-            <Button variant="primary" type="submit" disabled={!dirty} loading={updating}
-                    compact>
+            <Button variant="primary" type="submit" disabled={!dirty} loading={customUpdating ?? updating} compact>
                 {t("save")}
             </Button>
         </div>
