@@ -4,7 +4,7 @@ import { BlockedEntryOperation, FeedReference, PostingInfo, StoryInfo, Subscript
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { findPostingIdsByRemote } from "state/postings/selectors";
-import { ExtPostingInfo, PostingsState } from "state/postings/state";
+import { ExtPostingInfo, NodePostingsState, PostingsState } from "state/postings/state";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
 import { ellipsize } from "util/text";
 import { absoluteNodeName } from "util/rel-node-name";
@@ -48,12 +48,29 @@ function outsideIn(story: StoryInfo): PostingInfo | null {
     if (posting == null || posting.body == null) {
         return null;
     }
-    posting.feedReferences = [toFeedReference(story)];
+
+    if (posting.feedReferences == null || posting.feedReferences.length === 0) {
+        posting.feedReferences = [toFeedReference(story)];
+    }
+
     return posting;
 }
 
-function immutableSetSubscriptionId(state: PostingsState, nodeName: string, id: string, type: SubscriptionType,
-                                           subscriptionId: string | null) {
+function mergeFeedReferences(
+    fr1: FeedReference[] | null | undefined, fr2: FeedReference[] | null | undefined
+): FeedReference[] {
+    const merged = [...(fr1 ?? []), ...(fr2 ?? [])];
+    return merged.filter((ref, index) => merged.findIndex(r => r.storyId === ref.storyId) === index);
+}
+
+function mergePreviousFeedReferences(posting: PostingInfo, state: NodePostingsState | undefined): PostingInfo {
+    posting.feedReferences = mergeFeedReferences(posting.feedReferences, state?.[posting.id]?.posting.feedReferences);
+    return posting;
+}
+
+function immutableSetSubscriptionId(
+    state: PostingsState, nodeName: string, id: string, type: SubscriptionType, subscriptionId: string | null
+) {
     switch (type) {
         case "posting-comments":
             return immutable.set(state, [nodeName, id, "subscriptions", "comments"], subscriptionId);
@@ -83,6 +100,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             action.payload.stories
                 .map(s => outsideIn(s))
                 .filter(notNull)
+                .map(p => mergePreviousFeedReferences(p, state[nodeName]))
                 .forEach(p => istate.assign([nodeName, p.id], {
                     posting: safeguard(p),
                     deleting: false,

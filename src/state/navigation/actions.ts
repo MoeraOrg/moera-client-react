@@ -1,5 +1,6 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { Scope } from "api";
+import { NavigationStackItem } from "state/navigation/state";
 import { Page } from "state/navigation/pages";
 import { SearchFilter, SearchTab } from "state/search/state";
 
@@ -130,14 +131,20 @@ export const updateLocation = (): UpdateLocationAction =>
 export type LocationSetAction = ActionWithPayload<"LOCATION_SET", {
     location: string;
     title: string | null;
+    backTitle: string | null;
     canonicalUrl: string | null;
     noIndex: boolean;
     create: boolean;
 }>;
 export const locationSet = (
-    location: string, title: string | null, canonicalUrl: string | null, noIndex: boolean, create: boolean
+    location: string,
+    title: string | null,
+    backTitle: string | null,
+    canonicalUrl: string | null,
+    noIndex: boolean,
+    create: boolean
 ): LocationSetAction =>
-    actionWithPayload("LOCATION_SET", {location, title, canonicalUrl, noIndex, create});
+    actionWithPayload("LOCATION_SET", {location, title, backTitle, canonicalUrl, noIndex, create});
 
 export type LocationLockAction = ActionWithoutPayload<"LOCATION_LOCK">;
 export const locationLock = (): LocationLockAction =>
@@ -171,6 +178,12 @@ export type BottomMenuShowAction = ActionWithoutPayload<"BOTTOM_MENU_SHOW">;
 export const bottomMenuShow = (): BottomMenuShowAction =>
     actionWithoutPayload("BOTTOM_MENU_SHOW");
 
+export type NavigationStackSetAction = ActionWithPayload<"NAVIGATION_STACK_SET", {
+    stack: NavigationStackItem[];
+}>;
+export const navigationStackSet = (stack: NavigationStackItem[]): NavigationStackSetAction =>
+    actionWithPayload("NAVIGATION_STACK_SET", {stack});
+
 export type NavigationAnyAction =
     InitFromNodeLocationAction
     | InitFromLocationAction
@@ -184,4 +197,5 @@ export type NavigationAnyAction =
     | GoToLocationAction
     | GoHomeLocationAction
     | BottomMenuHideAction
-    | BottomMenuShowAction;
+    | BottomMenuShowAction
+    | NavigationStackSetAction;

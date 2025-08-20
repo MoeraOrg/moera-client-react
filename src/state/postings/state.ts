@@ -20,6 +20,6 @@ export interface PostingState {
     }
 }
 
-type NodePostingsState = Partial<Record<string, PostingState>>;
+export type NodePostingsState = Partial<Record<string, PostingState>>;
 
 export type PostingsState = Partial<Record<string, NodePostingsState>>;

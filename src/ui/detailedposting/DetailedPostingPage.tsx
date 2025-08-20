@@ -8,6 +8,8 @@ import { useTranslation } from 'react-i18next';
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { PostingInfo } from "api";
 import { ClientState } from "state/state";
+import { NavigationStackItem } from "state/navigation/state";
+import { getNavigationStack } from "state/navigation/selectors";
 import { isGooglePlayHiding } from "state/node/selectors";
 import { getDetailedPosting, isDetailedPostingBeingDeleted } from "state/detailedposting/selectors";
 import { getPostingFeedReference, isPostingSheriffProhibited } from "state/postings/selectors";
@@ -16,8 +18,13 @@ import { MinimalStoryInfo } from "ui/types";
 import { Page } from "ui/page/Page";
 import DetailedPostingPageHeader from "ui/detailedposting/DetailedPostingPageHeader";
 import DetailedPosting from "ui/detailedposting/DetailedPosting";
-import { getFeedTitle } from "ui/feed/feeds";
+import { getFeedBackTitle } from "ui/feed/feeds";
 import "./DetailedPostingPage.css";
+
+const getLastFeed = (state: ClientState, nodeName: string | undefined): NavigationStackItem | undefined =>
+    getNavigationStack(state).findLast(item =>
+        item.nodeName === nodeName && (item.location.startsWith("/timeline") || item.location.startsWith("/news"))
+    );
 
 function getStory(posting: PostingInfo, feedName: string): MinimalStoryInfo | null {
     const feedReference = getPostingFeedReference(posting, feedName);
@@ -30,22 +37,36 @@ function getStory(posting: PostingInfo, feedName: string): MinimalStoryInfo | nu
     }
 }
 
-function getFeedAndStory(posting: PostingInfo | null, t: TFunction): {
-    story: MinimalStoryInfo | null, href: string, feedTitle: string
+function getFeedAndStory(lastFeed: NavigationStackItem | undefined, posting: PostingInfo | null, t: TFunction): {
+    story: MinimalStoryInfo | null, href: string, backTitle: string
 } {
     if (posting == null) {
-        return {story: null, href: "", feedTitle: ""};
+        return {story: null, href: "", backTitle: ""};
     }
 
-    let story = getStory(posting, "timeline");
-    let href = "/timeline";
-    let feedTitle = getFeedTitle("timeline", t);
+    let story = null;
+    let href = lastFeed?.location;
+    let backTitle = lastFeed?.backTitle;
+    if (href) {
+        if (href.startsWith("/timeline")) {
+            story = getStory(posting, "timeline");
+        } else if (href.startsWith("/news")) {
+            story = getStory(posting, "news");
+        }
+    }
+
+    if (story == null) {
+        story = getStory(posting, "timeline");
+        href = "/timeline";
+        backTitle = getFeedBackTitle("timeline", t);
+    }
     if (story == null) {
         story = getStory(posting, "news");
         href = "/news";
-        feedTitle = getFeedTitle("news", t);
+        backTitle = getFeedBackTitle("news", t);
     }
-    return {story, href, feedTitle};
+
+    return {story, href: href ?? "", backTitle: backTitle ?? ""};
 }
 
 export default function DetailedPostingPage() {
@@ -53,14 +74,20 @@ export default function DetailedPostingPage() {
     const deleting = useSelector(isDetailedPostingBeingDeleted);
     const posting = useSelector(getDetailedPosting);
     const googlePlayHiding = useSelector(isGooglePlayHiding);
+    const lastFeed = useSelector((state: ClientState) =>
+        getLastFeed(state, posting?.receiverName ?? posting?.ownerName)
+    );
     const {t} = useTranslation();
 
-    const {story = null, href, feedTitle} = useMemo(() => getFeedAndStory(posting, t), [posting, t]);
+    const {story = null, href, backTitle} = useMemo(
+        () => getFeedAndStory(lastFeed, posting, t),
+        [lastFeed, posting, t]
+    );
     const googlePlayProhibited = googlePlayHiding && isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);
     const postingReady = posting != null && posting.parentMediaId == null && !googlePlayProhibited;
     return (
         <>
-            <DetailedPostingPageHeader story={story} href={href} feedTitle={feedTitle}/>
+            <DetailedPostingPageHeader story={story} href={href} backTitle={backTitle}/>
             <Page>
                 <div className="page-central-pane">
                     {(postingReady && story) &&
