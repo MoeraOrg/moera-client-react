@@ -3,9 +3,8 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import { Button } from "ui/control";
 import { getActualSheetName } from "ui/settings/settings-menu";
-import { Icon, msArrowBack } from "ui/material-symbols";
+import MobileBack from "ui/page/MobileBack";
 import "./SettingsBack.css";
 
 interface Props {
@@ -17,9 +16,8 @@ export default function SettingsBack({onBack}: Props) {
     const {t} = useTranslation();
 
     return (
-        <div className="settings-back">
-            <Button variant="silent-round" onClick={() => onBack()}><Icon icon={msArrowBack} size={24}/></Button>
+        <MobileBack className="settings-back" onBack={onBack}>
             {t(`setting.sheet.${sheetName}`)}
-        </div>
+        </MobileBack>
     );
 }

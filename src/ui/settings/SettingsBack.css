@@ -1,18 +1,3 @@
 .settings-back {
     grid-area: back;
-    padding: .5rem .25rem 2.5rem .25rem;
-    font-size: 1.4rem;
-    line-height: 127%;
-    color: var(--bs-gray-900);
-}
-
-.settings-back .btn {
-    vertical-align: .17em;
-    margin-right: .25em;
-}
-
-@media only screen and (min-width: 576px) {
-    .settings-back {
-        display: none;
-    }
 }
