@@ -18,10 +18,14 @@
 
     .page-central-pane {
         grid-column: 2;
+        container-type: inline-size;
+        container-name: page-pane;
     }
 
     .page-centralright-pane {
         grid-column: 2 / 4;
+        container-type: inline-size;
+        container-name: page-pane;
     }
 }
 
@@ -43,16 +47,22 @@
 
     .page-central-pane {
         grid-column: 2;
+        container-type: inline-size;
+        container-name: page-pane;
     }
 
     .page-centralright-pane {
         grid-column: 2;
+        container-type: inline-size;
+        container-name: page-pane;
     }
 }
 
 @media only screen and (max-width: 991px) {
     .page {
         display: block;
+        container-type: inline-size;
+        container-name: page-pane;
     }
 
     .page-left-pane {
