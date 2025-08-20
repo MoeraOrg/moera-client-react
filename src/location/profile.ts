@@ -14,5 +14,5 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
     info = info.sub("profile");
     info = info.withCanonicalUrl(getNodeRootLocation(state) + info.toUrl());
-    return info.withTitle(i18n.t("profile") + atOwner(state));
+    return info.withTitle(i18n.t("profile") + atOwner(state)).withBackTitle(i18n.t("back-profile"));
 }

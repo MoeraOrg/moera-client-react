@@ -1,3 +1,5 @@
+import i18n from 'i18next';
+
 import { ClientState } from "state/state";
 import { LocationInfo } from "location/LocationInfo";
 import { getNodeRootLocation } from "state/node/selectors";
@@ -22,5 +24,5 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     info = info.withCanonicalUrl(getNodeRootLocation(state) + info.toUrl());
     const posting = getPosting(state, postingId, REL_CURRENT);
     const heading = posting != null ? posting.heading : "";
-    return info.withTitle(heading + atOwner(state));
+    return info.withTitle(heading + atOwner(state)).withBackTitle(i18n.t("back-image"));
 }

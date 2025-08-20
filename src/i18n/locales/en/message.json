@@ -38,6 +38,14 @@
   "avatar-set": "Avatar set",
   "avatar-shape": "Avatar shape",
   "avatar-too-small": "Avatar image size should be at least 100x100 pixels.",
+  "back-complaints": "Back to Complaints",
+  "back-editor": "Back to Editor",
+  "back-image": "Back to Image",
+  "back-people": "Back to People",
+  "back-post": "Back to Post",
+  "back-profile": "Back to Profile",
+  "back-search": "Back to Search",
+  "back-settings": "Back to Settings",
   "back-to-feed": "← {feed}",
   "back-to-list-complaints": "← List of complaints",
   "banned-android-google-play": "Banned on Android (Google Play)",
@@ -233,6 +241,10 @@
   "expand": "Expand ↓",
   "expires": "Expires:",
   "failure-reason": "Failure reason",
+  "feed-back-title": {
+    "news": "Back to News",
+    "timeline": "Back to Timeline"
+  },
   "feed-title": {
     "news": "News",
     "timeline": "Timeline"

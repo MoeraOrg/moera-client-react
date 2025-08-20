@@ -21,6 +21,9 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
         }
         return info.withTitle(i18n.t("new-post-title") + atOwner(state));
     } else {
-        return info.withParameter("id", id).withTitle(i18n.t("edit-post-title") + atOwner(state));
+        return info
+            .withParameter("id", id)
+            .withTitle(i18n.t("edit-post-title") + atOwner(state))
+            .withBackTitle(i18n.t("back-editor"));
     }
 }

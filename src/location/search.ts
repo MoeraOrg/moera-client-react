@@ -84,5 +84,5 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     if (filter.datePeriod !== emptySearchFilter.datePeriod) {
         info = info.withParameter("period", filter.datePeriod);
     }
-    return info.withTitle(i18n.t("search") + (query ? ": " + query : ""));
+    return info.withTitle(i18n.t("search") + (query ? ": " + query : "")).withBackTitle(i18n.t("back-search"));
 }

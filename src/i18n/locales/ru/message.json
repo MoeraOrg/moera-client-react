@@ -38,6 +38,14 @@
   "avatar-set": "Аватарка установлена",
   "avatar-shape": "Форма аватарки",
   "avatar-too-small": "Размер картинки для аватарки должен быть хотя бы 100x100 пикселов",
+  "back-complaints": "Назад к жалобам",
+  "back-editor": "Назад в редактор",
+  "back-image": "Назад к картинке",
+  "back-people": "Назад к Людям",
+  "back-post": "Назад к посту",
+  "back-profile": "Назад к профилю",
+  "back-search": "Назад к поиску",
+  "back-settings": "Назад к настройкам",
   "back-to-feed": "← {feed}",
   "back-to-list-complaints": "← Список жалоб",
   "banned-android-google-play": "Запрещено к показу на Android (Google Play)",
@@ -233,6 +241,10 @@
   "expand": "Развернуть ↓",
   "expires": "Годен до:",
   "failure-reason": "Причина неудачи",
+  "feed-back-title": {
+    "news": "Назад к Новостям",
+    "timeline": "Назад к Хронике"
+  },
   "feed-title": {
     "news": "Новости",
     "timeline": "Хроника"
