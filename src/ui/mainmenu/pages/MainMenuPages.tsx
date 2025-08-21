@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import MainMenuTimelineLink from "ui/mainmenu/MainMenuTimelineLink";
-import MainMenuLink from "ui/mainmenu/MainMenuLink";
-import MainMenuNewsLink from "ui/mainmenu/MainMenuNewsLink";
-import MainMenuComplaintsLink from "ui/mainmenu/MainMenuComplaintsLink";
+import MainMenuTimelineLink from "ui/mainmenu/pages/MainMenuTimelineLink";
+import MainMenuLink from "ui/mainmenu/pages/MainMenuLink";
+import MainMenuNewsLink from "ui/mainmenu/pages/MainMenuNewsLink";
+import MainMenuComplaintsLink from "ui/mainmenu/pages/MainMenuComplaintsLink";
 
 export default function MainMenuPages() {
     const {t} = useTranslation();

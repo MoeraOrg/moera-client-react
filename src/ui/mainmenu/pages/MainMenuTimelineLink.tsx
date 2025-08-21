@@ -2,7 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { useMainMenuTimeline } from "ui/mainmenu/main-menu";
+import { useMainMenuTimeline } from "ui/mainmenu/pages/main-menu";
 import { getFeedTitle } from "ui/feed/feeds";
 import Jump from "ui/navigation/Jump";
 import { REL_CURRENT } from "util/rel-node-name";

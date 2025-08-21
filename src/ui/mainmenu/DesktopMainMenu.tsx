@@ -2,16 +2,21 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { isAtNode } from "state/node/selectors";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import Logo from "ui/mainmenu/logo/Logo";
 import OwnerSwitcher from "ui/mainmenu/owner/OwnerSwitcher";
-import MainMenuPages from "ui/mainmenu/MainMenuPages";
+import MainMenuPages from "ui/mainmenu/pages/MainMenuPages";
 import ConnectionStatus from "ui/mainmenu/connectionstatus/ConnectionStatus";
-import VerticalMenuToggler from "ui/mainmenu/vertical/VerticalMenuToggler";
 import RefreshIndicator from "ui/mainmenu/RefreshIndicator";
-import "./MainMenu.css";
+import "./DesktopMainMenu.css";
 
-export default function MainMenu() {
+export default function DesktopMainMenu() {
     const atNode = useSelector(isAtNode);
+
+    const tinyScreen = useIsTinyScreen();
+    if (tinyScreen) {
+        return null;
+    }
 
     return (
         <>
@@ -28,7 +33,6 @@ export default function MainMenu() {
                     <div className="collapse navbar-collapse"/>
                 }
                 <ConnectionStatus/>
-                <VerticalMenuToggler/>
             </nav>
             <RefreshIndicator/>
         </>

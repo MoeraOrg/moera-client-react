@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { getOwnerName } from "state/node/selectors";
-import MainMenuLink from "ui/mainmenu/MainMenuLink";
+import MainMenuLink from "ui/mainmenu/pages/MainMenuLink";
 
 export default function MainMenuComplaintsLink() {
     const ownerName = useSelector(getOwnerName);

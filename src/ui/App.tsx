@@ -8,10 +8,11 @@ import { getFeedWidth, getSetting } from "state/settings/selectors";
 import EventsFrontend from "ui/events/EventsFrontend";
 import Navigation from "ui/navigation/Navigation";
 import ErrorPane from "ui/error/ErrorPane";
-import MainMenu from "ui/mainmenu/MainMenu";
+import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
+import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
 import CurrentPage from "ui/page/CurrentPage";
 import WelcomePage from "ui/welcome/WelcomePage";
-import BottomMenu from "ui/bottommenu/BottomMenu";
+import BottomMenu from "ui/mainmenu/BottomMenu";
 import GlobalDialogs from "ui/page/GlobalDialogs";
 import NodeDialogs from "ui/page/NodeDialogs";
 import { useIsTinyScreen } from "ui/hook/media-query";
@@ -45,7 +46,8 @@ export default function App() {
             <EventsFrontend/>
             <Navigation/>
             <ErrorPane/>
-            <MainMenu/>
+            <DesktopMainMenu/>
+            <MobileMainMenu/>
             {atGlobalPage ?
                 <>
                     {atRemovalPage && <RemovalPage/>}

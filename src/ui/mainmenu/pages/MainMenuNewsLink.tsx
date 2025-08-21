@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { getFeedState } from "state/feeds/selectors";
-import MainMenuLink from "ui/mainmenu/MainMenuLink";
+import MainMenuLink from "ui/mainmenu/pages/MainMenuLink";
 import { getFeedTitle } from "ui/feed/feeds";
 import { REL_CURRENT } from "util/rel-node-name";
 

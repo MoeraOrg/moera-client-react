@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import Jump from "ui/navigation/Jump";
 import { ClientState } from "state/state";
 import { getFeedNotViewed } from "state/feeds/selectors";
-import { useMainMenuHomeNews } from "ui/mainmenu/main-menu";
+import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import { REL_HOME } from "util/rel-node-name";
 import "./NewsButton.css";
 

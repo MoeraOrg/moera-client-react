@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { isAtNode } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
-import MainMenuPages from "ui/mainmenu/MainMenuPages";
+import MainMenuPages from "ui/mainmenu/pages/MainMenuPages";
 import DisconnectButton from "ui/mainmenu/connectionstatus/DisconnectButton";
 import HomeAvatar from "ui/mainmenu/connections/HomeAvatar";
 import HomeName from "ui/mainmenu/connections/HomeName";

@@ -2,10 +2,10 @@ import React from 'react';
 import cx from 'classnames';
 
 import { Icon, msArrowBack } from "ui/material-symbols";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import Jump from "ui/navigation/Jump";
 import { RelNodeName } from "util/rel-node-name";
 import "./MobileBack.css";
-import { useIsTinyScreen } from "ui/hook/media-query";
 
 interface Props {
     nodeName?: RelNodeName | string;

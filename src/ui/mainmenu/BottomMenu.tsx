@@ -16,7 +16,7 @@ import NewsButton from "ui/mainmenu/connectionstatus/NewsButton";
 import InstantButton from "ui/instant/InstantButton";
 import SettingsButton from "ui/mainmenu/connectionstatus/SettingsButton";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
-import "./BottomMenu.css";
+import "ui/mainmenu/BottomMenu.css";
 
 export default function BottomMenu() {
     const atNode = useSelector(isAtNode);

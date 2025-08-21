@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -17,9 +17,7 @@ import SettingsButton from "ui/mainmenu/connectionstatus/SettingsButton";
 import ConnectionsButton from "ui/mainmenu/connections/ConnectionsButton";
 import "./ConnectionStatus.css";
 
-const ConnectDialog = React.lazy(() => import("ui/connectdialog/ConnectDialog"));
-
-function ConnectionButtons() {
+export default function ConnectionStatus() {
     const atNode = useSelector(isAtNode);
     const connecting = useSelector((state: ClientState) => state.home.connecting);
     const connected = useSelector(isConnectedToHome);
@@ -39,43 +37,27 @@ function ConnectionButtons() {
             return null;
         }
         return (
-            <span className="d-none d-lg-inline me-lg-2">
-                {t("not-connected-home")}
-                <Button variant="primary" size="sm" onClick={() => dispatch(openSignUpDialog())}>
-                    {t("sign-up")}
-                </Button>
-                <Button variant="success" size="sm" onClick={() => dispatch(openConnectDialog())}>
-                    {t("connect")}
-                </Button>
-            </span>
+            <div className="connection-status">
+                <span className="me-2">
+                    {t("not-connected-home")}
+                    <Button variant="primary" size="sm" onClick={() => dispatch(openSignUpDialog())}>
+                        {t("sign-up")}
+                    </Button>
+                    <Button variant="success" size="sm" onClick={() => dispatch(openConnectDialog())}>
+                        {t("connect")}
+                    </Button>
+                </span>
+            </div>
         );
     }
     return (
-        <span className="d-none d-lg-inline">
+        <div className="connection-status">
             <NewPostButton/>
             <NewsButton/>
             <InstantButton/>
             <SettingsButton/>
             <HomeButton/>
             <ConnectionsButton/>
-        </span>
-    );
-}
-
-export default function ConnectionStatus() {
-    const showConnectDialog = useSelector((state: ClientState) =>
-        state.connectDialog.show && !state.messageBox.show && !state.home.connecting);
-
-    return (
-        <>
-            <div className="connection-status">
-                <ConnectionButtons/>
-            </div>
-            {showConnectDialog &&
-                <Suspense fallback={null}>
-                    <ConnectDialog/>
-                </Suspense>
-            }
-        </>
+        </div>
     );
 }
