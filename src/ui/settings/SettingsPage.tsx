@@ -6,6 +6,8 @@ import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { Page } from "ui/page/Page";
 import { useOverlay } from "ui/overlays/overlays";
+import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
+import BottomMenu from "ui/mainmenu/BottomMenu";
 import { useDisableScrollX } from "ui/settings/settings-hooks";
 import SettingsConflicts from "ui/settings/SettingsConflicts";
 import SettingsTabs from "ui/settings/SettingsTabs";
@@ -45,15 +47,21 @@ export default function SettingsPage() {
                     <SettingsConflicts/>
                     <div className="settings-notebook-switcher" ref={switcherRef}>
                         <div className={`settings-notebook ${side}-side`}>
-                            <div className="settings-title">{t("settings")}</div>
-                            <SettingsTabs/>
-                            {visible &&
-                                <>
-                                    <SettingsBack onBack={() => setSide("menu")}/>
-                                    <SettingsMenu onSelect={() => setSide("sheet")}/>
-                                    <SettingsTabContent tab={tab}/>
-                                </>
-                            }
+                            <div className="settings-left">
+                                <div className="settings-title">{t("settings")}</div>
+                                <MobileMainMenu/>
+                                <SettingsTabs/>
+                                {visible && <SettingsMenu onSelect={() => setSide("sheet")}/>}
+                                <BottomMenu/>
+                            </div>
+                            <div className="settings-right">
+                                {visible &&
+                                    <>
+                                        <SettingsBack onBack={() => setSide("menu")}/>
+                                        <SettingsTabContent tab={tab}/>
+                                    </>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>

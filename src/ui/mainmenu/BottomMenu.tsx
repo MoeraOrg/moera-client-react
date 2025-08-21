@@ -31,7 +31,7 @@ export default function BottomMenu() {
         || activeElement?.tagName === "TEXTAREA"
         || activeElement?.classList.contains("visual-text-area");
 
-    const className = cx(["connection-status", "d-lg-none", "navbar-dark", "bg-dark"], {invisible});
+    const className = cx(["connection-status", "navbar-dark", "bg-dark"], {invisible});
 
     if (connecting) {
         return (

@@ -2,7 +2,7 @@
     .compose-page {
         padding-bottom: 3rem;
         background-color: white;
-        min-height: calc(100vh - 5rem);
+        min-height: 100vh;
     }
 }
 
@@ -17,7 +17,6 @@
 @media only screen and (max-width: 575px) {
     .composer {
         margin-top: 0;
-        padding-top: 0;
     }
 }
 

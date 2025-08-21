@@ -9,10 +9,8 @@ import EventsFrontend from "ui/events/EventsFrontend";
 import Navigation from "ui/navigation/Navigation";
 import ErrorPane from "ui/error/ErrorPane";
 import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
-import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
 import CurrentPage from "ui/page/CurrentPage";
 import WelcomePage from "ui/welcome/WelcomePage";
-import BottomMenu from "ui/mainmenu/BottomMenu";
 import GlobalDialogs from "ui/page/GlobalDialogs";
 import NodeDialogs from "ui/page/NodeDialogs";
 import { useIsTinyScreen } from "ui/hook/media-query";
@@ -47,7 +45,6 @@ export default function App() {
             <Navigation/>
             <ErrorPane/>
             <DesktopMainMenu/>
-            <MobileMainMenu/>
             {atGlobalPage ?
                 <>
                     {atRemovalPage && <RemovalPage/>}
@@ -63,7 +60,6 @@ export default function App() {
                     nodeIntroduced && <WelcomePage/>
                 )
             }
-            <BottomMenu/>
             <GlobalDialogs/>
         </div>
     );

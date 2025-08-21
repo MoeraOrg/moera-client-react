@@ -13,6 +13,14 @@
         "menu buttons buttons";
 }
 
+.settings-notebook .settings-left {
+    display: contents;
+}
+
+.settings-notebook .settings-right {
+    display: contents;
+}
+
 @media only screen and (max-width: 575px) {
     .settings-notebook-switcher {
         width: 100vw;
@@ -22,16 +30,14 @@
 
     .settings-notebook {
         margin: 0;
-        padding: 0 1rem 1rem 1rem;
+        padding: 0;
+        border-radius: 0;
         width: 200vw;
-        height: calc(100vh - 5.5rem);
-        grid-template-columns: calc(100vw - 1rem) calc(100vw - 1rem);
-        grid-template-rows: 4.6rem .5rem auto 3.875rem;
+        height: 100vh;
+        grid-template-columns: 100vw 100vw;
+        grid-template-rows: auto;
         grid-template-areas:
-        "tabs back"
-        "tabs sheet"
-        "menu sheet"
-        "menu buttons";
+            "left right";
         position: relative;
     }
 
@@ -44,6 +50,41 @@
         left: -100vw;
         transition: left .15s ease-in-out;
     }
+
+    .settings-notebook .settings-left {
+        display: grid;
+        grid-template-columns: auto;
+        grid-template-rows: 2.75rem 5.1rem auto 2.85rem;
+        grid-template-areas:
+            "main-menu"
+            "tabs"
+            "menu"
+            "bottom-menu";
+    }
+
+    .settings-notebook .settings-right {
+        display: grid;
+        grid-template-columns: auto;
+        grid-template-rows: 4.6rem auto 3.875rem;
+        grid-template-areas:
+            "back"
+            "sheet"
+            "buttons";
+        padding-right: 1rem;
+        padding-bottom: 1rem;
+    }
+}
+
+.settings-notebook #main-menu {
+    grid-area: main-menu;
+    position: unset;
+
+}
+
+.settings-notebook #bottom-menu {
+    grid-area: bottom-menu;
+    position: unset;
+
 }
 
 .settings-notebook .settings-title {
