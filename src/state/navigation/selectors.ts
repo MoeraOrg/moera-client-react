@@ -53,3 +53,7 @@ export function isBottomMenuVisible(state: ClientState): boolean {
 export function getNavigationStack(state: ClientState): NavigationStackItem[] {
     return state.navigation.stack;
 }
+
+export function getNavigationPrevious(state: ClientState): NavigationStackItem | null {
+    return state.navigation.stack.length > 1 ? state.navigation.stack[state.navigation.stack.length - 2] : null;
+}

@@ -1,16 +1,24 @@
 @media only screen and (max-width: 991px) {
     .compose-page {
         padding-bottom: 3rem;
+        background-color: white;
+        min-height: calc(100vh - 5rem);
     }
 }
 
 .composer {
     background-color: white;
-    border: var(--bs-gray-400) 1px solid;
-    border-radius: 5px;
+    border-radius: 1rem;
+    padding: 1.5rem 1.5rem 1.75rem 1.5rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
-    padding: 1rem;
+}
+
+@media only screen and (max-width: 575px) {
+    .composer {
+        margin-top: 0;
+        padding-top: 0;
+    }
 }
 
 .composer .info-line {

@@ -1,14 +1,12 @@
 .mobile-back {
+    display: flex;
+    align-items: center;
+    gap: .25em;
     height: 4.6rem;
     padding: .5rem .25rem 2.5rem .25rem;
     font-size: 1.4rem;
     line-height: 127%;
     color: var(--bs-gray-900);
-}
-
-.mobile-back .btn {
-    vertical-align: .17em;
-    margin-right: .25em;
 }
 
 @media only screen and (min-width: 576px) {

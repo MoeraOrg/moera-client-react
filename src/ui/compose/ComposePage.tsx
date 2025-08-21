@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { PrincipalValue, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
+import { getNavigationPrevious } from "state/navigation/selectors";
 import { getSetting } from "state/settings/selectors";
 import { isAtHomeNode } from "state/node/selectors";
 import { composeConflictClose } from "state/compose/actions";
@@ -22,9 +23,10 @@ import NodeName from "ui/nodename/NodeName";
 import { ConflictWarning, Loading } from "ui/control";
 import { AvatarField, InputField } from "ui/control/field";
 import { RichTextField } from "ui/control/richtexteditor";
+import { getFeedBackTitle } from "ui/feed/feeds";
 import { Page } from "ui/page/Page";
-import PageHeader from "ui/page/PageHeader";
-import Jump from "ui/navigation/Jump";
+import MobileBack from "ui/page/MobileBack";
+import DesktopBack from "ui/page/DesktopBack";
 import ComposeViewPrincipal from "ui/compose/ComposeViewPrincipal";
 import ComposeDrafts from "ui/compose/drafts/ComposeDrafts";
 import ComposeFeatures from "ui/compose/features/ComposeFeatures";
@@ -49,6 +51,7 @@ function ComposePageInner(props: Props) {
     const conflict = useSelector((state: ClientState) => state.compose.conflict);
     const beingPosted = useSelector((state: ClientState) => state.compose.beingPosted);
     const showPreview = useSelector((state: ClientState) => state.compose.showPreview);
+    const prevPage = useSelector(getNavigationPrevious);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -65,67 +68,81 @@ function ComposePageInner(props: Props) {
 
     const tinyScreen = useIsTinyScreen();
 
+    let backNodeName = prevPage?.nodeName;
+    let backHref = prevPage?.location;
+    let backTitle = prevPage?.backTitle;
+    if (!backHref) {
+        if (postingId != null) {
+            backNodeName = undefined;
+            backHref = `/post/${postingId}`;
+            backTitle = t("back-post");
+        } else {
+            backNodeName = undefined;
+            backHref = "/news";
+            backTitle = getFeedBackTitle("news", t);
+        }
+    }
+
     const title = postingId == null ? t("new-post-title") : t("edit-post-title");
     const sourceFormats = features?.sourceFormats ?? [];
     const submitDisabled = !ready || areValuesEmpty(values) || !areImagesUploaded(values);
     return (
         <>
-            <PageHeader>
-                <h2>
-                    {title}
-                    {postingId != null &&
-                        <Jump className="btn btn-sm btn-outline-secondary ms-3" href={`/post/${postingId}`}>
-                            {t("to-post")}
-                        </Jump>
-                    }
-                    {loadingContent && <Loading/>}
-                </h2>
-            </PageHeader>
             <Page className="compose-page">
-                <div className="page-central-pane composer">
-                    <Form>
-                        {(!postAllowed && !postWarningClosed) &&
-                            <ConflictWarning text={t("post-not-allowed")} onClose={postWarningClose}/>
-                        }
-                        {conflict &&
-                            <ConflictWarning text={t("post-edited-conflict")}
-                                             onClose={() => dispatch(composeConflictClose())}/>
-                        }
-                        <div className="info-line">
-                            <div className="info">
-                                <AvatarField name="avatar" size={56} disabled={!ready}/>
-                                <div className="body">
-                                    <NodeName name={ownerName} fullName={values.fullName} linked={false} popup={false}
-                                              className="ms-2"/>
-                                    <ComposeViewPrincipal/>
+                <div className="page-central-pane">
+                    <MobileBack nodeName={backNodeName} href={backHref}>
+                        {title}
+                        {loadingContent && <Loading/>}
+                    </MobileBack>
+                    <DesktopBack nodeName={backNodeName} href={backHref}>
+                        {backTitle}
+                        {loadingContent && <Loading/>}
+                    </DesktopBack>
+                    <div className="composer">
+                        <Form>
+                            {(!postAllowed && !postWarningClosed) &&
+                                <ConflictWarning text={t("post-not-allowed")} onClose={postWarningClose}/>
+                            }
+                            {conflict &&
+                                <ConflictWarning text={t("post-edited-conflict")}
+                                                 onClose={() => dispatch(composeConflictClose())}/>
+                            }
+                            <div className="info-line">
+                                <div className="info">
+                                    <AvatarField name="avatar" size={56} disabled={!ready}/>
+                                    <div className="body">
+                                        <NodeName name={ownerName} fullName={values.fullName} linked={false} popup={false}
+                                                  className="ms-2"/>
+                                        <ComposeViewPrincipal/>
+                                    </div>
                                 </div>
+                                {!tinyScreen && <ComposeDrafts ready={ready}/>}
                             </div>
-                            {!tinyScreen && <ComposeDrafts ready={ready}/>}
-                        </div>
-                        {features?.subjectPresent &&
-                            <InputField name="subject" title="Title" anyValue disabled={!ready}/>
-                        }
-                        <RichTextField
-                            name="body"
-                            placeholder={t("whats-new")}
-                            disabled={!ready || beingPosted}
-                            format={values.bodyFormat}
-                            smileysEnabled={smileysEnabled}
-                            features={features}
-                            nodeName={REL_CURRENT}
-                            urlsField="bodyUrls"
-                            linkPreviewsField="linkPreviews"
-                            anyValue
-                            autoFocus
-                            maxHeight="max(100vh - 26rem, 10.8em)"
-                        >
-                            {tinyScreen && <ComposeDrafts ready={ready}/>}
-                        </RichTextField>
+                            {features?.subjectPresent &&
+                                <InputField name="subject" title="Title" anyValue disabled={!ready}/>
+                            }
+                            <RichTextField
+                                name="body"
+                                placeholder={t("whats-new")}
+                                disabled={!ready || beingPosted}
+                                format={values.bodyFormat}
+                                smileysEnabled={smileysEnabled}
+                                features={features}
+                                nodeName={REL_CURRENT}
+                                urlsField="bodyUrls"
+                                linkPreviewsField="linkPreviews"
+                                anyValue
+                                autoFocus
+                                maxHeight="max(100vh - 26rem, 10.8em)"
+                            >
+                                {tinyScreen && <ComposeDrafts ready={ready}/>}
+                            </RichTextField>
 
-                        <ComposeFeatures sourceFormats={sourceFormats} updateInfo={postingId != null}/>
-                        <ComposeSubmitButton loading={beingPosted} update={postingId != null}
-                                             disabled={submitDisabled}/>
-                    </Form>
+                            <ComposeFeatures sourceFormats={sourceFormats} updateInfo={postingId != null}/>
+                            <ComposeSubmitButton loading={beingPosted} update={postingId != null}
+                                                 disabled={submitDisabled}/>
+                        </Form>
+                    </div>
                 </div>
                 {showPreview && <ComposePreviewDialog/>}
             </Page>

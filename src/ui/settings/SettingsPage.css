@@ -23,7 +23,6 @@
     .settings-notebook {
         margin: 0;
         padding: 0 1rem 1rem 1rem;
-        border-radius: 0;
         width: 200vw;
         height: calc(100vh - 5.5rem);
         grid-template-columns: calc(100vw - 1rem) calc(100vw - 1rem);
