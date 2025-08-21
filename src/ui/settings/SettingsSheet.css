@@ -21,6 +21,10 @@
     padding-top: .5rem;
 }
 
+.settings-sheet .chapter:first-child {
+    padding-top: 0;
+}
+
 .settings-sheet .chapter .title {
     font-size: 18pt;
     padding-bottom: 1.5rem;
