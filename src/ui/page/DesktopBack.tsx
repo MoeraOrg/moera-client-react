@@ -5,6 +5,7 @@ import { Icon, msArrowBack } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
 import { RelNodeName } from "util/rel-node-name";
 import "./DesktopBack.css";
+import { useIsTinyScreen } from "ui/hook/media-query";
 
 interface Props {
     nodeName?: RelNodeName | string;
@@ -15,6 +16,11 @@ interface Props {
 }
 
 export default function DesktopBack({nodeName, href, className, onBack, children}: Props) {
+    const tinyScreen = useIsTinyScreen();
+    if (tinyScreen) {
+        return null;
+    }
+
     const onJump = onBack ? () => onBack() : undefined;
 
     return (

@@ -8,9 +8,3 @@
     line-height: 127%;
     color: var(--bs-gray-900);
 }
-
-@media only screen and (min-width: 576px) {
-    .mobile-back {
-        display: none;
-    }
-}

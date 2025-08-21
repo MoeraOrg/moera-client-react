@@ -12,9 +12,3 @@
     line-height: 133%;
     color: var(--bs-gray-900);
 }
-
-@media only screen and (max-width: 575px) {
-    .desktop-back {
-        display: none;
-    }
-}
