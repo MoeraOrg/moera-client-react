@@ -1,3 +1,7 @@
+.detailed-posting-page .mobile-back {
+    background-color: white;
+}
+
 .posting-not-found {
     background-color: white;
     border: var(--bs-gray-400) 1px solid;

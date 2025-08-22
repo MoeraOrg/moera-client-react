@@ -17,6 +17,7 @@ import InstantButton from "ui/instant/InstantButton";
 import SettingsButton from "ui/mainmenu/connectionstatus/SettingsButton";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
 import "ui/mainmenu/BottomMenu.css";
+import { useIsTinyScreen } from "ui/hook/media-query";
 
 export default function BottomMenu() {
     const atNode = useSelector(isAtNode);
@@ -26,6 +27,12 @@ export default function BottomMenu() {
     const activeElement = useActiveElement();
     const dispatch = useDispatch();
     const {t} = useTranslation();
+
+    const tinyScreen = useIsTinyScreen();
+
+    if (!tinyScreen) {
+        return null;
+    }
 
     const invisible = !bottomMenuVisible
         || activeElement?.tagName === "TEXTAREA"

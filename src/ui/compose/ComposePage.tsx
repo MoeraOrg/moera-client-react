@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { PrincipalValue, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
-import { getNavigationPrevious } from "state/navigation/selectors";
 import { getSetting } from "state/settings/selectors";
 import { isAtHomeNode } from "state/node/selectors";
 import { composeConflictClose } from "state/compose/actions";
@@ -27,6 +26,7 @@ import { getFeedBackTitle } from "ui/feed/feeds";
 import { Page } from "ui/page/Page";
 import MobileBack from "ui/page/MobileBack";
 import DesktopBack from "ui/page/DesktopBack";
+import { useBackTarget } from "ui/page/back-target";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import ComposeViewPrincipal from "ui/compose/ComposeViewPrincipal";
 import ComposeDrafts from "ui/compose/drafts/ComposeDrafts";
@@ -52,7 +52,6 @@ function ComposePageInner(props: Props) {
     const conflict = useSelector((state: ClientState) => state.compose.conflict);
     const beingPosted = useSelector((state: ClientState) => state.compose.beingPosted);
     const showPreview = useSelector((state: ClientState) => state.compose.showPreview);
-    const prevPage = useSelector(getNavigationPrevious);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -67,22 +66,23 @@ function ComposePageInner(props: Props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [posting, avatarDefault, formId, sharedText, setPostWarningClosed]); // 'props' are missing on purpose
 
-    const tinyScreen = useIsTinyScreen();
-
-    let backNodeName = prevPage?.nodeName;
-    let backHref = prevPage?.location;
-    let backTitle = prevPage?.backTitle;
-    if (!backHref) {
+    const {backNodeName, backHref, backTitle} = useBackTarget(() => {
         if (postingId != null) {
-            backNodeName = undefined;
-            backHref = `/post/${postingId}`;
-            backTitle = t("back-post");
+            return {
+                backNodeName: undefined,
+                backHref: `/post/${postingId}`,
+                backTitle: t("back-post")
+            }
         } else {
-            backNodeName = undefined;
-            backHref = "/news";
-            backTitle = getFeedBackTitle("news", t);
+            return {
+                backNodeName: undefined,
+                backHref: "/news",
+                backTitle: getFeedBackTitle("news", t)
+            }
         }
-    }
+    })
+
+    const tinyScreen = useIsTinyScreen();
 
     const title = postingId == null ? t("new-post-title") : t("edit-post-title");
     const sourceFormats = features?.sourceFormats ?? [];
