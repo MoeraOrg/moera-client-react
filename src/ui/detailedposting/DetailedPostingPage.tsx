@@ -44,7 +44,7 @@ function getStory(posting: PostingInfo, feedName: string): MinimalStoryInfo | nu
     }
 }
 
-function getFeedAndStory(
+function getLastFeedAndStory(
     atHome: boolean, lastFeed: NavigationStackItem | undefined, posting: PostingInfo | null, t: TFunction
 ): {
     story: MinimalStoryInfo | null, backNodeName: RelNodeName | string, backHref: string, backTitle: string
@@ -111,7 +111,7 @@ export default function DetailedPostingPage() {
     const {t} = useTranslation();
 
     const {story = null, backNodeName, backHref, backTitle} = useMemo(
-        () => getFeedAndStory(ownerName === homeOwnerName, lastFeed, posting, t),
+        () => getLastFeedAndStory(ownerName === homeOwnerName, lastFeed, posting, t),
         [homeOwnerName, lastFeed, ownerName, posting, t]
     );
     const googlePlayProhibited = googlePlayHiding && isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);
@@ -124,7 +124,7 @@ export default function DetailedPostingPage() {
                     {backTitle}
                 </DesktopBack>
                 <MobileBack nodeName={backNodeName} href={backHref} sticky>
-                    {backTitle}
+                    {t("posting")}
                 </MobileBack>
                 {(postingReady && story) &&
                     <DetailedPosting posting={posting} story={story} deleting={deleting}/>
