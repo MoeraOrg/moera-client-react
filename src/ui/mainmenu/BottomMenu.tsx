@@ -10,14 +10,13 @@ import { isBottomMenuVisible } from "state/navigation/selectors";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { Button, Loading } from "ui/control";
-import { useActiveElement } from "ui/hook";
+import { useActiveElement, useIsTinyScreen } from "ui/hook";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
 import NewsButton from "ui/mainmenu/connectionstatus/NewsButton";
 import InstantButton from "ui/instant/InstantButton";
 import SettingsButton from "ui/mainmenu/connectionstatus/SettingsButton";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
 import "ui/mainmenu/BottomMenu.css";
-import { useIsTinyScreen } from "ui/hook/media-query";
 
 export default function BottomMenu() {
     const atNode = useSelector(isAtNode);

@@ -2,7 +2,7 @@ import React, { ForwardedRef, forwardRef } from 'react';
 import cx from 'classnames';
 
 import { Icon, MaterialSymbol } from "ui/material-symbols";
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import { useDropdownMenu } from "ui/control/index";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import "ui/control/richtexteditor/formatting-menu/FormattingMenuItem.css";

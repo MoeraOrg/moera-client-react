@@ -8,7 +8,7 @@ import { getNamingNameRoot } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import PreloadedImage from "ui/posting/PreloadedImage";
 import { Loading } from 'ui/control';
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import { mediaImageTagAttributes } from "util/media-images";
 import { RelNodeName } from "util/rel-node-name";
 import "./EntryLinkPreviewImage.css";

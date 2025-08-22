@@ -2,8 +2,7 @@ import React, { useCallback, useState } from 'react';
 import cx from 'classnames';
 
 import { Icon, msArrowBack } from "ui/material-symbols";
-import { useIntersect } from "ui/hook";
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIntersect, useIsTinyScreen } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import { RelNodeName } from "util/rel-node-name";
 import "./MobileBack.css";

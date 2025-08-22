@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Icon, msCommentRegular } from "ui/material-symbols";
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import "./PostingComments.css";
 

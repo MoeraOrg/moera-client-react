@@ -10,7 +10,7 @@ import { isAtHomeNode } from "state/node/selectors";
 import { peopleSelectToggle } from "state/people/actions";
 import { getPeopleTab } from "state/people/selectors";
 import { Avatar, AvatarWithPopup, Principal, SubscribeButton } from "ui/control";
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import SubscriberVisibility from "ui/people/SubscriberVisibility";
 import PeopleContactStatuses from "ui/people/PeopleContactStatuses";

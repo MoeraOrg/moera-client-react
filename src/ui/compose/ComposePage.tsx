@@ -17,7 +17,7 @@ import {
     ComposePageProps,
     ComposePageValues
 } from "ui/compose/posting-compose";
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import NodeName from "ui/nodename/NodeName";
 import { ConflictWarning, Loading } from "ui/control";
 import { AvatarField, InputField } from "ui/control/field";

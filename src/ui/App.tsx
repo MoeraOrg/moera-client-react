@@ -13,7 +13,7 @@ import CurrentPage from "ui/page/CurrentPage";
 import WelcomePage from "ui/welcome/WelcomePage";
 import GlobalDialogs from "ui/page/GlobalDialogs";
 import NodeDialogs from "ui/page/NodeDialogs";
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import "./colors.css";
 import "./zindex.css";
 import "./App.css";

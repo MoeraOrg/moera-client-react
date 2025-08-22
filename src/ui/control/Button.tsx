@@ -3,7 +3,7 @@ import composeRefs from '@seznam/compose-react-refs';
 import cx from 'classnames';
 
 import { LoadingInline } from "ui/control";
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import "./Button.css";
 
 type Props = {

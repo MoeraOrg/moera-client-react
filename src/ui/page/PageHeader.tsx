@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import cx from 'classnames';
 
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import { getFeedHeaderHeight } from "util/ui";
 import "./PageHeader.css";
 

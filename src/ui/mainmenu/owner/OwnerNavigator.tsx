@@ -14,8 +14,8 @@ import { searchHistoryDelete, searchHistoryPrepare } from "state/search/actions"
 import { emptySearchFilter } from "state/search/empty";
 import { NameSuggestion } from "ui/control";
 import { Icon, msCancel, msHistory, msSearch } from "ui/material-symbols";
+import { useSuggestions } from "ui/hook";
 import Jump from "ui/navigation/Jump";
-import { useSuggestions } from "ui/hook/suggestions";
 import { NameListItem, namesListQuery } from "util/names-list";
 import { ut } from "util/url";
 import "./OwnerNavigator.css";

@@ -9,7 +9,7 @@ import { openFriendGroupAddDialog } from "state/friendgroupadddialog/actions";
 import { PeopleTab } from "state/people/state";
 import { Tabs } from "ui/control";
 import { getFriendGroupTitle } from "ui/control/principal-display";
-import { useMediaQuery } from "ui/hook/media-query";
+import { useMediaQuery } from "ui/hook";
 import { msGroupAdd, msLock } from "ui/material-symbols";
 import "./PeopleTabs.css";
 

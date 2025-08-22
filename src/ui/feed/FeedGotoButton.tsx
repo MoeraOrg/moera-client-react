@@ -9,7 +9,7 @@ import { getFeedAtTimestamp } from "state/feeds/selectors";
 import { feedScrollToAnchor } from "state/feeds/actions";
 import { Button, CloseButton, Loading } from "ui/control";
 import { Icon, msArrowDownward, msCalendarMonth } from "ui/material-symbols";
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import { RelNodeName } from "util/rel-node-name";
 import "./FeedGotoButton.css";
 

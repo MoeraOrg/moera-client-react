@@ -8,7 +8,7 @@ import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { getSetting } from "state/settings/selectors";
 import { profileUpdate } from "state/profile/actions";
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import { ComboboxField, InputField, PrincipalField } from "ui/control/field";
 import { RichTextField, RichTextValue } from "ui/control/richtexteditor";
 import { useSettingsSheetResize } from "ui/settings/settings-hooks";

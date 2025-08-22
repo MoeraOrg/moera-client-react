@@ -6,7 +6,7 @@ import { ClientState } from "state/state";
 import { settingsGoToSheet } from "state/settings/actions";
 import { Tabs } from "ui/control";
 import { msKeyboardArrowRight } from "ui/material-symbols";
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import { getActualSheetName, getActualTab, getSheets } from "ui/settings/settings-menu";
 import "./SettingsMenu.css";
 

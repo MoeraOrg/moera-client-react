@@ -9,7 +9,7 @@ import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
 import { getNamesInComments } from "state/detailedposting/selectors";
-import { useSuggestions } from "ui/hook/suggestions";
+import { useSuggestions } from "ui/hook";
 import { NameSuggestion } from "ui/control/NameSuggestion";
 import { nameListInsertFirst, NameListItem, namesListQuery } from "util/names-list";
 import "./NameSelector.css";

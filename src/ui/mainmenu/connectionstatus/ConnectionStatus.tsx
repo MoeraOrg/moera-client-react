@@ -8,7 +8,7 @@ import { isAtNode } from "state/node/selectors";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { Button, Loading } from "ui/control";
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
 import NewsButton from "ui/mainmenu/connectionstatus/NewsButton";

@@ -4,7 +4,7 @@ import { ReactEditor, Slate, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
 import deepEqual from 'react-fast-compare';
 
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import VisualEditorCommands from "ui/control/richtexteditor/visual/VisualEditorCommands";
 import RichTextEditorPanel, { RichTextEditorPanelMode } from "ui/control/richtexteditor/panel/RichTextEditorPanel";
 import RichTextEditorShortPanel from "ui/control/richtexteditor/formatting-menu/RichTextEditorShortPanel";

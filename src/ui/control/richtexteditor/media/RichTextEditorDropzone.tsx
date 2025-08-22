@@ -6,7 +6,7 @@ import { RichTextValue } from "ui/control/richtexteditor";
 import { UploadProgress, useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import RichTextEditorImageList from "ui/control/richtexteditor/media/RichTextEditorImageList";
 import { isOverlayClosedRecently } from "ui/overlays/overlays";
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import { RelNodeName } from "util/rel-node-name";
 import "./RichTextEditorDropzone.css";
 

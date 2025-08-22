@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import deepEqual from 'react-fast-compare';
 
-import { useDebounce } from "ui/hook/misc";
+import { useDebounce } from "ui/hook";
 
 interface UseSuggestionsOptions<L> {
     defaultQuery?: string;

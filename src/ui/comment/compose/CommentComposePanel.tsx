@@ -18,7 +18,7 @@ import {
     msPhotoLibrary
 } from "ui/material-symbols";
 import * as Browser from "ui/browser";
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEditorButton";

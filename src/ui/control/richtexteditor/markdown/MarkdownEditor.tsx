@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback, useRef } from 'react';
 
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import MarkdownEditorCommands from "ui/control/richtexteditor/markdown/MarkdownEditorCommands";
 import RichTextEditorPanel, { RichTextEditorPanelMode } from "ui/control/richtexteditor/panel/RichTextEditorPanel";

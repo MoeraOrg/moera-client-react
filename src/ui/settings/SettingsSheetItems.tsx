@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CLIENT_SETTINGS_PREFIX, ClientSettingMetaInfo, SettingMetaInfo } from "api";
-import { useIsTinyScreen } from "ui/hook/media-query";
+import { useIsTinyScreen } from "ui/hook";
 import { Item } from "ui/settings/settings-menu";
 import SettingsField from "ui/settings/SettingsField";
 
