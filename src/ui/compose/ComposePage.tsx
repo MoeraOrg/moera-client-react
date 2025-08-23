@@ -26,14 +26,14 @@ import { getFeedBackTitle } from "ui/feed/feeds";
 import { Page } from "ui/page/Page";
 import MobileBack from "ui/page/MobileBack";
 import DesktopBack from "ui/page/DesktopBack";
-import { useBackTarget } from "ui/page/back-target";
+import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import ComposeViewPrincipal from "ui/compose/ComposeViewPrincipal";
 import ComposeDrafts from "ui/compose/drafts/ComposeDrafts";
 import ComposeFeatures from "ui/compose/features/ComposeFeatures";
 import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
 import ComposePreviewDialog from "ui/compose/ComposePreviewDialog";
-import { REL_CURRENT } from "util/rel-node-name";
+import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import "./ComposePage.css";
 
 type Props = ComposePageProps & FormikProps<ComposePageValues>;
@@ -52,6 +52,7 @@ function ComposePageInner(props: Props) {
     const conflict = useSelector((state: ClientState) => state.compose.conflict);
     const beingPosted = useSelector((state: ClientState) => state.compose.beingPosted);
     const showPreview = useSelector((state: ClientState) => state.compose.showPreview);
+    const newsHref = useMainMenuHomeNews().href;
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -66,21 +67,14 @@ function ComposePageInner(props: Props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [posting, avatarDefault, formId, sharedText, setPostWarningClosed]); // 'props' are missing on purpose
 
-    const {backNodeName, backHref, backTitle} = useBackTarget(() => {
-        if (postingId != null) {
-            return {
-                backNodeName: undefined,
-                backHref: `/post/${postingId}`,
-                backTitle: t("back-post")
-            }
-        } else {
-            return {
-                backNodeName: undefined,
-                backHref: "/news",
-                backTitle: getFeedBackTitle("news", t)
-            }
-        }
-    })
+    let backNodeName = REL_HOME;
+    let backHref = newsHref;
+    let backTitle = getFeedBackTitle("news", t);
+    if (postingId != null) {
+        backNodeName = REL_CURRENT;
+        backHref = `/post/${postingId}`;
+        backTitle = t("back-post")
+    }
 
     const tinyScreen = useIsTinyScreen();
 

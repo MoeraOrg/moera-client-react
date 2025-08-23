@@ -8,15 +8,13 @@ import { useTranslation } from 'react-i18next';
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { PostingInfo } from "api";
 import { ClientState } from "state/state";
-import { NavigationStackItem } from "state/navigation/state";
-import { getNavigationStack } from "state/navigation/selectors";
-import { getOwnerName, isGooglePlayHiding } from "state/node/selectors";
-import { getHomeOwnerName } from "state/home/selectors";
+import { isAtHomeNode, isGooglePlayHiding } from "state/node/selectors";
 import { getDetailedPosting, isDetailedPostingBeingDeleted } from "state/detailedposting/selectors";
 import { getPostingFeedReference, isPostingSheriffProhibited } from "state/postings/selectors";
 import { Loading } from "ui/control";
 import { MinimalStoryInfo } from "ui/types";
 import { getFeedBackTitle } from "ui/feed/feeds";
+import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { Page } from "ui/page/Page";
 import DesktopBack from "ui/page/DesktopBack";
@@ -24,14 +22,6 @@ import MobileBack from "ui/page/MobileBack";
 import DetailedPosting from "ui/detailedposting/DetailedPosting";
 import { REL_CURRENT, REL_HOME, RelNodeName } from "util/rel-node-name";
 import "./DetailedPostingPage.css";
-
-const getLastFeed = (
-    state: ClientState, ownerName: string | null | undefined, homeOwnerName: string | null | undefined
-): NavigationStackItem | undefined =>
-    getNavigationStack(state).findLast(item =>
-        (item.nodeName === ownerName && item.location.startsWith("/timeline"))
-        || (item.nodeName === homeOwnerName && item.location.startsWith("/news"))
-    );
 
 function getStory(posting: PostingInfo, feedName: string): MinimalStoryInfo | null {
     const feedReference = getPostingFeedReference(posting, feedName);
@@ -44,75 +34,46 @@ function getStory(posting: PostingInfo, feedName: string): MinimalStoryInfo | nu
     }
 }
 
-function getLastFeedAndStory(
-    atHome: boolean, lastFeed: NavigationStackItem | undefined, posting: PostingInfo | null, t: TFunction
-): {
+function getBackFeedAndStory(atHome: boolean, posting: PostingInfo | null, t: TFunction, newsHref: string): {
     story: MinimalStoryInfo | null, backNodeName: RelNodeName | string, backHref: string, backTitle: string
 } {
     if (posting == null) {
-        return {story: null, backNodeName: REL_CURRENT, backHref: "", backTitle: ""};
+        return {story: null, backNodeName: REL_HOME, backHref: newsHref, backTitle: getFeedBackTitle("news", t)};
     }
 
-    let story: MinimalStoryInfo | null = null;
-    let backHref = lastFeed?.location;
-    let backTitle = lastFeed?.backTitle;
-
-    if (atHome) {
-        if (backHref) {
-            if (backHref.startsWith("/timeline")) {
-                story = getStory(posting, "timeline");
-            } else if (backHref.startsWith("/news")) {
-                story = getStory(posting, "news");
-            }
-        }
-
-        if (story == null) {
-            story = getStory(posting, "timeline");
-            backHref = "/timeline";
-            backTitle = getFeedBackTitle("timeline", t);
-        }
-        if (story == null) {
-            story = getStory(posting, "news");
-            backHref = "/news";
-            backTitle = getFeedBackTitle("news", t);
-        }
-
-        backHref = backHref && story != null ? `${backHref}?before=${story.moment}` : backHref
-
-        return {story, backNodeName: REL_CURRENT, backHref: backHref ?? "", backTitle: backTitle ?? ""};
+    let story = getStory(posting, "timeline");
+    let backNodeName = REL_CURRENT;
+    let backHref = "/timeline";
+    let backTitle = getFeedBackTitle("timeline", t);
+    if (story == null && atHome) {
+        story = getStory(posting, "news");
+        backNodeName = REL_HOME;
+        backHref = "/news";
+        backTitle = getFeedBackTitle("news", t);
+    }
+    if (story == null) {
+        backNodeName = REL_HOME;
+        backHref = newsHref;
+        backTitle = getFeedBackTitle("news", t);
+    } else {
+        backHref = `${backHref}?before=${story.moment}`;
     }
 
-    story = getStory(posting, "timeline");
-
-    if (backHref) {
-        if (backHref.startsWith("/timeline")) {
-            backHref = story != null ? `${backHref}?before=${story.moment}` : backHref
-            return {story, backNodeName: REL_CURRENT, backHref, backTitle: backTitle ?? ""};
-        }
-        if (backHref.startsWith("/news")) {
-            return {story, backNodeName: REL_HOME, backHref, backTitle: backTitle ?? ""};
-        }
-    }
-
-    backHref = story != null ? `/timeline?before=${story.moment}` : "/timeline";
-    backTitle = getFeedBackTitle("timeline", t);
-
-    return {story, backNodeName: REL_CURRENT, backHref, backTitle};
+    return {story, backNodeName, backHref, backTitle};
 }
 
 export default function DetailedPostingPage() {
-    const ownerName = useSelector(getOwnerName);
-    const homeOwnerName = useSelector(getHomeOwnerName);
+    const atHome = useSelector(isAtHomeNode);
     const loading = useSelector((state: ClientState) => state.detailedPosting.loading);
     const deleting = useSelector(isDetailedPostingBeingDeleted);
     const posting = useSelector(getDetailedPosting);
     const googlePlayHiding = useSelector(isGooglePlayHiding);
-    const lastFeed = useSelector((state: ClientState) => getLastFeed(state, ownerName, homeOwnerName));
+    const newsHref = useMainMenuHomeNews().href;
     const {t} = useTranslation();
 
     const {story = null, backNodeName, backHref, backTitle} = useMemo(
-        () => getLastFeedAndStory(ownerName === homeOwnerName, lastFeed, posting, t),
-        [homeOwnerName, lastFeed, ownerName, posting, t]
+        () => getBackFeedAndStory(atHome, posting, t, newsHref),
+        [atHome, newsHref, posting, t]
     );
     const googlePlayProhibited = googlePlayHiding && isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);
     const postingReady = posting != null && posting.parentMediaId == null && !googlePlayProhibited;

@@ -1,6 +1,5 @@
 import { isAtNode } from "state/node/selectors";
 import { ClientState } from "state/state";
-import { NavigationStackItem } from "state/navigation/state";
 
 export function isAtTimelinePage(state: ClientState): boolean {
     return isAtNode(state) && state.navigation.page === "timeline";
@@ -48,12 +47,4 @@ export function isAtSearchPage(state: ClientState): boolean {
 
 export function isBottomMenuVisible(state: ClientState): boolean {
     return state.navigation.bottomMenuVisible;
-}
-
-export function getNavigationStack(state: ClientState): NavigationStackItem[] {
-    return state.navigation.stack;
-}
-
-export function getNavigationPrevious(state: ClientState): NavigationStackItem | null {
-    return state.navigation.stack.length > 1 ? state.navigation.stack[state.navigation.stack.length - 2] : null;
 }

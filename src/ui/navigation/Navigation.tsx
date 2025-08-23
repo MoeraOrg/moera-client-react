@@ -2,8 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
-import { navigationStackSet, goToLocation, initFromLocation } from "state/navigation/actions";
-import { NavigationStackItem } from "state/navigation/state";
+import { goToLocation, initFromLocation } from "state/navigation/actions";
 import { cartesLoad } from "state/cartes/actions";
 import { getInstantCount } from "state/feeds/selectors";
 import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
@@ -15,7 +14,6 @@ export default function Navigation() {
     const rootLocation = useSelector(getNodeRootLocation);
     const location = useSelector((state: ClientState) => state.navigation.location);
     const title = useSelector((state: ClientState) => state.navigation.title);
-    const backTitle = useSelector((state: ClientState) => state.navigation.backTitle);
     const canonicalUrl = useSelector((state: ClientState) => state.navigation.canonicalUrl);
     const noIndex = useSelector((state: ClientState) => state.navigation.noIndex);
     const create = useSelector((state: ClientState) => state.navigation.create);
@@ -23,7 +21,7 @@ export default function Navigation() {
     const count = useSelector(getInstantCount);
     const dispatch = useDispatch();
 
-    const stack = useRef<NavigationStackItem[]>([]);
+    const stack = useRef<string[]>([]);
 
     const popState = useCallback((event: PopStateEvent) => {
         stack.current.pop();
@@ -36,7 +34,6 @@ export default function Navigation() {
                 dispatch(initFromLocation(name ?? null, root, path, query, hash));
             }
         }
-        dispatch(navigationStackSet(stack.current));
         event.preventDefault();
     }, [dispatch, rootLocation]);
 
@@ -92,24 +89,23 @@ export default function Navigation() {
         const url = Browser.universalLocation(Browser.getRootLocation(), nodeName, rootLocation, location);
         if (
             (!create && stack.current.length === 0)
-            || (create && stack.current[stack.current.length - 1]?.url === url)
+            || (create && stack.current[stack.current.length - 1] === url)
         ) {
             return;
         }
 
         const data = {location: url};
         if (create) {
-            stack.current.push({url, nodeName, location, backTitle});
+            stack.current.push(url);
             window.history.pushState(data, "", url);
         } else {
             if (stack.current.length > 0) {
-                stack.current[stack.current.length - 1].url = url;
+                stack.current[stack.current.length - 1] = url;
             }
             window.history.replaceState(data, "", url);
         }
         window.Android?.locationChanged(url, location);
-        dispatch(navigationStackSet(stack.current));
-    }, [dispatch, location, locked, nodeName, rootLocation, create, backTitle]);
+    }, [dispatch, location, locked, nodeName, rootLocation, create]);
 
     useEffect(() => {
         const counter = count > 0 ? `(${count}) ` : "";

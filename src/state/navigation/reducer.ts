@@ -5,13 +5,11 @@ const initialState: NavigationState = {
     page: "timeline",
     location: "",
     title: "",
-    backTitle: "",
     canonicalUrl: null,
     noIndex: false,
     create: false,
     locked: false,
-    bottomMenuVisible: true,
-    stack: []
+    bottomMenuVisible: true
 };
 
 export default (state: NavigationState = initialState, action: ClientAction): NavigationState => {
@@ -37,7 +35,6 @@ export default (state: NavigationState = initialState, action: ClientAction): Na
                 ...state,
                 location: action.payload.location,
                 title: action.payload.title ?? "",
-                backTitle: action.payload.backTitle ?? "",
                 canonicalUrl: action.payload.canonicalUrl,
                 noIndex: action.payload.noIndex,
                 create: !state.locked ? action.payload.create : state.create && action.payload.create
@@ -66,12 +63,6 @@ export default (state: NavigationState = initialState, action: ClientAction): Na
             return {
                 ...state,
                 bottomMenuVisible: true
-            }
-
-        case "NAVIGATION_STACK_SET":
-            return {
-                ...state,
-                stack: action.payload.stack
             }
 
         default:
