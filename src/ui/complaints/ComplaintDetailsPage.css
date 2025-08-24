@@ -1,3 +1,7 @@
+.complaint .mobile-back {
+    background-color: white;
+}
+
 .complaint H4 A:hover {
     text-decoration: underline;
 }

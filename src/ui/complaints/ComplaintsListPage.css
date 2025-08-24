@@ -1,5 +1,24 @@
+.complaints .mobile-back {
+    background-color: white;
+}
+
 .complaints .navigator {
-    margin-bottom: .25em;
+    margin-bottom: 1rem;
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
+}
+
+.complaints .navigator > .title {
+    font-family: var(--font-messages), sans-serif;
+    font-weight: 600;
+    font-size: 2rem;
+    line-height: 125%;
+    color: var(--bs-gray-900);
+}
+
+@media only screen and (max-width: 575px) {
+    .complaints .navigator > .title {
+        display: none;
+    }
 }

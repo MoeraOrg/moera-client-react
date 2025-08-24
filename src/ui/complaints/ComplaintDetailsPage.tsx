@@ -12,7 +12,9 @@ import { NameDisplayMode } from "ui/types";
 import { Loading } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import { Page } from "ui/page/Page";
-import PageHeader from "ui/page/PageHeader";
+import MobileBack from "ui/page/MobileBack";
+import DesktopBack from "ui/page/DesktopBack";
+import BottomMenu from "ui/mainmenu/BottomMenu";
 import { getComplaintHeadingHtml, getComplaintStatusDetails } from "ui/complaints/complaint-details";
 import Complaint from "ui/complaints/Complaint";
 import ComplaintDecisionEditor from "ui/complaints/ComplaintDecisionEditor";
@@ -26,7 +28,8 @@ export default function ComplaintsListPage() {
     const loadingComplaints = useSelector((state: ClientState) => state.complaints.loadingComplaints);
     const atHomeNode = useSelector(isAtHomeNode);
     const nameDisplayMode = useSelector((state: ClientState) =>
-        getSetting(state, "full-name.display") as NameDisplayMode);
+        getSetting(state, "full-name.display") as NameDisplayMode
+    );
     const {t} = useTranslation();
 
     const {icon: statusIcon, className: statusClass} = getComplaintStatusDetails(complaintGroup?.status);
@@ -42,16 +45,15 @@ export default function ComplaintsListPage() {
     const heading = complaintGroup != null ? getComplaintHeadingHtml(complaintGroup, nameDisplayMode, t) : "";
 
     return (
-        <>
-            <PageHeader>
-                <h2 className="ms-0">
-                    <Jump href="/complaints" className="btn btn-sm btn-outline-secondary">
-                        {t("back-to-list-complaints")}
-                    </Jump>
-                </h2>
-            </PageHeader>
-            <Page>
-                <div className="page-central-pane complaint content-panel">
+        <Page className="complaint">
+            <div className="page-central-pane">
+                <MobileBack href="/complaints" sticky>
+                    {t("complaint")}
+                </MobileBack>
+                <DesktopBack href="/complaints">
+                    {t("back-complaints")}
+                </DesktopBack>
+                <div className="content-panel">
                     {loadingGroup && <Loading/>}
                     {complaintGroup != null &&
                         <>
@@ -88,7 +90,8 @@ export default function ComplaintsListPage() {
                         </>
                     }
                 </div>
-            </Page>
-        </>
+            </div>
+            <BottomMenu/>
+        </Page>
     );
 }

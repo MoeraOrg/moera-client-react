@@ -54,6 +54,7 @@ import { ReactComponent as msGroups } from "ui/material-symbols/groups.isvg";
 import { ReactComponent as msHelpFilled40 } from "ui/material-symbols/help_filled40.isvg";
 import { ReactComponent as msHistory } from "ui/material-symbols/history.isvg";
 import { ReactComponent as msHorizontalRule } from "ui/material-symbols/horizontal_rule.isvg";
+import { ReactComponent as msInbox } from "ui/material-symbols/inbox.isvg";
 import { ReactComponent as msInkPen } from "ui/material-symbols/ink_pen.isvg";
 import { ReactComponent as msKeepFilled16 } from "ui/material-symbols/keep_filled16.isvg";
 import { ReactComponent as msKeyboardArrowDown } from "ui/material-symbols/keyboard_arrow_down.isvg";
@@ -164,6 +165,7 @@ export {
     msHelpFilled40,
     msHistory,
     msHorizontalRule,
+    msInbox,
     msInkPen,
     msKeepFilled16,
     msLink,
