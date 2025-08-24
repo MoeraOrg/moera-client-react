@@ -3,47 +3,50 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import { getOwnerAvatar, getOwnerName } from "state/node/selectors";
-import { Avatar, Loading } from "ui/control";
-import Jump from "ui/navigation/Jump";
-import PageHeader from "ui/page/PageHeader";
+import { Loading } from "ui/control";
 import { Page } from "ui/page/Page";
+import MobileBack from "ui/page/MobileBack";
+import DesktopBack from "ui/page/DesktopBack";
+import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import BottomMenu from "ui/mainmenu/BottomMenu";
+import { getFeedBackTitle } from "ui/feed/feeds";
 import PeopleTabs from "ui/people/PeopleTabs";
 import PeopleContent from "ui/people/PeopleContent";
 import AskSelectedDialog from "ui/askdialog/AskSelectedDialog";
 import PeopleSelectedHideDialog from "ui/peoplehidedialog/PeopleSelectedHideDialog";
 import FriendGroupAddDialog from "ui/friendgroupadddialog/FriendGroupAddDialog";
+import { REL_HOME } from "util/rel-node-name";
 import "./PeoplePage.css";
 
 export default function PeoplePage() {
     const tab = useSelector((state: ClientState) => state.people.tab);
     const loadingGeneral = useSelector((state: ClientState) => state.people.loadingGeneral);
-    const ownerAvatar = useSelector(getOwnerAvatar);
-    const ownerName = useSelector(getOwnerName);
     const showAskDialog = useSelector((state: ClientState) => state.askDialog.show);
     const showPeopleHideDialog = useSelector((state: ClientState) => state.peopleHideDialog.show);
     const showFriendGroupAddDialog = useSelector((state: ClientState) => state.friendGroupAddDialog.show);
+    const newsHref = useMainMenuHomeNews().href;
     const {t} = useTranslation();
 
     return (
-        <>
-            <PageHeader>
-                <h2>
-                    <Jump href="/profile" title={t("profile")} className="avatar-link">
-                        <Avatar avatar={ownerAvatar} ownerName={ownerName} size={40}/>
-                    </Jump>
-                    {t("people")} {loadingGeneral && <Loading/>}
-                </h2>
-            </PageHeader>
-            <Page>
-                <div className="page-central-pane people-page content-panel">
+        <Page className="people-page">
+            <div className="page-central-pane">
+                <MobileBack nodeName={REL_HOME} href={newsHref} sticky>
+                    {t("people")}
+                    {loadingGeneral && <Loading/>}
+                </MobileBack>
+                <DesktopBack nodeName={REL_HOME} href={newsHref}>
+                    {getFeedBackTitle("news", t)}
+                    {loadingGeneral && <Loading/>}
+                </DesktopBack>
+                <div className="content-panel">
                     <PeopleTabs active={tab}/>
                     <PeopleContent/>
                 </div>
-                {showAskDialog && <AskSelectedDialog/>}
-                {showPeopleHideDialog && <PeopleSelectedHideDialog/>}
-                {showFriendGroupAddDialog && <FriendGroupAddDialog/>}
-            </Page>
-        </>
+            </div>
+            <BottomMenu/>
+            {showAskDialog && <AskSelectedDialog/>}
+            {showPeopleHideDialog && <PeopleSelectedHideDialog/>}
+            {showFriendGroupAddDialog && <FriendGroupAddDialog/>}
+        </Page>
     );
 }

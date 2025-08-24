@@ -1,9 +1,15 @@
-.people-page.content-panel {
-    min-height: 25vh;
-}
-
 @media only screen and (max-width: 575px) {
     .people-page {
         padding-bottom: 3rem;
+        background-color: white;
+        min-height: 100vh;
     }
+}
+
+.people-page .mobile-back {
+    background-color: white;
+}
+
+.people-page .content-panel {
+    min-height: 25vh;
 }

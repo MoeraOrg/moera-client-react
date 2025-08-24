@@ -6,6 +6,10 @@
     }
 }
 
+.profile-page .mobile-back {
+    background-color: white;
+}
+
 .profile-view A:hover {
     text-decoration: underline;
 }

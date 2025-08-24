@@ -33,7 +33,7 @@ export default function ProfilePage() {
     return (
         <Page className="profile-page">
             <div className="page-central-pane">
-                <MobileBack nodeName={REL_HOME} href={newsHref}>
+                <MobileBack nodeName={REL_HOME} href={newsHref} sticky>
                     {t("profile")}
                     {loading && <Loading/>}
                 </MobileBack>
