@@ -26,11 +26,11 @@ export default function FeedSubscribeButton({nodeName, feedName}: Props) {
     }
 
     return (
-        <>
+        <div className="mt-2 mb-3">
             {(generalReady && (subscription?.loaded ?? false)) &&
                 <SubscribeButton nodeName={ownerName} feedName={feedName}/>
             }
             {(generalLoading || subscription?.loading) && <Loading/>}
-        </>
+        </div>
     );
 }

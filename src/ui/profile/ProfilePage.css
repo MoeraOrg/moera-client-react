@@ -1,3 +1,11 @@
+@media only screen and (max-width: 991px) {
+    .profile-page {
+        padding-bottom: 3rem;
+        background-color: white;
+        min-height: 100vh;
+    }
+}
+
 .profile-view A:hover {
     text-decoration: underline;
 }

@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 
 import { shareDialogPrepare, sharePageCopyLink } from "state/sharedialog/actions";
 import * as Browser from "ui/browser";
-import { DropdownMenu } from "ui/control";
-import "./PageShareButton.css";
+import { Button, DropdownMenu } from "ui/control";
+import { Icon, msShare } from "ui/material-symbols";
 import { REL_CURRENT } from "util/rel-node-name";
 
 interface Props {
@@ -45,9 +45,9 @@ export default function PageShareButton({href}: Props) {
         );
     } else {
         return (
-            <button className="page-share" title={t("share-page")} onClick={onShare}>
-                <FontAwesomeIcon icon={faShareAlt}/>
-            </button>
+            <Button variant="silent-round" className="ms-3" title={t("share-page")} onClick={onShare}>
+                <Icon icon={msShare} size={20}/>
+            </Button>
         );
     }
 }

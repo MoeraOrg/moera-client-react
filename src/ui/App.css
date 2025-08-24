@@ -102,7 +102,7 @@ BLOCKQUOTE BLOCKQUOTE:last-child, BLOCKQUOTE P:last-child {
 .content-panel {
     display: flow-root;
     background-color: white;
-    border-radius: .5rem;
+    border-radius: 1rem;
     padding: 1rem;
 }
 

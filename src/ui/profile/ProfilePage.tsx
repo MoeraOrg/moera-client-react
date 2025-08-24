@@ -8,53 +8,56 @@ import { isProfileEditable } from "state/profile/selectors";
 import { getOwnerCard, getOwnerName } from "state/node/selectors";
 import { Avatar, DonateButton, Loading } from "ui/control";
 import Jump from "ui/navigation/Jump";
-import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
+import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import BottomMenu from "ui/mainmenu/BottomMenu";
 import { Page } from "ui/page/Page";
-import PageHeader from "ui/page/PageHeader";
+import MobileBack from "ui/page/MobileBack";
+import DesktopBack from "ui/page/DesktopBack";
 import PageShareButton from "ui/page/PageShareButton";
+import { getFeedBackTitle } from "ui/feed/feeds";
+import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import NodeNameView from "ui/profile/view/NodeNameView";
 import EntryHtml from "ui/entry/EntryHtml";
 import { shortGender } from "util/names";
-import { REL_CURRENT } from "util/rel-node-name";
+import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import "./ProfilePage.css";
-
-function EditButton() {
-    const {t} = useTranslation();
-
-    return (
-        <Jump className="btn btn-sm btn-outline-primary ms-3" href="/settings/profile#profile">
-            {t("edit")}
-        </Jump>
-    );
-}
 
 export default function ProfilePage() {
     const loading = useSelector((state: ClientState) => getOwnerCard(state)?.details?.loading ?? true);
     const profile = useSelector((state: ClientState) => getOwnerCard(state)?.details?.profile);
     const ownerName = useSelector(getOwnerName);
     const editable = useSelector(isProfileEditable);
+    const newsHref = useMainMenuHomeNews().href;
     const {t} = useTranslation();
 
     return (
-        <>
-            <PageHeader>
-                <h2>
+        <Page className="profile-page">
+            <div className="page-central-pane">
+                <MobileBack nodeName={REL_HOME} href={newsHref}>
                     {t("profile")}
-                    {" "}<FeedSubscribeButton nodeName={REL_CURRENT} feedName="timeline"/>
-                    {" "}{editable && <EditButton/>}
-                    <PageShareButton href="/profile"/>
-                </h2>
-            </PageHeader>
-            <Page>
-                <div className="page-central-pane profile-view content-panel">
-                    <Avatar avatar={profile?.avatar} ownerName={ownerName} size={200}/>
                     {loading && <Loading/>}
+                </MobileBack>
+                <DesktopBack nodeName={REL_HOME} href={newsHref}>
+                    {getFeedBackTitle("news", t)}
+                    {loading && <Loading/>}
+                </DesktopBack>
+                <div className="profile-view content-panel">
+                    <Avatar avatar={profile?.avatar} ownerName={ownerName} size={200}/>
                     <div className="full-name">
                         {profile?.fullName ?? NodeName.shorten(ownerName)}
                         {profile?.gender && <span className="gender">{shortGender(profile.gender, t)}</span>}
+                        <PageShareButton href="/profile"/>
                     </div>
                     <NodeNameView/>
                     {profile?.title && <div className="title">{profile.title}</div>}
+                    <FeedSubscribeButton nodeName={REL_CURRENT} feedName="timeline"/>
+                    {editable &&
+                        <div className="mt-2 mb-3">
+                            <Jump className="btn btn-outline-primary" href="/settings/profile#profile">
+                                {t("edit")}
+                            </Jump>
+                        </div>
+                    }
                     <DonateButton name={ownerName} fullName={profile?.fullName ?? null}
                                   fundraisers={profile?.fundraisers ?? null} className="donate"/>
                     {profile?.email &&
@@ -65,7 +68,8 @@ export default function ProfilePage() {
                     }
                     {profile?.bioHtml && <EntryHtml className="bio" html={profile.bioHtml} nodeName={REL_CURRENT}/>}
                 </div>
-            </Page>
-        </>
+            </div>
+            <BottomMenu/>
+        </Page>
     );
 }
