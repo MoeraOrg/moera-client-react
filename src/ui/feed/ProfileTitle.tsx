@@ -8,9 +8,9 @@ import { getOwnerAvatar, getOwnerFullName, getOwnerName, getOwnerTitle } from "s
 import { Avatar, DonateButton } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import { mentionName } from "util/names";
-import "./FeedTitle.css";
+import "./ProfileTitle.css";
 
-export default function FeedTitle() {
+export default function ProfileTitle() {
     const nodeName = useSelector(getOwnerName);
     const fullName = useSelector(getOwnerFullName);
     const title = useSelector(getOwnerTitle);
@@ -19,7 +19,7 @@ export default function FeedTitle() {
     const {t} = useTranslation();
 
     return (
-        <div id="feed-title">
+        <div id="profile-title">
             <div className="panel">
                 <Jump href="/profile" title={t("profile")} className="avatar-link">
                     <Avatar avatar={avatar} ownerName={nodeName} size={100}/>

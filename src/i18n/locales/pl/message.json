@@ -539,6 +539,9 @@
   },
   "profile": "Profil",
   "profile-edited-conflict": "Profil został edytowany przez kogoś innego.",
+  "profile-tabs": {
+    "posts": "Posty"
+  },
   "progress": "{done} z {total} wykonane",
   "prohibited": "Zabronione",
   "prohibited-to-comment": "komentowanie",

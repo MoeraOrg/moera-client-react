@@ -36,7 +36,7 @@ export default function MobileBack({nodeName, href, className, sticky, onBack, c
     return (
         <>
             <div className="mobile-back-sentinel" aria-hidden="true" ref={sentinel}/>
-            <div className={cx("mobile-back", {sticky, shadow}, className)}>
+            <div className={cx("mobile-back", {sticky, "mobile-back-shadow": shadow}, className)}>
                 <Jump className="btn btn-silent-round" nodeName={nodeName} href={href} onNear={onJump} onFar={onJump}>
                     <Icon icon={msArrowBack} size={24}/>
                 </Jump>

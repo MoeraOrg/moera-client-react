@@ -539,6 +539,9 @@
   },
   "profile": "Профиль",
   "profile-edited-conflict": "Профиль был кем-то отредактирован.",
+  "profile-tabs": {
+    "posts": "Посты"
+  },
   "progress": "{done} из {total} готово",
   "prohibited": "Запрещено",
   "prohibited-to-comment": "комментировать",

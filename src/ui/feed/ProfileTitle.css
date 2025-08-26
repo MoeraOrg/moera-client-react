@@ -1,38 +1,38 @@
-#feed-title {
-    background-color: var(--bs-gray-100);
+#profile-title {
+    background-color: white;
     padding: .5rem 1rem;
 }
 
-#feed-title .panel {
+#profile-title .panel {
     width: min(var(--feed-width), 100%);
     margin-left: auto;
     margin-right: auto;
     display: flex;
 }
 
-#feed-title .panel .avatar-link {
+#profile-title .panel .avatar-link {
     flex: none;
     margin-right: .5rem;
 }
 
-#feed-title .panel .body {
+#profile-title .panel .body {
     flex: auto;
     padding: .5rem 0;
     line-height: 1.2;
 }
 
-#feed-title .full-name {
+#profile-title .full-name {
     font-size: 1.9rem;
     font-weight: bold;
     overflow-wrap: break-word;
 }
 
-#feed-title .mention {
+#profile-title .mention {
     color: var(--bs-gray-500);
     white-space: nowrap;
 }
 
-#feed-title .title {
+#profile-title .title {
     font-size: larger;
     margin-top: .5em;
 }
