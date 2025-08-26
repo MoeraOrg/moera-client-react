@@ -2,6 +2,13 @@
     padding-top: 1rem;
 }
 
+
+@media only screen and (max-width: 576px) {
+    .news-page .page-central-pane {
+        padding-top: .75rem;
+    }
+}
+
 .news-page .feed-top-box {
     top: 3rem;
 }
