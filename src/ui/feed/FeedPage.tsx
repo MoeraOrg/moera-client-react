@@ -25,15 +25,16 @@ import { REL_HOME, RelNodeName } from "util/rel-node-name";
 import { getPageHeaderHeight } from "util/ui";
 import "./FeedPage.css";
 
+type NavigationUpdateHandler = (navigable: boolean, atBottom: boolean) => void;
+
 interface Props {
     nodeName: RelNodeName | string;
     feedName: string;
     visible: boolean;
-    title: string;
-    shareable?: boolean;
+    onNavigationUpdate?: NavigationUpdateHandler;
 }
 
-export default function FeedPage({nodeName, feedName, visible, title, shareable}: Props) {
+export default function FeedPage({nodeName, feedName, visible, onNavigationUpdate}: Props) {
     const loadingFuture = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).loadingFuture);
     const loadingPast = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).loadingPast);
     const before = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).before);
@@ -140,6 +141,12 @@ export default function FeedPage({nodeName, feedName, visible, title, shareable}
     const onBoundaryFuture = (intersecting: boolean) => setAtTop(intersecting);
 
     const onBoundaryPast = (intersecting: boolean) => setAtBottom(intersecting);
+
+    useEffect(() => {
+        if (onNavigationUpdate != null) {
+            onNavigationUpdate(stories.length > 0, atBottom && after <= Number.MIN_SAFE_INTEGER);
+        }
+    }, [after, atBottom, onNavigationUpdate, stories.length]);
 
     const totalAfterTop = useMemo((): number => {
         if (topmostMoment >= Number.MAX_SAFE_INTEGER) {

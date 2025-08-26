@@ -15,6 +15,7 @@ import BottomMenu from "ui/mainmenu/BottomMenu";
 import { getFeedBackTitle, getFeedTitle } from "ui/feed/feeds";
 import ProfileTitle from "ui/feed/ProfileTitle";
 import FeedPage from "ui/feed/FeedPage";
+import FeedGotoButton from "ui/feed/FeedGotoButton";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import "./TimelinePage.css";
 
@@ -25,6 +26,13 @@ export default function TimelinePage() {
     const {t} = useTranslation();
 
     const [shadow, setShadow] = useState<boolean>(false);
+    const [navigable, setNavigable] = useState<boolean>(false);
+    const [atBottom, setAtBottom] = useState<boolean>(false);
+
+    const onNavigationUpdate = useCallback((navigable: boolean, atBottom: boolean) => {
+        setNavigable(navigable);
+        setAtBottom(atBottom);
+    }, []);
 
     const onIntersect = useCallback(
         (intersecting: boolean) => setShadow(!intersecting),
@@ -53,15 +61,18 @@ export default function TimelinePage() {
                                     title: tTitle(t("profile-tabs.posts")),
                                     href: "/timeline"
                                 }
-                            ]} value="posts"/>
+                            ]} value="posts">
+                                {navigable &&
+                                    <FeedGotoButton nodeName={REL_CURRENT} feedName="timeline" atBottom={atBottom}/>
+                                }
+                            </UnderlinedTabs>
                         </div>
                     </div>
                     <FeedPage
                         nodeName={REL_CURRENT}
                         feedName="timeline"
-                        title={getFeedTitle("timeline", t)}
-                        shareable
                         visible={visible}
+                        onNavigationUpdate={onNavigationUpdate}
                     />
                 </div>
             </Page>

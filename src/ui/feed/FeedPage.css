@@ -15,6 +15,10 @@
     color: var(--bs-gray-600);
 }
 
+.feed-after-end {
+    height: 1rem;
+}
+
 @media only screen and (max-width: 575px) {
     .feed-after-end {
         height: 4rem;
