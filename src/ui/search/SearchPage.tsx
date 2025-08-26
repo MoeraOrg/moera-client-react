@@ -18,6 +18,8 @@ import NothingFound from "ui/search/NothingFound";
 import SearchFilterDialog from "ui/search/SearchFilterDialog";
 import { ellipsize } from "util/text";
 import "./SearchPage.css";
+import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
+import BottomMenu from "ui/mainmenu/BottomMenu";
 
 export default function SearchPage() {
     const query = useSelector(getSearchQuery);
@@ -52,8 +54,13 @@ export default function SearchPage() {
 
     return (
         <>
-            <PageHeader>
-                <h2>{t("search")}{query ? ": " + ellipsize(query, tinyScreen ? 16 : 40) : ""}</h2>
+            {!tinyScreen &&
+                <PageHeader>
+                    <h2>{t("search")}{query ? ": " + ellipsize(query, tinyScreen ? 16 : 40) : ""}</h2>
+                </PageHeader>
+            }
+            <MobileMainMenu/>
+            <Page className="search-page">
                 <FeedTopBox>
                     {scrollPosition > 50 &&
                         <div className="feed-top-button" onClick={onTop}>
@@ -61,8 +68,6 @@ export default function SearchPage() {
                         </div>
                     }
                 </FeedTopBox>
-            </PageHeader>
-            <Page className="search-page">
                 <div className="page-central-pane">
                     <SearchTabs/>
                     {hasContent ?
@@ -88,6 +93,7 @@ export default function SearchPage() {
                 </div>
                 {showFilters && <SearchFilterDialog/>}
             </Page>
+            <BottomMenu/>
         </>
     );
 }

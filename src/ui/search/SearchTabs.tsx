@@ -1,6 +1,6 @@
+import { useMemo } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import cx from 'classnames';
 import deepEqual from 'react-fast-compare';
 
 import { tTitle } from "i18n";
@@ -17,6 +17,7 @@ import {
     getSearchQuery,
     getSearchTab
 } from "state/search/selectors";
+import { UnderlinedTabDescription, UnderlinedTabs } from "ui/control";
 import { Icon, msTune } from "ui/material-symbols";
 import "./SearchTabs.css";
 
@@ -29,43 +30,40 @@ export default function SearchTabs() {
     const mode = useSelector(getSearchMode);
     const query = useSelector(getSearchQuery);
     const tab = useSelector(getSearchTab);
+    const {t} = useTranslation();
+    const tabs = useMemo<UnderlinedTabDescription[]>(
+        () => TABS.map(tabName => {
+            const invisible =
+                tab !== tabName
+                && (
+                    (mode === "hashtag" && tabName === "people")
+                    || (
+                        (ownerName === homeOwnerName || ownerName === searchNodeName)
+                        && tabName === "current-blog"
+                    )
+                    || (homeOwnerName == null && tabName === "own-blog")
+                );
+            return {
+                title: tTitle(t("search-tab." + tabName)),
+                value: tabName,
+                visible: !invisible
+            };
+        }),
+        [homeOwnerName, mode, ownerName, searchNodeName, t, tab]
+    );
     const filterActive = useSelector((state: ClientState) => !deepEqual(getSearchFilter(state), emptySearchFilter));
     const dispatch = useDispatch();
-    const {t} = useTranslation();
 
-    const onClick = (tab: SearchTab) => () => dispatch(searchLoad(query, tab, emptySearchFilter));
+    const onClick = (tab: SearchTab) => dispatch(searchLoad(query, tab, emptySearchFilter));
 
     const onFilterClick = () => dispatch(searchOpenFilterDialog());
 
     return (
-        <div className="search-tabs">
-            <div className="tab-scroller">
-                {TABS.map(tabName => {
-                    const invisible =
-                        tab !== tabName
-                        && (
-                            (mode === "hashtag" && tabName === "people")
-                            || (
-                                (ownerName === homeOwnerName || ownerName === searchNodeName)
-                                && tabName === "current-blog"
-                            )
-                            || (homeOwnerName == null && tabName === "own-blog")
-                        );
-                    if (invisible) {
-                        return null;
-                    }
-                    return (
-                        <button key={tabName} className={cx("tab", {"active": tabName === tab})}
-                                onClick={onClick(tabName)}>
-                            {tTitle(t("search-tab." + tabName))}
-                        </button>
-                    );
-                })}
-            </div>
+        <UnderlinedTabs tabs={tabs} value={tab} onChange={onClick} className="search-tabs">
             <button className="filter" title={t("filters")} onClick={onFilterClick}>
                 {filterActive && <div className="indicator"/>}
                 <Icon icon={msTune}/>
             </button>
-        </div>
-    );
+        </UnderlinedTabs>
+    )
 }

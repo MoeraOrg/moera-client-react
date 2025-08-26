@@ -1,7 +1,6 @@
 .search-page .show-more {
     background-color: white;
-    border: var(--bs-gray-400) 1px solid;
-    border-radius: .25rem;
+    border-radius: 1rem;
     margin-bottom: 1rem;
     padding: 1.25rem;
     text-align: center;

@@ -44,4 +44,6 @@ export { SubscribeButton } from "ui/control/subscribebutton/SubscribeButton";
 export { Tabs } from "ui/control/Tabs";
 export type { TabDescription } from "ui/control/Tabs";
 export { TextareaAutosize } from "ui/control/TextareaAutosize";
+export { UnderlinedTabs } from "ui/control/UnderlinedTabs";
+export type { UnderlinedTabDescription } from "ui/control/UnderlinedTabs";
 export { Wrapper } from "ui/control/Wrapper";
