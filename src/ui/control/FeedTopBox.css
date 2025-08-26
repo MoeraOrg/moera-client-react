@@ -1,24 +1,10 @@
 .feed-top-box {
-    position: absolute;
+    position: fixed;
     z-index: var(--zindex-feed-top-button);
     left: 0;
     width: 100%;
     display: block;
     text-align: center;
-}
-
-@media only screen and (min-width: 576px) {
-    .feed-top-box {
-        bottom: -.8rem;
-    }
-}
-
-@media only screen and (max-width: 575px) {
-    .feed-top-box {
-        bottom: -2.2rem;
-        margin: 0 3.5rem;
-        width: calc(100% - 7rem); /* to make place for "go to bottom" button */
-    }
 }
 
 .feed-top-button {

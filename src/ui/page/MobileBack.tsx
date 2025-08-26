@@ -25,7 +25,6 @@ export default function MobileBack({nodeName, href, className, sticky, onBack, c
     );
 
     const sentinel = useIntersect(onIntersect);
-
     const tinyScreen = useIsTinyScreen();
 
     if (!tinyScreen) {

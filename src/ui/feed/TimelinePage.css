@@ -1,0 +1,37 @@
+.timeline-page .mobile-back {
+    background-color: white;
+    margin-bottom: 1rem;
+}
+
+.timeline-page .desktop-back-box {
+    display: none;
+    background-color: var(--body-background);
+    padding-top: 1rem;
+}
+
+.timeline-page .desktop-back {
+    margin-top: 0;
+}
+
+.timeline-page .desktop-back.shadow {
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, .16);
+}
+
+.timeline-page .desktop-back-sentinel {
+    block-size: 1px;
+    margin-block-end: -1px;
+}
+
+@media only screen and (min-width: 576px) {
+    .timeline-page .desktop-back-box {
+        display: block;
+        position: sticky;
+        top: 2.7rem;
+        z-index: var(--zindex-page-header);
+        transition: box-shadow .2s ease;
+    }
+}
+
+.timeline-page .feed-top-box {
+    top: 6.7rem;
+}

@@ -15,10 +15,10 @@ import {
 } from "state/feeds/actions";
 import { getFeedState } from "state/feeds/selectors";
 import { isPostingSheriffProhibited } from "state/postings/selectors";
+import { FeedTopBox } from "ui/control";
 import { useDebounce } from "ui/hook";
-import { Page } from "ui/page/Page";
-import FeedTitle from "ui/feed/FeedTitle";
-import FeedPageHeader from "ui/feed/FeedPageHeader";
+import FeedTopButton from "ui/feed/FeedTopButton";
+import FeedSkipPinnedButton from "ui/feed/FeedSkipPinnedButton";
 import FeedStory from "ui/feed/FeedStory";
 import FeedSentinel from "ui/feed/FeedSentinel";
 import { REL_HOME, RelNodeName } from "util/rel-node-name";
@@ -153,83 +153,66 @@ export default function FeedPage({nodeName, feedName, visible, title, shareable}
 
     const momentAbove = useMemo(() => getMomentAbove(topmostMoment), [topmostMoment]);
 
-    if (stories.length === 0 && !loadingFuture && !loadingPast
-        && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER) {
-
+    if (
+        stories.length === 0 && !loadingFuture && !loadingPast
+        && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER
+    ) {
         return (
-            <>
-                <FeedTitle/>
-                <FeedPageHeader
-                    nodeName={nodeName}
-                    feedName={feedName}
-                    title={title}
-                    empty
-                    atTop={true}
-                    atBottom={true}
-                    totalAfterTop={0}
-                    notViewed={0}
-                    notViewedMoment={null}
-                    momentAbove={null}
-                />
-                <div className="no-postings">{t("nothing-yet")}</div>
-            </>
+            <div className="no-postings">{t("nothing-yet")}</div>
         );
     }
 
     return (
         <>
-            <FeedTitle/>
-            <FeedPageHeader
-                nodeName={nodeName}
-                feedName={feedName}
-                title={title}
-                shareable={shareable}
-                atTop={atTop && before >= Number.MAX_SAFE_INTEGER}
-                atBottom={atBottom && after <= Number.MIN_SAFE_INTEGER}
-                totalAfterTop={totalAfterTop}
-                notViewed={notViewed ?? 0}
-                notViewedMoment={notViewedMoment ?? null}
-                momentAbove={momentAbove}
+            <FeedTopBox>
+                <FeedTopButton
+                    nodeName={nodeName}
+                    feedName={feedName}
+                    atTop={atTop && before >= Number.MAX_SAFE_INTEGER}
+                    totalAfterTop={totalAfterTop}
+                    notViewed={notViewed ?? 0}
+                    notViewedMoment={notViewedMoment ?? null}
+                    momentAbove={momentAbove}
+                />
+                {(!atTop || before < Number.MAX_SAFE_INTEGER) &&
+                    <FeedSkipPinnedButton nodeName={nodeName} feedName={feedName}/>
+                }
+            </FeedTopBox>
+            <FeedSentinel
+                loading={loadingFuture}
+                title={t("load-newer-posts")}
+                margin="50% 0px 0px 0px"
+                visible={before < Number.MAX_SAFE_INTEGER}
+                onSentinel={onSentinelFuture}
+                onBoundary={onBoundaryFuture}
+                onClick={loadFuture}
             />
-            <Page>
-                <div className="page-central-pane">
-                    <FeedSentinel
-                        loading={loadingFuture}
-                        title={t("load-newer-posts")}
-                        margin="50% 0px 0px 0px"
-                        visible={before < Number.MAX_SAFE_INTEGER}
-                        onSentinel={onSentinelFuture}
-                        onBoundary={onBoundaryFuture}
-                        onClick={loadFuture}
-                    />
-                    {stories.map(({story, posting, deleting}) =>
-                        <FeedStory
-                            key={story.moment}
-                            nodeName={nodeName}
-                            posting={posting}
-                            feedName={feedName}
-                            story={story}
-                            deleting={deleting}
-                        />
-                    )}
-                    <FeedSentinel
-                        bottom
-                        loading={loadingPast}
-                        title={t("load-older-posts")}
-                        margin="0px 0px 50% 0px"
-                        visible={after > Number.MIN_SAFE_INTEGER}
-                        onSentinel={onSentinelPast}
-                        onBoundary={onBoundaryPast}
-                        onClick={loadPast}
-                    />
-                    {after <= Number.MIN_SAFE_INTEGER &&
-                        <>
-                            <div className="feed-end">{t("reached-bottom")}</div>
-                            <div className="feed-after-end"/>
-                        </>
-                    }
-                </div>
-            </Page>
+            {stories.map(({story, posting, deleting}) =>
+                <FeedStory
+                    key={story.moment}
+                    nodeName={nodeName}
+                    posting={posting}
+                    feedName={feedName}
+                    story={story}
+                    deleting={deleting}
+                />
+            )}
+            <FeedSentinel
+                bottom
+                loading={loadingPast}
+                title={t("load-older-posts")}
+                margin="0px 0px 50% 0px"
+                visible={after > Number.MIN_SAFE_INTEGER}
+                onSentinel={onSentinelPast}
+                onBoundary={onBoundaryPast}
+                onClick={loadPast}
+            />
+            {after <= Number.MIN_SAFE_INTEGER &&
+                <>
+                    <div className="feed-end">{t("reached-bottom")}</div>
+                    <div className="feed-after-end"/>
+                </>
+            }
         </>
     );
 }
