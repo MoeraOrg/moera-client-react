@@ -36,3 +36,8 @@
     font-size: larger;
     margin-top: .5em;
 }
+
+#profile-title .feed-subscribe-button {
+    margin-top: 1.25rem;
+    margin-bottom: 0;
+}

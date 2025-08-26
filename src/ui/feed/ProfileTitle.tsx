@@ -7,7 +7,9 @@ import { ClientState } from "state/state";
 import { getOwnerAvatar, getOwnerFullName, getOwnerName, getOwnerTitle } from "state/node/selectors";
 import { Avatar, DonateButton } from "ui/control";
 import Jump from "ui/navigation/Jump";
+import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import { mentionName } from "util/names";
+import { REL_CURRENT } from "util/rel-node-name";
 import "./ProfileTitle.css";
 
 export default function ProfileTitle() {
@@ -34,6 +36,7 @@ export default function ProfileTitle() {
                     {title && <div className="title">{title}</div>}
                 </div>
             </div>
+            <FeedSubscribeButton nodeName={nodeName ?? REL_CURRENT} feedName="timeline"/>
         </div>
     );
 }
