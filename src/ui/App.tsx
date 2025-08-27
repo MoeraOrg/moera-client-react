@@ -44,7 +44,6 @@ export default function App() {
             <EventsFrontend/>
             <Navigation/>
             <ErrorPane/>
-            <DesktopMainMenu/>
             {atGlobalPage ?
                 <>
                     {atRemovalPage && <RemovalPage/>}
@@ -53,6 +52,7 @@ export default function App() {
             :
                 (atNode ?
                     <>
+                        <DesktopMainMenu/>
                         <CurrentPage/>
                         <NodeDialogs/>
                     </>

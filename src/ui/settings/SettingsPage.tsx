@@ -48,7 +48,7 @@ export default function SettingsPage() {
                     <div className="settings-notebook-switcher" ref={switcherRef}>
                         <div className={`settings-notebook ${side}-side`}>
                             <div className="settings-left">
-                                <div className="settings-title">{t("settings")}</div>
+                                <div className="page-title">{t("settings")}</div>
                                 <MobileMainMenu/>
                                 <SettingsTabs/>
                                 {visible && <SettingsMenu onSelect={() => setSide("sheet")}/>}

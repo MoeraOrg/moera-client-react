@@ -1,0 +1,17 @@
+@media only screen and (min-width: 576px) {
+    .removal-page {
+        padding-top: 1rem;
+    }
+
+    .removal-page .page-central-pane {
+        padding: 1.5rem;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .removal-page {
+        padding-bottom: 3rem;
+        background-color: white;
+        min-height: calc(100vh - 2.7rem);
+    }
+}

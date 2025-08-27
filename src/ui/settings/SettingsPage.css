@@ -87,18 +87,13 @@
 
 }
 
-.settings-notebook .settings-title {
+.settings-notebook .page-title {
     grid-area: title;
-    font-family: var(--font-messages), sans-serif;
-    font-weight: 600;
-    font-size: 2rem;
-    line-height: 125%;
-    color: var(--bs-gray-900);
     margin-bottom: 2rem;
 }
 
 @media only screen and (max-width: 575px) {
-    .settings-notebook .settings-title {
+    .settings-notebook .page-title {
         display: none;
     }
 }

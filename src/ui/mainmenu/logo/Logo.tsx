@@ -2,10 +2,20 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { isConnectedToHome } from "state/home/selectors";
-import { useMainMenuHomeNews, useMainMenuTimeline } from "ui/mainmenu/pages/main-menu";
 import Jump from "ui/navigation/Jump";
+import { useMainMenuHomeNews, useMainMenuTimeline } from "ui/mainmenu/pages/main-menu";
+import { ReactComponent as LogoSvg } from "ui/mainmenu/logo/logo.isvg";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import "./Logo.css";
+
+interface LogoImageProps {
+    className?: string;
+    width?: number | string;
+    height?: number | string;
+}
+
+export const LogoImage = ({className, width, height}: LogoImageProps) =>
+    React.createElement(LogoSvg, {className, height, width});
 
 export default function Logo() {
     const connectedToHome = useSelector(isConnectedToHome);

@@ -1,23 +1,27 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
+import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
+import BottomMenu from "ui/mainmenu/BottomMenu";
 import SettingsRemovalSheet from "ui/settings/SettingsRemovalSheet";
+import "./RemovalPage.css";
+import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 
 export default function RemovalPage() {
     const {t} = useTranslation();
 
     return (
         <>
-            <PageHeader>
-                <h2>{t("delete-account-moera")}</h2>
-            </PageHeader>
-            <Page>
-                <div className="page-central-pane row content-panel">
+            <DesktopMainMenu/>
+            <MobileMainMenu/>
+            <Page className="removal-page">
+                <div className="page-central-pane content-panel">
+                    <div className="page-title mb-3">{t("delete-account-moera")}</div>
                     <SettingsRemovalSheet/>
                 </div>
             </Page>
+            <BottomMenu/>
         </>
     );
 }

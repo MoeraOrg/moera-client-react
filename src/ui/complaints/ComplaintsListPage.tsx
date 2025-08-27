@@ -45,7 +45,7 @@ export default function ComplaintsListPage() {
                 <div className="content-panel">
                     <div className="navigator">
                         <div className="total">{`${t("total-colon")} ${total}`}</div>
-                        <div className="title">{t("complaints")}</div>
+                        <div className="page-title">{t("complaints")}</div>
                         <Button variant="tool-round" active={inboxOnly} title={t("only-new")} onClick={onInboxToggle}>
                             <Icon icon={msInbox} size={20}/>
                         </Button>
