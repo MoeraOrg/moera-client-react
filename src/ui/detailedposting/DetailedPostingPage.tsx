@@ -17,6 +17,7 @@ import { getFeedBackTitle } from "ui/feed/feeds";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { Page } from "ui/page/Page";
+import BackBox from "ui/page/BackBox";
 import DesktopBack from "ui/page/DesktopBack";
 import MobileBack from "ui/page/MobileBack";
 import DetailedPosting from "ui/detailedposting/DetailedPosting";
@@ -81,12 +82,14 @@ export default function DetailedPostingPage() {
     return (
         <Page className="detailed-posting-page">
             <div className="page-central-pane">
-                <DesktopBack nodeName={backNodeName} href={backHref}>
-                    {backTitle}
-                </DesktopBack>
-                <MobileBack nodeName={backNodeName} href={backHref} sticky>
-                    {t("posting")}
-                </MobileBack>
+                <BackBox>
+                    <DesktopBack nodeName={backNodeName} href={backHref}>
+                        {backTitle}
+                    </DesktopBack>
+                    <MobileBack nodeName={backNodeName} href={backHref}>
+                        {t("posting")}
+                    </MobileBack>
+                </BackBox>
                 {(postingReady && story) &&
                     <DetailedPosting posting={posting} story={story} deleting={deleting}/>
                 }

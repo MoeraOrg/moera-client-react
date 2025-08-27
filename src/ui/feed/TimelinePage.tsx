@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import cx from 'classnames';
 
 import { tTitle } from "i18n";
 import { isAtTimelinePage } from "state/navigation/selectors";
 import { UnderlinedTabs } from "ui/control";
-import { useIntersect, useIsTinyScreen } from "ui/hook";
+import { useIsTinyScreen } from "ui/hook";
 import { Page } from "ui/page/Page";
+import BackBox from "ui/page/BackBox";
 import MobileBack from "ui/page/MobileBack";
 import DesktopBack from "ui/page/DesktopBack";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
@@ -25,7 +25,6 @@ export default function TimelinePage() {
     const tinyScreen = useIsTinyScreen();
     const {t} = useTranslation();
 
-    const [shadow, setShadow] = useState<boolean>(false);
     const [navigable, setNavigable] = useState<boolean>(false);
     const [atBottom, setAtBottom] = useState<boolean>(false);
 
@@ -33,13 +32,6 @@ export default function TimelinePage() {
         setNavigable(navigable);
         setAtBottom(atBottom);
     }, []);
-
-    const onIntersect = useCallback(
-        (intersecting: boolean) => setShadow(!intersecting),
-        [setShadow]
-    );
-
-    const sentinel = useIntersect(onIntersect);
 
     return (
         <>
@@ -49,25 +41,22 @@ export default function TimelinePage() {
                         {getFeedTitle("timeline", t)}
                     </MobileBack>
                     {tinyScreen && <ProfileTitle/>}
-                    <div className="back-box-sentinel" aria-hidden="true" ref={sentinel}/>
-                    <div className="back-box">
-                        <div className={cx("back-box-inner", {"back-box-shadow": shadow})}>
-                            <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                                {getFeedBackTitle("news", t)}
-                            </DesktopBack>
-                            <UnderlinedTabs tabs={[
-                                {
-                                    value: "posts",
-                                    title: tTitle(t("profile-tabs.posts")),
-                                    href: "/timeline"
-                                }
-                            ]} value="posts">
-                                {navigable &&
-                                    <FeedGotoButton nodeName={REL_CURRENT} feedName="timeline" atBottom={atBottom}/>
-                                }
-                            </UnderlinedTabs>
-                        </div>
-                    </div>
+                    <BackBox>
+                        <DesktopBack nodeName={REL_HOME} href={newsHref}>
+                            {getFeedBackTitle("news", t)}
+                        </DesktopBack>
+                        <UnderlinedTabs tabs={[
+                            {
+                                value: "posts",
+                                title: tTitle(t("profile-tabs.posts")),
+                                href: "/timeline"
+                            }
+                        ]} value="posts">
+                            {navigable &&
+                                <FeedGotoButton nodeName={REL_CURRENT} feedName="timeline" atBottom={atBottom}/>
+                            }
+                        </UnderlinedTabs>
+                    </BackBox>
                     <FeedPage
                         nodeName={REL_CURRENT}
                         feedName="timeline"
