@@ -1,0 +1,25 @@
+.feed-no-content {
+    background-color: white;
+    border-radius: 1rem;
+    text-align: center;
+    padding: 2rem 0 6rem;
+}
+
+.feed-no-content .caption {
+    font-family: var(--font-messages), sans-serif;
+    font-weight: 600;
+    font-size: 2rem;
+    line-height: 125%;
+    color: var(--bs-gray-900);
+    margin-bottom: .25rem;
+}
+
+.feed-no-content .instructions {
+    font-weight: 400;
+    line-height: 150%;
+    color: var(--bs-gray-600);
+}
+
+.feed-no-content .instructions ~ .btn {
+    margin-top: 1.5rem;
+}

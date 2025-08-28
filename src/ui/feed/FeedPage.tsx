@@ -21,6 +21,7 @@ import FeedTopButton from "ui/feed/FeedTopButton";
 import FeedSkipPinnedButton from "ui/feed/FeedSkipPinnedButton";
 import FeedStory from "ui/feed/FeedStory";
 import FeedSentinel from "ui/feed/FeedSentinel";
+import FeedNoContent from "ui/feed/nocontent/FeedNoContent";
 import { REL_HOME, RelNodeName } from "util/rel-node-name";
 import { getPageHeaderHeight } from "util/ui";
 import "./FeedPage.css";
@@ -165,7 +166,7 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
         && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER
     ) {
         return (
-            <div className="no-postings">{t("nothing-yet")}</div>
+            <FeedNoContent feedName={feedName}/>
         );
     }
 
