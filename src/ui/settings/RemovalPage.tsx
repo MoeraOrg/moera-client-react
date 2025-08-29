@@ -2,11 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Page } from "ui/page/Page";
+import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import SettingsRemovalSheet from "ui/settings/SettingsRemovalSheet";
 import "./RemovalPage.css";
-import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 
 export default function RemovalPage() {
     const {t} = useTranslation();

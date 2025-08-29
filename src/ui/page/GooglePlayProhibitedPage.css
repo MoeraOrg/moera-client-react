@@ -1,0 +1,7 @@
+@media only screen and (max-width: 575px) {
+    .google-play-prohibited-page {
+        padding-bottom: 3rem;
+        background-color: white;
+        min-height: 100vh;
+    }
+}
