@@ -21,7 +21,7 @@ export default function NewsPage() {
                         nodeName={REL_CURRENT}
                         feedName="news"
                         visible={visible}
-                    />;
+                    />
                 </div>
             </Page>
             <BottomMenu/>
