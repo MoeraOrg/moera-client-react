@@ -1,23 +1,25 @@
-.detailed-posting-page .mobile-back {
-    background-color: white;
-}
-
 .posting-not-found {
     background-color: white;
-    border: var(--bs-gray-400) 1px solid;
-    border-radius: 5px;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    display: flex;
+    border-radius: 1rem;
+    text-align: center;
+    padding: 2rem 0 6rem;
 }
 
-.posting-not-found .icon {
-    margin-right: 1.2rem;
-    color: var(--cyan-light);
+.posting-not-found .caption {
+    font-family: var(--font-messages), sans-serif;
+    font-weight: 600;
+    font-size: 2rem;
+    line-height: 125%;
+    color: var(--bs-gray-900);
+    margin-bottom: .25rem;
 }
 
-.posting-not-found .message {
-    font-size: large;
+.posting-not-found .instructions {
+    font-weight: 400;
+    line-height: 150%;
     color: var(--bs-gray-600);
+}
+
+.posting-not-found .instructions ~ .btn {
+    margin-top: 1.5rem;
 }

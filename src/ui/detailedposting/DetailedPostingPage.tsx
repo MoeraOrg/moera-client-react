@@ -1,17 +1,18 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFrown } from '@fortawesome/free-solid-svg-icons';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
+import { tTitle } from "i18n";
 import { PostingInfo } from "api";
 import { ClientState } from "state/state";
+import { dispatch } from "state/store-sagas";
 import { isAtHomeNode, isGooglePlayHiding } from "state/node/selectors";
+import { detailedPostingLoad } from "state/detailedposting/actions";
 import { getDetailedPosting, isDetailedPostingBeingDeleted } from "state/detailedposting/selectors";
 import { getPostingFeedReference, isPostingSheriffProhibited } from "state/postings/selectors";
-import { Loading } from "ui/control";
+import { Button, Loading } from "ui/control";
 import { MinimalStoryInfo } from "ui/types";
 import { getFeedBackTitle } from "ui/feed/feeds";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
@@ -21,6 +22,7 @@ import BackBox from "ui/page/BackBox";
 import DesktopBack from "ui/page/DesktopBack";
 import MobileBack from "ui/page/MobileBack";
 import DetailedPosting from "ui/detailedposting/DetailedPosting";
+import { ReactComponent as NotFound } from "ui/detailedposting/NotFound.isvg";
 import { REL_CURRENT, REL_HOME, RelNodeName } from "util/rel-node-name";
 import "./DetailedPostingPage.css";
 
@@ -79,6 +81,8 @@ export default function DetailedPostingPage() {
     const googlePlayProhibited = googlePlayHiding && isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);
     const postingReady = posting != null && posting.parentMediaId == null && !googlePlayProhibited;
 
+    const onTryAgain = () => dispatch(detailedPostingLoad());
+
     return (
         <Page className="detailed-posting-page">
             <div className="page-central-pane">
@@ -100,13 +104,17 @@ export default function DetailedPostingPage() {
                 }
                 {!postingReady && !loading &&
                     <div className="posting-not-found">
-                        <FontAwesomeIcon className="icon" icon={faFrown} size="3x"/>
-                        <div className="message">
+                        <NotFound/>
+                        <div className="caption">{tTitle(t("posting-not-found"))}</div>
+                        <div className="instructions">
                             {!googlePlayProhibited
-                                ? t("posting-not-found")
+                                ? t("posting-not-found-or-displayed")
                                 : t("content-not-accessible-android")
                             }
                         </div>
+                        {!googlePlayProhibited &&
+                            <Button variant="primary" onClick={onTryAgain}>{tTitle(t("try-again"))}</Button>
+                        }
                     </div>
                 }
             </div>
