@@ -96,7 +96,7 @@ export function Popover({
                             {children}
                         </div>
                     </div>,
-                document.querySelector("#modal-root")!
+                document.getElementById("modal-root")!
             )}
         </PopoverContext.Provider>
     );
