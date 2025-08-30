@@ -8,7 +8,7 @@ import { Popover } from "ui/control";
 import InstantBell from "ui/instant/InstantBell";
 import { REL_HOME } from "util/rel-node-name";
 
-const Instants = React.lazy(() => import("ui/instant/Instants"));
+const InstantsPopover = React.lazy(() => import("ui/instant/InstantsPopover"));
 
 export default function InstantButton() {
     const stories = useSelector((state: ClientState) => getFeedState(state, REL_HOME, "instant").stories);
@@ -42,7 +42,7 @@ export default function InstantButton() {
     return (
         <Suspense fallback={<InstantBell/>}>
             <Popover element={InstantBell} className="instant-popover" detached offset={[0, 10]} onToggle={onToggle}>
-                <Instants instantBorder={border}/>
+                <InstantsPopover instantBorder={border}/>
             </Popover>
         </Suspense>
     );
