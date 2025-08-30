@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
@@ -7,7 +7,6 @@ import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { tTitle } from "i18n";
 import { PostingInfo } from "api";
 import { ClientState } from "state/state";
-import { dispatch } from "state/store-sagas";
 import { isAtHomeNode, isGooglePlayHiding } from "state/node/selectors";
 import { detailedPostingLoad } from "state/detailedposting/actions";
 import { getDetailedPosting, isDetailedPostingBeingDeleted } from "state/detailedposting/selectors";
@@ -72,6 +71,7 @@ export default function DetailedPostingPage() {
     const posting = useSelector(getDetailedPosting);
     const googlePlayHiding = useSelector(isGooglePlayHiding);
     const newsHref = useMainMenuHomeNews().href;
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const {story = null, backNodeName, backHref, backTitle} = useMemo(
