@@ -66,9 +66,17 @@ export function SettingsSheetItems({items, valuesMap, metaMap}: Props) {
                         }
                         const initialValue = valuesMap.get(item.name) ?? meta.defaultValue;
                         const groupClassName = item.marginBottom != null ? `mb-${item.marginBottom}` : undefined;
-                        return <SettingsField key={index} name={item.name} fieldName={toFieldName(item.name)}
-                                              titleName={toTitleName(item.name)} meta={meta}
-                                              initialValue={initialValue} groupClassName={groupClassName}/>
+                        return (
+                            <SettingsField
+                                key={index}
+                                name={item.name}
+                                fieldName={toFieldName(item.name)}
+                                titleName={toTitleName(item.name)}
+                                meta={meta}
+                                initialValue={initialValue}
+                                groupClassName={groupClassName}
+                            />
+                        )
                     }
 
                     case "component":

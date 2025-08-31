@@ -86,7 +86,7 @@ export default function InstantStory({story, hide}: Props) {
                     {tDistanceToNow(publishDate, t)}
                 </time>
             </div>
-            <div className="sidebar">
+            <div className="sidebar only-desktop">
                 {!story.read &&
                     <span className="envelope" title={t("mark-read")} onClick={onEnvelope}>
                         <Icon icon={msCircleFilled} size={12}/>

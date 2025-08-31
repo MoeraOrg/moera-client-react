@@ -105,9 +105,3 @@
 #instants .instant:hover .sidebar .envelope {
     cursor: pointer;
 }
-
-@media only screen and (max-width: 575px) {
-    #instants .instant .sidebar {
-        display: none;
-    }
-}

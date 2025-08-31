@@ -28,7 +28,7 @@ export default function SettingsMenu({onSelect}: Props) {
 
     return (
         <>
-            <div className="settings-menu-spacer"/>
+            <div className="settings-menu-spacer only-desktop"/>
             <Tabs<string>
                 tabStyle="pills"
                 className="flex-column settings-menu"

@@ -8,9 +8,3 @@
     justify-content: space-between;
     align-items: flex-end;
 }
-
-@media only screen and (max-width: 575px) {
-    .complaints .navigator > .page-title {
-        display: none;
-    }
-}

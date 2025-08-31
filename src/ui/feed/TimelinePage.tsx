@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { tTitle } from "i18n";
 import { isAtTimelinePage } from "state/navigation/selectors";
-import { UnderlinedTabs } from "ui/control";
-import { useIsTinyScreen } from "ui/hook";
+import { OnlyMobile, UnderlinedTabs } from "ui/control";
 import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
 import MobileBack from "ui/page/MobileBack";
@@ -22,7 +21,6 @@ import "./TimelinePage.css";
 export default function TimelinePage() {
     const visible = useSelector(isAtTimelinePage);
     const newsHref = useMainMenuHomeNews().href;
-    const tinyScreen = useIsTinyScreen();
     const {t} = useTranslation();
 
     const [navigable, setNavigable] = useState<boolean>(false);
@@ -40,7 +38,7 @@ export default function TimelinePage() {
                     <MobileBack nodeName={REL_HOME} href={newsHref} sticky>
                         {getFeedTitle("timeline", t)}
                     </MobileBack>
-                    {tinyScreen && <ProfileTitle/>}
+                    <OnlyMobile><ProfileTitle/></OnlyMobile>
                     <BackBox>
                         <DesktopBack nodeName={REL_HOME} href={newsHref}>
                             {getFeedBackTitle("news", t)}

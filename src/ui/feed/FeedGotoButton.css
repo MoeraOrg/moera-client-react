@@ -30,9 +30,9 @@
     }
 
     .feed-goto-button .bottom {
-        position: fixed;
-        top: 7rem;
-        right: 1rem;
+        position: absolute;
+        top: 3rem;
+        right: .5rem;
         border-radius: .5rem;
         width: 2.5rem;
         height: 2.5rem;
@@ -45,10 +45,6 @@
         width: 20px;
         height: 20px;
         vertical-align: -.5em;
-    }
-
-    .feed-goto-button .bottom .caption {
-        display: none;
     }
 }
 

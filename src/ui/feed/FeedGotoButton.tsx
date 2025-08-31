@@ -68,7 +68,8 @@ export default function FeedGotoButton({nodeName, feedName, atBottom}: Props) {
                     />
                     <Button variant="outline-primary" size="sm" className="bottom" invisible={atBottom}
                             onClick={toBottom}>
-                        <Icon icon={msArrowDownward} size={16}/><span className="caption">&nbsp;{t("bottom")}</span>
+                        <Icon icon={msArrowDownward} size={16}/>
+                        <span className="caption only-desktop">&nbsp;{t("bottom")}</span>
                     </Button>
                 </Suspense>
             }

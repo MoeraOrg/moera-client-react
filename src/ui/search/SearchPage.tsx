@@ -5,11 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { searchScrolled } from "state/search/actions";
 import { getSearchQuery, getSearchTab, hasSearchMoreResults } from "state/search/selectors";
-import { FeedTopBox, Loading } from "ui/control";
+import { FeedTopBox, Loading, OnlyDesktop } from "ui/control";
 import { useDebounce, useIsTinyScreen } from "ui/hook";
 import { Icon, msArrowUpward } from "ui/material-symbols";
 import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
+import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
+import BottomMenu from "ui/mainmenu/BottomMenu";
 import SearchTabs from "ui/search/SearchTabs";
 import SearchNode from "ui/search/SearchNode";
 import SearchEntry from "ui/search/SearchEntry";
@@ -18,8 +20,6 @@ import NothingFound from "ui/search/NothingFound";
 import SearchFilterDialog from "ui/search/SearchFilterDialog";
 import { ellipsize } from "util/text";
 import "./SearchPage.css";
-import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
-import BottomMenu from "ui/mainmenu/BottomMenu";
 
 export default function SearchPage() {
     const query = useSelector(getSearchQuery);
@@ -54,11 +54,11 @@ export default function SearchPage() {
 
     return (
         <>
-            {!tinyScreen &&
+            <OnlyDesktop>
                 <PageHeader>
                     <h2>{t("search")}{query ? ": " + ellipsize(query, tinyScreen ? 16 : 40) : ""}</h2>
                 </PageHeader>
-            }
+            </OnlyDesktop>
             <MobileMainMenu/>
             <Page className="search-page">
                 <FeedTopBox>

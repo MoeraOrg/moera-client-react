@@ -9,8 +9,7 @@ import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import { peopleSelectToggle } from "state/people/actions";
 import { getPeopleTab } from "state/people/selectors";
-import { Avatar, AvatarWithPopup, Principal, SubscribeButton } from "ui/control";
-import { useIsTinyScreen } from "ui/hook";
+import { Avatar, AvatarWithPopup, OnlyDesktop, OnlyMobile, Principal, SubscribeButton } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import SubscriberVisibility from "ui/people/SubscriberVisibility";
 import PeopleContactStatuses from "ui/people/PeopleContactStatuses";
@@ -25,7 +24,6 @@ export default function PeoplePerson({contact}: Props) {
     const selecting = useSelector((state: ClientState) => state.people.selecting);
     const selected = useSelector((state: ClientState) => state.people.selected[contact.contact.nodeName] ?? false);
     const tab = useSelector(getPeopleTab);
-    const tinyScreen = useIsTinyScreen();
     const dispatch = useDispatch();
 
     const onSelectClick = () => dispatch(peopleSelectToggle(contact.contact.nodeName));
@@ -54,14 +52,14 @@ export default function PeoplePerson({contact}: Props) {
                     {tab === "subscriptions" && contact.subscription != null &&
                         <Principal value={contact.subscription.operations?.view ?? "public"} defaultValue="public"/>
                     }
-                    {!atHome && !tinyScreen && <PeopleContactStatuses contact={contact}/>}
+                    {!atHome && <OnlyDesktop><PeopleContactStatuses contact={contact}/></OnlyDesktop>}
                 </Jump>
                 <Jump className="name" nodeName={contact.contact.nodeName} href="/">
                     {shortNodeName}
                 </Jump>
             </div>
             <SubscribeButton nodeName={contact.contact.nodeName} feedName="timeline"/>
-            {!atHome && tinyScreen && <PeopleContactStatuses contact={contact}/>}
+            {!atHome && <OnlyMobile><PeopleContactStatuses contact={contact}/></OnlyMobile>}
         </div>
     );
 }

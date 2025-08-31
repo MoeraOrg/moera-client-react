@@ -17,9 +17,8 @@ import {
     ComposePageProps,
     ComposePageValues
 } from "ui/compose/posting-compose";
-import { useIsTinyScreen } from "ui/hook";
 import NodeName from "ui/nodename/NodeName";
-import { ConflictWarning, Loading } from "ui/control";
+import { ConflictWarning, Loading, OnlyDesktop, OnlyMobile } from "ui/control";
 import { AvatarField, InputField } from "ui/control/field";
 import { RichTextField } from "ui/control/richtexteditor";
 import { getFeedBackTitle } from "ui/feed/feeds";
@@ -76,8 +75,6 @@ function ComposePageInner(props: Props) {
         backTitle = t("back-post")
     }
 
-    const tinyScreen = useIsTinyScreen();
-
     const title = postingId == null ? t("new-post-title") : t("edit-post-title");
     const sourceFormats = features?.sourceFormats ?? [];
     const submitDisabled = !ready || areValuesEmpty(values) || !areImagesUploaded(values);
@@ -111,7 +108,7 @@ function ComposePageInner(props: Props) {
                                         <ComposeViewPrincipal/>
                                     </div>
                                 </div>
-                                {!tinyScreen && <ComposeDrafts ready={ready}/>}
+                                <OnlyDesktop><ComposeDrafts ready={ready}/></OnlyDesktop>
                             </div>
                             {features?.subjectPresent &&
                                 <InputField name="subject" title="Title" anyValue disabled={!ready}/>
@@ -130,7 +127,7 @@ function ComposePageInner(props: Props) {
                                 autoFocus
                                 maxHeight="max(100vh - 26rem, 10.8em)"
                             >
-                                {tinyScreen && <ComposeDrafts ready={ready}/>}
+                                <OnlyMobile><ComposeDrafts ready={ready}/></OnlyMobile>
                             </RichTextField>
 
                             <ComposeFeatures sourceFormats={sourceFormats} updateInfo={postingId != null}/>

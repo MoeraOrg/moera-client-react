@@ -92,12 +92,6 @@
     margin-bottom: 2rem;
 }
 
-@media only screen and (max-width: 575px) {
-    .settings-notebook .page-title {
-        display: none;
-    }
-}
-
 .settings-notebook .form-check {
     padding-left: 1.75em;
 }

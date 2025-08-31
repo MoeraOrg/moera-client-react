@@ -18,7 +18,7 @@ import {
     msPhotoLibrary
 } from "ui/material-symbols";
 import * as Browser from "ui/browser";
-import { useIsTinyScreen } from "ui/hook";
+import { OnlyDesktop } from "ui/control";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEditorButton";
@@ -58,7 +58,6 @@ function CommentComposePanel() {
     const {unsaved, saving, saved} = useCommentDraftSaver(null);
     const {values, submitForm} = useFormikContext<CommentComposeValues>();
     const notReady = !ready || (draft == null && areValuesEmpty(values)) || !areImagesUploaded(values);
-    const tinyScreen = useIsTinyScreen();
 
     return (
         <div className="comment-compose-panel">
@@ -71,8 +70,11 @@ function CommentComposePanel() {
                 {supportsVideo &&
                     <RichTextEditorButton icon={msMediaLink} title={t("video-internet")} command={formatVideo}/>
                 }
-                {supportsMedia && !tinyScreen &&
-                    <RichTextEditorButton icon={msFileSave} title={t("copy-image-from-internet")} command={copyImage}/>
+                {supportsMedia &&
+                    <OnlyDesktop>
+                        <RichTextEditorButton icon={msFileSave} title={t("copy-image-from-internet")}
+                                              command={copyImage}/>
+                    </OnlyDesktop>
                 }
                 {!Browser.isMobile() &&
                     <RichTextEditorEmojiButton onSelect={formatEmoji}/>
