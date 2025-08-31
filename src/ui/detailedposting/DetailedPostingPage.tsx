@@ -20,6 +20,7 @@ import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
 import DesktopBack from "ui/page/DesktopBack";
 import MobileBack from "ui/page/MobileBack";
+import { ReactComponent as GooglePlayProhibited } from "ui/page/GooglePlayProhibited.isvg";
 import DetailedPosting from "ui/detailedposting/DetailedPosting";
 import { ReactComponent as NotFound } from "ui/detailedposting/NotFound.isvg";
 import { REL_CURRENT, REL_HOME, RelNodeName } from "util/rel-node-name";
@@ -104,16 +105,21 @@ export default function DetailedPostingPage() {
                 }
                 {!postingReady && !loading &&
                     <div className="posting-not-found">
-                        <NotFound/>
-                        <div className="caption">{tTitle(t("posting-not-found"))}</div>
-                        <div className="instructions">
-                            {!googlePlayProhibited
-                                ? t("posting-not-found-or-displayed")
-                                : t("content-not-accessible-android")
-                            }
-                        </div>
-                        {!googlePlayProhibited &&
-                            <Button variant="primary" onClick={onTryAgain}>{tTitle(t("try-again"))}</Button>
+                        {googlePlayProhibited ?
+                            <>
+                                <GooglePlayProhibited/>
+                                <div className="caption">{tTitle(t("not-accessible"))}</div>
+                                <div className="instructions">{t("content-not-accessible-android")}</div>
+                            </>
+                        :
+                            <>
+                                <NotFound/>
+                                <div className="caption">{tTitle(t("posting-not-found"))}</div>
+                                <div className="instructions">
+                                    {t("posting-not-found-or-displayed")}
+                                </div>
+                                <Button variant="primary" onClick={onTryAgain}>{tTitle(t("try-again"))}</Button>
+                            </>
                         }
                     </div>
                 }

@@ -6,6 +6,7 @@ import { getFeedBackTitle } from "ui/feed/feeds";
 import { Page } from "ui/page/Page";
 import DesktopBack from "ui/page/DesktopBack";
 import MobileBack from "ui/page/MobileBack";
+import { ReactComponent as GooglePlayProhibited } from "ui/page/GooglePlayProhibited.isvg";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { REL_HOME } from "util/rel-node-name";
@@ -25,8 +26,10 @@ export default function GooglePlayProhibitedPage() {
                     <DesktopBack nodeName={REL_HOME} href={newsHref}>
                         {getFeedBackTitle("news", t)}
                     </DesktopBack>
-                    <div className="content-panel text-center">
-                        {t("content-not-accessible-android")}
+                    <div className="content-panel">
+                        <GooglePlayProhibited/>
+                        <div className="caption">{tTitle(t("not-accessible"))}</div>
+                        <div className="instructions">{t("content-not-accessible-android")}</div>
                     </div>
                 </div>
             </Page>
