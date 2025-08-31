@@ -11,7 +11,7 @@
     transition: all .5s;
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     #page-header {
         padding-top: .3rem;
     }
@@ -49,7 +49,7 @@
     vertical-align: .25em;
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     #page-header H2 .subscribe-button {
         vertical-align: .1em;
     }
@@ -71,7 +71,7 @@
     line-height: 2;
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     #page-header .page-header-buttons {
         top: .3rem;
     }

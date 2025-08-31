@@ -68,7 +68,7 @@
     overflow-y: auto;
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .nav.nav-tabs.scroll-mobile, .nav.nav-pills.scroll-mobile {
         overflow-x: auto;
         overflow-y: hidden;

@@ -136,7 +136,7 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     name="entryType"
                                     title={t("type-content")}
                                     choices={ENTRY_TYPES}
-                                    labelClassName="col-4 col-md-3"
+                                    labelClassName="col-4 col-lg-3"
                                     horizontal
                                     anyValue
                                 />
@@ -146,7 +146,7 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     name="inNewsfeed"
                                     title={t("where-look")}
                                     choices={WHERE}
-                                    labelClassName="col-4 col-md-3"
+                                    labelClassName="col-4 col-lg-3"
                                     horizontal
                                     anyValue
                                 />
@@ -156,7 +156,7 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     name="ownedByMe"
                                     title={t("author")}
                                     choices={AUTHOR}
-                                    labelClassName="col-4 col-md-3"
+                                    labelClassName="col-4 col-lg-3"
                                     horizontal
                                     anyValue
                                 />
@@ -173,7 +173,7 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     name="minImageCount"
                                     title={t("images")}
                                     choices={IMAGE_NUMBER}
-                                    labelClassName="col-4 col-md-3"
+                                    labelClassName="col-4 col-lg-3"
                                     horizontal
                                     anyValue
                                 />
@@ -183,7 +183,7 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     name="videoPresent"
                                     title={t("video")}
                                     choices={VIDEO}
-                                    labelClassName="col-4 col-md-3"
+                                    labelClassName="col-4 col-lg-3"
                                     horizontal
                                     anyValue
                                 />
@@ -201,7 +201,7 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     name="beforeDate"
                                     title={t("date")}
                                     choices={BEFORE_DATE}
-                                    labelClassName="col-4 col-md-3"
+                                    labelClassName="col-4 col-lg-3"
                                     horizontal
                                     anyValue
                                 />
@@ -211,7 +211,7 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     name="datePeriod"
                                     title={t("date")}
                                     choices={DATE_PERIOD}
-                                    labelClassName="col-4 col-md-3"
+                                    labelClassName="col-4 col-lg-3"
                                     horizontal
                                     anyValue
                                 />

@@ -9,7 +9,7 @@
     margin-bottom: .25rem;
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     #instants .instant {
         grid-template-columns: [avatar] calc(40px + .75rem) [summary] auto [sidebar end];
     }

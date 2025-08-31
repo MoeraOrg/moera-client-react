@@ -19,5 +19,5 @@ export function useMediaQuery(query: string): boolean {
 }
 
 export function useIsTinyScreen(): boolean {
-    return useMediaQuery("(max-width: 575px)");
+    return useMediaQuery("(max-width: 991px)");
 }

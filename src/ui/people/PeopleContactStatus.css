@@ -1,11 +1,11 @@
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .people-page .person .contact-statuses {
         margin-top: .25rem;
         line-height: 120%;
     }
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .people-page .person .contact-statuses {
         display: inline;
         margin-left: .5rem;

@@ -11,7 +11,7 @@
     --nav-link-arrow-color: var(--bs-gray-600);
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .settings-menu {
         width: calc(100% - 1rem);
         padding-left: 1rem;

@@ -35,7 +35,7 @@
     opacity: .7;
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .lightbox-reactions {
         right: 0;
     }
@@ -62,7 +62,7 @@
     }
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .lightbox-reactions {
         left: 0;
         width: 100%;

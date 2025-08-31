@@ -2,6 +2,8 @@
     display: block;
     position: sticky;
     z-index: var(--zindex-page-header);
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
 }
 
 .back-box-inner {
@@ -20,7 +22,7 @@
     margin-block-end: -1px;
 }
 
-@media only screen and (max-width: 576px) {
+@media only screen and (max-width: 991px) {
     .back-box {
         top: 0;
         margin-bottom: .75rem;
@@ -31,7 +33,7 @@
     }
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .back-box {
         top: 2.7rem;
         padding-top: .25rem;

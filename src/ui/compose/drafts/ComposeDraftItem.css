@@ -58,13 +58,13 @@
     padding-bottom: .25rem;
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .draft-selector .dropdown-item .content {
         max-width: 25em;
     }
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .draft-selector .dropdown-item .content {
         max-width: calc(100vw - 6rem);
     }

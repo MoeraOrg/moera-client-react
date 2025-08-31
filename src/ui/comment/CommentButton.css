@@ -15,7 +15,7 @@
     transition: background-color, color .15s ease-in;
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .comment-button, A.comment-button {
         margin-left: -.25rem;
         margin-right: .55rem;
@@ -30,7 +30,7 @@
     }
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .comment-button, A.comment-button {
         padding: 0 1rem;
     }

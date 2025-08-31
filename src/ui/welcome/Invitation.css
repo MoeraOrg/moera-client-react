@@ -8,7 +8,7 @@
     text-align: center;
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     #invitation H1 {
         font-size: 1.8rem;
     }

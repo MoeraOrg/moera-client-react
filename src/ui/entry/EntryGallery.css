@@ -11,13 +11,13 @@
     margin-bottom: .25rem;
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .comment .gallery {
         width: calc(min(var(--feed-width), 100vw) * 0.5);
     }
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .comment .gallery {
         width: calc(min(var(--feed-width), 100vw - 55px));
     }
@@ -87,7 +87,7 @@
     max-width: calc(min(var(--feed-width), 100vw - 10px));
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .posting .gallery.single .entry-image IMG {
         max-height: min(560px, var(--image-height));
     }
@@ -98,7 +98,7 @@
     }
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .posting .gallery.single.horizontal .entry-image IMG {
         max-height: min(75vh, var(--image-height));
     }
@@ -137,7 +137,7 @@
     z-index: var(--zindex-text-overlay);
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .entry .gallery .gallery-expand {
         opacity: .5;
         font-size: 1em;

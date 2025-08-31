@@ -9,13 +9,13 @@
     display: inline;
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .rich-text-editor-panel .group {
         margin-right: 1rem;
     }
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .rich-text-editor-panel .group {
         margin-right: .25rem;
     }

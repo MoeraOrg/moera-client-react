@@ -47,13 +47,13 @@
     overflow-y: auto;
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .comment .content.preview {
         max-height: 150vh;
     }
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .comment .content.preview {
         max-height: 100vh;
     }
@@ -88,13 +88,13 @@
     padding-top: 0;
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .comment A.link-preview, .comment DIV.link-preview {
         width: 400px;
     }
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .comment A.link-preview, .comment DIV.link-preview {
         width: calc(100vw - .5rem - 32px);
     }

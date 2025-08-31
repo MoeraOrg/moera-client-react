@@ -11,13 +11,13 @@
     overflow-y: auto;
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .entry-link-selector .popover {
         width: 25em;
     }
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .entry-link-selector .popover {
         width: calc(100vw - 4.3rem);
     }

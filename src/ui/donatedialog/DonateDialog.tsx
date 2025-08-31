@@ -91,7 +91,7 @@ export default function DonateDialog() {
                     <Trans i18nKey="donate-to-recipient" values={{recipientName}}><span className="name"/></Trans>
                 </div>
                 <div className="fundraisers">
-                    <ul className="nav nav-pills flex-md-column">
+                    <ul className="nav nav-pills flex-lg-column">
                         {fundraisers.map((fundraiser, index) =>
                             <li className="nav-item" key={index}>
                                 <span className={cx("nav-link", {"active": fundraiserIndex === index})}

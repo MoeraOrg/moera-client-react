@@ -10,7 +10,7 @@
     justify-content: flex-end;
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .people-panel .search .input-group {
         max-width: 250px;
     }

@@ -9,7 +9,7 @@
     grid-template-columns: 2em 11.25em 5em;
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .formatting-menu-item {
         grid-template-columns: 2em 12em 2em;
     }

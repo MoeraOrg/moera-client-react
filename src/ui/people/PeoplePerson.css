@@ -6,7 +6,7 @@
     grid-template-columns: min-content auto auto;
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .people-page .person {
         padding-right: 0;
     }

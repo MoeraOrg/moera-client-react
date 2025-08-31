@@ -6,7 +6,7 @@
     margin-top: .75rem;
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .posting-buttons {
         padding-top: .625rem;
     }

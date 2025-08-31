@@ -19,7 +19,7 @@
     padding: 1px 0 1px 10px;
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .ril__navButtons {
         height: calc(100vh - 100px - 13rem) !important;
     }

@@ -24,7 +24,7 @@ BODY {
     height: 100%;
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     BODY .dropdown-menu {
         --bs-dropdown-font-size: 1.1rem;
     }
@@ -106,7 +106,7 @@ BLOCKQUOTE BLOCKQUOTE:last-child, BLOCKQUOTE P:last-child {
     padding: 1rem;
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .content-panel {
         border-left-width: 0;
         border-right-width: 0;

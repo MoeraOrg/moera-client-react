@@ -12,5 +12,5 @@ export default function ComposeBodyFormat({sourceFormats}: Props) {
         .filter(f => f !== "application")
         .map(value => ({value, title: `source-format.${value.replaceAll("/", "--")}`}));
 
-    return <SelectField name="bodyFormat" groupClassName="ps-2" col="col-md-3" choices={choices} anyValue/>;
+    return <SelectField name="bodyFormat" groupClassName="ps-2" col="col-lg-3" choices={choices} anyValue/>;
 }

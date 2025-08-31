@@ -2,7 +2,7 @@
     border-radius: 1rem;
 }
 
-@media only screen and (max-width: 576px) {
+@media only screen and (max-width: 991px) {
     .timeline-page .back-box {
         top: 4rem;
     }
@@ -13,7 +13,7 @@
     }
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .timeline-page .back-box {
         padding-top: 1rem;
     }
@@ -32,13 +32,13 @@
     margin-bottom: -.5rem;
 }
 
-@media only screen and (max-width: 576px) {
+@media only screen and (max-width: 991px) {
     .timeline-page .feed-top-box {
         top: 6rem;
     }
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .timeline-page .feed-top-box {
         top: 9rem;
     }

@@ -1,4 +1,4 @@
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .modal-dialog.donate-dialog {
         max-width: 550px;
     }

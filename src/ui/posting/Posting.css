@@ -14,7 +14,7 @@
     background-color: #fffee4;
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .posting {
         margin-bottom: .75rem;
         padding: 1rem 1rem .5rem 1rem;
@@ -30,13 +30,13 @@
     overflow-y: auto;
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .posting.preview > .content {
         max-height: 170vh;
     }
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .posting.preview > .content {
         max-height: 100vh;
     }
@@ -90,7 +90,7 @@
     right: 1.2rem;
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .posting > .menu {
         top: .5rem;
         right: .5rem;

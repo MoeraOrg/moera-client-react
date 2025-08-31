@@ -20,13 +20,13 @@
     margin-inline-end: 1em;
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (min-width: 992px) {
     .comment-dialog A.link-preview, .comment-dialog DIV.link-preview {
         width: 400px;
     }
 }
 
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 991px) {
     .comment-dialog A.link-preview, .comment-dialog DIV.link-preview {
         width: calc(100vw - 2rem);
     }

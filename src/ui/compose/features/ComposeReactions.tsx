@@ -27,8 +27,8 @@ export default function ComposeReactions() {
                         horizontal
                         layout="left"
                         groupClassName="ps-2"
-                        labelClassName="col-md-3"
-                        col="col-md-8"
+                        labelClassName="col-lg-3"
+                        col="col-lg-8"
                         negative={false}
                         setting="posting.reactions-disabled.positive.default"
                     />
@@ -46,8 +46,8 @@ export default function ComposeReactions() {
                             horizontal
                             layout="left"
                             groupClassName="ps-2"
-                            labelClassName="col-md-3"
-                            col="col-md-8"
+                            labelClassName="col-lg-3"
+                            col="col-lg-8"
                             negative={true}
                             setting="posting.reactions-disabled.negative.default"
                         />
