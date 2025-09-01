@@ -66,6 +66,8 @@
 
 .node-card .people {
     margin-top: .5em;
+    text-wrap: nowrap;
+    overflow: hidden;
 }
 
 .node-card .counter {
