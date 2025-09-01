@@ -10,20 +10,20 @@ import { isBottomMenuVisible } from "state/navigation/selectors";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { Button, Loading } from "ui/control";
-import { useActiveElement, useIsTinyScreen } from "ui/hook";
+import { useIsTinyScreen, useVirtualKeyboard } from "ui/hook";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
 import NewsButton from "ui/mainmenu/connectionstatus/NewsButton";
 import InstantButton from "ui/instant/InstantButton";
 import SettingsButton from "ui/mainmenu/connectionstatus/SettingsButton";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
-import "ui/mainmenu/BottomMenu.css";
+import "./BottomMenu.css";
 
 export default function BottomMenu() {
     const atNode = useSelector(isAtNode);
     const connecting = useSelector((state: ClientState) => state.home.connecting);
     const connected = useSelector(isConnectedToHome);
     const bottomMenuVisible = useSelector(isBottomMenuVisible);
-    const activeElement = useActiveElement();
+    const {open: keyboardOpen} = useVirtualKeyboard();
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -33,9 +33,7 @@ export default function BottomMenu() {
         return null;
     }
 
-    const invisible = !bottomMenuVisible
-        || activeElement?.tagName === "TEXTAREA"
-        || activeElement?.classList.contains("visual-text-area");
+    const invisible = !bottomMenuVisible || keyboardOpen;
 
     const className = cx(["connection-status", "navbar-dark", "bg-dark"], {invisible});
 
