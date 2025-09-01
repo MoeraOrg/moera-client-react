@@ -35,11 +35,7 @@
 .reactions .senior-positive, .reactions .senior-negative {
     border-radius: 1em;
     font-size: 1.3em;
-    padding: .35em .4em .4em .4em;
-}
-
-.reactions .senior-positive:hover, .reactions .senior-negative:hover {
-    cursor: pointer;
+    padding: .35em .4em .4em;
 }
 
 .reactions .senior-positive {
@@ -50,4 +46,8 @@
 .reactions .senior-negative {
     color: var(--incorrect);
     background-color: var(--reactions-negative);
+}
+
+.reactions .senior-positive:hover, .reactions .senior-negative:hover {
+    cursor: pointer;
 }

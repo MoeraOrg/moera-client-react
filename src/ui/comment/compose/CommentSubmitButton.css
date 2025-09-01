@@ -1,7 +1,7 @@
 .comment-compose-panel .submit {
     text-wrap: nowrap;
     height: 2em;
-    padding: .15em .15em 1.7em .15em;
+    padding: .15em .15em 1.7em;
 }
 
 @media only screen and (max-width: 409px) {

@@ -4,12 +4,9 @@
 
 .loading-overlay:has(.loading) {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background-color: white;
-    opacity: 60%;
+    opacity: .6;
     z-index: var(--zindex-overlay-loading);
     display: grid;
     place-items: center;

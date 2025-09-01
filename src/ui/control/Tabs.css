@@ -59,25 +59,21 @@
 }
 
 .nav.nav-tabs.scroll-always, .nav.nav-pills.scroll-always {
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: auto hidden;
 }
 
 .nav.nav-tabs.scroll-always.flex-column, .nav.nav-pills.scroll-always.flex-column {
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
 }
 
 @media only screen and (max-width: 991px) {
     .nav.nav-tabs.scroll-mobile, .nav.nav-pills.scroll-mobile {
-        overflow-x: auto;
-        overflow-y: hidden;
+        overflow: auto hidden;
         scrollbar-width: none;
     }
 
     .nav.nav-tabs.scroll-mobile.flex-column, .nav.nav-pills.scroll-mobile.flex-column {
-        overflow-x: hidden;
-        overflow-y: auto;
+        overflow: hidden auto;
     }
 }
 

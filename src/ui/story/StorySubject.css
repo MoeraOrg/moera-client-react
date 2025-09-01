@@ -3,7 +3,7 @@
     font-size: 1.75rem;
     line-height: 1.2;
     margin-bottom: 0.5rem;
-    color: var(--node-name);
+    color: var(--subject);
     overflow-wrap: break-word;
 }
 

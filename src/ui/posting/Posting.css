@@ -2,7 +2,7 @@
     position: relative;
     border-radius: 1rem;
     margin-bottom: 1rem;
-    padding: 1.5rem 1.5rem 1rem 1.5rem;
+    padding: 1.5rem 1.5rem 1rem;
 }
 
 .posting:not(.not-viewed) {
@@ -17,7 +17,7 @@
 @media only screen and (max-width: 991px) {
     .posting {
         margin-bottom: .75rem;
-        padding: 1rem 1rem .5rem 1rem;
+        padding: 1rem 1rem .5rem;
     }
 }
 

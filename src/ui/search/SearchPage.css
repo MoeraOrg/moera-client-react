@@ -12,7 +12,7 @@
     display: grid;
     grid-template-columns: calc(44px + .5rem) auto min-content;
     grid-auto-rows: min-content;
-    grid-row-gap: 1rem;
+    row-gap: 1rem;
 }
 
 .search-page .nodes .person-avatar {

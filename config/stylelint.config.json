@@ -1,0 +1,13 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "media-feature-range-notation": "prefix",
+    "selector-class-pattern": "^([a-z][a-z-]+)|(react-datepicker.*)$",
+    "selector-type-case": [
+      "upper",
+      {
+        "ignoreTypes": ["svg"]
+      }
+    ]
+  }
+}

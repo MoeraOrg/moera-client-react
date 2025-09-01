@@ -3,5 +3,5 @@
 }
 
 .home-avatar:hover {
-    border: 1px solid rgba(255, 255, 255, .7);
+    border: 1px solid rgb(255 255 255 / 70%);
 }

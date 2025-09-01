@@ -1,12 +1,12 @@
 #vertical-menu {
     border-radius: 3px;
-    padding: 0.5rem;
+    padding: .5rem;
     border: solid var(--status-icon) 1px;
 }
 
 #vertical-menu .navbar-nav {
     line-height: 1.1;
-    padding: 0 .5rem 1rem .5rem;
+    padding: 0 .5rem 1rem;
 }
 
 #vertical-menu .nav-item .nav-link {

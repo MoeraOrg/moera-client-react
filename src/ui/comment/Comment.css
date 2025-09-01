@@ -9,7 +9,7 @@
     border-radius: 1rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
-    padding: 1.5rem 1.5rem 1rem 1.5rem;
+    padding: 1.5rem 1.5rem 1rem;
     background-color: white;
 }
 
@@ -59,14 +59,14 @@
     }
 }
 
-.comment .content IMG:not(.emoji) {
-    width: auto;
-    height: auto;
-}
-
 .comment .content IMG, .comment .content IFRAME, .comment .content .preload-placeholder {
     max-width: min(100vw - 7rem, var(--feed-width) - 6.5rem, var(--width, 100vw));
     max-height: min(16rem, var(--height, 200vh));
+}
+
+.comment .content IMG:not(.emoji) {
+    width: auto;
+    height: auto;
 }
 
 .comment .content FIGURE {

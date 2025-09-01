@@ -18,8 +18,7 @@
     display: flex;
     flex-wrap: nowrap;
     padding-top: .25rem;
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: auto hidden;
     scrollbar-width: none;
 }
 

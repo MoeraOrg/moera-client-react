@@ -45,7 +45,7 @@ export default function RichTextEditorPanel() {
     return (
         <div className="rich-text-editor-panel">
             {supportsComplexBlocks &&
-                <div className="group">
+                <div className="group ms-n2">
                     <RichTextEditorHeadingButton onSelect={formatHeading}/>
                 </div>
             }

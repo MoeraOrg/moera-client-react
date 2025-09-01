@@ -3,6 +3,7 @@
     gap: .25rem;
     margin-right: .25rem;
     padding: .3rem .4rem;
+
     --bs-btn-hover-color: white;
     --bs-btn-hover-bg: var(--bs-danger);
     --bs-btn-hover-border-color: var(--bs-danger);

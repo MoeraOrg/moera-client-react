@@ -13,7 +13,7 @@
 }
 
 .user-complaint .owner > A {
-    color: var(--node-name);
+    color: var(--subject);
 }
 
 .user-complaint .date {

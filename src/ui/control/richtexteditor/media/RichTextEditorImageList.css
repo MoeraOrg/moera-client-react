@@ -1,5 +1,5 @@
 .rich-text-editor-image-list {
-    padding: 1rem 1rem 0 1rem;
+    padding: 1rem 1rem 0;
     display: flex;
     gap: .5rem;
     flex-wrap: wrap;

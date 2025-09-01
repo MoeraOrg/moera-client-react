@@ -69,6 +69,8 @@
 }
 
 .reactions-dialog .items .item .owner-name {
+    flex: auto;
+    line-height: 32px;
     max-width: calc(100% - 1.5em - .35rem - 32px);
 }
 
@@ -111,11 +113,6 @@
     width: 4em;
     padding-right: 0.5rem;
     text-align: right;
-}
-
-.reactions-dialog .items .item .owner-name {
-    flex: auto;
-    line-height: 32px;
 }
 
 .reactions-dialog .items .item .bar {

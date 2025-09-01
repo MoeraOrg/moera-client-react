@@ -8,8 +8,7 @@
 
 .modal-children {
     max-height: calc(100vh - 8.5rem);
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
     overscroll-behavior-y: none;
 }
 

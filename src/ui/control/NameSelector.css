@@ -2,9 +2,8 @@
     border: solid 1px var(--bs-gray-400);
     border-radius: 5px;
     max-height: 19em;
-    overflow-y: auto;
+    overflow: hidden auto;
     overscroll-behavior-y: none;
-    overflow-x: hidden;
 }
 
 .name-select .item {

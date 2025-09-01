@@ -22,16 +22,22 @@ DIV.link-preview {
     A.link-preview, DIV.link-preview {
         display: flex;
     }
+
     A.link-preview {
         width: 99.6vw;
         margin-left: -1rem;
         margin-right: -1rem;
     }
+
     DIV.link-preview {
         width: calc(99.6vw - 1rem);
         margin-left: -.5rem;
         margin-right: -.5rem;
     }
+}
+
+A.link-preview:hover {
+    background-color: var(--bs-gray-300);
 }
 
 A.link-preview.large, DIV.link-preview.large {
@@ -44,10 +50,6 @@ A.link-preview.small, DIV.link-preview.small {
 
 .entry A.link-preview, .entry A.link-preview:hover {
     text-decoration: none;
-}
-
-A.link-preview:hover {
-    background-color: var(--bs-gray-300);
 }
 
 .link-preview .details {

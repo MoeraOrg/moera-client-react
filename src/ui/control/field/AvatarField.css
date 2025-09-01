@@ -16,8 +16,7 @@
     cursor: default;
     width: max-content;
     max-height: calc(312px + .75rem);
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden auto;
     overscroll-behavior-y: none;
 }
 

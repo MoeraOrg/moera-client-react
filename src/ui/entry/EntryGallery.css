@@ -99,16 +99,16 @@
 }
 
 @media only screen and (max-width: 991px) {
+    .comment .gallery.single .entry-image IMG {
+        max-width: calc(min(var(--feed-width), 100vw - 55px));
+    }
+
     .posting .gallery.single.horizontal .entry-image IMG {
         max-height: min(75vh, var(--image-height));
     }
 
     .posting .gallery.single.vertical .entry-image IMG {
         max-height: min(100vh, var(--image-height));
-    }
-
-    .comment .gallery.single .entry-image IMG {
-        max-width: calc(min(var(--feed-width), 100vw - 55px));
     }
 
     .comment .gallery.single.horizontal .entry-image IMG {

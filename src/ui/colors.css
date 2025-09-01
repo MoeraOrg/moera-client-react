@@ -20,35 +20,39 @@
      */
 
     /* New design colors */
-    --primary-50: #eefafa; /* Future primary */
+    --primary-800: #0b898f; /* Future primary */
     --primary-600: #0fb6bf;
-    --primary-800: #0b898f;
-    --secondary-600: #515795;
+    --primary-50: #eefafa;
     --secondary-800: #3d4170;
+    --secondary-600: #515795;
 
-    --body-background: var(--bs-gray-200);
-    --highlight: rgba(0, 0, 0, .05);
-    --highlight-light: rgba(0, 0, 0, .025);
-    --highlight-blue: rgba(0, 123, 255, .1); /* TODO need to change after changing primary color */
-    --highlight-red: rgba(220, 53, 69, .1);
+    /* Page body color */
+    --body-bg: var(--bs-gray-200);
+
+    /* Highlight colors */
+    --highlight: rgb(0 0 0 / 5%);
+    --highlight-light: rgb(0 0 0 / 2.5%);
+    --highlight-blue: rgb(0 123 255 / 10%); /* TODO need to change after changing primary color */
+    --highlight-red: rgb(220 53 69 / 10%);
     --highlight-cyan: #f0fafa;
     --highlight-primary: var(--highlight-blue);
 
-    --cyan-light: var(--bs-cyan-200);
+    /* Special colors */
     --green-light: #42d042; /* forest green + 20% lighter */
 
+    /* Verification colors */
     --verifying: var(--bs-cyan);
     --correct: forestgreen;
     --incorrect: var(--bs-red);
     --correct-light: var(--green-light);
-    --node-name: #385898;
 
-    --status-icon: rgba(255, 255, 255, .5);
-    --status-icon-highlight: rgba(255, 255, 255, .75);
-    --shadow: rgba(0, 0, 0, .75);
+    /* Main menu icon colors */
+    --status-icon: rgb(255 255 255 / 50%);
+    --status-icon-highlight: rgb(255 255 255 / 75%);
 
+    /* Other elements' colors */
     --reactions-positive: #e9fce5;
     --reactions-negative: #feeff0;
     --comments: #f8faff;
-    --comment-button: #385898;
+    --subject: #385898;
 }

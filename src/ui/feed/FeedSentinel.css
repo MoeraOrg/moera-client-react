@@ -4,7 +4,7 @@
     font-weight: bold;
     height: 1.6em;
     color: var(--bs-cyan);
-    border: .1em var(--body-background) solid;
+    border: .1em var(--body-bg) solid;
     border-radius: .5em;
     background-color: var(--bs-gray-100);
     cursor: pointer;

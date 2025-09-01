@@ -4,13 +4,12 @@
     padding: 1.5rem;
     border-radius: 1rem;
     display: grid;
-    grid-template-columns: 15.5rem minmax(0, 45rem) auto;
-    grid-template-rows: min-content min-content auto 3.875rem;
-    grid-template-areas:
-        "title title title"
-        "tabs tabs tabs"
-        "menu sheet sheet"
-        "menu buttons buttons";
+    grid-template:
+        " title   title            title"   min-content
+        " tabs    tabs             tabs"    min-content
+        " menu    sheet            sheet"   auto
+        " menu    buttons          buttons" 3.875rem
+        / 15.5rem minmax(0, 45rem) auto;
 }
 
 .settings-notebook .settings-left {
@@ -34,10 +33,9 @@
         border-radius: 0;
         width: 200vw;
         height: 100vh;
-        grid-template-columns: 100vw 100vw;
-        grid-template-rows: auto;
-        grid-template-areas:
-            "left right";
+        grid-template:
+            " left  right" auto
+            / 100vw 100vw;
         position: relative;
     }
 
@@ -53,23 +51,21 @@
 
     .settings-notebook .settings-left {
         display: grid;
-        grid-template-columns: auto;
-        grid-template-rows: 2.75rem 5.1rem auto 2.85rem;
-        grid-template-areas:
-            "main-menu"
-            "tabs"
-            "menu"
-            "bottom-menu";
+        grid-template:
+            " main-menu"   2.75rem
+            " tabs"        5.1rem
+            " menu"        auto
+            " bottom-menu" 2.85rem
+            / auto;
     }
 
     .settings-notebook .settings-right {
         display: grid;
-        grid-template-columns: auto;
-        grid-template-rows: 4.6rem auto 3.875rem;
-        grid-template-areas:
-            "back"
-            "sheet"
-            "buttons";
+        grid-template:
+            " back"    4.6rem
+            " sheet"   auto
+            " buttons" 3.875rem
+            / auto;
         padding-right: 1rem;
         padding-bottom: 1rem;
     }

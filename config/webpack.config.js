@@ -25,6 +25,7 @@ const ForkTsCheckerWebpackPlugin =
     ? require('react-dev-utils/ForkTsCheckerWarningWebpackPlugin')
     : require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const StylelintPlugin = require('stylelint-webpack-plugin');
 
 const createEnvironmentHash = require('./webpack/persistentCache/createEnvironmentHash');
 
@@ -784,6 +785,12 @@ module.exports = function (webpackEnv) {
       new webpack.ProvidePlugin({
         process: "process/browser",
         Buffer: ["buffer", "Buffer"],
+      }),
+      new StylelintPlugin({
+        configFile: 'config/stylelint.config.json',
+        context: 'src',
+        extensions: ['css'],
+        threads: true,
       }),
     ].filter(Boolean),
     // Turn off performance processing because we utilize

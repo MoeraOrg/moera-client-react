@@ -30,6 +30,6 @@
     margin-top: 1rem;
 }
 
-.avatar-edit-dialog INPUT[type=file] {
+.avatar-edit-dialog INPUT[type="file"] {
     display: none;
 }

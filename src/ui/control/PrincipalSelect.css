@@ -34,16 +34,14 @@
     color: var(--bs-gray-600);
 }
 
-.principal-select.long .btn .principal {
-    color: var(--bs-gray-800);
-}
-
-.principal-select.long .btn .principal svg {
-    vertical-align: -.18em;
-}
-
 .principal-select .btn:disabled .principal {
     color: var(--bs-gray-800);
+}
+
+.principal-select .dropdown-item svg {
+    font-size: 1.2em;
+    vertical-align: -.2em;
+    line-height: 1.5;
 }
 
 .principal-select .dropdown-toggle::after {
@@ -51,10 +49,12 @@
     vertical-align: .1em;
 }
 
-.principal-select .dropdown-item svg {
-    font-size: 1.2em;
-    vertical-align: -.2em;
-    line-height: 1.5;
+.principal-select.long .btn .principal {
+    color: var(--bs-gray-800);
+}
+
+.principal-select.long .btn .principal svg {
+    vertical-align: -.18em;
 }
 
 .form-group .principal-select {
