@@ -544,6 +544,7 @@
   "profile": "Профіль",
   "profile-edited-conflict": "Профіль був кимось відредагований.",
   "profile-tabs": {
+    "people": "Люди",
     "posts": "Пости"
   },
   "progress": "{done} з {total} зроблено",

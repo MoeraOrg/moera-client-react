@@ -18,6 +18,7 @@ import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
+import BackBoxInner from "ui/page/BackBoxInner";
 import DesktopBack from "ui/page/DesktopBack";
 import MobileBack from "ui/page/MobileBack";
 import { ReactComponent as GooglePlayProhibited } from "ui/page/GooglePlayProhibited.isvg";
@@ -88,12 +89,14 @@ export default function DetailedPostingPage() {
         <Page className="detailed-posting-page">
             <div className="page-central-pane">
                 <BackBox>
-                    <DesktopBack nodeName={backNodeName} href={backHref}>
-                        {backTitle}
-                    </DesktopBack>
-                    <MobileBack nodeName={backNodeName} href={backHref}>
-                        {t("posting")}
-                    </MobileBack>
+                    <BackBoxInner>
+                        <DesktopBack nodeName={backNodeName} href={backHref}>
+                            {backTitle}
+                        </DesktopBack>
+                        <MobileBack nodeName={backNodeName} href={backHref}>
+                            {t("posting")}
+                        </MobileBack>
+                    </BackBoxInner>
                 </BackBox>
                 {(postingReady && story) &&
                     <DetailedPosting posting={posting} story={story} deleting={deleting}/>

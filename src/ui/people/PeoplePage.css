@@ -5,11 +5,3 @@
         min-height: 100vh;
     }
 }
-
-.people-page .mobile-back {
-    background-color: white;
-}
-
-.people-page .content-panel {
-    min-height: 25vh;
-}

@@ -1,0 +1,8 @@
+.people-top {
+    padding: 1rem;
+}
+
+.people-top.back-box-inner {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}

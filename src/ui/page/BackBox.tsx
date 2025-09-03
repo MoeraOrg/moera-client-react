@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import cx from 'classnames';
 
 import { useIntersect } from "ui/hook";
+import { BackBoxContext } from "ui/page/backbox-context";
 import "./BackBox.css";
 
 interface Props {
@@ -22,9 +22,9 @@ export default function BackBox({children}: Props) {
         <>
             <div className="back-box-sentinel" aria-hidden="true" ref={sentinel}/>
             <div className="back-box">
-                <div className={cx("back-box-inner", {"back-box-shadow": shadow})}>
+                <BackBoxContext.Provider value={{shadow}}>
                     {children}
-                </div>
+                </BackBoxContext.Provider>
             </div>
         </>
     );

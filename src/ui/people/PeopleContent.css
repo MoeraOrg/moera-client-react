@@ -1,0 +1,15 @@
+.people-content {
+    display: flow-root;
+    background-color: white;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    padding: 0 1rem 1rem;
+    min-height: 25vh;
+}
+
+@media only screen and (max-width: 991px) {
+    .people-content {
+        border-radius: 0;
+        padding-bottom: 3rem;
+    }
+}

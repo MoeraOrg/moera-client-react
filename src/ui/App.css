@@ -109,8 +109,6 @@ BLOCKQUOTE BLOCKQUOTE:last-child, BLOCKQUOTE P:last-child {
 
 @media only screen and (max-width: 991px) {
     .content-panel {
-        border-left-width: 0;
-        border-right-width: 0;
         border-radius: 0;
         padding-bottom: 3rem;
     }

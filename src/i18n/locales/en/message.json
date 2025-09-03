@@ -544,6 +544,7 @@
   "profile": "Profile",
   "profile-edited-conflict": "Profile was edited by somebody.",
   "profile-tabs": {
+    "people": "People",
     "posts": "Posts"
   },
   "progress": "{done} of {total} done",

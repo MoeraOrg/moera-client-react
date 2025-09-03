@@ -3,30 +3,18 @@ import { useSelector } from 'react-redux';
 
 import { ContactWithRelationships } from "api";
 import { ClientState } from "state/state";
-import { isAtHomeNode } from "state/node/selectors";
-import {
-    getPeopleContactsByAlpha,
-    getPeopleContactsByDistance,
-    getPeopleContactsMaxInTabs,
-    getPeopleContactsTotal,
-    isPeopleContactsLoading
-} from "state/people/selectors";
-import * as Browser from "ui/browser";
+import { getPeopleContactsByAlpha, getPeopleContactsByDistance, isPeopleContactsLoading } from "state/people/selectors";
 import { Loading } from "ui/control";
-import PeopleSelectionPanel from "ui/people/PeopleSelectionPanel";
 import PeoplePerson from "ui/people/PeoplePerson";
 import { nameListItemMatch } from "util/names-list";
+import "./PeopleContent.css";
 
 export default function PeopleContent() {
-    const atHome = useSelector(isAtHomeNode);
-    const loadingGeneral = useSelector((state: ClientState) => state.people.loadingGeneral);
     const loadingContacts = useSelector(isPeopleContactsLoading);
     const contacts = useSelector(
         (state: ClientState) =>
             state.people.sortAlpha ? getPeopleContactsByAlpha(state) : getPeopleContactsByDistance(state)
     );
-    const contactsTotal = useSelector(getPeopleContactsTotal);
-    const contactsMax = useSelector(getPeopleContactsMaxInTabs);
     const searchRegexes = useSelector((state: ClientState) => state.people.searchRegexes);
 
     const found = useMemo(() =>
@@ -37,10 +25,7 @@ export default function PeopleContent() {
     );
 
     return (
-        <div className="flex-fill">
-            {(atHome && !loadingGeneral && contactsTotal > 0 && (Browser.isDevMode() || contactsMax > 12)) &&
-                <PeopleSelectionPanel/>
-            }
+        <div className="people-content">
             {found}
             {loadingContacts && <Loading/>}
         </div>

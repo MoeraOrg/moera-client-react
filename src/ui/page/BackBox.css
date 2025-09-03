@@ -6,17 +6,6 @@
     border-bottom-right-radius: 1rem;
 }
 
-.back-box-inner {
-    border-radius: 1rem;
-    background-color: white;
-    transition: box-shadow .2s ease;
-}
-
-.back-box-inner.back-box-shadow {
-    box-shadow: 0 12px 16px 0 rgb(0 0 0 / 16%);
-    transition: box-shadow .2s ease;
-}
-
 .back-box-sentinel {
     block-size: 1px;
     margin-block-end: -1px;
@@ -26,10 +15,7 @@
     .back-box {
         top: 0;
         margin-bottom: .75rem;
-    }
-
-    .back-box-inner {
-        border-radius: 0;
+        background-color: white;
     }
 }
 

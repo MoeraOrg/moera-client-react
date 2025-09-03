@@ -1,37 +1,3 @@
-.timeline-page .back-box .underlined-tabs {
-    border-radius: 1rem;
-}
-
-@media only screen and (max-width: 991px) {
-    .timeline-page .back-box {
-        top: 4rem;
-    }
-
-    .timeline-page .back-box .underlined-tabs {
-        border-radius: 0;
-        padding: 0 .25rem;
-    }
-}
-
-@media only screen and (min-width: 992px) {
-    .timeline-page .back-box {
-        padding-top: 1rem;
-    }
-}
-
-.timeline-page .mobile-back {
-    background-color: white;
-}
-
-.timeline-page .mobile-back.mobile-back-shadow {
-    box-shadow: none;
-}
-
-.timeline-page .desktop-back {
-    margin-top: 0;
-    margin-bottom: -.5rem;
-}
-
 @media only screen and (max-width: 991px) {
     .timeline-page .feed-top-box {
         top: 6rem;
