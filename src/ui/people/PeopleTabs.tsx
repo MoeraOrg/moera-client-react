@@ -98,7 +98,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                     }
                 ]}
                 tabStyle="pills"
-                className="people-tabs mb-3"
+                className="people-tabs mb-1"
                 scroll={smallScreen ? "always" : "mobile"}
                 value={active}
                 onChange={goToTab}
@@ -115,7 +115,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                             ? friendGroup.operations?.view ?? "public"
                             : "public"
                     }))}
-                    className="mb-3"
+                    className="mt-2 mb-1"
                     scroll={friendGroups.length > 4 || smallScreen ? "always" : "mobile"}
                     value={active}
                     onChange={goToTab}

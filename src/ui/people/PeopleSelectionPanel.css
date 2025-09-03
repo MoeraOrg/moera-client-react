@@ -1,4 +1,6 @@
 .people-panel {
+    margin-top: 1rem;
+
     --bs-border-radius: .75rem;
     --bs-border-radius-sm: .75rem;
 }
