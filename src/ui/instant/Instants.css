@@ -85,7 +85,7 @@
     text-decoration: underline;
 }
 
-#instants .content {
+#instants > .content {
     max-width: 800px;
     max-height: 70vh;
     overflow-y: auto;
@@ -93,14 +93,14 @@
 }
 
 @media only screen and (max-width: 991px) {
-    #instants .content {
+    #instants > .content {
         max-width: 100vw;
         max-height: unset;
         height: calc(100vh - 10.65rem);
     }
 }
 
-#instants .content HR {
+#instants > .content HR {
     border-color: var(--bs-gray-500);
     margin-top: .25rem;
     margin-bottom: .25rem;
