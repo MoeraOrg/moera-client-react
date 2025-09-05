@@ -1,7 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import cx from 'classnames';
 
-import { Icon, msArrowBack } from "ui/material-symbols";
+import { Icon, msArrowBack, msMoreVert } from "ui/material-symbols";
+import { DropdownMenu } from "ui/control";
+import { MenuItem } from "ui/control/dropdownmenu/dropdown-menu-types";
 import { useIntersect, useIsTinyScreen } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import { RelNodeName } from "util/rel-node-name";
@@ -13,10 +15,14 @@ interface Props {
     className?: string;
     sticky?: boolean;
     onBack?: () => void;
+    menuContent?: React.ReactNode;
+    menuItems?: MenuItem[];
     children?: React.ReactNode;
 }
 
-export default function MobileBack({nodeName, href, className, sticky, onBack, children}: Props) {
+export default function MobileBack({
+    nodeName, href, className, sticky, onBack, menuContent, menuItems, children
+}: Props) {
     const [shadow, setShadow] = useState<boolean>(false);
 
     const onIntersect = useCallback(
@@ -41,6 +47,15 @@ export default function MobileBack({nodeName, href, className, sticky, onBack, c
                     <Icon icon={msArrowBack} size={24}/>
                 </Jump>
                 <div className="content">{children}</div>
+                {(menuContent != null || menuItems != null) &&
+                    <DropdownMenu
+                        content={menuContent}
+                        items={menuItems}
+                        menuContainer={document.getElementById("modal-root")}
+                    >
+                        <Icon icon={msMoreVert} size="1.7rem"/>
+                    </DropdownMenu>
+                }
             </div>
         </>
     );

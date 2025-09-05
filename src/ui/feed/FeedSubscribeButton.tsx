@@ -12,9 +12,10 @@ import "./FeedSubscribeButton.css";
 interface Props {
     nodeName: RelNodeName | string;
     feedName: string;
+    sharing?: boolean;
 }
 
-export default function FeedSubscribeButton({nodeName, feedName}: Props) {
+export default function FeedSubscribeButton({nodeName, feedName, sharing}: Props) {
     const show = useSelector((state: ClientState) =>
         isOwnerNameSet(state) && !isAtHomeNode(state) && isConnectedToHome(state) && isHomeOwnerNameSet(state)
     );
@@ -30,7 +31,7 @@ export default function FeedSubscribeButton({nodeName, feedName}: Props) {
     return (
         <div className="feed-subscribe-button">
             {(generalReady && (subscription?.loaded ?? false)) &&
-                <SubscribeButton nodeName={ownerName} feedName={feedName}/>
+                <SubscribeButton nodeName={ownerName} feedName={feedName} sharing={sharing}/>
             }
             {(generalLoading || subscription?.loading) && <Loading/>}
         </div>

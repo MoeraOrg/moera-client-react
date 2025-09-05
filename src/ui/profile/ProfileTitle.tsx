@@ -9,6 +9,7 @@ import { Avatar, DonateButton, OnlyMobile } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import MobileBack from "ui/page/MobileBack";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import ManagementMenuItems from "ui/profile/manage/ManagementMenuItems";
 import OperationStatus from "ui/profile/manage/OperationStatus";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import { mentionName } from "util/names";
@@ -28,7 +29,7 @@ export default function ProfileTitle() {
 
     return (
         <>
-            <MobileBack nodeName={REL_HOME} href={newsHref} sticky>
+            <MobileBack nodeName={REL_HOME} href={newsHref} menuContent={<ManagementMenuItems/>} sticky>
                 {fullName || NodeName.shorten(nodeName)}
             </MobileBack>
             <OnlyMobile>

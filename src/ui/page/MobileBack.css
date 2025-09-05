@@ -22,9 +22,18 @@
 }
 
 .mobile-back .content {
+    flex: auto;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.mobile-back .menu {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    margin-right: .25rem;
+    width: 2.5rem;
 }
 
 .mobile-back-sentinel {

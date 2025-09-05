@@ -16,9 +16,10 @@ interface Props {
     nodeName: string;
     feedName: string;
     onDialogOpened?: () => void;
+    sharing?: boolean;
 }
 
-export function SubscribeButton({nodeName, feedName, onDialogOpened}: Props) {
+export function SubscribeButton({nodeName, feedName, onDialogOpened, sharing}: Props) {
     const card = useSelector((state: ClientState) => getNodeCard(state, nodeName));
     const homeOwnerName = useSelector(getHomeOwnerName);
     const homeGender = useSelector(getHomeOwnerGender);
@@ -87,7 +88,7 @@ export function SubscribeButton({nodeName, feedName, onDialogOpened}: Props) {
             <DropdownMenu
                 className="btn btn-sm"
                 content={
-                    <SubscribeButtonMenu nodeName={nodeName} feedName={feedName}/>
+                    <SubscribeButtonMenu nodeName={nodeName} feedName={feedName} sharing={sharing}/>
                 }
                 parentOverlayId={parentOverlayId}
                 menuContainer={document.getElementById("modal-root")}

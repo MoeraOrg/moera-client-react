@@ -43,7 +43,7 @@ export default function ProfileSidebar() {
                     {atHome ?
                         <ManagementMenu/>
                     :
-                        <FeedSubscribeButton nodeName={nodeName ?? REL_CURRENT} feedName="timeline"/>
+                        <FeedSubscribeButton nodeName={nodeName ?? REL_CURRENT} feedName="timeline" sharing/>
                     }
                 </div>
                 <div className="full-name">
