@@ -9,6 +9,7 @@ import { Avatar, DonateButton, OnlyMobile } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import MobileBack from "ui/page/MobileBack";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import OperationStatus from "ui/profile/manage/OperationStatus";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import { mentionName } from "util/names";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
@@ -42,6 +43,7 @@ export default function ProfileTitle() {
                         </Jump>
                     </div>
                     <div className="mention">{mentionName(nodeName)}</div>
+                    <OperationStatus/>
                     {title && <div className="title">{title}</div>}
                     <div className="subscribe-line">
                         <FeedSubscribeButton nodeName={nodeName ?? REL_CURRENT} feedName="timeline"/>

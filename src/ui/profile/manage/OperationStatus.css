@@ -1,7 +1,7 @@
 .naming-operation-status {
-    font-size: 80%;
-    margin-left: 1em;
-    white-space: nowrap;
+    font-size: .88rem;
+    line-height: 143%;
+    margin-bottom: .5rem;
 }
 
 .naming-operation-status.success {

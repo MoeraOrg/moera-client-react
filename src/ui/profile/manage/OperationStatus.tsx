@@ -26,7 +26,7 @@ export default function OperationStatus() {
     const date = fromUnixTime(statusUpdated);
 
     return (
-        <span className={cx(
+        <div className={cx(
             "naming-operation-status", {
                 "success": success,
                 "failure": failure
@@ -39,6 +39,6 @@ export default function OperationStatus() {
                 </Popover>
             }
             {` ${t("operation-at")} `}<time dateTime={formatISO(date)}>{format(date, "dd-MM-yyyy HH:mm:ss")}</time>
-        </span>
+        </div>
     );
 }

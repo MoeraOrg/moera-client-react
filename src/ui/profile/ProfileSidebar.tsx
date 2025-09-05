@@ -16,6 +16,7 @@ import { Avatar, DonateButton, OnlyDesktop } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import ManagementMenu from "ui/profile/manage/ManagementMenu";
+import OperationStatus from "ui/profile/manage/OperationStatus";
 import EntryHtml from "ui/entry/EntryHtml";
 import { mentionName } from "util/names";
 import { REL_CURRENT } from "util/rel-node-name";
@@ -49,6 +50,7 @@ export default function ProfileSidebar() {
                     {fullName || NodeName.shorten(nodeName)}
                 </div>
                 <div className="mention">{mentionName(nodeName)}</div>
+                <OperationStatus/>
                 {title && <div className="title">{title}</div>}
                 <div className="counters-line">
                     <div className="counter">
