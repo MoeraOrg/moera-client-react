@@ -21,6 +21,12 @@
     transition: box-shadow .2s ease;
 }
 
+.mobile-back .content {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .mobile-back-sentinel {
     block-size: 1px;
     margin-block-end: -1px;

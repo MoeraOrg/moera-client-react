@@ -40,7 +40,7 @@ export default function MobileBack({nodeName, href, className, sticky, onBack, c
                 <Jump className="btn btn-silent-round" nodeName={nodeName} href={href} onNear={onJump} onFar={onJump}>
                     <Icon icon={msArrowBack} size={24}/>
                 </Jump>
-                {children}
+                <div className="content">{children}</div>
             </div>
         </>
     );

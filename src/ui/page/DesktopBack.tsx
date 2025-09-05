@@ -28,7 +28,7 @@ export default function DesktopBack({nodeName, href, className, onBack, children
             <span className="btn btn-tool-round">
                 <Icon icon={msArrowBack} size={16}/>
             </span>
-            {children}
+            <div className="content">{children}</div>
         </Jump>
     );
 }

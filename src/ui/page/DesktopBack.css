@@ -12,3 +12,9 @@
     line-height: 133%;
     color: var(--bs-gray-900);
 }
+
+.desktop-back .content {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
