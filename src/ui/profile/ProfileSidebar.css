@@ -16,6 +16,11 @@
 
 #profile-sidebar .feed-subscribe-button {
     margin-top: 0;
+    justify-self: flex-end;
+}
+
+#profile-sidebar .subscribe-button .menu {
+    padding-right: 0;
 }
 
 #profile-sidebar .full-name {
