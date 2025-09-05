@@ -2,13 +2,12 @@ import i18n from 'i18next';
 
 import { conj, disj, inv, trigger } from "state/trigger";
 import { isConnectedToHome } from "state/home/selectors";
-import { isAtProfilePage, isAtSettingsPage } from "state/navigation/selectors";
+import { isAtPeoplePage, isAtProfilePage, isAtSettingsPage, isAtTimelinePage } from "state/navigation/selectors";
 import { isNodeNameToBeLoaded } from "state/nodename/selectors";
 import { nodeNameLoad, nodeNameUnset } from "state/nodename/actions";
-import { isSettingsAtSecuritySheet } from "state/settings/selectors";
 import { flashBox } from "state/flashbox/actions";
 
-const isAtNodeNamePage = disj(isAtProfilePage, conj(isAtSettingsPage, isSettingsAtSecuritySheet));
+const isAtNodeNamePage = disj(isAtProfilePage, isAtTimelinePage, isAtPeoplePage, isAtSettingsPage);
 
 export default [
     trigger(

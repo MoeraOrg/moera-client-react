@@ -4,16 +4,25 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
 import { ClientState } from "state/state";
-import { getOwnerAvatar, getOwnerCard, getOwnerFullName, getOwnerName, getOwnerTitle } from "state/node/selectors";
+import {
+    getOwnerAvatar,
+    getOwnerCard,
+    getOwnerFullName,
+    getOwnerName,
+    getOwnerTitle,
+    isAtHomeNode
+} from "state/node/selectors";
 import { Avatar, DonateButton, OnlyDesktop } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
+import ManagementMenu from "ui/profile/manage/ManagementMenu";
 import EntryHtml from "ui/entry/EntryHtml";
 import { mentionName } from "util/names";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./ProfileSidebar.css";
 
 export default function ProfileSidebar() {
+    const atHome = useSelector(isAtHomeNode);
     const nodeName = useSelector(getOwnerName);
     const fullName = useSelector(getOwnerFullName);
     const title = useSelector(getOwnerTitle);
@@ -30,7 +39,11 @@ export default function ProfileSidebar() {
             <div id="profile-sidebar">
                 <div className="panel">
                     <Avatar avatar={avatar} ownerName={nodeName} size={96}/>
-                    <FeedSubscribeButton nodeName={nodeName ?? REL_CURRENT} feedName="timeline"/>
+                    {atHome ?
+                        <ManagementMenu/>
+                    :
+                        <FeedSubscribeButton nodeName={nodeName ?? REL_CURRENT} feedName="timeline"/>
+                    }
                 </div>
                 <div className="full-name">
                     {fullName || NodeName.shorten(nodeName)}

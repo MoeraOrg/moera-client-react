@@ -23,6 +23,14 @@
     padding-right: 0;
 }
 
+#profile-sidebar .management-menu {
+    place-self: start end;
+}
+
+#profile-sidebar .management-menu .menu {
+    padding-right: 0;
+}
+
 #profile-sidebar .full-name {
     color: var(--bs-gray-900);
     font-weight: 600;

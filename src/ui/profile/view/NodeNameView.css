@@ -6,11 +6,3 @@
     color: var(--bs-gray-600);
     margin-right: .5em;
 }
-
-.node-name-view .menu {
-    display: inline;
-    border: 0;
-    background: transparent;
-    position: relative;
-    top: .1em;
-}
