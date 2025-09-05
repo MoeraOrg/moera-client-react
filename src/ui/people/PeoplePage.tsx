@@ -3,9 +3,8 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import { Loading, OnlyMobile } from "ui/control";
+import { Loading } from "ui/control";
 import { Page } from "ui/page/Page";
-import MobileBack from "ui/page/MobileBack";
 import DesktopBack from "ui/page/DesktopBack";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
@@ -33,11 +32,7 @@ export default function PeoplePage() {
     return (
         <Page className="people-page profile-page">
             <div className="page-central-pane">
-                <MobileBack nodeName={REL_HOME} href={newsHref} sticky>
-                    {t("people")}
-                    {loadingGeneral && <Loading/>}
-                </MobileBack>
-                <OnlyMobile><ProfileTitle/></OnlyMobile>
+                <ProfileTitle/>
                 <BackBox>
                     <BackBoxInner noShadow>
                         <DesktopBack nodeName={REL_HOME} href={newsHref}>

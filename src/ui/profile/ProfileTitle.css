@@ -1,43 +1,66 @@
 #profile-title {
     background-color: white;
-    padding: .5rem 1rem;
+    padding: 0 1rem;
 }
 
 #profile-title .panel {
-    width: min(var(--feed-width), 100%);
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
+    display: grid;
+    grid-template: min-content / auto minmax(4.5rem, min-content) minmax(4.5rem, min-content);
+    gap: .8rem;
+    margin-bottom: .5rem;
 }
 
-#profile-title .panel .avatar-link {
-    flex: none;
-    margin-right: .5rem;
+#profile-title .counter {
+    display: block;
+    font-size: .75rem;
+    line-height: 133%;
+    color: var(--bs-gray-900);
+    text-align: center;
+    align-self: center;
 }
 
-#profile-title .panel .body {
-    flex: auto;
-    padding: .5rem 0;
-    line-height: 1.2;
-}
-
-#profile-title .full-name {
-    font-size: 1.9rem;
-    font-weight: bold;
-    overflow-wrap: break-word;
+#profile-title .counter EM {
+    display: block;
+    font-weight: 600;
+    font-size: 1rem;
+    font-style: normal;
+    line-height: 150%;
 }
 
 #profile-title .mention {
-    color: var(--bs-gray-500);
+    color: var(--bs-gray-600);
+    font-size: .88rem;
+    line-height: 143%;
     white-space: nowrap;
 }
 
 #profile-title .title {
-    font-size: larger;
-    margin-top: .5em;
+    color: var(--bs-gray-900);
+    font-size: .88rem;
+    line-height: 143%;
+}
+
+#profile-title .subscribe-line {
+    margin-top: .5rem;
+    display: flex;
+    justify-content: space-between;
 }
 
 #profile-title .feed-subscribe-button {
-    margin-top: 1.25rem;
-    margin-bottom: 0;
+    margin: 0;
+    flex: auto;
+}
+
+#profile-title .subscribe-button {
+    display: flex;
+}
+
+#profile-title .subscribe-button .status {
+    flex: auto;
+    align-self: center;
+    text-align: center;
+}
+
+#profile-title .subscribe-button .menu {
+    padding-right: 0;
 }
