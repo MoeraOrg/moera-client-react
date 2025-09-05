@@ -10,7 +10,7 @@ import { PopoverContext } from "ui/control";
 import { useOverlay } from "ui/overlays/overlays";
 import MobileBack from "ui/page/MobileBack";
 import Instants from "ui/instant/Instants";
-import { REL_HOME } from "util/rel-node-name";
+import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { BUILD_NUMBER } from "build-number";
 
 interface Props {
@@ -35,7 +35,20 @@ export default function InstantsDialog({instantBorder, onClose}: Props) {
     return ReactDOM.createPortal(
         <PopoverContext.Provider value={{hide: onClose, update: () => {}, overlayId}}>
             <div id="instants" style={{zIndex: zIndex?.widget}} ref={instantsRef}>
-                <MobileBack href="/news" onBack={onClose}>
+                <MobileBack
+                    href="/news"
+                    onBack={onClose}
+                    menuItems={[
+                        {
+                            title: t("mark-all-read"),
+                            nodeName: REL_CURRENT,
+                            href: "/",
+                            onClick: onReadAll,
+                            show: stories.length > 0
+
+                        }
+                    ]}
+                >
                     {t("instants")}
                 </MobileBack>
                 <div className="content">
@@ -43,7 +56,6 @@ export default function InstantsDialog({instantBorder, onClose}: Props) {
                 </div>
                 <div className="footer">
                     <div className="build-number">rev {BUILD_NUMBER}</div>
-                    {stories.length > 0 && <button className="action" onClick={onReadAll}>{t("mark-all-read")}</button>}
                 </div>
             </div>
         </PopoverContext.Provider>,
