@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 
 import { NodeName } from "api";
 import { ClientState } from "state/state";
@@ -24,7 +24,6 @@ export default function ProfileTitle() {
     const subscribersTotal = card?.people.subscribersTotal ?? "?";
     const fundraisers = useSelector((state: ClientState) => state.profile.profile.fundraisers);
     const newsHref = useMainMenuHomeNews().href;
-    const {t} = useTranslation();
 
     return (
         <>
@@ -34,9 +33,7 @@ export default function ProfileTitle() {
             <OnlyMobile>
                 <div id="profile-title">
                     <div className="panel">
-                        <Jump href="/profile" title={t("profile")} className="avatar-link">
-                            <Avatar avatar={avatar} ownerName={nodeName} size={64}/>
-                        </Jump>
+                        <Avatar avatar={avatar} ownerName={nodeName} size={64}/>
                         <div className="counter">
                             <Trans i18nKey="count-posts" values={{count: storiesTotal}}><em/></Trans>
                         </div>

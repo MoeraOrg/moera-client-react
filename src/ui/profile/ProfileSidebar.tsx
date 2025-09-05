@@ -29,9 +29,7 @@ export default function ProfileSidebar() {
         <OnlyDesktop>
             <div id="profile-sidebar">
                 <div className="panel">
-                    <Jump href="/profile" title={t("profile")} className="avatar-link">
-                        <Avatar avatar={avatar} ownerName={nodeName} size={96}/>
-                    </Jump>
+                    <Avatar avatar={avatar} ownerName={nodeName} size={96}/>
                     <FeedSubscribeButton nodeName={nodeName ?? REL_CURRENT} feedName="timeline"/>
                 </div>
                 <div className="full-name">
