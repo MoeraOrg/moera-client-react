@@ -13,6 +13,7 @@ import BottomMenu from "ui/mainmenu/BottomMenu";
 import { getFeedBackTitle } from "ui/feed/feeds";
 import ProfileTitle from "ui/profile/ProfileTitle";
 import ProfileTabs from "ui/profile/ProfileTabs";
+import ProfileSidebar from "ui/profile/ProfileSidebar";
 import PeopleTop from "ui/people/PeopleTop";
 import PeopleContent from "ui/people/PeopleContent";
 import AskSelectedDialog from "ui/askdialog/AskSelectedDialog";
@@ -31,6 +32,9 @@ export default function PeoplePage() {
 
     return (
         <Page className="people-page profile-page">
+            <div className="page-left-pane">
+                <ProfileSidebar/>
+            </div>
             <div className="page-central-pane">
                 <ProfileTitle/>
                 <BackBox>

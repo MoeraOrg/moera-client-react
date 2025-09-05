@@ -3,6 +3,10 @@
     text-wrap: nowrap;
 }
 
+.subscribe-button .menu {
+    --bs-btn-active-border-color: transparent;
+}
+
 .subscribe-button .status {
     border-radius: 1.5em;
     padding: .5em .75em;

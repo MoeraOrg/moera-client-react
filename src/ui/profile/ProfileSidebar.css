@@ -1,0 +1,71 @@
+#profile-sidebar {
+    margin-top: 1rem;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    background-color: white;
+    position: sticky;
+    top: 3.7rem;
+}
+
+#profile-sidebar .panel {
+    display: grid;
+    grid-template: min-content / min-content auto;
+    gap: .25rem;
+    margin-bottom: 1rem;
+}
+
+#profile-sidebar .feed-subscribe-button {
+    margin-top: 0;
+}
+
+#profile-sidebar .full-name {
+    color: var(--bs-gray-900);
+    font-weight: 600;
+    font-size: 1.31rem;
+    line-height: 133%;
+}
+
+#profile-sidebar .mention {
+    color: var(--bs-gray-600);
+    font-size: .88rem;
+    line-height: 143%;
+    white-space: nowrap;
+}
+
+#profile-sidebar .title {
+    color: var(--bs-gray-900);
+    font-size: .88rem;
+    line-height: 143%;
+}
+
+#profile-sidebar .counters-line {
+    margin-top: .75rem;
+}
+
+#profile-sidebar .counter {
+    display: inline-block;
+    width: 4.75rem;
+    margin-right: .8rem;
+    font-size: .88rem;
+    line-height: 143%;
+    color: var(--bs-gray-900);
+}
+
+#profile-sidebar .counter EM {
+    display: block;
+    font-weight: 600;
+    font-size: 1.3rem;
+    font-style: normal;
+    line-height: 133%;
+}
+
+#profile-sidebar .bio {
+    font-size: .88rem;
+    margin-top: 1rem;
+}
+
+#profile-sidebar .email {
+    font-size: .88rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}

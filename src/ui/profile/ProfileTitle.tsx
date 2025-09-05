@@ -4,8 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
 import { ClientState } from "state/state";
-import { getOwnerAvatar, getOwnerFullName, getOwnerName, getOwnerTitle } from "state/node/selectors";
-import { getNodeCard } from "state/nodecards/selectors";
+import { getOwnerAvatar, getOwnerCard, getOwnerFullName, getOwnerName, getOwnerTitle } from "state/node/selectors";
 import { Avatar, DonateButton, OnlyMobile } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import MobileBack from "ui/page/MobileBack";
@@ -20,7 +19,7 @@ export default function ProfileTitle() {
     const fullName = useSelector(getOwnerFullName);
     const title = useSelector(getOwnerTitle);
     const avatar = useSelector(getOwnerAvatar);
-    const card = useSelector((state: ClientState) => getNodeCard(state, nodeName));
+    const card = useSelector(getOwnerCard);
     const storiesTotal = card?.stories.storiesTotal ?? "?";
     const subscribersTotal = card?.people.subscribersTotal ?? "?";
     const fundraisers = useSelector((state: ClientState) => state.profile.profile.fundraisers);

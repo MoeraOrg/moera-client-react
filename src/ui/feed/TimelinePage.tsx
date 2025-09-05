@@ -11,6 +11,7 @@ import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import ProfileTitle from "ui/profile/ProfileTitle";
 import ProfileTabs from "ui/profile/ProfileTabs";
+import ProfileSidebar from "ui/profile/ProfileSidebar";
 import { getFeedBackTitle } from "ui/feed/feeds";
 import FeedPage from "ui/feed/FeedPage";
 import FeedGotoButton from "ui/feed/FeedGotoButton";
@@ -33,6 +34,9 @@ export default function TimelinePage() {
     return (
         <>
             <Page className="timeline-page profile-page">
+                <div className="page-left-pane">
+                    <ProfileSidebar/>
+                </div>
                 <div className="page-central-pane">
                     <ProfileTitle/>
                     <BackBox>

@@ -90,6 +90,7 @@ export function SubscribeButton({nodeName, feedName, onDialogOpened}: Props) {
                     <SubscribeButtonMenu nodeName={nodeName} feedName={feedName}/>
                 }
                 parentOverlayId={parentOverlayId}
+                menuContainer={document.getElementById("modal-root")}
                 onDialogOpened={onDialogOpened}
             >
                 <MenuButton active/>
