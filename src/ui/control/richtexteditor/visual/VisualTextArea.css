@@ -105,10 +105,10 @@
     counter-reset: list-counter-1 list-counter-2 list-counter-3 list-counter-4 list-counter-5;
 }
 
-.visual-text-area DIV.list-item ~ P,
-.visual-text-area DIV.list-item ~ DETAILS,
-.visual-text-area DIV.list-item ~ .block-border,
-.visual-text-area DIV.list-item ~ DIV.formula {
+.visual-text-area DIV.list-item + P,
+.visual-text-area DIV.list-item + DETAILS,
+.visual-text-area DIV.list-item + .block-border,
+.visual-text-area DIV.list-item + DIV.formula {
     margin-top: 1rem;
 }
 
