@@ -122,7 +122,11 @@ export default function AvatarEditDialog() {
     const onClose = () => dispatch(profileCloseAvatarEditDialog());
 
     return (
-        <ModalDialog title={t("create-avatar")} className="avatar-edit-dialog" onClose={onClose}>
+        <ModalDialog
+            title={t("create-avatar")}
+            className="avatar-edit-dialog modal-fullscreen-lg-down"
+            onClose={onClose}
+        >
             <div className="modal-body">
                 <div className="tools">
                     <Rotate value={rotate} onChange={onRotateChange}/>
@@ -134,15 +138,26 @@ export default function AvatarEditDialog() {
                             <ReactAvatarEditor
                                 className={cx("editor", {"drag-accept": isDragAccept, "drag-reject": isDragReject})}
                                 image={path ? `${rootPage}/media/${path}` : avatarPlaceholder}
-                                width={200} height={200} border={50} color={[255, 255, 224, 0.6]}
-                                borderRadius={shape === "circle" ? 100 : 10} scale={scale} rotate={rotate}
-                                ref={refEditor}/>
+                                width={200}
+                                height={200}
+                                border={50}
+                                color={[255, 255, 224, 0.6]}
+                                borderRadius={shape === "circle" ? 100 : 10}
+                                scale={scale}
+                                rotate={rotate}
+                                ref={refEditor}
+                            />
                             <input {...getInputProps()}/>
                         </div>
                     )}
                 </Dropzone>
-                <Button variant={imageId ? "outline-secondary" : "primary"} size="sm" className="upload"
-                        loading={imageUploading} onClick={onUploadClick}>
+                <Button
+                    variant={imageId ? "outline-secondary" : "primary"}
+                    size="sm"
+                    className="upload"
+                    loading={imageUploading}
+                    onClick={onUploadClick}
+                >
                     {imageUploadProgress == null
                         ? t("upload-image")
                         : t("uploading-file", {progress: imageUploadProgress})

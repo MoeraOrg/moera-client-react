@@ -79,9 +79,17 @@ export default function AvatarEditor({name, onChange}: Props) {
                 {visible &&
                     <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
                          className={`fade popover bs-popover-${placement} shadow-sm show`}>
-                        <AvatarSelector nodeName={nodeName} loading={avatarsLoading} loaded={avatarsLoaded}
-                                        avatars={avatars} active={value} onSelect={onSelect} onNew={onNew}
-                                        onDelete={onDelete} onReorder={onReorder}/>
+                        <AvatarSelector
+                            nodeName={nodeName}
+                            loading={avatarsLoading}
+                            loaded={avatarsLoaded}
+                            avatars={avatars}
+                            active={value}
+                            onSelect={onSelect}
+                            onNew={onNew}
+                            onDelete={onDelete}
+                            onReorder={onReorder}
+                        />
                         <div ref={setArrowRef} style={arrowStyles} className="popover-arrow"/>
                     </div>
                 }

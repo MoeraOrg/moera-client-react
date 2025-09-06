@@ -1,0 +1,12 @@
+.profile-avatar {
+    position: relative;
+}
+
+.profile-avatar .btn {
+    position: absolute;
+    top: 0;
+    left: 68px;
+    white-space: nowrap;
+
+    --bs-btn-border-radius: .5rem;
+}

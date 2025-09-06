@@ -5,10 +5,11 @@ import { Trans } from 'react-i18next';
 import { NodeName } from "api";
 import { ClientState } from "state/state";
 import { getOwnerAvatar, getOwnerCard, getOwnerFullName, getOwnerName, getOwnerTitle } from "state/node/selectors";
-import { Avatar, DonateButton, OnlyMobile } from "ui/control";
+import { DonateButton, OnlyMobile } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import MobileBack from "ui/page/MobileBack";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import ProfileAvatar from "ui/profile/ProfileAvatar";
 import ManagementMenuItems from "ui/profile/manage/ManagementMenuItems";
 import OperationStatus from "ui/profile/manage/OperationStatus";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
@@ -35,7 +36,7 @@ export default function ProfileTitle() {
             <OnlyMobile>
                 <div id="profile-title">
                     <div className="panel">
-                        <Avatar avatar={avatar} ownerName={nodeName} size={64}/>
+                        <ProfileAvatar avatar={avatar} ownerName={nodeName} size={64}/>
                         <div className="counter">
                             <Trans i18nKey="count-posts" values={{count: storiesTotal}}><em/></Trans>
                         </div>

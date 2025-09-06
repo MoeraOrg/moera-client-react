@@ -12,9 +12,10 @@ import {
     getOwnerTitle,
     isAtHomeNode
 } from "state/node/selectors";
-import { Avatar, DonateButton, OnlyDesktop } from "ui/control";
+import { DonateButton, OnlyDesktop } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
+import ProfileAvatar from "ui/profile/ProfileAvatar";
 import ManagementMenu from "ui/profile/manage/ManagementMenu";
 import OperationStatus from "ui/profile/manage/OperationStatus";
 import EntryHtml from "ui/entry/EntryHtml";
@@ -39,7 +40,7 @@ export default function ProfileSidebar() {
         <OnlyDesktop>
             <div id="profile-sidebar">
                 <div className="panel">
-                    <Avatar avatar={avatar} ownerName={nodeName} size={96}/>
+                    <ProfileAvatar avatar={avatar} ownerName={nodeName} size={96}/>
                     {atHome ?
                         <ManagementMenu/>
                     :
