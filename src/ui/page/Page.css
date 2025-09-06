@@ -11,6 +11,8 @@
 
     .page-left-pane {
         grid-column: 1;
+        container-type: inline-size;
+        container-name: left-pane;
     }
 
     .page-right-pane {
@@ -41,6 +43,8 @@
 
     .page-left-pane {
         grid-column: 1;
+        container-type: inline-size;
+        container-name: left-pane;
     }
 
     .page-right-pane {

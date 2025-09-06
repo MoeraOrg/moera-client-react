@@ -14,9 +14,25 @@
     margin-bottom: 1rem;
 }
 
-#profile-sidebar .feed-subscribe-button {
-    margin-top: 0;
-    justify-self: flex-end;
+@container left-pane (width >= 20.2rem) {
+    #profile-sidebar .feed-subscribe-button.position-lg {
+        margin-top: 0;
+        justify-self: flex-end;
+    }
+
+    #profile-sidebar .feed-subscribe-button.position-sm {
+        display: none;
+    }
+}
+
+@container left-pane (width < 20.2rem) {
+    #profile-sidebar .feed-subscribe-button.position-lg {
+        display: none;
+    }
+
+    #profile-sidebar .feed-subscribe-button.position-sm {
+        margin-top: 1rem;
+    }
 }
 
 #profile-sidebar .subscribe-button .menu {

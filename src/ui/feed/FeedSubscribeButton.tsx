@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { getOwnerCard, getOwnerName, isAtHomeNode, isOwnerNameSet } from "state/node/selectors";
@@ -13,9 +14,10 @@ interface Props {
     nodeName: RelNodeName | string;
     feedName: string;
     sharing?: boolean;
+    className?: string;
 }
 
-export default function FeedSubscribeButton({nodeName, feedName, sharing}: Props) {
+export default function FeedSubscribeButton({nodeName, feedName, sharing, className}: Props) {
     const show = useSelector((state: ClientState) =>
         isOwnerNameSet(state) && !isAtHomeNode(state) && isConnectedToHome(state) && isHomeOwnerNameSet(state)
     );
@@ -29,7 +31,7 @@ export default function FeedSubscribeButton({nodeName, feedName, sharing}: Props
     }
 
     return (
-        <div className="feed-subscribe-button">
+        <div className={cx("feed-subscribe-button", className)}>
             {(generalReady && (subscription?.loaded ?? false)) &&
                 <SubscribeButton nodeName={ownerName} feedName={feedName} sharing={sharing}/>
             }

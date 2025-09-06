@@ -44,7 +44,12 @@ export default function ProfileSidebar() {
                     {atHome ?
                         <ManagementMenu/>
                     :
-                        <FeedSubscribeButton nodeName={nodeName ?? REL_CURRENT} feedName="timeline" sharing/>
+                        <FeedSubscribeButton
+                            className="position-lg"
+                            nodeName={nodeName ?? REL_CURRENT}
+                            feedName="timeline"
+                            sharing
+                        />
                     }
                 </div>
                 <div className="full-name">
@@ -53,6 +58,14 @@ export default function ProfileSidebar() {
                 <div className="mention">{mentionName(nodeName)}</div>
                 <OperationStatus/>
                 {title && <div className="title">{title}</div>}
+                {!atHome &&
+                    <FeedSubscribeButton
+                        className="position-sm"
+                        nodeName={nodeName ?? REL_CURRENT}
+                        feedName="timeline"
+                        sharing
+                    />
+                }
                 <div className="counters-line">
                     <div className="counter">
                         <Trans i18nKey="count-posts" values={{count: storiesTotal}}><em/></Trans>
