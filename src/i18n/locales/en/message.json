@@ -50,7 +50,7 @@
   "back-to-feed": "← {feed}",
   "banned-android-google-play": "Banned on Android (Google Play)",
   "banned-content-android-google-play": "All content banned on Android (Google Play)",
-  "bio": "Bio",
+  "bio": "About me",
   "block": "Block",
   "blocked": "Blocked",
   "blocked-plural": "Blocked",
@@ -545,6 +545,7 @@
   "profile": "Profile",
   "profile-edited-conflict": "Profile was edited by somebody.",
   "profile-tabs": {
+    "about": "About me",
     "people": "People",
     "posts": "Posts"
   },

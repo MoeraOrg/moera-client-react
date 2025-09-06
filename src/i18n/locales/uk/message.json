@@ -545,6 +545,7 @@
   "profile": "Профіль",
   "profile-edited-conflict": "Профіль був кимось відредагований.",
   "profile-tabs": {
+    "about": "Про себе",
     "people": "Люди",
     "posts": "Пости"
   },

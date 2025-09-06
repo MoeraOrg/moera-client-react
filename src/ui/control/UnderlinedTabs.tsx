@@ -27,7 +27,7 @@ export function UnderlinedTabs<V = any>({className, tabs, value: selected, onCha
         <div className={cx("underlined-tabs", className)}>
             <div className="tab-scroller">
                 {tabs
-                    .filter(({visible}) => visible !== false)
+                    .filter(({visible, value}) => visible !== false || value === selected)
                     .map(({title, value, href, active, className}, index) =>
                         <TabLink
                             key={index}

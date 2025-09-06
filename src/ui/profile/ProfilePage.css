@@ -33,61 +33,9 @@
 }
 
 @media only screen and (max-width: 991px) {
-    .profile-page { /* FIXME deprecated */
+    .profile-about-page {
         padding-bottom: 3rem;
         background-color: white;
         min-height: 100vh;
     }
-}
-
-.profile-view A:hover {
-    text-decoration: underline;
-}
-
-.profile-view .avatar {
-    display: block;
-    margin-bottom: .5rem;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-@media only screen and (min-width: 992px) {
-    .profile-view .avatar {
-        float: left;
-        margin-left: unset;
-        margin-right: .7rem;
-    }
-}
-
-.profile-view .full-name {
-    font-size: x-large;
-    font-weight: bold;
-}
-
-.profile-view .full-name .gender {
-    margin-left: .5em;
-    font-size: medium;
-    font-weight: normal;
-    font-style: italic;
-}
-
-.profile-view > .title {
-    font-size: larger;
-    margin-top: .2em;
-}
-
-.profile-view .donate {
-    margin-top: .2em;
-}
-
-.profile-view .email {
-    margin-top: 1em;
-}
-
-.profile-view .email .title {
-    font-weight: bold;
-}
-
-.profile-view .bio {
-    margin-top: 1em;
 }
