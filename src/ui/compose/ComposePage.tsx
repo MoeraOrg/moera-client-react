@@ -21,7 +21,6 @@ import NodeName from "ui/nodename/NodeName";
 import { ConflictWarning, Loading, OnlyDesktop, OnlyMobile } from "ui/control";
 import { AvatarField, InputField } from "ui/control/field";
 import { RichTextField } from "ui/control/richtexteditor";
-import { getFeedBackTitle } from "ui/feed/feeds";
 import { Page } from "ui/page/Page";
 import MobileBack from "ui/page/MobileBack";
 import DesktopBack from "ui/page/DesktopBack";
@@ -68,7 +67,7 @@ function ComposePageInner(props: Props) {
 
     let backNodeName = REL_HOME;
     let backHref = newsHref;
-    let backTitle = getFeedBackTitle("news", t);
+    let backTitle = t("back-news");
     if (postingId != null) {
         backNodeName = REL_CURRENT;
         backHref = `/post/${postingId}`;

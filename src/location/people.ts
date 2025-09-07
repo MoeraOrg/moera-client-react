@@ -26,7 +26,5 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
     info = info.sub("people").sub(getPeopleTab(state));
     info = info.withCanonicalUrl(getNodeRootLocation(state) + info.toUrl());
-    return info
-        .withTitle(getPeopleTabTitle(getPeopleTab(state), getNodeFriendGroups(state), i18n.t) + atOwner(state))
-        .withBackTitle(i18n.t("back-people"));
+    return info.withTitle(getPeopleTabTitle(getPeopleTab(state), getNodeFriendGroups(state), i18n.t) + atOwner(state));
 }

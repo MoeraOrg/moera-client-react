@@ -32,7 +32,7 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
 }
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
-    info = info.sub("settings").withTitle(i18n.t("settings") + atOwner(state)).withBackTitle(i18n.t("back-settings"));
+    info = info.sub("settings").withTitle(i18n.t("settings") + atOwner(state));
     if (SETTINGS_TABS.includes(state.settings.tab)) {
         info = info.sub(state.settings.tab);
     }

@@ -12,7 +12,6 @@ import DesktopBack from "ui/page/DesktopBack";
 import MobileBack from "ui/page/MobileBack";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import BottomMenu from "ui/mainmenu/BottomMenu";
-import { getFeedBackTitle } from "ui/feed/feeds";
 import ComplaintGroupLine from "ui/complaints/ComplaintGroupLine";
 import ComplaintsSentinel from "ui/complaints/ComplaintsSentinel";
 import { REL_HOME } from "util/rel-node-name";
@@ -40,7 +39,7 @@ export default function ComplaintsListPage() {
                     {t("complaints")}
                 </MobileBack>
                 <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                    {getFeedBackTitle("news", t)}
+                    {t("back-news")}
                 </DesktopBack>
                 <div className="content-panel">
                     <div className="navigator">

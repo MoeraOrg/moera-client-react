@@ -13,7 +13,6 @@ import BackBoxInner from "ui/page/BackBoxInner";
 import ProfileSidebar from "ui/profile/ProfileSidebar";
 import ProfileTitle from "ui/profile/ProfileTitle";
 import ProfileTabs from "ui/profile/ProfileTabs";
-import { getFeedBackTitle } from "ui/feed/feeds";
 import EntryHtml from "ui/entry/EntryHtml";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import "./ProfilePage.css";
@@ -33,7 +32,7 @@ export default function ProfilePage() {
                 <BackBox>
                     <BackBoxInner>
                         <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                            {getFeedBackTitle("news", t)}
+                            {t("back-news")}
                         </DesktopBack>
                         <ProfileTabs value="about"/>
                     </BackBoxInner>

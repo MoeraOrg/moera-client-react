@@ -40,14 +40,10 @@
   "avatar-shape": "Kształt awatara",
   "avatar-too-small": "Rozmiar obrazka awatara powinien wynosić co najmniej 100x100 pikseli.",
   "back-complaints": "Powrót do listy skarg",
-  "back-editor": "Powrót do edytora",
-  "back-image": "Powrót do obrazu",
-  "back-people": "Powrót do Ludzie",
+  "back-news": "Powrót do Aktualności",
   "back-post": "Powrót do postu",
-  "back-profile": "Powrót do profilu",
-  "back-search": "Powrót do wyszukiwania",
-  "back-settings": "Powrót do ustawień",
-  "back-to-feed": "← {feed}",
+  "back-posts": "Powrót do postów {name}",
+  "back-your-posts": "Powrót do twoich postów",
   "banned-android-google-play": "Zablokowany na Androidzie (Google Play)",
   "banned-content-android-google-play": "Wszystkie treści zakazane na Androidzie (Google Play)",
   "bio": "O mnie",
@@ -243,10 +239,6 @@
   "expand": "Rozwiń ↓",
   "expires": "Wygasa:",
   "failure-reason": "Powód niepowodzenia",
-  "feed-back-title": {
-    "news": "Powrót do Aktualności",
-    "timeline": "Powrót do Kroniki"
-  },
   "feed-currently-empty": "Kanał jest obecnie pusty",
   "feed-title": {
     "news": "Aktualności",

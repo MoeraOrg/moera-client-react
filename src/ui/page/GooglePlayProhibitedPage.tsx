@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { tTitle } from "i18n";
-import { getFeedBackTitle } from "ui/feed/feeds";
 import { Page } from "ui/page/Page";
 import DesktopBack from "ui/page/DesktopBack";
 import MobileBack from "ui/page/MobileBack";
@@ -24,7 +23,7 @@ export default function GooglePlayProhibitedPage() {
                 </MobileBack>
                 <div className="page-central-pane">
                     <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                        {getFeedBackTitle("news", t)}
+                        {t("back-news")}
                     </DesktopBack>
                     <div className="content-panel">
                         <GooglePlayProhibited/>

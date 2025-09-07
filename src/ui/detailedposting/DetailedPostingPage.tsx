@@ -5,15 +5,14 @@ import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { tTitle } from "i18n";
-import { PostingInfo } from "api";
+import { NodeName, PostingInfo } from "api";
 import { ClientState } from "state/state";
-import { isAtHomeNode, isGooglePlayHiding } from "state/node/selectors";
+import { getOwnerFullName, getOwnerName, isAtHomeNode, isGooglePlayHiding } from "state/node/selectors";
 import { detailedPostingLoad } from "state/detailedposting/actions";
 import { getDetailedPosting, isDetailedPostingBeingDeleted } from "state/detailedposting/selectors";
 import { getPostingFeedReference, isPostingSheriffProhibited } from "state/postings/selectors";
 import { Button, Loading } from "ui/control";
 import { MinimalStoryInfo } from "ui/types";
-import { getFeedBackTitle } from "ui/feed/feeds";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { Page } from "ui/page/Page";
@@ -38,27 +37,30 @@ function getStory(posting: PostingInfo, feedName: string): MinimalStoryInfo | nu
     }
 }
 
-function getBackFeedAndStory(atHome: boolean, posting: PostingInfo | null, t: TFunction, newsHref: string): {
+function getBackFeedAndStory(
+    atHome: boolean, nodeName: string | null, nodeFullName: string | null, posting: PostingInfo | null, t: TFunction,
+    newsHref: string
+): {
     story: MinimalStoryInfo | null, backNodeName: RelNodeName | string, backHref: string, backTitle: string
 } {
     if (posting == null) {
-        return {story: null, backNodeName: REL_HOME, backHref: newsHref, backTitle: getFeedBackTitle("news", t)};
+        return {story: null, backNodeName: REL_HOME, backHref: newsHref, backTitle: t("back-news")};
     }
 
     let story = getStory(posting, "timeline");
     let backNodeName = REL_CURRENT;
     let backHref = "/timeline";
-    let backTitle = getFeedBackTitle("timeline", t);
+    let backTitle = atHome ? t("back-your-posts") : t("back-posts", {name: nodeFullName || NodeName.shorten(nodeName)});
     if (story == null && atHome) {
         story = getStory(posting, "news");
         backNodeName = REL_HOME;
         backHref = "/news";
-        backTitle = getFeedBackTitle("news", t);
+        backTitle = t("back-news");
     }
     if (story == null) {
         backNodeName = REL_HOME;
         backHref = newsHref;
-        backTitle = getFeedBackTitle("news", t);
+        backTitle = t("back-news");
     } else {
         backHref = `${backHref}?before=${story.moment}`;
     }
@@ -68,6 +70,8 @@ function getBackFeedAndStory(atHome: boolean, posting: PostingInfo | null, t: TF
 
 export default function DetailedPostingPage() {
     const atHome = useSelector(isAtHomeNode);
+    const nodeName = useSelector(getOwnerName);
+    const nodeFullName = useSelector(getOwnerFullName);
     const loading = useSelector((state: ClientState) => state.detailedPosting.loading);
     const deleting = useSelector(isDetailedPostingBeingDeleted);
     const posting = useSelector(getDetailedPosting);
@@ -77,8 +81,8 @@ export default function DetailedPostingPage() {
     const {t} = useTranslation();
 
     const {story = null, backNodeName, backHref, backTitle} = useMemo(
-        () => getBackFeedAndStory(atHome, posting, t, newsHref),
-        [atHome, newsHref, posting, t]
+        () => getBackFeedAndStory(atHome, nodeName, nodeFullName, posting, t, newsHref),
+        [atHome, newsHref, nodeFullName, nodeName, posting, t]
     );
     const googlePlayProhibited = googlePlayHiding && isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);
     const postingReady = posting != null && posting.parentMediaId == null && !googlePlayProhibited;

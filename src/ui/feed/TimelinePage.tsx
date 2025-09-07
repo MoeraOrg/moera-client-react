@@ -12,7 +12,6 @@ import BottomMenu from "ui/mainmenu/BottomMenu";
 import ProfileTitle from "ui/profile/ProfileTitle";
 import ProfileTabs from "ui/profile/ProfileTabs";
 import ProfileSidebar from "ui/profile/ProfileSidebar";
-import { getFeedBackTitle } from "ui/feed/feeds";
 import FeedPage from "ui/feed/FeedPage";
 import FeedGotoButton from "ui/feed/FeedGotoButton";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
@@ -42,7 +41,7 @@ export default function TimelinePage() {
                     <BackBox>
                         <BackBoxInner>
                             <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                                {getFeedBackTitle("news", t)}
+                                {t("back-news")}
                             </DesktopBack>
                             <ProfileTabs value="posts">
                                 {navigable &&

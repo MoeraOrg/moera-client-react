@@ -14,18 +14,3 @@ export function getFeedTitle(feedName: string | null | undefined, t?: TFunction)
             return feedName;
     }
 }
-
-export function getFeedBackTitle(feedName: string | null | undefined, t?: TFunction): string {
-    const te = t ?? ((text: string) => text);
-    switch (feedName) {
-        case "timeline":
-            return te("feed-back-title.timeline");
-        case "news":
-            return te("feed-back-title.news");
-        case null:
-        case undefined:
-            return te("feed-back-title.timeline");
-        default:
-            return feedName;
-    }
-}

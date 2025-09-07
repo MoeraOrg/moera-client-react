@@ -40,14 +40,10 @@
   "avatar-shape": "Форма аватарки",
   "avatar-too-small": "Размер картинки для аватарки должен быть хотя бы 100x100 пикселов",
   "back-complaints": "Назад к списку жалоб",
-  "back-editor": "Назад в редактор",
-  "back-image": "Назад к картинке",
-  "back-people": "Назад к Людям",
+  "back-news": "Назад к Новостям",
   "back-post": "Назад к посту",
-  "back-profile": "Назад к профилю",
-  "back-search": "Назад к поиску",
-  "back-settings": "Назад к настройкам",
-  "back-to-feed": "← {feed}",
+  "back-posts": "Назад к постам {name}",
+  "back-your-posts": "Назад к вашим постам",
   "banned-android-google-play": "Запрещено к показу на Android (Google Play)",
   "banned-content-android-google-play": "Весь контент запрещен на Android (Google Play)",
   "bio": "О себе",
@@ -243,10 +239,6 @@
   "expand": "Развернуть ↓",
   "expires": "Годен до:",
   "failure-reason": "Причина неудачи",
-  "feed-back-title": {
-    "news": "Назад к Новостям",
-    "timeline": "Назад к Хронике"
-  },
   "feed-currently-empty": "Лента пока пуста",
   "feed-title": {
     "news": "Новости",

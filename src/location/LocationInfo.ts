@@ -4,7 +4,6 @@ export class LocationInfo {
     parameters: Partial<Record<string, string>>;
     hash: string;
     title: string | null;
-    backTitle: string | null;
     canonicalUrl: string | null;
     noIndexPage: boolean;
 
@@ -13,7 +12,6 @@ export class LocationInfo {
         this.parameters = {};
         this.hash = "";
         this.title = "";
-        this.backTitle = "";
         this.canonicalUrl = null;
         this.noIndexPage = false;
     }
@@ -28,7 +26,6 @@ export class LocationInfo {
         info.parameters = {...this.parameters};
         info.hash = this.hash;
         info.title = this.title;
-        info.backTitle = this.backTitle;
         info.canonicalUrl = this.canonicalUrl;
         info.noIndexPage = this.noIndexPage;
         return info;
@@ -88,16 +85,6 @@ export class LocationInfo {
     withTitle(title: string | null): LocationInfo {
         const info = this.clone();
         info.title = title;
-        return info;
-    }
-
-    hasTitle(): boolean {
-        return this.title != null && this.title !== "";
-    }
-
-    withBackTitle(backTitle: string | null): LocationInfo {
-        const info = this.clone();
-        info.backTitle = backTitle;
         return info;
     }
 

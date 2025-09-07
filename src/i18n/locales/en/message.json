@@ -40,14 +40,10 @@
   "avatar-shape": "Avatar shape",
   "avatar-too-small": "Avatar image size should be at least 100x100 pixels.",
   "back-complaints": "Back to the list of complaints",
-  "back-editor": "Back to Editor",
-  "back-image": "Back to Image",
-  "back-people": "Back to People",
+  "back-news": "Back to News",
   "back-post": "Back to Post",
-  "back-profile": "Back to Profile",
-  "back-search": "Back to Search",
-  "back-settings": "Back to Settings",
-  "back-to-feed": "← {feed}",
+  "back-posts": "Back to {name}'s posts",
+  "back-your-posts": "Back to your posts",
   "banned-android-google-play": "Banned on Android (Google Play)",
   "banned-content-android-google-play": "All content banned on Android (Google Play)",
   "bio": "About me",
@@ -243,10 +239,6 @@
   "expand": "Expand ↓",
   "expires": "Expires:",
   "failure-reason": "Failure reason",
-  "feed-back-title": {
-    "news": "Back to News",
-    "timeline": "Back to Timeline"
-  },
   "feed-currently-empty": "The feed is currently empty",
   "feed-title": {
     "news": "News",

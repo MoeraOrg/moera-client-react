@@ -40,14 +40,10 @@
   "avatar-shape": "Форма аватара",
   "avatar-too-small": "Розмір картинки для аватара повинен бути хоча б 100x100 пікселів",
   "back-complaints": "Назад до списку скарг",
-  "back-editor": "Назад до редактора",
-  "back-image": "Назад до картинки",
-  "back-people": "Назад до Людей",
+  "back-news": "Назад до Новин",
   "back-post": "Назад до поста",
-  "back-profile": "Назад до профілю",
-  "back-search": "Назад до пошуку",
-  "back-settings": "Назад до налаштувань",
-  "back-to-feed": "← {feed}",
+  "back-posts": "Назад до постів {name}",
+  "back-your-posts": "Назад до ваших постів",
   "banned-android-google-play": "Заборонено до показу на Андроїд (Google Play)",
   "banned-content-android-google-play": "Весь контент заборонений на Android (Google Play)",
   "bio": "Про себе",
@@ -243,10 +239,6 @@
   "expand": "Розгорнути ↓",
   "expires": "Придатний до:",
   "failure-reason": "Причина невдачі",
-  "feed-back-title": {
-    "news": "Назад до Новин",
-    "timeline": "Назад до Хроніки"
-  },
   "feed-currently-empty": "Стрічка наразі порожня",
   "feed-title": {
     "news": "Новини",
