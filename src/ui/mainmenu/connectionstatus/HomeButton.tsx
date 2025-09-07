@@ -19,7 +19,7 @@ export default function HomeButton() {
     return (
         <Jump nodeName={REL_HOME} href="/"
               className={cx("connection-button", "home-button", {"active": atHomeTimeline})}
-              title={t("your-timeline")}>
+              title={t("your-posts")}>
             <FontAwesomeIcon icon={faHome}/>
         </Jump>
     );

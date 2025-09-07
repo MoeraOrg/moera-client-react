@@ -6,7 +6,7 @@ import { ClientState } from "state/state";
 import { getNodeRootLocation } from "state/node/selectors";
 import { getFeedAt } from "state/feeds/selectors";
 import { goToTimeline } from "state/navigation/actions";
-import { getFeedBackTitle, getFeedTitle } from "ui/feed/feeds";
+import { getFeedBackTitle } from "ui/feed/feeds";
 import { atOwner } from "util/names";
 import { REL_CURRENT } from "util/rel-node-name";
 
@@ -21,6 +21,6 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     info = at < Number.MAX_SAFE_INTEGER ? info.withParameter("before", String(at)) : info;
     info = info.withCanonicalUrl(getNodeRootLocation(state) + info.toUrl()).noIndex();
     return info
-        .withTitle(getFeedTitle("timeline", i18n.t) + atOwner(state))
+        .withTitle(i18n.t("postings") + atOwner(state))
         .withBackTitle(getFeedBackTitle("timeline", i18n.t));
 }

@@ -689,7 +689,7 @@
   "set-as-default": "Ustaw jako domyślne",
   "set-by-admin": "ustawione przez administratora",
   "set-by-post-owner": "ustawione przez autora posta",
-  "set-email-provider-contact": "Aby dostawca mógł się z Tobą skontaktować, musisz podać adres e-mail w swoim profilu. Przejdź do strony swojego profilu, naciśnij przycisk Edytuj i wypełnij pole E-mail.",
+  "set-email-provider-contact": "Musisz ustawić adres e-mail w swoim profilu, aby dostawca mógł się z Tobą skontaktować w razie potrzeby. Proszę, przejdź do Ustawienia > Mój Profil i wypełnij pole E-mail.",
   "set-home-password": "Ustaw hasło domowe",
   "set-password-and-connect": "Ustaw hasło i zaloguj się",
   "setting": {
@@ -1112,8 +1112,8 @@
   "you-no-longer-subscribed": "Nie jesteś już subskrybentem",
   "your-news": "Twoje aktualności",
   "your-password": "Twoje hasło",
+  "your-posts": "Twoje posty",
   "your-profile": "Twój profil",
-  "your-timeline": "Twoja kronika",
   "you-subscribed": "Jesteś subskrybentem",
   "zoom-in": "Powiększ",
   "zoom-out": "Pomniejsz"
