@@ -18,7 +18,7 @@ interface Props {
 export const AvatarWithPopup = ({ownerName, ownerFullName, avatar = null, nodeName, size, className}: Props) => (
     <NodeNamePopup nodeName={ownerName} fullName={ownerFullName} avatar={avatar} avatarNodeName={nodeName}>
         {ref =>
-            <Jump nodeName={ownerName} href="/profile" className={className}>
+            <Jump nodeName={ownerName} href="/" className={className}>
                 <Avatar avatar={avatar} ownerName={ownerName} size={size} nodeName={nodeName} ref={ref}/>
             </Jump>
         }

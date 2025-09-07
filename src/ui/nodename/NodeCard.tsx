@@ -54,7 +54,7 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
     return (
         <div className="node-card">
             <div className="main">
-                <Jump nodeName={nodeName} href="/profile" title={t("profile")} className="avatar-link">
+                <Jump nodeName={nodeName} href="/" title={t("profile")} className="avatar-link">
                     <Avatar avatar={realAvatar} ownerName={nodeName} size={72} nodeName={realAvatarNodeName}/>
                 </Jump>
                 <div className="body">

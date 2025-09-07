@@ -11,7 +11,6 @@ export default function MainMenuPages() {
     return (
         <ul className="navbar-nav">
             <MainMenuTimelineLink/>
-            <MainMenuLink page="profile" href="/profile">{t("profile")}</MainMenuLink>
             <MainMenuLink page="people" href="/people">{t("people")}</MainMenuLink>
             <MainMenuNewsLink/>
             <MainMenuComplaintsLink/>

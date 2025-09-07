@@ -14,7 +14,7 @@ export default function HomeAvatar() {
     const {t} = useTranslation();
 
     return (
-        <Jump nodeName={REL_HOME} href="/profile" title={t("your-profile")}>
+        <Jump nodeName={REL_HOME} href="/" title={t("your-profile")}>
             <Avatar avatar={avatar} ownerName={ownerName} size={32} nodeName={REL_HOME} className="home-avatar"/>
         </Jump>
     );

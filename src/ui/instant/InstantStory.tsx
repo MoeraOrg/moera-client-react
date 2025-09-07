@@ -51,7 +51,7 @@ export default function InstantStory({story, hide}: Props) {
             {!googlePlayHiding || !story.hideSheriffMarked ?
                 <>
                     {(profileLink && story.summaryNodeName != null) &&
-                        <Jump nodeName={story.summaryNodeName} href="/profile" className="outer cells-avatar"/>
+                        <Jump nodeName={story.summaryNodeName} href="/" className="outer cells-avatar"/>
                     }
                     {!profileLink &&
                         <Jump nodeName={nodeName} href={href} readId={readId} onNear={onJump} onFar={onJump}
