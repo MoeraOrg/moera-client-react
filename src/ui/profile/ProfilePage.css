@@ -1,20 +1,20 @@
-.profile-page .back-box .underlined-tabs {
+.profile-page #back-box .underlined-tabs {
     border-radius: 1rem;
 }
 
 @media only screen and (max-width: 991px) {
-    .profile-page .back-box {
+    .profile-page #back-box {
         top: 4rem;
     }
 
-    .profile-page .back-box .underlined-tabs {
+    .profile-page #back-box .underlined-tabs {
         border-radius: 0;
         padding: 0 .25rem;
     }
 }
 
 @media only screen and (min-width: 992px) {
-    .profile-page .back-box {
+    .profile-page #back-box {
         padding-top: 1rem;
     }
 }

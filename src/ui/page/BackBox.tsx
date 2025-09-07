@@ -20,8 +20,8 @@ export default function BackBox({children}: Props) {
 
     return (
         <>
-            <div className="back-box-sentinel" aria-hidden="true" ref={sentinel}/>
-            <div className="back-box">
+            <div id="back-box-sentinel" aria-hidden="true" ref={sentinel}/>
+            <div id="back-box">
                 <BackBoxContext.Provider value={{shadow}}>
                     {children}
                 </BackBoxContext.Provider>

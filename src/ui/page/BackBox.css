@@ -1,4 +1,4 @@
-.back-box {
+#back-box {
     display: block;
     position: sticky;
     z-index: var(--zindex-page-header);
@@ -6,13 +6,13 @@
     border-bottom-right-radius: 1rem;
 }
 
-.back-box-sentinel {
+#back-box-sentinel {
     block-size: 1px;
     margin-block-end: -1px;
 }
 
 @media only screen and (max-width: 991px) {
-    .back-box {
+    #back-box {
         top: 0;
         margin-bottom: .75rem;
         background-color: white;
@@ -20,13 +20,13 @@
 }
 
 @media only screen and (min-width: 992px) {
-    .back-box {
+    #back-box {
         top: 2.7rem;
         padding-top: .25rem;
         background-color: var(--body-bg);
     }
 }
 
-.back-box .mobile-back.mobile-back-shadow {
+#back-box .mobile-back.mobile-back-shadow {
     box-shadow: none;
 }

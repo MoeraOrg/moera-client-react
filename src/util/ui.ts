@@ -1,8 +1,9 @@
+import { ReactNode } from 'react';
+import ReactDOM from 'react-dom';
 import * as Base64js from 'base64-js';
 
+import { isTinyScreen } from "ui/hook";
 import { isSpaces } from "util/misc";
-import { ReactNode } from "react";
-import ReactDOM from "react-dom";
 
 export function randomId(len: number = 16): string {
     let buf = new Uint8Array(len);
@@ -176,11 +177,14 @@ export function wrapBlock(field: HTMLTextAreaElement | HTMLInputElement, wrap: s
 }
 
 export function getPageHeaderHeight(): number {
+    const tinyScreen = isTinyScreen();
     const mainMenu = document.getElementById("main-menu");
     const header = document.getElementById("page-header");
+    const backBox = document.getElementById("back-box");
     const mainMenuHeight = mainMenu != null ? mainMenu.getBoundingClientRect().height : 0;
     const headerHeight = header != null ? header.getBoundingClientRect().height : 0;
-    return mainMenuHeight + headerHeight;
+    const backBoxHeight = backBox != null ? backBox.getBoundingClientRect().height + (tinyScreen ? 30 : 10) : 0;
+    return mainMenuHeight + headerHeight + backBoxHeight;
 }
 
 export function getFeedHeaderHeight(): number {

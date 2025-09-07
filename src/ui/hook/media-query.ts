@@ -21,3 +21,7 @@ export function useMediaQuery(query: string): boolean {
 export function useIsTinyScreen(): boolean {
     return useMediaQuery("(max-width: 991px)");
 }
+
+export function isTinyScreen(): boolean {
+    return window.matchMedia("(max-width: 991px)").matches;
+}
