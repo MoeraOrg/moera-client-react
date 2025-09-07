@@ -1,0 +1,20 @@
+.people-panel .search {
+    flex: auto;
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media only screen and (min-width: 992px) {
+    .people-panel .search .input-group {
+        max-width: 250px;
+    }
+}
+
+.people-panel .search .cancel {
+    position: absolute;
+    top: .4em;
+    right: .1em;
+    z-index: var(--zindex-input-overlay);
+    background-color: transparent;
+    border: 0;
+}

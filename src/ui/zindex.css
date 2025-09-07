@@ -1,5 +1,6 @@
 :root {
     --zindex-text-overlay: 1;
+    --zindex-input-overlay: 6;
     --zindex-overlay-loading: 895;
     --zindex-page-header: 900;
     --zindex-page-header-buttons: 940;

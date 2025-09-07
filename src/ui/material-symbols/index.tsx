@@ -12,6 +12,7 @@ import { ReactComponent as msBadge } from "ui/material-symbols/badge.isvg";
 import { ReactComponent as msBlock } from "ui/material-symbols/block.isvg";
 import { ReactComponent as msCalendarMonth } from "ui/material-symbols/calendar_month.isvg";
 import { ReactComponent as msCancel } from "ui/material-symbols/cancel.isvg";
+import { ReactComponent as msCancelFilled } from "ui/material-symbols/cancel_filled.isvg";
 import { ReactComponent as msCheck } from "ui/material-symbols/check.isvg";
 import { ReactComponent as msChevronRight } from "ui/material-symbols/chevron_right.isvg";
 import { ReactComponent as msCircleFilled } from "ui/material-symbols/circle_filled.isvg";
@@ -123,6 +124,7 @@ export {
     msBlock,
     msCalendarMonth,
     msCancel,
+    msCancelFilled,
     msCheck,
     msChevronRight,
     msCircleFilled,

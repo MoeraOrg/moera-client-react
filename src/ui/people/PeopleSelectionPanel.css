@@ -4,15 +4,3 @@
     --bs-border-radius: .75rem;
     --bs-border-radius-sm: .75rem;
 }
-
-.people-panel .search {
-    flex: auto;
-    display: flex;
-    justify-content: flex-end;
-}
-
-@media only screen and (min-width: 992px) {
-    .people-panel .search .input-group {
-        max-width: 250px;
-    }
-}
