@@ -39,7 +39,7 @@
     width: 1.2rem;
     height: 1.2rem;
     right: .25rem;
-    bottom: 0;
+    top: 30px;
 }
 
 .people-page .person .avatar-selector .selection.selected {
