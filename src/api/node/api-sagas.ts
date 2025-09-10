@@ -1520,11 +1520,12 @@ export async function registerAtPushRelay(
 }
 
 export async function getRecommendedPostings(
-    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, sheriff: string | null = null,
-    limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, feed: string | null = null,
+    sheriff: string | null = null, limit: number | null = null, errorFilter: ErrorFilter = false,
+    auth: boolean | string = true
 ): Promise<API.RecommendedPostingInfo[]> {
 
-    const location = urlWithParameters(ut`/recommendations/postings`, {sheriff, limit});
+    const location = urlWithParameters(ut`/recommendations/postings`, {feed, sheriff, limit});
     return callApi<API.RecommendedPostingInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "RecommendedPostingInfoArray", errorFilter
     });
@@ -1554,10 +1555,13 @@ export async function getRecommendedPostingsForCommenting(
 
 export async function acceptRecommendedPosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
-    postingId: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    postingId: string, feed: string | null = null, errorFilter: ErrorFilter = false, auth: true | string = true
 ): Promise<API.Result> {
 
-    const location = ut`/recommendations/postings/accepted/${remoteNodeName}/${postingId}`;
+    const location = urlWithParameters(
+        ut`/recommendations/postings/accepted/${remoteNodeName}/${postingId}`,
+        {feed}
+    );
     return callApi<API.Result>({
         caller, nodeName, method: "POST", location, auth, schema: "Result", errorFilter
     });
@@ -1565,10 +1569,13 @@ export async function acceptRecommendedPosting(
 
 export async function rejectRecommendedPosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
-    postingId: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    postingId: string, feed: string | null = null, errorFilter: ErrorFilter = false, auth: true | string = true
 ): Promise<API.Result> {
 
-    const location = ut`/recommendations/postings/rejected/${remoteNodeName}/${postingId}`;
+    const location = urlWithParameters(
+        ut`/recommendations/postings/rejected/${remoteNodeName}/${postingId}`,
+        {feed}
+    );
     return callApi<API.Result>({
         caller, nodeName, method: "POST", location, auth, schema: "Result", errorFilter
     });
