@@ -3,6 +3,7 @@ import {
     isAtComplaintsPage,
     isAtComposePage,
     isAtDetailedPostingPage,
+    isAtExplorePage,
     isAtGrantPage,
     isAtNewsPage,
     isAtPeoplePage,
@@ -14,6 +15,7 @@ import {
 } from "state/navigation/selectors";
 import { build as complaintsBuild, transform as complaintsTransform } from "location/complaints";
 import { build as composeBuild, transform as composeTransform } from "location/compose";
+import { build as exploreBuild, transform as exploreTransform } from "location/explore";
 import { build as grantBuild, transform as grantTransform } from "location/grant";
 import { build as newsBuild, transform as newsTransform } from "location/news";
 import { build as peopleBuild, transform as peopleTransform } from "location/people";
@@ -66,6 +68,9 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (dstInfo.directories[0] === "search") {
         return searchTransform(srcInfo, dstInfo);
     }
+    if (dstInfo.directories[0] === "explore") {
+        return exploreTransform(srcInfo, dstInfo);
+    }
     return [];
 }
 
@@ -105,6 +110,9 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     }
     if (isAtSearchPage(state)) {
         return searchBuild(state, info);
+    }
+    if (isAtExplorePage(state)) {
+        return exploreBuild(state, info);
     }
     return info;
 }

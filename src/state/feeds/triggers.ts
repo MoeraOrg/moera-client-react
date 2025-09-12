@@ -1,6 +1,12 @@
 import { disj, inv, trigger } from "state/trigger";
 import { updateLocation } from "state/navigation/actions";
-import { isAtDetailedPostingPage, isAtNewsPage, isAtProfilePage, isAtTimelinePage } from "state/navigation/selectors";
+import {
+    isAtDetailedPostingPage,
+    isAtExplorePage,
+    isAtNewsPage,
+    isAtProfilePage,
+    isAtTimelinePage
+} from "state/navigation/selectors";
 import {
     feedFutureSliceLoad,
     feedGeneralLoad,
@@ -69,6 +75,11 @@ export default [
     ),
     trigger(
         ["GO_TO_PAGE", "FEEDS_UNSET"],
+        state => isAtExplorePage(state) && isFeedStatusToBeLoaded(state, REL_CURRENT, "explore"),
+        feedStatusLoad(REL_CURRENT, "explore")
+    ),
+    trigger(
+        ["GO_TO_PAGE", "FEEDS_UNSET"],
         state => isAtTimelinePage(state) && isFeedFutureToBeLoaded(state, REL_CURRENT, "timeline"),
         feedFutureSliceLoad(REL_CURRENT, "timeline")
     ),
@@ -87,6 +98,16 @@ export default [
         state => isAtNewsPage(state) && isFeedPastToBeLoaded(state, REL_CURRENT, "news"),
         feedPastSliceLoad(REL_CURRENT, "news")
     ),
+    trigger(
+        ["GO_TO_PAGE", "FEEDS_UNSET"],
+        state => isAtExplorePage(state) && isFeedFutureToBeLoaded(state, REL_CURRENT, "explore"),
+        feedFutureSliceLoad(REL_CURRENT, "explore")
+    ),
+    trigger(
+        ["GO_TO_PAGE", "FEEDS_UNSET"],
+        state => isAtExplorePage(state) && isFeedPastToBeLoaded(state, REL_CURRENT, "explore"),
+        feedPastSliceLoad(REL_CURRENT, "explore")
+    ),
     trigger("FEED_SCROLLED", true, updateLocation),
     trigger(
         "HOME_READY",
@@ -102,6 +123,7 @@ export default [
     trigger("WAKE_UP", true, feedsUpdate),
     trigger("FEEDS_UNSET", isConnectedToHome, feedStatusLoad(REL_HOME, "instant")),
     trigger("FEEDS_UNSET", isConnectedToHome, feedStatusLoad(REL_HOME, "news")),
+    trigger("FEEDS_UNSET", isConnectedToHome, feedStatusLoad(REL_HOME, "explore")),
     trigger(
         ["POST_INIT", "POST_INIT_DELAYED"],
         state => isConnectedToHome(state) && isFeedToBeLoaded(state, REL_HOME, "instant"),

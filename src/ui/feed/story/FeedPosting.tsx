@@ -58,9 +58,10 @@ interface FeedPostingProps {
     nodeName: RelNodeName | string;
     posting: ExtPostingInfo;
     story: MinimalStoryInfo;
+    hideRecommended?: boolean;
 }
 
-export default function FeedPosting({nodeName, posting, story}: FeedPostingProps) {
+export default function FeedPosting({nodeName, posting, story, hideRecommended}: FeedPostingProps) {
     const postingEditable = useSelector((state: ClientState) => isPermitted("edit", posting, "owner", state));
     const isSheriff = useSelector(getHomeOwnerName) === SHERIFF_GOOGLE_PLAY_TIMELINE;
     const dispatch = useDispatch();
@@ -68,7 +69,7 @@ export default function FeedPosting({nodeName, posting, story}: FeedPostingProps
     return (
         <>
             <PostingMenu posting={posting} story={story}/>
-            <StoryBadges pinned={story.pinned} recommended={posting.recommended}/>
+            <StoryBadges pinned={story.pinned} recommended={!hideRecommended && posting.recommended}/>
             <div className="owner-line">
                 <PostingAvatar posting={posting}/>
                 <div className="owner-info">

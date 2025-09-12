@@ -239,9 +239,11 @@
   "enter-text-here": "Введіть текст тут...",
   "expand": "Розгорнути ↓",
   "expires": "Придатний до:",
+  "explore": "Огляд",
   "failure-reason": "Причина невдачі",
   "feed-currently-empty": "Стрічка наразі порожня",
   "feed-title": {
+    "explore": "Огляд",
     "news": "Новини",
     "timeline": "Хроніка"
   },

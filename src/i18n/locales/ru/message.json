@@ -239,9 +239,11 @@
   "enter-text-here": "Вводите текст тут...",
   "expand": "Развернуть ↓",
   "expires": "Годен до:",
+  "explore": "Обзор",
   "failure-reason": "Причина неудачи",
   "feed-currently-empty": "Лента пока пуста",
   "feed-title": {
+    "explore": "Обзор",
     "news": "Новости",
     "timeline": "Хроника"
   },

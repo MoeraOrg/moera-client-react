@@ -106,6 +106,12 @@ export type GoToSearchAction = GoToPageAction<"search", {
 export const goToSearch = (query: string, tab: SearchTab, filter: SearchFilter): GoToSearchAction =>
     goToPage("search", {query, tab, filter});
 
+export type GoToExploreAction = GoToPageAction<"explore", {
+    at: number | null;
+}>;
+export const goToExplore = (at: number | null = null): GoToExploreAction =>
+    goToPage("explore", {at});
+
 export type GoToPageAnyAction =
     GoToProfileAction
     | GoToTimelineAction
@@ -117,7 +123,8 @@ export type GoToPageAnyAction =
     | GoToComplaintsAction
     | GoToRemovalAction
     | GoToGrantAction
-    | GoToSearchAction;
+    | GoToSearchAction
+    | GoToExploreAction;
 
 export type NewLocationAction = ActionWithoutPayload<"NEW_LOCATION">;
 export const newLocation = (): NewLocationAction =>

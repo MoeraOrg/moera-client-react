@@ -239,9 +239,11 @@
   "enter-text-here": "Enter text here...",
   "expand": "Expand ↓",
   "expires": "Expires:",
+  "explore": "Explore",
   "failure-reason": "Failure reason",
   "feed-currently-empty": "The feed is currently empty",
   "feed-title": {
+    "explore": "Explore",
     "news": "News",
     "timeline": "Timeline"
   },

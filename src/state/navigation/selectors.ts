@@ -45,6 +45,10 @@ export function isAtSearchPage(state: ClientState): boolean {
     return state.navigation.page === "search";
 }
 
+export function isAtExplorePage(state: ClientState): boolean {
+    return state.navigation.page === "explore";
+}
+
 export function isBottomMenuVisible(state: ClientState): boolean {
     return state.navigation.bottomMenuVisible;
 }

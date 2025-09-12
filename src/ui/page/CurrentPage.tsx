@@ -7,12 +7,13 @@ import { isDetailedPostingPositioned } from "state/detailedposting/selectors";
 import { isGooglePlayHiding } from "state/node/selectors";
 import { isFeedGeneralReady, isFeedSheriff, isFeedSheriffMarked } from "state/feeds/selectors";
 import { Loading } from "ui/control";
+import GooglePlayProhibitedPage from "ui/page/GooglePlayProhibitedPage";
 import TimelinePage from "ui/feed/TimelinePage";
 import ProfilePage from "ui/profile/ProfilePage";
 import DetailedPostingPage from "ui/detailedposting/DetailedPostingPage";
 import NewsPage from "ui/feed/NewsPage";
-import GooglePlayProhibitedPage from "ui/page/GooglePlayProhibitedPage";
 import SearchPage from "ui/search/SearchPage";
+import ExplorePage from "ui/explore/ExplorePage";
 import { REL_CURRENT } from "util/rel-node-name";
 
 const ComposePage = React.lazy(() => import("ui/compose/ComposePage"));
@@ -33,7 +34,12 @@ export default function CurrentPage() {
     );
 
     useEffect(() => {
-        if (page !== "timeline" && page !== "news" && (page !== "detailedposting" || !positioned)) {
+        if (
+            page !== "timeline"
+            && page !== "news"
+            && page !== "explore"
+            && (page !== "detailedposting" || !positioned)
+        ) {
             setTimeout(() => window.scrollTo(0, 0));
         }
     }, [page, positioned]);
@@ -77,6 +83,8 @@ export default function CurrentPage() {
             );
         case "search":
             return <SearchPage/>;
+        case "explore":
+            return <ExplorePage/>;
         default:
             return null;
     }

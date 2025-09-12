@@ -19,9 +19,10 @@ interface Props {
     story: ExtStoryInfo;
     posting: ExtPostingInfo | null;
     deleting: boolean;
+    hideRecommended?: boolean;
 }
 
-export default function FeedStory({nodeName, feedName, story, posting, deleting}: Props) {
+export default function FeedStory({nodeName, feedName, story, posting, deleting, hideRecommended}: Props) {
     const atHome = useSelector(isAtHomeNode);
 
     return (
@@ -32,7 +33,12 @@ export default function FeedStory({nodeName, feedName, story, posting, deleting}
             :
                 <>
                     {(story.storyType === "posting-added" && posting != null) &&
-                        <FeedPosting nodeName={nodeName} posting={posting} story={story}/>
+                        <FeedPosting
+                            nodeName={nodeName}
+                            posting={posting}
+                            story={story}
+                            hideRecommended={hideRecommended}
+                        />
                     }
                     {story.storyType.startsWith("reminder-") &&
                         <Suspense fallback={<Loading/>}>

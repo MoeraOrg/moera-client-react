@@ -9,4 +9,5 @@ export type Page =
     | "complaints"
     | "removal"
     | "grant"
-    | "search";
+    | "search"
+    | "explore";

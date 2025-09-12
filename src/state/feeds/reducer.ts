@@ -37,7 +37,8 @@ function getFeed(
 
 const PAGE_FEEDS = new Map<Page, string>([
     ["timeline", "timeline"],
-    ["news", "news"]
+    ["news", "news"],
+    ["explore", "explore"],
 ]);
 
 function extractStory(story: StoryInfo, homeOwnerName: string | null): ExtStoryInfo {

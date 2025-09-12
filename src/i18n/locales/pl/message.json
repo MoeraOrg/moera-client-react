@@ -239,9 +239,11 @@
   "enter-text-here": "Wpisz tekst tutaj...",
   "expand": "Rozwiń ↓",
   "expires": "Wygasa:",
+  "explore": "Przegląd",
   "failure-reason": "Powód niepowodzenia",
   "feed-currently-empty": "Kanał jest obecnie pusty",
   "feed-title": {
+    "explore": "Przegląd",
     "news": "Aktualności",
     "timeline": "Kronika"
   },
