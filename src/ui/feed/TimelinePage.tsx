@@ -32,7 +32,7 @@ export default function TimelinePage() {
 
     return (
         <>
-            <Page className="timeline-page profile-page">
+            <Page className="timeline-page tabbed-page">
                 <div className="page-left-pane">
                     <ProfileSidebar/>
                 </div>

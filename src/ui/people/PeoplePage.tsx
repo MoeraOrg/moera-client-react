@@ -30,7 +30,7 @@ export default function PeoplePage() {
     const {t} = useTranslation();
 
     return (
-        <Page className="people-page profile-page">
+        <Page className="people-page tabbed-page">
             <div className="page-left-pane">
                 <ProfileSidebar/>
             </div>

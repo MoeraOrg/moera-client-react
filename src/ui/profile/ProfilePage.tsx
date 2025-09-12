@@ -23,7 +23,7 @@ export default function ProfilePage() {
     const {t} = useTranslation();
 
     return (
-        <Page className="profile-about-page profile-page">
+        <Page className="profile-page tabbed-page">
             <div className="page-left-pane">
                 <ProfileSidebar/>
             </div>
