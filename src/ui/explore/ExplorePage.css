@@ -5,7 +5,11 @@
 }
 
 @media only screen and (min-width: 992px) {
+    .explore-page.tabbed-page #back-box .underlined-tabs {
+        padding: .25rem 1.5rem 0;
+    }
+
     .explore-page .feed-top-box {
-        top: 9rem;
+        top: 5.7rem;
     }
 }

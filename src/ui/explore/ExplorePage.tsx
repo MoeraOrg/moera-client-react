@@ -7,7 +7,6 @@ import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
 import MobileBack from "ui/page/MobileBack";
-import DesktopBack from "ui/page/DesktopBack";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import ExploreTabs from "ui/explore/ExploreTabs";
 import BottomMenu from "ui/mainmenu/BottomMenu";
@@ -29,9 +28,6 @@ export default function ExplorePage() {
                     </MobileBack>
                     <BackBox>
                         <BackBoxInner>
-                            <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                                {t("back-news")}
-                            </DesktopBack>
                             <ExploreTabs value="posts"/>
                         </BackBoxInner>
                     </BackBox>
