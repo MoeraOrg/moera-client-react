@@ -30,6 +30,7 @@ import { ReactComponent as msError } from "ui/material-symbols/error.isvg";
 import { ReactComponent as msExpandCircleDown } from "ui/material-symbols/expand_circle_down.isvg";
 import { ReactComponent as msExpandCircleDownFilled40 } from "ui/material-symbols/expand_circle_down_filled40.isvg";
 import { ReactComponent as msExpandCircleUpFilled40 } from "ui/material-symbols/expand_circle_up_filled40.isvg";
+import { ReactComponent as msExplore } from "ui/material-symbols/explore.isvg";
 import { ReactComponent as msFileSave } from "ui/material-symbols/file_save.isvg";
 import { ReactComponent as msFormatBold } from "ui/material-symbols/format_bold.isvg";
 import { ReactComponent as msFormatClear } from "ui/material-symbols/format_clear.isvg";
@@ -86,10 +87,11 @@ import { ReactComponent as msReplySolid } from "ui/material-symbols/reply-solid.
 import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
 import { ReactComponent as msRestartAlt16 } from "ui/material-symbols/restart_alt16.isvg";
 import { ReactComponent as msSatellite } from "ui/material-symbols/satellite.isvg";
+import { ReactComponent as msSchedule } from "ui/material-symbols/schedule.isvg";
 import { ReactComponent as msSearch } from "ui/material-symbols/search.isvg";
 import { ReactComponent as msSend } from "ui/material-symbols/send.isvg";
 import { ReactComponent as msSentimentSatisfied } from "ui/material-symbols/sentiment_satisfied.isvg";
-import { ReactComponent as msSchedule } from "ui/material-symbols/schedule.isvg";
+import { ReactComponent as msSettings } from "ui/material-symbols/settings.isvg";
 import { ReactComponent as msShare } from "ui/material-symbols/share.isvg";
 import { ReactComponent as msShieldPerson } from "ui/material-symbols/shield_person.isvg";
 import { ReactComponent as msSort } from "ui/material-symbols/sort.isvg";
@@ -142,6 +144,7 @@ export {
     msExpandCircleDown,
     msExpandCircleDownFilled40,
     msExpandCircleUpFilled40,
+    msExplore,
     msFileSave,
     msFormatBold,
     msFormatClear,
@@ -198,11 +201,12 @@ export {
     msReport,
     msRestartAlt16,
     msSatellite,
+    msSchedule,
     msSearch,
     msSend,
     msSentimentSatisfied,
+    msSettings,
     msShare,
-    msSchedule,
     msShieldPerson,
     msSort,
     msSortByAlpha,

@@ -25,6 +25,7 @@ import { Page } from "ui/page/Page";
 import MobileBack from "ui/page/MobileBack";
 import DesktopBack from "ui/page/DesktopBack";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import ComposeViewPrincipal from "ui/compose/ComposeViewPrincipal";
 import ComposeDrafts from "ui/compose/drafts/ComposeDrafts";
@@ -80,6 +81,9 @@ function ComposePageInner(props: Props) {
     return (
         <>
             <Page className="compose-page">
+                <div className="page-left-pane">
+                    <MainMenuSidebar/>
+                </div>
                 <div className="page-central-pane">
                     <MobileBack nodeName={backNodeName} href={backHref}>
                         {title}

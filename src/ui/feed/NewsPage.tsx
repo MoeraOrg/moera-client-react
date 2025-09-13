@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { isAtNewsPage } from "state/navigation/selectors";
 import FeedPage from "ui/feed/FeedPage";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
+import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { Page } from "ui/page/Page";
 import { REL_CURRENT } from "util/rel-node-name";
@@ -16,6 +17,9 @@ export default function NewsPage() {
         <>
             <MobileMainMenu/>
             <Page className="news-page">
+                <div className="page-left-pane">
+                    <MainMenuSidebar selected="news"/>
+                </div>
                 <div className="page-central-pane">
                     <FeedPage
                         nodeName={REL_CURRENT}

@@ -9,6 +9,7 @@ import BackBoxInner from "ui/page/BackBoxInner";
 import MobileBack from "ui/page/MobileBack";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import ExploreTabs from "ui/explore/ExploreTabs";
+import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import FeedPage from "ui/feed/FeedPage";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
@@ -22,6 +23,9 @@ export default function ExplorePage() {
     return (
         <>
             <Page className="explore-page tabbed-page">
+                <div className="page-left-pane">
+                    <MainMenuSidebar selected="explore"/>
+                </div>
                 <div className="page-central-pane">
                     <MobileBack nodeName={REL_HOME} href={newsHref} sticky>
                         {t("explore")}

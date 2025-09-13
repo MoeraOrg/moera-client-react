@@ -7,6 +7,7 @@ import { isConnectedToHome } from "state/home/selectors";
 import { Page } from "ui/page/Page";
 import { useOverlay } from "ui/overlays/overlays";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
+import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { useDisableScrollX } from "ui/settings/settings-hooks";
 import SettingsConflicts from "ui/settings/SettingsConflicts";
@@ -43,6 +44,9 @@ export default function SettingsPage() {
     return (
         <>
             <Page>
+                <div className="page-left-pane">
+                    <MainMenuSidebar selected="settings"/>
+                </div>
                 <div className="page-centralright-pane">
                     <SettingsConflicts/>
                     <div className="settings-notebook-switcher" ref={switcherRef}>

@@ -11,6 +11,7 @@ import { Icon, msArrowUpward } from "ui/material-symbols";
 import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
+import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import SearchTabs from "ui/search/SearchTabs";
 import SearchNode from "ui/search/SearchNode";
@@ -61,15 +62,18 @@ export default function SearchPage() {
             </OnlyDesktop>
             <MobileMainMenu/>
             <Page className="search-page">
-                <FeedTopBox>
-                    {scrollPosition > 50 &&
-                        <div className="feed-top-button" onClick={onTop}>
-                            <Icon icon={msArrowUpward} size={16}/><span className="title">{t("top")}</span>
-                        </div>
-                    }
-                </FeedTopBox>
+                <div className="page-left-pane">
+                    <MainMenuSidebar/>
+                </div>
                 <div className="page-central-pane">
                     <SearchTabs/>
+                    <FeedTopBox>
+                        {scrollPosition > 50 &&
+                            <div className="feed-top-button" onClick={onTop}>
+                                <Icon icon={msArrowUpward} size={16}/><span className="title">{t("top")}</span>
+                            </div>
+                        }
+                    </FeedTopBox>
                     {hasContent ?
                         <>
                             {tab === "people" ?

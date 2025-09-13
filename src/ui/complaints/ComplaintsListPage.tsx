@@ -11,6 +11,7 @@ import { Page } from "ui/page/Page";
 import DesktopBack from "ui/page/DesktopBack";
 import MobileBack from "ui/page/MobileBack";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import ComplaintGroupLine from "ui/complaints/ComplaintGroupLine";
 import ComplaintsSentinel from "ui/complaints/ComplaintsSentinel";
@@ -34,6 +35,9 @@ export default function ComplaintsListPage() {
 
     return (
         <Page className="complaints">
+            <div className="page-left-pane">
+                <MainMenuSidebar/>
+            </div>
             <div className="page-central-pane">
                 <MobileBack nodeName={REL_HOME} href={newsHref} sticky>
                     {t("complaints")}

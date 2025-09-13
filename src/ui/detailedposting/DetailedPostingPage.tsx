@@ -14,6 +14,7 @@ import { getPostingFeedReference, isPostingSheriffProhibited } from "state/posti
 import { Button, Loading } from "ui/control";
 import { MinimalStoryInfo } from "ui/types";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
@@ -91,6 +92,9 @@ export default function DetailedPostingPage() {
 
     return (
         <Page className="detailed-posting-page">
+            <div className="page-left-pane">
+                <MainMenuSidebar/>
+            </div>
             <div className="page-central-pane">
                 <BackBox>
                     <BackBoxInner>

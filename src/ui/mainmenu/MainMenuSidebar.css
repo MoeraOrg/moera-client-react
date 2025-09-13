@@ -1,0 +1,34 @@
+#main-menu-sidebar {
+    position: sticky;
+    top: 3.7rem;
+    margin-top: 1rem;
+    border-radius: 1rem;
+    padding: 1rem;
+    background-color: white;
+}
+
+#main-menu-sidebar .nav {
+    --bs-nav-link-padding-y: .88rem;
+    --bs-nav-link-font-size: 1.125rem;
+    --bs-nav-link-color: var(--bs-gray-600);
+    --bs-nav-link-hover-color: var(--bs-gray-900);
+    --bs-nav-pills-border-radius: .75rem;
+}
+
+#main-menu-sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    line-height: 133%;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+#main-menu-sidebar .nav-link .icon {
+    margin-right: .5rem;
+}
+
+#main-menu-sidebar .nav HR {
+    border-color: var(--bs-gray-500);
+    margin-top: .25rem;
+    margin-bottom: .25rem;
+}

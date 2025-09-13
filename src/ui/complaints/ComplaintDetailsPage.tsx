@@ -14,6 +14,7 @@ import Jump from "ui/navigation/Jump";
 import { Page } from "ui/page/Page";
 import MobileBack from "ui/page/MobileBack";
 import DesktopBack from "ui/page/DesktopBack";
+import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { getComplaintHeadingHtml, getComplaintStatusDetails } from "ui/complaints/complaint-details";
 import Complaint from "ui/complaints/Complaint";
@@ -46,6 +47,9 @@ export default function ComplaintsListPage() {
 
     return (
         <Page className="complaint">
+            <div className="page-left-pane">
+                <MainMenuSidebar/>
+            </div>
             <div className="page-central-pane">
                 <MobileBack href="/complaints" sticky>
                     {t("complaint")}
