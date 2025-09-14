@@ -81,13 +81,16 @@ export default function SearchPage() {
                                     {nodes.map((node, index) =>
                                         <SearchNode node={node} key={index}/>
                                     )}
+                                    {moreResults && <SearchShowMore loading={loading}/>}
                                 </div>
                             :
-                                entries.map(entry =>
-                                    <SearchEntry entry={entry} key={entry.moment}/>
-                                )
+                                <>
+                                    {entries.map(entry =>
+                                        <SearchEntry entry={entry} key={entry.moment}/>
+                                    )}
+                                    {moreResults && <SearchShowMore loading={loading}/>}
+                                </>
                             }
-                            {moreResults && <SearchShowMore loading={loading}/>}
                         </>
                     :
                         <div className="content-panel text-center">

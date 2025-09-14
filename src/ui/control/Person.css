@@ -1,0 +1,59 @@
+.person {
+    padding: .25rem .5rem .25rem .25rem;
+    border-radius: .25rem;
+    display: grid;
+    grid-template:
+        " avatar      details subscribe" min-content
+        " avatar      status  status"    min-content
+        / min-content auto    auto;
+}
+
+@media only screen and (max-width: 991px) {
+    .person {
+        padding-right: 0;
+    }
+}
+
+.person .avatar {
+    margin: .25rem .75rem .25rem 0;
+}
+
+.person .avatar-selector, .person > .avatar, .person > A:has(> .avatar) {
+    grid-area: avatar;
+}
+
+.person .details {
+    flex: auto;
+    grid-area: details;
+    overflow-x: hidden;
+}
+
+.person .details .full-name {
+    display: block;
+    font-weight: 600;
+    font-size: 1.14rem;
+    line-height: 150%;
+    color: var(--bs-gray-800);
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+@media only screen and (max-width: 991px) {
+    .person .details .full-name {
+        font-size: 1rem;
+    }
+}
+
+.person .details .name {
+    display: block;
+    color: var(--bs-gray-600);
+    font-size: .88rem;
+    line-height: 143%;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+.person .subscribe-button {
+    grid-area: subscribe;
+    justify-self: end;
+}

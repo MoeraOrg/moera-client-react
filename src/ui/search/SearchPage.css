@@ -14,33 +14,17 @@
     }
 }
 
-.search-page .nodes {
-    display: grid;
-    grid-template-columns: calc(44px + .5rem) auto min-content;
-    grid-auto-rows: min-content;
-    row-gap: 1rem;
+.search-page .nodes .person {
+    margin-bottom: 1rem;
+    padding: 0;
 }
 
-.search-page .nodes .person-avatar {
-    padding-top: .25rem;
+.search-page .nodes .person .details .full-name {
+    font-size: 1rem;
 }
 
-.search-page .nodes .node-name {
-    line-height: 150%;
-}
-
-.search-page .nodes .raw-node-name {
+.search-page .nodes .person .title {
+    grid-area: status;
     font-size: .88rem;
     line-height: 143%;
-    color: var(--bs-gray-600);
-}
-
-.search-page .nodes .title {
-    font-size: .88rem;
-    line-height: 143%;
-}
-
-.search-page .nodes .person-subscribe {
-    padding-top: .25rem;
-    text-align: right;
 }

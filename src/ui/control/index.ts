@@ -1,3 +1,6 @@
+import "./Person.css";
+import "./TabbedPage.css";
+
 export { Avatar } from "ui/control/Avatar";
 export { AvatarWithPopup } from "ui/control/AvatarWithPopup";
 export { Button } from "ui/control/Button";

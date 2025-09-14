@@ -1,0 +1,37 @@
+.tabbed-page .mobile-back {
+    background-color: white;
+}
+
+.tabbed-page .mobile-back.sticky.mobile-back-shadow {
+    box-shadow: none;
+}
+
+#back-box .mobile-back.sticky.mobile-back-shadow {
+    box-shadow: none;
+}
+
+.tabbed-page .desktop-back {
+    margin-top: 0;
+    margin-bottom: -.5rem;
+}
+
+.tabbed-page #back-box .underlined-tabs {
+    border-radius: 1rem;
+}
+
+@media only screen and (max-width: 991px) {
+    .tabbed-page #back-box {
+        top: 4rem;
+    }
+
+    .tabbed-page #back-box .underlined-tabs {
+        border-radius: 0;
+        padding: 0 .25rem;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .tabbed-page #back-box {
+        padding-top: 1rem;
+    }
+}

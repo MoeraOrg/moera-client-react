@@ -14,21 +14,16 @@ interface Props {
 export default function SearchNode({node}: Props) {
     const homeOwnerName = useSelector(getHomeOwnerName);
     return (
-        <>
-            <div className="person-avatar">
-                <AvatarWithPopup ownerName={node.nodeName} ownerFullName={node.fullName}
-                                 avatar={node.avatar} size={40}/>
+        <div className="person">
+            <AvatarWithPopup ownerName={node.nodeName} ownerFullName={node.fullName} avatar={node.avatar} size={40}/>
+            <div className="details">
+                <NodeName className="full-name" name={node.nodeName} fullName={node.fullName} display="full-name"/>
+                <span className="name">{NodeNameFormat.shorten(node.nodeName)}</span>
             </div>
-            <div className="person-details">
-                <NodeName name={node.nodeName} fullName={node.fullName} display="full-name"/><br/>
-                <span className="raw-node-name">{NodeNameFormat.shorten(node.nodeName)}</span><br/>
-                <span className="title">{node.title}</span>
-            </div>
-            <div className="person-subscribe">
-                {node.nodeName !== homeOwnerName &&
-                    <SubscribeButton nodeName={node.nodeName} feedName="timeline"/>
-                }
-            </div>
-        </>
+            {node.nodeName !== homeOwnerName &&
+                <SubscribeButton nodeName={node.nodeName} feedName="timeline"/>
+            }
+            <span className="title">{node.title}</span>
+        </div>
     );
 }
