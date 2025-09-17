@@ -1,3 +1,7 @@
 .new-post-button {
     margin: 0 1rem 0.3rem 0.3rem;
 }
+
+.new-post-button svg {
+    vertical-align: -.25em;
+}
