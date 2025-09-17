@@ -16,8 +16,11 @@ export function useButtonPopper(placement: Placement, options: ButtonPopperOptio
     const [buttonRef, setButtonRef] = useState<Element | null>(null);
     const [popperRef, setPopperRef] = useState<HTMLElement | null>(null);
     const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null);
-    const {styles, attributes, state} = usePopper(buttonRef, popperRef,
-        {placement, ...options, modifiers: [{name: "arrow", options: {element: arrowRef}}]});
+    const {styles, attributes, state} = usePopper(
+        buttonRef,
+        popperRef,
+        {placement, ...options, modifiers: [{name: "arrow", options: {element: arrowRef}}]}
+    );
 
     const onToggle = (event: {preventDefault: () => void}) => {
         setVisible(visible => !visible);
@@ -34,11 +37,17 @@ export function useButtonPopper(placement: Placement, options: ButtonPopperOptio
     );
 
     return {
-        visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef,
+        visible,
+        hide,
+        onToggle,
+        setButtonRef,
+        setPopperRef,
+        setArrowRef,
         popperStyles: styles ? styles.popper : {},
         popperAttributes: attributes ? attributes.popper : {},
         arrowStyles: styles && styles.arrow ? styles.arrow : {},
         placement: state ? state.placement.split("-")[0] : "",
-        zIndex, overlayId
+        zIndex,
+        overlayId
     };
 }
