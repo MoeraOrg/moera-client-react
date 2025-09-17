@@ -1,0 +1,15 @@
+.active-people-page .person {
+    margin-bottom: 1rem;
+}
+
+.active-people-page .person .title {
+    grid-area: status;
+}
+
+@media only screen and (max-width: 991px) {
+    .active-people-page {
+        padding-bottom: 3rem;
+        background-color: white;
+        min-height: 100vh;
+    }
+}

@@ -10,4 +10,5 @@ export type Page =
     | "removal"
     | "grant"
     | "search"
-    | "explore";
+    | "explore"
+    | "activepeople";

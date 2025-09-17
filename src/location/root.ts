@@ -1,5 +1,6 @@
 import { goToTimeline } from "state/navigation/actions";
 import {
+    isAtActivePeoplePage,
     isAtComplaintsPage,
     isAtComposePage,
     isAtDetailedPostingPage,
@@ -111,7 +112,7 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     if (isAtSearchPage(state)) {
         return searchBuild(state, info);
     }
-    if (isAtExplorePage(state)) {
+    if (isAtExplorePage(state) || isAtActivePeoplePage(state)) {
         return exploreBuild(state, info);
     }
     return info;

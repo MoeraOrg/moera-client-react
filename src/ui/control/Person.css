@@ -4,13 +4,17 @@
     display: grid;
     grid-template:
         " avatar      details subscribe" min-content
-        " avatar      status  status"    min-content
+        " avatar      status  ."         min-content
         / min-content auto    auto;
 }
 
 @media only screen and (max-width: 991px) {
     .person {
         padding-right: 0;
+        grid-template:
+        " avatar      details subscribe" min-content
+        " avatar      status  status"    min-content
+        / min-content auto    auto;
     }
 }
 

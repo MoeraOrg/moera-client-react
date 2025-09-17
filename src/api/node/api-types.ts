@@ -746,6 +746,13 @@ export interface RejectedReactions {
     negative?: string | null;
 }
 
+export interface RecommendedNodeInfo {
+    nodeName: string;
+    fullName?: string | null;
+    title?: string | null;
+    avatar?: AvatarImage | null;
+}
+
 export interface RemoteFeed {
     nodeName: string;
     feedName: string;

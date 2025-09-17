@@ -1581,6 +1581,17 @@ export async function rejectRecommendedPosting(
     });
 }
 
+export async function getRecommendedNodesByActivity(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, sheriff: string | null = null,
+    limit: number | null = null, errorFilter: ErrorFilter = false
+): Promise<API.RecommendedNodeInfo[]> {
+
+    const location = urlWithParameters(ut`/recommendations/nodes/active`, {sheriff, limit});
+    return callApi<API.RecommendedNodeInfo[]>({
+        caller, nodeName, method: "GET", location, schema: "RecommendedNodeInfoArray", errorFilter
+    });
+}
+
 export async function excludeNodeFromRecommendations(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     errorFilter: ErrorFilter = false, auth: true | string = true

@@ -71,7 +71,7 @@ export default function MainMenuSidebar({selected}: Props) {
                     </li>
                     <hr/>
                     {MENU_TABS.map(item => (
-                        <li className="nav-item">
+                        <li className="nav-item" key={item.value}>
                             <Jump className={cx("nav-link", {"active": selected === item.value})} nodeName={REL_HOME}
                                   href={item.href}>
                                 <Icon className="icon" icon={item.icon} size={24}/>

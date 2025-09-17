@@ -12,9 +12,11 @@ import { DetailedPostingState } from "state/detailedposting/state";
 import { DonateDialogState } from "state/donatedialog/state";
 import { EntryCopyTextDialogState } from "state/entrycopytextdialog/state";
 import { ErrorState } from "state/error/state";
+import { ExploreState } from "state/explore/state";
 import { FeedsState } from "state/feeds/state";
 import { HomeState } from "state/home/state";
 import { FlashBoxState } from "state/flashbox/state";
+import { FriendGroupAddDialogState } from "state/friendgroupadddialog/state";
 import { FriendGroupsDialogState } from "state/friendgroupsdialog/state";
 import { GrantState } from "state/grant/state";
 import { ImageEditDialogState } from "state/imageeditdialog/state";
@@ -43,7 +45,6 @@ import { SheriffOrderDetailsDialogState } from "state/sherifforderdetailsdialog/
 import { SignUpDialogState } from "state/signupdialog/state";
 import { SourceDialogState } from "state/sourcedialog/state";
 import { TokensState } from "state/tokens/state";
-import { FriendGroupAddDialogState } from "state/friendgroupadddialog/state";
 
 export interface ClientState {
     askDialog: AskDialogState;
@@ -60,6 +61,7 @@ export interface ClientState {
     donateDialog: DonateDialogState;
     entryCopyTextDialog: EntryCopyTextDialogState;
     error: ErrorState;
+    explore: ExploreState;
     feeds: FeedsState;
     flashBox: FlashBoxState;
     friendGroupAddDialog: FriendGroupAddDialogState;

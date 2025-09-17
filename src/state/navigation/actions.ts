@@ -112,6 +112,10 @@ export type GoToExploreAction = GoToPageAction<"explore", {
 export const goToExplore = (at: number | null = null): GoToExploreAction =>
     goToPage("explore", {at});
 
+export type GoToActivePeopleAction = GoToPageAction<"activepeople", {}>;
+export const goToActivePeople = (): GoToActivePeopleAction =>
+    goToPage("activepeople", {});
+
 export type GoToPageAnyAction =
     GoToProfileAction
     | GoToTimelineAction
@@ -124,7 +128,8 @@ export type GoToPageAnyAction =
     | GoToRemovalAction
     | GoToGrantAction
     | GoToSearchAction
-    | GoToExploreAction;
+    | GoToExploreAction
+    | GoToActivePeopleAction;
 
 export type NewLocationAction = ActionWithoutPayload<"NEW_LOCATION">;
 export const newLocation = (): NewLocationAction =>

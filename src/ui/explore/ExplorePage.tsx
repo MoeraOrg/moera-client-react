@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
+import { tTitle } from "i18n";
 import { isAtExplorePage } from "state/navigation/selectors";
 import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
@@ -28,7 +29,7 @@ export default function ExplorePage() {
                 </div>
                 <div className="page-central-pane">
                     <MobileBack nodeName={REL_HOME} href={newsHref} sticky>
-                        {t("explore")}
+                        {tTitle(t("explore-posts"))}
                     </MobileBack>
                     <BackBox>
                         <BackBoxInner>

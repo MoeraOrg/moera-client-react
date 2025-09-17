@@ -13,6 +13,7 @@ import { DetailedPostingAnyAction } from "state/detailedposting/actions";
 import { DonateDialogAnyAction } from "state/donatedialog/actions";
 import { EntryCopyTextDialogAnyAction } from "state/entrycopytextdialog/actions";
 import { ErrorAnyAction } from "state/error/actions";
+import { ExploreAnyAction } from "state/explore/actions";
 import { FeedsAnyAction } from "state/feeds/actions";
 import { FlashBoxAnyAction } from "state/flashbox/actions";
 import { FriendGroupAddDialogAnyAction } from "state/friendgroupadddialog/actions";
@@ -65,6 +66,7 @@ export type ClientAction =
     | DetailedPostingAnyAction
     | EntryCopyTextDialogAnyAction
     | ErrorAnyAction
+    | ExploreAnyAction
     | FeedsAnyAction
     | FlashBoxAnyAction
     | FriendGroupAddDialogAnyAction

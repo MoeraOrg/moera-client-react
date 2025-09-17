@@ -1972,6 +1972,46 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
+        RecommendedNodeInfo: {
+            type: "object",
+            properties: {
+                "nodeName": {
+                    type: "string"
+                },
+                "fullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "title": {
+                    type: "string",
+                    nullable: true
+                },
+                "avatar": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+            },
+            required: [
+                "nodeName",
+            ],
+            additionalProperties: false
+        },
+
+        RecommendedNodeInfoArray: {
+            type: "array",
+            items: {
+                $ref: "node#/definitions/RecommendedNodeInfo"
+            }
+        },
+
         RemoteMediaInfo: {
             type: "object",
             properties: {
