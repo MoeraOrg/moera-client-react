@@ -17,9 +17,10 @@ interface Props {
     feedName: string;
     onDialogOpened?: () => void;
     sharing?: boolean;
+    buttonOnly?: boolean;
 }
 
-export function SubscribeButton({nodeName, feedName, onDialogOpened, sharing}: Props) {
+export function SubscribeButton({nodeName, feedName, onDialogOpened, sharing, buttonOnly}: Props) {
     const card = useSelector((state: ClientState) => getNodeCard(state, nodeName));
     const homeOwnerName = useSelector(getHomeOwnerName);
     const homeGender = useSelector(getHomeOwnerGender);
@@ -47,7 +48,7 @@ export function SubscribeButton({nodeName, feedName, onDialogOpened, sharing}: P
 
     return (
         <span className="subscribe-button">
-            {loaded &&
+            {loaded && !buttonOnly &&
                 (caption ?
                     (blocked || blockedBy ?
                         <button className="status blocked" onClick={onBlockingDetails}>{caption}</button>

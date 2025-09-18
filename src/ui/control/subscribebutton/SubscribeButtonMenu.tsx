@@ -202,7 +202,7 @@ export default function SubscribeButtonMenu({nodeName, feedName, sharing}: Props
                 href: "/",
                 onClick: onAskDialog,
                 opensDialog: true,
-                show: !blocked && !blockedBy
+                show: !blocked && !blockedBy && (!subscribedToMe || !friendOf)
             },
             {
                 title: t("hide"),
@@ -285,6 +285,7 @@ export default function SubscribeButtonMenu({nodeName, feedName, sharing}: Props
                 nodeName: REL_CURRENT,
                 href: "/",
                 onClick: onShare,
+                opensDialog: true,
                 show: sharing ?? false
             },
         ]}/>

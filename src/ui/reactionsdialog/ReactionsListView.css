@@ -5,7 +5,7 @@
     display: grid;
     grid-template:
         " avatar      details reaction    subscribe" min-content
-        / min-content auto    min-content min-content;
+        / min-content auto    2.075rem    2.075rem;
     gap: .75rem;
 }
 
@@ -20,7 +20,7 @@
 
 .reactions-dialog .items.list .item .details .owner-name {
     display: flex;
-    align-items: end;
+    align-items: flex-end;
     gap: .25em;
 }
 
@@ -48,6 +48,15 @@
 }
 
 .reactions-dialog .items.list .item .reaction {
+    grid-area: reaction;
     padding: 0 .25rem;
     font-size: 1.25rem;
+}
+
+.reactions-dialog .items.list .item .subscribe-button {
+    grid-area: subscribe;
+}
+
+.reactions-dialog .items.list .item .subscribe-button .menu {
+    padding: 0;
 }

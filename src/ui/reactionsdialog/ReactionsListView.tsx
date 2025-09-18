@@ -12,7 +12,7 @@ import {
     isReactionsDialogReactionsAllLoaded,
     isReactionsDialogReactionsLoading
 } from "state/reactionsdialog/selectors";
-import { AvatarWithPopup, Loading } from "ui/control";
+import { AvatarWithPopup, Loading, SubscribeButton } from "ui/control";
 import Twemoji from "ui/twemoji/Twemoji";
 import NodeName from "ui/nodename/NodeName";
 import { getSubscriptionStatus, SubscriptionStatus } from "ui/control/subscribebutton/subscription-status";
@@ -63,6 +63,11 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
                             <div className="status">{statuses[i]?.caption ?? ""}</div>
                         </div>
                         <div className="reaction">{r.emoji != null && <Twemoji code={r.emoji}/>}</div>
+                        {r.ownerName ?
+                            <SubscribeButton nodeName={r.ownerName} feedName="timeline" buttonOnly/>
+                        :
+                            <span className="subscribe-button"/>
+                        }
                     </div>
                 )}
             </div>
