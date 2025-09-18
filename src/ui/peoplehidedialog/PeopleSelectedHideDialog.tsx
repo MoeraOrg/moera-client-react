@@ -42,7 +42,7 @@ function PeopleSelectedHideDialogInner({nodeName, subscribersHidden, subscriptio
     const onClose = () => dispatch(closePeopleHideDialog());
 
     return (
-        <ModalDialog title={t("hide")} onClose={onClose}>
+        <ModalDialog title={t("privacy")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
                     <CheckboxField title={t("hide-my-subscription")} name="hideMySubscription"

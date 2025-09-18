@@ -205,7 +205,7 @@ export default function SubscribeButtonMenu({nodeName, feedName, sharing}: Props
                 show: !blocked && !blockedBy && (!subscribedToMe || !friendOf)
             },
             {
-                title: t("hide"),
+                title: t("privacy"),
                 nodeName,
                 href: "/",
                 onClick: onHideDialog,

@@ -539,6 +539,7 @@
     "signed": "Logged in",
     "subscribed": "Subscriptions"
   },
+  "privacy": "Privacy",
   "profile": "Profile",
   "profile-edited-conflict": "Profile was edited by somebody.",
   "profile-tabs": {

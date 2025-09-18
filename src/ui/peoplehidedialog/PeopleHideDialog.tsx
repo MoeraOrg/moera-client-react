@@ -44,7 +44,7 @@ function PeopleHideDialogInner({nodeName, card, subscribersHidden, subscriptions
     const onClose = () => dispatch(closePeopleHideDialog());
 
     return (
-        <ModalDialog title={t("hide")} onClose={onClose}>
+        <ModalDialog title={t("privacy")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
                     {card?.subscription.subscription != null &&

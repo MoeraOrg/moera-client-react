@@ -91,7 +91,7 @@ export default function PeopleSelectedButton() {
                 show: summary.notSubscribedToMe || summary.notFriendOfs
             },
             {
-                title: t("hide"),
+                title: t("privacy"),
                 nodeName: REL_CURRENT,
                 href: "/people",
                 onClick: onHideDialog,
