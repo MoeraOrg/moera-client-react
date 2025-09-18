@@ -8,6 +8,7 @@ import { getNodeCard } from "state/nodecards/selectors";
 import { feedSubscribe } from "state/feeds/actions";
 import { openBlockingDetailsDialog } from "state/blockingdetailsdialog/actions";
 import { Button, DropdownMenu, MenuButton, useModalDialog, usePopover } from "ui/control";
+import { MenuItem } from "ui/control/dropdownmenu/dropdown-menu-types";
 import { getSubscriptionStatus } from "ui/control/subscribebutton/subscription-status";
 import SubscribeButtonMenu from "ui/control/subscribebutton/SubscribeButtonMenu";
 import "./SubscribeButton.css";
@@ -16,11 +17,11 @@ interface Props {
     nodeName: string;
     feedName: string;
     onDialogOpened?: () => void;
-    sharing?: boolean;
+    addon?: MenuItem[];
     buttonOnly?: boolean;
 }
 
-export function SubscribeButton({nodeName, feedName, onDialogOpened, sharing, buttonOnly}: Props) {
+export function SubscribeButton({nodeName, feedName, onDialogOpened, addon, buttonOnly}: Props) {
     const card = useSelector((state: ClientState) => getNodeCard(state, nodeName));
     const homeOwnerName = useSelector(getHomeOwnerName);
     const homeGender = useSelector(getHomeOwnerGender);
@@ -62,7 +63,7 @@ export function SubscribeButton({nodeName, feedName, onDialogOpened, sharing, bu
             <DropdownMenu
                 className="btn btn-sm"
                 content={
-                    <SubscribeButtonMenu nodeName={nodeName} feedName={feedName} sharing={sharing}/>
+                    <SubscribeButtonMenu nodeName={nodeName} feedName={feedName} addon={addon}/>
                 }
                 parentOverlayId={parentOverlayId}
                 menuContainer={document.getElementById("modal-root")}

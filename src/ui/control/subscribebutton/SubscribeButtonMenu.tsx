@@ -18,18 +18,18 @@ import { openAskDialog } from "state/askdialog/actions";
 import { openPeopleHideDialog } from "state/peoplehidedialog/actions";
 import { openBlockDialog } from "state/blockdialog/actions";
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
-import { shareDialogPrepare, sharePageCopyLink } from "state/sharedialog/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { Button, DropdownMenuItems } from "ui/control";
+import { MenuItem } from "ui/control/dropdownmenu/dropdown-menu-types";
 import { REL_CURRENT } from "util/rel-node-name";
 
 interface Props {
     nodeName: string;
     feedName: string;
-    sharing?: boolean;
+    addon?: MenuItem[];
 }
 
-export default function SubscribeButtonMenu({nodeName, feedName, sharing}: Props) {
+export default function SubscribeButtonMenu({nodeName, feedName, addon}: Props) {
     const card = useSelector((state: ClientState) => getNodeCard(state, nodeName));
     const homeGender = useSelector(getHomeOwnerGender);
     const friendsId = useSelector(getHomeFriendsId);
@@ -115,10 +115,6 @@ export default function SubscribeButtonMenu({nodeName, feedName, sharing}: Props
             variant: "success"
         }));
     };
-
-    const onCopyLink = () => dispatch(sharePageCopyLink(REL_CURRENT, "/"));
-
-    const onShare = () => dispatch(shareDialogPrepare(REL_CURRENT, "/"));
 
     const subscribed = subscription != null;
     const subscribedToMe = subscriber != null;
@@ -273,21 +269,7 @@ export default function SubscribeButtonMenu({nodeName, feedName, sharing}: Props
             {
                 divider: true
             },
-            {
-                title: t("copy-link"),
-                nodeName: REL_CURRENT,
-                href: "/",
-                onClick: onCopyLink,
-                show: sharing ?? false
-            },
-            {
-                title: t("share"),
-                nodeName: REL_CURRENT,
-                href: "/",
-                onClick: onShare,
-                opensDialog: true,
-                show: sharing ?? false
-            },
+            ...(addon ?? [])
         ]}/>
     );
 }
