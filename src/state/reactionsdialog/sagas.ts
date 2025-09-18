@@ -2,6 +2,7 @@ import { Node } from "api";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { executor } from "state/executor";
+import { nodeCardsPreload } from "state/nodecards/actions";
 import {
     ReactionsDialogPastReactionsLoadAction,
     reactionsDialogPastReactionsLoaded,
@@ -15,6 +16,7 @@ import {
 import { errorThrown } from "state/error/actions";
 import { getReactionsDialogPosting } from "state/reactionsdialog/selectors";
 import { REL_HOME } from "util/rel-node-name";
+import { notNull } from "util/misc";
 
 export default [
     executor("REACTIONS_DIALOG_PAST_REACTIONS_LOAD", "", reactionsDialogPastReactionsLoadSaga),
@@ -49,6 +51,7 @@ async function reactionsDialogPastReactionsLoadSaga(
         dispatch(reactionsDialogPastReactionsLoaded(
             slice.reactions, posting.id, commentId, negative, emoji, slice.before, slice.after, slice.total
         ).causedBy(action));
+        dispatch(nodeCardsPreload(slice.reactions.map(sr => sr.ownerName).filter(notNull)).causedBy(action));
     } catch (e) {
         dispatch(reactionsDialogPastReactionsLoadFailed(posting.id, null, negative, emoji).causedBy(action));
         dispatch(errorThrown(e));

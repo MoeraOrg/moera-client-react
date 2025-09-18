@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { getHomeOwnerGender } from "state/home/selectors";
 import { reactionsDialogPastReactionsLoad } from "state/reactionsdialog/actions";
 import {
     getReactionsDialogItems,
@@ -14,6 +15,7 @@ import {
 import { AvatarWithPopup, Loading } from "ui/control";
 import Twemoji from "ui/twemoji/Twemoji";
 import NodeName from "ui/nodename/NodeName";
+import { getSubscriptionStatus, SubscriptionStatus } from "ui/control/subscribebutton/subscription-status";
 import TotalsTabs from "ui/reactionsdialog/TotalsTabs";
 import ReactionVerifyButton from "ui/reactionsdialog/ReactionVerifyButton";
 import "./ReactionsListView.css";
@@ -34,22 +36,31 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
+    const cards = useSelector((state: ClientState) => state.nodeCards.cards);
+    const homeGender = useSelector(getHomeOwnerGender);
+    const statuses = useMemo<(SubscriptionStatus | null)[]>(() =>
+        reactions.map(r => r.ownerName ? getSubscriptionStatus(cards[r.ownerName] ?? null, homeGender, t) : null),
+        [cards, homeGender, reactions, t]
+    );
+
     return (
         <>
             <TotalsTabs/>
             <div className="items list" tabIndex={-1} ref={itemsRef}>
-                {reactions.map(r =>
+                {reactions.map((r, i) =>
                     <div className="item" key={r.moment}>
                         <AvatarWithPopup ownerName={r.ownerName!} ownerFullName={r.ownerFullName} avatar={r.ownerAvatar}
                                          nodeName={reactionsNodeName} size={48}/>
                         <div className="details">
-                            <NodeName name={r.ownerName} fullName={r.ownerFullName} avatar={r.ownerAvatar}
-                                      avatarNodeName={reactionsNodeName}/>
-                            {" "}
-                            {r.ownerName != null && r.signature != null && postingId != null &&
-                                <ReactionVerifyButton postingId={postingId} commentId={commentId}
-                                                      ownerName={r.ownerName}/>
-                            }
+                            <div className="owner-name">
+                                <NodeName name={r.ownerName} fullName={r.ownerFullName} avatar={r.ownerAvatar}
+                                          avatarNodeName={reactionsNodeName}/>
+                                {r.ownerName != null && r.signature != null && postingId != null &&
+                                    <ReactionVerifyButton postingId={postingId} commentId={commentId}
+                                                          ownerName={r.ownerName}/>
+                                }
+                            </div>
+                            <div className="status">{statuses[i]?.caption ?? ""}</div>
                         </div>
                         <div className="reaction">{r.emoji != null && <Twemoji code={r.emoji}/>}</div>
                     </div>
