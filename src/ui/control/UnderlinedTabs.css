@@ -55,3 +55,7 @@
 .underlined-tabs .tab.active:hover {
     background-color: transparent;
 }
+
+.underlined-tabs .tab .twemoji {
+    vertical-align: -.25em;
+}

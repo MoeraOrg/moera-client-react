@@ -1,11 +1,13 @@
+import React from 'react';
 import cx from 'classnames';
 
-import "./UnderlinedTabs.css";
-import React from "react";
+import Twemoji from "ui/twemoji/Twemoji";
 import Jump from "ui/navigation/Jump";
+import "./UnderlinedTabs.css";
 
 export interface UnderlinedTabDescription<V = any> {
     title: string;
+    emoji?: number;
     value?: V;
     href?: string;
     active?: boolean;
@@ -28,14 +30,14 @@ export function UnderlinedTabs<V = any>({className, tabs, value: selected, onCha
             <div className="tab-scroller">
                 {tabs
                     .filter(({visible, value}) => visible !== false || value === selected)
-                    .map(({title, value, href, active, className}, index) =>
+                    .map(({title, emoji, value, href, active, className}, index) =>
                         <TabLink
                             key={index}
                             href={href}
                             onClick={onChange && value != null ? () => onChange(value) : undefined}
                             className={cx("tab", {"active": active ?? value === selected}, className)}
                         >
-                            {title}
+                            {emoji && <Twemoji code={emoji}/>}{title}
                         </TabLink>
                     )
                 }

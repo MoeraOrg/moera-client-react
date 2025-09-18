@@ -1,49 +1,37 @@
-.reactions-dialog .topright {
-    float: right;
+.reactions-dialog-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: grid;
+    place-content: center;
 }
 
-.reactions-dialog .topright .btn-close {
-    position: relative;
-    top: -.5em;
+.reactions-dialog {
+    width: min(var(--bs-modal-width), 100vw);
 }
 
-.reactions-dialog .switch-view {
-    display: inline-block;
-    margin-right: 1rem;
-    font-size: 130%;
-    cursor: pointer;
-    padding: 0.3rem 0.5rem;
-    color: var(--bs-gray-600);
+.reactions-dialog .popover-body {
+    padding: .75rem 1.5rem 1.5rem;
 }
 
-.reactions-dialog .switch-view:hover {
-    background-color: var(--highlight);
-    color: var(--bs-gray-800);
+.reactions-dialog .underlined-tabs {
+    padding: 0;
+    font-size: 1rem;
 }
 
-.reactions-dialog .totals {
-    border-bottom: 1px var(--bs-gray-400) solid;
-    margin-bottom: 1rem;
+.reactions-dialog .underlined-tabs .tab-scroller {
+    padding-top: 0;
 }
 
-.reactions-dialog .total-tabs {
-    display: inline-flex;
+.reactions-dialog .underlined-tabs .tab {
+    margin-right: 0;
 }
 
-.reactions-dialog .total-tabs .total {
-    font-size: 0.9em;
-    margin-right: 0.8em;
-    padding-bottom: 0.8em;
-    position: relative;
-    top: 5px;
-    cursor: pointer;
-    color: var(--bs-gray-600);
-}
-
-.reactions-dialog .total-tabs .total.active {
-    border-bottom: 3px var(--bs-primary) solid;
-    cursor: default;
-    color: black;
+.reactions-dialog .underlined-tabs .btn-close {
+    align-self: center;
 }
 
 .reactions-dialog .items {
@@ -53,82 +41,11 @@
     overscroll-behavior-y: none;
     outline: none;
     font-size: 1rem;
-}
-
-.reactions-dialog .items .item {
-    display: flex;
-    padding: .15rem;
+    margin-top: 1rem;
 }
 
 .reactions-dialog .items .item:hover {
     background-color: var(--highlight);
-}
-
-.reactions-dialog .items .item .avatar {
-    margin-right: .5rem;
-}
-
-.reactions-dialog .items .item .owner-name {
-    flex: auto;
-    line-height: 32px;
-    max-width: calc(100% - 1.5em - .35rem - 32px);
-}
-
-.reactions-dialog .items .item .owner-name .node-name {
-    display: inline-block;
-    vertical-align: top;
-    max-width: calc(100% - 2.5em);
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-.reactions-dialog .items .item .emoji-type {
-    flex: none;
-    width: 1.7em;
-    padding-right: 0.5rem;
-}
-
-.reactions-dialog .items .item .emoji-end {
-    flex: none;
-    width: 1.5em;
-    font-size: larger;
-    line-height: 32px;
-}
-
-.reactions-dialog .items .item .all {
-    flex: none;
-    width: 5.7em;
-    padding-right: 0.5rem;
-    font-weight: bold;
-}
-
-.reactions-dialog .items .item .share {
-    flex: none;
-    width: 4em;
-    padding-right: 0.5rem;
-}
-
-.reactions-dialog .items .item .total {
-    flex: none;
-    width: 4em;
-    padding-right: 0.5rem;
-    text-align: right;
-}
-
-.reactions-dialog .items .item .bar {
-    flex: auto;
-    display: flex;
-    padding-top: 0.1rem;
-    padding-bottom: 0.1rem;
-}
-
-.reactions-dialog .items .item .bar-left {
-    flex: none;
-    background-color: var(--bs-gray-400);
-}
-
-.reactions-dialog .items .item .bar-right {
-    flex: auto;
 }
 
 .reactions-dialog DIV.more {

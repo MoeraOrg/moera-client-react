@@ -1,34 +1,37 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { Loading } from "ui/control";
-import Twemoji from "ui/twemoji/Twemoji";
-import { reactionsDialogSelectTab } from "state/reactionsdialog/actions";
 import { ClientState } from "state/state";
+import { reactionsDialogSelectTab } from "state/reactionsdialog/actions";
+import { CloseButton, Loading, UnderlinedTabDescription, UnderlinedTabs, usePopover } from "ui/control";
 
 export default function TotalsTabs() {
     const {loading, loaded, total, emojis} = useSelector((state: ClientState) => state.reactionsDialog.totals);
     const activeTab = useSelector((state: ClientState) => state.reactionsDialog.activeTab);
+    const {hide} = usePopover();
     const dispatch = useDispatch();
     const {t} = useTranslation();
+
+    const tabs = useMemo<UnderlinedTabDescription<number>[]>(() => [
+        {
+            title: `${t("all")}\xA0\xA0${total}`,
+            value: 0
+        },
+        ...emojis.map(rt => ({
+            title: `\xA0\xA0${rt.total}`,
+            emoji: rt.emoji,
+            value: rt.emoji
+        }))
+    ], [emojis, t, total]);
 
     return (
         <>
             {loaded &&
-                <div className="total-tabs">
-                    <div className={cx("total", {"active": activeTab == null})}
-                         onClick={() => dispatch(reactionsDialogSelectTab(null))}>
-                        {t("all")} {total}
-                    </div>
-                    {emojis.map(rt =>
-                        <div key={rt.emoji} className={cx("total", {"active": activeTab === rt.emoji})}
-                             onClick={() => dispatch(reactionsDialogSelectTab(rt.emoji))}>
-                            <Twemoji code={rt.emoji}/>{" "}{rt.total}
-                        </div>
-                    )}
-                </div>
+                <UnderlinedTabs tabs={tabs} value={activeTab ?? 0}
+                                onChange={tab => dispatch(reactionsDialogSelectTab(tab))}>
+                    <CloseButton onClick={hide}/>
+                </UnderlinedTabs>
             }
             {loading && <Loading/>}
         </>

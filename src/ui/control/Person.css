@@ -27,7 +27,6 @@
 }
 
 .person .details {
-    flex: auto;
     grid-area: details;
     overflow-x: hidden;
 }

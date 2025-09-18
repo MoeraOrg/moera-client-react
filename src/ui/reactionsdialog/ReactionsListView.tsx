@@ -1,11 +1,9 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import { closeReactionsDialog, reactionsDialogPastReactionsLoad } from "state/reactionsdialog/actions";
+import { reactionsDialogPastReactionsLoad } from "state/reactionsdialog/actions";
 import {
     getReactionsDialogItems,
     getReactionsDialogNodeName,
@@ -13,11 +11,12 @@ import {
     isReactionsDialogReactionsAllLoaded,
     isReactionsDialogReactionsLoading
 } from "state/reactionsdialog/selectors";
-import { AvatarWithPopup, CloseButton, Loading } from "ui/control";
-import NodeName from "ui/nodename/NodeName";
+import { AvatarWithPopup, Loading } from "ui/control";
 import Twemoji from "ui/twemoji/Twemoji";
-import ReactionVerifyButton from "ui/reactionsdialog/ReactionVerifyButton";
+import NodeName from "ui/nodename/NodeName";
 import TotalsTabs from "ui/reactionsdialog/TotalsTabs";
+import ReactionVerifyButton from "ui/reactionsdialog/ReactionVerifyButton";
+import "./ReactionsListView.css";
 
 interface Props {
     itemsRef?: React.LegacyRef<HTMLDivElement>;
@@ -37,21 +36,13 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
 
     return (
         <>
-            <div className="totals clearfix">
-                <TotalsTabs/>
-                <div className="topright">
-                    <div className="switch-view" title={t("view-as-chart")} onClick={onSwitchView}>
-                        <FontAwesomeIcon icon={faChartBar}/>
-                    </div>
-                    <CloseButton onClick={() => dispatch(closeReactionsDialog())}/>
-                </div>
-            </div>
-            <div className="items" tabIndex={-1} ref={itemsRef}>
+            <TotalsTabs/>
+            <div className="items list" tabIndex={-1} ref={itemsRef}>
                 {reactions.map(r =>
                     <div className="item" key={r.moment}>
                         <AvatarWithPopup ownerName={r.ownerName!} ownerFullName={r.ownerFullName} avatar={r.ownerAvatar}
-                                         nodeName={reactionsNodeName} size={32}/>
-                        <div className="owner-name">
+                                         nodeName={reactionsNodeName} size={48}/>
+                        <div className="details">
                             <NodeName name={r.ownerName} fullName={r.ownerFullName} avatar={r.ownerAvatar}
                                       avatarNodeName={reactionsNodeName}/>
                             {" "}
@@ -60,7 +51,7 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
                                                       ownerName={r.ownerName}/>
                             }
                         </div>
-                        <div className="emoji-end">{r.emoji != null && <Twemoji code={r.emoji}/>}</div>
+                        <div className="reaction">{r.emoji != null && <Twemoji code={r.emoji}/>}</div>
                     </div>
                 )}
             </div>
