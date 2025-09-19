@@ -8,7 +8,7 @@ export class NodeName {
             return new RegisteredName(null);
         }
         const parts = qName.split("_");
-        return new RegisteredName(parts[0],parts.length > 1 ? parseInt(parts[1]) : 0)
+        return new RegisteredName(parts[0], parts.length > 1 ? parseInt(parts[1]) : 0)
     }
 
     static shorten(qName: string): string;

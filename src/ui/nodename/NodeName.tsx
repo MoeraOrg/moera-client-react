@@ -6,7 +6,7 @@ import { AvatarImage } from "api";
 import { getNamingNameDetails } from "state/naming/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ClientState } from "state/state";
-import Jump from "ui/navigation/Jump";
+import Jump, { JumpCallback } from "ui/navigation/Jump";
 import NodeNameText from "ui/nodename/NodeNameText";
 import NodeNamePopup from "ui/nodename/NodeNamePopup";
 import { NameDisplayMode } from "ui/types";
@@ -24,11 +24,12 @@ interface Props {
     linked?: boolean;
     popup?: boolean;
     display?: NameDisplayMode;
+    onJump?: JumpCallback;
 }
 
 export default function NodeName({
     name, fullName, avatar, avatarNodeName, className, verified = false, correct = false, linked = true, popup = true,
-    display
+    display, onJump
 }: Props) {
     const details = useSelector((state: ClientState) => getNamingNameDetails(state, name));
     const mode = useSelector((state: ClientState) => getSetting(state, "full-name.display") as NameDisplayMode);
@@ -50,7 +51,7 @@ export default function NodeName({
                        disabled={!popup}>
             {ref =>
                 linked ?
-                    <Jump className={klass} nodeName={name} href="/" ref={ref}>
+                    <Jump className={klass} nodeName={name} href="/" onNear={onJump} onFar={onJump} ref={ref}>
                         <NodeNameText name={name} fullName={fullName} mode={display ?? mode}/>
                     </Jump>
                 :

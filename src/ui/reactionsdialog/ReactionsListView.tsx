@@ -12,11 +12,12 @@ import {
     isReactionsDialogReactionsAllLoaded,
     isReactionsDialogReactionsLoading
 } from "state/reactionsdialog/selectors";
-import { AvatarWithPopup, Loading, SubscribeButton } from "ui/control";
+import { Avatar, Loading, SubscribeButton, usePopover } from "ui/control";
+import { getSubscriptionStatus, SubscriptionStatus } from "ui/control/subscribebutton/subscription-status";
 import { Icon, msFinance } from "ui/material-symbols";
 import Twemoji from "ui/twemoji/Twemoji";
 import NodeName from "ui/nodename/NodeName";
-import { getSubscriptionStatus, SubscriptionStatus } from "ui/control/subscribebutton/subscription-status";
+import Jump from "ui/navigation/Jump";
 import TotalsTabs from "ui/reactionsdialog/TotalsTabs";
 import ReactionVerifyButton from "ui/reactionsdialog/ReactionVerifyButton";
 import "./ReactionsListView.css";
@@ -34,6 +35,7 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
     const reactionsLoading = useSelector(isReactionsDialogReactionsLoading);
     const reactionsLoaded = useSelector(isReactionsDialogReactionsAllLoaded);
     const reactions = useSelector(getReactionsDialogItems);
+    const {hide} = usePopover();
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -43,6 +45,11 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
         reactions.map(r => r.ownerName ? getSubscriptionStatus(cards[r.ownerName] ?? null, homeGender, t) : null),
         [cards, homeGender, reactions, t]
     );
+
+    const onJump = (_: string, performJump: () => void) => {
+        hide();
+        performJump();
+    }
 
     return (
         <>
@@ -56,12 +63,14 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
             <div className="items list" tabIndex={-1} ref={itemsRef}>
                 {reactions.map((r, i) =>
                     <div className="item" key={r.moment}>
-                        <AvatarWithPopup ownerName={r.ownerName!} ownerFullName={r.ownerFullName} avatar={r.ownerAvatar}
-                                         nodeName={reactionsNodeName} size={48}/>
+                        <Jump nodeName={r.ownerName!} href="/" onNear={onJump} onFar={onJump}>
+                            <Avatar avatar={r.ownerAvatar} ownerName={r.ownerName!} size={48}
+                                    nodeName={reactionsNodeName}/>
+                        </Jump>
                         <div className="details">
                             <div className="owner-name">
                                 <NodeName name={r.ownerName} fullName={r.ownerFullName} avatar={r.ownerAvatar}
-                                          avatarNodeName={reactionsNodeName}/>
+                                          avatarNodeName={reactionsNodeName} popup={false} onJump={onJump}/>
                                 {r.ownerName != null && r.signature != null && postingId != null &&
                                     <ReactionVerifyButton postingId={postingId} commentId={commentId}
                                                           ownerName={r.ownerName}/>
