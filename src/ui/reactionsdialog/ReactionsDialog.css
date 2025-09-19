@@ -20,6 +20,7 @@
 .reactions-dialog .underlined-tabs {
     padding: 0;
     font-size: 1rem;
+    min-height: 2.625rem;
 }
 
 .reactions-dialog .underlined-tabs .tab-scroller {
@@ -34,6 +35,17 @@
     align-self: center;
 }
 
+.reactions-dialog .switch-view {
+    border: none;
+    background-color: transparent;
+    margin-right: 1rem;
+    color: var(--bs-gray-600);
+}
+
+.reactions-dialog .switch-view:hover {
+    color: var(--bs-gray-800);
+}
+
 .reactions-dialog .items {
     min-height: 30vh;
     max-height: 80vh;
@@ -42,10 +54,6 @@
     outline: none;
     font-size: 1rem;
     margin-top: 1rem;
-}
-
-.reactions-dialog .items .item:hover {
-    background-color: var(--highlight);
 }
 
 .reactions-dialog DIV.more {

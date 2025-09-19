@@ -1,13 +1,13 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faList } from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import { closeReactionsDialog } from "state/reactionsdialog/actions";
-import { CloseButton, Loading } from "ui/control";
+import { Loading } from "ui/control";
+import { Icon, msListAlt } from "ui/material-symbols";
 import Twemoji from "ui/twemoji/Twemoji";
+import TotalsTabs from "ui/reactionsdialog/TotalsTabs";
+import "./ReactionsChartView.css";
 
 interface Props {
     itemsRef?: React.LegacyRef<HTMLDivElement>;
@@ -16,7 +16,6 @@ interface Props {
 
 export default function ReactionsChartView({itemsRef, onSwitchView}: Props) {
     const {loading, loaded, total, emojis} = useSelector((state: ClientState) => state.reactionsDialog.totals);
-    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     if (!loaded) {
@@ -25,22 +24,18 @@ export default function ReactionsChartView({itemsRef, onSwitchView}: Props) {
 
     return (
         <>
-            <div className="totals clearfix">
-                <div className="topright">
-                    {onSwitchView &&
-                        <div className="switch-view" title={t("view-as-list")} onClick={onSwitchView}>
-                            <FontAwesomeIcon icon={faList}/>
-                        </div>
-                    }
-                    <CloseButton onClick={() => dispatch(closeReactionsDialog())}/>
-                </div>
-            </div>
-            <div className="items" tabIndex={-1} ref={itemsRef}>
+            <TotalsTabs hidden>
+                {onSwitchView &&
+                    <button className="switch-view" title={t("view-as-list")} onClick={onSwitchView}>
+                        <Icon icon={msListAlt}/>
+                    </button>
+                }
+            </TotalsTabs>
+            <div className="items chart" tabIndex={-1} ref={itemsRef}>
                 {total !== 0 &&
-                    <div className="item">
-                        <div className="all">{t("all")}</div>
+                    <div className="caption">
+                        <div className="all">{t("total")}</div>
                         <div className="total">{total}</div>
-                        <div className="bar"/>
                     </div>
                 }
                 {emojis

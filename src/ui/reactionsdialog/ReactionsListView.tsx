@@ -13,6 +13,7 @@ import {
     isReactionsDialogReactionsLoading
 } from "state/reactionsdialog/selectors";
 import { AvatarWithPopup, Loading, SubscribeButton } from "ui/control";
+import { Icon, msFinance } from "ui/material-symbols";
 import Twemoji from "ui/twemoji/Twemoji";
 import NodeName from "ui/nodename/NodeName";
 import { getSubscriptionStatus, SubscriptionStatus } from "ui/control/subscribebutton/subscription-status";
@@ -45,7 +46,13 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
 
     return (
         <>
-            <TotalsTabs/>
+            <TotalsTabs>
+                {onSwitchView &&
+                    <button className="switch-view" title={t("view-as-chart")} onClick={onSwitchView}>
+                        <Icon icon={msFinance}/>
+                    </button>
+                }
+            </TotalsTabs>
             <div className="items list" tabIndex={-1} ref={itemsRef}>
                 {reactions.map((r, i) =>
                     <div className="item" key={r.moment}>

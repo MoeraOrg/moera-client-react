@@ -32,6 +32,7 @@ import { ReactComponent as msExpandCircleDownFilled40 } from "ui/material-symbol
 import { ReactComponent as msExpandCircleUpFilled40 } from "ui/material-symbols/expand_circle_up_filled40.isvg";
 import { ReactComponent as msExplore } from "ui/material-symbols/explore.isvg";
 import { ReactComponent as msFileSave } from "ui/material-symbols/file_save.isvg";
+import { ReactComponent as msFinance } from "ui/material-symbols/finance.isvg";
 import { ReactComponent as msFormatBold } from "ui/material-symbols/format_bold.isvg";
 import { ReactComponent as msFormatClear } from "ui/material-symbols/format_clear.isvg";
 import { ReactComponent as msFormatH1 } from "ui/material-symbols/format_h1.isvg";
@@ -63,6 +64,7 @@ import { ReactComponent as msKeyboardArrowDown } from "ui/material-symbols/keybo
 import { ReactComponent as msKeyboardArrowRight } from "ui/material-symbols/keyboard_arrow_right.isvg";
 import { ReactComponent as msKeyboardArrowUp } from "ui/material-symbols/keyboard_arrow_up.isvg";
 import { ReactComponent as msLink } from "ui/material-symbols/link.isvg";
+import { ReactComponent as msListAlt } from "ui/material-symbols/list_alt.isvg";
 import { ReactComponent as msLiveHelp } from "ui/material-symbols/live_help.isvg";
 import { ReactComponent as msLock } from "ui/material-symbols/lock.isvg";
 import { ReactComponent as msMediaLink } from "ui/material-symbols/media_link.isvg";
@@ -146,6 +148,7 @@ export {
     msExpandCircleUpFilled40,
     msExplore,
     msFileSave,
+    msFinance,
     msFormatBold,
     msFormatClear,
     msFormatH1,
@@ -174,6 +177,7 @@ export {
     msInkPen,
     msKeepFilled16,
     msLink,
+    msListAlt,
     msLiveHelp,
     msLock,
     msKeyboardArrowDown,

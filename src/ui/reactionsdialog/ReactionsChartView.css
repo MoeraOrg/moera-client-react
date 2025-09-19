@@ -1,0 +1,58 @@
+.reactions-dialog .items.chart .caption {
+    display: grid;
+    gap: .5rem;
+    grid-template: " title  total"
+                   / 6.2rem 4rem;
+    margin-bottom: .75rem;
+    font-size: 1.25rem;
+}
+
+.reactions-dialog .items.chart .caption .all {
+    grid-area: title;
+    font-weight: bold;
+}
+
+.reactions-dialog .items.chart .caption .total {
+    grid-area: total;
+    text-align: right;
+}
+
+.reactions-dialog .items.chart .item {
+    display: grid;
+    gap: .5rem;
+    grid-template: " emoji  share  total  bar"
+                   / 1.7rem 4rem   4rem   auto;
+    align-items: center;
+    margin-bottom: .3rem;
+}
+
+.reactions-dialog .items.chart .item .emoji-type {
+    grid-area: emoji;
+    font-size: 1.25rem;
+}
+
+.reactions-dialog .items.chart .item .share {
+    grid-area: share;
+}
+
+.reactions-dialog .items.chart .item .total {
+    grid-area: total;
+    text-align: right;
+}
+
+.reactions-dialog .items.chart .item .bar {
+    grid-area: bar;
+    display: flex;
+    padding: .1rem .5rem;
+}
+
+.reactions-dialog .items.chart .item .bar-left {
+    flex: none;
+    background-color: var(--bs-gray-400);
+    height: 1.25rem;
+    border-radius: .5rem;
+}
+
+.reactions-dialog .items.chart .item .bar-right {
+    flex: auto;
+}

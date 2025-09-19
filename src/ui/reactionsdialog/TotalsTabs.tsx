@@ -6,30 +6,42 @@ import { ClientState } from "state/state";
 import { reactionsDialogSelectTab } from "state/reactionsdialog/actions";
 import { CloseButton, Loading, UnderlinedTabDescription, UnderlinedTabs, usePopover } from "ui/control";
 
-export default function TotalsTabs() {
+interface Props {
+    hidden?: boolean;
+    children?: React.ReactNode;
+}
+
+export default function TotalsTabs({hidden, children}: Props) {
     const {loading, loaded, total, emojis} = useSelector((state: ClientState) => state.reactionsDialog.totals);
     const activeTab = useSelector((state: ClientState) => state.reactionsDialog.activeTab);
     const {hide} = usePopover();
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const tabs = useMemo<UnderlinedTabDescription<number>[]>(() => [
-        {
-            title: `${t("all")}\xA0\xA0${total}`,
-            value: 0
-        },
-        ...emojis.map(rt => ({
-            title: `\xA0\xA0${rt.total}`,
-            emoji: rt.emoji,
-            value: rt.emoji
-        }))
-    ], [emojis, t, total]);
+    const tabs = useMemo<UnderlinedTabDescription<number>[]>(() =>
+        hidden ?
+            []
+        :
+            [
+                {
+                    title: `${t("all")}\xA0\xA0${total}`,
+                    value: 0
+                },
+                ...emojis.map(rt => ({
+                    title: `\xA0\xA0${rt.total}`,
+                    emoji: rt.emoji,
+                    value: rt.emoji
+                }))
+            ],
+        [emojis, hidden, t, total]
+    );
 
     return (
         <>
             {loaded &&
                 <UnderlinedTabs tabs={tabs} value={activeTab ?? 0}
                                 onChange={tab => dispatch(reactionsDialogSelectTab(tab))}>
+                    {children}
                     <CloseButton onClick={hide}/>
                 </UnderlinedTabs>
             }

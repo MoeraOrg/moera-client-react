@@ -1009,6 +1009,7 @@
   "token-usage-warning": "Please note that the token gives admin access to your blog. Never give it to anybody you don't trust!",
   "too-long": "Too long",
   "top": "Top",
+  "total": "Total",
   "total-colon": "Total:",
   "transfer": "Transfer",
   "transfer-existing-name": "Transfer an existing name",
