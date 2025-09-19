@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ReactDOM from 'react-dom';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { closeReactionsDialog } from "state/reactionsdialog/actions";
 import { isReactionsDialogPermitted } from "state/reactionsdialog/selectors";
 import { PopoverContext } from "ui/control";
 import { useOverlay } from "ui/overlays/overlays";
+import MobileBack from "ui/page/MobileBack";
 import ReactionsChartView from "ui/reactionsdialog/ReactionsChartView";
 import ReactionsListView from "ui/reactionsdialog/ReactionsListView";
 import "./ReactionsDialog.css";
@@ -17,6 +19,7 @@ export default function ReactionsDialog() {
     );
     const modalDialog = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
+    const {t} = useTranslation();
 
     const onClose = useCallback(() => dispatch(closeReactionsDialog()), [dispatch]);
 
@@ -37,6 +40,9 @@ export default function ReactionsDialog() {
         <PopoverContext.Provider value={{hide: onClose, update: () => {}, overlayId}}>
             <div className="reactions-dialog-backdrop modal" style={{zIndex: zIndex?.shadow}}>
                 <div className="reactions-dialog popover show" style={{zIndex: zIndex?.widget}} ref={modalDialog}>
+                    <MobileBack href="/news" onBack={onClose}>
+                        {t("reactions")}
+                    </MobileBack>
                     <div className="popover-body">
                         {chartView || !viewReactions ?
                             <ReactionsChartView itemsRef={itemsRef}

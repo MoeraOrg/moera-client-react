@@ -9,6 +9,10 @@
     gap: .75rem;
 }
 
+.reactions-dialog .items.list .item:last-child {
+    margin-bottom: 0;
+}
+
 .reactions-dialog .items.list .item .avatar {
     grid-area: avatar;
 }

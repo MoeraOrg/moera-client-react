@@ -7,10 +7,21 @@
     z-index: 1000;
     display: grid;
     place-content: center;
+    overflow: hidden;
 }
 
 .reactions-dialog {
     width: min(var(--bs-modal-width), 100vw);
+}
+
+@media only screen and (max-width: 991px) {
+    .reactions-dialog-backdrop {
+        place-content: start;
+    }
+
+    .reactions-dialog {
+        --bs-popover-border-radius: 0;
+    }
 }
 
 .reactions-dialog .popover-body {
@@ -46,6 +57,16 @@
     color: var(--bs-gray-800);
 }
 
+@media only screen and (max-width: 991px) {
+    .reactions-dialog .underlined-tabs .btn-close {
+        display: none;
+    }
+
+    .reactions-dialog .switch-view {
+        margin-right: 0;
+    }
+}
+
 .reactions-dialog .items {
     min-height: 30vh;
     max-height: 80vh;
@@ -54,6 +75,13 @@
     outline: none;
     font-size: 1rem;
     margin-top: 1rem;
+}
+
+@media only screen and (max-width: 991px) {
+    .reactions-dialog .items {
+        max-height: unset;
+        height: calc(100vh - 12.75rem);
+    }
 }
 
 .reactions-dialog DIV.more {
