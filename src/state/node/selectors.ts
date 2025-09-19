@@ -147,7 +147,7 @@ export function isGooglePlayHiding(state: ClientState): boolean {
 type AnyOperations = Partial<Record<string, PrincipalValue | null>>;
 
 export interface ProtectedObject {
-    ownerName?: string;
+    ownerName?: string | null;
     receiverName?: string | null;
     operations?: AnyOperations | PostingOperations | CommentOperations | null;
     receiverOperations?: AnyOperations | PostingOperations | null;
@@ -186,8 +186,13 @@ const defaultIsPermittedOptions: IsPermittedOptions = {
     useOperations: "normal"
 };
 
-export function isPermitted(operation: string, object: ProtectedObject | null, defaultValue: PrincipalValue,
-                            state: ClientState, options: Partial<IsPermittedOptions> = {}): boolean {
+export function isPermitted(
+    operation: string,
+    object: ProtectedObject | null,
+    defaultValue: PrincipalValue,
+    state: ClientState,
+    options: Partial<IsPermittedOptions> = {}
+): boolean {
     const op: IsPermittedOptions = {
         ...defaultIsPermittedOptions,
         useOperations: object?.receiverName != null ? "receiver" : "normal",
