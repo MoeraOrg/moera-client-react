@@ -36,7 +36,7 @@ export default function ComplaintsListPage() {
     return (
         <Page className="complaints">
             <div className="page-left-pane">
-                <MainMenuSidebar/>
+                <MainMenuSidebar selected="complaints"/>
             </div>
             <div className="page-central-pane">
                 <MobileBack nodeName={REL_HOME} href={newsHref} sticky>
