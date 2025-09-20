@@ -59,8 +59,13 @@ export default function InstantButton() {
                     {showDialog && <InstantsDialog instantBorder={border} onClose={() => onToggle(false)}/>}
                 </span>
             :
-                <Popover element={InstantBell} className="instant-popover" detached offset={[0, 10]}
-                         onToggle={onToggle}>
+                <Popover
+                    text={<InstantBell/>}
+                    className="instant-popover"
+                    detached
+                    offset={[0, 10]}
+                    onToggle={onToggle}
+                >
                     <InstantsPopover instantBorder={border}/>
                 </Popover>
             }

@@ -1,17 +1,27 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
-import { Popover } from "ui/control";
-import HomeName from "ui/mainmenu/connections/HomeName";
+import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
+import { Avatar, Popover } from "ui/control";
 import Connections from "ui/mainmenu/connections/Connections";
-import HomeAvatar from "ui/mainmenu/connections/HomeAvatar";
+import { REL_HOME } from "util/rel-node-name";
 
-const ConnectionsButton = () => (
-    <>
-        <HomeAvatar/>
-        <Popover element={HomeName} detached>
-            <Connections/>
-        </Popover>
-    </>
-);
+export default function ConnectionsButton() {
+    const ownerName = useSelector(getHomeOwnerName);
+    const avatar = useSelector(getHomeOwnerAvatar);
 
-export default ConnectionsButton;
+    return (
+        <>
+            <Popover
+                text={
+                    <Avatar avatar={avatar} ownerName={ownerName} size={32} nodeName={REL_HOME}
+                            className="home-avatar"/>
+                }
+                detached
+                offset={[0, 10]}
+            >
+                <Connections/>
+            </Popover>
+        </>
+    );
+}

@@ -3,8 +3,6 @@ import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 import { Modifier, usePopper } from 'react-popper';
 import { PositioningStrategy } from '@popperjs/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { PopoverContext } from "ui/control";
 import { useOverlay } from "ui/overlays/overlays";
@@ -12,11 +10,9 @@ import "./Popover.css";
 
 interface Props {
     className?: string;
-    text?: string;
+    text?: string | React.ReactNode;
     textClassName?: string;
-    icon?: IconProp;
     title?: string;
-    element?: any;
     detached?: boolean;
     strategy?: PositioningStrategy;
     offset?: [number, number?];
@@ -26,7 +22,7 @@ interface Props {
 }
 
 export function Popover({
-    className, text, textClassName, icon, title, element, detached, strategy = "fixed", offset, parentOverlayId,
+    className, text, textClassName, title, detached, strategy = "fixed", offset, parentOverlayId,
     onToggle, children
 }: Props) {
     const [visible, setVisible] = useState<boolean>(false);
@@ -68,8 +64,6 @@ export function Popover({
     return (
         <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {}), overlayId}}>
             <span ref={setButtonRef} onClick={toggle} title={title} className={cx(textClassName, {"active": visible})}>
-                {element && React.createElement(element)}
-                {icon && <FontAwesomeIcon icon={icon}/>}
                 {text}
             </span>
             {ReactDOM.createPortal(
