@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 
-import { Node, PrincipalValue, StoryInfo } from "api";
+import { Node, NodeApiError, PrincipalValue, StoryInfo } from "api";
 import { ClientAction } from "state/action";
 import {
     FeedFutureSliceLoadAction,
@@ -203,11 +203,15 @@ async function feedStatusLoadSaga(action: WithContext<FeedStatusLoadAction>): Pr
     let {nodeName, feedName} = action.payload;
     nodeName = absoluteNodeName(nodeName, action.context);
     try {
-        const status = await Node.getFeedStatus(action, nodeName, feedName);
+        const status = await Node.getFeedStatus(
+            action, nodeName, feedName, ["feed.not-found", "authentication.required"]
+        );
         dispatch(feedStatusSet(nodeName, feedName, status).causedBy(action));
     } catch (e) {
         dispatch(feedStatusLoadFailed(nodeName, feedName).causedBy(action));
-        dispatch(errorThrown(e));
+        if (!(e instanceof NodeApiError)) {
+            dispatch(errorThrown(e));
+        }
     }
 }
 
@@ -232,7 +236,7 @@ async function feedPastSliceLoadSaga(action: WithContext<FeedPastSliceLoadAction
     nodeName = absoluteNodeName(nodeName, action.context);
     try {
         const before = (select(state => getFeedState(state, nodeName, feedName))).after;
-        const slice = await Node.getFeedSlice(action, nodeName, feedName, null, before, 20);
+        const slice = await Node.getFeedSlice(action, nodeName, feedName, null, before, 20, ["feed.not-found"]);
         await fillActivityReactionsInStories(action, slice.stories);
         await fillBlockedOperationsInStories(action, slice.stories);
         dispatch(feedPastSliceSet(
@@ -240,8 +244,14 @@ async function feedPastSliceLoadSaga(action: WithContext<FeedPastSliceLoadAction
         ).causedBy(action));
         await fillSubscriptions(action, slice.stories);
     } catch (e) {
-        dispatch(feedPastSliceLoadFailed(nodeName, feedName).causedBy(action));
-        dispatch(errorThrown(e));
+        if (e instanceof NodeApiError) {
+            dispatch(feedPastSliceSet(
+                nodeName, feedName, [], Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER, 0, 0
+            ).causedBy(action));
+        } else {
+            dispatch(feedPastSliceLoadFailed(nodeName, feedName).causedBy(action));
+            dispatch(errorThrown(e));
+        }
     }
 }
 
@@ -251,7 +261,7 @@ async function feedFutureSliceLoadSaga(action: WithContext<FeedFutureSliceLoadAc
     nodeName = absoluteNodeName(nodeName, action.context);
     try {
         const after = (select(state => getFeedState(state, nodeName, feedName))).before;
-        const slice = await Node.getFeedSlice(action, nodeName, feedName, after, null, 20);
+        const slice = await Node.getFeedSlice(action, nodeName, feedName, after, null, 20, ["feed.not-found"]);
         await fillActivityReactionsInStories(action, slice.stories);
         await fillBlockedOperationsInStories(action, slice.stories);
         dispatch(feedFutureSliceSet(
@@ -259,8 +269,14 @@ async function feedFutureSliceLoadSaga(action: WithContext<FeedFutureSliceLoadAc
         ).causedBy(action));
         await fillSubscriptions(action, slice.stories);
     } catch (e) {
-        dispatch(feedFutureSliceLoadFailed(nodeName, feedName).causedBy(action));
-        dispatch(errorThrown(e));
+        if (e instanceof NodeApiError) {
+            dispatch(feedPastSliceSet(
+                nodeName, feedName, [], Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER, 0, 0
+            ).causedBy(action));
+        } else {
+            dispatch(feedFutureSliceLoadFailed(nodeName, feedName).causedBy(action));
+            dispatch(errorThrown(e));
+        }
     }
 }
 
