@@ -7,13 +7,10 @@ import { isConnectedToHome } from "state/home/selectors";
 import { isAtNode } from "state/node/selectors";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
-import { Button, Loading } from "ui/control";
+import { Button, LoadingInline } from "ui/control";
 import { useIsTinyScreen } from "ui/hook";
-import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
-import NewsButton from "ui/mainmenu/connectionstatus/NewsButton";
 import InstantButton from "ui/instant/InstantButton";
-import SettingsButton from "ui/mainmenu/connectionstatus/SettingsButton";
 import ConnectionsButton from "ui/mainmenu/connections/ConnectionsButton";
 import "./ConnectionStatus.css";
 
@@ -30,33 +27,27 @@ export default function ConnectionStatus() {
         return null;
     }
     if (connecting) {
-        return <>{t("connecting")} <Loading/></>;
+        return <div className="connection-status"><LoadingInline/></div>;
     }
     if (!connected) {
         if (!atNode) {
             return null;
         }
         return (
-            <div className="connection-status">
-                <span className="me-2">
-                    {t("not-connected-home")}
-                    <Button variant="primary" size="sm" onClick={() => dispatch(openSignUpDialog())}>
-                        {t("sign-up")}
-                    </Button>
-                    <Button variant="success" size="sm" onClick={() => dispatch(openConnectDialog())}>
-                        {t("connect")}
-                    </Button>
-                </span>
+            <div className="connection-status not-connected">
+                <Button variant="outline-primary" onClick={() => dispatch(openConnectDialog())}>
+                    {t("connect")}
+                </Button>
+                <Button variant="primary" onClick={() => dispatch(openSignUpDialog())}>
+                    {t("sign-up")}
+                </Button>
             </div>
         );
     }
     return (
-        <div className="connection-status">
+        <div className="connection-status connected">
             <NewPostButton/>
-            <NewsButton/>
             <InstantButton/>
-            <SettingsButton/>
-            <HomeButton/>
             <ConnectionsButton/>
         </div>
     );

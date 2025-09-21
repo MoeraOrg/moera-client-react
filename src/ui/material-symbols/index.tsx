@@ -72,6 +72,7 @@ import { ReactComponent as msMediaLink } from "ui/material-symbols/media_link.is
 import { ReactComponent as msMoreHoriz } from "ui/material-symbols/more_horiz.isvg";
 import { ReactComponent as msMoreVert } from "ui/material-symbols/more_vert.isvg";
 import { ReactComponent as msMoreVert12 } from "ui/material-symbols/more_vert12.isvg";
+import { ReactComponent as msNotifications } from "ui/material-symbols/notifications.isvg";
 import { ReactComponent as msOpenInNew } from "ui/material-symbols/open_in_new.isvg";
 import { ReactComponent as msPaid } from "ui/material-symbols/paid.isvg";
 import { ReactComponent as msPartlyCloudyDay } from "ui/material-symbols/partly_cloudy_day.isvg";
@@ -189,6 +190,7 @@ export {
     msMoreHoriz,
     msMoreVert,
     msMoreVert12,
+    msNotifications,
     msOpenInNew,
     msPaid,
     msPartlyCloudyDay,

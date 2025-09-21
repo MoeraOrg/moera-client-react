@@ -1,13 +1,17 @@
-.connection-status {
-    color: white;
-    white-space: nowrap;
+.connection-status.connected {
+    display: grid;
+    grid-template-columns: repeat(3, min-content);
+    gap: .75rem;
+    align-items: center;
 }
 
-.connection-status BUTTON {
-    display: inline;
-    margin-left: 1rem;
+.connection-status.not-connected {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
 }
 
+/* Deprecated */
 .connection-status .connection-button {
     cursor: pointer;
     color: var(--status-icon);
@@ -29,9 +33,4 @@
 
 .connection-status .active .connection-button {
     color: white;
-}
-
-.connection-status .loading {
-    color: white;
-    fill: white !important;
 }

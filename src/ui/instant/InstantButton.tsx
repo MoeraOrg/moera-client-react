@@ -63,7 +63,8 @@ export default function InstantButton() {
                     text={<InstantBell/>}
                     className="instant-popover"
                     detached
-                    offset={[0, 10]}
+                    placement="bottom-end"
+                    offset={[0, 30]}
                     onToggle={onToggle}
                 >
                     <InstantsPopover instantBorder={border}/>

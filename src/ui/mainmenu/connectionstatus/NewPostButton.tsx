@@ -18,7 +18,7 @@ export default function NewPostButton() {
     }
 
     return (
-        <Jump nodeName={REL_HOME} href="/compose" className="btn btn-success btn-sm new-post-button">
+        <Jump nodeName={REL_HOME} href="/compose" className="btn btn-success new-post-button">
             <Icon icon={msAddBox} size="1.2em"/>
             &nbsp;&nbsp;{tTitle(t("new-post-button"))}
         </Jump>

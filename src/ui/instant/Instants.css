@@ -1,6 +1,5 @@
 .instant-popover {
     width: 28rem;
-    border-top: 1px solid var(--bs-gray-300);
 }
 
 @media only screen and (max-width: 991px) {

@@ -6,7 +6,6 @@ import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { Avatar } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import { REL_HOME } from "util/rel-node-name";
-import "./HomeAvatar.css";
 
 export default function HomeAvatar() {
     const ownerName = useSelector(getHomeOwnerName);

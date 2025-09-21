@@ -30,9 +30,5 @@
 #main-menu .main-menu-right-pane {
     grid-column: 3;
     justify-self: end;
-}
-
-#main-menu SPAN:has(.home-avatar) {
-    margin-left: 1rem;
-    margin-right: 1rem;
+    margin-right: 2rem;
 }

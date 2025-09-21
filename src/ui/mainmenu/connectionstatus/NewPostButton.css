@@ -1,5 +1,5 @@
 .new-post-button {
-    margin: 0 1rem 0.3rem 0.3rem;
+    white-space: nowrap;
 }
 
 .new-post-button svg {
