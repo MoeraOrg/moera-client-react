@@ -187,13 +187,6 @@ export function getPageHeaderHeight(): number {
     return mainMenuHeight + headerHeight + backBoxHeight;
 }
 
-export function getFeedHeaderHeight(): number {
-    const headerHeight = getPageHeaderHeight();
-    const feedTitle = document.getElementById("feed-title");
-    const feedTitleHeight = feedTitle != null ? feedTitle.getBoundingClientRect().height : 0;
-    return headerHeight + feedTitleHeight;
-}
-
 export function isElementVisible(element: Element, threshold: number = 0): boolean {
     const rect = element.getBoundingClientRect();
     const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);

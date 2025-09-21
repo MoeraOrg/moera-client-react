@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import cx from 'classnames';
 
 import { useIsTinyScreen } from "ui/hook";
-import { getFeedHeaderHeight } from "util/ui";
+import { getPageHeaderHeight } from "util/ui";
 import "./PageHeader.css";
 
 const HIDING_DISTANCE = 16;
@@ -28,7 +28,7 @@ function PageHeader({children}: Props) {
             if (state.scroll == null) {
                 return {invisible: state.invisible, scroll: window.scrollY};
             }
-            if (window.scrollY <= getFeedHeaderHeight()) {
+            if (window.scrollY <= getPageHeaderHeight()) {
                 return {invisible: false, scroll: window.scrollY};
             }
             const invisible = window.scrollY > state.scroll;
