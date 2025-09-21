@@ -1,7 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { Storage } from "storage";
@@ -10,8 +8,10 @@ import { getHomeRootLocation } from "state/home/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { usePopover } from "ui/control";
+import { Icon, msAdd } from "ui/material-symbols";
+import Jump from "ui/navigation/Jump";
 import NodeName from "ui/nodename/NodeName";
-import ConnectionItem from "ui/mainmenu/connections/ConnectionItem";
+import { REL_HOME } from "util/rel-node-name";
 import "./Connections.css";
 
 export default function Connections() {
@@ -19,67 +19,73 @@ export default function Connections() {
     const login = useSelector((state: ClientState) => state.home.login);
     const owner = useSelector((state: ClientState) => state.home.owner);
     const roots = useSelector((state: ClientState) => state.home.roots);
+    const activeRoot = roots.find(root => root.url === location);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const {hide} = usePopover();
 
-    const onAddClick = () => {
-        dispatch(openConnectDialog());
+    const onActiveItemClick = (_: string, performJump: () => void) => {
         hide();
+        performJump();
     };
 
-    const onItemClick = (location: string) => () => {
-        Storage.switchData(location);
+    const onDisconnectConfirmed = () => {
         hide();
-    };
-
-    const onDisconnect = (location: string) => () => {
-        Storage.deleteData(location);
-    };
-
-    const onConfirmed = () => {
         if (location == null || login == null) {
             return;
         }
         Storage.deleteData(location);
     };
 
-    const onDisconnectActive = () => {
-        hide();
+    const onDisconnect = () => {
         dispatch(confirmBox({
             message: t("want-disconnect"),
             yes: t("disconnect"),
             no: t("cancel"),
-            onYes: onConfirmed,
+            onYes: onDisconnectConfirmed,
             variant: "danger"
         }));
     }
 
+    const onItemClick = (location: string) => () => {
+        Storage.switchData(location);
+        hide();
+    };
+
+    const onAddClick = () => {
+        dispatch(openConnectDialog());
+        hide();
+    };
+
     return (
         <div id="connections">
-            {roots.map(root => (
-                root.url === location ?
-                    <div className="connection-item active" key={root.url}>
-                        <div className="connection">
-                            <NodeName name={owner.name} verified={owner.verified} correct={owner.correct}
-                                      linked={false} popup={false}/><br/>
-                            {location}<br/>
-                            <span className="connected">{t("connected")}</span>
-                        </div>
-                        <div className="connection-buttons">
-                            <div className="disconnect" title={t("disconnect")} onClick={onDisconnectActive}>
-                                <FontAwesomeIcon icon={faSignOutAlt}/>
-                            </div>
-                        </div>
+            {activeRoot &&
+                <div className="connection-item active">
+                    <Jump className="connection" nodeName={REL_HOME} href="/"
+                          onNear={onActiveItemClick} onFar={onActiveItemClick}>
+                        <NodeName name={owner.name} verified={owner.verified} correct={owner.correct}
+                                  linked={false} popup={false}/>
+                        <div className="location">{location}</div>
+                        <div className="connected">{t("connected")}</div>
+                    </Jump>
+                    <div className="disconnect" onClick={onDisconnect}>{t("disconnect")}</div>
+                </div>
+            }
+            {roots.filter(root => root.url !== location).map(root => (
+                <div className="connection-item" key={root.url}>
+                    <div className="connection" onClick={onItemClick(root.url)}>
+                        {root.name ?
+                            <NodeName name={root.name} linked={false} popup={false}/>
+                        :
+                            <div className="no-name">{t("no-name-known")}</div>
+                        }
+                        <div className="location">{root.url}</div>
                     </div>
-                :
-                    <ConnectionItem key={root.url} name={root.name} url={root.url}
-                                    onClick={onItemClick(root.url)}
-                                    onDisconnect={onDisconnect(root.url)}/>
+                </div>
             ))}
             <div className="connection-add" onClick={onAddClick}>
-                <FontAwesomeIcon icon={faPlus}/> {t("add-connection")}
+                <Icon icon={msAdd}/> {t("add-connection")}
             </div>
         </div>
     );

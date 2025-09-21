@@ -18,6 +18,7 @@ export default function ConnectionsButton() {
                             className="home-avatar"/>
                 }
                 detached
+                placement="bottom-end"
                 offset={[0, 10]}
             >
                 <Connections/>

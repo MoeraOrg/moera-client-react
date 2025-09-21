@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 import { Modifier, usePopper } from 'react-popper';
-import { PositioningStrategy } from '@popperjs/core';
+import { Placement, PositioningStrategy } from '@popperjs/core';
 
 import { PopoverContext } from "ui/control";
 import { useOverlay } from "ui/overlays/overlays";
@@ -14,6 +14,7 @@ interface Props {
     textClassName?: string;
     title?: string;
     detached?: boolean;
+    placement?: Placement;
     strategy?: PositioningStrategy;
     offset?: [number, number?];
     parentOverlayId?: string;
@@ -22,7 +23,7 @@ interface Props {
 }
 
 export function Popover({
-    className, text, textClassName, title, detached, strategy = "fixed", offset, parentOverlayId,
+    className, text, textClassName, title, detached, placement = "bottom", strategy = "fixed", offset, parentOverlayId,
     onToggle, children
 }: Props) {
     const [visible, setVisible] = useState<boolean>(false);
@@ -36,7 +37,7 @@ export function Popover({
         modifiers.push({name: "offset", options: {offset}});
     }
     const {styles, attributes, state, forceUpdate} =
-        usePopper(buttonRef, popperRef, {placement: "bottom", strategy, modifiers});
+        usePopper(buttonRef, popperRef, {placement, strategy, modifiers});
 
     useEffect(() => {
         if (onToggle != null) {

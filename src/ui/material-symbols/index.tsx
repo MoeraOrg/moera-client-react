@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { ReactComponent as msAdd } from "ui/material-symbols/add.isvg";
 import { ReactComponent as msAddBox } from "ui/material-symbols/add_box.isvg";
 import { ReactComponent as msAddLink } from "ui/material-symbols/add_link.isvg";
 import { ReactComponent as msAlternateEmail } from "ui/material-symbols/alternate_email.isvg";
@@ -116,6 +117,7 @@ import { ReactComponent as msVisibilityOff } from "ui/material-symbols/visibilit
 import { ReactComponent as msVolunteerActivism } from "ui/material-symbols/volunteer_activism.isvg";
 
 export {
+    msAdd,
     msAddBox,
     msAddLink,
     msAlternateEmail,
