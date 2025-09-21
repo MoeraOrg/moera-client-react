@@ -38,6 +38,7 @@ export default function App() {
     return (
         // FIXME React.CSSProperties does not include CSS variables
         <div style={{
+            "--page-header-height": "4.25rem",
             "--feed-width": `${feedWidth}px`,
             "--posting-font-magnitude": `${[postingFontMagnitude]}%`
         } as any}>

@@ -10,6 +10,6 @@
     }
 
     .explore-page .feed-top-box {
-        top: 5.7rem;
+        top: calc(var(--page-header-height) + 3rem);
     }
 }

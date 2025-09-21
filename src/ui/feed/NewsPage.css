@@ -9,5 +9,5 @@
 }
 
 .news-page .feed-top-box {
-    top: 3rem;
+    top: calc(var(--page-header-height) + .3rem);
 }

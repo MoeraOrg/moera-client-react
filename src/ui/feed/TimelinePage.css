@@ -6,6 +6,6 @@
 
 @media only screen and (min-width: 992px) {
     .timeline-page .feed-top-box {
-        top: 9rem;
+        top: calc(var(--page-header-height) + 6.3rem);
     }
 }

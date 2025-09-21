@@ -6,7 +6,6 @@ import Jump from "ui/navigation/Jump";
 import { useMainMenuHomeNews, useMainMenuTimeline } from "ui/mainmenu/pages/main-menu";
 import { ReactComponent as LogoSvg } from "ui/mainmenu/logo/logo.isvg";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
-import "./Logo.css";
 
 interface LogoImageProps {
     className?: string;
@@ -26,9 +25,9 @@ export default function Logo() {
     const href = connectedToHome ? newsHref : timelineHref;
 
     return (
-        <div id="logo" className="navbar-brand">
+        <div id="logo">
             <Jump nodeName={nodeName} href={href}>
-                <img id="logo-image" src="/pics/logo-o-32.png" alt="Moera"/>
+                <LogoImage width="4.6rem"/>
             </Jump>
         </div>
     );

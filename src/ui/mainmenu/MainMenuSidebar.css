@@ -1,6 +1,6 @@
 #main-menu-sidebar {
     position: sticky;
-    top: 3.7rem;
+    top: calc(var(--page-header-height) + 1rem);
     margin-top: 1rem;
     border-radius: 1rem;
     padding: 1rem;

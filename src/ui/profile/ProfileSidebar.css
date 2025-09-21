@@ -4,7 +4,7 @@
     padding: 1.5rem;
     background-color: white;
     position: sticky;
-    top: 3.7rem;
+    top: calc(var(--page-header-height) + 1rem);
 }
 
 #profile-sidebar .panel {

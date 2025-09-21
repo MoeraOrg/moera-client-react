@@ -1,40 +1,29 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
-import { isAtNode } from "state/node/selectors";
-import { useIsTinyScreen } from "ui/hook";
+import { OnlyDesktop } from "ui/control";
 import Logo from "ui/mainmenu/logo/Logo";
 import OwnerSwitcher from "ui/mainmenu/owner/OwnerSwitcher";
-import MainMenuPages from "ui/mainmenu/pages/MainMenuPages";
 import ConnectionStatus from "ui/mainmenu/connectionstatus/ConnectionStatus";
 import RefreshIndicator from "ui/mainmenu/RefreshIndicator";
 import "./DesktopMainMenu.css";
 
-export default function DesktopMainMenu() {
-    const atNode = useSelector(isAtNode);
+const DesktopMainMenu = () => (
+    <OnlyDesktop>
+        <nav id="main-menu">
+            <div className="main-menu-content">
+                <div className="main-menu-left-pane">
+                    <Logo/>
+                </div>
+                <div className="main-menu-center-pane">
+                    <OwnerSwitcher/>
+                </div>
+                <div className="main-menu-right-pane">
+                    <ConnectionStatus/>
+                </div>
+            </div>
+        </nav>
+        <RefreshIndicator/>
+    </OnlyDesktop>
+);
 
-    const tinyScreen = useIsTinyScreen();
-    if (tinyScreen) {
-        return null;
-    }
-
-    return (
-        <>
-            <nav id="main-menu" className="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-                <Logo/>
-                {atNode ?
-                    <>
-                        <OwnerSwitcher/>
-                        <div className="collapse navbar-collapse">
-                            <MainMenuPages/>
-                        </div>
-                    </>
-                :
-                    <div className="collapse navbar-collapse"/>
-                }
-                <ConnectionStatus/>
-            </nav>
-            <RefreshIndicator/>
-        </>
-    );
-}
+export default DesktopMainMenu;
