@@ -1,20 +1,30 @@
 #owner-navigator {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    padding-right: 1rem;
+    position: relative;
 }
 
 #owner-navigator INPUT {
-    margin-right: .5rem;
     margin-bottom: 0;
-    flex: 0 1 auto;
-    min-width: 0;
+    width: 30rem;
+    background-color: var(--bs-gray-100);
+    border-radius: .75rem;
+    padding-left: 2.4rem;
+}
+
+#owner-navigator INPUT::placeholder {
+    color: var(--bs-gray-600);
+}
+
+#owner-navigator .search-icon {
+    position: absolute;
+    top: .55rem;
+    left: .75rem;
+    z-index: var(--zindex-input-overlay);
+    color: var(--bs-gray-400);
 }
 
 #owner-navigator .name-select {
     position: fixed;
-    top: 2.55rem;
+    top: 3.5rem;
     width: min(30rem, 100vw - 1rem);
     max-height: 30em;
     padding-top: .25rem;
@@ -22,11 +32,7 @@
     background-color: white;
     border: 0;
     box-shadow: 0 12px 16px 0 rgb(0 0 0 / 16%);
-}
-
-#owner-navigator .name-select HR {
-    margin: .5rem;
-    color: var(--bs-gray-400);
+    z-index: var(--zindex-fixed);
 }
 
 @media only screen and (max-width: 991px) {
@@ -37,8 +43,13 @@
 
 @media only screen and (min-width: 992px) {
     #owner-navigator .name-select {
-        left: 5.8rem;
+        left: calc((100vw - 30rem) / 2);
     }
+}
+
+#owner-navigator .name-select HR {
+    margin: .5rem;
+    color: var(--bs-gray-400);
 }
 
 #owner-navigator .name-select .search-item {

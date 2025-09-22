@@ -1,7 +1,7 @@
 #back-box {
     display: block;
     position: sticky;
-    z-index: var(--zindex-page-header);
+    z-index: var(--zindex-back-box);
     border-bottom-left-radius: 1rem;
     border-bottom-right-radius: 1rem;
 }

@@ -5,13 +5,15 @@ import deepEqual from 'react-fast-compare';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
-import { ownerSwitch, ownerSwitchClose } from "state/node/actions";
+import { ownerSwitch } from "state/node/actions";
 import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { goToSearch } from "state/navigation/actions";
+import { isAtSearchPage } from "state/navigation/selectors";
 import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
 import { searchHistoryDelete, searchHistoryPrepare } from "state/search/actions";
 import { emptySearchFilter } from "state/search/empty";
+import { getSearchQuery } from "state/search/selectors";
 import { NameSuggestion } from "ui/control";
 import { Icon, msCancel, msHistory, msSearch } from "ui/material-symbols";
 import { useSuggestions } from "ui/hook";
@@ -27,9 +29,12 @@ export default function OwnerNavigator() {
     const history = useSelector((state: ClientState) => state.search.history);
     const homeName = useSelector(getHomeOwnerName);
     const homeAvatar = useSelector(getHomeOwnerAvatar);
+    const atSearch = useSelector(isAtSearchPage);
+    const defaultQuery = useSelector(getSearchQuery);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
+    const [focused, setFocused] = React.useState<boolean>(false);
     const inputDom = useRef<HTMLInputElement>(null);
     const listDom = useRef<HTMLDivElement>(null);
 
@@ -42,29 +47,25 @@ export default function OwnerNavigator() {
                     }
                     break;
                 case "search":
-                    dispatch(ownerSwitchClose());
+                    inputDom.current?.blur();
                     if (query) {
                         dispatch(goToSearch(query, "content", emptySearchFilter));
                     }
                     break;
                 case "history":
-                    dispatch(ownerSwitchClose());
+                    inputDom.current?.blur();
                     dispatch(goToSearch(item.query, "content", emptySearchFilter));
                     break;
             }
         } else {
-            dispatch(ownerSwitchClose());
+            inputDom.current?.blur();
         }
-    }
-
-    const onButtonClick = (_: string, performJump: () => void) => {
-        dispatch(ownerSwitchClose());
-        performJump();
     }
 
     const {
         searchList, setSearchList, selectedIndex, query, handleKeyDown, handleChange, handleClick
     } = useSuggestions<SearchListItem>({
+        defaultQuery: atSearch ? defaultQuery : "",
         runQuery: query => {
             dispatch(contactsPrepare(query));
             dispatch(searchHistoryPrepare(query));
@@ -74,6 +75,10 @@ export default function OwnerNavigator() {
         inputDom,
         listDom
     });
+
+    const onInputFocus = () => setFocused(true);
+
+    const onInputBlur = () => setTimeout(() => setFocused(false), 200);
 
     const onHistoryDelete = (index: number) => (event: React.MouseEvent) => {
         const item = searchList[index];
@@ -118,9 +123,11 @@ export default function OwnerNavigator() {
 
     return (
         <div id="owner-navigator">
-            <input type="search" className="form-control" value={query ?? ""} ref={inputDom}
-                   onKeyDown={handleKeyDown} onChange={handleChange}/>
-            <div className={cx("name-select", {"d-none": searchList.length === 0 && !query})} ref={listDom}>
+            <Icon icon={msSearch} size={20} className="search-icon"/>
+            <input type="search" className="form-control" value={query ?? ""} placeholder={t("search")} ref={inputDom}
+                   onKeyDown={handleKeyDown} onChange={handleChange} onFocus={onInputFocus} onBlur={onInputBlur}/>
+            <div className={cx("name-select", {"d-none": !focused || (searchList.length === 0 && !query)})}
+                 ref={listDom}>
                 {searchList.map((item, index) =>
                     <React.Fragment key={index}>
                         {item.type === "history" &&
@@ -176,10 +183,6 @@ export default function OwnerNavigator() {
                     </React.Fragment>
                 )}
             </div>
-            <Jump href={ut`/search?query=${query}`} className="btn btn-secondary btn-sm"
-                  onNear={onButtonClick} onFar={onButtonClick}>
-                <Icon icon={msSearch} size={20}/>
-            </Jump>
         </div>
     );
 }

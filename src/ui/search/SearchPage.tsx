@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { searchScrolled } from "state/search/actions";
-import { getSearchQuery, getSearchTab, hasSearchMoreResults } from "state/search/selectors";
-import { FeedTopBox, Loading, OnlyDesktop } from "ui/control";
-import { useDebounce, useIsTinyScreen } from "ui/hook";
+import { getSearchTab, hasSearchMoreResults } from "state/search/selectors";
+import { FeedTopBox, Loading } from "ui/control";
+import { useDebounce } from "ui/hook";
 import { Icon, msArrowUpward } from "ui/material-symbols";
-import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
+import BackBox from "ui/page/BackBox";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
@@ -19,11 +19,10 @@ import SearchEntry from "ui/search/SearchEntry";
 import SearchShowMore from "ui/search/SearchShowMore";
 import NothingFound from "ui/search/NothingFound";
 import SearchFilterDialog from "ui/search/SearchFilterDialog";
-import { ellipsize } from "util/text";
 import "./SearchPage.css";
+import BackBoxInner from "ui/page/BackBoxInner";
 
 export default function SearchPage() {
-    const query = useSelector(getSearchQuery);
     const tab = useSelector(getSearchTab);
     const entries = useSelector((state: ClientState) => state.search.entries);
     const nodes = useSelector((state: ClientState) => state.search.nodes);
@@ -31,7 +30,6 @@ export default function SearchPage() {
     const loaded = useSelector((state: ClientState) => state.search.loaded);
     const moreResults = useSelector(hasSearchMoreResults);
     const showFilters = useSelector((state: ClientState) => state.search.showFilters);
-    const tinyScreen = useIsTinyScreen();
     const [scrollPosition, setScrollPosition] = useDebounce(0, 250);
     const dispatch = useDispatch();
     const {t} = useTranslation();
@@ -55,18 +53,17 @@ export default function SearchPage() {
 
     return (
         <>
-            <OnlyDesktop>
-                <PageHeader>
-                    <h2>{t("search")}{query ? ": " + ellipsize(query, tinyScreen ? 16 : 40) : ""}</h2>
-                </PageHeader>
-            </OnlyDesktop>
             <MobileMainMenu/>
-            <Page className="search-page">
+            <Page className="search-page tabbed-page">
                 <div className="page-left-pane">
                     <MainMenuSidebar/>
                 </div>
                 <div className="page-central-pane">
-                    <SearchTabs/>
+                    <BackBox>
+                        <BackBoxInner>
+                            <SearchTabs/>
+                        </BackBoxInner>
+                    </BackBox>
                     <FeedTopBox>
                         {scrollPosition > 50 &&
                             <div className="feed-top-button" onClick={onTop}>

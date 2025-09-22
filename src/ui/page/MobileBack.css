@@ -12,7 +12,7 @@
 .mobile-back.sticky {
     position: sticky;
     top: 0;
-    z-index: var(--zindex-page-header);
+    z-index: var(--zindex-back-box);
     transition: box-shadow .2s ease;
 }
 

@@ -179,12 +179,10 @@ export function wrapBlock(field: HTMLTextAreaElement | HTMLInputElement, wrap: s
 export function getPageHeaderHeight(): number {
     const tinyScreen = isTinyScreen();
     const mainMenu = document.getElementById("main-menu");
-    const header = document.getElementById("page-header");
     const backBox = document.getElementById("back-box");
     const mainMenuHeight = mainMenu != null ? mainMenu.getBoundingClientRect().height : 0;
-    const headerHeight = header != null ? header.getBoundingClientRect().height : 0;
     const backBoxHeight = backBox != null ? backBox.getBoundingClientRect().height + (tinyScreen ? 30 : 10) : 0;
-    return mainMenuHeight + headerHeight + backBoxHeight;
+    return mainMenuHeight + backBoxHeight;
 }
 
 export function isElementVisible(element: Element, threshold: number = 0): boolean {

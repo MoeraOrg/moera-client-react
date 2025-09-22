@@ -42,10 +42,6 @@
         height: 20px;
         vertical-align: -.5em;
     }
-
-    #page-header.hidden .feed-goto-button .bottom {
-        display: none;
-    }
 }
 
 .feed-goto-button DIV:has(> .react-datepicker__input-container) {

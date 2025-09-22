@@ -10,8 +10,10 @@ interface UseSuggestionsOptions<L> {
     runQuery: (query: string) => void;
     onSubmit: (query: string | null, success: boolean, result: L | null) => void;
     submitOnEscape?: boolean;
+    submitOnAt?: boolean;
     inputDom: React.RefObject<HTMLInputElement>;
     listDom: React.RefObject<HTMLDivElement>;
+    autoFocus?: boolean;
 }
 
 interface UseSuggestionsResult<L> {
@@ -28,7 +30,7 @@ interface UseSuggestionsResult<L> {
  * USER-[handleChange]->query-[debounce]->queryToLoad-[runQuery]->...-[setSearchList]->searchList
  */
 export function useSuggestions<L>({
-    defaultQuery = "", preprocessQuery, runQuery, onSubmit, submitOnEscape, inputDom, listDom
+    defaultQuery = "", preprocessQuery, runQuery, onSubmit, submitOnEscape, submitOnAt, inputDom, listDom, autoFocus
 }: UseSuggestionsOptions<L>): UseSuggestionsResult<L> {
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const selectedName = useRef<L | null>(null);
@@ -52,12 +54,12 @@ export function useSuggestions<L>({
     }, [runQuery, queryToLoad]);
 
     useEffect(() => {
-        if (inputDom.current) {
+        if (autoFocus && inputDom.current) {
             inputDom.current.focus();
             inputDom.current.select();
         }
         setQuery(defaultQuery);
-    }, [defaultQuery, inputDom]);
+    }, [defaultQuery, autoFocus, inputDom]);
 
     useEffect(() =>
         selectIndex(searchList.findIndex(item => deepEqual(item, selectedName.current))),
@@ -83,7 +85,11 @@ export function useSuggestions<L>({
                 }
                 break;
             case "@":
-                handleSubmit(false, -1);
+                if (submitOnAt) {
+                    handleSubmit(false, -1);
+                } else {
+                    return;
+                }
                 break;
             case "ArrowUp":
                 selectIndex(Math.max(0, selectedIndex - 1));

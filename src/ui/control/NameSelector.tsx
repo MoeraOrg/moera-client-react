@@ -41,8 +41,10 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit}: Props) {
         runQuery: query => dispatch(contactsPrepare(query)),
         onSubmit: (query, success, result) => onSubmit(success, result ?? {nodeName: query, fullName: ""}),
         submitOnEscape: false,
+        submitOnAt: true,
         inputDom,
-        listDom
+        listDom,
+        autoFocus: true
     });
 
     useEffect(() => {
