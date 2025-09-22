@@ -21,6 +21,7 @@ interface UseSuggestionsResult<L> {
     setSearchList: (list: L[] | ((update: L[]) => L[])) => void;
     selectedIndex: number;
     query: string | null;
+    setQuery: (query: string | null) => void;
     handleKeyDown: (event: React.KeyboardEvent) => void;
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleClick: (index: number) => () => void;
@@ -111,5 +112,5 @@ export function useSuggestions<L>({
 
     const handleClick = (index: number) => () => handleSubmit(true, index);
 
-    return {searchList, setSearchList, selectedIndex, query, handleKeyDown, handleChange, handleClick};
+    return {searchList, setSearchList, selectedIndex, query, setQuery, handleKeyDown, handleChange, handleClick};
 }

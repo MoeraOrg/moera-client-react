@@ -8,6 +8,7 @@
     background-color: var(--bs-gray-100);
     border-radius: .75rem;
     padding-left: 2.4rem;
+    padding-right: 2rem;
 }
 
 #search-box INPUT::placeholder {
@@ -20,6 +21,16 @@
     left: .75rem;
     z-index: var(--zindex-input-overlay);
     color: var(--bs-gray-400);
+}
+
+#search-box .cancel {
+    position: absolute;
+    top: .25rem;
+    right: .35rem;
+    z-index: var(--zindex-input-overlay);
+    background-color: transparent;
+    border: 0;
+    color: var(--bs-gray-600);
 }
 
 #search-box .name-select {

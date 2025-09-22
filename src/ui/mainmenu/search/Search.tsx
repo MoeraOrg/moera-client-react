@@ -15,7 +15,7 @@ import { searchHistoryDelete, searchHistoryPrepare } from "state/search/actions"
 import { emptySearchFilter } from "state/search/empty";
 import { getSearchQuery } from "state/search/selectors";
 import { NameSuggestion } from "ui/control";
-import { Icon, msCancel, msHistory, msSearch } from "ui/material-symbols";
+import { Icon, msCancel, msCancelFilled, msHistory, msSearch } from "ui/material-symbols";
 import { useSuggestions } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import { NameListItem, namesListQuery } from "util/names-list";
@@ -63,7 +63,7 @@ export default function Search() {
     }
 
     const {
-        searchList, setSearchList, selectedIndex, query, handleKeyDown, handleChange, handleClick
+        searchList, setSearchList, selectedIndex, query, setQuery, handleKeyDown, handleChange, handleClick
     } = useSuggestions<SearchListItem>({
         defaultQuery: atSearch ? defaultQuery : "",
         runQuery: query => {
@@ -79,6 +79,8 @@ export default function Search() {
     const onInputFocus = () => setFocused(true);
 
     const onInputBlur = () => setTimeout(() => setFocused(false), 200);
+
+    const onClear = () => setQuery("");
 
     const onHistoryDelete = (index: number) => (event: React.MouseEvent) => {
         const item = searchList[index];
@@ -126,6 +128,11 @@ export default function Search() {
             <Icon icon={msSearch} size={20} className="search-icon"/>
             <input type="search" className="form-control" value={query ?? ""} placeholder={t("search")} ref={inputDom}
                    onKeyDown={handleKeyDown} onChange={handleChange} onFocus={onInputFocus} onBlur={onInputBlur}/>
+            {query &&
+                <button className="cancel" title={t("clear")} onClick={onClear}>
+                    <Icon icon={msCancelFilled} size={16}/>
+                </button>
+            }
             <div className={cx("name-select", {"d-none": !focused || (searchList.length === 0 && !query)})}
                  ref={listDom}>
                 {searchList.map((item, index) =>
