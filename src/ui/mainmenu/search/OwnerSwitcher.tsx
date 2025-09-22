@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
 import { ownerSwitchClose, ownerSwitchOpen } from "state/node/actions";
-import OwnerName from "ui/mainmenu/owner/OwnerName";
-import OwnerNavigator from "ui/mainmenu/owner/OwnerNavigator";
+import OwnerName from "ui/mainmenu/search/OwnerName";
+import Search from "ui/mainmenu/search/Search";
 import "./OwnerSwitcher.css";
 
 export default function OwnerSwitcher() {
@@ -49,7 +49,7 @@ export default function OwnerSwitcher() {
     return (
         <div id="owner-switcher" onClick={nameClick}>
             {showNavigator ?
-                <OwnerNavigator/>
+                <Search/>
             :
                 <OwnerName/>
             }

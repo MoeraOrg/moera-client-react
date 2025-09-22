@@ -20,11 +20,11 @@ import { useSuggestions } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import { NameListItem, namesListQuery } from "util/names-list";
 import { ut } from "util/url";
-import "./OwnerNavigator.css";
+import "./Search.css";
 
 type SearchListItem = {type: "name"} & NameListItem | {type: "search"} | {type: "history", query: string};
 
-export default function OwnerNavigator() {
+export default function Search() {
     const contactNames = useSelector(getContacts);
     const history = useSelector((state: ClientState) => state.search.history);
     const homeName = useSelector(getHomeOwnerName);
@@ -122,7 +122,7 @@ export default function OwnerNavigator() {
     }, [contactNames, history, query, setSearchList]);
 
     return (
-        <div id="owner-navigator">
+        <div id="search-box">
             <Icon icon={msSearch} size={20} className="search-icon"/>
             <input type="search" className="form-control" value={query ?? ""} placeholder={t("search")} ref={inputDom}
                    onKeyDown={handleKeyDown} onChange={handleChange} onFocus={onInputFocus} onBlur={onInputBlur}/>

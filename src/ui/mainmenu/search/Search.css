@@ -1,8 +1,8 @@
-#owner-navigator {
+#search-box {
     position: relative;
 }
 
-#owner-navigator INPUT {
+#search-box INPUT {
     margin-bottom: 0;
     width: 30rem;
     background-color: var(--bs-gray-100);
@@ -10,11 +10,11 @@
     padding-left: 2.4rem;
 }
 
-#owner-navigator INPUT::placeholder {
+#search-box INPUT::placeholder {
     color: var(--bs-gray-600);
 }
 
-#owner-navigator .search-icon {
+#search-box .search-icon {
     position: absolute;
     top: .55rem;
     left: .75rem;
@@ -22,7 +22,7 @@
     color: var(--bs-gray-400);
 }
 
-#owner-navigator .name-select {
+#search-box .name-select {
     position: fixed;
     top: 3.5rem;
     width: min(30rem, 100vw - 1rem);
@@ -36,35 +36,35 @@
 }
 
 @media only screen and (max-width: 991px) {
-    #owner-navigator .name-select {
+    #search-box .name-select {
         left: .5rem;
     }
 }
 
 @media only screen and (min-width: 992px) {
-    #owner-navigator .name-select {
+    #search-box .name-select {
         left: calc((100vw - 30rem) / 2);
     }
 }
 
-#owner-navigator .name-select HR {
+#search-box .name-select HR {
     margin: .5rem;
     color: var(--bs-gray-400);
 }
 
-#owner-navigator .name-select .search-item {
+#search-box .name-select .search-item {
     display: grid;
     grid-template-columns: calc(44px + .5rem) auto calc(44px + .5rem);
     padding-top: .25rem;
     padding-bottom: .25rem;
 }
 
-#owner-navigator .name-select .search-item .icon-cell {
+#search-box .name-select .search-item .icon-cell {
     color: var(--bs-gray-600);
     text-align: center;
 }
 
-#owner-navigator .name-select .search-item .body {
+#search-box .name-select .search-item .body {
     position: relative;
     top: .05em;
     color: var(--bs-gray-600);
@@ -72,13 +72,13 @@
     overflow-x: hidden;
 }
 
-#owner-navigator .name-select .item .body {
+#search-box .name-select .item .body {
     color: var(--bs-body-color);
 }
 
-#owner-navigator .name-select .item.selected .icon-cell,
-#owner-navigator .name-select .item.selected:hover .icon-cell,
-#owner-navigator .name-select .item.selected .body,
-#owner-navigator .name-select .item.selected:hover .body {
+#search-box .name-select .item.selected .icon-cell,
+#search-box .name-select .item.selected:hover .icon-cell,
+#search-box .name-select .item.selected .body,
+#search-box .name-select .item.selected:hover .body {
     color: white;
 }

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { OnlyDesktop } from "ui/control";
 import Logo from "ui/mainmenu/logo/Logo";
-import OwnerNavigator from "ui/mainmenu/owner/OwnerNavigator";
+import Search from "ui/mainmenu/search/Search";
 import ConnectionStatus from "ui/mainmenu/connectionstatus/ConnectionStatus";
 import RefreshIndicator from "ui/mainmenu/RefreshIndicator";
 import "./DesktopMainMenu.css";
@@ -15,7 +15,7 @@ const DesktopMainMenu = () => (
                     <Logo/>
                 </div>
                 <div className="main-menu-center-pane">
-                    <OwnerNavigator/>
+                    <Search/>
                 </div>
                 <div className="main-menu-right-pane">
                     <ConnectionStatus/>
