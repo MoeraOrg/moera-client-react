@@ -37,11 +37,11 @@ export default function PeopleSearch() {
             <div className="input-group input-group-sm">
                 <span className="input-group-text"><Icon icon={msSearch} size={16}/></span>
                 {clear &&
-                    <button className="cancel" title={t("clear")} onClick={onClear}>
+                    <button className="cancel" title={t("clear")} onClick={onClear} aria-label="Clear search">
                         <Icon icon={msCancelFilled} size={20}/>
                     </button>
                 }
-                <input type="text" className="form-control" onKeyDown={onKeyDown} onChange={onChange} ref={inputRef}/>
+                <input type="search" className="form-control" onKeyDown={onKeyDown} onChange={onChange} ref={inputRef}/>
             </div>
         </div>
     );

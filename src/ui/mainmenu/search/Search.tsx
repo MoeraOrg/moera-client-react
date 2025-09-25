@@ -35,6 +35,7 @@ export default function Search() {
     const {t} = useTranslation();
 
     const [focused, setFocused] = React.useState<boolean>(false);
+    const inputBlurTimeout = useRef<number | NodeJS.Timeout | null>(null);
     const inputDom = useRef<HTMLInputElement>(null);
     const listDom = useRef<HTMLDivElement>(null);
 
@@ -78,9 +79,21 @@ export default function Search() {
 
     const onInputFocus = () => setFocused(true);
 
-    const onInputBlur = () => setTimeout(() => setFocused(false), 200);
+    const onInputBlur = () => {
+        inputBlurTimeout.current = setTimeout(() => {
+            setFocused(false);
+            inputBlurTimeout.current = null;
+        }, 200);
+    }
 
-    const onClear = () => setQuery("");
+    const onClear = () => {
+        setQuery("");
+        if (inputBlurTimeout.current != null) {
+            clearTimeout(inputBlurTimeout.current);
+            inputBlurTimeout.current = null;
+        }
+        inputDom.current?.focus();
+    }
 
     const onHistoryDelete = (index: number) => (event: React.MouseEvent) => {
         const item = searchList[index];
@@ -129,7 +142,7 @@ export default function Search() {
             <input type="search" className="form-control" value={query ?? ""} placeholder={t("search")} ref={inputDom}
                    onKeyDown={handleKeyDown} onChange={handleChange} onFocus={onInputFocus} onBlur={onInputBlur}/>
             {query &&
-                <button className="cancel" title={t("clear")} onClick={onClear}>
+                <button className="cancel" title={t("clear")} onClick={onClear} aria-label="Clear search">
                     <Icon icon={msCancelFilled} size={16}/>
                 </button>
             }
