@@ -18,3 +18,7 @@
     padding-left: .2rem;
     padding-right: .2rem;
 }
+
+SPAN.active .bell-button {
+    background-color: var(--highlight);
+}
