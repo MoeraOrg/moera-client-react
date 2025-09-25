@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import cx from 'classnames';
 
 import { Icon, msArrowBack, msMoreVert } from "ui/material-symbols";
-import { DropdownMenu } from "ui/control";
+import { DropdownMenu, OnlyMobile } from "ui/control";
 import { MenuItem } from "ui/control/dropdownmenu/dropdown-menu-types";
-import { useIntersect, useIsTinyScreen } from "ui/hook";
 import Jump from "ui/navigation/Jump";
+import { useScrollShadow } from "ui/mainmenu/scroll-shadow";
 import { RelNodeName } from "util/rel-node-name";
 import "./MobileBack.css";
 
@@ -23,24 +23,12 @@ interface Props {
 export default function MobileBack({
     nodeName, href, className, sticky, onBack, menuContent, menuItems, children
 }: Props) {
-    const [shadow, setShadow] = useState<boolean>(false);
-
-    const onIntersect = useCallback(
-        (intersecting: boolean) => setShadow(!intersecting),
-        [setShadow]
-    );
-
-    const sentinel = useIntersect(onIntersect);
-    const tinyScreen = useIsTinyScreen();
-
-    if (!tinyScreen) {
-        return null;
-    }
+    const {shadow, sentinel} = useScrollShadow();
 
     const onJump = onBack ? () => onBack() : undefined;
 
     return (
-        <>
+        <OnlyMobile>
             <div className="mobile-back-sentinel" aria-hidden="true" ref={sentinel}/>
             <div className={cx("mobile-back", {sticky, "mobile-back-shadow": shadow}, className)}>
                 <Jump className="btn btn-silent-round" nodeName={nodeName} href={href} onNear={onJump} onFar={onJump}>
@@ -57,6 +45,6 @@ export default function MobileBack({
                     </DropdownMenu>
                 }
             </div>
-        </>
+        </OnlyMobile>
     );
 }

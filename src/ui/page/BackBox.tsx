@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 
-import { useIntersect } from "ui/hook";
+import { useScrollShadow } from "ui/mainmenu/scroll-shadow";
 import { BackBoxContext } from "ui/page/backbox-context";
 import "./BackBox.css";
 
@@ -9,14 +9,7 @@ interface Props {
 }
 
 export default function BackBox({children}: Props) {
-    const [shadow, setShadow] = useState<boolean>(false);
-
-    const onIntersect = useCallback(
-        (intersecting: boolean) => setShadow(!intersecting),
-        [setShadow]
-    );
-
-    const sentinel = useIntersect(onIntersect);
+    const {shadow, sentinel} = useScrollShadow();
 
     return (
         <>
