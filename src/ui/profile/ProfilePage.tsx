@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { getOwnerCard } from "state/node/selectors";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import NewsCounter from "ui/mainmenu/NewsCounter";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { Page } from "ui/page/Page";
 import DesktopBack from "ui/page/DesktopBack";
@@ -32,7 +33,7 @@ export default function ProfilePage() {
                 <BackBox>
                     <BackBoxInner>
                         <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                            {t("back-news")}
+                            {t("back-news")}<NewsCounter/>
                         </DesktopBack>
                         <ProfileTabs value="about"/>
                     </BackBoxInner>

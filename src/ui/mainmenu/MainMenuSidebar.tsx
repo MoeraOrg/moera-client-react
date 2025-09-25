@@ -11,6 +11,7 @@ import { Avatar, OnlyDesktop } from "ui/control";
 import { Icon, MaterialSymbol, msExplore, msPublic, msReport, msSettings } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import NewsCounter from "ui/mainmenu/NewsCounter";
 import { getFeedTitle } from "ui/feed/feeds";
 import { REL_HOME } from "util/rel-node-name";
 import "./MainMenuSidebar.css";
@@ -90,6 +91,7 @@ export default function MainMenuSidebar({selected}: Props) {
                             >
                                 <Icon className="icon" icon={item.icon} size={24}/>
                                 {item.title}
+                                {item.value === "news" && <NewsCounter/>}
                             </Jump>
                         </li>
                     ))}

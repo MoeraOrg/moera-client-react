@@ -18,3 +18,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.desktop-back .content .badge {
+    background-color: var(--bs-primary);
+    color: white;
+    margin-left: .5rem;
+}

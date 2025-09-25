@@ -27,6 +27,16 @@
     margin-right: .5rem;
 }
 
+#main-menu-sidebar .nav-link .badge {
+    background-color: var(--bs-primary);
+    color: white;
+}
+
+#main-menu-sidebar .nav-link.active .badge {
+    background-color: white;
+    color: var(--bs-primary);
+}
+
 #main-menu-sidebar .nav HR {
     border-color: var(--bs-gray-500);
     margin-top: .25rem;

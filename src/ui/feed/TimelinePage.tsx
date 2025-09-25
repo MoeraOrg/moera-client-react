@@ -8,6 +8,7 @@ import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
 import DesktopBack from "ui/page/DesktopBack";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import NewsCounter from "ui/mainmenu/NewsCounter";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import ProfileTitle from "ui/profile/ProfileTitle";
 import ProfileTabs from "ui/profile/ProfileTabs";
@@ -41,7 +42,7 @@ export default function TimelinePage() {
                     <BackBox>
                         <BackBoxInner>
                             <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                                {t("back-news")}
+                                {t("back-news")}<NewsCounter/>
                             </DesktopBack>
                             <ProfileTabs value="posts">
                                 {navigable &&

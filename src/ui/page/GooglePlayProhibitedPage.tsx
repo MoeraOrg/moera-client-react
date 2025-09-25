@@ -7,6 +7,7 @@ import DesktopBack from "ui/page/DesktopBack";
 import MobileBack from "ui/page/MobileBack";
 import { ReactComponent as GooglePlayProhibited } from "ui/page/GooglePlayProhibited.isvg";
 import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import NewsCounter from "ui/mainmenu/NewsCounter";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { REL_HOME } from "util/rel-node-name";
 import "./GooglePlayProhibitedPage.css";
@@ -23,7 +24,7 @@ export default function GooglePlayProhibitedPage() {
                 </MobileBack>
                 <div className="page-central-pane">
                     <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                        {t("back-news")}
+                        {t("back-news")}<NewsCounter/>
                     </DesktopBack>
                     <div className="content-panel">
                         <GooglePlayProhibited/>
