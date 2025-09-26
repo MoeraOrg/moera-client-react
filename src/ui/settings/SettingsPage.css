@@ -24,7 +24,7 @@
     .settings-notebook-switcher {
         width: 100vw;
         height: min-content;
-        overflow-x: hidden;
+        overflow: hidden;
     }
 
     .settings-notebook {
@@ -52,9 +52,9 @@
     .settings-notebook .settings-left {
         display: grid;
         grid-template:
-            " main-menu"   2.75rem
+            " main-menu"   4.12rem
             " tabs"        5.1rem
-            " menu"        auto
+            " menu"        1fr
             " bottom-menu" 2.85rem
             / auto;
     }
@@ -63,7 +63,7 @@
         display: grid;
         grid-template:
             " back"    4.6rem
-            " sheet"   auto
+            " sheet"   1fr
             " buttons" 3.875rem
             / auto;
         padding-right: 1rem;
