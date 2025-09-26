@@ -15,7 +15,7 @@ export default function NewsPage() {
 
     return (
         <>
-            <MobileMainMenu/>
+            <MobileMainMenu shadow/>
             <Page className="news-page">
                 <div className="page-left-pane">
                     <MainMenuSidebar selected="news"/>

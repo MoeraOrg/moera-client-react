@@ -1,32 +1,36 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import cx from 'classnames';
 
-import { isAtNode } from "state/node/selectors";
-import { useIsTinyScreen } from "ui/hook";
+import Sandwich from "ui/mainmenu/Sandwich";
 import Logo from "ui/mainmenu/logo/Logo";
-import OwnerSwitcher from "ui/mainmenu/search/OwnerSwitcher";
-import VerticalMenuToggler from "ui/mainmenu/vertical/VerticalMenuToggler";
+import { useScrollShadow } from "ui/mainmenu/scroll-shadow";
 import RefreshIndicator from "ui/mainmenu/RefreshIndicator";
+import { Icon, msSearch, msSettings } from "ui/material-symbols";
+import { Button, OnlyMobile } from "ui/control";
+import Jump from "ui/navigation/Jump";
+import "./MobileMainMenu.css";
 
-export default function MobileMainMenu() {
-    const atNode = useSelector(isAtNode);
+interface Props {
+    shadow?: boolean;
+}
 
-    const tinyScreen = useIsTinyScreen();
-    if (!tinyScreen) {
-        return null;
-    }
+export default function MobileMainMenu({shadow: hasShadow}: Props) {
+    const {shadow, sentinel} = useScrollShadow();
 
     return (
-        <>
-            <nav id="main-menu" className="navbar sticky-top navbar-dark bg-dark">
+        <OnlyMobile>
+            <div id="main-menu-sentinel" aria-hidden="true" ref={sentinel}/>
+            <nav id="main-menu" className={cx({shadow: hasShadow && shadow})}>
+                <Sandwich/>
                 <Logo/>
-                {atNode &&
-                    <OwnerSwitcher/>
-                }
-                <div className="collapse navbar-collapse"/>
-                <VerticalMenuToggler/>
+                <Jump className="btn btn-tool-round" href="/settings">
+                    <Icon icon={msSettings} size={20}/>
+                </Jump>
+                <Button variant="tool-round">
+                    <Icon icon={msSearch} size={20}/>
+                </Button>
             </nav>
             <RefreshIndicator/>
-        </>
+        </OnlyMobile>
     );
 }

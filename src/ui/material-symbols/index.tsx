@@ -69,6 +69,7 @@ import { ReactComponent as msListAlt } from "ui/material-symbols/list_alt.isvg";
 import { ReactComponent as msLiveHelp } from "ui/material-symbols/live_help.isvg";
 import { ReactComponent as msLock } from "ui/material-symbols/lock.isvg";
 import { ReactComponent as msMediaLink } from "ui/material-symbols/media_link.isvg";
+import { ReactComponent as msMenu } from "ui/material-symbols/menu.isvg";
 import { ReactComponent as msMoreHoriz } from "ui/material-symbols/more_horiz.isvg";
 import { ReactComponent as msMoreVert } from "ui/material-symbols/more_vert.isvg";
 import { ReactComponent as msMoreVert12 } from "ui/material-symbols/more_vert12.isvg";
@@ -187,6 +188,7 @@ export {
     msKeyboardArrowRight,
     msKeyboardArrowUp,
     msMediaLink,
+    msMenu,
     msMoreHoriz,
     msMoreVert,
     msMoreVert12,

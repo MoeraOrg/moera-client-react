@@ -53,7 +53,7 @@ export default function SearchPage() {
 
     return (
         <>
-            <MobileMainMenu/>
+            <MobileMainMenu shadow/>
             <Page className="search-page tabbed-page">
                 <div className="page-left-pane">
                     <MainMenuSidebar/>
