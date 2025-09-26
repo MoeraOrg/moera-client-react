@@ -19,10 +19,13 @@ interface UseSearchSuggestionsResult {
     query: string | null;
     searchList: SearchListItem[];
     selectedIndex: number;
+    focused: boolean;
     handleKeyDown: (event: React.KeyboardEvent) => void;
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    handleClick: (index: number) => () => void;
+    handleFocus: () => void;
+    handleBlur: () => void;
     handleClear: () => void;
+    handleClick: (index: number) => () => void;
     handleHistoryDelete: (index: number) => (event: React.MouseEvent) => void;
     inputDom: React.RefObject<HTMLInputElement>;
     listDom: React.RefObject<HTMLDivElement>;
@@ -35,9 +38,19 @@ export function useSearchSuggestions(): UseSearchSuggestionsResult {
     const defaultQuery = useSelector(getSearchQuery);
     const dispatch = useDispatch();
 
+    const [focused, setFocused] = React.useState<boolean>(false);
     const inputBlurTimeout = useRef<number | NodeJS.Timeout | null>(null);
     const inputDom = useRef<HTMLInputElement>(null);
     const listDom = useRef<HTMLDivElement>(null);
+
+    const onInputFocus = () => setFocused(true);
+
+    const onInputBlur = () => {
+        inputBlurTimeout.current = setTimeout(() => {
+            setFocused(false);
+            inputBlurTimeout.current = null;
+        }, 200);
+    }
 
     const onSubmit = (success: boolean, item: SearchListItem) => {
         if (success) {
@@ -128,7 +141,8 @@ export function useSearchSuggestions(): UseSearchSuggestionsResult {
     }, [contactNames, history, query, setSearchList]);
 
     return {
-        query, searchList, selectedIndex, handleKeyDown, handleChange, handleClick, handleClear: onClear,
+        query, searchList, selectedIndex, focused, handleKeyDown, handleChange,
+        handleFocus: onInputFocus, handleBlur: onInputBlur, handleClear: onClear, handleClick,
         handleHistoryDelete: onHistoryDelete, inputDom, listDom
     };
 }
