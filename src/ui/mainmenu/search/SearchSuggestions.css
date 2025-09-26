@@ -1,4 +1,4 @@
-#search-box .name-select {
+.search-suggestions.name-select {
     position: fixed;
     top: 3.5rem;
     width: min(30rem, 100vw - 1rem);
@@ -12,35 +12,35 @@
 }
 
 @media only screen and (max-width: 991px) {
-    #search-box .name-select {
+    .search-suggestions.name-select {
         left: .5rem;
     }
 }
 
 @media only screen and (min-width: 992px) {
-    #search-box .name-select {
+    .search-suggestions.name-select {
         left: calc((100vw - 30rem) / 2);
     }
 }
 
-#search-box .name-select HR {
+.search-suggestions.name-select HR {
     margin: .5rem;
     color: var(--bs-gray-400);
 }
 
-#search-box .name-select .search-item {
+.search-suggestions.name-select .search-item {
     display: grid;
     grid-template-columns: calc(44px + .5rem) auto calc(44px + .5rem);
     padding-top: .25rem;
     padding-bottom: .25rem;
 }
 
-#search-box .name-select .search-item .icon-cell {
+.search-suggestions.name-select .search-item .icon-cell {
     color: var(--bs-gray-600);
     text-align: center;
 }
 
-#search-box .name-select .search-item .body {
+.search-suggestions.name-select .search-item .body {
     position: relative;
     top: .05em;
     color: var(--bs-gray-600);
@@ -48,13 +48,13 @@
     overflow-x: hidden;
 }
 
-#search-box .name-select .item .body {
+.search-suggestions.name-select .item .body {
     color: var(--bs-body-color);
 }
 
-#search-box .name-select .item.selected .icon-cell,
-#search-box .name-select .item.selected:hover .icon-cell,
-#search-box .name-select .item.selected .body,
-#search-box .name-select .item.selected:hover .body {
+.search-suggestions.name-select .item.selected .icon-cell,
+.search-suggestions.name-select .item.selected:hover .icon-cell,
+.search-suggestions.name-select .item.selected .body,
+.search-suggestions.name-select .item.selected:hover .body {
     color: white;
 }

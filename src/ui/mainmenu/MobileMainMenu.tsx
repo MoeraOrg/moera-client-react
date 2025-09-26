@@ -6,7 +6,7 @@ import Logo from "ui/mainmenu/logo/Logo";
 import { useScrollShadow } from "ui/mainmenu/scroll-shadow";
 import RefreshIndicator from "ui/mainmenu/RefreshIndicator";
 import { Icon, msSearch, msSettings } from "ui/material-symbols";
-import { Button, OnlyMobile } from "ui/control";
+import { OnlyMobile } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import "./MobileMainMenu.css";
 
@@ -26,9 +26,9 @@ export default function MobileMainMenu({shadow: hasShadow}: Props) {
                 <Jump className="btn btn-tool-round" href="/settings">
                     <Icon icon={msSettings} size={20}/>
                 </Jump>
-                <Button variant="tool-round">
+                <Jump className="btn btn-tool-round" href="/search">
                     <Icon icon={msSearch} size={20}/>
-                </Button>
+                </Jump>
             </nav>
             <RefreshIndicator/>
         </OnlyMobile>

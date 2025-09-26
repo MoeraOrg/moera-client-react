@@ -6,4 +6,28 @@
     .search-page {
         padding-bottom: 2rem;
     }
+
+    .search-page #search-box INPUT {
+        width: calc(100% - 1rem);
+        height: 2.75rem;
+    }
+
+    .search-page #search-box .search-icon {
+        top: .7rem;
+    }
+
+    .search-page #search-box .cancel {
+        top: .3rem;
+        right: 1.35rem;
+    }
+
+    .search-page .search-suggestions.name-select {
+        position: static;
+        width: 100%;
+        height: calc(100vh - 6.9rem);
+        max-height: unset;
+        overflow-y: auto;
+        box-shadow: unset;
+        z-index: unset;
+    }
 }

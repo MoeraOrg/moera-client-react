@@ -173,7 +173,7 @@ export class OverlaysManager {
     mobileBack(): void {
         const overlay = this.topOverlay;
         if (overlay.lower == null) {
-            window.Android?.back();
+            window.Android ? window.Android.back() : window.history.back();
         } else if (overlay.closeOnBack) {
             this.closeOverlay(overlay);
         }

@@ -23,7 +23,7 @@ interface Props {
 }
 
 function SearchSuggestions(
-    {query, searchList, selectedIndex, handleClick, onHistoryDelete, visible}: Props,
+    {query, searchList, selectedIndex, handleClick, onHistoryDelete, visible = true}: Props,
     ref: ForwardedRef<HTMLDivElement>
 ) {
     const homeName = useSelector(getHomeOwnerName);
@@ -31,7 +31,7 @@ function SearchSuggestions(
     const {t} = useTranslation();
 
     return (
-        <div className={cx("name-select", {"d-none": !visible})} ref={ref}>
+        <div className={cx("search-suggestions", "name-select", {"d-none": !visible})} ref={ref}>
             {searchList.map((item, index) =>
                 <React.Fragment key={index}>
                     {item.type === "history" &&
