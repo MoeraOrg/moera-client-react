@@ -1,0 +1,20 @@
+@media only screen and (min-width: 992px) {
+    .search-page .feed-top-box {
+        top: calc(var(--page-header-height) + 2.3rem);
+    }
+}
+
+.search-page .nodes .person {
+    margin-bottom: 1rem;
+    padding: 0;
+}
+
+.search-page .nodes .person .details .full-name {
+    font-size: 1rem;
+}
+
+.search-page .nodes .person .title {
+    grid-area: status;
+    font-size: .88rem;
+    line-height: 143%;
+}

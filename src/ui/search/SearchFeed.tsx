@@ -12,6 +12,7 @@ import SearchNode from "ui/search/SearchNode";
 import SearchEntry from "ui/search/SearchEntry";
 import SearchShowMore from "ui/search/SearchShowMore";
 import NothingFound from "ui/search/NothingFound";
+import "./SearchFeed.css";
 
 export default function SearchFeed() {
     const tab = useSelector(getSearchTab);
