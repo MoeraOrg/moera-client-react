@@ -124,7 +124,8 @@ export default function AvatarEditDialog() {
     return (
         <ModalDialog
             title={t("create-avatar")}
-            className="avatar-edit-dialog modal-fullscreen-lg-down"
+            className="avatar-edit-dialog"
+            expand
             onClose={onClose}
         >
             <div className="modal-body">

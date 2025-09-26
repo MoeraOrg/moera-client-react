@@ -25,7 +25,7 @@ export default function MobileBack({
 }: Props) {
     const {shadow, sentinel} = useScrollShadow();
 
-    const onJump = onBack ? () => onBack() : undefined;
+    const onJump = () => onBack ? onBack() : window.overlays.mobileBack();
 
     return (
         <OnlyMobile>

@@ -7,13 +7,16 @@ import { tTitle } from "i18n";
 import { getFeedWidth } from "state/settings/selectors";
 import { CloseButton, Loading, ModalDialogContext } from "ui/control";
 import { useOverlay } from "ui/overlays/overlays";
+import { useIsTinyScreen } from "ui/hook";
 import "./ModalDialog.css";
+import MobileBack from "ui/page/MobileBack";
 
 interface Props {
     title?: string;
     size?: string;
     className?: string;
     centered?: boolean;
+    expand?: boolean;
     shadowClick?: boolean;
     loading?: boolean;
     parentOverlayId?: string;
@@ -23,12 +26,14 @@ interface Props {
 }
 
 export function ModalDialog({
-    title, size, className, centered = true, shadowClick = true, loading, parentOverlayId, onClose, onKeyDown, children
+    title, size, className, centered = true, expand, shadowClick = true, loading, parentOverlayId, onClose, onKeyDown,
+    children
 }: Props) {
     const feedWidth = useSelector(getFeedWidth);
     const modalDialog = useRef<HTMLDivElement>(null);
     const [zIndex, overlayId]
         = useOverlay(modalDialog, {parentId: parentOverlayId, closeOnClick: shadowClick, onClose});
+    const tinyScreen = useIsTinyScreen();
 
     useEffect(() => {
         if (onKeyDown != null) {
@@ -48,19 +53,24 @@ export function ModalDialog({
                     className,
                     {
                         "modal-dialog-centered": centered,
-                        [`modal-${size}`]: !!size
+                        [`modal-${size}`]: !!size,
+                        "modal-fullscreen-lg-down": expand,
                     }
                 // @ts-ignore
                 )} style={{"--feed-width": feedWidth + "px"}}>
                     <div className="modal-content" ref={modalDialog}>
                         {loading && <Loading overlay large/>}
-                        {title &&
-                            <div className="modal-header">
-                                <h4 className="modal-title">{tTitle(title)}</h4>
-                                {onClose &&
-                                    <CloseButton onClick={onClose}/>
-                                }
-                            </div>
+                        {!tinyScreen ?
+                            (title &&
+                                <div className="modal-header">
+                                    <h4 className="modal-title">{tTitle(title)}</h4>
+                                    {onClose &&
+                                        <CloseButton onClick={onClose}/>
+                                    }
+                                </div>
+                            )
+                        :
+                            <MobileBack href="" onBack={onClose}>{tTitle(title ?? "")}</MobileBack>
                         }
                         <div className="modal-children">
                             {children}
