@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { getSearchQuery } from "state/search/selectors";
@@ -19,10 +19,12 @@ export default function MobileSearchPage() {
     const pageRef = useRef(null);
     const [suggestions, setSuggestions] = useState<boolean>(!searchQuery);
 
+    const onSubmit = useCallback(() => setSuggestions(false), [setSuggestions]);
+
     const {
         query, searchList, selectedIndex, focused, handleKeyDown, handleChange, handleFocus, handleBlur, handleClear,
         handleClick, handleHistoryDelete, inputDom, listDom
-    } = useSearchSuggestions();
+    } = useSearchSuggestions({onSubmit});
 
     useEffect(() => setSuggestions(!searchQuery), [searchQuery]);
 

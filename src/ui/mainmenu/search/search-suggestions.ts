@@ -15,6 +15,10 @@ import { useSuggestions } from "ui/hook";
 import { SearchListItem } from "ui/mainmenu/search/SearchSuggestions";
 import { namesListQuery } from "util/names-list";
 
+interface UseSearchSuggestionsProps {
+    onSubmit?: (success: boolean) => void;
+}
+
 interface UseSearchSuggestionsResult {
     query: string | null;
     searchList: SearchListItem[];
@@ -31,7 +35,9 @@ interface UseSearchSuggestionsResult {
     listDom: React.RefObject<HTMLDivElement>;
 }
 
-export function useSearchSuggestions(): UseSearchSuggestionsResult {
+export function useSearchSuggestions(
+    {onSubmit: onSubmitCallback}: UseSearchSuggestionsProps = {}
+): UseSearchSuggestionsResult {
     const contactNames = useSelector(getContacts);
     const history = useSelector((state: ClientState) => state.search.history);
     const atSearch = useSelector(isAtSearchPage);
@@ -74,6 +80,7 @@ export function useSearchSuggestions(): UseSearchSuggestionsResult {
         } else {
             inputDom.current?.blur();
         }
+        onSubmitCallback && onSubmitCallback(success);
     }
 
     const {
