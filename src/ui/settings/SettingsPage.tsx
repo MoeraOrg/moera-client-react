@@ -5,9 +5,10 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { Page } from "ui/page/Page";
+import MobileBack from "ui/page/MobileBack";
 import { useOverlay } from "ui/overlays/overlays";
-import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
+import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { useDisableScrollX } from "ui/settings/settings-hooks";
 import SettingsConflicts from "ui/settings/SettingsConflicts";
@@ -15,6 +16,7 @@ import SettingsTabs from "ui/settings/SettingsTabs";
 import SettingsBack from "ui/settings/SettingsBack";
 import SettingsMenu from "ui/settings/SettingsMenu";
 import SettingsTabContent from "ui/settings/SettingsTabContent";
+import { REL_HOME } from "util/rel-node-name";
 import "./SettingsPage.css";
 
 type NotebookSide = "menu" | "sheet";
@@ -22,6 +24,7 @@ type NotebookSide = "menu" | "sheet";
 export default function SettingsPage() {
     const connectedToHome = useSelector(isConnectedToHome);
     const tab = useSelector((state: ClientState) => state.settings.tab);
+    const newsHref = useMainMenuHomeNews().href;
     const [side, setSide] = React.useState<NotebookSide>("menu");
     const switcherRef = useRef<HTMLDivElement>(null);
     useOverlay(
@@ -53,7 +56,9 @@ export default function SettingsPage() {
                         <div className={`settings-notebook ${side}-side`}>
                             <div className="settings-left">
                                 <div className="page-title only-desktop">{t("settings")}</div>
-                                <MobileMainMenu/>
+                                <MobileBack nodeName={REL_HOME} href={newsHref} className="settings-back" sticky>
+                                    {t("settings")}
+                                </MobileBack>
                                 <SettingsTabs/>
                                 {visible && <SettingsMenu onSelect={() => setSide("sheet")}/>}
                                 <BottomMenu/>

@@ -52,7 +52,7 @@
     .settings-notebook .settings-left {
         display: grid;
         grid-template:
-            " main-menu"   4.12rem
+            " back"        4.6rem
             " tabs"        5.1rem
             " menu"        1fr
             " bottom-menu" 2.85rem
