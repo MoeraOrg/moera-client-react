@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { getSearchQuery } from "state/search/selectors";
@@ -10,11 +10,13 @@ import { useSearchSuggestions } from "ui/mainmenu/search/search-suggestions";
 import SearchInput from "ui/mainmenu/search/SearchInput";
 import SearchSuggestions from "ui/mainmenu/search/SearchSuggestions";
 import BottomMenu from "ui/mainmenu/BottomMenu";
+import { useOverlay } from "ui/overlays/overlays";
 import SearchTabs from "ui/search/SearchTabs";
 import SearchFeed from "ui/search/SearchFeed";
 
 export default function MobileSearchPage() {
     const searchQuery = useSelector(getSearchQuery);
+    const pageRef = useRef(null);
     const [suggestions, setSuggestions] = useState<boolean>(!searchQuery);
 
     const {
@@ -30,10 +32,21 @@ export default function MobileSearchPage() {
         }
     }, [focused]);
 
+    useOverlay(
+        pageRef,
+        {
+            visible: !suggestions,
+            onClose: () => setSuggestions(true),
+            closeOnClick: false,
+            closeOnSelect: false,
+            closeOnEscape: false
+        }
+    )
+
     return (
         <>
             <Page className="search-page tabbed-page">
-                <div className="page-central-pane">
+                <div className="page-central-pane" ref={pageRef}>
                     <MobileBack href="">
                         <div id="search-box">
                             <SearchInput
