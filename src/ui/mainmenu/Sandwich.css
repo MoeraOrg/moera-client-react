@@ -7,3 +7,23 @@
     border: none;
     background-color: transparent;
 }
+
+.offcanvas {
+    border-radius: 0 1rem 1rem 0;
+}
+
+.offcanvas-header {
+    margin-top: .5rem;
+}
+
+.offcanvas-header .btn-close {
+    margin: 0;
+}
+
+.offcanvas-backdrop {
+    pointer-events: none;
+}
+
+.offcanvas-backdrop.show {
+    pointer-events: auto;
+}

@@ -17,6 +17,11 @@ $nav-link-hover-color:        $gray-700;
 $popover-border-width:        0;
 $popover-border-radius:       1rem;
 
+$offcanvas-padding-y:         .75rem;
+$offcanvas-padding-x:         .75rem;
+$offcanvas-horizontal-width:  90vw;
+$offcanvas-border-color:      white;
+
 @import "~bootstrap/scss/maps";
 @import "~bootstrap/scss/mixins";
 @import "~bootstrap/scss/utilities";
