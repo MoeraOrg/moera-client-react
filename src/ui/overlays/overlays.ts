@@ -12,6 +12,7 @@ export interface OverlayProps {
     closeOnSelect: boolean;
     closeOnEscape: boolean;
     closeOnBack: boolean;
+    disableScroll: boolean;
 }
 
 export interface OverlayZIndex {
@@ -27,6 +28,7 @@ export class Overlay<E extends Element> {
     closeOnSelect: boolean = false;
     closeOnEscape: boolean = false;
     closeOnBack: boolean = false;
+    disableScroll: boolean = false;
 
     private readonly parent: Overlay<Element> | null;
     private children: Overlay<Element>[] = [];
@@ -61,6 +63,8 @@ export class Overlay<E extends Element> {
         this.closeOnSelect = props.closeOnSelect ?? false;
         this.closeOnEscape = props.closeOnEscape ?? closable;
         this.closeOnBack = props.closeOnBack ?? closable;
+        this.disableScroll = props.disableScroll ?? true;
+        window.overlays?.updateScroll(); // window.overlays may be null in the constructor of OverlayManager
     }
 
     private closeChildren(): void {
@@ -115,7 +119,6 @@ export class OverlaysManager {
         const overlay = new Overlay<E>(element, this.topOverlay, parent ?? this.rootOverlay);
         this.overlays.set(id, overlay);
         this.setTopOverlay(overlay);
-        disableBodyScroll();
         return overlay;
     }
 
@@ -155,14 +158,21 @@ export class OverlaysManager {
 
     private setTopOverlay(overlay: Overlay<Element>): void {
         this.topOverlay = overlay;
+        this.updateTopOverlay();
     }
 
     private updateTopOverlay(): void {
         while (this.topOverlay.destroyed && this.topOverlay.lower != null) {
             this.topOverlay = this.topOverlay.lower;
         }
-        if (this.topOverlay.lower == null) {
+        this.updateScroll();
+    }
+
+    updateScroll(): void {
+        if (this.topOverlay.lower == null || !this.topOverlay.disableScroll) {
             enableBodyScroll();
+        } else {
+            disableBodyScroll();
         }
     }
 

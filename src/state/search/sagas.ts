@@ -198,7 +198,6 @@ async function load(
         }
     } catch (e) {
         dispatch(searchLoadFailed().causedBy(action));
-        dispatch(errorThrown(e));
     }
 }
 

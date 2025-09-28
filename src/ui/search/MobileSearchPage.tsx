@@ -8,14 +8,17 @@ import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
 import { useSearchSuggestions } from "ui/mainmenu/search/search-suggestions";
 import SearchInput from "ui/mainmenu/search/SearchInput";
+import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import SearchSuggestions from "ui/mainmenu/search/SearchSuggestions";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { useOverlay } from "ui/overlays/overlays";
 import SearchTabs from "ui/search/SearchTabs";
 import SearchFeed from "ui/search/SearchFeed";
+import { REL_HOME } from "util/rel-node-name";
 
 export default function MobileSearchPage() {
     const searchQuery = useSelector(getSearchQuery);
+    const newsHref = useMainMenuHomeNews().href;
     const pageRef = useRef(null);
     const [suggestions, setSuggestions] = useState<boolean>(!searchQuery);
 
@@ -26,7 +29,12 @@ export default function MobileSearchPage() {
         handleClick, handleHistoryDelete, inputDom, listDom
     } = useSearchSuggestions({onSubmit});
 
-    useEffect(() => setSuggestions(!searchQuery), [searchQuery]);
+    useEffect(() => {
+        setSuggestions(!searchQuery);
+        if (!searchQuery) {
+            inputDom.current?.focus();
+        }
+    }, [inputDom, searchQuery]);
 
     useEffect(() => {
         if (focused) {
@@ -41,7 +49,8 @@ export default function MobileSearchPage() {
             onClose: () => setSuggestions(true),
             closeOnClick: false,
             closeOnSelect: false,
-            closeOnEscape: false
+            closeOnEscape: false,
+            disableScroll: false
         }
     )
 
@@ -49,7 +58,7 @@ export default function MobileSearchPage() {
         <>
             <Page className="search-page tabbed-page">
                 <div className="page-central-pane" ref={pageRef}>
-                    <MobileBack href="">
+                    <MobileBack nodeName={REL_HOME} href={suggestions ? newsHref: ""} sticky>
                         <div id="search-box">
                             <SearchInput
                                 query={query}
