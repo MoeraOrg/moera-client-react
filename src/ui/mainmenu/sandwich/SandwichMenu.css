@@ -1,0 +1,39 @@
+.sandwich-menu HR {
+    border-color: var(--bs-gray-500);
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.sandwich-menu .profile {
+    padding: .5rem 1.5rem .5rem 1rem;
+    display: grid;
+    grid-template:
+        " avatar      full-name" min-content
+        " avatar      name"      min-content
+        / 40px        auto;
+    column-gap: .75rem;
+    align-items: start;
+}
+
+.sandwich-menu .profile .avatar {
+    grid-area: avatar;
+    align-self: center;
+}
+
+.sandwich-menu .profile .full-name {
+    grid-area: full-name;
+    font-weight: 600;
+    font-size: .88rem;
+    line-height: 143%;
+    color: black;
+    overflow-wrap: anywhere;
+}
+
+.sandwich-menu .profile .name {
+    grid-area: name;
+    font-weight: 400;
+    font-size: .88rem;
+    line-height: 143%;
+    color: var(--bs-gray-700);
+    overflow-wrap: anywhere;
+}

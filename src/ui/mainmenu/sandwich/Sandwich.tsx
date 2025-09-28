@@ -6,6 +6,8 @@ import cx from 'classnames';
 import { Icon, msMenu } from "ui/material-symbols";
 import { useOverlay } from "ui/overlays/overlays";
 import { CloseButton } from "ui/control";
+import { SandwichContext } from "ui/mainmenu/sandwich/sandwich-context";
+import SandwichMenu from "ui/mainmenu/sandwich/SandwichMenu";
 import "./Sandwich.css";
 
 const EDGE_HOTZONE = 70;
@@ -68,17 +70,16 @@ export default function Sandwich() {
                 <Icon icon={msMenu} size={24}/>
             </button>
             {ReactDOM.createPortal(
-                <>
+                <SandwichContext.Provider value={{hide: onClose}}>
                     <div className={cx("offcanvas", "offcanvas-start", {"show": open})} tabIndex={-1}
                          style={{zIndex: zIndex?.widget}}>
                         <div className="offcanvas-header">
                             <CloseButton onClick={onClose}/>
                         </div>
-                        <div className="offcanvas-body" ref={offcanvasRef}>
-                        </div>
+                        <SandwichMenu ref={offcanvasRef}/>
                     </div>
                     <div className={cx("offcanvas-backdrop", "fade", {"show": open})} style={{zIndex: zIndex?.shadow}}/>
-                </>,
+                </SandwichContext.Provider>,
                 document.getElementById("modal-root")!
             )}
         </>

@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 
-import Sandwich from "ui/mainmenu/Sandwich";
+import Sandwich from "ui/mainmenu/sandwich/Sandwich";
 import Logo from "ui/mainmenu/logo/Logo";
 import { useScrollShadow } from "ui/mainmenu/scroll-shadow";
 import RefreshIndicator from "ui/mainmenu/RefreshIndicator";
