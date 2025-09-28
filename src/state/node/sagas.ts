@@ -13,7 +13,6 @@ import {
     OwnerLoadAction,
     ownerSet,
     OwnerSwitchAction,
-    ownerSwitchClose,
     ownerSwitchFailed,
     ownerVerified,
     OwnerVerifyAction
@@ -77,7 +76,6 @@ async function ownerVerifySaga(action: OwnerVerifyAction): Promise<void> {
 
 async function ownerSwitchSaga(action: WithContext<OwnerSwitchAction>): Promise<void> {
     if (action.payload.name === action.context.ownerName) {
-        dispatch(ownerSwitchClose().causedBy(action));
         return;
     }
 

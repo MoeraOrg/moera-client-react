@@ -34,14 +34,6 @@ export type OwnerVerifiedLoadAction = ActionWithPayload<"OWNER_VERIFIED", {
 export const ownerVerified = (name: string, correct: boolean): OwnerVerifiedLoadAction =>
     actionWithPayload("OWNER_VERIFIED", {name, correct});
 
-export type OwnerSwitchOpenAction = ActionWithoutPayload<"OWNER_SWITCH_OPEN">;
-export const ownerSwitchOpen = (): OwnerSwitchOpenAction =>
-    actionWithoutPayload("OWNER_SWITCH_OPEN");
-
-export type OwnerSwitchCloseAction = ActionWithoutPayload<"OWNER_SWITCH_CLOSE">;
-export const ownerSwitchClose = (): OwnerSwitchCloseAction =>
-    actionWithoutPayload("OWNER_SWITCH_CLOSE");
-
 export type OwnerSwitchAction = ActionWithPayload<"OWNER_SWITCH", {
     name: string;
 }>;
@@ -68,8 +60,6 @@ export type NodeAnyAction =
     | OwnerSetAction
     | OwnerVerifyAction
     | OwnerVerifiedLoadAction
-    | OwnerSwitchOpenAction
-    | OwnerSwitchCloseAction
     | OwnerSwitchAction
     | OwnerSwitchFailedAction
     | NodeFeaturesLoadAction

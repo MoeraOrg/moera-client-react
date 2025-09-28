@@ -20,7 +20,6 @@ const initialState: NodeState = {
         verified: false,
         verifiedAt: 0,
         changing: false,
-        showNavigator: false,
         switching: false
     },
     features: null
@@ -79,18 +78,6 @@ export default (state: NodeState = initialState, action: ClientAction): NodeStat
                 });
             }
             return state;
-
-        case "OWNER_SWITCH_OPEN":
-            return immutable.assign(state, "owner", {
-                showNavigator: true,
-                switching: false
-            });
-
-        case "OWNER_SWITCH_CLOSE":
-            return immutable.assign(state, "owner", {
-                showNavigator: false,
-                switching: false
-            });
 
         case "OWNER_SWITCH":
             return immutable.set(state, "owner.switching", true);
