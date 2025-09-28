@@ -52,8 +52,8 @@
     .settings-notebook .settings-left {
         display: grid;
         grid-template:
-            " back"        4.6rem
-            " tabs"        5.1rem
+            " back"        calc(var(--page-header-height) + .6rem)
+            " tabs"        4.1rem
             " menu"        1fr
             " bottom-menu" 2.85rem
             / auto;
@@ -62,7 +62,7 @@
     .settings-notebook .settings-right {
         display: grid;
         grid-template:
-            " back"    4.6rem
+            " back"    calc(var(--page-header-height) + .6rem)
             " sheet"   1fr
             " buttons" 3.875rem
             / auto;

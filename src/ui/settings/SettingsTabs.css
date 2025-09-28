@@ -5,7 +5,7 @@
 
 @media only screen and (max-width: 991px) {
     .settings-tabs {
-        padding-top: 1rem;
+        padding-top: 0;
         padding-left: 1rem;
         margin-bottom: 1.5rem;
     }
