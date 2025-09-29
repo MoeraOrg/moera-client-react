@@ -7,13 +7,17 @@
         padding-bottom: 2rem;
     }
 
+    .search-page #search-box {
+        margin: .25rem;
+    }
+
     .search-page #search-box INPUT {
         width: calc(100% - 1rem);
-        height: 2.75rem;
+        height: 2.5rem;
     }
 
     .search-page #search-box .search-icon {
-        top: .7rem;
+        top: .6rem;
     }
 
     .search-page #search-box .cancel {
