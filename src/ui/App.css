@@ -80,6 +80,10 @@ BLOCKQUOTE BLOCKQUOTE:last-child, BLOCKQUOTE P:last-child {
     margin-bottom: 0;
 }
 
+INPUT[type="search"]::-webkit-search-cancel-button {
+    appearance: none;
+}
+
 .emoji {
     background-repeat: no-repeat;
     color: transparent;
