@@ -9,7 +9,7 @@ import { randomId } from "util/ui";
 type UserAgent = "firefox" | "chrome" | "opera" | "yandex" | "brave" | "vivaldi" | "dolphin" | "unknown";
 type UserAgentOs = "android" | "ios" | "windows" | "linux" | "mac" | "unknown";
 
-interface DocumentLocation {
+export interface DocumentLocation {
     name?: string | null;
     rootLocation?: string;
     path?: string | null;

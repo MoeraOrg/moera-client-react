@@ -12,6 +12,7 @@ import {
 } from "state/home/actions";
 import { getHomeConnectionData } from "state/home/selectors";
 import { namingNamesPopulate, namingNamesSwitchServer } from "state/naming/actions";
+import { boot } from "state/navigation/actions";
 import { settingsClientValuesSet } from "state/settings/actions";
 import * as Access from "./access"
 
@@ -115,11 +116,17 @@ export function storeInvisibleUsers(checksum: number, blockedUsers: BlockedUserI
 }
 
 export function deleteData(location: string): void {
-    loadedData(Access.deleteData(location));
+    const reboot = Access.deleteData(location);
+    if (reboot) {
+        dispatch(boot());
+    }
 }
 
 export function switchData(location: string): void {
-    loadedData(Access.switchData(location))
+    const reboot = Access.switchData(location);
+    if (reboot) {
+        dispatch(boot());
+    }
 }
 
 export function storeName(serverUrl: string, name: string, nodeUri: string, updated: number) {

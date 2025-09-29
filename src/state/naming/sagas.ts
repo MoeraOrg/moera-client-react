@@ -121,8 +121,9 @@ async function fetchName(caller: ClientAction | null, nodeName: string, includeS
 
     const info = {nodeName: nodeNameFound, accessed: 0, updated: 0, loading: false, loaded: true, nodeUri};
     if (fetching.has(info.nodeName)) {
-        fetching.get(info.nodeName)?.forEach(resolve => resolve(info));
+        const promises = fetching.get(info.nodeName);
         fetching.delete(info.nodeName);
+        promises?.forEach(resolve => resolve(info));
     }
     return info;
 }

@@ -3,13 +3,16 @@ import { barrier, dispatch } from "state/store-sagas";
 import { delay } from "util/misc";
 
 export async function signalPostInitSaga(): Promise<void> {
-    await delay(1000);
     while (true) {
-        if (!await barrier("*", true, 1000)) {
-            dispatch(postInit());
-            await delay(5000);
-            dispatch(postInitDelayed());
-            return;
+        await barrier("BOOT", true);
+        await delay(1000);
+        while (true) {
+            if (!await barrier("*", true, 1000)) {
+                dispatch(postInit());
+                await delay(5000);
+                dispatch(postInitDelayed());
+                break;
+            }
         }
     }
 }

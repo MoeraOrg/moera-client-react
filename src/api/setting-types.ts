@@ -15,6 +15,10 @@ interface MemoizedSettingValue {
 }
 const memoizedValues = new Map<string, MemoizedSettingValue>();
 
+export function clearSettingsCache(): void {
+    memoizedValues.clear();
+}
+
 export function toValueMemoized(name: string, type: SettingType, valueString: string): SettingValue {
     switch (type) {
         case "Timestamp":
@@ -52,8 +56,9 @@ export function toValue(type: SettingType, valueString: string): SettingValue {
     }
 }
 
-export function toFieldValue(type: SettingType, valueString: string,
-                             modifiers: SettingModifiers | null | undefined): SettingValue {
+export function toFieldValue(
+    type: SettingType, valueString: string, modifiers: SettingModifiers | null | undefined
+): SettingValue {
     if (!modifiers) {
         return toValue(type, valueString);
     }
@@ -74,8 +79,9 @@ function deserializeInt(value: string | number): number {
     return isNumber(value) ? value : parseInt(value);
 }
 
-export function validate(value: SettingValue, type: SettingType,
-                         modifiers: SettingModifiers | null | undefined): true | string {
+export function validate(
+    value: SettingValue, type: SettingType, modifiers: SettingModifiers | null | undefined
+): true | string {
     if (!modifiers) {
         return true;
     }
@@ -125,8 +131,9 @@ export function validate(value: SettingValue, type: SettingType,
     }
 }
 
-export function toString(value: SettingValue, type: SettingType,
-                         modifiers: SettingModifiers | null | undefined): string {
+export function toString(
+    value: SettingValue, type: SettingType, modifiers: SettingModifiers | null | undefined
+): string {
     switch (type) {
         case "int":
             if (modifiers != null && modifiers.format === "size") {

@@ -5,7 +5,6 @@ import { Storage } from "storage";
 import { getNodeUri } from "state/naming/sagas";
 import { messageBox } from "state/messagebox/actions";
 import {
-    connectedToHome,
     connectionToHomeFailed,
     ConnectToHomeAction,
     homeOwnerSet,
@@ -15,9 +14,9 @@ import {
 import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
-import { getHomeConnectionData, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
+import { getHomeConnectionData, getHomeRootPage } from "state/home/selectors";
 import { isAtNode } from "state/node/selectors";
-import { goHomeLocation } from "state/navigation/actions";
+import { boot } from "state/navigation/actions";
 import { executor } from "state/executor";
 import { connectDialogSetForm } from "state/connectdialog/actions";
 import { normalizeUrl } from "util/url";
@@ -79,19 +78,8 @@ async function connectToHomeSaga(action: WithContext<ConnectToHomeAction>): Prom
         return;
     }
     Storage.storeConnectionData(nodeUrl, null, null, null, login, info.token, info.permissions);
-    const homeLocation = select(getHomeRootLocation);
-    dispatch(connectedToHome({
-        location: nodeUrl,
-        login,
-        token: info.token,
-        permissions: info.permissions,
-        connectionSwitch: homeLocation != null && nodeUrl !== homeLocation
-    }).causedBy(action));
-
     const atNode = select(isAtNode);
-    if (!atNode) {
-        dispatch(goHomeLocation("/news", null, null));
-    }
+    dispatch(boot(!atNode ? {} : undefined));
 }
 
 async function homeOwnerVerifySaga(action: WithContext<HomeOwnerVerifyAction>): Promise<void> {

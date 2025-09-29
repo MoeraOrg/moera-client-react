@@ -2,6 +2,13 @@ import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWi
 import { Scope } from "api";
 import { Page } from "state/navigation/pages";
 import { SearchFilter, SearchTab } from "state/search/state";
+import { DocumentLocation } from "ui/browser";
+
+export type BootAction = ActionWithPayload<"BOOT", {
+    target?: DocumentLocation;
+}>;
+export const boot = (target?: DocumentLocation): BootAction =>
+    actionWithPayload("BOOT", {target});
 
 export type InitFromNodeLocationAction = ActionWithPayload<"INIT_FROM_NODE_LOCATION", {
     nodeName: string;
@@ -188,7 +195,8 @@ export const bottomMenuShow = (): BottomMenuShowAction =>
     actionWithoutPayload("BOTTOM_MENU_SHOW");
 
 export type NavigationAnyAction =
-    InitFromNodeLocationAction
+    BootAction
+    | InitFromNodeLocationAction
     | InitFromLocationAction
     | WakeUpAction
     | GoToPageAnyAction

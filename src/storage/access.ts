@@ -93,51 +93,43 @@ export function storeData(data: StoredData): Data.RootInfo[] {
     return roots;
 }
 
-export function deleteData(location: string | null): StoredData {
+export function deleteData(location: string | null): boolean {
     let homeRoot = Data.getStorageItem("currentRoot");
     let roots = Data.getStorageItem("roots") ?? [];
     if (!location) {
         location = homeRoot;
     }
     if (roots.find(r => r.url === location) == null && location !== homeRoot) {
-        return buildData();
+        return false;
     }
     roots = roots.filter(r => r.url !== location);
     Data.setStorageItem("roots", null, roots);
     Data.removeStorageItem("clientData", location);
 
-    let nodeName;
     if (location === homeRoot || homeRoot == null) {
         if (roots.length === 0) {
             Data.removeStorageItem("currentRoot");
-            return buildData(homeRoot, {}, roots);
+            return homeRoot != null;
         }
         homeRoot = roots[roots.length - 1].url;
-        nodeName = roots[roots.length - 1].name;
         Data.setStorageItem("currentRoot", null, homeRoot);
-    } else {
-        nodeName = Data.findRootName(roots, homeRoot);
+        return true;
     }
-    const clientData = Data.getStorageItem("clientData", homeRoot) ?? {};
-    ObjectPath.set(clientData, "home.nodeName", nodeName);
-    const names = Data.getNames(findNameServerUrl(clientData.settings));
-    return buildData(homeRoot, clientData, roots, names);
+
+    return false;
 }
 
-export function switchData(location: string): StoredData {
+export function switchData(location: string): boolean {
     let homeRoot = Data.getStorageItem("currentRoot");
     let roots = Data.getStorageItem("roots") ?? [];
 
     const root = roots.find(r => r.url === location);
     if (!location || location === homeRoot || root == null) {
-        return buildData();
+        return false;
     }
     Data.setStorageItem("currentRoot", null, location);
 
-    const clientData = Data.getStorageItem("clientData", location) ?? {};
-    ObjectPath.set(clientData, "home.nodeName", root.name);
-    const names = Data.getNames(findNameServerUrl(clientData.settings));
-    return buildData(location, clientData, roots, names);
+    return true;
 }
 
 export function storeName(serverUrl: string | null, name: string, nodeUri: string, updated: number): void {

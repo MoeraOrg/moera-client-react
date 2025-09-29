@@ -185,7 +185,7 @@ function combinedReducer(state: ClientState | undefined, action: ClientAction): 
         ...action,
         context: getContext(state)
     };
-    return reducers(state, actionWithContext);
+    return action.type === "BOOT" ? reducers(undefined, actionWithContext) : reducers(state, actionWithContext);
 }
 
 const triggers = collectTriggers(

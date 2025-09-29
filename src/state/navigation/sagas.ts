@@ -1,14 +1,20 @@
 import * as URI from 'uri-js';
 
+import { Storage } from "storage";
 import { locationBuild, LocationInfo, locationTransform } from "location";
+import { clearSettingsCache } from "api/setting-types";
 import { executor } from "state/executor";
 import { ClientAction } from "state/action";
 import { dispatch, select } from "state/store-sagas";
 import {
+    BootAction,
+    goHomeLocation,
     GoHomeLocationAction,
     GoToLocationAction,
+    goToRemoval,
     initFromLocation,
     InitFromLocationAction,
+    initFromNodeLocation,
     InitFromNodeLocationAction,
     locationLock,
     locationSet,
@@ -21,9 +27,13 @@ import { nodeReady } from "state/node/actions";
 import { isAtNode } from "state/node/selectors";
 import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
+import { storyReadingUpdate } from "state/stories/actions";
+import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
+import { REL_HOME } from "util/rel-node-name";
 
 export default [
+    executor("BOOT", "", bootSaga),
     executor("INIT_FROM_NODE_LOCATION", "", initFromNodeLocationSaga),
     executor("INIT_FROM_LOCATION", "", initFromLocationSaga),
     executor("NEW_LOCATION", null, newLocationSaga),
@@ -31,6 +41,31 @@ export default [
     executor("GO_TO_LOCATION", payload => `${payload.path}:${payload.query}:${payload.hash}`, goToLocationSaga),
     executor("GO_HOME_LOCATION", "", goHomeLocationSaga)
 ];
+
+function bootSaga(action: BootAction): void {
+    clearSettingsCache();
+    Storage.loadData();
+
+    const {
+        name, rootLocation, path = null, query = null, hash = null
+    } = action.payload.target ?? Browser.parseDocumentLocation();
+
+    if (rootLocation != null) {
+        dispatch(initFromLocation(name ?? null, rootLocation, path, query, hash));
+    } else if (name != null) {
+        dispatch(initFromNodeLocation(name, path, query, hash, null));
+    } else if (path?.startsWith("removal")) {
+        dispatch(goToRemoval());
+    } else if (path && path !== "/") {
+        dispatch(goHomeLocation(path, query, hash));
+    } else {
+        dispatch(goHomeLocation("/news", null, null));
+    }
+    const readId = Browser.parameters.get("read");
+    if (readId) {
+        dispatch(storyReadingUpdate(REL_HOME, "instant", readId, true));
+    }
+}
 
 function transformation(
     caller: ClientAction,

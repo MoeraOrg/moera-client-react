@@ -116,6 +116,7 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
 
         Storage.storeConnectionData(rootLocation, null, null, null, login, info.token, info.permissions);
         const homeLocation = select(getHomeRootLocation);
+        // TODO this should dispatch boot() or call Storage.switchData()
         dispatch(connectedToHome({
             location: rootLocation,
             login,
