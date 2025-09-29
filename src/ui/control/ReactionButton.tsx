@@ -10,9 +10,9 @@ import {
 } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
-import { DelayedPopover, EmojiProps, EmojiSelector, ReactionEmojiButton, useDropdownMenu } from "ui/control";
+import { DelayedPopover, EmojiProps, EmojiSelector, ReactionEmojiButton } from "ui/control";
+import { useParent } from "ui/hook";
 import { MaterialSymbol } from "ui/material-symbols";
-import { useLightBox } from "ui/lightbox/lightbox-context";
 import EmojiList from "util/emoji-list";
 
 interface Props {
@@ -75,9 +75,7 @@ export function ReactionButton(props: Props) {
     const buttonInvisible = invisible
         || (mainReactions.every(r => r.invisible) && additionalReactions.every(r => r.invisible));
 
-    const {overlayId: lightBoxOverlayId} = useLightBox();
-    const {overlayId: menuOverlayId} = useDropdownMenu();
-    const parentOverlayId = menuOverlayId ?? lightBoxOverlayId;
+    const {overlayId: parentOverlayId} = useParent();
 
     return (
         <DelayedPopover

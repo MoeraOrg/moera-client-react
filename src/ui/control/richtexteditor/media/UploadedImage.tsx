@@ -8,10 +8,11 @@ import { useTranslation } from 'react-i18next';
 import { VerifiedMediaFile } from "api";
 import { openImageEditDialog } from "state/imageeditdialog/actions";
 import { Icon, msMoreVert12 } from "ui/material-symbols";
-import { DropdownMenu, useModalDialog } from "ui/control";
+import { DropdownMenu } from "ui/control";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import AttachedImage from "ui/control/richtexteditor/media/AttachedImage";
+import { useParent } from "ui/hook";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import "./UploadedImage.css";
 
@@ -34,7 +35,7 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const {overlayId: parentOverlayId} = useModalDialog();
+    const {overlayId: parentOverlayId} = useParent();
 
     const onEdit = () => {
         if (!dragged) {

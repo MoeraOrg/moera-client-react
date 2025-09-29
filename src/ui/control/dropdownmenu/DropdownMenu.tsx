@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { useButtonPopper } from "ui/hook";
+import { ParentContext, useButtonPopper } from "ui/hook";
 import { DropdownMenuContext, MenuItem } from "ui/control/dropdownmenu/dropdown-menu-types";
 import { DropdownMenuItems } from "ui/control/dropdownmenu/DropdownMenuItems";
 import { MenuButton } from "ui/control/dropdownmenu/MenuButton";
@@ -36,33 +36,35 @@ export function DropdownMenu({
     }
 
     return (
-        <DropdownMenuContext.Provider value={{hide, onDialogOpened, overlayId}}>
-            <button
-                type="button"
-                className={cx("menu", {active: visible}, className)}
-                disabled={disabled}
-                ref={setButtonRef}
-                aria-label={t("menu")}
-                onClick={onToggle}
-            >
-                {typeof children === "function" ?
-                    children(visible)
-                :
-                    (children ?? <MenuButton active={visible}/>)
-                }
-            </button>
-            {visible && createPortalIfNeeded(
-                <div
-                    ref={setPopperRef}
-                    style={{...popperStyles, zIndex: zIndex?.widget}}
-                    {...popperAttributes}
-                    className={cx("fade dropdown-menu shadow-sm show", dropdownClassName)}
+        <ParentContext.Provider value={{hide, overlayId}}>
+            <DropdownMenuContext.Provider value={{onDialogOpened}}>
+                <button
+                    type="button"
+                    className={cx("menu", {active: visible}, className)}
+                    disabled={disabled}
+                    ref={setButtonRef}
+                    aria-label={t("menu")}
+                    onClick={onToggle}
                 >
-                    {content}
-                    {items && <DropdownMenuItems items={items}/>}
-                </div>,
-                menuContainer
-            )}
-        </DropdownMenuContext.Provider>
+                    {typeof children === "function" ?
+                        children(visible)
+                    :
+                        (children ?? <MenuButton active={visible}/>)
+                    }
+                </button>
+                {visible && createPortalIfNeeded(
+                    <div
+                        ref={setPopperRef}
+                        style={{...popperStyles, zIndex: zIndex?.widget}}
+                        {...popperAttributes}
+                        className={cx("fade dropdown-menu shadow-sm show", dropdownClassName)}
+                    >
+                        {content}
+                        {items && <DropdownMenuItems items={items}/>}
+                    </div>,
+                    menuContainer
+                )}
+            </DropdownMenuContext.Provider>
+        </ParentContext.Provider>
     );
 }

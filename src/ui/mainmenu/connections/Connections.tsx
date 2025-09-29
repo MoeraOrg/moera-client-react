@@ -7,7 +7,7 @@ import { ClientState } from "state/state";
 import { getHomeRootLocation } from "state/home/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
-import { usePopover } from "ui/control";
+import { useParent } from "ui/hook";
 import { Icon, msAdd } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
 import NodeName from "ui/nodename/NodeName";
@@ -23,7 +23,7 @@ export default function Connections() {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const {hide} = usePopover();
+    const {hide} = useParent();
 
     const onActiveItemClick = (_: string, performJump: () => void) => {
         hide();

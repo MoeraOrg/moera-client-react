@@ -2,7 +2,8 @@ import React from 'react';
 import { Form, FormikBag, FormikValues, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { Button, ModalDialog, useModalDialog } from "ui/control";
+import { Button, ModalDialog } from "ui/control";
+import { useParent } from "ui/hook";
 
 export type RichTextEditorDialogSubmit<V> = (ok: boolean | null, values: Partial<V>) => void;
 
@@ -39,7 +40,7 @@ export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V e
         const onClose = () => onSubmit(false, {});
 
         // eslint-disable-next-line react-hooks/rules-of-hooks
-        const {overlayId: parentOverlayId} = useModalDialog();
+        const {overlayId: parentOverlayId} = useParent();
 
         return (
             <ModalDialog title={t(title)} parentOverlayId={parentOverlayId} onClose={onClose}>

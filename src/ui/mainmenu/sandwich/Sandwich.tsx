@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { Icon, msMenu } from "ui/material-symbols";
 import { useOverlay } from "ui/overlays/overlays";
 import { CloseButton } from "ui/control";
-import { SandwichContext } from "ui/mainmenu/sandwich/sandwich-context";
+import { ParentContext } from "ui/hook";
 import SandwichMenu from "ui/mainmenu/sandwich/SandwichMenu";
 import "./Sandwich.css";
 
@@ -22,7 +22,7 @@ export default function Sandwich() {
 
     const onClose = () => setOpen(false);
 
-    const [zIndex] = useOverlay(offcanvasRef, {visible: open, onClose});
+    const [zIndex, overlayId] = useOverlay(offcanvasRef, {visible: open, onClose});
 
     useDrag(
         ({first, last, movement: [mx], initial: [ix], cancel, tap, elapsedTime}) => {
@@ -70,7 +70,7 @@ export default function Sandwich() {
                 <Icon icon={msMenu} size={24}/>
             </button>
             {ReactDOM.createPortal(
-                <SandwichContext.Provider value={{hide: onClose}}>
+                <ParentContext.Provider value={{hide: onClose, overlayId}}>
                     <div className={cx("offcanvas", "offcanvas-start", {"show": open})} tabIndex={-1}
                          style={{zIndex: zIndex?.widget}}>
                         <div className="offcanvas-header">
@@ -79,7 +79,7 @@ export default function Sandwich() {
                         <SandwichMenu ref={offcanvasRef}/>
                     </div>
                     <div className={cx("offcanvas-backdrop", "fade", {"show": open})} style={{zIndex: zIndex?.shadow}}/>
-                </SandwichContext.Provider>,
+                </ParentContext.Provider>,
                 document.getElementById("modal-root")!
             )}
         </>

@@ -10,6 +10,7 @@ import {
     MenuItem,
     useDropdownMenu
 } from "ui/control/dropdownmenu/dropdown-menu-types";
+import { useParent } from "ui/hook";
 import { RelNodeName } from "util/rel-node-name";
 
 function isDivider(item: MenuItem): item is DividerMenuItem {
@@ -71,7 +72,8 @@ interface Props {
 
 export function DropdownMenuItems({items}: Props) {
     const {t} = useTranslation();
-    const {hide, onDialogOpened} = useDropdownMenu();
+    const {hide} = useParent();
+    const {onDialogOpened} = useDropdownMenu();
 
     const onClick = (item: RenderedItem) => (_: string, performJump: () => void) => {
         hide();

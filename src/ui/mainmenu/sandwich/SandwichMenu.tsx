@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { tTitle } from "i18n";
 import { Storage } from "storage";
 import { ClientState } from "state/state";
@@ -10,11 +11,10 @@ import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName, getHomeRoot
 import { confirmBox } from "state/confirmbox/actions";
 import { Avatar } from "ui/control";
 import { Icon, msLogout, msReport, msSwapHoriz } from "ui/material-symbols";
+import { useParent } from "ui/hook";
 import Jump from "ui/navigation/Jump";
-import { useSandwich } from "ui/mainmenu/sandwich/sandwich-context";
 import { REL_HOME } from "util/rel-node-name";
 import "./SandwichMenu.css";
-import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 
 interface Props {
 }
@@ -25,7 +25,7 @@ function SandwichMenu(_: Props, ref: ForwardedRef<HTMLDivElement>) {
     const avatar = useSelector(getHomeOwnerAvatar);
     const location = useSelector(getHomeRootLocation);
     const login = useSelector((state: ClientState) => state.home.login);
-    const {hide} = useSandwich();
+    const {hide} = useParent();
     const dispatch = useDispatch();
     const {t} = useTranslation();
 

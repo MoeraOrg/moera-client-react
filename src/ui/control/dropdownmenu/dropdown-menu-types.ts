@@ -25,14 +25,9 @@ export interface CaptionMenuItem {
 export type MenuItem = TextMenuItem | DividerMenuItem | CaptionMenuItem;
 
 interface DropdownMenuInterface {
-    hide: () => void;
     onDialogOpened?: () => void;
-    overlayId: string | undefined;
 }
 
-export const DropdownMenuContext = createContext<DropdownMenuInterface>({
-    hide: () => {},
-    overlayId: undefined
-});
+export const DropdownMenuContext = createContext<DropdownMenuInterface>({});
 
 export const useDropdownMenu = (): DropdownMenuInterface => useContext(DropdownMenuContext);

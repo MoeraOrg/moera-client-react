@@ -23,6 +23,7 @@ import { useOverlay } from "ui/overlays/overlays";
 import { REL_CURRENT } from "util/rel-node-name";
 import { urlWithParameters } from "util/url";
 import "./LightBox.css";
+import { ParentContext } from "ui/hook";
 
 export default function LightBox() {
     const posting = useSelector((state: ClientState) => getPosting(state, state.lightBox.postingId, REL_CURRENT));
@@ -40,7 +41,7 @@ export default function LightBox() {
 
     const onCloseRequest = useCallback(() => dispatch(closeLightBox()), [dispatch]);
 
-    const [zIndex] = useOverlay(null, {closeOnClick: false, closeOnEscape: false, onClose: onCloseRequest});
+    const [zIndex, overlayId] = useOverlay(null, {closeOnClick: false, closeOnEscape: false, onClose: onCloseRequest});
 
     const media = useMemo(() => getGallery(posting, comment), [comment, posting]);
     const auth = carte != null ? "carte:" + carte : null;
@@ -103,19 +104,29 @@ export default function LightBox() {
     const onMoveNextRequest = () => nextMediaId != null ? dispatch(lightBoxMediaSet(nextMediaId, nextSequence)) : null;
 
     return (
-        <Lightbox mainSrc={mainSrc} prevSrc={prevSrc} nextSrc={nextSrc} imageTitle={title}
-                  onCloseRequest={onCloseRequest} closeLabel={t("close")}
-                  onMovePrevRequest={onMovePrevRequest} prevLabel={t("previous-image")}
-                  onMoveNextRequest={onMoveNextRequest} nextLabel={t("next-image")}
-                  reactModalStyle={{overlay: {zIndex: zIndex?.shadow}}}
-                  toolbarButtons={[
-                      <LightBoxShareButton mediaNodeName={mediaNodeName} mediaHref={mainHref}/>,
-                      <LightBoxDownloadButton mediaUrl={mainSrc} mediaMimeType={mainMimeType}/>,
-                      <LightBoxReactions/>
-                  ]}
-                  zoomInLabel={t("zoom-in")}
-                  zoomOutLabel={t("zoom-out")}
-                  imageCaption={<LightBoxCaption posting={mediaPosting}/>}/>
+        <ParentContext.Provider value={{hide: onCloseRequest, overlayId}}>
+            <Lightbox
+                mainSrc={mainSrc}
+                prevSrc={prevSrc}
+                nextSrc={nextSrc}
+                imageTitle={title}
+                onCloseRequest={onCloseRequest}
+                closeLabel={t("close")}
+                onMovePrevRequest={onMovePrevRequest}
+                prevLabel={t("previous-image")}
+                onMoveNextRequest={onMoveNextRequest}
+                nextLabel={t("next-image")}
+                reactModalStyle={{overlay: {zIndex: zIndex?.shadow}}}
+                toolbarButtons={[
+                    <LightBoxShareButton mediaNodeName={mediaNodeName} mediaHref={mainHref}/>,
+                    <LightBoxDownloadButton mediaUrl={mainSrc} mediaMimeType={mainMimeType}/>,
+                    <LightBoxReactions/>
+                ]}
+                zoomInLabel={t("zoom-in")}
+                zoomOutLabel={t("zoom-out")}
+                imageCaption={<LightBoxCaption posting={mediaPosting}/>}
+            />
+        </ParentContext.Provider>
     );
 }
 

@@ -6,6 +6,7 @@ import { Placement, PositioningStrategy } from '@popperjs/core';
 
 import { PopoverContext } from "ui/control";
 import { useOverlay } from "ui/overlays/overlays";
+import { ParentContext } from "ui/hook";
 import "./Popover.css";
 
 interface Props {
@@ -63,36 +64,43 @@ export function Popover({
         = useOverlay(popperRef, {parentId: parentOverlayId, visible: !detached || visible, onClose: hide});
 
     return (
-        <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {}), overlayId}}>
-            <span ref={setButtonRef} onClick={toggle} title={title} className={cx(textClassName, {"active": visible})}>
-                {text}
-            </span>
-            {ReactDOM.createPortal(
-                (!detached || visible) &&
-                    <div
-                        ref={setPopperRef}
-                        style={{...styles.popper, zIndex: zIndex?.widget}}
-                        {...attributes.popper}
-                        className={cx(
-                            "popover",
-                            "fade",
-                            `bs-popover-${state?.placement}`, // activates Bootstrap style for .popover-arrow
-                            {"show": visible},
-                            className
-                        )}
-                    >
+        <ParentContext.Provider value={{hide, overlayId}}>
+            <PopoverContext.Provider value={{update: forceUpdate ?? (() => {})}}>
+                <span
+                    ref={setButtonRef}
+                    onClick={toggle}
+                    title={title}
+                    className={cx(textClassName, {"active": visible})}
+                >
+                    {text}
+                </span>
+                {ReactDOM.createPortal(
+                    (!detached || visible) &&
                         <div
-                            ref={setArrowRef}
-                            style={styles.arrow}
-                            {...attributes.arrow}
-                            className="popover-arrow"
-                        />
-                        <div className="popover-body">
-                            {children}
-                        </div>
-                    </div>,
-                document.getElementById("modal-root")!
-            )}
-        </PopoverContext.Provider>
+                            ref={setPopperRef}
+                            style={{...styles.popper, zIndex: zIndex?.widget}}
+                            {...attributes.popper}
+                            className={cx(
+                                "popover",
+                                "fade",
+                                `bs-popover-${state?.placement}`, // activates Bootstrap style for .popover-arrow
+                                {"show": visible},
+                                className
+                            )}
+                        >
+                            <div
+                                ref={setArrowRef}
+                                style={styles.arrow}
+                                {...attributes.arrow}
+                                className="popover-arrow"
+                            />
+                            <div className="popover-body">
+                                {children}
+                            </div>
+                        </div>,
+                    document.getElementById("modal-root")!
+                )}
+            </PopoverContext.Provider>
+        </ParentContext.Provider>
     );
 }

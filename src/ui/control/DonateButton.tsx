@@ -5,9 +5,10 @@ import { useTranslation } from 'react-i18next';
 
 import { FundraiserInfo } from "api";
 import { openDonateDialog } from "state/donatedialog/actions";
-import { Button, usePopover } from "ui/control";
+import { Button } from "ui/control";
 import * as Browser from "ui/browser";
 import { Icon, msVolunteerActivism } from "ui/material-symbols";
+import { useParent } from "ui/hook";
 
 interface Props {
     name: string | null;
@@ -21,7 +22,7 @@ export function DonateButton({name, fullName, fundraisers, styles = "large", cla
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const {hide: hidePopover} = usePopover();
+    const {hide: hidePopover} = useParent();
 
     if (name == null || fundraisers == null || fundraisers.length === 0) {
         return null;

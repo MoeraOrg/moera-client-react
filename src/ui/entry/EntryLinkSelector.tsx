@@ -4,8 +4,8 @@ import shortenUrl from 'shorten-url';
 import { useTranslation } from 'react-i18next';
 
 import { Icon, msLink } from "ui/material-symbols";
-import { useButtonPopper } from "ui/hook";
-import { Button, useModalDialog } from "ui/control";
+import { useButtonPopper, useParent } from "ui/hook";
+import { Button } from "ui/control";
 import "./EntryLinkSelector.css";
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default function EntryLinkSelector({urls, onSelect, disabled}: Props) {
-    const {overlayId: parentOverlayId} = useModalDialog();
+    const {overlayId: parentOverlayId} = useParent();
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
     } = useButtonPopper("bottom-start", {parentOverlayId});

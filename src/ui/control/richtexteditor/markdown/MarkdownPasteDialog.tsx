@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ModalDialog } from "ui/control/ModalDialog";
-import { Button } from "ui/control/Button";
-import { useModalDialog } from "ui/control/modal-dialog-context";
+import { Button, ModalDialog } from "ui/control";
+import { useParent } from "ui/hook";
 import "./MarkdownPasteDialog.css";
 
 export type RichTextPasteMode = "none" | "text" | "html";
@@ -27,7 +26,7 @@ export default function MarkdownPasteDialog({onSubmit}: Props) {
         }
     }
 
-    const {overlayId: parentOverlayId} = useModalDialog();
+    const {overlayId: parentOverlayId} = useParent();
 
     return (
         <ModalDialog title={t("paste-with-formatting")} className="rich-text-paste-dialog"

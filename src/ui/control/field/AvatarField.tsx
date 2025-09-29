@@ -8,8 +8,8 @@ import { AvatarInfo } from "api";
 import { ClientState } from "state/state";
 import { homeAvatarsLoad } from "state/home/actions";
 import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
-import { useButtonPopper } from "ui/hook";
-import { Avatar, Loading, useModalDialog } from "ui/control";
+import { useButtonPopper, useParent } from "ui/hook";
+import { Avatar, Loading } from "ui/control";
 import "./AvatarField.css";
 
 interface Props {
@@ -29,7 +29,7 @@ export function AvatarField({name, size, disabled}: Props) {
 
     const [, {value}, {setValue}] = useField<AvatarInfo | null>(name);
 
-    const {overlayId: parentOverlayId} = useModalDialog();
+    const {overlayId: parentOverlayId} = useParent();
     const {
         visible, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
         placement, zIndex

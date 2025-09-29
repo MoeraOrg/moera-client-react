@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad } from "state/feeds/actions";
-import { usePopover } from "ui/control";
+import { useParent } from "ui/hook";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
 import NoInstants from "ui/instant/NoInstants";
@@ -25,7 +25,7 @@ export default function Instants({instantBorder}: Props) {
 
     const pastIntersecting = useRef<boolean>(true);
 
-    const {hide} = usePopover();
+    const {hide} = useParent();
 
     const loadPast = () => {
         if (loadingPast || after <= Number.MIN_SAFE_INTEGER) {

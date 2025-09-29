@@ -5,11 +5,11 @@ import cx from 'classnames';
 
 import { tTitle } from "i18n";
 import { getFeedWidth } from "state/settings/selectors";
-import { CloseButton, Loading, ModalDialogContext } from "ui/control";
+import { CloseButton, Loading } from "ui/control";
 import { useOverlay } from "ui/overlays/overlays";
-import { useIsTinyScreen } from "ui/hook";
-import "./ModalDialog.css";
+import { ParentContext, useIsTinyScreen } from "ui/hook";
 import MobileBack from "ui/page/MobileBack";
+import "./ModalDialog.css";
 
 interface Props {
     title?: string;
@@ -45,7 +45,7 @@ export function ModalDialog({
     }, [onKeyDown]);
 
     return ReactDOM.createPortal(
-        <ModalDialogContext.Provider value={{overlayId}}>
+        <ParentContext.Provider value={{hide: onClose ?? (() => {}), overlayId}}>
             <div className={cx("modal-backdrop", "show")} style={{zIndex: zIndex?.shadow}}/>
             <div className={cx("modal", "show")} style={{zIndex: zIndex?.widget}}>
                 <div className={cx(
@@ -78,7 +78,7 @@ export function ModalDialog({
                     </div>
                 </div>
             </div>
-        </ModalDialogContext.Provider>,
+        </ParentContext.Provider>,
         document.getElementById("modal-root")!
     );
 }

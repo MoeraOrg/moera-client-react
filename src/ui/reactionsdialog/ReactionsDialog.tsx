@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { closeReactionsDialog } from "state/reactionsdialog/actions";
 import { isReactionsDialogPermitted } from "state/reactionsdialog/selectors";
-import { PopoverContext } from "ui/control";
 import { useOverlay } from "ui/overlays/overlays";
+import { ParentContext } from "ui/hook";
 import MobileBack from "ui/page/MobileBack";
 import ReactionsChartView from "ui/reactionsdialog/ReactionsChartView";
 import ReactionsListView from "ui/reactionsdialog/ReactionsListView";
@@ -37,7 +37,7 @@ export default function ReactionsDialog() {
     const onSwitchView = () => setChartView(!chartView);
 
     return ReactDOM.createPortal(
-        <PopoverContext.Provider value={{hide: onClose, update: () => {}, overlayId}}>
+        <ParentContext.Provider value={{hide: onClose, overlayId}}>
             <div className="reactions-dialog-backdrop modal" style={{zIndex: zIndex?.shadow}}>
                 <div className="reactions-dialog popover show" style={{zIndex: zIndex?.widget}} ref={modalDialog}>
                     <MobileBack href="/news" onBack={onClose}>
@@ -53,7 +53,7 @@ export default function ReactionsDialog() {
                     </div>
                 </div>
             </div>
-        </PopoverContext.Provider>,
+        </ParentContext.Provider>,
         document.getElementById("modal-root")!
     );
 }

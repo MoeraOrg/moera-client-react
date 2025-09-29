@@ -8,7 +8,8 @@ import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
 import { getNodeCard, isNodeCardAnyLoaded, isNodeCardAnyLoading } from "state/nodecards/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
-import { Avatar, DonateButton, SubscribeButton, usePopover } from "ui/control";
+import { Avatar, DonateButton, SubscribeButton } from "ui/control";
+import { useParent } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import { shortGender } from "util/names";
 import { RelNodeName } from "util/rel-node-name";
@@ -28,7 +29,7 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
     const homeOwnerName = useSelector(getHomeOwnerName);
     const {t} = useTranslation();
 
-    const {hide: hidePopover} = usePopover();
+    const {hide: hidePopover} = useParent();
 
     if (card == null || (!anyLoaded && !anyLoading)) {
         return (

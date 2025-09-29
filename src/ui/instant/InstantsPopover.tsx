@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { feedStatusUpdate } from "state/feeds/actions";
 import { getFeedState } from "state/feeds/selectors";
-import { usePopover } from "ui/control";
+import { useParent } from "ui/hook";
 import { Icon, msClose } from "ui/material-symbols";
 import Instants from "ui/instant/Instants";
 import { REL_HOME } from "util/rel-node-name";
@@ -20,7 +20,7 @@ export default function InstantsPopover({instantBorder}: Props) {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const {hide} = usePopover();
+    const {hide} = useParent();
 
     const onReadAll = () => {
         if (stories.length === 0) {

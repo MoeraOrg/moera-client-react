@@ -29,7 +29,6 @@ export { Loading } from "ui/control/Loading";
 export { LoadingInline } from "ui/control/LoadingInline";
 export { MenuButton } from "ui/control/dropdownmenu/MenuButton";
 export { ModalDialog } from "ui/control/ModalDialog";
-export { ModalDialogContext, useModalDialog } from "ui/control/modal-dialog-context";
 export { NameHelp } from "ui/control/NameHelp";
 export { NameSelector } from "ui/control/NameSelector";
 export { NameSuggestion } from "ui/control/NameSuggestion";

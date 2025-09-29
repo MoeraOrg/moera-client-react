@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { feedStatusUpdate } from "state/feeds/actions";
 import { getFeedState } from "state/feeds/selectors";
-import { PopoverContext } from "ui/control";
 import { useOverlay } from "ui/overlays/overlays";
+import { ParentContext } from "ui/hook";
 import MobileBack from "ui/page/MobileBack";
 import Instants from "ui/instant/Instants";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
@@ -33,7 +33,7 @@ export default function InstantsDialog({instantBorder, onClose}: Props) {
     }
 
     return ReactDOM.createPortal(
-        <PopoverContext.Provider value={{hide: onClose, update: () => {}, overlayId}}>
+        <ParentContext.Provider value={{hide: onClose, overlayId}}>
             <div id="instants" style={{zIndex: zIndex?.widget}} ref={instantsRef}>
                 <MobileBack
                     href="/news"
@@ -58,7 +58,7 @@ export default function InstantsDialog({instantBorder, onClose}: Props) {
                     <div className="build-number">rev {BUILD_NUMBER}</div>
                 </div>
             </div>
-        </PopoverContext.Provider>,
+        </ParentContext.Provider>,
         document.getElementById("modal-root")!
     );
 }

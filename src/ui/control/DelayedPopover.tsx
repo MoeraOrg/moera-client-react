@@ -5,6 +5,7 @@ import cx from 'classnames';
 
 import { PopoverContext } from "ui/control";
 import { OverlayZIndex, useOverlay } from "ui/overlays/overlays";
+import { ParentContext } from "ui/hook";
 import { createPortalIfNeeded } from "util/ui";
 
 export type DelayedPopoverElement = (ref: (dom: Element | null) => void) => any;
@@ -215,44 +216,46 @@ export function DelayedPopover({
     };
 
     return (
-        <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {}), overlayId}}>
-            {element(setButtonRef)}
-            {popup && createPortalIfNeeded(
-                <div
-                    ref={setPopperRef}
-                    style={{...popperStyles.popper, zIndex: zIndex?.widget}}
-                    {...attributes.popper}
-                    className={cx(
-                        "shadow",
-                        "fade",
-                        "show",
-                        `bs-popover-${state?.placement}`, // activates Bootstrap style for .popover-arrow
-                        {
-                            "popover": styles === "popover",
-                            "dropdown-menu": styles === "menu",
-                        },
-                        className
-                    )}
-                >
-                    {arrow &&
-                        <div
-                            ref={setArrowRef}
-                            style={popperStyles.arrow}
-                            {...attributes.arrow}
-                            className="popover-arrow"
-                        />
-                    }
+        <ParentContext.Provider value={{hide, overlayId}}>
+            <PopoverContext.Provider value={{update: forceUpdate ?? (() => {})}}>
+                {element(setButtonRef)}
+                {popup && createPortalIfNeeded(
                     <div
-                        className={cx({"popover-body": styles === "popover"})}
-                        onMouseEnter={popupEnter}
-                        onMouseLeave={!sticky ? popupLeave : undefined}
+                        ref={setPopperRef}
+                        style={{...popperStyles.popper, zIndex: zIndex?.widget}}
+                        {...attributes.popper}
+                        className={cx(
+                            "shadow",
+                            "fade",
+                            "show",
+                            `bs-popover-${state?.placement}`, // activates Bootstrap style for .popover-arrow
+                            {
+                                "popover": styles === "popover",
+                                "dropdown-menu": styles === "menu",
+                            },
+                            className
+                        )}
                     >
-                        {children}
-                    </div>
-                </div>,
-                popoverContainer
-            )}
-        </PopoverContext.Provider>
+                        {arrow &&
+                            <div
+                                ref={setArrowRef}
+                                style={popperStyles.arrow}
+                                {...attributes.arrow}
+                                className="popover-arrow"
+                            />
+                        }
+                        <div
+                            className={cx({"popover-body": styles === "popover"})}
+                            onMouseEnter={popupEnter}
+                            onMouseLeave={!sticky ? popupLeave : undefined}
+                        >
+                            {children}
+                        </div>
+                    </div>,
+                    popoverContainer
+                )}
+            </PopoverContext.Provider>
+        </ParentContext.Provider>
     );
 }
 

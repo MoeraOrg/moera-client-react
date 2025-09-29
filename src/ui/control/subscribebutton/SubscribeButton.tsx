@@ -7,10 +7,11 @@ import { getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
 import { feedSubscribe } from "state/feeds/actions";
 import { openBlockingDetailsDialog } from "state/blockingdetailsdialog/actions";
-import { Button, DropdownMenu, MenuButton, useModalDialog, usePopover } from "ui/control";
+import { Button, DropdownMenu, MenuButton } from "ui/control";
 import { MenuItem } from "ui/control/dropdownmenu/dropdown-menu-types";
 import { getSubscriptionStatus } from "ui/control/subscribebutton/subscription-status";
 import SubscribeButtonMenu from "ui/control/subscribebutton/SubscribeButtonMenu";
+import { useParent } from "ui/hook";
 import "./SubscribeButton.css";
 
 interface Props {
@@ -30,9 +31,7 @@ export function SubscribeButton({nodeName, feedName, onDialogOpened, addon, butt
     const loaded = card?.subscription.loaded && card?.friendship.loaded && card?.blocking.loaded;
     const {caption, blocked, blockedBy} = getSubscriptionStatus(card, homeGender, t);
 
-    const {overlayId: dialogOverlayId} = useModalDialog();
-    const {overlayId: popoverOverlayId} = usePopover();
-    const parentOverlayId = popoverOverlayId ?? dialogOverlayId;
+    const {overlayId: parentOverlayId} = useParent();
     const dispatch = useDispatch();
 
     if (nodeName === homeOwnerName) {

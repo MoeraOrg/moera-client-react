@@ -12,10 +12,10 @@ import {
     msFormatH5,
     msTitle
 } from "ui/material-symbols";
-import { useDropdownMenu } from "ui/control/index";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import FormattingSubmenuButton from "ui/control/richtexteditor/formatting-menu/FormattingSubmenuButton";
 import { FormattingMenuItem } from "ui/control/richtexteditor/formatting-menu/FormattingMenuItem";
+import { useParent } from "ui/hook";
 
 interface Props {
     onSelect?: (headingLevel: number) => void;
@@ -25,7 +25,7 @@ export default function FormattingHeadingButton({onSelect}: Props) {
     const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
 
     const {enableHeading, headingLevel, focus} = useRichTextEditorCommands();
-    const {hide} = useDropdownMenu();
+    const {hide} = useParent();
     const {t} = useTranslation();
 
     const onItemSelect = (e: React.MouseEvent, headingLevel: number) => {

@@ -12,8 +12,9 @@ import {
     isReactionsDialogReactionsAllLoaded,
     isReactionsDialogReactionsLoading
 } from "state/reactionsdialog/selectors";
-import { Avatar, Loading, SubscribeButton, usePopover } from "ui/control";
+import { Avatar, Loading, SubscribeButton } from "ui/control";
 import { getSubscriptionStatus, SubscriptionStatus } from "ui/control/subscribebutton/subscription-status";
+import { useParent } from "ui/hook";
 import { Icon, msFinance } from "ui/material-symbols";
 import Twemoji from "ui/twemoji/Twemoji";
 import NodeName from "ui/nodename/NodeName";
@@ -35,7 +36,7 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
     const reactionsLoading = useSelector(isReactionsDialogReactionsLoading);
     const reactionsLoaded = useSelector(isReactionsDialogReactionsAllLoaded);
     const reactions = useSelector(getReactionsDialogItems);
-    const {hide} = usePopover();
+    const {hide} = useParent();
     const dispatch = useDispatch();
     const {t} = useTranslation();
 

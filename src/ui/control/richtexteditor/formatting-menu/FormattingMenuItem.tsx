@@ -2,10 +2,9 @@ import React, { ForwardedRef, forwardRef } from 'react';
 import cx from 'classnames';
 
 import { Icon, MaterialSymbol } from "ui/material-symbols";
-import { useIsTinyScreen } from "ui/hook";
-import { useDropdownMenu } from "ui/control/index";
+import { useIsTinyScreen, useParent } from "ui/hook";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
-import "ui/control/richtexteditor/formatting-menu/FormattingMenuItem.css";
+import "./FormattingMenuItem.css";
 
 interface Props {
     icon: MaterialSymbol;
@@ -24,7 +23,7 @@ export function FormattingMenuItemImpl(
     ref: ForwardedRef<HTMLButtonElement>
 ) {
     const {focus} = useRichTextEditorCommands();
-    const {hide} = useDropdownMenu();
+    const {hide} = useParent();
 
     const onCommandClick = (event: React.MouseEvent) => {
         command && command();

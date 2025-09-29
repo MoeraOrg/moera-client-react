@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { reactionsDialogSelectTab } from "state/reactionsdialog/actions";
-import { CloseButton, Loading, UnderlinedTabDescription, UnderlinedTabs, usePopover } from "ui/control";
+import { CloseButton, Loading, UnderlinedTabDescription, UnderlinedTabs } from "ui/control";
+import { useParent } from "ui/hook";
 
 interface Props {
     hidden?: boolean;
@@ -14,7 +15,7 @@ interface Props {
 export default function TotalsTabs({hidden, children}: Props) {
     const {loading, loaded, total, emojis} = useSelector((state: ClientState) => state.reactionsDialog.totals);
     const activeTab = useSelector((state: ClientState) => state.reactionsDialog.activeTab);
-    const {hide} = usePopover();
+    const {hide} = useParent();
     const dispatch = useDispatch();
     const {t} = useTranslation();
 

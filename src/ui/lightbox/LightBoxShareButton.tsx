@@ -17,7 +17,7 @@ import { getPosting } from "state/postings/selectors";
 import { getComment } from "state/detailedposting/selectors";
 import { getOwnerName } from "state/node/selectors";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
-import { useLightBox } from "ui/lightbox/lightbox-context";
+import { useParent } from "ui/hook";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { urlWithParameters, ut } from "util/url";
 import './LightBoxShareButton.css';
@@ -97,7 +97,7 @@ function LightBoxShareItems({mediaNodeName, mediaHref}: Props) {
 export default function LightBoxShareButton({mediaNodeName, mediaHref}: Props) {
     const {t} = useTranslation();
 
-    const {overlayId: parentOverlayId} = useLightBox();
+    const {overlayId: parentOverlayId} = useParent();
 
     return (
         <DropdownMenu parentOverlayId={parentOverlayId} className="lightbox-button lightbox-share" content={
