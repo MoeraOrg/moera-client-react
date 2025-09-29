@@ -1,7 +1,6 @@
 .sandwich-menu HR {
     border-color: var(--bs-gray-500);
-    margin-left: 1rem;
-    margin-right: 1rem;
+    margin: 0 1rem;
 }
 
 .sandwich-menu .profile {
@@ -36,4 +35,17 @@
     line-height: 143%;
     color: var(--bs-gray-700);
     overflow-wrap: anywhere;
+}
+
+.sandwich-menu .item {
+    padding: 1rem 1.5rem 1rem 1rem;
+    height: 3.5rem;
+    display: flex;
+    gap: .75rem;
+    align-items: center;
+    font-weight: 500;
+    font-size: .88rem;
+    line-height: 143%;
+    color: var(--bs-gray-700);
+    cursor: pointer;
 }

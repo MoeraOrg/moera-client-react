@@ -10,9 +10,8 @@ import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName } from "stat
 import { Avatar, OnlyDesktop } from "ui/control";
 import { Icon, MaterialSymbol, msExplore, msPublic, msReport, msSettings } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
-import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import NewsCounter from "ui/mainmenu/NewsCounter";
-import { getFeedTitle } from "ui/feed/feeds";
+import { getFeedTitle, useHomeNews } from "ui/feed/feeds";
 import { REL_HOME } from "util/rel-node-name";
 import "./MainMenuSidebar.css";
 
@@ -35,7 +34,7 @@ export default function MainMenuSidebar({selected}: Props) {
     const ownerName = useSelector(getHomeOwnerName);
     const ownerFullName = useSelector(getHomeOwnerFullName);
     const avatar = useSelector(getHomeOwnerAvatar);
-    const newsHref = useMainMenuHomeNews().href;
+    const newsHref = useHomeNews();
     const {t} = useTranslation();
 
     const MENU_TABS = useMemo<MenuItem[]>(() => [

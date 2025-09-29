@@ -6,9 +6,9 @@ import { Page } from "ui/page/Page";
 import MobileBack from "ui/page/MobileBack";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
+import { useHomeNews } from "ui/feed/feeds";
 import { useSearchSuggestions } from "ui/mainmenu/search/search-suggestions";
 import SearchInput from "ui/mainmenu/search/SearchInput";
-import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import SearchSuggestions from "ui/mainmenu/search/SearchSuggestions";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { useOverlay } from "ui/overlays/overlays";
@@ -18,7 +18,7 @@ import { REL_HOME } from "util/rel-node-name";
 
 export default function MobileSearchPage() {
     const searchQuery = useSelector(getSearchQuery);
-    const newsHref = useMainMenuHomeNews().href;
+    const newsHref = useHomeNews();
     const pageRef = useRef(null);
     const [suggestions, setSuggestions] = useState<boolean>(!searchQuery);
 

@@ -68,6 +68,7 @@ import { ReactComponent as msLink } from "ui/material-symbols/link.isvg";
 import { ReactComponent as msListAlt } from "ui/material-symbols/list_alt.isvg";
 import { ReactComponent as msLiveHelp } from "ui/material-symbols/live_help.isvg";
 import { ReactComponent as msLock } from "ui/material-symbols/lock.isvg";
+import { ReactComponent as msLogout } from "ui/material-symbols/logout.isvg";
 import { ReactComponent as msMediaLink } from "ui/material-symbols/media_link.isvg";
 import { ReactComponent as msMenu } from "ui/material-symbols/menu.isvg";
 import { ReactComponent as msMoreHoriz } from "ui/material-symbols/more_horiz.isvg";
@@ -105,6 +106,7 @@ import { ReactComponent as msStarFilled16 } from "ui/material-symbols/star_fille
 import { ReactComponent as msStrikethroughS } from "ui/material-symbols/strikethrough_s.isvg";
 import { ReactComponent as msSubscript } from "ui/material-symbols/subscript.isvg";
 import { ReactComponent as msSuperscript } from "ui/material-symbols/superscript.isvg";
+import { ReactComponent as msSwapHoriz } from "ui/material-symbols/swap_horiz.isvg";
 import { ReactComponent as msThumbDown } from "ui/material-symbols/thumb_down.isvg";
 import { ReactComponent as msThumbUp } from "ui/material-symbols/thumb_up.isvg";
 import { ReactComponent as msThumbsDownSolid } from "ui/material-symbols/thumbs-down-solid.isvg"; // FontAwesome
@@ -184,6 +186,7 @@ export {
     msListAlt,
     msLiveHelp,
     msLock,
+    msLogout,
     msKeyboardArrowDown,
     msKeyboardArrowRight,
     msKeyboardArrowUp,
@@ -224,6 +227,7 @@ export {
     msStrikethroughS,
     msSubscript,
     msSuperscript,
+    msSwapHoriz,
     msThumbDown,
     msThumbUp,
     msThumbsDownSolid,

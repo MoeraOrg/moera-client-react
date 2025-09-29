@@ -8,10 +8,10 @@ import { getOwnerAvatar, getOwnerCard, getOwnerFullName, getOwnerName, getOwnerT
 import { DonateButton, OnlyMobile } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import MobileBack from "ui/page/MobileBack";
-import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import ProfileAvatar from "ui/profile/ProfileAvatar";
 import ManagementMenuItems from "ui/profile/manage/ManagementMenuItems";
 import OperationStatus from "ui/profile/manage/OperationStatus";
+import { useHomeNews } from "ui/feed/feeds";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import { mentionName } from "util/names";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
@@ -26,7 +26,7 @@ export default function ProfileTitle() {
     const storiesTotal = card?.stories.storiesTotal ?? "?";
     const subscribersTotal = card?.people.subscribersTotal ?? "?";
     const fundraisers = useSelector((state: ClientState) => state.profile.profile.fundraisers);
-    const newsHref = useMainMenuHomeNews().href;
+    const newsHref = useHomeNews();
 
     return (
         <>

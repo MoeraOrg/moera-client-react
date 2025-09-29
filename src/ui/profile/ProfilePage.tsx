@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { getOwnerCard } from "state/node/selectors";
-import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import { useHomeNews } from "ui/feed/feeds";
 import NewsCounter from "ui/mainmenu/NewsCounter";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { Page } from "ui/page/Page";
@@ -20,7 +20,7 @@ import "./ProfilePage.css";
 
 export default function ProfilePage() {
     const profile = useSelector((state: ClientState) => getOwnerCard(state)?.details?.profile);
-    const newsHref = useMainMenuHomeNews().href;
+    const newsHref = useHomeNews();
     const {t} = useTranslation();
 
     return (

@@ -13,7 +13,7 @@ import { getDetailedPosting, isDetailedPostingBeingDeleted } from "state/detaile
 import { getPostingFeedReference, isPostingSheriffProhibited } from "state/postings/selectors";
 import { Button, Loading } from "ui/control";
 import { MinimalStoryInfo } from "ui/types";
-import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import { useHomeNews } from "ui/feed/feeds";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { Page } from "ui/page/Page";
@@ -77,7 +77,7 @@ export default function DetailedPostingPage() {
     const deleting = useSelector(isDetailedPostingBeingDeleted);
     const posting = useSelector(getDetailedPosting);
     const googlePlayHiding = useSelector(isGooglePlayHiding);
-    const newsHref = useMainMenuHomeNews().href;
+    const newsHref = useHomeNews();
     const dispatch = useDispatch();
     const {t} = useTranslation();
 

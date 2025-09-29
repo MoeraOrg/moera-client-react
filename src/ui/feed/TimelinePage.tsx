@@ -7,12 +7,12 @@ import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
 import DesktopBack from "ui/page/DesktopBack";
-import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import NewsCounter from "ui/mainmenu/NewsCounter";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import ProfileTitle from "ui/profile/ProfileTitle";
 import ProfileTabs from "ui/profile/ProfileTabs";
 import ProfileSidebar from "ui/profile/ProfileSidebar";
+import { useHomeNews } from "ui/feed/feeds";
 import FeedPage from "ui/feed/FeedPage";
 import FeedGotoButton from "ui/feed/FeedGotoButton";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
@@ -20,7 +20,7 @@ import "./TimelinePage.css";
 
 export default function TimelinePage() {
     const visible = useSelector(isAtTimelinePage);
-    const newsHref = useMainMenuHomeNews().href;
+    const newsHref = useHomeNews();
     const {t} = useTranslation();
 
     const [navigable, setNavigable] = useState<boolean>(false);

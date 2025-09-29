@@ -12,7 +12,7 @@ import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
 import MobileBack from "ui/page/MobileBack";
-import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import { useHomeNews } from "ui/feed/feeds";
 import ExploreTabs from "ui/explore/ExploreTabs";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
@@ -21,7 +21,7 @@ import "./ActivePeoplePage.css";
 
 export default function ActivePeoplePage() {
     const homeOwnerName = useSelector(getHomeOwnerName);
-    const newsHref = useMainMenuHomeNews().href;
+    const newsHref = useHomeNews();
     const loading = useSelector((state: ClientState) => state.explore.loadingActivePeople);
     const people = useSelector((state: ClientState) => state.explore.activePeople);
     const {t} = useTranslation();

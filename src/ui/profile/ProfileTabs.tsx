@@ -3,10 +3,11 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { tTitle } from "i18n";
-import { UnderlinedTabs } from "ui/control";
-import { useIsTinyScreen } from "ui/hook";
 import { ClientState } from "state/state";
 import { getOwnerCard } from "state/node/selectors";
+import { UnderlinedTabs } from "ui/control";
+import { useIsTinyScreen } from "ui/hook";
+import { useTimeline } from "ui/feed/feeds";
 
 interface Props {
     value: string;
@@ -15,6 +16,7 @@ interface Props {
 
 export default function ProfileTabs({value, children}: Props) {
     const profile = useSelector((state: ClientState) => getOwnerCard(state)?.details?.profile);
+    const timelineHref = useTimeline();
     const tinyScreen = useIsTinyScreen();
     const {t} = useTranslation();
 
@@ -29,7 +31,7 @@ export default function ProfileTabs({value, children}: Props) {
             {
                 value: "posts",
                 title: tTitle(t("profile-tabs.posts")),
-                href: "/timeline"
+                href: timelineHref
             },
             {
                 value: "people",

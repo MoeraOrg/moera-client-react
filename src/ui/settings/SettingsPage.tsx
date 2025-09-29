@@ -7,8 +7,8 @@ import { isConnectedToHome } from "state/home/selectors";
 import { Page } from "ui/page/Page";
 import MobileBack from "ui/page/MobileBack";
 import { useOverlay } from "ui/overlays/overlays";
+import { useHomeNews } from "ui/feed/feeds";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
-import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { useDisableScrollX } from "ui/settings/settings-hooks";
 import SettingsConflicts from "ui/settings/SettingsConflicts";
@@ -24,7 +24,7 @@ type NotebookSide = "menu" | "sheet";
 export default function SettingsPage() {
     const connectedToHome = useSelector(isConnectedToHome);
     const tab = useSelector((state: ClientState) => state.settings.tab);
-    const newsHref = useMainMenuHomeNews().href;
+    const newsHref = useHomeNews();
     const [side, setSide] = React.useState<NotebookSide>("menu");
     const switcherRef = useRef<HTMLDivElement>(null);
     useOverlay(

@@ -8,17 +8,17 @@ import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
 import MobileBack from "ui/page/MobileBack";
-import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
 import ExploreTabs from "ui/explore/ExploreTabs";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
+import { useHomeNews } from "ui/feed/feeds";
 import FeedPage from "ui/feed/FeedPage";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import "./ExplorePage.css";
 
 export default function ExplorePage() {
     const visible = useSelector(isAtExplorePage);
-    const newsHref = useMainMenuHomeNews().href;
+    const newsHref = useHomeNews();
     const {t} = useTranslation();
 
     return (

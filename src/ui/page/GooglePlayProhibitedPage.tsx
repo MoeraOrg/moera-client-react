@@ -6,14 +6,14 @@ import { Page } from "ui/page/Page";
 import DesktopBack from "ui/page/DesktopBack";
 import MobileBack from "ui/page/MobileBack";
 import { ReactComponent as GooglePlayProhibited } from "ui/page/GooglePlayProhibited.isvg";
-import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import { useHomeNews } from "ui/feed/feeds";
 import NewsCounter from "ui/mainmenu/NewsCounter";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { REL_HOME } from "util/rel-node-name";
 import "./GooglePlayProhibitedPage.css";
 
 export default function GooglePlayProhibitedPage() {
-    const newsHref = useMainMenuHomeNews().href;
+    const newsHref = useHomeNews();
     const {t} = useTranslation();
 
     return (

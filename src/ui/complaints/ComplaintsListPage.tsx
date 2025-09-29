@@ -10,7 +10,7 @@ import { Icon, msInbox } from "ui/material-symbols";
 import { Page } from "ui/page/Page";
 import DesktopBack from "ui/page/DesktopBack";
 import MobileBack from "ui/page/MobileBack";
-import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import { useHomeNews } from "ui/feed/feeds";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import ComplaintGroupLine from "ui/complaints/ComplaintGroupLine";
@@ -25,7 +25,7 @@ export default function ComplaintsListPage() {
     const totalInPast = useSelector((state: ClientState) => state.complaints.totalInPast);
     const before = useSelector((state: ClientState) => state.complaints.before);
     const inboxOnly = useSelector((state: ClientState) => state.complaints.inboxOnly);
-    const newsHref = useMainMenuHomeNews().href;
+    const newsHref = useHomeNews();
     const dispatch = useDispatch();
     const {t} = useTranslation();
 

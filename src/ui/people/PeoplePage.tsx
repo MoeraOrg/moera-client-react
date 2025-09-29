@@ -8,7 +8,7 @@ import { Page } from "ui/page/Page";
 import DesktopBack from "ui/page/DesktopBack";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
-import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import { useHomeNews } from "ui/feed/feeds";
 import NewsCounter from "ui/mainmenu/NewsCounter";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import ProfileTitle from "ui/profile/ProfileTitle";
@@ -27,7 +27,7 @@ export default function PeoplePage() {
     const showAskDialog = useSelector((state: ClientState) => state.askDialog.show);
     const showPeopleHideDialog = useSelector((state: ClientState) => state.peopleHideDialog.show);
     const showFriendGroupAddDialog = useSelector((state: ClientState) => state.friendGroupAddDialog.show);
-    const newsHref = useMainMenuHomeNews().href;
+    const newsHref = useHomeNews();
     const {t} = useTranslation();
 
     return (

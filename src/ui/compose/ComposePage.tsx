@@ -24,7 +24,7 @@ import { RichTextField } from "ui/control/richtexteditor";
 import { Page } from "ui/page/Page";
 import MobileBack from "ui/page/MobileBack";
 import DesktopBack from "ui/page/DesktopBack";
-import { useMainMenuHomeNews } from "ui/mainmenu/pages/main-menu";
+import { useHomeNews } from "ui/feed/feeds";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import ComposeViewPrincipal from "ui/compose/ComposeViewPrincipal";
@@ -51,7 +51,7 @@ function ComposePageInner(props: Props) {
     const conflict = useSelector((state: ClientState) => state.compose.conflict);
     const beingPosted = useSelector((state: ClientState) => state.compose.beingPosted);
     const showPreview = useSelector((state: ClientState) => state.compose.showPreview);
-    const newsHref = useMainMenuHomeNews().href;
+    const newsHref = useHomeNews();
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
