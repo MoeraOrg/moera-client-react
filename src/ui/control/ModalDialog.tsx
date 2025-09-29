@@ -60,7 +60,7 @@ export function ModalDialog({
                 )} style={{"--feed-width": feedWidth + "px"}}>
                     <div className="modal-content" ref={modalDialog}>
                         {loading && <Loading overlay large/>}
-                        {!tinyScreen ?
+                        {!tinyScreen || !expand ?
                             (title &&
                                 <div className="modal-header">
                                     <h4 className="modal-title">{tTitle(title)}</h4>
