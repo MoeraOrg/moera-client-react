@@ -28,4 +28,7 @@ export interface HomeState {
         checksum: number;
         blockedUsers: BlockedUserInfo[];
     }
+    connectionsDialog: {
+        show: boolean;
+    }
 }

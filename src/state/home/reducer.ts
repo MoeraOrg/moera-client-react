@@ -32,6 +32,9 @@ const emptyConnection = {
     invisibleUsers: {
         checksum: 0,
         blockedUsers: []
+    },
+    connectionsDialog: {
+        show: false
     }
 };
 
@@ -156,6 +159,12 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
                 checksum: action.payload.checksum,
                 blockedUsers: action.payload.blockedUsers
             });
+
+        case "OPEN_CONNECTIONS_DIALOG":
+            return immutable.set(state, "connectionsDialog.show", true);
+
+        case "CLOSE_CONNECTIONS_DIALOG":
+            return immutable.set(state, "connectionsDialog.show", false);
 
         case "BLOCKED_USERS_ADDED":
             return updateBlocked(state, action.payload.blockedUsers, true);

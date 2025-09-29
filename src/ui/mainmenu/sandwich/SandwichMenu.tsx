@@ -7,6 +7,7 @@ import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { tTitle } from "i18n";
 import { Storage } from "storage";
 import { ClientState } from "state/state";
+import { openConnectionsDialog } from "state/home/actions";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName, getHomeRootLocation } from "state/home/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { Avatar } from "ui/control";
@@ -32,6 +33,11 @@ function SandwichMenu(_: Props, ref: ForwardedRef<HTMLDivElement>) {
     const onJump = (_: string, performJump: () => void) => {
         hide();
         performJump();
+    }
+
+    const onSwitchAccounts = () => {
+        hide();
+        dispatch(openConnectionsDialog());
     }
 
     const onDisconnectConfirmed = () => {
@@ -73,7 +79,7 @@ function SandwichMenu(_: Props, ref: ForwardedRef<HTMLDivElement>) {
                         </>
                     }
                     <hr/>
-                    <div className="item">
+                    <div className="item" onClick={onSwitchAccounts}>
                         <Icon icon={msSwapHoriz} size={24}/>
                         <span>{tTitle(t("switch-accounts"))}</span>
                     </div>

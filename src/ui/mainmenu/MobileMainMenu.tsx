@@ -1,10 +1,13 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
 
+import { ClientState } from "state/state";
 import Sandwich from "ui/mainmenu/sandwich/Sandwich";
 import Logo from "ui/mainmenu/logo/Logo";
 import { useScrollShadow } from "ui/mainmenu/scroll-shadow";
 import RefreshIndicator from "ui/mainmenu/RefreshIndicator";
+import ConnectionsDialog from "ui/mainmenu/connections/ConnectionsDialog";
 import { Icon, msSearch, msSettings } from "ui/material-symbols";
 import { OnlyMobile } from "ui/control";
 import Jump from "ui/navigation/Jump";
@@ -15,6 +18,7 @@ interface Props {
 }
 
 export default function MobileMainMenu({shadow: hasShadow}: Props) {
+    const showConnectionsDialog = useSelector((state: ClientState) => state.home.connectionsDialog.show);
     const {shadow, sentinel} = useScrollShadow();
 
     return (
@@ -31,6 +35,7 @@ export default function MobileMainMenu({shadow: hasShadow}: Props) {
                 </Jump>
             </nav>
             <RefreshIndicator/>
+            {showConnectionsDialog && <ConnectionsDialog/>}
         </OnlyMobile>
     );
 }

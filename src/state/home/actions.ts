@@ -111,6 +111,14 @@ export const homeInvisibleUsersLoaded = (
 ): HomeInvisibleUsersLoadedAction =>
     actionWithPayload("HOME_INVISIBLE_USERS_LOADED", {checksum, blockedUsers});
 
+export type OpenConnectionsDialogAction = ActionWithoutPayload<"OPEN_CONNECTIONS_DIALOG">;
+export const openConnectionsDialog = (): OpenConnectionsDialogAction =>
+    actionWithoutPayload("OPEN_CONNECTIONS_DIALOG");
+
+export type CloseConnectionsDialogAction = ActionWithoutPayload<"CLOSE_CONNECTIONS_DIALOG">;
+export const closeConnectionsDialog = (): CloseConnectionsDialogAction =>
+    actionWithoutPayload("CLOSE_CONNECTIONS_DIALOG");
+
 export type HomeAnyAction =
     ConnectToHomeAction
     | ConnectionToHomeFailedAction
@@ -127,4 +135,6 @@ export type HomeAnyAction =
     | HomeFriendGroupsLoadAction
     | HomeFriendGroupsLoadedAction
     | HomeInvisibleUsersLoadAction
-    | HomeInvisibleUsersLoadedAction;
+    | HomeInvisibleUsersLoadedAction
+    | OpenConnectionsDialogAction
+    | CloseConnectionsDialogAction;

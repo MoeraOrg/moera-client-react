@@ -1,0 +1,8 @@
+.connections-dialog #connections {
+    width: unset;
+    padding: 0;
+}
+
+.connections-dialog #connections .connection-item .connection .location {
+    font-size: .88rem;
+}

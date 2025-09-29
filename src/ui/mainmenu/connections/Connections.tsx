@@ -14,7 +14,11 @@ import NodeName from "ui/nodename/NodeName";
 import { REL_HOME } from "util/rel-node-name";
 import "./Connections.css";
 
-export default function Connections() {
+interface Props {
+    noActiveRoot?: boolean;
+}
+
+export default function Connections({noActiveRoot}: Props) {
     const location = useSelector(getHomeRootLocation);
     const login = useSelector((state: ClientState) => state.home.login);
     const owner = useSelector((state: ClientState) => state.home.owner);
@@ -60,7 +64,7 @@ export default function Connections() {
 
     return (
         <div id="connections">
-            {activeRoot &&
+            {activeRoot && !noActiveRoot &&
                 <div className="connection-item active">
                     <Jump className="connection" nodeName={REL_HOME} href="/"
                           onNear={onActiveItemClick} onFar={onActiveItemClick}>
