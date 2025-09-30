@@ -3,7 +3,7 @@
         height: 4rem;
         padding: .75rem 1rem;
         display: grid;
-        grid-template-columns: 1.5rem auto 2.5rem 2.5rem;
+        grid-template-columns: 1.5rem auto 2.5rem max-content;
         gap: .5rem;
         align-items: center;
     }
@@ -30,6 +30,11 @@
         place-items: center;
 
         --bs-btn-color: var(--bs-gray-600);
+    }
+
+    #main-menu .btn-primary {
+        width: 6.5rem;
+        height: 2.5rem;
     }
 
     #main-menu-sentinel {

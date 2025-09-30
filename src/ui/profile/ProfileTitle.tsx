@@ -5,8 +5,10 @@ import { Trans } from 'react-i18next';
 import { NodeName } from "api";
 import { ClientState } from "state/state";
 import { getOwnerAvatar, getOwnerCard, getOwnerFullName, getOwnerName, getOwnerTitle } from "state/node/selectors";
+import { isConnectedToHome } from "state/home/selectors";
 import { DonateButton, OnlyMobile } from "ui/control";
 import Jump from "ui/navigation/Jump";
+import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
 import MobileBack from "ui/page/MobileBack";
 import ProfileAvatar from "ui/profile/ProfileAvatar";
 import ManagementMenuItems from "ui/profile/manage/ManagementMenuItems";
@@ -18,8 +20,10 @@ import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import "./ProfileTitle.css";
 
 export default function ProfileTitle() {
+    const connectedToHome = useSelector(isConnectedToHome);
     const nodeName = useSelector(getOwnerName);
     const fullName = useSelector(getOwnerFullName);
+    const name = fullName || NodeName.shorten(nodeName);
     const title = useSelector(getOwnerTitle);
     const avatar = useSelector(getOwnerAvatar);
     const card = useSelector(getOwnerCard);
@@ -30,9 +34,13 @@ export default function ProfileTitle() {
 
     return (
         <>
-            <MobileBack nodeName={REL_HOME} href={newsHref} menuContent={<ManagementMenuItems/>} sticky>
-                {fullName || NodeName.shorten(nodeName)}
-            </MobileBack>
+            {connectedToHome ?
+                <MobileBack nodeName={REL_HOME} href={newsHref} menuContent={<ManagementMenuItems/>} sticky>
+                    {name}
+                </MobileBack>
+            :
+                <MobileMainMenu/>
+            }
             <OnlyMobile>
                 <div id="profile-title">
                     <div className="panel">
@@ -44,6 +52,7 @@ export default function ProfileTitle() {
                             <Trans i18nKey="count-subscribers" values={{count: subscribersTotal}}><em/></Trans>
                         </Jump>
                     </div>
+                    {!connectedToHome && <div className="full-name">{name}</div>}
                     <div className="mention">{mentionName(nodeName)}</div>
                     <OperationStatus/>
                     {title && <div className="title">{title}</div>}

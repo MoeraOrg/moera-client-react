@@ -202,14 +202,14 @@ function PostingMenuItems({posting, story, detailed}: Props) {
                 nodeName: REL_HOME,
                 href: "/compose",
                 onClick: onReply,
-                show: true
+                show: homeOwnerName != null
             },
             {
                 title: t("follow-comments"),
                 nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onFollowComments,
-                show: !followingComments
+                show: homeOwnerName != null && !followingComments
             },
             {
                 title: t("unfollow-comments"),
@@ -313,7 +313,7 @@ function PostingMenuItems({posting, story, detailed}: Props) {
                 nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onHideInGooglePlay,
-                show: !googlePlaySheriff
+                show: homeOwnerName != null && !googlePlaySheriff
             }
         ]}/>
     );

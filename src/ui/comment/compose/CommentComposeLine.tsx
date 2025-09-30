@@ -1,7 +1,8 @@
 import React, { Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
+import { tTitle } from "i18n";
 import { SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
@@ -14,9 +15,10 @@ import {
     getDetailedPosting
 } from "state/detailedposting/selectors";
 import { getSetting } from "state/settings/selectors";
-import { openSignUpDialog } from "state/signupdialog/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { Button } from "ui/control";
+import { useIsTinyScreen } from "ui/hook";
+import "./CommentComposeLine.css";
 
 const CommentCompose = React.lazy(() => import("ui/comment/compose/CommentCompose"));
 
@@ -49,18 +51,17 @@ export default function CommentComposeLine() {
         getSetting(state, "comment.body-src-format.default") as SourceFormat
     );
     const smileysEnabled = useSelector((state: ClientState) => getSetting(state, "comment.smileys.enabled") as boolean);
+    const tinyScreen = useIsTinyScreen();
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
     if (!ownerName) {
-        const onSignUp = () => dispatch(openSignUpDialog());
         const onConnect = () => dispatch(openConnectDialog());
         return (
-            <div id="comment-compose" className="alert alert-info">
-                <Trans i18nKey="add-comments-need" values={{signup: t("sign-up"), connect: t("connect")}}>
-                    <Button variant="primary" size="sm" onClick={onSignUp}/>
-                    <Button variant="success" size="sm" onClick={onConnect}/>
-                </Trans>
+            <div id="comment-compose" className="nologin">
+                <Button variant={tinyScreen ? "primary" : "outline-primary"} onClick={onConnect}>
+                    {tTitle(t("add-comment"))}
+                </Button>
             </div>
         );
     }

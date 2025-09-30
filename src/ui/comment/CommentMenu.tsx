@@ -248,7 +248,7 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
                 nodeName: REL_CURRENT,
                 href: commentHref,
                 onClick: onHideInGooglePlay,
-                show: !googlePlaySheriff
+                show: homeOwnerName != null && !googlePlaySheriff
             }
         ]}/>
     );

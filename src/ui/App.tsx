@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
 import { isAtNode, isNodeIntroduced } from "state/node/selectors";
+import { isConnectedToHome } from "state/home/selectors";
 import { isAtGrantPage, isAtRemovalPage } from "state/navigation/selectors";
 import { getFeedWidth, getSetting } from "state/settings/selectors";
 import EventsFrontend from "ui/events/EventsFrontend";
@@ -30,6 +31,7 @@ export default function App() {
         getSetting(state, tinyScreen ? "posting.body.font-magnitude.mobile" : "posting.body.font-magnitude") as number
     );
     const nodeIntroduced = useSelector(isNodeIntroduced);
+    const connectedToHome = useSelector(isConnectedToHome);
 
     const atRemovalPage = useSelector(isAtRemovalPage);
     const atGrantPage = useSelector(isAtGrantPage);
@@ -38,8 +40,8 @@ export default function App() {
     return (
         // FIXME React.CSSProperties does not include CSS variables
         <div style={{
-            "--page-header-height": !tinyScreen ? "4.25rem" : "4rem",
-            "--page-footer-height": !tinyScreen ? "0" : "2.85rem",
+            "--page-header-height": !tinyScreen ? (connectedToHome ? "4.25rem" : "7.75rem") : "4rem",
+            "--page-footer-height": !tinyScreen ? "0" : (connectedToHome ? "2.85rem" : "3.5rem"),
             "--feed-width": `${feedWidth}px`,
             "--posting-font-magnitude": `${[postingFontMagnitude]}%`
         } as any}>

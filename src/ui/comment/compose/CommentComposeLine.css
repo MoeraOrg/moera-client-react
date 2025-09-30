@@ -1,0 +1,12 @@
+@media only screen and (min-width: 992px) {
+    #comment-compose.nologin .btn {
+        width: 10.25rem;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    #comment-compose.nologin {
+        display: grid;
+        margin-bottom: calc(var(--page-footer-height) + .25rem);
+    }
+}

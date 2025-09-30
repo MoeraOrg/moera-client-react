@@ -27,6 +27,14 @@
     line-height: 150%;
 }
 
+#profile-title .full-name {
+    color: var(--bs-gray-900);
+    font-size: 1.31rem;
+    font-weight: 600;
+    line-height: 133%;
+    white-space: nowrap;
+}
+
 #profile-title .mention {
     color: var(--bs-gray-600);
     font-size: .88rem;

@@ -14,13 +14,18 @@ import BottomMenu from "ui/mainmenu/BottomMenu";
 import { useOverlay } from "ui/overlays/overlays";
 import SearchTabs from "ui/search/SearchTabs";
 import SearchFeed from "ui/search/SearchFeed";
-import { REL_HOME } from "util/rel-node-name";
+import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
+import { isConnectedToHome } from "state/home/selectors";
 
 export default function MobileSearchPage() {
+    const connectedToHome = useSelector(isConnectedToHome);
     const searchQuery = useSelector(getSearchQuery);
     const newsHref = useHomeNews();
     const pageRef = useRef(null);
     const [suggestions, setSuggestions] = useState<boolean>(!searchQuery);
+
+    const backNode = connectedToHome ? REL_HOME : REL_CURRENT;
+    const backHref = suggestions ? (connectedToHome ? newsHref : "/") : "";
 
     const onSubmit = useCallback(() => setSuggestions(false), [setSuggestions]);
 
@@ -58,7 +63,7 @@ export default function MobileSearchPage() {
         <>
             <Page className="search-page tabbed-page">
                 <div className="page-central-pane" ref={pageRef}>
-                    <MobileBack nodeName={REL_HOME} href={suggestions ? newsHref: ""} sticky>
+                    <MobileBack nodeName={backNode} href={backHref} sticky>
                         <div id="search-box">
                             <SearchInput
                                 query={query}

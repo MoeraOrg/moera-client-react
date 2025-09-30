@@ -2,8 +2,9 @@ import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
+import { NodeName as Name } from "api";
 import { ClientState } from "state/state";
-import { getHomeOwnerGender } from "state/home/selectors";
+import { getHomeOwnerGender, isConnectedToHome } from "state/home/selectors";
 import { reactionsDialogPastReactionsLoad } from "state/reactionsdialog/actions";
 import {
     getReactionsDialogItems,
@@ -29,6 +30,7 @@ interface Props {
 }
 
 export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
+    const connectedToHome = useSelector(isConnectedToHome);
     const postingId = useSelector((state: ClientState) => state.reactionsDialog.postingId);
     const commentId = useSelector((state: ClientState) => state.reactionsDialog.commentId);
     const reactionsNodeName = useSelector(getReactionsDialogNodeName);
@@ -77,10 +79,12 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
                                                           ownerName={r.ownerName}/>
                                 }
                             </div>
-                            <div className="status">{statuses[i]?.caption ?? ""}</div>
+                            <div className="status">
+                                {connectedToHome ? statuses[i]?.caption ?? "" : Name.shorten(r.ownerName)}
+                            </div>
                         </div>
                         <div className="reaction">{r.emoji != null && <Twemoji code={r.emoji}/>}</div>
-                        {r.ownerName ?
+                        {r.ownerName && connectedToHome ?
                             <SubscribeButton nodeName={r.ownerName} feedName="timeline" buttonOnly/>
                         :
                             <span className="subscribe-button"/>
