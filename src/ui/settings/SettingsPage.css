@@ -55,7 +55,7 @@
             " back"        calc(var(--page-header-height) + .6rem)
             " tabs"        4.1rem
             " menu"        1fr
-            " bottom-menu" 2.85rem
+            " bottom-menu" var(--page-footer-height)
             / auto;
     }
 

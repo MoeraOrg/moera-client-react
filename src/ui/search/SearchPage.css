@@ -4,7 +4,7 @@
 
 @media only screen and (max-width: 991px) {
     .search-page {
-        padding-bottom: 2rem;
+        padding-bottom: calc(var(--page-footer-height) + .25rem);
     }
 
     .search-page #search-box {

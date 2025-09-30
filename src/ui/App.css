@@ -114,7 +114,7 @@ INPUT[type="search"]::-webkit-search-cancel-button {
 @media only screen and (max-width: 991px) {
     .content-panel {
         border-radius: 0;
-        padding-bottom: 3rem;
+        padding-bottom: calc(var(--page-footer-height) + .25rem);
     }
 }
 

@@ -10,7 +10,7 @@
 
 @media only screen and (max-width: 991px) {
     .removal-page {
-        padding-bottom: 3rem;
+        padding-bottom: calc(var(--page-footer-height) + .25rem);
         background-color: white;
         min-height: calc(100vh - 2.7rem);
     }

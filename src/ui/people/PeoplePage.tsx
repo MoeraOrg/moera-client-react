@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import { Loading } from "ui/control";
+import { isConnectedToHome } from "state/home/selectors";
 import { Page } from "ui/page/Page";
 import DesktopBack from "ui/page/DesktopBack";
 import BackBox from "ui/page/BackBox";
@@ -23,7 +23,7 @@ import { REL_HOME } from "util/rel-node-name";
 import "./PeoplePage.css";
 
 export default function PeoplePage() {
-    const loadingGeneral = useSelector((state: ClientState) => state.people.loadingGeneral);
+    const connectedToHome = useSelector(isConnectedToHome);
     const showAskDialog = useSelector((state: ClientState) => state.askDialog.show);
     const showPeopleHideDialog = useSelector((state: ClientState) => state.peopleHideDialog.show);
     const showFriendGroupAddDialog = useSelector((state: ClientState) => state.friendGroupAddDialog.show);
@@ -39,10 +39,11 @@ export default function PeoplePage() {
                 <ProfileTitle/>
                 <BackBox>
                     <BackBoxInner noShadow>
-                        <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                            {t("back-news")}<NewsCounter/>
-                            {loadingGeneral && <Loading/>}
-                        </DesktopBack>
+                        {connectedToHome &&
+                            <DesktopBack nodeName={REL_HOME} href={newsHref}>
+                                {t("back-news")}<NewsCounter/>
+                            </DesktopBack>
+                        }
                         <ProfileTabs value="people"/>
                     </BackBoxInner>
                     <PeopleTop/>

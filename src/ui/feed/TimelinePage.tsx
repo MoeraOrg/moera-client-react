@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
+import { isConnectedToHome } from "state/home/selectors";
 import { isAtTimelinePage } from "state/navigation/selectors";
 import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
@@ -19,6 +20,7 @@ import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import "./TimelinePage.css";
 
 export default function TimelinePage() {
+    const connectedToHome = useSelector(isConnectedToHome);
     const visible = useSelector(isAtTimelinePage);
     const newsHref = useHomeNews();
     const {t} = useTranslation();
@@ -41,9 +43,11 @@ export default function TimelinePage() {
                     <ProfileTitle/>
                     <BackBox>
                         <BackBoxInner>
-                            <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                                {t("back-news")}<NewsCounter/>
-                            </DesktopBack>
+                            {connectedToHome &&
+                                <DesktopBack nodeName={REL_HOME} href={newsHref}>
+                                    {t("back-news")}<NewsCounter/>
+                                </DesktopBack>
+                            }
                             <ProfileTabs value="posts">
                                 {navigable &&
                                     <FeedGotoButton nodeName={REL_CURRENT} feedName="timeline" atBottom={atBottom}/>

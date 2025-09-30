@@ -1,6 +1,6 @@
 @media only screen and (max-width: 991px) {
     .profile-page {
-        padding-bottom: 3rem;
+        padding-bottom: calc(var(--page-footer-height) + .25rem);
         background-color: white;
         min-height: 100vh;
     }
