@@ -5,6 +5,10 @@ export type NodeReadyAction = ActionWithoutPayload<"NODE_READY">;
 export const nodeReady = (): NodeReadyAction =>
     actionWithoutPayload("NODE_READY");
 
+export type NodeUnsetAction = ActionWithoutPayload<"NODE_UNSET">;
+export const nodeUnset = (): NodeUnsetAction =>
+    actionWithoutPayload("NODE_UNSET");
+
 export type OwnerLoadAction = ActionWithoutPayload<"OWNER_LOAD">;
 export const ownerLoad = (): OwnerLoadAction =>
     actionWithoutPayload("OWNER_LOAD");
@@ -56,6 +60,7 @@ export const nodeFeaturesLoaded = (features: Features): NodeFeaturesLoadedAction
 
 export type NodeAnyAction =
     NodeReadyAction
+    | NodeUnsetAction
     | OwnerLoadAction
     | OwnerSetAction
     | OwnerVerifyAction

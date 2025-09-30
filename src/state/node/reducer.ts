@@ -57,6 +57,13 @@ export default (state: NodeState = initialState, action: ClientAction): NodeStat
                 introduced: true
             };
 
+        case "NODE_UNSET":
+            return immutable
+                .wrap(state)
+                .assign("root", initialState.root)
+                .assign("owner", initialState.owner)
+                .value();
+
         case "OWNER_SET": {
             const istate = immutable.wrap(state);
             if (state.owner.name !== action.payload.name) {

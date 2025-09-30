@@ -45,6 +45,13 @@ export type GoToPageAction<P extends Page, D> = ActionWithPayload<"GO_TO_PAGE", 
 export const goToPage = <P extends Page, D>(page: P, details: D): GoToPageAction<P, D> =>
     actionWithPayload("GO_TO_PAGE", {page, details: {at: null, ...details}});
 
+export type GoToHomePageAction<P extends Page, D> = ActionWithPayload<"GO_TO_HOME_PAGE", {
+    page: P;
+    details: D & {at: number | null};
+}>;
+export const goToHomePage = <P extends Page, D>(page: P, details: D): GoToHomePageAction<P, D> =>
+    actionWithPayload("GO_TO_HOME_PAGE", {page, details: {at: null, ...details}});
+
 export type GoToProfileAction = GoToPageAction<"profile", {}>;
 export const goToProfile = (): GoToProfileAction =>
     goToPage("profile", {});
@@ -65,22 +72,22 @@ export const goToPosting = (
 ): GoToPostingAction =>
     goToPage("detailedposting", {id, commentId, galleryExpanded});
 
-export type GoToComposeAction = GoToPageAction<"compose", {
+export type GoToComposeAction = GoToHomePageAction<"compose", {
     id: string | null;
     draftId: string | null;
 }>;
 export const goToCompose = (id: string | null = null, draftId: string | null = null): GoToComposeAction =>
-    goToPage("compose", {id, draftId});
+    goToHomePage("compose", {id, draftId});
 
-export type GoToSettingsAction = GoToPageAction<"settings", {}>;
+export type GoToSettingsAction = GoToHomePageAction<"settings", {}>;
 export const goToSettings = (): GoToSettingsAction =>
-    goToPage("settings", {});
+    goToHomePage("settings", {});
 
-export type GoToNewsAction = GoToPageAction<"news", {
+export type GoToNewsAction = GoToHomePageAction<"news", {
     at: number | null;
 }>;
 export const goToNews = (at: number | null = null): GoToNewsAction =>
-    goToPage("news", {at});
+    goToHomePage("news", {at});
 
 export type GoToPeopleAction = GoToPageAction<"people", {}>;
 export const goToPeople = (): GoToPeopleAction =>
@@ -90,11 +97,11 @@ export type GoToComplaintsAction = GoToPageAction<"complaints", {}>;
 export const goToComplaints = (): GoToComplaintsAction =>
     goToPage("complaints", {});
 
-export type GoToRemovalAction = GoToPageAction<"removal", {}>;
+export type GoToRemovalAction = GoToHomePageAction<"removal", {}>;
 export const goToRemoval = (): GoToRemovalAction =>
-    goToPage("removal", {});
+    goToHomePage("removal", {});
 
-export type GoToGrantAction = GoToPageAction<"grant", {
+export type GoToGrantAction = GoToHomePageAction<"grant", {
     clientName: string;
     carte: string;
     scope: Scope[];
@@ -103,7 +110,7 @@ export type GoToGrantAction = GoToPageAction<"grant", {
 export const goToGrant = (
     clientName: string, carte: string, scope: Scope[], redirectUri: string | null
 ): GoToGrantAction =>
-    goToPage("grant", {clientName, carte, scope, redirectUri});
+    goToHomePage("grant", {clientName, carte, scope, redirectUri});
 
 export type GoToSearchAction = GoToPageAction<"search", {
     query: string;
@@ -113,11 +120,11 @@ export type GoToSearchAction = GoToPageAction<"search", {
 export const goToSearch = (query: string, tab: SearchTab, filter: SearchFilter): GoToSearchAction =>
     goToPage("search", {query, tab, filter});
 
-export type GoToExploreAction = GoToPageAction<"explore", {
+export type GoToExploreAction = GoToHomePageAction<"explore", {
     at: number | null;
 }>;
 export const goToExplore = (at: number | null = null): GoToExploreAction =>
-    goToPage("explore", {at});
+    goToHomePage("explore", {at});
 
 export type GoToActivePeopleAction = GoToPageAction<"activepeople", {}>;
 export const goToActivePeople = (): GoToActivePeopleAction =>
@@ -127,14 +134,20 @@ export type GoToPageAnyAction =
     GoToProfileAction
     | GoToTimelineAction
     | GoToPostingAction
+    | GoToPageAction<"compose", GoToComposeAction["payload"]["details"]>
     | GoToComposeAction
+    | GoToPageAction<"settings", GoToComposeAction["payload"]["details"]>
     | GoToSettingsAction
+    | GoToPageAction<"news", GoToComposeAction["payload"]["details"]>
     | GoToNewsAction
     | GoToPeopleAction
     | GoToComplaintsAction
+    | GoToPageAction<"removal", GoToComposeAction["payload"]["details"]>
     | GoToRemovalAction
+    | GoToPageAction<"grant", GoToGrantAction["payload"]["details"]>
     | GoToGrantAction
     | GoToSearchAction
+    | GoToPageAction<"explore", GoToComposeAction["payload"]["details"]>
     | GoToExploreAction
     | GoToActivePeopleAction;
 
