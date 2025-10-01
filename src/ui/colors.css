@@ -46,10 +46,6 @@
     --incorrect: var(--bs-red);
     --correct-light: var(--green-light);
 
-    /* Main menu icon colors */
-    --status-icon: rgb(255 255 255 / 50%);
-    --status-icon-highlight: rgb(255 255 255 / 75%);
-
     /* Other elements' colors */
     --reactions-positive: #e9fce5;
     --reactions-negative: #feeff0;

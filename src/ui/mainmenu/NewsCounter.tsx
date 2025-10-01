@@ -1,11 +1,9 @@
 import { useSelector } from 'react-redux';
 
-import { ClientState } from "state/state";
-import { getFeedNotViewed } from "state/feeds/selectors";
-import { REL_HOME } from "util/rel-node-name";
+import { getNewsCount } from "state/feeds/selectors";
 
 export default function NewsCounter() {
-    const count = useSelector((state: ClientState) => getFeedNotViewed(state, REL_HOME, "news"));
+    const count = useSelector(getNewsCount);
 
-    return count ? <span className="badge news-counter">{count}</span> : null;
+    return count > 0 ? <span className="badge news-counter">{count}</span> : null;
 }

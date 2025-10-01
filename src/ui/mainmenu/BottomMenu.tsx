@@ -1,26 +1,42 @@
-import React from 'react';
+import React, { Suspense, useState } from 'react';
 import { useSelector } from 'react-redux';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { isAtNode } from "state/node/selectors";
-import { isConnectedToHome } from "state/home/selectors";
-import { isBottomMenuVisible } from "state/navigation/selectors";
-import { Loading } from "ui/control";
+import { getHomeOwnerAvatar, getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
+import { isAtNewsPage, isBottomMenuVisible, isInExplorePages } from "state/navigation/selectors";
+import { getInstantCount, getNewsCount } from "state/feeds/selectors";
+import { Icon, msAdd, msExplore, msNotifications, msPublic } from "ui/material-symbols";
+import { Avatar } from "ui/control";
 import { useIsTinyScreen, useVirtualKeyboard } from "ui/hook";
-import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
-import NewsButton from "ui/mainmenu/connectionstatus/NewsButton";
-import InstantButton from "ui/instant/InstantButton";
-import SettingsButton from "ui/mainmenu/connectionstatus/SettingsButton";
-import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
+import Jump from "ui/navigation/Jump";
+import { getFeedTitle, useHomeNews } from "ui/feed/feeds";
 import InvitationAlert from "ui/mainmenu/InvitationAlert";
+import { useInstantsToggler } from "ui/instant/instants-toggler";
+import { REL_HOME } from "util/rel-node-name";
 import "./BottomMenu.css";
+
+const InstantsDialog = React.lazy(() => import("ui/instant/InstantsDialog"));
 
 export default function BottomMenu() {
     const atNode = useSelector(isAtNode);
     const connecting = useSelector((state: ClientState) => state.home.connecting);
     const connected = useSelector(isConnectedToHome);
+    const ownerName = useSelector(getHomeOwnerName);
+    const avatar = useSelector(getHomeOwnerAvatar);
+
+    const atNews = useSelector(isAtNewsPage);
+    const newsHref = useHomeNews();
+    const newsCount = useSelector(getNewsCount) + 5;
+
+    const inExplore = useSelector(isInExplorePages);
+
+    const instantCount = useSelector(getInstantCount) + 6;
+    const [showInstantsDialog, setShowInstantsDialog] = useState<boolean>(false);
+    const {border: instantsBorder, onToggle: onInstantsToggle} = useInstantsToggler();
+
     const bottomMenuVisible = useSelector(isBottomMenuVisible);
     const {open: keyboardOpen} = useVirtualKeyboard();
     const {t} = useTranslation();
@@ -31,33 +47,62 @@ export default function BottomMenu() {
         return null;
     }
 
-    const invisible = !bottomMenuVisible || keyboardOpen;
-
-    const className = cx(["connection-status", "navbar-dark", "bg-dark"], {invisible});
-
-    if (connecting) {
-        return (
-            <div id="bottom-menu" className={className}>
-                {t("connecting")} <Loading/>
-            </div>
-        );
-    }
-
     if (!connected) {
-        if (!atNode) {
+        if (!atNode || connecting) {
             return null;
         }
 
         return <InvitationAlert/>;
     }
 
+    const onInstantsDialogToggle = (show: boolean) => {
+        onInstantsToggle(show);
+        setShowInstantsDialog(show);
+    }
+
+    const invisible = !bottomMenuVisible || keyboardOpen;
+
     return (
-        <div id="bottom-menu" className={className}>
-            <NewPostButton/>
-            <SettingsButton/>
-            <HomeButton/>
-            <InstantButton/>
-            <NewsButton/>
+        <div id="bottom-menu" className={cx({invisible})}>
+            <Jump nodeName={REL_HOME} href={newsHref} className="item">
+                <div className={cx("icon", "news", {active: atNews})}>
+                    <Icon icon={msPublic} size={20}/>
+                    {newsCount > 0 && <div className="count">{newsCount}</div>}
+                </div>
+                <div>{getFeedTitle("news", t)}</div>
+            </Jump>
+            <Jump nodeName={REL_HOME} href="/explore" className="item">
+                <div className={cx("icon", {active: inExplore})}>
+                    <Icon icon={msExplore} size={20}/>
+                </div>
+                <div>{t("explore")}</div>
+            </Jump>
+            <Jump nodeName={REL_HOME} href="/compose" className="new-post">
+                <Icon icon={msAdd} size={24}/>
+            </Jump>
+            <div className="item" onClick={() => onInstantsDialogToggle(!showInstantsDialog)}>
+                <div className="icon bell">
+                    <Icon icon={msNotifications} size={20}/>
+                    {instantCount > 0 && <div className="count">{instantCount}</div>}
+                </div>
+                <div>{t("instants")}</div>
+            </div>
+            <Jump nodeName={REL_HOME} href="/" className="item">
+                <div className="icon">
+                    <Avatar avatar={avatar} ownerName={ownerName} size={20} nodeName={REL_HOME}/>
+                </div>
+                <div>{t("profile")}</div>
+            </Jump>
+            {showInstantsDialog &&
+                <Suspense fallback={null}>
+                    <InstantsDialog instantBorder={instantsBorder} onClose={() => onInstantsDialogToggle(false)}/>
+                </Suspense>
+            }
         </div>
     );
+    // return (
+    //     <div id="bottom-menu" className={cx(["connection-status", "navbar-dark", "bg-dark"], {invisible})}>
+    //         <NewsButton/>
+    //     </div>
+    // );
 }

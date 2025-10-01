@@ -41,7 +41,7 @@ export default function App() {
         // FIXME React.CSSProperties does not include CSS variables
         <div style={{
             "--page-header-height": !tinyScreen ? (connectedToHome ? "4.25rem" : "7.75rem") : "4rem",
-            "--page-footer-height": !tinyScreen ? "0" : (connectedToHome ? "2.85rem" : "3.5rem"),
+            "--page-footer-height": !tinyScreen ? "0" : (connectedToHome ? "5rem" : "3.5rem"),
             "--feed-width": `${feedWidth}px`,
             "--posting-font-magnitude": `${[postingFontMagnitude]}%`
         } as any}>

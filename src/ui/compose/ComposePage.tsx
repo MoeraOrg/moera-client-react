@@ -26,7 +26,6 @@ import MobileBack from "ui/page/MobileBack";
 import DesktopBack from "ui/page/DesktopBack";
 import { useHomeNews } from "ui/feed/feeds";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
-import BottomMenu from "ui/mainmenu/BottomMenu";
 import ComposeViewPrincipal from "ui/compose/ComposeViewPrincipal";
 import ComposeDrafts from "ui/compose/drafts/ComposeDrafts";
 import ComposeFeatures from "ui/compose/features/ComposeFeatures";
@@ -138,7 +137,6 @@ function ComposePageInner(props: Props) {
                                                  disabled={submitDisabled}/>
                         </Form>
                     </div>
-                    <BottomMenu/>
                 </div>
                 {showPreview && <ComposePreviewDialog/>}
             </Page>

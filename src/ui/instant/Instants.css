@@ -98,7 +98,7 @@
     #instants > .content {
         max-width: 100vw;
         max-height: unset;
-        height: calc(100vh - 8.45rem);
+        height: calc(100vh - 5.75rem);
     }
 }
 

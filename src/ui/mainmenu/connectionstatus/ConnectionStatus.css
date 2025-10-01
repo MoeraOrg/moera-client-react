@@ -10,27 +10,3 @@
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
 }
-
-/* Deprecated */
-.connection-status .connection-button {
-    cursor: pointer;
-    color: var(--status-icon);
-    margin: 0.3rem;
-    font-size: 150%;
-    position: relative;
-    top: 0.15rem;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
-}
-
-.connection-status .connection-button:hover {
-    color: var(--status-icon-highlight);
-}
-
-.connection-status .connection-button.active {
-    cursor: default;
-    color: white;
-}
-
-.connection-status .active .connection-button {
-    color: white;
-}

@@ -91,6 +91,10 @@ export function getFeedAtTimestamp(state: ClientState, nodeName: RelNodeName | s
     return at < MAX_MOMENT ? Math.floor(at / 1000) : getUnixTime(new Date());
 }
 
+export function getNewsCount(state: ClientState): number {
+    return getFeedNotViewed(state, REL_HOME, "news") ?? 0;
+}
+
 export function getInstantCount(state: ClientState): number {
     const feed = getFeedState(state, REL_HOME, "instant");
     const mode = getSetting(state, "instants.number.mode") as string;
