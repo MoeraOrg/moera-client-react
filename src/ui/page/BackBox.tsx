@@ -1,5 +1,7 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
+import { isConnectedToHome } from "state/home/selectors";
 import { useScrollShadow } from "ui/mainmenu/scroll-shadow";
 import { BackBoxContext } from "ui/page/backbox-context";
 import "./BackBox.css";
@@ -9,7 +11,8 @@ interface Props {
 }
 
 export default function BackBox({children}: Props) {
-    const {shadow, sentinel} = useScrollShadow();
+    const connectedToHome = useSelector(isConnectedToHome);
+    const {shadow, sentinel} = useScrollShadow({margin: connectedToHome ? 50 : 100});
 
     return (
         <>

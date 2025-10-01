@@ -1,16 +1,17 @@
 import { RefObject, useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
 
-import { isConnectedToHome } from "state/home/selectors";
 import { useIntersect } from "ui/hook";
+
+interface Props {
+    margin?: number;
+}
 
 interface ScrollShadow {
     shadow: boolean;
     sentinel: RefObject<any>;
 }
 
-export function useScrollShadow(): ScrollShadow {
-    const connectedToHome = useSelector(isConnectedToHome);
+export function useScrollShadow({margin = 0}: Props = {}): ScrollShadow {
     const [shadow, setShadow] = useState<boolean>(false);
 
     const onIntersect = useCallback(
@@ -18,7 +19,6 @@ export function useScrollShadow(): ScrollShadow {
         [setShadow]
     );
 
-    const margin = connectedToHome ? 50 : 100;
     const sentinel = useIntersect(onIntersect, {rootMargin: `-${margin}px 0px 0px 0px`});
 
     return {shadow, sentinel};
