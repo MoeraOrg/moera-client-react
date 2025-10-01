@@ -29,11 +29,11 @@ export default function BottomMenu() {
 
     const atNews = useSelector(isAtNewsPage);
     const newsHref = useHomeNews();
-    const newsCount = useSelector(getNewsCount) + 5;
+    const newsCount = useSelector(getNewsCount);
 
     const inExplore = useSelector(isInExplorePages);
 
-    const instantCount = useSelector(getInstantCount) + 6;
+    const instantCount = useSelector(getInstantCount);
     const [showInstantsDialog, setShowInstantsDialog] = useState<boolean>(false);
     const {border: instantsBorder, onToggle: onInstantsToggle} = useInstantsToggler();
 
