@@ -1,8 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 
-import { tTitle } from "i18n";
 import { NodeName as NodeNameFormat } from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
@@ -11,20 +9,16 @@ import NodeName from "ui/nodename/NodeName";
 import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
-import MobileBack from "ui/page/MobileBack";
-import { useHomeNews } from "ui/feed/feeds";
 import ExploreTabs from "ui/explore/ExploreTabs";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
+import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
 import BottomMenu from "ui/mainmenu/BottomMenu";
-import { REL_HOME } from "util/rel-node-name";
 import "./ActivePeoplePage.css";
 
 export default function ActivePeoplePage() {
     const homeOwnerName = useSelector(getHomeOwnerName);
-    const newsHref = useHomeNews();
     const loading = useSelector((state: ClientState) => state.explore.loadingActivePeople);
     const people = useSelector((state: ClientState) => state.explore.activePeople);
-    const {t} = useTranslation();
 
     return (
         <>
@@ -33,9 +27,7 @@ export default function ActivePeoplePage() {
                     <MainMenuSidebar selected="explore"/>
                 </div>
                 <div className="page-central-pane">
-                    <MobileBack nodeName={REL_HOME} href={newsHref} sticky>
-                        {tTitle(t("explore-people"))}
-                    </MobileBack>
+                    <MobileMainMenu/>
                     <BackBox>
                         <BackBoxInner>
                             <ExploreTabs value="people"/>
