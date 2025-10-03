@@ -30,7 +30,7 @@ export default function MobileBack({
     return (
         <OnlyMobile>
             <div className="mobile-back-sentinel" aria-hidden="true" ref={sentinel}/>
-            <div className={cx("mobile-back", {sticky, "mobile-back-shadow": shadow}, className)}>
+            <header className={cx("mobile-back", {sticky, "mobile-back-shadow": shadow}, className)}>
                 <Jump className="btn btn-silent-round" nodeName={nodeName} href={href} onNear={onJump} onFar={onJump}>
                     <Icon icon={msArrowBack} size={24}/>
                 </Jump>
@@ -44,7 +44,7 @@ export default function MobileBack({
                         <Icon icon={msMoreVert} size="1.7rem"/>
                     </DropdownMenu>
                 }
-            </div>
+            </header>
         </OnlyMobile>
     );
 }

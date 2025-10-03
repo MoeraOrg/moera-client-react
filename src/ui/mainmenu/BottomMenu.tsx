@@ -65,7 +65,7 @@ export default function BottomMenu() {
     const invisible = !bottomMenuVisible || keyboardOpen;
 
     return (
-        <div id="bottom-menu" className={cx({invisible}, menuStyle)}>
+        <footer id="bottom-menu" className={cx({invisible}, menuStyle)}>
             <Jump nodeName={REL_HOME} href={newsHref} className="item">
                 <div className={cx("icon", "news", {active: atNews})}>
                     <Icon icon={msPublic} size={20}/>
@@ -100,6 +100,6 @@ export default function BottomMenu() {
                     <InstantsDialog instantBorder={instantsBorder} onClose={() => onInstantsDialogToggle(false)}/>
                 </Suspense>
             }
-        </div>
+        </footer>
     );
 }

@@ -25,10 +25,10 @@ export default function PeopleContent() {
     );
 
     return (
-        <div className="people-content">
+        <main className="people-content">
             {found}
             {loadingContacts && <Loading/>}
-        </div>
+        </main>
     );
 }
 

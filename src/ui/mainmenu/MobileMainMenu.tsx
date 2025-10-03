@@ -30,7 +30,7 @@ export default function MobileMainMenu({shadow: hasShadow}: Props) {
     return (
         <OnlyMobile>
             <div id="main-menu-sentinel" aria-hidden="true" ref={sentinel}/>
-            <nav id="main-menu" className={cx({shadow: hasShadow && shadow})}>
+            <header id="main-menu" className={cx({shadow: hasShadow && shadow})}>
                 <Sandwich/>
                 <Logo/>
                 {connectedToHome &&
@@ -46,7 +46,7 @@ export default function MobileMainMenu({shadow: hasShadow}: Props) {
                         {t("connect")}
                     </Button>
                 }
-            </nav>
+            </header>
             <RefreshIndicator/>
             {showConnectionsDialog && <ConnectionsDialog/>}
         </OnlyMobile>

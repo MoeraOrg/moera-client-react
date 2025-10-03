@@ -112,12 +112,12 @@ export default function DetailedPostingPage() {
                     <DetailedPosting posting={posting} story={story} deleting={deleting}/>
                 }
                 {!postingReady && loading &&
-                    <div className="posting">
+                    <main className="posting">
                         <Loading/>
-                    </div>
+                    </main>
                 }
                 {!postingReady && !loading &&
-                    <div className="posting-not-found">
+                    <main className="posting-not-found">
                         {googlePlayProhibited ?
                             <>
                                 <GooglePlayProhibited/>
@@ -134,7 +134,7 @@ export default function DetailedPostingPage() {
                                 <Button variant="primary" onClick={onTryAgain}>{tTitle(t("try-again"))}</Button>
                             </>
                         }
-                    </div>
+                    </main>
                 }
             </div>
             <BottomMenu/>

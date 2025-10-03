@@ -45,7 +45,7 @@ export default function ComplaintsListPage() {
                 <DesktopBack nodeName={REL_HOME} href={newsHref}>
                     {t("back-news")}
                 </DesktopBack>
-                <div className="content-panel">
+                <main className="content-panel">
                     <div className="navigator">
                         <div className="total">{`${t("total-colon")} ${total}`}</div>
                         <div className="page-title only-desktop">{t("complaints")}</div>
@@ -67,7 +67,7 @@ export default function ComplaintsListPage() {
                         visible={total > 0 && before < Number.MAX_SAFE_INTEGER}
                         onClick={onLoadPast}
                     />
-                </div>
+                </main>
             </div>
             <BottomMenu/>
         </Page>

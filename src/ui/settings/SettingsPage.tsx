@@ -54,7 +54,7 @@ export default function SettingsPage() {
                     <SettingsConflicts/>
                     <div className="settings-notebook-switcher" ref={switcherRef}>
                         <div className={`settings-notebook ${side}-side`}>
-                            <div className="settings-left">
+                            <nav className="settings-left">
                                 <div className="page-title only-desktop">{t("settings")}</div>
                                 <MobileBack nodeName={REL_HOME} href={newsHref} className="settings-back" sticky>
                                     {t("settings")}
@@ -62,15 +62,15 @@ export default function SettingsPage() {
                                 <SettingsTabs/>
                                 {visible && <SettingsMenu onSelect={() => setSide("sheet")}/>}
                                 <BottomMenu/>
-                            </div>
-                            <div className="settings-right">
+                            </nav>
+                            <main className="settings-right">
                                 {visible &&
                                     <>
                                         <SettingsBack onBack={() => setSide("menu")}/>
                                         <SettingsTabContent tab={tab}/>
                                     </>
                                 }
-                            </div>
+                            </main>
                         </div>
                     </div>
                 </div>

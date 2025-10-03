@@ -15,7 +15,7 @@ export default function DesktopMainMenu() {
 
     return (
         <OnlyDesktop>
-            <nav id="main-menu">
+            <header id="main-menu">
                 <div className="main-menu-content">
                     <div className="main-menu-left-pane">
                         <Logo/>
@@ -27,7 +27,7 @@ export default function DesktopMainMenu() {
                         <ConnectionStatus/>
                     </div>
                 </div>
-            </nav>
+            </header>
             {!connectedToHome && <InvitationAlert/>}
             <RefreshIndicator/>
         </OnlyDesktop>

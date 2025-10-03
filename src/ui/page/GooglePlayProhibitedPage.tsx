@@ -26,11 +26,11 @@ export default function GooglePlayProhibitedPage() {
                     <DesktopBack nodeName={REL_HOME} href={newsHref}>
                         {t("back-news")}<NewsCounter/>
                     </DesktopBack>
-                    <div className="content-panel">
+                    <main className="content-panel">
                         <GooglePlayProhibited/>
                         <div className="caption">{tTitle(t("not-accessible"))}</div>
                         <div className="instructions">{t("content-not-accessible-android")}</div>
-                    </div>
+                    </main>
                 </div>
             </Page>
             <BottomMenu/>

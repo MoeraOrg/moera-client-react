@@ -26,7 +26,7 @@ export default function FeedStory({nodeName, feedName, story, posting, deleting,
     const atHome = useSelector(isAtHomeNode);
 
     return (
-        <div className={cx("posting entry preview", {"not-viewed": atHome && story.viewed === false})}
+        <article className={cx("posting entry preview", {"not-viewed": atHome && story.viewed === false})}
              data-moment={story.moment} data-viewed={story.viewed !== false}>
             {deleting ?
                 <PostingDeleting/>
@@ -50,6 +50,6 @@ export default function FeedStory({nodeName, feedName, story, posting, deleting,
                     }
                 </>
             }
-        </div>
+        </article>
     );
 }

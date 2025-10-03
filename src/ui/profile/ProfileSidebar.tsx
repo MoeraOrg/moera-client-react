@@ -38,7 +38,7 @@ export default function ProfileSidebar() {
 
     return (
         <OnlyDesktop>
-            <div id="profile-sidebar">
+            <aside id="profile-sidebar">
                 <div className="panel">
                     <ProfileAvatar avatar={avatar} ownerName={nodeName} size={96}/>
                     {atHome ?
@@ -86,7 +86,7 @@ export default function ProfileSidebar() {
                     </div>
                 }
                 <DonateButton name={nodeName} fullName={fullName} fundraisers={fundraisers ?? null}/>
-            </div>
+            </aside>
         </OnlyDesktop>
     );
 }

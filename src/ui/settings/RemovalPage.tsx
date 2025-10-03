@@ -16,10 +16,10 @@ export default function RemovalPage() {
             <DesktopMainMenu/>
             <MobileMainMenu/>
             <Page className="removal-page">
-                <div className="page-central-pane content-panel">
+                <main className="page-central-pane content-panel">
                     <div className="page-title mb-3">{t("delete-account-moera")}</div>
                     <SettingsRemovalSheet/>
-                </div>
+                </main>
             </Page>
             <BottomMenu/>
         </>

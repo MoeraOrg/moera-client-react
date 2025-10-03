@@ -26,7 +26,7 @@ interface Props<V> {
 
 export function UnderlinedTabs<V = any>({className, tabs, value: selected, onChange, children}: Props<V>) {
     return (
-        <div className={cx("underlined-tabs", className)}>
+        <nav className={cx("underlined-tabs", className)}>
             <div className="tab-scroller">
                 {tabs
                     .filter(({visible, value}) => visible !== false || value === selected)
@@ -43,7 +43,7 @@ export function UnderlinedTabs<V = any>({className, tabs, value: selected, onCha
                 }
             </div>
             {children}
-        </div>
+        </nav>
     );
 }
 

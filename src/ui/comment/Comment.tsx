@@ -51,7 +51,7 @@ export default function Comment({comment, previousId, focused}: Props) {
     const realPostingId = postingReceiverPostingId ?? postingId;
 
     return (
-        <div className={cx("comment", "entry", {
+        <article className={cx("comment", "entry", {
             "focused": focused,
             "single-emoji": comment.singleEmoji,
             "topic-starter": comment.ownerName === postingReceiverName
@@ -95,6 +95,6 @@ export default function Comment({comment, previousId, focused}: Props) {
                     </div>
                 </>
             }
-        </div>
+        </article>
     );
 }

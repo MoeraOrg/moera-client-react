@@ -92,7 +92,7 @@ function ComposePageInner(props: Props) {
                         {backTitle}
                         {loadingContent && <Loading/>}
                     </DesktopBack>
-                    <div className="composer">
+                    <main className="composer">
                         <Form>
                             {(!postAllowed && !postWarningClosed) &&
                                 <ConflictWarning text={t("post-not-allowed")} onClose={postWarningClose}/>
@@ -136,7 +136,7 @@ function ComposePageInner(props: Props) {
                             <ComposeSubmitButton loading={beingPosted} update={postingId != null}
                                                  disabled={submitDisabled}/>
                         </Form>
-                    </div>
+                    </main>
                 </div>
                 {showPreview && <ComposePreviewDialog/>}
             </Page>

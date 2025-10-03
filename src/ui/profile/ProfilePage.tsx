@@ -38,7 +38,7 @@ export default function ProfilePage() {
                         <ProfileTabs value="about"/>
                     </BackBoxInner>
                 </BackBox>
-                <div className="content-panel">
+                <main className="content-panel">
                     {profile?.bioHtml && <EntryHtml className="bio" html={profile.bioHtml} nodeName={REL_CURRENT}/>}
                     {profile?.email &&
                         <p>
@@ -46,7 +46,7 @@ export default function ProfilePage() {
                             <a href={`mailto:${profile.email}`}>{profile.email}</a>
                         </p>
                     }
-                </div>
+                </main>
             </div>
             <BottomMenu/>
         </Page>

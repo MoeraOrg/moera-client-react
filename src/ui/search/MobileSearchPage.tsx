@@ -65,7 +65,7 @@ export default function MobileSearchPage() {
     return (
         <>
             <Page className={cx("search-page", {"tabbed-page": results})}>
-                <div className="page-central-pane" ref={pageRef}>
+                <main className="page-central-pane" ref={pageRef}>
                     <MobileBack nodeName={backNode} href={backHref} sticky>
                         <div id="search-box">
                             <SearchInput
@@ -96,7 +96,7 @@ export default function MobileSearchPage() {
                         ref={listDom}
                     />
                     {results && <SearchFeed/>}
-                </div>
+                </main>
             </Page>
             <BottomMenu/>
         </>

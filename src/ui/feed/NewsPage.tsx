@@ -20,13 +20,13 @@ export default function NewsPage() {
                 <div className="page-left-pane">
                     <MainMenuSidebar selected="news"/>
                 </div>
-                <div className="page-central-pane">
+                <main className="page-central-pane">
                     <FeedPage
                         nodeName={REL_CURRENT}
                         feedName="news"
                         visible={visible}
                     />
-                </div>
+                </main>
             </Page>
             <BottomMenu/>
         </>

@@ -42,7 +42,7 @@ export default function ProfileTitle() {
                 <MobileMainMenu/>
             }
             <OnlyMobile>
-                <div id="profile-title">
+                <aside id="profile-title">
                     <div className="panel">
                         <ProfileAvatar avatar={avatar} ownerName={nodeName} size={64}/>
                         <div className="counter">
@@ -61,7 +61,7 @@ export default function ProfileTitle() {
                         <DonateButton name={nodeName} fullName={fullName} fundraisers={fundraisers ?? null}
                                       styles="icon"/>
                     </div>
-                </div>
+                </aside>
             </OnlyMobile>
         </>
     );

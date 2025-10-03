@@ -12,14 +12,14 @@ const DesktopSearchPage = () => (
         <div className="page-left-pane">
             <MainMenuSidebar/>
         </div>
-        <div className="page-central-pane">
+        <main className="page-central-pane">
             <BackBox>
                 <BackBoxInner>
                     <SearchTabs/>
                 </BackBoxInner>
             </BackBox>
             <SearchFeed/>
-        </div>
+        </main>
     </Page>
 );
 

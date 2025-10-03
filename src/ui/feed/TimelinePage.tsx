@@ -39,7 +39,7 @@ export default function TimelinePage() {
                 <div className="page-left-pane">
                     <ProfileSidebar/>
                 </div>
-                <div className="page-central-pane">
+                <main className="page-central-pane">
                     <ProfileTitle/>
                     <BackBox>
                         <BackBoxInner>
@@ -61,7 +61,7 @@ export default function TimelinePage() {
                         visible={visible}
                         onNavigationUpdate={onNavigationUpdate}
                     />
-                </div>
+                </main>
             </Page>
             <BottomMenu/>
         </>

@@ -33,7 +33,7 @@ export default function ActivePeoplePage() {
                             <ExploreTabs value="people"/>
                         </BackBoxInner>
                     </BackBox>
-                    <div className="content-panel">
+                    <main className="content-panel">
                         {people.map(node =>
                             <div className="person" key={node.nodeName}>
                                 <AvatarWithPopup ownerName={node.nodeName} ownerFullName={node.fullName}
@@ -50,7 +50,7 @@ export default function ActivePeoplePage() {
                             </div>
                         )}
                         {loading && <Loading/>}
-                    </div>
+                    </main>
                 </div>
             </Page>
             <BottomMenu/>

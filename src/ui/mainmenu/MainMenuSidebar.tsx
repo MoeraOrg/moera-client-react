@@ -71,7 +71,7 @@ export default function MainMenuSidebar({selected}: Props) {
 
     return (
         <OnlyDesktop>
-            <div id="main-menu-sidebar">
+            <nav id="main-menu-sidebar">
                 <ul className="nav nav-pills flex-column">
                     <li className="nav-item">
                         <Jump className="nav-link" nodeName={REL_HOME} href="/">
@@ -95,7 +95,7 @@ export default function MainMenuSidebar({selected}: Props) {
                         </li>
                     ))}
                 </ul>
-            </div>
+            </nav>
         </OnlyDesktop>
     );
 }

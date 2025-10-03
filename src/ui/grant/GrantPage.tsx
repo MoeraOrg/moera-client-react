@@ -14,11 +14,11 @@ export default function GrantPage() {
         <>
             <OnlyDesktop><LogoImage width="4.6rem" className="mt-4 ms-5 mb-3"/></OnlyDesktop>
             <Page className="grant-page">
-                <div className="page-central-pane content-panel">
+                <main className="page-central-pane content-panel">
                     <OnlyMobile><LogoImage width="4.6rem" className="mt-2 mb-3"/></OnlyMobile>
                     <div className="page-title mb-3">{t("grant-access")}</div>
                     <GrantContent/>
-                </div>
+                </main>
             </Page>
         </>
     );

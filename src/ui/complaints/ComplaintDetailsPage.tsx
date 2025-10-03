@@ -57,7 +57,7 @@ export default function ComplaintsListPage() {
                 <DesktopBack href="/complaints">
                     {t("back-complaints")}
                 </DesktopBack>
-                <div className="content-panel">
+                <main className="content-panel">
                     {loadingGroup && <Loading/>}
                     {complaintGroup != null &&
                         <>
@@ -93,7 +93,7 @@ export default function ComplaintsListPage() {
                             }
                         </>
                     }
-                </div>
+                </main>
             </div>
             <BottomMenu/>
         </Page>

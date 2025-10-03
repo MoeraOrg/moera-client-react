@@ -22,7 +22,7 @@ export default function ExplorePage() {
                 <div className="page-left-pane">
                     <MainMenuSidebar selected="explore"/>
                 </div>
-                <div className="page-central-pane">
+                <main className="page-central-pane">
                     <MobileMainMenu/>
                     <BackBox>
                         <BackBoxInner>
@@ -35,7 +35,7 @@ export default function ExplorePage() {
                         visible={visible}
                         recommendations
                     />
-                </div>
+                </main>
             </Page>
             <BottomMenu/>
         </>
