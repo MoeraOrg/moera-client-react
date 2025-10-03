@@ -3,8 +3,8 @@
 }
 
 .rich-text-editor-uploaded-image .thumbnail {
-    width: 96px;
-    height: 96px;
+    width: 95px;
+    height: 95px;
     object-fit: cover;
     object-position: center;
     border-radius: .5rem;
