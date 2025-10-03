@@ -723,6 +723,11 @@
           "no": "Nic nie robić",
           "yes": "Zrezygnuj z subskrypcji"
         },
+        "bottom-menu_style": "Styl dolnego menu",
+        "bottom-menu_style-items": {
+          "compact": "Kompaktowy",
+          "regular": "Zwykły"
+        },
         "clock_offset": "Przesunięcie zegara od czasu rzeczywistego (w godzinach)",
         "comment_body-src-format_default": "Formatowanie tekstu komentarza (domyślne)",
         "comment_body-src-format_default-items": {

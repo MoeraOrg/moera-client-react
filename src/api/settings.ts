@@ -620,6 +620,25 @@ const META: ClientSettingMetaInfo[] = [
         defaultValue: "true",
         modifiers: {}
     },
+    {
+        name: "bottom-menu.style",
+        type: "string",
+        defaultValue: "regular",
+        modifiers: {
+            format: "select",
+            items: [
+                {
+                    title: "Regular",
+                    value: "regular"
+                },
+                {
+                    title: "Compact",
+                    value: "compact"
+                },
+            ]
+        },
+        scope: "mobile"
+    },
 ];
 
 function collectMetaMap(map: Map<string, ClientSettingMetaInfo>, metadata: ClientSettingMetaInfo[]) {

@@ -723,6 +723,11 @@
           "no": "Нічого не робити",
           "yes": "Відписуватись"
         },
+        "bottom-menu_style": "Стиль нижнього меню",
+        "bottom-menu_style-items": {
+          "compact": "Компактний",
+          "regular": "Звичайний"
+        },
         "clock_offset": "Зміщення годинника щодо реального часу (у годинах)",
         "comment_body-src-format_default": "Форматування тексту коментаря (за замовчуванням)",
         "comment_body-src-format_default-items": {

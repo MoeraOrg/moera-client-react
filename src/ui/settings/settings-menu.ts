@@ -156,6 +156,7 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             option(CLIENT_SETTINGS_PREFIX + "avatar.shape"),
             option(CLIENT_SETTINGS_PREFIX + "full-name.display", 4),
             option(CLIENT_SETTINGS_PREFIX + "entry.gallery.loop"),
+            option(CLIENT_SETTINGS_PREFIX + "bottom-menu.style"),
         ]),
         sheet("notifications", [
             option(CLIENT_SETTINGS_PREFIX + "instants.number.mode"),

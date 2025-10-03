@@ -7,6 +7,7 @@ import { ClientState } from "state/state";
 import { isAtNode } from "state/node/selectors";
 import { getHomeOwnerAvatar, getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
 import { isAtNewsPage, isBottomMenuVisible, isInExplorePages } from "state/navigation/selectors";
+import { getSetting } from "state/settings/selectors";
 import { getInstantCount, getNewsCount } from "state/feeds/selectors";
 import { Icon, msAdd, msExplore, msNotifications, msPublic } from "ui/material-symbols";
 import { Avatar } from "ui/control";
@@ -26,6 +27,7 @@ export default function BottomMenu() {
     const connected = useSelector(isConnectedToHome);
     const ownerName = useSelector(getHomeOwnerName);
     const avatar = useSelector(getHomeOwnerAvatar);
+    const menuStyle = useSelector((state: ClientState) => getSetting(state, "bottom-menu.style") as string);
 
     const atNews = useSelector(isAtNewsPage);
     const newsHref = useHomeNews();
@@ -63,19 +65,19 @@ export default function BottomMenu() {
     const invisible = !bottomMenuVisible || keyboardOpen;
 
     return (
-        <div id="bottom-menu" className={cx({invisible})}>
+        <div id="bottom-menu" className={cx({invisible}, menuStyle)}>
             <Jump nodeName={REL_HOME} href={newsHref} className="item">
                 <div className={cx("icon", "news", {active: atNews})}>
                     <Icon icon={msPublic} size={20}/>
                     {newsCount > 0 && <div className="count">{newsCount}</div>}
                 </div>
-                <div>{getFeedTitle("news", t)}</div>
+                <div className="title">{getFeedTitle("news", t)}</div>
             </Jump>
             <Jump nodeName={REL_HOME} href="/explore" className="item">
                 <div className={cx("icon", {active: inExplore})}>
                     <Icon icon={msExplore} size={20}/>
                 </div>
-                <div>{t("explore")}</div>
+                <div className="title">{t("explore")}</div>
             </Jump>
             <Jump nodeName={REL_HOME} href="/compose" className="new-post">
                 <Icon icon={msAdd} size={24}/>
@@ -85,13 +87,13 @@ export default function BottomMenu() {
                     <Icon icon={msNotifications} size={20}/>
                     {instantCount > 0 && <div className="count">{instantCount}</div>}
                 </div>
-                <div>{t("instants")}</div>
+                <div className="title">{t("instants")}</div>
             </div>
             <Jump nodeName={REL_HOME} href="/" className="item">
                 <div className="icon">
                     <Avatar avatar={avatar} ownerName={ownerName} size={20} nodeName={REL_HOME}/>
                 </div>
-                <div>{t("profile")}</div>
+                <div className="title">{t("profile")}</div>
             </Jump>
             {showInstantsDialog &&
                 <Suspense fallback={null}>
@@ -100,9 +102,4 @@ export default function BottomMenu() {
             }
         </div>
     );
-    // return (
-    //     <div id="bottom-menu" className={cx(["connection-status", "navbar-dark", "bg-dark"], {invisible})}>
-    //         <NewsButton/>
-    //     </div>
-    // );
 }

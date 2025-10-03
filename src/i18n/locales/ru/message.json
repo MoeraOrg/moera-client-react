@@ -723,6 +723,11 @@
           "no": "Ничего не делать",
           "yes": "Отписываться"
         },
+        "bottom-menu_style": "Стиль нижнего меню",
+        "bottom-menu_style-items": {
+          "compact": "Компактный",
+          "regular": "Обычный"
+        },
         "clock_offset": "Смещение часов относительно реального времени (в часах)",
         "comment_body-src-format_default": "Форматирование текста комментария (по умолчанию)",
         "comment_body-src-format_default-items": {

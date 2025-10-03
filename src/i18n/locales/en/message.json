@@ -723,6 +723,11 @@
           "no": "Do nothing",
           "yes": "Unsubscribe"
         },
+        "bottom-menu_style": "Bottom menu style",
+        "bottom-menu_style-items": {
+          "compact": "Compact",
+          "regular": "Regular"
+        },
         "clock_offset": "Clock offset from the real time (in hours)",
         "comment_body-src-format_default": "Comment text formatting (default)",
         "comment_body-src-format_default-items": {

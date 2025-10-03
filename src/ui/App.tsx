@@ -31,6 +31,7 @@ export default function App() {
     const postingFontMagnitude = useSelector((state: ClientState) =>
         getSetting(state, tinyScreen ? "posting.body.font-magnitude.mobile" : "posting.body.font-magnitude") as number
     );
+    const bottomMenuStyle = useSelector((state: ClientState) => getSetting(state, "bottom-menu.style") as string);
     const nodeIntroduced = useSelector(isNodeIntroduced);
     const connectedToHome = useSelector(isConnectedToHome);
 
@@ -44,7 +45,9 @@ export default function App() {
         // FIXME React.CSSProperties does not include CSS variables
         <div style={{
             "--page-header-height": !tinyScreen ? (connectedToHome ? "4.25rem" : "7.75rem") : "4rem",
-            "--page-footer-height": !tinyScreen ? "0" : (connectedToHome ? "5rem" : "3.5rem"),
+            "--page-footer-height": !tinyScreen
+                ? "0"
+                : (connectedToHome ? (bottomMenuStyle === "compact" ? "3rem" : "5rem") : "3.5rem"),
             "--feed-width": `${feedWidth}px`,
             "--posting-font-magnitude": `${[postingFontMagnitude]}%`
         } as any}>
