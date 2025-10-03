@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { reactionsDialogSelectTab } from "state/reactionsdialog/actions";
@@ -39,13 +40,11 @@ export default function TotalsTabs({hidden, children}: Props) {
 
     return (
         <>
-            {loaded &&
-                <UnderlinedTabs tabs={tabs} value={activeTab ?? 0}
-                                onChange={tab => dispatch(reactionsDialogSelectTab(tab))}>
-                    {children}
-                    <CloseButton onClick={hide}/>
-                </UnderlinedTabs>
-            }
+            <UnderlinedTabs className={cx({invisible: !loaded})} tabs={tabs} value={activeTab ?? 0}
+                            onChange={tab => dispatch(reactionsDialogSelectTab(tab))}>
+                {children}
+                <CloseButton onClick={hide}/>
+            </UnderlinedTabs>
             {loading && <Loading/>}
         </>
     );

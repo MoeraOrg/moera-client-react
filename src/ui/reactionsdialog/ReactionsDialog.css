@@ -80,7 +80,7 @@
 @media only screen and (max-width: 991px) {
     .reactions-dialog .items {
         max-height: unset;
-        height: calc(100vh - 12.75rem);
+        height: calc(100vh - 9.75rem);
     }
 }
 
