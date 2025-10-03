@@ -1,3 +1,7 @@
+.sandwich-menu {
+    font-size: 1rem;
+}
+
 .sandwich-menu HR {
     border-color: var(--bs-gray-500);
     margin: 0 1rem;
@@ -22,7 +26,6 @@
 .sandwich-menu .profile .full-name {
     grid-area: full-name;
     font-weight: 600;
-    font-size: .88rem;
     line-height: 143%;
     color: black;
     overflow-wrap: anywhere;
@@ -31,7 +34,6 @@
 .sandwich-menu .profile .name {
     grid-area: name;
     font-weight: 400;
-    font-size: .88rem;
     line-height: 143%;
     color: var(--bs-gray-700);
     overflow-wrap: anywhere;
@@ -44,7 +46,6 @@
     gap: .75rem;
     align-items: center;
     font-weight: 500;
-    font-size: .88rem;
     line-height: 143%;
     color: var(--bs-gray-700);
     cursor: pointer;

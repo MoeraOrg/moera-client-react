@@ -27,6 +27,7 @@ export default function Sandwich() {
     useDrag(
         ({first, last, movement: [mx], initial: [ix], cancel, tap, elapsedTime}) => {
             if (tap) {
+                cancel();
                 return;
             }
             if (first && ix > EDGE_HOTZONE && !open) {
@@ -56,7 +57,6 @@ export default function Sandwich() {
             pointer: {
                 touch: true
             },
-            preventScroll: true,
             target: document.body
         }
     );
