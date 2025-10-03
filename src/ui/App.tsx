@@ -6,6 +6,7 @@ import { isAtNode, isNodeIntroduced } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { isAtGrantPage, isAtRemovalPage } from "state/navigation/selectors";
 import { getFeedWidth, getSetting } from "state/settings/selectors";
+import { useReload } from "ui/hook/reload";
 import EventsFrontend from "ui/events/EventsFrontend";
 import Navigation from "ui/navigation/Navigation";
 import ErrorPane from "ui/error/ErrorPane";
@@ -36,6 +37,8 @@ export default function App() {
     const atRemovalPage = useSelector(isAtRemovalPage);
     const atGrantPage = useSelector(isAtGrantPage);
     const atGlobalPage = atRemovalPage || atGrantPage;
+
+    useReload();
 
     return (
         // FIXME React.CSSProperties does not include CSS variables

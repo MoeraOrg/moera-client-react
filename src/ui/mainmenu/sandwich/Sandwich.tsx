@@ -11,7 +11,7 @@ import SandwichMenu from "ui/mainmenu/sandwich/SandwichMenu";
 import "./Sandwich.css";
 
 const EDGE_HOTZONE = 70;
-const GESTURE_TIMEOUT = 1000;
+const GESTURE_TIMEOUT = 3000;
 const GESTURE_DISTANCE = 50;
 
 export default function Sandwich() {
@@ -56,11 +56,8 @@ export default function Sandwich() {
             pointer: {
                 touch: true
             },
-            target: document.body,
-            swipe: {
-                distance: 50,
-                duration: 250
-            }
+            preventScroll: true,
+            target: document.body
         }
     );
 
