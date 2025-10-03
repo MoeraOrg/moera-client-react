@@ -1,4 +1,5 @@
 {
+  "about-me": "Про себе",
   "access-google-play-sheriff-granted": "Доступ шерифу Google Play дозволено",
   "access-granted": "Доступ надано",
   "access-request-not-valid": "Запит на доступ недійсний",
@@ -525,6 +526,7 @@
   "posting-updated-at": "змінений",
   "post-not-allowed": "Ви не в змозі писати у цей блог.",
   "post-preview": "Перегляд поста",
+  "posts": "Пости",
   "preparing": "Підготовка...",
   "present": "Є",
   "preserve-formatting": "Зберегти форматування",
@@ -541,11 +543,6 @@
   "privacy": "Конфіденційність",
   "profile": "Профіль",
   "profile-edited-conflict": "Профіль був кимось відредагований.",
-  "profile-tabs": {
-    "about": "Про себе",
-    "people": "Люди",
-    "posts": "Пости"
-  },
   "progress": "{done} з {total} зроблено",
   "prohibited": "Заборонено",
   "prohibited-to-comment": "коментувати",

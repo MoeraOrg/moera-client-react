@@ -48,7 +48,7 @@ export default function ComplaintsListPage() {
     return (
         <Page className="complaint">
             <div className="page-left-pane">
-                <MainMenuSidebar selected="complaints"/>
+                <MainMenuSidebar/>
             </div>
             <div className="page-central-pane">
                 <MobileBack href="/complaints" sticky>

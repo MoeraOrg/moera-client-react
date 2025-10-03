@@ -1,3 +1,11 @@
+@media only screen and (max-width: 991px) {
+    .complaints {
+        padding-bottom: calc(var(--page-footer-height) + .25rem);
+        background-color: white;
+        min-height: 100vh;
+    }
+}
+
 .complaints .mobile-back {
     background-color: white;
 }

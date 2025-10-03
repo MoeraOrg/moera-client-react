@@ -1,4 +1,5 @@
 {
+  "about-me": "О себе",
   "access-google-play-sheriff-granted": "Доступ шерифу Google Play разрешён",
   "access-granted": "Доступ разрешён",
   "access-request-not-valid": "Запрос на доступ недействителен",
@@ -525,6 +526,7 @@
   "posting-updated-at": "изменён",
   "post-not-allowed": "Вы не можете писать в этот блог.",
   "post-preview": "Предпросмотр поста",
+  "posts": "Посты",
   "preparing": "Подготовка...",
   "present": "Есть",
   "preserve-formatting": "Сохранить форматирование",
@@ -541,11 +543,6 @@
   "privacy": "Конфиденциальность",
   "profile": "Профиль",
   "profile-edited-conflict": "Профиль был кем-то отредактирован.",
-  "profile-tabs": {
-    "about": "О себе",
-    "people": "Люди",
-    "posts": "Посты"
-  },
   "progress": "{done} из {total} готово",
   "prohibited": "Запрещено",
   "prohibited-to-comment": "комментировать",

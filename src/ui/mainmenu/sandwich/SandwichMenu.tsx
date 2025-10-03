@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
-import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { tTitle } from "i18n";
 import { Storage } from "storage";
 import { ClientState } from "state/state";
@@ -11,7 +10,7 @@ import { openConnectionsDialog } from "state/home/actions";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName, getHomeRootLocation } from "state/home/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { Avatar } from "ui/control";
-import { Icon, msLogout, msReport, msSwapHoriz } from "ui/material-symbols";
+import { Icon, msLogout, msSwapHoriz } from "ui/material-symbols";
 import { useParent } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import { REL_HOME } from "util/rel-node-name";
@@ -69,15 +68,6 @@ function SandwichMenu(_: Props, ref: ForwardedRef<HTMLDivElement>) {
                         </div>
                         <div className="name">{NodeName.shorten(nodeName)}</div>
                     </Jump>
-                    {nodeName === SHERIFF_GOOGLE_PLAY_TIMELINE &&
-                        <>
-                            <hr/>
-                            <Jump nodeName={REL_HOME} href="/complaints" className="item">
-                                <Icon icon={msReport} size={24}/>
-                                <span>{tTitle(t("complaints"))}</span>
-                            </Jump>
-                        </>
-                    }
                     <hr/>
                     <div className="item" onClick={onSwitchAccounts}>
                         <Icon icon={msSwapHoriz} size={24}/>

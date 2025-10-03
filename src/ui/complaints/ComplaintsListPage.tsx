@@ -4,21 +4,27 @@ import { useTranslation } from 'react-i18next';
 import { createSelector } from 'reselect';
 
 import { ClientState } from "state/state";
+import { isConnectedToHome } from "state/home/selectors";
 import { complaintsInboxSet, complaintsPastSliceLoad } from "state/complaints/actions";
 import { Button } from "ui/control";
 import { Icon, msInbox } from "ui/material-symbols";
 import { Page } from "ui/page/Page";
 import DesktopBack from "ui/page/DesktopBack";
-import MobileBack from "ui/page/MobileBack";
+import BackBox from "ui/page/BackBox";
+import BackBoxInner from "ui/page/BackBoxInner";
 import { useHomeNews } from "ui/feed/feeds";
-import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
+import NewsCounter from "ui/mainmenu/NewsCounter";
 import BottomMenu from "ui/mainmenu/BottomMenu";
+import ProfileSidebar from "ui/profile/ProfileSidebar";
+import ProfileTabs from "ui/profile/ProfileTabs";
+import ProfileTitle from "ui/profile/ProfileTitle";
 import ComplaintGroupLine from "ui/complaints/ComplaintGroupLine";
 import ComplaintsSentinel from "ui/complaints/ComplaintsSentinel";
 import { REL_HOME } from "util/rel-node-name";
 import "./ComplaintsListPage.css";
 
 export default function ComplaintsListPage() {
+    const connectedToHome = useSelector(isConnectedToHome);
     const complaintGroups = useSelector(getComplaintGroups);
     const loadingPast = useSelector((state: ClientState) => state.complaints.loadingPast);
     const total = useSelector((state: ClientState) => state.complaints.total);
@@ -34,21 +40,25 @@ export default function ComplaintsListPage() {
     const onInboxToggle = () => dispatch(complaintsInboxSet(!inboxOnly));
 
     return (
-        <Page className="complaints">
+        <Page className="complaints tabbed-page">
             <div className="page-left-pane">
-                <MainMenuSidebar selected="complaints"/>
+                <ProfileSidebar/>
             </div>
             <div className="page-central-pane">
-                <MobileBack nodeName={REL_HOME} href={newsHref} sticky>
-                    {t("complaints")}
-                </MobileBack>
-                <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                    {t("back-news")}
-                </DesktopBack>
+                <ProfileTitle/>
+                <BackBox>
+                    <BackBoxInner noShadow>
+                        {connectedToHome &&
+                            <DesktopBack nodeName={REL_HOME} href={newsHref}>
+                                {t("back-news")}<NewsCounter/>
+                            </DesktopBack>
+                        }
+                        <ProfileTabs value="complaints"/>
+                    </BackBoxInner>
+                </BackBox>
                 <main className="content-panel">
                     <div className="navigator">
                         <div className="total">{`${t("total-colon")} ${total}`}</div>
-                        <div className="page-title only-desktop">{t("complaints")}</div>
                         <Button variant="tool-round" active={inboxOnly} title={t("only-new")} onClick={onInboxToggle}>
                             <Icon icon={msInbox} size={20}/>
                         </Button>

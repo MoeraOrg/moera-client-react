@@ -1,4 +1,5 @@
 {
+  "about-me": "O mnie",
   "access-google-play-sheriff-granted": "Dostęp dla szeryfa Google Play został przyznany",
   "access-granted": "Dostęp przyznany",
   "access-request-not-valid": "Żądanie dostępu jest nieprawidłowe",
@@ -525,6 +526,7 @@
   "posting-updated-at": "zaktualizowany",
   "post-not-allowed": "Nie możesz publikować na tym blogu.",
   "post-preview": "Podgląd posta",
+  "posts": "Posty",
   "preparing": "Przygotowywanie...",
   "present": "Jest",
   "preserve-formatting": "Zachowaj formatowanie",
@@ -541,11 +543,6 @@
   "privacy": "Prywatność",
   "profile": "Profil",
   "profile-edited-conflict": "Profil został edytowany przez kogoś innego.",
-  "profile-tabs": {
-    "about": "O mnie",
-    "people": "Ludzie",
-    "posts": "Posty"
-  },
   "progress": "{done} z {total} wykonane",
   "prohibited": "Zabronione",
   "prohibited-to-comment": "komentowanie",

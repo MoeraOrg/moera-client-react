@@ -4,18 +4,17 @@ import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
 import { NodeName } from "api";
-import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { isAtHomeNode } from "state/node/selectors";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { Avatar, OnlyDesktop } from "ui/control";
-import { Icon, MaterialSymbol, msExplore, msPublic, msReport, msSettings } from "ui/material-symbols";
+import { Icon, MaterialSymbol, msExplore, msPublic, msSettings } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
 import NewsCounter from "ui/mainmenu/NewsCounter";
 import { getFeedTitle, useHomeNews } from "ui/feed/feeds";
 import { REL_HOME } from "util/rel-node-name";
 import "./MainMenuSidebar.css";
 
-type MainMenuSidebarItem = "news" | "explore" | "settings" | "complaints";
+type MainMenuSidebarItem = "news" | "explore" | "settings";
 
 interface MenuItem {
     value: MainMenuSidebarItem;
@@ -56,14 +55,7 @@ export default function MainMenuSidebar({selected}: Props) {
             title: t("settings"),
             href: "/settings"
         },
-        {
-            value: "complaints",
-            icon: msReport,
-            title: t("complaints"),
-            href: "/complaints",
-            visible: ownerName === SHERIFF_GOOGLE_PLAY_TIMELINE
-        },
-    ], [newsHref, ownerName, t]);
+    ], [newsHref, t]);
 
     if (!ownerName) {
         return null;
