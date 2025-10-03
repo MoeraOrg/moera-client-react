@@ -84,7 +84,7 @@ function ComposePageInner(props: Props) {
                     <MainMenuSidebar/>
                 </div>
                 <div className="page-central-pane">
-                    <MobileBack nodeName={backNodeName} href={backHref}>
+                    <MobileBack nodeName={backNodeName} href={backHref} sticky>
                         {title}
                         {loadingContent && <Loading/>}
                     </MobileBack>

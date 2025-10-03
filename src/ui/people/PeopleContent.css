@@ -10,6 +10,5 @@
 @media only screen and (max-width: 991px) {
     .people-content {
         border-radius: 0;
-        padding-bottom: calc(var(--page-footer-height) + .25rem);
     }
 }

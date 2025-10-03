@@ -3,6 +3,10 @@
         background-color: white;
         min-height: 100vh;
     }
+
+    .compose-page .mobile-back {
+        background-color: white;
+    }
 }
 
 .composer {

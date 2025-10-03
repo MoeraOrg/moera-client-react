@@ -7,6 +7,15 @@
         padding-bottom: calc(var(--page-footer-height) + .25rem);
     }
 
+    .search-page:not(.tabbed-page) {
+        background-color: white;
+        min-height: 100vh;
+    }
+
+    .search-page .mobile-back {
+        background-color: white;
+    }
+
     .search-page #search-box {
         margin: .25rem;
     }
@@ -28,8 +37,9 @@
     .search-page .search-suggestions.name-select {
         position: static;
         width: 100%;
-        height: calc(100vh - 6.9rem);
+        height: unset;
         max-height: unset;
+        border-radius: 0;
         overflow-y: auto;
         box-shadow: unset;
         z-index: unset;

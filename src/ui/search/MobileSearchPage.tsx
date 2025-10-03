@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import cx from 'classnames';
 
+import { isConnectedToHome } from "state/home/selectors";
 import { getSearchQuery } from "state/search/selectors";
 import { Page } from "ui/page/Page";
 import MobileBack from "ui/page/MobileBack";
@@ -15,7 +17,6 @@ import { useOverlay } from "ui/overlays/overlays";
 import SearchTabs from "ui/search/SearchTabs";
 import SearchFeed from "ui/search/SearchFeed";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
-import { isConnectedToHome } from "state/home/selectors";
 
 export default function MobileSearchPage() {
     const connectedToHome = useSelector(isConnectedToHome);
@@ -59,9 +60,11 @@ export default function MobileSearchPage() {
         }
     )
 
+    const results = !suggestions && !focused;
+
     return (
         <>
-            <Page className="search-page tabbed-page">
+            <Page className={cx("search-page", {"tabbed-page": results})}>
                 <div className="page-central-pane" ref={pageRef}>
                     <MobileBack nodeName={backNode} href={backHref} sticky>
                         <div id="search-box">
@@ -76,25 +79,23 @@ export default function MobileSearchPage() {
                             />
                         </div>
                     </MobileBack>
+                    {results &&
+                        <BackBox>
+                            <BackBoxInner>
+                                <SearchTabs/>
+                            </BackBoxInner>
+                        </BackBox>
+                    }
                     <SearchSuggestions
                         query={query}
                         searchList={searchList}
                         selectedIndex={selectedIndex}
                         handleClick={handleClick}
                         onHistoryDelete={handleHistoryDelete}
-                        visible={(suggestions || focused) && (searchList.length > 0 || !!query)}
+                        visible={!results && (searchList.length > 0 || !!query)}
                         ref={listDom}
                     />
-                    {!suggestions && !focused &&
-                        <>
-                            <BackBox>
-                                <BackBoxInner>
-                                    <SearchTabs/>
-                                </BackBoxInner>
-                            </BackBox>
-                            <SearchFeed/>
-                        </>
-                    }
+                    {results && <SearchFeed/>}
                 </div>
             </Page>
             <BottomMenu/>

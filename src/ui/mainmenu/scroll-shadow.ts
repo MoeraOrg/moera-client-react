@@ -19,7 +19,7 @@ export function useScrollShadow({margin = 0}: Props = {}): ScrollShadow {
         [setShadow]
     );
 
-    const sentinel = useIntersect(onIntersect, {rootMargin: `-${margin}px 0px 0px 0px`});
+    const sentinel = useIntersect(onIntersect, {rootMargin: `${-margin}px 0px 0px 0px`});
 
     return {shadow, sentinel};
 }

@@ -6,7 +6,7 @@
 
 @media only screen and (min-width: 992px) {
     .search-page .feed-top-box {
-        top: calc(var(--page-header-height) + 2.3rem);
+        top: calc(var(--page-header-height) + 4.5rem);
     }
 }
 

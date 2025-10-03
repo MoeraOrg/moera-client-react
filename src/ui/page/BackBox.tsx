@@ -7,12 +7,13 @@ import { BackBoxContext } from "ui/page/backbox-context";
 import "./BackBox.css";
 
 interface Props {
+    shadowMargin?: number;
     children?: React.ReactNode;
 }
 
-export default function BackBox({children}: Props) {
+export default function BackBox({shadowMargin, children}: Props) {
     const connectedToHome = useSelector(isConnectedToHome);
-    const {shadow, sentinel} = useScrollShadow({margin: connectedToHome ? 50 : 100});
+    const {shadow, sentinel} = useScrollShadow({margin: shadowMargin ?? (connectedToHome ? 50 : 100)});
 
     return (
         <>

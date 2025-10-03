@@ -13,6 +13,7 @@ import { getDetailedPosting, isDetailedPostingBeingDeleted } from "state/detaile
 import { getPostingFeedReference, isPostingSheriffProhibited } from "state/postings/selectors";
 import { Button, Loading } from "ui/control";
 import { MinimalStoryInfo } from "ui/types";
+import { useIsTinyScreen } from "ui/hook";
 import { useHomeNews } from "ui/feed/feeds";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
@@ -78,6 +79,7 @@ export default function DetailedPostingPage() {
     const posting = useSelector(getDetailedPosting);
     const googlePlayHiding = useSelector(isGooglePlayHiding);
     const newsHref = useHomeNews();
+    const tinyScreen = useIsTinyScreen();
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -96,7 +98,7 @@ export default function DetailedPostingPage() {
                 <MainMenuSidebar/>
             </div>
             <div className="page-central-pane">
-                <BackBox>
+                <BackBox shadowMargin={tinyScreen ? 0 : undefined}>
                     <BackBoxInner>
                         <DesktopBack nodeName={backNodeName} href={backHref}>
                             {backTitle}
