@@ -39,8 +39,6 @@ export default function App() {
     const atGrantPage = useSelector(isAtGrantPage);
     const atGlobalPage = atRemovalPage || atGrantPage;
 
-    useReload();
-
     return (
         // FIXME React.CSSProperties does not include CSS variables
         <div style={{
