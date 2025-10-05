@@ -1,5 +1,5 @@
 :root {
-    --nav-pills-link-hover-bg: var(--bs-brand-100);
+    --nav-pills-link-hover-bg: var(--brand-50);
     --nav-pills-link-active-hover-bg: var(--bs-primary);
     --nav-link-arrow-color: var(--bs-nav-link-color);
     --nav-link-active-arrow-color: var(--nav-link-arrow-color);
