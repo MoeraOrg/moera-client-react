@@ -240,13 +240,13 @@
   "enter-text-here": "Wpisz tekst tutaj...",
   "expand": "Rozwiń ↓",
   "expires": "Wygasa:",
-  "explore": "Przegląd",
-  "explore-people": "Przegląd ludzi",
-  "explore-posts": "Przegląd postów",
+  "explore": "Odkrywaj",
+  "explore-people": "Odkrywaj ludzi",
+  "explore-posts": "Odkrywaj posty",
   "failure-reason": "Powód niepowodzenia",
   "feed-currently-empty": "Kanał jest obecnie pusty",
   "feed-title": {
-    "explore": "Przegląd",
+    "explore": "Odkrywaj",
     "news": "Aktualności",
     "timeline": "Kronika"
   },
