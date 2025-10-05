@@ -31,6 +31,10 @@
     font-size: .6em;
 }
 
+.people-page .person .full-name .principal {
+    margin-left: .5em;
+}
+
 .people-page .person .contact-statuses {
     grid-area: status;
 }
