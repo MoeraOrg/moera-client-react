@@ -1,9 +1,7 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 
 import { Loading } from "ui/control";
-import "./CommentsSentinel.css";
+import { Icon, msSync } from "ui/material-symbols";
 
 interface Props {
     visible: boolean;
@@ -15,19 +13,15 @@ interface Props {
 
 export default function CommentsSentinel({visible, loading, title, total, onClick}: Props) {
     if (!visible) {
-        return <div className="comments-sentinel"/>;
+        return null;
     }
     if (loading) {
-        return (
-            <div className="comments-sentinel">
-                <Loading/>
-            </div>
-        );
+        return <div><Loading/></div>;
     }
     const fullTitle = total > 0 ? `${title} (${total})` : title;
     return (
-        <button className="btn btn-link comments-sentinel" onClick={onClick}>
-            <FontAwesomeIcon className="icon" icon={faSyncAlt}/>&nbsp;&nbsp;{fullTitle}
+        <button className="btn btn-outline-primary d-flex" onClick={onClick}>
+            <Icon icon={msSync} size={20}/>&nbsp;{fullTitle}
         </button>
     );
 }

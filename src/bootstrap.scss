@@ -104,6 +104,10 @@ $blues: (
   --#{$prefix}btn-disabled-color: #{$gray-100};
 }
 
+.btn-outline-primary {
+  --#{$prefix}btn-hover-color: white;
+}
+
 @import "~bootstrap/scss/transitions";
 @import "~bootstrap/scss/dropdown";
 @import "~bootstrap/scss/button-group";

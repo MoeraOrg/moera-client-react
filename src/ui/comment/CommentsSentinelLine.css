@@ -1,12 +1,5 @@
 .comments-sentinel-line {
-    display: flex;
-}
-
-.comments-sentinel {
-    flex: auto;
-}
-
-.comments-counter {
-    flex: none;
-    color: var(--bs-gray-500);
+    margin: 2rem 0;
+    display: grid;
+    place-items: center;
 }

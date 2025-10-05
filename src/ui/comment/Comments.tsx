@@ -125,25 +125,35 @@ export default function Comments() {
                 {empty ||
                     <>
                         {comments.length > 0 &&
-                            <CommentsSentinelLine end={false} loading={loadingPast}
-                                                  title={t("view-earlier-comments")} total={totalInPast}
-                                                  visible={total > 0 && after > Number.MIN_SAFE_INTEGER}
-                                                  onClick={loadPast}/>
+                            <CommentsSentinelLine
+                                end={false}
+                                loading={loadingPast}
+                                title={t("view-earlier-comments")}
+                                total={totalInPast}
+                                visible={total > 0 && after > Number.MIN_SAFE_INTEGER}
+                                onClick={loadPast}
+                            />
                         }
                         {comments.map((comment, index) =>
-                            <Comment key={comment.moment} comment={comment}
-                                     previousId={index > 0 ? comments[index - 1].id : null}
-                                     focused={comment.id === focusedCommentId}/>
+                            <Comment
+                                key={comment.moment}
+                                comment={comment}
+                                previousId={index > 0 ? comments[index - 1].id : null}
+                                focused={comment.id === focusedCommentId}
+                            />
                         )}
-                        <CommentsSentinelLine end={true} loading={loadingFuture}
-                                              title={
-                                                  comments.length !== 0
-                                                      ? t("view-later-comments")
-                                                      : t("view-comments")
-                                              }
-                                              total={totalInFuture}
-                                              visible={total > 0 && before < Number.MAX_SAFE_INTEGER}
-                                              onClick={loadFuture}/>
+                        <CommentsSentinelLine
+                            end={true}
+                            loading={loadingFuture}
+                            title={
+                                comments.length !== 0
+                                    ? t("view-later-comments")
+                                    : t("view-comments")
+                            }
+                            total={totalInFuture}
+                            visible={total > 0 && before < Number.MAX_SAFE_INTEGER}
+                            onClick={loadFuture}
+                        />
                     </>
                 }
             </div>

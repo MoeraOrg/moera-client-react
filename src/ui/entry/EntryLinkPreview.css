@@ -90,7 +90,7 @@ A.link-preview.small, DIV.link-preview.small {
     position: absolute;
     right: 2rem;
     top: -.25rem;
-    color: var(--bs-blue);
+    color: var(--bs-primary);
     font-size: 1.5em;
     height: 1em;
     width: 1em;

@@ -38,7 +38,7 @@
 .feed-top-button .new {
     position: relative;
     top: .1em;
-    background-color: var(--bs-blue);
+    background-color: var(--bs-primary);
     color: white;
     font-weight: bold;
     padding: .15em .35em .15em .3em;

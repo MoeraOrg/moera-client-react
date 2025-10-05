@@ -108,6 +108,7 @@ import { ReactComponent as msStrikethroughS } from "ui/material-symbols/striketh
 import { ReactComponent as msSubscript } from "ui/material-symbols/subscript.isvg";
 import { ReactComponent as msSuperscript } from "ui/material-symbols/superscript.isvg";
 import { ReactComponent as msSwapHoriz } from "ui/material-symbols/swap_horiz.isvg";
+import { ReactComponent as msSync } from "ui/material-symbols/sync.isvg";
 import { ReactComponent as msThumbDown } from "ui/material-symbols/thumb_down.isvg";
 import { ReactComponent as msThumbUp } from "ui/material-symbols/thumb_up.isvg";
 import { ReactComponent as msThumbsDownSolid } from "ui/material-symbols/thumbs-down-solid.isvg"; // FontAwesome
@@ -230,6 +231,7 @@ export {
     msSubscript,
     msSuperscript,
     msSwapHoriz,
+    msSync,
     msThumbDown,
     msThumbUp,
     msThumbsDownSolid,
