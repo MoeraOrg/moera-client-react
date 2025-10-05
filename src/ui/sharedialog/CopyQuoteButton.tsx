@@ -1,14 +1,13 @@
 import React, { MouseEvent } from 'react';
 import { useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faQuoteLeft } from '@fortawesome/free-solid-svg-icons';
 import clipboardCopy from 'clipboard-copy';
 import { useTranslation } from 'react-i18next';
 
-import { ShareTextMode } from "ui/sharedialog/share-text-mode";
-import * as Browser from "ui/browser";
-import { closeShareDialog } from "state/sharedialog/actions";
 import { flashBox } from "state/flashbox/actions";
+import { closeShareDialog } from "state/sharedialog/actions";
+import { Icon, msCode } from "ui/material-symbols";
+import * as Browser from "ui/browser";
+import { ShareTextMode } from "ui/sharedialog/share-text-mode";
 import { htmlEntities } from "util/html";
 import "./CopyQuoteButton.css";
 
@@ -43,7 +42,7 @@ export default function CopyQuoteButton({url, title, mode}: Props) {
 
     return (
         <button className="copy-quote" title={t("copy-quote")} onClick={onClick}>
-            <FontAwesomeIcon icon={faQuoteLeft}/>
+            <Icon icon={msCode} size={24}/>
         </button>
     );
 }

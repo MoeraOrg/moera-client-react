@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
 import cx from 'classnames';
 
 import { NEGATIVE_REACTIONS, POSITIVE_REACTIONS } from "api";
 import { EmojiListDialog } from "ui/control";
+import { Icon, msEdit } from "ui/material-symbols";
 import Twemoji from "ui/twemoji/Twemoji";
 import EmojiList from "util/emoji-list";
 import "./EmojiListInput.css"
@@ -42,7 +41,7 @@ export function EmojiListInput({className, negative, value, disabled, onChange}:
             </div>
             {!disabled &&
                 <div className="button" onClick={edit}>
-                    <FontAwesomeIcon icon={faPen}/>
+                    <Icon icon={msEdit} size="1.2em"/>
                 </div>
             }
             {editing &&
