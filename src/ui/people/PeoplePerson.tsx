@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { Icon, msCheck16 } from "ui/material-symbols";
 import cx from 'classnames';
 
 import { ContactWithRelationships, NodeName } from "api";
@@ -36,7 +35,7 @@ export default function PeoplePerson({contact}: Props) {
                 <div className="avatar-selector" onClick={onSelectClick}>
                     <Avatar ownerName={contact.contact.nodeName} avatar={contact.contact.avatar} size={40}/>
                     <button className={cx("selection", {"selected": selected})}>
-                        {selected && <FontAwesomeIcon icon={faCheck}/>}
+                        {selected && <Icon icon={msCheck16} size={16}/>}
                     </button>
                 </div>
             :

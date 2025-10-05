@@ -29,6 +29,7 @@
     border: 0;
     color: white;
     font-size: .6em;
+    padding-left: .1em;
 }
 
 .people-page .person .full-name .principal {

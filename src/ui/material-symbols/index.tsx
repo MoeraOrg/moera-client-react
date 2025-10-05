@@ -15,6 +15,7 @@ import { ReactComponent as msCalendarMonth } from "ui/material-symbols/calendar_
 import { ReactComponent as msCancel } from "ui/material-symbols/cancel.isvg";
 import { ReactComponent as msCancelFilled } from "ui/material-symbols/cancel_filled.isvg";
 import { ReactComponent as msCheck } from "ui/material-symbols/check.isvg";
+import { ReactComponent as msCheck16 } from "ui/material-symbols/check16.isvg";
 import { ReactComponent as msChevronRight } from "ui/material-symbols/chevron_right.isvg";
 import { ReactComponent as msCircleFilled } from "ui/material-symbols/circle_filled.isvg";
 import { ReactComponent as msClose } from "ui/material-symbols/close.isvg";
@@ -136,6 +137,7 @@ export {
     msCancel,
     msCancelFilled,
     msCheck,
+    msCheck16,
     msChevronRight,
     msCircleFilled,
     msClose,
