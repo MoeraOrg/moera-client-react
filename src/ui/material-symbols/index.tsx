@@ -103,6 +103,7 @@ import { ReactComponent as msShare } from "ui/material-symbols/share.isvg";
 import { ReactComponent as msShieldPerson } from "ui/material-symbols/shield_person.isvg";
 import { ReactComponent as msSort } from "ui/material-symbols/sort.isvg";
 import { ReactComponent as msSortByAlpha } from "ui/material-symbols/sort_by_alpha.isvg";
+import { ReactComponent as msStar } from "ui/material-symbols/star.isvg";
 import { ReactComponent as msStarFilled16 } from "ui/material-symbols/star_filled16.isvg";
 import { ReactComponent as msStrikethroughS } from "ui/material-symbols/strikethrough_s.isvg";
 import { ReactComponent as msSubscript } from "ui/material-symbols/subscript.isvg";
@@ -226,6 +227,7 @@ export {
     msShieldPerson,
     msSort,
     msSortByAlpha,
+    msStar,
     msStarFilled16,
     msStrikethroughS,
     msSubscript,
