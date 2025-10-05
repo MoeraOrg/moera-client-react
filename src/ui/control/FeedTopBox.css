@@ -8,8 +8,8 @@
 }
 
 .feed-top-button {
-    background-color: var(--primary-50);
-    color: var(--primary-600);
+    background-color: var(--brand-50);
+    color: var(--bs-primary);
     display: inline-block;
     padding: .15rem .8rem .4rem .5rem;
     border-radius: 1em;
@@ -20,15 +20,15 @@
 }
 
 .feed-top-button:hover {
-    background-color: var(--primary-600);
-    border-color: var(--primary-600);
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
     color: white;
 }
 
 .feed-top-button .title {
     position: relative;
     top: .1em;
-    color: var(--primary-800);
+    color: var(--bs-brand-600);
 }
 
 .feed-top-button:hover .title {

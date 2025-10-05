@@ -1,9 +1,9 @@
 .compose-features-button {
-    color: var(--secondary-600);
+    color: var(--violet-600);
     margin-inline-start: -.75rem;
     margin-bottom: 1rem;
 }
 
 .compose-features-button:hover {
-    color: var(--secondary-800);
+    color: var(--violet-800);
 }

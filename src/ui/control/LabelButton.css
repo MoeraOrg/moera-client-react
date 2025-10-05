@@ -12,7 +12,7 @@
 }
 
 .form-label-button:hover {
-    background-color: var(--highlight);
+    background-color: var(--bs-gray-100);
     color: var(--bs-gray-600);
 }
 

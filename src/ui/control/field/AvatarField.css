@@ -46,5 +46,5 @@
 }
 
 .avatar-field .selector .item:hover {
-    background-color: var(--highlight);
+    background-color: var(--bs-gray-100);
 }

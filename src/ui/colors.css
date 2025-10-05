@@ -19,32 +19,18 @@
      * --bs-cyan-200: #9eeaf9;
      */
 
-    /* New design colors */
-    --primary-800: #0b898f; /* Future primary */
-    --primary-600: #0fb6bf;
-    --primary-50: #eefafa;
-    --secondary-800: #3d4170;
-    --secondary-600: #515795;
+    /* Design colors */
+    --brand-50: #eefafa;
+    --violet-800: #3d4170;
+    --violet-600: #515795;
 
     /* Page body color */
     --body-bg: var(--bs-gray-200);
 
-    /* Highlight colors */
-    --highlight: rgb(0 0 0 / 5%);
-    --highlight-light: rgb(0 0 0 / 2.5%);
-    --highlight-blue: rgb(0 123 255 / 10%); /* TODO need to change after changing primary color */
-    --highlight-red: rgb(220 53 69 / 10%);
-    --highlight-cyan: #f0fafa;
-    --highlight-primary: var(--highlight-blue);
-
-    /* Special colors */
-    --green-light: #42d042; /* forest green + 20% lighter */
-
     /* Verification colors */
-    --verifying: var(--bs-cyan);
+    --verifying: var(--bs-brand-400);
     --correct: forestgreen;
     --incorrect: var(--bs-red);
-    --correct-light: var(--green-light);
 
     /* Other elements' colors */
     --reactions-positive: #e9fce5;

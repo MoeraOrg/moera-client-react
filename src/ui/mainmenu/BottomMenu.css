@@ -36,7 +36,7 @@
 
 #bottom-menu .item .icon.active {
     border-radius: 1rem;
-    background-color: var(--primary-600);
+    background-color: var(--bs-primary);
     color: white;
 }
 
@@ -61,7 +61,7 @@
 }
 
 #bottom-menu .item .icon.news .count {
-    background-color: var(--secondary-600);
+    background-color: var(--violet-600);
 }
 
 #bottom-menu .new-post {
@@ -69,7 +69,7 @@
     height: 3.5rem;
     border-radius: 1rem;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 30%), 0 4px 8px 3px rgb(0 0 0 / 15%);
-    background-color: var(--primary-600);
+    background-color: var(--bs-primary);
     color: white;
     display: grid;
     place-items: center;

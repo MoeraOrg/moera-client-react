@@ -11,7 +11,7 @@
 
 .comment-button:hover, A.comment-button:hover {
     color: var(--bs-gray-800);
-    background-color: var(--highlight);
+    background-color: var(--bs-gray-100);
     transition: background-color, color .15s ease-in;
 }
 

@@ -25,7 +25,7 @@ export default function DesktopBack({nodeName, href, className, onBack, children
 
     return (
         <Jump className={cx("desktop-back", className)} nodeName={nodeName} href={href} onNear={onJump} onFar={onJump}>
-            <span className="btn btn-tool-round">
+            <span className="btn btn-tool-round arrow">
                 <Icon icon={msArrowBack} size={16}/>
             </span>
             <div className="content">{children}</div>

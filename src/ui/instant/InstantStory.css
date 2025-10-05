@@ -16,11 +16,11 @@
 }
 
 #instants .instant.unread {
-    background-color: var(--primary-50);
+    background-color: var(--brand-50);
 }
 
 #instants .instant:hover, #instants .instant.unread:hover {
-    background-color: var(--highlight);
+    background-color: var(--bs-gray-100);
 }
 
 #instants .instant A.outer {
@@ -99,7 +99,7 @@
     grid-column: sidebar / end;
     place-self: center;
     padding: .5em;
-    color: var(--primary-600);
+    color: var(--bs-primary);
 }
 
 #instants .instant:hover .sidebar .envelope {

@@ -31,7 +31,7 @@
     --bs-nav-link-hover-color: var(--bs-danger);
     --bs-nav-pills-link-active-color: white;
     --bs-nav-pills-link-active-bg: var(--bs-danger);
-    --nav-pills-link-hover-bg: var(--highlight-red);
+    --nav-pills-link-hover-bg: var(--bs-danger-bg-subtle);
     --nav-pills-link-active-hover-bg: var(--bs-danger);
     --nav-link-arrow-color: transparent;
     --nav-link-active-arrow-color: transparent;

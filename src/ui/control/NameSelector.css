@@ -17,7 +17,7 @@
 }
 
 .name-select .item:hover {
-    background-color: var(--highlight);
+    background-color: var(--bs-gray-100);
 }
 
 .name-select .item.selected .name {

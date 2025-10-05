@@ -9,7 +9,7 @@
 }
 
 .complaint-group-line:hover {
-    background: var(--highlight);
+    background: var(--bs-gray-100);
     color: black;
 }
 

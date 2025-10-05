@@ -38,12 +38,12 @@
 
 .emoji-selector .choice.other {
     padding: 0;
-    color: var(--primary-600);
+    color: var(--bs-primary);
 }
 
 .emoji-selector .choice.expand {
     padding: 0;
-    color: var(--primary-600);
+    color: var(--bs-primary);
     filter: opacity(60%);
 }
 

@@ -13,7 +13,7 @@
     align-items: center;
     width: 100%;
     background-color: var(--bs-gray-100);
-    color: var(--secondary-600);
+    color: var(--violet-600);
     border-radius: .5rem;
     padding: .5rem 1rem;
     font-size: 1.2rem;
@@ -21,5 +21,5 @@
 }
 
 .draft-selector .dropdown-item.new-post:hover DIV {
-    background-color: var(--highlight);
+    background-color: var(--bs-gray-100);
 }

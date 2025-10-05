@@ -47,6 +47,6 @@
 }
 
 .settings-sheet .chapter .title .delete:hover {
-    background-color: var(--highlight);
+    background-color: var(--bs-gray-100);
     color: var(--bs-red);
 }

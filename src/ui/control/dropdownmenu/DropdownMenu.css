@@ -22,5 +22,5 @@
 }
 
 .border-primary-600 {
-    border-color: var(--primary-600);
+    border-color: var(--bs-primary);
 }

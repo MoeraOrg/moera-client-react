@@ -1,5 +1,5 @@
 :root {
-    --nav-pills-link-hover-bg: var(--highlight-blue);
+    --nav-pills-link-hover-bg: var(--bs-brand-100);
     --nav-pills-link-active-hover-bg: var(--bs-primary);
     --nav-link-arrow-color: var(--bs-nav-link-color);
     --nav-link-active-arrow-color: var(--nav-link-arrow-color);
@@ -92,6 +92,6 @@
 }
 
 .nav.nav-tabs .nav-link.active.add-tab:hover {
-    background-color: var(--highlight);
+    background-color: var(--bs-gray-100);
     color: var(--bs-nav-tabs-link-active-color);
 }

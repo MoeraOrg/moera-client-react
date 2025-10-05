@@ -11,11 +11,11 @@
 }
 
 #connections .connection-item .connection:hover {
-    background-color: var(--highlight);
+    background-color: var(--bs-gray-100);
 }
 
 #connections .connection-item.active .connection {
-    background: var(--primary-50);
+    background: var(--brand-50);
 }
 
 #connections .connection-item.active + .connection-item {
@@ -35,7 +35,7 @@
 }
 
 #connections .connection-item.active .connection .node-name {
-    color: var(--primary-800);
+    color: var(--bs-brand-600);
 }
 
 #connections .connection-item .connection .no-name {
@@ -79,7 +79,7 @@
 
 #connections .connection-add {
     padding: .75rem 1rem .25rem;
-    color: var(--secondary-800);
+    color: var(--violet-800);
     cursor: pointer;
     font-weight: 500;
     font-size: 1.12rem;

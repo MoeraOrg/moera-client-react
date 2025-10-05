@@ -5,6 +5,13 @@
     padding: 0 1.5rem;
     margin-bottom: 1rem;
     flex-wrap: nowrap;
+
+    --underlined-tabs-tab-hover-color: var(--bs-gray-700);
+    --underlined-tabs-tab-hover-bg: var(--bs-gray-100);
+    --underlined-tabs-tab-hover-underline: var(--bs-brand-100);
+    --underlined-tabs-tab-active-color: var(--bs-gray-800);
+    --underlined-tabs-tab-active-bg: transparent;
+    --underlined-tabs-tab-active-underline: var(--bs-primary);
 }
 
 @media only screen and (max-width: 991px) {
@@ -41,19 +48,18 @@
 }
 
 .underlined-tabs .tab:hover {
-    background-color: var(--highlight);
+    color: var(--underlined-tabs-tab-hover-color);
+    background-color: var(--underlined-tabs-tab-hover-bg);
+    border-bottom-color: var(--underlined-tabs-tab-hover-underline);
     transition: background-color .15s ease-in-out;
 }
 
 .underlined-tabs .tab.active {
-    border-bottom: 2px solid var(--primary-600);
-    color: var(--bs-gray-800);
+    color: var(--underlined-tabs-tab-active-color);
+    background-color: var(--underlined-tabs-tab-active-bg);
+    border-bottom-color: var(--underlined-tabs-tab-active-underline);
     transition: background-color .15s ease-in-out, color .15s ease-in-out, border-bottom-color .15s ease-in-out;
     cursor: default;
-}
-
-.underlined-tabs .tab.active:hover {
-    background-color: transparent;
 }
 
 .underlined-tabs .tab .twemoji {

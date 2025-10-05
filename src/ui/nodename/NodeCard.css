@@ -88,7 +88,7 @@
 
 .node-card .counter TIME {
     text-decoration: underline dotted;
-    color: var(--primary-800);
+    color: var(--bs-brand-600);
 }
 
 .node-card .buttons {

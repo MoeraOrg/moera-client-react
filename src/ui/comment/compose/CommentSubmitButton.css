@@ -12,7 +12,7 @@
     }
 
     .comment-compose-panel .submit:hover:not(:disabled) {
-        background-color: var(--highlight-primary);
+        background-color: var(--bs-primary-bg-subtle);
     }
 }
 

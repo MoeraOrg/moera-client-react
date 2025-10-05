@@ -99,5 +99,5 @@
 }
 
 .reactions-dialog BUTTON.more:hover {
-    background-color: var(--highlight);
+    background-color: var(--bs-gray-100);
 }

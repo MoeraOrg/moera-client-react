@@ -17,8 +17,8 @@
 }
 
 .subscribe-button SPAN.status {
-    background-color: var(--primary-50);
-    color: var(--primary-800);
+    background-color: var(--brand-50);
+    color: var(--bs-brand-600);
 }
 
 .subscribe-button .status.blocked {

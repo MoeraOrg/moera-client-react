@@ -26,12 +26,12 @@
 }
 
 .rich-text-editor-button:hover:not(:disabled) {
-    background-color: var(--highlight);
+    background-color: var(--bs-gray-100);
     color: var(--bs-gray-800);
 }
 
 .rich-text-editor-button.active:hover {
-    background-color: var(--highlight-primary);
+    background-color: var(--bs-primary-bg-subtle);
     color: var(--bs-primary);
 }
 

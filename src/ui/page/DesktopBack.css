@@ -13,6 +13,11 @@
     color: var(--bs-gray-900);
 }
 
+.desktop-back .arrow {
+    width: 2.125rem;
+    height: 2.125rem;
+}
+
 .desktop-back .content {
     white-space: nowrap;
     overflow: hidden;

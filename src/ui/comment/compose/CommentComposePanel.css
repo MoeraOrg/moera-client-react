@@ -20,7 +20,7 @@
 }
 
 .comment-compose-panel .rich-text-editor-button.delete:hover {
-    background-color: var(--highlight-red);
+    background-color: var(--bs-danger-bg-subtle);
 }
 
 .comment-compose-panel .formatting-menu-button {
@@ -30,7 +30,7 @@
 }
 
 .comment-compose-panel .formatting-menu-button:hover {
-    background-color: var(--highlight);
+    background-color: var(--bs-gray-100);
 }
 
 .comment-compose-panel .formatting-menu-button:hover .rich-text-editor-button {

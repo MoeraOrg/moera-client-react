@@ -20,5 +20,5 @@
 }
 
 SPAN.active .bell-button {
-    background-color: var(--highlight);
+    background-color: var(--bs-gray-100);
 }

@@ -48,7 +48,7 @@
 }
 
 #instants .header .close:hover {
-    background-color: var(--highlight);
+    background-color: var(--bs-gray-100);
 }
 
 @media only screen and (min-width: 992px) {
@@ -77,7 +77,7 @@
 }
 
 #instants .action {
-    color: var(--secondary-600);
+    color: var(--violet-600);
     font-size: 1rem;
     border: 0;
     background-color: transparent;

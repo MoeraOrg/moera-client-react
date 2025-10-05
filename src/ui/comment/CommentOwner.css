@@ -20,7 +20,7 @@
 }
 
 .comment.topic-starter > .owner-line .owner > A {
-    color: var(--primary-800);
+    color: var(--bs-brand-600);
 }
 
 .comment .owner-line .owner .signature-verify-button {
