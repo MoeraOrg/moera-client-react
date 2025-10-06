@@ -1,8 +1,5 @@
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faBolt } from '@fortawesome/free-solid-svg-icons';
-import { faBitcoin, faEthereum, faPatreon, faPaypal } from '@fortawesome/free-brands-svg-icons';
-
 import { FundraiserInfo } from "api";
+import { brBitcoin, brBolt, brEthereum, brPatreon, brPaypal, MaterialSymbol } from "ui/material-symbols";
 import { hasSchemeOrDomain } from "util/url";
 
 const BITCOIN_ADDRESS = /^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$/;
@@ -10,34 +7,34 @@ const LIGHTNING_ADDRESS = /^LNURL1[AC-HJ-NP-Z02-9]{6,}$/;
 
 interface FundraiserIconInfo {
     prefix: string;
-    icon: IconProp;
+    icon: MaterialSymbol;
     color?: string;
 }
 
 const FUNDRAISER_ICONS: FundraiserIconInfo[] = [
     {
         prefix: "bitcoin:",
-        icon: faBitcoin
+        icon: brBitcoin
     },
     {
         prefix: "lightning:",
-        icon: faBolt
+        icon: brBolt
     },
     {
         prefix: "ethereum:",
-        icon: faEthereum
+        icon: brEthereum
     },
     {
         prefix: "patreon.com",
-        icon: faPatreon
+        icon: brPatreon
     },
     {
         prefix: "paypal.com",
-        icon: faPaypal
+        icon: brPaypal
     },
     {
         prefix: "paypal.me",
-        icon: faPaypal
+        icon: brPaypal
     }
 ];
 
@@ -50,8 +47,12 @@ export function getFundraiserAutoHref(fundraiser: FundraiserInfo): string | unde
     if (!qrCode) {
         return undefined;
     }
-    if (qrCode.startsWith("http:") || qrCode.startsWith("https:") || qrCode.startsWith("bitcoin:")
-        || qrCode.startsWith("lightning:")) {
+    if (
+        qrCode.startsWith("http:")
+        || qrCode.startsWith("https:")
+        || qrCode.startsWith("bitcoin:")
+        || qrCode.startsWith("lightning:")
+    ) {
         return qrCode;
     }
     if (qrCode.match(BITCOIN_ADDRESS)) {

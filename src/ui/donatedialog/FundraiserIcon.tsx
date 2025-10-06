@@ -1,7 +1,7 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { FundraiserInfo } from "api";
+import { Icon } from "ui/material-symbols";
 import { findIcon } from "ui/donatedialog/fundraiser-util";
 
 interface FundraiserIconProps {
@@ -13,5 +13,5 @@ export default function FundraiserIcon({fundraiser}: FundraiserIconProps) {
     if (icon == null) {
         return null;
     }
-    return <FontAwesomeIcon icon={icon.icon} className="me-2"/>;
+    return <Icon icon={icon.icon} size="1.2em" className="me-2"/>;
 }
