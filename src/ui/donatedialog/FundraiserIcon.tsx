@@ -13,5 +13,5 @@ export default function FundraiserIcon({fundraiser}: FundraiserIconProps) {
     if (icon == null) {
         return null;
     }
-    return <Icon icon={icon.icon} size="1.2em" className="me-2"/>;
+    return <Icon icon={icon.icon} size="1.5em" className="me-2"/>;
 }
