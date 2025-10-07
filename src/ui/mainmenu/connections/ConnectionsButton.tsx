@@ -15,7 +15,7 @@ export default function ConnectionsButton() {
         <>
             <Popover
                 text={
-                    <Avatar avatar={avatar} ownerName={ownerName} size={40} nodeName={REL_HOME}
+                    <Avatar avatar={avatar} ownerName={ownerName} size={35} nodeName={REL_HOME}
                             className="home-avatar"/>
                 }
                 detached
