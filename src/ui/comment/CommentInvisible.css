@@ -1,4 +1,5 @@
 .comment .banned {
     color: var(--bs-red);
     margin-right: .5rem;
+    vertical-align: .1em;
 }

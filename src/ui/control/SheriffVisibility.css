@@ -2,4 +2,5 @@
     color: var(--bs-red);
     font-size: 90%;
     margin-right: .5em;
+    vertical-align: .1em;
 }

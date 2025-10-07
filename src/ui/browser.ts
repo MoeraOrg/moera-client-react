@@ -92,14 +92,14 @@ export const isTouchScreen = (): boolean =>
 export const isMobile = (): boolean =>
     userAgentOs === "android" || userAgentOs === "ios";
 
-export const isAndroidApp = (): boolean =>
-    androidAppFlavor != null;
+export const isAndroidApp = (): boolean => true;
+    // androidAppFlavor != null;
 
 export const isAndroidBrowser = (): boolean =>
     userAgentOs === "android" && !isAndroidApp();
 
-export const isAndroidGooglePlay = (): boolean =>
-    androidAppFlavor === "google-play";
+export const isAndroidGooglePlay = (): boolean => true;
+    // androidAppFlavor === "google-play";
 
 export const isMac = (): boolean =>
     userAgentOs === "mac";

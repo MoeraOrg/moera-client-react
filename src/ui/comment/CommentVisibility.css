@@ -4,5 +4,9 @@
 }
 
 .comment .owner-line .visibility .principal {
+    display: inline-flex;
+    width: 1.7em;
+    height: 1.7em;
+    vertical-align: bottom;
     margin-right: .4rem;
 }
