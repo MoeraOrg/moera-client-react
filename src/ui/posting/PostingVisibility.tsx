@@ -1,7 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { format, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
@@ -11,6 +9,7 @@ import { ClientState } from "state/state";
 import { postingOperationsUpdate } from "state/postings/actions";
 import { getSetting } from "state/settings/selectors";
 import { Principal, PrincipalSelect } from "ui/control";
+import { Icon, msDelete } from "ui/material-symbols";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./PostingVisibility.css";
 
@@ -48,7 +47,7 @@ export default function PostingVisibility({posting, editable}: Props) {
                 :
                     <span className="principal text-danger opacity-75"
                           title={t("original-deleted", {date: deletionDate})}>
-                        <FontAwesomeIcon icon={faTrashCan}/>
+                        <Icon icon={msDelete} size="1em"/>
                     </span>
                 )
             }
