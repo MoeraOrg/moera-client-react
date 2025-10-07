@@ -23,6 +23,7 @@
     --brand-50: #eefafa;
     --violet-800: #3d4170;
     --violet-600: #515795;
+    --gray-100-transparent: rgb(0 0 0 / 3%);
 
     /* Page body color */
     --body-bg: var(--bs-gray-200);
