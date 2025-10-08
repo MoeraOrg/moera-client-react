@@ -2,14 +2,12 @@ import React, { MouseEventHandler, useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as URI from 'uri-js';
 import cx from 'classnames';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircle, faPen } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
-import { DeleteButton } from "ui/control";
+import { Icon, msClose, msEdit } from "ui/material-symbols";
 import EntryLinkPreviewImage from "ui/entry/EntryLinkPreviewImage";
 import EntryLinkPreviewEditDialog, { EntryLinkPreviewEditValues } from "ui/entry/EntryLinkPreviewEditDialog";
 import { interceptLinkClick } from "ui/entry/link-click-intercept";
@@ -106,12 +104,17 @@ interface FrameProps {
 
 function Frame({editing, className, url, children, onEdit, onDelete}: FrameProps) {
     const openInNewWindow = useSelector((state: ClientState) => getSetting(state, "link.new-window") as boolean);
+    const {t} = useTranslation();
 
     if (editing) {
         return (
             <div className={className} title="Edit">
-                <EditButton onClick={onEdit}/>
-                <DeleteButton onClick={onDelete}/>
+                <button className="control-button edit" title={t("edit")} onClick={onEdit}>
+                    <Icon icon={msEdit} size={16}/>
+                </button>
+                <button className="control-button delete" title={t("delete")} onClick={onDelete}>
+                    <Icon icon={msClose} size={16}/>
+                </button>
                 {children}
             </div>
         );
@@ -125,21 +128,4 @@ function Frame({editing, className, url, children, onEdit, onDelete}: FrameProps
             </a>
         );
     }
-}
-
-interface EditButtonProps {
-    onClick?: MouseEventHandler;
-}
-
-export const EditButton = ({onClick}: EditButtonProps) => {
-    const {t} = useTranslation();
-
-    return (
-        <div className="edit-button" title={t("edit")} onClick={onClick}>
-        <span className="fa-layers fa-fw">
-            <FontAwesomeIcon icon={faCircle}/>
-            <span className="pen"><FontAwesomeIcon icon={faPen} color="white"/></span>
-        </span>
-        </div>
-    );
 }

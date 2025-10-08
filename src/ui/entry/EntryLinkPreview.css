@@ -81,23 +81,26 @@ A.link-preview.small, DIV.link-preview.small {
     margin-right: .25em;
 }
 
-.link-preview .delete-button {
-    top: -.25rem;
-    right: -.1rem;
+.link-preview .control-button {
+    position: absolute;
+    color: white;
+    height: 1.5rem;
+    width: 1.5rem;
+    border: none;
+    border-radius: .75rem;
+    padding: 0;
+    display: grid;
+    place-items: center;
 }
 
-.link-preview .edit-button {
-    position: absolute;
+.link-preview .control-button.edit {
     right: 2rem;
     top: -.25rem;
-    color: var(--bs-primary);
-    font-size: 1.5em;
-    height: 1em;
-    width: 1em;
-    line-height: 1;
-    cursor: pointer;
+    background-color: var(--bs-primary);
 }
 
-.link-preview .edit-button .pen {
-    font-size: .8rem;
+.link-preview .control-button.delete {
+    right: -.1rem;
+    top: -.25rem;
+    background-color: var(--bs-danger);
 }
