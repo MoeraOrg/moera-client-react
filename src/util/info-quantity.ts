@@ -81,4 +81,4 @@ export class InfoQuantity {
 }
 
 export const formatMib = (size: number): string =>
-    (size / 1024 / 1024).toLocaleString("en-US", {maximumFractionDigits: 2}) + "\u00a0Mib";
+    (size / 1024 / 1024).toLocaleString("en-US", {maximumFractionDigits: 2}) + "\u00a0MiB";
