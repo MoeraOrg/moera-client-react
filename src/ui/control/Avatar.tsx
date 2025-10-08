@@ -8,7 +8,7 @@ import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { getSetting } from "state/settings/selectors";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
-import avatarPlaceholder from "./avatar.png";
+import avatarPlaceholder from "./avatar.jpg";
 import "./Avatar.css";
 
 function effectiveShape(shape: string | null, shapeLocal: string | null | undefined,

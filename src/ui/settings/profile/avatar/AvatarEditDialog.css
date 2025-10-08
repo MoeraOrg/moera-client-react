@@ -8,6 +8,7 @@
     display: flex;
     justify-content: space-between;
     width: 300px;
+    margin-bottom: .5rem;
 }
 
 .avatar-edit-dialog .editor {
@@ -24,6 +25,9 @@
 
 .avatar-edit-dialog .upload {
     margin-top: .25rem;
+    display: flex;
+    align-items: center;
+    border-radius: .5rem;
 }
 
 .avatar-edit-dialog .scale {

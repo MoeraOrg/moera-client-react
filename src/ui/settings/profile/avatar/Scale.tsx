@@ -1,9 +1,8 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from "ui/control";
+import { Icon, msAdd, msRemove } from "ui/material-symbols";
 import "./Scale.css";
 
 interface Props {
@@ -33,13 +32,13 @@ export default function Scale({max = 1, value, onChange}: Props) {
 
     return (
         <div className="scale">
-            <Button variant="light" size="sm" title={t("zoom-out")} onClick={onClick(-1)} disabled={value === 1}>
-                <FontAwesomeIcon icon={faMinus}/>
+            <Button variant="silent" size="sm" title={t("zoom-out")} onClick={onClick(-1)} disabled={value === 1}>
+                <Icon icon={msRemove} size={16}/>
             </Button>
-            <input type="range" className="form-control-range" min={1} max={max} step="any" value={value}
+            <input type="range" className="form-range" min={1} max={max} step="any" value={value}
                    onChange={onScaleChange}/>
-            <Button variant="light" size="sm" title={t("zoom-in")} onClick={onClick(1)} disabled={value === max}>
-                <FontAwesomeIcon icon={faPlus}/>
+            <Button variant="silent" size="sm" title={t("zoom-in")} onClick={onClick(1)} disabled={value === max}>
+                <Icon icon={msAdd} size={16}/>
             </Button>
         </div>
     );

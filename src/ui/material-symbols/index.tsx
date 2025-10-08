@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import { ReactComponent as brBitcoin } from "ui/material-symbols/brands/bitcoin.isvg";
-import { ReactComponent as brBolt } from "ui/material-symbols/brands/bolt.isvg";
-import { ReactComponent as brEthereum } from "ui/material-symbols/brands/ethereum.isvg";
-import { ReactComponent as brPatreon } from "ui/material-symbols/brands/patreon.isvg";
-import { ReactComponent as brPaypal } from "ui/material-symbols/brands/paypal.isvg";
+import { ReactComponent as brBitcoin } from "ui/material-symbols/brands/bitcoin.isvg"; // FontAwesome
+import { ReactComponent as brBolt } from "ui/material-symbols/brands/bolt.isvg"; // FontAwesome
+import { ReactComponent as brEthereum } from "ui/material-symbols/brands/ethereum.isvg"; // FontAwesome
+import { ReactComponent as brPatreon } from "ui/material-symbols/brands/patreon.isvg"; // FontAwesome
+import { ReactComponent as brPaypal } from "ui/material-symbols/brands/paypal.isvg"; // FontAwesome
 import { ReactComponent as msAdd } from "ui/material-symbols/add.isvg";
 import { ReactComponent as msAddBox } from "ui/material-symbols/add_box.isvg";
 import { ReactComponent as msAddLink } from "ui/material-symbols/add_link.isvg";
@@ -22,6 +22,7 @@ import { ReactComponent as msCancelFilled } from "ui/material-symbols/cancel_fil
 import { ReactComponent as msCheck } from "ui/material-symbols/check.isvg";
 import { ReactComponent as msCheck16 } from "ui/material-symbols/check16.isvg";
 import { ReactComponent as msChevronRight } from "ui/material-symbols/chevron_right.isvg";
+import { ReactComponent as msCircle } from "ui/material-symbols/circle.isvg";
 import { ReactComponent as msCircleFilled } from "ui/material-symbols/circle_filled.isvg";
 import { ReactComponent as msClose } from "ui/material-symbols/close.isvg";
 import { ReactComponent as msClose12 } from "ui/material-symbols/close12.isvg";
@@ -31,6 +32,7 @@ import { ReactComponent as msCode } from "ui/material-symbols/code.isvg";
 import { ReactComponent as msCodeBlocks } from "ui/material-symbols/code_blocks.isvg";
 import { ReactComponent as msComment } from "ui/material-symbols/comment.isvg";
 import { ReactComponent as msCommentRegular } from "ui/material-symbols/comment-regular.isvg"; // FontAwesome
+import { ReactComponent as msCropSquare } from "ui/material-symbols/crop_square.isvg";
 import { ReactComponent as msDelete } from "ui/material-symbols/delete.isvg";
 import { ReactComponent as msEdit } from "ui/material-symbols/edit.isvg";
 import { ReactComponent as msError } from "ui/material-symbols/error.isvg";
@@ -94,11 +96,14 @@ import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_libr
 import { ReactComponent as msPreview } from "ui/material-symbols/preview.isvg";
 import { ReactComponent as msPublic } from "ui/material-symbols/public.isvg";
 import { ReactComponent as msRedo } from "ui/material-symbols/redo.isvg";
+import { ReactComponent as msRemove } from "ui/material-symbols/remove.isvg";
 import { ReactComponent as msReorder } from "ui/material-symbols/reorder.isvg";
 import { ReactComponent as msRepeat } from "ui/material-symbols/repeat.isvg";
 import { ReactComponent as msReplySolid } from "ui/material-symbols/reply-solid.isvg"; // FontAwesome
 import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
 import { ReactComponent as msRestartAlt16 } from "ui/material-symbols/restart_alt16.isvg";
+import { ReactComponent as msRotate90DegreesCcw } from "ui/material-symbols/rotate_90_degrees_ccw.isvg";
+import { ReactComponent as msRotate90DegreesCw } from "ui/material-symbols/rotate_90_degrees_cw.isvg";
 import { ReactComponent as msSatellite } from "ui/material-symbols/satellite.isvg";
 import { ReactComponent as msSchedule } from "ui/material-symbols/schedule.isvg";
 import { ReactComponent as msSearch } from "ui/material-symbols/search.isvg";
@@ -124,6 +129,7 @@ import { ReactComponent as msThumbsUpSolid } from "ui/material-symbols/thumbs-up
 import { ReactComponent as msTitle } from "ui/material-symbols/title.isvg";
 import { ReactComponent as msTune } from "ui/material-symbols/tune.isvg";
 import { ReactComponent as msUndo } from "ui/material-symbols/undo.isvg";
+import { ReactComponent as msUpload } from "ui/material-symbols/upload.isvg";
 import { ReactComponent as msVerifiedUser } from "ui/material-symbols/verified_user.isvg";
 import { ReactComponent as msVideoLibrary } from "ui/material-symbols/video_library.isvg";
 import { ReactComponent as msVisibility } from "ui/material-symbols/visibility.isvg";
@@ -153,6 +159,7 @@ export {
     msCheck,
     msCheck16,
     msChevronRight,
+    msCircle,
     msCircleFilled,
     msClose,
     msClose12,
@@ -162,6 +169,7 @@ export {
     msCodeBlocks,
     msComment,
     msCommentRegular,
+    msCropSquare,
     msDelete,
     msEdit,
     msError,
@@ -225,11 +233,14 @@ export {
     msPreview,
     msPublic,
     msRedo,
+    msRemove,
     msReorder,
     msRepeat,
     msReplySolid,
     msReport,
     msRestartAlt16,
+    msRotate90DegreesCcw,
+    msRotate90DegreesCw,
     msSatellite,
     msSchedule,
     msSearch,
@@ -255,6 +266,7 @@ export {
     msTitle,
     msTune,
     msUndo,
+    msUpload,
     msVerifiedUser,
     msVideoLibrary,
     msVisibility,

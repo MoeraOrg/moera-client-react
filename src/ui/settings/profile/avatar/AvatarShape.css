@@ -10,8 +10,3 @@
     display: inline-block;
     transition: .15s background-color ease-in-out, .15s color ease-in-out;
 }
-
-.avatar-shape BUTTON.active {
-    background-color: var(--bs-info);
-    color: white;
-}

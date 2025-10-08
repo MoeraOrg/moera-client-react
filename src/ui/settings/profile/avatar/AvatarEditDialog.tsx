@@ -5,17 +5,18 @@ import Dropzone from 'react-dropzone';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { ACCEPTED_IMAGE_TYPES } from "ui/image-types";
-import { Button, ModalDialog } from "ui/control";
-import avatarPlaceholder from "ui/control/avatar.png";
-import { profileAvatarCreate, profileCloseAvatarEditDialog, profileImageUpload } from "state/profile/actions";
+import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
-import { ClientState } from "state/state";
+import { profileAvatarCreate, profileCloseAvatarEditDialog, profileImageUpload } from "state/profile/actions";
+import { ACCEPTED_IMAGE_TYPES } from "ui/image-types";
+import { Button, ModalDialog } from "ui/control";
+import avatarPlaceholder from "ui/control/avatar.jpg";
+import { Icon, msUpload } from "ui/material-symbols";
 import Rotate from "ui/settings/profile/avatar/Rotate";
 import AvatarShape from "ui/settings/profile/avatar/AvatarShape";
 import Scale from "ui/settings/profile/avatar/Scale";
-import "ui/settings/profile/avatar/AvatarEditDialog.css";
+import "./AvatarEditDialog.css";
 
 export default function AvatarEditDialog() {
     const imageUploading = useSelector((state: ClientState) => state.profile.avatarEditDialog.imageUploading);
@@ -46,7 +47,7 @@ export default function AvatarEditDialog() {
         [getScaleMax]);
 
     const onEditorWheel = useCallback((event: WheelEvent) => {
-        updateScale(scale - event.deltaY * getScaleMax() / 400);
+        updateScale(scale - event.deltaY * getScaleMax() / 4000);
         event.preventDefault();
     }, [updateScale, getScaleMax, scale]);
 
@@ -142,7 +143,7 @@ export default function AvatarEditDialog() {
                                 width={200}
                                 height={200}
                                 border={50}
-                                color={[255, 255, 224, 0.6]}
+                                color={[255, 255, 255, 0.8]}
                                 borderRadius={shape === "circle" ? 100 : 10}
                                 scale={scale}
                                 rotate={rotate}
@@ -159,6 +160,7 @@ export default function AvatarEditDialog() {
                     loading={imageUploading}
                     onClick={onUploadClick}
                 >
+                    <Icon icon={msUpload} size="1.2em"/>&nbsp;&nbsp;
                     {imageUploadProgress == null
                         ? t("upload-image")
                         : t("uploading-file", {progress: imageUploadProgress})

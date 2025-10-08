@@ -1,9 +1,8 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRedoAlt, faUndoAlt } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from "ui/control";
+import { Icon, msRotate90DegreesCcw, msRotate90DegreesCw } from "ui/material-symbols";
 
 interface Props {
     value: number;
@@ -21,11 +20,11 @@ export default function Rotate({value, onChange}: Props) {
 
     return (
         <div className="btn-group">
-            <Button variant="light" size="sm" title={t("rotate-left")} onClick={onClick(-1)}>
-                <FontAwesomeIcon icon={faUndoAlt}/>
+            <Button variant="tool" title={t("rotate-left")} onClick={onClick(-1)}>
+                <Icon icon={msRotate90DegreesCcw} size={24}/>
             </Button>
-            <Button variant="light" size="sm" title={t("rotate-right")} onClick={onClick(1)}>
-                <FontAwesomeIcon icon={faRedoAlt}/>
+            <Button variant="tool" title={t("rotate-right")} onClick={onClick(1)}>
+                <Icon icon={msRotate90DegreesCw} size={24}/>
             </Button>
         </div>
     );
