@@ -3,7 +3,8 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 import { AvatarInfo } from "api";
-import { Avatar, DeleteButton } from "ui/control";
+import { Avatar } from "ui/control";
+import { Icon, msClose12 } from "ui/material-symbols";
 
 interface Props {
     nodeName: string | null,
@@ -24,7 +25,11 @@ export default function AvatarSelectorItem({nodeName, avatar, onSelect, onDelete
 
     return (
         <>
-            {onDelete && <DeleteButton onClick={onDeleteClick}/>}
+            {onDelete &&
+                <button type="button" className="menu" onClick={onDeleteClick}>
+                    <Icon icon={msClose12} size={12}/>
+                </button>
+            }
             <div ref={sortable.setNodeRef} style={sortableStyle} {...sortable.attributes} {...sortable.listeners}>
                 <Avatar avatar={avatar} ownerName={nodeName} size={100} shape="design" draggable={false}
                         onClick={onClick}/>

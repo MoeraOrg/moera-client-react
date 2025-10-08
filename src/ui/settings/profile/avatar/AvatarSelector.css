@@ -1,7 +1,8 @@
 .avatar-selector {
-    margin: .15rem;
+    margin: .75rem;
     display: flex;
     flex-wrap: wrap;
+    gap: .5rem;
     cursor: default;
     width: max-content;
     max-height: calc(312px + .75rem);
@@ -22,7 +23,6 @@
 }
 
 .avatar-selector .item {
-    margin-left: .1rem;
     padding: .25rem;
     cursor: pointer;
     border-radius: 10px;
@@ -34,22 +34,29 @@
 }
 
 .avatar-selector .item.active, .avatar-selector .item.active:hover {
-    background-color: var(--bs-cyan);
+    border: 2px solid var(--bs-primary);
     cursor: default;
 }
 
-.avatar-selector .create {
-    width: 100px;
-    height: 100px;
-    text-align: center;
-    border: 2px solid var(--bs-blue-300);
-    border-radius: 10px;
-    color: var(--bs-blue-300);
-    font-weight: bold;
-    font-size: 1.5rem;
-    padding-top: 1rem;
+.avatar-selector .item .menu {
+    position: absolute;
+    right: .25rem;
+    top: .25rem;
+    background-color: white;
+    color: var(--bs-gray-600);
+    border: 1px solid var(--bs-gray-400);
+    border-radius: .6rem;
+    padding: 0;
+    font-size: 50%;
+    height: 1.2rem;
+    width: 1.2rem;
+    line-height: 1;
 }
 
-.avatar-selector .create .fa-plus {
-    font-size: 2rem;
+.avatar-selector .create {
+    display: grid;
+    place-items: center;
+    width: calc(100px + .5rem);
+    height: calc(100px + .5rem);
+    border-radius: 10px;
 }

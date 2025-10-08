@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
     DndContext,
     DragEndEvent,
@@ -17,7 +15,8 @@ import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
 import cx from 'classnames';
 
 import { AvatarInfo } from "api";
-import { Avatar, Loading } from "ui/control";
+import { Avatar, Button, Loading } from "ui/control";
+import { Icon, msAdd } from "ui/material-symbols";
 import AvatarSelectorItem from "ui/settings/profile/avatar/AvatarSelectorItem";
 import "./AvatarSelector.css";
 
@@ -67,11 +66,9 @@ export default function AvatarSelector({
                 <div className="avatar-selector">
                     {loaded ?
                         <>
-                            <div className="item">
-                                <div className="create" onClick={onNew}>
-                                    <FontAwesomeIcon icon={faPlus}/><br/>New
-                                </div>
-                            </div>
+                            <Button variant="primary" className="create" onClick={onNew}>
+                                <Icon icon={msAdd} size="5em"/>
+                            </Button>
                             {avatars.map(avatar =>
                                 <div key={avatar.id}
                                      className={cx("item", {"active": active && !dragged && avatar.id === active.id})}>
