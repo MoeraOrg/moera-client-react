@@ -94,6 +94,7 @@ import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_libr
 import { ReactComponent as msPreview } from "ui/material-symbols/preview.isvg";
 import { ReactComponent as msPublic } from "ui/material-symbols/public.isvg";
 import { ReactComponent as msRedo } from "ui/material-symbols/redo.isvg";
+import { ReactComponent as msReorder } from "ui/material-symbols/reorder.isvg";
 import { ReactComponent as msRepeat } from "ui/material-symbols/repeat.isvg";
 import { ReactComponent as msReplySolid } from "ui/material-symbols/reply-solid.isvg"; // FontAwesome
 import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
@@ -115,6 +116,7 @@ import { ReactComponent as msSubscript } from "ui/material-symbols/subscript.isv
 import { ReactComponent as msSuperscript } from "ui/material-symbols/superscript.isvg";
 import { ReactComponent as msSwapHoriz } from "ui/material-symbols/swap_horiz.isvg";
 import { ReactComponent as msSync } from "ui/material-symbols/sync.isvg";
+import { ReactComponent as msTable } from "ui/material-symbols/table.isvg";
 import { ReactComponent as msThumbDown } from "ui/material-symbols/thumb_down.isvg";
 import { ReactComponent as msThumbUp } from "ui/material-symbols/thumb_up.isvg";
 import { ReactComponent as msThumbsDownSolid } from "ui/material-symbols/thumbs-down-solid.isvg"; // FontAwesome
@@ -223,6 +225,7 @@ export {
     msPreview,
     msPublic,
     msRedo,
+    msReorder,
     msRepeat,
     msReplySolid,
     msReport,
@@ -244,6 +247,7 @@ export {
     msSuperscript,
     msSwapHoriz,
     msSync,
+    msTable,
     msThumbDown,
     msThumbUp,
     msThumbsDownSolid,
