@@ -5,20 +5,20 @@
     gap: .5rem;
     cursor: default;
     width: max-content;
-    max-height: calc(312px + .75rem);
+    max-height: calc(312px + 3.5rem);
     overflow: hidden auto;
     overscroll-behavior-y: none;
 }
 
 @media only screen and (max-width: 991px) {
     .avatar-selector {
-        max-width: calc(312px + 1rem);
+        max-width: min(calc(312px + 2.5rem), calc(100vw - 6rem));
     }
 }
 
 @media only screen and (min-width: 992px) {
     .avatar-selector {
-        max-width: calc(614px + 2.75rem);
+        max-width: min(calc(520px + 3.5rem), calc(100vw - 6rem));
     }
 }
 

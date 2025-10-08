@@ -4,6 +4,8 @@
     width: min-content;
     margin-bottom: .7rem;
     padding: .5rem;
+
+    --bs-popover-border-width: 1px;
 }
 
 .avatar-editor .icon {
