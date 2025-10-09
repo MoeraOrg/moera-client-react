@@ -1,6 +1,6 @@
 .scale {
     display: flex;
-    width: 100%;
+    width: calc(300px + 1em);
     height: 1.5em;
     align-items: flex-start;
 }

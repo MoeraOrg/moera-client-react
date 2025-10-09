@@ -38,7 +38,10 @@
   "avatar": "Awatar",
   "avatar-placeholder": "Miejsce na awatar",
   "avatar-set": "Awatar ustawiony",
-  "avatar-shape": "Kształt awatara",
+  "avatar-shape": {
+    "circle": "Okrągły awatar",
+    "square": "Kwadratowy awatar"
+  },
   "avatar-too-small": "Rozmiar obrazka awatara powinien wynosić co najmniej 100x100 pikseli.",
   "back-complaints": "Powrót do listy skarg",
   "back-news": "Powrót do Aktualności",

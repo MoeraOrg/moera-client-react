@@ -38,7 +38,10 @@
   "avatar": "Avatar",
   "avatar-placeholder": "Avatar placeholder",
   "avatar-set": "Avatar set",
-  "avatar-shape": "Avatar shape",
+  "avatar-shape": {
+    "circle": "Round avatar",
+    "square": "Square avatar"
+  },
   "avatar-too-small": "Avatar image size should be at least 100x100 pixels.",
   "back-complaints": "Back to the list of complaints",
   "back-news": "Back to News",

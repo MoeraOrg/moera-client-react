@@ -153,20 +153,19 @@ export default function AvatarEditDialog() {
                         </div>
                     )}
                 </Dropzone>
+                <Scale max={getScaleMax()} value={scale} onChange={onScaleChange}/>
                 <Button
                     variant={imageId ? "outline-secondary" : "primary"}
-                    size="sm"
                     className="upload"
                     loading={imageUploading}
                     onClick={onUploadClick}
                 >
-                    <Icon icon={msUpload} size="1.2em"/>&nbsp;&nbsp;
+                    <Icon icon={msUpload} size="1.5em"/>&nbsp;&nbsp;
                     {imageUploadProgress == null
                         ? t("upload-image")
                         : t("uploading-file", {progress: imageUploadProgress})
                     }
                 </Button>
-                <Scale max={getScaleMax()} value={scale} onChange={onScaleChange}/>
                 <input type="file" accept="image/*" ref={domFile} onChange={onFileChange}/>
             </div>
             <div className="modal-footer">

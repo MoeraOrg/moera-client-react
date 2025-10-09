@@ -21,10 +21,10 @@ export default function Rotate({value, onChange}: Props) {
     return (
         <div className="btn-group">
             <Button variant="tool" title={t("rotate-left")} onClick={onClick(-1)}>
-                <Icon icon={msRotate90DegreesCcw} size={24}/>
+                <Icon icon={msRotate90DegreesCcw} size={20}/>
             </Button>
             <Button variant="tool" title={t("rotate-right")} onClick={onClick(1)}>
-                <Icon icon={msRotate90DegreesCw} size={24}/>
+                <Icon icon={msRotate90DegreesCw} size={20}/>
             </Button>
         </div>
     );
