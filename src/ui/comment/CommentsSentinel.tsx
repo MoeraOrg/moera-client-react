@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Loading } from "ui/control";
+import { Button, Loading } from "ui/control";
 import { Icon, msSync } from "ui/material-symbols";
 
 interface Props {
@@ -20,8 +20,8 @@ export default function CommentsSentinel({visible, loading, title, total, onClic
     }
     const fullTitle = total > 0 ? `${title} (${total})` : title;
     return (
-        <button className="btn btn-outline-primary d-flex" onClick={onClick}>
+        <Button variant="outline-primary" className="d-flex" onClick={onClick}>
             <Icon icon={msSync} size={20}/>&nbsp;{fullTitle}
-        </button>
+        </Button>
     );
 }

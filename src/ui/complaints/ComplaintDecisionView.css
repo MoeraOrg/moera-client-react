@@ -1,7 +1,7 @@
 .complaint-decision-view {
-    background-color: var(--bs-blue-100);
+    background-color: var(--bs-primary-bg-subtle);
     border-radius: .25rem;
-    padding: .5rem;
+    padding: 1rem;
     margin-top: 1rem;
 }
 

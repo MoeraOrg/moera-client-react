@@ -1,9 +1,7 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 
-import { Loading } from "ui/control";
-import "./ComplaintsSentinel.css";
+import { Button, Loading } from "ui/control";
+import { Icon, msSync } from "ui/material-symbols";
 
 interface Props {
     visible: boolean;
@@ -15,19 +13,15 @@ interface Props {
 
 export default function ComplaintsSentinel({visible, loading, title, total, onClick}: Props) {
     if (loading) {
-        return (
-            <div className="complaints-sentinel">
-                <Loading/>
-            </div>
-        );
+        return <div><Loading/></div>;
     }
     if (!visible) {
-        return <div className="complaints-sentinel"/>;
+        return <div/>;
     }
     const fullTitle = total > 0 ? `${title} (${total})` : title;
     return (
-        <button className="btn btn-link complaints-sentinel" onClick={onClick}>
-            <FontAwesomeIcon className="icon" icon={faSyncAlt}/>&nbsp;&nbsp;{fullTitle}
-        </button>
+        <Button variant="outline-primary" className="d-flex ms-auto me-auto mt-3" onClick={onClick}>
+            <Icon className="icon" icon={msSync} size={20}/>&nbsp;{fullTitle}
+        </Button>
     );
 }

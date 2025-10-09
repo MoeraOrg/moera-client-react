@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import cx from 'classnames';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -10,6 +9,7 @@ import { getSetting } from "state/settings/selectors";
 import { getActiveComplaintGroup } from "state/complaints/selectors";
 import { NameDisplayMode } from "ui/types";
 import { Loading } from "ui/control";
+import { Icon } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
 import { Page } from "ui/page/Page";
 import MobileBack from "ui/page/MobileBack";
@@ -68,7 +68,7 @@ export default function ComplaintsListPage() {
                             </h4>
                             <div className={cx("status", statusClass)}>
                                 <strong>{t("complaint-status-colon")} </strong>
-                                {statusIcon && <FontAwesomeIcon icon={statusIcon}/>}
+                                {statusIcon && <Icon icon={statusIcon} size="1.2em" className="icon"/>}
                                 {" " + t("complaint-status." + complaintGroup.status)}
                             </div>
                             {loadingComplaints && <Loading/>}
@@ -86,9 +86,12 @@ export default function ComplaintsListPage() {
                                     <ComplaintDecisionEditor group={complaintGroup}/>
                                 )
                             :
-                                ((complaintGroup.status === "approved"
-                                        || (complaintGroup.status === "rejected" && complaintGroup.decisionDetails)) &&
-                                    <ComplaintDecisionView/>
+                                (
+                                    (
+                                        complaintGroup.status === "approved"
+                                        || (complaintGroup.status === "rejected" && complaintGroup.decisionDetails)
+                                    ) &&
+                                        <ComplaintDecisionView/>
                                 )
                             }
                         </>

@@ -26,6 +26,10 @@
     color: var(--incorrect);
 }
 
+.complaint .status .icon {
+    vertical-align: -.25em;
+}
+
 .complaint .anonymous {
     background-color: var(--bs-gray-100);
     border-radius: .25rem;

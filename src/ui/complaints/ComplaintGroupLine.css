@@ -1,7 +1,7 @@
 .complaint-group-line {
     display: grid;
     grid-template: 2em auto / 2em;
-    height: 2em;
+    align-items: center;
     border-top: 1px solid var(--bs-gray-200);
     border-bottom: 1px solid var(--bs-gray-200);
     color: black;
@@ -16,7 +16,9 @@
 .complaint-group-line .status {
     grid-row: 1 / 2;
     grid-column: 1 / 2;
-    place-self: center;
+    place-self: stretch;
+    display: grid;
+    place-items: center;
 }
 
 .complaint-group-line .status.processing {
@@ -34,7 +36,6 @@
 .complaint-group-line .heading {
     grid-row: 1 / 2;
     grid-column: 2 / 3;
-    line-height: 2;
     padding-left: .5em;
     white-space: nowrap;
     overflow: hidden;
