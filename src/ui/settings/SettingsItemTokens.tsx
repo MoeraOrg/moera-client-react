@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faKey, faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { format, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
@@ -11,6 +9,7 @@ import { getHomeToken } from "state/home/selectors";
 import { settingsTokensDelete, settingsTokensDialogOpen } from "state/settings/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { Button, Loading } from "ui/control";
+import { Icon, msDelete, msEdit, msKey } from "ui/material-symbols";
 import TokenDialog from "ui/settings/TokenDialog";
 import NewTokenDialog from "ui/settings/NewTokenDialog";
 import "./SettingsItemTokens.css";
@@ -60,16 +59,17 @@ export default function SettingsItemTokens() {
             <br/>
             {tokens.map(tk =>
                 <div className="token-info" key={tk.id}>
-                    <FontAwesomeIcon icon={faKey} className="icon"/>
+                    <Icon icon={msKey} size="1.2em" className="icon"/>
                     <Button variant="link" onClick={onClick(tk.id)}>{getName(tk)}</Button>
                     {!isHomeToken(tk, homeToken) ?
                         <>
-                            <button className="token-button" title={t("change")} onClick={onEdit(tk)}>
-                                <FontAwesomeIcon icon={faPen}/>
-                            </button>
-                            <button className="token-button red" title={t("delete")} onClick={onDelete(tk)}>
-                                <FontAwesomeIcon icon={faTrashCan}/>
-                            </button>
+                            <Button variant="silent" className="token-button" title={t("change")} onClick={onEdit(tk)}>
+                                <Icon icon={msEdit} size="1.2em"/>
+                            </Button>
+                            <Button variant="silent" className="token-button red" title={t("delete")}
+                                    onClick={onDelete(tk)}>
+                                <Icon icon={msDelete} size="1.2em"/>
+                            </Button>
                         </>
                     :
                         <span className="current">{t("current")}</span>

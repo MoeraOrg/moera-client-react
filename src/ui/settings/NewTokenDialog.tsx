@@ -1,12 +1,11 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { settingsTokensNewTokenClose, settingsTokensNewTokenCopy } from "state/settings/actions";
 import { Button, ModalDialog } from "ui/control";
+import { Icon, msContentCopy } from "ui/material-symbols";
 
 export default function NewTokenDialog() {
     const newToken = useSelector((state: ClientState) => state.settings.tokens.dialog.newToken);
@@ -32,8 +31,8 @@ export default function NewTokenDialog() {
                 </p>
                 <div className="input-group">
                     <input type="text" className="form-control" value={newToken.token} onChange={() => {}}/>
-                    <Button variant="secondary" title={t("copy")} onClick={onCopy}>
-                        <FontAwesomeIcon icon={faCopy}/>
+                    <Button variant="secondary" className="ps-2 pe-1" title={t("copy")} onClick={onCopy}>
+                        <Icon icon={msContentCopy} size="1.5em"/>
                     </Button>
                 </div>
             </div>

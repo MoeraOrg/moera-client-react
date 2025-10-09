@@ -1,5 +1,6 @@
 .token-info {
     padding-left: .5rem;
+    border-radius: .5rem;
 }
 
 .token-info:hover {
@@ -8,35 +9,30 @@
 
 .token-info .icon {
     color: var(--bs-gray-500);
+    vertical-align: -.25em;
 }
 
-.token-info .btn {
+.token-info .btn-link {
     padding-top: .1em;
     padding-bottom: .25em;
+    min-width: 7rem;
+    text-align: left;
 }
 
-.token-info .btn:focus:not(:focus-visible) {
+.token-info .btn-link:focus:not(:focus-visible) {
     outline: 0;
     box-shadow: none;
 }
 
 .token-info .current {
     color: var(--bs-brand-600);
-    font-style: italic;
 }
 
 .token-info .token-button {
-    border: 0;
-    border-radius: 5px;
-    background: none;
     font-size: 80%;
-    color: var(--bs-gray-600);
-    margin-left: .25rem;
-}
-
-.token-info .token-button:hover {
-    background-color: var(--bs-gray-100);
-    color: var(--bs-gray-800);
+    padding: .25em .35em;
+    margin-right: .25em;
+    vertical-align: .1em;
 }
 
 .token-info .token-button.red:hover {

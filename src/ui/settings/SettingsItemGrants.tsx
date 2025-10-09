@@ -1,14 +1,13 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGlobe, faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { GrantInfo, NodeName as NodeNameUtil } from "api";
 import { ClientState } from "state/state";
 import { settingsGrantsDelete, settingsGrantsDialogOpen } from "state/settings/actions";
 import { confirmBox } from "state/confirmbox/actions";
-import { Loading } from "ui/control";
+import { Button, Loading } from "ui/control";
+import { Icon, msDelete, msEdit, msPublic } from "ui/material-symbols";
 import NodeName from "ui/nodename/NodeName";
 import GrantDialog from "ui/settings/GrantDialog";
 
@@ -43,14 +42,14 @@ export default function SettingsItemGrants() {
             {(loaded && grants.length === 0) && <i>{t("no-applications")}</i>}
             {grants.map(g =>
                 <div className="token-info" key={g.nodeName}>
-                    <FontAwesomeIcon icon={faGlobe} className="icon me-2"/>
+                    <Icon icon={msPublic} className="icon me-2"/>
                     <NodeName name={g.nodeName} popup={false}/>
-                    <button className="token-button ms-3" title={t("change")} onClick={onEdit(g)}>
-                        <FontAwesomeIcon icon={faPen}/>
-                    </button>
-                    <button className="token-button red" title={t("delete")} onClick={onDelete(g)}>
-                        <FontAwesomeIcon icon={faTrashCan}/>
-                    </button>
+                    <Button variant="silent" className="token-button ms-3" title={t("change")} onClick={onEdit(g)}>
+                        <Icon icon={msEdit} size="1.2em"/>
+                    </Button>
+                    <Button variant="silent" className="token-button red" title={t("delete")} onClick={onDelete(g)}>
+                        <Icon icon={msDelete} size="1.2em"/>
+                    </Button>
                 </div>
             )}
             {showDialog && <GrantDialog/>}

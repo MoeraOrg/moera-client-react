@@ -32,6 +32,7 @@ import { ReactComponent as msCode } from "ui/material-symbols/code.isvg";
 import { ReactComponent as msCodeBlocks } from "ui/material-symbols/code_blocks.isvg";
 import { ReactComponent as msComment } from "ui/material-symbols/comment.isvg";
 import { ReactComponent as msCommentRegular } from "ui/material-symbols/comment-regular.isvg"; // FontAwesome
+import { ReactComponent as msContentCopy } from "ui/material-symbols/content_copy.isvg";
 import { ReactComponent as msCropSquare } from "ui/material-symbols/crop_square.isvg";
 import { ReactComponent as msDelete } from "ui/material-symbols/delete.isvg";
 import { ReactComponent as msEdit } from "ui/material-symbols/edit.isvg";
@@ -69,6 +70,7 @@ import { ReactComponent as msHorizontalRule } from "ui/material-symbols/horizont
 import { ReactComponent as msInbox } from "ui/material-symbols/inbox.isvg";
 import { ReactComponent as msInkPen } from "ui/material-symbols/ink_pen.isvg";
 import { ReactComponent as msKeepFilled16 } from "ui/material-symbols/keep_filled16.isvg";
+import { ReactComponent as msKey } from "ui/material-symbols/key.isvg";
 import { ReactComponent as msKeyboardArrowDown } from "ui/material-symbols/keyboard_arrow_down.isvg";
 import { ReactComponent as msKeyboardArrowRight } from "ui/material-symbols/keyboard_arrow_right.isvg";
 import { ReactComponent as msKeyboardArrowUp } from "ui/material-symbols/keyboard_arrow_up.isvg";
@@ -169,6 +171,7 @@ export {
     msCodeBlocks,
     msComment,
     msCommentRegular,
+    msContentCopy,
     msCropSquare,
     msDelete,
     msEdit,
@@ -206,14 +209,15 @@ export {
     msInbox,
     msInkPen,
     msKeepFilled16,
+    msKey,
+    msKeyboardArrowDown,
+    msKeyboardArrowRight,
+    msKeyboardArrowUp,
     msLink,
     msListAlt,
     msLiveHelp,
     msLock,
     msLogout,
-    msKeyboardArrowDown,
-    msKeyboardArrowRight,
-    msKeyboardArrowUp,
     msMediaLink,
     msMenu,
     msMoreHoriz,

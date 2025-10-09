@@ -1,11 +1,11 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { settingsPluginsDelete } from "state/settings/actions";
 import { confirmBox } from "state/confirmbox/actions";
+import { Button } from "ui/control";
+import { Icon, msDelete } from "ui/material-symbols";
 import { PluginProps } from "ui/settings/settings-menu";
 
 type Props = PluginProps;
@@ -30,8 +30,8 @@ export default function SettingsPluginControls({plugin}: Props) {
     }
 
     return (
-        <button className="delete" title={t("delete")} onClick={onDelete}>
-            <FontAwesomeIcon icon={faTrashCan}/>
-        </button>
+        <Button variant="silent" className="delete" title={t("delete")} onClick={onDelete}>
+            <Icon icon={msDelete} size="1.2em"/>
+        </Button>
     );
 }
