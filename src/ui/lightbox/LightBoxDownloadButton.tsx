@@ -1,9 +1,8 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileDownload } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { urlWithParameters } from "util/url";
+import { Icon, msDownload } from "ui/material-symbols";
 
 interface Props {
     mediaUrl: string;
@@ -23,7 +22,7 @@ export default function LightBoxDownloadButton({mediaUrl, mediaMimeType}: Props)
     return (
         <a className="lightbox-button lightbox-download" download onClick={onDownload}
            href={urlWithParameters(mediaUrl, {download: true})} title={t("download")}>
-            <FontAwesomeIcon icon={faFileDownload}/>
+            <Icon icon={msDownload} size="1.5em"/>
         </a>
     );
 }

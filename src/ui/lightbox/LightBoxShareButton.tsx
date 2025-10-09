@@ -1,6 +1,4 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -17,6 +15,7 @@ import { getPosting } from "state/postings/selectors";
 import { getComment } from "state/detailedposting/selectors";
 import { getOwnerName } from "state/node/selectors";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
+import { Icon, msShare } from "ui/material-symbols";
 import { useParent } from "ui/hook";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { urlWithParameters, ut } from "util/url";
@@ -103,7 +102,7 @@ export default function LightBoxShareButton({mediaNodeName, mediaHref}: Props) {
         <DropdownMenu parentOverlayId={parentOverlayId} className="lightbox-button lightbox-share" content={
             <LightBoxShareItems mediaNodeName={mediaNodeName} mediaHref={mediaHref}/>
         }>
-            <FontAwesomeIcon icon={faShareAlt} title={t("share")}/>
+            <Icon icon={msShare} title={t("share")} size="1.2em"/>
         </DropdownMenu>
     );
 }
