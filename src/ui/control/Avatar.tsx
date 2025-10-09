@@ -8,11 +8,11 @@ import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { getSetting } from "state/settings/selectors";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
-import avatarPlaceholder from "./avatar.jpg";
 import "./Avatar.css";
 
-function effectiveShape(shape: string | null, shapeLocal: string | null | undefined,
-                        shapeGlobal: string): string | null {
+function effectiveShape(
+    shape: string | null, shapeLocal: string | null | undefined, shapeGlobal: string
+): string | null {
     const shapeSetting = shapeLocal ?? shapeGlobal;
     return shapeSetting === "circle" || shapeSetting === "square" ? shapeSetting : shape;
 }
@@ -60,17 +60,26 @@ function AvatarImpl(
         alt = t("avatar");
         shape = effectiveShape(avatar.shape ?? null, shapeLocal, shapeGlobal);
         style = undefined;
+        return (
+            <img src={src} alt={alt} width={size} height={size} draggable={draggable} ref={ref} onClick={onClick}
+                 className={cx("avatar", `avatar-${shape}`, className)} style={style}/>
+        );
     } else {
-        src = avatarPlaceholder;
         alt = t("avatar-placeholder");
         shape = effectiveShape("circle", shapeLocal, shapeGlobal);
-        style = {filter: `hue-rotate(${nameAngle(ownerName)}deg)`};
+        style = {
+            width: `${size}px`,
+            height: `${size}px`,
+            fontSize: `${size / 3}px`,
+            filter: `hue-rotate(${nameAngle(ownerName)}deg)`
+        };
+        return (
+            <div title={alt} draggable={draggable} ref={ref} onClick={onClick}
+                 className={cx("avatar", `avatar-${shape}`, "avatar-placeholder", className)} style={style}>
+                {(ownerName ?? "XX").substring(0, 2).toUpperCase()}
+            </div>
+        );
     }
-
-    return (
-        <img src={src} alt={alt} width={size} height={size} draggable={draggable} ref={ref} onClick={onClick}
-             className={cx("avatar", `avatar-${shape}`, className)} style={style}/>
-    );
 }
 
 const Avatar = forwardRef(AvatarImpl);
