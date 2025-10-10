@@ -2,24 +2,8 @@
     width: 28rem;
 }
 
-@media only screen and (max-width: 991px) {
-    .instant-popover {
-        width: 100vw;
-    }
-}
-
 #instants {
     font-size: .835rem;
-}
-
-@media only screen and (max-width: 991px) {
-    #instants {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        background-color: white;
-    }
 }
 
 #instants .header {

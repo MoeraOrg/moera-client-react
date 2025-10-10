@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -6,7 +6,13 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { isAtHomeNode, isAtNode } from "state/node/selectors";
 import { getHomeOwnerAvatar, getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
-import { isAtNewsPage, isBottomMenuVisible, isInExplorePages, isInProfilePages } from "state/navigation/selectors";
+import {
+    isAtInstantsPage,
+    isAtNewsPage,
+    isBottomMenuVisible,
+    isInExplorePages,
+    isInProfilePages
+} from "state/navigation/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getInstantCount, getNewsCount } from "state/feeds/selectors";
 import { Icon, msAdd, msExplore, msNotifications, msPublic } from "ui/material-symbols";
@@ -15,11 +21,8 @@ import { useIsTinyScreen, useVirtualKeyboard } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import { getFeedTitle, useHomeNews } from "ui/feed/feeds";
 import InvitationAlert from "ui/mainmenu/InvitationAlert";
-import { useInstantsToggler } from "ui/instant/instants-toggler";
 import { REL_HOME } from "util/rel-node-name";
 import "./BottomMenu.css";
-
-const InstantsDialog = React.lazy(() => import("ui/instant/InstantsDialog"));
 
 export default function BottomMenu() {
     const atNode = useSelector(isAtNode);
@@ -34,11 +37,9 @@ export default function BottomMenu() {
     const newsCount = useSelector(getNewsCount);
 
     const inExplore = useSelector(isInExplorePages);
-    const inHomeProfile = useSelector((state: ClientState) => isAtHomeNode(state) && isInProfilePages(state));
-
+    const atInstants = useSelector(isAtInstantsPage);
     const instantCount = useSelector(getInstantCount);
-    const [showInstantsDialog, setShowInstantsDialog] = useState<boolean>(false);
-    const {border: instantsBorder, onToggle: onInstantsToggle} = useInstantsToggler();
+    const inHomeProfile = useSelector((state: ClientState) => isAtHomeNode(state) && isInProfilePages(state));
 
     const bottomMenuVisible = useSelector(isBottomMenuVisible);
     const {open: keyboardOpen} = useVirtualKeyboard();
@@ -56,11 +57,6 @@ export default function BottomMenu() {
         }
 
         return <InvitationAlert/>;
-    }
-
-    const onInstantsDialogToggle = (show: boolean) => {
-        onInstantsToggle(show);
-        setShowInstantsDialog(show);
     }
 
     const invisible = !bottomMenuVisible || keyboardOpen;
@@ -83,24 +79,19 @@ export default function BottomMenu() {
             <Jump nodeName={REL_HOME} href="/compose" className="new-post">
                 <Icon icon={msAdd} size={24}/>
             </Jump>
-            <div className="item" onClick={() => onInstantsDialogToggle(!showInstantsDialog)}>
-                <div className="icon bell">
+            <Jump nodeName={REL_HOME} href="/instants" className="item">
+                <div className={cx("icon", "bell", {active: atInstants})}>
                     <Icon icon={msNotifications} size={20}/>
                     {instantCount > 0 && <div className="count">{instantCount}</div>}
                 </div>
                 <div className="title">{t("instants")}</div>
-            </div>
+            </Jump>
             <Jump nodeName={REL_HOME} href="/" className="item">
                 <div className={cx("icon", {active: inHomeProfile})}>
                     <Avatar avatar={avatar} ownerName={ownerName} size={20} nodeName={REL_HOME}/>
                 </div>
                 <div className="title">{t("profile")}</div>
             </Jump>
-            {showInstantsDialog &&
-                <Suspense fallback={null}>
-                    <InstantsDialog instantBorder={instantsBorder} onClose={() => onInstantsDialogToggle(false)}/>
-                </Suspense>
-            }
         </footer>
     );
 }

@@ -21,6 +21,7 @@ const SettingsPage = React.lazy(() => import("ui/settings/SettingsPage"));
 const PeoplePage = React.lazy(() => import("ui/people/PeoplePage"));
 const ComplaintsPage = React.lazy(() => import("ui/complaints/ComplaintsPage"));
 const ActivePeoplePage = React.lazy(() => import("ui/explore/ActivePeoplePage"));
+const InstantsPage = React.lazy(() => import("ui/instant/InstantsPage"));
 
 export default function CurrentPage() {
     const page = useSelector((state: ClientState) => state.navigation.page);
@@ -90,6 +91,12 @@ export default function CurrentPage() {
             return (
                 <Suspense fallback={<Loading overlay large/>}>
                     <ActivePeoplePage/>
+                </Suspense>
+            );
+        case "instants":
+            return (
+                <Suspense fallback={<Loading overlay large/>}>
+                    <InstantsPage/>
                 </Suspense>
             );
         default:

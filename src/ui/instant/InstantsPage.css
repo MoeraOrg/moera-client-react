@@ -1,0 +1,12 @@
+@media only screen and (max-width: 991px) {
+    .instants-page {
+        background-color: white;
+        min-height: 100vh;
+    }
+}
+
+.instants-page #instants > .content {
+    max-width: unset;
+    max-height: unset;
+    height: unset;
+}

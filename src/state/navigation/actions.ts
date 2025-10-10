@@ -130,6 +130,10 @@ export type GoToActivePeopleAction = GoToPageAction<"activepeople", {}>;
 export const goToActivePeople = (): GoToActivePeopleAction =>
     goToPage("activepeople", {});
 
+export type GoToInstantsAction = GoToHomePageAction<"instants", {}>;
+export const goToInstants = (): GoToInstantsAction =>
+    goToHomePage("instants", {});
+
 export type GoToPageAnyAction =
     GoToProfileAction
     | GoToTimelineAction
@@ -149,7 +153,9 @@ export type GoToPageAnyAction =
     | GoToSearchAction
     | GoToPageAction<"explore", GoToComposeAction["payload"]["details"]>
     | GoToExploreAction
-    | GoToActivePeopleAction;
+    | GoToActivePeopleAction
+    | GoToPageAction<"instants", GoToComposeAction["payload"]["details"]>
+    | GoToInstantsAction;
 
 export type NewLocationAction = ActionWithoutPayload<"NEW_LOCATION">;
 export const newLocation = (): NewLocationAction =>

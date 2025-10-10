@@ -61,6 +61,10 @@ export function isInExplorePages(state: ClientState): boolean {
     return isAtExplorePage(state) || isAtActivePeoplePage(state);
 }
 
+export function isAtInstantsPage(state: ClientState): boolean {
+    return state.navigation.page === "instants";
+}
+
 export function isBottomMenuVisible(state: ClientState): boolean {
     return state.navigation.bottomMenuVisible;
 }
