@@ -4,7 +4,14 @@ import { Trans } from 'react-i18next';
 
 import { NodeName } from "api";
 import { ClientState } from "state/state";
-import { getOwnerAvatar, getOwnerCard, getOwnerFullName, getOwnerName, getOwnerTitle } from "state/node/selectors";
+import {
+    getOwnerAvatar,
+    getOwnerCard,
+    getOwnerFullName,
+    getOwnerName,
+    getOwnerTitle,
+    isAtHomeNode
+} from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { DonateButton, OnlyMobile } from "ui/control";
 import Jump from "ui/navigation/Jump";
@@ -21,6 +28,7 @@ import "./ProfileTitle.css";
 
 export default function ProfileTitle() {
     const connectedToHome = useSelector(isConnectedToHome);
+    const atHomeNode = useSelector(isAtHomeNode);
     const nodeName = useSelector(getOwnerName);
     const fullName = useSelector(getOwnerFullName);
     const name = fullName || NodeName.shorten(nodeName);
@@ -34,7 +42,7 @@ export default function ProfileTitle() {
 
     return (
         <>
-            {connectedToHome ?
+            {connectedToHome && !atHomeNode ?
                 <MobileBack nodeName={REL_HOME} href={newsHref} menuContent={<ManagementMenuItems/>} sticky>
                     {name}
                 </MobileBack>

@@ -9,6 +9,10 @@
     position: relative;
 }
 
+.feed-goto-button .goto {
+    white-space: nowrap;
+}
+
 .feed-goto-button .goto svg {
     vertical-align: -.5em;
 }

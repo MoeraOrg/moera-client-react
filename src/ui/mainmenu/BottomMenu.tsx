@@ -4,9 +4,9 @@ import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import { isAtNode } from "state/node/selectors";
+import { isAtHomeNode, isAtNode } from "state/node/selectors";
 import { getHomeOwnerAvatar, getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
-import { isAtNewsPage, isBottomMenuVisible, isInExplorePages } from "state/navigation/selectors";
+import { isAtNewsPage, isBottomMenuVisible, isInExplorePages, isInProfilePages } from "state/navigation/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getInstantCount, getNewsCount } from "state/feeds/selectors";
 import { Icon, msAdd, msExplore, msNotifications, msPublic } from "ui/material-symbols";
@@ -34,6 +34,7 @@ export default function BottomMenu() {
     const newsCount = useSelector(getNewsCount);
 
     const inExplore = useSelector(isInExplorePages);
+    const inHomeProfile = useSelector((state: ClientState) => isAtHomeNode(state) && isInProfilePages(state));
 
     const instantCount = useSelector(getInstantCount);
     const [showInstantsDialog, setShowInstantsDialog] = useState<boolean>(false);
@@ -90,7 +91,7 @@ export default function BottomMenu() {
                 <div className="title">{t("instants")}</div>
             </div>
             <Jump nodeName={REL_HOME} href="/" className="item">
-                <div className="icon">
+                <div className={cx("icon", {active: inHomeProfile})}>
                     <Avatar avatar={avatar} ownerName={ownerName} size={20} nodeName={REL_HOME}/>
                 </div>
                 <div className="title">{t("profile")}</div>
