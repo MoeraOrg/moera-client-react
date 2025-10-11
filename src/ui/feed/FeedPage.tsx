@@ -68,6 +68,24 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
     const beginning = stories.length > 0 ? stories[0].story.moment : null;
     const prevBeginning = useRef<number | null>(null)
 
+    const mostRecentMoment = before >= Number.MAX_SAFE_INTEGER
+        ? beginning ?? Number.MAX_SAFE_INTEGER // we know what the last story in the feed is
+        : Number.MAX_SAFE_INTEGER;             // we don't
+
+    const scrollTo = useCallback((moment: number): void => {
+        const posting = getPostingAt(moment);
+        if (posting != null) {
+            if (moment >= mostRecentMoment) {
+                window.scrollTo(0, 0);
+                return;
+            }
+
+            const y = posting.getBoundingClientRect().top;
+            const minY = getPageHeaderHeight() + 10;
+            window.scrollBy(0, y - minY - 25);
+        }
+    }, [mostRecentMoment]);
+
     useEffect(() => {
         if (anchor == null) {
             if (beginning !== prevBeginning.current) {
@@ -90,7 +108,7 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
             onScroll();
             dispatch(feedScrolledToAnchor(nodeName, feedName));
         }
-    }, [after, anchor, before, beginning, dispatch, feedName, nodeName, onScroll]);
+    }, [after, anchor, before, beginning, dispatch, feedName, nodeName, onScroll, scrollTo]);
 
     const loadFuture = useCallback(() => {
         if (loadingFuture || before >= Number.MAX_SAFE_INTEGER) {
@@ -328,14 +346,5 @@ function markAllViewed(): void {
             posting.dataset.viewed = "true";
             posting.classList.remove("not-viewed");
         }
-    }
-}
-
-function scrollTo(moment: number): void {
-    const posting = getPostingAt(moment);
-    if (posting != null) {
-        const y = posting.getBoundingClientRect().top;
-        const minY = getPageHeaderHeight() + 10;
-        window.scrollBy(0, y - minY - 25);
     }
 }
