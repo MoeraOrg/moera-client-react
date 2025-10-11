@@ -80,6 +80,7 @@ import { ReactComponent as msListAlt } from "ui/material-symbols/list_alt.isvg";
 import { ReactComponent as msLiveHelp } from "ui/material-symbols/live_help.isvg";
 import { ReactComponent as msLock } from "ui/material-symbols/lock.isvg";
 import { ReactComponent as msLogout } from "ui/material-symbols/logout.isvg";
+import { ReactComponent as msMarkEmailRead } from "ui/material-symbols/mark_email_read.isvg";
 import { ReactComponent as msMediaLink } from "ui/material-symbols/media_link.isvg";
 import { ReactComponent as msMenu } from "ui/material-symbols/menu.isvg";
 import { ReactComponent as msMoreHoriz } from "ui/material-symbols/more_horiz.isvg";
@@ -220,6 +221,7 @@ export {
     msLiveHelp,
     msLock,
     msLogout,
+    msMarkEmailRead,
     msMediaLink,
     msMenu,
     msMoreHoriz,

@@ -7,6 +7,7 @@ import { ClientState } from "state/state";
 import { feedStatusUpdate } from "state/feeds/actions";
 import { getFeedState } from "state/feeds/selectors";
 import { OnlyDesktop } from "ui/control";
+import { msMarkEmailRead } from "ui/material-symbols";
 import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
@@ -47,7 +48,9 @@ export default function InstantsPage() {
                     <MainMenuSidebar/>
                 </div>
                 <div className="page-central-pane">
-                    <MobileMainMenu shadow/>
+                    <MobileMainMenu shadow menuItems={[
+                        {icon: msMarkEmailRead, onClick: onReadAll},
+                    ]}/>
                     <OnlyDesktop>
                         <BackBox>
                             <BackBoxInner>

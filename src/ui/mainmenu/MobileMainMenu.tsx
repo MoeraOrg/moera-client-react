@@ -11,21 +11,34 @@ import Logo from "ui/mainmenu/logo/Logo";
 import { useScrollShadow } from "ui/mainmenu/scroll-shadow";
 import RefreshIndicator from "ui/mainmenu/RefreshIndicator";
 import ConnectionsDialog from "ui/mainmenu/connections/ConnectionsDialog";
-import { Icon, msSearch, msSettings } from "ui/material-symbols";
+import { Icon, MaterialSymbol, msSearch, msSettings } from "ui/material-symbols";
 import { Button, OnlyMobile } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import "./MobileMainMenu.css";
 
-interface Props {
-    shadow?: boolean;
+interface MainMenuItem {
+    href?: string;
+    onClick?: () => void;
+    icon: MaterialSymbol;
+    visible?: boolean;
 }
 
-export default function MobileMainMenu({shadow: hasShadow}: Props) {
+interface Props {
+    shadow?: boolean;
+    menuItems?: MainMenuItem[];
+}
+
+export default function MobileMainMenu({shadow: hasShadow, menuItems}: Props) {
     const connectedToHome = useSelector(isConnectedToHome);
     const showConnectionsDialog = useSelector((state: ClientState) => state.home.connectionsDialog.show);
     const {shadow, sentinel} = useScrollShadow();
     const dispatch = useDispatch();
     const {t} = useTranslation();
+
+    const buttons = menuItems ?? [
+        {href: "/settings", icon: msSettings, visible: connectedToHome},
+        {href: "/search", icon: msSearch},
+    ];
 
     return (
         <OnlyMobile>
@@ -33,14 +46,16 @@ export default function MobileMainMenu({shadow: hasShadow}: Props) {
             <header id="main-menu" className={cx({shadow: hasShadow && shadow})}>
                 <Sandwich/>
                 <Logo/>
-                {connectedToHome &&
-                    <Jump className="btn btn-tool-round" href="/settings">
-                        <Icon icon={msSettings} size={20}/>
-                    </Jump>
-                }
-                <Jump className="btn btn-tool-round" href="/search">
-                    <Icon icon={msSearch} size={20}/>
-                </Jump>
+                {buttons.filter(item => item.visible !== false).map((item, index) => (
+                    item.href != null ?
+                        <Jump key={index} className="btn btn-tool-round" href={item.href}>
+                            <Icon icon={item.icon} size={20}/>
+                        </Jump>
+                    :
+                        <Button key={index} variant="tool-round" onClick={item.onClick}>
+                            <Icon icon={item.icon} size={20}/>
+                        </Button>
+                ))}
                 {!connectedToHome &&
                     <Button variant="primary" onClick={() => dispatch(openConnectDialog())}>
                         {t("connect")}
