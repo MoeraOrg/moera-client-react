@@ -5,6 +5,7 @@
     width: 100%;
     display: block;
     text-align: center;
+    pointer-events: none;
 }
 
 .feed-top-button {
@@ -17,6 +18,7 @@
     cursor: pointer;
     font-size: .875rem;
     font-weight: 400;
+    pointer-events: auto;
 }
 
 .feed-top-button:hover {

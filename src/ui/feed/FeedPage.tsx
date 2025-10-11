@@ -81,7 +81,8 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
         const sanchor = toSafeRange(anchor);
         const sbefore = toSafeRange(before);
         const safter = toSafeRange(after);
-        if (sbefore > safter
+        if (
+            sbefore > safter
             && sanchor <= sbefore
             && ((sanchor > safter) || (sanchor === safter && safter === Number.MIN_SAFE_INTEGER))
         ) {
