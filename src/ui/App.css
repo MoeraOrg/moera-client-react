@@ -56,7 +56,7 @@ DETAILS[open] {
 }
 
 BLOCKQUOTE {
-    border-left: 3px solid var(--bs-cyan);
+    border-left: 3px solid var(--bs-primary);
     padding: .2rem .2rem .2rem 2.7rem;
     position: relative;
     overflow: hidden;
@@ -70,7 +70,7 @@ BLOCKQUOTE:not(BLOCKQUOTE BLOCKQUOTE)::before {
     content: "\201C";
     font-family: serif;
     font-size: 4rem;
-    color: var(--bs-cyan);
+    color: var(--bs-primary);
     position: absolute;
     left: .5rem;
     top: -1.5rem;
@@ -78,6 +78,22 @@ BLOCKQUOTE:not(BLOCKQUOTE BLOCKQUOTE)::before {
 
 BLOCKQUOTE BLOCKQUOTE:last-child, BLOCKQUOTE P:last-child {
     margin-bottom: 0;
+}
+
+@media only screen and (max-width: 991px) {
+    BLOCKQUOTE {
+        border-left-width: 2px;
+        padding-left: 2.4rem;
+    }
+
+    BLOCKQUOTE BLOCKQUOTE {
+        padding-left: 1.2rem;
+    }
+
+    BLOCKQUOTE:not(BLOCKQUOTE BLOCKQUOTE)::before {
+        font-size: 3.5rem;
+        top: -1.4rem;
+    }
 }
 
 INPUT[type="search"]::-webkit-search-cancel-button {
