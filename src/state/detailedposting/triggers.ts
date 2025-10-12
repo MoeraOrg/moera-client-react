@@ -59,7 +59,6 @@ import { REL_CURRENT } from "util/rel-node-name";
 export default [
     trigger("GO_TO_PAGE", conj(isAtDetailedPostingPage, isDetailedPostingToBeLoaded), detailedPostingLoad),
     trigger(["HOME_READY", "WAKE_UP"], isDetailedPostingDefined, detailedPostingLoad),
-    trigger("HOME_READY", true, commentsUnset),
     trigger("WAKE_UP", isAtDetailedPostingPage, commentsUpdate),
     trigger("WAKE_UP", inv(isAtDetailedPostingPage), commentsUnset),
     trigger(

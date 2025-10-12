@@ -209,23 +209,6 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 operations: {}
             });
 
-        case "PEOPLE_UNSET":
-            return immutable.assign(state, "", {
-                loadedGeneral: false,
-                subscribersTotal: null,
-                subscriptionsTotal: null,
-                friendsTotal: null,
-                friendOfsTotal: null,
-                blockedTotal: null,
-                blockedByTotal: null,
-                loadedSubscribers: false,
-                loadedSubscriptions: false,
-                contacts: {},
-                operations: {},
-                selecting: false,
-                selected: {}
-            });
-
         case "PEOPLE_START_SELECTION":
             return immutable.set(state, "selecting", true);
 

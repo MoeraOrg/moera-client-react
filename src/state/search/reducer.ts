@@ -139,13 +139,6 @@ export default (state: SearchState = initialState, action: ClientAction): Search
             return istate.value();
         }
 
-        case "SEARCH_HISTORY_UNSET":
-            return {
-                ...state,
-                historyQueries: {},
-                history: []
-            };
-
         default:
             return state;
     }

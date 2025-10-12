@@ -13,7 +13,7 @@ import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { isSheriffGoverned, isSheriffMarked } from "util/sheriff";
 import { absoluteNodeName } from "util/rel-node-name";
 
-const initialState = {
+const initialState: FeedsState = {
 };
 
 function getFeed(
@@ -204,18 +204,6 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 .value();
         }
 
-        case "FEED_GENERAL_UNSET": {
-            let {nodeName, feedName} = action.payload;
-            nodeName = absoluteNodeName(nodeName, action.context);
-            return getFeed(state, nodeName, feedName).istate
-                .assign([nodeName, feedName], {
-                    ...emptyInfo,
-                    loadingGeneral: false,
-                    loadedGeneral: false
-                })
-                .value();
-        }
-
         case "FEED_STATUS_LOAD": {
             let {nodeName, feedName} = action.payload;
             nodeName = absoluteNodeName(nodeName, action.context);
@@ -372,43 +360,6 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                     before: action.payload.before,
                     totalInFuture: action.payload.totalInFuture
                 });
-            }
-            return istate.value();
-        }
-
-        case "FEEDS_UNSET": {
-            const istate = immutable.wrap(state);
-            for (let [nodeName, nodeFeeds] of Object.entries(state)) {
-                if (nodeFeeds == null) {
-                    continue;
-                }
-                for (let [feedName, feed] of Object.entries(nodeFeeds)) {
-                    if (feed != null) {
-                        if (feed.anchor != null) {
-                            istate.assign([nodeName, feedName], {
-                                before: feed.anchor,
-                                after: feed.anchor,
-                                stories: [],
-                                at: feed.anchor,
-                                loadedStatus: false
-                            });
-                        } else {
-                            istate.assign([nodeName, feedName], {
-                                before: feed.at,
-                                after: feed.at,
-                                stories: [],
-                                anchor: feed.at,
-                                loadedStatus: false
-                            });
-                        }
-                        istate.assign([nodeName, feedName, "status"], {
-                            notViewed: 0,
-                            notRead: 0,
-                            notViewedMoment: null,
-                            notReadMoment: null
-                        });
-                    }
-                }
             }
             return istate.value();
         }

@@ -25,13 +25,6 @@ export type FeedGeneralSetAction = ActionWithPayload<"FEED_GENERAL_SET", {
 export const feedGeneralSet = (nodeName: string, feedName: string, info: FeedInfo): FeedGeneralSetAction =>
     actionWithPayload("FEED_GENERAL_SET", {nodeName, feedName, info});
 
-export type FeedGeneralUnsetAction = ActionWithPayload<"FEED_GENERAL_UNSET", {
-    nodeName: RelNodeName | string;
-    feedName: string;
-}>;
-export const feedGeneralUnset = (nodeName: RelNodeName | string, feedName: string): FeedGeneralUnsetAction =>
-    actionWithPayload("FEED_GENERAL_UNSET", {nodeName, feedName});
-
 export type FeedSubscribeAction = ActionWithPayload<"FEED_SUBSCRIBE", {
     nodeName: string;
     feedName: string;
@@ -232,10 +225,6 @@ export const feedSliceUpdate = (
 ): FeedSliceUpdateAction =>
     actionWithPayload("FEED_SLICE_UPDATE", {nodeName, feedName, stories, before, after, totalInPast, totalInFuture});
 
-export type FeedsUnsetAction = ActionWithoutPayload<"FEEDS_UNSET">;
-export const feedsUnset = (): FeedsUnsetAction =>
-    actionWithoutPayload("FEEDS_UNSET");
-
 export type FeedsUpdateAction = ActionWithoutPayload<"FEEDS_UPDATE">;
 export const feedsUpdate = (): FeedsUpdateAction =>
     actionWithoutPayload("FEEDS_UPDATE");
@@ -276,7 +265,6 @@ export type FeedsAnyAction =
     FeedGeneralLoadAction
     | FeedGeneralLoadFailedAction
     | FeedGeneralSetAction
-    | FeedGeneralUnsetAction
     | FeedSubscribeAction
     | FeedSubscribedAction
     | FeedSubscribeFailedAction
@@ -300,7 +288,6 @@ export type FeedsAnyAction =
     | FeedPastSliceSetAction
     | FeedFutureSliceSetAction
     | FeedSliceUpdateAction
-    | FeedsUnsetAction
     | FeedsUpdateAction
     | FeedScrolledAction
     | FeedScrollToAnchorAction

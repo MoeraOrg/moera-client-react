@@ -1,4 +1,4 @@
-import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
+import { actionWithPayload, ActionWithPayload } from "state/action-types";
 import { SearchNodeInfo } from "api";
 
 export type ContactsPrepareAction = ActionWithPayload<"CONTACTS_PREPARE", {
@@ -32,14 +32,9 @@ export type ContactsLoadFailedAction = ActionWithPayload<"CONTACTS_LOAD_FAILED",
 export const contactsLoadFailed = (query: string): ContactsLoadFailedAction =>
     actionWithPayload("CONTACTS_LOAD_FAILED", {query});
 
-export type ContactsUnsetAction = ActionWithoutPayload<"CONTACTS_UNSET">;
-export const contactsUnset = (): ContactsUnsetAction =>
-    actionWithoutPayload("CONTACTS_UNSET");
-
 export type ContactsAnyAction =
     ContactsPrepareAction
     | ContactsLoadAction
     | ContactsLoadedAction
     | ContactsNameFoundAction
-    | ContactsLoadFailedAction
-    | ContactsUnsetAction;
+    | ContactsLoadFailedAction;

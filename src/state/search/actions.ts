@@ -91,10 +91,6 @@ export type SearchHistoryDeleteAction = ActionWithPayload<"SEARCH_HISTORY_DELETE
 export const searchHistoryDelete = (query: string): SearchHistoryDeleteAction =>
     actionWithPayload("SEARCH_HISTORY_DELETE", {query});
 
-export type SearchHistoryUnsetAction = ActionWithoutPayload<"SEARCH_HISTORY_UNSET">;
-export const searchHistoryUnset = (): SearchHistoryUnsetAction =>
-    actionWithoutPayload("SEARCH_HISTORY_UNSET");
-
 export type SearchAnyAction =
     SearchLoadAction
     | SearchHashtagLoadedAction
@@ -111,5 +107,4 @@ export type SearchAnyAction =
     | SearchHistoryLoadedAction
     | SearchHistoryLoadFailedAction
     | SearchHistoryDeleteAction
-    | SearchHistoryAddAction
-    | SearchHistoryUnsetAction;
+    | SearchHistoryAddAction;

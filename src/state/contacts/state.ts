@@ -1,6 +1,6 @@
 import { SearchNodeInfo } from "api";
 
-interface ContactsQueryState {
+export interface ContactsQueryState {
     loading: boolean;
     loaded: boolean;
 }

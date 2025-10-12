@@ -17,7 +17,6 @@ import {
     feedSubscribed,
     feedSubscriberUpdated,
     feedSubscriptionUpdated,
-    feedsUnset,
     feedsUpdate,
     feedUnsubscribed
 } from "state/feeds/actions";
@@ -63,47 +62,47 @@ export default [
         feedGeneralLoad(REL_CURRENT, "timeline")
     ),
     trigger(
-        ["GO_TO_PAGE", "FEEDS_UNSET"],
+        ["GO_TO_PAGE", "HOME_READY"],
         state => isAtTimelinePage(state) && isFeedStatusToBeLoaded(state, REL_CURRENT, "timeline"),
         feedStatusLoad(REL_CURRENT, "timeline")
     ),
     trigger(
-        ["GO_TO_PAGE", "FEEDS_UNSET"],
+        ["GO_TO_PAGE", "HOME_READY"],
         state => isAtNewsPage(state) && isFeedStatusToBeLoaded(state, REL_CURRENT, "news"),
         feedStatusLoad(REL_CURRENT, "news")
     ),
     trigger(
-        ["GO_TO_PAGE", "FEEDS_UNSET"],
+        ["GO_TO_PAGE", "HOME_READY"],
         state => isAtExplorePage(state) && isFeedStatusToBeLoaded(state, REL_CURRENT, "explore"),
         feedStatusLoad(REL_CURRENT, "explore")
     ),
     trigger(
-        ["GO_TO_PAGE", "FEEDS_UNSET"],
+        ["GO_TO_PAGE", "HOME_READY"],
         state => isAtTimelinePage(state) && isFeedFutureToBeLoaded(state, REL_CURRENT, "timeline"),
         feedFutureSliceLoad(REL_CURRENT, "timeline")
     ),
     trigger(
-        ["GO_TO_PAGE", "FEEDS_UNSET"],
+        ["GO_TO_PAGE", "HOME_READY"],
         state => isAtTimelinePage(state) && isFeedPastToBeLoaded(state, REL_CURRENT, "timeline"),
         feedPastSliceLoad(REL_CURRENT, "timeline")
     ),
     trigger(
-        ["GO_TO_PAGE", "FEEDS_UNSET"],
+        ["GO_TO_PAGE", "HOME_READY"],
         state => isAtNewsPage(state) && isFeedFutureToBeLoaded(state, REL_CURRENT, "news"),
         feedFutureSliceLoad(REL_CURRENT, "news")
     ),
     trigger(
-        ["GO_TO_PAGE", "FEEDS_UNSET"],
+        ["GO_TO_PAGE", "HOME_READY"],
         state => isAtNewsPage(state) && isFeedPastToBeLoaded(state, REL_CURRENT, "news"),
         feedPastSliceLoad(REL_CURRENT, "news")
     ),
     trigger(
-        ["GO_TO_PAGE", "FEEDS_UNSET"],
+        ["GO_TO_PAGE", "HOME_READY"],
         state => isAtExplorePage(state) && isFeedFutureToBeLoaded(state, REL_CURRENT, "explore"),
         feedFutureSliceLoad(REL_CURRENT, "explore")
     ),
     trigger(
-        ["GO_TO_PAGE", "FEEDS_UNSET"],
+        ["GO_TO_PAGE", "HOME_READY"],
         state => isAtExplorePage(state) && isFeedPastToBeLoaded(state, REL_CURRENT, "explore"),
         feedPastSliceLoad(REL_CURRENT, "explore")
     ),
@@ -113,11 +112,10 @@ export default [
         disj(isInProfilePages, isAtDetailedPostingPage),
         feedGeneralLoad(REL_CURRENT, "timeline")
     ),
-    trigger("HOME_READY", true, feedsUnset),
     trigger("WAKE_UP", true, feedsUpdate),
-    trigger("FEEDS_UNSET", isConnectedToHome, feedStatusLoad(REL_HOME, "instant")),
-    trigger("FEEDS_UNSET", isConnectedToHome, feedStatusLoad(REL_HOME, "news")),
-    trigger("FEEDS_UNSET", isConnectedToHome, feedStatusLoad(REL_HOME, "explore")),
+    trigger("HOME_READY", isConnectedToHome, feedStatusLoad(REL_HOME, "instant")),
+    trigger("HOME_READY", isConnectedToHome, feedStatusLoad(REL_HOME, "news")),
+    trigger("HOME_READY", isConnectedToHome, feedStatusLoad(REL_HOME, "explore")),
     trigger(
         ["POST_INIT", "POST_INIT_DELAYED"],
         state => isConnectedToHome(state) && isFeedToBeLoaded(state, REL_HOME, "instant"),

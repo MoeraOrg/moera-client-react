@@ -1,15 +1,14 @@
 import * as immutable from 'object-path-immutable';
-import cloneDeep from 'lodash.clonedeep';
 
-import { ContactsState } from "state/contacts/state";
+import { ContactsQueryState, ContactsState } from "state/contacts/state";
 import { ClientAction } from "state/action";
 
-const emptyQuery = {
+const emptyQuery: ContactsQueryState = {
     loading: false,
     loaded: false
 }
 
-const initialState = {
+const initialState: ContactsState = {
     queries: {},
     contacts: []
 }
@@ -46,9 +45,6 @@ export default (state: ContactsState = initialState, action: ClientAction): Cont
 
         case "CONTACTS_LOAD_FAILED":
             return immutable.set(state, ["queries", action.payload.query, "loading"], false);
-
-        case "CONTACTS_UNSET":
-            return cloneDeep(initialState);
 
         default:
             return state;

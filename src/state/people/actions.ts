@@ -41,10 +41,6 @@ export type PeopleGeneralUnsetAction = ActionWithoutPayload<"PEOPLE_GENERAL_UNSE
 export const peopleGeneralUnset = (): PeopleGeneralUnsetAction =>
     actionWithoutPayload("PEOPLE_GENERAL_UNSET");
 
-export type PeopleUnsetAction = ActionWithoutPayload<"PEOPLE_UNSET">;
-export const peopleUnset = (): PeopleUnsetAction =>
-    actionWithoutPayload("PEOPLE_UNSET");
-
 export type PeopleStartSelectionAction = ActionWithoutPayload<"PEOPLE_START_SELECTION">;
 export const peopleStartSelection = (): PeopleStartSelectionAction =>
     actionWithoutPayload("PEOPLE_START_SELECTION");
@@ -264,7 +260,6 @@ export type PeopleAnyAction =
     | PeopleGeneralLoadedAction
     | PeopleGeneralLoadFailedAction
     | PeopleGeneralUnsetAction
-    | PeopleUnsetAction
     | PeopleStartSelectionAction
     | PeopleStopSelectionAction
     | PeopleSelectToggleAction

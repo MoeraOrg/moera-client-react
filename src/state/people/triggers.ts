@@ -24,15 +24,10 @@ import {
     peopleGeneralLoad,
     peopleGeneralUnset,
     peopleGoToDefaultTab,
-    peopleUnset,
     subscribersLoad,
     subscriptionsLoad
 } from "state/people/actions";
-import {
-    EventAction,
-    SubscriptionAddedEvent,
-    SubscriptionDeletedEvent
-} from "api/events";
+import { EventAction, SubscriptionAddedEvent, SubscriptionDeletedEvent } from "api/events";
 
 export default [
     trigger("GO_TO_PAGE", conj(isAtPeoplePage, isPeopleGeneralToBeLoaded), peopleGeneralLoad),
@@ -45,7 +40,6 @@ export default [
     trigger("PEOPLE_GO_TO_TAB", conj(isAtBlockedByTab, isBlockedByToBeLoaded), blockedByLoad),
     trigger("PEOPLE_GENERAL_LOADED", isAtPeoplePage, peopleGoToDefaultTab),
     trigger("HOME_READY", isAtPeoplePage, peopleGeneralLoad),
-    trigger("HOME_READY", true, peopleUnset),
     trigger("HOME_READY", conj(isAtPeoplePage, isAtSubscribersTab), subscribersLoad),
     trigger("HOME_READY", conj(isAtPeoplePage, isAtSubscriptionsTab), subscriptionsLoad),
     trigger("HOME_READY", conj(isAtPeoplePage, isAtFriendsTab), friendsLoad),
