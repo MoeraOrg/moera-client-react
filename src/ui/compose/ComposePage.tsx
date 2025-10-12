@@ -25,6 +25,7 @@ import { Page } from "ui/page/Page";
 import MobileBack from "ui/page/MobileBack";
 import DesktopBack from "ui/page/DesktopBack";
 import { useHomeNews } from "ui/feed/feeds";
+import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import ComposeViewPrincipal from "ui/compose/ComposeViewPrincipal";
 import ComposeDrafts from "ui/compose/drafts/ComposeDrafts";
@@ -79,6 +80,7 @@ function ComposePageInner(props: Props) {
     const submitDisabled = !ready || areValuesEmpty(values) || !areImagesUploaded(values);
     return (
         <>
+            <DesktopMainMenu/>
             <Page className="compose-page">
                 <div className="page-left-pane">
                     <MainMenuSidebar/>

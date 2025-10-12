@@ -8,6 +8,7 @@ import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
 import DesktopBack from "ui/page/DesktopBack";
+import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import NewsCounter from "ui/mainmenu/NewsCounter";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
@@ -36,6 +37,7 @@ export default function TimelinePage() {
 
     return (
         <>
+            <DesktopMainMenu/>
             <Page className="timeline-page tabbed-page">
                 <div className="page-left-pane">
                     <ProfileSidebar/>

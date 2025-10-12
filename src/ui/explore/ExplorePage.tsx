@@ -6,6 +6,7 @@ import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
 import ExploreTabs from "ui/explore/ExploreTabs";
+import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
 import BottomMenu from "ui/mainmenu/BottomMenu";
@@ -18,6 +19,7 @@ export default function ExplorePage() {
 
     return (
         <>
+            <DesktopMainMenu/>
             <Page className="explore-page tabbed-page">
                 <div className="page-left-pane">
                     <MainMenuSidebar/>

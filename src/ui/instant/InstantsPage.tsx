@@ -12,6 +12,7 @@ import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
 import DesktopBack from "ui/page/DesktopBack";
+import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import NewsCounter from "ui/mainmenu/NewsCounter";
@@ -43,6 +44,7 @@ export default function InstantsPage() {
 
     return (
         <>
+            <DesktopMainMenu/>
             <Page className="instants-page">
                 <div className="page-left-pane">
                     <MainMenuSidebar/>

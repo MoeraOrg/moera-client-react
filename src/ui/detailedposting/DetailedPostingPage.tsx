@@ -15,6 +15,7 @@ import { Button, Loading } from "ui/control";
 import { MinimalStoryInfo } from "ui/types";
 import { useIsTinyScreen } from "ui/hook";
 import { useHomeNews } from "ui/feed/feeds";
+import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { Page } from "ui/page/Page";
@@ -93,51 +94,54 @@ export default function DetailedPostingPage() {
     const onTryAgain = () => dispatch(detailedPostingLoad());
 
     return (
-        <Page className="detailed-posting-page">
-            <div className="page-left-pane">
-                <MainMenuSidebar/>
-            </div>
-            <div className="page-central-pane">
-                <BackBox shadowMargin={tinyScreen ? 0 : undefined}>
-                    <BackBoxInner>
-                        <DesktopBack nodeName={backNodeName} href={backHref}>
-                            {backTitle}
-                        </DesktopBack>
-                        <MobileBack nodeName={backNodeName} href={backHref}>
-                            {t("posting")}
-                        </MobileBack>
-                    </BackBoxInner>
-                </BackBox>
-                {(postingReady && story) &&
-                    <DetailedPosting posting={posting} story={story} deleting={deleting}/>
-                }
-                {!postingReady && loading &&
-                    <main className="posting">
-                        <Loading/>
-                    </main>
-                }
-                {!postingReady && !loading &&
-                    <main className="posting-not-found">
-                        {googlePlayProhibited ?
-                            <>
-                                <GooglePlayProhibited/>
-                                <div className="caption">{tTitle(t("not-accessible"))}</div>
-                                <div className="instructions">{t("content-not-accessible-android")}</div>
-                            </>
-                        :
-                            <>
-                                <NotFound/>
-                                <div className="caption">{tTitle(t("posting-not-found"))}</div>
-                                <div className="instructions">
-                                    {t("posting-not-found-or-displayed")}
-                                </div>
-                                <Button variant="primary" onClick={onTryAgain}>{tTitle(t("try-again"))}</Button>
-                            </>
-                        }
-                    </main>
-                }
-            </div>
-            <BottomMenu/>
-        </Page>
+        <>
+            <DesktopMainMenu/>
+            <Page className="detailed-posting-page">
+                <div className="page-left-pane">
+                    <MainMenuSidebar/>
+                </div>
+                <div className="page-central-pane">
+                    <BackBox shadowMargin={tinyScreen ? 0 : undefined}>
+                        <BackBoxInner>
+                            <DesktopBack nodeName={backNodeName} href={backHref}>
+                                {backTitle}
+                            </DesktopBack>
+                            <MobileBack nodeName={backNodeName} href={backHref}>
+                                {t("posting")}
+                            </MobileBack>
+                        </BackBoxInner>
+                    </BackBox>
+                    {(postingReady && story) &&
+                        <DetailedPosting posting={posting} story={story} deleting={deleting}/>
+                    }
+                    {!postingReady && loading &&
+                        <main className="posting">
+                            <Loading/>
+                        </main>
+                    }
+                    {!postingReady && !loading &&
+                        <main className="posting-not-found">
+                            {googlePlayProhibited ?
+                                <>
+                                    <GooglePlayProhibited/>
+                                    <div className="caption">{tTitle(t("not-accessible"))}</div>
+                                    <div className="instructions">{t("content-not-accessible-android")}</div>
+                                </>
+                            :
+                                <>
+                                    <NotFound/>
+                                    <div className="caption">{tTitle(t("posting-not-found"))}</div>
+                                    <div className="instructions">
+                                        {t("posting-not-found-or-displayed")}
+                                    </div>
+                                    <Button variant="primary" onClick={onTryAgain}>{tTitle(t("try-again"))}</Button>
+                                </>
+                            }
+                        </main>
+                    }
+                </div>
+                <BottomMenu/>
+            </Page>
+        </>
     );
 }

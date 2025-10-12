@@ -8,7 +8,14 @@
 
 @media only screen and (min-width: 992px) {
     #main-menu {
-        height: 4.25rem;
+        height: calc(4.25rem - 1px);
+        border-bottom: 1px solid var(--body-bg);
+    }
+
+    #main-menu.transparent {
+        background-color: rgb(255 255 255 / 90%);
+        border-bottom-color: var(--bs-gray-300);
+        backdrop-filter: blur(3px);
     }
 
     #main-menu .main-menu-content {

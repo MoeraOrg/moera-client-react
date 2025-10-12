@@ -9,7 +9,6 @@ import { getFeedWidth, getSetting } from "state/settings/selectors";
 import EventsFrontend from "ui/events/EventsFrontend";
 import Navigation from "ui/navigation/Navigation";
 import ErrorPane from "ui/error/ErrorPane";
-import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import CurrentPage from "ui/page/CurrentPage";
 import WelcomePage from "ui/welcome/WelcomePage";
 import GlobalDialogs from "ui/page/GlobalDialogs";
@@ -59,7 +58,6 @@ export default function App() {
             :
                 (atNode ?
                     <>
-                        <DesktopMainMenu/>
                         <CurrentPage/>
                         <NodeDialogs/>
                     </>

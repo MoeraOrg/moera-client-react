@@ -8,4 +8,8 @@
         background-color: white;
         min-height: 100vh;
     }
+
+    .grant-page .content-panel {
+        padding: 1.5rem;
+    }
 }

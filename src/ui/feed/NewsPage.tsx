@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { isAtNewsPage } from "state/navigation/selectors";
 import FeedPage from "ui/feed/FeedPage";
+import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
@@ -15,6 +16,7 @@ export default function NewsPage() {
 
     return (
         <>
+            <DesktopMainMenu transparent/>
             <MobileMainMenu shadow/>
             <Page className="news-page">
                 <div className="page-left-pane">

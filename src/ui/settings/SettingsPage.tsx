@@ -8,6 +8,7 @@ import { Page } from "ui/page/Page";
 import MobileBack from "ui/page/MobileBack";
 import { useOverlay } from "ui/overlays/overlays";
 import { useHomeNews } from "ui/feed/feeds";
+import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { useDisableScrollX } from "ui/settings/settings-hooks";
@@ -46,6 +47,7 @@ export default function SettingsPage() {
 
     return (
         <>
+            <DesktopMainMenu/>
             <Page>
                 <div className="page-left-pane">
                     <MainMenuSidebar/>
