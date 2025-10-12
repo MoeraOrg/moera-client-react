@@ -101,7 +101,7 @@ export default [
     ),
     trigger("HOME_READY", inv(isConnectedToHome), settingsDeleteNodeRequestUnset),
     trigger(
-        ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_SHEET"],
+        ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_TAB", "SETTINGS_GO_TO_SHEET"],
         conj(isConnectedToHome, isAtSettingsPage, isSettingsAtProfileSheet, isProfileToBeLoaded),
         profileLoad
     ),
