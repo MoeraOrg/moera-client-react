@@ -89,9 +89,6 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return istate.value();
         }
 
-        case "FEEDS_UNSET":
-            return {};
-
         case "FEED_PAST_SLICE_SET":
         case "FEED_FUTURE_SLICE_SET":
         case "FEED_SLICE_UPDATE": {
