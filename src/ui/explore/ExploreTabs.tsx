@@ -16,12 +16,12 @@ export default function ExploreTabs({value, children}: Props) {
         <UnderlinedTabs tabs={[
             {
                 value: "posts",
-                title: tTitle(t("postings")),
+                title: tTitle(t("recommendations")),
                 href: "/explore"
             },
             {
                 value: "people",
-                title: tTitle(t("people")),
+                title: tTitle(t("top-50")),
                 href: "/explore/people"
             },
         ]} value={value}>

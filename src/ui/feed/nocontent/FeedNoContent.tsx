@@ -21,7 +21,7 @@ export default function FeedNoContent({feedName}: Props) {
     return (
         <>
             <div className="feed-no-content">
-                {feedName === "timeline" ? (
+                {feedName === "timeline" &&
                     <>
                         <NoPosts/>
                         <div className="caption">{tTitle(t("no-posts-yet"))}</div>
@@ -34,13 +34,21 @@ export default function FeedNoContent({feedName}: Props) {
                             </Jump>
                         }
                     </>
-                ) : (
+                }
+                {feedName === "news" &&
                     <>
                         <NoNews/>
                         <div className="caption">{tTitle(t("empty-feed"))}</div>
                         <div className="instructions">{t("feed-currently-empty")}</div>
                     </>
-                )}
+                }
+                {feedName === "explore" &&
+                    <>
+                        <NoNews/>
+                        <div className="caption">{tTitle(t("no-recommendations"))}</div>
+                        <div className="instructions">{t("nothing-to-recommend")}</div>
+                    </>
+                }
             </div>
             <div className="feed-after-end"/>
         </>
