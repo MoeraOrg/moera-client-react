@@ -21,22 +21,15 @@ import {
 import {
     settingsClientConflict,
     settingsClientValuesLoad,
-    settingsClientValuesUnset,
     settingsDeleteNodeRequestLoad,
-    settingsDeleteNodeRequestUnset,
     settingsGoToTab,
     settingsGrantsLoad,
-    settingsGrantsUnset,
     settingsNodeConflict,
     settingsNodeMetaLoad,
-    settingsNodeMetaUnset,
     settingsNodeValuesLoad,
-    settingsNodeValuesUnset,
     settingsPluginsConflict,
     settingsPluginsLoad,
-    settingsPluginsUnset,
-    settingsTokensLoad,
-    settingsTokensUnset
+    settingsTokensLoad
 } from "state/settings/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { newLocation, updateLocation } from "state/navigation/actions";
@@ -49,11 +42,8 @@ export default [
     trigger("SETTINGS_GO_TO_TAB", conj(isConnectedToHome, isSettingsNodeMetaToBeLoaded), settingsNodeMetaLoad),
     trigger(["HOME_READY", "WAKE_UP"], isConnectedToHome, settingsNodeValuesLoad),
     trigger(["HOME_READY", "EVENT_HOME_NODE_SETTINGS_META_CHANGED"], isConnectedToHome, settingsNodeMetaLoad),
-    trigger(["HOME_READY", "WAKE_UP"], inv(isConnectedToHome), settingsNodeValuesUnset),
-    trigger(["HOME_READY", "WAKE_UP"], inv(isConnectedToHome), settingsNodeMetaUnset),
     trigger("SETTINGS_GO_TO_TAB", conj(isConnectedToHome, isSettingsClientValuesToBeLoaded), settingsClientValuesLoad),
     trigger(["HOME_READY", "WAKE_UP"], isConnectedToHome, settingsClientValuesLoad),
-    trigger(["HOME_READY", "WAKE_UP"], inv(isConnectedToHome), settingsClientValuesUnset),
     trigger(
         "HOME_READY",
         conj(isAtSettingsPage, isAtSettingsNodeTab, inv(isConnectedToHome)),
@@ -66,19 +56,16 @@ export default [
         conj(isConnectedToHome, isAtSettingsPage, isSettingsAtApplicationsSheet, isSettingsGrantsToBeLoaded),
         settingsGrantsLoad
     ),
-    trigger("HOME_READY", inv(isConnectedToHome), settingsGrantsUnset),
     trigger(
         ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_SHEET"],
         conj(isConnectedToHome, isAtSettingsPage, isSettingsAtApplicationsSheet, isSettingsTokensToBeLoaded),
         settingsTokensLoad
     ),
-    trigger("HOME_READY", inv(isConnectedToHome), settingsTokensUnset),
     trigger(
         ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_SHEET"],
         conj(isConnectedToHome, isAtSettingsPage, isSettingsAtAddonsSheet, isSettingsPluginsToBeLoaded),
         settingsPluginsLoad
     ),
-    trigger("HOME_READY", inv(isConnectedToHome), settingsPluginsUnset),
     trigger("EVENT_HOME_NODE_SETTINGS_CHANGED", true, settingsNodeValuesLoad),
     trigger("EVENT_HOME_NODE_SETTINGS_CHANGED", conj(isAtSettingsPage, isAtSettingsNodeTab), settingsNodeConflict),
     trigger("EVENT_HOME_CLIENT_SETTINGS_CHANGED", true, settingsClientValuesLoad),
@@ -99,7 +86,6 @@ export default [
         ),
         settingsDeleteNodeRequestLoad
     ),
-    trigger("HOME_READY", inv(isConnectedToHome), settingsDeleteNodeRequestUnset),
     trigger(
         ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_TAB", "SETTINGS_GO_TO_SHEET"],
         conj(isConnectedToHome, isAtSettingsPage, isSettingsAtProfileSheet, isProfileToBeLoaded),

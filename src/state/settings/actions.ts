@@ -28,10 +28,6 @@ export type SettingsNodeValuesLoadFailedAction = ActionWithoutPayload<"SETTINGS_
 export const settingsNodeValuesLoadFailed = (): SettingsNodeValuesLoadFailedAction =>
     actionWithoutPayload("SETTINGS_NODE_VALUES_LOAD_FAILED");
 
-export type SettingsNodeValuesUnsetAction = ActionWithoutPayload<"SETTINGS_NODE_VALUES_UNSET">;
-export const settingsNodeValuesUnset = (): SettingsNodeValuesUnsetAction =>
-    actionWithoutPayload("SETTINGS_NODE_VALUES_UNSET");
-
 export type SettingsNodeConflictAction = ActionWithoutPayload<"SETTINGS_NODE_CONFLICT">;
 export const settingsNodeConflict = (): SettingsNodeConflictAction =>
     actionWithoutPayload("SETTINGS_NODE_CONFLICT");
@@ -54,10 +50,6 @@ export type SettingsNodeMetaLoadFailedAction = ActionWithoutPayload<"SETTINGS_NO
 export const settingsNodeMetaLoadFailed = (): SettingsNodeMetaLoadFailedAction =>
     actionWithoutPayload("SETTINGS_NODE_META_LOAD_FAILED");
 
-export type SettingsNodeMetaUnsetAction = ActionWithoutPayload<"SETTINGS_NODE_META_UNSET">;
-export const settingsNodeMetaUnset = (): SettingsNodeMetaUnsetAction =>
-    actionWithoutPayload("SETTINGS_NODE_META_UNSET");
-
 export type SettingsClientValuesLoadAction = ActionWithoutPayload<"SETTINGS_CLIENT_VALUES_LOAD">;
 export const settingsClientValuesLoad = (): SettingsClientValuesLoadAction =>
     actionWithoutPayload("SETTINGS_CLIENT_VALUES_LOAD");
@@ -77,10 +69,6 @@ export type SettingsClientValuesSetAction = ActionWithPayload<"SETTINGS_CLIENT_V
 }>;
 export const settingsClientValuesSet = (settings: SettingInfo[]): SettingsClientValuesSetAction =>
     actionWithPayload("SETTINGS_CLIENT_VALUES_SET", {settings});
-
-export type SettingsClientValuesUnsetAction = ActionWithoutPayload<"SETTINGS_CLIENT_VALUES_UNSET">;
-export const settingsClientValuesUnset = (): SettingsClientValuesUnsetAction =>
-    actionWithoutPayload("SETTINGS_CLIENT_VALUES_UNSET");
 
 export type SettingsClientConflictAction = ActionWithoutPayload<"SETTINGS_CLIENT_CONFLICT">;
 export const settingsClientConflict = (): SettingsClientConflictAction =>
@@ -152,10 +140,6 @@ export type SettingsGrantsLoadFailedAction = ActionWithoutPayload<"SETTINGS_GRAN
 export const settingsGrantsLoadFailed = (): SettingsGrantsLoadFailedAction =>
     actionWithoutPayload("SETTINGS_GRANTS_LOAD_FAILED");
 
-export type SettingsGrantsUnsetAction = ActionWithoutPayload<"SETTINGS_GRANTS_UNSET">;
-export const settingsGrantsUnset = (): SettingsGrantsUnsetAction =>
-    actionWithoutPayload("SETTINGS_GRANTS_UNSET");
-
 export type SettingsGrantsDialogOpenAction = ActionWithPayload<"SETTINGS_GRANTS_DIALOG_OPEN", {
     nodeName: string;
     grant: GrantInfo | null;
@@ -210,10 +194,6 @@ export const settingsTokensLoaded = (tokens: TokenInfo[]): SettingsTokensLoadedA
 export type SettingsTokensLoadFailedAction = ActionWithoutPayload<"SETTINGS_TOKENS_LOAD_FAILED">;
 export const settingsTokensLoadFailed = (): SettingsTokensLoadFailedAction =>
     actionWithoutPayload("SETTINGS_TOKENS_LOAD_FAILED");
-
-export type SettingsTokensUnsetAction = ActionWithoutPayload<"SETTINGS_TOKENS_UNSET">;
-export const settingsTokensUnset = (): SettingsTokensUnsetAction =>
-    actionWithoutPayload("SETTINGS_TOKENS_UNSET");
 
 export type SettingsTokensDialogOpenAction = ActionWithPayload<"SETTINGS_TOKENS_DIALOG_OPEN", {
     token: TokenInfo | null;
@@ -300,10 +280,6 @@ export type SettingsPluginsLoadFailedAction = ActionWithoutPayload<"SETTINGS_PLU
 export const settingsPluginsLoadFailed = (): SettingsPluginsLoadFailedAction =>
     actionWithoutPayload("SETTINGS_PLUGINS_LOAD_FAILED");
 
-export type SettingsPluginsUnsetAction = ActionWithoutPayload<"SETTINGS_PLUGINS_UNSET">;
-export const settingsPluginsUnset = (): SettingsPluginsUnsetAction =>
-    actionWithoutPayload("SETTINGS_PLUGINS_UNSET");
-
 export type SettingsPluginsDeleteAction = ActionWithPayload<"SETTINGS_PLUGINS_DELETE", {
     name: string;
     tokenId: string;
@@ -365,28 +341,21 @@ export type SettingsDeleteNodeRequestStatusSetAction = ActionWithPayload<"SETTIN
 export const settingsDeleteNodeRequestStatusSet = (requested: boolean): SettingsDeleteNodeRequestStatusSetAction =>
     actionWithPayload("SETTINGS_DELETE_NODE_REQUEST_STATUS_SET", {requested});
 
-export type SettingsDeleteNodeRequestUnsetAction = ActionWithoutPayload<"SETTINGS_DELETE_NODE_REQUEST_UNSET">;
-export const settingsDeleteNodeRequestUnset = (): SettingsDeleteNodeRequestUnsetAction =>
-    actionWithoutPayload("SETTINGS_DELETE_NODE_REQUEST_UNSET");
-
 export type SettingsAnyAction =
     SettingsGoToTabAction
     | SettingsGoToSheetAction
     | SettingsNodeValuesLoadAction
     | SettingsNodeValuesLoadedAction
     | SettingsNodeValuesLoadFailedAction
-    | SettingsNodeValuesUnsetAction
     | SettingsNodeConflictAction
     | SettingsNodeConflictCloseAction
     | SettingsNodeMetaLoadAction
     | SettingsNodeMetaLoadedAction
     | SettingsNodeMetaLoadFailedAction
-    | SettingsNodeMetaUnsetAction
     | SettingsClientValuesLoadAction
     | SettingsClientValuesLoadedAction
     | SettingsClientValuesLoadFailedAction
     | SettingsClientValuesSetAction
-    | SettingsClientValuesUnsetAction
     | SettingsClientConflictAction
     | SettingsClientConflictCloseAction
     | SettingsUpdateAction
@@ -401,7 +370,6 @@ export type SettingsAnyAction =
     | SettingsGrantsLoadAction
     | SettingsGrantsLoadedAction
     | SettingsGrantsLoadFailedAction
-    | SettingsGrantsUnsetAction
     | SettingsGrantsDialogOpenAction
     | SettingsGrantsDialogCloseAction
     | SettingsGrantsDialogConfirmAction
@@ -412,7 +380,6 @@ export type SettingsAnyAction =
     | SettingsTokensLoadAction
     | SettingsTokensLoadedAction
     | SettingsTokensLoadFailedAction
-    | SettingsTokensUnsetAction
     | SettingsTokensDialogOpenAction
     | SettingsTokensDialogCloseAction
     | SettingsTokensCreateAction
@@ -428,7 +395,6 @@ export type SettingsAnyAction =
     | SettingsPluginsLoadAction
     | SettingsPluginsLoadedAction
     | SettingsPluginsLoadFailedAction
-    | SettingsPluginsUnsetAction
     | SettingsPluginsDeleteAction
     | SettingsPluginsDeletedAction
     | SettingsPluginsConflictAction
@@ -440,5 +406,4 @@ export type SettingsAnyAction =
     | SettingsDeleteNodeRequestSendAction
     | SettingsDeleteNodeRequestCancelAction
     | SettingsDeleteNodeRequestUpdateFailedAction
-    | SettingsDeleteNodeRequestStatusSetAction
-    | SettingsDeleteNodeRequestUnsetAction;
+    | SettingsDeleteNodeRequestStatusSetAction;

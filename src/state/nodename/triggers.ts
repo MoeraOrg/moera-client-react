@@ -2,12 +2,12 @@ import i18n from 'i18next';
 
 import { conj, disj, inv, trigger } from "state/trigger";
 import { isConnectedToHome } from "state/home/selectors";
-import { isAtPeoplePage, isAtProfilePage, isAtSettingsPage, isAtTimelinePage } from "state/navigation/selectors";
+import { isAtSettingsPage, isInProfilePages } from "state/navigation/selectors";
 import { isNodeNameToBeLoaded } from "state/nodename/selectors";
 import { nodeNameLoad, nodeNameUnset } from "state/nodename/actions";
 import { flashBox } from "state/flashbox/actions";
 
-const isAtNodeNamePage = disj(isAtProfilePage, isAtTimelinePage, isAtPeoplePage, isAtSettingsPage);
+const isAtNodeNamePage = disj(isInProfilePages, isAtSettingsPage);
 
 export default [
     trigger(
@@ -15,7 +15,6 @@ export default [
         conj(isAtNodeNamePage, isNodeNameToBeLoaded, isConnectedToHome),
         nodeNameLoad
     ),
-    trigger("HOME_READY", disj(inv(isAtNodeNamePage), isConnectedToHome), nodeNameUnset),
     trigger("REGISTER_NAME_SUCCEEDED", isConnectedToHome, nodeNameLoad),
     trigger("NODE_NAME_UPDATE_SUCCEEDED", true, nodeNameLoad),
     trigger("NODE_NAME_UPDATE_SUCCEEDED", true, () => flashBox(i18n.t("name-operation-started"))),

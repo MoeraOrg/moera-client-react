@@ -1,16 +1,15 @@
-import { disj, inv, trigger } from "state/trigger";
+import { disj, trigger } from "state/trigger";
 import { updateLocation } from "state/navigation/actions";
 import {
     isAtDetailedPostingPage,
     isAtExplorePage,
     isAtNewsPage,
-    isAtProfilePage,
-    isAtTimelinePage
+    isAtTimelinePage,
+    isInProfilePages
 } from "state/navigation/selectors";
 import {
     feedFutureSliceLoad,
     feedGeneralLoad,
-    feedGeneralUnset,
     feedPastSliceLoad,
     feedStatusLoad,
     feedStatusSet,
@@ -59,7 +58,7 @@ const toStory = (eventPayload: Omit<StoryAddedEvent | StoryUpdatedEvent | StoryD
 export default [
     trigger(
         "GO_TO_PAGE",
-        state => (isAtTimelinePage(state) || isAtProfilePage(state) || isAtDetailedPostingPage(state))
+        state => (isInProfilePages(state) || isAtDetailedPostingPage(state))
             && isFeedGeneralToBeLoaded(state, REL_CURRENT, "timeline"),
         feedGeneralLoad(REL_CURRENT, "timeline")
     ),
@@ -111,13 +110,8 @@ export default [
     trigger("FEED_SCROLLED", true, updateLocation),
     trigger(
         "HOME_READY",
-        disj(isAtTimelinePage, isAtProfilePage, isAtDetailedPostingPage),
+        disj(isInProfilePages, isAtDetailedPostingPage),
         feedGeneralLoad(REL_CURRENT, "timeline")
-    ),
-    trigger(
-        "HOME_READY",
-        inv(disj(isAtTimelinePage, isAtProfilePage, isAtDetailedPostingPage)),
-        feedGeneralUnset(REL_CURRENT, "timeline")
     ),
     trigger("HOME_READY", true, feedsUnset),
     trigger("WAKE_UP", true, feedsUpdate),

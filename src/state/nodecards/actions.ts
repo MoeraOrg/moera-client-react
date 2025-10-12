@@ -178,10 +178,6 @@ export type NodeCardSheriffListSetAction = ActionWithPayload<"NODE_CARD_SHERIFF_
 export const nodeCardSheriffListSet = (nodeName: string, blocked: boolean): NodeCardSheriffListSetAction =>
     actionWithPayload("NODE_CARD_SHERIFF_LIST_SET", {nodeName, blocked});
 
-export type NodeCardsClientSwitchAction = ActionWithoutPayload<"NODE_CARDS_CLIENT_SWITCH">;
-export const nodeCardsClientSwitch = (): NodeCardsClientSwitchAction =>
-    actionWithoutPayload("NODE_CARDS_CLIENT_SWITCH");
-
 export type NodeCardsRefreshAction = ActionWithoutPayload<"NODE_CARDS_REFRESH">;
 export const nodeCardsRefresh = (): NodeCardsRefreshAction =>
     actionWithoutPayload("NODE_CARDS_REFRESH");
@@ -224,7 +220,6 @@ export type NodeCardsAnyAction =
     | NodeCardSheriffListLoadAction
     | NodeCardSheriffListLoadFailedAction
     | NodeCardSheriffListSetAction
-    | NodeCardsClientSwitchAction
     | NodeCardsRefreshAction
     | SheriffListAddAction
     | SheriffListDeleteAction;

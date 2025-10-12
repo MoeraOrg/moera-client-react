@@ -64,7 +64,6 @@ const emptyCard: NodeCardState = {
 };
 
 const initialState: NodeCardsState = {
-    clientName: null,
     cards: {}
 };
 
@@ -506,25 +505,6 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
 
         case "BLOCKED_USERS_DELETED":
             return updateBlocked(state, action.payload.blockedUsers, false);
-
-        case "NODE_CARDS_CLIENT_SWITCH": {
-            const {homeOwnerNameOrUrl} = action.context;
-            if (state.clientName === homeOwnerNameOrUrl) {
-                return state;
-            }
-            const istate = immutable.wrap(state);
-            istate.set("clientName", homeOwnerNameOrUrl);
-            for (const nodeName of Object.keys(state.cards)) {
-                istate.set(["cards", nodeName, "details", "loaded"], false);
-                istate.assign(["cards", nodeName], {
-                    people: cloneDeep(emptyCard.people),
-                    subscription: cloneDeep(emptyCard.subscription),
-                    friendship: cloneDeep(emptyCard.friendship),
-                    blocking: cloneDeep(emptyCard.blocking)
-                });
-            }
-            return istate.value();
-        }
 
         case "NODE_CARDS_REFRESH": {
             const istate = immutable.wrap(state);

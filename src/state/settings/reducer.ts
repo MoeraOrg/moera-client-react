@@ -1,5 +1,4 @@
 import * as immutable from 'object-path-immutable';
-import cloneDeep from 'lodash.clonedeep';
 
 import { CLIENT_SETTINGS_PREFIX, clientSettingsBuildMetaMap } from "api";
 import { ClientAction } from "state/action";
@@ -111,15 +110,6 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
         case "SETTINGS_NODE_VALUES_LOAD_FAILED":
             return immutable.set(state, "node.loadingValues", false);
 
-        case "SETTINGS_NODE_VALUES_UNSET":
-            return immutable.wrap(state)
-                .set("node.loadingValues", false)
-                .set("node.loadedValues", false)
-                .set("node.conflict", false)
-                .set("node.values", new Map())
-                .update("formId", formId => formId + 1)
-                .value();
-
         case "SETTINGS_NODE_CONFLICT":
             return immutable.set(state, "node.conflict", true);
 
@@ -143,14 +133,6 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
         case "SETTINGS_NODE_META_LOAD_FAILED":
             return immutable.set(state, "node.loadingMeta", false);
 
-        case "SETTINGS_NODE_META_UNSET":
-            return immutable.wrap(state)
-                .set("node.loadingMeta", false)
-                .set("node.loadedMeta", false)
-                .set("node.meta", new Map())
-                .update("formId", formId => formId + 1)
-                .value();
-
         case "SETTINGS_CLIENT_VALUES_LOAD":
             return immutable.set(state, "client.loadingValues", true);
 
@@ -173,15 +155,6 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
             action.payload.settings.forEach(({name, value}) => values.set(name, value ?? null));
             return immutable.set(state, "client.values", values);
         }
-
-        case "SETTINGS_CLIENT_VALUES_UNSET":
-            return immutable.wrap(state)
-                .set("client.loadingValues", false)
-                .set("client.loadedValues", false)
-                .set("client.conflict", false)
-                .set("client.values", new Map())
-                .update("formId", formId => formId + 1)
-                .value();
 
         case "SETTINGS_CLIENT_CONFLICT":
             return immutable.set(state, "client.conflict", true);
@@ -279,9 +252,6 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
         case "SETTINGS_GRANTS_LOAD_FAILED":
             return immutable.set(state, "grants.loading", false);
 
-        case "SETTINGS_GRANTS_UNSET":
-            return immutable.set(state, "grants", cloneDeep(initialState.grants));
-
         case "SETTINGS_GRANTS_DIALOG_OPEN":
             return immutable.assign(state, "grants.dialog", {
                 show: true,
@@ -342,9 +312,6 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
 
         case "SETTINGS_TOKENS_LOAD_FAILED":
             return immutable.set(state, "tokens.loading", false);
-
-        case "SETTINGS_TOKENS_UNSET":
-            return immutable.set(state, "tokens", cloneDeep(initialState.tokens));
 
         case "SETTINGS_TOKENS_DIALOG_OPEN":
             return immutable.assign(state, "tokens.dialog", {
@@ -426,9 +393,6 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
         case "SETTINGS_PLUGINS_LOAD_FAILED":
             return immutable.set(state, "plugins.loading", false);
 
-        case "SETTINGS_PLUGINS_UNSET":
-            return immutable.set(state, "plugins", cloneDeep(initialState.plugins));
-
         case "SETTINGS_PLUGINS_DELETED":
             return immutable.set(state, "plugins.plugins",
                 state.plugins.plugins.filter(p => p.name !== action.payload.name));
@@ -464,9 +428,6 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 updating: false,
                 requested: action.payload.requested
             });
-
-        case "SETTINGS_DELETE_NODE_REQUEST_UNSET":
-            return immutable.set(state, "deleteNode.loaded", false);
 
         case "EVENT_HOME_DELETE_NODE_STATUS_UPDATED":
             return immutable.set(state, "deleteNode.requested", action.payload.requested);

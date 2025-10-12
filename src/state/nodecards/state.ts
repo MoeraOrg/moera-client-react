@@ -56,6 +56,5 @@ export interface NodeCardState {
 type NodeCardCardsState = Partial<Record<string, NodeCardState>>;
 
 export interface NodeCardsState {
-    clientName: string | null; // home owner name or URL used when querying data, null for unsigned
     cards: NodeCardCardsState;
 }
