@@ -14,6 +14,7 @@ import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
 import { useHomeNews } from "ui/feed/feeds";
 import NewsCounter from "ui/mainmenu/NewsCounter";
+import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import ProfileSidebar from "ui/profile/ProfileSidebar";
 import ProfileTabs from "ui/profile/ProfileTabs";
@@ -78,6 +79,9 @@ export default function ComplaintsListPage() {
                         onClick={onLoadPast}
                     />
                 </main>
+            </div>
+            <div className="page-right-pane">
+                <MainMenuSidebar/>
             </div>
             <BottomMenu/>
         </Page>

@@ -6,6 +6,7 @@ import { ClientState } from "state/state";
 import { getOwnerCard } from "state/node/selectors";
 import { useHomeNews } from "ui/feed/feeds";
 import NewsCounter from "ui/mainmenu/NewsCounter";
+import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { Page } from "ui/page/Page";
 import DesktopBack from "ui/page/DesktopBack";
@@ -47,6 +48,9 @@ export default function ProfilePage() {
                         </p>
                     }
                 </main>
+            </div>
+            <div className="page-right-pane">
+                <MainMenuSidebar/>
             </div>
             <BottomMenu/>
         </Page>

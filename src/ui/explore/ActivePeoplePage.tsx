@@ -24,7 +24,7 @@ export default function ActivePeoplePage() {
         <>
             <Page className="active-people-page explore-page tabbed-page">
                 <div className="page-left-pane">
-                    <MainMenuSidebar selected="explore"/>
+                    <MainMenuSidebar/>
                 </div>
                 <div className="page-central-pane">
                     <MobileMainMenu/>

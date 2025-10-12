@@ -20,7 +20,7 @@ export default function ExplorePage() {
         <>
             <Page className="explore-page tabbed-page">
                 <div className="page-left-pane">
-                    <MainMenuSidebar selected="explore"/>
+                    <MainMenuSidebar/>
                 </div>
                 <main className="page-central-pane">
                     <MobileMainMenu/>

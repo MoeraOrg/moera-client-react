@@ -18,7 +18,7 @@ export default function NewsPage() {
             <MobileMainMenu shadow/>
             <Page className="news-page">
                 <div className="page-left-pane">
-                    <MainMenuSidebar selected="news"/>
+                    <MainMenuSidebar/>
                 </div>
                 <main className="page-central-pane">
                     <FeedPage

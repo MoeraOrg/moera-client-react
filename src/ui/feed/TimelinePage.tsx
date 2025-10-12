@@ -9,6 +9,7 @@ import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
 import DesktopBack from "ui/page/DesktopBack";
 import NewsCounter from "ui/mainmenu/NewsCounter";
+import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import ProfileTitle from "ui/profile/ProfileTitle";
 import ProfileTabs from "ui/profile/ProfileTabs";
@@ -62,6 +63,9 @@ export default function TimelinePage() {
                         onNavigationUpdate={onNavigationUpdate}
                     />
                 </main>
+                <div className="page-right-pane">
+                    <MainMenuSidebar/>
+                </div>
             </Page>
             <BottomMenu/>
         </>

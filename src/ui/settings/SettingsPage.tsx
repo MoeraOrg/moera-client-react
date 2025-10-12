@@ -48,7 +48,7 @@ export default function SettingsPage() {
         <>
             <Page>
                 <div className="page-left-pane">
-                    <MainMenuSidebar selected="settings"/>
+                    <MainMenuSidebar/>
                 </div>
                 <div className="page-centralright-pane">
                     <SettingsConflicts/>
