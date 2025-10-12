@@ -65,7 +65,7 @@ export default [
     executor("NODE_CARD_SUBSCRIPTION_LOAD", payload => payload.nodeName, nodeCardSubscriptionLoadSaga),
     executor("NODE_CARD_FRIENDSHIP_LOAD", payload => payload.nodeName, nodeCardFriendshipLoadSaga),
     executor("NODE_CARD_BLOCKING_LOAD", payload => payload.nodeName, nodeCardBlockingLoadSaga),
-    executor("NODE_CARDS_PRELOAD", null, nodeCardPreloadSaga),
+    executor("NODE_CARDS_PRELOAD", null, nodeCardsPreloadSaga),
     executor("NODE_CARD_SHERIFF_LIST_LOAD", payload => payload.nodeName, nodeCardSheriffListLoadSaga),
     executor("SHERIFF_LIST_ADD", payload => payload.nodeName, sheriffListAddSaga),
     executor("SHERIFF_LIST_DELETE", payload => payload.nodeName, sheriffListDeleteSaga)
@@ -273,7 +273,7 @@ async function loadBlockedBy(
     return Node.searchBlockedByUsers(action, REL_HOME, {postings: [{nodeName}]});
 }
 
-async function nodeCardPreloadSaga(action: WithContext<NodeCardsPreloadAction>): Promise<void> {
+async function nodeCardsPreloadSaga(action: WithContext<NodeCardsPreloadAction>): Promise<void> {
     await homeIntroduced();
 
     const nodeNames = action.payload.nodeNames
