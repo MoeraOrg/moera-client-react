@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
@@ -23,7 +23,7 @@ export function useInstantsToggler(): InstantsToggler {
 
     const [border, setBorder] = useState<number>(Number.MAX_SAFE_INTEGER);
 
-    const viewAll = () => {
+    const viewAll = useCallback(() => {
         if (
             document.visibilityState !== "visible"
             || !visible.current
@@ -36,9 +36,12 @@ export function useInstantsToggler(): InstantsToggler {
         }
         topMoment.current = stories[0].moment;
         dispatch(feedStatusUpdate(REL_HOME, "instant", true, null, topMoment.current));
-    }
+    }, [dispatch, stories, notViewedCount]);
 
-    const onToggle = (v: boolean) => {
+    // This effect is activated when the list of stories is changed. Visibility is checked in viewAll().
+    useEffect(() => viewAll(), [viewAll]);
+
+    const onToggle = useCallback((v: boolean) => {
         if (v && visible.current !== v) {
             if (Date.now() - lastToggle.current < 200) {
                 return;
@@ -48,7 +51,7 @@ export function useInstantsToggler(): InstantsToggler {
         lastToggle.current = Date.now();
         visible.current = v;
         viewAll();
-    }
+    }, [instantBorder, viewAll]);
 
     return {border, onToggle};
 }
