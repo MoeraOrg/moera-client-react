@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
-import { ClientState } from "state/state";
 import {
     getOwnerAvatar,
     getOwnerCard,
@@ -30,10 +29,10 @@ export default function ProfileSidebar() {
     const title = useSelector(getOwnerTitle);
     const avatar = useSelector(getOwnerAvatar);
     const card = useSelector(getOwnerCard);
-    const profile = card?.details?.profile;
+    const profile = card?.details.profile;
     const storiesTotal = card?.stories.storiesTotal ?? "?";
     const subscribersTotal = card?.people.subscribersTotal ?? "?";
-    const fundraisers = useSelector((state: ClientState) => state.profile.profile.fundraisers);
+    const fundraisers = card?.details.profile.fundraisers;
     const {t} = useTranslation();
 
     return (
