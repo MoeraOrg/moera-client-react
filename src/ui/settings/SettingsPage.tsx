@@ -18,6 +18,7 @@ import SettingsBack from "ui/settings/SettingsBack";
 import SettingsMenu from "ui/settings/SettingsMenu";
 import SettingsTabContent from "ui/settings/SettingsTabContent";
 import { REL_HOME } from "util/rel-node-name";
+import { BUILD_NUMBER } from "build-number";
 import "./SettingsPage.css";
 
 type NotebookSide = "menu" | "sheet";
@@ -63,6 +64,7 @@ export default function SettingsPage() {
                                 </MobileBack>
                                 <SettingsTabs/>
                                 {visible && <SettingsMenu onSelect={() => setSide("sheet")}/>}
+                                <div id="build-number">rev {BUILD_NUMBER}</div>
                                 <BottomMenu/>
                             </nav>
                             <main className="settings-right">

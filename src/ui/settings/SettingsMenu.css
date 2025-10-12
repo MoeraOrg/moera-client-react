@@ -21,7 +21,7 @@
 }
 
 .settings-menu-spacer {
-    grid-area: menu;
+    grid-area: menu / menu / build / menu;
     width: calc(100% - 1.5rem);
     border-right: 1px solid var(--bs-border-color);
 }

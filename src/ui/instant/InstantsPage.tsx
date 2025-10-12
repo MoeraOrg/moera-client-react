@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { BUILD_NUMBER } from "build-number";
 import { ClientState } from "state/state";
 import { feedStatusUpdate } from "state/feeds/actions";
 import { getFeedState } from "state/feeds/selectors";
@@ -65,9 +64,6 @@ export default function InstantsPage() {
                     <main id="instants" className="content-panel">
                         <div className="content">
                             <Instants instantBorder={border}/>
-                        </div>
-                        <div className="footer">
-                            <div className="build-number">rev {BUILD_NUMBER}</div>
                         </div>
                     </main>
                 </div>

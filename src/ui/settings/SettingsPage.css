@@ -8,7 +8,7 @@
         " title   title            title"   min-content
         " tabs    tabs             tabs"    min-content
         " menu    sheet            sheet"   auto
-        " menu    buttons          buttons" 3.875rem
+        " build   buttons          buttons" 3.875rem
         / 15.5rem minmax(0, 45rem) auto;
 }
 
@@ -55,6 +55,7 @@
             " back"        calc(var(--page-header-height) + .6rem)
             " tabs"        4.1rem
             " menu"        1fr
+            " build"       1.5rem
             " bottom-menu" var(--page-footer-height)
             / auto;
     }
@@ -75,6 +76,20 @@
     grid-area: main-menu;
     position: unset;
 
+}
+
+.settings-notebook #build-number {
+    grid-area: build;
+    color: var(--bs-gray-500);
+    font-size: .7rem;
+    align-self: end;
+}
+
+@media only screen and (max-width: 991px) {
+    .settings-notebook #build-number {
+        align-self: center;
+        margin-left: 1rem;
+    }
 }
 
 .settings-notebook #bottom-menu {

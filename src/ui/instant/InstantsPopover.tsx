@@ -9,7 +9,6 @@ import { useParent } from "ui/hook";
 import { Icon, msClose } from "ui/material-symbols";
 import Instants from "ui/instant/Instants";
 import { REL_HOME } from "util/rel-node-name";
-import { BUILD_NUMBER } from "build-number";
 
 interface Props {
     instantBorder: number;
@@ -41,7 +40,6 @@ export default function InstantsPopover({instantBorder}: Props) {
                 <Instants instantBorder={instantBorder}/>
             </div>
             <div className="footer">
-                <div className="build-number">rev {BUILD_NUMBER}</div>
                 {stories.length > 0 && <button className="action" onClick={onReadAll}>{t("mark-all-read")}</button>}
             </div>
         </div>
