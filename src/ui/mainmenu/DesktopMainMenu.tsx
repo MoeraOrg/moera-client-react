@@ -23,7 +23,7 @@ export default function DesktopMainMenu({transparent}: Props) {
     return (
         <OnlyDesktop>
             <div id="main-menu-sentinel" aria-hidden="true" ref={sentinel}/>
-            <header id="main-menu" className={cx({transparent: transparent && shadow})}>
+            <header id="main-menu" className={cx({transparent: transparent, scrolled: shadow})}>
                 <div className="main-menu-content">
                     <div className="main-menu-left-pane">
                         <Logo/>
