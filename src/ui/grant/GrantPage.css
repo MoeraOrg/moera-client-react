@@ -1,15 +1,12 @@
-.grant-page {
+.grant-page .content-panel {
     font-size: 1.1rem;
+    padding: 1.5rem;
 }
 
 @media only screen and (max-width: 991px) {
     .grant-page {
         padding-bottom: calc(var(--page-footer-height) + .25rem);
         background-color: white;
-        min-height: 100vh;
-    }
-
-    .grant-page .content-panel {
-        padding: 1.5rem;
+        min-height: calc(100vh - var(--page-header-height));
     }
 }

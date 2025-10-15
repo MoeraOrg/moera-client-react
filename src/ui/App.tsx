@@ -4,11 +4,12 @@ import { useSelector } from 'react-redux';
 import { ClientState } from "state/state";
 import { isAtNode, isNodeIntroduced } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
-import { isAtGrantPage, isAtRemovalPage } from "state/navigation/selectors";
+import { GLOBAL_PAGES } from "state/navigation/pages";
 import { getFeedWidth, getSetting } from "state/settings/selectors";
 import EventsFrontend from "ui/events/EventsFrontend";
 import Navigation from "ui/navigation/Navigation";
 import ErrorPane from "ui/error/ErrorPane";
+import GlobalPage from "ui/page/GlobalPage";
 import CurrentPage from "ui/page/CurrentPage";
 import WelcomePage from "ui/welcome/WelcomePage";
 import GlobalDialogs from "ui/page/GlobalDialogs";
@@ -17,9 +18,6 @@ import { useIsTinyScreen } from "ui/hook";
 import "./colors.css";
 import "./zindex.css";
 import "./App.css";
-
-const RemovalPage = React.lazy(() => import("ui/settings/RemovalPage"));
-const GrantPage = React.lazy(() => import("ui/grant/GrantPage"));
 
 export default function App() {
     const tinyScreen = useIsTinyScreen();
@@ -33,9 +31,7 @@ export default function App() {
     const nodeIntroduced = useSelector(isNodeIntroduced);
     const connectedToHome = useSelector(isConnectedToHome);
 
-    const atRemovalPage = useSelector(isAtRemovalPage);
-    const atGrantPage = useSelector(isAtGrantPage);
-    const atGlobalPage = atRemovalPage || atGrantPage;
+    const atGlobalPage = useSelector((state: ClientState) => GLOBAL_PAGES.includes(state.navigation.page));
 
     return (
         // FIXME React.CSSProperties does not include CSS variables
@@ -51,10 +47,7 @@ export default function App() {
             <Navigation/>
             <ErrorPane/>
             {atGlobalPage ?
-                <>
-                    {atRemovalPage && <RemovalPage/>}
-                    {atGrantPage && <GrantPage/>}
-                </>
+                <GlobalPage/>
             :
                 (atNode ?
                     <>

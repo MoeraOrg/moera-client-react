@@ -13,3 +13,5 @@ export type Page =
     | "explore"
     | "activepeople"
     | "instants";
+
+export const GLOBAL_PAGES: Page[] = ["removal", "grant"];
