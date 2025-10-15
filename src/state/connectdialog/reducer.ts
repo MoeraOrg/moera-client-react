@@ -8,11 +8,24 @@ const initialState = {
     login: "admin",
     form: "connect" as const,
     resettingPassword: false,
-    emailHint: ""
+    emailHint: "",
+    backHref: "",
 };
 
 export default (state: ConnectDialogState = initialState, action: ClientAction): ConnectDialogState => {
     switch (action.type) {
+        case "GO_TO_PAGE":
+            if (action.payload.page === "connect") {
+                return {
+                    ...state,
+                    form: "connect",
+                    resettingPassword: false,
+                    emailHint: "",
+                    backHref: action.payload.details.backHref
+                };
+            }
+            return state;
+
         case "OPEN_CONNECT_DIALOG":
             return {
                 ...state,

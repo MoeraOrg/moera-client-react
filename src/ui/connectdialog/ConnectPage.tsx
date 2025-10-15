@@ -11,11 +11,12 @@ import "./ConnectPage.css"
 export default function ConnectPage() {
     const form = useSelector((state: ClientState) => state.connectDialog.form);
     const location = useSelector((state: ClientState) => state.connectDialog.location);
+    const backHref = useSelector((state: ClientState) => state.connectDialog.backHref);
     const nodeRoot = NodeName.shorten(useSelector(getOwnerNameOrUrl));
 
     return (
         <>
-            <GlobalTitle back/>
+            <GlobalTitle back={backHref}/>
             <div className="connect-page">
                 {form === "connect" && <ConnectForm location={location} nodeRoot={nodeRoot}/>}
             </div>

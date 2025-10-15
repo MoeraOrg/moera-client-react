@@ -7,10 +7,11 @@ import { Icon, msArrowBack } from "ui/material-symbols";
 import { LogoImage } from "ui/mainmenu/logo/Logo";
 import { useScrollShadow } from "ui/mainmenu/scroll-shadow";
 import MobileBack from "ui/page/MobileBack";
+import Jump from "ui/navigation/Jump";
 import "./GlobalTitle.css";
 
 interface Props {
-    back?: boolean;
+    back?: string;
 }
 
 export default function GlobalTitle({back}: Props) {
@@ -20,7 +21,7 @@ export default function GlobalTitle({back}: Props) {
 
     if (tinyScreen) {
         if (back) {
-            return <MobileBack className="global-back" href="" sticky><LogoImage width="4.6rem"/></MobileBack>;
+            return <MobileBack className="global-back" href={back} sticky><LogoImage width="4.6rem"/></MobileBack>;
         } else {
             return (
                 <>
@@ -38,9 +39,9 @@ export default function GlobalTitle({back}: Props) {
                     <LogoImage width="4.6rem"/>
                 </header>
                 {back &&
-                    <button id="global-title-back" onClick={() => window.overlays.mobileBack()}>
+                    <Jump href={back} id="global-title-back">
                         <Icon icon={msArrowBack} size={16}/>{t("back")}
-                    </button>
+                    </Jump>
                 }
             </>
         );

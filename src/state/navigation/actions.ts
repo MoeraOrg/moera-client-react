@@ -134,9 +134,11 @@ export type GoToInstantsAction = GoToHomePageAction<"instants", {}>;
 export const goToInstants = (): GoToInstantsAction =>
     goToHomePage("instants", {});
 
-export type GoToConnectAction = GoToPageAction<"connect", {}>;
-export const goToConnect = (): GoToConnectAction =>
-    goToPage("connect", {});
+export type GoToConnectAction = GoToPageAction<"connect", {
+    backHref: string;
+}>;
+export const goToConnect = (backHref: string): GoToConnectAction =>
+    goToPage("connect", {backHref});
 
 export type GoToPageAnyAction =
     GoToProfileAction

@@ -8,11 +8,15 @@ import { LocationInfo } from "location/LocationInfo";
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     let actions = [];
     if (srcInfo.directories[0] !== "connect") {
-        actions.push(goToConnect());
+        actions.push(goToConnect(dstInfo.parameters["back"] ?? ""));
     }
     return actions;
 }
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
-    return info.sub("connect").noIndex().withTitle(i18n.t("connect"));
+    info = info.sub("connect");
+    if (state.connectDialog.backHref) {
+        info = info.withParameter("back", state.connectDialog.backHref);
+    }
+    return info.noIndex().withTitle(i18n.t("connect"));
 }

@@ -7,4 +7,5 @@ export interface ConnectDialogState {
     form: ConnectDialogForm;
     resettingPassword: boolean;
     emailHint: string;
+    backHref: string;
 }

@@ -18,6 +18,7 @@ interface Props {
     nodeName?: RelNodeName | string;
     nodeUri?: string | null;
     href: string;
+    id?: string;
     className?: string;
     style?: React.CSSProperties;
     title?: string;
@@ -28,7 +29,7 @@ interface Props {
 }
 
 function Jump(
-    {nodeName = REL_CURRENT, nodeUri, href, className, style, title, readId, onNear, onFar, children}: Props,
+    {nodeName = REL_CURRENT, nodeUri, href, id, className, style, title, readId, onNear, onFar, children}: Props,
     ref: ForwardedRef<HTMLAnchorElement>
 ) {
     const ownerNameOrUrl = useSelector(getOwnerNameOrUrl);
@@ -91,7 +92,7 @@ function Jump(
     if (nodeOwnerName === ownerNameOrUrl) {
         const nodeLocation = rootPage ?? nodeUri;
         const url = Browser.universalLocation(Browser.getRootLocation(), ownerNameOrUrl, nodeLocation, href, readId);
-        return <a href={url} className={className} style={style} title={title} data-nodename={nodeOwnerName}
+        return <a href={url} id={id} className={className} style={style} title={title} data-nodename={nodeOwnerName}
                   data-href={href} ref={ref} onClick={onNearClick} suppressHydrationWarning>{children}</a>;
     } else {
         let nodeLocation;
@@ -104,7 +105,7 @@ function Jump(
         }
         nodeLocation ??= null;
         const url = Browser.universalLocation(null, nodeOwnerName, nodeLocation, href, readId);
-        return <a href={url} className={className} style={style} title={title} data-nodename={nodeOwnerName}
+        return <a href={url} id={id} className={className} style={style} title={title} data-nodename={nodeOwnerName}
                   data-href={href} ref={ref} onClick={onFarClick(url, nodeLocation, nodeOwnerName)}
                   suppressHydrationWarning>{children}</a>;
     }
