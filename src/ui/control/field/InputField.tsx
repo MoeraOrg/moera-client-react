@@ -20,6 +20,7 @@ interface Props {
     col?: string;
     autoFocus?: boolean;
     anyValue?: boolean;
+    errorsOnly?: boolean;
     className?: string;
     autoComplete?: string;
     noFeedback?: boolean;
@@ -30,7 +31,7 @@ interface Props {
 function InputFieldImpl(
     {
         name, title, placeholder, disabled, maxLength, horizontal = false, layout, groupClassName, labelClassName,
-        inputClassName, col, autoFocus, anyValue, className, autoComplete, noFeedback = false, initialValue,
+        inputClassName, col, autoFocus, anyValue, errorsOnly, className, autoComplete, noFeedback = false, initialValue,
         defaultValue
     }: Props,
     ref: ForwardedRef<HTMLInputElement>
@@ -66,7 +67,7 @@ function InputFieldImpl(
                     type={!name.toLowerCase().includes("password") ? "text" : "password"}
                     className={cx(
                         "form-control", {
-                            "is-valid": !anyValue && touched && !error,
+                            "is-valid": !anyValue && !errorsOnly && touched && !error,
                             "is-invalid": !anyValue && touched && error,
                             [className!]: !!className
                         },

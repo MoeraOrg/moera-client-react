@@ -12,6 +12,7 @@ export type Page =
     | "search"
     | "explore"
     | "activepeople"
-    | "instants";
+    | "instants"
+    | "connect";
 
-export const GLOBAL_PAGES: Page[] = ["removal", "grant"];
+export const GLOBAL_PAGES: Page[] = ["removal", "grant", "connect"];

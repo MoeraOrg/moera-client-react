@@ -4,13 +4,14 @@ import { FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { NamingRules } from "api";
+import { tTitle } from "i18n";
 import { dispatch } from "state/store-sagas";
 import { connectToHome } from "state/home/actions";
 import { connectDialogSetForm } from "state/connectdialog/actions";
 import { ConnectDialogForm } from "state/connectdialog/state";
+import { openSignUpDialog } from "state/signupdialog/actions";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
-import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
 import { isUrl } from "util/url";
 
 interface OuterProps {
@@ -32,10 +33,10 @@ function ConnectForm({values}: Props) {
     const setForm = (form: ConnectDialogForm) =>
         dispatch(connectDialogSetForm(values.location, "admin", form));
 
-    const onSetPassword = (event: React.MouseEvent) => {
-        setForm("assign");
+    const onSignUp = (event: React.MouseEvent) => {
+        dispatch(openSignUpDialog());
         event.preventDefault();
-    }
+    };
 
     const onForgotPassword = (event: React.MouseEvent) => {
         setForm("forgot");
@@ -43,14 +44,21 @@ function ConnectForm({values}: Props) {
     }
 
     return (
-        <ConnectDialogModal title={t("connect-home")} buttonCaption={t("connect")}>
-            <InputField name="location" title={t("name-or-node-url")} autoFocus/>
-            <InputField name="password" title={t("password")}/>
-            <div className="links">
-                <Button variant="link" onClick={onSetPassword}>{t("password-not-set")}</Button>
-                <Button variant="link" onClick={onForgotPassword}>{t("forgot-password")}</Button>
+        <>
+            <div className="title">{t("connect")}</div>
+            <InputField name="location" title={tTitle(t("blog-name"))} placeholder={t("enter-blog-name")} errorsOnly
+                        autoFocus/>
+            <InputField name="password" title={t("password")} placeholder={t("password")} errorsOnly/>
+            <Button variant="primary" className="submit-button">{t("connect")}</Button>
+            <div className="link mt-3">
+                {t("forgot-password")}{" "}
+                <Button variant="link" onClick={onForgotPassword}>{t("reset")}</Button>
             </div>
-        </ConnectDialogModal>
+            <div className="link mt-3 pt-3">
+                {t("dont-have-account")}{" "}
+                <Button variant="link" onClick={onSignUp}>{t("sign-up")}</Button>
+            </div>
+        </>
     );
 }
 

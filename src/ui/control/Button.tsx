@@ -10,7 +10,6 @@ type Props = {
     variant: string;
     size?: "sm" | "lg";
     compact?: boolean;
-    block?: boolean;
     borderless?: boolean;
     invisible?: boolean;
     active?: boolean;
@@ -19,8 +18,8 @@ type Props = {
 
 function ButtonImpl(
     {
-        variant, size, compact = false, block = false, borderless = false, invisible = false, active = false,
-        loading = false, disabled = false, className = "", type = "button", autoFocus, ...props
+        variant, size, compact = false, borderless = false, invisible = false, active = false, loading = false,
+        disabled = false, className = "", type = "button", autoFocus, ...props
     }: Props,
     ref: ForwardedRef<HTMLButtonElement>
 ) {
@@ -39,7 +38,6 @@ function ButtonImpl(
         {
             "btn-sm": size === "sm",
             "btn-lg": size === "lg",
-            "flex-fill": block,
             "border-0": borderless,
             invisible,
             active,

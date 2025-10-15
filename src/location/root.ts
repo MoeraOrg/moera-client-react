@@ -3,6 +3,7 @@ import {
     isAtActivePeoplePage,
     isAtComplaintsPage,
     isAtComposePage,
+    isAtConnectPage,
     isAtDetailedPostingPage,
     isAtExplorePage,
     isAtGrantPage,
@@ -17,6 +18,7 @@ import {
 } from "state/navigation/selectors";
 import { build as complaintsBuild, transform as complaintsTransform } from "location/complaints";
 import { build as composeBuild, transform as composeTransform } from "location/compose";
+import { build as connectBuild, transform as connectTransform } from "location/connect";
 import { build as exploreBuild, transform as exploreTransform } from "location/explore";
 import { build as grantBuild, transform as grantTransform } from "location/grant";
 import { build as instantsBuild, transform as instantsTransform } from "location/instants";
@@ -77,6 +79,9 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (dstInfo.directories[0] === "instants") {
         return instantsTransform(srcInfo, dstInfo);
     }
+    if (dstInfo.directories[0] === "connect") {
+        return connectTransform(srcInfo, dstInfo);
+    }
     return [];
 }
 
@@ -122,6 +127,9 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     }
     if (isAtInstantsPage(state)) {
         return instantsBuild(state, info);
+    }
+    if (isAtConnectPage(state)) {
+        return connectBuild(state, info);
     }
     return info;
 }

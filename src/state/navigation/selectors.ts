@@ -65,6 +65,10 @@ export function isAtInstantsPage(state: ClientState): boolean {
     return state.navigation.page === "instants";
 }
 
+export function isAtConnectPage(state: ClientState): boolean {
+    return state.navigation.page === "connect";
+}
+
 export function isBottomMenuVisible(state: ClientState): boolean {
     return state.navigation.bottomMenuVisible;
 }

@@ -1,4 +1,4 @@
-export type ConnectDialogForm = "connect" | "assign" | "forgot" | "reset";
+export type ConnectDialogForm = "connect" | "forgot" | "reset";
 
 export interface ConnectDialogState {
     show: boolean;

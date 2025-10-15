@@ -34,7 +34,7 @@ function ForgotForm({values}: Props) {
         <ConnectDialogModal title={t("forgot-home-password")} buttonCaption={t("reset-password")}
                             loading={resettingPassword}>
             <div className="instructions">{t("reset-password-instructions")}</div>
-            <InputField name="location" title={t("name-or-node-url")} autoFocus/>
+            <InputField name="location" title={t("blog-name")} autoFocus/>
             <div className="links">
                 <button className="btn btn-link" onClick={onMail}>{t("received-mail")}</button>
             </div>

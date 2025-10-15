@@ -1,0 +1,18 @@
+import i18n from 'i18next';
+
+import { ClientState } from "state/state";
+import { ClientAction } from "state/action";
+import { goToConnect } from "state/navigation/actions";
+import { LocationInfo } from "location/LocationInfo";
+
+export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
+    let actions = [];
+    if (srcInfo.directories[0] !== "connect") {
+        actions.push(goToConnect());
+    }
+    return actions;
+}
+
+export function build(state: ClientState, info: LocationInfo): LocationInfo {
+    return info.sub("connect").noIndex().withTitle(i18n.t("connect"));
+}

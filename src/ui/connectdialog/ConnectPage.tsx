@@ -4,18 +4,21 @@ import { useSelector } from 'react-redux';
 import { NodeName } from "api";
 import { ClientState } from "state/state";
 import { getOwnerNameOrUrl } from "state/node/selectors";
-import ForgotForm from "ui/connectdialog/ForgotForm";
-import ResetForm from "ui/connectdialog/ResetForm";
+import GlobalTitle from "ui/mainmenu/GlobalTitle";
+import ConnectForm from "ui/connectdialog/ConnectForm";
+import "./ConnectPage.css"
 
-export default function ConnectDialog() {
+export default function ConnectPage() {
     const form = useSelector((state: ClientState) => state.connectDialog.form);
     const location = useSelector((state: ClientState) => state.connectDialog.location);
     const nodeRoot = NodeName.shorten(useSelector(getOwnerNameOrUrl));
 
     return (
         <>
-            {form === "forgot" && <ForgotForm location={location} nodeRoot={nodeRoot}/>}
-            {form === "reset" && <ResetForm location={location} nodeRoot={nodeRoot}/>}
+            <GlobalTitle back/>
+            <div className="connect-page">
+                {form === "connect" && <ConnectForm location={location} nodeRoot={nodeRoot}/>}
+            </div>
         </>
     );
 }

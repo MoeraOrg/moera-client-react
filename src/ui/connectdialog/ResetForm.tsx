@@ -41,7 +41,7 @@ function ResetForm({values}: Props) {
                      dangerouslySetInnerHTML={{__html: t("reset-password-hint-instructions", {emailHint})}}/>
             }
             <InputField name="resetToken" title={t("secret-code")} autoFocus/>
-            <InputField name="location" title={t("name-or-node-url")}/>
+            <InputField name="location" title={t("blog-name")}/>
             <InputField name="password" title={t("new-password")}/>
             <InputField name="confirmPassword" title={t("confirm-password")}/>
             <div className="links">

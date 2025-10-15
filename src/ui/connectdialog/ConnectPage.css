@@ -1,0 +1,51 @@
+.connect-page {
+    border-radius: .75rem;
+    padding: 3rem;
+    width: 32.5rem;
+    margin: 0 auto;
+    background-color: white;
+}
+
+@media only screen and (max-width: 991px) {
+    .connect-page {
+        padding-bottom: calc(var(--page-footer-height) + .25rem);
+        background-color: white;
+        width: 100%;
+        min-height: calc(100vh - var(--page-header-height));
+        margin: 0;
+        border-radius: 0;
+    }
+}
+
+.connect-page .title {
+    height: 2.5rem;
+    font-family: var(--font-messages) sans-serif;
+    font-weight: 600;
+    font-size: 2rem;
+    line-height: 125%;
+    color: var(--bs-gray-900);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.connect-page .submit-button {
+    margin-top: 2rem;
+    display: block;
+    width: 100%;
+}
+
+.connect-page .link {
+    font-weight: 400;
+    font-size: .88rem;
+    line-height: 143%;
+    color: var(--bs-gray-600);
+    text-align: center;
+}
+
+.connect-page .link .btn {
+    font-size: .88rem;
+    text-decoration: underline;
+    color: var(--violet-600);
+    padding: 0;
+    vertical-align: baseline;
+}

@@ -134,6 +134,10 @@ export type GoToInstantsAction = GoToHomePageAction<"instants", {}>;
 export const goToInstants = (): GoToInstantsAction =>
     goToHomePage("instants", {});
 
+export type GoToConnectAction = GoToPageAction<"connect", {}>;
+export const goToConnect = (): GoToConnectAction =>
+    goToPage("connect", {});
+
 export type GoToPageAnyAction =
     GoToProfileAction
     | GoToTimelineAction
@@ -155,7 +159,8 @@ export type GoToPageAnyAction =
     | GoToExploreAction
     | GoToActivePeopleAction
     | GoToPageAction<"instants", GoToComposeAction["payload"]["details"]>
-    | GoToInstantsAction;
+    | GoToInstantsAction
+    | GoToConnectAction;
 
 export type NewLocationAction = ActionWithoutPayload<"NEW_LOCATION">;
 export const newLocation = (): NewLocationAction =>
