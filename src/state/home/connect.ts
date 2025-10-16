@@ -21,6 +21,7 @@ import { executor } from "state/executor";
 import { connectDialogSetForm } from "state/connectdialog/actions";
 import { normalizeUrl } from "util/url";
 import { REL_HOME } from "util/rel-node-name";
+import { toDocumentLocation } from "util/universal-url";
 
 export default [
     executor("CONNECT_TO_HOME", null, connectToHomeSaga),
@@ -79,7 +80,8 @@ async function connectToHomeSaga(action: WithContext<ConnectToHomeAction>): Prom
     }
     Storage.storeConnectionData(nodeUrl, null, null, null, login, info.token, info.permissions);
     const atNode = select(isAtNode);
-    dispatch(boot(!atNode ? {} : undefined));
+    const backHref = select(state => state.connectDialog.backHref);
+    dispatch(boot(!atNode || !backHref ? {} : toDocumentLocation({href: backHref})));
 }
 
 async function homeOwnerVerifySaga(action: WithContext<HomeOwnerVerifyAction>): Promise<void> {

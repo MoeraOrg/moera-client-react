@@ -56,6 +56,7 @@ import * as Browser from "ui/browser";
 import { toAvatarDescription } from "util/avatar";
 import { absoluteNodeName, REL_HOME, RelNodeName } from "util/rel-node-name";
 import { notNull } from "util/misc";
+import { universalLocation } from "util/universal-url";
 
 export default [
     executor("POSTING_DELETE", payload => payload.id, postingDeleteSaga),
@@ -239,13 +240,13 @@ export async function postingGetLink(
     const targetNode = posting?.receiverName ?? absoluteNodeName(nodeName, action.context);
     if (targetNode && posting?.receiverDeletedAt == null) {
         const nodeUri = await getNodeUri(action, targetNode);
-        return Browser.universalLocation(null, targetNode, nodeUri, `/post/${posting?.receiverPostingId ?? id}`);
+        return universalLocation(null, targetNode, nodeUri, `/post/${posting?.receiverPostingId ?? id}`);
     } else {
         const {ownerName, rootLocation} = select(state => ({
             ownerName: getOwnerName(state),
             rootLocation: getNodeRootLocation(state)
         }));
-        return Browser.universalLocation(null, ownerName, rootLocation, `/moera/post/${id}`);
+        return universalLocation(null, ownerName, rootLocation, `/moera/post/${id}`);
     }
 }
 

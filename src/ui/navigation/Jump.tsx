@@ -11,8 +11,9 @@ import { getSearchNodeName } from "state/search/selectors";
 import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
 import { absoluteNodeName, REL_CURRENT, RelNodeName } from "util/rel-node-name";
+import { universalLocation } from "util/universal-url";
 
-export type JumpCallback = (href: string, callback: () => void) => void | null;
+export type JumpCallback = (href: string, performJump: () => void) => void | null;
 
 interface Props {
     nodeName?: RelNodeName | string;
@@ -91,7 +92,7 @@ function Jump(
 
     if (nodeOwnerName === ownerNameOrUrl) {
         const nodeLocation = rootPage ?? nodeUri;
-        const url = Browser.universalLocation(Browser.getRootLocation(), ownerNameOrUrl, nodeLocation, href, readId);
+        const url = universalLocation(Browser.getRootLocation(), ownerNameOrUrl, nodeLocation, href, readId);
         return <a href={url} id={id} className={className} style={style} title={title} data-nodename={nodeOwnerName}
                   data-href={href} ref={ref} onClick={onNearClick} suppressHydrationWarning>{children}</a>;
     } else {
@@ -104,7 +105,7 @@ function Jump(
             nodeLocation = nodeUri;
         }
         nodeLocation ??= null;
-        const url = Browser.universalLocation(null, nodeOwnerName, nodeLocation, href, readId);
+        const url = universalLocation(null, nodeOwnerName, nodeLocation, href, readId);
         return <a href={url} id={id} className={className} style={style} title={title} data-nodename={nodeOwnerName}
                   data-href={href} ref={ref} onClick={onFarClick(url, nodeLocation, nodeOwnerName)}
                   suppressHydrationWarning>{children}</a>;

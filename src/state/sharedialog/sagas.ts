@@ -18,6 +18,7 @@ import * as Browser from "ui/browser";
 import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
 import { getWindowSelectionHtml, hasWindowSelection } from "util/ui";
 import { absoluteNodeName } from "util/rel-node-name";
+import { universalLocation } from "util/universal-url";
 
 export default [
     executor("SHARE_DIALOG_PREPARE", "", shareDialogPrepareSaga),
@@ -51,7 +52,7 @@ async function shareDialogPrepareSaga(action: WithContext<ShareDialogPrepareActi
         dispatch(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName).causedBy(action));
         return;
     }
-    const url = Browser.universalLocation(null, nodeName, nodeUri, href);
+    const url = universalLocation(null, nodeName, nodeUri, href);
     share(action, url, text);
 }
 
@@ -72,7 +73,7 @@ async function sharePageCopyLinkSaga(action: WithContext<SharePageCopyLinkAction
         dispatch(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName).causedBy(action));
         return;
     }
-    await clipboardCopy(Browser.universalLocation(null, nodeName, nodeUri, href));
+    await clipboardCopy(universalLocation(null, nodeName, nodeUri, href));
     if (!Browser.isAndroidBrowser()) {
         dispatch(flashBox(i18n.t("link-copied")).causedBy(action));
     }

@@ -6,7 +6,7 @@ import { Storage } from "storage";
 import { ClientState } from "state/state";
 import { getHomeRootLocation } from "state/home/selectors";
 import { confirmBox } from "state/confirmbox/actions";
-import { openConnectDialog } from "state/connectdialog/actions";
+import * as Browser from "ui/browser";
 import { useParent } from "ui/hook";
 import { Icon, msAdd } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
@@ -57,9 +57,9 @@ export default function Connections({noActiveRoot}: Props) {
         hide();
     };
 
-    const onAddClick = () => {
-        dispatch(openConnectDialog());
+    const onAddClick = (_: string, performJump: () => void) => {
         hide();
+        performJump();
     };
 
     return (
@@ -88,9 +88,9 @@ export default function Connections({noActiveRoot}: Props) {
                     </div>
                 </div>
             ))}
-            <div className="connection-add" onClick={onAddClick}>
+            <Jump className="connection-add" href={Browser.urlWithBackHref("/connect")} onNear={onAddClick}>
                 <Icon icon={msAdd}/> {t("add-connection")}
-            </div>
+            </Jump>
         </div>
     );
 }

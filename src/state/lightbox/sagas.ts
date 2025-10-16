@@ -12,6 +12,7 @@ import { LightBoxCopyLinkAction, LightBoxMediaPostingLoadAction, LightBoxMediaSe
 import { getLightBoxMediaPostingId, getLightBoxNodeName } from "state/lightbox/selectors";
 import * as Browser from "ui/browser";
 import { absoluteNodeName } from "util/rel-node-name";
+import { universalLocation } from "util/universal-url";
 
 export default [
     executor("LIGHT_BOX_MEDIA_POSTING_LOAD", null, lightBoxMediaPostingLoadSaga),
@@ -45,7 +46,7 @@ async function lightBoxCopyLinkSaga(action: WithContext<LightBoxCopyLinkAction>)
     nodeName = absoluteNodeName(nodeName, action.context);
     try {
         const nodeUri = await getNodeUri(action, nodeName);
-        await clipboardCopy(Browser.universalLocation(null, nodeName, nodeUri, url));
+        await clipboardCopy(universalLocation(null, nodeName, nodeUri, url));
         if (!Browser.isAndroidBrowser()) {
             dispatch(flashBox(i18n.t("link-copied")).causedBy(action));
         }

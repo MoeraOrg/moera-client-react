@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
+import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { NamingRules } from "api";
@@ -26,7 +26,7 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function ConnectForm({values}: Props) {
+function ConnectForm({values, submitForm}: Props) {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -44,12 +44,12 @@ function ConnectForm({values}: Props) {
     }
 
     return (
-        <>
+        <Form>
             <div className="title">{t("connect")}</div>
             <InputField name="location" title={tTitle(t("blog-name"))} placeholder={t("enter-blog-name")} errorsOnly
                         autoFocus/>
             <InputField name="password" title={t("password")} placeholder={t("password")} errorsOnly/>
-            <Button variant="primary" className="submit-button">{t("connect")}</Button>
+            <Button type="submit" variant="primary" className="submit-button">{t("connect")}</Button>
             <div className="link mt-3">
                 {t("forgot-password")}{" "}
                 <Button variant="link" onClick={onForgotPassword}>{t("reset")}</Button>
@@ -58,7 +58,7 @@ function ConnectForm({values}: Props) {
                 {t("dont-have-account")}{" "}
                 <Button variant="link" onClick={onSignUp}>{t("sign-up")}</Button>
             </div>
-        </>
+        </Form>
     );
 }
 

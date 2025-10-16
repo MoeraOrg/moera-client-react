@@ -1,14 +1,16 @@
 import i18n from 'i18next';
+import * as URI from 'uri-js';
 
 import { NameResolvingError, NodeApiError, VerboseError } from "api";
 import { CausedError, NodeConnectionError } from "api/error";
 import { Storage } from "storage";
 import { errorDismiss, errorShow, ErrorThrownAction } from "state/error/actions";
+import { goToLocation } from "state/navigation/actions";
 import { messageBox } from "state/messagebox/actions";
-import { openConnectDialog } from "state/connectdialog/actions";
 import { getHomeRootLocation } from "state/home/selectors";
 import { executor } from "state/executor";
 import { dispatch, select } from "state/store-sagas";
+import * as Browser from "ui/browser";
 import { delay } from "util/misc";
 
 export default [
@@ -65,6 +67,7 @@ function errorAuthInvalidSaga(): void {
     const location = select(getHomeRootLocation);
     if (location != null) {
         Storage.deleteData(location);
-        dispatch(messageBox(i18n.t("disconnected-from-home"), openConnectDialog()));
+        const {path = null, query = null} = URI.parse(Browser.urlWithBackHref("/connect"));
+        dispatch(messageBox(i18n.t("disconnected-from-home"), goToLocation(path, query, null)));
     }
 }

@@ -2,7 +2,7 @@ import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWi
 import { Scope } from "api";
 import { Page } from "state/navigation/pages";
 import { SearchFilter, SearchTab } from "state/search/state";
-import { DocumentLocation } from "ui/browser";
+import { DocumentLocation } from "util/universal-url";
 
 export type BootAction = ActionWithPayload<"BOOT", {
     target?: DocumentLocation;
@@ -97,9 +97,9 @@ export type GoToComplaintsAction = GoToPageAction<"complaints", {}>;
 export const goToComplaints = (): GoToComplaintsAction =>
     goToPage("complaints", {});
 
-export type GoToRemovalAction = GoToHomePageAction<"removal", {}>;
+export type GoToRemovalAction = GoToPageAction<"removal", {}>;
 export const goToRemoval = (): GoToRemovalAction =>
-    goToHomePage("removal", {});
+    goToPage("removal", {});
 
 export type GoToGrantAction = GoToHomePageAction<"grant", {
     clientName: string;
@@ -152,7 +152,6 @@ export type GoToPageAnyAction =
     | GoToNewsAction
     | GoToPeopleAction
     | GoToComplaintsAction
-    | GoToPageAction<"removal", GoToComposeAction["payload"]["details"]>
     | GoToRemovalAction
     | GoToPageAction<"grant", GoToGrantAction["payload"]["details"]>
     | GoToGrantAction

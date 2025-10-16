@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import cx from 'classnames';
 
 import { tTitle } from "i18n";
 import { SourceFormat } from "api";
@@ -15,9 +16,9 @@ import {
     getDetailedPosting
 } from "state/detailedposting/selectors";
 import { getSetting } from "state/settings/selectors";
-import { openConnectDialog } from "state/connectdialog/actions";
-import { Button } from "ui/control";
+import * as Browser from "ui/browser";
 import { useIsTinyScreen } from "ui/hook";
+import Jump from "ui/navigation/Jump";
 import "./CommentComposeLine.css";
 
 const CommentCompose = React.lazy(() => import("ui/comment/compose/CommentCompose"));
@@ -52,16 +53,17 @@ export default function CommentComposeLine() {
     );
     const smileysEnabled = useSelector((state: ClientState) => getSetting(state, "comment.smileys.enabled") as boolean);
     const tinyScreen = useIsTinyScreen();
-    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     if (!ownerName) {
-        const onConnect = () => dispatch(openConnectDialog());
         return (
             <div id="comment-compose" className="nologin">
-                <Button variant={tinyScreen ? "primary" : "outline-primary"} onClick={onConnect}>
+                <Jump
+                    className={cx("btn", {"btn-primary": tinyScreen, "btn-outline-primary": !tinyScreen})}
+                    href={Browser.urlWithBackHref("/connect")}
+                >
                     {tTitle(t("add-comment"))}
-                </Button>
+                </Jump>
             </div>
         );
     }

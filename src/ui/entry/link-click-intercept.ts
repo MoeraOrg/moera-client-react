@@ -6,6 +6,7 @@ import { initFromLocation, initFromNodeLocation, newLocation } from "state/navig
 import { getSetting } from "state/settings/selectors";
 import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
+import { getCanonicalLocation, parseUniversalLocation } from "util/universal-url";
 
 export function interceptLinkClick(event: MouseEvent | React.MouseEvent): void {
     if (event.currentTarget == null) {
@@ -22,7 +23,7 @@ export function interceptLinkClick(event: MouseEvent | React.MouseEvent): void {
     }
 
     if (["moera.page", window.location.host].includes(parts.host.toLowerCase())) {
-        const uniParts = Browser.parseUniversalLocation(parts.path, parts.query, parts.fragment);
+        const uniParts = parseUniversalLocation(parts.path, parts.query, parts.fragment);
         if (uniParts != null) {
             const {name = null, rootLocation, path = null, query = null, hash = null} = uniParts;
             jump(name, rootLocation, path, query, hash);
@@ -43,7 +44,7 @@ export function interceptLinkClick(event: MouseEvent | React.MouseEvent): void {
         if (headers && headers.has("X-Moera")) {
             const rootPage = rootUrl(parts.scheme!, parts.host!, parts.port);
             const {name = null, rootLocation, path = null, query = null, hash = null} =
-                Browser.getLocation(rootPage, parts.path, parts.query, parts.fragment, headers.get("X-Moera"));
+                getCanonicalLocation(rootPage, parts.path, parts.query, parts.fragment, headers.get("X-Moera"));
             jump(name, rootLocation, path, query, hash);
         } else {
             openLink(href);

@@ -6,11 +6,12 @@ import { Trans, useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { isConnectedToHome } from "state/home/selectors";
-import { openConnectDialog } from "state/connectdialog/actions";
 import { settingsDeleteNodeRequestCancel, settingsDeleteNodeRequestSend } from "state/settings/actions";
+import * as Browser from "ui/browser";
 import { Button, Loading } from "ui/control";
 import { TextField } from "ui/control/field";
 import { useSettingsSheetResize } from "ui/settings/settings-hooks";
+import Jump from "ui/navigation/Jump";
 
 interface Values {
     message: string;
@@ -21,14 +22,11 @@ function SettingsRemovalSheet() {
 
     const sheetMaxHeight = useSettingsSheetResize();
     const connectedToHome = useSelector(isConnectedToHome);
-    const connectingToHome = useSelector((state: ClientState) => state.home.connecting);
     const loaded = useSelector((state: ClientState) => state.settings.deleteNode.loaded);
     const loading = useSelector((state: ClientState) => state.settings.deleteNode.loading);
     const requested = useSelector((state: ClientState) => state.settings.deleteNode.requested);
     const updating = useSelector((state: ClientState) => state.settings.deleteNode.updating);
     const dispatch = useDispatch();
-
-    const onConnect = () => dispatch(openConnectDialog());
 
     const onCancelRequest = () => dispatch(settingsDeleteNodeRequestCancel());
 
@@ -61,10 +59,12 @@ function SettingsRemovalSheet() {
                         :
                             <div className="alert alert-warning show" role="alert">
                                 {t("delete-account-need-log-in")}
-                                <Button variant="success" size="sm" className="ms-3" onClick={onConnect}
-                                        loading={connectingToHome}>
+                                <Jump
+                                    className="btn btn-primary btn-sm ms-3"
+                                    href={Browser.urlWithBackHref("/connect")}
+                                >
                                     {t("connect")}
-                                </Button>
+                                </Jump>
                             </div>
                         }
                     </Form>

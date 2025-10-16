@@ -10,12 +10,12 @@ import { goToLocation, initFromLocation } from "state/navigation/actions";
 import { getHomeOwnerName, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { executor } from "state/executor";
-import * as Browser from "ui/browser";
 import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
 import { getWindowSelectionHtml } from "util/ui";
 import { mentionName } from "util/names";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { htmlEntities } from "util/html";
+import { universalLocation } from "util/universal-url";
 
 export default [
     executor("POSTING_REPLY", "", postingReplySaga)
@@ -63,7 +63,7 @@ async function postingReplySaga(action: WithContext<PostingReplyAction>): Promis
             case "html":
             case "html/visual": {
                 const name = posting.ownerFullName || NodeName.shorten(posting.ownerName);
-                const href = Browser.universalLocation(null, posting.ownerName, null, "/");
+                const href = universalLocation(null, posting.ownerName, null, "/");
                 const mention =
                     `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(posting.ownerName)}" data-href="/">`
                     + `${htmlEntities(name)}</a>`;

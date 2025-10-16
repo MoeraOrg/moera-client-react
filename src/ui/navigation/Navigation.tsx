@@ -8,6 +8,7 @@ import { getInstantCount } from "state/feeds/selectors";
 import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
 import * as Browser from "ui/browser";
 import { asyncReturn } from "util/async-calls";
+import { universalLocation } from "util/universal-url";
 
 export default function Navigation() {
     const nodeName = useSelector(getOwnerName);
@@ -86,7 +87,7 @@ export default function Navigation() {
             return;
         }
 
-        const url = Browser.universalLocation(Browser.getRootLocation(), nodeName, rootLocation, location);
+        const url = universalLocation(Browser.getRootLocation(), nodeName, rootLocation, location);
         if (
             (!create && stack.current.length === 0)
             || (create && stack.current[stack.current.length - 1] === url)

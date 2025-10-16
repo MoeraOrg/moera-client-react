@@ -1,11 +1,11 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
-import { openConnectDialog } from "state/connectdialog/actions";
+import * as Browser from "ui/browser";
 import Sandwich from "ui/mainmenu/sandwich/Sandwich";
 import Logo from "ui/mainmenu/logo/Logo";
 import { useScrollShadow } from "ui/mainmenu/scroll-shadow";
@@ -32,7 +32,6 @@ export default function MobileMainMenu({shadow: hasShadow, menuItems}: Props) {
     const connectedToHome = useSelector(isConnectedToHome);
     const showConnectionsDialog = useSelector((state: ClientState) => state.home.connectionsDialog.show);
     const {shadow, sentinel} = useScrollShadow();
-    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const buttons = menuItems ?? [
@@ -57,9 +56,9 @@ export default function MobileMainMenu({shadow: hasShadow, menuItems}: Props) {
                         </Button>
                 ))}
                 {!connectedToHome &&
-                    <Button variant="primary" onClick={() => dispatch(openConnectDialog())}>
+                    <Jump className="btn btn-primary" href={Browser.urlWithBackHref("/connect")}>
                         {t("connect")}
-                    </Button>
+                    </Jump>
                 }
             </header>
             <RefreshIndicator/>

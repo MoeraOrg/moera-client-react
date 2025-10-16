@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 
 import { NodeName, PrivateMediaFileInfo, SourceFormat, VerifiedMediaFile } from "api";
-import * as Browser from "ui/browser";
 import { RichTextEditorCommandsContext } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import {
     getTextSelection,
@@ -24,6 +23,7 @@ import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-tex
 import { htmlEntities } from "util/html";
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
+import { universalLocation } from "util/universal-url";
 
 interface Props {
     format: SourceFormat;
@@ -192,7 +192,7 @@ export default function MarkdownEditorCommands({
                     insertText(textArea.current, mentionName(nodeName, fullName))
                 } else {
                     const text = (fullName || NodeName.shorten(nodeName)) ?? nodeName ?? "";
-                    const href = Browser.universalLocation(null, nodeName, null, "/");
+                    const href = universalLocation(null, nodeName, null, "/");
                     insertText(textArea.current,
                         `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(nodeName ?? "")}" data-href="/">`
                         + `${htmlEntities(text)}</a>`);

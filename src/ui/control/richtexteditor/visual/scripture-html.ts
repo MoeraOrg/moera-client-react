@@ -28,7 +28,8 @@ import {
     isScriptureRegularInline,
     isScriptureSimpleBlock,
     isScriptureSuperBlock,
-    isScriptureText, isScriptureVoid,
+    isScriptureText,
+    isScriptureVoid,
     isScriptureVoidBlock,
     Scripture,
     ScriptureDescendant,
@@ -37,9 +38,9 @@ import {
     ScriptureText
 } from "ui/control/richtexteditor/visual/scripture";
 import { findStandardSize, getImageDimensions } from "ui/control/richtexteditor/media/rich-text-image";
-import * as Browser from "ui/browser";
 import { htmlEntities, htmlToEmoji, linefeedsToHtml, safeImportHtml, unhtmlEntities } from "util/html";
 import { isNumericString, notNull } from "util/misc";
+import { universalLocation } from "util/universal-url";
 
 export function htmlToScripture(
     text?: string | Scripture | null | undefined, cleanup?: boolean, media?: PrivateMediaFileInfo[] | null
@@ -312,7 +313,7 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 context.output += "</mr-spoiler-block>";
                 return;
             case "mention":
-                const href = Browser.universalLocation(null, node.nodeName, null, "/");
+                const href = universalLocation(null, node.nodeName, null, "/");
                 context.output += `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(node.nodeName)}"`
                 context.output += ' data-href="/">';
                 scriptureNodesToHtml(node.children as ScriptureDescendant[], context);

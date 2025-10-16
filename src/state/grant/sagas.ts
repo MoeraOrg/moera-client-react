@@ -1,8 +1,14 @@
+import * as URI from 'uri-js';
+
 import { executor } from "state/executor";
+import { Node } from "api";
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import { dispatch, select } from "state/store-sagas";
 import { homeIntroduced } from "state/init-barriers";
+import { getNodeUri } from "state/naming/sagas";
+import { isConnectedToHome } from "state/home/selectors";
+import { goToLocation } from "state/navigation/actions";
 import {
     GrantConfirmAction,
     grantConfirmed,
@@ -10,9 +16,8 @@ import {
     GrantValidateAction,
     grantValidated
 } from "state/grant/actions";
-import { Node } from "api";
-import { getNodeUri } from "state/naming/sagas";
 import { REL_HOME } from "util/rel-node-name";
+import { urlWithParameters } from "util/url";
 
 export default [
     executor("GRANT_VALIDATE", null, grantValidateSaga),
@@ -22,11 +27,18 @@ export default [
 
 async function grantValidateSaga(action: WithContext<GrantValidateAction>): Promise<void> {
     await homeIntroduced();
-    const {clientName, carte, scopes} = select(state => ({
+    const {clientName, carte, scopes, redirectUri, connectedToHome} = select(state => ({
         clientName: state.grant.clientName,
         carte: state.grant.carte,
-        scopes: state.grant.scopes
+        scopes: state.grant.scopes,
+        redirectUri: state.grant.redirectUri,
+        connectedToHome: isConnectedToHome(state)
     }));
+
+    if (!connectedToHome) {
+        openConnectPage(clientName, carte, scopes, redirectUri);
+        return;
+    }
 
     if (!clientName) {
         dispatch(grantValidated(false, "Client name is not set").causedBy(action));
@@ -61,6 +73,17 @@ async function grantValidateSaga(action: WithContext<GrantValidateAction>): Prom
     } catch (e) {
         dispatch(grantValidated(false, String(e)).causedBy(action));
     }
+}
+
+function openConnectPage(clientName: string, carte: string, scopes: string[], redirectUri: string | null): void {
+    const backHref = urlWithParameters("/grant", {
+        client_id: clientName,
+        cliend_secret: carte,
+        scope: scopes.join(","),
+        redirect_uri: redirectUri
+    });
+    const {path = null, query = null} = URI.parse(urlWithParameters("/connect", {back: backHref}));
+    dispatch(goToLocation(path, query, null));
 }
 
 async function grantConfirmSaga(action: WithContext<GrantConfirmAction>): Promise<void> {

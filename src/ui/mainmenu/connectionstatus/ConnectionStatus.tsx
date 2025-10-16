@@ -4,12 +4,13 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
-import { openConnectDialog } from "state/connectdialog/actions";
+import * as Browser from "ui/browser";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { Button, LoadingInline } from "ui/control";
+import Jump from "ui/navigation/Jump";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
-import InstantButton from "ui/instant/InstantButton";
 import ConnectionsButton from "ui/mainmenu/connections/ConnectionsButton";
+import InstantButton from "ui/instant/InstantButton";
 import "./ConnectionStatus.css";
 
 export default function ConnectionStatus() {
@@ -24,9 +25,9 @@ export default function ConnectionStatus() {
     if (!connected) {
         return (
             <div className="connection-status not-connected">
-                <Button variant="outline-primary" onClick={() => dispatch(openConnectDialog())}>
+                <Jump className="btn btn-outline-primary" href={Browser.urlWithBackHref("/connect")}>
                     {t("connect")}
-                </Button>
+                </Jump>
                 <Button variant="primary" onClick={() => dispatch(openSignUpDialog())}>
                     {t("sign-up")}
                 </Button>

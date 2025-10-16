@@ -4,9 +4,10 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
-import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
+import * as Browser from "ui/browser";
 import { Button } from "ui/control";
+import Jump from "ui/navigation/Jump";
 import "./Invitation.css";
 
 export default function Invitation() {
@@ -25,7 +26,7 @@ export default function Invitation() {
                 <Trans i18nKey="invitation-buttons">
                     <Button variant="primary" size="lg" onClick={() => dispatch(openSignUpDialog())}/>
                     <div className="or"/>
-                    <Button variant="success" size="lg" onClick={() => dispatch(openConnectDialog())}/>
+                    <Jump className="btn btn-success btn-lg" href={Browser.urlWithBackHref("/connect")}/>
                 </Trans>
             </div>
         </div>
