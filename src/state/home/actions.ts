@@ -16,9 +16,11 @@ export const connectToHome = (
 ): ConnectToHomeAction =>
     actionWithPayload("CONNECT_TO_HOME", {location, assign, login, password, oldPassword, resetToken});
 
-export type ConnectionToHomeFailedAction = ActionWithoutPayload<"CONNECTION_TO_HOME_FAILED">;
-export const connectionToHomeFailed = (): ConnectionToHomeFailedAction =>
-    actionWithoutPayload("CONNECTION_TO_HOME_FAILED");
+export type ConnectionToHomeFailedAction = ActionWithPayload<"CONNECTION_TO_HOME_FAILED", {
+    error: string;
+}>;
+export const connectionToHomeFailed = (error: string): ConnectionToHomeFailedAction =>
+    actionWithPayload("CONNECTION_TO_HOME_FAILED", {error});
 
 interface ConnectedToHomePayload {
     location: string;

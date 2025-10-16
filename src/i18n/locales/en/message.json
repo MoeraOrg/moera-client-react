@@ -473,6 +473,7 @@
   "no-blocking": "No blocking.",
   "node-name-not-exists": "No node with such name exist.",
   "node-settings-changed-conflict": "Blog settings were changed by somebody.",
+  "node-url-not-found": "Node URL not found",
   "no-kick": "Do not kick",
   "no-name-known": "no name known",
   "no-notifications": "No notifications",

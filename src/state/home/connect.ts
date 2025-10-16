@@ -1,9 +1,6 @@
-import i18n from 'i18next';
-
 import { Node, NodeApiError, selectApi } from "api";
 import { Storage } from "storage";
 import { getNodeUri } from "state/naming/sagas";
-import { messageBox } from "state/messagebox/actions";
 import {
     connectionToHomeFailed,
     ConnectToHomeAction,
@@ -31,25 +28,24 @@ export default [
 function connectToHomeFailure(action: WithContext<ConnectToHomeAction>, error: any): void {
     const {location, login} = action.payload;
 
-    dispatch(connectionToHomeFailed().causedBy(action));
     let message = typeof(error) === "string" ? error : error.message;
     if (error instanceof NodeApiError) {
         switch (error.errorCode) {
             case "credentials.wrong-reset-token":
-                message = i18n.t("wrong-reset-token");
+                message = "wrong-reset-token";
                 break;
             case "credentials.reset-token-expired":
-                message = i18n.t("reset-token-expired");
+                message = "reset-token-expired";
                 dispatch(connectDialogSetForm(location, login, "forgot").causedBy(action));
                 break;
             case "credentials.login-incorrect":
-                message = i18n.t("login-incorrect");
+                message = "login-incorrect";
                 break;
             default:
                 break;
         }
     }
-    dispatch(messageBox(message).causedBy(action));
+    dispatch(connectionToHomeFailed(message).causedBy(action));
 }
 
 async function connectToHomeSaga(action: WithContext<ConnectToHomeAction>): Promise<void> {
@@ -75,7 +71,7 @@ async function connectToHomeSaga(action: WithContext<ConnectToHomeAction>): Prom
 
     const nodeUrl = normalizeUrl((await selectApi(action, location)).rootLocation);
     if (nodeUrl == null) {
-        connectToHomeFailure(action, "Node URL not found");
+        connectToHomeFailure(action, "node-url-not-found");
         return;
     }
     Storage.storeConnectionData(nodeUrl, null, null, null, login, info.token, info.permissions);

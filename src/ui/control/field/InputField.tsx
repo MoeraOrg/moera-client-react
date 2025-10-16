@@ -21,6 +21,7 @@ interface Props {
     autoFocus?: boolean;
     anyValue?: boolean;
     errorsOnly?: boolean;
+    error?: string | null;
     className?: string;
     autoComplete?: string;
     noFeedback?: boolean;
@@ -31,8 +32,8 @@ interface Props {
 function InputFieldImpl(
     {
         name, title, placeholder, disabled, maxLength, horizontal = false, layout, groupClassName, labelClassName,
-        inputClassName, col, autoFocus, anyValue, errorsOnly, className, autoComplete, noFeedback = false, initialValue,
-        defaultValue
+        inputClassName, col, autoFocus, anyValue, errorsOnly, error: externalError, className, autoComplete,
+        noFeedback = false, initialValue, defaultValue
     }: Props,
     ref: ForwardedRef<HTMLInputElement>
 ) {
@@ -44,8 +45,10 @@ function InputFieldImpl(
         }
     }, [autoFocus]);
 
-    const [inputProps, {touched, error}, , {undo, reset, onUndo, onReset}] =
+    const [inputProps, {touched, error: fieldError}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<string>(name, initialValue, defaultValue);
+
+    const error = externalError ?? (touched ? fieldError : undefined);
 
     return (
         <FormGroup
@@ -67,8 +70,8 @@ function InputFieldImpl(
                     type={!name.toLowerCase().includes("password") ? "text" : "password"}
                     className={cx(
                         "form-control", {
-                            "is-valid": !anyValue && !errorsOnly && touched && !error,
-                            "is-invalid": !anyValue && touched && error,
+                            "is-valid": !anyValue && !errorsOnly && !error,
+                            "is-invalid": !anyValue && error,
                             [className!]: !!className
                         },
                         inputClassName
@@ -79,7 +82,7 @@ function InputFieldImpl(
                     maxLength={maxLength}
                     ref={composeRefs(ref, inputRef)}
                 />
-                {!noFeedback && touched && <FieldError error={error}/>}
+                {!noFeedback && error && <FieldError error={error}/>}
             </Wrapper>
         </FormGroup>
     );

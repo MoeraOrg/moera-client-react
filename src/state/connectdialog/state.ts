@@ -8,4 +8,6 @@ export interface ConnectDialogState {
     resettingPassword: boolean;
     emailHint: string;
     backHref: string;
+    lastError: string | null;
+    formId: number;
 }

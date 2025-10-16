@@ -473,6 +473,7 @@
   "no-blocking": "Brak blokowania.",
   "node-name-not-exists": "Nie istnieje węzeł o takiej nazwie.",
   "node-settings-changed-conflict": "Ustawienia bloga zostały zmienione przez kogoś innego.",
+  "node-url-not-found": "URL węzła nie znaleziono",
   "no-kick": "Nie wyrzucaj",
   "no-name-known": "nieznana nazwa",
   "no-notifications": "Brak powiadomień",

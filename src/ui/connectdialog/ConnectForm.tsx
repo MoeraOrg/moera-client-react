@@ -1,14 +1,14 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { NamingRules } from "api";
 import { tTitle } from "i18n";
+import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { connectToHome } from "state/home/actions";
 import { connectDialogSetForm } from "state/connectdialog/actions";
-import { ConnectDialogForm } from "state/connectdialog/state";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
@@ -26,12 +26,20 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function ConnectForm({values, submitForm}: Props) {
+function ConnectForm(props: Props) {
+    const {values, dirty, resetForm} = props;
+
+    const formId = useSelector((state: ClientState) => state.connectDialog.formId);
+    const lastError = useSelector((state: ClientState) => state.connectDialog.lastError);
+    const connecting = useSelector((state: ClientState) => state.home.connecting);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const setForm = (form: ConnectDialogForm) =>
-        dispatch(connectDialogSetForm(values.location, "admin", form));
+    useEffect(() => {
+        const values = connectFormLogic.mapPropsToValues(props);
+        resetForm({values});
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formId]); // 'props' are missing on purpose
 
     const onSignUp = (event: React.MouseEvent) => {
         dispatch(openSignUpDialog());
@@ -39,17 +47,24 @@ function ConnectForm({values, submitForm}: Props) {
     };
 
     const onForgotPassword = (event: React.MouseEvent) => {
-        setForm("forgot");
+        dispatch(connectDialogSetForm(values.location, "admin", "forgot"));
         event.preventDefault();
     }
+
+    const formError = !dirty ? lastError : undefined;
+    const disabled = !values.location || !values.password || !isLocationValid(values.location) || connecting;
 
     return (
         <Form>
             <div className="title">{t("connect")}</div>
             <InputField name="location" title={tTitle(t("blog-name"))} placeholder={t("enter-blog-name")} errorsOnly
-                        autoFocus/>
-            <InputField name="password" title={t("password")} placeholder={t("password")} errorsOnly/>
-            <Button type="submit" variant="primary" className="submit-button">{t("connect")}</Button>
+                        noFeedback error={formError} autoFocus/>
+            <InputField name="password" title={t("password")} placeholder={t("password")} errorsOnly noFeedback
+                        error={formError}/>
+            {formError && <div className="form-error">{t(formError)}</div>}
+            <Button type="submit" variant="primary" className="submit-button" disabled={disabled} loading={connecting}>
+                {t("connect")}
+            </Button>
             <div className="link mt-3">
                 {t("forgot-password")}{" "}
                 <Button variant="link" onClick={onForgotPassword}>{t("reset")}</Button>
@@ -60,6 +75,10 @@ function ConnectForm({values, submitForm}: Props) {
             </div>
         </Form>
     );
+}
+
+function isLocationValid(location: string) {
+    return isUrl(location) || NamingRules.isRegisteredNameValid(location);
 }
 
 const connectFormLogic = {
@@ -75,7 +94,7 @@ const connectFormLogic = {
         const location = values.location.trim();
         if (!location) {
             errors.location = "must-not-empty";
-        } else if (!isUrl(location) && !NamingRules.isRegisteredNameValid(location)) {
+        } else if (!isLocationValid(location)) {
             errors.location = "name-or-node-url-not-valid";
         }
         if (!values.password) {

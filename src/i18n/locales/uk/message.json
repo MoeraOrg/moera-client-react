@@ -473,6 +473,7 @@
   "no-blocking": "Немає блокування.",
   "node-name-not-exists": "Не існує блогу з цим ім'ям.",
   "node-settings-changed-conflict": "Налаштування блога були кимось змінені.",
+  "node-url-not-found": "URL вузла не знайдено",
   "no-kick": "Не виганяти",
   "no-name-known": "невідоме ім'я",
   "no-notifications": "Немає повідомлень",
