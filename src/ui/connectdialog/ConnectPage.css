@@ -28,6 +28,21 @@
     margin-bottom: 2rem;
 }
 
+.connect-page .title:has(~ .instructions) {
+    margin-bottom: .75rem;
+}
+
+.connect-page .instructions {
+    font-family: var(--font-messages) sans-serif;
+    font-weight: 400;
+    font-size: 1.12rem;
+    line-height: 156%;
+    text-align: center;
+    text-wrap: balance;
+    color: var(--bs-gray-600);
+    margin-bottom: 2rem;
+}
+
 .connect-page .form-error {
     margin-top: 1rem;
     width: 100%;

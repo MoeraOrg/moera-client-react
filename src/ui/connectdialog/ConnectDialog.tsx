@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { NodeName } from "api";
 import { ClientState } from "state/state";
 import { getOwnerNameOrUrl } from "state/node/selectors";
-import ForgotForm from "ui/connectdialog/ForgotForm";
 import ResetForm from "ui/connectdialog/ResetForm";
 
 export default function ConnectDialog() {
@@ -14,7 +13,6 @@ export default function ConnectDialog() {
 
     return (
         <>
-            {form === "forgot" && <ForgotForm location={location} nodeRoot={nodeRoot}/>}
             {form === "reset" && <ResetForm location={location} nodeRoot={nodeRoot}/>}
         </>
     );

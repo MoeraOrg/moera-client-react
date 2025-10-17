@@ -1,13 +1,14 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
-import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
+import { Trans, useTranslation } from 'react-i18next';
 
+import { tTitle } from "i18n";
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
-import { connectDialogResetPassword, connectDialogSetForm } from "state/connectdialog/actions";
+import { connectDialogResetPassword } from "state/connectdialog/actions";
+import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
-import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
 
 interface OuterProps {
     location: string;
@@ -22,23 +23,21 @@ type Props = OuterProps & FormikProps<Values>;
 
 function ForgotForm({values}: Props) {
     const resettingPassword = useSelector((state: ClientState) => state.connectDialog.resettingPassword);
-    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const onMail = (event: React.MouseEvent) => {
-        dispatch(connectDialogSetForm(values.location, "admin", "reset"));
-        event.preventDefault();
-    }
+    const disabled = !values.location || resettingPassword;
 
     return (
-        <ConnectDialogModal title={t("forgot-home-password")} buttonCaption={t("reset-password")}
-                            loading={resettingPassword}>
-            <div className="instructions">{t("reset-password-instructions")}</div>
-            <InputField name="location" title={t("blog-name")} autoFocus/>
-            <div className="links">
-                <button className="btn btn-link" onClick={onMail}>{t("received-mail")}</button>
-            </div>
-        </ConnectDialogModal>
+        <Form>
+            <div className="title">{tTitle(t("password-recovery"))}</div>
+            <div className="instructions"><Trans i18nKey="reset-password-instructions"/></div>
+            <InputField name="location" title={tTitle(t("blog-name"))} placeholder={t("enter-blog-name")} errorsOnly
+                        noFeedback autoFocus/>
+            <Button type="submit" variant="primary" className="submit-button" disabled={disabled}
+                    loading={resettingPassword}>
+                {t("reset-password")}
+            </Button>
+        </Form>
     );
 }
 
@@ -64,4 +63,5 @@ const forgotFormLogic = {
     }
 
 };
+
 export default withFormik(forgotFormLogic)(ForgotForm);
