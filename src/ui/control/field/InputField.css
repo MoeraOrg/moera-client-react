@@ -1,0 +1,24 @@
+.password-field {
+    position: relative;
+}
+
+.password-field .form-control {
+    padding-right: calc(1.5em + 0.75rem);
+}
+
+.password-field .show-password {
+    position: absolute;
+    top: .5em;
+    right: .5em;
+    width: 3em;
+    height: 3em;
+    z-index: var(--zindex-text-overlay);
+    font-size: 60%;
+    background: none;
+    border: none;
+    color: var(--bs-gray-600);
+}
+
+.password-field .show-password:hover {
+    color: var(--bs-gray-800);
+}
