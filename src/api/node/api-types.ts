@@ -371,6 +371,10 @@ export interface CredentialsCreated {
     created: boolean;
 }
 
+export interface CredentialsResetToken {
+    token: string;
+}
+
 export interface DeleteNodeStatus {
     requested: boolean;
 }
@@ -1269,6 +1273,12 @@ export interface UserListSliceInfo {
     total: number;
     totalInPast: number;
     totalInFuture: number;
+}
+
+export interface VerificationInfo {
+    correct: boolean;
+    errorCode?: string | null;
+    errorMessage?: string | null;
 }
 
 export interface WhoAmI {

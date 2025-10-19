@@ -7,8 +7,9 @@ const initialState: ConnectDialogState = {
     location: "",
     login: "admin",
     form: "connect" as const,
-    resettingPassword: false,
+    processing: false,
     emailHint: "",
+    resetToken: null,
     backHref: "",
     lastError: null,
     formId: 0
@@ -21,9 +22,10 @@ export default (state: ConnectDialogState = initialState, action: ClientAction):
                 return {
                     ...state,
                     form: "connect",
-                    resettingPassword: false,
+                    processing: false,
                     emailHint: "",
                     backHref: action.payload.details.backHref,
+                    lastError: null,
                     formId: state.formId + 1
                 };
             }
@@ -34,7 +36,7 @@ export default (state: ConnectDialogState = initialState, action: ClientAction):
                 ...state,
                 show: true,
                 form: "connect",
-                resettingPassword: false,
+                processing: false,
                 emailHint: "",
                 formId: state.formId + 1
             };
@@ -87,20 +89,38 @@ export default (state: ConnectDialogState = initialState, action: ClientAction):
                 location: action.payload.location,
                 login: action.payload.login,
                 form: action.payload.form,
-                resettingPassword: false,
+                processing: false,
+                lastError: null,
                 formId: state.formId + 1
             };
 
         case "CONNECT_DIALOG_RESET_PASSWORD":
             return {
                 ...state,
-                resettingPassword: true
+                processing: true
             };
 
         case "CONNECT_DIALOG_RESET_PASSWORD_FAILED":
             return {
                 ...state,
-                resettingPassword: false
+                lastError: action.payload.error,
+                processing: false,
+                formId: state.formId + 1
+            };
+
+        case "CONNECT_DIALOG_VERIFY_CODE":
+            return {
+                ...state,
+                resetToken: action.payload.resetToken,
+                processing: true
+            };
+
+        case "CONNECT_DIALOG_VERIFY_CODE_FAILED":
+            return {
+                ...state,
+                lastError: action.payload.error,
+                processing: false,
+                formId: state.formId + 1
             };
 
         case "CONNECT_DIALOG_SET_EMAIL_HINT":

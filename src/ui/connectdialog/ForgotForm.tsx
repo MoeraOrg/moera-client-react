@@ -21,11 +21,13 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function ForgotForm({values}: Props) {
-    const resettingPassword = useSelector((state: ClientState) => state.connectDialog.resettingPassword);
+function ForgotForm({location, values, dirty}: Props) {
+    const processing = useSelector((state: ClientState) => state.connectDialog.processing);
+    const lastError = useSelector((state: ClientState) => state.connectDialog.lastError);
     const {t} = useTranslation();
 
-    const disabled = !values.location || resettingPassword;
+    const formError = !dirty ? lastError : undefined;
+    const disabled = !values.location || processing;
 
     return (
         <Form>
@@ -33,8 +35,8 @@ function ForgotForm({values}: Props) {
             <div className="instructions"><Trans i18nKey="reset-password-instructions"/></div>
             <InputField name="location" title={tTitle(t("blog-name"))} placeholder={t("enter-blog-name")} errorsOnly
                         noFeedback autoFocus/>
-            <Button type="submit" variant="primary" className="submit-button" disabled={disabled}
-                    loading={resettingPassword}>
+            {formError && <div className="form-error">{t(formError, {location})}</div>}
+            <Button type="submit" variant="primary" className="submit-button" disabled={disabled} loading={processing}>
                 {t("reset-password")}
             </Button>
         </Form>

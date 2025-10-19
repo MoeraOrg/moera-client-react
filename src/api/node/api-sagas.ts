@@ -556,6 +556,17 @@ export async function resetCredentials(
     });
 }
 
+export async function verifyCredentialsResetToken(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, resetToken: API.CredentialsResetToken,
+    errorFilter: ErrorFilter = false
+): Promise<API.VerificationInfo> {
+
+    const location = "/credentials/reset/verify";
+    return callApi<API.VerificationInfo>({
+        caller, nodeName, method: "POST", location, body: resetToken, schema: "VerificationInfo", errorFilter
+    });
+}
+
 export async function getDeletedPostings(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, page: number | null = null,
     limit: number | null = null, errorFilter: ErrorFilter = false, auth: true | string = true

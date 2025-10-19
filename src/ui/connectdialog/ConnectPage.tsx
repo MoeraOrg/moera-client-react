@@ -7,6 +7,7 @@ import { getOwnerNameOrUrl } from "state/node/selectors";
 import GlobalTitle from "ui/mainmenu/GlobalTitle";
 import ConnectForm from "ui/connectdialog/ConnectForm";
 import ForgotForm from "ui/connectdialog/ForgotForm";
+import VerifyForm from "ui/connectdialog/VerifyForm";
 import "./ConnectPage.css"
 
 export default function ConnectPage() {
@@ -21,6 +22,7 @@ export default function ConnectPage() {
             <div className="connect-page">
                 {form === "connect" && <ConnectForm location={location} nodeRoot={nodeRoot}/>}
                 {form === "forgot" && <ForgotForm location={location} nodeRoot={nodeRoot}/>}
+                {form === "verify" && <VerifyForm location={location} nodeRoot={nodeRoot}/>}
             </div>
         </>
     );

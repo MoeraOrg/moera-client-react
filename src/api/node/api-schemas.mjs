@@ -3176,6 +3176,27 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
+        VerificationInfo: {
+            type: "object",
+            properties: {
+                "correct": {
+                    type: "boolean"
+                },
+                "errorCode": {
+                    type: "string",
+                    nullable: true
+                },
+                "errorMessage": {
+                    type: "string",
+                    nullable: true
+                },
+            },
+            required: [
+                "correct",
+            ],
+            additionalProperties: false
+        },
+
         WhoAmI: {
             type: "object",
             properties: {

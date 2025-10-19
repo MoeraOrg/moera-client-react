@@ -25,9 +25,11 @@ export type ConnectDialogResetPasswordAction = ActionWithPayload<"CONNECT_DIALOG
 export const connectDialogResetPassword = (location: string): ConnectDialogResetPasswordAction =>
     actionWithPayload("CONNECT_DIALOG_RESET_PASSWORD", {location});
 
-export type ConnectDialogResetPasswordFailedAction = ActionWithoutPayload<"CONNECT_DIALOG_RESET_PASSWORD_FAILED">;
-export const connectDialogResetPasswordFailed = (): ConnectDialogResetPasswordFailedAction =>
-    actionWithoutPayload("CONNECT_DIALOG_RESET_PASSWORD_FAILED");
+export type ConnectDialogResetPasswordFailedAction = ActionWithPayload<"CONNECT_DIALOG_RESET_PASSWORD_FAILED", {
+    error: string;
+}>;
+export const connectDialogResetPasswordFailed = (error: string): ConnectDialogResetPasswordFailedAction =>
+    actionWithPayload("CONNECT_DIALOG_RESET_PASSWORD_FAILED", {error});
 
 export type ConnectDialogSetEmailHintAction = ActionWithPayload<"CONNECT_DIALOG_SET_EMAIL_HINT", {
     emailHint: string;
@@ -35,10 +37,25 @@ export type ConnectDialogSetEmailHintAction = ActionWithPayload<"CONNECT_DIALOG_
 export const connectDialogSetEmailHint = (emailHint: string): ConnectDialogSetEmailHintAction =>
     actionWithPayload("CONNECT_DIALOG_SET_EMAIL_HINT", {emailHint});
 
+export type ConnectDialogVerifyCodeAction = ActionWithPayload<"CONNECT_DIALOG_VERIFY_CODE", {
+    location: string;
+    resetToken: string;
+}>;
+export const connectDialogVerifyCode = (location: string, resetToken: string): ConnectDialogVerifyCodeAction =>
+    actionWithPayload("CONNECT_DIALOG_VERIFY_CODE", {location, resetToken});
+
+export type ConnectDialogVerifyCodeFailedAction = ActionWithPayload<"CONNECT_DIALOG_VERIFY_CODE_FAILED", {
+    error: string;
+}>;
+export const connectDialogVerifyCodeFailed = (error: string): ConnectDialogVerifyCodeFailedAction =>
+    actionWithPayload("CONNECT_DIALOG_VERIFY_CODE_FAILED", {error});
+
 export type ConnectDialogAnyAction =
     OpenConnectDialogAction
     | CancelConnectDialogAction
     | ConnectDialogSetFormAction
     | ConnectDialogResetPasswordAction
     | ConnectDialogResetPasswordFailedAction
-    | ConnectDialogSetEmailHintAction;
+    | ConnectDialogSetEmailHintAction
+    | ConnectDialogVerifyCodeAction
+    | ConnectDialogVerifyCodeFailedAction;

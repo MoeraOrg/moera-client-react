@@ -43,6 +43,10 @@
     margin-bottom: 2rem;
 }
 
+.connect-page .hint {
+    margin-bottom: 2rem;
+}
+
 .connect-page .form-error {
     margin-top: 1rem;
     width: 100%;

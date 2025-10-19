@@ -1,12 +1,13 @@
-export type ConnectDialogForm = "connect" | "forgot" | "reset";
+export type ConnectDialogForm = "connect" | "forgot" | "verify" | "reset";
 
 export interface ConnectDialogState {
     show: boolean;
     location: string;
     login: string;
     form: ConnectDialogForm;
-    resettingPassword: boolean;
+    processing: boolean;
     emailHint: string;
+    resetToken: string | null;
     backHref: string;
     lastError: string | null;
     formId: number;
