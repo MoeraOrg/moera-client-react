@@ -6,10 +6,10 @@ import { Trans, useTranslation } from 'react-i18next';
 import { tTitle } from "i18n";
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
-import { connectDialogResetPassword, connectDialogVerifyCode } from "state/connectdialog/actions";
+import { connectPageResetPassword, connectPageVerifyCode } from "state/connectpage/actions";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
-import { useWaitTill } from "ui/connectdialog/wait-till";
+import { useWaitTill } from "ui/connectpage/wait-till";
 
 interface OuterProps {
     location: string;
@@ -23,12 +23,12 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function VerifyForm({location, nodeRoot, values, dirty, resetForm}: Props) {
-    const emailHint = useSelector((state: ClientState) => state.connectDialog.emailHint);
-    const processing = useSelector((state: ClientState) => state.connectDialog.processing);
-    const lastError = useSelector((state: ClientState) => state.connectDialog.lastError);
-    const mailAfter = useSelector((state: ClientState) => state.connectDialog.mailAfter);
+    const emailHint = useSelector((state: ClientState) => state.connectPage.emailHint);
+    const processing = useSelector((state: ClientState) => state.connectPage.processing);
+    const lastError = useSelector((state: ClientState) => state.connectPage.lastError);
+    const mailAfter = useSelector((state: ClientState) => state.connectPage.mailAfter);
     const waitMail = useWaitTill(mailAfter);
-    const formId = useSelector((state: ClientState) => state.connectDialog.formId);
+    const formId = useSelector((state: ClientState) => state.connectPage.formId);
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -39,7 +39,7 @@ function VerifyForm({location, nodeRoot, values, dirty, resetForm}: Props) {
 
     const onTryAgain = (event: React.MouseEvent) => {
         const target = location || nodeRoot || "";
-        dispatch(connectDialogResetPassword(target));
+        dispatch(connectPageResetPassword(target));
         event.preventDefault();
     }
 
@@ -88,7 +88,7 @@ const verifyFormLogic = {
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         const location = formik.props.location || formik.props.nodeRoot || "";
-        dispatch(connectDialogVerifyCode(location, values.resetToken.trim()));
+        dispatch(connectPageVerifyCode(location, values.resetToken.trim()));
         formik.setSubmitting(false);
     }
 

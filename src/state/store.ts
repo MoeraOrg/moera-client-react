@@ -13,7 +13,7 @@ import node from "state/node/reducer";
 import home from "state/home/reducer";
 import tokens from "state/tokens/reducer";
 import navigation from "state/navigation/reducer";
-import connectDialog from "state/connectdialog/reducer";
+import connectPage from "state/connectpage/reducer";
 import nodeName from "state/nodename/reducer";
 import profile from "state/profile/reducer";
 import detailedPosting from "state/detailedposting/reducer";
@@ -60,7 +60,7 @@ import navigationExecutors from "state/navigation/sagas";
 import errorExecutors from "state/error/sagas";
 import nodeExecutors from "state/node/sagas";
 import connectExecutors from "state/home/connect";
-import connectDialogExecutors from "state/connectdialog/sagas";
+import connectPageExecutors from "state/connectpage/sagas";
 import homeExecutors from "state/home/sagas";
 import cartesExecutors from "state/cartes/sagas";
 import nodeNameExecutors from "state/nodename/sagas";
@@ -138,7 +138,7 @@ const reducers = combineReducers({
     home,
     tokens,
     navigation,
-    connectDialog,
+    connectPage,
     nodeName,
     profile,
     detailedPosting,
@@ -224,7 +224,7 @@ const executors = collectExecutors(
     errorExecutors,
     nodeExecutors,
     connectExecutors,
-    connectDialogExecutors,
+    connectPageExecutors,
     homeExecutors,
     nodeNameExecutors,
     cartesExecutors,

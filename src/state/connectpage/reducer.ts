@@ -1,8 +1,8 @@
 import { NodeName } from "api";
 import { ClientAction } from "state/action";
-import { ConnectDialogState } from "state/connectdialog/state";
+import { ConnectPageState } from "state/connectpage/state";
 
-const initialState: ConnectDialogState = {
+const initialState: ConnectPageState = {
     location: "",
     login: "admin",
     form: "connect" as const,
@@ -16,7 +16,7 @@ const initialState: ConnectDialogState = {
     mailAfter: new Date()
 };
 
-export default (state: ConnectDialogState = initialState, action: ClientAction): ConnectDialogState => {
+export default (state: ConnectPageState = initialState, action: ClientAction): ConnectPageState => {
     switch (action.type) {
         case "GO_TO_PAGE":
             if (action.payload.page === "connect") {
@@ -67,7 +67,7 @@ export default (state: ConnectDialogState = initialState, action: ClientAction):
                 return state;
             }
 
-        case "CONNECT_DIALOG_SET_FORM":
+        case "CONNECT_PAGE_SET_FORM":
             return {
                 ...state,
                 location: action.payload.location,
@@ -78,13 +78,13 @@ export default (state: ConnectDialogState = initialState, action: ClientAction):
                 formId: state.formId + 1
             };
 
-        case "CONNECT_DIALOG_RESET_PASSWORD":
+        case "CONNECT_PAGE_RESET_PASSWORD":
             return {
                 ...state,
                 processing: true
             };
 
-        case "CONNECT_DIALOG_RESET_PASSWORD_FAILED":
+        case "CONNECT_PAGE_RESET_PASSWORD_FAILED":
             return {
                 ...state,
                 lastError: action.payload.error,
@@ -92,14 +92,14 @@ export default (state: ConnectDialogState = initialState, action: ClientAction):
                 formId: state.formId + 1
             };
 
-        case "CONNECT_DIALOG_VERIFY_CODE":
+        case "CONNECT_PAGE_VERIFY_CODE":
             return {
                 ...state,
                 resetToken: action.payload.resetToken,
                 processing: true
             };
 
-        case "CONNECT_DIALOG_VERIFY_CODE_FAILED":
+        case "CONNECT_PAGE_VERIFY_CODE_FAILED":
             return {
                 ...state,
                 lastError: action.payload.error,
@@ -107,19 +107,19 @@ export default (state: ConnectDialogState = initialState, action: ClientAction):
                 formId: state.formId + 1
             };
 
-        case "CONNECT_DIALOG_SET_EMAIL_HINT":
+        case "CONNECT_PAGE_SET_EMAIL_HINT":
             return {
                 ...state,
                 emailHint: action.payload.emailHint
             };
 
-        case "CONNECT_DIALOG_CONNECT_AFTER":
+        case "CONNECT_PAGE_CONNECT_AFTER":
             return {
                 ...state,
                 connectAfter: action.payload.after
             };
 
-        case "CONNECT_DIALOG_MAIL_AFTER":
+        case "CONNECT_PAGE_MAIL_AFTER":
             return {
                 ...state,
                 mailAfter: action.payload.after

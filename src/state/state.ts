@@ -6,7 +6,7 @@ import { ChangeDateDialogState } from "state/changedatedialog/state";
 import { ComplaintsState } from "state/complaints/state";
 import { ComposeState } from "state/compose/state";
 import { ConfirmBoxState } from "state/confirmbox/state";
-import { ConnectDialogState } from "state/connectdialog/state";
+import { ConnectPageState } from "state/connectpage/state";
 import { ContactsState } from "state/contacts/state";
 import { DetailedPostingState } from "state/detailedposting/state";
 import { DonateDialogState } from "state/donatedialog/state";
@@ -55,7 +55,7 @@ export interface ClientState {
     complaints: ComplaintsState;
     compose: ComposeState;
     confirmBox: ConfirmBoxState;
-    connectDialog: ConnectDialogState;
+    connectPage: ConnectPageState;
     contacts: ContactsState;
     detailedPosting: DetailedPostingState;
     donateDialog: DonateDialogState;

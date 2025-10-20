@@ -15,7 +15,7 @@ import { getHomeConnectionData, getHomeRootPage } from "state/home/selectors";
 import { isAtNode } from "state/node/selectors";
 import { boot } from "state/navigation/actions";
 import { executor } from "state/executor";
-import { connectDialogConnectAfter, connectDialogSetForm } from "state/connectdialog/actions";
+import { connectPageConnectAfter, connectPageSetForm } from "state/connectpage/actions";
 import { normalizeUrl } from "util/url";
 import { REL_HOME } from "util/rel-node-name";
 import { toDocumentLocation } from "util/universal-url";
@@ -33,11 +33,11 @@ function connectToHomeFailure(action: WithContext<ConnectToHomeAction>, error: a
         switch (error.errorCode) {
             case "credentials.wrong-reset-token":
                 message = "wrong-reset-token";
-                dispatch(connectDialogSetForm(location, login, "verify").causedBy(action));
+                dispatch(connectPageSetForm(location, login, "verify").causedBy(action));
                 break;
             case "credentials.reset-token-expired":
                 message = "reset-token-expired";
-                dispatch(connectDialogSetForm(location, login, "forgot").causedBy(action));
+                dispatch(connectPageSetForm(location, login, "forgot").causedBy(action));
                 break;
             case "credentials.login-incorrect":
                 message = "login-incorrect";
@@ -48,7 +48,7 @@ function connectToHomeFailure(action: WithContext<ConnectToHomeAction>, error: a
     }
     if (error instanceof TooManyRequestsError) {
         message = "too-many-login-attempts";
-        dispatch(connectDialogConnectAfter(error.retryAfter).causedBy(action));
+        dispatch(connectPageConnectAfter(error.retryAfter).causedBy(action));
     }
     dispatch(connectionToHomeFailed(message).causedBy(action));
 }
@@ -81,7 +81,7 @@ async function connectToHomeSaga(action: WithContext<ConnectToHomeAction>): Prom
     }
     Storage.storeConnectionData(nodeUrl, null, null, null, login, info.token, info.permissions);
     const atNode = select(isAtNode);
-    const backHref = select(state => state.connectDialog.backHref);
+    const backHref = select(state => state.connectPage.backHref);
     dispatch(boot(!atNode || !backHref ? {} : toDocumentLocation({href: backHref})));
 }
 

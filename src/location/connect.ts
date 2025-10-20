@@ -15,8 +15,8 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
     info = info.sub("connect");
-    if (state.connectDialog.backHref) {
-        info = info.withParameter("back", state.connectDialog.backHref);
+    if (state.connectPage.backHref) {
+        info = info.withParameter("back", state.connectPage.backHref);
     }
     return info.noIndex().withTitle(i18n.t("connect"));
 }

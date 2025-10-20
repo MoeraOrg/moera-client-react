@@ -9,7 +9,7 @@ import { dispatch } from "state/store-sagas";
 import { connectToHome } from "state/home/actions";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
-import { useWaitTill } from "ui/connectdialog/wait-till";
+import { useWaitTill } from "ui/connectpage/wait-till";
 
 interface OuterProps {
     location: string;
@@ -26,10 +26,10 @@ type Props = OuterProps & FormikProps<Values>;
 
 function ResetForm({dirty, values, resetForm}: Props) {
     const connecting = useSelector((state: ClientState) => state.home.connecting);
-    const lastError = useSelector((state: ClientState) => state.connectDialog.lastError);
-    const connectAfter = useSelector((state: ClientState) => state.connectDialog.connectAfter);
+    const lastError = useSelector((state: ClientState) => state.connectPage.lastError);
+    const connectAfter = useSelector((state: ClientState) => state.connectPage.connectAfter);
     const waitConnect = useWaitTill(connectAfter);
-    const formId = useSelector((state: ClientState) => state.connectDialog.formId);
+    const formId = useSelector((state: ClientState) => state.connectPage.formId);
     const {t} = useTranslation();
 
     useEffect(() => {

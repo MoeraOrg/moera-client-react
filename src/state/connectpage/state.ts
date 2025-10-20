@@ -1,9 +1,9 @@
-export type ConnectDialogForm = "connect" | "forgot" | "verify" | "reset";
+export type ConnectPageForm = "connect" | "forgot" | "verify" | "reset";
 
-export interface ConnectDialogState {
+export interface ConnectPageState {
     location: string;
     login: string;
-    form: ConnectDialogForm;
+    form: ConnectPageForm;
     processing: boolean;
     emailHint: string;
     resetToken: string | null;

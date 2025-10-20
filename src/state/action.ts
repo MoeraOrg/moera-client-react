@@ -7,7 +7,7 @@ import { ChangeDateDialogAnyAction } from "state/changedatedialog/actions";
 import { ComplaintsAnyAction } from "state/complaints/actions";
 import { ComposeAnyAction } from "state/compose/actions";
 import { ConfirmBoxAnyAction } from "state/confirmbox/actions";
-import { ConnectDialogAnyAction } from "state/connectdialog/actions";
+import { ConnectPageAnyAction } from "state/connectpage/actions";
 import { ContactsAnyAction } from "state/contacts/actions";
 import { DetailedPostingAnyAction } from "state/detailedposting/actions";
 import { DonateDialogAnyAction } from "state/donatedialog/actions";
@@ -60,7 +60,7 @@ export type ClientAction =
     | ComplaintsAnyAction
     | ComposeAnyAction
     | ConfirmBoxAnyAction
-    | ConnectDialogAnyAction
+    | ConnectPageAnyAction
     | ContactsAnyAction
     | DonateDialogAnyAction
     | DetailedPostingAnyAction

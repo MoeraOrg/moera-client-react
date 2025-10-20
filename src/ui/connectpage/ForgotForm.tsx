@@ -6,10 +6,10 @@ import { Trans, useTranslation } from 'react-i18next';
 import { tTitle } from "i18n";
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
-import { connectDialogResetPassword } from "state/connectdialog/actions";
+import { connectPageResetPassword } from "state/connectpage/actions";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
-import { useWaitTill } from "ui/connectdialog/wait-till";
+import { useWaitTill } from "ui/connectpage/wait-till";
 
 interface OuterProps {
     location: string;
@@ -23,9 +23,9 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function ForgotForm({location, values, dirty}: Props) {
-    const processing = useSelector((state: ClientState) => state.connectDialog.processing);
-    const lastError = useSelector((state: ClientState) => state.connectDialog.lastError);
-    const mailAfter = useSelector((state: ClientState) => state.connectDialog.mailAfter);
+    const processing = useSelector((state: ClientState) => state.connectPage.processing);
+    const lastError = useSelector((state: ClientState) => state.connectPage.lastError);
+    const mailAfter = useSelector((state: ClientState) => state.connectPage.mailAfter);
     const waitMail = useWaitTill(mailAfter);
     const {t} = useTranslation();
 
@@ -63,7 +63,7 @@ const forgotFormLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        dispatch(connectDialogResetPassword(values.location.trim()));
+        dispatch(connectPageResetPassword(values.location.trim()));
         formik.setSubmitting(false);
     }
 

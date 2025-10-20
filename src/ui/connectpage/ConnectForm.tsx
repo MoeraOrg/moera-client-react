@@ -8,11 +8,11 @@ import { tTitle } from "i18n";
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { connectToHome } from "state/home/actions";
-import { connectDialogSetForm } from "state/connectdialog/actions";
+import { connectPageSetForm } from "state/connectpage/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
-import { useWaitTill } from "ui/connectdialog/wait-till";
+import { useWaitTill } from "ui/connectpage/wait-till";
 import { isUrl } from "util/url";
 
 interface OuterProps {
@@ -30,11 +30,11 @@ type Props = OuterProps & FormikProps<Values>;
 function ConnectForm(props: Props) {
     const {values, dirty, resetForm} = props;
 
-    const lastError = useSelector((state: ClientState) => state.connectDialog.lastError);
+    const lastError = useSelector((state: ClientState) => state.connectPage.lastError);
     const connecting = useSelector((state: ClientState) => state.home.connecting);
-    const connectAfter = useSelector((state: ClientState) => state.connectDialog.connectAfter);
+    const connectAfter = useSelector((state: ClientState) => state.connectPage.connectAfter);
     const waitConnect = useWaitTill(connectAfter);
-    const formId = useSelector((state: ClientState) => state.connectDialog.formId);
+    const formId = useSelector((state: ClientState) => state.connectPage.formId);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -50,7 +50,7 @@ function ConnectForm(props: Props) {
     };
 
     const onForgotPassword = (event: React.MouseEvent) => {
-        dispatch(connectDialogSetForm(values.location, "admin", "forgot"));
+        dispatch(connectPageSetForm(values.location, "admin", "forgot"));
         event.preventDefault();
     }
 
