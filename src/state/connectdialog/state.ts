@@ -11,4 +11,6 @@ export interface ConnectDialogState {
     backHref: string;
     lastError: string | null;
     formId: number;
+    connectAfter: Date;
+    mailAfter: Date;
 }

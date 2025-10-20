@@ -1,3 +1,5 @@
+import { addSeconds } from 'date-fns';
+
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { SafeValidationErrors } from "safe/message-types";
@@ -91,6 +93,19 @@ export class HomeNotConnectedError extends VerboseError {
 
     setQuery(method: string, location: string): void {
         this.messageVerbose = `${method} ${location}: ${this.message}`
+    }
+
+}
+
+export class TooManyRequestsError extends VerboseError {
+
+    retryAfter: Date;
+
+    constructor(waitFor: number, cause: WithContext<ClientAction> | null = null) {
+        const message = "Too many requests";
+        const messageVerbose = `Too many requests. Retry after ${waitFor}s`;
+        super(message, messageVerbose, cause);
+        this.retryAfter = addSeconds(Date.now(), waitFor);
     }
 
 }

@@ -15,6 +15,7 @@ export {
     NamingError,
     NodeError,
     NodeApiError,
+    TooManyRequestsError,
     VerboseError,
     formatSchemaErrors
 } from "api/error";

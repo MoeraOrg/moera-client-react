@@ -9,6 +9,7 @@ import { dispatch } from "state/store-sagas";
 import { connectDialogResetPassword, connectDialogVerifyCode } from "state/connectdialog/actions";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
+import { useWaitTill } from "ui/connectdialog/wait-till";
 
 interface OuterProps {
     location: string;
@@ -27,6 +28,8 @@ function VerifyForm(props: Props) {
     const emailHint = useSelector((state: ClientState) => state.connectDialog.emailHint);
     const processing = useSelector((state: ClientState) => state.connectDialog.processing);
     const lastError = useSelector((state: ClientState) => state.connectDialog.lastError);
+    const mailAfter = useSelector((state: ClientState) => state.connectDialog.mailAfter);
+    const waitMail = useWaitTill(mailAfter);
     const formId = useSelector((state: ClientState) => state.connectDialog.formId);
     const {t} = useTranslation();
 
@@ -59,7 +62,11 @@ function VerifyForm(props: Props) {
             </Button>
             <div className="link mt-3">
                 {t("not-received-email")}{" "}
-                <Button variant="link" onClick={onTryAgain}>{tTitle(t("try-again"))}</Button>
+                {waitMail ?
+                    waitMail
+                :
+                    <Button variant="link" onClick={onTryAgain}>{tTitle(t("try-again"))}</Button>
+                }
             </div>
         </Form>
     );

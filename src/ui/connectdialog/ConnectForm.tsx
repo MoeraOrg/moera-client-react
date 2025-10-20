@@ -12,6 +12,7 @@ import { connectDialogSetForm } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
+import { useWaitTill } from "ui/connectdialog/wait-till";
 import { isUrl } from "util/url";
 
 interface OuterProps {
@@ -32,6 +33,8 @@ function ConnectForm(props: Props) {
     const formId = useSelector((state: ClientState) => state.connectDialog.formId);
     const lastError = useSelector((state: ClientState) => state.connectDialog.lastError);
     const connecting = useSelector((state: ClientState) => state.home.connecting);
+    const connectAfter = useSelector((state: ClientState) => state.connectDialog.connectAfter);
+    const waitConnect = useWaitTill(connectAfter);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -52,7 +55,8 @@ function ConnectForm(props: Props) {
     }
 
     const formError = !dirty ? lastError : undefined;
-    const disabled = !values.location || !values.password || !isLocationValid(values.location) || connecting;
+    const disabled = !values.location || !values.password || !isLocationValid(values.location) || connecting
+        || !!waitConnect;
 
     return (
         <Form>
@@ -63,7 +67,7 @@ function ConnectForm(props: Props) {
                         error={formError}/>
             {formError && <div className="form-error">{t(formError)}</div>}
             <Button type="submit" variant="primary" className="submit-button" disabled={disabled} loading={connecting}>
-                {t("connect")}
+                {`${t("connect")} ${waitConnect}`}
             </Button>
             <div className="link mt-3">
                 {t("forgot-password")}{" "}

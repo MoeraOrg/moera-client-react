@@ -9,6 +9,7 @@ import { dispatch } from "state/store-sagas";
 import { connectDialogResetPassword } from "state/connectdialog/actions";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
+import { useWaitTill } from "ui/connectdialog/wait-till";
 
 interface OuterProps {
     location: string;
@@ -24,10 +25,12 @@ type Props = OuterProps & FormikProps<Values>;
 function ForgotForm({location, values, dirty}: Props) {
     const processing = useSelector((state: ClientState) => state.connectDialog.processing);
     const lastError = useSelector((state: ClientState) => state.connectDialog.lastError);
+    const mailAfter = useSelector((state: ClientState) => state.connectDialog.mailAfter);
+    const waitMail = useWaitTill(mailAfter);
     const {t} = useTranslation();
 
     const formError = !dirty ? lastError : undefined;
-    const disabled = !values.location || processing;
+    const disabled = !values.location || processing || !!waitMail;
 
     return (
         <Form>
@@ -37,7 +40,7 @@ function ForgotForm({location, values, dirty}: Props) {
                         noFeedback autoFocus/>
             {formError && <div className="form-error">{t(formError, {location})}</div>}
             <Button type="submit" variant="primary" className="submit-button" disabled={disabled} loading={processing}>
-                {t("reset-password")}
+                {`${t("reset-password")} ${waitMail}`}
             </Button>
         </Form>
     );

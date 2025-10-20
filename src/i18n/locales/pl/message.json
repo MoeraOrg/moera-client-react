@@ -1025,6 +1025,8 @@
   "token-name": "Nazwa tokenu",
   "token-usage-warning": "Prosimy pamiętać, że token daje dostęp do bloga. Nigdy nie udostępniaj go osobom, którym nie ufasz!",
   "too-long": "Zbyt długi",
+  "too-many-login-attempts": "Zbyt wiele prób logowania. Proszę poczekać przed ponownym logowaniem.",
+  "too-many-password-reset-attempts": "Zbyt wiele prób resetowania hasła. Proszę poczekać przed ponownym resetowaniem.",
   "top": "Góra",
   "top-50": "Top 50",
   "total": "Całkowity",

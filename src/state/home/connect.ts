@@ -1,4 +1,4 @@
-import { Node, NodeApiError, selectApi } from "api";
+import { Node, NodeApiError, selectApi, TooManyRequestsError } from "api";
 import { Storage } from "storage";
 import { getNodeUri } from "state/naming/sagas";
 import {
@@ -15,7 +15,7 @@ import { getHomeConnectionData, getHomeRootPage } from "state/home/selectors";
 import { isAtNode } from "state/node/selectors";
 import { boot } from "state/navigation/actions";
 import { executor } from "state/executor";
-import { connectDialogSetForm } from "state/connectdialog/actions";
+import { connectDialogConnectAfter, connectDialogSetForm } from "state/connectdialog/actions";
 import { normalizeUrl } from "util/url";
 import { REL_HOME } from "util/rel-node-name";
 import { toDocumentLocation } from "util/universal-url";
@@ -44,6 +44,10 @@ function connectToHomeFailure(action: WithContext<ConnectToHomeAction>, error: a
             default:
                 break;
         }
+    }
+    if (error instanceof TooManyRequestsError) {
+        message = "too-many-login-attempts";
+        dispatch(connectDialogConnectAfter(error.retryAfter).causedBy(action));
     }
     dispatch(connectionToHomeFailed(message).causedBy(action));
 }

@@ -50,6 +50,18 @@ export type ConnectDialogVerifyCodeFailedAction = ActionWithPayload<"CONNECT_DIA
 export const connectDialogVerifyCodeFailed = (error: string): ConnectDialogVerifyCodeFailedAction =>
     actionWithPayload("CONNECT_DIALOG_VERIFY_CODE_FAILED", {error});
 
+export type ConnectDialogConnectAfterAction = ActionWithPayload<"CONNECT_DIALOG_CONNECT_AFTER", {
+    after: Date;
+}>;
+export const connectDialogConnectAfter = (after: Date): ConnectDialogConnectAfterAction =>
+    actionWithPayload("CONNECT_DIALOG_CONNECT_AFTER", {after});
+
+export type ConnectDialogMailAfterAction = ActionWithPayload<"CONNECT_DIALOG_MAIL_AFTER", {
+    after: Date;
+}>;
+export const connectDialogMailAfter = (after: Date): ConnectDialogMailAfterAction =>
+    actionWithPayload("CONNECT_DIALOG_MAIL_AFTER", {after});
+
 export type ConnectDialogAnyAction =
     OpenConnectDialogAction
     | CancelConnectDialogAction
@@ -58,4 +70,6 @@ export type ConnectDialogAnyAction =
     | ConnectDialogResetPasswordFailedAction
     | ConnectDialogSetEmailHintAction
     | ConnectDialogVerifyCodeAction
-    | ConnectDialogVerifyCodeFailedAction;
+    | ConnectDialogVerifyCodeFailedAction
+    | ConnectDialogConnectAfterAction
+    | ConnectDialogMailAfterAction;

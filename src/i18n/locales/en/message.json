@@ -1025,6 +1025,8 @@
   "token-name": "Token name",
   "token-usage-warning": "Please note that the token gives admin access to your blog. Never give it to anybody you don't trust!",
   "too-long": "Too long",
+  "too-many-login-attempts": "Too many login attempts. Please wait before trying again.",
+  "too-many-password-reset-attempts": "Too many password reset attempts. Please wait before trying again.",
   "top": "Top",
   "top-50": "Top 50",
   "total": "Total",

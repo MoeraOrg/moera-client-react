@@ -3,7 +3,7 @@ import i18n from 'i18next';
 import { formatSchemaErrors, HomeNotConnectedError, NameResolvingError, NodeApiError, NodeError } from "api";
 import { validateSchema } from "api/node/safe";
 import { fetcher, ProgressHandler } from "api/fetcher";
-import { CausedError, NodeConnectionError } from "api/error";
+import { CausedError, NodeConnectionError, TooManyRequestsError } from "api/error";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { errorAuthInvalid } from "state/error/actions";
@@ -123,6 +123,10 @@ export async function callApi<T>({
             const {valid} = await validateSchema("Result", data, false);
             if (!valid) {
                 throw exception("Server returned error status");
+            }
+            if (data.errorCode === "too-many-requests") {
+                const waitFor = parseInt(response.headers.get("retry-after") ?? "1");
+                throw new TooManyRequestsError(waitFor, caller);
             }
             if (data.errorCode === "authentication.invalid") {
                 dispatch(errorAuthInvalid().causedBy(caller));

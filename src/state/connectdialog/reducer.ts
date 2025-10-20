@@ -12,7 +12,9 @@ const initialState: ConnectDialogState = {
     resetToken: null,
     backHref: "",
     lastError: null,
-    formId: 0
+    formId: 0,
+    connectAfter: new Date(),
+    mailAfter: new Date()
 };
 
 export default (state: ConnectDialogState = initialState, action: ClientAction): ConnectDialogState => {
@@ -127,6 +129,18 @@ export default (state: ConnectDialogState = initialState, action: ClientAction):
             return {
                 ...state,
                 emailHint: action.payload.emailHint
+            };
+
+        case "CONNECT_DIALOG_CONNECT_AFTER":
+            return {
+                ...state,
+                connectAfter: action.payload.after
+            };
+
+        case "CONNECT_DIALOG_MAIL_AFTER":
+            return {
+                ...state,
+                mailAfter: action.payload.after
             };
 
         default:
