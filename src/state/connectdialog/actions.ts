@@ -1,13 +1,5 @@
-import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
+import { actionWithPayload, ActionWithPayload } from "state/action-types";
 import { ConnectDialogForm } from "state/connectdialog/state";
-
-export type OpenConnectDialogAction = ActionWithoutPayload<"OPEN_CONNECT_DIALOG">;
-export const openConnectDialog = (): OpenConnectDialogAction =>
-    actionWithoutPayload("OPEN_CONNECT_DIALOG");
-
-export type CancelConnectDialogAction = ActionWithoutPayload<"CANCEL_CONNECT_DIALOG">;
-export const cancelConnectDialog = (): CancelConnectDialogAction =>
-    actionWithoutPayload("CANCEL_CONNECT_DIALOG");
 
 export type ConnectDialogSetFormAction = ActionWithPayload<"CONNECT_DIALOG_SET_FORM", {
     location: string;
@@ -63,9 +55,7 @@ export const connectDialogMailAfter = (after: Date): ConnectDialogMailAfterActio
     actionWithPayload("CONNECT_DIALOG_MAIL_AFTER", {after});
 
 export type ConnectDialogAnyAction =
-    OpenConnectDialogAction
-    | CancelConnectDialogAction
-    | ConnectDialogSetFormAction
+    ConnectDialogSetFormAction
     | ConnectDialogResetPasswordAction
     | ConnectDialogResetPasswordFailedAction
     | ConnectDialogSetEmailHintAction

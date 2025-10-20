@@ -1,7 +1,6 @@
 export type ConnectDialogForm = "connect" | "forgot" | "verify" | "reset";
 
 export interface ConnectDialogState {
-    show: boolean;
     location: string;
     login: string;
     form: ConnectDialogForm;

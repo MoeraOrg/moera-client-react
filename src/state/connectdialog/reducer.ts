@@ -3,7 +3,6 @@ import { ClientAction } from "state/action";
 import { ConnectDialogState } from "state/connectdialog/state";
 
 const initialState: ConnectDialogState = {
-    show: false,
     location: "",
     login: "admin",
     form: "connect" as const,
@@ -33,22 +32,6 @@ export default (state: ConnectDialogState = initialState, action: ClientAction):
             }
             return state;
 
-        case "OPEN_CONNECT_DIALOG":
-            return {
-                ...state,
-                show: true,
-                form: "connect",
-                processing: false,
-                emailHint: "",
-                formId: state.formId + 1
-            };
-
-        case "CANCEL_CONNECT_DIALOG":
-            return {
-                ...state,
-                show: false
-            };
-
         case "CONNECT_TO_HOME":
             return {
                 ...state,
@@ -61,7 +44,6 @@ export default (state: ConnectDialogState = initialState, action: ClientAction):
         case "CONNECTED_TO_HOME":
             return {
                 ...state,
-                show: false,
                 location: NodeName.shorten(action.payload.name) ?? action.payload.location,
                 login: action.payload.login ?? "",
                 lastError: null,
