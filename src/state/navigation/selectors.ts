@@ -69,6 +69,10 @@ export function isAtConnectPage(state: ClientState): boolean {
     return state.navigation.page === "connect";
 }
 
+export function isAtSignUpPage(state: ClientState): boolean {
+    return state.navigation.page === "signup";
+}
+
 export function isBottomMenuVisible(state: ClientState): boolean {
     return state.navigation.bottomMenuVisible;
 }

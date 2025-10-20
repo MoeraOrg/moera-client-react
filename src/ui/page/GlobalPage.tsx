@@ -6,6 +6,7 @@ import { ClientState } from "state/state";
 const RemovalPage = React.lazy(() => import("ui/settings/RemovalPage"));
 const GrantPage = React.lazy(() => import("ui/grant/GrantPage"));
 const ConnectPage = React.lazy(() => import("ui/connectpage/ConnectPage"));
+const SignUpPage = React.lazy(() => import("ui/signupdialog/SignUpPage"));
 
 export default function GlobalPage() {
     const page = useSelector((state: ClientState) => state.navigation.page);
@@ -27,6 +28,12 @@ export default function GlobalPage() {
             return (
                 <Suspense fallback={null}>
                     <ConnectPage/>
+                </Suspense>
+            );
+        case "signup":
+            return (
+                <Suspense fallback={null}>
+                    <SignUpPage/>
                 </Suspense>
             );
         default:

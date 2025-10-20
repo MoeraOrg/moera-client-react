@@ -8,4 +8,5 @@ export interface SignUpDialogState {
     domain: string | null;
     password: string | null;
     email: string | null;
+    backHref: string;
 }

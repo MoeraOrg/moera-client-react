@@ -14,6 +14,7 @@ import {
     isAtRemovalPage,
     isAtSearchPage,
     isAtSettingsPage,
+    isAtSignUpPage,
     isAtTimelinePage
 } from "state/navigation/selectors";
 import { build as complaintsBuild, transform as complaintsTransform } from "location/complaints";
@@ -29,6 +30,7 @@ import { build as profileBuild, transform as profileTransform } from "location/p
 import { build as removalBuild, transform as removalTransform } from "location/removal";
 import { build as searchBuild, transform as searchTransform } from "location/search";
 import { build as settingsBuild, transform as settingsTransform } from "location/settings";
+import { build as signupBuild, transform as signupTransform } from "location/signup";
 import { build as timelineBuild, transform as timelineTransform } from "location/timeline";
 import { build as mediaBuild } from "location/media";
 import { LocationInfo } from "location/LocationInfo";
@@ -82,6 +84,9 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (dstInfo.directories[0] === "connect") {
         return connectTransform(srcInfo, dstInfo);
     }
+    if (dstInfo.directories[0] === "signup") {
+        return signupTransform(srcInfo, dstInfo);
+    }
     return [];
 }
 
@@ -130,6 +135,9 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     }
     if (isAtConnectPage(state)) {
         return connectBuild(state, info);
+    }
+    if (isAtSignUpPage(state)) {
+        return signupBuild(state, info);
     }
     return info;
 }

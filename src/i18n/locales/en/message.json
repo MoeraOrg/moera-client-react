@@ -151,6 +151,8 @@
   "count-subscribers": "<0>{count}</0> {count, plural, one {subscriber} other {subscribers}}",
   "count-subscriptions": "<0>{count}</0> {count, plural, one {subscription} other {subscriptions}}",
   "create": "Create",
+  "create-account": "Create an account",
+  "create-account-submit": "Create account",
   "create-avatar": "Create Avatar",
   "created-at": "Created at:",
   "create-new-password": "Create new password",

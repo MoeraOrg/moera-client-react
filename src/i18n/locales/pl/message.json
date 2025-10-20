@@ -151,6 +151,8 @@
   "count-subscribers": "<0>{count}</0> {count, plural, one {subskrybent} few {subskrybenci} many {subskrybentów} other {subskrybentów}}",
   "count-subscriptions": "<0>{count}</0> {count, plural, one {subskrypcja} few {subskrypcje} many {subskrypcji} other {subskrypcji}}",
   "create": "Utwórz",
+  "create-account": "Utwórz konto",
+  "create-account-submit": "Utwórz konto",
   "create-avatar": "Utwórz awatar",
   "created-at": "Utworzono:",
   "create-new-password": "Utwórz nowe hasło",

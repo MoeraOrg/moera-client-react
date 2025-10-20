@@ -2,14 +2,15 @@ import { SIGN_UP_STAGE_DOMAIN } from "state/signupdialog/actions";
 import { SignUpDialogState } from "state/signupdialog/state";
 import { ClientAction } from "state/action";
 
-const initialState = {
+const initialState: SignUpDialogState = {
     show: false,
     processing: false,
     stage: SIGN_UP_STAGE_DOMAIN,
     name: null,
     domain: null,
     password: null,
-    email: null
+    email: null,
+    backHref: ""
 };
 
 export default (state: SignUpDialogState = initialState, action: ClientAction): SignUpDialogState => {

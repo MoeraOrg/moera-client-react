@@ -140,6 +140,12 @@ export type GoToConnectAction = GoToPageAction<"connect", {
 export const goToConnect = (backHref: string): GoToConnectAction =>
     goToPage("connect", {backHref});
 
+export type GoToSignUpAction = GoToPageAction<"signup", {
+    backHref: string;
+}>;
+export const goToSignUp = (backHref: string): GoToSignUpAction =>
+    goToPage("signup", {backHref});
+
 export type GoToPageAnyAction =
     GoToProfileAction
     | GoToTimelineAction
@@ -161,7 +167,8 @@ export type GoToPageAnyAction =
     | GoToActivePeopleAction
     | GoToPageAction<"instants", GoToComposeAction["payload"]["details"]>
     | GoToInstantsAction
-    | GoToConnectAction;
+    | GoToConnectAction
+    | GoToSignUpAction;
 
 export type NewLocationAction = ActionWithoutPayload<"NEW_LOCATION">;
 export const newLocation = (): NewLocationAction =>

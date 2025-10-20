@@ -13,6 +13,7 @@ export type Page =
     | "explore"
     | "activepeople"
     | "instants"
-    | "connect";
+    | "connect"
+    | "signup";
 
-export const GLOBAL_PAGES: Page[] = ["removal", "grant", "connect"];
+export const GLOBAL_PAGES: Page[] = ["removal", "grant", "connect", "signup"];

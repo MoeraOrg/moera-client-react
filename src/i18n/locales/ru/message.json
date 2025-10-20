@@ -151,6 +151,8 @@
   "count-subscribers": "<0>{count}</0> {count, plural, one {подписчик} few {подписчика} other {подписчиков}}",
   "count-subscriptions": "<0>{count}</0> {count, plural, one {подписка} few {подписки} other {подписок}}",
   "create": "Создать",
+  "create-account": "Создать аккаунт",
+  "create-account-submit": "Создать аккаунт",
   "create-avatar": "Создать аватар",
   "created-at": "Создан:",
   "create-new-password": "Создать новый пароль",
