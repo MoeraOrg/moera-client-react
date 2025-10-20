@@ -153,6 +153,7 @@
   "create": "Utwórz",
   "create-avatar": "Utwórz awatar",
   "created-at": "Utworzono:",
+  "create-new-password": "Utwórz nowe hasło",
   "create-token": "Utwórz token",
   "current": "Obecny",
   "current-password": "Obecne hasło",
@@ -461,6 +462,8 @@
   "new-avatar-new-posts": "Nowy awatar pojawi się tylko w twoich nowych postach i komentarzach",
   "new-name-new-posts": "Nowe imię pojawi się tylko w twoich nowych postach i komentarzach",
   "new-password": "Nowe hasło",
+  "new-password-hint-instructions": "Upewnij się, że ma co najmniej 8 znaków, i mieszaj liczby, symbole oraz duże i małe litery dla dodatkowej ochrony.",
+  "new-password-instructions": "Utwórz silne hasło, aby zabezpieczyć swoje konto.",
   "new-post-button": "Nowy post",
   "new-post-item": "Nowy post",
   "new-posts-newsfeed": "{count, plural, =0 {Nie masz nowych postów} =1 {Masz nowy post} one {Masz # nowy post} few {Masz # nowe posty} other {Masz # nowych postów}} w swoim kanale aktualności",
@@ -524,6 +527,7 @@
   "password-not-set": "Hasło nie zostało jeszcze ustawione",
   "password-recovery": "Odzyskiwanie hasła",
   "passwords-different": "Hasła są różne",
+  "password-too-short": "Za krótka, powinna mieć co najmniej 8 znaków",
   "paste-with-formatting": "Wklej tekst z formatowaniem",
   "people": "Ludzie",
   "permissions": "Uprawnienia",
@@ -698,8 +702,6 @@
   "set-by-admin": "ustawione przez administratora",
   "set-by-post-owner": "ustawione przez autora posta",
   "set-email-provider-contact": "Musisz ustawić adres e-mail w swoim profilu, aby dostawca mógł się z Tobą skontaktować w razie potrzeby. Proszę, przejdź do Ustawienia > Mój Profil i wypełnij pole E-mail.",
-  "set-home-password": "Ustaw hasło domowe",
-  "set-password-and-connect": "Ustaw hasło i zaloguj się",
   "setting": {
     "chapter": {
       "comments": "Komentarze",

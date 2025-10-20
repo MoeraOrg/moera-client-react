@@ -22,9 +22,7 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function VerifyForm(props: Props) {
-    const {location, nodeRoot, values, dirty, resetForm} = props;
-
+function VerifyForm({location, nodeRoot, values, dirty, resetForm}: Props) {
     const emailHint = useSelector((state: ClientState) => state.connectDialog.emailHint);
     const processing = useSelector((state: ClientState) => state.connectDialog.processing);
     const lastError = useSelector((state: ClientState) => state.connectDialog.lastError);
@@ -34,7 +32,7 @@ function VerifyForm(props: Props) {
     const {t} = useTranslation();
 
     useEffect(() => {
-        const values = verifyFormLogic.mapPropsToValues(props);
+        const values = verifyFormLogic.mapPropsToValues();
         resetForm({values});
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formId]); // 'props' are missing on purpose
@@ -74,7 +72,7 @@ function VerifyForm(props: Props) {
 
 const verifyFormLogic = {
 
-    mapPropsToValues: (props: OuterProps): Values => ({
+    mapPropsToValues: (): Values => ({
         resetToken: ""
     }),
 

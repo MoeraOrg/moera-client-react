@@ -33,6 +33,7 @@ function connectToHomeFailure(action: WithContext<ConnectToHomeAction>, error: a
         switch (error.errorCode) {
             case "credentials.wrong-reset-token":
                 message = "wrong-reset-token";
+                dispatch(connectDialogSetForm(location, login, "verify").causedBy(action));
                 break;
             case "credentials.reset-token-expired":
                 message = "reset-token-expired";

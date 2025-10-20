@@ -30,11 +30,11 @@ type Props = OuterProps & FormikProps<Values>;
 function ConnectForm(props: Props) {
     const {values, dirty, resetForm} = props;
 
-    const formId = useSelector((state: ClientState) => state.connectDialog.formId);
     const lastError = useSelector((state: ClientState) => state.connectDialog.lastError);
     const connecting = useSelector((state: ClientState) => state.home.connecting);
     const connectAfter = useSelector((state: ClientState) => state.connectDialog.connectAfter);
     const waitConnect = useWaitTill(connectAfter);
+    const formId = useSelector((state: ClientState) => state.connectDialog.formId);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 

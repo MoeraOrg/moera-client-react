@@ -153,6 +153,7 @@
   "create": "Create",
   "create-avatar": "Create Avatar",
   "created-at": "Created at:",
+  "create-new-password": "Create new password",
   "create-token": "Create a Token",
   "current": "Current",
   "current-password": "Current password",
@@ -461,6 +462,8 @@
   "new-avatar-new-posts": "The new avatar will only appear in your new posts and comments",
   "new-name-new-posts": "The new name will only appear in your new posts and comments",
   "new-password": "New password",
+  "new-password-hint-instructions": "Make sure it is at least 8 characters long, and mix it up with numbers, symbols, and both uppercase and lowercase letters for extra protection.",
+  "new-password-instructions": "Create a strong one to keep your account secure.",
   "new-post-button": "New post",
   "new-post-item": "New post",
   "new-posts-newsfeed": "You have {count, plural, =0 {no new posts} one {a new post} other {# new posts}} in your News feed",
@@ -524,6 +527,7 @@
   "password-not-set": "Password not set yet",
   "password-recovery": "Password recovery",
   "passwords-different": "Passwords are different",
+  "password-too-short": "Too short, should be 8 characters at least",
   "paste-with-formatting": "Paste text with formatting",
   "people": "People",
   "permissions": "Permissions",
@@ -698,8 +702,6 @@
   "set-by-admin": "set by admin",
   "set-by-post-owner": "set by post author",
   "set-email-provider-contact": "You need to set an E-mail address in your profile, so the provider will be able to contact you if needed. Please, go to Settings > My Profile and fill the E-mail field.",
-  "set-home-password": "Set Home Password",
-  "set-password-and-connect": "Set Password & Log In",
   "setting": {
     "chapter": {
       "comments": "Comments",

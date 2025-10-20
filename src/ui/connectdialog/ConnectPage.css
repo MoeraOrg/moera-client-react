@@ -47,6 +47,14 @@
     margin-bottom: 2rem;
 }
 
+.connect-page .password-hint {
+    font-weight: 400;
+    font-size: .88rem;
+    line-height: 143%;
+    color: var(--bs-gray-600);
+    margin-bottom: 2rem;
+}
+
 .connect-page .form-error {
     margin-top: 1rem;
     width: 100%;

@@ -55,6 +55,8 @@ const changePasswordLogic = {
         }
         if (!values.password) {
             errors.password = "must-not-empty";
+        } else if (values.password.length < 8) {
+            errors.password = "password-too-short";
         }
         if (!values.confirmPassword) {
             errors.confirmPassword = "retype-password";
