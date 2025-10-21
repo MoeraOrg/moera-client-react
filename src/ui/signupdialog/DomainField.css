@@ -12,11 +12,11 @@
     flex: none;
     display: block;
     margin-left: .2em;
-    font-family: var(--bs-font-monospace);
+    font-family: var(--bs-font-monospace) monospace;
 }
 
 .domain-field .domain-name {
-    font-family: var(--bs-font-monospace);
+    font-family: var(--bs-font-monospace) monospace;
 }
 
 .domain-field .domain-auto {

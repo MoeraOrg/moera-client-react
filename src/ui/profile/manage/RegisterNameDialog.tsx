@@ -7,7 +7,7 @@ import { NamingRules } from "api";
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { registerName, registerNameDialogCancel } from "state/nodename/actions";
-import { Button, ModalDialog, NameHelp } from "ui/control";
+import { Button, ModalDialog } from "ui/control";
 import { InputField } from "ui/control/field";
 
 interface Values {
@@ -25,8 +25,7 @@ function RegisterNameDialog() {
         <ModalDialog title={t("register-new-name")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
-                    <InputField name="name" title={t("name")} autoFocus/>
-                    <NameHelp/>
+                    <InputField name="name" title={t("name")} tooltip="name-help" autoFocus/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={onClose}

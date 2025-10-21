@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { msBackspaceFilled16, msRestartAlt16 } from "ui/material-symbols";
-import { LabelButton, Wrapper } from "ui/control";
+import { Information, LabelButton, Wrapper } from "ui/control";
 import SetDefaultButton from "ui/control/field/SetDefaultButton";
 
 export interface LabelProps {
@@ -14,6 +14,7 @@ export interface LabelProps {
     className?: string;
     horizontal?: boolean;
     checkbox?: boolean;
+    tooltip?: string;
     undo?: boolean;
     reset?: boolean;
     setting?: string;
@@ -23,7 +24,8 @@ export interface LabelProps {
 }
 
 export function Label({
-    title, titleHtml, name, htmlFor, className, horizontal, checkbox, undo, reset, setting, onUndo, onReset, children
+    title, titleHtml, name, htmlFor, className, horizontal, checkbox, tooltip, undo, reset, setting, onUndo, onReset,
+    children
 }: LabelProps) {
     const {t} = useTranslation();
 
@@ -49,6 +51,9 @@ export function Label({
                 children ?? null
             }
             <Wrapper className={cx({"ms-2 align-self-center": (undo || reset || setting) && horizontal && children})}>
+                {tooltip &&
+                    <Information className="ms-1" text={tooltip}/>
+                }
                 {undo &&
                     <LabelButton icon={msRestartAlt16} className="form-label-button-undo" title={t("undo")}
                                  onClick={onUndo}/>

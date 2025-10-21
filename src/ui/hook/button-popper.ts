@@ -38,6 +38,7 @@ export function useButtonPopper(placement: Placement, options: ButtonPopperOptio
 
     return {
         visible,
+        setVisible,
         hide,
         onToggle,
         setButtonRef,

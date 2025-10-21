@@ -107,19 +107,6 @@ INPUT[type="search"]::-webkit-search-cancel-button {
     min-width: 1.3em;
 }
 
-.dialog-help {
-    border: solid 1px cornsilk;
-    border-radius: 5px;
-    padding: .5em;
-    margin-bottom: .5rem;
-    margin-top: -.5rem;
-    background-color: floralwhite;
-}
-
-.dialog-help .btn-close {
-    float: right;
-}
-
 .content-panel {
     display: flow-root;
     background-color: white;

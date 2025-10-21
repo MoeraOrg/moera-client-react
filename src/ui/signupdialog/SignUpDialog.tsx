@@ -25,7 +25,7 @@ import { SignUpStage } from "state/signupdialog/state";
 import { findPreferredLanguage } from "i18n";
 import * as Browser from "ui/browser";
 import { useDebounce } from "ui/hook";
-import { Button, ModalDialog, NameHelp } from "ui/control";
+import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, InputField, SelectField, SelectFieldChoice } from "ui/control/field";
 import DomainField from "ui/signupdialog/DomainField";
 import { isEmail } from "util/misc";
@@ -192,7 +192,6 @@ function SignUpDialogInner({stage, values, setFieldValue, touched, setFieldTouch
                                  disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}/>
                     <InputField name="name" title={t("name")} ref={nameInputRef}
                                 disabled={processing || stage > SIGN_UP_STAGE_NAME}/>
-                    <NameHelp/>
                     <DomainField name="domain" title={t("domain")}
                                  disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
                                  onDomainInput={onDomainInput} onDomainBlur={onDomainBlur}/>

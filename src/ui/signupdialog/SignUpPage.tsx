@@ -188,17 +188,17 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
             <div className="signup-page">
                 <div className="title">{tTitle(t("create-account"))}</div>
                 <Form>
-                    <InputField name="name" title={t("blog-name")} ref={nameInputRef}
+                    <InputField name="name" title={t("blog-name")} tooltip="name-help" ref={nameInputRef}
                                 disabled={processing || stage > SIGN_UP_STAGE_NAME} errorsOnly autoFocus/>
                     <DomainField name="domain" title={t("domain")}
                                  disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
                                  onDomainInput={onDomainInput} onDomainBlur={onDomainBlur}/>
                     <InputField name="password" title={t("password")}
-                                disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
+                                disabled={processing || stage > SIGN_UP_STAGE_PASSWORD} errorsOnly/>
                     <InputField name="confirmPassword" title={t("confirm-password")}
-                                disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
+                                disabled={processing || stage > SIGN_UP_STAGE_PASSWORD} errorsOnly/>
                     <InputField name="email" title={t("e-mail")}
-                                disabled={processing || stage > SIGN_UP_STAGE_PROFILE}/>
+                                disabled={processing || stage > SIGN_UP_STAGE_PROFILE} errorsOnly/>
                     <SelectField name="provider" title={t("provider")} choices={PROVIDER_CHOICES} anyValue
                                  disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}/>
                     <SelectField name="language" title={t("language")} choices={languageChoices} anyValue

@@ -14,6 +14,7 @@ interface Props {
     name: string;
     title?: string;
     placeholder?: string;
+    tooltip?: string;
     disabled?: boolean;
     maxLength?: number;
     horizontal?: boolean;
@@ -35,9 +36,9 @@ interface Props {
 
 function InputFieldImpl(
     {
-        name, title, placeholder, disabled, maxLength, horizontal = false, layout, groupClassName, labelClassName,
-        inputClassName, col, autoFocus, anyValue, errorsOnly, error: externalError, className, autoComplete,
-        noFeedback = false, initialValue, defaultValue
+        name, title, placeholder, tooltip, disabled, maxLength, horizontal = false, layout, groupClassName,
+        labelClassName, inputClassName, col, autoFocus, anyValue, errorsOnly, error: externalError, className,
+        autoComplete, noFeedback = false, initialValue, defaultValue
     }: Props,
     ref: ForwardedRef<HTMLInputElement>
 ) {
@@ -66,6 +67,7 @@ function InputFieldImpl(
             layout={layout}
             labelClassName={labelClassName}
             groupClassName={groupClassName}
+            tooltip={tooltip}
             undo={undo}
             reset={reset}
             onUndo={onUndo}

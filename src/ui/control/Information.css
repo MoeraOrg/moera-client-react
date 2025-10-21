@@ -1,0 +1,12 @@
+.information {
+    border: none;
+    background: none;
+    padding: 0;
+    color: var(--bs-gray-600);
+}
+
+.information + .tooltip .tooltip-inner {
+    text-align: start;
+
+    --bs-tooltip-max-width: min(25rem, 80vw);
+}
