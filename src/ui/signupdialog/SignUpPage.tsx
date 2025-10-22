@@ -185,7 +185,7 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
     return (
         <>
             <GlobalTitle back={backHref}/>
-            <div className="signup-page">
+            <main className="signup-page global-page">
                 <div className="title">{tTitle(t("create-account"))}</div>
                 <Form>
                     <InputField name="name" title={t("blog-name")} tooltip="name-help" ref={nameInputRef}
@@ -213,7 +213,7 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
                         {tTitle(t("create-account-submit"))}
                     </Button>
                 </Form>
-            </div>
+            </main>
         </>
     );
 }

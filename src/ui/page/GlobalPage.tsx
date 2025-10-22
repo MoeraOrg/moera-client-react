@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
+import "./GlobalPage.css";
 
 const RemovalPage = React.lazy(() => import("ui/settings/RemovalPage"));
 const GrantPage = React.lazy(() => import("ui/grant/GrantPage"));

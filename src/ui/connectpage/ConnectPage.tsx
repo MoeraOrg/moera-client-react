@@ -21,12 +21,12 @@ export default function ConnectPage() {
     return (
         <>
             <GlobalTitle back={backHref}/>
-            <div className="connect-page">
+            <main className="connect-page global-page">
                 {form === "connect" && <ConnectForm location={location} nodeRoot={nodeRoot}/>}
                 {form === "forgot" && <ForgotForm location={location} nodeRoot={nodeRoot}/>}
                 {form === "verify" && <VerifyForm location={location} nodeRoot={nodeRoot}/>}
                 {form === "reset" && <ResetForm location={location} nodeRoot={nodeRoot} resetToken={resetToken ?? ""}/>}
-            </div>
+            </main>
         </>
     );
 }

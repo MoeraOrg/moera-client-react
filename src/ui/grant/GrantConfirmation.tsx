@@ -29,10 +29,9 @@ export default function GrantConfirmation() {
                 )}
             </ul>
             <p className="text-danger">{t("careful-grant-access")}</p>
-            <div className="d-grid col-6 mx-auto">
-                <Button variant="primary" className="text-uppercase" onClick={onConfirm}
-                        loading={confirming}>{t("confirm")}</Button>
-            </div>
+            <Button variant="primary" className="submit-button" onClick={onConfirm} loading={confirming}>
+                {t("confirm")}
+            </Button>
         </>
     );
 }

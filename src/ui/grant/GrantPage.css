@@ -1,12 +1,9 @@
-.grant-page .content-panel {
+.grant-page {
     font-size: 1.1rem;
-    padding: 1.5rem;
 }
 
-@media only screen and (max-width: 991px) {
-    .grant-page {
-        padding-bottom: calc(var(--page-footer-height) + .25rem);
-        background-color: white;
-        min-height: calc(100vh - var(--page-header-height));
-    }
+.grant-page .submit-button {
+    margin-top: 2rem;
+    display: block;
+    width: 100%;
 }
