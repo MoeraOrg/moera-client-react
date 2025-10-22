@@ -180,7 +180,7 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
         [languages, t]
     );
 
-    const disabled = processing;
+    const disabled = Object.keys(signUpPageLogic.validate(values)).length > 0 || processing;
 
     return (
         <>
@@ -202,8 +202,7 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
                     <SelectField name="provider" title={t("provider")} choices={PROVIDER_CHOICES} anyValue
                                  disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}/>
                     <SelectField name="language" title={t("language")} choices={languageChoices} anyValue
-                                 disabled={processing || stage > SIGN_UP_STAGE_PROFILE}
-                                 ref={languageSelectRef} autoFocus/>
+                                 disabled={processing || stage > SIGN_UP_STAGE_PROFILE} ref={languageSelectRef}/>
                     {Browser.isAndroidGooglePlay() &&
                         <CheckboxField titleHtml={getTermsTitle(t)} name="termsAgree"/>
                     }
@@ -269,6 +268,8 @@ const signUpPageLogic = {
 
         if (!values.password) {
             errors.password = "must-not-empty";
+        } else if (values.password.length < 8) {
+            errors.password = "password-too-short";
         }
         if (!values.confirmPassword) {
             errors.confirmPassword = "retype-password";

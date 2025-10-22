@@ -1,6 +1,11 @@
 .domain-field {
     display: flex;
     align-items: center;
+    font-family: var(--bs-font-monospace), monospace;
+}
+
+.domain-field .hostname {
+    color: var(--bs-primary);
 }
 
 .domain-field .domain {
@@ -10,24 +15,12 @@
 
 .domain-field .suffix {
     flex: none;
-    display: block;
     margin-left: .2em;
-    font-family: var(--bs-font-monospace) monospace;
-}
-
-.domain-field .domain-name {
-    font-family: var(--bs-font-monospace) monospace;
-}
-
-.domain-field .domain-auto {
-    font-style: italic;
-}
-
-.domain-field .domain-name .hostname {
-    color: var(--bs-pink);
 }
 
 .domain-field BUTTON {
-    flex: none;
-    margin-left: 1em;
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-family: var(--bs-body-font-family);
 }

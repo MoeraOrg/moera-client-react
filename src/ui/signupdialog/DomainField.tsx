@@ -68,35 +68,26 @@ export default function DomainField({name, title, disabled, onDomainInput, onDom
     const suffix = "." + (PROVIDERS.find(p => p.name === providerValue)?.domain ?? "");
 
     return (
-        <FormGroup title={title} name={name}>
+        <FormGroup title={title} name={name} groupClassName="position-relative">
             <>
                 <div className={cx("domain-field", {"is-invalid": touched && error})}>
                     {autoDomainValue ?
-                        (value ?
-                            <div className="domain-name">
-                                <span className="hostname">{value}</span>{suffix}
-                            </div>
-                        :
-                            <div className="domain-auto">{t("selected-automatically")}</div>
-                        )
+                        value && <div className="hostname">{value}</div>
                     :
-                        <>
-                            <input
-                                {...inputProps}
-                                type="text"
-                                className={cx(
-                                    "domain",
-                                    "form-control", {
-                                        "is-valid": touched && !error,
-                                        "is-invalid": touched && error,
-                                    })}
-                                disabled={disabled}
-                                ref={setInputRef}
-                            />
-                            <div className="suffix">{suffix}</div>
-                        </>
+                        <input
+                            {...inputProps}
+                            type="text"
+                            className={cx(
+                                "domain",
+                                "form-control", {
+                                    "is-invalid": touched && error,
+                                })}
+                            disabled={disabled}
+                            ref={setInputRef}
+                        />
                     }
-                    <Button variant="outline-secondary" size="sm" onClick={onAutoClick}>
+                    <div className="suffix">{suffix}</div>
+                    <Button variant="tool" size="sm" onClick={onAutoClick}>
                         {autoDomainValue ? t("change") : t("auto")}
                     </Button>
                 </div>

@@ -5,6 +5,10 @@
     color: var(--bs-gray-600);
 }
 
+.information + .tooltip {
+    pointer-events: none;
+}
+
 .information + .tooltip .tooltip-inner {
     text-align: start;
 
