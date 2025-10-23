@@ -1,14 +1,16 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { Scope } from "api";
+import { ClientState } from "state/state";
 import { Page } from "state/navigation/pages";
 import { SearchFilter, SearchTab } from "state/search/state";
 import { DocumentLocation } from "util/universal-url";
 
 export type BootAction = ActionWithPayload<"BOOT", {
     target?: DocumentLocation;
+    initialState?: Partial<ClientState>;
 }>;
-export const boot = (target?: DocumentLocation): BootAction =>
-    actionWithPayload("BOOT", {target});
+export const boot = (target?: DocumentLocation, initialState?: Partial<ClientState>): BootAction =>
+    actionWithPayload("BOOT", {target, initialState});
 
 export type InitFromNodeLocationAction = ActionWithPayload<"INIT_FROM_NODE_LOCATION", {
     nodeName: string;

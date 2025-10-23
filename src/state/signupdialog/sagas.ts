@@ -2,10 +2,13 @@ import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import PROVIDERS, { Provider } from "providers";
 import { CLIENT_SETTINGS_PREFIX, Naming, Node, NodeApiError, SettingInfo } from "api";
 import { Storage } from "storage";
+import { ClientState } from "state/state";
 import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";
 import { barrier, dispatch, select } from "state/store-sagas";
-import { connectedToHome, homeOwnerSet } from "state/home/actions";
+import { executor } from "state/executor";
+import { homeOwnerSet } from "state/home/actions";
+import { boot } from "state/navigation/actions";
 import { registerNameSucceeded } from "state/nodename/actions";
 import {
     SIGN_UP_STAGE_CONNECT,
@@ -21,11 +24,9 @@ import {
     SignUpNameVerifyAction
 } from "state/signupdialog/actions";
 import { getHomeRootLocation } from "state/home/selectors";
-import { executor } from "state/executor";
 import { serializeSheriffs } from "util/sheriff";
 import { rootUrl } from "util/url";
 import { REL_HOME } from "util/rel-node-name";
-import { ClientState } from "state/state";
 
 export default [
     executor("SIGN_UP", "", signUpSaga),
@@ -71,8 +72,11 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
     if (stage <= SIGN_UP_STAGE_DOMAIN) {
         try {
             await Node.createDomain(
-                action, provider.controller, {name: nodeDomainName},
-                ["domain.already-exists", "domain.name.blank", "domain.name.invalid-domain"]
+                action,
+                provider.controller,
+                {name: nodeDomainName},
+                ["domain.already-exists", "domain.name.blank", "domain.name.invalid-domain"],
+                false
             );
         } catch (e) {
             dispatch(signUpFailed(SIGN_UP_STAGE_DOMAIN).causedBy(action));
@@ -115,15 +119,8 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
         }
 
         Storage.storeConnectionData(rootLocation, null, null, null, login, info.token, info.permissions);
-        const homeLocation = select(getHomeRootLocation);
-        // TODO this should dispatch boot() or call Storage.switchData()
-        dispatch(connectedToHome({
-            location: rootLocation,
-            login,
-            token: info.token,
-            permissions: info.permissions,
-            connectionSwitch: homeLocation != null && homeLocation !== rootLocation
-        }).causedBy(action));
+        const signUpDialog = select().signUpDialog;
+        dispatch(boot({rootLocation, path: "/signup"}, {signUpDialog}));
     }
 
     if (stage <= SIGN_UP_STAGE_PROFILE) {

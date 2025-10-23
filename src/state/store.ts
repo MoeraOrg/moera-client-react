@@ -3,6 +3,7 @@ import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 
 import { applyMiddleware, combineReducers, legacy_createStore } from 'redux';
+import * as immutable from 'object-path-immutable';
 import { createStoreMiddleware } from "state/store-middleware";
 
 import getContext from "state/context";
@@ -185,7 +186,9 @@ function combinedReducer(state: ClientState | undefined, action: ClientAction): 
         ...action,
         context: getContext(state)
     };
-    return action.type === "BOOT" ? reducers(undefined, actionWithContext) : reducers(state, actionWithContext);
+    return action.type === "BOOT"
+        ? immutable.assign(reducers(undefined, actionWithContext), [], action.payload.initialState)
+        : reducers(state, actionWithContext);
 }
 
 const triggers = collectTriggers(

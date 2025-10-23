@@ -1,5 +1,6 @@
 import { AvatarImage, BlockedUserInfo, CarteInfo, CLIENT_SETTINGS_PREFIX } from "api";
 import { ClientAction } from "state/action";
+import { ClientState } from "state/state";
 import { dispatch, select } from "state/store-sagas";
 import { cartesSet } from "state/cartes/actions";
 import { getCartesListTtl } from "state/cartes/selectors";
@@ -14,6 +15,7 @@ import { getHomeConnectionData } from "state/home/selectors";
 import { namingNamesPopulate, namingNamesSwitchServer } from "state/naming/actions";
 import { boot } from "state/navigation/actions";
 import { settingsClientValuesSet } from "state/settings/actions";
+import { DocumentLocation } from "util/universal-url";
 import * as Access from "./access"
 
 function loadedData(data: Access.StoredData): void {
@@ -122,10 +124,10 @@ export function deleteData(location: string): void {
     }
 }
 
-export function switchData(location: string): void {
+export function switchData(location: string, target?: DocumentLocation, initialState?: Partial<ClientState>): void {
     const reboot = Access.switchData(location);
     if (reboot) {
-        dispatch(boot());
+        dispatch(boot(target, initialState));
     }
 }
 
