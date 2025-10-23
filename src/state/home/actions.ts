@@ -33,7 +33,6 @@ interface ConnectedToHomePayload {
     cartesIp?: string | null;
     cartes?: CarteInfo[] | null;
     roots?: RootInfo[] | null;
-    connectionSwitch: boolean;
 }
 
 export type ConnectedToHomeAction = ActionWithPayload<"CONNECTED_TO_HOME", ConnectedToHomePayload>;

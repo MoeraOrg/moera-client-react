@@ -1,8 +1,6 @@
 import { conj, trigger } from "state/trigger";
 import { DraftAddedEvent, DraftDeletedEvent, DraftUpdatedEvent, EventAction, PostingUpdatedEvent } from "api/events";
-import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
-import { ConnectedToHomeAction } from "state/home/actions";
 import {
     composeConflict,
     composeDraftDelete,
@@ -35,8 +33,6 @@ import { getPostingStory, hasPostingFeedReference } from "state/postings/selecto
 import { storyAdded, storyUpdated } from "state/stories/actions";
 import { REL_CURRENT } from "util/rel-node-name";
 
-const isConnectionSwitch = (_: ClientState, action: ConnectedToHomeAction) => action.payload.connectionSwitch;
-
 export default [
     trigger("GO_TO_PAGE", conj(isAtComposePage, isComposePostingToBeLoaded), composePostingLoad),
     trigger(["GO_TO_PAGE", "CONNECTED_TO_HOME"], conj(isAtComposePage, isComposeDraftToBeLoaded), composeDraftLoad),
@@ -45,7 +41,7 @@ export default [
         conj(isAtComposePage, isComposeDraftListToBeLoaded),
         composeDraftListLoad
     ),
-    trigger("CONNECTED_TO_HOME", conj(isAtComposePage, isConnectionSwitch), composeDraftListLoad),
+    trigger("CONNECTED_TO_HOME", isAtComposePage, composeDraftListLoad),
     trigger("GO_TO_PAGE", conj(isAtComposePage, isComposeSharedTextToBeLoaded), composeSharedTextLoad),
     trigger("COMPOSE_POST_SUCCEEDED", state => getComposeDraftId(state) != null, composeDraftDelete),
     trigger("COMPOSE_DRAFT_SAVED", isComposePosted, composeDraftDelete),
@@ -82,7 +78,7 @@ export default [
     trigger("COMPOSE_DRAFT_SELECT", true, updateLocation),
     trigger("COMPOSE_DRAFT_UNSET", true, updateLocation),
     trigger("COMPOSE_DRAFT_LIST_ITEM_DELETED", true, updateLocation),
-    trigger("CONNECTED_TO_HOME", conj(isAtComposePage, isConnectionSwitch), () => composeDraftUnset(true)),
+    trigger("CONNECTED_TO_HOME", isAtComposePage, () => composeDraftUnset(true)),
     trigger(
         [
             "CONNECTED_TO_HOME", "GO_TO_PAGE", "COMPOSE_POSTING_LOADED", "COMPOSE_POSTING_LOAD_FAILED",

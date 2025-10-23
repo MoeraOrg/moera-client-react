@@ -70,8 +70,7 @@ function loadedData(data: Access.StoredData): void {
                 avatar,
                 cartesIp: data.cartesIp,
                 cartes: data.cartes ?? [],
-                roots: data.roots ?? [],
-                connectionSwitch: home.location != null && location !== home.location
+                roots: data.roots ?? []
             }));
         }
     } else {
