@@ -8,8 +8,7 @@ import "./CheckboxField.css";
 interface Props<V> {
     id?: string;
     name: string;
-    title?: string;
-    titleHtml?: string;
+    title?: string | React.ReactNode;
     isChecked?: (value: V) => boolean;
     onChange?: () => void;
     value?: string | number;
@@ -25,8 +24,8 @@ interface Props<V> {
 }
 
 export function RadioField<V = boolean>({
-    id, name, title, titleHtml, isChecked, onChange: onInputChange, value: inputValue, disabled, groupClassName,
-    labelClassName, autoFocus, single, anyValue, initialValue, defaultValue, setting
+    id, name, title, isChecked, onChange: onInputChange, value: inputValue, disabled, groupClassName, labelClassName,
+    autoFocus, single, anyValue, initialValue, defaultValue, setting
 }: Props<V>) {
     const [{value, onChange, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<V>(name, initialValue, defaultValue);
@@ -34,7 +33,6 @@ export function RadioField<V = boolean>({
     return (
         <FormGroup
             title={title}
-            titleHtml={titleHtml}
             name={name}
             labelFor={id}
             labelClassName={labelClassName}

@@ -202,7 +202,7 @@ function SignUpDialogInner({stage, values, setFieldValue, touched, setFieldTouch
                     <InputField name="email" title={t("e-mail")}
                                 disabled={processing || stage > SIGN_UP_STAGE_PROFILE}/>
                     {Browser.isAndroidGooglePlay() &&
-                        <CheckboxField titleHtml={getTermsTitle(t)} name="termsAgree"/>
+                        <CheckboxField title={getTermsTitle(t)} name="termsAgree"/>
                     }
                     <CheckboxField title={t("want-allow-android-google-play")} name="googlePlayAllowed"/>
                 </div>

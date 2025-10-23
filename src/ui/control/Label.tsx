@@ -7,8 +7,7 @@ import { Information, LabelButton, Wrapper } from "ui/control";
 import SetDefaultButton from "ui/control/field/SetDefaultButton";
 
 export interface LabelProps {
-    title?: string;
-    titleHtml?: string;
+    title?: string | React.ReactNode;
     name?: string;
     htmlFor?: string;
     className?: string;
@@ -24,14 +23,13 @@ export interface LabelProps {
 }
 
 export function Label({
-    title, titleHtml, name, htmlFor, className, horizontal, checkbox, tooltip, undo, reset, setting, onUndo, onReset,
-    children
+    title, name, htmlFor, className, horizontal, checkbox, tooltip, undo, reset, setting, onUndo, onReset, children
 }: LabelProps) {
     const {t} = useTranslation();
 
     return (
         <>
-            {(title || titleHtml) ?
+            {title ?
                 <>
                     <label htmlFor={htmlFor ?? name} className={cx(
                         className, {
@@ -43,7 +41,6 @@ export function Label({
                             "me-3": horizontal
                         })}>
                         {title}
-                        {titleHtml && <span dangerouslySetInnerHTML={{__html: titleHtml}}/>}
                     </label>
                     {children}
                 </>

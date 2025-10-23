@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { TFunction } from 'i18next';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 
 import i18n, { findPreferredLanguage, tTitle } from "i18n";
@@ -28,6 +27,7 @@ import { useDebounce } from "ui/hook";
 import * as Browser from "ui/browser";
 import GlobalTitle from "ui/mainmenu/GlobalTitle";
 import DomainField from "ui/signupdialog/DomainField";
+import { getSheriffPolicyHref } from "util/sheriff";
 import { isEmail } from "util/misc";
 import "./SignUpPage.css";
 
@@ -203,10 +203,26 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
                                  disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}/>
                     <SelectField name="language" title={t("language")} choices={languageChoices} anyValue
                                  disabled={processing || stage > SIGN_UP_STAGE_PROFILE} ref={languageSelectRef}/>
-                    {Browser.isAndroidGooglePlay() &&
-                        <CheckboxField titleHtml={getTermsTitle(t)} name="termsAgree"/>
-                    }
-                    <CheckboxField title={t("want-allow-android-google-play")} name="googlePlayAllowed"/>
+                    <CheckboxField
+                        title={
+                            <Trans i18nKey="read-and-agree-to-terms">
+                                <a href="https://moera.org/license/terms-and-conditions.html" target="_blank"/>
+                                <a href={getSheriffPolicyHref(values.language)} target="_blank"/>
+                            </Trans>
+                        }
+                        name="termsAgree"
+                        groupClassName="mb-0"
+                        errorsOnly
+                    />
+                    <CheckboxField
+                        title={
+                            <Trans i18nKey="agree-to-sheriff-oversight">
+                                <a href={getSheriffPolicyHref(values.language)} target="_blank"/>
+                            </Trans>
+                        }
+                        name="googlePlayAllowed"
+                        anyValue
+                    />
                     <Button type="submit" variant="primary" className="submit-button" disabled={disabled}
                             loading={processing}>
                         {tTitle(t("create-account-submit"))}
@@ -215,13 +231,6 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
             </main>
         </>
     );
-}
-
-function getTermsTitle(t: TFunction): string {
-    return t("read-and-agree-with")
-        + " <a href='https://moera.org/license/terms-and-conditions.html' target='_blank'>"
-        + t("terms-and-conditions")
-        + "</a>";
 }
 
 const signUpPageLogic = {
@@ -283,9 +292,6 @@ const signUpPageLogic = {
 
         if (!values.termsAgree) {
             errors.termsAgree = "need-agree-with-terms";
-        }
-        if (Browser.isAndroidGooglePlay() && !values.googlePlayAllowed) {
-            errors.googlePlayAllowed = "need-allow-google-play";
         }
 
         return errors;

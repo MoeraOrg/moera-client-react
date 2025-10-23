@@ -8,8 +8,7 @@ import "./CheckboxField.css";
 interface Props<V> {
     id?: string;
     name: string;
-    title?: string;
-    titleHtml?: string;
+    title?: string | React.ReactNode;
     isChecked?: (value: V) => boolean | null;
     onChange?: () => void;
     value?: string | number;
@@ -18,14 +17,15 @@ interface Props<V> {
     labelClassName?: string;
     autoFocus?: boolean;
     anyValue?: boolean;
+    errorsOnly?: boolean;
     initialValue?: V | null;
     defaultValue?: V | null;
     setting?: string;
 }
 
 export function CheckboxField<V = boolean>({
-    id, name, title, titleHtml, isChecked, onChange: onInputChange, value: inputValue, disabled, groupClassName,
-    labelClassName, autoFocus, anyValue, initialValue, defaultValue, setting
+    id, name, title, isChecked, onChange: onInputChange, value: inputValue, disabled, groupClassName, labelClassName,
+    autoFocus, anyValue, errorsOnly, initialValue, defaultValue, setting
 }: Props<V>) {
     const [{value, onChange, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<V>(name, initialValue, defaultValue);
@@ -33,7 +33,6 @@ export function CheckboxField<V = boolean>({
     return (
         <FormGroup
             title={title}
-            titleHtml={titleHtml}
             name={name}
             labelFor={id}
             labelClassName={labelClassName}
@@ -60,7 +59,7 @@ export function CheckboxField<V = boolean>({
                 className={cx(
                     "form-check-input",
                     {
-                        "is-valid": !anyValue && touched && !error,
+                        "is-valid": !anyValue && !errorsOnly && touched && !error,
                         "is-invalid": !anyValue && touched && error
                     }
                 )}

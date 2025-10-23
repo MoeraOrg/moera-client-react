@@ -1,4 +1,5 @@
 import { SheriffMark } from "api";
+import { findPreferredLanguage } from "i18n";
 
 interface SheriffControlled {
     sheriffs?: string[] | null;
@@ -28,4 +29,14 @@ export function deserializeSheriffs(value: string | null | undefined): string[] 
 
 export function serializeSheriffs(sheriffs: string[]): string {
     return sheriffs.join(",");
+}
+
+export const getSheriffPolicyHref = (lang: string): string =>
+    `https://moera.org/license/sheriff-policy-${getSheriffPolicyLanguage(lang)}.html`;
+
+function getSheriffPolicyLanguage(lang: string): string {
+    if (lang === "auto") {
+        lang = findPreferredLanguage();
+    }
+    return ["en", "ru", "uk"].includes(lang) ? lang : "en";
 }

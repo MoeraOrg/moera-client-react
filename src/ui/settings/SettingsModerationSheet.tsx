@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
-import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
+import { Trans } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { dispatch } from "state/store-sagas";
@@ -8,7 +9,7 @@ import { settingsUpdate } from "state/settings/actions";
 import { CheckboxField } from "ui/control/field";
 import { useSettingsResetForm, useSettingsSheetResize } from "ui/settings/settings-hooks";
 import SettingsButtons from "ui/settings/SettingsButtons";
-import { deserializeSheriffs, serializeSheriffs } from "util/sheriff";
+import { deserializeSheriffs, getSheriffPolicyHref, serializeSheriffs } from "util/sheriff";
 import "./SettingsSheet.css";
 
 interface OuterProps {
@@ -22,15 +23,21 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function SettingsModerationSheet(props: Props) {
-    const {t} = useTranslation();
-
     const sheetMaxHeight = useSettingsSheetResize();
     useSettingsResetForm(settingsModerationSheetLogic, props);
 
     return (
         <Form className="settings-sheet-form">
             <div className="settings-sheet" style={{maxHeight: sheetMaxHeight}}>
-                <CheckboxField name="googlePlayAllowed" title={t("want-allow-android-google-play")} anyValue/>
+                <CheckboxField
+                    title={
+                        <Trans i18nKey="agree-to-sheriff-oversight">
+                            <a href={getSheriffPolicyHref(i18n.language)} target="_blank"/>
+                        </Trans>
+                    }
+                    name="googlePlayAllowed"
+                    anyValue
+                />
             </div>
             <SettingsButtons/>
         </Form>
