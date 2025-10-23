@@ -44,7 +44,7 @@ import { SettingsAnyAction } from "state/settings/actions";
 import { ShareDialogAnyAction } from "state/sharedialog/actions";
 import { SheriffOrderDialogAnyAction } from "state/sherifforderdialog/actions";
 import { SheriffOrderDetailsDialogAnyAction } from "state/sherifforderdetailsdialog/actions";
-import { SignUpDialogAnyAction } from "state/signupdialog/actions";
+import { SignUpAnyAction } from "state/signup/actions";
 import { SourceDialogAnyAction } from "state/sourcedialog/actions";
 import { StoriesAnyAction } from "state/stories/actions";
 import { ClientEventAction } from "api/events";
@@ -97,7 +97,7 @@ export type ClientAction =
     | ShareDialogAnyAction
     | SheriffOrderDialogAnyAction
     | SheriffOrderDetailsDialogAnyAction
-    | SignUpDialogAnyAction
+    | SignUpAnyAction
     | SourceDialogAnyAction
     | StoriesAnyAction;
 

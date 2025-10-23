@@ -18,16 +18,18 @@ import {
     signUpDomainVerify,
     signUpFindDomain,
     signUpNameVerify
-} from "state/signupdialog/actions";
-import { SignUpStage } from "state/signupdialog/state";
+} from "state/signup/actions";
+import { SignUpStage } from "state/signup/state";
 import { getSetting, getSettingMeta } from "state/settings/selectors";
 import { Button } from "ui/control";
 import { CheckboxField, InputField, SelectField, SelectFieldChoice } from "ui/control/field";
 import { useDebounce } from "ui/hook";
 import * as Browser from "ui/browser";
+import Jump from "ui/navigation/Jump";
 import GlobalTitle from "ui/mainmenu/GlobalTitle";
-import DomainField from "ui/signupdialog/DomainField";
+import DomainField from "ui/signup/DomainField";
 import { getSheriffPolicyHref } from "util/sheriff";
+import { urlWithParameters } from "util/url";
 import { isEmail } from "util/misc";
 import "./SignUpPage.css";
 
@@ -61,8 +63,8 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched}: Props) {
-    const backHref = useSelector((state: ClientState) => state.signUpDialog.backHref);
-    const processing = useSelector((state: ClientState) => state.signUpDialog.processing);
+    const backHref = useSelector((state: ClientState) => state.signUp.backHref);
+    const processing = useSelector((state: ClientState) => state.signUp.processing);
     const languages = useSelector((state: ClientState) => getSettingMeta(state, "language")?.modifiers?.items);
     const connectedToHome = useSelector(isConnectedToHome);
     const dispatch = useDispatch();
@@ -232,6 +234,12 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
                         {tTitle(t("create-account-submit"))}
                     </Button>
                 </Form>
+                <div className="link mt-3">
+                    {t("already-have-account")}{" "}
+                    <Jump className="btn btn-link" href={urlWithParameters("/connect", {back: backHref})}>
+                        {t("connect")}
+                    </Jump>
+                </div>
             </main>
         </>
     );
@@ -322,11 +330,11 @@ const signUpPageLogic = {
 const SignUpPageOuter = withFormik(signUpPageLogic)(SignUpPageInner);
 
 export default function SignUpPage() {
-    const stage = useSelector((state: ClientState) => state.signUpDialog.stage);
-    const name = useSelector((state: ClientState) => state.signUpDialog.name);
-    const domain = useSelector((state: ClientState) => state.signUpDialog.domain);
-    const password = useSelector((state: ClientState) => state.signUpDialog.password);
-    const email = useSelector((state: ClientState) => state.signUpDialog.email);
+    const stage = useSelector((state: ClientState) => state.signUp.stage);
+    const name = useSelector((state: ClientState) => state.signUp.name);
+    const domain = useSelector((state: ClientState) => state.signUp.domain);
+    const password = useSelector((state: ClientState) => state.signUp.password);
+    const email = useSelector((state: ClientState) => state.signUp.email);
     const language = useSelector((state: ClientState) => getSetting(state, "language") as string);
 
     return <SignUpPageOuter stage={stage} name={name} domain={domain} password={password} email={email}

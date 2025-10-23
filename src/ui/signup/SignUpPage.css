@@ -1,0 +1,25 @@
+.signup-page .submit-button {
+    margin-top: 1.5rem;
+    display: block;
+    width: 100%;
+}
+
+.signup-page A[target="_blank"] {
+    text-decoration: underline;
+}
+
+.signup-page .link {
+    font-weight: 400;
+    font-size: .88rem;
+    line-height: 143%;
+    color: var(--bs-gray-600);
+    text-align: center;
+}
+
+.signup-page .link .btn {
+    font-size: .88rem;
+    text-decoration: underline;
+    color: var(--violet-600);
+    padding: 0;
+    vertical-align: baseline;
+}

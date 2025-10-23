@@ -1,9 +1,8 @@
-import { SIGN_UP_STAGE_DOMAIN } from "state/signupdialog/actions";
-import { SignUpDialogState } from "state/signupdialog/state";
+import { SIGN_UP_STAGE_DOMAIN } from "state/signup/actions";
+import { SignUpState } from "state/signup/state";
 import { ClientAction } from "state/action";
 
-const initialState: SignUpDialogState = {
-    show: false,
+const initialState: SignUpState = {
     processing: false,
     stage: SIGN_UP_STAGE_DOMAIN,
     name: null,
@@ -13,20 +12,16 @@ const initialState: SignUpDialogState = {
     backHref: ""
 };
 
-export default (state: SignUpDialogState = initialState, action: ClientAction): SignUpDialogState => {
+export default (state: SignUpState = initialState, action: ClientAction): SignUpState => {
     switch (action.type) {
-        case "OPEN_SIGN_UP_DIALOG":
-            return {
-                ...initialState,
-                show: true
-            };
-
-        case "SIGNED_UP":
-        case "CANCEL_SIGN_UP_DIALOG":
-            return {
-                ...state,
-                show: false
-            };
+        case "GO_TO_PAGE":
+            if (action.payload.page === "connect") {
+                return {
+                    ...initialState,
+                    backHref: action.payload.details.backHref
+                };
+            }
+            return state;
 
         case "SIGN_UP":
             return {

@@ -8,11 +8,9 @@ import ConfirmBox from "ui/confirmbox/ConfirmBox";
 import FlashBox from "ui/flashbox/FlashBox";
 import ProgressBox from "ui/progressbox/ProgressBox";
 
-const SignUpDialog = React.lazy(() => import("ui/signupdialog/SignUpDialog"));
 const ShareDialog = React.lazy(() => import("ui/sharedialog/ShareDialog"));
 
 export default function GlobalDialogs() {
-    const showSignUpDialog = useSelector((state: ClientState) => state.signUpDialog.show);
     const showMnemonicDialog = useSelector((state: ClientState) => !!state.nodeName.mnemonic);
     const showMessageBox = useSelector((state: ClientState) => state.messageBox.show);
     const showConfirmBox = useSelector((state: ClientState) => state.confirmBox.show);
@@ -24,9 +22,6 @@ export default function GlobalDialogs() {
         <>
             <Suspense fallback={null}>
                 {showShareDialog && <ShareDialog/>}
-            </Suspense>
-            <Suspense fallback={null}>
-                {showSignUpDialog && <SignUpDialog/>}
             </Suspense>
             {showMnemonicDialog && <MnemonicDialog/>}
             {showMessageBox && <MessageBox/>}

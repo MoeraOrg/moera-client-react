@@ -1,12 +1,11 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import * as Browser from "ui/browser";
-import { openSignUpDialog } from "state/signupdialog/actions";
-import { Button, LoadingInline } from "ui/control";
+import { LoadingInline } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
 import ConnectionsButton from "ui/mainmenu/connections/ConnectionsButton";
@@ -16,7 +15,6 @@ import "./ConnectionStatus.css";
 export default function ConnectionStatus() {
     const connecting = useSelector((state: ClientState) => state.home.connecting);
     const connected = useSelector(isConnectedToHome);
-    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     if (connecting) {
@@ -28,9 +26,9 @@ export default function ConnectionStatus() {
                 <Jump className="btn btn-outline-primary" href={Browser.urlWithBackHref("/connect")}>
                     {t("connect")}
                 </Jump>
-                <Button variant="primary" onClick={() => dispatch(openSignUpDialog())}>
+                <Jump className="btn btn-primary" href={Browser.urlWithBackHref("/signup")}>
                     {t("sign-up")}
-                </Button>
+                </Jump>
             </div>
         );
     }

@@ -26,6 +26,7 @@
   "allow-showing-blog-google-play": "<0>Zezwalaj</0> na wyświetlanie bloga <1>{name}</1> na Androidzie (Google Play).",
   "allow-showing-comment-google-play": "<0>Zezwalaj</0> na wyświetlanie na Androidzie komentarza użytkownika <1>{commentName}</1> „{commentHeading}” do posta użytkownika <1>{postingName}</1> „{postingHeading}” (Google Play).",
   "allow-showing-post-google-play": "<0>Zezwalaj</0> na wyświetlanie posta użytkownika <1>{name}</1> „{heading}” na Androidzie (Google Play).",
+  "already-have-account": "Masz już konto?",
   "any": "Dowolny",
   "anybody": "Ktokolwiek",
   "application-name": "Nazwa aplikacji",

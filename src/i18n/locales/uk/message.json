@@ -26,6 +26,7 @@
   "allow-showing-blog-google-play": "<0>Дозволити</0> показ блогу <1>{name}</1> на Android (Google Play).",
   "allow-showing-comment-google-play": "<0>Дозволити</0> показ коментаря <1>{commentName}</1> \"{commentHeading}\" до поста <1>{postingName}</1> \"{postingHeading}\" на Android (Google Play).",
   "allow-showing-post-google-play": "<0>Дозволити</0> показ посту <1>{name}</1> \"{heading}\" на Android (Google Play).",
+  "already-have-account": "Вже маєте акаунт?",
   "any": "Будь-який",
   "anybody": "Будь-хто",
   "application-name": "Ім'я додатку",

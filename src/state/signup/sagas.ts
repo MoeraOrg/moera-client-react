@@ -16,13 +16,12 @@ import {
     SIGN_UP_STAGE_NAME,
     SIGN_UP_STAGE_PASSWORD,
     SIGN_UP_STAGE_PROFILE,
-    signedUp,
     SignUpAction,
     SignUpDomainVerifyAction,
     signUpFailed,
     SignUpFindDomainAction,
     SignUpNameVerifyAction
-} from "state/signupdialog/actions";
+} from "state/signup/actions";
 import { getHomeRootLocation } from "state/home/selectors";
 import { serializeSheriffs } from "util/sheriff";
 import { rootUrl } from "util/url";
@@ -48,7 +47,7 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
         language, provider: providerName, name, domain, password, email, googlePlayAllowed, onError
     } = action.payload;
 
-    const stage = select().signUpDialog.stage;
+    const stage = select().signUp.stage;
     const provider = getProvider(providerName);
 
     let nodeDomainName;
@@ -119,8 +118,8 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
         }
 
         Storage.storeConnectionData(rootLocation, null, null, null, login, info.token, info.permissions);
-        const signUpDialog = select().signUpDialog;
-        dispatch(boot({rootLocation, path: "/signup"}, {signUpDialog}));
+        const signUp = select().signUp;
+        dispatch(boot({rootLocation, path: "/signup"}, {signUp}));
     }
 
     if (stage <= SIGN_UP_STAGE_PROFILE) {
@@ -154,7 +153,8 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
             }
             const secret = await Node.createNodeName(action, REL_HOME, {name});
             dispatch(homeOwnerSet(null, true, null, null).causedBy(action));
-            dispatch(signedUp().causedBy(action));
+            // TODO go to mnemonic page or newsfeed
+            // dispatch(signedUp().causedBy(action));
             dispatch(registerNameSucceeded(secret.name, secret.mnemonic!).causedBy(action));
         } catch (e) {
             dispatch(signUpFailed(SIGN_UP_STAGE_NAME).causedBy(action));

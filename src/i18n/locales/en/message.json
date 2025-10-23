@@ -26,6 +26,7 @@
   "allow-showing-blog-google-play": "<0>Allow</0> showing the blog <1>{name}</1> on Android (Google Play).",
   "allow-showing-comment-google-play": "<0>Allow</0> showing the <1>{commentName}</1>'s comment \"{commentHeading}\" to the <1>{postingName}</1>'s post \"{postingHeading}\" on Android (Google Play).",
   "allow-showing-post-google-play": "<0>Allow</0> showing the <1>{name}</1>'s post \"{heading}\" on Android (Google Play).",
+  "already-have-account": "Already have an account?",
   "any": "Any",
   "anybody": "Anybody",
   "application-name": "Application name",

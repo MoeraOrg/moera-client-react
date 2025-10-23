@@ -52,7 +52,7 @@ import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
 import progressBox from "state/progressbox/reducer";
-import signUpDialog from "state/signupdialog/reducer";
+import signUp from "state/signup/reducer";
 import refresh from "state/refresh/reducer";
 
 import { collectExecutors } from "state/executor";
@@ -98,7 +98,7 @@ import blockingDetailsDialogExecutors from "state/blockingdetailsdialog/sagas";
 import sheriffOrderDialogExecutors from "state/sherifforderdialog/sagas";
 import sheriffOrderDetailsDialogExecutors from "state/sherifforderdetailsdialog/sagas";
 import flashBoxExecutors from "state/flashbox/sagas";
-import signUpDialogExecutors from "state/signupdialog/sagas";
+import signUpExecutors from "state/signup/sagas";
 import refreshExecutors from "state/refresh/sagas";
 
 import { collectTriggers } from "state/trigger";
@@ -128,7 +128,7 @@ import askDialogTriggers from "state/askdialog/triggers";
 import blockingDetailsDialogTriggers from "state/blockingdetailsdialog/triggers";
 import blockedOperationsTriggers from "state/blockedoperations/triggers";
 import sheriffOrderDetailsDialogTriggers from "state/sherifforderdetailsdialog/triggers";
-import signUpDialogTriggers from "state/signupdialog/triggers";
+import signUpTriggers from "state/signup/triggers";
 import refreshTriggers from "state/refresh/triggers";
 
 const reducers = combineReducers({
@@ -177,7 +177,7 @@ const reducers = combineReducers({
     confirmBox,
     flashBox,
     progressBox,
-    signUpDialog,
+    signUp,
     refresh
 });
 
@@ -218,7 +218,7 @@ const triggers = collectTriggers(
     blockingDetailsDialogTriggers,
     blockedOperationsTriggers,
     sheriffOrderDetailsDialogTriggers,
-    signUpDialogTriggers,
+    signUpTriggers,
     refreshTriggers
 );
 
@@ -264,7 +264,7 @@ const executors = collectExecutors(
     sheriffOrderDialogExecutors,
     sheriffOrderDetailsDialogExecutors,
     flashBoxExecutors,
-    signUpDialogExecutors,
+    signUpExecutors,
     refreshExecutors
 );
 

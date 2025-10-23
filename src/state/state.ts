@@ -42,7 +42,7 @@ import { SettingsState } from "state/settings/state";
 import { ShareDialogState } from "state/sharedialog/state";
 import { SheriffOrderDialogState } from "state/sherifforderdialog/state";
 import { SheriffOrderDetailsDialogState } from "state/sherifforderdetailsdialog/state";
-import { SignUpDialogState } from "state/signupdialog/state";
+import { SignUpState } from "state/signup/state";
 import { SourceDialogState } from "state/sourcedialog/state";
 import { TokensState } from "state/tokens/state";
 
@@ -91,7 +91,7 @@ export interface ClientState {
     shareDialog: ShareDialogState;
     sheriffOrderDialog: SheriffOrderDialogState;
     sheriffOrderDetailsDialog: SheriffOrderDetailsDialogState;
-    signUpDialog: SignUpDialogState;
+    signUp: SignUpState;
     sourceDialog: SourceDialogState;
     tokens: TokensState;
 }

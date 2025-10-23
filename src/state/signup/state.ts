@@ -1,7 +1,6 @@
 export type SignUpStage = 0 | 1 | 2 | 3 | 4;
 
-export interface SignUpDialogState {
-    show: boolean;
+export interface SignUpState {
     processing: boolean;
     stage: SignUpStage;
     name: string | null;

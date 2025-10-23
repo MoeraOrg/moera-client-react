@@ -26,6 +26,7 @@
   "allow-showing-blog-google-play": "<0>Разрешить</0> показ блога <1>{name}</1> на Android (Google Play).",
   "allow-showing-comment-google-play": "<0>Разрешить</0> показ комментария <1>{commentName}</1> \"{commentHeading}\" к посту <1>{postingName}</1> \"{postingHeading}\" на Android (Google Play).",
   "allow-showing-post-google-play": "<0>Разрешить</0> показ поста <1>{name}</1> \"{heading}\" на Android (Google Play).",
+  "already-have-account": "Уже есть аккаунт?",
   "any": "Любой",
   "anybody": "Любой",
   "application-name": "Имя приложения",

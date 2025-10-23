@@ -1,19 +1,11 @@
-import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
-import { SignUpStage } from "state/signupdialog/state";
+import { actionWithPayload, ActionWithPayload } from "state/action-types";
+import { SignUpStage } from "state/signup/state";
 
 export const SIGN_UP_STAGE_DOMAIN = 0 as const;
 export const SIGN_UP_STAGE_PASSWORD = 1 as const;
 export const SIGN_UP_STAGE_CONNECT = 2 as const;
 export const SIGN_UP_STAGE_PROFILE = 3 as const;
 export const SIGN_UP_STAGE_NAME = 4 as const;
-
-export type OpenSignUpDialogAction = ActionWithoutPayload<"OPEN_SIGN_UP_DIALOG">;
-export const openSignUpDialog = (): OpenSignUpDialogAction =>
-    actionWithoutPayload("OPEN_SIGN_UP_DIALOG");
-
-export type CancelSignUpDialogAction = ActionWithoutPayload<"CANCEL_SIGN_UP_DIALOG">;
-export const cancelSignUpDialog = (): CancelSignUpDialogAction =>
-    actionWithoutPayload("CANCEL_SIGN_UP_DIALOG");
 
 type SignUpOnError = (fieldName: string, message: string) => void;
 export type SignUpAction = ActionWithPayload<"SIGN_UP", {
@@ -31,10 +23,6 @@ export const signUp = (
     googlePlayAllowed: boolean, onError: SignUpOnError
 ): SignUpAction =>
     actionWithPayload("SIGN_UP", {language, provider, name, domain, password, email, googlePlayAllowed, onError});
-
-export type SignedUpAction = ActionWithoutPayload<"SIGNED_UP">;
-export const signedUp = (): SignedUpAction =>
-    actionWithoutPayload("SIGNED_UP");
 
 export type SignUpFailedAction = ActionWithPayload<"SIGN_UP_FAILED", {
     stage: SignUpStage;
@@ -72,11 +60,8 @@ export const signUpDomainVerify = (
 ): SignUpDomainVerifyAction =>
     actionWithPayload("SIGN_UP_DOMAIN_VERIFY", {provider, name, onVerify});
 
-export type SignUpDialogAnyAction =
-    OpenSignUpDialogAction
-    | CancelSignUpDialogAction
-    | SignUpAction
-    | SignedUpAction
+export type SignUpAnyAction =
+    SignUpAction
     | SignUpFailedAction
     | SignUpNameVerifyAction
     | SignUpFindDomainAction

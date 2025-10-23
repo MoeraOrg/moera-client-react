@@ -9,11 +9,11 @@ import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { connectToHome } from "state/home/actions";
 import { connectPageSetForm } from "state/connectpage/actions";
-import { openSignUpDialog } from "state/signupdialog/actions";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
+import Jump from "ui/navigation/Jump";
 import { useWaitTill } from "ui/connectpage/wait-till";
-import { isUrl } from "util/url";
+import { isUrl, urlWithParameters } from "util/url";
 
 interface OuterProps {
     location: string;
@@ -35,6 +35,7 @@ function ConnectForm(props: Props) {
     const connectAfter = useSelector((state: ClientState) => state.connectPage.connectAfter);
     const waitConnect = useWaitTill(connectAfter);
     const formId = useSelector((state: ClientState) => state.connectPage.formId);
+    const backHref = useSelector((state: ClientState) => state.connectPage.backHref);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -43,11 +44,6 @@ function ConnectForm(props: Props) {
         resetForm({values});
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formId]); // 'props' are missing on purpose
-
-    const onSignUp = (event: React.MouseEvent) => {
-        dispatch(openSignUpDialog());
-        event.preventDefault();
-    };
 
     const onForgotPassword = (event: React.MouseEvent) => {
         dispatch(connectPageSetForm(values.location, "admin", "forgot"));
@@ -75,7 +71,9 @@ function ConnectForm(props: Props) {
             </div>
             <div className="link mt-3 pt-3">
                 {t("dont-have-account")}{" "}
-                <Button variant="link" onClick={onSignUp}>{t("sign-up")}</Button>
+                <Jump className="btn btn-link" href={urlWithParameters("/signup", {back: backHref})}>
+                    {t("sign-up")}
+                </Jump>
             </div>
         </Form>
     );
