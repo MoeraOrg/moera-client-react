@@ -206,8 +206,11 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
                     <CheckboxField
                         title={
                             <Trans i18nKey="read-and-agree-to-terms">
-                                <a href="https://moera.org/license/terms-and-conditions.html" target="_blank"/>
-                                <a href={getSheriffPolicyHref(values.language)} target="_blank"/>
+                                {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+                                <a href="https://moera.org/license/terms-and-conditions.html" target="_blank"
+                                   rel="noreferrer"/>
+                                {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+                                <a href={getSheriffPolicyHref(values.language)} target="_blank" rel="noreferrer"/>
                             </Trans>
                         }
                         name="termsAgree"
@@ -217,7 +220,8 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
                     <CheckboxField
                         title={
                             <Trans i18nKey="agree-to-sheriff-oversight">
-                                <a href={getSheriffPolicyHref(values.language)} target="_blank"/>
+                                {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+                                <a href={getSheriffPolicyHref(values.language)} target="_blank" rel="noreferrer"/>
                             </Trans>
                         }
                         name="googlePlayAllowed"

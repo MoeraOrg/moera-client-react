@@ -32,7 +32,8 @@ function SettingsModerationSheet(props: Props) {
                 <CheckboxField
                     title={
                         <Trans i18nKey="agree-to-sheriff-oversight">
-                            <a href={getSheriffPolicyHref(i18n.language)} target="_blank"/>
+                            {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+                            <a href={getSheriffPolicyHref(i18n.language)} target="_blank" rel="noreferrer"/>
                         </Trans>
                     }
                     name="googlePlayAllowed"

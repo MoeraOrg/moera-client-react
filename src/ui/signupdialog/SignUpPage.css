@@ -3,3 +3,7 @@
     display: block;
     width: 100%;
 }
+
+.signup-page A[target="_blank"] {
+    text-decoration: underline;
+}

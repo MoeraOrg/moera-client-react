@@ -217,7 +217,7 @@ function SignUpDialogInner({stage, values, setFieldValue, touched, setFieldTouch
 
 function getTermsTitle(t: TFunction): string {
     return t("read-and-agree-with")
-        + " <a href='https://moera.org/license/terms-and-conditions.html' target='_blank'>"
+        + " <a href='https://moera.org/license/terms-and-conditions.html' target='_blank' rel='noreferrer'>"
         + t("terms-and-conditions")
         + "</a>";
 }
