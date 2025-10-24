@@ -10,6 +10,11 @@
     width: calc(100% - 2.85rem);
 }
 
+.comment .owner-line > SPAN {
+    display: flex;
+    align-items: baseline;
+}
+
 .comment .owner {
     font-weight: bold;
     margin: 0 .5em;
