@@ -23,6 +23,8 @@ import * as Browser from "ui/browser";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/url";
 
+const MAX_EMPTY_RESULT_RETRIES = 3;
+
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "HEAD" | "OPTIONS";
 
 export type ErrorFilter = boolean | string[] | ((code: string) => boolean);
@@ -80,6 +82,7 @@ export async function callApi<T>({
     };
 
     let cartesRenewed = false;
+    let emptyResultRetries = 0;
     while (true) {
         const authSuccess = authorize(headers, rootLocation, auth);
         if (!authSuccess && !cartesRenewed) {
@@ -115,7 +118,11 @@ export async function callApi<T>({
             if (!response.ok) {
                 throw exception("Server returned error status");
             } else {
-                throw exception("Server returned empty result");
+                if (emptyResultRetries >= MAX_EMPTY_RESULT_RETRIES) {
+                    throw exception("Server returned empty result");
+                }
+                emptyResultRetries++;
+                continue;
             }
         }
 
