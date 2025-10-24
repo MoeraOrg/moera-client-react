@@ -53,10 +53,11 @@ export const nodeFeaturesLoad = (): NodeFeaturesLoadAction =>
     actionWithoutPayload("NODE_FEATURES_LOAD");
 
 export type NodeFeaturesLoadedAction = ActionWithPayload<"NODE_FEATURES_LOADED", {
+    nodeName: string;
     features: Features;
 }>;
-export const nodeFeaturesLoaded = (features: Features): NodeFeaturesLoadedAction =>
-    actionWithPayload("NODE_FEATURES_LOADED", {features});
+export const nodeFeaturesLoaded = (nodeName: string, features: Features): NodeFeaturesLoadedAction =>
+    actionWithPayload("NODE_FEATURES_LOADED", {nodeName, features});
 
 export type NodeAnyAction =
     NodeReadyAction

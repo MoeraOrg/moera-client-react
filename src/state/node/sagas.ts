@@ -3,7 +3,7 @@ import i18n from 'i18next';
 
 import { Node, NodeName } from "api";
 import { executor } from "state/executor";
-import { homeIntroduced, namingInitialized } from "state/init-barriers";
+import { mutuallyIntroduced, namingInitialized } from "state/init-barriers";
 import { dispatch, select } from "state/store-sagas";
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
@@ -28,7 +28,7 @@ export default [
     executor("OWNER_LOAD", "", ownerLoadSaga),
     executor("OWNER_VERIFY", null, ownerVerifySaga),
     executor("OWNER_SWITCH", payload => payload.name, ownerSwitchSaga),
-    executor("NODE_FEATURES_LOAD", "", nodeFeaturesLoadSaga)
+    executor("NODE_FEATURES_LOAD", null, nodeFeaturesLoadSaga)
 ];
 
 async function ownerLoadSaga(action: WithContext<OwnerLoadAction>): Promise<void> {
@@ -97,10 +97,16 @@ async function ownerSwitchSaga(action: WithContext<OwnerSwitchAction>): Promise<
 }
 
 async function nodeFeaturesLoadSaga(action: WithContext<NodeFeaturesLoadAction>): Promise<void> {
-    await homeIntroduced();
+    await mutuallyIntroduced();
+
+    const nodeName = action.context.ownerName;
+    if (nodeName == null) {
+        return;
+    }
+
     try {
-        const features = await Node.getFeatures(action, REL_CURRENT);
-        dispatch(nodeFeaturesLoaded(features).causedBy(action));
+        const features = await Node.getFeatures(action, nodeName);
+        dispatch(nodeFeaturesLoaded(nodeName, features).causedBy(action));
     } catch (e) {
         dispatch(errorThrown(e));
     }

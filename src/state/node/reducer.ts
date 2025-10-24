@@ -93,10 +93,13 @@ export default (state: NodeState = initialState, action: ClientAction): NodeStat
             return immutable.set(state, "owner.switching", false);
 
         case "NODE_FEATURES_LOADED":
-            return {
-                ...state,
-                features: action.payload.features
-            };
+            if (state.owner.name === action.payload.nodeName) {
+                return {
+                    ...state,
+                    features: action.payload.features
+                };
+            }
+            return state;
 
         default:
             return state;

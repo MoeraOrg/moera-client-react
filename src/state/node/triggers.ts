@@ -19,7 +19,7 @@ export default [
     trigger("OWNER_SET", true, nodeReady),
     trigger("NODE_READY", conj(isAtNode, isOwnerNameRecentlyChanged), ownerVerify),
     trigger("NODE_READY", true, newLocation),
-    trigger("NODE_READY", isAtNode, nodeFeaturesLoad),
+    trigger("INIT_FROM_LOCATION", isAtNode, nodeFeaturesLoad),
     trigger(
         "NAMING_NAME_LOADED",
         (state, signal: NamingNameLoadedAction) => signal.payload.name === getOwnerName(state),
