@@ -19,7 +19,7 @@ import {
     signUpFindDomain,
     signUpNameVerify
 } from "state/signup/actions";
-import { SignUpStage } from "state/signup/state";
+import { SignUpMode, SignUpStage } from "state/signup/state";
 import { getSetting, getSettingMeta } from "state/settings/selectors";
 import { Button } from "ui/control";
 import { CheckboxField, InputField, SelectField, SelectFieldChoice } from "ui/control/field";
@@ -27,6 +27,7 @@ import { useDebounce } from "ui/hook";
 import * as Browser from "ui/browser";
 import Jump from "ui/navigation/Jump";
 import GlobalTitle from "ui/mainmenu/GlobalTitle";
+import SignUpTabs from "ui/signup/SignUpTabs";
 import DomainField from "ui/signup/DomainField";
 import { getSheriffPolicyHref } from "util/sheriff";
 import { urlWithParameters } from "util/url";
@@ -37,6 +38,7 @@ const PROVIDER_CHOICES = (Browser.isDevMode() ? PROVIDERS : PROVIDERS.filter(p =
     .map(p => ({title: p.title, value: p.name}));
 
 interface OuterProps {
+    mode: SignUpMode;
     stage: SignUpStage;
     name: string | null;
     domain: string | null;
@@ -46,6 +48,7 @@ interface OuterProps {
 }
 
 interface Values {
+    mode: SignUpMode;
     language: string;
     provider: string;
     name: string;
@@ -182,6 +185,7 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
         [languages, t]
     );
 
+    const advanced = values.mode === "advanced";
     const disabled = Object.keys(signUpPageLogic.validate(values)).length > 0 || processing;
 
     return (
@@ -190,45 +194,55 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
             <main className="signup-page global-page">
                 <div className="title">{tTitle(t("create-account"))}</div>
                 <Form>
+                    <SignUpTabs/>
                     <InputField name="name" title={t("blog-name")} tooltip="name-help" ref={nameInputRef}
                                 disabled={processing || stage > SIGN_UP_STAGE_NAME} errorsOnly autoFocus/>
-                    <DomainField name="domain" title={t("domain")}
-                                 disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
-                                 onDomainInput={onDomainInput} onDomainBlur={onDomainBlur}/>
+                    {advanced &&
+                        <DomainField name="domain" title={t("domain")}
+                                     disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
+                                     onDomainInput={onDomainInput} onDomainBlur={onDomainBlur}/>
+                    }
                     <InputField name="password" title={t("password")}
                                 disabled={processing || stage > SIGN_UP_STAGE_PASSWORD} errorsOnly/>
                     <InputField name="confirmPassword" title={t("confirm-password")}
                                 disabled={processing || stage > SIGN_UP_STAGE_PASSWORD} errorsOnly/>
                     <InputField name="email" title={t("e-mail")}
                                 disabled={processing || stage > SIGN_UP_STAGE_PROFILE} errorsOnly/>
-                    <SelectField name="provider" title={t("provider")} choices={PROVIDER_CHOICES} anyValue
-                                 disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}/>
-                    <SelectField name="language" title={t("language")} choices={languageChoices} anyValue
-                                 disabled={processing || stage > SIGN_UP_STAGE_PROFILE} ref={languageSelectRef}/>
-                    <CheckboxField
-                        title={
-                            <Trans i18nKey="read-and-agree-to-terms">
-                                {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
-                                <a href="https://moera.org/license/terms-and-conditions.html" target="_blank"
-                                   rel="noreferrer"/>
-                                {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
-                                <a href={getSheriffPolicyHref(values.language)} target="_blank" rel="noreferrer"/>
-                            </Trans>
-                        }
-                        name="termsAgree"
-                        groupClassName="mb-0"
-                        errorsOnly
-                    />
-                    <CheckboxField
-                        title={
-                            <Trans i18nKey="agree-to-sheriff-oversight">
-                                {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
-                                <a href={getSheriffPolicyHref(values.language)} target="_blank" rel="noreferrer"/>
-                            </Trans>
-                        }
-                        name="googlePlayAllowed"
-                        anyValue
-                    />
+                    {advanced &&
+                        <>
+                            <SelectField name="provider" title={t("provider")} choices={PROVIDER_CHOICES} anyValue
+                                         disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}/>
+                            <SelectField name="language" title={t("language")} choices={languageChoices} anyValue
+                                         disabled={processing || stage > SIGN_UP_STAGE_PROFILE}
+                                         ref={languageSelectRef}/>
+                            <CheckboxField
+                                title={
+                                    <Trans i18nKey="read-and-agree-to-terms">
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+                                        <a href="https://moera.org/license/terms-and-conditions.html" target="_blank"
+                                           rel="noreferrer"/>
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+                                        <a href={getSheriffPolicyHref(values.language)} target="_blank"
+                                           rel="noreferrer"/>
+                                    </Trans>
+                                }
+                                name="termsAgree"
+                                groupClassName="mb-0"
+                                errorsOnly
+                            />
+                            <CheckboxField
+                                title={
+                                    <Trans i18nKey="agree-to-sheriff-oversight">
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+                                        <a href={getSheriffPolicyHref(values.language)} target="_blank"
+                                           rel="noreferrer"/>
+                                    </Trans>
+                                }
+                                name="googlePlayAllowed"
+                                anyValue
+                            />
+                        </>
+                    }
                     <Button type="submit" variant="primary" className="submit-button" disabled={disabled}
                             loading={processing}>
                         {tTitle(t("create-account-submit"))}
@@ -240,6 +254,18 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
                         {t("connect")}
                     </Jump>
                 </div>
+                {!advanced &&
+                    <div className="link mt-2">
+                        <Trans i18nKey="by-creating-account-agree-to-terms">
+                            {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+                            <a href="https://moera.org/license/terms-and-conditions.html" target="_blank"
+                               rel="noreferrer"/>
+                            {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+                            <a href={getSheriffPolicyHref(values.language)} target="_blank"
+                               rel="noreferrer"/>
+                        </Trans>
+                    </div>
+                }
             </main>
         </>
     );
@@ -248,6 +274,7 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
 const signUpPageLogic = {
 
     mapPropsToValues: (props: OuterProps): Values => ({
+        mode: props.mode,
         language: props.language,
         provider: Browser.isDevMode() ? "local" : "moera.blog",
         name: props.name ?? "",
@@ -258,13 +285,14 @@ const signUpPageLogic = {
         password: props.password ?? "",
         confirmPassword: props.password ?? "",
         email: props.email ?? "",
-        termsAgree: !Browser.isAndroidApp(),
+        termsAgree: true,
         googlePlayAllowed: true
     }),
 
     validate: (values: Values): FormikErrors<Values> => {
         const errors: FormikErrors<Values> = {};
 
+        const advanced = values.mode === "advanced";
         const name = values.name.trim();
         if (!name) {
             errors.name = "must-not-empty";
@@ -274,7 +302,7 @@ const signUpPageLogic = {
             errors.name = "name-already-taken";
         }
 
-        if (!values.autoDomain) {
+        if (advanced && !values.autoDomain) {
             const domain = values.domain.trim();
             if (!domain) {
                 errors.domain = "must-not-empty";
@@ -302,7 +330,7 @@ const signUpPageLogic = {
             errors.email = "not-valid-e-mail";
         }
 
-        if (!values.termsAgree) {
+        if (advanced && !values.termsAgree) {
             errors.termsAgree = "need-agree-with-terms";
         }
 
@@ -310,15 +338,19 @@ const signUpPageLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
+        const quick = values.mode === "quick";
         dispatch(
             signUp(
+                values.mode,
                 values.language,
                 values.provider,
                 values.name.trim(),
-                values.autoDomain && formik.props.stage <= SIGN_UP_STAGE_DOMAIN ? null : values.domain.trim(),
+                (quick || values.autoDomain) && formik.props.stage <= SIGN_UP_STAGE_DOMAIN
+                    ? null
+                    : values.domain.trim(),
                 values.password,
                 values.email,
-                values.googlePlayAllowed,
+                quick || values.googlePlayAllowed,
                 (fieldName, message) => formik.setFieldError(fieldName, message)
             )
         );
@@ -330,6 +362,7 @@ const signUpPageLogic = {
 const SignUpPageOuter = withFormik(signUpPageLogic)(SignUpPageInner);
 
 export default function SignUpPage() {
+    const mode = useSelector((state: ClientState) => state.signUp.mode);
     const stage = useSelector((state: ClientState) => state.signUp.stage);
     const name = useSelector((state: ClientState) => state.signUp.name);
     const domain = useSelector((state: ClientState) => state.signUp.domain);
@@ -337,6 +370,6 @@ export default function SignUpPage() {
     const email = useSelector((state: ClientState) => state.signUp.email);
     const language = useSelector((state: ClientState) => getSetting(state, "language") as string);
 
-    return <SignUpPageOuter stage={stage} name={name} domain={domain} password={password} email={email}
+    return <SignUpPageOuter mode={mode} stage={stage} name={name} domain={domain} password={password} email={email}
                             language={language}/>;
 }

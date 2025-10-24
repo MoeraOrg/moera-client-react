@@ -1,5 +1,5 @@
 import { actionWithPayload, ActionWithPayload } from "state/action-types";
-import { SignUpStage } from "state/signup/state";
+import { SignUpMode, SignUpStage } from "state/signup/state";
 
 export const SIGN_UP_STAGE_DOMAIN = 0 as const;
 export const SIGN_UP_STAGE_PASSWORD = 1 as const;
@@ -9,6 +9,7 @@ export const SIGN_UP_STAGE_NAME = 4 as const;
 
 type SignUpOnError = (fieldName: string, message: string) => void;
 export type SignUpAction = ActionWithPayload<"SIGN_UP", {
+    mode: SignUpMode;
     language: string;
     provider: string;
     name: string;
@@ -19,10 +20,10 @@ export type SignUpAction = ActionWithPayload<"SIGN_UP", {
     onError: SignUpOnError;
 }>;
 export const signUp = (
-    language: string, provider: string, name: string, domain: string | null, password: string, email: string | null,
-    googlePlayAllowed: boolean, onError: SignUpOnError
+    mode: SignUpMode, language: string, provider: string, name: string, domain: string | null, password: string,
+    email: string | null, googlePlayAllowed: boolean, onError: SignUpOnError
 ): SignUpAction =>
-    actionWithPayload("SIGN_UP", {language, provider, name, domain, password, email, googlePlayAllowed, onError});
+    actionWithPayload("SIGN_UP", {mode, language, provider, name, domain, password, email, googlePlayAllowed, onError});
 
 export type SignUpFailedAction = ActionWithPayload<"SIGN_UP_FAILED", {
     stage: SignUpStage;

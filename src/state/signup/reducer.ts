@@ -3,6 +3,7 @@ import { SignUpState } from "state/signup/state";
 import { ClientAction } from "state/action";
 
 const initialState: SignUpState = {
+    mode: "quick",
     processing: false,
     stage: SIGN_UP_STAGE_DOMAIN,
     name: null,
@@ -27,6 +28,7 @@ export default (state: SignUpState = initialState, action: ClientAction): SignUp
             return {
                 ...state,
                 processing: true,
+                mode: action.payload.mode,
                 name: action.payload.name,
                 domain: action.payload.domain,
                 password: action.payload.password,
