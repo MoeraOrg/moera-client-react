@@ -50,42 +50,51 @@ async function callNamingBoolean({caller, method, params}: CallNamingBooleanPara
     return data.result;
 }
 
+const MAX_EMPTY_RESULT_RETRIES = 3;
+
 async function fetchNaming(method: string, params: any[], exception: CallException): Promise<any> {
     const location = select(state => getSetting(state, "naming.location") as string);
-    let response;
-    try {
-        response = await fetcher(location, {
-            method: "POST",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                jsonrpc: "2.0",
-                id: callId++,
-                method,
-                params
-            })
-        });
-    } catch (e) {
-        throw exception(e);
-    }
-    if (!response.ok) {
-        throw exception("Server returned error status", await response.text());
-    }
-    let data;
-    try {
-        data = await response.json();
-    } catch (e) {
-        throw exception("Server returned empty result");
-    }
-    if ("error" in data) {
-        if (!isSchemaValid(NamingApi.ErrorResult, data)) {
-            throw exception("Error response format incorrect", formatSchemaErrors(NamingApi.ErrorResult.errors));
+    let emptyResultRetries = 0;
+    while (true) {
+        let response;
+        try {
+            response = await fetcher(location, {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    jsonrpc: "2.0",
+                    id: callId++,
+                    method,
+                    params
+                })
+            });
+        } catch (e) {
+            throw exception(e);
         }
-        throw exception(data.error.message);
+        if (!response.ok) {
+            throw exception("Server returned error status", await response.text());
+        }
+        let data;
+        try {
+            data = await response.json();
+        } catch (e) {
+            if (emptyResultRetries >= MAX_EMPTY_RESULT_RETRIES) {
+                throw exception("Server returned empty result");
+            }
+            emptyResultRetries++;
+            continue;
+        }
+        if ("error" in data) {
+            if (!isSchemaValid(NamingApi.ErrorResult, data)) {
+                throw exception("Error response format incorrect", formatSchemaErrors(NamingApi.ErrorResult.errors));
+            }
+            throw exception(data.error.message);
+        }
+        return data;
     }
-    return data;
 }
 
 export async function getCurrent(
