@@ -54,19 +54,19 @@ function bootSaga(action: BootAction): void {
     } = action.payload.target ?? Browser.parseDocumentLocation();
 
     if (rootLocation != null) {
-        dispatch(initFromLocation(name ?? null, rootLocation, path, query, hash));
+        dispatch(initFromLocation(name ?? null, rootLocation, path, query, hash).causedBy(action));
     } else if (name != null) {
-        dispatch(initFromNodeLocation(name, path, query, hash, null));
+        dispatch(initFromNodeLocation(name, path, query, hash, null).causedBy(action));
     } else if (path?.startsWith("removal")) {
-        dispatch(goToRemoval());
+        dispatch(goToRemoval().causedBy(action));
     } else if (path && path !== "/") {
-        dispatch(goHomeLocation(path, query, hash));
+        dispatch(goHomeLocation(path, query, hash).causedBy(action));
     } else {
-        dispatch(goHomeLocation("/news", null, null));
+        dispatch(goHomeLocation("/news", null, null).causedBy(action));
     }
     const readId = Browser.parameters.get("read");
     if (readId) {
-        dispatch(storyReadingUpdate(REL_HOME, "instant", readId, true));
+        dispatch(storyReadingUpdate(REL_HOME, "instant", readId, true).causedBy(action));
     }
 }
 
@@ -149,7 +149,7 @@ async function goHomeLocationSaga(action: GoHomeLocationAction): Promise<void> {
         return;
     }
     if (homeRootPage == null) {
-        dispatch(nodeReady());
+        dispatch(nodeReady().causedBy(action));
         return;
     }
     const {scheme, host, port} = URI.parse(homeRootPage);
@@ -157,7 +157,7 @@ async function goHomeLocationSaga(action: GoHomeLocationAction): Promise<void> {
         const rootLocation = rootUrl(scheme, host, port);
         dispatch(initFromLocation(homeOwnerName, rootLocation, path, query, hash).causedBy(action));
     } else {
-        dispatch(nodeReady());
+        dispatch(nodeReady().causedBy(action));
     }
 }
 
@@ -168,12 +168,12 @@ async function goToHomePageSaga(action: GoToHomePageAction<any, any>): Promise<v
         homeOwnerName: getHomeOwnerName(state)
     }));
     if (homeOwnerName == null) {
-        dispatch(nodeUnset());
+        dispatch(nodeUnset().causedBy(action));
         return;
     }
     if (ownerName !== homeOwnerName) {
-        dispatch(ownerSwitch(homeOwnerName));
+        dispatch(ownerSwitch(homeOwnerName).causedBy(action));
         await barrier(["INIT_FROM_LOCATION", "OWNER_SWITCH_FAILED"], true);
     }
-    dispatch(goToPage(action.payload.page, action.payload.details));
+    dispatch(goToPage(action.payload.page, action.payload.details).causedBy(action));
 }

@@ -119,7 +119,7 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
 
         Storage.storeConnectionData(rootLocation, null, null, null, login, info.token, info.permissions);
         const signUp = select().signUp;
-        dispatch(boot({rootLocation, path: "/signup"}, {signUp}));
+        dispatch(boot({rootLocation, path: "/signup"}, {signUp}).causedBy(action));
     }
 
     if (stage <= SIGN_UP_STAGE_PROFILE) {
