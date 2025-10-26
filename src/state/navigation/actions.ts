@@ -148,6 +148,10 @@ export type GoToSignUpAction = GoToPageAction<"signup", {
 export const goToSignUp = (backHref: string): GoToSignUpAction =>
     goToPage("signup", {backHref});
 
+export type GoToMnemonicAction = GoToPageAction<"mnemonic", {}>;
+export const goToMnemonic = (): GoToMnemonicAction =>
+    goToPage("mnemonic", {});
+
 export type GoToPageAnyAction =
     GoToProfileAction
     | GoToTimelineAction
@@ -170,7 +174,8 @@ export type GoToPageAnyAction =
     | GoToPageAction<"instants", GoToComposeAction["payload"]["details"]>
     | GoToInstantsAction
     | GoToConnectAction
-    | GoToSignUpAction;
+    | GoToSignUpAction
+    | GoToMnemonicAction;
 
 export type NewLocationAction = ActionWithoutPayload<"NEW_LOCATION">;
 export const newLocation = (): NewLocationAction =>

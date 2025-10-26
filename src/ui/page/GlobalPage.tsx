@@ -8,6 +8,7 @@ const RemovalPage = React.lazy(() => import("ui/settings/RemovalPage"));
 const GrantPage = React.lazy(() => import("ui/grant/GrantPage"));
 const ConnectPage = React.lazy(() => import("ui/connectpage/ConnectPage"));
 const SignUpPage = React.lazy(() => import("ui/signup/SignUpPage"));
+const MnemonicPage = React.lazy(() => import("ui/profile/manage/MnemonicPage"));
 
 export default function GlobalPage() {
     const page = useSelector((state: ClientState) => state.navigation.page);
@@ -35,6 +36,12 @@ export default function GlobalPage() {
             return (
                 <Suspense fallback={null}>
                     <SignUpPage/>
+                </Suspense>
+            );
+        case "mnemonic":
+            return (
+                <Suspense fallback={null}>
+                    <MnemonicPage/>
                 </Suspense>
             );
         default:

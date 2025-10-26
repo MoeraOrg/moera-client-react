@@ -1,0 +1,46 @@
+.mnemonic-page .name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--bs-gray-600);
+    text-align: center;
+    margin-top: -1.5rem;
+    margin-bottom: 2rem;
+}
+
+.mnemonic-page .words-panel {
+    display: grid;
+    grid-template: " title print   download"
+                   / 1fr   2.75rem 2.75rem;
+    align-items: center;
+    height: 2.75rem;
+    margin-bottom: .25rem;
+    color: var(--bs-gray-900);
+}
+
+.mnemonic-page .words-panel .words-title {
+    grid-area: title;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 150%;
+}
+
+.mnemonic-page .words-panel .btn {
+    width: 2.75rem;
+    height: 2.75rem;
+}
+
+.mnemonic-page .written-down {
+    margin-top: 3rem;
+    font-weight: 400;
+    color: var(--bs-gray-600);
+}
+
+.mnemonic-page .submit-button {
+    display: block;
+    width: 100%;
+}
+
+.mnemonic-page .skip {
+    display: block;
+    margin: .75rem auto 0;
+}

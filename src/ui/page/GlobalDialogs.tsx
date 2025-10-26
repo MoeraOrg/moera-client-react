@@ -2,13 +2,13 @@ import React, { Suspense } from 'react';
 import { useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
-import MnemonicDialog from "ui/profile/manage/MnemonicDialog";
 import MessageBox from "ui/messagebox/MessageBox";
 import ConfirmBox from "ui/confirmbox/ConfirmBox";
 import FlashBox from "ui/flashbox/FlashBox";
 import ProgressBox from "ui/progressbox/ProgressBox";
 
 const ShareDialog = React.lazy(() => import("ui/sharedialog/ShareDialog"));
+const MnemonicDialog = React.lazy(() => import("ui/profile/manage/MnemonicDialog"));
 
 export default function GlobalDialogs() {
     const showMnemonicDialog = useSelector((state: ClientState) => !!state.nodeName.mnemonic);

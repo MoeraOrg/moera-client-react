@@ -99,6 +99,7 @@ import { ReactComponent as msPersonOff } from "ui/material-symbols/person_off.is
 import { ReactComponent as msPersonSearch } from "ui/material-symbols/person_search.isvg";
 import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_library.isvg";
 import { ReactComponent as msPreview } from "ui/material-symbols/preview.isvg";
+import { ReactComponent as msPrint } from "ui/material-symbols/print.isvg";
 import { ReactComponent as msPublic } from "ui/material-symbols/public.isvg";
 import { ReactComponent as msRedo } from "ui/material-symbols/redo.isvg";
 import { ReactComponent as msRemove } from "ui/material-symbols/remove.isvg";
@@ -242,6 +243,7 @@ export {
     msPhotoLibrary,
     msPreview,
     msPublic,
+    msPrint,
     msRedo,
     msRemove,
     msReorder,

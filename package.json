@@ -62,6 +62,7 @@
     "react-qr-code": "^2.0.12",
     "react-redux": "^8.1.2",
     "react-share": "^4.4.1",
+    "react-to-print": "^3.2.0",
     "react-widgets": "^5.8.4",
     "react-widgets-date-fns": "^5.0.20",
     "react-widgets-simple-number": "^5.0.20",

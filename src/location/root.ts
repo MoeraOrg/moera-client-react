@@ -8,6 +8,7 @@ import {
     isAtExplorePage,
     isAtGrantPage,
     isAtInstantsPage,
+    isAtMnemonicPage,
     isAtNewsPage,
     isAtPeoplePage,
     isAtProfilePage,
@@ -23,6 +24,7 @@ import { build as connectBuild, transform as connectTransform } from "location/c
 import { build as exploreBuild, transform as exploreTransform } from "location/explore";
 import { build as grantBuild, transform as grantTransform } from "location/grant";
 import { build as instantsBuild, transform as instantsTransform } from "location/instants";
+import { build as mnemonicBuild, transform as mnemonicTransform } from "location/mnemonic";
 import { build as newsBuild, transform as newsTransform } from "location/news";
 import { build as peopleBuild, transform as peopleTransform } from "location/people";
 import { build as postBuild, transform as postTransform } from "location/post";
@@ -87,6 +89,9 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (dstInfo.directories[0] === "signup") {
         return signupTransform(srcInfo, dstInfo);
     }
+    if (dstInfo.directories[0] === "mnemonic") {
+        return mnemonicTransform(srcInfo, dstInfo);
+    }
     return [];
 }
 
@@ -138,6 +143,9 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     }
     if (isAtSignUpPage(state)) {
         return signupBuild(state, info);
+    }
+    if (isAtMnemonicPage(state)) {
+        return mnemonicBuild(state, info);
     }
     return info;
 }
