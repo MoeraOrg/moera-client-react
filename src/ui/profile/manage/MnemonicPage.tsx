@@ -8,7 +8,9 @@ import { useReactToPrint } from 'react-to-print';
 import { tTitle } from "i18n";
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
+import { goToNews } from "state/navigation/actions";
 import { flashBox } from "state/flashbox/actions";
+import { mnemonicStore, mnemonicUnset } from "state/nodename/actions";
 import { CheckboxField } from "ui/control/field";
 import * as Browser from "ui/browser";
 import { Button } from "ui/control";
@@ -38,6 +40,7 @@ function MnemonicPage() {
     const name = useSelector((state: ClientState) => state.nodeName.mnemonicName);
     const mnemonic = useSelector((state: ClientState) => state.nodeName.mnemonic ?? []);
     const {t} = useTranslation();
+
     const printRef = useRef<HTMLDivElement>(null);
     const onPrint = useReactToPrint({contentRef: printRef, documentTitle: `Secret words for ${name}`});
 
@@ -50,11 +53,13 @@ function MnemonicPage() {
         }
     }
 
+    const onSkip = () => dispatch(mnemonicStore());
+
     return (
         <>
             <GlobalTitle/>
             <main className="mnemonic-page global-page" ref={printRef}>
-                <div className="title">{tTitle(t("name-key"))}</div>
+                <div className="title">{tTitle(t("named-key"))}</div>
                 <div className="name">{name}</div>
                 <Trans i18nKey="write-down-words">
                     <p/>
@@ -80,7 +85,7 @@ function MnemonicPage() {
                                    errorsOnly/>
                     <Button type="submit" variant="primary" className="submit-button">{t("continue")}</Button>
                 </Form>
-                <Button variant="link" className="skip d-print-none">{t("skip-for-now")}</Button>
+                <Button variant="link" className="skip d-print-none" onClick={onSkip}>{t("skip-for-now")}</Button>
             </main>
         </>
     );
@@ -103,21 +108,8 @@ const mnemonicPageLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<{}, Values>): void {
-        // dispatch(
-        //     signUp(
-        //         values.mode,
-        //         values.language,
-        //         values.provider,
-        //         values.name.trim(),
-        //         (quick || values.autoDomain) && formik.props.stage <= SIGN_UP_STAGE_DOMAIN
-        //             ? null
-        //             : values.domain.trim(),
-        //         values.password,
-        //         values.email,
-        //         quick || values.googlePlayAllowed,
-        //         (fieldName, message) => formik.setFieldError(fieldName, message)
-        //     )
-        // );
+        dispatch(mnemonicUnset(false));
+        dispatch(goToNews());
         formik.setSubmitting(false);
     }
 

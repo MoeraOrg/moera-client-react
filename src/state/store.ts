@@ -128,7 +128,6 @@ import askDialogTriggers from "state/askdialog/triggers";
 import blockingDetailsDialogTriggers from "state/blockingdetailsdialog/triggers";
 import blockedOperationsTriggers from "state/blockedoperations/triggers";
 import sheriffOrderDetailsDialogTriggers from "state/sherifforderdetailsdialog/triggers";
-import signUpTriggers from "state/signup/triggers";
 import refreshTriggers from "state/refresh/triggers";
 
 const reducers = combineReducers({
@@ -218,7 +217,6 @@ const triggers = collectTriggers(
     blockingDetailsDialogTriggers,
     blockedOperationsTriggers,
     sheriffOrderDetailsDialogTriggers,
-    signUpTriggers,
     refreshTriggers
 );
 

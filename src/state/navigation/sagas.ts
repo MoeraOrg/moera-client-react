@@ -26,8 +26,8 @@ import {
 } from "state/navigation/actions";
 import { homeIntroduced, mutuallyIntroduced } from "state/init-barriers";
 import { nodeReady, nodeUnset, ownerSwitch } from "state/node/actions";
-import { getOwnerName, isAtNode } from "state/node/selectors";
-import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
+import { getNodeRootLocation, isAtNode } from "state/node/selectors";
+import { getHomeOwnerName, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { storyReadingUpdate } from "state/stories/actions";
 import * as Browser from "ui/browser";
@@ -95,7 +95,7 @@ async function initFromNodeLocationSaga(action: InitFromNodeLocationAction): Pro
         if (fallbackUrl != null) {
             window.location.href = fallbackUrl;
         } else {
-            dispatch(nodeReady());
+            dispatch(nodeReady().causedBy(action));
         }
         return;
     }
@@ -104,7 +104,7 @@ async function initFromNodeLocationSaga(action: InitFromNodeLocationAction): Pro
         if (fallbackUrl != null) {
             window.location.href = fallbackUrl;
         } else {
-            dispatch(nodeReady());
+            dispatch(nodeReady().causedBy(action));
         }
         return;
     }
@@ -163,17 +163,22 @@ async function goHomeLocationSaga(action: GoHomeLocationAction): Promise<void> {
 
 async function goToHomePageSaga(action: GoToHomePageAction<any, any>): Promise<void> {
     await mutuallyIntroduced();
-    const {ownerName, homeOwnerName} = select(state => ({
-        ownerName: getOwnerName(state),
-        homeOwnerName: getHomeOwnerName(state)
+    const {nodeLocation, homeOwnerName, homeLocation} = select(state => ({
+        nodeLocation: getNodeRootLocation(state),
+        homeOwnerName: getHomeOwnerName(state),
+        homeLocation: getHomeRootLocation(state)
     }));
-    if (homeOwnerName == null) {
+    if (homeLocation == null) {
         dispatch(nodeUnset().causedBy(action));
         return;
     }
-    if (ownerName !== homeOwnerName) {
-        dispatch(ownerSwitch(homeOwnerName).causedBy(action));
-        await barrier(["INIT_FROM_LOCATION", "OWNER_SWITCH_FAILED"], true);
+    if (nodeLocation !== homeLocation) {
+        if (homeOwnerName != null) {
+            dispatch(ownerSwitch(homeOwnerName).causedBy(action));
+            await barrier(["INIT_FROM_LOCATION", "OWNER_SWITCH_FAILED"], true);
+        } else {
+            dispatch(initFromLocation(null, homeLocation, null, null, null).causedBy(action))
+        }
     }
     dispatch(goToPage(action.payload.page, action.payload.details).causedBy(action));
 }

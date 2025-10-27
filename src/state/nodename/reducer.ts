@@ -20,6 +20,7 @@ const initialState: NodeNameState = {
     ...emptyInfo,
     showingRegisterDialog: false,
     registering: false,
+    showingMnemonicDialog: false,
     storedMnemonic: false,
     mnemonicName: null,
     mnemonic: null,
@@ -92,9 +93,7 @@ export default (state: NodeNameState = initialState, action: ClientAction): Node
             return {
                 ...state,
                 showingRegisterDialog: false,
-                registering: false,
-                mnemonicName: action.payload.name,
-                mnemonic: action.payload.mnemonic
+                registering: false
             };
 
         case "REGISTER_NAME_FAILED":
@@ -103,17 +102,30 @@ export default (state: NodeNameState = initialState, action: ClientAction): Node
                 registering: false
             };
 
-        case "MNEMONIC_OPEN":
+        case "MNEMONIC_DIALOG_OPEN":
+            return {
+                ...state,
+                showingMnemonicDialog: true
+            };
+
+        case "MNEMONIC_DIALOG_CLOSE":
+            return {
+                ...state,
+                showingMnemonicDialog: false
+            };
+
+        case "MNEMONIC_SET":
             return {
                 ...state,
                 mnemonicName: action.payload.name,
                 mnemonic: action.payload.mnemonic
             };
 
-        case "MNEMONIC_CLOSED":
+        case "MNEMONIC_UNSET":
             return {
                 ...state,
                 storedMnemonic: action.payload.stored,
+                mnemonicName: null,
                 mnemonic: null
             };
 

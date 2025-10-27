@@ -24,6 +24,7 @@ import {
     settingsDeleteNodeRequestLoad,
     settingsGoToTab,
     settingsGrantsLoad,
+    settingsMnemonicLoad,
     settingsNodeConflict,
     settingsNodeMetaLoad,
     settingsNodeValuesLoad,
@@ -71,6 +72,7 @@ export default [
     trigger("EVENT_HOME_CLIENT_SETTINGS_CHANGED", true, settingsClientValuesLoad),
     trigger("EVENT_HOME_CLIENT_SETTINGS_CHANGED", conj(isAtSettingsPage, isAtSettingsClientTab), settingsClientConflict),
     trigger("SETTINGS_CHANGED_PASSWORD", true, () => flashBox(i18n.t("password-changed"))),
+    trigger("MNEMONIC_DIALOG_OPEN", true, settingsMnemonicLoad),
     trigger("EVENT_HOME_PLUGINS_UPDATED", isSettingsPluginsLoaded, settingsPluginsLoad),
     trigger(
         "EVENT_HOME_PLUGINS_UPDATED",

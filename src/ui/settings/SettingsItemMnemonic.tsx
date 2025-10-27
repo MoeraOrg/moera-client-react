@@ -2,8 +2,8 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { mnemonicDialogOpen } from "state/nodename/actions";
 import { hasNodeNameStoredMnemonic } from "state/nodename/selectors";
-import { settingsMnemonicLoad } from "state/settings/actions";
 import { Button } from "ui/control";
 
 export default function SettingsItemMnemonic() {
@@ -17,13 +17,13 @@ export default function SettingsItemMnemonic() {
 
     return (
         <div className="chapter">
-            <div className="title">{t("name-key")}</div>
+            <div className="title">{t("named-key")}</div>
             <p>
                 <Trans i18nKey="write-down-secret-words">
                     <b/>
                 </Trans>
             </p>
-            <Button variant="outline-primary" onClick={() => dispatch(settingsMnemonicLoad())}>{t("open")}</Button>
+            <Button variant="outline-primary" onClick={() => dispatch(mnemonicDialogOpen())}>{t("open")}</Button>
         </div>
     );
 }

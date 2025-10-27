@@ -5,8 +5,10 @@ import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
 import {
-    MnemonicCloseAction,
-    mnemonicClosed,
+    MnemonicDeleteAction,
+    mnemonicSet,
+    MnemonicStoreAction,
+    mnemonicUnset,
     NodeNameLoadAction,
     nodeNameLoadFailed,
     nodeNameSet,
@@ -17,13 +19,15 @@ import {
     registerNameFailed,
     registerNameSucceeded
 } from "state/nodename/actions";
+import { goToMnemonic, goToNews } from "state/navigation/actions";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("NODE_NAME_LOAD", "", nodeNameLoadSaga),
     executor("REGISTER_NAME", payload => payload.name, registerNameSaga),
     executor("NODE_NAME_UPDATE", null, nodeNameUpdateSaga),
-    executor("MNEMONIC_CLOSE", null, mnemonicCloseSaga),
+    executor("MNEMONIC_STORE", null, mnemonicStoreSaga),
+    executor("MNEMONIC_DELETE", null, mnemonicDeleteSaga),
 ];
 
 async function nodeNameLoadSaga(action: WithContext<NodeNameLoadAction>): Promise<void> {
@@ -47,7 +51,9 @@ async function registerNameSaga(action: WithContext<RegisterNameAction>): Promis
             return;
         }
         const secret = await Node.createNodeName(action, REL_HOME, {name});
-        dispatch(registerNameSucceeded(secret.name, secret.mnemonic!).causedBy(action));
+        dispatch(registerNameSucceeded().causedBy(action));
+        dispatch(mnemonicSet(secret.name, secret.mnemonic!).causedBy(action));
+        dispatch(goToMnemonic().causedBy(action));
     } catch (e) {
         dispatch(registerNameFailed().causedBy(action));
         dispatch(errorThrown(e));
@@ -65,21 +71,26 @@ async function nodeNameUpdateSaga(action: WithContext<NodeNameUpdateAction>): Pr
     }
 }
 
-async function mnemonicCloseSaga(action: WithContext<MnemonicCloseAction>): Promise<void> {
-    const {store} = action.payload;
-
-    const {stored, mnemonic} = select(state => ({
-        stored: state.nodeName.storedMnemonic,
-        mnemonic: state.nodeName.mnemonic
-    }));
+async function mnemonicStoreSaga(action: WithContext<MnemonicStoreAction>): Promise<void> {
+    const mnemonic = select(state => state.nodeName.mnemonic);
 
     try {
-        if (store && !stored && mnemonic != null) {
+        if (mnemonic != null) {
             await Node.storeMnemonic(action, REL_HOME, {mnemonic});
-        } else if (!store && stored) {
-            await Node.deleteStoredMnemonic(action, REL_HOME);
         }
-        dispatch(mnemonicClosed(store).causedBy(action));
+        dispatch(mnemonicUnset(true).causedBy(action));
+        // wait with going to the next page until the mnemonic is stored, because if it fails,
+        // we'll have a chance to write the mnemonic down or retry
+        dispatch(goToNews().causedBy(action));
+    } catch (e) {
+        dispatch(errorThrown(e));
+    }
+}
+
+async function mnemonicDeleteSaga(action: WithContext<MnemonicDeleteAction>): Promise<void> {
+    try {
+        await Node.deleteStoredMnemonic(action, REL_HOME);
+        dispatch(mnemonicUnset(false).causedBy(action));
     } catch (e) {
         dispatch(errorThrown(e));
     }

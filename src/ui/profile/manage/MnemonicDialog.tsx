@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import { mnemonicClose } from "state/nodename/actions";
+import { mnemonicDelete, mnemonicDialogClose } from "state/nodename/actions";
 import { Button, ModalDialog } from "ui/control";
 
 interface ColumnProps {
@@ -30,12 +30,15 @@ export default function MnemonicDialog() {
         return null;
     }
 
-    const onCancel = () => dispatch(mnemonicClose(true));
+    const onCancel = () => dispatch(mnemonicDialogClose());
 
-    const onConfirm = () => dispatch(mnemonicClose(false));
+    const onConfirm = () => {
+        dispatch(mnemonicDelete());
+        dispatch(mnemonicDialogClose());
+    }
 
     return (
-        <ModalDialog title={t("name-key")} onClose={onCancel}>
+        <ModalDialog title={t("named-key")} onClose={onCancel}>
             <div className="modal-body">
                 <Trans i18nKey="write-down-words" values={{name}}>
                     <p/>

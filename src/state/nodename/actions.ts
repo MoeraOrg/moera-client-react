@@ -34,35 +34,42 @@ export type RegisterNameAction = ActionWithPayload<"REGISTER_NAME", {
 export const registerName = (name: string, onNameTaken: any): RegisterNameAction =>
     actionWithPayload("REGISTER_NAME", {name, onNameTaken});
 
-export type RegisterNameSucceededAction = ActionWithPayload<"REGISTER_NAME_SUCCEEDED", {
-    name: string;
-    mnemonic: string[];
-}>;
-export const registerNameSucceeded = (name: string, mnemonic: string[]): RegisterNameSucceededAction =>
-    actionWithPayload("REGISTER_NAME_SUCCEEDED", {name, mnemonic});
+export type RegisterNameSucceededAction = ActionWithoutPayload<"REGISTER_NAME_SUCCEEDED">;
+export const registerNameSucceeded = (): RegisterNameSucceededAction =>
+    actionWithoutPayload("REGISTER_NAME_SUCCEEDED");
 
 export type RegisterNameFailedAction = ActionWithoutPayload<"REGISTER_NAME_FAILED">;
 export const registerNameFailed = (): RegisterNameFailedAction =>
     actionWithoutPayload("REGISTER_NAME_FAILED");
 
-export type MnemonicOpenAction = ActionWithPayload<"MNEMONIC_OPEN", {
+export type MnemonicDialogOpenAction = ActionWithoutPayload<"MNEMONIC_DIALOG_OPEN">;
+export const mnemonicDialogOpen = (): MnemonicDialogOpenAction =>
+    actionWithoutPayload("MNEMONIC_DIALOG_OPEN");
+
+export type MnemonicDialogCloseAction = ActionWithoutPayload<"MNEMONIC_DIALOG_CLOSE">;
+export const mnemonicDialogClose = (): MnemonicDialogCloseAction =>
+    actionWithoutPayload("MNEMONIC_DIALOG_CLOSE");
+
+export type MnemonicSetAction = ActionWithPayload<"MNEMONIC_SET", {
     name: string;
     mnemonic: string[];
 }>;
-export const mnemonicOpen = (name: string, mnemonic: string[]): MnemonicOpenAction =>
-    actionWithPayload("MNEMONIC_OPEN", {name, mnemonic});
+export const mnemonicSet = (name: string, mnemonic: string[]): MnemonicSetAction =>
+    actionWithPayload("MNEMONIC_SET", {name, mnemonic});
 
-export type MnemonicCloseAction = ActionWithPayload<"MNEMONIC_CLOSE", {
-    store: boolean;
-}>;
-export const mnemonicClose = (store: boolean): MnemonicCloseAction =>
-    actionWithPayload("MNEMONIC_CLOSE", {store});
-
-export type MnemonicClosedAction = ActionWithPayload<"MNEMONIC_CLOSED", {
+export type MnemonicUnsetAction = ActionWithPayload<"MNEMONIC_UNSET", {
     stored: boolean;
 }>;
-export const mnemonicClosed = (stored: boolean): MnemonicClosedAction =>
-    actionWithPayload("MNEMONIC_CLOSED", {stored});
+export const mnemonicUnset = (stored: boolean): MnemonicUnsetAction =>
+    actionWithPayload("MNEMONIC_UNSET", {stored});
+
+export type MnemonicStoreAction = ActionWithoutPayload<"MNEMONIC_STORE">;
+export const mnemonicStore = (): MnemonicStoreAction =>
+    actionWithoutPayload("MNEMONIC_STORE");
+
+export type MnemonicDeleteAction = ActionWithoutPayload<"MNEMONIC_DELETE">;
+export const mnemonicDelete = (): MnemonicDeleteAction =>
+    actionWithoutPayload("MNEMONIC_DELETE");
 
 export type NodeNameUpdateDialogAction = ActionWithPayload<"NODE_NAME_UPDATE_DIALOG", {
     changeName: boolean;
@@ -99,9 +106,12 @@ export type NodeNameAnyAction =
     | RegisterNameAction
     | RegisterNameSucceededAction
     | RegisterNameFailedAction
-    | MnemonicOpenAction
-    | MnemonicCloseAction
-    | MnemonicClosedAction
+    | MnemonicDialogOpenAction
+    | MnemonicDialogCloseAction
+    | MnemonicSetAction
+    | MnemonicUnsetAction
+    | MnemonicStoreAction
+    | MnemonicDeleteAction
     | NodeNameUpdateDialogAction
     | NodeNameUpdateDialogCancelAction
     | NodeNameUpdateAction

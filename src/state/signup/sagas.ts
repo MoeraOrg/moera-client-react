@@ -8,8 +8,8 @@ import { WithContext } from "state/action-types";
 import { barrier, dispatch, select } from "state/store-sagas";
 import { executor } from "state/executor";
 import { homeOwnerSet } from "state/home/actions";
-import { boot } from "state/navigation/actions";
-import { registerNameSucceeded } from "state/nodename/actions";
+import { boot, goToMnemonic } from "state/navigation/actions";
+import { mnemonicSet, mnemonicStore, registerNameSucceeded } from "state/nodename/actions";
 import {
     SIGN_UP_STAGE_CONNECT,
     SIGN_UP_STAGE_DOMAIN,
@@ -153,9 +153,14 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
             }
             const secret = await Node.createNodeName(action, REL_HOME, {name});
             dispatch(homeOwnerSet(null, true, null, null).causedBy(action));
-            // TODO go to mnemonic page or newsfeed
-            // dispatch(signedUp().causedBy(action));
-            dispatch(registerNameSucceeded(secret.name, secret.mnemonic!).causedBy(action));
+            dispatch(registerNameSucceeded().causedBy(action));
+            dispatch(mnemonicSet(secret.name, secret.mnemonic!).causedBy(action));
+            const quick = select(state => state.signUp.mode === "quick");
+            if (quick) {
+                dispatch(mnemonicStore().causedBy(action));
+            } else {
+                dispatch(goToMnemonic().causedBy(action));
+            }
         } catch (e) {
             dispatch(signUpFailed(SIGN_UP_STAGE_NAME).causedBy(action));
             dispatch(errorThrown(e));

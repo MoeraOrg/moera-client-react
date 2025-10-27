@@ -11,7 +11,7 @@ const ShareDialog = React.lazy(() => import("ui/sharedialog/ShareDialog"));
 const MnemonicDialog = React.lazy(() => import("ui/profile/manage/MnemonicDialog"));
 
 export default function GlobalDialogs() {
-    const showMnemonicDialog = useSelector((state: ClientState) => !!state.nodeName.mnemonic);
+    const showMnemonicDialog = useSelector((state: ClientState) => state.nodeName.showingMnemonicDialog);
     const showMessageBox = useSelector((state: ClientState) => state.messageBox.show);
     const showConfirmBox = useSelector((state: ClientState) => state.confirmBox.show);
     const showFlashBox = useSelector((state: ClientState) => state.flashBox.show);
@@ -23,7 +23,9 @@ export default function GlobalDialogs() {
             <Suspense fallback={null}>
                 {showShareDialog && <ShareDialog/>}
             </Suspense>
-            {showMnemonicDialog && <MnemonicDialog/>}
+            <Suspense fallback={null}>
+                {showMnemonicDialog && <MnemonicDialog/>}
+            </Suspense>
             {showMessageBox && <MessageBox/>}
             {showConfirmBox && <ConfirmBox/>}
             {showFlashBox && <FlashBox/>}

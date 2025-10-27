@@ -14,5 +14,5 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
 }
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
-    return info.sub("mnemonic").noIndex().withTitle(i18n.t("name-key"));
+    return info.sub("mnemonic").noIndex().withTitle(i18n.t("named-key"));
 }

@@ -72,7 +72,7 @@ import {
 import { errorThrown } from "state/error/actions";
 import { executor } from "state/executor";
 import { getSetting, getSettingsClient, getSettingsClientMeta } from "state/settings/selectors";
-import { mnemonicOpen } from "state/nodename/actions";
+import { mnemonicSet } from "state/nodename/actions";
 import { flashBox } from "state/flashbox/actions";
 import { messageBox } from "state/messagebox/actions";
 import * as Browser from "ui/browser";
@@ -249,7 +249,7 @@ async function settingsMnemonicLoadSaga(action: WithContext<SettingsMnemonicLoad
         const keyMnemonic = await Node.getStoredMnemonic(action, REL_HOME);
         if (action.context.homeOwnerName != null) {
             const name = NodeName.shorten(action.context.homeOwnerName);
-            dispatch(mnemonicOpen(name, keyMnemonic.mnemonic).causedBy(action));
+            dispatch(mnemonicSet(name, keyMnemonic.mnemonic).causedBy(action));
         }
     } catch (e) {
         dispatch(errorThrown(e));
