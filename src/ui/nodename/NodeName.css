@@ -2,7 +2,7 @@
     font-weight: bold;
 }
 
-.node-name:hover {
+.node-name.linked:hover {
     text-decoration: underline;
 }
 

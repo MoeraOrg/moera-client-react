@@ -152,6 +152,10 @@ export type GoToMnemonicAction = GoToPageAction<"mnemonic", {}>;
 export const goToMnemonic = (): GoToMnemonicAction =>
     goToPage("mnemonic", {});
 
+export type GoToStartReadingAction = GoToPageAction<"start-reading", {}>;
+export const goToStartReading = (): GoToStartReadingAction =>
+    goToPage("start-reading", {});
+
 export type GoToPageAnyAction =
     GoToProfileAction
     | GoToTimelineAction
@@ -175,7 +179,8 @@ export type GoToPageAnyAction =
     | GoToInstantsAction
     | GoToConnectAction
     | GoToSignUpAction
-    | GoToMnemonicAction;
+    | GoToMnemonicAction
+    | GoToStartReadingAction;
 
 export type NewLocationAction = ActionWithoutPayload<"NEW_LOCATION">;
 export const newLocation = (): NewLocationAction =>

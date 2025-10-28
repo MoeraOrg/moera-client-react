@@ -16,6 +16,7 @@ import {
     isAtSearchPage,
     isAtSettingsPage,
     isAtSignUpPage,
+    isAtStartReadingPage,
     isAtTimelinePage
 } from "state/navigation/selectors";
 import { build as complaintsBuild, transform as complaintsTransform } from "location/complaints";
@@ -33,6 +34,7 @@ import { build as removalBuild, transform as removalTransform } from "location/r
 import { build as searchBuild, transform as searchTransform } from "location/search";
 import { build as settingsBuild, transform as settingsTransform } from "location/settings";
 import { build as signupBuild, transform as signupTransform } from "location/signup";
+import { build as startReadingBuild, transform as startReadingTransform } from "location/start-reading";
 import { build as timelineBuild, transform as timelineTransform } from "location/timeline";
 import { build as mediaBuild } from "location/media";
 import { LocationInfo } from "location/LocationInfo";
@@ -92,6 +94,10 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (dstInfo.directories[0] === "mnemonic") {
         return mnemonicTransform(srcInfo, dstInfo);
     }
+    if (dstInfo.directories[0] === "start-reading") {
+        return startReadingTransform(srcInfo, dstInfo);
+    }
+
     return [];
 }
 
@@ -146,6 +152,9 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     }
     if (isAtMnemonicPage(state)) {
         return mnemonicBuild(state, info);
+    }
+    if (isAtStartReadingPage(state)) {
+        return startReadingBuild(state, info);
     }
     return info;
 }

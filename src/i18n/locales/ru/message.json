@@ -451,6 +451,7 @@
   "more-reactions": "Ещё {remaining}",
   "more-reactions-hidden": "Ещё {remaining} {remaining, plural, one {скрытая} other {скрытых}}",
   "more-year": "Больше года назад",
+  "most-active-blogs": "Самые активные блоги",
   "must-not-empty": "Обязательное поле",
   "must-single-english-word": "Введите одно английское слово",
   "mutual-friends": "Взаимные друзья",

@@ -18,7 +18,6 @@
 }
 
 .global-page .title {
-    height: 2.5rem;
     font-family: var(--font-messages) sans-serif;
     font-weight: 600;
     font-size: 2rem;

@@ -77,6 +77,10 @@ export function isAtMnemonicPage(state: ClientState): boolean {
     return state.navigation.page === "mnemonic";
 }
 
+export function isAtStartReadingPage(state: ClientState): boolean {
+    return state.navigation.page === "start-reading";
+}
+
 export function isBottomMenuVisible(state: ClientState): boolean {
     return state.navigation.bottomMenuVisible;
 }

@@ -1,0 +1,19 @@
+@media only screen and (min-width: 992px) {
+    .start-reading-page {
+        width: 34.5rem;
+    }
+}
+
+.start-reading-page .title {
+    text-align: start;
+}
+
+.start-reading-page .person .blog-title {
+    grid-area: status;
+}
+
+.start-reading-page .submit-button {
+    margin-top: 2rem;
+    display: block;
+    width: 100%;
+}

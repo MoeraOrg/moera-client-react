@@ -41,7 +41,8 @@ export default function NodeName({
     const klass = cx(
         "node-name", {
             "correct": verified && correct,
-            "incorrect": verified && !correct
+            "incorrect": verified && !correct,
+            linked,
         },
         className
     );
