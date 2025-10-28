@@ -1,0 +1,62 @@
+@media only print {
+    .mnemonic-document {
+        padding: 3rem;
+        width: 32.5rem;
+        margin: 0 auto;
+    }
+
+    .mnemonic-document .title {
+        height: 2.5rem;
+        font-family: var(--font-messages) sans-serif;
+        font-weight: 600;
+        font-size: 2rem;
+        line-height: 125%;
+        color: var(--bs-gray-900);
+        text-align: center;
+        margin-bottom: .5rem;
+    }
+}
+
+.mnemonic-document .name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--bs-gray-600);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.mnemonic-document .words-panel {
+    display: grid;
+    grid-template: " title print   copy"
+                   / 1fr   2.75rem 2.75rem;
+    align-items: center;
+    height: 2.75rem;
+    margin-bottom: .25rem;
+    color: var(--bs-gray-900);
+}
+
+.mnemonic-document .words-panel .words-title {
+    grid-area: title;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 150%;
+}
+
+.mnemonic-document .words-panel .btn {
+    width: 2.75rem;
+    height: 2.75rem;
+}
+
+.mnemonic-document .words-panel .print-button {
+    grid-area: print;
+}
+
+@media only screen and (max-width: 991px) {
+    .mnemonic-document .words-panel .print-button {
+        display: none;
+    }
+}
+
+.mnemonic-document .words-panel .copy-button {
+    grid-area: copy;
+}

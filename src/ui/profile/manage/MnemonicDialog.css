@@ -1,0 +1,24 @@
+@media only screen {
+    .mnemonic-dialog .mnemonic-document .title {
+        display: none;
+    }
+
+    .mnemonic-dialog .mnemonic-document .name {
+        display: none;
+    }
+
+    .mnemonic-dialog .mnemonic-document .explanation {
+        display: none;
+    }
+
+    .mnemonic-dialog .mnemonic-document .words-title {
+        display: none;
+    }
+}
+
+.mnemonic-dialog .written-down {
+    margin-top: 2rem;
+    margin-bottom: 0;
+    font-weight: 400;
+    color: var(--bs-gray-600);
+}
