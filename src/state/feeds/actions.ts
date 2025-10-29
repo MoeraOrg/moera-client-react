@@ -29,9 +29,12 @@ export type FeedSubscribeAction = ActionWithPayload<"FEED_SUBSCRIBE", {
     nodeName: string;
     feedName: string;
     storyId?: string | null;
+    silent?: boolean;
 }>;
-export const feedSubscribe = (nodeName: string, feedName: string, storyId?: string | null): FeedSubscribeAction =>
-    actionWithPayload("FEED_SUBSCRIBE", {nodeName, feedName, storyId});
+export const feedSubscribe = (
+    nodeName: string, feedName: string, storyId?: string | null, silent?: boolean
+): FeedSubscribeAction =>
+    actionWithPayload("FEED_SUBSCRIBE", {nodeName, feedName, storyId, silent});
 
 export type FeedSubscribedAction = ActionWithPayload<"FEED_SUBSCRIBED", {
     nodeName: string;

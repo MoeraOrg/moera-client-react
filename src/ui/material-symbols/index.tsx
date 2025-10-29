@@ -7,6 +7,7 @@ import { ReactComponent as brPatreon } from "ui/material-symbols/brands/patreon.
 import { ReactComponent as brPaypal } from "ui/material-symbols/brands/paypal.isvg"; // FontAwesome
 import { ReactComponent as msAdd } from "ui/material-symbols/add.isvg";
 import { ReactComponent as msAddBox } from "ui/material-symbols/add_box.isvg";
+import { ReactComponent as msAddCircle } from "ui/material-symbols/add_circle.isvg";
 import { ReactComponent as msAddLink } from "ui/material-symbols/add_link.isvg";
 import { ReactComponent as msAlternateEmail } from "ui/material-symbols/alternate_email.isvg";
 import { ReactComponent as msArrowBack } from "ui/material-symbols/arrow_back.isvg";
@@ -150,6 +151,7 @@ export {
     brPaypal,
     msAdd,
     msAddBox,
+    msAddCircle,
     msAddLink,
     msAlternateEmail,
     msArrowBack,

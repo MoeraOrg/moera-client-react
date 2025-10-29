@@ -12,6 +12,37 @@
     grid-area: status;
 }
 
+.start-reading-page .person .subscribe-button {
+    width: 1.95rem;
+    height: 1.95rem;
+    display: grid;
+    place-items: center;
+    margin-left: 1rem;
+
+    --bs-btn-color: white;
+    --bs-btn-bg: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-color: var(--bs-gray-100);
+    --bs-btn-hover-bg: var(--bs-brand-400);
+    --bs-btn-hover-border-color: var(--bs-brand-400);
+    --bs-btn-active-color: white;
+    --bs-btn-active-bg: var(--bs-primary);
+    --bs-btn-active-border-color: var(--bs-primary);
+    --bs-btn-disabled-color: var(--bs-gray-200);
+    --bs-btn-disabled-bg: var(--bs-brand-300);
+    --bs-btn-disabled-border-color: var(--bs-brand-300);
+    --bs-btn-border-radius: 50%;
+    --bs-btn-padding-x: 0;
+    --bs-btn-padding-y: 0;
+}
+
+.start-reading-page .person DIV.subscribe-button {
+    color: var(--bs-btn-color);
+    background-color: var(--bs-btn-bg);
+    border-color: var(--bs-btn-border-color);
+    border-radius: var(--bs-btn-border-radius);
+}
+
 .start-reading-page .submit-button {
     margin-top: 2rem;
     display: block;

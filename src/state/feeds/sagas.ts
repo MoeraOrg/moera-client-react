@@ -91,13 +91,15 @@ async function feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>): 
 
 async function feedSubscribeSaga(action: WithContext<FeedSubscribeAction>): Promise<void> {
     await homeIntroduced();
-    const {nodeName, feedName, storyId} = action.payload;
+    const {nodeName, feedName, storyId, silent = false} = action.payload;
     try {
         const subscription = await Node.createSubscription(
             action, REL_HOME,
             {type: "feed" as const, feedName: "news", remoteNodeName: nodeName, remoteFeedName: feedName}
         );
-        dispatch(flashBox(i18n.t("you-subscribed")).causedBy(action));
+        if (!silent) {
+            dispatch(flashBox(i18n.t("you-subscribed")).causedBy(action));
+        }
         dispatch(feedSubscribed(nodeName, subscription).causedBy(action));
         if (storyId != null) {
             dispatch(storySatisfy(REL_HOME, "instant", storyId).causedBy(action));
