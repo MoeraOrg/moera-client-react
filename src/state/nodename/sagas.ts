@@ -19,7 +19,7 @@ import {
     registerNameFailed,
     registerNameSucceeded
 } from "state/nodename/actions";
-import { goToMnemonic, goToNews } from "state/navigation/actions";
+import { goToMnemonic, goToStartReading } from "state/navigation/actions";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
@@ -81,7 +81,7 @@ async function mnemonicStoreSaga(action: WithContext<MnemonicStoreAction>): Prom
         dispatch(mnemonicUnset(true).causedBy(action));
         // wait with going to the next page until the mnemonic is stored, because if it fails,
         // we'll have a chance to write the mnemonic down or retry
-        dispatch(goToNews().causedBy(action));
+        dispatch(goToStartReading().causedBy(action));
     } catch (e) {
         dispatch(errorThrown(e));
     }

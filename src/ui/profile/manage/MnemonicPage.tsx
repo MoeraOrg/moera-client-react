@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Form, FormikBag, FormikErrors, withFormik } from 'formik';
 
 import { dispatch } from "state/store-sagas";
-import { goToNews } from "state/navigation/actions";
+import { goToStartReading } from "state/navigation/actions";
 import { mnemonicStore, mnemonicUnset } from "state/nodename/actions";
 import { CheckboxField } from "ui/control/field";
 import { Button } from "ui/control";
@@ -54,7 +54,7 @@ const mnemonicPageLogic = {
 
     handleSubmit(values: Values, formik: FormikBag<{}, Values>): void {
         dispatch(mnemonicUnset(false));
-        dispatch(goToNews());
+        dispatch(goToStartReading());
         formik.setSubmitting(false);
     }
 
