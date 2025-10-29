@@ -755,6 +755,8 @@ export interface RecommendedNodeInfo {
     fullName?: string | null;
     title?: string | null;
     avatar?: AvatarImage | null;
+    subscribersTotal: number;
+    postingsTotal: number;
 }
 
 export interface RemoteFeed {

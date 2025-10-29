@@ -1998,9 +1998,17 @@ export const NODE_API_SCHEMAS = {
                         }
                     ]
                 },
+                "subscribersTotal": {
+                    type: "integer"
+                },
+                "postingsTotal": {
+                    type: "integer"
+                },
             },
             required: [
                 "nodeName",
+                "subscribersTotal",
+                "postingsTotal",
             ],
             additionalProperties: false
         },

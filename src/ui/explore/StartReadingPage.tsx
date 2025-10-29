@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import * as immutable from 'object-path-immutable';
 
-import { NodeName as NodeNameFormat } from "api";
 import { tTitle } from "i18n";
 import { ClientState } from "state/state";
 import { getSettingNode } from "state/settings/selectors";
@@ -48,7 +47,15 @@ export default function StartReadingPage() {
                             <div className="details">
                                 <NodeName className="full-name" name={node.nodeName} fullName={node.fullName}
                                           display="full-name" linked={false} popup={false}/>
-                                <span className="name">{NodeNameFormat.shorten(node.nodeName)}</span>
+                                <span className="name">
+                                    <Trans i18nKey="count-posts" values={{count: node.postingsTotal}}>
+                                        <span/>
+                                    </Trans>
+                                    {", "}
+                                    <Trans i18nKey="count-subscribers" values={{count: node.subscribersTotal}}>
+                                        <span/>
+                                    </Trans>
+                                </span>
                             </div>
                             <span className="blog-title">{node.title}</span>
                             {!subscribed ?

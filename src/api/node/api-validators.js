@@ -21645,7 +21645,7 @@ return errors === 0;
 }
 
 export const RecommendedNodeInfo = validate98;
-const schema114 = {"type":"object","properties":{"nodeName":{"type":"string"},"fullName":{"type":"string","nullable":true},"title":{"type":"string","nullable":true},"avatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]}},"required":["nodeName"],"additionalProperties":false};
+const schema114 = {"type":"object","properties":{"nodeName":{"type":"string"},"fullName":{"type":"string","nullable":true},"title":{"type":"string","nullable":true},"avatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"subscribersTotal":{"type":"integer"},"postingsTotal":{"type":"integer"}},"required":["nodeName","subscribersTotal","postingsTotal"],"additionalProperties":false};
 
 function validate98(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
 let vErrors = null;
@@ -21653,14 +21653,14 @@ let errors = 0;
 if(errors === 0){
 if(data && typeof data == "object" && !Array.isArray(data)){
 let missing0;
-if((data.nodeName === undefined) && (missing0 = "nodeName")){
+if((((data.nodeName === undefined) && (missing0 = "nodeName")) || ((data.subscribersTotal === undefined) && (missing0 = "subscribersTotal"))) || ((data.postingsTotal === undefined) && (missing0 = "postingsTotal"))){
 validate98.errors = [{instancePath,schemaPath:"#/required",keyword:"required",params:{missingProperty: missing0},message:"must have required property '"+missing0+"'"}];
 return false;
 }
 else {
 const _errs1 = errors;
 for(const key0 in data){
-if(!((((key0 === "nodeName") || (key0 === "fullName")) || (key0 === "title")) || (key0 === "avatar"))){
+if(!((((((key0 === "nodeName") || (key0 === "fullName")) || (key0 === "title")) || (key0 === "avatar")) || (key0 === "subscribersTotal")) || (key0 === "postingsTotal"))){
 delete data[key0];
 }
 }
@@ -22153,6 +22153,80 @@ var valid0 = _errs10 === errors;
 }
 else {
 var valid0 = true;
+}
+if(valid0){
+if(data.subscribersTotal !== undefined){
+let data9 = data.subscribersTotal;
+const _errs33 = errors;
+if(!(((typeof data9 == "number") && (!(data9 % 1) && !isNaN(data9))) && (isFinite(data9)))){
+let dataType10 = typeof data9;
+let coerced10 = undefined;
+if(dataType10 == 'object' && Array.isArray(data9) && data9.length == 1){
+data9 = data9[0];
+dataType10 = typeof data9;
+if(((typeof data9 == "number") && (!(data9 % 1) && !isNaN(data9))) && (isFinite(data9))){
+coerced10 = data9;
+}
+}
+if(!(coerced10 !== undefined)){
+if(dataType10 === "boolean" || data9 === null
+              || (dataType10 === "string" && data9 && data9 == +data9 && !(data9 % 1))){
+coerced10 = +data9;
+}
+else {
+validate98.errors = [{instancePath:instancePath+"/subscribersTotal",schemaPath:"#/properties/subscribersTotal/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+return false;
+}
+}
+if(coerced10 !== undefined){
+data9 = coerced10;
+if(data !== undefined){
+data["subscribersTotal"] = coerced10;
+}
+}
+}
+var valid0 = _errs33 === errors;
+}
+else {
+var valid0 = true;
+}
+if(valid0){
+if(data.postingsTotal !== undefined){
+let data10 = data.postingsTotal;
+const _errs35 = errors;
+if(!(((typeof data10 == "number") && (!(data10 % 1) && !isNaN(data10))) && (isFinite(data10)))){
+let dataType11 = typeof data10;
+let coerced11 = undefined;
+if(dataType11 == 'object' && Array.isArray(data10) && data10.length == 1){
+data10 = data10[0];
+dataType11 = typeof data10;
+if(((typeof data10 == "number") && (!(data10 % 1) && !isNaN(data10))) && (isFinite(data10))){
+coerced11 = data10;
+}
+}
+if(!(coerced11 !== undefined)){
+if(dataType11 === "boolean" || data10 === null
+              || (dataType11 === "string" && data10 && data10 == +data10 && !(data10 % 1))){
+coerced11 = +data10;
+}
+else {
+validate98.errors = [{instancePath:instancePath+"/postingsTotal",schemaPath:"#/properties/postingsTotal/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+return false;
+}
+}
+if(coerced11 !== undefined){
+data10 = coerced11;
+if(data !== undefined){
+data["postingsTotal"] = coerced11;
+}
+}
+}
+var valid0 = _errs35 === errors;
+}
+else {
+var valid0 = true;
+}
+}
 }
 }
 }
