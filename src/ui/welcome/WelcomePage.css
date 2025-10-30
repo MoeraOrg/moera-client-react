@@ -1,19 +1,51 @@
 .welcome .title {
-    font-size: 400%;
-    font-weight: bold;
-    color: var(--bs-info);
-    text-align: center;
-    margin-top: 4rem;
+    margin-bottom: 2.5rem;
 }
 
-.welcome .discover {
-    text-align: center;
-    margin-top: .7rem;
+.welcome .or-line {
+    margin-top: 1.75rem;
+    margin-bottom: 1.75rem;
+    height: 1.25rem;
+    display: grid;
+    grid-template-columns: 1fr 2.9rem 1fr;
+    align-items: center;
 }
 
-.welcome .discover A {
-    padding-left: 2em;
-    padding-right: 1.5em;
-    position: relative;
-    left: -3rem;
+.welcome .or-line HR {
+    border-color: var(--bs-gray-500);
+}
+
+.welcome .or-line .or {
+    justify-self: center;
+    font-weight: 400;
+    font-size: .88rem;
+    line-height: 143%;
+    color: var(--bs-gray-600);
+}
+
+.welcome .more-button {
+    display: block;
+    width: 100%;
+}
+
+.welcome .signup-button {
+    margin-top: 1.25rem;
+    display: block;
+    width: 100%;
+}
+
+.welcome .link {
+    font-weight: 400;
+    font-size: .88rem;
+    line-height: 143%;
+    color: var(--bs-gray-600);
+    text-align: center;
+}
+
+.welcome .link .btn {
+    font-size: .88rem;
+    text-decoration: underline;
+    color: var(--violet-600);
+    padding: 0;
+    vertical-align: baseline;
 }

@@ -1,0 +1,31 @@
+.welcome #search-box {
+    display: flex;
+    gap: .75rem;
+    width: min(26.5rem, 100vw - 4rem);
+}
+
+.welcome #search-box .search-icon {
+    display: none;
+}
+
+.welcome #search-box INPUT {
+    flex: auto;
+    background-color: var(--bs-body-bg);
+    border-radius: var(--bs-border-radius);
+    width: unset;
+    min-width: 0;
+    font-size: 1.12rem;
+    padding-left: .75rem;
+}
+
+.welcome #search-box .cancel {
+    top: .4rem;
+    right: 4.3rem;
+}
+
+.welcome .search-suggestions.name-select {
+    position: absolute;
+    left: 0;
+    top: 2.75rem;
+    width: min(26.5rem, 100vw - 4rem);
+}

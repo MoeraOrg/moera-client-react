@@ -36,7 +36,9 @@ export default function App() {
     return (
         // FIXME React.CSSProperties does not include CSS variables
         <div style={{
-            "--page-header-height": !tinyScreen ? (connectedToHome || atGlobalPage ? "4.25rem" : "7.75rem") : "4rem",
+            "--page-header-height": !tinyScreen
+                ? (connectedToHome || atGlobalPage || !atNode ? "4.25rem" : "7.75rem")
+                : "4rem",
             "--page-footer-height": !tinyScreen
                 ? "0"
                 : (connectedToHome ? (bottomMenuStyle === "compact" ? "3rem" : "5rem") : "3.5rem"),

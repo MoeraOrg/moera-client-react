@@ -1,29 +1,42 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Page } from "ui/page/Page";
-import WelcomeNavigator from "ui/welcome/WelcomeNavigator";
-import Invitation from "ui/welcome/Invitation";
+import { tTitle } from "i18n";
+import * as Browser from "ui/browser";
+import GlobalTitle from "ui/mainmenu/GlobalTitle";
 import Jump from "ui/navigation/Jump";
+import WelcomeSearchBox from "ui/welcome/WelcomeSearchBox";
 import "./WelcomePage.css";
 
 export default function WelcomePage() {
     const {t} = useTranslation();
 
     return (
-        <Page className="welcome">
-            <main className="page-central-pane">
-                <div className="title">{t("welcome")}</div>
-                <WelcomeNavigator/>
-                <div className="discover">
-                    <Jump className="btn btn-primary btn-sm" nodeName="moera-activity-blog_0"
-                          nodeUri="https://moera-activity-blog.moera.blog/moera"
-                          href="/post/9f838e8f-d419-4c89-8908-06ae029d2482">
-                        {t("find-more-people")}
+        <>
+            <GlobalTitle/>
+            <main className="welcome global-page">
+                <div className="title">{tTitle(t("welcome"))}</div>
+                <WelcomeSearchBox/>
+                <div className="or-line">
+                    <hr/>
+                    <div className="or">
+                        {t("or")}
+                    </div>
+                    <hr/>
+                </div>
+                <Jump className="btn btn-outline-primary btn-lg more-button" href="/explore/people">
+                    {tTitle(t("find-more-people"))}
+                </Jump>
+                <Jump className="btn btn-primary btn-lg signup-button" href={Browser.urlWithBackHref("/signup")}>
+                    {tTitle(t("create-account-submit"))}
+                </Jump>
+                <div className="link mt-3">
+                    {t("already-have-account")}{" "}
+                    <Jump className="btn btn-link" href={Browser.urlWithBackHref("/connect")}>
+                        {t("connect")}
                     </Jump>
                 </div>
-                <Invitation/>
             </main>
-        </Page>
+        </>
     );
 }
