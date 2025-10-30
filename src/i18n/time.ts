@@ -36,7 +36,7 @@ export function tDistanceToNow(past: Date, t: TFunction, options: DistanceFormat
     }
 
     const weeks = differenceInWeeks(now, past);
-    if (weeks < 4) {
+    if (weeks < 5) {
         return `${weeks}\xa0${t("time.week.short")}` + suffix;
     }
 
