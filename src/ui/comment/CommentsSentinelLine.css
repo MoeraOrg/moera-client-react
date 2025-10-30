@@ -3,3 +3,7 @@
     display: grid;
     place-items: center;
 }
+
+.comments-sentinel-line:empty {
+    margin: 0;
+}
