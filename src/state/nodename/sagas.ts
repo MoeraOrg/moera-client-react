@@ -83,7 +83,7 @@ async function mnemonicStoreSaga(action: WithContext<MnemonicStoreAction>): Prom
         // we'll have a chance to write the mnemonic down or retry
         dispatch(goToStartReading().causedBy(action));
     } catch (e) {
-        dispatch(errorThrown(e));
+        dispatch(goToMnemonic().causedBy(action));
     }
 }
 

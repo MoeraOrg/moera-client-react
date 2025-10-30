@@ -151,7 +151,7 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
                 dispatch(signUpFailed(SIGN_UP_STAGE_NAME).causedBy(action));
                 return;
             }
-            const secret = await Node.createNodeName(action, REL_HOME, {name});
+            const secret = await Node.createNodeName(action, rootLocation, {name});
             dispatch(homeOwnerSet(null, true, null, null).causedBy(action));
             dispatch(registerNameSucceeded().causedBy(action));
             dispatch(mnemonicSet(secret.name, secret.mnemonic!).causedBy(action));
