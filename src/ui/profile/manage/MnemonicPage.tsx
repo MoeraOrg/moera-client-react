@@ -8,6 +8,7 @@ import { mnemonicStore, mnemonicUnset } from "state/nodename/actions";
 import { CheckboxField } from "ui/control/field";
 import { Button } from "ui/control";
 import GlobalTitle from "ui/mainmenu/GlobalTitle";
+import GlobalBottom from "ui/mainmenu/GlobalBottom";
 import MnemonicDocument from "ui/profile/manage/MnemonicDocument";
 import "./MnemonicPage.css";
 
@@ -32,6 +33,7 @@ function MnemonicPage() {
                 </Form>
                 <Button variant="link" className="skip" onClick={onSkip}>{t("skip-for-now")}</Button>
             </main>
+            <GlobalBottom/>
         </>
     );
 }

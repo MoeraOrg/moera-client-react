@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import GlobalTitle from "ui/mainmenu/GlobalTitle";
+import GlobalBottom from "ui/mainmenu/GlobalBottom";
 import GrantContent from "ui/grant/GrantContent";
 import "./GrantPage.css";
 
@@ -15,6 +16,7 @@ export default function GrantPage() {
                 <div className="title">{t("grant-access")}</div>
                 <GrantContent/>
             </main>
+            <GlobalBottom/>
         </>
     );
 }

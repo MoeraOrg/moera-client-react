@@ -5,6 +5,7 @@ import { NodeName } from "api";
 import { ClientState } from "state/state";
 import { getOwnerNameOrUrl } from "state/node/selectors";
 import GlobalTitle from "ui/mainmenu/GlobalTitle";
+import GlobalBottom from "ui/mainmenu/GlobalBottom";
 import ConnectForm from "ui/connectpage/ConnectForm";
 import ForgotForm from "ui/connectpage/ForgotForm";
 import VerifyForm from "ui/connectpage/VerifyForm";
@@ -27,6 +28,7 @@ export default function ConnectPage() {
                 {form === "verify" && <VerifyForm location={location} nodeRoot={nodeRoot}/>}
                 {form === "reset" && <ResetForm location={location} nodeRoot={nodeRoot} resetToken={resetToken ?? ""}/>}
             </main>
+            <GlobalBottom/>
         </>
     );
 }

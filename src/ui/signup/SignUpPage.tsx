@@ -27,6 +27,7 @@ import { useDebounce } from "ui/hook";
 import * as Browser from "ui/browser";
 import Jump from "ui/navigation/Jump";
 import GlobalTitle from "ui/mainmenu/GlobalTitle";
+import GlobalBottom from "ui/mainmenu/GlobalBottom";
 import SignUpTabs from "ui/signup/SignUpTabs";
 import DomainField from "ui/signup/DomainField";
 import { getSheriffPolicyHref } from "util/sheriff";
@@ -267,6 +268,7 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
                     </div>
                 }
             </main>
+            <GlobalBottom/>
         </>
     );
 }

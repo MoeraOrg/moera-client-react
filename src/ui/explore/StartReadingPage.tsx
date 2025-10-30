@@ -11,6 +11,7 @@ import { Avatar, Loading } from "ui/control";
 import { Icon, msAddCircle, msCheck } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
 import GlobalTitle from "ui/mainmenu/GlobalTitle";
+import GlobalBottom from "ui/mainmenu/GlobalBottom";
 import NodeName from "ui/nodename/NodeName";
 import { REL_HOME } from "util/rel-node-name";
 import "./StartReadingPage.css";
@@ -81,6 +82,7 @@ export default function StartReadingPage() {
                     </Jump>
                 }
             </main>
+            <GlobalBottom/>
         </>
     );
 }

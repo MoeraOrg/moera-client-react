@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import GlobalTitle from "ui/mainmenu/GlobalTitle";
+import GlobalBottom from "ui/mainmenu/GlobalBottom";
 import SettingsRemovalSheet from "ui/settings/SettingsRemovalSheet";
 
 export default function RemovalPage() {
@@ -14,6 +15,7 @@ export default function RemovalPage() {
                 <div className="page-title mb-3">{t("delete-account-moera")}</div>
                 <SettingsRemovalSheet/>
             </main>
+            <GlobalBottom/>
         </>
     );
 }
