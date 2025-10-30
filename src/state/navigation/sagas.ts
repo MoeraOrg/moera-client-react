@@ -13,7 +13,6 @@ import {
     GoToHomePageAction,
     GoToLocationAction,
     goToPage,
-    goToRemoval,
     initFromLocation,
     InitFromLocationAction,
     initFromNodeLocation,
@@ -57,8 +56,6 @@ function bootSaga(action: BootAction): void {
         dispatch(initFromLocation(name ?? null, rootLocation, path, query, hash).causedBy(action));
     } else if (name != null) {
         dispatch(initFromNodeLocation(name, path, query, hash, null).causedBy(action));
-    } else if (path?.startsWith("removal")) {
-        dispatch(goToRemoval().causedBy(action));
     } else if (path && path !== "/") {
         dispatch(goHomeLocation(path, query, hash).causedBy(action));
     } else {
@@ -139,39 +136,45 @@ function changeLocation(actionType: "NEW_LOCATION" | "UPDATE_LOCATION" | null, c
 
 async function goHomeLocationSaga(action: GoHomeLocationAction): Promise<void> {
     await homeIntroduced();
+
     const {path, query, hash} = action.payload;
     const {atNode, homeOwnerName, homeRootPage} = select(state => ({
         atNode: isAtNode(state),
         homeOwnerName: getHomeOwnerName(state),
         homeRootPage: getHomeRootPage(state)
     }));
+
     if (atNode) {
         return;
     }
-    if (homeRootPage == null) {
-        dispatch(nodeReady().causedBy(action));
-        return;
+
+    if (homeRootPage != null) {
+        const {scheme, host, port} = URI.parse(homeRootPage);
+        if (scheme != null && host != null) {
+            const rootLocation = rootUrl(scheme, host, port);
+            dispatch(initFromLocation(homeOwnerName, rootLocation, path, query, hash).causedBy(action));
+            return;
+        }
     }
-    const {scheme, host, port} = URI.parse(homeRootPage);
-    if (scheme != null && host != null) {
-        const rootLocation = rootUrl(scheme, host, port);
-        dispatch(initFromLocation(homeOwnerName, rootLocation, path, query, hash).causedBy(action));
-    } else {
-        dispatch(nodeReady().causedBy(action));
-    }
+
+    dispatch(nodeReady().causedBy(action));
+    dispatch(initFromLocation(homeOwnerName, null, path, query, hash).causedBy(action));
 }
 
 async function goToHomePageSaga(action: GoToHomePageAction<any, any>): Promise<void> {
     await mutuallyIntroduced();
+
     const {nodeLocation, homeOwnerName, homeLocation} = select(state => ({
         nodeLocation: getNodeRootLocation(state),
         homeOwnerName: getHomeOwnerName(state),
         homeLocation: getHomeRootLocation(state)
     }));
+
     if (homeLocation == null) {
         dispatch(nodeUnset().causedBy(action));
         return;
     }
+
     if (nodeLocation !== homeLocation) {
         if (homeOwnerName != null) {
             dispatch(ownerSwitch(homeOwnerName).causedBy(action));
@@ -180,5 +183,6 @@ async function goToHomePageSaga(action: GoToHomePageAction<any, any>): Promise<v
             dispatch(initFromLocation(null, homeLocation, null, null, null).causedBy(action))
         }
     }
+
     dispatch(goToPage(action.payload.page, action.payload.details).causedBy(action));
 }

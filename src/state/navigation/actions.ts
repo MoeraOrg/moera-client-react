@@ -26,13 +26,13 @@ export const initFromNodeLocation = (
 
 export type InitFromLocationAction = ActionWithPayload<"INIT_FROM_LOCATION", {
     nodeName: string | null;
-    rootLocation: string;
+    rootLocation: string | null;
     path: string | null;
     query: string | null;
     hash: string | null;
 }>;
 export const initFromLocation = (
-    nodeName: string | null, rootLocation: string, path: string | null, query: string | null, hash: string | null
+    nodeName: string | null, rootLocation: string | null, path: string | null, query: string | null, hash: string | null
 ): InitFromLocationAction =>
     actionWithPayload("INIT_FROM_LOCATION", {nodeName, rootLocation, path, query, hash});
 

@@ -83,7 +83,7 @@ export default function Navigation() {
     }, [messageReceived, popState]);
 
     useEffect(() => {
-        if (locked || !nodeName || rootLocation == null) {
+        if (locked) {
             return;
         }
 
