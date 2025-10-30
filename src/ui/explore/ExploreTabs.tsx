@@ -1,7 +1,9 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { tTitle } from "i18n";
+import { isConnectedToHome } from "state/home/selectors";
 import { UnderlinedTabs } from "ui/control";
 
 interface Props {
@@ -10,6 +12,7 @@ interface Props {
 }
 
 export default function ExploreTabs({value, children}: Props) {
+    const connectedToHome = useSelector(isConnectedToHome);
     const {t} = useTranslation();
 
     return (
@@ -17,7 +20,8 @@ export default function ExploreTabs({value, children}: Props) {
             {
                 value: "posts",
                 title: tTitle(t("recommendations")),
-                href: "/explore"
+                href: "/explore",
+                visible: connectedToHome
             },
             {
                 value: "people",

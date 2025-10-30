@@ -45,7 +45,7 @@ export default function ActivePeoplePage() {
                                               display="full-name"/>
                                     <span className="name">{NodeNameFormat.shorten(node.nodeName)}</span>
                                 </div>
-                                {node.nodeName !== homeOwnerName &&
+                                {homeOwnerName && node.nodeName !== homeOwnerName &&
                                     <SubscribeButton nodeName={node.nodeName} feedName="timeline"/>
                                 }
                                 <span className="title">{node.title}</span>
