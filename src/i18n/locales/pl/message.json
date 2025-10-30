@@ -174,7 +174,7 @@
   "defrosting-message-box": "\uD83C\uDF89 <b>Bardzo się cieszymy, że możemy Cię ponownie zobaczyć po tak długiej nieobecności!</b><br><br>Od tego czasu w Moera wydarzyło się wiele wspaniałych rzeczy. Rozejrzyj się, gdy Twój kanał zapełnia się nowymi postami.",
   "delete": "Usuń",
   "delete-account-moera": "Usuń moje konto w Moera",
-  "delete-account-need-log-in": "Aby usunąć swoje konto, musisz się",
+  "delete-account-need-log-in": "Aby usunąć konto, musisz się zalogować",
   "delete-all-his-recommended": "Usuń wszystkie polecane posty przez {gender, select, female {nią} other {niego}}",
   "delete-avatar": "Usunąć awatar?",
   "delete-blog": "Usuń mój blog",

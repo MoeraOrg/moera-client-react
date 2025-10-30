@@ -50,22 +50,24 @@ function SettingsRemovalSheet() {
                                 <span className="text-danger fw-bold"/>
                             </Trans>
                         </p>
-                        <TextField name="message" title={t("why-delete-blog")} maxHeight="5em" maxLength={1024}
-                                   anyValue/>
                         {connectedToHome ?
-                            <Button variant="danger" type="submit" loading={updating}>
-                                {t("delete-blog")}
-                            </Button>
+                            <>
+                                <TextField name="message" title={t("why-delete-blog")} maxHeight="5em" maxLength={1024}
+                                           anyValue/>
+                                <Button variant="danger" type="submit" loading={updating}>
+                                    {t("delete-blog")}
+                                </Button>
+                            </>
                         :
-                            <div className="alert alert-warning show" role="alert">
-                                {t("delete-account-need-log-in")}
+                            <>
+                                <p className="fw-bold text-center">{t("delete-account-need-log-in")}</p>
                                 <Jump
-                                    className="btn btn-primary btn-sm ms-3"
+                                    className="btn btn-primary d-block w-100"
                                     href={Browser.urlWithBackHref("/connect")}
                                 >
                                     {t("connect")}
                                 </Jump>
-                            </div>
+                            </>
                         }
                     </Form>
                 )

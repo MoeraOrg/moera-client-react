@@ -174,7 +174,7 @@
   "defrosting-message-box": "\uD83C\uDF89 <b>We are thrilled to see you again after such a long absence!</b><br><br>Many great new things have been added to Moera since then. Look around while your feed is being filled with new posts.",
   "delete": "Delete",
   "delete-account-moera": "Delete my account in Moera",
-  "delete-account-need-log-in": "To delete your account, you need to",
+  "delete-account-need-log-in": "To delete your account, you need to log in",
   "delete-all-his-recommended": "Delete all recommended posts by {gender, select, male {him} female {her} other {them}}",
   "delete-avatar": "Delete the avatar?",
   "delete-blog": "Delete my blog",
