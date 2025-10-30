@@ -19,6 +19,6 @@ export default function SignUpTabs() {
                 title: t("advanced"),
                 value: "advanced"
             }
-        ]} className="mb-3" value={value} onChange={setValue}/>
+        ]} scroll="never" className="mb-3" value={value} onChange={setValue}/>
     );
 }
