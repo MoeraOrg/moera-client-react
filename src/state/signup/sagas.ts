@@ -25,7 +25,6 @@ import {
 import { getHomeRootLocation } from "state/home/selectors";
 import { serializeSheriffs } from "util/sheriff";
 import { rootUrl } from "util/url";
-import { REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("SIGN_UP", "", signUpSaga),
