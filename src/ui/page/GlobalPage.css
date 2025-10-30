@@ -8,12 +8,8 @@
 
 @media only screen and (max-width: 991px) {
     .global-page {
-        padding-bottom: calc(var(--page-footer-height) + .25rem);
-        background-color: white;
-        width: 100%;
-        min-height: calc(100vh - var(--page-header-height));
-        margin: 0;
-        border-radius: 0;
+        padding: 1.5rem 1rem;
+        width: calc(100% - 2rem);
     }
 }
 

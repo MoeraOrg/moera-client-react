@@ -12,7 +12,7 @@
         top: 0;
         z-index: var(--zindex-page-header);
         padding-left: 1.5rem;
-        background-color: white;
+        background-color: var(--body-bg);
         transition: box-shadow .2s ease;
     }
 
@@ -51,5 +51,5 @@
 }
 
 .global-back {
-    background-color: white;
+    background-color: var(--body-bg);
 }
