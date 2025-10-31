@@ -13,7 +13,8 @@ export default [
     trigger("INIT_FROM_LOCATION", conj(isAtNode, inv(isOwnerNameSet)), ownerLoad),
     trigger(
         "INIT_FROM_LOCATION",
-        (_: ClientState, signal: InitFromLocationAction) => signal.payload.nodeName != null,
+        (_: ClientState, signal: InitFromLocationAction) =>
+            signal.payload.nodeName != null || (signal.payload.nodeName == null && signal.payload.rootLocation == null),
         nodeReady
     ),
     trigger("OWNER_SET", true, nodeReady),

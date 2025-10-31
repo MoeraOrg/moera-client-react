@@ -31,9 +31,7 @@ export default function Navigation() {
         if (root === rootLocation) {
             dispatch(goToLocation(path, query, hash));
         } else {
-            if (root != null) {
-                dispatch(initFromLocation(name ?? null, root, path, query, hash));
-            }
+            dispatch(initFromLocation(name ?? null, root ?? null, path, query, hash));
         }
         event.preventDefault();
     }, [dispatch, rootLocation]);

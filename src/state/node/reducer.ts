@@ -29,7 +29,7 @@ export default (state: NodeState = initialState, action: ClientAction): NodeStat
     switch (action.type) {
         case "INIT_FROM_LOCATION": {
             if (!action.payload.rootLocation) {
-                return state;
+                return cloneDeep(initialState);
             }
 
             const location = action.payload.rootLocation.toLowerCase();
