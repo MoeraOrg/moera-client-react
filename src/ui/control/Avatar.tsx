@@ -7,7 +7,7 @@ import { AvatarImage } from "api";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { getSetting } from "state/settings/selectors";
-import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
+import { REL_CURRENT, REL_SEARCH, RelNodeName } from "util/rel-node-name";
 import "./Avatar.css";
 
 function effectiveShape(
@@ -45,7 +45,11 @@ function AvatarImpl(
     {avatar, ownerName, size, shape: shapeLocal, className, draggable = true, nodeName = REL_CURRENT, onClick}: Props,
     ref: ForwardedRef<HTMLImageElement>
 ) {
-    const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, nodeName));
+    const rootPage = useSelector((state: ClientState) =>
+        getNamingNameRoot(state, nodeName)
+        ?? getNamingNameRoot(state, ownerName ?? REL_SEARCH)
+        ?? getNamingNameRoot(state, REL_SEARCH)
+    );
     const shapeGlobal = useSelector((state: ClientState) => getSetting(state, "avatar.shape") as string);
     const {t} = useTranslation();
 
