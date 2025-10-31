@@ -6,6 +6,7 @@ import "./SearchInput.css";
 
 interface Props {
     query: string | null;
+    placeholder?: string;
     handleKeyDown: (event: React.KeyboardEvent) => void;
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleFocus: () => void;
@@ -14,7 +15,7 @@ interface Props {
 }
 
 function SearchInput(
-    {query, handleKeyDown, handleChange, handleFocus, handleBlur, handleClear}: Props,
+    {query, placeholder = "search", handleKeyDown, handleChange, handleFocus, handleBlur, handleClear}: Props,
     ref: ForwardedRef<HTMLInputElement>
 ) {
     const {t} = useTranslation();
@@ -26,7 +27,7 @@ function SearchInput(
                 type="search"
                 className="form-control"
                 value={query ?? ""}
-                placeholder={t("search")}
+                placeholder={t(placeholder)}
                 ref={ref}
                 onKeyDown={handleKeyDown}
                 onChange={handleChange}

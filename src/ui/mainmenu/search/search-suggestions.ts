@@ -4,12 +4,13 @@ import deepEqual from "react-fast-compare";
 
 import { ClientState } from "state/state";
 import { ownerSwitch } from "state/node/actions";
+import { isAtNode } from "state/node/selectors";
 import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
-import { goToSearch } from "state/navigation/actions";
+import { goToSearch, initFromNodeLocation } from "state/navigation/actions";
 import { isAtSearchPage } from "state/navigation/selectors";
 import { searchHistoryDelete, searchHistoryPrepare } from "state/search/actions";
-import { getSearchQuery } from "state/search/selectors";
+import { getSearchNodeName, getSearchQuery } from "state/search/selectors";
 import { emptySearchFilter } from "state/search/empty";
 import { useSuggestions } from "ui/hook";
 import { SearchListItem } from "ui/mainmenu/search/SearchSuggestions";
@@ -30,6 +31,7 @@ interface UseSearchSuggestionsResult {
     handleBlur: () => void;
     handleClear: () => void;
     handleClick: (index: number) => () => void;
+    submit: (success: boolean, item: SearchListItem) => void;
     handleHistoryDelete: (index: number) => (event: React.MouseEvent) => void;
     inputDom: React.RefObject<HTMLInputElement>;
     listDom: React.RefObject<HTMLDivElement>;
@@ -40,7 +42,9 @@ export function useSearchSuggestions(
 ): UseSearchSuggestionsResult {
     const contactNames = useSelector(getContacts);
     const history = useSelector((state: ClientState) => state.search.history);
+    const atNode = useSelector(isAtNode);
     const atSearch = useSelector(isAtSearchPage);
+    const searchNode = useSelector(getSearchNodeName);
     const defaultQuery = useSelector(getSearchQuery);
     const dispatch = useDispatch();
 
@@ -69,7 +73,12 @@ export function useSearchSuggestions(
                 case "search":
                     inputDom.current?.blur();
                     if (query) {
-                        dispatch(goToSearch(query, "content", emptySearchFilter));
+                        if (atNode) {
+                            dispatch(goToSearch(query, "content", emptySearchFilter));
+                        } else {
+                            const q = "query=" + encodeURIComponent(query);
+                            dispatch(initFromNodeLocation(searchNode, "/search", q, null, null));
+                        }
                     }
                     break;
                 case "history":
@@ -149,7 +158,7 @@ export function useSearchSuggestions(
 
     return {
         query, searchList, selectedIndex, focused, handleKeyDown, handleChange,
-        handleFocus: onInputFocus, handleBlur: onInputBlur, handleClear: onClear, handleClick,
+        handleFocus: onInputFocus, handleBlur: onInputBlur, handleClear: onClear, handleClick, submit: onSubmit,
         handleHistoryDelete: onHistoryDelete, inputDom, listDom
     };
 }

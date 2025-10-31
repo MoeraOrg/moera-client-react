@@ -10,13 +10,14 @@ import "./WelcomeSearchBox.css";
 export default function WelcomeSearchBox() {
     const {
         query, searchList, selectedIndex, focused, handleKeyDown, handleChange, handleFocus, handleBlur, handleClear,
-        handleClick, handleHistoryDelete, inputDom, listDom
+        handleClick, handleHistoryDelete, submit, inputDom, listDom
     } = useSearchSuggestions();
 
     return (
         <div id="search-box">
             <SearchInput
                 query={query}
+                placeholder="find-text-users"
                 handleKeyDown={handleKeyDown}
                 handleChange={handleChange}
                 handleFocus={handleFocus}
@@ -24,7 +25,9 @@ export default function WelcomeSearchBox() {
                 handleClear={handleClear}
                 ref={inputDom}
             />
-            <Button variant="secondary" type="submit"><Icon icon={msSearch} size={24}/></Button>
+            <Button variant="secondary" type="submit" onClick={() => submit(true, {type: "search"})}>
+                <Icon icon={msSearch} size={24}/>
+            </Button>
             <SearchSuggestions
                 query={query}
                 searchList={searchList}
