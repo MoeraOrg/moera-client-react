@@ -84,7 +84,12 @@ function PostingMenuItems({posting, story, detailed}: Props) {
 
     const onReply = () => dispatch(postingReply(posting.id));
 
-    const ownPosting = (posting.receiverName ?? posting.ownerName) === homeOwnerName;
+    const ownerName = posting.receiverName ?? posting.ownerName;
+    const fullName = (posting.receiverName != null ? posting.receiverFullName : posting.ownerFullName) ?? null;
+    const gender = (posting.receiverName != null ? posting.receiverGender : posting.ownerGender) ?? null;
+    const postingId = posting.receiverPostingId ?? posting.id;
+
+    const ownPosting = ownerName === homeOwnerName;
     const followingComments = ownPosting ? commentAddedInstantBlockId == null : commentsSubscriptionId != null;
 
     const onFollowComments = () => {
@@ -145,11 +150,6 @@ function PostingMenuItems({posting, story, detailed}: Props) {
     const onShowInvisibleComments = () => dispatch(commentsShowInvisibleSet(true));
 
     const onHideInvisibleComments = () => dispatch(commentsShowInvisibleSet(false));
-
-    const ownerName = posting.receiverName ?? posting.ownerName;
-    const fullName = (posting.receiverName != null ? posting.receiverFullName : posting.ownerFullName) ?? null;
-    const gender = (posting.receiverName != null ? posting.receiverGender : posting.ownerGender) ?? null;
-    const postingId = posting.receiverPostingId ?? posting.id;
 
     const onHideInGooglePlay = () =>
         dispatch(openSheriffOrderDialog({
@@ -313,7 +313,7 @@ function PostingMenuItems({posting, story, detailed}: Props) {
                 nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onHideInGooglePlay,
-                show: homeOwnerName != null && !googlePlaySheriff
+                show: homeOwnerName != null && !googlePlaySheriff && !ownPosting
             }
         ]}/>
     );
