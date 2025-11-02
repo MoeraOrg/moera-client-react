@@ -38,6 +38,12 @@ export default function TimelinePage() {
         setAtBottom(atBottom);
     }, []);
 
+    // FIXME React.CSSProperties does not include CSS variables
+    const pageStyle: any = {
+        "--feed-header-height":
+            !connectedToHome ? "calc(var(--page-header-height) - 3.3rem)" : "var(--page-header-height)",
+    };
+
     return (
         <>
             <DesktopMainMenu/>
@@ -45,7 +51,7 @@ export default function TimelinePage() {
                 <div className="page-left-pane">
                     <ProfileSidebar/>
                 </div>
-                <main className="page-central-pane">
+                <main className="page-central-pane" style={pageStyle}>
                     <ProfileTitle/>
                     <BackBox>
                         <BackBoxInner>

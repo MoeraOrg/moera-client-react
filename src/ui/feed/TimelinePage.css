@@ -1,11 +1,11 @@
 @media only screen and (max-width: 991px) {
     .timeline-page .feed-top-box {
-        top: calc(var(--page-header-height) + 3.5rem);
+        top: calc(var(--feed-header-height) + 3.5rem);
     }
 }
 
 @media only screen and (min-width: 992px) {
     .timeline-page .feed-top-box {
-        top: calc(var(--page-header-height) + 6.3rem);
+        top: calc(var(--feed-header-height) + 6.3rem);
     }
 }
