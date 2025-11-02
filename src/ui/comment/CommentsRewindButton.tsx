@@ -1,7 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBackwardFast, faForwardFast } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -35,7 +33,7 @@ export default function CommentsRewindButton({end, forward}: Props) {
     return (
         <button className="comments-rewind" title={forward ? t("go-last-comment") : t("go-first-comment")}
                 onClick={onClick}>
-            <FontAwesomeIcon icon={forward ? faForwardFast : faBackwardFast}/>
+            {/*<FontAwesomeIcon icon={forward ? faForwardFast : faBackwardFast}/>*/}
         </button>
     )
 }

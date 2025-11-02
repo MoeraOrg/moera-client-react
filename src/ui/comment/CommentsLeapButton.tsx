@@ -1,7 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -29,7 +27,7 @@ export default function CommentsLeapButton({end}: Props) {
 
     return (
         <button className="comments-rewind" title={end ? t("go-top") : t("go-bottom")} onClick={onClick}>
-            <FontAwesomeIcon icon={end ? faArrowUp : faArrowDown}/>
+            {/*<FontAwesomeIcon icon={end ? faArrowUp : faArrowDown}/>*/}
         </button>
     );
 }
