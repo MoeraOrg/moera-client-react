@@ -4,6 +4,12 @@
     margin-top: .35rem;
 }
 
+@media only screen and (max-width: 991px) {
+    .comment-compose-panel {
+        margin-left: -3.25rem;
+    }
+}
+
 .comment-compose-panel .rich-text-editor-button {
     border-radius: .5em;
     width: 2em;
@@ -17,6 +23,12 @@
 
 .comment-compose-panel .rich-text-editor-button.delete {
     color: var(--bs-danger);
+}
+
+@media only screen and (max-width: 991px) {
+    .comment-compose-panel .rich-text-editor-button.delete {
+        margin-inline-end: 1em;
+    }
 }
 
 .comment-compose-panel .rich-text-editor-button.delete:hover {
