@@ -7,6 +7,7 @@ import deepEqual from 'react-fast-compare';
 import { SearchEntryType } from "api";
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
+import { isConnectedToHome } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { searchCloseFilterDialog, searchLoad } from "state/search/actions";
 import { emptySearchFilter } from "state/search/empty";
@@ -36,6 +37,15 @@ const ENABLED_FIELDS: Record<SearchTab, FilterField[]> = {
     "own-blog": [
         "entryType", "inNewsfeed", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch", "period"
     ]
+}
+
+const ENABLED_FIELDS_NO_USER: Record<SearchTab, FilterField[]> = {
+    "people": ["safeSearch"],
+    "content": ["minImageCount", "videoPresent", "safeSearch", "period"],
+    "postings": ["minImageCount", "videoPresent", "safeSearch", "period"],
+    "comments": ["minImageCount", "videoPresent", "safeSearch", "period"],
+    "current-blog": ["entryType", "minImageCount", "videoPresent", "safeSearch", "period"],
+    "own-blog": []
 }
 
 const ENTRY_TYPES: SelectFieldChoiceBase<SearchEntryType>[] = [
@@ -108,6 +118,7 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
+    const connectedToHome = useSelector(isConnectedToHome);
     const mode = useSelector(getSearchMode);
     const sheriffName = useSelector((state: ClientState) => getSetting(state, "search.sheriff-name") as string);
     const {values, setValues} = useFormikContext<Values>();
@@ -125,11 +136,13 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
         || tab === "comments"
         || ((tab === "own-blog" || tab === "current-blog") && values.entryType !== "posting");
 
+    const fields = connectedToHome ? ENABLED_FIELDS : ENABLED_FIELDS_NO_USER;
+
     return (
         <ModalDialog className="search-filter-dialog" title={t("filters")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
-                    {ENABLED_FIELDS[tab].map(fieldName =>
+                    {fields[tab].map(fieldName =>
                         <React.Fragment key={fieldName}>
                             {fieldName === "entryType" &&
                                 <SelectField
