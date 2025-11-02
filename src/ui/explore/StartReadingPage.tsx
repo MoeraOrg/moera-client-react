@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';
 import * as immutable from 'object-path-immutable';
@@ -19,8 +19,10 @@ import "./StartReadingPage.css";
 export default function StartReadingPage() {
     const loading = useSelector((state: ClientState) => state.explore.loadingActivePeople);
     const autoSubscription = useSelector((state: ClientState) => getSettingNode(state, "subscription.auto.node"));
-    const people = useSelector((state: ClientState) =>
-        state.explore.activePeople.filter(p => p.nodeName !== autoSubscription).slice(0, 10)
+    const activePeople = useSelector((state: ClientState) => state.explore.activePeople);
+    const people = useMemo(
+        () => activePeople.filter(p => p.nodeName !== autoSubscription).slice(0, 10),
+        [activePeople, autoSubscription]
     );
     const [selection, setSelection] = useState<Record<string, boolean>>({});
     const dispatch = useDispatch();
@@ -38,7 +40,7 @@ export default function StartReadingPage() {
         <>
             <GlobalTitle/>
             <main className="start-reading-page global-page">
-                <div className="title">{tTitle(t("most-active-blogs"))}</div>
+                <div className="title">{tTitle(t("subscribe-popular-blogs"))}</div>
                 {people.map(node => {
                     const subscribed = selection[node.nodeName] ?? false;
 

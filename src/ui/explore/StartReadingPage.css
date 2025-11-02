@@ -8,6 +8,10 @@
     text-align: start;
 }
 
+.start-reading-page .person {
+    margin-bottom: 1rem;
+}
+
 .start-reading-page .person .blog-title {
     grid-area: status;
 }

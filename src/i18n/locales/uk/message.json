@@ -991,6 +991,7 @@
   "subscribed": "{gender, select, female {Підписана} other {Підписаний}}",
   "subscribed-to-me": "{gender, select, female {Підписана} other {Підписаний}} на мене",
   "subscribe-me": "Підписатись на мене",
+  "subscribe-popular-blogs": "Підпишіться на популярні блоги",
   "subscribers": "Підписники",
   "subscript": "Підрядковий знак",
   "subscriptions": "Підписки",
