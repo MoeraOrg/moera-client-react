@@ -11,7 +11,6 @@ import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
 import { useHomeNews } from "ui/feed/feeds";
 import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
-import NewsCounter from "ui/mainmenu/NewsCounter";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import ProfileTitle from "ui/profile/ProfileTitle";
@@ -47,7 +46,7 @@ export default function PeoplePage() {
                         <BackBoxInner noShadow>
                             {connectedToHome &&
                                 <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                                    {t("back-news")}<NewsCounter/>
+                                    {t("back-news")}
                                 </DesktopBack>
                             }
                             <ProfileTabs value="people"/>

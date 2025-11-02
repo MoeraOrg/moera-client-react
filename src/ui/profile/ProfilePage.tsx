@@ -6,7 +6,6 @@ import { ClientState } from "state/state";
 import { getOwnerCard } from "state/node/selectors";
 import { useHomeNews } from "ui/feed/feeds";
 import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
-import NewsCounter from "ui/mainmenu/NewsCounter";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { Page } from "ui/page/Page";
@@ -37,7 +36,7 @@ export default function ProfilePage() {
                     <BackBox>
                         <BackBoxInner>
                             <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                                {t("back-news")}<NewsCounter/>
+                                {t("back-news")}
                             </DesktopBack>
                             <ProfileTabs value="about"/>
                         </BackBoxInner>

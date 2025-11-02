@@ -14,7 +14,6 @@ import DesktopBack from "ui/page/DesktopBack";
 import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
-import NewsCounter from "ui/mainmenu/NewsCounter";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { useHomeNews } from "ui/feed/feeds";
 import Instants from "ui/instant/Instants";
@@ -56,7 +55,7 @@ export default function InstantsPage() {
                         <BackBox>
                             <BackBoxInner>
                                 <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                                    {t("back-news")}<NewsCounter/>
+                                    {t("back-news")}
                                 </DesktopBack>
                             </BackBoxInner>
                         </BackBox>

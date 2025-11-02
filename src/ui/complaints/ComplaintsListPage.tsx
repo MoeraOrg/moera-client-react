@@ -13,7 +13,6 @@ import DesktopBack from "ui/page/DesktopBack";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
 import { useHomeNews } from "ui/feed/feeds";
-import NewsCounter from "ui/mainmenu/NewsCounter";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import ProfileSidebar from "ui/profile/ProfileSidebar";
@@ -51,7 +50,7 @@ export default function ComplaintsListPage() {
                     <BackBoxInner noShadow>
                         {connectedToHome &&
                             <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                                {t("back-news")}<NewsCounter/>
+                                {t("back-news")}
                             </DesktopBack>
                         }
                         <ProfileTabs value="complaints"/>
