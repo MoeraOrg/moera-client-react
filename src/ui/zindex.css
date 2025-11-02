@@ -4,6 +4,7 @@
     --zindex-overlay-loading: 895;
     --zindex-back-box: 900;
     --zindex-feed-top-button: 950;
+    --zindex-invitation-alert: 960;
     --zindex-page-header: 970;
     --zindex-dropdown: 1000; /* Bootstrap */
     --zindex-sticky: 1020; /* Bootstrap */
