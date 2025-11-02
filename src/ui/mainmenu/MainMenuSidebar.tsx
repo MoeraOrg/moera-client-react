@@ -13,7 +13,7 @@ import { Icon, MaterialSymbol, msExplore, msPublic, msSettings } from "ui/materi
 import Jump from "ui/navigation/Jump";
 import NewsCounter from "ui/mainmenu/NewsCounter";
 import { getFeedTitle, useHomeNews } from "ui/feed/feeds";
-import { REL_HOME } from "util/rel-node-name";
+import { REL_HOME, REL_SEARCH, RelNodeName } from "util/rel-node-name";
 import "./MainMenuSidebar.css";
 
 type MainMenuSidebarItem = "news" | "explore" | "settings";
@@ -22,8 +22,10 @@ interface MenuItem {
     value: MainMenuSidebarItem;
     icon: MaterialSymbol;
     title: string;
+    nodeName: RelNodeName | string;
     href: string;
     active: boolean;
+    visible: boolean;
 }
 
 export default function MainMenuSidebar() {
@@ -42,34 +44,36 @@ export default function MainMenuSidebar() {
             value: "news",
             icon: msPublic,
             title: getFeedTitle("news", t),
+            nodeName: REL_HOME,
             href: newsHref,
-            active: atNews
+            active: atNews,
+            visible: !!ownerName
         },
         {
             value: "explore",
             icon: msExplore,
             title: t("explore"),
-            href: "/explore",
-            active: inExplore
+            nodeName: ownerName ? REL_HOME : REL_SEARCH,
+            href: ownerName ? "/explore" : "/explore/people",
+            active: inExplore,
+            visible: true
         },
         {
             value: "settings",
             icon: msSettings,
             title: t("settings"),
+            nodeName: REL_HOME,
             href: "/settings",
-            active: atSettings
+            active: atSettings,
+            visible: !!ownerName
         },
-    ], [atNews, atSettings, inExplore, newsHref, t]);
-
-    if (!ownerName) {
-        return null;
-    }
+    ], [atNews, atSettings, inExplore, newsHref, ownerName, t]);
 
     return (
         <OnlyDesktop>
             <nav id="main-menu-sidebar">
                 <ul className="nav nav-pills flex-column">
-                    {!inHomeProfile &&
+                    {ownerName && !inHomeProfile &&
                         <>
                             <li className="nav-item">
                                 <Jump className="nav-link" nodeName={REL_HOME} href="/">
@@ -81,11 +85,11 @@ export default function MainMenuSidebar() {
                             <hr/>
                         </>
                     }
-                    {MENU_TABS.map((item, index) => (
+                    {MENU_TABS.filter(({visible}) => visible).map((item, index) => (
                         <li className="nav-item" key={index}>
                             <Jump
                                 className={cx("nav-link", {"active": item.active})}
-                                nodeName={REL_HOME}
+                                nodeName={item.nodeName}
                                 href={item.href}
                             >
                                 <Icon className="icon" icon={item.icon} size={24}/>

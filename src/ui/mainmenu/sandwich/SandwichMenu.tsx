@@ -9,11 +9,12 @@ import { ClientState } from "state/state";
 import { openConnectionsDialog } from "state/home/actions";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName, getHomeRootLocation } from "state/home/selectors";
 import { confirmBox } from "state/confirmbox/actions";
+import * as Browser from "ui/browser";
 import { Avatar } from "ui/control";
-import { Icon, msLogout, msSwapHoriz } from "ui/material-symbols";
+import { Icon, msExplore, msLogout, msSwapHoriz } from "ui/material-symbols";
 import { useParent } from "ui/hook";
 import Jump from "ui/navigation/Jump";
-import { REL_HOME } from "util/rel-node-name";
+import { REL_HOME, REL_SEARCH } from "util/rel-node-name";
 import "./SandwichMenu.css";
 
 interface Props {
@@ -59,7 +60,7 @@ function SandwichMenu(_: Props, ref: ForwardedRef<HTMLDivElement>) {
 
     return (
         <div className="offcanvas-body sandwich-menu" ref={ref}>
-            {nodeName &&
+            {nodeName ?
                 <>
                     <Jump nodeName={REL_HOME} href="/" className="profile" onNear={onJump} onFar={onJump}>
                         <Avatar avatar={avatar} ownerName={nodeName} size={40}/>
@@ -68,7 +69,7 @@ function SandwichMenu(_: Props, ref: ForwardedRef<HTMLDivElement>) {
                         </div>
                         <div className="name">{NodeName.shorten(nodeName)}</div>
                     </Jump>
-                    <hr/>
+                    <hr className="mt-1 mb-2"/>
                     <div className="item" onClick={onSwitchAccounts}>
                         <Icon icon={msSwapHoriz} size={24}/>
                         <span>{tTitle(t("switch-accounts"))}</span>
@@ -77,6 +78,17 @@ function SandwichMenu(_: Props, ref: ForwardedRef<HTMLDivElement>) {
                         <Icon icon={msLogout} size={24}/>
                         <span>{tTitle(t("disconnect"))}</span>
                     </div>
+                </>
+            :
+                <>
+                    <Jump nodeName={REL_SEARCH} href="/explore/people" className="item" onNear={onJump} onFar={onJump}>
+                        <Icon icon={msExplore} size={24}/>
+                        <span>{tTitle(t("explore"))}</span>
+                    </Jump>
+                    <Jump className="btn btn-primary mt-3 w-100" href={Browser.urlWithBackHref("/signup")}
+                          onNear={onJump} onFar={onJump}>
+                        {tTitle(t("create-account-submit"))}
+                    </Jump>
                 </>
             }
         </div>
