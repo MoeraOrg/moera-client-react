@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { isRegularNode } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { Page } from "ui/page/Page";
 import DesktopBack from "ui/page/DesktopBack";
@@ -26,6 +27,7 @@ import "./PeoplePage.css";
 
 export default function PeoplePage() {
     const connectedToHome = useSelector(isConnectedToHome);
+    const regularNode = useSelector(isRegularNode);
     const showAskDialog = useSelector((state: ClientState) => state.askDialog.show);
     const showPeopleHideDialog = useSelector((state: ClientState) => state.peopleHideDialog.show);
     const showFriendGroupAddDialog = useSelector((state: ClientState) => state.friendGroupAddDialog.show);
@@ -52,7 +54,7 @@ export default function PeoplePage() {
                         </BackBoxInner>
                         <PeopleTop/>
                     </BackBox>
-                    <PeopleContent/>
+                    {regularNode && <PeopleContent/>}
                 </div>
                 <div className="page-right-pane">
                     <MainMenuSidebar/>

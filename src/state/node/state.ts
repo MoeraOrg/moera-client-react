@@ -1,4 +1,4 @@
-import { Features } from "api";
+import { Features, NodeType } from "api";
 
 export interface NodeState {
     introduced: boolean;
@@ -17,4 +17,5 @@ export interface NodeState {
         switching: boolean;
     },
     features: Features | null;
+    type: NodeType;
 }

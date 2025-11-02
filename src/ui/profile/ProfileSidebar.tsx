@@ -9,7 +9,8 @@ import {
     getOwnerFullName,
     getOwnerName,
     getOwnerTitle,
-    isAtHomeNode
+    isAtHomeNode,
+    isRegularNode
 } from "state/node/selectors";
 import { DonateButton, OnlyDesktop } from "ui/control";
 import Jump from "ui/navigation/Jump";
@@ -24,6 +25,7 @@ import "./ProfileSidebar.css";
 
 export default function ProfileSidebar() {
     const atHome = useSelector(isAtHomeNode);
+    const regularNode = useSelector(isRegularNode);
     const nodeName = useSelector(getOwnerName);
     const fullName = useSelector(getOwnerFullName);
     const title = useSelector(getOwnerTitle);
@@ -65,24 +67,28 @@ export default function ProfileSidebar() {
                         sharing
                     />
                 }
-                <div className="counters-line">
-                    <div className="counter">
-                        <Trans i18nKey="count-posts" values={{count: storiesTotal}}><em/></Trans>
-                    </div>
-                    <Jump className="counter" href="/people/subscribers">
-                        <Trans i18nKey="count-subscribers" values={{count: subscribersTotal}}><em/></Trans>
-                    </Jump>
-                </div>
-                {profile?.bioHtml &&
-                    <div className="bio">
-                        <EntryHtml html={profile.bioHtml} nodeName={REL_CURRENT}/>
-                    </div>
-                }
-                {profile?.email &&
-                    <div className="email">
-                        <span className="title">{t("e-mail")}:</span>{" "}
-                        <a href={`mailto:${profile.email}`}>{profile.email}</a>
-                    </div>
+                {regularNode &&
+                    <>
+                        <div className="counters-line">
+                            <div className="counter">
+                                <Trans i18nKey="count-posts" values={{count: storiesTotal}}><em/></Trans>
+                            </div>
+                            <Jump className="counter" href="/people/subscribers">
+                                <Trans i18nKey="count-subscribers" values={{count: subscribersTotal}}><em/></Trans>
+                            </Jump>
+                        </div>
+                        {profile?.bioHtml &&
+                            <div className="bio">
+                                <EntryHtml html={profile.bioHtml} nodeName={REL_CURRENT}/>
+                            </div>
+                        }
+                        {profile?.email &&
+                            <div className="email">
+                                <span className="title">{t("e-mail")}:</span>{" "}
+                                <a href={`mailto:${profile.email}`}>{profile.email}</a>
+                            </div>
+                        }
+                    </>
                 }
                 <DonateButton name={nodeName} fullName={fullName} fundraisers={fundraisers ?? null}/>
             </aside>

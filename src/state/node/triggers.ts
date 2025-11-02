@@ -10,7 +10,7 @@ import { messageBox } from "state/messagebox/actions";
 import { ClientState } from "state/state";
 
 export default [
-    trigger("INIT_FROM_LOCATION", conj(isAtNode, inv(isOwnerNameSet)), ownerLoad),
+    trigger("INIT_FROM_LOCATION", isAtNode, ownerLoad),
     trigger(
         "INIT_FROM_LOCATION",
         (_: ClientState, signal: InitFromLocationAction) =>
@@ -33,7 +33,7 @@ export default [
         true,
         (signal: EventAction<NodeNameChangedEvent>) =>
             ownerSet(signal.payload.name, false, signal.payload.fullName ?? null, signal.payload.gender ?? null,
-                signal.payload.title ?? null, signal.payload.avatar ?? null)
+                signal.payload.title ?? null, signal.payload.avatar ?? null, null)
     ),
     trigger(
         [

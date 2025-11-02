@@ -1,4 +1,4 @@
-import { AvatarImage, Features } from "api";
+import { AvatarImage, Features, NodeType } from "api";
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 
 export type NodeReadyAction = ActionWithoutPayload<"NODE_READY">;
@@ -20,12 +20,13 @@ export type OwnerSetAction = ActionWithPayload<"OWNER_SET", {
     gender: string | null | false;
     title: string | null | false;
     avatar: AvatarImage | null;
+    type: NodeType | null;
 }>;
 export const ownerSet = (
     name: string | null, changing: boolean | null, fullName: string | null | false, gender: string | null | false,
-    title: string | null | false, avatar: AvatarImage | null
+    title: string | null | false, avatar: AvatarImage | null, type: NodeType | null
 ): OwnerSetAction =>
-    actionWithPayload("OWNER_SET", {name, changing, fullName, gender, title, avatar});
+    actionWithPayload("OWNER_SET", {name, changing, fullName, gender, title, avatar, type});
 
 export type OwnerVerifyAction = ActionWithoutPayload<"OWNER_VERIFY">;
 export const ownerVerify = (): OwnerVerifyAction =>

@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
+import { isRegularNode } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { isAtTimelinePage } from "state/navigation/selectors";
 import { Page } from "ui/page/Page";
@@ -18,11 +19,13 @@ import ProfileSidebar from "ui/profile/ProfileSidebar";
 import { useHomeNews } from "ui/feed/feeds";
 import FeedPage from "ui/feed/FeedPage";
 import FeedGotoButton from "ui/feed/FeedGotoButton";
+import FeedNoContent from "ui/feed/nocontent/FeedNoContent";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import "./TimelinePage.css";
 
 export default function TimelinePage() {
     const connectedToHome = useSelector(isConnectedToHome);
+    const regularNode = useSelector(isRegularNode);
     const visible = useSelector(isAtTimelinePage);
     const newsHref = useHomeNews();
     const {t} = useTranslation();
@@ -58,12 +61,16 @@ export default function TimelinePage() {
                             </ProfileTabs>
                         </BackBoxInner>
                     </BackBox>
-                    <FeedPage
-                        nodeName={REL_CURRENT}
-                        feedName="timeline"
-                        visible={visible}
-                        onNavigationUpdate={onNavigationUpdate}
-                    />
+                    {regularNode ?
+                        <FeedPage
+                            nodeName={REL_CURRENT}
+                            feedName="timeline"
+                            visible={visible}
+                            onNavigationUpdate={onNavigationUpdate}
+                        />
+                    :
+                        <FeedNoContent feedName="timeline"/>
+                    }
                 </main>
                 <div className="page-right-pane">
                     <MainMenuSidebar/>

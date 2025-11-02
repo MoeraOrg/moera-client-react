@@ -10,7 +10,8 @@ import {
     getOwnerFullName,
     getOwnerName,
     getOwnerTitle,
-    isAtHomeNode
+    isAtHomeNode,
+    isRegularNode
 } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { DonateButton, OnlyMobile } from "ui/control";
@@ -29,6 +30,7 @@ import "./ProfileTitle.css";
 export default function ProfileTitle() {
     const connectedToHome = useSelector(isConnectedToHome);
     const atHomeNode = useSelector(isAtHomeNode);
+    const regularNode = useSelector(isRegularNode);
     const nodeName = useSelector(getOwnerName);
     const fullName = useSelector(getOwnerFullName);
     const name = fullName || NodeName.shorten(nodeName);
@@ -53,12 +55,16 @@ export default function ProfileTitle() {
                 <aside id="profile-title">
                     <div className="panel">
                         <ProfileAvatar avatar={avatar} ownerName={nodeName} size={64}/>
-                        <div className="counter">
-                            <Trans i18nKey="count-posts" values={{count: storiesTotal}}><em/></Trans>
-                        </div>
-                        <Jump className="counter" href="/people/subscribers">
-                            <Trans i18nKey="count-subscribers" values={{count: subscribersTotal}}><em/></Trans>
-                        </Jump>
+                        {regularNode &&
+                            <>
+                                <div className="counter">
+                                    <Trans i18nKey="count-posts" values={{count: storiesTotal}}><em/></Trans>
+                                </div>
+                                <Jump className="counter" href="/people/subscribers">
+                                    <Trans i18nKey="count-subscribers" values={{count: subscribersTotal}}><em/></Trans>
+                                </Jump>
+                            </>
+                        }
                     </div>
                     {!connectedToHome && <div className="full-name">{name}</div>}
                     <div className="mention">{mentionName(nodeName)}</div>

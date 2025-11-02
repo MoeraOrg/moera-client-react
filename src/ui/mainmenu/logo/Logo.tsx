@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { isRegularNode } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { useIsTinyScreen } from "ui/hook";
 import Jump from "ui/navigation/Jump";
@@ -19,18 +20,24 @@ export const LogoImage = ({className, width, height}: LogoImageProps) =>
 
 export default function Logo() {
     const connectedToHome = useSelector(isConnectedToHome);
+    const regularNode = useSelector(isRegularNode);
     const timelineHref = useTimeline();
     const newsHref = useHomeNews();
     const tinyScreen = useIsTinyScreen();
 
     const nodeName = connectedToHome ? REL_HOME : REL_CURRENT;
-    const href = connectedToHome ? newsHref : timelineHref;
+    const href = connectedToHome ? newsHref : (regularNode ? timelineHref : null);
+    const logoWidth = tinyScreen ? "3.5rem" : "4.6rem";
 
     return (
         <div id="logo">
-            <Jump nodeName={nodeName} href={href}>
-                <LogoImage width={tinyScreen ? "3.5rem" : "4.6rem"}/>
-            </Jump>
+            {href != null ?
+                <Jump nodeName={nodeName} href={href}>
+                    <LogoImage width={logoWidth}/>
+                </Jump>
+            :
+                <LogoImage width={logoWidth}/>
+            }
         </div>
     );
 }

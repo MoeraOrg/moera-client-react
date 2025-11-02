@@ -3244,6 +3244,10 @@ export const NODE_API_SCHEMAS = {
                     type: "boolean",
                     nullable: true
                 },
+                "type": {
+                    type: "string",
+                    nullable: true
+                },
             },
             additionalProperties: false
         },

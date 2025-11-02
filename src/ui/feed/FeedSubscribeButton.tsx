@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
-import { getOwnerCard, getOwnerName, isAtHomeNode, isOwnerNameSet } from "state/node/selectors";
+import { getOwnerCard, getOwnerName, isAtHomeNode, isOwnerNameSet, isRegularNode } from "state/node/selectors";
 import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
 import { isFeedGeneralLoading, isFeedGeneralReady } from "state/feeds/selectors";
 import { shareDialogPrepare, sharePageCopyLink } from "state/sharedialog/actions";
@@ -24,13 +24,14 @@ export default function FeedSubscribeButton({nodeName, feedName, sharing, classN
         isOwnerNameSet(state) && !isAtHomeNode(state) && isConnectedToHome(state) && isHomeOwnerNameSet(state)
     );
     const ownerName = useSelector(getOwnerName);
+    const regularNode = useSelector(isRegularNode);
     const generalReady = useSelector((state: ClientState) => isFeedGeneralReady(state, nodeName, feedName));
     const generalLoading = useSelector((state: ClientState) => isFeedGeneralLoading(state, nodeName, feedName));
     const subscription = useSelector((state: ClientState) => getOwnerCard(state)?.subscription);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    if (ownerName == null || !show) {
+    if (ownerName == null || !regularNode || !show) {
         return null;
     }
 

@@ -144,6 +144,10 @@ export function isGooglePlayHiding(state: ClientState): boolean {
         && getHomeOwnerName(state) !== SHERIFF_GOOGLE_PLAY_TIMELINE;
 }
 
+export function isRegularNode(state: ClientState): boolean {
+    return state.node.type === "regular";
+}
+
 type AnyOperations = Partial<Record<string, PrincipalValue | null>>;
 
 export interface ProtectedObject {

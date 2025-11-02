@@ -13,6 +13,8 @@ export type BodyFormat = "message" | "application";
 
 export type DraftType = "new-posting" | "posting-update" | "new-comment" | "comment-update";
 
+export type NodeType = "regular" | "search" | "application";
+
 export type OperationStatus = "waiting" | "added" | "started" | "succeeded" | "failed" | "unknown";
 
 export type PrincipalFlag = "none" | "private" | "admin" | "owner" | "secret" | "senior" | "enigma" | "major"
@@ -1291,6 +1293,7 @@ export interface WhoAmI {
     title?: string | null;
     avatar?: AvatarImage | null;
     frozen?: boolean | null;
+    type?: NodeType | null;
 }
 
 export interface ActivityReactionFilter {

@@ -34,9 +34,12 @@ export default [
 async function ownerLoadSaga(action: WithContext<OwnerLoadAction>): Promise<void> {
     try {
         const {
-            nodeName = null, nodeNameChanging = false, fullName = null, gender = null, title = null, avatar = null
+            nodeName = null, nodeNameChanging = false, fullName = null, gender = null, title = null, avatar = null,
+            type
         } = await Node.whoAmI(action, REL_CURRENT);
-        dispatch(ownerSet(nodeName, nodeNameChanging, fullName, gender, title, avatar).causedBy(action));
+        dispatch(
+            ownerSet(nodeName, nodeNameChanging, fullName, gender, title, avatar, type ?? "regular").causedBy(action)
+        );
     } catch (e) {
         dispatch(errorThrown(e));
     }

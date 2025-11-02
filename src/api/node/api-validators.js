@@ -37294,7 +37294,7 @@ return errors === 0;
 }
 
 export const WhoAmI = validate147;
-const schema171 = {"type":"object","properties":{"nodeName":{"type":"string","nullable":true},"nodeNameChanging":{"type":"boolean","nullable":true},"fullName":{"type":"string","nullable":true},"gender":{"type":"string","nullable":true},"title":{"type":"string","nullable":true},"avatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"frozen":{"type":"boolean","nullable":true}},"additionalProperties":false};
+const schema171 = {"type":"object","properties":{"nodeName":{"type":"string","nullable":true},"nodeNameChanging":{"type":"boolean","nullable":true},"fullName":{"type":"string","nullable":true},"gender":{"type":"string","nullable":true},"title":{"type":"string","nullable":true},"avatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"frozen":{"type":"boolean","nullable":true},"type":{"type":"string","nullable":true}},"additionalProperties":false};
 
 function validate147(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
 let vErrors = null;
@@ -37303,7 +37303,7 @@ if(errors === 0){
 if(data && typeof data == "object" && !Array.isArray(data)){
 const _errs1 = errors;
 for(const key0 in data){
-if(!(((((((key0 === "nodeName") || (key0 === "nodeNameChanging")) || (key0 === "fullName")) || (key0 === "gender")) || (key0 === "title")) || (key0 === "avatar")) || (key0 === "frozen"))){
+if(!((((((((key0 === "nodeName") || (key0 === "nodeNameChanging")) || (key0 === "fullName")) || (key0 === "gender")) || (key0 === "title")) || (key0 === "avatar")) || (key0 === "frozen")) || (key0 === "type"))){
 delete data[key0];
 }
 }
@@ -37922,6 +37922,48 @@ var valid0 = _errs40 === errors;
 }
 else {
 var valid0 = true;
+}
+if(valid0){
+if(data.type !== undefined){
+let data12 = data.type;
+const _errs43 = errors;
+if((typeof data12 !== "string") && (data12 !== null)){
+let dataType13 = typeof data12;
+let coerced13 = undefined;
+if(dataType13 == 'object' && Array.isArray(data12) && data12.length == 1){
+data12 = data12[0];
+dataType13 = typeof data12;
+if((typeof data12 === "string") && (data12 === null)){
+coerced13 = data12;
+}
+}
+if(!(coerced13 !== undefined)){
+if(dataType13 == "number" || dataType13 == "boolean"){
+coerced13 = "" + data12;
+}
+else if(data12 === null){
+coerced13 = "";
+}
+else if(data12 === "" || data12 === 0 || data12 === false){
+coerced13 = null;
+}
+else {
+validate147.errors = [{instancePath:instancePath+"/type",schemaPath:"#/properties/type/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+return false;
+}
+}
+if(coerced13 !== undefined){
+data12 = coerced13;
+if(data !== undefined){
+data["type"] = coerced13;
+}
+}
+}
+var valid0 = _errs43 === errors;
+}
+else {
+var valid0 = true;
+}
 }
 }
 }

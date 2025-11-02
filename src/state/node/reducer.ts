@@ -22,7 +22,8 @@ const initialState: NodeState = {
         changing: false,
         switching: false
     },
-    features: null
+    features: null,
+    type: "regular"
 };
 
 export default (state: NodeState = initialState, action: ClientAction): NodeState => {
@@ -67,11 +68,15 @@ export default (state: NodeState = initialState, action: ClientAction): NodeStat
         case "OWNER_SET": {
             const istate = immutable.wrap(state);
             if (state.owner.name !== action.payload.name) {
-                istate.assign("owner", initialState.owner)
+                istate
+                    .assign("owner", initialState.owner)
                     .set("owner.name", action.payload.name);
             }
             if (action.payload.changing != null) {
                 istate.set("owner.changing", action.payload.changing);
+            }
+            if (action.payload.type != null) {
+                istate.set("type", action.payload.type);
             }
             return istate.value();
         }
