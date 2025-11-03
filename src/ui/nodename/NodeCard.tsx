@@ -9,7 +9,7 @@ import { ClientState } from "state/state";
 import { getNodeCard, isNodeCardAnyLoaded, isNodeCardAnyLoading } from "state/nodecards/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import { Avatar, DonateButton, SubscribeButton } from "ui/control";
-import { useParent } from "ui/hook";
+import { useIsTinyScreen, useParent } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import { shortGender } from "util/names";
 import { RelNodeName } from "util/rel-node-name";
@@ -27,6 +27,7 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
     const anyLoaded = useSelector((state: ClientState) => isNodeCardAnyLoaded(state, nodeName));
     const anyLoading = useSelector((state: ClientState) => isNodeCardAnyLoading(state, nodeName));
     const homeOwnerName = useSelector(getHomeOwnerName);
+    const tinyScreen = useIsTinyScreen();
     const {t} = useTranslation();
 
     const {hide: hidePopover} = useParent();
@@ -82,10 +83,10 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
                     <Trans i18nKey="count-posts" values={{count: storiesTotal}}><em/></Trans>
                     {storiesLastDate &&
                         <>
-                            {`, ${t("last-post")} `}
+                            {tinyScreen ? ", " : `, ${t("last-post")} `}
                             <time dateTime={formatISO(storiesLastDate)}
                                   title={format(storiesLastDate, "dd-MM-yyyy HH:mm")}>
-                                {tDistanceToNow(storiesLastDate, t, {ago: true})}
+                                {tDistanceToNow(storiesLastDate, t, {ago: !tinyScreen})}
                             </time>
                         </>
                     }
