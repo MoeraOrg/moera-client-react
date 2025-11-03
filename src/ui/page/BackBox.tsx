@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { isConnectedToHome } from "state/home/selectors";
+import { useIsTinyScreen } from "ui/hook";
 import { useScrollShadow } from "ui/mainmenu/scroll-shadow";
 import { BackBoxContext } from "ui/page/backbox-context";
 import "./BackBox.css";
@@ -13,7 +14,10 @@ interface Props {
 
 export default function BackBox({shadowMargin, children}: Props) {
     const connectedToHome = useSelector(isConnectedToHome);
-    const {shadow, sentinel} = useScrollShadow({margin: shadowMargin ?? (connectedToHome ? 50 : 100)});
+    const tinyScreen = useIsTinyScreen();
+    const {shadow, sentinel} = useScrollShadow({
+        margin: shadowMargin ?? (connectedToHome ? 50 : (tinyScreen ? 50 : 100))
+    });
 
     return (
         <>
