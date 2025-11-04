@@ -1,6 +1,6 @@
 export const SOCIAL_BUTTONS = [
-    "facebook", "telegram", "twitter", "reddit", "email", "vk", "livejournal", "linkedin", "pocket", "tumblr",
-    "whatsapp", "viber", "ok", "veibo"
+    "email", "facebook", "telegram", "twitter", "reddit", "linkedin", "bluesky", "threads", "gab", "vk", "livejournal",
+    "whatsapp", "viber"
 ];
 
 export const SOCIAL_BUTTONS_ORDER = new Map(SOCIAL_BUTTONS.map((v, i) => [v, i]));

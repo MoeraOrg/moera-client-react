@@ -1,34 +1,32 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+    BlueskyIcon,
+    BlueskyShareButton,
     EmailIcon,
     EmailShareButton,
     FacebookIcon,
     FacebookShareButton,
+    GabIcon,
+    GabShareButton,
     LinkedinIcon,
     LinkedinShareButton,
     LivejournalIcon,
     LivejournalShareButton,
-    OKIcon,
-    OKShareButton,
-    PocketIcon,
-    PocketShareButton,
     RedditIcon,
     RedditShareButton,
     TelegramIcon,
     TelegramShareButton,
-    TumblrIcon,
-    TumblrShareButton,
-    TwitterIcon,
+    ThreadsIcon,
+    ThreadsShareButton,
     TwitterShareButton,
     ViberIcon,
     ViberShareButton,
     VKIcon,
     VKShareButton,
-    WeiboIcon,
-    WeiboShareButton,
     WhatsappIcon,
-    WhatsappShareButton
+    WhatsappShareButton,
+    XIcon
 } from 'react-share';
 import * as immutable from 'object-path-immutable';
 
@@ -38,6 +36,8 @@ import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
 import { closeShareDialog } from "state/sharedialog/actions";
 
+const ICON_SIZE = 48;
+
 interface Props {
     type: string;
     url: string;
@@ -46,7 +46,8 @@ interface Props {
 
 export default function SocialButton({type, url, title}: Props) {
     const usage = useSelector((state: ClientState) =>
-        getSetting(state, "share.social-buttons.usage") as any as Partial<Record<string, number>>);
+        getSetting(state, "share.social-buttons.usage") as any as Partial<Record<string, number>>
+    );
     const dispatch = useDispatch();
 
     const onClick = () => {
@@ -59,89 +60,83 @@ export default function SocialButton({type, url, title}: Props) {
     };
 
     switch (type) {
-        case "facebook":
+        case "bluesky":
             return (
-                <FacebookShareButton url={url} quote={title} beforeOnClick={onClick}>
-                    <FacebookIcon size={40} round/>
-                </FacebookShareButton>
-            );
-        case "telegram":
-            return (
-                <TelegramShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <TelegramIcon size={40} round/>
-                </TelegramShareButton>
-            );
-        case "twitter":
-            return (
-                <TwitterShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <TwitterIcon size={40} round/>
-                </TwitterShareButton>
-            );
-        case "reddit":
-            return (
-                <RedditShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <RedditIcon size={40} round/>
-                </RedditShareButton>
+                <BlueskyShareButton url={url} title={title} beforeOnClick={onClick}>
+                    <BlueskyIcon size={ICON_SIZE} round/>
+                </BlueskyShareButton>
             );
         case "email":
             return (
                 <EmailShareButton url={url} subject={title} beforeOnClick={onClick}>
-                    <EmailIcon size={40} round/>
+                    <EmailIcon size={ICON_SIZE} round/>
                 </EmailShareButton>
             );
-        case "vk":
+        case "facebook":
             return (
-                <VKShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <VKIcon size={40} round/>
-                </VKShareButton>
+                <FacebookShareButton url={url} title={title} beforeOnClick={onClick}>
+                    <FacebookIcon size={ICON_SIZE} round/>
+                </FacebookShareButton>
             );
-        case "livejournal":
+        case "gab":
             return (
-                <LivejournalShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <LivejournalIcon size={40} round/>
-                </LivejournalShareButton>
+                <GabShareButton url={url} title={title} beforeOnClick={onClick}>
+                    <GabIcon size={ICON_SIZE} round/>
+                </GabShareButton>
             );
         case "linkedin":
             return (
                 <LinkedinShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <LinkedinIcon size={40} round/>
+                    <LinkedinIcon size={ICON_SIZE} round/>
                 </LinkedinShareButton>
             );
-        case "pocket":
+        case "livejournal":
             return (
-                <PocketShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <PocketIcon size={40} round/>
-                </PocketShareButton>
+                <LivejournalShareButton url={url} title={title} beforeOnClick={onClick}>
+                    <LivejournalIcon size={ICON_SIZE} round/>
+                </LivejournalShareButton>
             );
-        case "tumblr":
+        case "reddit":
             return (
-                <TumblrShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <TumblrIcon size={40} round/>
-                </TumblrShareButton>
+                <RedditShareButton url={url} title={title} beforeOnClick={onClick}>
+                    <RedditIcon size={ICON_SIZE} round/>
+                </RedditShareButton>
             );
-        case "whatsapp":
+        case "telegram":
             return (
-                <WhatsappShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <WhatsappIcon size={40} round/>
-                </WhatsappShareButton>
+                <TelegramShareButton url={url} title={title} beforeOnClick={onClick}>
+                    <TelegramIcon size={ICON_SIZE} round/>
+                </TelegramShareButton>
+            );
+        case "threads":
+            return (
+                <ThreadsShareButton url={url} title={title} beforeOnClick={onClick}>
+                    <ThreadsIcon size={ICON_SIZE} round/>
+                </ThreadsShareButton>
+            );
+        case "twitter":
+            return (
+                <TwitterShareButton url={url} title={title} beforeOnClick={onClick}>
+                    <XIcon size={ICON_SIZE} round/>
+                </TwitterShareButton>
             );
         case "viber":
             return (
                 <ViberShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <ViberIcon size={40} round/>
+                    <ViberIcon size={ICON_SIZE} round/>
                 </ViberShareButton>
             );
-        case "ok":
+        case "vk":
             return (
-                <OKShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <OKIcon size={40} round/>
-                </OKShareButton>
+                <VKShareButton url={url} title={title} beforeOnClick={onClick}>
+                    <VKIcon size={ICON_SIZE} round/>
+                </VKShareButton>
             );
-        case "weibo":
+        case "whatsapp":
             return (
-                <WeiboShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <WeiboIcon size={40} round/>
-                </WeiboShareButton>
+                <WhatsappShareButton url={url} title={title} beforeOnClick={onClick}>
+                    <WhatsappIcon size={ICON_SIZE} round/>
+                </WhatsappShareButton>
             );
         default:
             return null;

@@ -42,7 +42,7 @@ export default function CopyQuoteButton({url, title, mode}: Props) {
 
     return (
         <button className="copy-quote" title={t("copy-quote")} onClick={onClick}>
-            <Icon icon={msCode} size={24}/>
+            <Icon icon={msCode} size={30}/>
         </button>
     );
 }

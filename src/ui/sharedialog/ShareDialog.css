@@ -1,5 +1,4 @@
 .share-dialog .title {
-    margin-top: .5em;
     margin-bottom: .5em;
 }
 
@@ -15,14 +14,18 @@
 
 .share-dialog .link BUTTON {
     flex: none;
+    width: 2.5em;
+    height: 2.5em;
 }
 
 .share-dialog .social {
-    margin-top: 1em;
+    margin-top: 1.5em;
     line-height: 3.3;
+    text-align: center;
 }
 
 .share-dialog .social BUTTON {
     display: inline-block;
-    margin-right: .25em;
+    margin-right: .5em;
+    margin-bottom: .5em;
 }
