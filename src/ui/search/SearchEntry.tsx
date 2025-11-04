@@ -13,6 +13,7 @@ import EntryHtml from "ui/entry/EntryHtml";
 import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
 import CommentDate from "ui/comment/CommentDate";
 import SearchEntryImagePreview from "ui/search/SearchEntryImagePreview";
+import SearchEntryMenu from "ui/search/SearchEntryMenu";
 import Jump from "ui/navigation/Jump";
 import { replaceEmojis } from "util/html";
 import { REL_SEARCH } from "util/rel-node-name";
@@ -81,6 +82,7 @@ export default function SearchEntry({entry}: Props) {
             )}
             data-moment={entry.moment}
         >
+            <SearchEntryMenu entry={entry}/>
             {entry.commentId == null ?
                 <PostingOwnerLine entry={entry} href={href}/>
             :

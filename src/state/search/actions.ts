@@ -91,6 +91,16 @@ export type SearchHistoryDeleteAction = ActionWithPayload<"SEARCH_HISTORY_DELETE
 export const searchHistoryDelete = (query: string): SearchHistoryDeleteAction =>
     actionWithPayload("SEARCH_HISTORY_DELETE", {query});
 
+export type SearchEntryCopyLinkAction = ActionWithPayload<"SEARCH_ENTRY_COPY_LINK", {
+    nodeName: string;
+    postingId: string;
+    commentId: string | null;
+}>;
+export const searchEntryCopyLink = (
+    nodeName: string, postingId: string, commentId: string | null
+): SearchEntryCopyLinkAction =>
+    actionWithPayload("SEARCH_ENTRY_COPY_LINK", {nodeName, postingId, commentId});
+
 export type SearchAnyAction =
     SearchLoadAction
     | SearchHashtagLoadedAction
@@ -107,4 +117,5 @@ export type SearchAnyAction =
     | SearchHistoryLoadedAction
     | SearchHistoryLoadFailedAction
     | SearchHistoryDeleteAction
-    | SearchHistoryAddAction;
+    | SearchHistoryAddAction
+    | SearchEntryCopyLinkAction;

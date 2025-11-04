@@ -24,3 +24,8 @@
     font-size: .88rem;
     line-height: 143%;
 }
+
+.search-page .comment > .menu {
+    top: 1.55rem;
+    right: 1.25rem;
+}

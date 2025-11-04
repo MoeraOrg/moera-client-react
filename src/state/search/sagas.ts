@@ -1,13 +1,18 @@
 import { endOfDay, getUnixTime, startOfDay, subDays, subMonths, subWeeks, subYears } from 'date-fns';
+import clipboardCopy from 'clipboard-copy';
 
 import { executor } from "state/executor";
+import i18n from "i18next";
 import { Node, SearchEntryType, SearchHashtagFilter, SearchNodeFilter, SearchTextFilter } from "api";
 import { homeIntroduced } from "state/init-barriers";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
+import { getNodeUri } from "state/naming/sagas";
+import { flashBox } from "state/flashbox/actions";
 import {
+    SearchEntryCopyLinkAction,
     searchHashtagLoaded,
     searchHistoryAdd,
     SearchHistoryDeleteAction,
@@ -31,14 +36,17 @@ import {
 } from "state/search/selectors";
 import { nodeCardsPreload } from "state/nodecards/actions";
 import { getSetting } from "state/settings/selectors";
+import * as Browser from "ui/browser";
 import { REL_HOME, REL_SEARCH } from "util/rel-node-name";
+import { universalLocation } from "util/universal-url";
 
 export default [
     executor("SEARCH_LOAD", null, searchLoadSaga),
     executor("SEARCH_LOAD_MORE", null, searchLoadMoreSaga),
     executor("SEARCH_RESTORE_SCROLL", null, searchRestoreScrollSaga),
     executor("SEARCH_HISTORY_LOAD", payload => payload.query, searchHistoryLoadSaga),
-    executor("SEARCH_HISTORY_DELETE", payload => payload.query, searchHistoryDeleteSaga)
+    executor("SEARCH_HISTORY_DELETE", payload => payload.query, searchHistoryDeleteSaga),
+    executor("SEARCH_ENTRY_COPY_LINK", null, searchEntryCopyLinkSaga)
 ];
 
 async function searchLoadSaga(action: WithContext<SearchLoadAction>): Promise<void> {
@@ -218,6 +226,22 @@ async function searchHistoryLoadSaga(action: WithContext<SearchHistoryLoadAction
 async function searchHistoryDeleteSaga(action: WithContext<SearchHistoryDeleteAction>): Promise<void> {
     try {
         await Node.deleteFromSearchHistory(action, REL_HOME, action.payload.query);
+    } catch (e) {
+        dispatch(errorThrown(e));
+    }
+}
+
+async function searchEntryCopyLinkSaga(action: WithContext<SearchEntryCopyLinkAction>): Promise<void> {
+    const {nodeName, postingId, commentId} = action.payload;
+
+    try {
+        const nodeUri = await getNodeUri(action, nodeName);
+        const location = `/post/${postingId}` + (commentId != null ? `?comment=${commentId}` : "");
+        const href = universalLocation(null, nodeName, nodeUri, location);
+        await clipboardCopy(href);
+        if (!Browser.isAndroidBrowser()) {
+            dispatch(flashBox(i18n.t("link-copied")).causedBy(action));
+        }
     } catch (e) {
         dispatch(errorThrown(e));
     }
