@@ -104,6 +104,7 @@ BLOCKQUOTE BLOCKQUOTE:last-child, BLOCKQUOTE P:last-child {
 
     BLOCKQUOTE:not(BLOCKQUOTE BLOCKQUOTE)::before {
         font-size: 3.5rem;
+        left: .45rem;
         top: -1.4rem;
     }
 }
