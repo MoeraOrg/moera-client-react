@@ -14,7 +14,11 @@ import { isNodeIntroduced } from "state/node/selectors";
 
 export default [
     trigger("PULSE_6H", true, nodeCardsRefresh),
-    trigger(["NODE_READY", "HOME_READY", "WAKE_UP"], conj(isNodeIntroduced, isHomeIntroduced), nodeCardPrepareOwners),
+    trigger(
+        ["NODE_READY", "HOME_READY", "WAKE_UP", "NODE_CARDS_REFRESH"],
+        conj(isNodeIntroduced, isHomeIntroduced),
+        nodeCardPrepareOwners
+    ),
     trigger(
         "PROFILE_SET",
         true,

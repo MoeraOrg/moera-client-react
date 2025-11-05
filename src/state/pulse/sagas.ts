@@ -20,6 +20,9 @@ export async function signalPostInitSaga(): Promise<void> {
 export async function pulseSaga(): Promise<void> {
     let count = 0;
     while (true) {
+        await delay(60000);
+        count = (count + 1) % 360;
+
         dispatch(pulse1Min());
         if (count % 10 === 0) {
             dispatch(pulse10Min());
@@ -27,7 +30,5 @@ export async function pulseSaga(): Promise<void> {
         if (count % 360 === 0) {
             dispatch(pulse6H());
         }
-        await delay(60000);
-        count = (count + 1) % 360;
     }
 }
