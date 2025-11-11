@@ -15,7 +15,22 @@ import { nodeUrlToEvents, nodeUrlToLocation } from "util/url";
 const NODE_OR_RECEIVER: EventSource[] = ["NODE" as const, "RECEIVER" as const];
 
 export default function EventsFrontend() {
-    const eventWorker = useRef<Worker>(new Worker(new URL('../../events/index.ts', import.meta.url)));
+    const eventWorker = useRef<Worker>();
+    const dispatch = useDispatch();
+
+    const onMessage = useCallback((event: MessageEvent) => dispatch(event.data as Action), [dispatch]);
+
+    useEffect(() => {
+        if (eventWorker.current == null) {
+            eventWorker.current = new Worker(new URL('../../events/index.ts', import.meta.url));
+            eventWorker.current.addEventListener("message", onMessage);
+        }
+        return () => {
+            eventWorker.current?.removeEventListener("message", onMessage);
+            eventWorker.current?.terminate();
+            eventWorker.current = undefined;
+        };
+    }, [onMessage]);
 
     const homeEvents = useSelector((state: ClientState) => state.home.root.events);
     const nodeEvents = useSelector((state: ClientState) => state.node.root.events);
@@ -29,38 +44,32 @@ export default function EventsFrontend() {
     const nodeNode = useSelector(getOwnerName);
     const receiverNode = useSelector(getReceiverNodeName);
     const nodePrefix = receiverNode == null ? NODE_OR_RECEIVER : "NODE" as const;
-    const dispatch = useDispatch();
 
     useEffect(() => {
-        eventWorker.current.postMessage(eventsSetClientIdMessage(Browser.clientId));
+        eventWorker.current?.postMessage(eventsSetClientIdMessage(Browser.clientId));
     }, []);
 
     useEffect(() => {
-        eventWorker.current.postMessage(eventsSetupConnectionMessage(
-            "home", homeEvents, homeToken, null, "HOME", homeNode));
+        eventWorker.current?.postMessage(
+            eventsSetupConnectionMessage("home", homeEvents, homeToken, null, "HOME", homeNode)
+        );
     }, [homeEvents, homeToken, homeNode]);
 
     useEffect(() => {
-        eventWorker.current.postMessage(eventsSetupConnectionMessage(
-            "node", nodeEvents, nodeToken, carte, nodePrefix, nodeNode));
+        eventWorker.current?.postMessage(
+            eventsSetupConnectionMessage("node", nodeEvents, nodeToken, carte, nodePrefix, nodeNode)
+        );
     }, [carte, nodeEvents, nodeNode, nodePrefix, nodeToken]);
 
     useEffect(() => {
-        eventWorker.current.postMessage(eventsSetupConnectionMessage(
-            "receiver", receiverEvents, receiverToken, carte, "RECEIVER", receiverNode));
+        eventWorker.current?.postMessage(
+            eventsSetupConnectionMessage("receiver", receiverEvents, receiverToken, carte, "RECEIVER", receiverNode)
+        );
     }, [carte, receiverEvents, receiverNode, receiverToken]);
-
-    const onMessage = useCallback((event: MessageEvent) => dispatch(event.data as Action), [dispatch]);
-
-    useEffect(() => {
-        const worker = eventWorker.current;
-        worker.addEventListener("message", onMessage);
-        return () => worker.removeEventListener("message", onMessage);
-    }, [onMessage]);
 
     const onVisibilityChange = useCallback(() => {
         if (document.visibilityState === "visible") {
-            eventWorker.current.postMessage(eventsWakeUpMessage());
+            eventWorker.current?.postMessage(eventsWakeUpMessage());
         }
     }, []);
 

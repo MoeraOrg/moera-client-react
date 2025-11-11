@@ -1,6 +1,6 @@
 import { safeValidateMessage, SafeValidationErrors, SafeWorkerResponse } from "safe/message-types";
 
-const NUM_WORKERS = 1;
+const NUM_WORKERS = 4;
 
 interface ValidationResult {
     valid: boolean;
