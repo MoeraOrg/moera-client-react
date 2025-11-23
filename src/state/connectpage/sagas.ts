@@ -49,7 +49,7 @@ async function connectPageVerifyCodeSaga(action: WithContext<ConnectPageVerifyCo
             if (result.correct) {
                 dispatch(connectPageSetForm(location, "admin", "reset").causedBy(action));
             } else {
-                dispatch(connectPageVerifyCodeFailed("invalid-secret-code").causedBy(action));
+                dispatch(connectPageVerifyCodeFailed("invalid-verification-code").causedBy(action));
             }
             break;
         } catch (e) {
