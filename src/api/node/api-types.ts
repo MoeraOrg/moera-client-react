@@ -630,6 +630,7 @@ export interface ProfileInfo {
     fullName?: string | null;
     gender?: string | null;
     email?: string | null;
+    emailVerified?: boolean | null;
     title?: string | null;
     bioSrc?: string | null;
     bioSrcFormat?: SourceFormat | null;

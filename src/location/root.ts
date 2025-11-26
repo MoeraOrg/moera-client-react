@@ -4,7 +4,7 @@ import {
     isAtComplaintsPage,
     isAtComposePage,
     isAtConnectPage,
-    isAtDetailedPostingPage,
+    isAtDetailedPostingPage, isAtEmailVerifiedPage,
     isAtExplorePage,
     isAtGrantPage,
     isAtInstantsPage,
@@ -22,6 +22,7 @@ import {
 import { build as complaintsBuild, transform as complaintsTransform } from "location/complaints";
 import { build as composeBuild, transform as composeTransform } from "location/compose";
 import { build as connectBuild, transform as connectTransform } from "location/connect";
+import { build as emailVerifiedBuild, transform as emailVerifiedTransform } from "location/email-verified";
 import { build as exploreBuild, transform as exploreTransform } from "location/explore";
 import { build as grantBuild, transform as grantTransform } from "location/grant";
 import { build as instantsBuild, transform as instantsTransform } from "location/instants";
@@ -97,6 +98,9 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (dstInfo.directories[0] === "start-reading") {
         return startReadingTransform(srcInfo, dstInfo);
     }
+    if (dstInfo.directories[0] === "email-verified") {
+        return emailVerifiedTransform(srcInfo, dstInfo);
+    }
 
     return [];
 }
@@ -155,6 +159,9 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     }
     if (isAtStartReadingPage(state)) {
         return startReadingBuild(state, info);
+    }
+    if (isAtEmailVerifiedPage(state)) {
+        return emailVerifiedBuild(state, info);
     }
     return info;
 }

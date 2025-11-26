@@ -1566,6 +1566,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "emailVerified": {
+                    type: "boolean",
+                    nullable: true
+                },
                 "title": {
                     type: "string",
                     nullable: true

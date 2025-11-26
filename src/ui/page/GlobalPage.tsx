@@ -10,6 +10,7 @@ const ConnectPage = React.lazy(() => import("ui/connectpage/ConnectPage"));
 const SignUpPage = React.lazy(() => import("ui/signup/SignUpPage"));
 const MnemonicPage = React.lazy(() => import("ui/profile/manage/MnemonicPage"));
 const StartReadingPage = React.lazy(() => import("ui/explore/StartReadingPage"));
+const EmailVerifiedPage = React.lazy(() => import("ui/profile/EmailVerifiedPage"));
 
 export default function GlobalPage() {
     const page = useSelector((state: ClientState) => state.navigation.page);
@@ -49,6 +50,12 @@ export default function GlobalPage() {
             return (
                 <Suspense fallback={null}>
                     <StartReadingPage/>
+                </Suspense>
+            );
+        case "email-verified":
+            return (
+                <Suspense fallback={null}>
+                    <EmailVerifiedPage/>
                 </Suspense>
             );
         default:

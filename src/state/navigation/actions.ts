@@ -156,6 +156,10 @@ export type GoToStartReadingAction = GoToPageAction<"start-reading", {}>;
 export const goToStartReading = (): GoToStartReadingAction =>
     goToPage("start-reading", {});
 
+export type GoToEmailVerifiedAction = GoToPageAction<"email-verified", {}>;
+export const goToEmailVerified = (): GoToEmailVerifiedAction =>
+    goToPage("email-verified", {});
+
 export type GoToPageAnyAction =
     GoToProfileAction
     | GoToTimelineAction
@@ -180,7 +184,8 @@ export type GoToPageAnyAction =
     | GoToConnectAction
     | GoToSignUpAction
     | GoToMnemonicAction
-    | GoToStartReadingAction;
+    | GoToStartReadingAction
+    | GoToEmailVerifiedAction;
 
 export type NewLocationAction = ActionWithoutPayload<"NEW_LOCATION">;
 export const newLocation = (): NewLocationAction =>

@@ -1463,6 +1463,17 @@ export async function updateProfile(
     });
 }
 
+export async function verifyEmail(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
+    auth: true | string = true
+): Promise<API.Result> {
+
+    const location = "/profile/email/verify";
+    return callApi<API.Result>({
+        caller, nodeName, method: "PUT", location, auth, schema: "Result", errorFilter
+    });
+}
+
 export async function getDeleteNodeRequestStatus(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
     auth: true | string = true

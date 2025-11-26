@@ -16,6 +16,9 @@ export type Page =
     | "connect"
     | "signup"
     | "mnemonic"
-    | "start-reading";
+    | "start-reading"
+    | "email-verified";
 
-export const GLOBAL_PAGES: Page[] = ["removal", "grant", "connect", "signup", "mnemonic", "start-reading"];
+export const GLOBAL_PAGES: Page[] = [
+    "removal", "grant", "connect", "signup", "mnemonic", "start-reading", "email-verified"
+];

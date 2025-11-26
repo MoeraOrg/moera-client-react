@@ -22,6 +22,7 @@ import { ReactComponent as msCancel } from "ui/material-symbols/cancel.isvg";
 import { ReactComponent as msCancelFilled } from "ui/material-symbols/cancel_filled.isvg";
 import { ReactComponent as msCheck } from "ui/material-symbols/check.isvg";
 import { ReactComponent as msCheck16 } from "ui/material-symbols/check16.isvg";
+import { ReactComponent as msCheckCircle } from "ui/material-symbols/check_circle.isvg";
 import { ReactComponent as msChevronRight } from "ui/material-symbols/chevron_right.isvg";
 import { ReactComponent as msCircle } from "ui/material-symbols/circle.isvg";
 import { ReactComponent as msCircleFilled } from "ui/material-symbols/circle_filled.isvg";
@@ -166,6 +167,7 @@ export {
     msCancelFilled,
     msCheck,
     msCheck16,
+    msCheckCircle,
     msChevronRight,
     msCircle,
     msCircleFilled,

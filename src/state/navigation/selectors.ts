@@ -81,6 +81,10 @@ export function isAtStartReadingPage(state: ClientState): boolean {
     return state.navigation.page === "start-reading";
 }
 
+export function isAtEmailVerifiedPage(state: ClientState): boolean {
+    return state.navigation.page === "email-verified";
+}
+
 export function isBottomMenuVisible(state: ClientState): boolean {
     return state.navigation.bottomMenuVisible;
 }

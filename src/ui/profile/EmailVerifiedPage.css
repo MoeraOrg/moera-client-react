@@ -1,0 +1,35 @@
+@media only screen and (min-width: 992px) {
+    .email-verified-page {
+        width: 33.5rem;
+    }
+}
+
+.email-verified-page .title {
+    text-wrap: balance;
+}
+
+.email-verified-page .status {
+    font-size: 1.2rem;
+    display: grid;
+    grid-template-columns: 1.2em auto;
+    gap: .5em;
+    align-items: start;
+}
+
+.email-verified-page .status svg {
+    margin-top: .25em;
+}
+
+.email-verified-page .status.succeeded svg {
+    color: var(--correct);
+}
+
+.email-verified-page .status.failed svg {
+    color: var(--incorrect);
+}
+
+.email-verified-page .submit-button {
+    margin-top: 2.5rem;
+    display: block;
+    width: 100%;
+}
