@@ -4,7 +4,8 @@ import {
     isAtComplaintsPage,
     isAtComposePage,
     isAtConnectPage,
-    isAtDetailedPostingPage, isAtEmailVerifiedPage,
+    isAtDetailedPostingPage,
+    isAtEmailVerifiedPage,
     isAtExplorePage,
     isAtGrantPage,
     isAtInstantsPage,
@@ -17,7 +18,8 @@ import {
     isAtSettingsPage,
     isAtSignUpPage,
     isAtStartReadingPage,
-    isAtTimelinePage
+    isAtTimelinePage,
+    isAtVerifyEmailPage
 } from "state/navigation/selectors";
 import { build as complaintsBuild, transform as complaintsTransform } from "location/complaints";
 import { build as composeBuild, transform as composeTransform } from "location/compose";
@@ -37,6 +39,7 @@ import { build as settingsBuild, transform as settingsTransform } from "location
 import { build as signupBuild, transform as signupTransform } from "location/signup";
 import { build as startReadingBuild, transform as startReadingTransform } from "location/start-reading";
 import { build as timelineBuild, transform as timelineTransform } from "location/timeline";
+import { build as verifyEmailBuild, transform as verifyEmailTransform } from "location/verify-email";
 import { build as mediaBuild } from "location/media";
 import { LocationInfo } from "location/LocationInfo";
 import { ClientAction } from "state/action";
@@ -101,6 +104,9 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (dstInfo.directories[0] === "email-verified") {
         return emailVerifiedTransform(srcInfo, dstInfo);
     }
+    if (dstInfo.directories[0] === "verify-email") {
+        return verifyEmailTransform(srcInfo, dstInfo);
+    }
 
     return [];
 }
@@ -162,6 +168,9 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     }
     if (isAtEmailVerifiedPage(state)) {
         return emailVerifiedBuild(state, info);
+    }
+    if (isAtVerifyEmailPage(state)) {
+        return verifyEmailBuild(state, info);
     }
     return info;
 }

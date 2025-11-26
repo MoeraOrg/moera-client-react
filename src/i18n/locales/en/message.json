@@ -131,6 +131,7 @@
   "confirm": "Confirm",
   "confirmation-link-incorrect-expired": "Confirmation link is incorrect or expired",
   "confirm-password": "Confirm password",
+  "confirm-your-email-address": "Confirm your e-mail address",
   "connect": "Log In",
   "connected": "Logged in",
   "connect-home": "Log In",
@@ -320,6 +321,7 @@
   "how-often-blog-search": "How often was your blog found on Google and other search engines in the past week?",
   "i": "Me",
   "i-agree": "I agree",
+  "if-not-received-check-spam": "If you don't see the email in your inbox, please check your Junk or Spam folder. The link will expire in 15 minutes.",
   "ignore": "Ignore",
   "image": "Image",
   "image-internet": "Image from the Internet",
@@ -1150,6 +1152,7 @@
   "your-posts": "Your posts",
   "your-profile": "Your profile",
   "you-subscribed": "You are subscribed",
+  "you-will-receive-confirm-email": "You will receive an email shortly to confirm your e-mail address.",
   "zoom-in": "Zoom in",
   "zoom-out": "Zoom out"
 }

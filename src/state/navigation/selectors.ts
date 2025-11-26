@@ -85,6 +85,10 @@ export function isAtEmailVerifiedPage(state: ClientState): boolean {
     return state.navigation.page === "email-verified";
 }
 
+export function isAtVerifyEmailPage(state: ClientState): boolean {
+    return state.navigation.page === "verify-email";
+}
+
 export function isBottomMenuVisible(state: ClientState): boolean {
     return state.navigation.bottomMenuVisible;
 }

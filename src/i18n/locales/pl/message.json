@@ -131,6 +131,7 @@
   "confirm": "Zatwierdzić",
   "confirmation-link-incorrect-expired": "Link potwierdzający jest niepoprawny lub wygasł",
   "confirm-password": "Potwierdź hasło",
+  "confirm-your-email-address": "Potwierdź swój adres e-mail",
   "connect": "Zaloguj się",
   "connected": "Zalogowano",
   "connect-home": "Zaloguj się",
@@ -320,6 +321,7 @@
   "how-often-blog-search": "Jak często Twój blog był znajdowany w Google i innych wyszukiwarkach w ostatnim tygodniu?",
   "i": "Ja",
   "i-agree": "Zgadzam się",
+  "if-not-received-check-spam": "Jeśli nie widzisz wiadomości w swojej skrzynce odbiorczej, sprawdź folder Śmieci lub Spam. Link wygaśnie za 15 minut.",
   "ignore": "Ignoruj",
   "image": "Obrazek",
   "image-internet": "Obraz z Internetu",
@@ -1150,6 +1152,7 @@
   "your-posts": "Twoje posty",
   "your-profile": "Twój profil",
   "you-subscribed": "Jesteś subskrybentem",
+  "you-will-receive-confirm-email": "Wkrótce otrzymasz e-mail w celu potwierdzenia swojego adresu e-mail.",
   "zoom-in": "Powiększ",
   "zoom-out": "Pomniejsz"
 }

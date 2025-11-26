@@ -19,7 +19,7 @@ import {
     registerNameFailed,
     registerNameSucceeded
 } from "state/nodename/actions";
-import { goToMnemonic, goToStartReading } from "state/navigation/actions";
+import { goToMnemonic, goToStartReading, goToVerifyEmail } from "state/navigation/actions";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
@@ -73,6 +73,7 @@ async function nodeNameUpdateSaga(action: WithContext<NodeNameUpdateAction>): Pr
 
 async function mnemonicStoreSaga(action: WithContext<MnemonicStoreAction>): Promise<void> {
     const mnemonic = select(state => state.nodeName.mnemonic);
+    const email = select(state => state.signUp.email);
 
     try {
         if (mnemonic != null) {
@@ -81,7 +82,11 @@ async function mnemonicStoreSaga(action: WithContext<MnemonicStoreAction>): Prom
         dispatch(mnemonicUnset(true).causedBy(action));
         // wait with going to the next page until the mnemonic is stored, because if it fails,
         // we'll have a chance to write the mnemonic down or retry
-        dispatch(goToStartReading().causedBy(action));
+        if (email) {
+            dispatch(goToVerifyEmail().causedBy(action));
+        } else {
+            dispatch(goToStartReading().causedBy(action));
+        }
     } catch (e) {
         dispatch(goToMnemonic().causedBy(action));
     }

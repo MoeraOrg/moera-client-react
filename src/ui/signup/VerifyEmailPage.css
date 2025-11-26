@@ -1,0 +1,19 @@
+@media only screen and (min-width: 992px) {
+    .verify-email-page {
+        width: 33.5rem;
+    }
+}
+
+.verify-email-page .title {
+    text-wrap: balance;
+}
+
+.verify-email-page P {
+    line-height: 1.5;
+}
+
+.verify-email-page .submit-button {
+    margin-top: 2.5rem;
+    display: block;
+    width: 100%;
+}
