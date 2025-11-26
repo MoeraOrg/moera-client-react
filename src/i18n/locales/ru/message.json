@@ -129,7 +129,7 @@
   "complaint-status-colon": "Статус жалобы:",
   "compress-images": "Сжимать картинки",
   "confirm": "Одобрить",
-  "confirmation-token-incorrect-expired": "Токен подтверждения неверен или срок его действия истек",
+  "confirmation-link-incorrect-expired": "Ссылка для подтверждения неверна или устарела",
   "confirm-password": "Подтверждение пароля",
   "connect": "Войти",
   "connected": "Вход выполнен",

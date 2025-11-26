@@ -129,7 +129,7 @@
   "complaint-status-colon": "Stan skargi",
   "compress-images": "Kompresuj obrazy",
   "confirm": "Zatwierdzić",
-  "confirmation-token-incorrect-expired": "Token potwierdzający jest nieprawidłowy lub wygasły",
+  "confirmation-link-incorrect-expired": "Link potwierdzający jest niepoprawny lub wygasł",
   "confirm-password": "Potwierdź hasło",
   "connect": "Zaloguj się",
   "connected": "Zalogowano",

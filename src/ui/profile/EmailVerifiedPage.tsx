@@ -31,7 +31,7 @@ export default function EmailVerifiedPage() {
                     :
                         <div className="status failed">
                             <Icon icon={msCancel} size="1.2em"/>
-                            {t("confirmation-token-incorrect-expired")}
+                            {t("confirmation-link-incorrect-expired")}
                         </div>
                     )
                 :

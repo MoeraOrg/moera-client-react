@@ -129,7 +129,7 @@
   "complaint-status-colon": "Complaint status:",
   "compress-images": "Compress images",
   "confirm": "Confirm",
-  "confirmation-token-incorrect-expired": "Confirmation token is incorrect or expired",
+  "confirmation-link-incorrect-expired": "Confirmation link is incorrect or expired",
   "confirm-password": "Confirm password",
   "connect": "Log In",
   "connected": "Logged in",
