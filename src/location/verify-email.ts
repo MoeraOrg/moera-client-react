@@ -7,7 +7,7 @@ import { LocationInfo } from "location/LocationInfo";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     let actions = [];
-    if (srcInfo.directories[0] !== "verify-email") {
+    if (srcInfo.directories[0] !== "profile" || srcInfo.directories[1] !== "verify-email") {
         actions.push(goToVerifyEmail());
     }
     return actions;

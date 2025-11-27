@@ -24,7 +24,6 @@ import {
 import { build as complaintsBuild, transform as complaintsTransform } from "location/complaints";
 import { build as composeBuild, transform as composeTransform } from "location/compose";
 import { build as connectBuild, transform as connectTransform } from "location/connect";
-import { build as emailVerifiedBuild, transform as emailVerifiedTransform } from "location/email-verified";
 import { build as exploreBuild, transform as exploreTransform } from "location/explore";
 import { build as grantBuild, transform as grantTransform } from "location/grant";
 import { build as instantsBuild, transform as instantsTransform } from "location/instants";
@@ -39,7 +38,6 @@ import { build as settingsBuild, transform as settingsTransform } from "location
 import { build as signupBuild, transform as signupTransform } from "location/signup";
 import { build as startReadingBuild, transform as startReadingTransform } from "location/start-reading";
 import { build as timelineBuild, transform as timelineTransform } from "location/timeline";
-import { build as verifyEmailBuild, transform as verifyEmailTransform } from "location/verify-email";
 import { build as mediaBuild } from "location/media";
 import { LocationInfo } from "location/LocationInfo";
 import { ClientAction } from "state/action";
@@ -101,12 +99,6 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (dstInfo.directories[0] === "start-reading") {
         return startReadingTransform(srcInfo, dstInfo);
     }
-    if (dstInfo.directories[0] === "email-verified") {
-        return emailVerifiedTransform(srcInfo, dstInfo);
-    }
-    if (dstInfo.directories[0] === "verify-email") {
-        return verifyEmailTransform(srcInfo, dstInfo);
-    }
 
     return [];
 }
@@ -124,7 +116,7 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     if (isAtComposePage(state)) {
         return composeBuild(state, info);
     }
-    if (isAtProfilePage(state)) {
+    if (isAtProfilePage(state) || isAtEmailVerifiedPage(state) || isAtVerifyEmailPage(state)) {
         return profileBuild(state, info);
     }
     if (isAtSettingsPage(state)) {
@@ -165,12 +157,6 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     }
     if (isAtStartReadingPage(state)) {
         return startReadingBuild(state, info);
-    }
-    if (isAtEmailVerifiedPage(state)) {
-        return emailVerifiedBuild(state, info);
-    }
-    if (isAtVerifyEmailPage(state)) {
-        return verifyEmailBuild(state, info);
     }
     return info;
 }
