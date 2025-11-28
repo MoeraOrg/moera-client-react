@@ -66,6 +66,7 @@ export function useSearchSuggestions(
         if (success) {
             switch (item.type) {
                 case "name":
+                    inputDom.current?.blur();
                     if (item.nodeName != null) {
                         dispatch(ownerSwitch(item.nodeName));
                     }
