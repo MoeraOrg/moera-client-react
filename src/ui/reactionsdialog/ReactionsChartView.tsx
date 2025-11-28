@@ -56,7 +56,7 @@ export default function ReactionsChartView({itemsRef, onSwitchView}: Props) {
                     )
                 }
             </div>
-            {loading && <Loading/>}
+            {loading && <Loading overlay large/>}
         </>
     );
 }

@@ -103,7 +103,7 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
                     </button>
                 )
             }
-            {reactionsLoading && <Loading/>}
+            {reactionsLoading && <Loading overlay large/>}
         </>
     );
 }
