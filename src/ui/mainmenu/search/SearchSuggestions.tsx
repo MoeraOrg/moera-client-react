@@ -37,7 +37,7 @@ function SearchSuggestions(
                     {item.type === "history" &&
                         <>
                             <Jump
-                                data-index={index}
+                                dataIndex={index}
                                 className={cx("search-item", "item", {"selected": selectedIndex === index})}
                                 href={ut`/search?query=${item.query}`}
                                 onNear={handleClick(index)} onFar={handleClick(index)}
@@ -70,7 +70,7 @@ function SearchSuggestions(
                         <>
                             {searchList.length > 1 && <hr/>}
                             <Jump
-                                data-index={index}
+                                dataIndex={index}
                                 className={cx("search-item", "item", {"selected": selectedIndex === index})}
                                 href={ut`/search?query=${query}`}
                                 onNear={handleClick(index)} onFar={handleClick(index)}

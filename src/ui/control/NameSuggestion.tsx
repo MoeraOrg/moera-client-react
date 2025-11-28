@@ -17,7 +17,7 @@ interface Props {
 
 export const NameSuggestion = ({className, index, nodeName, fullName, avatar, onClick}: Props) => (
     <Jump
-        data-index={index}
+        dataIndex={index}
         className={cx("name-suggestion", className)}
         nodeName={nodeName ?? undefined}
         href="/"
