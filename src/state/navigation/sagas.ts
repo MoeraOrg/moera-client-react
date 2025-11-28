@@ -92,7 +92,7 @@ async function initFromNodeLocationSaga(action: InitFromNodeLocationAction): Pro
         if (fallbackUrl != null) {
             window.location.href = fallbackUrl;
         } else {
-            dispatch(nodeReady().causedBy(action));
+            dispatch(goHomeLocation("/news", null, null).causedBy(action));
         }
         return;
     }
@@ -101,7 +101,7 @@ async function initFromNodeLocationSaga(action: InitFromNodeLocationAction): Pro
         if (fallbackUrl != null) {
             window.location.href = fallbackUrl;
         } else {
-            dispatch(nodeReady().causedBy(action));
+            dispatch(goHomeLocation("/news", null, null).causedBy(action));
         }
         return;
     }
