@@ -15,6 +15,7 @@ import {
     profileAvatarsLoaded,
     profileAvatarsLoadFailed,
     ProfileAvatarsReorderAction,
+    ProfileEmailVerifyAction,
     ProfileImageUploadAction,
     profileImageUploaded,
     profileImageUploadFailed,
@@ -27,10 +28,11 @@ import {
     profileUpdateSucceeded
 } from "state/profile/actions";
 import { executor } from "state/executor";
+import { flashBox } from "state/flashbox/actions";
 import { messageBox } from "state/messagebox/actions";
 import { getAvatars } from "state/profile/selectors";
 import { settingsUpdate } from "state/settings/actions";
-import { REL_CURRENT } from "util/rel-node-name";
+import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("PROFILE_LOAD", "", profileLoadSaga),
@@ -39,7 +41,8 @@ export default [
     executor("PROFILE_AVATARS_LOAD", "", profileAvatarsLoadSaga),
     executor("PROFILE_AVATAR_CREATE", "", profileAvatarCreateSaga),
     executor("PROFILE_AVATAR_DELETE", payload => payload.id, profileAvatarDeleteSaga),
-    executor("PROFILE_AVATARS_REORDER", "", profileAvatarsReorderSaga)
+    executor("PROFILE_AVATARS_REORDER", "", profileAvatarsReorderSaga),
+    executor("PROFILE_EMAIL_VERIFY", "", profileEmailVerifySaga)
 ];
 
 async function profileLoadSaga(action: WithContext<ProfileLoadAction>): Promise<void> {
@@ -131,6 +134,15 @@ async function profileAvatarsReorderSaga(action: WithContext<ProfileAvatarsReord
     ids.reverse();
     try {
         await Node.reorderAvatars(action, REL_CURRENT, {ids});
+    } catch (e) {
+        dispatch(errorThrown(e));
+    }
+}
+
+async function profileEmailVerifySaga(action: WithContext<ProfileEmailVerifyAction>): Promise<void> {
+    try {
+        await Node.verifyEmail(action, REL_HOME);
+        dispatch(flashBox(i18n.t("sent-confirmation-email")).causedBy(action));
     } catch (e) {
         dispatch(errorThrown(e));
     }

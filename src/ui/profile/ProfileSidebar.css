@@ -98,3 +98,13 @@
     margin-top: 1rem;
     margin-bottom: 1rem;
 }
+
+#profile-sidebar .email .not-verified {
+    color: var(--incorrect);
+    text-wrap: nowrap;
+}
+
+#profile-sidebar .email .btn-sm {
+    --bs-btn-padding-y: 0;
+    --bs-btn-padding-x: .4rem;
+}

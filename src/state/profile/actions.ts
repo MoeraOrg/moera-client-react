@@ -138,6 +138,10 @@ export type ProfileAvatarsReorderAction = ActionWithPayload<"PROFILE_AVATARS_REO
 export const profileAvatarsReorder = (avatarId: string, overAvatarId: string): ProfileAvatarsReorderAction =>
     actionWithPayload("PROFILE_AVATARS_REORDER", {avatarId, overAvatarId});
 
+export type ProfileEmailVerifyAction = ActionWithoutPayload<"PROFILE_EMAIL_VERIFY">;
+export const profileEmailVerify = (): ProfileEmailVerifyAction =>
+    actionWithoutPayload("PROFILE_EMAIL_VERIFY");
+
 export type ProfileAnyAction =
     ProfileLoadAction
     | ProfileLoadFailedAction
@@ -163,4 +167,5 @@ export type ProfileAnyAction =
     | ProfileAvatarConfirmDeleteAction
     | ProfileAvatarDeleteAction
     | ProfileAvatarDeletedAction
-    | ProfileAvatarsReorderAction;
+    | ProfileAvatarsReorderAction
+    | ProfileEmailVerifyAction;

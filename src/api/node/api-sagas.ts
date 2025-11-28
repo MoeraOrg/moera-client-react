@@ -1470,7 +1470,7 @@ export async function verifyEmail(
 
     const location = "/profile/email/verify";
     return callApi<API.Result>({
-        caller, nodeName, method: "PUT", location, auth, schema: "Result", errorFilter
+        caller, nodeName, method: "POST", location, auth, schema: "Result", errorFilter
     });
 }
 
