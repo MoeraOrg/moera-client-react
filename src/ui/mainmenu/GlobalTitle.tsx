@@ -26,7 +26,7 @@ export default function GlobalTitle({back}: Props) {
             return (
                 <>
                     <div id="global-title-sentinel" aria-hidden="true" ref={sentinel}/>
-                    <header id="global-title" className={cx({shadow})}>
+                    <header id="global-title" className={cx({"main-shadow": shadow})}>
                         <LogoImage width="4.6rem"/>
                     </header>
                 </>
@@ -35,7 +35,7 @@ export default function GlobalTitle({back}: Props) {
     } else {
         return (
             <>
-                <header id="global-title" className={cx({shadow})}>
+                <header id="global-title" className={cx({"main-shadow": shadow})}>
                     <LogoImage width="4.6rem"/>
                 </header>
                 {back &&

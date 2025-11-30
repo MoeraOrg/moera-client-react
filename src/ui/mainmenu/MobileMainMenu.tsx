@@ -42,7 +42,7 @@ export default function MobileMainMenu({shadow: hasShadow, menuItems}: Props) {
     return (
         <OnlyMobile>
             <div id="main-menu-sentinel" aria-hidden="true" ref={sentinel}/>
-            <header id="main-menu" className={cx({shadow: hasShadow && shadow})}>
+            <header id="main-menu" className={cx({"main-shadow": hasShadow && shadow})}>
                 <Sandwich/>
                 <Logo/>
                 {buttons.filter(item => item.visible !== false).map((item, index) => (

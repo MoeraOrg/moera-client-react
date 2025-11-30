@@ -16,7 +16,7 @@
         transition: box-shadow .2s ease;
     }
 
-    #global-title.shadow {
+    #global-title.main-shadow {
         box-shadow: var(--menu-shadow);
         transition: box-shadow .2s ease;
     }

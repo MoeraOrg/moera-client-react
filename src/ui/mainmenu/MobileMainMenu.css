@@ -8,7 +8,7 @@
         align-items: center;
     }
 
-    #main-menu.shadow {
+    #main-menu.main-shadow {
         box-shadow: var(--menu-shadow);
         transition: box-shadow .2s ease;
     }
