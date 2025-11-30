@@ -88,7 +88,7 @@ const verifyFormLogic = {
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         const location = formik.props.location || formik.props.nodeRoot || "";
-        dispatch(connectPageVerifyCode(location, values.resetToken.trim()));
+        dispatch(connectPageVerifyCode(location, values.resetToken.toUpperCase().trim()));
         formik.setSubmitting(false);
     }
 
