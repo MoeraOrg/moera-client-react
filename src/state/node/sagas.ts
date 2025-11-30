@@ -17,7 +17,7 @@ import {
     ownerVerified,
     OwnerVerifyAction
 } from "state/node/actions";
-import { getNodeRootPage, getOwnerName } from "state/node/selectors";
+import { getNodeRootLocation, getNodeRootPage, getOwnerName } from "state/node/selectors";
 import { initFromLocation } from "state/navigation/actions";
 import { getNameDetails, getNodeUri } from "state/naming/sagas";
 import { confirmBox } from "state/confirmbox/actions";
@@ -25,20 +25,22 @@ import { normalizeUrl, rootUrl } from "util/url";
 import { REL_CURRENT } from "util/rel-node-name";
 
 export default [
-    executor("OWNER_LOAD", "", ownerLoadSaga),
+    executor("OWNER_LOAD", null, ownerLoadSaga),
     executor("OWNER_VERIFY", null, ownerVerifySaga),
     executor("OWNER_SWITCH", payload => payload.name, ownerSwitchSaga),
     executor("NODE_FEATURES_LOAD", null, nodeFeaturesLoadSaga)
 ];
 
 async function ownerLoadSaga(action: WithContext<OwnerLoadAction>): Promise<void> {
+    const rootLocation = select(getNodeRootLocation);
     try {
         const {
             nodeName = null, nodeNameChanging = false, fullName = null, gender = null, title = null, avatar = null,
             type
         } = await Node.whoAmI(action, REL_CURRENT);
         dispatch(
-            ownerSet(nodeName, nodeNameChanging, fullName, gender, title, avatar, type ?? "regular").causedBy(action)
+            ownerSet(rootLocation, nodeName, nodeNameChanging, fullName, gender, title, avatar, type ?? "regular")
+                .causedBy(action)
         );
     } catch (e) {
         dispatch(errorThrown(e));

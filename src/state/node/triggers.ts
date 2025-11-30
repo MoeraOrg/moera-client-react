@@ -32,8 +32,10 @@ export default [
         "EVENT_NODE_NODE_NAME_CHANGED",
         true,
         (signal: EventAction<NodeNameChangedEvent>) =>
-            ownerSet(signal.payload.name, false, signal.payload.fullName ?? null, signal.payload.gender ?? null,
-                signal.payload.title ?? null, signal.payload.avatar ?? null, null)
+            ownerSet(
+                null, signal.payload.name, false, signal.payload.fullName ?? null, signal.payload.gender ?? null,
+                signal.payload.title ?? null, signal.payload.avatar ?? null, null
+            )
     ),
     trigger(
         [

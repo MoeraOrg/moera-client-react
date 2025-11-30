@@ -14,6 +14,7 @@ export const ownerLoad = (): OwnerLoadAction =>
     actionWithoutPayload("OWNER_LOAD");
 
 export type OwnerSetAction = ActionWithPayload<"OWNER_SET", {
+    rootLocation: string | null;
     name: string | null;
     changing: boolean | null;
     fullName: string | null | false;
@@ -23,10 +24,10 @@ export type OwnerSetAction = ActionWithPayload<"OWNER_SET", {
     type: NodeType | null;
 }>;
 export const ownerSet = (
-    name: string | null, changing: boolean | null, fullName: string | null | false, gender: string | null | false,
-    title: string | null | false, avatar: AvatarImage | null, type: NodeType | null
+    rootLocation: string | null, name: string | null, changing: boolean | null, fullName: string | null | false,
+    gender: string | null | false, title: string | null | false, avatar: AvatarImage | null, type: NodeType | null
 ): OwnerSetAction =>
-    actionWithPayload("OWNER_SET", {name, changing, fullName, gender, title, avatar, type});
+    actionWithPayload("OWNER_SET", {rootLocation, name, changing, fullName, gender, title, avatar, type});
 
 export type OwnerVerifyAction = ActionWithoutPayload<"OWNER_VERIFY">;
 export const ownerVerify = (): OwnerVerifyAction =>

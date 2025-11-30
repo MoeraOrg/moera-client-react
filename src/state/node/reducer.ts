@@ -66,6 +66,13 @@ export default (state: NodeState = initialState, action: ClientAction): NodeStat
                 .value();
 
         case "OWNER_SET": {
+            if (
+                action.payload.rootLocation != null
+                && action.payload.rootLocation.toLowerCase() !== state.root.location
+            ) {
+                return state;
+            }
+
             const istate = immutable.wrap(state);
             if (state.owner.name !== action.payload.name) {
                 istate
