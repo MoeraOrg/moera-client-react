@@ -180,6 +180,10 @@ export class OverlaysManager {
         return Object.is(this.topOverlay, this.get(id));
     }
 
+    isEmpty(): boolean {
+        return Object.is(this.topOverlay, this.rootOverlay);
+    }
+
     mobileBack(): void {
         const overlay = this.topOverlay;
         if (overlay.lower == null) {
