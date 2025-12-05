@@ -70,9 +70,10 @@ function sheriffMarkStory(story: ExtStoryInfo): void {
     for (const field of fields) {
         switch (field) {
             case "posting":
-                if (!isSheriffGoverned(data.posting, SHERIFF_GOOGLE_PLAY_TIMELINE)
-                    || isSheriffMarked(data.posting, SHERIFF_GOOGLE_PLAY_TIMELINE)) {
-
+                if (
+                    !isSheriffGoverned(data.posting, SHERIFF_GOOGLE_PLAY_TIMELINE)
+                    || isSheriffMarked(data.posting, SHERIFF_GOOGLE_PLAY_TIMELINE)
+                ) {
                     story.hideSheriffMarked = true;
                     return;
                 }
