@@ -21,7 +21,13 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
 }
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
-    info = info.sub("post").sub(getDetailedPostingId(state)!);
+    info = info.sub("post");
+    const postingId = getDetailedPostingId(state);
+    if (postingId != null) {
+        info = info.sub(postingId);
+    } else {
+        info = info.withError();
+    }
     const focusedCommentId = getFocusedCommentId(state);
     if (focusedCommentId != null) {
         info = info.withParameter("comment", focusedCommentId);

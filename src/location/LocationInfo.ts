@@ -6,6 +6,7 @@ export class LocationInfo {
     title: string | null;
     canonicalUrl: string | null;
     noIndexPage: boolean;
+    error: boolean;
 
     constructor() {
         this.directories = [];
@@ -14,6 +15,7 @@ export class LocationInfo {
         this.title = "";
         this.canonicalUrl = null;
         this.noIndexPage = false;
+        this.error = false;
     }
 
     static fromUrl(path: string | null, query: string | null, hash: string | null): LocationInfo {
@@ -28,6 +30,7 @@ export class LocationInfo {
         info.title = this.title;
         info.canonicalUrl = this.canonicalUrl;
         info.noIndexPage = this.noIndexPage;
+        info.error = this.error;
         return info;
     }
 
@@ -97,6 +100,12 @@ export class LocationInfo {
     noIndex(): LocationInfo {
         const info = this.clone();
         info.noIndexPage = true;
+        return info;
+    }
+
+    withError(): LocationInfo {
+        const info = this.clone();
+        info.error = true;
         return info;
     }
 

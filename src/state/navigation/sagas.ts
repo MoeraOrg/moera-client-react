@@ -130,8 +130,10 @@ function updateLocationSaga(action: UpdateLocationAction): void {
 
 function changeLocation(actionType: "NEW_LOCATION" | "UPDATE_LOCATION" | null, caller: ClientAction): void {
     const info = locationBuild(select(), new LocationInfo());
-    const create = actionType == null || actionType === "NEW_LOCATION";
-    dispatch(locationSet(info.toUrl(), info.title, info.canonicalUrl, info.noIndexPage, create).causedBy(caller));
+    if (!info.error) {
+        const create = actionType == null || actionType === "NEW_LOCATION";
+        dispatch(locationSet(info.toUrl(), info.title, info.canonicalUrl, info.noIndexPage, create).causedBy(caller));
+    }
 }
 
 async function goHomeLocationSaga(action: GoHomeLocationAction): Promise<void> {
