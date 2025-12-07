@@ -10,11 +10,7 @@ import { Icon, msClose } from "ui/material-symbols";
 import Instants from "ui/instant/Instants";
 import { REL_HOME } from "util/rel-node-name";
 
-interface Props {
-    instantBorder: number;
-}
-
-export default function InstantsPopover({instantBorder}: Props) {
+export default function InstantsPopover() {
     const stories = useSelector((state: ClientState) => getFeedState(state, REL_HOME, "instant").stories);
     const dispatch = useDispatch();
     const {t} = useTranslation();
@@ -37,7 +33,7 @@ export default function InstantsPopover({instantBorder}: Props) {
                 </button>
             </div>
             <div className="content">
-                <Instants instantBorder={instantBorder}/>
+                <Instants/>
             </div>
             <div className="footer">
                 {stories.length > 0 && <button className="action" onClick={onReadAll}>{t("mark-all-read")}</button>}

@@ -20,6 +20,7 @@ import { FriendGroupAddDialogState } from "state/friendgroupadddialog/state";
 import { FriendGroupsDialogState } from "state/friendgroupsdialog/state";
 import { GrantState } from "state/grant/state";
 import { ImageEditDialogState } from "state/imageeditdialog/state";
+import { InstantsState } from "state/instants/state";
 import { LightBoxState } from "state/lightbox/state";
 import { LinkPreviewsState } from "state/linkpreviews/state";
 import { MessageBoxState } from "state/messagebox/state";
@@ -69,6 +70,7 @@ export interface ClientState {
     grant: GrantState;
     home: HomeState;
     imageEditDialog: ImageEditDialogState;
+    instants: InstantsState;
     lightBox: LightBoxState;
     linkPreviews: LinkPreviewsState;
     messageBox: MessageBoxState;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -17,21 +17,14 @@ import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { useHomeNews } from "ui/feed/feeds";
 import Instants from "ui/instant/Instants";
-import { useInstantsToggler } from "ui/instant/instants-toggler";
 import { REL_HOME } from "util/rel-node-name";
 import "./InstantsPage.css";
 
 export default function InstantsPage() {
     const stories = useSelector((state: ClientState) => getFeedState(state, REL_HOME, "instant").stories);
-    const {border, onToggle} = useInstantsToggler();
     const newsHref = useHomeNews();
     const dispatch = useDispatch();
     const {t} = useTranslation();
-
-    useEffect(() => {
-        onToggle(true);
-        return () => onToggle(false);
-    }, [onToggle]);
 
     const onReadAll = () => {
         if (stories.length === 0) {
@@ -62,7 +55,7 @@ export default function InstantsPage() {
                     </OnlyDesktop>
                     <main id="instants" className="content-panel">
                         <div className="content">
-                            <Instants instantBorder={border}/>
+                            <Instants/>
                         </div>
                     </main>
                 </div>

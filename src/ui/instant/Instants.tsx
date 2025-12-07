@@ -12,14 +12,11 @@ import NoInstants from "ui/instant/NoInstants";
 import { REL_HOME } from "util/rel-node-name";
 import "./Instants.css";
 
-interface Props {
-    instantBorder: number;
-}
-
-export default function Instants({instantBorder}: Props) {
+export default function Instants() {
     const loadingPast = useSelector((state: ClientState) => getFeedState(state, REL_HOME, "instant").loadingPast);
     const after = useSelector((state: ClientState) => getFeedState(state, REL_HOME, "instant").after);
     const stories = useSelector((state: ClientState) => getFeedState(state, REL_HOME, "instant").stories);
+    const instantBorder = useSelector((state: ClientState) => state.instants.border);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 

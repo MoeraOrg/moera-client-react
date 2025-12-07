@@ -54,6 +54,7 @@ import flashBox from "state/flashbox/reducer";
 import progressBox from "state/progressbox/reducer";
 import signUp from "state/signup/reducer";
 import refresh from "state/refresh/reducer";
+import instants from "state/instants/reducer";
 
 import { collectExecutors } from "state/executor";
 import { pulseSaga, signalPostInitSaga } from "state/pulse/sagas";
@@ -100,6 +101,7 @@ import sheriffOrderDetailsDialogExecutors from "state/sherifforderdetailsdialog/
 import flashBoxExecutors from "state/flashbox/sagas";
 import signUpExecutors from "state/signup/sagas";
 import refreshExecutors from "state/refresh/sagas";
+import instantsExecutors from "state/instants/sagas";
 
 import { collectTriggers } from "state/trigger";
 import homeTriggers from "state/home/triggers";
@@ -129,6 +131,7 @@ import blockingDetailsDialogTriggers from "state/blockingdetailsdialog/triggers"
 import blockedOperationsTriggers from "state/blockedoperations/triggers";
 import sheriffOrderDetailsDialogTriggers from "state/sherifforderdetailsdialog/triggers";
 import refreshTriggers from "state/refresh/triggers";
+import instantsTriggers from "state/instants/triggers";
 
 const reducers = combineReducers({
     pulse,
@@ -177,7 +180,8 @@ const reducers = combineReducers({
     flashBox,
     progressBox,
     signUp,
-    refresh
+    refresh,
+    instants
 });
 
 function combinedReducer(state: ClientState | undefined, action: ClientAction): ClientState {
@@ -217,7 +221,8 @@ const triggers = collectTriggers(
     blockingDetailsDialogTriggers,
     blockedOperationsTriggers,
     sheriffOrderDetailsDialogTriggers,
-    refreshTriggers
+    refreshTriggers,
+    instantsTriggers
 );
 
 const executors = collectExecutors(
@@ -263,7 +268,8 @@ const executors = collectExecutors(
     sheriffOrderDetailsDialogExecutors,
     flashBoxExecutors,
     signUpExecutors,
-    refreshExecutors
+    refreshExecutors,
+    instantsExecutors
 );
 
 export default function initStore(): void {
