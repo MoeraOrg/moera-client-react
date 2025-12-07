@@ -1,4 +1,4 @@
-export type ConnectPageForm = "connect" | "forgot" | "verify" | "reset";
+export type ConnectPageForm = "connect" | "forgot" | "verify" | "reset" | "change";
 
 export interface ConnectPageState {
     location: string;

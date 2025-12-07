@@ -87,7 +87,7 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (dstInfo.directories[0] === "instants") {
         return instantsTransform(srcInfo, dstInfo);
     }
-    if (dstInfo.directories[0] === "connect") {
+    if (dstInfo.directories[0] === "connect" || dstInfo.directories[0] === "change-password") {
         return connectTransform(srcInfo, dstInfo);
     }
     if (dstInfo.directories[0] === "signup") {

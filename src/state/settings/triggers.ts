@@ -1,5 +1,3 @@
-import i18n from 'i18next';
-
 import { conj, disj, inv, trigger } from "state/trigger";
 import { isAtRemovalPage, isAtSettingsPage } from "state/navigation/selectors";
 import {
@@ -34,7 +32,6 @@ import {
 } from "state/settings/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { newLocation, updateLocation } from "state/navigation/actions";
-import { flashBox } from "state/flashbox/actions";
 import { profileEditConflict, profileLoad } from "state/profile/actions";
 import { isProfileLoaded, isProfileToBeLoaded } from "state/profile/selectors";
 
@@ -71,7 +68,6 @@ export default [
     trigger("EVENT_HOME_NODE_SETTINGS_CHANGED", conj(isAtSettingsPage, isAtSettingsNodeTab), settingsNodeConflict),
     trigger("EVENT_HOME_CLIENT_SETTINGS_CHANGED", true, settingsClientValuesLoad),
     trigger("EVENT_HOME_CLIENT_SETTINGS_CHANGED", conj(isAtSettingsPage, isAtSettingsClientTab), settingsClientConflict),
-    trigger("SETTINGS_CHANGED_PASSWORD", true, () => flashBox(i18n.t("password-changed"))),
     trigger("MNEMONIC_DIALOG_OPEN", true, settingsMnemonicLoad),
     trigger("EVENT_HOME_PLUGINS_UPDATED", isSettingsPluginsLoaded, settingsPluginsLoad),
     trigger(

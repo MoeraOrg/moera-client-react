@@ -24,8 +24,6 @@ export interface SettingsState {
     },
     formId: number;
     updating: boolean;
-    changePasswordDialogShow: boolean;
-    changingPassword: boolean;
     grants: {
         loading: boolean;
         loaded: boolean;

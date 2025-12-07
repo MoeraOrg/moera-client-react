@@ -7,7 +7,8 @@ import {
     ClientSettingMetaInfo,
     HomeNotConnectedError,
     Node,
-    NodeApiError, NodeName,
+    NodeApiError,
+    NodeName,
     SettingInfo
 } from "api";
 import { Storage } from "storage";
@@ -16,9 +17,6 @@ import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { homeIntroduced } from "state/init-barriers";
 import {
-    settingsChangedPassword,
-    SettingsChangePasswordAction,
-    settingsChangePasswordFailed,
     SettingsClientValuesLoadAction,
     settingsClientValuesLoaded,
     SettingsClientValuesLoadedAction,
@@ -86,7 +84,6 @@ export default [
     executor("SETTINGS_CLIENT_VALUES_SET", "", settingsClientValuesSetSaga),
     executor("SETTINGS_UPDATE", null, settingsUpdateSaga),
     executor("SETTINGS_UPDATE_SUCCEEDED", null, settingsUpdateSucceededSaga),
-    executor("SETTINGS_CHANGE_PASSWORD", "", settingsChangePasswordSaga),
     executor("SETTINGS_MNEMONIC_LOAD", "", settingsMnemonicLoadSaga),
     executor("SETTINGS_GRANTS_LOAD", "", settingsGrantsLoadSaga),
     executor("SETTINGS_GRANTS_DIALOG_CONFIRM", payload => payload.nodeName, settingsGrantsDialogConfirmSaga),
@@ -221,25 +218,6 @@ async function settingsUpdateSaga(action: WithContext<SettingsUpdateAction>): Pr
 function settingsUpdateSucceededSaga(action: SettingsUpdateSucceededAction): void {
     if (action.payload.onSuccess != null) {
         action.payload.onSuccess();
-    }
-}
-
-async function settingsChangePasswordSaga(action: WithContext<SettingsChangePasswordAction>): Promise<void> {
-    const {oldPassword, password, onLoginIncorrect} = action.payload;
-
-    try {
-        await Node.updateCredentials(
-            action, REL_HOME, {oldPassword, login: "admin", password},
-            ["credentials.wrong-reset-token", "credentials.reset-token-expired", "credentials.login-incorrect"]
-        );
-        dispatch(settingsChangedPassword().causedBy(action));
-    } catch (e) {
-        if (e instanceof NodeApiError && e.errorCode === "credentials.login-incorrect" && onLoginIncorrect != null) {
-            onLoginIncorrect();
-        } else {
-            dispatch(errorThrown(e));
-        }
-        dispatch(settingsChangePasswordFailed().causedBy(action));
     }
 }
 

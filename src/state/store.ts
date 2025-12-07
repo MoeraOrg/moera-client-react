@@ -108,6 +108,7 @@ import homeTriggers from "state/home/triggers";
 import cartesTriggers from "state/cartes/triggers";
 import navigationTriggers from "state/navigation/triggers";
 import nodeTriggers from "state/node/triggers";
+import connectPageTriggers from "state/connectpage/triggers";
 import nodeNameTriggers from "state/nodename/triggers";
 import profileTriggers from "state/profile/triggers";
 import feedTriggers from "state/feeds/triggers";
@@ -199,6 +200,7 @@ const triggers = collectTriggers(
     cartesTriggers,
     navigationTriggers,
     nodeTriggers,
+    connectPageTriggers,
     nodeNameTriggers,
     profileTriggers,
     feedTriggers,

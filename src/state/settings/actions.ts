@@ -96,32 +96,6 @@ export type SettingsUpdateFailedAction = ActionWithoutPayload<"SETTINGS_UPDATE_F
 export const settingsUpdateFailed = (): SettingsUpdateFailedAction =>
     actionWithoutPayload("SETTINGS_UPDATE_FAILED");
 
-export type SettingsChangePasswordDialogOpenAction = ActionWithoutPayload<"SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN">;
-export const settingsChangePasswordDialogOpen = (): SettingsChangePasswordDialogOpenAction =>
-    actionWithoutPayload("SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN");
-
-export type SettingsChangePasswordDialogCloseAction = ActionWithoutPayload<"SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE">;
-export const settingsChangePasswordDialogClose = (): SettingsChangePasswordDialogCloseAction =>
-    actionWithoutPayload("SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE");
-
-export type SettingsChangePasswordAction = ActionWithPayload<"SETTINGS_CHANGE_PASSWORD", {
-    oldPassword: string;
-    password: string;
-    onLoginIncorrect: any;
-}>;
-export const settingsChangePassword = (
-    oldPassword: string, password: string, onLoginIncorrect: any
-): SettingsChangePasswordAction =>
-    actionWithPayload("SETTINGS_CHANGE_PASSWORD", {oldPassword, password, onLoginIncorrect});
-
-export type SettingsChangedPasswordAction = ActionWithoutPayload<"SETTINGS_CHANGED_PASSWORD">;
-export const settingsChangedPassword = (): SettingsChangedPasswordAction =>
-    actionWithoutPayload("SETTINGS_CHANGED_PASSWORD");
-
-export type SettingsChangePasswordFailedAction = ActionWithoutPayload<"SETTINGS_CHANGE_PASSWORD_FAILED">;
-export const settingsChangePasswordFailed = (): SettingsChangePasswordFailedAction =>
-    actionWithoutPayload("SETTINGS_CHANGE_PASSWORD_FAILED");
-
 export type SettingsMnemonicLoadAction = ActionWithoutPayload<"SETTINGS_MNEMONIC_LOAD">;
 export const settingsMnemonicLoad = (): SettingsMnemonicLoadAction =>
     actionWithoutPayload("SETTINGS_MNEMONIC_LOAD");
@@ -361,11 +335,6 @@ export type SettingsAnyAction =
     | SettingsUpdateAction
     | SettingsUpdateSucceededAction
     | SettingsUpdateFailedAction
-    | SettingsChangePasswordDialogOpenAction
-    | SettingsChangePasswordDialogCloseAction
-    | SettingsChangePasswordAction
-    | SettingsChangedPasswordAction
-    | SettingsChangePasswordFailedAction
     | SettingsMnemonicLoadAction
     | SettingsGrantsLoadAction
     | SettingsGrantsLoadedAction

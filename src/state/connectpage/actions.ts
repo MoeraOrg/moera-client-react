@@ -2,12 +2,12 @@ import { actionWithPayload, ActionWithPayload } from "state/action-types";
 import { ConnectPageForm } from "state/connectpage/state";
 
 export type ConnectPageSetFormAction = ActionWithPayload<"CONNECT_PAGE_SET_FORM", {
-    location: string;
-    login: string;
+    location?: string;
+    login?: string;
     form: ConnectPageForm;
 }>;
 export const connectPageSetForm = (
-    location: string, login: string, form: ConnectPageForm
+    location: string | undefined, login: string | undefined, form: ConnectPageForm
 ): ConnectPageSetFormAction =>
     actionWithPayload("CONNECT_PAGE_SET_FORM", {location, login, form});
 
@@ -54,6 +54,20 @@ export type ConnectPageMailAfterAction = ActionWithPayload<"CONNECT_PAGE_MAIL_AF
 export const connectPageMailAfter = (after: Date): ConnectPageMailAfterAction =>
     actionWithPayload("CONNECT_PAGE_MAIL_AFTER", {after});
 
+export type ConnectPageChangePasswordAction = ActionWithPayload<"CONNECT_PAGE_CHANGE_PASSWORD", {
+    oldPassword: string;
+    password: string;
+}>;
+
+export const connectPageChangePassword = (oldPassword: string, password: string): ConnectPageChangePasswordAction =>
+    actionWithPayload("CONNECT_PAGE_CHANGE_PASSWORD", {oldPassword, password});
+
+export type ConnectPageChangePasswordFailedAction = ActionWithPayload<"CONNECT_PAGE_CHANGE_PASSWORD_FAILED", {
+    error: string;
+}>;
+export const connectPageChangePasswordFailed = (error: string): ConnectPageChangePasswordFailedAction =>
+    actionWithPayload("CONNECT_PAGE_CHANGE_PASSWORD_FAILED", {error});
+
 export type ConnectPageAnyAction =
     ConnectPageSetFormAction
     | ConnectPageResetPasswordAction
@@ -62,4 +76,6 @@ export type ConnectPageAnyAction =
     | ConnectPageVerifyCodeAction
     | ConnectPageVerifyCodeFailedAction
     | ConnectPageConnectAfterAction
-    | ConnectPageMailAfterAction;
+    | ConnectPageMailAfterAction
+    | ConnectPageChangePasswordAction
+    | ConnectPageChangePasswordFailedAction;

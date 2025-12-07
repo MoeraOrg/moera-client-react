@@ -11,6 +11,7 @@ import ForgotForm from "ui/connectpage/ForgotForm";
 import VerifyForm from "ui/connectpage/VerifyForm";
 import ResetForm from "ui/connectpage/ResetForm";
 import "./ConnectPage.css"
+import ChangePasswordForm from "ui/connectpage/ChangePasswordForm";
 
 export default function ConnectPage() {
     const form = useSelector((state: ClientState) => state.connectPage.form);
@@ -27,6 +28,7 @@ export default function ConnectPage() {
                 {form === "forgot" && <ForgotForm location={location} nodeRoot={nodeRoot}/>}
                 {form === "verify" && <VerifyForm location={location} nodeRoot={nodeRoot}/>}
                 {form === "reset" && <ResetForm location={location} nodeRoot={nodeRoot} resetToken={resetToken ?? ""}/>}
+                {form === "change" && <ChangePasswordForm/>}
             </main>
             <GlobalBottom/>
         </>

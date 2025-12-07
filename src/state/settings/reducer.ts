@@ -22,8 +22,6 @@ const emptySettings = {
         meta: clientSettingsBuildMetaMap()
     },
     updating: false,
-    changePasswordDialogShow: false,
-    changingPassword: false,
     grants: {
         loading: false,
         loaded: false,
@@ -207,37 +205,6 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 ...state,
                 updating: false
             };
-
-        case "SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN":
-            return {
-                ...state,
-                changePasswordDialogShow: true
-            };
-
-        case "SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE":
-            return {
-                ...state,
-                changePasswordDialogShow: false
-            };
-
-        case "SETTINGS_CHANGE_PASSWORD":
-            return {
-                ...state,
-                changingPassword: true
-            }
-
-        case "SETTINGS_CHANGED_PASSWORD":
-            return {
-                ...state,
-                changingPassword: false,
-                changePasswordDialogShow: false
-            }
-
-        case "SETTINGS_CHANGE_PASSWORD_FAILED":
-            return {
-                ...state,
-                changingPassword: false
-            }
 
         case "SETTINGS_GRANTS_LOAD":
             return immutable.set(state, "grants.loading", true);

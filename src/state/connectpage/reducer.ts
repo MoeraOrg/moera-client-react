@@ -70,8 +70,8 @@ export default (state: ConnectPageState = initialState, action: ClientAction): C
         case "CONNECT_PAGE_SET_FORM":
             return {
                 ...state,
-                location: action.payload.location,
-                login: action.payload.login,
+                location: action.payload.location ?? state.location,
+                login: action.payload.login ?? state.login,
                 form: action.payload.form,
                 processing: false,
                 lastError: null,
@@ -123,6 +123,20 @@ export default (state: ConnectPageState = initialState, action: ClientAction): C
             return {
                 ...state,
                 mailAfter: action.payload.after
+            };
+
+        case "CONNECT_PAGE_CHANGE_PASSWORD":
+            return {
+                ...state,
+                processing: true
+            };
+
+        case "CONNECT_PAGE_CHANGE_PASSWORD_FAILED":
+            return {
+                ...state,
+                lastError: action.payload.error,
+                processing: false,
+                formId: state.formId + 1
             };
 
         default:
