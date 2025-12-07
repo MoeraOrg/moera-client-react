@@ -69,7 +69,7 @@ function SettingsProfileSheetInner(props: Props) {
                 <ComboboxField title={t("gender")} name="gender" col="col-sm-6" data={["Male", "Female"]}
                                textField={g => longGender(g, t)}/>
                 <div className="row">
-                    <InputField title={t("e-mail")} name="email" maxLength={63}
+                    <InputField type="email" title={t("e-mail")} name="email" maxLength={63}
                                 groupClassName="col-sm-6 col-10 pe-0"/>
                     <PrincipalField name="viewEmail"
                                     values={["public", "signed", "subscribed", "friends", "admin"]}

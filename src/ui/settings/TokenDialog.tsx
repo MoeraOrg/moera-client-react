@@ -36,7 +36,7 @@ function TokenDialogInner({token}: Props) {
                 <div className="modal-body">
                     <InputField name="name" title={t("token-name")} autoFocus/>
                     {token == null &&
-                        <InputField name="password" title={t("your-password")}/>
+                        <InputField type="password" name="password" title={t("your-password")}/>
                     }
                     <PermissionSelector title={t("permissions")} name="scopes" enabledPermissions={token?.permissions}/>
                 </div>

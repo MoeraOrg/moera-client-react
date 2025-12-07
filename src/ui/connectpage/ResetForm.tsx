@@ -46,8 +46,9 @@ function ResetForm({dirty, values, resetForm}: Props) {
             <div className="title">{tTitle(t("create-new-password"))}</div>
             <div className="instructions">{t("new-password-instructions")}</div>
             <div className="password-hint">{t("new-password-hint-instructions")}</div>
-            <InputField name="password" title={tTitle(t("password"))} errorsOnly noFeedback autoFocus/>
-            <InputField name="confirmPassword" title={tTitle(t("confirm-password"))} errorsOnly noFeedback/>
+            <InputField type="password" name="password" title={tTitle(t("password"))} errorsOnly noFeedback autoFocus/>
+            <InputField type="password" name="confirmPassword" title={tTitle(t("confirm-password"))} errorsOnly
+                        noFeedback/>
             {formError && <div className="form-error">{t(formError)}</div>}
             <Button type="submit" variant="primary" className="submit-button" disabled={disabled} loading={connecting}>
                 {`${t("reset-password")} ${waitConnect}`}

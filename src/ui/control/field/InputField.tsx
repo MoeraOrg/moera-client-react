@@ -15,6 +15,7 @@ interface Props {
     title?: string;
     placeholder?: string;
     tooltip?: string;
+    type?: "text" | "password" | "email" | "url";
     disabled?: boolean;
     maxLength?: number;
     horizontal?: boolean;
@@ -36,9 +37,9 @@ interface Props {
 
 function InputFieldImpl(
     {
-        name, title, placeholder, tooltip, disabled, maxLength, horizontal = false, layout, groupClassName,
-        labelClassName, inputClassName, col, autoFocus, anyValue, errorsOnly, error: externalError, className,
-        autoComplete, noFeedback = false, initialValue, defaultValue
+        name, title, placeholder, tooltip, type = "text", disabled, maxLength, horizontal = false, layout,
+        groupClassName, labelClassName, inputClassName, col, autoFocus, anyValue, errorsOnly, error: externalError,
+        className, autoComplete, noFeedback = false, initialValue, defaultValue
     }: Props,
     ref: ForwardedRef<HTMLInputElement>
 ) {
@@ -51,8 +52,6 @@ function InputFieldImpl(
             inputRef.current.focus();
         }
     }, [autoFocus]);
-
-    const passwordInput = name.toLowerCase().includes("password");
 
     const [inputProps, {touched, error: fieldError}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<string>(name, initialValue, defaultValue);
@@ -74,11 +73,11 @@ function InputFieldImpl(
             onReset={onReset}
         >
             <Wrapper className={col}>
-                <Wrapper className={passwordInput ? "password-field" : undefined}>
+                <Wrapper className={type === "password" ? "password-field" : undefined}>
                     <input
                         {...inputProps}
                         id={name}
-                        type={!passwordInput || showPassword ? "text" : "password"}
+                        type={type === "password" && showPassword ? "text" : type}
                         className={cx(
                             "form-control", {
                                 "is-valid": !anyValue && !errorsOnly && !error,
@@ -94,7 +93,7 @@ function InputFieldImpl(
                         ref={composeRefs(ref, inputRef)}
                     />
                     {!noFeedback && error && <FieldError error={error}/>}
-                    {passwordInput && (anyValue || (!error && errorsOnly)) &&
+                    {type === "password" && (anyValue || (!error && errorsOnly)) &&
                         <button
                             className="show-password"
                             type="button"

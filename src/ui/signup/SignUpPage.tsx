@@ -203,11 +203,11 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
                                      disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
                                      onDomainInput={onDomainInput} onDomainBlur={onDomainBlur}/>
                     }
-                    <InputField name="password" title={t("password")}
+                    <InputField type="password" name="password" title={t("password")}
                                 disabled={processing || stage > SIGN_UP_STAGE_PASSWORD} errorsOnly/>
-                    <InputField name="confirmPassword" title={t("confirm-password")}
+                    <InputField type="password" name="confirmPassword" title={t("confirm-password")}
                                 disabled={processing || stage > SIGN_UP_STAGE_PASSWORD} errorsOnly/>
-                    <InputField name="email" title={t("e-mail")}
+                    <InputField type="email" name="email" title={t("e-mail")}
                                 disabled={processing || stage > SIGN_UP_STAGE_PROFILE} errorsOnly/>
                     {advanced &&
                         <>

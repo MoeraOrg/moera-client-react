@@ -101,7 +101,7 @@ function RichTextImageDialog({
                 </div>
             }
             {files == null && mediaFiles == null &&
-                <InputField name="href" title={t("link")} anyValue autoFocus/>
+                <InputField type="url" name="href" title={t("link")} anyValue autoFocus/>
             }
             {files != null && !forceCompress &&
                 <CheckboxField title={t("compress-images")} name="compress" groupClassName="mt-3 mb-0" anyValue/>

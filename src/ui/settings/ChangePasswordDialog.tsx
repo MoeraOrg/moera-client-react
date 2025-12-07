@@ -26,9 +26,9 @@ function ChangePasswordDialog() {
         <ModalDialog title={t("change-home-password")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
-                    <InputField name="oldPassword" title={t("current-password")} autoFocus/>
-                    <InputField name="password" title={t("new-password")}/>
-                    <InputField name="confirmPassword" title={t("confirm-password")}/>
+                    <InputField type="password" name="oldPassword" title={t("current-password")} autoFocus/>
+                    <InputField type="password" name="password" title={t("new-password")}/>
+                    <InputField type="password" name="confirmPassword" title={t("confirm-password")}/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>

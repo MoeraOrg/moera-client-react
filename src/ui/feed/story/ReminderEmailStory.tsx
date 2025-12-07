@@ -36,7 +36,7 @@ function ReminderEmailStoryInner({feedName, story, values, isSubmitting}: Props)
                 </p>
                 <p>{t("want-set-right-now")}</p>
                 <Form className="row gx-2 ms-2 me-2">
-                    <InputField name="email" maxLength={96} placeholder={t("email")}
+                    <InputField type="email" name="email" maxLength={96} placeholder={t("email")}
                                 groupClassName="col-lg-10 col-8 mb-0" anyValue autoFocus/>
                     <div className="col-lg-2 col-4">
                         <Button variant="primary" type="submit" loading={isSubmitting}
