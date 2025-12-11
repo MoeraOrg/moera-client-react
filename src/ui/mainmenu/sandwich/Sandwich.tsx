@@ -26,7 +26,7 @@ export default function Sandwich() {
 
     useDrag(
         ({first, last, movement: [mx], initial: [ix], cancel, tap, elapsedTime}) => {
-            if (!window.overlays.isEmpty()) {
+            if (!window.overlays.isEmpty() && !open) {
                 cancel();
                 return;
             }
