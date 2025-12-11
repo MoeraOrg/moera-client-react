@@ -1,7 +1,13 @@
 .duration-control {
     display: flex;
+    gap: .25rem;
 }
 
 .duration-control ~ .invalid-feedback {
     display: block;
+}
+
+.duration-control .rw-state-focus .rw-widget-picker {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 .25rem var(--bs-primary-bg-subtle);
 }

@@ -5,3 +5,8 @@
 .number-control ~ .invalid-feedback {
     display: block;
 }
+
+.number-control .rw-state-focus .rw-widget-picker {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 .25rem var(--bs-primary-bg-subtle);
+}

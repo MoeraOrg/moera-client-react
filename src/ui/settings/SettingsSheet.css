@@ -6,6 +6,7 @@
     grid-area: sheet;
     max-width: 46rem;
     overflow-y: auto;
+    padding-left: .25rem;
     padding-right: 1rem;
 }
 
