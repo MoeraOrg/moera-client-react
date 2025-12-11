@@ -2,3 +2,7 @@
     font-size: .8rem;
     color: var(--bs-gray-600);
 }
+
+.comment .date.updated {
+    margin-inline-start: .5em;
+}

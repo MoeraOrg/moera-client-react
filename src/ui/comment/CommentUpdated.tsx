@@ -24,7 +24,7 @@ export default function CommentUpdated({createdAt, editedAt}: Props) {
 
     const date = fromUnixTime(editedAt);
     return (
-        <time className="date" dateTime={formatISO(date)}>{" "}
+        <time className="date updated" dateTime={formatISO(date)}>{" "}
             ({t("comment-updated-at")}{" "}
             <abbr title={format(date, "dd-MM-yyyy HH:mm")}>
                 {tDistanceToNow(date, t)}
