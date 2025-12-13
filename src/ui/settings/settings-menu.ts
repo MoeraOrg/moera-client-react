@@ -128,7 +128,6 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             option("sheriffs.timeline"),
         ]),
         sheet("webui", [
-            option("webui.enabled"),
             option("webui.redirect-to-client"),
             option("feed.width"),
             option("posting.time.relative"),
