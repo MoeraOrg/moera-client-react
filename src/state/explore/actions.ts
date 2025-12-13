@@ -1,5 +1,5 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
-import { RecommendedNodeInfo } from "api";
+import { RecommendedNodeInfo, RecommendedPostingInfo } from "api";
 
 export type ActivePeopleLoadAction = ActionWithoutPayload<"ACTIVE_PEOPLE_LOAD">;
 export const activePeopleLoad = (): ActivePeopleLoadAction =>
@@ -15,7 +15,24 @@ export type ActivePeopleLoadFailedAction = ActionWithoutPayload<"ACTIVE_PEOPLE_L
 export const activePeopleLoadFailed = (): ActivePeopleLoadFailedAction =>
     actionWithoutPayload("ACTIVE_PEOPLE_LOAD_FAILED");
 
+export type TrendingLoadAction = ActionWithoutPayload<"TRENDING_LOAD">;
+export const trendingLoad = (): TrendingLoadAction =>
+    actionWithoutPayload("TRENDING_LOAD");
+
+export type TrendingLoadedAction = ActionWithPayload<"TRENDING_LOADED", {
+    list: RecommendedPostingInfo[];
+}>;
+export const trendingLoaded = (list: RecommendedPostingInfo[]): TrendingLoadedAction =>
+    actionWithPayload("TRENDING_LOADED", {list});
+
+export type TrendingLoadFailedAction = ActionWithoutPayload<"TRENDING_LOAD_FAILED">;
+export const trendingLoadFailed = (): TrendingLoadFailedAction =>
+    actionWithoutPayload("TRENDING_LOAD_FAILED");
+
 export type ExploreAnyAction =
     ActivePeopleLoadAction
     | ActivePeopleLoadedAction
-    | ActivePeopleLoadFailedAction;
+    | ActivePeopleLoadFailedAction
+    | TrendingLoadAction
+    | TrendingLoadedAction
+    | TrendingLoadFailedAction;

@@ -1,12 +1,10 @@
 import { goToTimeline } from "state/navigation/actions";
 import {
-    isAtActivePeoplePage,
     isAtComplaintsPage,
     isAtComposePage,
     isAtConnectPage,
     isAtDetailedPostingPage,
     isAtEmailVerifiedPage,
-    isAtExplorePage,
     isAtGrantPage,
     isAtInstantsPage,
     isAtMnemonicPage,
@@ -19,7 +17,8 @@ import {
     isAtSignUpPage,
     isAtStartReadingPage,
     isAtTimelinePage,
-    isAtVerifyEmailPage
+    isAtVerifyEmailPage,
+    isInExplorePages
 } from "state/navigation/selectors";
 import { build as complaintsBuild, transform as complaintsTransform } from "location/complaints";
 import { build as composeBuild, transform as composeTransform } from "location/compose";
@@ -140,7 +139,7 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     if (isAtSearchPage(state)) {
         return searchBuild(state, info);
     }
-    if (isAtExplorePage(state) || isAtActivePeoplePage(state)) {
+    if (isInExplorePages(state)) {
         return exploreBuild(state, info);
     }
     if (isAtInstantsPage(state)) {

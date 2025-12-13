@@ -164,6 +164,10 @@ export type GoToVerifyEmailAction = GoToPageAction<"verify-email", {}>;
 export const goToVerifyEmail = (): GoToVerifyEmailAction =>
     goToPage("verify-email", {});
 
+export type GoToTrendingAction = GoToPageAction<"trending", {}>;
+export const goToTrending = (): GoToTrendingAction =>
+    goToPage("trending", {});
+
 export type GoToPageAnyAction =
     GoToProfileAction
     | GoToTimelineAction
@@ -190,7 +194,8 @@ export type GoToPageAnyAction =
     | GoToMnemonicAction
     | GoToStartReadingAction
     | GoToEmailVerifiedAction
-    | GoToVerifyEmailAction;
+    | GoToVerifyEmailAction
+    | GoToTrendingAction;
 
 export type NewLocationAction = ActionWithoutPayload<"NEW_LOCATION">;
 export const newLocation = (): NewLocationAction =>

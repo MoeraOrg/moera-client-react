@@ -6,8 +6,10 @@ import { tTitle } from "i18n";
 import { isConnectedToHome } from "state/home/selectors";
 import { UnderlinedTabs } from "ui/control";
 
+type ExplorePage = "posts" | "people" | "trending";
+
 interface Props {
-    value: string;
+    value: ExplorePage;
     children?: React.ReactNode;
 }
 
@@ -16,7 +18,7 @@ export default function ExploreTabs({value, children}: Props) {
     const {t} = useTranslation();
 
     return (
-        <UnderlinedTabs tabs={[
+        <UnderlinedTabs<ExplorePage> tabs={[
             {
                 value: "posts",
                 title: tTitle(t("recommendations")),
@@ -27,6 +29,11 @@ export default function ExploreTabs({value, children}: Props) {
                 value: "people",
                 title: tTitle(t("top-50")),
                 href: "/explore/people"
+            },
+            {
+                value: "trending",
+                title: tTitle(t("trending")),
+                href: "/explore/trending"
             },
         ]} value={value}>
             {children}

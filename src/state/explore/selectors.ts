@@ -7,3 +7,11 @@ export function isActivePeopleToBeLoaded(state: ClientState): boolean {
 export function isActivePeopleLoaded(state: ClientState): boolean {
     return state.explore.loadedActivePeople && !state.explore.loadingActivePeople;
 }
+
+export function isTrendingToBeLoaded(state: ClientState): boolean {
+    return !state.explore.loadedTrending && !state.explore.loadingTrending;
+}
+
+export function isTrendingLoaded(state: ClientState): boolean {
+    return state.explore.loadedTrending && !state.explore.loadingTrending;
+}

@@ -6,6 +6,9 @@ const initialState: ExploreState = {
     loadingActivePeople: false,
     loadedActivePeople: false,
     activePeople: [],
+    loadingTrending: false,
+    loadedTrending: false,
+    trending: []
 }
 
 export default (state: ExploreState = initialState, action: WithContext<ClientAction>): ExploreState => {
@@ -28,6 +31,26 @@ export default (state: ExploreState = initialState, action: WithContext<ClientAc
             return {
                 ...state,
                 loadingActivePeople: false
+            }
+
+        case "TRENDING_LOAD":
+            return {
+                ...state,
+                loadingTrending: true
+            }
+
+        case "TRENDING_LOADED":
+            return {
+                ...state,
+                loadingTrending: false,
+                loadedTrending: true,
+                trending: action.payload.list
+            }
+
+        case "TRENDING_LOAD_FAILED":
+            return {
+                ...state,
+                loadingTrending: false
             }
 
         default:
