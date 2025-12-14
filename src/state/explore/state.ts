@@ -7,4 +7,7 @@ export interface ExploreState {
     loadingTrending: boolean;
     loadedTrending: boolean;
     trending: RecommendedPostingInfo[];
+    loadingDiscussions: boolean;
+    loadedDiscussions: boolean;
+    discussions: RecommendedPostingInfo[];
 }

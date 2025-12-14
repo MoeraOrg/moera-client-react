@@ -29,10 +29,27 @@ export type TrendingLoadFailedAction = ActionWithoutPayload<"TRENDING_LOAD_FAILE
 export const trendingLoadFailed = (): TrendingLoadFailedAction =>
     actionWithoutPayload("TRENDING_LOAD_FAILED");
 
+export type DiscussionsLoadAction = ActionWithoutPayload<"DISCUSSIONS_LOAD">;
+export const discussionsLoad = (): DiscussionsLoadAction =>
+    actionWithoutPayload("DISCUSSIONS_LOAD");
+
+export type DiscussionsLoadedAction = ActionWithPayload<"DISCUSSIONS_LOADED", {
+    list: RecommendedPostingInfo[];
+}>;
+export const discussionsLoaded = (list: RecommendedPostingInfo[]): DiscussionsLoadedAction =>
+    actionWithPayload("DISCUSSIONS_LOADED", {list});
+
+export type DiscussionsLoadFailedAction = ActionWithoutPayload<"DISCUSSIONS_LOAD_FAILED">;
+export const discussionsLoadFailed = (): DiscussionsLoadFailedAction =>
+    actionWithoutPayload("DISCUSSIONS_LOAD_FAILED");
+
 export type ExploreAnyAction =
     ActivePeopleLoadAction
     | ActivePeopleLoadedAction
     | ActivePeopleLoadFailedAction
     | TrendingLoadAction
     | TrendingLoadedAction
-    | TrendingLoadFailedAction;
+    | TrendingLoadFailedAction
+    | DiscussionsLoadAction
+    | DiscussionsLoadedAction
+    | DiscussionsLoadFailedAction;

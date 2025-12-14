@@ -58,7 +58,10 @@ export function isAtActivePeoplePage(state: ClientState): boolean {
 }
 
 export function isInExplorePages(state: ClientState): boolean {
-    return isAtExplorePage(state) || isAtActivePeoplePage(state) || isAtTrendingPage(state);
+    return isAtExplorePage(state)
+        || isAtActivePeoplePage(state)
+        || isAtTrendingPage(state)
+        || isAtDiscussionsPage(state);
 }
 
 export function isAtInstantsPage(state: ClientState): boolean {
@@ -92,6 +95,10 @@ export function isAtVerifyEmailPage(state: ClientState): boolean {
 
 export function isAtTrendingPage(state: ClientState): boolean {
     return state.navigation.page === "trending";
+}
+
+export function isAtDiscussionsPage(state: ClientState): boolean {
+    return state.navigation.page === "discussions";
 }
 
 export function isBottomMenuVisible(state: ClientState): boolean {

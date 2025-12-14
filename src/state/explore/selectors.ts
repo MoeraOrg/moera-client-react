@@ -15,3 +15,11 @@ export function isTrendingToBeLoaded(state: ClientState): boolean {
 export function isTrendingLoaded(state: ClientState): boolean {
     return state.explore.loadedTrending && !state.explore.loadingTrending;
 }
+
+export function isDiscussionsToBeLoaded(state: ClientState): boolean {
+    return !state.explore.loadedDiscussions && !state.explore.loadingDiscussions;
+}
+
+export function isDiscussionsLoaded(state: ClientState): boolean {
+    return state.explore.loadedDiscussions && !state.explore.loadingDiscussions;
+}

@@ -8,7 +8,10 @@ const initialState: ExploreState = {
     activePeople: [],
     loadingTrending: false,
     loadedTrending: false,
-    trending: []
+    trending: [],
+    loadingDiscussions: false,
+    loadedDiscussions: false,
+    discussions: []
 }
 
 export default (state: ExploreState = initialState, action: WithContext<ClientAction>): ExploreState => {
@@ -51,6 +54,26 @@ export default (state: ExploreState = initialState, action: WithContext<ClientAc
             return {
                 ...state,
                 loadingTrending: false
+            }
+
+        case "DISCUSSIONS_LOAD":
+            return {
+                ...state,
+                loadingDiscussions: true
+            }
+
+        case "DISCUSSIONS_LOADED":
+            return {
+                ...state,
+                loadingDiscussions: false,
+                loadedDiscussions: true,
+                discussions: action.payload.list
+            }
+
+        case "DISCUSSIONS_LOAD_FAILED":
+            return {
+                ...state,
+                loadingDiscussions: false
             }
 
         default:

@@ -11,7 +11,10 @@ import {
     activePeopleLoadFailed,
     TrendingLoadAction,
     trendingLoaded,
-    trendingLoadFailed
+    trendingLoadFailed,
+    DiscussionsLoadAction,
+    discussionsLoaded,
+    discussionsLoadFailed
 } from "state/explore/actions";
 import { getSetting } from "state/settings/selectors";
 import { getSafeSearchDefault } from "state/search/selectors";
@@ -20,6 +23,7 @@ import { REL_SEARCH } from "util/rel-node-name";
 export default [
     executor("ACTIVE_PEOPLE_LOAD", "", activePeopleLoadSaga),
     executor("TRENDING_LOAD", "", trendingLoadSaga),
+    executor("DISCUSSIONS_LOAD", "", discussionsLoadSaga),
 ];
 
 function getSheriffName(): string | undefined {
@@ -49,6 +53,18 @@ async function trendingLoadSaga(action: WithContext<TrendingLoadAction>): Promis
         dispatch(trendingLoaded(info).causedBy(action));
     } catch (e) {
         dispatch(trendingLoadFailed().causedBy(action));
+        dispatch(errorThrown(e));
+    }
+}
+
+async function discussionsLoadSaga(action: WithContext<DiscussionsLoadAction>): Promise<void> {
+    await homeIntroduced();
+
+    try {
+        const info = await Node.getRecommendedPostingsForCommenting(action, REL_SEARCH, getSheriffName(), 15);
+        dispatch(discussionsLoaded(info).causedBy(action));
+    } catch (e) {
+        dispatch(discussionsLoadFailed().causedBy(action));
         dispatch(errorThrown(e));
     }
 }

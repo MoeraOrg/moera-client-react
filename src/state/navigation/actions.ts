@@ -168,6 +168,10 @@ export type GoToTrendingAction = GoToPageAction<"trending", {}>;
 export const goToTrending = (): GoToTrendingAction =>
     goToPage("trending", {});
 
+export type GoToDiscussionsAction = GoToPageAction<"discussions", {}>;
+export const goToDiscussions = (): GoToDiscussionsAction =>
+    goToPage("discussions", {});
+
 export type GoToPageAnyAction =
     GoToProfileAction
     | GoToTimelineAction
@@ -195,7 +199,8 @@ export type GoToPageAnyAction =
     | GoToStartReadingAction
     | GoToEmailVerifiedAction
     | GoToVerifyEmailAction
-    | GoToTrendingAction;
+    | GoToTrendingAction
+    | GoToDiscussionsAction;
 
 export type NewLocationAction = ActionWithoutPayload<"NEW_LOCATION">;
 export const newLocation = (): NewLocationAction =>

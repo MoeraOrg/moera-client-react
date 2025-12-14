@@ -6,7 +6,7 @@ import { tTitle } from "i18n";
 import { isConnectedToHome } from "state/home/selectors";
 import { UnderlinedTabs } from "ui/control";
 
-type ExplorePage = "posts" | "people" | "trending";
+type ExplorePage = "posts" | "people" | "trending" | "discussions";
 
 interface Props {
     value: ExplorePage;
@@ -34,6 +34,11 @@ export default function ExploreTabs({value, children}: Props) {
                 value: "trending",
                 title: tTitle(t("trending")),
                 href: "/explore/trending"
+            },
+            {
+                value: "discussions",
+                title: tTitle(t("discussions")),
+                href: "/explore/discussions"
             },
         ]} value={value}>
             {children}

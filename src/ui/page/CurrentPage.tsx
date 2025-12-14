@@ -22,6 +22,7 @@ const PeoplePage = React.lazy(() => import("ui/people/PeoplePage"));
 const ComplaintsPage = React.lazy(() => import("ui/complaints/ComplaintsPage"));
 const ActivePeoplePage = React.lazy(() => import("ui/explore/ActivePeoplePage"));
 const TrendingPage = React.lazy(() => import("ui/explore/TrendingPage"));
+const DiscussionsPage = React.lazy(() => import("ui/explore/DiscussionsPage"));
 const InstantsPage = React.lazy(() => import("ui/instant/InstantsPage"));
 
 export default function CurrentPage() {
@@ -98,6 +99,12 @@ export default function CurrentPage() {
             return (
                 <Suspense fallback={<Loading overlay large/>}>
                     <TrendingPage/>
+                </Suspense>
+            );
+        case "discussions":
+            return (
+                <Suspense fallback={<Loading overlay large/>}>
+                    <DiscussionsPage/>
                 </Suspense>
             );
         case "instants":

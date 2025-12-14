@@ -19,7 +19,8 @@ export type Page =
     | "start-reading"
     | "email-verified"
     | "verify-email"
-    | "trending";
+    | "trending"
+    | "discussions";
 
 export const GLOBAL_PAGES: Page[] = [
     "removal", "grant", "connect", "signup", "mnemonic", "start-reading", "email-verified", "verify-email"

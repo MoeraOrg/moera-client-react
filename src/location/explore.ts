@@ -5,9 +5,9 @@ import { LocationInfo } from "location/LocationInfo";
 import { ClientAction } from "state/action";
 import { ClientState } from "state/state";
 import { getNodeRootLocation } from "state/node/selectors";
-import { isAtActivePeoplePage, isAtTrendingPage } from "state/navigation/selectors";
+import { isAtActivePeoplePage, isAtTrendingPage, isAtDiscussionsPage } from "state/navigation/selectors";
 import { getFeedAt } from "state/feeds/selectors";
-import { goToActivePeople, goToExplore, goToTrending } from "state/navigation/actions";
+import { goToActivePeople, goToExplore, goToTrending, goToDiscussions } from "state/navigation/actions";
 import { REL_CURRENT } from "util/rel-node-name";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
@@ -17,6 +17,9 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
         }
         if (dstInfo.directories[1] === "trending") {
             return [goToTrending()];
+        }
+        if (dstInfo.directories[1] === "discussions") {
+            return [goToDiscussions()];
         }
     }
     const before = dstInfo.parameters["before"];
@@ -32,6 +35,10 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     if (isAtTrendingPage(state)) {
         info = info.sub("trending");
         return info.withTitle(tTitle(i18n.t("trending")));
+    }
+    if (isAtDiscussionsPage(state)) {
+        info = info.sub("discussions");
+        return info.withTitle(tTitle(i18n.t("discussions")));
     }
     const at = getFeedAt(state, REL_CURRENT, "explore");
     info = at < Number.MAX_SAFE_INTEGER ? info.withParameter("before", String(at)) : info;
