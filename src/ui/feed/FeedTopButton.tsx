@@ -56,7 +56,7 @@ export default function FeedTopButton({
     return (
         <div className="feed-top-button" onClick={onClick}>
             <Icon icon={msArrowUpward} size={16}/><span className="title">{title}</span>
-            {news > 0 && <span className="new">{t("count-new", {count: news})}</span>}
+            {news > 0 && <span className="new">{t("count-new-on-posts", {count: news})}</span>}
         </div>
     );
 };
