@@ -1,13 +1,19 @@
 import { conj, disj, trigger } from "state/trigger";
-import { isAtActivePeoplePage, isAtStartReadingPage, isAtTrendingPage, isAtDiscussionsPage } from "state/navigation/selectors";
-import { activePeopleLoad, trendingLoad, discussionsLoad } from "state/explore/actions";
+import {
+    isAtActivePeoplePage,
+    isAtDiscussionsPage,
+    isAtNewsPage,
+    isAtStartReadingPage,
+    isAtTrendingPage
+} from "state/navigation/selectors";
+import { activePeopleLoad, discussionsLoad, trendingLoad } from "state/explore/actions";
 import {
     isActivePeopleLoaded,
     isActivePeopleToBeLoaded,
-    isTrendingLoaded,
-    isTrendingToBeLoaded,
     isDiscussionsLoaded,
-    isDiscussionsToBeLoaded
+    isDiscussionsToBeLoaded,
+    isTrendingLoaded,
+    isTrendingToBeLoaded
 } from "state/explore/selectors";
 
 export default [
@@ -17,8 +23,8 @@ export default [
         activePeopleLoad
     ),
     trigger("PULSE_6H", isActivePeopleLoaded, activePeopleLoad),
-    trigger("GO_TO_PAGE", conj(isAtTrendingPage, isTrendingToBeLoaded), trendingLoad),
+    trigger("GO_TO_PAGE", conj(disj(isAtTrendingPage, isAtNewsPage), isTrendingToBeLoaded), trendingLoad),
     trigger("PULSE_6H", isTrendingLoaded, trendingLoad),
-    trigger("GO_TO_PAGE", conj(isAtDiscussionsPage, isDiscussionsToBeLoaded), discussionsLoad),
+    trigger("GO_TO_PAGE", conj(disj(isAtDiscussionsPage, isAtNewsPage), isDiscussionsToBeLoaded), discussionsLoad),
     trigger("PULSE_6H", isDiscussionsLoaded, discussionsLoad),
 ];

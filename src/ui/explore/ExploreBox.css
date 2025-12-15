@@ -1,0 +1,36 @@
+#explore-box {
+    position: sticky;
+    top: calc(var(--page-header-height) + 1rem);
+    margin-top: 1rem;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    background-color: white;
+}
+
+#explore-box .title {
+    margin-bottom: 1.25rem;
+    font-size: 1.13rem;
+    font-weight: 600;
+    line-height: 133%;
+}
+
+#explore-box .nav {
+    margin-bottom: .75rem;
+}
+
+#explore-box .see-all {
+    width: 100%;
+
+    --bs-btn-color: var(--violet-600);
+    --bs-btn-bg: transparent;
+    --bs-btn-border-color: var(--bs-gray-400);
+    --bs-btn-hover-color: var(--violet-800);
+    --bs-btn-hover-bg: var(--bs-gray-100);
+    --bs-btn-hover-border-color: var(--bs-gray-500);
+    --bs-btn-active-color: var(--violet-600);
+    --bs-btn-active-bg: transparent;
+    --bs-btn-active-border-color: var(--bs-gray-400);
+    --bs-btn-disabled-color: var(--violet-600);
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: var(--bs-gray-200);
+}

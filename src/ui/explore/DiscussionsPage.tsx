@@ -32,7 +32,9 @@ export default function DiscussionsPage() {
                         </BackBoxInner>
                     </BackBox>
                     <main className="content-panel">
-                        {posts.map((post, index) => <TrendingPost trending={post} key={index}/>)}
+                        {posts.map((post, index) =>
+                            <TrendingPost trending={post} counters={["comments", "reactions"]} key={index}/>
+                        )}
                         {loading && <Loading/>}
                     </main>
                 </div>

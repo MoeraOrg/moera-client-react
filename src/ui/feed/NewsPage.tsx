@@ -7,6 +7,7 @@ import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
+import ExploreBox from "ui/explore/ExploreBox";
 import { Page } from "ui/page/Page";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./NewsPage.css";
@@ -29,6 +30,9 @@ export default function NewsPage() {
                         visible={visible}
                     />
                 </main>
+                <div className="page-right-pane">
+                    <ExploreBox/>
+                </div>
             </Page>
             <BottomMenu/>
         </>
