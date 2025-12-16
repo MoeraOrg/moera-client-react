@@ -8,7 +8,7 @@ export default function SettingsItemPassword() {
     const {t} = useTranslation();
 
     return (
-        <Jump href={Browser.urlWithBackHref("/change-password")} className="btn btn-outline-primary">
+        <Jump href={Browser.urlWithBackHref("/change-password")} className="btn btn-primary">
             {t("change-password")}
         </Jump>
     );
