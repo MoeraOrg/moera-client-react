@@ -11,7 +11,7 @@ import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName, getHomeRoot
 import { confirmBox } from "state/confirmbox/actions";
 import * as Browser from "ui/browser";
 import { Avatar } from "ui/control";
-import { Icon, msExplore, msLogout, msSwapHoriz } from "ui/material-symbols";
+import { Icon, msComment, msExplore, msLogout, msSwapHoriz, msTrendingUp } from "ui/material-symbols";
 import { useParent } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import { REL_HOME, REL_SEARCH } from "util/rel-node-name";
@@ -70,6 +70,17 @@ function SandwichMenu(_: Props, ref: ForwardedRef<HTMLDivElement>) {
                         <div className="name">{NodeName.shorten(nodeName)}</div>
                     </Jump>
                     <hr className="mt-1 mb-2"/>
+                    <Jump nodeName={REL_HOME} href="/explore/trending" className="item"
+                          onNear={onJump} onFar={onJump}>
+                        <Icon icon={msTrendingUp} size={24}/>
+                        <span>{tTitle(t("trending"))}</span>
+                    </Jump>
+                    <Jump nodeName={REL_HOME} href="/explore/discussions" className="item"
+                          onNear={onJump} onFar={onJump}>
+                        <Icon icon={msComment} size={24}/>
+                        <span>{tTitle(t("discussions"))}</span>
+                    </Jump>
+                    <hr className="mt-2 mb-2"/>
                     <div className="item" onClick={onSwitchAccounts}>
                         <Icon icon={msSwapHoriz} size={24}/>
                         <span>{tTitle(t("switch-accounts"))}</span>
@@ -84,6 +95,16 @@ function SandwichMenu(_: Props, ref: ForwardedRef<HTMLDivElement>) {
                     <Jump nodeName={REL_SEARCH} href="/explore/people" className="item" onNear={onJump} onFar={onJump}>
                         <Icon icon={msExplore} size={24}/>
                         <span>{tTitle(t("explore"))}</span>
+                    </Jump>
+                    <Jump nodeName={REL_SEARCH} href="/explore/trending" className="item"
+                          onNear={onJump} onFar={onJump}>
+                        <Icon icon={msTrendingUp} size={24}/>
+                        <span>{tTitle(t("trending"))}</span>
+                    </Jump>
+                    <Jump nodeName={REL_SEARCH} href="/explore/discussions" className="item"
+                          onNear={onJump} onFar={onJump}>
+                        <Icon icon={msComment} size={24}/>
+                        <span>{tTitle(t("discussions"))}</span>
                     </Jump>
                     <Jump className="btn btn-primary mt-3 w-100" href={Browser.urlWithBackHref("/signup")}
                           onNear={onJump} onFar={onJump}>

@@ -135,6 +135,7 @@ import { ReactComponent as msThumbUp } from "ui/material-symbols/thumb_up.isvg";
 import { ReactComponent as msThumbsDownSolid } from "ui/material-symbols/thumbs-down-solid.isvg"; // FontAwesome
 import { ReactComponent as msThumbsUpSolid } from "ui/material-symbols/thumbs-up-solid.isvg"; // FontAwesome
 import { ReactComponent as msTitle } from "ui/material-symbols/title.isvg";
+import { ReactComponent as msTrendingUp } from "ui/material-symbols/trending_up.isvg";
 import { ReactComponent as msTrendingUp16 } from "ui/material-symbols/trending_up16.isvg";
 import { ReactComponent as msTune } from "ui/material-symbols/tune.isvg";
 import { ReactComponent as msUndo } from "ui/material-symbols/undo.isvg";
@@ -281,6 +282,7 @@ export {
     msThumbsDownSolid,
     msThumbsUpSolid,
     msTitle,
+    msTrendingUp,
     msTrendingUp16,
     msTune,
     msUndo,
