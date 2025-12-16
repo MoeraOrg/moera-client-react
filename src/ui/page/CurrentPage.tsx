@@ -14,15 +14,15 @@ import DetailedPostingPage from "ui/detailedposting/DetailedPostingPage";
 import NewsPage from "ui/feed/NewsPage";
 import SearchPage from "ui/search/SearchPage";
 import ExplorePage from "ui/explore/ExplorePage";
+import ActivePeoplePage from "ui/explore/ActivePeoplePage";
+import TrendingPage from "ui/explore/TrendingPage";
+import DiscussionsPage from "ui/explore/DiscussionsPage";
 import { REL_CURRENT } from "util/rel-node-name";
 
 const ComposePage = React.lazy(() => import("ui/compose/ComposePage"));
 const SettingsPage = React.lazy(() => import("ui/settings/SettingsPage"));
 const PeoplePage = React.lazy(() => import("ui/people/PeoplePage"));
 const ComplaintsPage = React.lazy(() => import("ui/complaints/ComplaintsPage"));
-const ActivePeoplePage = React.lazy(() => import("ui/explore/ActivePeoplePage"));
-const TrendingPage = React.lazy(() => import("ui/explore/TrendingPage"));
-const DiscussionsPage = React.lazy(() => import("ui/explore/DiscussionsPage"));
 const InstantsPage = React.lazy(() => import("ui/instant/InstantsPage"));
 
 export default function CurrentPage() {
