@@ -104,12 +104,13 @@ export default function DonateDialog() {
                     </ul>
                     <div className="info">
                         {fundraiser.qrCode ?
-                            <div className="info-qr">
-                                <a href={getFundraiserAutoHref(fundraiser)} target="_blank" rel="noreferrer">
-                                    <QRCode value={fundraiser.qrCode} size={256} level={"Q"}/>
-                                </a>
-                                {fundraiser.text && <span className="description"><br/>{fundraiser.text}</span>}
-                            </div>
+                            <a className="info-qr" href={getFundraiserAutoHref(fundraiser)} target="_blank"
+                               rel="noreferrer">
+                                <QRCode value={fundraiser.qrCode} size={256} level="Q"/>
+                                <div className="description">
+                                    {fundraiser.text ?? getFundraiserAutoHref(fundraiser)}
+                                </div>
+                            </a>
                         :
                             <div className="info-text">
                                 {fundraiser.text && <>{fundraiser.text}<br/></>}

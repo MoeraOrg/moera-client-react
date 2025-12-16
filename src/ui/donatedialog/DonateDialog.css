@@ -34,15 +34,22 @@
     padding: 1rem;
 }
 
-.donate-dialog .fundraisers .info .info-qr {
+.donate-dialog .fundraisers .info A.info-qr {
+    display: block;
     text-align: center;
+    color: var(--bs-gray-900);
 }
 
-.donate-dialog .fundraisers .info .info-qr .description {
-    overflow-wrap: anywhere;
-}
-
-.donate-dialog .fundraisers .info .info-qr A {
-    display: inline-block;
+.donate-dialog .fundraisers .info A.info-qr svg {
     margin-bottom: .25rem;
+}
+
+.donate-dialog .fundraisers .info A.info-qr .description {
+    overflow-wrap: anywhere;
+    font-family: var(--bs-font-monospace), monospace;
+    font-size: 80%;
+}
+
+.donate-dialog .fundraisers .info A.info-qr:hover .description {
+    text-decoration: underline;
 }

@@ -1,10 +1,5 @@
 import * as React from 'react';
 
-import { ReactComponent as brBitcoin } from "ui/material-symbols/brands/bitcoin.isvg"; // FontAwesome
-import { ReactComponent as brBolt } from "ui/material-symbols/brands/bolt.isvg"; // FontAwesome
-import { ReactComponent as brEthereum } from "ui/material-symbols/brands/ethereum.isvg"; // FontAwesome
-import { ReactComponent as brPatreon } from "ui/material-symbols/brands/patreon.isvg"; // FontAwesome
-import { ReactComponent as brPaypal } from "ui/material-symbols/brands/paypal.isvg"; // FontAwesome
 import { ReactComponent as msAdd } from "ui/material-symbols/add.isvg";
 import { ReactComponent as msAddBox } from "ui/material-symbols/add_box.isvg";
 import { ReactComponent as msAddCircle } from "ui/material-symbols/add_circle.isvg";
@@ -147,11 +142,6 @@ import { ReactComponent as msVisibilityOff } from "ui/material-symbols/visibilit
 import { ReactComponent as msVolunteerActivism } from "ui/material-symbols/volunteer_activism.isvg";
 
 export {
-    brBitcoin,
-    brBolt,
-    brEthereum,
-    brPatreon,
-    brPaypal,
     msAdd,
     msAddBox,
     msAddCircle,

@@ -1,5 +1,6 @@
 import { FundraiserInfo } from "api";
-import { brBitcoin, brBolt, brEthereum, brPatreon, brPaypal, MaterialSymbol } from "ui/material-symbols";
+import { MaterialSymbol } from "ui/material-symbols";
+import { brBitcoin, brBolt, brBuyMeACoffee, brEthereum, brPatreon, brPaypal } from "ui/donatedialog/brands";
 import { hasSchemeOrDomain } from "util/url";
 
 const BITCOIN_ADDRESS = /^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$/;
@@ -35,6 +36,10 @@ const FUNDRAISER_ICONS: FundraiserIconInfo[] = [
     {
         prefix: "paypal.me",
         icon: brPaypal
+    },
+    {
+        prefix: "buymeacoffee.com",
+        icon: brBuyMeACoffee
     }
 ];
 

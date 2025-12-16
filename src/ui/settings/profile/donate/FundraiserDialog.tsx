@@ -36,10 +36,10 @@ function FundraiserDialog(props: Props) {
         <ModalDialog title={fundraiser != null ? t("edit-donation") : t("add-donation")} onClose={onCancel}>
             <Form>
                 <div className="modal-body">
-                    <InputField name="title" title={t("title")} autoFocus/>
-                    <InputField name="qrCode" title={t("qr-code")}/>
-                    <InputField name="text" title={t("text")}/>
-                    <InputField name="href" title={t("link")}/>
+                    <InputField name="title" title={t("title")} autoFocus errorsOnly/>
+                    <InputField name="qrCode" title={t("qr-code")} errorsOnly/>
+                    <InputField name="text" title={t("text")} errorsOnly/>
+                    <InputField name="href" title={t("link")} errorsOnly/>
                 </div>
                 <div className="modal-footer">
                     {fundraiser != null &&
