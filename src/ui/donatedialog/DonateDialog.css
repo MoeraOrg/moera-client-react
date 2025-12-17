@@ -20,6 +20,7 @@
 
 .donate-dialog .fundraisers .nav {
     flex: 1 0 10em;
+    overflow-x: auto;
 }
 
 .donate-dialog .fundraisers .nav .nav-link svg {
