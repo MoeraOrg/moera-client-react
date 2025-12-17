@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { isAtNewsPage } from "state/navigation/selectors";
+import { OnlyDesktop } from "ui/control";
 import FeedPage from "ui/feed/FeedPage";
 import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
@@ -30,9 +31,11 @@ export default function NewsPage() {
                         visible={visible}
                     />
                 </main>
-                <div className="page-right-pane">
-                    <ExploreBox/>
-                </div>
+                <OnlyDesktop>
+                    <div className="page-right-pane">
+                        <ExploreBox/>
+                    </div>
+                </OnlyDesktop>
             </Page>
             <BottomMenu/>
         </>

@@ -777,6 +777,7 @@
         "comment_smileys_enabled": "Замінювати прості смайлики на емодзі",
         "comment_submit-key": "Надсилати коментар за натисканням",
         "entry_gallery_loop": "Зациклювати перегляд галереї",
+        "explore_discussions_notify": "Сповіщати про нові активні дискусії",
         "feed_width": "Ширина стрічки (у пікселах)",
         "friends_subscribe-on-add": "При додаванні друга, на якого ви не підписані",
         "friends_subscribe-on-add-items": {

@@ -777,6 +777,7 @@
         "comment_smileys_enabled": "Заменять простые смайлики на эмодзи",
         "comment_submit-key": "Отправлять комментарий по нажатию",
         "entry_gallery_loop": "Зацикливать просмотр галереи",
+        "explore_discussions_notify": "Уведомлять о новых активных обсуждениях",
         "feed_width": "Ширина ленты (в пикселах)",
         "friends_subscribe-on-add": "При добавлении друга, на которого вы не подписаны",
         "friends_subscribe-on-add-items": {

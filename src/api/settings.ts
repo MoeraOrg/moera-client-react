@@ -639,6 +639,24 @@ const META: ClientSettingMetaInfo[] = [
         },
         scope: "mobile"
     },
+    {
+        name: "explore.discussions.notify",
+        type: "bool",
+        defaultValue: "true",
+        modifiers: {}
+    },
+    {
+        name: "explore.discussions.visited-at",
+        type: "Timestamp",
+        defaultValue: "0",
+        internal: true
+    },
+    {
+        name: "explore.discussions.ringing",
+        type: "bool",
+        defaultValue: "false",
+        internal: true
+    },
 ];
 
 function collectMetaMap(map: Map<string, ClientSettingMetaInfo>, metadata: ClientSettingMetaInfo[]) {

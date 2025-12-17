@@ -37,6 +37,10 @@ export default function BottomMenu() {
     const newsCount = useSelector(getNewsCount);
 
     const inExplore = useSelector(isInExplorePages);
+    const exploreRinging = useSelector((state: ClientState) =>
+        getSetting(state, "explore.discussions.ringing") as boolean
+    );
+
     const atInstants = useSelector(isAtInstantsPage);
     const instantCount = useSelector(getInstantCount);
     const inHomeProfile = useSelector((state: ClientState) => isAtHomeNode(state) && isInProfilePages(state));
@@ -70,9 +74,10 @@ export default function BottomMenu() {
                 </div>
                 <div className="title">{getFeedTitle("news", t)}</div>
             </Jump>
-            <Jump nodeName={REL_HOME} href="/explore" className="item">
+            <Jump nodeName={REL_HOME} href={!exploreRinging ? "/explore" : "/explore/discussions"} className="item">
                 <div className={cx("icon", {active: inExplore})}>
                     <Icon icon={msExplore} size={20}/>
+                    {exploreRinging && <div className="count">{" "}</div>}
                 </div>
                 <div className="title">{t("explore")}</div>
             </Jump>

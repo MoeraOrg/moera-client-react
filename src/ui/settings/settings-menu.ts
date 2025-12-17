@@ -161,6 +161,7 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             option(CLIENT_SETTINGS_PREFIX + "instants.number.mode"),
             option(CLIENT_SETTINGS_PREFIX + "instants.profile-link"),
             option(CLIENT_SETTINGS_PREFIX + "news-button.target-story"),
+            option(CLIENT_SETTINGS_PREFIX + "explore.discussions.notify"),
             option(CLIENT_SETTINGS_PREFIX + "mobile.notifications.enabled", 0),
             option(CLIENT_SETTINGS_PREFIX + "mobile.notifications.news.enabled"),
         ]),

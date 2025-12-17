@@ -43,6 +43,10 @@ export type DiscussionsLoadFailedAction = ActionWithoutPayload<"DISCUSSIONS_LOAD
 export const discussionsLoadFailed = (): DiscussionsLoadFailedAction =>
     actionWithoutPayload("DISCUSSIONS_LOAD_FAILED");
 
+export type DiscussionsVisitedAction = ActionWithoutPayload<"DISCUSSIONS_VISITED">;
+export const discussionsVisited = (): DiscussionsVisitedAction =>
+    actionWithoutPayload("DISCUSSIONS_VISITED");
+
 export type ExploreAnyAction =
     ActivePeopleLoadAction
     | ActivePeopleLoadedAction
@@ -52,4 +56,5 @@ export type ExploreAnyAction =
     | TrendingLoadFailedAction
     | DiscussionsLoadAction
     | DiscussionsLoadedAction
-    | DiscussionsLoadFailedAction;
+    | DiscussionsLoadFailedAction
+    | DiscussionsVisitedAction;
