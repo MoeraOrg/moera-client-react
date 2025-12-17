@@ -44,7 +44,7 @@
     filter: brightness(140%);
 }
 
-#bottom-menu .item .icon.bell, #bottom-menu .item .icon.news {
+#bottom-menu .item .icon.bell, #bottom-menu .item .icon.news, #bottom-menu .item .icon.explore {
     position: relative;
 }
 
@@ -66,6 +66,12 @@
 
 #bottom-menu .item .icon.news .count {
     background-color: var(--violet-600);
+}
+
+#bottom-menu .item .icon.explore .count {
+    background-color: var(--bs-green-400);
+    width: .5rem;
+    height: .5rem;
 }
 
 #bottom-menu .new-post {

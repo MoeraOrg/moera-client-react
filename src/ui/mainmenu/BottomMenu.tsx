@@ -75,7 +75,7 @@ export default function BottomMenu() {
                 <div className="title">{getFeedTitle("news", t)}</div>
             </Jump>
             <Jump nodeName={REL_HOME} href={!exploreRinging ? "/explore" : "/explore/discussions"} className="item">
-                <div className={cx("icon", {active: inExplore})}>
+                <div className={cx("icon", "explore", {active: inExplore})}>
                     <Icon icon={msExplore} size={20}/>
                     {exploreRinging && <div className="count">{" "}</div>}
                 </div>
