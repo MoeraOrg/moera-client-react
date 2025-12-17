@@ -12,7 +12,7 @@ export default function Search() {
     } = useSearchSuggestions();
 
     return (
-        <div id="search-box">
+        <search id="search-box">
             <SearchInput
                 query={query}
                 handleKeyDown={handleKeyDown}
@@ -31,6 +31,6 @@ export default function Search() {
                 visible={focused && (searchList.length > 0 || !!query)}
                 ref={listDom}
             />
-        </div>
+        </search>
     );
 }

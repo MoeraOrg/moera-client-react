@@ -33,7 +33,7 @@ export default function PeopleSearch() {
     }
 
     return (
-        <div className="search">
+        <search>
             <div className="input-group input-group-sm">
                 <span className="input-group-text"><Icon icon={msSearch} size={16}/></span>
                 {clear &&
@@ -43,6 +43,6 @@ export default function PeopleSearch() {
                 }
                 <input type="search" className="form-control" onKeyDown={onKeyDown} onChange={onChange} ref={inputRef}/>
             </div>
-        </div>
+        </search>
     );
 }

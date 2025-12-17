@@ -1,16 +1,16 @@
-.people-panel .search {
+.people-panel SEARCH {
     flex: auto;
     display: flex;
     justify-content: flex-end;
 }
 
 @media only screen and (min-width: 992px) {
-    .people-panel .search .input-group {
+    .people-panel SEARCH .input-group {
         max-width: 250px;
     }
 }
 
-.people-panel .search .cancel {
+.people-panel SEARCH .cancel {
     position: absolute;
     top: .4em;
     right: .1em;
