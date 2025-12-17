@@ -18,6 +18,11 @@
     margin-bottom: .75rem;
 }
 
+#explore-box .content {
+    max-height: calc(100vh - var(--page-header-height) - 11rem);
+    overflow-y: auto;
+}
+
 #explore-box .see-all {
     width: 100%;
 

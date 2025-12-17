@@ -8,14 +8,16 @@ import Jump from "ui/navigation/Jump";
 import TrendingPost from "ui/explore/TrendingPost";
 import "./ExploreBox.css";
 
+const MAX_ITEMS = 6;
+
 type ExploreBoxTab = "discussions" | "posts";
 
 export default function ExploreBox() {
     const [activeTab, setActiveTab] = useState<ExploreBoxTab>("discussions");
     const loadingDiscussions = useSelector((state: ClientState) => state.explore.loadingDiscussions);
-    const discussions = useSelector((state: ClientState) => state.explore.discussions.slice(0, 5));
+    const discussions = useSelector((state: ClientState) => state.explore.discussions.slice(0, MAX_ITEMS));
     const loadingTrending = useSelector((state: ClientState) => state.explore.loadingTrending);
-    const trending = useSelector((state: ClientState) => state.explore.trending.slice(0, 5));
+    const trending = useSelector((state: ClientState) => state.explore.trending.slice(0, MAX_ITEMS));
     const {t} = useTranslation();
 
     if (loadingDiscussions || loadingTrending || (discussions.length === 0 && trending.length === 0)) {
@@ -33,10 +35,12 @@ export default function ExploreBox() {
                 {title: t("discussions"), value: "discussions"},
                 {title: t("posts"), value: "posts"}
             ]} value={activeTab} onChange={setActiveTab}/>
-            {posts.map((post, index) => <TrendingPost key={index} trending={post} counters={counters} small/>)}
-            {posts.length === 5 &&
-                <Jump href={seeAllHref} className="btn see-all">{t("see-all")}</Jump>
-            }
+            <div className="content">
+                {posts.map((post, index) => <TrendingPost key={index} trending={post} counters={counters} small/>)}
+                {posts.length === MAX_ITEMS &&
+                    <Jump href={seeAllHref} className="btn see-all">{t("see-all")}</Jump>
+                }
+            </div>
         </div>
     );
 }
