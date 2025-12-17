@@ -66,9 +66,9 @@ export default function ManagementMenuItems() {
                     divider: true
                 },
                 {
-                    title: t("settings"),
+                    title: t("edit-profile"),
                     nodeName: REL_CURRENT,
-                    href: "/settings",
+                    href: "/settings/profile",
                     show: profileEditable
                 },
             ]}

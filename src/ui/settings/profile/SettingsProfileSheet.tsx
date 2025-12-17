@@ -57,7 +57,7 @@ function SettingsProfileSheetInner(props: Props) {
             <div className="settings-sheet" style={{maxHeight: sheetMaxHeight}}>
                 <AvatarEditor name="avatar"/>
                 <InputField title={t("full-name")} name="fullName" maxLength={96} anyValue autoFocus/>
-                <InputField title={t("title")} name="title" maxLength={120}/>
+                <InputField title={t("title")} name="title" maxLength={120} errorsOnly/>
                 <RichTextField
                     title={t("bio")}
                     name="bioSrc"
@@ -69,7 +69,7 @@ function SettingsProfileSheetInner(props: Props) {
                 <ComboboxField title={t("gender")} name="gender" col="col-sm-6" data={["Male", "Female"]}
                                textField={g => longGender(g, t)}/>
                 <div className="row">
-                    <InputField type="email" title={t("e-mail")} name="email" maxLength={63}
+                    <InputField type="email" title={t("e-mail")} name="email" maxLength={63} errorsOnly
                                 groupClassName="col-sm-6 col-10 pe-0"/>
                     <PrincipalField name="viewEmail"
                                     values={["public", "signed", "subscribed", "friends", "admin"]}
