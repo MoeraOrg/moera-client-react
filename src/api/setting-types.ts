@@ -1,4 +1,4 @@
-import { fromUnixTime } from 'date-fns';
+import { fromUnixTime, getUnixTime } from 'date-fns';
 import { isString } from 'formik';
 
 import { ClientSettingTypeModifiers, PrincipalValue, SettingType, SettingTypeModifiers } from "api";
@@ -143,6 +143,9 @@ export function toString(
 
         case "json":
             return JSON.stringify(value);
+
+        case "Timestamp":
+            return getUnixTime(value as Date).toString();
 
         default:
             return value.toString();
