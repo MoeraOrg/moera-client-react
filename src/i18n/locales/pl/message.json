@@ -912,6 +912,8 @@
         "none": "Wyłączony",
         "normal": "Umiarkowany"
       },
+      "recommendations_lifetime": "Usuń rekomendacje po",
+      "recommendations_max-non-viewed-news": "Maksymalny limit nieobejrzanych postów w Aktualnościach dla dodawania rekomendacji",
       "recommendations_safe": "Bezpieczne rekomendacje",
       "recommendations_sheriff": "Szeryf sprawdzający referencje dotyczące bezpieczeństwa",
       "recommendations_source": "Usługa rekomendacji do użycia",

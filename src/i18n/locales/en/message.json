@@ -912,6 +912,8 @@
         "none": "Off",
         "normal": "Moderate"
       },
+      "recommendations_lifetime": "Purge recommendations after",
+      "recommendations_max-non-viewed-news": "Maximum non-viewed Newsfeed posts limit for adding recommendations",
       "recommendations_safe": "Safe recommendations",
       "recommendations_sheriff": "Sheriff supervising the recommendations for safety",
       "recommendations_source": "Recommendation service to use",

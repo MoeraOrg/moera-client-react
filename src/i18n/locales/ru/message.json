@@ -912,6 +912,8 @@
         "none": "Выключены",
         "normal": "Среднее"
       },
+      "recommendations_lifetime": "Удалять рекомендации через",
+      "recommendations_max-non-viewed-news": "Максимальное число непросмотренных постов в ленте новостей для добавления рекомендаций",
       "recommendations_safe": "Безопасные рекомендации",
       "recommendations_sheriff": "Шериф, проверяющий рекомендации на безопасность",
       "recommendations_source": "Используемый сервис рекомендаций",
