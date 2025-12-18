@@ -1,7 +1,7 @@
 import { RefreshState } from "state/refresh/state";
 import { ClientAction } from "state/action";
 
-const initialState = {
+const initialState: RefreshState = {
     active: false
 };
 

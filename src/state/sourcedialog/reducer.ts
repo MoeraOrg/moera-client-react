@@ -1,7 +1,7 @@
 import { SourceDialogState } from "state/sourcedialog/state";
 import { ClientAction } from "state/action";
 
-const initialState = {
+const initialState: SourceDialogState = {
     show: false,
     text: "",
     loading: false

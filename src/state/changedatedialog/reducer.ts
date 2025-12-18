@@ -1,7 +1,7 @@
 import { ChangeDateDialogState } from "state/changedatedialog/state";
 import { ClientAction } from "state/action";
 
-const initialState = {
+const initialState: ChangeDateDialogState = {
     show: false,
     storyId: null,
     publishedAt: 0,

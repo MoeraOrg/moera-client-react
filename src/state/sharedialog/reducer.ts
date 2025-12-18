@@ -1,7 +1,7 @@
 import { ShareDialogState } from "state/sharedialog/state";
 import { ClientAction } from "state/action";
 
-const initialState = {
+const initialState: ShareDialogState = {
     show: false,
     title: "",
     url: null

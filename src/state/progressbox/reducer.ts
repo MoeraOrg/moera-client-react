@@ -1,7 +1,7 @@
 import { ClientAction } from "state/action";
 import { ProgressBoxState } from "state/progressbox/state";
 
-const initialState = {
+const initialState: ProgressBoxState = {
     show: false,
     done: 0,
     total: 0

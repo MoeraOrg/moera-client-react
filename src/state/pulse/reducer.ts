@@ -1,7 +1,7 @@
 import { PulseState } from "state/pulse/state";
 import { ClientAction } from "state/action";
 
-const initialState = {
+const initialState: PulseState = {
     pulse: 0
 };
 

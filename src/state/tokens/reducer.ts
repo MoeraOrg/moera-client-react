@@ -1,7 +1,7 @@
 import { TokensState } from "state/tokens/state";
 import { ClientAction } from "state/action";
 
-const initialState = {
+const initialState: TokensState = {
 };
 
 export default (state: TokensState = initialState, action: ClientAction): TokensState => {

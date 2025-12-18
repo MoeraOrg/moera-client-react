@@ -1,7 +1,7 @@
 import { ClientAction } from "state/action";
 import { PeopleHideDialogState } from "state/peoplehidedialog/state";
 
-const initialState = {
+const initialState: PeopleHideDialogState = {
     show: false,
     nodeName: null,
     feedName: null

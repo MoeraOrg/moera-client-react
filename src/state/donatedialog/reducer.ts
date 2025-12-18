@@ -1,7 +1,7 @@
 import { ClientAction } from "state/action";
 import { DonateDialogState } from "state/donatedialog/state";
 
-const initialState = {
+const initialState: DonateDialogState = {
     show: false,
     name: "",
     fullName: null,

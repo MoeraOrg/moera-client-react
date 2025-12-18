@@ -2,7 +2,7 @@ import { ClientAction } from "state/action";
 import { EntryCopyTextDialogState } from "state/entrycopytextdialog/state";
 import { REL_CURRENT } from "util/rel-node-name";
 
-const initialState = {
+const initialState: EntryCopyTextDialogState = {
     show: false,
     body: null,
     nodeName: REL_CURRENT,

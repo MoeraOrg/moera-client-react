@@ -1,18 +1,18 @@
 import * as immutable from 'object-path-immutable';
 
-import { ReactionsDialogState } from "state/reactionsdialog/state";
+import { ReactionsDialogState, ReactionsDialogTabsState } from "state/reactionsdialog/state";
 import { ClientAction } from "state/action";
 import { REL_CURRENT } from "util/rel-node-name";
 import { notNull } from "util/misc";
 
-const emptyReactions = {
+const emptyReactions: ReactionsDialogTabsState = {
     loading: false,
     total: 0,
     after: Number.MAX_SAFE_INTEGER,
     items: []
 };
 
-const initialState = {
+const initialState: ReactionsDialogState = {
     show: false,
     nodeName: REL_CURRENT,
     postingId: null,

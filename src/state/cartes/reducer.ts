@@ -2,9 +2,8 @@ import { CartesState } from "state/cartes/state";
 import { ClientAction } from "state/action";
 import { now } from "util/misc";
 
-const initialState = {
+const initialState: CartesState = {
     initialized: false,
-    clientIp: null,
     cartesIp: null,
     cartes: [],
     clockOffset: 0,

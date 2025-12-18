@@ -1,7 +1,7 @@
 import { PostingReplyState } from "state/postingreply/state";
 import { ClientAction } from "state/action";
 
-const initialState = {
+const initialState: PostingReplyState = {
     postingId: null
 };
 

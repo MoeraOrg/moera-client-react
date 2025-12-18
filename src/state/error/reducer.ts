@@ -1,7 +1,7 @@
 import { ErrorState } from "state/error/state";
 import { ClientAction } from "state/action";
 
-const initialState = {
+const initialState: ErrorState = {
     message: "",
     messageVerbose: "",
     visible: false

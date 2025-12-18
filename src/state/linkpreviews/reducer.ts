@@ -4,7 +4,7 @@ import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { LinkImageState, LinkPreviewsState, LinkPreviewState } from "state/linkpreviews/state";
 
-const initialState = {
+const initialState: LinkPreviewsState = {
 };
 
 const emptyLinkPreview: LinkPreviewState = {

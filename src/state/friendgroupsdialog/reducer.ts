@@ -1,7 +1,7 @@
 import { ClientAction } from "state/action";
 import { FriendGroupsDialogState } from "state/friendgroupsdialog/state";
 
-const initialState = {
+const initialState: FriendGroupsDialogState = {
     show: false,
     nodeName: null,
     changing: false

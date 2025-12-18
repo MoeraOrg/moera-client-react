@@ -12,7 +12,7 @@ import { notNull } from "util/misc";
 
 const MAX_SHORT_TITLE = 120;
 
-const initialState = {
+const initialState: PostingsState = {
 };
 
 function safeguard(posting: PostingInfo): ExtPostingInfo {

@@ -1,7 +1,7 @@
 import { FlashBoxState } from "state/flashbox/state";
 import { ClientAction } from "state/action";
 
-const initialState = {
+const initialState: FlashBoxState = {
     show: false,
     dismissing: false,
     message: null
