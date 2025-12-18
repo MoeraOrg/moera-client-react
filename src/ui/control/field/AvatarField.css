@@ -41,7 +41,7 @@
 }
 
 .avatar-field .selector .item.active, .avatar-field .selector .item.active:hover {
-    background-color: var(--bs-cyan);
+    border: 2px solid var(--bs-primary);
     cursor: default;
 }
 

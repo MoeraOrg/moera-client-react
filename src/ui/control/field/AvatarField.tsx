@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useField } from 'formik';
 import cx from 'classnames';
@@ -32,8 +32,12 @@ export function AvatarField({name, size, disabled}: Props) {
     const {overlayId: parentOverlayId} = useParent();
     const {
         visible, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
-        placement, zIndex
+        placement, zIndex, forceUpdate
     } = useButtonPopper("bottom-start", {parentOverlayId});
+
+    useEffect(() => {
+        forceUpdate && forceUpdate();
+    }, [avatarsLoaded, forceUpdate]);
 
     const onClick = (event: React.MouseEvent) => {
         if (disabled) {

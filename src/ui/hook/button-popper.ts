@@ -16,7 +16,7 @@ export function useButtonPopper(placement: Placement, options: ButtonPopperOptio
     const [buttonRef, setButtonRef] = useState<Element | null>(null);
     const [popperRef, setPopperRef] = useState<HTMLElement | null>(null);
     const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null);
-    const {styles, attributes, state} = usePopper(
+    const {styles, attributes, state, forceUpdate} = usePopper(
         buttonRef,
         popperRef,
         {placement, ...options, modifiers: [{name: "arrow", options: {element: arrowRef}}]}
@@ -40,6 +40,7 @@ export function useButtonPopper(placement: Placement, options: ButtonPopperOptio
         visible,
         setVisible,
         hide,
+        forceUpdate,
         onToggle,
         setButtonRef,
         setPopperRef,
