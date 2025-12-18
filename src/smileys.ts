@@ -20,7 +20,7 @@ export const SMILEYS: Smiley[] = [
     },
     {
         // 8-)
-        regex: /^8-?\)$/,
+        regex: /^8-\)$/,
         emoji: 0x1f60a
     },
     {
