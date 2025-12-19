@@ -12,8 +12,9 @@ export function normalizeUrl(url: string | null | undefined): string | null {
     return url.endsWith("/") ? url.substring(0, url.length - 1) : url;
 }
 
-export function urlWithParameters(url: string,
-                                  parameters: {[name: string]: string | number | boolean | null | undefined}): string {
+export function urlWithParameters(
+    url: string, parameters: {[name: string]: string | number | boolean | null | undefined}
+): string {
     let query = "";
     for (let name in parameters) {
         if (parameters.hasOwnProperty(name)) {
