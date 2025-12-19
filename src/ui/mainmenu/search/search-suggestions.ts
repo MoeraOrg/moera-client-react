@@ -15,6 +15,7 @@ import { emptySearchFilter } from "state/search/empty";
 import { useSuggestions } from "ui/hook";
 import { SearchListItem } from "ui/mainmenu/search/SearchSuggestions";
 import { namesListQuery } from "util/names-list";
+import { ut } from "util/url";
 
 interface UseSearchSuggestionsProps {
     onSubmit?: (success: boolean) => void;
@@ -77,8 +78,7 @@ export function useSearchSuggestions(
                         if (atNode) {
                             dispatch(goToSearch(query, "content", emptySearchFilter));
                         } else {
-                            const q = "query=" + encodeURIComponent(query);
-                            dispatch(initFromNodeLocation(searchNode, "/search", q, null, null));
+                            dispatch(initFromNodeLocation(searchNode, "/search", ut`query=${query}`, null, null));
                         }
                     }
                     break;
