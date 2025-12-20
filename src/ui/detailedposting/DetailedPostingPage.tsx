@@ -60,6 +60,12 @@ function getBackFeedAndStory(
         backHref = "/news";
         backTitle = t("back-news");
     }
+    if (story == null && atHome) {
+        story = getStory(posting, "explore");
+        backNodeName = REL_HOME;
+        backHref = "/explore";
+        backTitle = t("back-explore");
+    }
     if (story == null) {
         backNodeName = REL_HOME;
         backHref = newsHref;
@@ -111,7 +117,7 @@ export default function DetailedPostingPage() {
                             </MobileBack>
                         </BackBoxInner>
                     </BackBox>
-                    {(postingReady && story) &&
+                    {postingReady &&
                         <DetailedPosting posting={posting} story={story} deleting={deleting}/>
                     }
                     {!postingReady && loading &&

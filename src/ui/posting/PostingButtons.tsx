@@ -18,7 +18,7 @@ import "./PostingButtons.css";
 
 interface Props {
     posting: PostingInfo;
-    story: MinimalStoryInfo;
+    story: MinimalStoryInfo | null;
     menu?: boolean;
 }
 

@@ -48,6 +48,7 @@
   "avatar-too-small": "Avatar image size should be at least 100x100 pixels.",
   "back": "Back",
   "back-complaints": "Back to the list of complaints",
+  "back-explore": "Back to Explore",
   "back-news": "Back to News",
   "back-post": "Back to Post",
   "back-posts": "Back to {name}'s posts",

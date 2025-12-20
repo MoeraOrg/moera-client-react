@@ -39,7 +39,7 @@ import "ui/entry/EntryMenu.css";
 
 interface Props {
     posting: PostingInfo;
-    story: MinimalStoryInfo;
+    story: MinimalStoryInfo | null;
     detailed?: boolean;
 }
 
@@ -59,7 +59,9 @@ function PostingMenuItems({posting, story, detailed}: Props) {
     );
     const postingEditable = useSelector((state: ClientState) => isPermitted("edit", posting, "owner", state));
     const postingDeletable = useSelector((state: ClientState) => isPermitted("delete", posting, "private", state));
-    const storyEditable = useSelector((state: ClientState) => isPermitted("edit", story, "admin", state));
+    const storyEditable = useSelector((state: ClientState) =>
+        story != null && isPermitted("edit", story, "admin", state)
+    );
     const googlePlayGoverned = isPostingSheriff(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);
     const googlePlaySheriff = useSelector((state: ClientState) =>
         getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE
@@ -118,9 +120,9 @@ function PostingMenuItems({posting, story, detailed}: Props) {
         }));
     };
 
-    const onPin = () => dispatch(storyPinningUpdate(story.id, !story.pinned));
+    const onPin = () => story != null && dispatch(storyPinningUpdate(story.id, !story.pinned));
 
-    const onChangeDate = () => dispatch(openChangeDateDialog(story.id, story.publishedAt));
+    const onChangeDate = () => story != null && dispatch(openChangeDateDialog(story.id, story.publishedAt));
 
     const onDontRecommend = () => {
         dispatch(confirmBox({
@@ -232,7 +234,7 @@ function PostingMenuItems({posting, story, detailed}: Props) {
                 nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onPin,
-                show: story != null && storyEditable
+                show: storyEditable
             },
             {
                 title: t("change-date-time"),

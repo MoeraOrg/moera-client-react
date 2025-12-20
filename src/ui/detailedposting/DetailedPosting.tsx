@@ -31,7 +31,7 @@ import { REL_CURRENT } from "util/rel-node-name";
 import { getPageHeaderHeight } from "util/ui";
 
 interface Props {
-    story: MinimalStoryInfo;
+    story: MinimalStoryInfo | null;
     posting: PostingInfo;
     deleting?: boolean | null;
 }
@@ -79,10 +79,10 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
                         <PostingSheriffVisibility posting={posting}/>
                     }
                     <br/>
-                    <PostingDate posting={posting} publishedAt={story.publishedAt}/>
+                    <PostingDate posting={posting} publishedAt={story != null ? story.publishedAt : posting.createdAt}/>
                     {posting.totalRevisions > 1 &&
                         <PostingUpdated createdAt={posting.createdAt} editedAt={posting.editedAt}
-                                        publishedAt={story.publishedAt}/>
+                                        publishedAt={story != null ? story.publishedAt : posting.createdAt}/>
                     }
                     <PostingVisibility posting={posting} editable={postingEditable}/>
                 </div>
