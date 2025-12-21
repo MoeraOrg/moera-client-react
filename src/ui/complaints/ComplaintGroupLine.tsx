@@ -10,6 +10,7 @@ import { getComplaintHeadingHtml, getComplaintStatusDetails } from "ui/complaint
 import { NameDisplayMode } from "ui/types";
 import { Icon } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
+import { ut } from "util/url";
 import "./ComplaintGroupLine.css";
 
 interface Props {
@@ -26,7 +27,7 @@ export default function ComplaintGroupLine({group}: Props) {
     const headingHtml = getComplaintHeadingHtml(group, nameDisplayMode, t);
 
     return (
-        <Jump href={`/complaints/${group.id}`} className="complaint-group-line">
+        <Jump href={ut`/complaints/${group.id}`} className="complaint-group-line">
             <div className={cx("status", statusClass)} title={t("complaint-status." + group.status)}>
                 {statusIcon && <Icon icon={statusIcon} size="1.2em"/>}
             </div>

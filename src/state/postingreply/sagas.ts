@@ -16,6 +16,7 @@ import { mentionName } from "util/names";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { htmlEntities } from "util/html";
 import { universalLocation } from "util/universal-url";
+import { ut } from "util/url";
 
 export default [
     executor("POSTING_REPLY", "", postingReplySaga)
@@ -116,11 +117,11 @@ async function postingReplySaga(action: WithContext<PostingReplyAction>): Promis
         if (nodeRootPage !== homeRootPage) {
             if (homeRootLocation != null) {
                 dispatch(initFromLocation(
-                    homeOwnerName, homeRootLocation, "/compose", `?draft=${draft.id}`, null
+                    homeOwnerName, homeRootLocation, "/compose", ut`?draft=${draft.id}`, null
                 ).causedBy(action))
             }
         } else {
-            dispatch(goToLocation("/compose", `?draft=${draft.id}`, null).causedBy(action))
+            dispatch(goToLocation("/compose", ut`?draft=${draft.id}`, null).causedBy(action))
         }
     } catch (e) {
         dispatch(postingReplyFailed().causedBy(action));
@@ -145,9 +146,9 @@ function replySubject(subject?: string | null, subjectPrefix?: string | null): s
 
 async function postingHref(action: PostingReplyAction, posting: PostingInfo, rootNodePage: string): Promise<string> {
     if (posting.receiverName == null) {
-        return `${rootNodePage}/post/${posting.id}`;
+        return rootNodePage + ut`/post/${posting.id}`;
     } else {
         const rootReceiverPage = await getNodeUri(action, posting.receiverName);
-        return `${rootReceiverPage}/post/${posting.receiverPostingId}`;
+        return rootReceiverPage + ut`/post/${posting.receiverPostingId}`;
     }
 }

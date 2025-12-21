@@ -7,6 +7,7 @@ import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
 import Jump from "ui/navigation/Jump";
 import { RelNodeName } from "util/rel-node-name";
+import { ut } from "util/url";
 import "./CommentDate.css"
 
 interface Props {
@@ -22,7 +23,7 @@ export default function CommentDate({nodeName, postingId, commentId, createdAt}:
 
     const date = fromUnixTime(createdAt);
     return (
-        <Jump nodeName={nodeName} href={`/post/${postingId}?comment=${commentId}`} className="date">
+        <Jump nodeName={nodeName} href={ut`/post/${postingId}?comment=${commentId}`} className="date">
             <time dateTime={formatISO(date)} title={format(date, "dd-MM-yyyy HH:mm")}>
                 {tDistanceToNow(date, t)}
             </time>

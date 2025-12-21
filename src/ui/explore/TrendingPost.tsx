@@ -7,6 +7,7 @@ import { AvatarWithPopup } from "ui/control";
 import { Icon, MaterialSymbol, msComment, msThumbUp, msTrendingUp16 } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
 import NodeName from "ui/nodename/NodeName";
+import { ut } from "util/url";
 import "./TrendingPost.css";
 
 interface Props {
@@ -21,7 +22,7 @@ export default function TrendingPost({trending, small, counters}: Props) {
             <AvatarWithPopup ownerName={trending.ownerName} ownerFullName={trending.ownerFullName}
                              avatar={trending.ownerAvatar} size={24}/>
             <NodeName className="owner" name={trending.ownerName} fullName={trending.ownerFullName}/>
-            <Jump nodeName={trending.nodeName} href={`/post/${trending.postingId}`} className="heading">
+            <Jump nodeName={trending.nodeName} href={ut`/post/${trending.postingId}`} className="heading">
                 {trending.heading}
             </Jump>
             <div className="counters">

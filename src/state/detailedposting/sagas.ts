@@ -112,6 +112,7 @@ import { toAvatarDescription } from "util/avatar";
 import { getWindowSelectionHtml } from "util/ui";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { delay, notNull } from "util/misc";
+import { ut } from "util/url";
 
 export default [
     executor("DETAILED_POSTING_LOAD", "", detailedPostingLoadSaga),
@@ -654,7 +655,7 @@ async function commentCopyLinkSaga(action: WithContext<CommentCopyLinkAction>): 
     const {id, postingId} = action.payload;
     try {
         const href = await postingGetLink(action, postingId, REL_CURRENT);
-        await clipboardCopy(`${href}?comment=${id}`);
+        await clipboardCopy(href + ut`?comment=${id}`);
         if (!Browser.isAndroidBrowser()) {
             dispatch(flashBox(i18n.t("link-copied")).causedBy(action));
         }

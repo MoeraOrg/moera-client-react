@@ -39,6 +39,7 @@ import { getSetting } from "state/settings/selectors";
 import * as Browser from "ui/browser";
 import { REL_HOME, REL_SEARCH } from "util/rel-node-name";
 import { universalLocation } from "util/universal-url";
+import { ut } from "util/url";
 
 export default [
     executor("SEARCH_LOAD", null, searchLoadSaga),
@@ -236,7 +237,7 @@ async function searchEntryCopyLinkSaga(action: WithContext<SearchEntryCopyLinkAc
 
     try {
         const nodeUri = await getNodeUri(action, nodeName);
-        const location = `/post/${postingId}` + (commentId != null ? `?comment=${commentId}` : "");
+        const location = ut`/post/${postingId}` + (commentId != null ? ut`?comment=${commentId}` : "");
         const href = universalLocation(null, nodeName, nodeUri, location);
         await clipboardCopy(href);
         if (!Browser.isAndroidBrowser()) {

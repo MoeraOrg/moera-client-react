@@ -2,6 +2,7 @@ import React from 'react';
 
 import { DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import Jump from "ui/navigation/Jump";
+import { ut } from "util/url";
 
 interface Props {
     draft: ExtDraftInfo | DraftPostingInfo;
@@ -13,7 +14,7 @@ export default function DraftSubject({draft}: Props) {
     }
     return (
         <div className="subject">
-            <Jump href={`/post/${draft.id}`}><span dangerouslySetInnerHTML={{__html: draft.subjectHtml}}/></Jump>
+            <Jump href={ut`/post/${draft.id}`}><span dangerouslySetInnerHTML={{__html: draft.subjectHtml}}/></Jump>
         </div>
     );
 }

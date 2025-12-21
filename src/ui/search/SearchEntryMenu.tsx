@@ -7,6 +7,7 @@ import { ExtSearchEntryInfo } from "state/search/state";
 import { shareDialogPrepare } from "state/sharedialog/actions";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
 import { REL_CURRENT } from "util/rel-node-name";
+import { ut } from "util/url";
 import "ui/entry/EntryMenu.css";
 
 interface Props {
@@ -18,8 +19,8 @@ function SearchEntryMenuItems({entry}: Props) {
     const {t} = useTranslation();
 
     const entryHref = entry.commentId == null
-        ? `/post/${entry.postingId}`
-        : `/post/${entry.postingId}?comment=${entry.commentId}`;
+        ? ut`/post/${entry.postingId}`
+        : ut`/post/${entry.postingId}?comment=${entry.commentId}`;
 
     const onCopyLink = () => dispatch(searchEntryCopyLink(entry.nodeName, entry.postingId, entry.commentId ?? null));
 

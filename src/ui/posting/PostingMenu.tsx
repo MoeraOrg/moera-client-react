@@ -35,6 +35,7 @@ import { recommendationDont } from "state/feeds/actions";
 import { MinimalStoryInfo } from "ui/types";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
+import { ut } from "util/url";
 import "ui/entry/EntryMenu.css";
 
 interface Props {
@@ -79,7 +80,7 @@ function PostingMenuItems({posting, story, detailed}: Props) {
         const originalDeleted = posting.receiverDeletedAt != null;
         const nodeName = originalDeleted ? REL_CURRENT : (posting.receiverName ?? posting.ownerName);
         const postingId = originalDeleted ? posting.id : (posting.receiverPostingId ?? posting.id);
-        const href = `/post/${postingId}`;
+        const href = ut`/post/${postingId}`;
 
         dispatch(shareDialogPrepare(nodeName, href));
     };
@@ -175,7 +176,7 @@ function PostingMenuItems({posting, story, detailed}: Props) {
         }));
     };
 
-    const postingHref = `/post/${posting.id}`;
+    const postingHref = ut`/post/${posting.id}`;
     return (
         <DropdownMenuItems items={[
             {
@@ -226,7 +227,7 @@ function PostingMenuItems({posting, story, detailed}: Props) {
             {
                 title: t("edit"),
                 nodeName: REL_HOME,
-                href: `/compose?id=${postingId}`,
+                href: ut`/compose?id=${postingId}`,
                 show: postingEditable
             },
             {

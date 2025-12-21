@@ -8,6 +8,7 @@ import { Tabs } from "ui/control";
 import { msKeyboardArrowRight } from "ui/material-symbols";
 import { useIsTinyScreen } from "ui/hook";
 import { getActualSheetName, getActualTab, getSheets } from "ui/settings/settings-menu";
+import { ut } from "util/url";
 import "./SettingsMenu.css";
 
 interface Props {
@@ -37,7 +38,7 @@ export default function SettingsMenu({onSelect}: Props) {
                     getSheets(tab).map(sh => ({
                         title: t(`setting.sheet.${sh.name}`),
                         value: sh.name,
-                        href: `/settings/${tab}#${sh.name}`,
+                        href: ut`/settings/${tab}#${sh.name}`,
                         className: sh.navClass
                     }))
                 }

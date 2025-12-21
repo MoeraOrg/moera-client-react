@@ -17,6 +17,7 @@ import SearchEntryMenu from "ui/search/SearchEntryMenu";
 import Jump from "ui/navigation/Jump";
 import { replaceEmojis } from "util/html";
 import { REL_SEARCH } from "util/rel-node-name";
+import { ut } from "util/url";
 
 interface PostingOwnerLineProps {
     entry: ExtSearchEntryInfo;
@@ -118,5 +119,7 @@ export default function SearchEntry({entry}: Props) {
 }
 
 function getEntryLink(entry: SearchEntryInfo): string {
-    return entry.commentId == null ? `/post/${entry.postingId}` : `/post/${entry.postingId}?comment=${entry.commentId}`;
+    return entry.commentId == null
+        ? ut`/post/${entry.postingId}`
+        : ut`/post/${entry.postingId}?comment=${entry.commentId}`;
 }

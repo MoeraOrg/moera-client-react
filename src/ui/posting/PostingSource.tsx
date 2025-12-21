@@ -5,6 +5,7 @@ import { Icon, msRepeat } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
 import { DelayedPopover } from "ui/control";
 import PostingSources from "ui/posting/PostingSources";
+import { ut } from "util/url";
 import "./PostingSource.css";
 
 interface Props {
@@ -23,7 +24,7 @@ export default function PostingSource({posting}: Props) {
                 }
                 return (
                     <Jump ref={ref} className="posting-source" nodeName={posting.receiverName}
-                          href={`/post/${posting.receiverPostingId}`}>
+                          href={ut`/post/${posting.receiverPostingId}`}>
                         <Icon icon={msRepeat} size="1em"/>
                     </Jump>
                 );

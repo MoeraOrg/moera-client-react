@@ -11,6 +11,7 @@ import { Tabs } from "ui/control";
 import { getFriendGroupTitle } from "ui/control/principal-display";
 import { useMediaQuery } from "ui/hook";
 import { msGroupAdd, msLock } from "ui/material-symbols";
+import { ut } from "util/url";
 import "./PeopleTabs.css";
 
 interface PeopleTabsProps {
@@ -66,7 +67,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                     {
                         title: t("friend-groups.friends"),
                         value: friendsGroupId ?? "",
-                        href: `/people/${friendsGroupId ?? ""}`,
+                        href: ut`/people/${friendsGroupId ?? ""}`,
                         active: inFriendGroup,
                         visible: friendsTotal != null && friendGroups.length > 0,
                         count: loadedGeneral ? friendsTotal?.[friendsGroupId ?? 0] ?? 0: undefined,
@@ -109,7 +110,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                     tabs={friendGroups.map(friendGroup => ({
                         title: friendGroup.title !== "t:friends" ? getFriendGroupTitle(friendGroup.title, t) : t("all"),
                         value: friendGroup.id,
-                        href: `/people/${friendGroup.id}`,
+                        href: ut`/people/${friendGroup.id}`,
                         count: friendsTotal?.[friendGroup.id] ?? 0,
                         principal: friendGroup.title !== "t:friends"
                             ? friendGroup.operations?.view ?? "public"

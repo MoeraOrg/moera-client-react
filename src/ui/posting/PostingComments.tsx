@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Icon, msCommentRegular } from "ui/material-symbols";
 import { useIsTinyScreen } from "ui/hook";
 import Jump from "ui/navigation/Jump";
+import { ut } from "util/url";
 import "./PostingComments.css";
 
 interface Props {
@@ -22,7 +23,7 @@ export default function PostingComments({postingId, totalComments}: Props) {
     const commentsText = !tinyScreen ? t("count-comments", {count: totalComments}) : `${totalComments}`;
     return (
         <div className="posting-comments">
-            <Jump className="total-comments" href={`/post/${postingId}#comments`}>
+            <Jump className="total-comments" href={ut`/post/${postingId}#comments`}>
                 <Icon icon={msCommentRegular} size="1.2em"/>
                 <span className="caption">{commentsText}</span>
             </Jump>

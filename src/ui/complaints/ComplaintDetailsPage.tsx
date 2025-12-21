@@ -20,6 +20,7 @@ import { getComplaintHeadingHtml, getComplaintStatusDetails } from "ui/complaint
 import Complaint from "ui/complaints/Complaint";
 import ComplaintDecisionEditor from "ui/complaints/ComplaintDecisionEditor";
 import ComplaintDecisionView from "ui/complaints/ComplaintDecisionView";
+import { ut } from "util/url";
 import "./ComplaintDetailsPage.css";
 
 export default function ComplaintsListPage() {
@@ -37,9 +38,9 @@ export default function ComplaintsListPage() {
 
     let href: string = "/";
     if (complaintGroup?.remotePostingId != null) {
-        href = `/post/${complaintGroup.remotePostingId}`;
+        href = ut`/post/${complaintGroup.remotePostingId}`;
         if (complaintGroup.remoteCommentId != null) {
-            href += `?comment=${complaintGroup.remoteCommentId}`;
+            href += ut`?comment=${complaintGroup.remoteCommentId}`;
         }
     }
 

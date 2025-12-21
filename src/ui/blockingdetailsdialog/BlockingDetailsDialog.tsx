@@ -12,6 +12,7 @@ import EntryHtml from "ui/entry/EntryHtml";
 import Jump from "ui/navigation/Jump";
 import { formatFullName } from "util/names";
 import { htmlEntities, replaceEmojis } from "util/html";
+import { ut } from "util/url";
 
 export default function BlockingDetailsDialog() {
     const loaded = useSelector((state: ClientState) => state.blockingDetailsDialog.loaded);
@@ -42,7 +43,7 @@ export default function BlockingDetailsDialog() {
                 {(remoteNodeName != null && remotePostingId != null) &&
                     <p>
                         <strong>{t("in-post")}: </strong>
-                        <Jump nodeName={remoteNodeName} href={`/post/${remotePostingId}`}>
+                        <Jump nodeName={remoteNodeName} href={ut`/post/${remotePostingId}`}>
                             <span dangerouslySetInnerHTML={{__html: headingHtml}}/>
                         </Jump>
                     </p>

@@ -26,6 +26,7 @@ import { openBlockDialog } from "state/blockdialog/actions";
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
 import { REL_CURRENT } from "util/rel-node-name";
+import { ut } from "util/url";
 
 interface Props {
     nodeName: string;
@@ -68,7 +69,7 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
         dispatch(entryCopyText(comment.body, "ask", receiverName ?? REL_CURRENT, comment.media ?? null));
 
     const onShare = () => {
-        const href = `/post/${postingId}?comment=${comment.id}`;
+        const href = ut`/post/${postingId}?comment=${comment.id}`;
         dispatch(shareDialogPrepare(nodeName, href));
     };
 
@@ -140,7 +141,7 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
         }
     };
 
-    const commentHref = `/post/${postingId}?comment=${comment.id}`;
+    const commentHref = ut`/post/${postingId}?comment=${comment.id}`;
     const hideable =
         (commentEditable && isPrincipalIn("view", comment, "public", "public", {useOperations: "owner"}))
         || (

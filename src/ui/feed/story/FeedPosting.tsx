@@ -27,6 +27,7 @@ import PostingComments from "ui/posting/PostingComments";
 import PostingButtons from "ui/posting/PostingButtons";
 import Jump from "ui/navigation/Jump";
 import { RelNodeName } from "util/rel-node-name";
+import { ut } from "util/url";
 import "ui/posting/Posting.css";
 import "ui/entry/Entry.css";
 
@@ -43,7 +44,7 @@ function Content({nodeName, posting}: ContentProps) {
             <div className="content">
                 <EntryHtml postingId={posting.id} html={posting.bodyPreview.text} nodeName={nodeName}
                            media={posting.media}/>
-                <Jump href={`/post/${posting.id}`} className="btn btn-link read-more">{t("continue-reading")}</Jump>
+                <Jump href={ut`/post/${posting.id}`} className="btn btn-link read-more">{t("continue-reading")}</Jump>
             </div>
         );
     } else {

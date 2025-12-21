@@ -11,6 +11,7 @@ import { Button, ModalDialog } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import { formatFullName } from "util/names";
 import { htmlEntities, replaceEmojis } from "util/html";
+import { ut } from "util/url";
 
 export default function SheriffOrderDetailsDialog() {
     const loaded = useSelector((state: ClientState) => state.sheriffOrderDetailsDialog.loaded);
@@ -68,7 +69,7 @@ export default function SheriffOrderDetailsDialog() {
                         <p>
                             {info?.complaintGroupId != null ?
                                 <Trans i18nKey="decision-upon-complaint">
-                                    <Jump nodeName={info.sheriffName} href={`/complaints/${info.complaintGroupId}`}
+                                    <Jump nodeName={info.sheriffName} href={ut`/complaints/${info.complaintGroupId}`}
                                           onNear={onOpenComplaint} onFar={onOpenComplaint}/>
                                 </Trans>
                             :

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { shareDialogPrepare } from "state/sharedialog/actions";
 import { Icon, msShare } from "ui/material-symbols";
+import { ut } from "util/url";
 
 interface Props {
     nodeName: string;
@@ -16,7 +17,7 @@ export default function CommentShareButton({nodeName, postingId, commentId}: Pro
     const {t} = useTranslation();
 
     const onClick = () => {
-        const href = `/post/${postingId}?comment=${commentId}`;
+        const href = ut`/post/${postingId}?comment=${commentId}`;
         dispatch(shareDialogPrepare(nodeName, href));
     }
 

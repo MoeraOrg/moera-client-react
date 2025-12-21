@@ -33,6 +33,7 @@ import ComposeFeatures from "ui/compose/features/ComposeFeatures";
 import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
 import ComposePreviewDialog from "ui/compose/ComposePreviewDialog";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
+import { ut } from "util/url";
 import "./ComposePage.css";
 
 type Props = ComposePageProps & FormikProps<ComposePageValues>;
@@ -71,7 +72,7 @@ function ComposePageInner(props: Props) {
     let backTitle = t("back-news");
     if (postingId != null) {
         backNodeName = REL_CURRENT;
-        backHref = `/post/${postingId}`;
+        backHref = ut`/post/${postingId}`;
         backTitle = t("back-post")
     }
 
