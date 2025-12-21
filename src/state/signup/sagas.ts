@@ -8,7 +8,7 @@ import { WithContext } from "state/action-types";
 import { barrier, dispatch, select } from "state/store-sagas";
 import { executor } from "state/executor";
 import { homeOwnerSet } from "state/home/actions";
-import { boot, goToMnemonic } from "state/navigation/actions";
+import { boot, goToLocation } from "state/navigation/actions";
 import { mnemonicSet, mnemonicStore, registerNameSucceeded } from "state/nodename/actions";
 import {
     SIGN_UP_STAGE_CONNECT,
@@ -158,7 +158,7 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
             if (quick) {
                 dispatch(mnemonicStore().causedBy(action));
             } else {
-                dispatch(goToMnemonic().causedBy(action));
+                dispatch(goToLocation("/mnemonic", null, null).causedBy(action));
             }
         } catch (e) {
             dispatch(signUpFailed(SIGN_UP_STAGE_NAME).causedBy(action));

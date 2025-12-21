@@ -393,6 +393,9 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
         case "DETAILED_POSTING_SCROLLED_TO_GALLERY":
             return immutable.set(state, "galleryFocused", false);
 
+        case "DETAILED_POSTING_EXPAND_GALLERY":
+            return immutable.set(state, "galleryExpanded", action.payload.expanded);
+
         case "COMMENTS_SCROLLED_TO_COMMENTS":
             return immutable.set(state, "comments.focused", false);
 

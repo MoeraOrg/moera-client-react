@@ -38,6 +38,12 @@ export type DetailedPostingScrolledToGalleryAction = ActionWithoutPayload<"DETAI
 export const detailedPostingScrolledToGallery = (): DetailedPostingScrolledToGalleryAction =>
     actionWithoutPayload("DETAILED_POSTING_SCROLLED_TO_GALLERY");
 
+export type DetailedPostingExpandGalleryAction = ActionWithPayload<"DETAILED_POSTING_EXPAND_GALLERY", {
+    expanded: boolean;
+}>;
+export const detailedPostingExpandGallery = (expanded: boolean): DetailedPostingExpandGalleryAction =>
+    actionWithPayload("DETAILED_POSTING_EXPAND_GALLERY", {expanded});
+
 export type CommentsReceiverSwitchAction = ActionWithoutPayload<"COMMENTS_RECEIVER_SWITCH">;
 export const commentsReceiverSwitch = (): CommentsReceiverSwitchAction =>
     actionWithoutPayload("COMMENTS_RECEIVER_SWITCH");
@@ -559,6 +565,7 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | DetailedPostingLoadAttachedAction
     | DetailedPostingLoadedAttachedAction
     | DetailedPostingScrolledToGalleryAction
+    | DetailedPostingExpandGalleryAction
     | CommentsReceiverSwitchAction
     | CommentsReceiverSwitchedAction
     | CommentsReceiverFeaturesLoadAction

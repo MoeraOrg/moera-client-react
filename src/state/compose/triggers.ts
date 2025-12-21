@@ -14,7 +14,7 @@ import {
     composeReady,
     composeSharedTextLoad
 } from "state/compose/actions";
-import { goToPosting, updateLocation } from "state/navigation/actions";
+import { goToLocation, updateLocation } from "state/navigation/actions";
 import { isAtComposePage } from "state/navigation/selectors";
 import {
     getComposeDraftId,
@@ -32,6 +32,7 @@ import { postingSet } from "state/postings/actions";
 import { getPostingStory, hasPostingFeedReference } from "state/postings/selectors";
 import { storyAdded, storyUpdated } from "state/stories/actions";
 import { REL_CURRENT } from "util/rel-node-name";
+import { ut } from "util/url";
 
 export default [
     trigger("GO_TO_PAGE", conj(isAtComposePage, isComposePostingToBeLoaded), composePostingLoad),
@@ -48,7 +49,7 @@ export default [
     trigger(
         "COMPOSE_POST_SUCCEEDED",
         true,
-        (signal: ComposePostSucceededAction) => goToPosting(signal.payload.posting.id)
+        (signal: ComposePostSucceededAction) => goToLocation(ut`/post/${signal.payload.posting.id}`, null, null)
     ),
     trigger(
         "COMPOSE_POST_SUCCEEDED",

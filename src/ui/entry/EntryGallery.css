@@ -131,7 +131,8 @@
     opacity: 0;
     transition: opacity .15s ease-in-out;
     font-size: 1.3em;
-    display: block;
+    display: grid;
+    place-items: center;
     width: 1.75em;
     height: 1.75em;
     z-index: var(--zindex-text-overlay);

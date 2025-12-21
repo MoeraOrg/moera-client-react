@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { PostingInfo } from "api";
 import { ClientState } from "state/state";
-import { detailedPostingLoadAttached } from "state/detailedposting/actions";
+import { detailedPostingExpandGallery, detailedPostingLoadAttached } from "state/detailedposting/actions";
 import { isPermitted } from "state/node/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import { MinimalStoryInfo } from "ui/types";
@@ -38,12 +38,10 @@ interface Props {
 
 export default function DetailedPosting({story, posting, deleting}: Props) {
     const loadedAttached = useSelector((state: ClientState) => state.detailedPosting.loadedAttached);
-    const galleryExpanded = useSelector((state: ClientState) => state.detailedPosting.galleryExpanded);
+    const expanded = useSelector((state: ClientState) => state.detailedPosting.galleryExpanded);
     const postingEditable = useSelector((state: ClientState) => isPermitted("edit", posting, "owner", state));
     const isSheriff = useSelector((state: ClientState) => getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE);
     const dispatch = useDispatch();
-
-    const [expanded, setExpanded] = useState<boolean>(galleryExpanded);
 
     if (deleting) {
         return (
@@ -54,7 +52,7 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
     }
 
     const onExpand = () => {
-        setExpanded(true);
+        dispatch(detailedPostingExpandGallery(true));
         if (!loadedAttached) {
             dispatch(detailedPostingLoadAttached());
         }
@@ -62,7 +60,7 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
     }
 
     const onCollapse = () => {
-        setExpanded(false);
+        dispatch(detailedPostingExpandGallery(false));
         scrollToPostingGallery();
     }
 

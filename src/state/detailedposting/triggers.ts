@@ -1,5 +1,5 @@
 import { conj, inv, trigger } from "state/trigger";
-import { bottomMenuShow, goToTimeline, updateLocation } from "state/navigation/actions";
+import { bottomMenuShow, goToLocation, updateLocation } from "state/navigation/actions";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import {
     commentDialogCommentLoad,
@@ -92,6 +92,7 @@ export default [
         conj(isAtDetailedPostingPage, isCommentComposeDraftToBeLoaded),
         commentDraftLoad(false)
     ),
+    trigger("DETAILED_POSTING_EXPAND_GALLERY", true, updateLocation),
     trigger(
         "OPEN_COMMENT_DIALOG",
         conj(isAtDetailedPostingPage, isCommentDialogDraftToBeLoaded),
@@ -146,7 +147,7 @@ export default [
         "POSTING_DELETED",
         (state, signal: PostingDeletedAction) =>
             isAtDetailedPostingPage(state) && isDetailedPostingId(state, signal.payload.id),
-        signal => goToTimeline(getPostingMoment(signal.payload, "timeline"))
+        signal => goToLocation(`/timeline?before=${getPostingMoment(signal.payload, "timeline")}`, null, null)
     ),
     trigger(
         "COMMENT_POSTED",

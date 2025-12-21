@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Form, FormikBag, FormikErrors, withFormik } from 'formik';
 
 import { dispatch, select } from "state/store-sagas";
-import { goToStartReading, goToVerifyEmail } from "state/navigation/actions";
+import { goToLocation } from "state/navigation/actions";
 import { mnemonicStore, mnemonicUnset } from "state/nodename/actions";
 import { CheckboxField } from "ui/control/field";
 import { Button } from "ui/control";
@@ -58,9 +58,9 @@ const mnemonicPageLogic = {
         dispatch(mnemonicUnset(false));
         const email = select(state => state.signUp.email);
         if (email) {
-            dispatch(goToVerifyEmail());
+            dispatch(goToLocation("/profile/verify-email", null, null));
         } else {
-            dispatch(goToStartReading());
+            dispatch(goToLocation("/start-reading", null, null));
         }
         formik.setSubmitting(false);
     }

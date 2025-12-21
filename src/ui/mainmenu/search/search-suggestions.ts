@@ -3,15 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import deepEqual from "react-fast-compare";
 
 import { ClientState } from "state/state";
-import { ownerSwitch } from "state/node/actions";
 import { isAtNode } from "state/node/selectors";
 import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
-import { goToSearch, initFromNodeLocation } from "state/navigation/actions";
+import { goToLocation, initFromNodeLocation } from "state/navigation/actions";
 import { isAtSearchPage } from "state/navigation/selectors";
 import { searchHistoryDelete, searchHistoryPrepare } from "state/search/actions";
 import { getSearchNodeName, getSearchQuery } from "state/search/selectors";
-import { emptySearchFilter } from "state/search/empty";
 import { useSuggestions } from "ui/hook";
 import { SearchListItem } from "ui/mainmenu/search/SearchSuggestions";
 import { namesListQuery } from "util/names-list";
@@ -69,14 +67,14 @@ export function useSearchSuggestions(
                 case "name":
                     inputDom.current?.blur();
                     if (item.nodeName != null) {
-                        dispatch(ownerSwitch(item.nodeName));
+                        dispatch(initFromNodeLocation(item.nodeName, "/timeline", null, null, null));
                     }
                     break;
                 case "search":
                     inputDom.current?.blur();
                     if (query) {
                         if (atNode) {
-                            dispatch(goToSearch(query, "content", emptySearchFilter));
+                            dispatch(goToLocation("/search", ut`query=${query}`, null));
                         } else {
                             dispatch(initFromNodeLocation(searchNode, "/search", ut`query=${query}`, null, null));
                         }
@@ -84,7 +82,7 @@ export function useSearchSuggestions(
                     break;
                 case "history":
                     inputDom.current?.blur();
-                    dispatch(goToSearch(item.query, "content", emptySearchFilter));
+                    dispatch(goToLocation("/search", ut`query=${item.query}`, null));
                     break;
             }
         } else {
