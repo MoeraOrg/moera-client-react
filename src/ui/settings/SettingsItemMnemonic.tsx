@@ -23,7 +23,7 @@ export default function SettingsItemMnemonic() {
                     <b/>
                 </Trans>
             </p>
-            <Button variant="outline-primary" onClick={() => dispatch(mnemonicDialogOpen())}>{t("open")}</Button>
+            <Button variant="primary" onClick={() => dispatch(mnemonicDialogOpen())}>{t("open")}</Button>
         </div>
     );
 }
