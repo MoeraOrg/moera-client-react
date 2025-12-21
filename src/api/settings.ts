@@ -657,6 +657,12 @@ const META: ClientSettingMetaInfo[] = [
         defaultValue: "false",
         internal: true
     },
+    {
+        name: "explore.news.show",
+        type: "bool",
+        defaultValue: "true",
+        modifiers: {}
+    },
 ];
 
 function collectMetaMap(map: Map<string, ClientSettingMetaInfo>, metadata: ClientSettingMetaInfo[]) {

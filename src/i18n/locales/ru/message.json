@@ -779,6 +779,7 @@
         "comment_submit-key": "Отправлять комментарий по нажатию",
         "entry_gallery_loop": "Зацикливать просмотр галереи",
         "explore_discussions_notify": "Уведомлять о новых активных обсуждениях",
+        "explore_news_show": "Показывать Популярное на странице Новости",
         "feed_width": "Ширина ленты (в пикселах)",
         "friends_subscribe-on-add": "При добавлении друга, на которого вы не подписаны",
         "friends_subscribe-on-add-items": {

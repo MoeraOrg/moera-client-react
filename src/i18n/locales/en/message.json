@@ -779,6 +779,7 @@
         "comment_submit-key": "Send comment when pressed",
         "entry_gallery_loop": "Loop gallery view",
         "explore_discussions_notify": "Notify about new active discussions ",
+        "explore_news_show": "Show Trending on the News page",
         "feed_width": "Feed width (in pixels)",
         "friends_subscribe-on-add": "When adding a friend you are not subscribed to",
         "friends_subscribe-on-add-items": {

@@ -1,7 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { ClientState } from "state/state";
 import { isAtNewsPage } from "state/navigation/selectors";
+import { getSetting } from "state/settings/selectors";
 import { OnlyDesktop } from "ui/control";
 import FeedPage from "ui/feed/FeedPage";
 import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
@@ -15,6 +17,7 @@ import "./NewsPage.css";
 
 export default function NewsPage() {
     const visible = useSelector(isAtNewsPage);
+    const showExplore = useSelector((state: ClientState) => getSetting(state, "explore.news.show"));
 
     return (
         <>
@@ -33,7 +36,7 @@ export default function NewsPage() {
                 </main>
                 <OnlyDesktop>
                     <div className="page-right-pane">
-                        <ExploreBox/>
+                        {showExplore && <ExploreBox/>}
                     </div>
                 </OnlyDesktop>
             </Page>
