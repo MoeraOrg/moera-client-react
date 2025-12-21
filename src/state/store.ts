@@ -25,7 +25,6 @@ import settings from "state/settings/reducer";
 import complaints from "state/complaints/reducer";
 import cartes from "state/cartes/reducer";
 import reactionsDialog from "state/reactionsdialog/reducer";
-import postingReply from "state/postingreply/reducer";
 import changeDateDialog from "state/changedatedialog/reducer";
 import people from "state/people/reducer";
 import nodeCards from "state/nodecards/reducer";
@@ -153,7 +152,6 @@ const reducers = combineReducers({
     complaints,
     cartes,
     reactionsDialog,
-    postingReply,
     changeDateDialog,
     people,
     nodeCards,

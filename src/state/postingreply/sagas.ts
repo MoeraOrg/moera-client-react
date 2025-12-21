@@ -2,7 +2,7 @@ import { DraftText, Node, NodeName, PostingInfo, PrincipalValue, SourceFormat } 
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
-import { PostingReplyAction, postingReplyFailed } from "state/postingreply/actions";
+import { PostingReplyAction } from "state/postingreply/actions";
 import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getNodeUri } from "state/naming/sagas";
@@ -29,7 +29,7 @@ async function postingReplySaga(action: WithContext<PostingReplyAction>): Promis
         commentAdditionDefault, reactionsEnabledDefault, reactionsNegativeEnabledDefault, reactionsPositiveDefault,
         reactionsNegativeDefault, reactionsVisibleDefault, reactionTotalsVisibleDefault
     } = select(state => ({
-            posting: getPosting(state, state.postingReply.postingId, REL_CURRENT),
+            posting: getPosting(state, action.payload.id, REL_CURRENT),
             nodeRootPage: getNodeRootPage(state),
             homeOwnerName: getHomeOwnerName(state),
             homeRootPage: getHomeRootPage(state),
@@ -124,7 +124,6 @@ async function postingReplySaga(action: WithContext<PostingReplyAction>): Promis
             dispatch(goToLocation("/compose", ut`?draft=${draft.id}`, null).causedBy(action))
         }
     } catch (e) {
-        dispatch(postingReplyFailed().causedBy(action));
         dispatch(errorThrown(e));
     }
 }

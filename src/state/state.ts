@@ -31,7 +31,6 @@ import { NodeCardsState } from "state/nodecards/state";
 import { NodeNameState } from "state/nodename/state";
 import { PeopleState } from "state/people/state";
 import { PeopleHideDialogState } from "state/peoplehidedialog/state";
-import { PostingReplyState } from "state/postingreply/state";
 import { PostingsState } from "state/postings/state";
 import { ProfileState } from "state/profile/state";
 import { ProgressBoxState } from "state/progressbox/state";
@@ -81,7 +80,6 @@ export interface ClientState {
     nodeName: NodeNameState;
     people: PeopleState;
     peopleHideDialog: PeopleHideDialogState;
-    postingReply: PostingReplyState;
     postings: PostingsState;
     profile: ProfileState;
     progressBox: ProgressBoxState;

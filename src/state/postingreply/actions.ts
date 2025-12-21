@@ -1,4 +1,4 @@
-import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
+import { actionWithPayload, ActionWithPayload } from "state/action-types";
 
 export type PostingReplyAction = ActionWithPayload<"POSTING_REPLY", {
     id: string;
@@ -6,10 +6,5 @@ export type PostingReplyAction = ActionWithPayload<"POSTING_REPLY", {
 export const postingReply = (id: string): PostingReplyAction =>
     actionWithPayload("POSTING_REPLY", {id});
 
-export type PostingReplyFailedAction = ActionWithoutPayload<"POSTING_REPLY_FAILED">;
-export const postingReplyFailed = (): PostingReplyFailedAction =>
-    actionWithoutPayload("POSTING_REPLY_FAILED");
-
 export type PostingReplyAnyAction =
-    PostingReplyAction
-    | PostingReplyFailedAction;
+    PostingReplyAction;
