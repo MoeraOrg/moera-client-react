@@ -6,7 +6,7 @@ import { Node, NodeApiError, TooManyRequestsError } from "api";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
-import { goToLocation } from "state/navigation/actions";
+import { jumpNear } from "state/navigation/actions";
 import {
     ConnectPageChangePasswordAction,
     connectPageChangePasswordFailed,
@@ -83,7 +83,7 @@ async function connectPageChangePasswordSaga(action: WithContext<ConnectPageChan
         );
         dispatch(flashBox(i18n.t("password-changed")));
         const {path = null, query = null, fragment = null} = URI.parse(backHref);
-        dispatch(goToLocation(path, query, fragment).causedBy(action));
+        dispatch(jumpNear(path, query, fragment).causedBy(action));
     } catch (e) {
         if (!(e instanceof NodeApiError)) {
             dispatch(errorThrown(e));

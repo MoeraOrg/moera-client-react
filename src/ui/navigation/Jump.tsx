@@ -6,7 +6,7 @@ import { ClientState } from "state/state";
 import { getNamingNameDetails } from "state/naming/selectors";
 import { getHomeOwnerNameOrUrl, getHomeRootPage } from "state/home/selectors";
 import { getNodeRootPage, getOwnerNameOrUrl } from "state/node/selectors";
-import { goToLocation, initFromLocation, initFromNodeLocation } from "state/navigation/actions";
+import { jumpNear, initFromLocation, initFromNodeLocation } from "state/navigation/actions";
 import { getSearchNodeName } from "state/search/selectors";
 import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
@@ -52,7 +52,7 @@ function Jump(
 
         const performJump = () => {
             const {path = null, query = null, fragment = null} = URI.parse(href);
-            dispatch(goToLocation(path, query, fragment));
+            dispatch(jumpNear(path, query, fragment));
         }
         if (onNear != null) {
             onNear(href, performJump);

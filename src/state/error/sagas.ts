@@ -5,7 +5,7 @@ import { NameResolvingError, NodeApiError, VerboseError } from "api";
 import { CausedError, NodeConnectionError } from "api/error";
 import { Storage } from "storage";
 import { errorDismiss, errorShow, ErrorThrownAction } from "state/error/actions";
-import { goToLocation } from "state/navigation/actions";
+import { jumpNear } from "state/navigation/actions";
 import { messageBox } from "state/messagebox/actions";
 import { getHomeRootLocation } from "state/home/selectors";
 import { executor } from "state/executor";
@@ -68,6 +68,6 @@ function errorAuthInvalidSaga(): void {
     if (location != null) {
         Storage.deleteData(location);
         const {path = null, query = null} = URI.parse(Browser.urlWithBackHref("/connect"));
-        dispatch(messageBox(i18n.t("disconnected-from-home"), goToLocation(path, query, null)));
+        dispatch(messageBox(i18n.t("disconnected-from-home"), jumpNear(path, query, null)));
     }
 }

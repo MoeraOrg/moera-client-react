@@ -8,7 +8,7 @@ import { dispatch, select } from "state/store-sagas";
 import { homeIntroduced } from "state/init-barriers";
 import { getNodeUri } from "state/naming/sagas";
 import { isConnectedToHome } from "state/home/selectors";
-import { goToLocation } from "state/navigation/actions";
+import { jumpNear } from "state/navigation/actions";
 import {
     GrantConfirmAction,
     grantConfirmed,
@@ -83,7 +83,7 @@ function openConnectPage(clientName: string, carte: string, scopes: string[], re
         redirect_uri: redirectUri
     });
     const {path = null, query = null} = URI.parse(urlWithParameters("/connect", {back: backHref}));
-    dispatch(goToLocation(path, query, null));
+    dispatch(jumpNear(path, query, null));
 }
 
 async function grantConfirmSaga(action: WithContext<GrantConfirmAction>): Promise<void> {

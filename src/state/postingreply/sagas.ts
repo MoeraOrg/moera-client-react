@@ -6,7 +6,7 @@ import { PostingReplyAction } from "state/postingreply/actions";
 import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getNodeUri } from "state/naming/sagas";
-import { goToLocation, initFromLocation } from "state/navigation/actions";
+import { jumpNear, initFromLocation } from "state/navigation/actions";
 import { getHomeOwnerName, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { executor } from "state/executor";
@@ -121,7 +121,7 @@ async function postingReplySaga(action: WithContext<PostingReplyAction>): Promis
                 ).causedBy(action))
             }
         } else {
-            dispatch(goToLocation("/compose", ut`?draft=${draft.id}`, null).causedBy(action))
+            dispatch(jumpNear("/compose", ut`?draft=${draft.id}`, null).causedBy(action))
         }
     } catch (e) {
         dispatch(errorThrown(e));

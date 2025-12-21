@@ -1,5 +1,5 @@
 import { conj, inv, trigger } from "state/trigger";
-import { bottomMenuShow, goToLocation, updateLocation } from "state/navigation/actions";
+import { bottomMenuShow, jumpNear, updateLocation } from "state/navigation/actions";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import {
     commentDialogCommentLoad,
@@ -147,7 +147,7 @@ export default [
         "POSTING_DELETED",
         (state, signal: PostingDeletedAction) =>
             isAtDetailedPostingPage(state) && isDetailedPostingId(state, signal.payload.id),
-        signal => goToLocation(`/timeline?before=${getPostingMoment(signal.payload, "timeline")}`, null, null)
+        signal => jumpNear(`/timeline?before=${getPostingMoment(signal.payload, "timeline")}`, null, null)
     ),
     trigger(
         "COMMENT_POSTED",

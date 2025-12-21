@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
-import { goToLocation, initFromLocation } from "state/navigation/actions";
+import { jumpNear, initFromLocation } from "state/navigation/actions";
 import { cartesLoad } from "state/cartes/actions";
 import { getInstantCount } from "state/feeds/selectors";
 import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
@@ -29,7 +29,7 @@ export default function Navigation() {
 
         const {name, rootLocation: root, path = null, query = null, hash = null} = Browser.parseDocumentLocation();
         if (root === rootLocation) {
-            dispatch(goToLocation(path, query, hash));
+            dispatch(jumpNear(path, query, hash));
         } else {
             dispatch(initFromLocation(name ?? null, root ?? null, path, query, hash));
         }

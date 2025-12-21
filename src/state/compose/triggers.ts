@@ -14,7 +14,7 @@ import {
     composeReady,
     composeSharedTextLoad
 } from "state/compose/actions";
-import { goToLocation, updateLocation } from "state/navigation/actions";
+import { jumpNear, updateLocation } from "state/navigation/actions";
 import { isAtComposePage } from "state/navigation/selectors";
 import {
     getComposeDraftId,
@@ -49,7 +49,7 @@ export default [
     trigger(
         "COMPOSE_POST_SUCCEEDED",
         true,
-        (signal: ComposePostSucceededAction) => goToLocation(ut`/post/${signal.payload.posting.id}`, null, null)
+        (signal: ComposePostSucceededAction) => jumpNear(ut`/post/${signal.payload.posting.id}`, null, null)
     ),
     trigger(
         "COMPOSE_POST_SUCCEEDED",

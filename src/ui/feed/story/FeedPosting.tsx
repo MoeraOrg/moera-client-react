@@ -7,7 +7,7 @@ import { ClientState } from "state/state";
 import { ExtPostingInfo } from "state/postings/state";
 import { getHomeOwnerName } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
-import { goToLocation } from "state/navigation/actions";
+import { jumpNear } from "state/navigation/actions";
 import { MinimalStoryInfo } from "ui/types";
 import PostingMenu from "ui/posting/PostingMenu";
 import StoryBadges from "ui/story/StoryBadges";
@@ -91,7 +91,7 @@ export default function FeedPosting({nodeName, posting, story, hideRecommended}:
             <PostingSubject posting={posting} preview={true}/>
             <Content nodeName={nodeName} posting={posting}/>
             <EntryGallery postingId={posting.id} nodeName={nodeName} media={posting.media ?? null}
-                          onExpand={() => dispatch(goToLocation(ut`/post/${posting.id}`, "expanded=true", null))}/>
+                          onExpand={() => dispatch(jumpNear(ut`/post/${posting.id}`, "expanded=true", null))}/>
             <EntryLinkPreviews nodeName={nodeName}
                                linkPreviews={posting.bodyPreview?.linkPreviews ?? posting.body.linkPreviews}
                                limit={2} media={posting.media ?? null}/>

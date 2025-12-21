@@ -234,13 +234,13 @@ export type LocationUnlockAction = ActionWithoutPayload<"LOCATION_UNLOCK">;
 export const locationUnlock = (): LocationUnlockAction =>
     actionWithoutPayload("LOCATION_UNLOCK");
 
-export type GoToLocationAction = ActionWithPayload<"GO_TO_LOCATION", {
+export type JumpNearAction = ActionWithPayload<"JUMP_NEAR", {
     path: string | null;
     query: string | null;
     hash: string | null;
 }>;
-export const goToLocation = (path: string | null, query: string | null, hash: string | null): GoToLocationAction =>
-    actionWithPayload("GO_TO_LOCATION", {path, query, hash});
+export const jumpNear = (path: string | null, query: string | null, hash: string | null): JumpNearAction =>
+    actionWithPayload("JUMP_NEAR", {path, query, hash});
 
 export type GoHomeLocationAction = ActionWithPayload<"GO_HOME_LOCATION", {
     path: string | null;
@@ -269,7 +269,7 @@ export type NavigationAnyAction =
     | LocationSetAction
     | LocationLockAction
     | LocationUnlockAction
-    | GoToLocationAction
+    | JumpNearAction
     | GoHomeLocationAction
     | BottomMenuHideAction
     | BottomMenuShowAction;

@@ -6,7 +6,7 @@ import { ClientState } from "state/state";
 import { isAtNode } from "state/node/selectors";
 import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
-import { goToLocation, initFromNodeLocation } from "state/navigation/actions";
+import { jumpNear, initFromNodeLocation } from "state/navigation/actions";
 import { isAtSearchPage } from "state/navigation/selectors";
 import { searchHistoryDelete, searchHistoryPrepare } from "state/search/actions";
 import { getSearchNodeName, getSearchQuery } from "state/search/selectors";
@@ -74,7 +74,7 @@ export function useSearchSuggestions(
                     inputDom.current?.blur();
                     if (query) {
                         if (atNode) {
-                            dispatch(goToLocation("/search", ut`query=${query}`, null));
+                            dispatch(jumpNear("/search", ut`query=${query}`, null));
                         } else {
                             dispatch(initFromNodeLocation(searchNode, "/search", ut`query=${query}`, null, null));
                         }
@@ -82,7 +82,7 @@ export function useSearchSuggestions(
                     break;
                 case "history":
                     inputDom.current?.blur();
-                    dispatch(goToLocation("/search", ut`query=${item.query}`, null));
+                    dispatch(jumpNear("/search", ut`query=${item.query}`, null));
                     break;
             }
         } else {

@@ -19,7 +19,7 @@ import {
     registerNameFailed,
     registerNameSucceeded
 } from "state/nodename/actions";
-import { goToLocation } from "state/navigation/actions";
+import { jumpNear } from "state/navigation/actions";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
@@ -53,7 +53,7 @@ async function registerNameSaga(action: WithContext<RegisterNameAction>): Promis
         const secret = await Node.createNodeName(action, REL_HOME, {name});
         dispatch(registerNameSucceeded().causedBy(action));
         dispatch(mnemonicSet(secret.name, secret.mnemonic!).causedBy(action));
-        dispatch(goToLocation("/mnemonic", null, null).causedBy(action));
+        dispatch(jumpNear("/mnemonic", null, null).causedBy(action));
     } catch (e) {
         dispatch(registerNameFailed().causedBy(action));
         dispatch(errorThrown(e));
@@ -83,12 +83,12 @@ async function mnemonicStoreSaga(action: WithContext<MnemonicStoreAction>): Prom
         // wait with going to the next page until the mnemonic is stored, because if it fails,
         // we'll have a chance to write the mnemonic down or retry
         if (email) {
-            dispatch(goToLocation("/profile/verify-email", null, null).causedBy(action));
+            dispatch(jumpNear("/profile/verify-email", null, null).causedBy(action));
         } else {
-            dispatch(goToLocation("/start-reading", null, null).causedBy(action));
+            dispatch(jumpNear("/start-reading", null, null).causedBy(action));
         }
     } catch (e) {
-        dispatch(goToLocation("/mnemonic", null, null).causedBy(action));
+        dispatch(jumpNear("/mnemonic", null, null).causedBy(action));
     }
 }
 

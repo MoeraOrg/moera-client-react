@@ -11,7 +11,7 @@ import {
     goHomeLocation,
     GoHomeLocationAction,
     GoToHomePageAction,
-    GoToLocationAction,
+    JumpNearAction,
     goToPage,
     initFromLocation,
     InitFromLocationAction,
@@ -37,7 +37,7 @@ export default [
     executor("BOOT", "", bootSaga),
     executor("INIT_FROM_NODE_LOCATION", "", initFromNodeLocationSaga),
     executor("INIT_FROM_LOCATION", "", initFromLocationSaga),
-    executor("GO_TO_LOCATION", payload => `${payload.path}:${payload.query}:${payload.hash}`, goToLocationSaga),
+    executor("JUMP_NEAR", payload => `${payload.path}:${payload.query}:${payload.hash}`, jumpNearSaga),
     executor("NEW_LOCATION", null, newLocationSaga),
     executor("UPDATE_LOCATION", null, updateLocationSaga),
     executor("GO_HOME_LOCATION", "", goHomeLocationSaga),
@@ -114,7 +114,7 @@ function initFromLocationSaga(action: InitFromLocationAction): void {
     transformation(action, null, null, null, path, query, hash);
 }
 
-function goToLocationSaga(action: GoToLocationAction): void {
+function jumpNearSaga(action: JumpNearAction): void {
     const current = URI.parse(select(state => state.navigation.location));
     const {path, query, hash} = action.payload;
     transformation(action, current.path || "", current.query || "", current.fragment || "", path, query, hash);
