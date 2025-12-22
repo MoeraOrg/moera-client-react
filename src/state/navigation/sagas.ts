@@ -21,8 +21,8 @@ import {
 } from "state/navigation/actions";
 import { homeIntroduced } from "state/init-barriers";
 import { nodeReady, ownerSwitch } from "state/node/actions";
-import { getNodeRootLocation, getOwnerName, isAtNode } from "state/node/selectors";
-import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
+import { getNodeRootLocation, getOwnerName, isAtHomeNode, isAtNode } from "state/node/selectors";
+import { getHomeOwnerName, getHomeRootLocation } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { storyReadingUpdate } from "state/stories/actions";
 import { messageBox } from "state/messagebox/actions";
@@ -68,7 +68,7 @@ async function navigateFar(
 ): Promise<void> {
     if (rootLocation != null) {
         dispatch(ownerSwitch(nodeName, rootLocation).causedBy(caller));
-        transformation(caller, null, null, null, path, query, hash);
+        return transformation(caller, null, null, null, path, query, hash);
     } else if (nodeName != null) {
         return navigateFarOnlyNodeAndLocation(caller, nodeName, path, query, hash);
     } else if (path && path !== "/") {
@@ -106,41 +106,45 @@ async function navigateFarOnlyLocation(
 
     await homeIntroduced();
 
-    const {homeOwnerName, homeRootPage} = select(state => ({
-        homeOwnerName: getHomeOwnerName(state),
-        homeRootPage: getHomeRootPage(state)
-    }));
-
-    if (homeRootPage != null) {
-        const {scheme, host, port} = URI.parse(homeRootPage);
-        if (scheme != null && host != null) {
-            const rootLocation = rootUrl(scheme, host, port);
-            return navigateFar(caller, homeOwnerName, rootLocation, path, query, hash);
-        }
+    const homeOwnerName = select(getHomeOwnerName);
+    const homeLocation = select(getHomeRootLocation);
+    if (homeLocation != null) {
+        return navigateFar(caller, homeOwnerName, homeLocation, path, query, hash);
     }
 
     // Global page, no node
     dispatch(ownerSwitch(null, null).causedBy(caller));
     dispatch(nodeReady().causedBy(caller));
-    // TODO If the target page requires a home node, do nothing
-    transformation(caller, null, null, null, path, query, hash);
+    return transformation(caller, null, null, null, path, query, hash);
 }
 
-function navigateNearSaga(action: JumpNearAction | RestoreNearAction): void {
+async function navigateNearSaga(action: JumpNearAction | RestoreNearAction): Promise<void> {
     const current = URI.parse(select(state => state.navigation.location));
     const {path, query, hash} = action.payload;
-    transformation(action, current.path || "", current.query || "", current.fragment || "", path, query, hash);
+    return transformation(
+        action, current.path || null, current.query || null, current.fragment || null, path, query, hash
+    );
 }
 
-function transformation(
+async function transformation(
     caller: ClientAction,
     srcPath: string | null, srcQuery: string | null, srcHash: string | null,
     dstPath: string | null, dstQuery: string | null, dstHash: string | null
-): void {
+): Promise<void> {
     const srcInfo = srcPath != null ? LocationInfo.fromUrl(srcPath, srcQuery, srcHash) : new LocationInfo();
     dstPath = dstPath != null && dstPath.startsWith("/moera") ? dstPath.substring(6) : dstPath;
     const dstInfo = LocationInfo.fromUrl(dstPath, dstQuery, dstHash);
     const actions = locationTransform(srcInfo, dstInfo);
+    const atHome = select(isAtHomeNode);
+    const homeOnly = actions.some(action => action.type === "GO_TO_PAGE" && action.payload.homeOnly);
+    if (homeOnly && !atHome) {
+        const homeOwnerName = select(getHomeOwnerName);
+        const homeLocation = select(getHomeRootLocation);
+        if (homeLocation != null) {
+            await navigateFar(caller, homeOwnerName, homeLocation, dstPath, dstQuery, dstHash);
+        }
+        return;
+    }
     for (let a of actions) {
         dispatch(a.causedBy(caller));
     }
@@ -174,29 +178,3 @@ function changeLocation(create: boolean, caller: ClientAction): void {
     }
     window.Android?.locationChanged(url, location);
 }
-
-// async function goToHomePageSaga(action: GoToHomePageAction<any, any>): Promise<void> {
-//     await mutuallyIntroduced();
-//
-//     const {nodeLocation, homeOwnerName, homeLocation} = select(state => ({
-//         nodeLocation: getNodeRootLocation(state),
-//         homeOwnerName: getHomeOwnerName(state),
-//         homeLocation: getHomeRootLocation(state)
-//     }));
-//
-//     if (homeLocation == null) {
-//         dispatch(nodeUnset().causedBy(action));
-//         return;
-//     }
-//
-//     if (nodeLocation !== homeLocation) {
-//         if (homeOwnerName != null) {
-//             dispatch(ownerSwitch(homeOwnerName).causedBy(action));
-//             await barrier(["INIT_FROM_LOCATION", "OWNER_SWITCH_FAILED"], true);
-//         } else {
-//             dispatch(initFromLocation(null, homeLocation, null, null, null).causedBy(action))
-//         }
-//     }
-//
-//     dispatch(goToPage(action.payload.page, action.payload.details).causedBy(action));
-// }
