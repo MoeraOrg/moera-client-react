@@ -43,16 +43,10 @@ export const wakeUp = (): WakeUpAction =>
 export type GoToPageAction<P extends Page, D> = ActionWithPayload<"GO_TO_PAGE", {
     page: P;
     details: D & {at: number | null};
+    homeOnly: boolean;
 }>;
-export const goToPage = <P extends Page, D>(page: P, details: D): GoToPageAction<P, D> =>
-    actionWithPayload("GO_TO_PAGE", {page, details: {at: null, ...details}});
-
-export type GoToHomePageAction<P extends Page, D> = ActionWithPayload<"GO_TO_HOME_PAGE", {
-    page: P;
-    details: D & {at: number | null};
-}>;
-export const goToHomePage = <P extends Page, D>(page: P, details: D): GoToHomePageAction<P, D> =>
-    actionWithPayload("GO_TO_HOME_PAGE", {page, details: {at: null, ...details}});
+export const goToPage = <P extends Page, D>(page: P, details: D, homeOnly: boolean = false): GoToPageAction<P, D> =>
+    actionWithPayload("GO_TO_PAGE", {page, details: {at: null, ...details}, homeOnly});
 
 export type GoToProfileAction = GoToPageAction<"profile", {}>;
 export const goToProfile = (): GoToProfileAction =>
@@ -74,22 +68,22 @@ export const goToPosting = (
 ): GoToPostingAction =>
     goToPage("detailedposting", {id, commentId, galleryExpanded});
 
-export type GoToComposeAction = GoToHomePageAction<"compose", {
+export type GoToComposeAction = GoToPageAction<"compose", {
     id: string | null;
     draftId: string | null;
 }>;
 export const goToCompose = (id: string | null = null, draftId: string | null = null): GoToComposeAction =>
-    goToHomePage("compose", {id, draftId});
+    goToPage("compose", {id, draftId}, true);
 
-export type GoToSettingsAction = GoToHomePageAction<"settings", {}>;
+export type GoToSettingsAction = GoToPageAction<"settings", {}>;
 export const goToSettings = (): GoToSettingsAction =>
-    goToHomePage("settings", {});
+    goToPage("settings", {}, true);
 
-export type GoToNewsAction = GoToHomePageAction<"news", {
+export type GoToNewsAction = GoToPageAction<"news", {
     at: number | null;
 }>;
 export const goToNews = (at: number | null = null): GoToNewsAction =>
-    goToHomePage("news", {at});
+    goToPage("news", {at}, true);
 
 export type GoToPeopleAction = GoToPageAction<"people", {}>;
 export const goToPeople = (): GoToPeopleAction =>
@@ -103,7 +97,7 @@ export type GoToRemovalAction = GoToPageAction<"removal", {}>;
 export const goToRemoval = (): GoToRemovalAction =>
     goToPage("removal", {});
 
-export type GoToGrantAction = GoToHomePageAction<"grant", {
+export type GoToGrantAction = GoToPageAction<"grant", {
     clientName: string;
     carte: string;
     scope: Scope[];
@@ -112,7 +106,7 @@ export type GoToGrantAction = GoToHomePageAction<"grant", {
 export const goToGrant = (
     clientName: string, carte: string, scope: Scope[], redirectUri: string | null
 ): GoToGrantAction =>
-    goToHomePage("grant", {clientName, carte, scope, redirectUri});
+    goToPage("grant", {clientName, carte, scope, redirectUri}, true);
 
 export type GoToSearchAction = GoToPageAction<"search", {
     query: string;
@@ -122,19 +116,19 @@ export type GoToSearchAction = GoToPageAction<"search", {
 export const goToSearch = (query: string, tab: SearchTab, filter: SearchFilter): GoToSearchAction =>
     goToPage("search", {query, tab, filter});
 
-export type GoToExploreAction = GoToHomePageAction<"explore", {
+export type GoToExploreAction = GoToPageAction<"explore", {
     at: number | null;
 }>;
 export const goToExplore = (at: number | null = null): GoToExploreAction =>
-    goToHomePage("explore", {at});
+    goToPage("explore", {at}, true);
 
 export type GoToActivePeopleAction = GoToPageAction<"activepeople", {}>;
 export const goToActivePeople = (): GoToActivePeopleAction =>
     goToPage("activepeople", {});
 
-export type GoToInstantsAction = GoToHomePageAction<"instants", {}>;
+export type GoToInstantsAction = GoToPageAction<"instants", {}>;
 export const goToInstants = (): GoToInstantsAction =>
-    goToHomePage("instants", {});
+    goToPage("instants", {}, true);
 
 export type GoToConnectAction = GoToPageAction<"connect", {
     backHref: string;

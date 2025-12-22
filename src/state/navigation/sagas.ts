@@ -5,13 +5,11 @@ import { locationBuild, LocationInfo, locationTransform } from "location";
 import { clearSettingsCache } from "api/setting-types";
 import { executor } from "state/executor";
 import { ClientAction } from "state/action";
-import { barrier, dispatch, select } from "state/store-sagas";
+import { dispatch, select } from "state/store-sagas";
 import {
     BootAction,
     goHomeLocation,
     GoHomeLocationAction,
-    GoToHomePageAction,
-    goToPage,
     initFromLocation,
     InitFromLocationAction,
     initFromNodeLocation,
@@ -25,10 +23,10 @@ import {
     NewLocationAction,
     UpdateLocationAction
 } from "state/navigation/actions";
-import { homeIntroduced, mutuallyIntroduced } from "state/init-barriers";
-import { nodeReady, nodeUnset, ownerSwitch } from "state/node/actions";
-import { getNodeRootLocation, isAtNode } from "state/node/selectors";
-import { getHomeOwnerName, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
+import { homeIntroduced } from "state/init-barriers";
+import { nodeReady } from "state/node/actions";
+import { isAtNode } from "state/node/selectors";
+import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { storyReadingUpdate } from "state/stories/actions";
 import * as Browser from "ui/browser";
@@ -44,7 +42,6 @@ export default [
     executor("NEW_LOCATION", null, newLocationSaga),
     executor("UPDATE_LOCATION", null, updateLocationSaga),
     executor("GO_HOME_LOCATION", "", goHomeLocationSaga),
-    executor("GO_TO_HOME_PAGE", "", goToHomePageSaga),
 ];
 
 function bootSaga(action: BootAction): void {
@@ -244,28 +241,28 @@ async function goHomeLocationSaga(action: GoHomeLocationAction): Promise<void> {
     dispatch(initFromLocation(homeOwnerName, null, path, query, hash).causedBy(action));
 }
 
-async function goToHomePageSaga(action: GoToHomePageAction<any, any>): Promise<void> {
-    await mutuallyIntroduced();
-
-    const {nodeLocation, homeOwnerName, homeLocation} = select(state => ({
-        nodeLocation: getNodeRootLocation(state),
-        homeOwnerName: getHomeOwnerName(state),
-        homeLocation: getHomeRootLocation(state)
-    }));
-
-    if (homeLocation == null) {
-        dispatch(nodeUnset().causedBy(action));
-        return;
-    }
-
-    if (nodeLocation !== homeLocation) {
-        if (homeOwnerName != null) {
-            dispatch(ownerSwitch(homeOwnerName).causedBy(action));
-            await barrier(["INIT_FROM_LOCATION", "OWNER_SWITCH_FAILED"], true);
-        } else {
-            dispatch(initFromLocation(null, homeLocation, null, null, null).causedBy(action))
-        }
-    }
-
-    dispatch(goToPage(action.payload.page, action.payload.details).causedBy(action));
-}
+// async function goToHomePageSaga(action: GoToHomePageAction<any, any>): Promise<void> {
+//     await mutuallyIntroduced();
+//
+//     const {nodeLocation, homeOwnerName, homeLocation} = select(state => ({
+//         nodeLocation: getNodeRootLocation(state),
+//         homeOwnerName: getHomeOwnerName(state),
+//         homeLocation: getHomeRootLocation(state)
+//     }));
+//
+//     if (homeLocation == null) {
+//         dispatch(nodeUnset().causedBy(action));
+//         return;
+//     }
+//
+//     if (nodeLocation !== homeLocation) {
+//         if (homeOwnerName != null) {
+//             dispatch(ownerSwitch(homeOwnerName).causedBy(action));
+//             await barrier(["INIT_FROM_LOCATION", "OWNER_SWITCH_FAILED"], true);
+//         } else {
+//             dispatch(initFromLocation(null, homeLocation, null, null, null).causedBy(action))
+//         }
+//     }
+//
+//     dispatch(goToPage(action.payload.page, action.payload.details).causedBy(action));
+// }
