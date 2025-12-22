@@ -185,24 +185,14 @@ export type LocationSetAction = ActionWithPayload<"LOCATION_SET", {
     title: string | null;
     canonicalUrl: string | null;
     noIndex: boolean;
-    create: boolean;
 }>;
 export const locationSet = (
     location: string,
     title: string | null,
     canonicalUrl: string | null,
-    noIndex: boolean,
-    create: boolean
+    noIndex: boolean
 ): LocationSetAction =>
-    actionWithPayload("LOCATION_SET", {location, title, canonicalUrl, noIndex, create});
-
-export type LocationLockAction = ActionWithoutPayload<"LOCATION_LOCK">;
-export const locationLock = (): LocationLockAction =>
-    actionWithoutPayload("LOCATION_LOCK");
-
-export type LocationUnlockAction = ActionWithoutPayload<"LOCATION_UNLOCK">;
-export const locationUnlock = (): LocationUnlockAction =>
-    actionWithoutPayload("LOCATION_UNLOCK");
+    actionWithPayload("LOCATION_SET", {location, title, canonicalUrl, noIndex});
 
 export type JumpFarAction = ActionWithPayload<"JUMP_FAR", {
     nodeName: string | null;
@@ -226,6 +216,28 @@ export type JumpNearAction = ActionWithPayload<"JUMP_NEAR", {
 export const jumpNear = (path: string | null, query: string | null, hash: string | null): JumpNearAction =>
     actionWithPayload("JUMP_NEAR", {path, query, hash});
 
+export type RestoreFarAction = ActionWithPayload<"RESTORE_FAR", {
+    nodeName: string | null;
+    rootLocation: string | null;
+    path: string | null;
+    query: string | null;
+    hash: string | null;
+    fallbackUrl: string | null;
+}>;
+export const restoreFar = (
+    nodeName: string | null, rootLocation: string | null, path: string | null, query: string | null,
+    hash: string | null, fallbackUrl: string | null = null
+): RestoreFarAction =>
+    actionWithPayload("RESTORE_FAR", {nodeName, rootLocation, path, query, hash, fallbackUrl});
+
+export type RestoreNearAction = ActionWithPayload<"RESTORE_NEAR", {
+    path: string | null;
+    query: string | null;
+    hash: string | null;
+}>;
+export const restoreNear = (path: string | null, query: string | null, hash: string | null): RestoreNearAction =>
+    actionWithPayload("RESTORE_NEAR", {path, query, hash});
+
 export type BottomMenuHideAction = ActionWithoutPayload<"BOTTOM_MENU_HIDE">;
 export const bottomMenuHide = (): BottomMenuHideAction =>
     actionWithoutPayload("BOTTOM_MENU_HIDE");
@@ -241,9 +253,9 @@ export type NavigationAnyAction =
     | NewLocationAction
     | UpdateLocationAction
     | LocationSetAction
-    | LocationLockAction
-    | LocationUnlockAction
     | JumpFarAction
     | JumpNearAction
+    | RestoreFarAction
+    | RestoreNearAction
     | BottomMenuHideAction
     | BottomMenuShowAction;

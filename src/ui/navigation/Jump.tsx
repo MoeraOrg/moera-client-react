@@ -64,7 +64,7 @@ function Jump(
 
     const onFarClick = (
         url: string, nodeLocation: string | null, nodeOwnerName: string | null
-    ) => (e: React.MouseEvent) => {
+    ) => (e: React.MouseEvent<HTMLAnchorElement>) => {
         if (e.button !== 0 || e.shiftKey || e.ctrlKey || e.altKey) {
             return;
         }
@@ -81,7 +81,7 @@ function Jump(
                 }
             }
             const {path = null, query = null, fragment = null} = URI.parse(href);
-            dispatch(jumpFar(nodeOwnerName, rootLocation, path, query, fragment));
+            dispatch(jumpFar(nodeOwnerName, rootLocation, path, query, fragment, url));
         }
 
         if (onFar != null) {

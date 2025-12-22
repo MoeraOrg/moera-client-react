@@ -1,6 +1,6 @@
 import { conj, inv, trigger } from "state/trigger";
 import { EventAction, NodeNameChangedEvent } from "api/events";
-import { newLocation, updateLocation } from "state/navigation/actions";
+import { updateLocation } from "state/navigation/actions";
 import { nodeFeaturesLoad, nodeReady, ownerLoad, ownerSet, OwnerSwitchAction, ownerVerify } from "state/node/actions";
 import { getOwnerName, isAtHomeNode, isAtNode, isOwnerNameRecentlyChanged, isOwnerNameSet } from "state/node/selectors";
 import { NamingNameLoadedAction } from "state/naming/actions";
@@ -16,7 +16,7 @@ export default [
     ),
     trigger("OWNER_SWITCH", isAtNode, nodeFeaturesLoad),
     trigger("NODE_READY", conj(isAtNode, isOwnerNameRecentlyChanged), ownerVerify),
-    trigger("NODE_READY", true, newLocation),
+    trigger("NODE_READY", true, updateLocation),
     trigger(
         "NAMING_NAME_LOADED",
         (state, signal: NamingNameLoadedAction) => signal.payload.name === getOwnerName(state),

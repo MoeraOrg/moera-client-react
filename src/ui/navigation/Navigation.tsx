@@ -2,23 +2,18 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
-import { jumpFar, jumpNear } from "state/navigation/actions";
+import { restoreFar, restoreNear } from "state/navigation/actions";
 import { cartesLoad } from "state/cartes/actions";
 import { getInstantCount } from "state/feeds/selectors";
-import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
+import { getNodeRootLocation } from "state/node/selectors";
 import * as Browser from "ui/browser";
 import { asyncReturn } from "util/async-calls";
-import { universalLocation } from "util/universal-url";
 
 export default function Navigation() {
-    const nodeName = useSelector(getOwnerName);
     const rootLocation = useSelector(getNodeRootLocation);
-    const location = useSelector((state: ClientState) => state.navigation.location);
     const title = useSelector((state: ClientState) => state.navigation.title);
     const canonicalUrl = useSelector((state: ClientState) => state.navigation.canonicalUrl);
     const noIndex = useSelector((state: ClientState) => state.navigation.noIndex);
-    const create = useSelector((state: ClientState) => state.navigation.create);
-    const locked = useSelector((state: ClientState) => state.navigation.locked);
     const count = useSelector(getInstantCount);
     const dispatch = useDispatch();
 
@@ -29,9 +24,9 @@ export default function Navigation() {
 
         const {name, rootLocation: root, path = null, query = null, hash = null} = Browser.parseDocumentLocation();
         if (root === rootLocation) {
-            dispatch(jumpNear(path, query, hash));
+            dispatch(restoreNear(path, query, hash));
         } else {
-            dispatch(jumpFar(name ?? null, root ?? null, path, query, hash));
+            dispatch(restoreFar(name ?? null, root ?? null, path, query, hash));
         }
         event.preventDefault();
     }, [dispatch, rootLocation]);
@@ -79,32 +74,6 @@ export default function Navigation() {
             }
         }
     }, [messageReceived, popState]);
-
-    useEffect(() => {
-        if (locked) {
-            return;
-        }
-
-        const url = universalLocation(Browser.getRootLocation(), nodeName, rootLocation, location);
-        if (
-            (!create && stack.current.length === 0)
-            || (create && stack.current[stack.current.length - 1] === url)
-        ) {
-            return;
-        }
-
-        const data = {location: url};
-        if (create) {
-            stack.current.push(url);
-            window.history.pushState(data, "", url);
-        } else {
-            if (stack.current.length > 0) {
-                stack.current[stack.current.length - 1] = url;
-            }
-            window.history.replaceState(data, "", url);
-        }
-        window.Android?.locationChanged(url, location);
-    }, [dispatch, location, locked, nodeName, rootLocation, create]);
 
     useEffect(() => {
         const counter = count > 0 ? `(${count}) ` : "";

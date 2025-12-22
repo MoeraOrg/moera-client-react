@@ -6,7 +6,5 @@ export interface NavigationState {
     title: string;
     canonicalUrl: string | null;
     noIndex: boolean;
-    create: boolean;
-    locked: boolean;
     bottomMenuVisible: boolean;
 }

@@ -7,8 +7,6 @@ const initialState: NavigationState = {
     title: "",
     canonicalUrl: null,
     noIndex: false,
-    create: false,
-    locked: false,
     bottomMenuVisible: true
 };
 
@@ -27,21 +25,7 @@ export default (state: NavigationState = initialState, action: ClientAction): Na
                 location: action.payload.location,
                 title: action.payload.title ?? "",
                 canonicalUrl: action.payload.canonicalUrl,
-                noIndex: action.payload.noIndex,
-                create: !state.locked ? action.payload.create : state.create && action.payload.create
-            };
-
-        case "LOCATION_LOCK":
-            return {
-                ...state,
-                locked: true,
-                create: true
-            };
-
-        case "LOCATION_UNLOCK":
-            return {
-                ...state,
-                locked: false
+                noIndex: action.payload.noIndex
             };
 
         case "BOTTOM_MENU_HIDE":

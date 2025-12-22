@@ -9,19 +9,19 @@ import { ClientAction } from "state/action";
 import { dispatch, select } from "state/store-sagas";
 import {
     BootAction,
-    jumpFar,
     JumpFarAction,
     jumpNear,
     JumpNearAction,
-    locationLock,
     locationSet,
-    locationUnlock,
     NewLocationAction,
+    restoreFar,
+    RestoreFarAction,
+    RestoreNearAction,
     UpdateLocationAction
 } from "state/navigation/actions";
 import { homeIntroduced } from "state/init-barriers";
 import { nodeReady, ownerSwitch } from "state/node/actions";
-import { isAtNode } from "state/node/selectors";
+import { getNodeRootLocation, getOwnerName, isAtNode } from "state/node/selectors";
 import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { storyReadingUpdate } from "state/stories/actions";
@@ -29,11 +29,14 @@ import { messageBox } from "state/messagebox/actions";
 import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
 import { REL_HOME } from "util/rel-node-name";
+import { universalLocation } from "util/universal-url";
 
 export default [
     executor("BOOT", "", bootSaga),
-    executor("JUMP_FAR", "", jumpFarSaga),
-    executor("JUMP_NEAR", payload => `${payload.path}:${payload.query}:${payload.hash}`, jumpNearSaga),
+    executor("JUMP_FAR", "", navigateFarSaga),
+    executor("JUMP_NEAR", payload => `${payload.path}:${payload.query}:${payload.hash}`, navigateNearSaga),
+    executor("RESTORE_FAR", "", navigateFarSaga),
+    executor("RESTORE_NEAR", payload => `${payload.path}:${payload.query}:${payload.hash}`, navigateNearSaga),
     executor("NEW_LOCATION", null, newLocationSaga),
     executor("UPDATE_LOCATION", null, updateLocationSaga),
 ];
@@ -46,7 +49,7 @@ function bootSaga(action: BootAction): void {
         name = null, rootLocation = null, path = null, query = null, hash = null
     } = action.payload.target ?? Browser.parseDocumentLocation();
 
-    dispatch(jumpFar(name, rootLocation, path, query, hash).causedBy(action));
+    dispatch(restoreFar(name, rootLocation, path, query, hash).causedBy(action));
 
     const readId = Browser.parameters.get("read");
     if (readId) {
@@ -54,29 +57,29 @@ function bootSaga(action: BootAction): void {
     }
 }
 
-async function jumpFarSaga(action: JumpFarAction): Promise<void> {
+async function navigateFarSaga(action: JumpFarAction | RestoreFarAction): Promise<void> {
     const {nodeName, rootLocation, path, query, hash, fallbackUrl} = action.payload;
-    return jumpFarAnywhere(action, nodeName, rootLocation, path, query, hash, fallbackUrl);
+    return navigateFar(action, nodeName, rootLocation, path, query, hash, fallbackUrl);
 }
 
-async function jumpFarAnywhere(
-    caller: JumpFarAction, nodeName: string | null, rootLocation: string | null, path: string | null,
+async function navigateFar(
+    caller: ClientAction, nodeName: string | null, rootLocation: string | null, path: string | null,
     query: string | null, hash: string | null, fallbackUrl: string | null
 ): Promise<void> {
     if (rootLocation != null) {
         dispatch(ownerSwitch(nodeName, rootLocation).causedBy(caller));
         transformation(caller, null, null, null, path, query, hash);
     } else if (nodeName != null) {
-        return jumpFarOnlyNodeAndLocation(caller, nodeName, path, query, hash, fallbackUrl);
+        return navigateFarOnlyNodeAndLocation(caller, nodeName, path, query, hash, fallbackUrl);
     } else if (path && path !== "/") {
-        return jumpFarOnlyLocation(caller, path, query, hash, fallbackUrl);
+        return navigateFarOnlyLocation(caller, path, query, hash, fallbackUrl);
     } else {
-        return jumpFarOnlyLocation(caller, "/news", null, null, fallbackUrl);
+        return navigateFarOnlyLocation(caller, "/news", null, null, fallbackUrl);
     }
 }
 
-async function jumpFarOnlyNodeAndLocation(
-    caller: JumpFarAction, nodeName: string, path: string | null, query: string | null, hash: string | null,
+async function navigateFarOnlyNodeAndLocation(
+    caller: ClientAction, nodeName: string, path: string | null, query: string | null, hash: string | null,
     fallbackUrl: string | null
 ): Promise<void> {
     const nodeLocation = await getNodeUri(caller, nodeName);
@@ -84,7 +87,7 @@ async function jumpFarOnlyNodeAndLocation(
         if (fallbackUrl != null) {
             window.location.href = fallbackUrl;
         } else {
-            await jumpFarOnlyLocation(caller, "/news", null, null, fallbackUrl);
+            await navigateFarOnlyLocation(caller, "/news", null, null, fallbackUrl);
             dispatch(messageBox(i18n.t("node-name-not-exists")));
         }
         return;
@@ -94,16 +97,16 @@ async function jumpFarOnlyNodeAndLocation(
         if (fallbackUrl != null) {
             window.location.href = fallbackUrl;
         } else {
-            await jumpFarOnlyLocation(caller, "/news", null, null, fallbackUrl);
+            await navigateFarOnlyLocation(caller, "/news", null, null, fallbackUrl);
         }
         return;
     }
     const rootLocation = rootUrl(scheme, host, port);
-    return jumpFarAnywhere(caller, nodeName, rootLocation, path, query, hash, fallbackUrl);
+    return navigateFar(caller, nodeName, rootLocation, path, query, hash, fallbackUrl);
 }
 
-async function jumpFarOnlyLocation(
-    caller: JumpFarAction, path: string | null, query: string | null, hash: string | null, fallbackUrl: string | null
+async function navigateFarOnlyLocation(
+    caller: ClientAction, path: string | null, query: string | null, hash: string | null, fallbackUrl: string | null
 ): Promise<void> {
     const atNode = select(isAtNode);
     if (atNode) {
@@ -122,7 +125,7 @@ async function jumpFarOnlyLocation(
         const {scheme, host, port} = URI.parse(homeRootPage);
         if (scheme != null && host != null) {
             const rootLocation = rootUrl(scheme, host, port);
-            return jumpFarAnywhere(caller, homeOwnerName, rootLocation, path, query, hash, fallbackUrl);
+            return navigateFar(caller, homeOwnerName, rootLocation, path, query, hash, fallbackUrl);
         }
     }
 
@@ -133,7 +136,7 @@ async function jumpFarOnlyLocation(
     transformation(caller, null, null, null, path, query, hash);
 }
 
-function jumpNearSaga(action: JumpNearAction): void {
+function navigateNearSaga(action: JumpNearAction | RestoreNearAction): void {
     const current = URI.parse(select(state => state.navigation.location));
     const {path, query, hash} = action.payload;
     transformation(action, current.path || "", current.query || "", current.fragment || "", path, query, hash);
@@ -148,28 +151,38 @@ function transformation(
     dstPath = dstPath != null && dstPath.startsWith("/moera") ? dstPath.substring(6) : dstPath;
     const dstInfo = LocationInfo.fromUrl(dstPath, dstQuery, dstHash);
     const actions = locationTransform(srcInfo, dstInfo);
-    dispatch(locationLock().causedBy(caller));
     for (let a of actions) {
         dispatch(a.causedBy(caller));
     }
-    changeLocation(null, caller);
-    dispatch(locationUnlock().causedBy(caller));
 }
 
 function newLocationSaga(action: NewLocationAction): void {
-    changeLocation(action.type, action);
+    changeLocation(true, action);
 }
 
 function updateLocationSaga(action: UpdateLocationAction): void {
-    changeLocation(action.type, action);
+    changeLocation(false, action);
 }
 
-function changeLocation(actionType: "NEW_LOCATION" | "UPDATE_LOCATION" | null, caller: ClientAction): void {
+function changeLocation(create: boolean, caller: ClientAction): void {
     const info = locationBuild(select(), new LocationInfo());
-    if (!info.error) {
-        const create = actionType == null || actionType === "NEW_LOCATION";
-        dispatch(locationSet(info.toUrl(), info.title, info.canonicalUrl, info.noIndexPage, create).causedBy(caller));
+    if (info.error) {
+        return;
     }
+    const location = info.toUrl();
+    dispatch(locationSet(location, info.title, info.canonicalUrl, info.noIndexPage).causedBy(caller));
+
+    const nodeName = select(getOwnerName);
+    const rootLocation = select(getNodeRootLocation);
+    const url = universalLocation(Browser.getRootLocation(), nodeName, rootLocation, location);
+
+    const data = {location: url};
+    if (create) {
+        window.history.pushState(data, "", url);
+    } else {
+        window.history.replaceState(data, "", url);
+    }
+    window.Android?.locationChanged(url, location);
 }
 
 // async function goToHomePageSaga(action: GoToHomePageAction<any, any>): Promise<void> {
