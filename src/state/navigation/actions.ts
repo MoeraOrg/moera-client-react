@@ -234,6 +234,20 @@ export type LocationUnlockAction = ActionWithoutPayload<"LOCATION_UNLOCK">;
 export const locationUnlock = (): LocationUnlockAction =>
     actionWithoutPayload("LOCATION_UNLOCK");
 
+export type JumpFarAction = ActionWithPayload<"JUMP_FAR", {
+    nodeName: string | null;
+    rootLocation: string | null;
+    path: string | null;
+    query: string | null;
+    hash: string | null;
+    fallbackUrl: string | null;
+}>;
+export const jumpFar = (
+    nodeName: string | null, rootLocation: string | null, path: string | null, query: string | null,
+    hash: string | null, fallbackUrl: string | null = null
+): JumpFarAction =>
+    actionWithPayload("JUMP_FAR", {nodeName, rootLocation, path, query, hash, fallbackUrl});
+
 export type JumpNearAction = ActionWithPayload<"JUMP_NEAR", {
     path: string | null;
     query: string | null;
@@ -269,6 +283,7 @@ export type NavigationAnyAction =
     | LocationSetAction
     | LocationLockAction
     | LocationUnlockAction
+    | JumpFarAction
     | JumpNearAction
     | GoHomeLocationAction
     | BottomMenuHideAction
