@@ -9,11 +9,6 @@ import { ClientAction } from "state/action";
 import { dispatch, select } from "state/store-sagas";
 import {
     BootAction,
-    goHomeLocation,
-    GoHomeLocationAction,
-    initFromLocation,
-    InitFromLocationAction,
-    InitFromNodeLocationAction,
     jumpFar,
     JumpFarAction,
     jumpNear,
@@ -37,13 +32,10 @@ import { REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("BOOT", "", bootSaga),
-    executor("INIT_FROM_NODE_LOCATION", "", initFromNodeLocationSaga),
-    executor("INIT_FROM_LOCATION", "", initFromLocationSaga),
     executor("JUMP_FAR", "", jumpFarSaga),
     executor("JUMP_NEAR", payload => `${payload.path}:${payload.query}:${payload.hash}`, jumpNearSaga),
     executor("NEW_LOCATION", null, newLocationSaga),
     executor("UPDATE_LOCATION", null, updateLocationSaga),
-    executor("GO_HOME_LOCATION", "", goHomeLocationSaga),
 ];
 
 function bootSaga(action: BootAction): void {
@@ -62,53 +54,25 @@ function bootSaga(action: BootAction): void {
     }
 }
 
-function transformation(
-    caller: ClientAction,
-    srcPath: string | null, srcQuery: string | null, srcHash: string | null,
-    dstPath: string | null, dstQuery: string | null, dstHash: string | null
-): void {
-    const srcInfo = srcPath != null ? LocationInfo.fromUrl(srcPath, srcQuery, srcHash) : new LocationInfo();
-    dstPath = dstPath != null && dstPath.startsWith("/moera") ? dstPath.substring(6) : dstPath;
-    const dstInfo = LocationInfo.fromUrl(dstPath, dstQuery, dstHash);
-    const actions = locationTransform(srcInfo, dstInfo);
-    dispatch(locationLock().causedBy(caller));
-    for (let a of actions) {
-        dispatch(a.causedBy(caller));
-    }
-    changeLocation(null, caller);
-    dispatch(locationUnlock().causedBy(caller));
+async function jumpFarSaga(action: JumpFarAction): Promise<void> {
+    const {nodeName, rootLocation, path, query, hash, fallbackUrl} = action.payload;
+    return jumpFarAnywhere(action, nodeName, rootLocation, path, query, hash, fallbackUrl);
 }
 
-// FIXME deprecated
-async function initFromNodeLocationSaga(action: InitFromNodeLocationAction): Promise<void> {
-    const {nodeName, path, query, hash, fallbackUrl} = action.payload;
-
-    const nodeLocation = await getNodeUri(action, nodeName);
-    if (nodeLocation == null) {
-        if (fallbackUrl != null) {
-            window.location.href = fallbackUrl;
-        } else {
-            dispatch(goHomeLocation("/news", null, null).causedBy(action));
-        }
-        return;
+async function jumpFarAnywhere(
+    caller: JumpFarAction, nodeName: string | null, rootLocation: string | null, path: string | null,
+    query: string | null, hash: string | null, fallbackUrl: string | null
+): Promise<void> {
+    if (rootLocation != null) {
+        dispatch(ownerSwitch(nodeName, rootLocation).causedBy(caller));
+        transformation(caller, null, null, null, path, query, hash);
+    } else if (nodeName != null) {
+        return jumpFarOnlyNodeAndLocation(caller, nodeName, path, query, hash, fallbackUrl);
+    } else if (path && path !== "/") {
+        return jumpFarOnlyLocation(caller, path, query, hash, fallbackUrl);
+    } else {
+        return jumpFarOnlyLocation(caller, "/news", null, null, fallbackUrl);
     }
-    const {scheme, host, port} = URI.parse(nodeLocation);
-    if (scheme == null || host == null) {
-        if (fallbackUrl != null) {
-            window.location.href = fallbackUrl;
-        } else {
-            dispatch(goHomeLocation("/news", null, null).causedBy(action));
-        }
-        return;
-    }
-    const rootLocation = rootUrl(scheme, host, port);
-    dispatch(initFromLocation(nodeName, rootLocation, path, query, hash).causedBy(action));
-}
-
-// FIXME deprecated
-function initFromLocationSaga(action: InitFromLocationAction): void {
-    const {path, query, hash} = action.payload;
-    transformation(action, null, null, null, path, query, hash);
 }
 
 async function jumpFarOnlyNodeAndLocation(
@@ -169,31 +133,27 @@ async function jumpFarOnlyLocation(
     transformation(caller, null, null, null, path, query, hash);
 }
 
-async function jumpFarAnywhere(
-    caller: JumpFarAction, nodeName: string | null, rootLocation: string | null, path: string | null,
-    query: string | null, hash: string | null, fallbackUrl: string | null
-): Promise<void> {
-    if (rootLocation != null) {
-        dispatch(ownerSwitch(nodeName, rootLocation).causedBy(caller));
-        transformation(caller, null, null, null, path, query, hash);
-    } else if (nodeName != null) {
-        return jumpFarOnlyNodeAndLocation(caller, nodeName, path, query, hash, fallbackUrl);
-    } else if (path && path !== "/") {
-        return jumpFarOnlyLocation(caller, path, query, hash, fallbackUrl);
-    } else {
-        return jumpFarOnlyLocation(caller, "/news", null, null, fallbackUrl);
-    }
-}
-
-async function jumpFarSaga(action: JumpFarAction): Promise<void> {
-    const {nodeName, rootLocation, path, query, hash, fallbackUrl} = action.payload;
-    return jumpFarAnywhere(action, nodeName, rootLocation, path, query, hash, fallbackUrl);
-}
-
 function jumpNearSaga(action: JumpNearAction): void {
     const current = URI.parse(select(state => state.navigation.location));
     const {path, query, hash} = action.payload;
     transformation(action, current.path || "", current.query || "", current.fragment || "", path, query, hash);
+}
+
+function transformation(
+    caller: ClientAction,
+    srcPath: string | null, srcQuery: string | null, srcHash: string | null,
+    dstPath: string | null, dstQuery: string | null, dstHash: string | null
+): void {
+    const srcInfo = srcPath != null ? LocationInfo.fromUrl(srcPath, srcQuery, srcHash) : new LocationInfo();
+    dstPath = dstPath != null && dstPath.startsWith("/moera") ? dstPath.substring(6) : dstPath;
+    const dstInfo = LocationInfo.fromUrl(dstPath, dstQuery, dstHash);
+    const actions = locationTransform(srcInfo, dstInfo);
+    dispatch(locationLock().causedBy(caller));
+    for (let a of actions) {
+        dispatch(a.causedBy(caller));
+    }
+    changeLocation(null, caller);
+    dispatch(locationUnlock().causedBy(caller));
 }
 
 function newLocationSaga(action: NewLocationAction): void {
@@ -210,34 +170,6 @@ function changeLocation(actionType: "NEW_LOCATION" | "UPDATE_LOCATION" | null, c
         const create = actionType == null || actionType === "NEW_LOCATION";
         dispatch(locationSet(info.toUrl(), info.title, info.canonicalUrl, info.noIndexPage, create).causedBy(caller));
     }
-}
-
-// FIXME deprecated
-async function goHomeLocationSaga(action: GoHomeLocationAction): Promise<void> {
-    await homeIntroduced();
-
-    const {path, query, hash} = action.payload;
-    const {atNode, homeOwnerName, homeRootPage} = select(state => ({
-        atNode: isAtNode(state),
-        homeOwnerName: getHomeOwnerName(state),
-        homeRootPage: getHomeRootPage(state)
-    }));
-
-    if (atNode) {
-        return;
-    }
-
-    if (homeRootPage != null) {
-        const {scheme, host, port} = URI.parse(homeRootPage);
-        if (scheme != null && host != null) {
-            const rootLocation = rootUrl(scheme, host, port);
-            dispatch(initFromLocation(homeOwnerName, rootLocation, path, query, hash).causedBy(action));
-            return;
-        }
-    }
-
-    dispatch(nodeReady().causedBy(action));
-    dispatch(initFromLocation(homeOwnerName, null, path, query, hash).causedBy(action));
 }
 
 // async function goToHomePageSaga(action: GoToHomePageAction<any, any>): Promise<void> {

@@ -12,30 +12,6 @@ export type BootAction = ActionWithPayload<"BOOT", {
 export const boot = (target?: DocumentLocation, initialState?: Partial<ClientState>): BootAction =>
     actionWithPayload("BOOT", {target, initialState});
 
-export type InitFromNodeLocationAction = ActionWithPayload<"INIT_FROM_NODE_LOCATION", {
-    nodeName: string;
-    path: string | null;
-    query: string | null;
-    hash: string | null;
-    fallbackUrl: string | null;
-}>;
-export const initFromNodeLocation = (
-    nodeName: string, path: string | null, query: string | null, hash: string | null, fallbackUrl: string | null
-): InitFromNodeLocationAction =>
-    actionWithPayload("INIT_FROM_NODE_LOCATION", {nodeName, path, query, hash, fallbackUrl});
-
-export type InitFromLocationAction = ActionWithPayload<"INIT_FROM_LOCATION", {
-    nodeName: string | null;
-    rootLocation: string | null;
-    path: string | null;
-    query: string | null;
-    hash: string | null;
-}>;
-export const initFromLocation = (
-    nodeName: string | null, rootLocation: string | null, path: string | null, query: string | null, hash: string | null
-): InitFromLocationAction =>
-    actionWithPayload("INIT_FROM_LOCATION", {nodeName, rootLocation, path, query, hash});
-
 export type WakeUpAction = ActionWithoutPayload<"WAKE_UP">;
 export const wakeUp = (): WakeUpAction =>
     actionWithoutPayload("WAKE_UP");
@@ -250,14 +226,6 @@ export type JumpNearAction = ActionWithPayload<"JUMP_NEAR", {
 export const jumpNear = (path: string | null, query: string | null, hash: string | null): JumpNearAction =>
     actionWithPayload("JUMP_NEAR", {path, query, hash});
 
-export type GoHomeLocationAction = ActionWithPayload<"GO_HOME_LOCATION", {
-    path: string | null;
-    query: string | null;
-    hash: string | null;
-}>;
-export const goHomeLocation = (path: string | null, query: string | null, hash: string | null): GoHomeLocationAction =>
-    actionWithPayload("GO_HOME_LOCATION", {path, query, hash});
-
 export type BottomMenuHideAction = ActionWithoutPayload<"BOTTOM_MENU_HIDE">;
 export const bottomMenuHide = (): BottomMenuHideAction =>
     actionWithoutPayload("BOTTOM_MENU_HIDE");
@@ -268,8 +236,6 @@ export const bottomMenuShow = (): BottomMenuShowAction =>
 
 export type NavigationAnyAction =
     BootAction
-    | InitFromNodeLocationAction
-    | InitFromLocationAction
     | WakeUpAction
     | GoToPageAnyAction
     | NewLocationAction
@@ -279,6 +245,5 @@ export type NavigationAnyAction =
     | LocationUnlockAction
     | JumpFarAction
     | JumpNearAction
-    | GoHomeLocationAction
     | BottomMenuHideAction
     | BottomMenuShowAction;
