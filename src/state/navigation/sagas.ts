@@ -58,55 +58,45 @@ function bootSaga(action: BootAction): void {
 }
 
 async function navigateFarSaga(action: JumpFarAction | RestoreFarAction): Promise<void> {
-    const {nodeName, rootLocation, path, query, hash, fallbackUrl} = action.payload;
-    return navigateFar(action, nodeName, rootLocation, path, query, hash, fallbackUrl);
+    const {nodeName, rootLocation, path, query, hash} = action.payload;
+    return navigateFar(action, nodeName, rootLocation, path, query, hash);
 }
 
 async function navigateFar(
     caller: ClientAction, nodeName: string | null, rootLocation: string | null, path: string | null,
-    query: string | null, hash: string | null, fallbackUrl: string | null
+    query: string | null, hash: string | null
 ): Promise<void> {
     if (rootLocation != null) {
         dispatch(ownerSwitch(nodeName, rootLocation).causedBy(caller));
         transformation(caller, null, null, null, path, query, hash);
     } else if (nodeName != null) {
-        return navigateFarOnlyNodeAndLocation(caller, nodeName, path, query, hash, fallbackUrl);
+        return navigateFarOnlyNodeAndLocation(caller, nodeName, path, query, hash);
     } else if (path && path !== "/") {
-        return navigateFarOnlyLocation(caller, path, query, hash, fallbackUrl);
+        return navigateFarOnlyLocation(caller, path, query, hash);
     } else {
-        return navigateFarOnlyLocation(caller, "/news", null, null, fallbackUrl);
+        return navigateFarOnlyLocation(caller, "/news", null, null);
     }
 }
 
 async function navigateFarOnlyNodeAndLocation(
-    caller: ClientAction, nodeName: string, path: string | null, query: string | null, hash: string | null,
-    fallbackUrl: string | null
+    caller: ClientAction, nodeName: string, path: string | null, query: string | null, hash: string | null
 ): Promise<void> {
     const nodeLocation = await getNodeUri(caller, nodeName);
     if (nodeLocation == null) {
-        if (fallbackUrl != null) {
-            window.location.href = fallbackUrl;
-        } else {
-            await navigateFarOnlyLocation(caller, "/news", null, null, fallbackUrl);
-            dispatch(messageBox(i18n.t("node-name-not-exists")));
-        }
+        await navigateFarOnlyLocation(caller, "/news", null, null);
+        dispatch(messageBox(i18n.t("node-name-not-exists")));
         return;
     }
     const {scheme, host, port} = URI.parse(nodeLocation);
     if (scheme == null || host == null) {
-        if (fallbackUrl != null) {
-            window.location.href = fallbackUrl;
-        } else {
-            await navigateFarOnlyLocation(caller, "/news", null, null, fallbackUrl);
-        }
-        return;
+        return navigateFarOnlyLocation(caller, "/news", null, null);
     }
     const rootLocation = rootUrl(scheme, host, port);
-    return navigateFar(caller, nodeName, rootLocation, path, query, hash, fallbackUrl);
+    return navigateFar(caller, nodeName, rootLocation, path, query, hash);
 }
 
 async function navigateFarOnlyLocation(
-    caller: ClientAction, path: string | null, query: string | null, hash: string | null, fallbackUrl: string | null
+    caller: ClientAction, path: string | null, query: string | null, hash: string | null
 ): Promise<void> {
     const atNode = select(isAtNode);
     if (atNode) {
@@ -125,7 +115,7 @@ async function navigateFarOnlyLocation(
         const {scheme, host, port} = URI.parse(homeRootPage);
         if (scheme != null && host != null) {
             const rootLocation = rootUrl(scheme, host, port);
-            return navigateFar(caller, homeOwnerName, rootLocation, path, query, hash, fallbackUrl);
+            return navigateFar(caller, homeOwnerName, rootLocation, path, query, hash);
         }
     }
 

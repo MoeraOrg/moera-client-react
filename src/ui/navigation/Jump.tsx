@@ -81,7 +81,7 @@ function Jump(
                 }
             }
             const {path = null, query = null, fragment = null} = URI.parse(href);
-            dispatch(jumpFar(nodeOwnerName, rootLocation, path, query, fragment, url));
+            dispatch(jumpFar(nodeOwnerName, rootLocation, path, query, fragment));
         }
 
         if (onFar != null) {

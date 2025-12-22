@@ -200,13 +200,12 @@ export type JumpFarAction = ActionWithPayload<"JUMP_FAR", {
     path: string | null;
     query: string | null;
     hash: string | null;
-    fallbackUrl: string | null;
 }>;
 export const jumpFar = (
     nodeName: string | null, rootLocation: string | null, path: string | null, query: string | null,
-    hash: string | null, fallbackUrl: string | null = null
+    hash: string | null
 ): JumpFarAction =>
-    actionWithPayload("JUMP_FAR", {nodeName, rootLocation, path, query, hash, fallbackUrl});
+    actionWithPayload("JUMP_FAR", {nodeName, rootLocation, path, query, hash});
 
 export type JumpNearAction = ActionWithPayload<"JUMP_NEAR", {
     path: string | null;
@@ -222,13 +221,12 @@ export type RestoreFarAction = ActionWithPayload<"RESTORE_FAR", {
     path: string | null;
     query: string | null;
     hash: string | null;
-    fallbackUrl: string | null;
 }>;
 export const restoreFar = (
     nodeName: string | null, rootLocation: string | null, path: string | null, query: string | null,
-    hash: string | null, fallbackUrl: string | null = null
+    hash: string | null
 ): RestoreFarAction =>
-    actionWithPayload("RESTORE_FAR", {nodeName, rootLocation, path, query, hash, fallbackUrl});
+    actionWithPayload("RESTORE_FAR", {nodeName, rootLocation, path, query, hash});
 
 export type RestoreNearAction = ActionWithPayload<"RESTORE_NEAR", {
     path: string | null;

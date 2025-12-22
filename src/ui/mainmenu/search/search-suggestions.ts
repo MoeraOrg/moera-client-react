@@ -67,7 +67,7 @@ export function useSearchSuggestions(
                 case "name":
                     inputDom.current?.blur();
                     if (item.nodeName != null) {
-                        dispatch(jumpFar(item.nodeName, null, "/timeline", null, null, null));
+                        dispatch(jumpFar(item.nodeName, null, "/timeline", null, null));
                     }
                     break;
                 case "search":
@@ -76,7 +76,7 @@ export function useSearchSuggestions(
                         if (atNode) {
                             dispatch(jumpNear("/search", ut`query=${query}`, null));
                         } else {
-                            dispatch(jumpFar(searchNode, null, "/search", ut`query=${query}`, null, null));
+                            dispatch(jumpFar(searchNode, null, "/search", ut`query=${query}`, null));
                         }
                     }
                     break;
