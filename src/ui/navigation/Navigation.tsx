@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
-import { jumpNear, initFromLocation } from "state/navigation/actions";
+import { jumpFar, jumpNear } from "state/navigation/actions";
 import { cartesLoad } from "state/cartes/actions";
 import { getInstantCount } from "state/feeds/selectors";
 import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
@@ -31,7 +31,7 @@ export default function Navigation() {
         if (root === rootLocation) {
             dispatch(jumpNear(path, query, hash));
         } else {
-            dispatch(initFromLocation(name ?? null, root ?? null, path, query, hash));
+            dispatch(jumpFar(name ?? null, root ?? null, path, query, hash));
         }
         event.preventDefault();
     }, [dispatch, rootLocation]);

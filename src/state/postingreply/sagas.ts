@@ -6,7 +6,7 @@ import { PostingReplyAction } from "state/postingreply/actions";
 import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getNodeUri } from "state/naming/sagas";
-import { jumpNear, initFromLocation } from "state/navigation/actions";
+import { jumpFar, jumpNear } from "state/navigation/actions";
 import { getHomeOwnerName, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { executor } from "state/executor";
@@ -116,8 +116,8 @@ async function postingReplySaga(action: WithContext<PostingReplyAction>): Promis
         const draft = await Node.createDraft(action, REL_HOME, draftText);
         if (nodeRootPage !== homeRootPage) {
             if (homeRootLocation != null) {
-                dispatch(initFromLocation(
-                    homeOwnerName, homeRootLocation, "/compose", ut`?draft=${draft.id}`, null
+                dispatch(jumpFar(
+                    homeOwnerName, homeRootLocation, "/compose", ut`draft=${draft.id}`, null
                 ).causedBy(action))
             }
         } else {

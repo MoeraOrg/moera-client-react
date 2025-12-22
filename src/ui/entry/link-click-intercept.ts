@@ -2,7 +2,7 @@ import React from 'react';
 import * as URI from 'uri-js';
 
 import { dispatch, select } from "state/store-sagas";
-import { initFromLocation, initFromNodeLocation, newLocation } from "state/navigation/actions";
+import { jumpFar } from "state/navigation/actions";
 import { getSetting } from "state/settings/selectors";
 import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
@@ -25,8 +25,8 @@ export function interceptLinkClick(event: MouseEvent | React.MouseEvent): void {
     if (["moera.page", window.location.host].includes(parts.host.toLowerCase())) {
         const uniParts = parseUniversalLocation(parts.path, parts.query, parts.fragment);
         if (uniParts != null) {
-            const {name = null, rootLocation, path = null, query = null, hash = null} = uniParts;
-            jump(name, rootLocation, path, query, hash);
+            const {name = null, rootLocation = null, path = null, query = null, hash = null} = uniParts;
+            dispatch(jumpFar(name, rootLocation, path, query, hash));
             event.preventDefault();
             return;
         }
@@ -43,9 +43,9 @@ export function interceptLinkClick(event: MouseEvent | React.MouseEvent): void {
         const headers = response.headers;
         if (headers && headers.has("X-Moera")) {
             const rootPage = rootUrl(parts.scheme!, parts.host!, parts.port);
-            const {name = null, rootLocation, path = null, query = null, hash = null} =
+            const {name = null, rootLocation = null, path = null, query = null, hash = null} =
                 getCanonicalLocation(rootPage, parts.path, parts.query, parts.fragment, headers.get("X-Moera"));
-            jump(name, rootLocation, path, query, hash);
+            dispatch(jumpFar(name, rootLocation, path, query, hash));
         } else {
             openLink(href);
         }
@@ -61,17 +61,5 @@ function openLink(href: string): void {
         window.location.href = href;
     } else {
         window.open(href, "_blank");
-    }
-}
-
-function jump(
-    nodeName: string | null, rootLocation: string | null | undefined, path: string | null, query: string | null,
-    hash: string | null
-): void {
-    if (rootLocation != null) {
-        dispatch(newLocation());
-        dispatch(initFromLocation(nodeName, rootLocation, path, query, hash));
-    } else if (nodeName != null) {
-        dispatch(initFromNodeLocation(nodeName, path, query, hash, null));
     }
 }

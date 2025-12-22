@@ -13,8 +13,8 @@ import {
     GoHomeLocationAction,
     initFromLocation,
     InitFromLocationAction,
-    initFromNodeLocation,
     InitFromNodeLocationAction,
+    jumpFar,
     JumpFarAction,
     jumpNear,
     JumpNearAction,
@@ -51,18 +51,11 @@ function bootSaga(action: BootAction): void {
     Storage.loadData();
 
     const {
-        name, rootLocation, path = null, query = null, hash = null
+        name = null, rootLocation = null, path = null, query = null, hash = null
     } = action.payload.target ?? Browser.parseDocumentLocation();
 
-    if (rootLocation != null) {
-        dispatch(initFromLocation(name ?? null, rootLocation, path, query, hash).causedBy(action));
-    } else if (name != null) {
-        dispatch(initFromNodeLocation(name, path, query, hash, null).causedBy(action));
-    } else if (path && path !== "/") {
-        dispatch(goHomeLocation(path, query, hash).causedBy(action));
-    } else {
-        dispatch(goHomeLocation("/news", null, null).causedBy(action));
-    }
+    dispatch(jumpFar(name, rootLocation, path, query, hash).causedBy(action));
+
     const readId = Browser.parameters.get("read");
     if (readId) {
         dispatch(storyReadingUpdate(REL_HOME, "instant", readId, true).causedBy(action));

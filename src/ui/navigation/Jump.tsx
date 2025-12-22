@@ -6,7 +6,7 @@ import { ClientState } from "state/state";
 import { getNamingNameDetails } from "state/naming/selectors";
 import { getHomeOwnerNameOrUrl, getHomeRootPage } from "state/home/selectors";
 import { getNodeRootPage, getOwnerNameOrUrl } from "state/node/selectors";
-import { jumpNear, initFromLocation, initFromNodeLocation } from "state/navigation/actions";
+import { jumpFar, jumpNear } from "state/navigation/actions";
 import { getSearchNodeName } from "state/search/selectors";
 import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
@@ -72,17 +72,16 @@ function Jump(
         const performJump = () => {
             if (nodeOwnerName == null) {
                 return;
-            } else if (nodeLocation == null) {
-                const {path = null, query = null, fragment = null} = URI.parse(href);
-                dispatch(initFromNodeLocation(nodeOwnerName, path, query, fragment, url));
-            } else {
+            }
+            let rootLocation = null;
+            if (nodeLocation != null) {
                 const {scheme, host, port} = URI.parse(nodeLocation);
                 if (scheme != null && host != null) {
-                    const rootLocation = rootUrl(scheme, host, port);
-                    const {path = null, query = null, fragment = null} = URI.parse(href);
-                    dispatch(initFromLocation(nodeOwnerName, rootLocation, path, query, fragment));
+                    rootLocation = rootUrl(scheme, host, port);
                 }
             }
+            const {path = null, query = null, fragment = null} = URI.parse(href);
+            dispatch(jumpFar(nodeOwnerName, rootLocation, path, query, fragment));
         }
 
         if (onFar != null) {

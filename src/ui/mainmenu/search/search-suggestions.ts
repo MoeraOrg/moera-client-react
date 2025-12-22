@@ -6,7 +6,7 @@ import { ClientState } from "state/state";
 import { isAtNode } from "state/node/selectors";
 import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
-import { jumpNear, initFromNodeLocation } from "state/navigation/actions";
+import { jumpFar, jumpNear } from "state/navigation/actions";
 import { isAtSearchPage } from "state/navigation/selectors";
 import { searchHistoryDelete, searchHistoryPrepare } from "state/search/actions";
 import { getSearchNodeName, getSearchQuery } from "state/search/selectors";
@@ -67,7 +67,7 @@ export function useSearchSuggestions(
                 case "name":
                     inputDom.current?.blur();
                     if (item.nodeName != null) {
-                        dispatch(initFromNodeLocation(item.nodeName, "/timeline", null, null, null));
+                        dispatch(jumpFar(item.nodeName, null, "/timeline", null, null, null));
                     }
                     break;
                 case "search":
@@ -76,7 +76,7 @@ export function useSearchSuggestions(
                         if (atNode) {
                             dispatch(jumpNear("/search", ut`query=${query}`, null));
                         } else {
-                            dispatch(initFromNodeLocation(searchNode, "/search", ut`query=${query}`, null, null));
+                            dispatch(jumpFar(searchNode, null, "/search", ut`query=${query}`, null, null));
                         }
                     }
                     break;

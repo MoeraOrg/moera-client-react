@@ -16,7 +16,7 @@ import {
     OwnerVerifyAction
 } from "state/node/actions";
 import { getNodeRootLocation, getNodeRootPage, getOwnerName } from "state/node/selectors";
-import { initFromLocation } from "state/navigation/actions";
+import { jumpFar } from "state/navigation/actions";
 import { getNodeUri } from "state/naming/sagas";
 import { confirmBox } from "state/confirmbox/actions";
 import { normalizeUrl, rootUrl } from "util/url";
@@ -67,7 +67,7 @@ async function ownerVerifySaga(action: OwnerVerifyAction): Promise<void> {
                     message: i18n.t("blog-moved", {name: NodeName.shorten(ownerName), location: rootLocation}),
                     yes: i18n.t("open"),
                     no: i18n.t("cancel"),
-                    onYes: initFromLocation(ownerName, rootLocation, path, query, fragment)
+                    onYes: jumpFar(ownerName, rootLocation, path, query, fragment)
                 }).causedBy(action));
             }
         }
