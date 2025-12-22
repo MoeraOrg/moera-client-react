@@ -1,33 +1,28 @@
-import i18n from 'i18next';
-
 import { conj, inv, trigger } from "state/trigger";
 import { EventAction, NodeNameChangedEvent } from "api/events";
-import { InitFromLocationAction, newLocation, updateLocation } from "state/navigation/actions";
-import { nodeFeaturesLoad, nodeReady, ownerLoad, ownerSet, ownerVerify } from "state/node/actions";
+import { newLocation, updateLocation } from "state/navigation/actions";
+import { nodeFeaturesLoad, nodeReady, ownerLoad, ownerSet, OwnerSwitchAction, ownerVerify } from "state/node/actions";
 import { getOwnerName, isAtHomeNode, isAtNode, isOwnerNameRecentlyChanged, isOwnerNameSet } from "state/node/selectors";
 import { NamingNameLoadedAction } from "state/naming/actions";
-import { messageBox } from "state/messagebox/actions";
 import { ClientState } from "state/state";
 
 export default [
-    trigger("INIT_FROM_LOCATION", isAtNode, ownerLoad),
+    trigger("OWNER_SWITCH", isAtNode, ownerLoad),
     trigger(
-        "INIT_FROM_LOCATION",
-        (_: ClientState, signal: InitFromLocationAction) =>
+        "OWNER_SWITCH",
+        (_: ClientState, signal: OwnerSwitchAction) =>
             signal.payload.nodeName != null || (signal.payload.nodeName == null && signal.payload.rootLocation == null),
         nodeReady
     ),
-    trigger("OWNER_SET", true, nodeReady),
+    trigger("OWNER_SWITCH", isAtNode, nodeFeaturesLoad),
     trigger("NODE_READY", conj(isAtNode, isOwnerNameRecentlyChanged), ownerVerify),
     trigger("NODE_READY", true, newLocation),
-    trigger("INIT_FROM_LOCATION", isAtNode, nodeFeaturesLoad),
     trigger(
         "NAMING_NAME_LOADED",
         (state, signal: NamingNameLoadedAction) => signal.payload.name === getOwnerName(state),
         updateLocation
     ),
     trigger("PULSE_6H", isOwnerNameSet, ownerVerify),
-    trigger("OWNER_SWITCH_FAILED", true, () => messageBox(i18n.t("node-name-not-exists"))),
     trigger(
         "EVENT_NODE_NODE_NAME_CHANGED",
         true,

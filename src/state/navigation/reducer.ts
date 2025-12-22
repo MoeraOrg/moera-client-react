@@ -14,7 +14,7 @@ const initialState: NavigationState = {
 
 export default (state: NavigationState = initialState, action: ClientAction): NavigationState => {
     switch (action.type) {
-        case "INIT_FROM_LOCATION": {
+        case "INIT_FROM_LOCATION": { // FIXME
             let {path, query, hash} = action.payload;
             path = path != null && path.startsWith("/moera") ? path.substring(6) : path;
             return {

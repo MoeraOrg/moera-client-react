@@ -5,10 +5,6 @@ export type NodeReadyAction = ActionWithoutPayload<"NODE_READY">;
 export const nodeReady = (): NodeReadyAction =>
     actionWithoutPayload("NODE_READY");
 
-export type NodeUnsetAction = ActionWithoutPayload<"NODE_UNSET">;
-export const nodeUnset = (): NodeUnsetAction =>
-    actionWithoutPayload("NODE_UNSET");
-
 export type OwnerLoadAction = ActionWithoutPayload<"OWNER_LOAD">;
 export const ownerLoad = (): OwnerLoadAction =>
     actionWithoutPayload("OWNER_LOAD");
@@ -41,14 +37,11 @@ export const ownerVerified = (name: string, correct: boolean): OwnerVerifiedLoad
     actionWithPayload("OWNER_VERIFIED", {name, correct});
 
 export type OwnerSwitchAction = ActionWithPayload<"OWNER_SWITCH", {
-    name: string;
+    nodeName: string | null;
+    rootLocation: string | null;
 }>;
-export const ownerSwitch = (name: string): OwnerSwitchAction =>
-    actionWithPayload("OWNER_SWITCH", {name});
-
-export type OwnerSwitchFailedAction = ActionWithoutPayload<"OWNER_SWITCH_FAILED">;
-export const ownerSwitchFailed = (): OwnerSwitchFailedAction =>
-    actionWithoutPayload("OWNER_SWITCH_FAILED");
+export const ownerSwitch = (nodeName: string | null, rootLocation: string | null): OwnerSwitchAction =>
+    actionWithPayload("OWNER_SWITCH", {nodeName, rootLocation});
 
 export type NodeFeaturesLoadAction = ActionWithoutPayload<"NODE_FEATURES_LOAD">;
 export const nodeFeaturesLoad = (): NodeFeaturesLoadAction =>
@@ -63,12 +56,10 @@ export const nodeFeaturesLoaded = (nodeName: string, features: Features): NodeFe
 
 export type NodeAnyAction =
     NodeReadyAction
-    | NodeUnsetAction
     | OwnerLoadAction
     | OwnerSetAction
     | OwnerVerifyAction
     | OwnerVerifiedLoadAction
     | OwnerSwitchAction
-    | OwnerSwitchFailedAction
     | NodeFeaturesLoadAction
     | NodeFeaturesLoadedAction;

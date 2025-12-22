@@ -172,7 +172,7 @@ function updateBlockedBy(state: PeopleState, blockedByUser: BlockedByUserInfo, a
 
 export default (state: PeopleState = initialState, action: WithContext<ClientAction>): PeopleState => {
     switch (action.type) {
-        case "INIT_FROM_LOCATION":
+        case "OWNER_SWITCH":
             return cloneDeep(initialState);
 
         case "PEOPLE_GO_TO_TAB":

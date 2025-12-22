@@ -81,7 +81,7 @@ function immutableSetSubscriptionId(
 
 export default (state: PostingsState = initialState, action: WithContext<ClientAction>): PostingsState => {
     switch (action.type) {
-        case "INIT_FROM_LOCATION": {
+        case "OWNER_SWITCH": {
             const istate = immutable.wrap(state);
             Object.keys(state)
                 .filter(name => name !== action.payload.nodeName && name !== action.context.homeOwnerNameOrUrl)

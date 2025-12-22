@@ -14,7 +14,6 @@ export interface NodeState {
         verified: boolean;
         verifiedAt: number;
         changing: boolean;
-        switching: boolean;
     },
     features: Features | null;
     type: NodeType;

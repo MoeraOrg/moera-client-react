@@ -160,7 +160,7 @@ function updateBlocked(state: DetailedPostingState, homeOwnerName: string | null
 
 export default (state: DetailedPostingState = initialState, action: WithContext<ClientAction>): DetailedPostingState => {
     switch (action.type) {
-        case "INIT_FROM_LOCATION":
+        case "OWNER_SWITCH":
             return cloneDeep(initialState);
 
         case "GO_TO_PAGE": {

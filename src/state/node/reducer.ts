@@ -19,8 +19,7 @@ const initialState: NodeState = {
         correct: false,
         verified: false,
         verifiedAt: 0,
-        changing: false,
-        switching: false
+        changing: false
     },
     features: null,
     type: "regular"
@@ -28,11 +27,10 @@ const initialState: NodeState = {
 
 export default (state: NodeState = initialState, action: ClientAction): NodeState => {
     switch (action.type) {
-        case "INIT_FROM_LOCATION": {
-            if (!action.payload.rootLocation) {
+        case "OWNER_SWITCH": {
+            if (action.payload.rootLocation == null) {
                 return cloneDeep(initialState);
             }
-
             const location = action.payload.rootLocation.toLowerCase();
             const page = location + "/moera";
             const api = page + "/api";
@@ -57,13 +55,6 @@ export default (state: NodeState = initialState, action: ClientAction): NodeStat
                 ...state,
                 introduced: true
             };
-
-        case "NODE_UNSET":
-            return immutable
-                .wrap(state)
-                .assign("root", initialState.root)
-                .assign("owner", initialState.owner)
-                .value();
 
         case "OWNER_SET": {
             if (
@@ -97,12 +88,6 @@ export default (state: NodeState = initialState, action: ClientAction): NodeStat
                 });
             }
             return state;
-
-        case "OWNER_SWITCH":
-            return immutable.set(state, "owner.switching", true);
-
-        case "OWNER_SWITCH_FAILED":
-            return immutable.set(state, "owner.switching", false);
 
         case "NODE_FEATURES_LOADED":
             if (state.owner.name === action.payload.nodeName) {

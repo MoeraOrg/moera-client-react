@@ -1,3 +1,4 @@
+import i18n from 'i18next';
 import * as URI from 'uri-js';
 
 import { Storage } from "storage";
@@ -24,11 +25,12 @@ import {
     UpdateLocationAction
 } from "state/navigation/actions";
 import { homeIntroduced } from "state/init-barriers";
-import { nodeReady } from "state/node/actions";
+import { nodeReady, ownerSwitch } from "state/node/actions";
 import { isAtNode } from "state/node/selectors";
 import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { storyReadingUpdate } from "state/stories/actions";
+import { messageBox } from "state/messagebox/actions";
 import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
 import { REL_HOME } from "util/rel-node-name";
@@ -126,6 +128,7 @@ async function jumpFarOnlyNodeAndLocation(
             window.location.href = fallbackUrl;
         } else {
             await jumpFarOnlyLocation(caller, "/news", null, null, fallbackUrl);
+            dispatch(messageBox(i18n.t("node-name-not-exists")));
         }
         return;
     }
@@ -166,8 +169,11 @@ async function jumpFarOnlyLocation(
         }
     }
 
+    // Global page, no node
+    dispatch(ownerSwitch(null, null).causedBy(caller));
     dispatch(nodeReady().causedBy(caller));
-    return jumpFarAnywhere(caller, homeOwnerName, null, path, query, hash, fallbackUrl);
+    // TODO If the target page requires a home node, do nothing
+    transformation(caller, null, null, null, path, query, hash);
 }
 
 async function jumpFarAnywhere(
@@ -175,7 +181,7 @@ async function jumpFarAnywhere(
     query: string | null, hash: string | null, fallbackUrl: string | null
 ): Promise<void> {
     if (rootLocation != null) {
-        // TODO do something like OWNER_SWITCH to do cleaning and emit OWNER_LOAD
+        dispatch(ownerSwitch(nodeName, rootLocation).causedBy(caller));
         transformation(caller, null, null, null, path, query, hash);
     } else if (nodeName != null) {
         return jumpFarOnlyNodeAndLocation(caller, nodeName, path, query, hash, fallbackUrl);

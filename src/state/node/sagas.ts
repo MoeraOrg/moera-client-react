@@ -12,14 +12,12 @@ import {
     nodeFeaturesLoaded,
     OwnerLoadAction,
     ownerSet,
-    OwnerSwitchAction,
-    ownerSwitchFailed,
     ownerVerified,
     OwnerVerifyAction
 } from "state/node/actions";
 import { getNodeRootLocation, getNodeRootPage, getOwnerName } from "state/node/selectors";
 import { initFromLocation } from "state/navigation/actions";
-import { getNameDetails, getNodeUri } from "state/naming/sagas";
+import { getNodeUri } from "state/naming/sagas";
 import { confirmBox } from "state/confirmbox/actions";
 import { normalizeUrl, rootUrl } from "util/url";
 import { REL_CURRENT } from "util/rel-node-name";
@@ -27,7 +25,6 @@ import { REL_CURRENT } from "util/rel-node-name";
 export default [
     executor("OWNER_LOAD", null, ownerLoadSaga),
     executor("OWNER_VERIFY", null, ownerVerifySaga),
-    executor("OWNER_SWITCH", payload => payload.name, ownerSwitchSaga),
     executor("NODE_FEATURES_LOAD", null, nodeFeaturesLoadSaga)
 ];
 
@@ -75,28 +72,6 @@ async function ownerVerifySaga(action: OwnerVerifyAction): Promise<void> {
             }
         }
     } catch (e) {
-        dispatch(errorThrown(e));
-    }
-}
-
-async function ownerSwitchSaga(action: WithContext<OwnerSwitchAction>): Promise<void> {
-    if (action.payload.name === action.context.ownerName) {
-        return;
-    }
-
-    try {
-        const info = await getNameDetails(action, action.payload.name, true);
-        if (info && info.nodeName && info.nodeUri) {
-            const {scheme, host, port, path = null} = URI.parse(info.nodeUri);
-            if (scheme != null && host != null) {
-                const rootLocation = rootUrl(scheme, host, port);
-                dispatch(initFromLocation(info.nodeName, rootLocation, path, null, null).causedBy(action));
-            }
-        } else {
-            dispatch(ownerSwitchFailed().causedBy(action));
-        }
-    } catch (e) {
-        dispatch(ownerSwitchFailed().causedBy(action));
         dispatch(errorThrown(e));
     }
 }

@@ -135,7 +135,7 @@ function updateScrollingOnInactive(
 
 export default (state: FeedsState = initialState, action: WithContext<ClientAction>): FeedsState => {
     switch (action.type) {
-        case "INIT_FROM_LOCATION": {
+        case "OWNER_SWITCH": {
             const istate = immutable.wrap(state);
             Object.keys(state)
                 .filter(name => name !== action.payload.nodeName && name !== action.context.homeOwnerNameOrUrl)

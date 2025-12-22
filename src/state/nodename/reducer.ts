@@ -31,7 +31,7 @@ const initialState: NodeNameState = {
 
 export default (state: NodeNameState = initialState, action: ClientAction): NodeNameState => {
     switch (action.type) {
-        case "INIT_FROM_LOCATION":
+        case "OWNER_SWITCH":
             return cloneDeep(initialState);
 
         case "NODE_NAME_LOAD":

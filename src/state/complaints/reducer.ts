@@ -76,7 +76,7 @@ function extractComplaint(complaint: SheriffComplaintInfo | ExtComplaintInfo): E
 
 export default (state: ComplaintsState = initialState, action: WithContext<ClientAction>): ComplaintsState => {
     switch (action.type) {
-        case "INIT_FROM_LOCATION":
+        case "OWNER_SWITCH":
             return cloneDeep(initialState);
 
         case "COMPLAINTS_PAST_SLICE_LOAD":
