@@ -10,7 +10,7 @@ export default [
 async function flashBoxSaga(action: FlashBoxAction): Promise<void> {
     const {short} = action.payload;
 
-    await delay(!short ? 1500 : 1000);
+    await delay(!short ? 2000 : 1000);
     dispatch(flashBoxDismiss().causedBy(action));
     await delay(1000);
     dispatch(flashBoxClose().causedBy(action));

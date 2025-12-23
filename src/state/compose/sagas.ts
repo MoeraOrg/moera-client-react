@@ -17,6 +17,7 @@ import {
     ComposeDraftSaveAction,
     composeDraftSaved,
     composeDraftSaveFailed,
+    composeDraftSelect,
     composeDraftUnset,
     ComposePostAction,
     composePostFailed,
@@ -118,6 +119,7 @@ async function composeDraftLoadSaga(action: WithContext<ComposeDraftLoadAction>)
         } else {
             dispatch(errorThrown(e));
         }
+        dispatch(composeDraftSelect(null));
     }
 }
 
