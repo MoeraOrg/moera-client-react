@@ -15,16 +15,16 @@ type ExploreBoxTab = "discussions" | "posts";
 export default function ExploreBox() {
     const [activeTab, setActiveTab] = useState<ExploreBoxTab>("discussions");
     const loadingDiscussions = useSelector((state: ClientState) => state.explore.loadingDiscussions);
-    const discussions = useSelector((state: ClientState) => state.explore.discussions.slice(0, MAX_ITEMS));
+    const discussions = useSelector((state: ClientState) => state.explore.discussions);
     const loadingTrending = useSelector((state: ClientState) => state.explore.loadingTrending);
-    const trending = useSelector((state: ClientState) => state.explore.trending.slice(0, MAX_ITEMS));
+    const trending = useSelector((state: ClientState) => state.explore.trending);
     const {t} = useTranslation();
 
     if (loadingDiscussions || loadingTrending || (discussions.length === 0 && trending.length === 0)) {
         return null;
     }
 
-    const posts = activeTab === "discussions" ? discussions : trending;
+    const posts = (activeTab === "discussions" ? discussions : trending).slice(0, MAX_ITEMS);
     const seeAllHref = activeTab === "discussions" ? "/explore/discussions" : "/explore/trending";
     const counters = activeTab === "discussions"
         ? ["comments" as const, "reactions-icon" as const]
