@@ -1,8 +1,8 @@
-/* eslint-disable no-restricted-globals */
+import workerpool from 'workerpool';
 
 import { isSchemaValid } from "api/schema";
 import { NODE_API_VALIDATORS } from "api/node/api-validators";
-import { safeValidateResponse, SafeValidationErrors, SafeWorkerMessage } from "safe/message-types";
+import { SafeValidateFunction, SafeValidationErrors } from "safe/types";
 import {
     Body,
     BodyFormat,
@@ -20,7 +20,9 @@ import {
     EncodedFeedSliceInfo,
     EncodedPostingInfo,
     EncodedPostingRevisionInfo,
-    EncodedSearchEntryInfo, EncodedSearchHashtagSliceInfo, EncodedSearchTextPageInfo,
+    EncodedSearchEntryInfo,
+    EncodedSearchHashtagSliceInfo,
+    EncodedSearchTextPageInfo,
     EncodedStoryInfo,
     EntryInfo,
     FeedSliceInfo,
@@ -31,35 +33,27 @@ import {
     StoryInfo
 } from "api";
 
-self.onmessage = (e: MessageEvent) => {
-    const message = e.data as SafeWorkerMessage;
-    switch (message.type) {
-        case "VALIDATE": {
-            let {id, schemaName, data, decodeBodies: decode} = message.payload;
-            const schema = NODE_API_VALIDATORS[schemaName];
-            if (schema == null) {
-                postMessage(safeValidateResponse(id, false, [{message: `Schema ${schemaName} is not found`}]));
-                break;
-            }
-            let valid = isSchemaValid(schema, data);
-            let errors: SafeValidationErrors | null | undefined = schema.errors;
-            if (valid && decode) {
-                try {
-                    data = decodeBodies(data);
-                } catch (e) {
-                    valid = false;
-                    if (e instanceof BodyError) {
-                        errors = [{message: "Server returned incorrect Body"}];
-                        if (e.errors != null) {
-                            errors.concat(e.errors);
-                        }
-                    }
+const safeValidate: SafeValidateFunction = ({schemaName, data, decodeBodies: decode}) => {
+    const schema = NODE_API_VALIDATORS[schemaName];
+    if (schema == null) {
+        return {valid: false, data, errors: [{message: `Schema ${schemaName} is not found`}]};
+    }
+    let valid = isSchemaValid(schema, data);
+    let errors: SafeValidationErrors | null | undefined = schema.errors;
+    if (valid && decode) {
+        try {
+            data = decodeBodies(data);
+        } catch (e) {
+            valid = false;
+            if (e instanceof BodyError) {
+                errors = [{message: "Server returned incorrect Body"}];
+                if (e.errors != null) {
+                    errors.concat(e.errors);
                 }
             }
-            postMessage(safeValidateResponse(id, valid, data, errors));
-            break;
         }
     }
+    return {valid, data, errors};
 }
 
 class BodyError {
@@ -126,3 +120,5 @@ function decodeBodies(data: EncodedEntities | EncodedEntities[]): Entities | Ent
     }
     return decoded;
 }
+
+workerpool.worker({safeValidate});

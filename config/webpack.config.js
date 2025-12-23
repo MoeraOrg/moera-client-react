@@ -26,6 +26,7 @@ const ForkTsCheckerWebpackPlugin =
     : require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
+const WorkerUrlPlugin = require('worker-url/plugin');
 
 const createEnvironmentHash = require('./webpack/persistentCache/createEnvironmentHash');
 
@@ -344,6 +345,9 @@ module.exports = function (webpackEnv) {
       fallback: {
         stream: require.resolve("stream-browserify"),
         buffer: require.resolve("buffer"),
+        os: false,
+        worker_threads: false,
+        child_process: false,
       },
     },
     module: {
@@ -792,6 +796,7 @@ module.exports = function (webpackEnv) {
         extensions: ['css'],
         threads: true,
       }),
+      new WorkerUrlPlugin(),
     ].filter(Boolean),
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter

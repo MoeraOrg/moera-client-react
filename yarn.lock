@@ -10738,6 +10738,16 @@ workbox-window@7.3.0:
     "@types/trusted-types" "^2.0.2"
     workbox-core "7.3.0"
 
+worker-url@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/worker-url/-/worker-url-1.1.0.tgz#607b92f36822061dca8363d9208fea3dec6a0bcb"
+  integrity sha512-HDLF1ZcIsb9gGGUgYkvOmr4AJVkLLuWCdpJ4/xyETDYCQMuqmp3DvKkj7EGepQXvowaETg32lENI6Dmqq59ywA==
+
+workerpool@^10.0.1:
+  version "10.0.1"
+  resolved "https://registry.npmjs.org/workerpool/-/workerpool-10.0.1.tgz#9e74de7df694f8f5ad0eec2b6d42553c664f5123"
+  integrity sha512-NAnKwZJxWlj/U1cp6ZkEtPE+GQY1S6KtOS3AlCiPfPFLxV3m64giSp7g2LsNJxzYCocDT7TSl+7T0sgrDp3KoQ==
+
 wrap-ansi@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"

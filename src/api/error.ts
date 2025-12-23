@@ -2,7 +2,7 @@ import { addSeconds } from 'date-fns';
 
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
-import { SafeValidationErrors } from "safe/message-types";
+import { SafeValidationErrors } from "safe/types";
 import { absoluteNodeName, RelNodeName } from "util/rel-node-name";
 
 function extractMessage(messageOrError: any): string {

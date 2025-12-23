@@ -1,43 +1,13 @@
-import { safeValidateMessage, SafeValidationErrors, SafeWorkerResponse } from "safe/message-types";
+import workerpool from 'workerpool';
+import { WorkerUrl } from 'worker-url';
 
-const NUM_WORKERS = 4;
+import { SafeValidateFunction, SafeValidateResult } from "safe/types";
 
-interface ValidationResult {
-    valid: boolean;
-    data: any;
-    errors?: SafeValidationErrors | null;
+const pool = workerpool.pool(
+    new WorkerUrl(new URL('../../safe/index.ts', import.meta.url)).toString(),
+    { minWorkers: 4, workerType: "web" }
+);
+
+export async function validateSchema(schemaName: string, data: any, decodeBodies: boolean): Promise<SafeValidateResult> {
+    return await pool.exec<SafeValidateFunction>("safeValidate", [{schemaName, data, decodeBodies}]);
 }
-type PromiseResolver = (value: ValidationResult | PromiseLike<ValidationResult>) => void;
-const pending = new Map<number, PromiseResolver>();
-
-let nextId: number = 1;
-
-export function validateSchema(schemaName: string, data: any, decodeBodies: boolean): Promise<ValidationResult> {
-    const id = nextId++;
-    const promise = new Promise<ValidationResult>(resolve => pending.set(id, resolve));
-    const safeWorker = workers[id % workers.length];
-    safeWorker.postMessage(safeValidateMessage(id, schemaName, data, decodeBodies));
-    return promise;
-}
-
-const onMessage = (event: MessageEvent) => {
-    const message = event.data as SafeWorkerResponse;
-    switch (message.type) {
-        case "VALIDATE": {
-            const {id, valid, data, errors} = message.payload;
-            const resolver = pending.get(id);
-            if (resolver != null) {
-                pending.delete(id);
-                resolver({valid, data, errors});
-            }
-        }
-    }
-}
-
-function createWorker(): Worker {
-    const worker = new Worker(new URL('../../safe/index.ts', import.meta.url));
-    worker.onmessage = onMessage;
-    return worker;
-}
-
-const workers: Worker[] = Array(NUM_WORKERS).fill(0).map(createWorker);
