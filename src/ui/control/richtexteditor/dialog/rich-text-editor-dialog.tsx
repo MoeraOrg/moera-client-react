@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Form, FormikBag, FormikValues, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -35,9 +35,11 @@ export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V e
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const {t} = useTranslation();
 
-        const onCancel = () => onSubmit(prevValues == null ? false : null, {});
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const onCancel = useCallback(() => onSubmit(prevValues == null ? false : null, {}), [prevValues, onSubmit]);
 
-        const onClose = () => onSubmit(false, {});
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const onClose = useCallback(() => onSubmit(false, {}), [onSubmit]);
 
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const {overlayId: parentOverlayId} = useParent();
