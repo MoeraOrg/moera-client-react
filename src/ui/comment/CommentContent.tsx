@@ -3,6 +3,7 @@ import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { ExtCommentInfo } from "state/detailedposting/state";
+import { Button } from "ui/control";
 import CommentRepliedTo from "ui/comment/CommentRepliedTo";
 import EntryHtml from "ui/entry/EntryHtml";
 import { hasWindowSelection } from "util/ui";
@@ -35,7 +36,7 @@ export default function CommentContent({comment, previousId, receiverName}: Prop
                         <EntryHtml postingId={comment.postingId} commentId={comment.id} html={comment.bodyPreview.text}
                                    nodeName={receiverName} media={comment.media} onClick={onClick}/>
                         <p>
-                            <button className="btn btn-link read-more" onClick={onClick}>{t("read-more")}</button>
+                            <Button variant="link" className="read-more" onClick={onClick}>{t("read-more")}</Button>
                         </p>
                     </>
                 );
