@@ -8,10 +8,11 @@ import { tTitle } from "i18n";
 import { NodeName, PostingInfo } from "api";
 import { ClientState } from "state/state";
 import { getOwnerFullName, getOwnerName, isAtHomeNode, isGooglePlayHiding } from "state/node/selectors";
+import { isConnectedToHome } from "state/home/selectors";
 import { detailedPostingLoad } from "state/detailedposting/actions";
 import { getDetailedPosting, isDetailedPostingBeingDeleted } from "state/detailedposting/selectors";
 import { getPostingFeedReference, isPostingSheriffProhibited } from "state/postings/selectors";
-import { Button, Loading } from "ui/control";
+import { Button, Loading, OnlyDesktop } from "ui/control";
 import { MinimalStoryInfo } from "ui/types";
 import { useIsTinyScreen } from "ui/hook";
 import { useHomeNews } from "ui/feed/feeds";
@@ -24,6 +25,7 @@ import BackBoxInner from "ui/page/BackBoxInner";
 import DesktopBack from "ui/page/DesktopBack";
 import MobileBack from "ui/page/MobileBack";
 import { ReactComponent as GooglePlayProhibited } from "ui/page/GooglePlayProhibited.isvg";
+import ExploreBox from "ui/explore/ExploreBox";
 import DetailedPosting from "ui/detailedposting/DetailedPosting";
 import { ReactComponent as NotFound } from "ui/detailedposting/NotFound.isvg";
 import { REL_CURRENT, REL_HOME, RelNodeName } from "util/rel-node-name";
@@ -78,6 +80,7 @@ function getBackFeedAndStory(
 }
 
 export default function DetailedPostingPage() {
+    const connectedToHome = useSelector(isConnectedToHome);
     const atHome = useSelector(isAtHomeNode);
     const nodeName = useSelector(getOwnerName);
     const nodeFullName = useSelector(getOwnerFullName);
@@ -146,6 +149,13 @@ export default function DetailedPostingPage() {
                         </main>
                     }
                 </div>
+                {!connectedToHome &&
+                    <OnlyDesktop>
+                        <div className="page-right-pane">
+                            <ExploreBox/>
+                        </div>
+                    </OnlyDesktop>
+                }
                 <BottomMenu/>
             </Page>
         </>

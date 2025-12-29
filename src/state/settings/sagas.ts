@@ -16,6 +16,7 @@ import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { homeIntroduced } from "state/init-barriers";
+import { isConnectedToHome } from "state/home/selectors";
 import {
     SettingsClientValuesLoadAction,
     settingsClientValuesLoaded,
@@ -202,8 +203,11 @@ async function settingsUpdateSaga(action: WithContext<SettingsUpdateAction>): Pr
     const toMobile = settings
         .filter(t => isMobileSetting(clientMeta, t.name))
         .map(t => ({name: t.name.substring(CLIENT_SETTINGS_PREFIX.length), value: t.value}));
+    const connectedToHome = select(isConnectedToHome);
     try {
-        await Node.updateSettings(action, REL_HOME, toHome);
+        if (connectedToHome) {
+            await Node.updateSettings(action, REL_HOME, toHome);
+        }
         if (window.Android && toMobile.length > 0) {
             window.Android.storeSettings(JSON.stringify(toMobile));
         }
