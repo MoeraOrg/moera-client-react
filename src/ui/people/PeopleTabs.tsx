@@ -5,7 +5,6 @@ import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { getNodeFriendGroups, isAtHomeNode } from "state/node/selectors";
-import { peopleGoToTab } from "state/people/actions";
 import { openFriendGroupAddDialog } from "state/friendgroupadddialog/actions";
 import { PeopleTab } from "state/people/state";
 import { Tabs } from "ui/control";
@@ -40,8 +39,6 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
     const smallScreen = useMediaQuery("(max-width: 1435px)");
     const dispatch = useDispatch();
     const {t} = useTranslation();
-
-    const goToTab = (tab: PeopleTab) => dispatch(peopleGoToTab(tab));
 
     const onAdd = () => dispatch(openFriendGroupAddDialog());
 
@@ -106,7 +103,6 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                 className={cx("people-tabs", "mb-1", {"small-font": smallFont})}
                 scroll={smallScreen ? "always" : "mobile"}
                 value={active}
-                onChange={goToTab}
                 principalIcons={{"admin": msLock}}
             />
             {inFriendGroup &&
@@ -123,7 +119,6 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                     className="mt-2 mb-1"
                     scroll={friendGroups.length > 4 || smallScreen ? "always" : "mobile"}
                     value={active}
-                    onChange={goToTab}
                     principalIcons={{"admin": msLock}}
                     principalTitles={{
                         "private": t("friend-group-visibility.private"),

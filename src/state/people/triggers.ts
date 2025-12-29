@@ -1,5 +1,5 @@
 import { conj, inv, trigger } from "state/trigger";
-import { newLocation } from "state/navigation/actions";
+import { updateLocation } from "state/navigation/actions";
 import { isAtPeoplePage } from "state/navigation/selectors";
 import {
     isAtBlockedByTab,
@@ -31,7 +31,7 @@ import { EventAction, SubscriptionAddedEvent, SubscriptionDeletedEvent } from "a
 
 export default [
     trigger("GO_TO_PAGE", conj(isAtPeoplePage, isPeopleGeneralToBeLoaded), peopleGeneralLoad),
-    trigger("PEOPLE_GO_TO_TAB", true, newLocation),
+    trigger("PEOPLE_GO_TO_TAB", true, updateLocation),
     trigger("PEOPLE_GO_TO_TAB", conj(isAtSubscribersTab, isSubscribersToBeLoaded), subscribersLoad),
     trigger("PEOPLE_GO_TO_TAB", conj(isAtSubscriptionsTab, isSubscriptionsToBeLoaded), subscriptionsLoad),
     trigger("PEOPLE_GO_TO_TAB", conj(isAtFriendsTab, isFriendsToBeLoaded), friendsLoad),

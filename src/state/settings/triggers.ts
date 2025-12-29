@@ -31,7 +31,7 @@ import {
     settingsTokensLoad
 } from "state/settings/actions";
 import { isConnectedToHome } from "state/home/selectors";
-import { newLocation, updateLocation } from "state/navigation/actions";
+import { updateLocation } from "state/navigation/actions";
 import { profileEditConflict, profileLoad } from "state/profile/actions";
 import { isProfileLoaded, isProfileToBeLoaded } from "state/profile/selectors";
 
@@ -47,7 +47,7 @@ export default [
         conj(isAtSettingsPage, isAtSettingsNodeTab, inv(isConnectedToHome)),
         settingsGoToTab("client")
     ),
-    trigger("SETTINGS_GO_TO_TAB", true, newLocation),
+    trigger("SETTINGS_GO_TO_TAB", true, updateLocation),
     trigger("SETTINGS_GO_TO_SHEET", true, updateLocation),
     trigger(
         ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_SHEET"],
