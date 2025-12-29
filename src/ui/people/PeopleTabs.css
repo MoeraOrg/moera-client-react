@@ -1,3 +1,7 @@
 .people-tabs.nav.nav-pills {
     --bs-nav-pills-border-radius: 2rem;
 }
+
+.people-tabs.nav.nav-pills.small-font {
+    --bs-nav-link-font-size: .9em;
+}

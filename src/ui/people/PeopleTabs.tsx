@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { getNodeFriendGroups, isAtHomeNode } from "state/node/selectors";
@@ -43,6 +44,9 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
     const goToTab = (tab: PeopleTab) => dispatch(peopleGoToTab(tab));
 
     const onAdd = () => dispatch(openFriendGroupAddDialog());
+
+    const smallFont = !smallScreen && blockedTotal != null && blockedByTotal != null
+        && (t("blocked-plural") + t("blocked-by-plural")).length > 30;
 
     return (
         <>
@@ -99,7 +103,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
                     }
                 ]}
                 tabStyle="pills"
-                className="people-tabs mb-1"
+                className={cx("people-tabs", "mb-1", {"small-font": smallFont})}
                 scroll={smallScreen ? "always" : "mobile"}
                 value={active}
                 onChange={goToTab}
