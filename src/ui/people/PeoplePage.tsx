@@ -10,7 +10,6 @@ import DesktopBack from "ui/page/DesktopBack";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
 import { useHomeNews } from "ui/feed/feeds";
-import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import ProfileTitle from "ui/profile/ProfileTitle";
@@ -34,35 +33,32 @@ export default function PeoplePage() {
     const {t} = useTranslation();
 
     return (
-        <>
-            <DesktopMainMenu/>
-            <Page className="people-page tabbed-page">
-                <div className="page-left-pane">
-                    <ProfileSidebar/>
-                </div>
-                <div className="page-central-pane">
-                    <ProfileTitle/>
-                    <BackBox>
-                        <BackBoxInner noShadow>
-                            {connectedToHome &&
-                                <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                                    {t("back-news")}
-                                </DesktopBack>
-                            }
-                            <ProfileTabs value="people"/>
-                        </BackBoxInner>
-                        <PeopleTop/>
-                    </BackBox>
-                    {regularNode && <PeopleContent/>}
-                </div>
-                <div className="page-right-pane">
-                    <MainMenuSidebar/>
-                </div>
-                <BottomMenu/>
-                {showAskDialog && <AskSelectedDialog/>}
-                {showPeopleHideDialog && <PeopleSelectedHideDialog/>}
-                {showFriendGroupAddDialog && <FriendGroupAddDialog/>}
-            </Page>
-        </>
+        <Page className="people-page tabbed-page">
+            <div className="page-left-pane">
+                <ProfileSidebar/>
+            </div>
+            <div className="page-central-pane">
+                <ProfileTitle/>
+                <BackBox>
+                    <BackBoxInner noShadow>
+                        {connectedToHome &&
+                            <DesktopBack nodeName={REL_HOME} href={newsHref}>
+                                {t("back-news")}
+                            </DesktopBack>
+                        }
+                        <ProfileTabs value="people"/>
+                    </BackBoxInner>
+                    <PeopleTop/>
+                </BackBox>
+                {regularNode && <PeopleContent/>}
+            </div>
+            <div className="page-right-pane">
+                <MainMenuSidebar/>
+            </div>
+            <BottomMenu/>
+            {showAskDialog && <AskSelectedDialog/>}
+            {showPeopleHideDialog && <PeopleSelectedHideDialog/>}
+            {showFriendGroupAddDialog && <FriendGroupAddDialog/>}
+        </Page>
     );
 }

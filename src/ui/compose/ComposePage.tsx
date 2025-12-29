@@ -25,7 +25,6 @@ import { Page } from "ui/page/Page";
 import MobileBack from "ui/page/MobileBack";
 import DesktopBack from "ui/page/DesktopBack";
 import { useHomeNews } from "ui/feed/feeds";
-import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import ComposeViewPrincipal from "ui/compose/ComposeViewPrincipal";
 import ComposeDrafts from "ui/compose/drafts/ComposeDrafts";
@@ -80,70 +79,67 @@ function ComposePageInner(props: Props) {
     const sourceFormats = features?.sourceFormats ?? [];
     const submitDisabled = !ready || areValuesEmpty(values) || !areImagesUploaded(values);
     return (
-        <>
-            <DesktopMainMenu/>
-            <Page className="compose-page">
-                <div className="page-left-pane">
-                    <MainMenuSidebar/>
-                </div>
-                <div className="page-central-pane">
-                    <MobileBack nodeName={backNodeName} href={backHref} sticky>
-                        {title}
-                        {loadingContent && <Loading/>}
-                    </MobileBack>
-                    <DesktopBack nodeName={backNodeName} href={backHref}>
-                        {backTitle}
-                        {loadingContent && <Loading/>}
-                    </DesktopBack>
-                    <main className="composer">
-                        <Form>
-                            {(!postAllowed && !postWarningClosed) &&
-                                <ConflictWarning text={t("post-not-allowed")} onClose={postWarningClose}/>
-                            }
-                            {conflict &&
-                                <ConflictWarning text={t("post-edited-conflict")}
-                                                 onClose={() => dispatch(composeConflictClose())}/>
-                            }
-                            <div className="info-line">
-                                <div className="info">
-                                    <AvatarField name="avatar" size={56} disabled={!ready}/>
-                                    <div className="body">
-                                        <NodeName name={ownerName} fullName={values.fullName} linked={false} popup={false}
-                                                  className="ms-2"/>
-                                        <ComposeViewPrincipal/>
-                                    </div>
+        <Page className="compose-page">
+            <div className="page-left-pane">
+                <MainMenuSidebar/>
+            </div>
+            <div className="page-central-pane">
+                <MobileBack nodeName={backNodeName} href={backHref} sticky>
+                    {title}
+                    {loadingContent && <Loading/>}
+                </MobileBack>
+                <DesktopBack nodeName={backNodeName} href={backHref}>
+                    {backTitle}
+                    {loadingContent && <Loading/>}
+                </DesktopBack>
+                <main className="composer">
+                    <Form>
+                        {(!postAllowed && !postWarningClosed) &&
+                            <ConflictWarning text={t("post-not-allowed")} onClose={postWarningClose}/>
+                        }
+                        {conflict &&
+                            <ConflictWarning text={t("post-edited-conflict")}
+                                             onClose={() => dispatch(composeConflictClose())}/>
+                        }
+                        <div className="info-line">
+                            <div className="info">
+                                <AvatarField name="avatar" size={56} disabled={!ready}/>
+                                <div className="body">
+                                    <NodeName name={ownerName} fullName={values.fullName} linked={false} popup={false}
+                                              className="ms-2"/>
+                                    <ComposeViewPrincipal/>
                                 </div>
-                                <OnlyDesktop><ComposeDrafts ready={ready}/></OnlyDesktop>
                             </div>
-                            {features?.subjectPresent &&
-                                <InputField name="subject" title="Title" anyValue disabled={!ready}/>
-                            }
-                            <RichTextField
-                                name="body"
-                                placeholder={t("whats-new")}
-                                disabled={!ready || beingPosted}
-                                format={values.bodyFormat}
-                                smileysEnabled={smileysEnabled}
-                                features={features}
-                                nodeName={REL_CURRENT}
-                                urlsField="bodyUrls"
-                                linkPreviewsField="linkPreviews"
-                                anyValue
-                                autoFocus
-                                maxHeight="max(100vh - 26rem, 10.8em)"
-                            >
-                                <OnlyMobile><ComposeDrafts ready={ready}/></OnlyMobile>
-                            </RichTextField>
+                            <OnlyDesktop><ComposeDrafts ready={ready}/></OnlyDesktop>
+                        </div>
+                        {features?.subjectPresent &&
+                            <InputField name="subject" title="Title" anyValue disabled={!ready}/>
+                        }
+                        <RichTextField
+                            name="body"
+                            placeholder={t("whats-new")}
+                            disabled={!ready || beingPosted}
+                            format={values.bodyFormat}
+                            smileysEnabled={smileysEnabled}
+                            features={features}
+                            nodeName={REL_CURRENT}
+                            urlsField="bodyUrls"
+                            linkPreviewsField="linkPreviews"
+                            anyValue
+                            autoFocus
+                            maxHeight="max(100vh - 26rem, 10.8em)"
+                        >
+                            <OnlyMobile><ComposeDrafts ready={ready}/></OnlyMobile>
+                        </RichTextField>
 
-                            <ComposeFeatures sourceFormats={sourceFormats} updateInfo={postingId != null}/>
-                            <ComposeSubmitButton loading={beingPosted} update={postingId != null}
-                                                 disabled={submitDisabled}/>
-                        </Form>
-                    </main>
-                </div>
-                {showPreview && <ComposePreviewDialog/>}
-            </Page>
-        </>
+                        <ComposeFeatures sourceFormats={sourceFormats} updateInfo={postingId != null}/>
+                        <ComposeSubmitButton loading={beingPosted} update={postingId != null}
+                                             disabled={submitDisabled}/>
+                    </Form>
+                </main>
+            </div>
+            {showPreview && <ComposePreviewDialog/>}
+        </Page>
     );
 }
 

@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { getOwnerCard } from "state/node/selectors";
 import { useHomeNews } from "ui/feed/feeds";
-import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { Page } from "ui/page/Page";
@@ -25,37 +24,34 @@ export default function ProfilePage() {
     const {t} = useTranslation();
 
     return (
-        <>
-            <DesktopMainMenu/>
-            <Page className="profile-page tabbed-page">
-                <div className="page-left-pane">
-                    <ProfileSidebar/>
-                </div>
-                <div className="page-central-pane">
-                    <ProfileTitle/>
-                    <BackBox>
-                        <BackBoxInner>
-                            <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                                {t("back-news")}
-                            </DesktopBack>
-                            <ProfileTabs value="about"/>
-                        </BackBoxInner>
-                    </BackBox>
-                    <main className="content-panel">
-                        {profile?.bioHtml && <EntryHtml className="bio" html={profile.bioHtml} nodeName={REL_CURRENT}/>}
-                        {profile?.email &&
-                            <p>
-                                <b>{t("e-mail")}:</b>{" "}
-                                <a href={`mailto:${profile.email}`}>{profile.email}</a>
-                            </p>
-                        }
-                    </main>
-                </div>
-                <div className="page-right-pane">
-                    <MainMenuSidebar/>
-                </div>
-                <BottomMenu/>
-            </Page>
-        </>
+        <Page className="profile-page tabbed-page">
+            <div className="page-left-pane">
+                <ProfileSidebar/>
+            </div>
+            <div className="page-central-pane">
+                <ProfileTitle/>
+                <BackBox>
+                    <BackBoxInner>
+                        <DesktopBack nodeName={REL_HOME} href={newsHref}>
+                            {t("back-news")}
+                        </DesktopBack>
+                        <ProfileTabs value="about"/>
+                    </BackBoxInner>
+                </BackBox>
+                <main className="content-panel">
+                    {profile?.bioHtml && <EntryHtml className="bio" html={profile.bioHtml} nodeName={REL_CURRENT}/>}
+                    {profile?.email &&
+                        <p>
+                            <b>{t("e-mail")}:</b>{" "}
+                            <a href={`mailto:${profile.email}`}>{profile.email}</a>
+                        </p>
+                    }
+                </main>
+            </div>
+            <div className="page-right-pane">
+                <MainMenuSidebar/>
+            </div>
+            <BottomMenu/>
+        </Page>
     );
 }

@@ -11,7 +11,6 @@ import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
 import DesktopBack from "ui/page/DesktopBack";
-import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
@@ -34,33 +33,30 @@ export default function InstantsPage() {
     }
 
     return (
-        <>
-            <DesktopMainMenu/>
-            <Page className="instants-page">
-                <div className="page-left-pane">
-                    <MainMenuSidebar/>
-                </div>
-                <div className="page-central-pane">
-                    <MobileMainMenu shadow menuItems={[
-                        {icon: msMarkEmailRead, onClick: onReadAll},
-                    ]}/>
-                    <OnlyDesktop>
-                        <BackBox>
-                            <BackBoxInner>
-                                <DesktopBack nodeName={REL_HOME} href={newsHref}>
-                                    {t("back-news")}
-                                </DesktopBack>
-                            </BackBoxInner>
-                        </BackBox>
-                    </OnlyDesktop>
-                    <main id="instants" className="content-panel">
-                        <div className="content">
-                            <Instants/>
-                        </div>
-                    </main>
-                </div>
-                <BottomMenu/>
-            </Page>
-        </>
+        <Page className="instants-page">
+            <div className="page-left-pane">
+                <MainMenuSidebar/>
+            </div>
+            <div className="page-central-pane">
+                <MobileMainMenu shadow menuItems={[
+                    {icon: msMarkEmailRead, onClick: onReadAll},
+                ]}/>
+                <OnlyDesktop>
+                    <BackBox>
+                        <BackBoxInner>
+                            <DesktopBack nodeName={REL_HOME} href={newsHref}>
+                                {t("back-news")}
+                            </DesktopBack>
+                        </BackBoxInner>
+                    </BackBox>
+                </OnlyDesktop>
+                <main id="instants" className="content-panel">
+                    <div className="content">
+                        <Instants/>
+                    </div>
+                </main>
+            </div>
+            <BottomMenu/>
+        </Page>
     );
 }

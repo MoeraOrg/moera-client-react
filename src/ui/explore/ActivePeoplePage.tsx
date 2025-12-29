@@ -9,7 +9,6 @@ import NodeName from "ui/nodename/NodeName";
 import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
-import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
 import BottomMenu from "ui/mainmenu/BottomMenu";
@@ -23,7 +22,6 @@ export default function ActivePeoplePage() {
 
     return (
         <>
-            <DesktopMainMenu/>
             <Page className="active-people-page explore-page tabbed-page">
                 <div className="page-left-pane">
                     <MainMenuSidebar/>

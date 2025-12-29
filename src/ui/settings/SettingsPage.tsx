@@ -8,7 +8,6 @@ import { Page } from "ui/page/Page";
 import MobileBack from "ui/page/MobileBack";
 import { useOverlay } from "ui/overlays/overlays";
 import { useHomeNews } from "ui/feed/feeds";
-import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
 import { useDisableScrollX } from "ui/settings/settings-hooks";
@@ -47,38 +46,35 @@ export default function SettingsPage() {
     const visible = connectedToHome || tab === "client";
 
     return (
-        <>
-            <DesktopMainMenu/>
-            <Page>
-                <div className="page-left-pane">
-                    <MainMenuSidebar/>
-                </div>
-                <div className="page-centralright-pane">
-                    <SettingsConflicts/>
-                    <div className="settings-notebook-switcher" ref={switcherRef}>
-                        <div className={`settings-notebook ${side}-side`}>
-                            <nav className="settings-left">
-                                <div className="page-title only-desktop">{t("settings")}</div>
-                                <MobileBack nodeName={REL_HOME} href={newsHref} className="settings-back" sticky>
-                                    {t("settings")}
-                                </MobileBack>
-                                <SettingsTabs/>
-                                {visible && <SettingsMenu onSelect={() => setSide("sheet")}/>}
-                                <div id="build-number">rev {BUILD_NUMBER}</div>
-                                <BottomMenu/>
-                            </nav>
-                            <main className="settings-right">
-                                {visible &&
-                                    <>
-                                        <SettingsBack onBack={() => setSide("menu")}/>
-                                        <SettingsTabContent tab={tab}/>
-                                    </>
-                                }
-                            </main>
-                        </div>
+        <Page>
+            <div className="page-left-pane">
+                <MainMenuSidebar/>
+            </div>
+            <div className="page-centralright-pane">
+                <SettingsConflicts/>
+                <div className="settings-notebook-switcher" ref={switcherRef}>
+                    <div className={`settings-notebook ${side}-side`}>
+                        <nav className="settings-left">
+                            <div className="page-title only-desktop">{t("settings")}</div>
+                            <MobileBack nodeName={REL_HOME} href={newsHref} className="settings-back" sticky>
+                                {t("settings")}
+                            </MobileBack>
+                            <SettingsTabs/>
+                            {visible && <SettingsMenu onSelect={() => setSide("sheet")}/>}
+                            <div id="build-number">rev {BUILD_NUMBER}</div>
+                            <BottomMenu/>
+                        </nav>
+                        <main className="settings-right">
+                            {visible &&
+                                <>
+                                    <SettingsBack onBack={() => setSide("menu")}/>
+                                    <SettingsTabContent tab={tab}/>
+                                </>
+                            }
+                        </main>
                     </div>
                 </div>
-            </Page>
-        </>
+            </div>
+        </Page>
     );
 }

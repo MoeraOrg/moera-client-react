@@ -6,7 +6,6 @@ import { Loading } from "ui/control";
 import { Page } from "ui/page/Page";
 import BackBox from "ui/page/BackBox";
 import BackBoxInner from "ui/page/BackBoxInner";
-import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
 import BottomMenu from "ui/mainmenu/BottomMenu";
@@ -19,7 +18,6 @@ export default function TrendingPage() {
 
     return (
         <>
-            <DesktopMainMenu/>
             <Page className="trending-page explore-page tabbed-page">
                 <div className="page-left-pane">
                     <MainMenuSidebar/>

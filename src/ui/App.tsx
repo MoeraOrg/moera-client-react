@@ -4,11 +4,13 @@ import { useSelector } from 'react-redux';
 import { ClientState } from "state/state";
 import { isAtNode, isNodeIntroduced } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
+import { isAtNewsPage } from "state/navigation/selectors";
 import { GLOBAL_PAGES } from "state/navigation/pages";
 import { getFeedWidth, getSetting } from "state/settings/selectors";
 import EventsFrontend from "ui/events/EventsFrontend";
 import Navigation from "ui/navigation/Navigation";
 import ErrorPane from "ui/error/ErrorPane";
+import DesktopMainMenu from "ui/mainmenu/DesktopMainMenu";
 import GlobalPage from "ui/page/GlobalPage";
 import CurrentPage from "ui/page/CurrentPage";
 import WelcomePage from "ui/welcome/WelcomePage";
@@ -32,6 +34,7 @@ export default function App() {
     const connectedToHome = useSelector(isConnectedToHome);
 
     const atGlobalPage = useSelector((state: ClientState) => GLOBAL_PAGES.includes(state.navigation.page));
+    const atNewsPage = useSelector(isAtNewsPage);
 
     return (
         // FIXME React.CSSProperties does not include CSS variables
@@ -53,6 +56,7 @@ export default function App() {
             :
                 (atNode ?
                     <>
+                        <DesktopMainMenu transparent={atNewsPage}/>
                         <CurrentPage/>
                         <NodeDialogs/>
                     </>
