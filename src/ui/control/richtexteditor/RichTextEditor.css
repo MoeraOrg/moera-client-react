@@ -14,6 +14,7 @@
     border: var(--bs-border-width) solid var(--bs-border-color);
     border-radius: .5rem;
     padding: .375rem .75rem;
+    font-variant-emoji: emoji;
 }
 
 .rich-text-editor:focus-within TEXTAREA, .rich-text-editor:focus-within .visual-text-area {
