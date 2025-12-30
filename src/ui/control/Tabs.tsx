@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import cx from 'classnames';
+import scrollIntoView from 'scroll-into-view-if-needed';
 
 import { PrincipalValue } from "api";
 import { Icon, MaterialSymbol } from "ui/material-symbols";
@@ -88,9 +89,17 @@ interface TabLinkProps {
 }
 
 function TabLink({active, href, onClick, className, children}: TabLinkProps) {
+    const itemRef = useRef<HTMLSpanElement>(null);
+
+    useEffect(() => {
+        if (active && itemRef.current != null) {
+            scrollIntoView(itemRef.current, {inline: "nearest", scrollMode: "if-needed"});
+        }
+    });
+
     if (active) {
         return (
-            <span className={cx("nav-link", "active", className)} aria-current="page">
+            <span className={cx("nav-link", "active", className)} aria-current="page" ref={itemRef}>
                 {children}
             </span>
         );
