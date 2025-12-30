@@ -7,6 +7,7 @@ import { isNodeNameDefined, isNodeNameManageable, isNodeNameOperationPending } f
 import { isProfileEditable } from "state/profile/selectors";
 import { shareDialogPrepare, sharePageCopyLink } from "state/sharedialog/actions";
 import { DropdownMenuItems } from "ui/control";
+import { useIsTinyScreen } from "ui/hook";
 import { REL_CURRENT } from "util/rel-node-name";
 
 export default function ManagementMenuItems() {
@@ -14,6 +15,7 @@ export default function ManagementMenuItems() {
     const nameDefined = useSelector(isNodeNameDefined);
     const operationPending = useSelector(isNodeNameOperationPending);
     const profileEditable = useSelector(isProfileEditable);
+    const tinyScreen = useIsTinyScreen();
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -70,6 +72,15 @@ export default function ManagementMenuItems() {
                     nodeName: REL_CURRENT,
                     href: "/settings/profile",
                     show: profileEditable
+                },
+                {
+                    divider: true
+                },
+                {
+                    title: t("search"),
+                    nodeName: REL_CURRENT,
+                    href: "/search",
+                    show: tinyScreen
                 },
             ]}
         />
