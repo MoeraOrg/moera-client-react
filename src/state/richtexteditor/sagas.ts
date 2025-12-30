@@ -32,11 +32,11 @@ async function richTextEditorImageUpload(
         (loaded: number, total: number) => onProgress(index, loaded, total)
     );
     if (mediaFile != null) {
-        if (captionSrc != null && mediaFile.postingId != null) {
+        if (mediaFile.postingId != null) {
             const postingText: PostingText = {
                 ownerName: homeOwnerName,
                 ownerFullName: homeOwnerFullName,
-                bodySrc: captionSrc,
+                bodySrc: captionSrc || "{}",
                 bodySrcFormat: captionSrcFormat || "markdown",
                 rejectedReactions
             };
