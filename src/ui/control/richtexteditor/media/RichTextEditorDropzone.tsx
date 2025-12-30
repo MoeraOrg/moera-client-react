@@ -63,7 +63,11 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName,
         event.preventDefault();
     }
 
-    const hidden = hiding && (value.media == null || value.media.length === 0);
+    const hidden =
+        hiding
+        && (value.media == null || value.media.length === 0)
+        && uploadProgress.length === 0
+        && !downloading;
     const progressSummary = useMemo(() => calcProgressSummary(uploadProgress), [uploadProgress])
     const buttonsTitle = !tinyScreen ? "upload-or-copy-or-drop-images" : "upload-images";
 
