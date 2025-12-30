@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import * as immutable from 'object-path-immutable';
 
-import { PostingFeatures, SourceFormat, VerifiedMediaFile } from "api";
+import { PostingFeatures, RejectedReactions, SourceFormat, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { richTextEditorImageCopy, richTextEditorImagesUpload } from "state/richtexteditor/actions";
@@ -40,12 +40,13 @@ interface Props {
     nodeName: RelNodeName | string;
     forceCompress?: boolean;
     srcFormat: SourceFormat;
+    rejectedReactions?: RejectedReactions | null;
     onChange?: ChangeHandler;
     children: ReactNode;
 }
 
 export default function RichTextEditorMedia({
-    value, features, nodeName, forceCompress = false, srcFormat, onChange, children
+    value, features, nodeName, forceCompress = false, srcFormat, rejectedReactions, onChange, children
 }: Props) {
     const compressImages = useSelector((state: ClientState) =>
         getSetting(state, "posting.media.compress.default") as boolean);
@@ -94,17 +95,28 @@ export default function RichTextEditorMedia({
     }
 
     const uploadImages = (
-        files: File[], compress: boolean, onInsert?: OnInsertHandler,
-        standardSize?: RichTextImageStandardSize, customWidth?: number | null, customHeight?: number | null,
+        files: File[],
+        compress: boolean,
+        onInsert?: OnInsertHandler,
+        standardSize?: RichTextImageStandardSize,
+        customWidth?: number | null,
+        customHeight?: number | null,
         caption?: string
     ) => {
         if (files.length > 0) {
             setUploadProgress(files.map(file => ({status: "loading", loaded: 0, total: file.size})));
             imageUploadStarted(files.length);
             dispatch(richTextEditorImagesUpload(
-                nodeName, files, features, compress,
-                onImageUploadSuccess(onInsert, standardSize, customWidth, customHeight, caption), onImageUploadFailure,
-                onImageUploadProgress, null, srcFormat
+                nodeName,
+                files,
+                features,
+                compress,
+                onImageUploadSuccess(onInsert, standardSize, customWidth, customHeight, caption),
+                onImageUploadFailure,
+                onImageUploadProgress,
+                null,
+                srcFormat,
+                rejectedReactions
             ));
         }
     };

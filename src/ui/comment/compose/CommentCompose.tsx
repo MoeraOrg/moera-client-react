@@ -27,7 +27,10 @@ import "./CommentCompose.css";
 type Props = CommentComposeProps & FormikProps<CommentComposeValues>;
 
 function CommentCompose(props: Props) {
-    const {sourceFormatDefault, smileysEnabled, formId, values, resetForm, submitForm} = props;
+    const {
+        sourceFormatDefault, smileysEnabled, reactionsPositiveDefault, reactionsNegativeDefault, formId, values,
+        resetForm, submitForm
+    } = props;
 
     const ready = useSelector(isCommentComposerReady);
     const receiverName = useSelector(getCommentsReceiverName);
@@ -82,6 +85,7 @@ function CommentCompose(props: Props) {
                         commentQuote
                         panelMode="none"
                         format={sourceFormatDefault}
+                        rejectedReactions={{positive: reactionsPositiveDefault, negative: reactionsNegativeDefault}}
                         submitKey={submitKey}
                         onSubmit={() => submitForm()}
                         urlsField="bodyUrls"

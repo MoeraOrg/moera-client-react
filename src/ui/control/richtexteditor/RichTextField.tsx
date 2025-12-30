@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { PostingFeatures, SourceFormat } from "api";
+import { PostingFeatures, RejectedReactions, SourceFormat } from "api";
 import { FormGroup } from "ui/control";
 import {
     RichTextEditor,
@@ -41,6 +41,7 @@ interface Props {
     commentQuote?: boolean;
     panelMode?: RichTextEditorPanelMode;
     format: SourceFormat;
+    rejectedReactions?: RejectedReactions | null;
     submitKey?: string;
     onSubmit?: () => void;
     urlsField?: string;
@@ -53,7 +54,7 @@ export function RichTextField({
     name, title, rows = 3, minHeight, maxHeight, features, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo,
     nodeName = REL_CURRENT, forceImageCompress, placeholder, autoFocus, anyValue, className, autoComplete,
     noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled, commentQuote, panelMode, format,
-    submitKey, onSubmit, urlsField, linkPreviewsField, linkPreviewsSmall, children
+    rejectedReactions, submitKey, onSubmit, urlsField, linkPreviewsField, linkPreviewsSmall, children
 }: Props) {
     const [{value, onBlur}, {touched, error}, {setTouched}, {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
@@ -114,6 +115,7 @@ export function RichTextField({
                     noVideo={noVideo}
                     nodeName={nodeName}
                     forceImageCompress={forceImageCompress}
+                    rejectedReactions={rejectedReactions}
                     children={children}
                 />
                 {!noFeedback && touched && <FieldError error={(error as any)?.text}/>}

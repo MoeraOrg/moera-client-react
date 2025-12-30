@@ -17,7 +17,8 @@ async function richTextEditorImageUpload(
     action: WithContext<RichTextEditorImagesUploadAction>, index: number
 ): Promise<void> {
     const {
-        features, nodeName, files, compress, onSuccess, onProgress, onFailure, captionSrc, captionSrcFormat
+        features, nodeName, files, compress, onSuccess, onProgress, onFailure, captionSrc, captionSrcFormat,
+        rejectedReactions
     } = action.payload;
     const {homeOwnerName, homeOwnerFullName} = action.context;
 
@@ -36,7 +37,8 @@ async function richTextEditorImageUpload(
                 ownerName: homeOwnerName,
                 ownerFullName: homeOwnerFullName,
                 bodySrc: captionSrc,
-                bodySrcFormat: captionSrcFormat || "markdown"
+                bodySrcFormat: captionSrcFormat || "markdown",
+                rejectedReactions
             };
             const posting = await Node.updatePosting(action, nodeName, mediaFile.postingId, postingText);
             dispatch(postingSet(posting, REL_CURRENT).causedBy(action));
