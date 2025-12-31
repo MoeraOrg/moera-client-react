@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import clipboardCopy from 'clipboard-copy';
 import { useTranslation } from 'react-i18next';
@@ -29,7 +29,7 @@ export default function CopyQuoteButton({url, title, mode}: Props) {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const onClick = (event: MouseEvent) => {
+    const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         dispatch(closeShareDialog());
         clipboardCopy((title ? title + "\n\n" : "") + formatLink(url, mode))
             .then(() => {

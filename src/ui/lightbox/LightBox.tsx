@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
@@ -15,6 +15,7 @@ import { getPosting } from "state/postings/selectors";
 import { ExtCommentInfo } from "state/detailedposting/state";
 import { getComment } from "state/detailedposting/selectors";
 import { getSetting } from "state/settings/selectors";
+import { ParentContext } from "ui/hook";
 import LightBoxCaption from "ui/lightbox/LightBoxCaption";
 import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import LightBoxShareButton from "ui/lightbox/LightBoxShareButton";
@@ -23,7 +24,6 @@ import { useOverlay } from "ui/overlays/overlays";
 import { REL_CURRENT } from "util/rel-node-name";
 import { urlWithParameters } from "util/url";
 import "./LightBox.css";
-import { ParentContext } from "ui/hook";
 
 export default function LightBox() {
     const posting = useSelector((state: ClientState) => getPosting(state, state.lightBox.postingId, REL_CURRENT));
@@ -98,6 +98,29 @@ export default function LightBox() {
         }
         title = `${index + 1} / ${media.length}`;
     }
+
+    const dyed = useRef<boolean>(false);
+
+    const imageClick = useCallback(
+        () => {
+            if (!dyed.current) {
+                document.getElementsByClassName("ril__outer")[0]?.classList.add("transparent");
+            } else {
+                document.getElementsByClassName("ril__outer")[0]?.classList.remove("transparent");
+            }
+            dyed.current = !dyed.current;
+        },
+        []
+    );
+
+    useEffect(() => {
+        const image = document.getElementsByClassName("ril-image-current")[0];
+        if (image == null) {
+            return () => {};
+        }
+        image.addEventListener("click", imageClick);
+        return () => image.removeEventListener("click", imageClick);
+    }, [imageClick, mainSrc]);
 
     const onMovePrevRequest = () => prevMediaId != null ? dispatch(lightBoxMediaSet(prevMediaId, prevSequence)) : null;
 

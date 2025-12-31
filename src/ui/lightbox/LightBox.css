@@ -27,3 +27,9 @@
         height: calc(100vh - 100px - 13rem) !important;
     }
 }
+
+.ril__outer.transparent .ril__toolbar, .ril__outer.transparent .ril__navButtons, .ril__outer.transparent .ril__caption {
+    filter: opacity(0);
+    transition: filter .5s ease;
+    pointer-events: none;
+}
