@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
+import { Placement } from '@popperjs/core';
 
 import {
     ADDITIONAL_NEGATIVE_REACTIONS,
@@ -23,12 +24,13 @@ interface Props {
     negative: boolean;
     rejected?: string | null;
     invisible: boolean;
+    placement?: Placement;
     onReactionAdd: (negative: boolean, emoji: number) => void;
     onReactionDelete: () => void;
 }
 
 export function ReactionButton(props: Props) {
-    const {emoji, negative, rejected, invisible, onReactionAdd, onReactionDelete} = props;
+    const {emoji, negative, rejected, invisible, placement = "top", onReactionAdd, onReactionDelete} = props;
 
     const pastEmoji = useRef<number | null>(null);
 
@@ -79,10 +81,11 @@ export function ReactionButton(props: Props) {
 
     return (
         <DelayedPopover
-            placement="top"
+            placement={placement}
             arrow
             parentOverlayId={parentOverlayId}
             clickable
+            popoverContainer={document.getElementById("hovercard-root")}
             onPreparePopper={preparePopper}
             onShow={show}
             onHide={hide}

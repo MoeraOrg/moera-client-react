@@ -10,6 +10,7 @@ import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ReactionButton } from "ui/control";
 import { msThumbDown, msThumbUp } from "ui/material-symbols";
+import { useIsTinyScreen } from "ui/hook";
 import PostingReactions from "ui/posting/PostingReactions";
 import "./LightBoxReactions.css";
 
@@ -23,6 +24,7 @@ export default function LightBoxReactions() {
         getSetting(state, "posting.reactions.self.enabled") as boolean
     );
     const dispatch = useDispatch();
+    const tinyScreen = useIsTinyScreen();
 
     if (posting == null) {
         return null;
@@ -46,6 +48,7 @@ export default function LightBoxReactions() {
                     negative={false}
                     emoji={!cr.negative ? cr.emoji : null}
                     rejected={posting.rejectedReactions?.positive}
+                    placement={tinyScreen ? "bottom" : "left"}
                     onReactionAdd={onReactionAdd}
                     onReactionDelete={onReactionDelete}
                 />
@@ -58,6 +61,7 @@ export default function LightBoxReactions() {
                     negative={true}
                     emoji={cr.negative ? cr.emoji : null}
                     rejected={posting.rejectedReactions?.negative}
+                    placement={tinyScreen ? "bottom" : "left"}
                     onReactionAdd={onReactionAdd}
                     onReactionDelete={onReactionDelete}
                 />

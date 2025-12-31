@@ -37,11 +37,12 @@
 
 @media only screen and (min-width: 992px) {
     .lightbox-reactions {
-        right: 0;
+        right: 1rem;
     }
 
     .lightbox-reaction-button {
         right: 0;
+        font-size: 120%;
     }
 
     .lightbox-reaction-button.positive {
@@ -49,16 +50,16 @@
     }
 
     .lightbox-reaction-button.negative {
-        top: 3.9rem;
+        top: 4.9rem;
     }
 
     .lightbox-reactions .reactions .positive {
-        right: 0;
+        right: -.75rem;
     }
 
     .lightbox-reactions .reactions .negative {
-        top: 5.9rem;
-        right: 0;
+        top: 6.9rem;
+        right: -.75rem;
     }
 }
 
@@ -73,18 +74,18 @@
     }
 
     .lightbox-reaction-button.positive {
-        right: 50vw;
+        right: calc(50vw + .5rem);
     }
 
     .lightbox-reaction-button.negative {
-        left: 50vw;
+        left: calc(50vw + .5rem);
     }
 
     .lightbox-reactions .reactions .positive {
-        right: calc(50vw + 2rem);
+        right: calc(50vw + 2.5rem);
     }
 
     .lightbox-reactions .reactions .negative {
-        left: calc(50vw + 2rem);
+        left: calc(50vw + 2.5rem);
     }
 }
