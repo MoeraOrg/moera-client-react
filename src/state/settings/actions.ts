@@ -56,19 +56,16 @@ export const settingsClientValuesLoad = (): SettingsClientValuesLoadAction =>
 
 export type SettingsClientValuesLoadedAction = ActionWithPayload<"SETTINGS_CLIENT_VALUES_LOADED", {
     settings: SettingInfo[];
+    stored: boolean;
 }>;
-export const settingsClientValuesLoaded = (settings: SettingInfo[]): SettingsClientValuesLoadedAction =>
-    actionWithPayload("SETTINGS_CLIENT_VALUES_LOADED", {settings});
+export const settingsClientValuesLoaded = (
+    settings: SettingInfo[], stored: boolean
+): SettingsClientValuesLoadedAction =>
+    actionWithPayload("SETTINGS_CLIENT_VALUES_LOADED", {settings, stored});
 
 export type SettingsClientValuesLoadFailedAction = ActionWithoutPayload<"SETTINGS_CLIENT_VALUES_LOAD_FAILED">;
 export const settingsClientValuesLoadFailed = (): SettingsClientValuesLoadFailedAction =>
     actionWithoutPayload("SETTINGS_CLIENT_VALUES_LOAD_FAILED");
-
-export type SettingsClientValuesSetAction = ActionWithPayload<"SETTINGS_CLIENT_VALUES_SET", {
-    settings: SettingInfo[];
-}>;
-export const settingsClientValuesSet = (settings: SettingInfo[]): SettingsClientValuesSetAction =>
-    actionWithPayload("SETTINGS_CLIENT_VALUES_SET", {settings});
 
 export type SettingsClientConflictAction = ActionWithoutPayload<"SETTINGS_CLIENT_CONFLICT">;
 export const settingsClientConflict = (): SettingsClientConflictAction =>
@@ -329,7 +326,6 @@ export type SettingsAnyAction =
     | SettingsClientValuesLoadAction
     | SettingsClientValuesLoadedAction
     | SettingsClientValuesLoadFailedAction
-    | SettingsClientValuesSetAction
     | SettingsClientConflictAction
     | SettingsClientConflictCloseAction
     | SettingsUpdateAction

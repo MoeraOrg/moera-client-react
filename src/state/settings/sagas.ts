@@ -8,8 +8,7 @@ import {
     HomeNotConnectedError,
     Node,
     NodeApiError,
-    NodeName,
-    SettingInfo
+    NodeName
 } from "api";
 import { Storage } from "storage";
 import { ClientAction } from "state/action";
@@ -22,7 +21,6 @@ import {
     settingsClientValuesLoaded,
     SettingsClientValuesLoadedAction,
     settingsClientValuesLoadFailed,
-    SettingsClientValuesSetAction,
     SettingsDeleteNodeRequestCancelAction,
     SettingsDeleteNodeRequestLoadAction,
     settingsDeleteNodeRequestLoaded,
@@ -82,7 +80,6 @@ export default [
     executor("SETTINGS_NODE_META_LOAD", "", settingsNodeMetaLoadSaga),
     executor("SETTINGS_CLIENT_VALUES_LOAD", "", settingsClientValuesLoadSaga),
     executor("SETTINGS_CLIENT_VALUES_LOADED", "", settingsClientValuesLoadedSaga),
-    executor("SETTINGS_CLIENT_VALUES_SET", "", settingsClientValuesSetSaga),
     executor("SETTINGS_UPDATE", null, settingsUpdateSaga),
     executor("SETTINGS_UPDATE_SUCCEEDED", null, settingsUpdateSucceededSaga),
     executor("SETTINGS_MNEMONIC_LOAD", "", settingsMnemonicLoadSaga),
@@ -150,10 +147,10 @@ async function settingsClientValuesLoadSaga(action: WithContext<SettingsClientVa
         }
         const clientMeta = select(getSettingsClientMeta);
         settings = settings.filter(t => !isDeviceSetting(clientMeta, t.name));
-        dispatch(settingsClientValuesLoaded(settings).causedBy(action));
+        dispatch(settingsClientValuesLoaded(settings, false).causedBy(action));
     } catch (e) {
         if (e instanceof HomeNotConnectedError) {
-            dispatch(settingsClientValuesLoaded([]).causedBy(action));
+            dispatch(settingsClientValuesLoaded([], false).causedBy(action));
         } else {
             dispatch(settingsClientValuesLoadFailed().causedBy(action));
             dispatch(errorThrown(e));
@@ -161,41 +158,28 @@ async function settingsClientValuesLoadSaga(action: WithContext<SettingsClientVa
     }
 }
 
-async function settingsClientValuesLoadedSaga(action: SettingsClientValuesLoadedAction): Promise<void> {
+async function updateLanguage(caller: ClientAction): Promise<void> {
     let lang = select(state => getSetting(state, "language") as string);
-    if (lang === "auto") {
-        lang = findPreferredLanguage();
-    }
-    if (lang !== i18n.language) {
-        await Browser.changeLanguage(lang);
-        dispatch(settingsLanguageChanged().causedBy(action));
-    }
-    storeSettings();
-}
-
-async function updateLanguage(action: ClientAction, settings: SettingInfo[]): Promise<void> {
-    let lang = settings.find(st => st.name === CLIENT_SETTINGS_PREFIX + "language")?.value;
     if (lang != null) {
         if (lang === "auto") {
             lang = findPreferredLanguage();
         }
         if (lang !== i18n.language) {
             await Browser.changeLanguage(lang);
-            dispatch(settingsLanguageChanged().causedBy(action));
+            dispatch(settingsLanguageChanged().causedBy(caller));
         }
     }
 }
 
-async function settingsClientValuesSetSaga(action: SettingsClientValuesSetAction): Promise<void> {
-    const {settings} = action.payload;
-
-    await updateLanguage(action, settings);
+async function settingsClientValuesLoadedSaga(action: SettingsClientValuesLoadedAction): Promise<void> {
+    await updateLanguage(action);
+    if (!action.payload.stored) {
+        storeSettings();
+    }
 }
 
 async function settingsUpdateSaga(action: WithContext<SettingsUpdateAction>): Promise<void> {
     const {settings, onSuccess} = action.payload;
-
-    await updateLanguage(action, settings);
 
     const clientMeta = select(getSettingsClientMeta);
     const toHome = settings
@@ -219,7 +203,9 @@ async function settingsUpdateSaga(action: WithContext<SettingsUpdateAction>): Pr
     }
 }
 
-function settingsUpdateSucceededSaga(action: SettingsUpdateSucceededAction): void {
+async function settingsUpdateSucceededSaga(action: SettingsUpdateSucceededAction): Promise<void> {
+    await updateLanguage(action);
+
     if (action.payload.onSuccess != null) {
         action.payload.onSuccess();
     }

@@ -14,7 +14,7 @@ import {
 import { getHomeConnectionData } from "state/home/selectors";
 import { namingNamesPopulate, namingNamesSwitchServer } from "state/naming/actions";
 import { boot } from "state/navigation/actions";
-import { settingsClientValuesSet } from "state/settings/actions";
+import { settingsClientValuesLoaded } from "state/settings/actions";
 import { DocumentLocation } from "util/universal-url";
 import * as Access from "./access"
 
@@ -28,8 +28,9 @@ function loadedData(data: Access.StoredData): void {
     }
 
     if (data.settings != null) {
-        dispatch(settingsClientValuesSet(
-            data.settings.map(([name, value]) => ({name: CLIENT_SETTINGS_PREFIX + name, value}))
+        dispatch(settingsClientValuesLoaded(
+            data.settings.map(([name, value]) => ({name: CLIENT_SETTINGS_PREFIX + name, value})),
+            true
         ));
     }
 

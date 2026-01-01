@@ -137,22 +137,19 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
         case "SETTINGS_CLIENT_VALUES_LOADED": {
             const values = new Map(state.client.values.entries());
             action.payload.settings.forEach(({name, value}) => values.set(name, value ?? null));
-            return immutable.wrap(state)
-                .set("client.loadingValues", false)
-                .set("client.loadedValues", true)
+
+            const istate = immutable.wrap(state);
+            if (!action.payload.stored) {
+                istate.set("client.loadingValues", false);
+            }
+            istate.set("client.loadedValues", true)
                 .set("client.values", values)
-                .update("formId", formId => formId + 1)
-                .value();
+                .update("formId", formId => formId + 1);
+            return istate.value();
         }
 
         case "SETTINGS_CLIENT_VALUES_LOAD_FAILED":
             return immutable.set(state, "client.loadingValues", false);
-
-        case "SETTINGS_CLIENT_VALUES_SET": {
-            const values = new Map(state.client.values.entries());
-            action.payload.settings.forEach(({name, value}) => values.set(name, value ?? null));
-            return immutable.set(state, "client.values", values);
-        }
 
         case "SETTINGS_CLIENT_CONFLICT":
             return immutable.set(state, "client.conflict", true);
