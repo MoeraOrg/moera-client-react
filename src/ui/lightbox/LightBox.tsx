@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
@@ -99,6 +99,10 @@ export default function LightBox() {
         title = `${index + 1} / ${media.length}`;
     }
 
+    const [loadedCount, setLoadedCount] = useState<number>(0);
+
+    const onImageLoad = () => setLoadedCount(count => count + 1);
+
     const dyed = useRef<boolean>(false);
 
     const imageClick = useCallback(
@@ -120,7 +124,7 @@ export default function LightBox() {
         }
         image.addEventListener("click", imageClick);
         return () => image.removeEventListener("click", imageClick);
-    }, [imageClick, mainSrc]);
+    }, [imageClick, mainSrc, loadedCount]);
 
     const onMovePrevRequest = () => prevMediaId != null ? dispatch(lightBoxMediaSet(prevMediaId, prevSequence)) : null;
 
@@ -138,6 +142,7 @@ export default function LightBox() {
                 onMovePrevRequest={onMovePrevRequest}
                 prevLabel={t("previous-image")}
                 onMoveNextRequest={onMoveNextRequest}
+                onImageLoad={onImageLoad}
                 nextLabel={t("next-image")}
                 reactModalStyle={{overlay: {zIndex: zIndex?.shadow}}}
                 toolbarButtons={[
