@@ -7,7 +7,7 @@ import { ClientAction } from "state/action";
 import { HomeState } from "state/home/state";
 import { toWsUrl } from "util/url";
 
-const emptyConnection = {
+const emptyConnection: Omit<HomeState, "roots"> = {
     introduced: false,
     connecting: false,
     root: {
@@ -33,6 +33,7 @@ const emptyConnection = {
         checksum: 0,
         blockedUsers: []
     },
+    features: null,
     connectionsDialog: {
         show: false
     }
@@ -244,6 +245,15 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
                 "friendGroups",
                 (fgs: FriendGroupInfo[]) => fgs.filter(fg => fg.id !== action.payload.friendGroupId)
             );
+
+        case "NODE_FEATURES_LOADED":
+            if (state.owner.name === action.payload.nodeName) {
+                return {
+                    ...state,
+                    features: action.payload.features
+                };
+            }
+            return state;
 
         default:
             return state;

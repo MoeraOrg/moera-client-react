@@ -11,14 +11,16 @@ import { homeIntroduced } from "state/init-barriers";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
-import { getHomeInvisibleUsersChecksum } from "state/home/selectors";
+import { getHomeInvisibleUsersChecksum, getHomeOwnerName } from "state/home/selectors";
+import { NodeFeaturesLoadedAction } from "state/node/actions";
 import { executor } from "state/executor";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("HOME_AVATARS_LOAD", "", homeAvatarsLoadSaga),
     executor("HOME_FRIEND_GROUPS_LOAD", "", homeFriendGroupsLoadSaga),
-    executor("HOME_INVISIBLE_USERS_LOAD", "", homeInvisibleUsersLoadSaga)
+    executor("HOME_INVISIBLE_USERS_LOAD", "", homeInvisibleUsersLoadSaga),
+    executor("NODE_FEATURES_LOADED", "", nodeFeaturesLoadedSaga)
 ];
 
 async function homeAvatarsLoadSaga(action: WithContext<HomeAvatarsLoadAction>): Promise<void> {
@@ -55,6 +57,21 @@ async function homeInvisibleUsersLoadSaga(action: WithContext<HomeInvisibleUsers
         });
         dispatch(homeInvisibleUsersLoaded(checksums.visibility, blockedUsers).causedBy(action));
         Storage.storeInvisibleUsers(checksums.visibility, blockedUsers);
+    } catch (e) {
+        dispatch(errorThrown(e));
+    }
+}
+
+async function nodeFeaturesLoadedSaga(action: WithContext<NodeFeaturesLoadedAction>): Promise<void> {
+    await homeIntroduced();
+
+    const homeOwnerName = select(getHomeOwnerName);
+    if (homeOwnerName !== action.payload.nodeName || action.payload.stored) {
+        return;
+    }
+
+    try {
+        Storage.storeFeatures(action.payload.features);
     } catch (e) {
         dispatch(errorThrown(e));
     }

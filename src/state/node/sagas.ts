@@ -15,7 +15,7 @@ import {
     ownerVerified,
     OwnerVerifyAction
 } from "state/node/actions";
-import { getNodeRootLocation, getNodeRootPage, getOwnerName } from "state/node/selectors";
+import { getNodeRootLocation, getNodeRootPage, getOwnerName, isAtHomeNode } from "state/node/selectors";
 import { jumpFar } from "state/navigation/actions";
 import { getNodeUri } from "state/naming/sagas";
 import { confirmBox } from "state/confirmbox/actions";
@@ -84,9 +84,15 @@ async function nodeFeaturesLoadSaga(action: WithContext<NodeFeaturesLoadAction>)
         return;
     }
 
+    const atHome = select(isAtHomeNode);
+    const homeFeatures = select(state => state.home.features);
+    if (atHome && homeFeatures != null) {
+        dispatch(nodeFeaturesLoaded(nodeName, homeFeatures, true).causedBy(action));
+    }
+
     try {
         const features = await Node.getFeatures(action, nodeName);
-        dispatch(nodeFeaturesLoaded(nodeName, features).causedBy(action));
+        dispatch(nodeFeaturesLoaded(nodeName, features, false).causedBy(action));
     } catch (e) {
         dispatch(errorThrown(e));
     }

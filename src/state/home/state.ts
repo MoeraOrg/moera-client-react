@@ -1,4 +1,4 @@
-import { AvatarInfo, BlockedUserInfo, FriendGroupInfo } from "api";
+import { AvatarInfo, BlockedUserInfo, Features, FriendGroupInfo } from "api";
 import { RootInfo } from "storage";
 
 export interface HomeState {
@@ -28,6 +28,7 @@ export interface HomeState {
         checksum: number;
         blockedUsers: BlockedUserInfo[];
     }
+    features: Features | null; // for caching only
     connectionsDialog: {
         show: boolean;
     }

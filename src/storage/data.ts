@@ -1,4 +1,4 @@
-import { AvatarImage, CarteInfo } from "api";
+import { AvatarImage, CarteInfo, Features } from "api";
 
 type StorageKey = "currentRoot" | "clientData" | "roots" | "names";
 
@@ -30,6 +30,7 @@ export interface ClientData {
         checksum: number;
         blockedUsers: [string, string][];
     } | null;
+    features?: Features | null;
 }
 
 export function getStorageItem(key: "currentRoot"): string | null;

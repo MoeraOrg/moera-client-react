@@ -1,4 +1,4 @@
-import { AvatarImage, BlockedUserInfo, CarteInfo, CLIENT_SETTINGS_PREFIX } from "api";
+import { AvatarImage, BlockedUserInfo, CarteInfo, CLIENT_SETTINGS_PREFIX, Features } from "api";
 import { ClientAction } from "state/action";
 import { ClientState } from "state/state";
 import { dispatch, select } from "state/store-sagas";
@@ -17,6 +17,7 @@ import { boot } from "state/navigation/actions";
 import { settingsClientValuesLoaded } from "state/settings/actions";
 import { DocumentLocation } from "util/universal-url";
 import * as Access from "./access"
+import { nodeFeaturesLoaded } from "state/node/actions";
 
 function loadedData(data: Access.StoredData): void {
     if (!data) {
@@ -80,6 +81,10 @@ function loadedData(data: Access.StoredData): void {
             dispatch(disconnectedFromHome());
         }
     }
+
+    if (nodeName != null && data.features != null) {
+        dispatch(nodeFeaturesLoaded(nodeName, data.features, true));
+    }
 }
 
 export function loadData(): void {
@@ -115,6 +120,10 @@ export function storeInvisibleUsers(checksum: number, blockedUsers: BlockedUserI
             blockedUsers: blockedUsers.map(bu => [bu.id, bu.nodeName])
         }
     });
+}
+
+export function storeFeatures(features: Features): void {
+    Access.storeData({features});
 }
 
 export function deleteData(location: string): void {

@@ -1,30 +1,26 @@
 import ObjectPath from 'object-path';
 
-import { CarteInfo } from "api";
 import { now } from "util/misc";
 import * as Data from "./data"
 
 const MAX_NAMES_SIZE = 500;
 export const DEFAULT_NAMING_SERVER = "https://naming.moera.org/moera-naming";
 
-export interface StoredData {
+export interface StoredData extends Data.ClientData {
     home?: Data.ClientHomeData & {
         location: string;
         nodeName?: string | null;
     };
     names?: Data.NameDetails[];
     roots?: Data.RootInfo[];
-    cartesIp?: string | null;
-    cartes?: CarteInfo[] | null;
-    settings?: [string, string | null][] | null;
-    invisibleUsers?: {
-        checksum: number;
-        blockedUsers: [string, string][];
-    } | null;
 }
 
-function buildData(currentRoot?: string | null, clientData?: Data.ClientData, roots?: Data.RootInfo[],
-                   names?: Data.NameDetails[]): StoredData {
+function buildData(
+    currentRoot?: string | null,
+    clientData?: Data.ClientData,
+    roots?: Data.RootInfo[],
+    names?: Data.NameDetails[]
+): StoredData {
     let data = {};
     if (currentRoot) {
         data = {...clientData};
