@@ -19,18 +19,11 @@ export default function InstantButton() {
     const modifiers: Modifier<any>[] = [{name: "offset", options: {offset: [0, 15]}}];
     const {styles, attributes, forceUpdate} = usePopper(buttonRef, popperRef, {placement: "bottom-end", modifiers});
 
-    const [lazyLoaded, setLazyLoaded] = useState(false);
+    const componentLoaded = useSelector((state: ClientState) => state.instants.componentLoaded);
     const visible = useSelector((state: ClientState) => state.instants.showPopover);
     const dispatch = useDispatch();
 
-    const onClick = () => {
-        if (!visible) {
-            setLazyLoaded(true);
-            dispatch(openInstantsPopover());
-        } else {
-            dispatch(!visible ? openInstantsPopover() : closeInstantsPopover());
-        }
-    }
+    const onClick = () => dispatch(!visible ? openInstantsPopover() : closeInstantsPopover());
 
     const hide = () => setTimeout(() => dispatch(closeInstantsPopover()));
 
@@ -42,7 +35,7 @@ export default function InstantButton() {
                 <PopoverContext.Provider value={{update: forceUpdate ?? (() => {})}}>
                     <span className={cx({"active": visible})} ref={setButtonRef}><InstantBell onClick={onClick}/></span>
                     {ReactDOM.createPortal(
-                        lazyLoaded &&
+                        componentLoaded &&
                             <div
                                 ref={setPopperRef}
                                 style={{...styles.popper, zIndex: zIndex?.widget}}

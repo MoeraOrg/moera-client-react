@@ -3,7 +3,8 @@ import { ClientAction } from "state/action";
 
 const initialState: InstantsState = {
     showPopover: false,
-    border: Number.MAX_SAFE_INTEGER
+    border: Number.MAX_SAFE_INTEGER,
+    componentLoaded: false,
 };
 
 export default (state: InstantsState = initialState, action: ClientAction): InstantsState => {
@@ -11,7 +12,8 @@ export default (state: InstantsState = initialState, action: ClientAction): Inst
         case "OPEN_INSTANTS_POPOVER":
             return {
                 ...state,
-                showPopover: true
+                showPopover: true,
+                componentLoaded: true
             };
 
         case "CLOSE_INSTANTS_POPOVER":
@@ -24,6 +26,12 @@ export default (state: InstantsState = initialState, action: ClientAction): Inst
             return {
                 ...state,
                 border: action.payload.border
+            };
+
+        case "INSTANTS_COMPONENT_LOADED":
+            return {
+                ...state,
+                componentLoaded: true
             };
 
         default:

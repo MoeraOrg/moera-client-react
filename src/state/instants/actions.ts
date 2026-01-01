@@ -18,8 +18,13 @@ export type InstantsMarkViewedAction = ActionWithoutPayload<"INSTANTS_MARK_VIEWE
 export const instantsMarkViewed = (): InstantsMarkViewedAction =>
     actionWithoutPayload("INSTANTS_MARK_VIEWED");
 
+export type InstantsComponentLoadedAction = ActionWithoutPayload<"INSTANTS_COMPONENT_LOADED">;
+export const instantsComponentLoaded = (): InstantsComponentLoadedAction =>
+    actionWithoutPayload("INSTANTS_COMPONENT_LOADED");
+
 export type InstantsAnyAction =
     OpenInstantsPopoverAction
     | CloseInstantsPopoverAction
     | InstantsBorderSetAction
-    | InstantsMarkViewedAction;
+    | InstantsMarkViewedAction
+    | InstantsComponentLoadedAction;
