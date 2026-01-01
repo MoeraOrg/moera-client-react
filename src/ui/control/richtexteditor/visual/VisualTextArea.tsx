@@ -5,12 +5,7 @@ import isHotkey from 'is-hotkey';
 
 import { NodeName } from "api";
 import * as Browser from "ui/browser";
-import {
-    UI_EVENT_COMMENT_QUOTE,
-    UI_EVENT_OPEN_MENTION,
-    UiEventCommentQuote,
-    UiEventOpenMention
-} from "ui/ui-events";
+import { UI_EVENT_COMMENT_QUOTE, UI_EVENT_OPEN_MENTION, UiEventCommentQuote, UiEventOpenMention } from "ui/ui-events";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { safeImportScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
@@ -24,6 +19,7 @@ import {
 } from "ui/control/richtexteditor/visual/scripture";
 import {
     findWrappingElement,
+    isSelectionInElement,
     scriptureReplaceSmileys,
     scriptureReplaceUrl
 } from "ui/control/richtexteditor/visual/scripture-editor";
@@ -67,6 +63,87 @@ export default function VisualTextArea({
         ];
     }, [submitKey]);
 
+    const onHardEnter = (event: React.KeyboardEvent) => {
+        if (editor.selection == null) {
+            return; // should never happen
+        }
+
+        if (inBlockquote) {
+            const [, path] = findWrappingElement(editor, "paragraph") ?? [null, null];
+            if (path != null && editor.string(path) === "") {
+                editor.liftNodes();
+                event.preventDefault();
+            }
+        }
+        if (inList) {
+            const [listItem, path] = findWrappingElement<ListItemElement>(editor, "list-item") ?? [null, null];
+            if (path != null && editor.string(path) === "") {
+                if (listItem.level > 1) {
+                    editor.setNodes(createListItemElement(listItem.ordered, listItem.level - 1, []));
+                } else {
+                    editor.setNodes(createParagraphElement([]));
+                }
+                event.preventDefault();
+            }
+        }
+        if (headingLevel > 0 || inCodeBlock) {
+            const [, path] = findWrappingElement(editor, ["heading", "code-block"]) ?? [null, null];
+            if (path != null && editor.isEdge(editor.selection.anchor, path)) {
+                editor.insertNode(createParagraphElement([createScriptureText("")]));
+                event.preventDefault();
+            }
+        }
+        if (inVoid) {
+            editor.insertNode(createParagraphElement([createScriptureText("")]));
+            event.preventDefault();
+        }
+
+        if (!event.defaultPrevented) {
+            const [node] = editor.node(editor.selection.anchor);
+            if (isScriptureText(node)) {
+                const {offset} = editor.selection.anchor;
+                let m = node.text.substring(0, offset).match(/\s*$/);
+                if (m) {
+                    for (let i = 0; i < m[0].length; i++) {
+                        editor.deleteBackward("character");
+                    }
+                }
+                m = node.text.substring(offset).match(/^\s*/);
+                if (m) {
+                    for (let i = 0; i < m[0].length; i++) {
+                        editor.deleteForward("character");
+                    }
+                }
+            }
+            editor.insertBreak();
+            event.preventDefault();
+        }
+    }
+
+    const onSoftEnter = (event: React.KeyboardEvent) => {
+        if (inVoid && editor.selection != null && Range.isCollapsed(editor.selection)) {
+            const parent = Path.parent(editor.selection.anchor.path);
+            editor.insertNode(createParagraphElement([createScriptureText("")]), {at: parent});
+            event.preventDefault();
+        } else {
+            editor.insertText("\n");
+            event.preventDefault();
+        }
+    }
+
+    const isDoubleLinefeed = (): boolean => {
+        if (editor.selection != null && Range.isCollapsed(editor.selection)) {
+            if (isSelectionInElement(editor, ["code-block", "list-item"])) {
+                return false;
+            }
+            const [node] = editor.node(editor.selection.anchor);
+            if (isScriptureText(node) && node.text[editor.selection.anchor.offset - 1] === "\n") {
+                return true;
+            }
+        }
+        return false;
+    }
+
     const onKeyDown = (event: React.KeyboardEvent) => {
         if (onSubmit != null && isSubmitKey(event)) {
             onSubmit();
@@ -84,65 +161,13 @@ export default function VisualTextArea({
             }
         }
         if (isHardEnter(event) && editor.selection != null && Range.isCollapsed(editor.selection)) {
-            if (inBlockquote) {
-                const [, path] = findWrappingElement(editor, "paragraph") ?? [null, null];
-                if (path != null && editor.string(path) === "") {
-                    editor.liftNodes();
-                    event.preventDefault();
-                }
-            }
-            if (inList) {
-                const [listItem, path] = findWrappingElement<ListItemElement>(editor, "list-item") ?? [null, null];
-                if (path != null && editor.string(path) === "") {
-                    if (listItem.level > 1) {
-                        editor.setNodes(createListItemElement(listItem.ordered, listItem.level - 1, []));
-                    } else {
-                        editor.setNodes(createParagraphElement([]));
-                    }
-                    event.preventDefault();
-                }
-            }
-            if (headingLevel > 0 || inCodeBlock) {
-                const [, path] = findWrappingElement(editor, ["heading", "code-block"]) ?? [null, null];
-                if (path != null && editor.isEdge(editor.selection.anchor, path)) {
-                    editor.insertNode(createParagraphElement([createScriptureText("")]));
-                    event.preventDefault();
-                }
-            }
-            if (inVoid) {
-                editor.insertNode(createParagraphElement([createScriptureText("")]));
-                event.preventDefault();
-            }
-
-            if (!event.defaultPrevented) {
-                const [node] = editor.node(editor.selection.anchor);
-                if (isScriptureText(node)) {
-                    const {offset} = editor.selection.anchor;
-                    let m = node.text.substring(0, offset).match(/\s*$/);
-                    if (m) {
-                        for (let i = 0; i < m[0].length; i++) {
-                            editor.deleteBackward("character");
-                        }
-                    }
-                    m = node.text.substring(offset).match(/^\s*/);
-                    if (m) {
-                        for (let i = 0; i < m[0].length; i++) {
-                            editor.deleteForward("character");
-                        }
-                    }
-                }
-                editor.insertBreak();
-                event.preventDefault();
-            }
+            onHardEnter(event);
         }
         if (isSoftEnter(event)) {
-            if (inVoid && editor.selection != null && Range.isCollapsed(editor.selection)) {
-                const parent = Path.parent(editor.selection.anchor.path);
-                editor.insertNode(createParagraphElement([createScriptureText("")]), {at: parent});
-                event.preventDefault();
+            if (isDoubleLinefeed()) {
+                onHardEnter(event);
             } else {
-                editor.insertText("\n");
-                event.preventDefault();
+                onSoftEnter(event);
             }
         }
 
