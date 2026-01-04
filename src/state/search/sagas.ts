@@ -1,5 +1,4 @@
 import { endOfDay, getUnixTime, startOfDay, subDays, subMonths, subWeeks, subYears } from 'date-fns';
-import clipboardCopy from 'clipboard-copy';
 
 import { executor } from "state/executor";
 import i18n from "i18next";
@@ -40,6 +39,7 @@ import * as Browser from "ui/browser";
 import { REL_HOME, REL_SEARCH } from "util/rel-node-name";
 import { universalLocation } from "util/universal-url";
 import { ut } from "util/url";
+import { clipboardCopy } from "util/clipboard";
 
 export default [
     executor("SEARCH_LOAD", null, searchLoadSaga),

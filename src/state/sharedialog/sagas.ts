@@ -1,4 +1,3 @@
-import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
 import {
@@ -19,6 +18,7 @@ import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html
 import { getWindowSelectionHtml, hasWindowSelection } from "util/ui";
 import { absoluteNodeName } from "util/rel-node-name";
 import { universalLocation } from "util/universal-url";
+import { clipboardCopy } from "util/clipboard";
 
 export default [
     executor("SHARE_DIALOG_PREPARE", "", shareDialogPrepareSaga),

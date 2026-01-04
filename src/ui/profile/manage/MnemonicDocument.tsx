@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';
 import { useReactToPrint } from 'react-to-print';
-import clipboardCopy from 'clipboard-copy';
 
 import { tTitle } from "i18n";
 import { ClientState } from "state/state";
@@ -11,6 +10,7 @@ import { flashBox } from "state/flashbox/actions";
 import { Button } from "ui/control";
 import { Icon, msContentCopy, msPrint } from "ui/material-symbols";
 import * as Browser from "ui/browser";
+import { clipboardCopy } from "util/clipboard";
 import "./MnemonicDocument.css";
 
 interface ColumnProps {

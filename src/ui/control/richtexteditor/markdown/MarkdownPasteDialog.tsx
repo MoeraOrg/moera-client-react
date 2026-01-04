@@ -41,7 +41,7 @@ export default function MarkdownPasteDialog({onSubmit}: Props) {
                 </div>
             </div>
             <div className="modal-footer">
-                <Button variant="warning" onClick={() => onSubmit("text", persist)}>
+                <Button variant="secondary" onClick={() => onSubmit("text", persist)}>
                     {t("text-only")} (t)
                 </Button>
                 <Button variant="primary" onClick={() => onSubmit("html", persist)}>

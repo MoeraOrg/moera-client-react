@@ -1,4 +1,3 @@
-import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
@@ -10,6 +9,7 @@ import { getNamingNameRoot } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import * as Browser from "ui/browser";
 import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
+import { clipboardCopy } from "util/clipboard";
 import { clearHtml, containsTags, htmlEntities } from "util/html";
 import { mediaImagePreview } from "util/media-images";
 import { urlWithParameters } from "util/url";
@@ -20,14 +20,14 @@ export default [
 ];
 
 async function entryCopyTextSaga(action: EntryCopyTextAction): Promise<void> {
-    let {body: {text}, mode, nodeName, media} = action.payload;
+    let {body: {text: bodyText}, mode, nodeName, media} = action.payload;
 
-    if (!text) {
+    if (!bodyText) {
         return;
     }
 
     if (mode === "ask") {
-        if (!containsTags(text, "basic")) {
+        if (!containsTags(bodyText, "basic")) {
             mode = "text";
         }
     }
@@ -37,9 +37,11 @@ async function entryCopyTextSaga(action: EntryCopyTextAction): Promise<void> {
         return;
     }
 
-    text = htmlToMarkdown(text);
+    let text = htmlToMarkdown(bodyText);
+    let html = undefined;
     if (mode === "text") {
         text = clearHtml(text);
+        html = text;
     } else {
         const {rootPage, carte} = select(state => ({
             rootPage: getNamingNameRoot(state, nodeName),
@@ -47,9 +49,10 @@ async function entryCopyTextSaga(action: EntryCopyTextAction): Promise<void> {
         }));
         if (rootPage != null) {
             text = replaceMediaUrls(text, rootPage, carte, media);
+            html = replaceMediaUrls(bodyText, rootPage, carte, media);
         }
     }
-    await clipboardCopy(text);
+    await clipboardCopy(text, html);
     if (!Browser.isAndroidBrowser()) {
         dispatch(flashBox(i18n.t("text-copied")).causedBy(action));
     }

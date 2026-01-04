@@ -30,7 +30,7 @@ export default function EntryCopyTextDialog() {
                 {t("text-contains-formatting")}
             </div>
             <div className="modal-footer">
-                <Button variant="warning" onClick={onSubmit("text")}>{t("text-only")}</Button>
+                <Button variant="secondary" onClick={onSubmit("text")}>{t("text-only")}</Button>
                 <Button variant="primary" onClick={onSubmit("html")}>{t("preserve-formatting")}</Button>
             </div>
         </ModalDialog>

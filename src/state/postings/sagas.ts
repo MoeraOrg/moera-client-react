@@ -1,4 +1,3 @@
-import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
 import { Node, ReactionTotalsInfo } from "api";
@@ -55,6 +54,7 @@ import { isConnectedToHome } from "state/home/selectors";
 import * as Browser from "ui/browser";
 import { toAvatarDescription } from "util/avatar";
 import { absoluteNodeName, REL_HOME, RelNodeName } from "util/rel-node-name";
+import { clipboardCopy } from "util/clipboard";
 import { notNull } from "util/misc";
 import { universalLocation } from "util/universal-url";
 import { ut } from "util/url";

@@ -1,4 +1,3 @@
-import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
 import { WithContext } from "state/action-types";
@@ -13,6 +12,7 @@ import { getLightBoxMediaPostingId, getLightBoxNodeName } from "state/lightbox/s
 import * as Browser from "ui/browser";
 import { absoluteNodeName } from "util/rel-node-name";
 import { universalLocation } from "util/universal-url";
+import { clipboardCopy } from "util/clipboard";
 
 export default [
     executor("LIGHT_BOX_MEDIA_POSTING_LOAD", null, lightBoxMediaPostingLoadSaga),

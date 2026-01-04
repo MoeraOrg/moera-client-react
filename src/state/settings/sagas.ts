@@ -1,4 +1,3 @@
-import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
 import { findPreferredLanguage } from "i18n";
@@ -74,6 +73,7 @@ import { flashBox } from "state/flashbox/actions";
 import { messageBox } from "state/messagebox/actions";
 import * as Browser from "ui/browser";
 import { REL_HOME } from "util/rel-node-name";
+import { clipboardCopy } from "util/clipboard";
 
 export default [
     executor("SETTINGS_NODE_VALUES_LOAD", "", settingsNodeValuesLoadSaga),

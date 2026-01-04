@@ -360,3 +360,18 @@ export const unhtmlEntitiesMinimal = (s: string | null | undefined): string =>
 
 export const isHtmlEmpty = (html: string | null | undefined): boolean =>
     !html || html.trim() === "" || html.trim() === "<p></p>";
+
+export function ht(strings: TemplateStringsArray, ...args: any[]): string {
+    const all = [];
+    let i = 0;
+    while (i < strings.length || i < args.length) {
+        if (i < strings.length) {
+            all.push(strings[i]);
+        }
+        if (i < args.length) {
+            all.push(htmlEntities(args[i]));
+        }
+        i++;
+    }
+    return all.join("");
+}

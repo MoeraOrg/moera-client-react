@@ -1,4 +1,3 @@
-import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
 import {
@@ -111,6 +110,7 @@ import { uiEventCommentQuote } from "ui/ui-events";
 import { toAvatarDescription } from "util/avatar";
 import { getWindowSelectionHtml } from "util/ui";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
+import { clipboardCopy } from "util/clipboard";
 import { delay, notNull } from "util/misc";
 import { ut } from "util/url";
 
