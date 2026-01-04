@@ -7,6 +7,7 @@ import { feedStatusUpdate } from "state/feeds/actions";
 import { getFeedState } from "state/feeds/selectors";
 import { useParent } from "ui/hook";
 import { Icon, msClose } from "ui/material-symbols";
+import Jump from "ui/navigation/Jump";
 import Instants from "ui/instant/Instants";
 import { REL_HOME } from "util/rel-node-name";
 
@@ -16,6 +17,11 @@ export default function InstantsPopover() {
     const {t} = useTranslation();
 
     const {hide} = useParent();
+
+    const onSeeAll = (href: string, performJump: () => void) => {
+        hide();
+        performJump();
+    }
 
     const onReadAll = () => {
         if (stories.length === 0) {
@@ -27,7 +33,9 @@ export default function InstantsPopover() {
     return (
         <div id="instants">
             <div className="header">
-                <div className="title">{t("instants")}</div>
+                <Jump nodeName={REL_HOME} href="/instants" className="title" onNear={onSeeAll} onFar={onSeeAll}>
+                    {t("instants")}
+                </Jump>
                 <button className="close" onClick={hide}>
                     <Icon icon={msClose} size={16}/>
                 </button>

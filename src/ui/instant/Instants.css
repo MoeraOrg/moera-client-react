@@ -18,6 +18,7 @@
     font-weight: 400;
     font-size: 1.25rem;
     line-height: 1.2;
+    color: var(--bs-popover-body-color);
 }
 
 #instants .header .close {
