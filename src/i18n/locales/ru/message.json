@@ -149,6 +149,7 @@
   "copy-link": "Копировать ссылку",
   "copy-quote": "Копировать цитату",
   "copy-text": "Копировать текст",
+  "copy-text-image": "Копировать текст с картинки",
   "copy-with-formatting": "Копировать текст с форматированием",
   "count-comments": "{count} {count, plural, one {комментарий} few {комментария} other {комментариев}}",
   "count-images": "{count} {count, plural, one {картинка} few {картинки} other {картинок}}",

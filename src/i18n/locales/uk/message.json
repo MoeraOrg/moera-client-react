@@ -149,6 +149,7 @@
   "copy-link": "Копіювати посилання",
   "copy-quote": "Копіювати цитату",
   "copy-text": "Копіювати текст",
+  "copy-text-image": "Копіювати текст з картинки",
   "copy-with-formatting": "Копіювати текст із форматуванням",
   "count-comments": "{count} {count, plural, one {коментар} few {коментарі} other {коментарів}}",
   "count-images": "{count} {count, plural, one {зображення} few {зображення} other {зображень}}",

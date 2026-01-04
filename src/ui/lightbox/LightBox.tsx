@@ -18,6 +18,7 @@ import { getSetting } from "state/settings/selectors";
 import { ParentContext } from "ui/hook";
 import LightBoxCaption from "ui/lightbox/LightBoxCaption";
 import LightBoxReactions from "ui/lightbox/LightBoxReactions";
+import LightBoxCopyTextButton from "ui/lightbox/LightBoxCopyTextButton";
 import LightBoxShareButton from "ui/lightbox/LightBoxShareButton";
 import LightBoxDownloadButton from "ui/lightbox/LightBoxDownloadButton";
 import { useOverlay } from "ui/overlays/overlays";
@@ -28,11 +29,13 @@ import "./LightBox.css";
 export default function LightBox() {
     const posting = useSelector((state: ClientState) => getPosting(state, state.lightBox.postingId, REL_CURRENT));
     const comment = useSelector((state: ClientState) =>
-        state.lightBox.commentId != null ? getComment(state, state.lightBox.commentId) : null);
+        state.lightBox.commentId != null ? getComment(state, state.lightBox.commentId) : null
+    );
     const mediaId = useSelector(getLightBoxMediaId);
     const mediaNodeName = useSelector((state: ClientState) => state.lightBox.nodeName);
     const mediaPosting = useSelector((state: ClientState) =>
-        getPosting(state, getLightBoxMediaPostingId(state), mediaNodeName));
+        getPosting(state, getLightBoxMediaPostingId(state), mediaNodeName)
+    );
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, state.lightBox.nodeName));
     const carte = useSelector(getCurrentViewMediaCarte);
     const loopGallery = useSelector((state: ClientState) => getSetting(state, "entry.gallery.loop") as boolean);
@@ -48,6 +51,7 @@ export default function LightBox() {
     let mainHref = "";
     let mainSrc = "";
     let mainMimeType = "";
+    let mainTextContent: string | undefined = undefined;
     let prevSrc: string | undefined = undefined;
     let prevMediaId: string | undefined = undefined;
     let prevSequence: LightBoxMediaSequence = "normal";
@@ -70,6 +74,7 @@ export default function LightBox() {
             mainSrc = urlWithParameters(rootPage + mainHref, {auth});
         }
         mainMimeType = mainMedia?.mimeType ?? "image/jpeg";
+        mainTextContent = mainMedia?.textContent ?? undefined;
         const prevIndex = index > 0
             ? index - 1
             : (index === 0 && loop ? media.length - 1 : null);
@@ -146,6 +151,7 @@ export default function LightBox() {
                 nextLabel={t("next-image")}
                 reactModalStyle={{overlay: {zIndex: zIndex?.shadow}}}
                 toolbarButtons={[
+                    mainTextContent && <LightBoxCopyTextButton text={mainTextContent}/>,
                     <LightBoxShareButton mediaNodeName={mediaNodeName} mediaHref={mainHref}/>,
                     <LightBoxDownloadButton mediaUrl={mainSrc} mediaMimeType={mainMimeType}/>,
                     <LightBoxReactions/>

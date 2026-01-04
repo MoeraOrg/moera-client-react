@@ -149,6 +149,7 @@
   "copy-link": "Kopiuj link",
   "copy-quote": "Kopiuj cytat",
   "copy-text": "Kopiuj tekst",
+  "copy-text-image": "Kopiuj tekst z obrazu",
   "copy-with-formatting": "Kopiuj tekst z formatowaniem",
   "count-comments": "{count} {count, plural, one {komentarz} few {komentarze} many {komentarzy} other {komentarzy}}",
   "count-images": "{count} {count, plural, one {obraz} few {obrazy} many {obrazów} other {obrazów}}",
