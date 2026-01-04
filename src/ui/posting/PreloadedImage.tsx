@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface Props {
     src: string;
@@ -23,6 +23,15 @@ export default function PreloadedImage({src, srcSet, sizes, width, height, alt, 
         window.loadedImages?.add(src);
     }
 
+    const imgRef = useRef<HTMLImageElement>(null);
+
+    useEffect(() => {
+        const figure = imgRef.current?.closest("figure");
+        if (figure) {
+            figure.style.setProperty("--width", `${width}px`);
+        }
+    }, [width]);
+
     const style: React.CSSProperties = {
         "--width": `${width}px`,
         "--height": `${height}px`,
@@ -35,8 +44,8 @@ export default function PreloadedImage({src, srcSet, sizes, width, height, alt, 
                 <img width={width} height={height} alt={alt ?? ""} title={title} style={style}
                      className="preload-placeholder"/>
             }
-            <img src={src} srcSet={srcSet} sizes={sizes} width={width} height={height} alt={alt ?? ""} title={title}
-                 className={className} style={loaded ? style : {display: "none"}} onLoad={onLoad}/>
+            <img ref={imgRef} src={src} srcSet={srcSet} sizes={sizes} width={width} height={height} alt={alt ?? ""}
+                 title={title} className={className} style={loaded ? style : {display: "none"}} onLoad={onLoad}/>
         </>
     );
 }

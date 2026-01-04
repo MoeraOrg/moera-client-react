@@ -78,6 +78,7 @@
     line-height: 1.5;
     margin-top: .5em;
     color: var(--bs-secondary);
+    max-width: calc(var(--width) * 1.05);
 }
 
 .comment .content .read-more {
