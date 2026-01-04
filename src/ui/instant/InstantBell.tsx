@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { getInstantCount } from "state/feeds/selectors";
 import { Icon, msNotifications } from "ui/material-symbols";
+import Jump from "ui/navigation/Jump";
+import { REL_HOME } from "util/rel-node-name";
 import "./InstantBell.css";
 
 interface Props {
@@ -15,8 +17,9 @@ export default function InstantBell({onClick}: Props) {
     const {t} = useTranslation();
 
     return (
-        <button className="btn btn-silent-round bell-button" title={t("instants")} onClick={onClick}>
+        <Jump nodeName={REL_HOME} href="/instants" className="btn btn-silent-round bell-button" title={t("instants")}
+              onNear={onClick} onFar={onClick}>
             <Icon icon={msNotifications} size={24}/>{count > 0 && <div className="count">{count}</div>}
-        </button>
+        </Jump>
     );
 }
