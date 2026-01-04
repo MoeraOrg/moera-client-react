@@ -114,8 +114,8 @@ module.exports = function (proxy, allowedHost) {
       return middlewares
     },
     server: {
-      type: 'http',
-      //options: getHttpsConfig(),
+      type: process.env.HTTPS === 'true' ? 'https' : 'http',
+      options: getHttpsConfig() || {},
     }
   };
 };

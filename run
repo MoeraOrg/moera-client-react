@@ -1,3 +1,14 @@
 #!/bin/sh
 
+if [ -d .ssl ]; then
+    export HTTPS=true
+    for crtfile in .ssl/*.pem; do
+        crtfile=`realpath $crtfile`
+        case $crtfile in
+            *-key.pem) export SSL_KEY_FILE=$crtfile ;;
+            *) export SSL_CRT_FILE=$crtfile ;;
+        esac
+    done
+fi
+
 PORT=3000 yarn start
