@@ -14,7 +14,7 @@ import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html
 import { getWindowSelectionHtml } from "util/ui";
 import { mentionName } from "util/names";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
-import { htmlEntities } from "util/html";
+import { ht } from "util/html";
 import { universalLocation } from "util/universal-url";
 import { ut } from "util/url";
 
@@ -65,9 +65,7 @@ async function postingReplySaga(action: WithContext<PostingReplyAction>): Promis
             case "html/visual": {
                 const name = posting.ownerFullName || NodeName.shorten(posting.ownerName);
                 const href = universalLocation(null, posting.ownerName, null, "/");
-                const mention =
-                    `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(posting.ownerName)}" data-href="/">`
-                    + `${htmlEntities(name)}</a>`;
+                const mention = ht`<a href="${href}" data-nodename="${posting.ownerName}" data-href="/">${name}</a>`;
                 const preamble = preambleTemplateHtml
                     .replace("%POST%", await postingHref(action, posting, nodeRootPage))
                     .replace("%USER%", mention);
