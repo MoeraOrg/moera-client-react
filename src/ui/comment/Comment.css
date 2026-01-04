@@ -97,7 +97,17 @@
 
 @media only screen and (max-width: 991px) {
     .comment A.link-preview, .comment DIV.link-preview {
-        width: calc(100vw - .5rem - 32px);
+        width: calc(100vw - 32px);
+    }
+
+    .comment A.link-preview {
+        width: calc(100vw - 32px);
+        margin-left: -.25rem;
+    }
+
+    .comment DIV.link-preview {
+        width: calc(100vw - 32px);
+        margin-left: -4rem;
     }
 }
 
