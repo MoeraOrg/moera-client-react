@@ -17,7 +17,7 @@ export type RichTextEditorDialogBodyProps<P> = P & {
 };
 
 export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V extends FormikValues>(
-    title: string,
+    title: string | ((props: P) => string),
     mapPropsToValues: (props: P) => V,
     DialogBody: React.ComponentType<RichTextEditorDialogBodyProps<P>>
 ) {
@@ -44,8 +44,10 @@ export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V e
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const {overlayId: parentOverlayId} = useParent();
 
+        const titleS = typeof title === "function" ? title(props) : title;
+
         return (
-            <ModalDialog title={t(title)} parentOverlayId={parentOverlayId} onClose={onClose}>
+            <ModalDialog title={t(titleS)} parentOverlayId={parentOverlayId} onClose={onClose}>
                 <Form>
                     <div className="modal-body">
                         <DialogBody {...props} okButtonRef={okButtonRef}/>
