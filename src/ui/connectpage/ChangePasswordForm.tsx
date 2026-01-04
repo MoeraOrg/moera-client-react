@@ -40,10 +40,12 @@ function ChangePasswordForm({dirty, values, errors, resetForm}: Props) {
     return (
         <Form>
             <div className="title">{t("change-home-password")}</div>
-            <InputField type="password" name="oldPassword" title={t("current-password")} errorsOnly noFeedback
-                        autoFocus/>
-            <InputField type="password" name="password" title={t("new-password")} errorsOnly noFeedback/>
-            <InputField type="password" name="confirmPassword" title={t("confirm-password")} errorsOnly noFeedback/>
+            <InputField type="password" name="oldPassword" title={t("current-password")} autoComplete="current-password"
+                        errorsOnly noFeedback autoFocus/>
+            <InputField type="password" name="password" title={t("new-password")} autoComplete="new-password" errorsOnly
+                        noFeedback/>
+            <InputField type="password" name="confirmPassword" title={t("confirm-password")} autoComplete="new-password"
+                        errorsOnly noFeedback/>
             {formError && <div className="form-error">{t(formError)}</div>}
             <Button type="submit" variant="primary" className="submit-button" disabled={disabled} loading={processing}>
                 {t("change-password")}
