@@ -1527,6 +1527,7 @@ export interface PostingInfoBase<B> {
     sources?: PostingSourceInfo[] | null;
     totalComments?: number | null;
     recommended?: boolean | null;
+    externalSourceUri?: string | null;
 }
 
 export type EncodedPostingInfo = PostingInfoBase<string>;
@@ -1593,6 +1594,7 @@ export interface PostingText {
     commentOperations?: CommentOperations | null;
     reactionOperations?: ReactionOperations | null;
     commentReactionOperations?: ReactionOperations | null;
+    externalSourceUri?: string | null;
 }
 
 export interface ReactionCreated {

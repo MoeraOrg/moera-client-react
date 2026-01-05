@@ -1251,6 +1251,18 @@ export async function createPosting(
     });
 }
 
+export async function getPostingsByExternalSource(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, external: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.PostingInfo[]> {
+
+    const location = urlWithParameters(ut`/postings`, {external});
+    return callApi<API.PostingInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "PostingInfoArray", decodeBodies: true,
+        errorFilter
+    });
+}
+
 export async function updatePosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string, posting: API.PostingText,
     errorFilter: ErrorFilter = false, auth: boolean | string = true

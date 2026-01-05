@@ -43872,7 +43872,7 @@ return errors === 0;
 }
 
 export const PostingInfo = validate181;
-const schema195 = {"type":"object","properties":{"id":{"type":"string"},"revisionId":{"type":"string"},"receiverRevisionId":{"type":"string","nullable":true},"totalRevisions":{"type":"integer"},"receiverName":{"type":"string","nullable":true},"receiverFullName":{"type":"string","nullable":true},"receiverGender":{"type":"string","nullable":true},"receiverAvatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"receiverPostingId":{"type":"string","nullable":true},"parentMediaId":{"type":"string","nullable":true},"ownerName":{"type":"string"},"ownerFullName":{"type":"string","nullable":true},"ownerGender":{"type":"string","nullable":true},"ownerAvatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"bodyPreview":{"type":"string","nullable":true},"bodySrc":{"type":"string","nullable":true},"bodySrcHash":{"type":"string"},"bodySrcFormat":{"type":"string","nullable":true},"body":{"type":"string"},"bodyFormat":{"type":"string","nullable":true},"media":{"type":"array","items":{"$ref":"node#/definitions/MediaAttachment"},"nullable":true},"heading":{"type":"string"},"description":{"type":"string","nullable":true},"updateInfo":{"anyOf":[{"$ref":"node#/definitions/UpdateInfo","type":"object","nullable":true},{"type":"null"}]},"createdAt":{"type":"integer"},"editedAt":{"type":"integer","nullable":true},"deletedAt":{"type":"integer","nullable":true},"receiverCreatedAt":{"type":"integer","nullable":true},"receiverEditedAt":{"type":"integer","nullable":true},"receiverDeletedAt":{"type":"integer","nullable":true},"revisionCreatedAt":{"type":"integer"},"receiverRevisionCreatedAt":{"type":"integer","nullable":true},"deadline":{"type":"integer","nullable":true},"digest":{"type":"string","nullable":true},"signature":{"type":"string","nullable":true},"signatureVersion":{"type":"integer","nullable":true},"feedReferences":{"type":"array","items":{"$ref":"node#/definitions/FeedReference"},"nullable":true},"blockedInstants":{"type":"array","items":{"$ref":"node#/definitions/BlockedPostingInstantInfo"},"nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/PostingOperations","type":"object","nullable":true},{"type":"null"}]},"receiverOperations":{"anyOf":[{"$ref":"node#/definitions/PostingOperations","type":"object","nullable":true},{"type":"null"}]},"commentOperations":{"anyOf":[{"$ref":"node#/definitions/CommentOperations","type":"object","nullable":true},{"type":"null"}]},"reactionOperations":{"anyOf":[{"$ref":"node#/definitions/ReactionOperations","type":"object","nullable":true},{"type":"null"}]},"commentReactionOperations":{"anyOf":[{"$ref":"node#/definitions/ReactionOperations","type":"object","nullable":true},{"type":"null"}]},"blockedOperations":{"type":"array","items":{"type":"string"},"nullable":true},"blockedCommentOperations":{"type":"array","items":{"type":"string"},"nullable":true},"sheriffs":{"type":"array","items":{"type":"string"},"nullable":true},"sheriffMarks":{"type":"array","items":{"$ref":"node#/definitions/SheriffMark"},"nullable":true},"rejectedReactions":{"anyOf":[{"$ref":"node#/definitions/RejectedReactions","type":"object","nullable":true},{"type":"null"}]},"commentRejectedReactions":{"anyOf":[{"$ref":"node#/definitions/RejectedReactions","type":"object","nullable":true},{"type":"null"}]},"clientReaction":{"anyOf":[{"$ref":"node#/definitions/ClientReactionInfo","type":"object","nullable":true},{"type":"null"}]},"reactions":{"anyOf":[{"$ref":"node#/definitions/ReactionTotalsInfo","type":"object","nullable":true},{"type":"null"}]},"sources":{"type":"array","items":{"$ref":"node#/definitions/PostingSourceInfo"},"nullable":true},"totalComments":{"type":"integer","nullable":true},"recommended":{"type":"boolean","nullable":true}},"required":["id","revisionId","totalRevisions","ownerName","bodySrcHash","body","heading","createdAt","revisionCreatedAt"],"additionalProperties":false};
+const schema195 = {"type":"object","properties":{"id":{"type":"string"},"revisionId":{"type":"string"},"receiverRevisionId":{"type":"string","nullable":true},"totalRevisions":{"type":"integer"},"receiverName":{"type":"string","nullable":true},"receiverFullName":{"type":"string","nullable":true},"receiverGender":{"type":"string","nullable":true},"receiverAvatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"receiverPostingId":{"type":"string","nullable":true},"parentMediaId":{"type":"string","nullable":true},"ownerName":{"type":"string"},"ownerFullName":{"type":"string","nullable":true},"ownerGender":{"type":"string","nullable":true},"ownerAvatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"bodyPreview":{"type":"string","nullable":true},"bodySrc":{"type":"string","nullable":true},"bodySrcHash":{"type":"string"},"bodySrcFormat":{"type":"string","nullable":true},"body":{"type":"string"},"bodyFormat":{"type":"string","nullable":true},"media":{"type":"array","items":{"$ref":"node#/definitions/MediaAttachment"},"nullable":true},"heading":{"type":"string"},"description":{"type":"string","nullable":true},"updateInfo":{"anyOf":[{"$ref":"node#/definitions/UpdateInfo","type":"object","nullable":true},{"type":"null"}]},"createdAt":{"type":"integer"},"editedAt":{"type":"integer","nullable":true},"deletedAt":{"type":"integer","nullable":true},"receiverCreatedAt":{"type":"integer","nullable":true},"receiverEditedAt":{"type":"integer","nullable":true},"receiverDeletedAt":{"type":"integer","nullable":true},"revisionCreatedAt":{"type":"integer"},"receiverRevisionCreatedAt":{"type":"integer","nullable":true},"deadline":{"type":"integer","nullable":true},"digest":{"type":"string","nullable":true},"signature":{"type":"string","nullable":true},"signatureVersion":{"type":"integer","nullable":true},"feedReferences":{"type":"array","items":{"$ref":"node#/definitions/FeedReference"},"nullable":true},"blockedInstants":{"type":"array","items":{"$ref":"node#/definitions/BlockedPostingInstantInfo"},"nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/PostingOperations","type":"object","nullable":true},{"type":"null"}]},"receiverOperations":{"anyOf":[{"$ref":"node#/definitions/PostingOperations","type":"object","nullable":true},{"type":"null"}]},"commentOperations":{"anyOf":[{"$ref":"node#/definitions/CommentOperations","type":"object","nullable":true},{"type":"null"}]},"reactionOperations":{"anyOf":[{"$ref":"node#/definitions/ReactionOperations","type":"object","nullable":true},{"type":"null"}]},"commentReactionOperations":{"anyOf":[{"$ref":"node#/definitions/ReactionOperations","type":"object","nullable":true},{"type":"null"}]},"blockedOperations":{"type":"array","items":{"type":"string"},"nullable":true},"blockedCommentOperations":{"type":"array","items":{"type":"string"},"nullable":true},"sheriffs":{"type":"array","items":{"type":"string"},"nullable":true},"sheriffMarks":{"type":"array","items":{"$ref":"node#/definitions/SheriffMark"},"nullable":true},"rejectedReactions":{"anyOf":[{"$ref":"node#/definitions/RejectedReactions","type":"object","nullable":true},{"type":"null"}]},"commentRejectedReactions":{"anyOf":[{"$ref":"node#/definitions/RejectedReactions","type":"object","nullable":true},{"type":"null"}]},"clientReaction":{"anyOf":[{"$ref":"node#/definitions/ClientReactionInfo","type":"object","nullable":true},{"type":"null"}]},"reactions":{"anyOf":[{"$ref":"node#/definitions/ReactionTotalsInfo","type":"object","nullable":true},{"type":"null"}]},"sources":{"type":"array","items":{"$ref":"node#/definitions/PostingSourceInfo"},"nullable":true},"totalComments":{"type":"integer","nullable":true},"recommended":{"type":"boolean","nullable":true},"externalSourceUri":{"type":"string","nullable":true}},"required":["id","revisionId","totalRevisions","ownerName","bodySrcHash","body","heading","createdAt","revisionCreatedAt"],"additionalProperties":false};
 
 function validate181(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
 let vErrors = null;
@@ -50766,6 +50766,48 @@ var valid0 = _errs459 === errors;
 }
 else {
 var valid0 = true;
+}
+if(valid0){
+if(data.externalSourceUri !== undefined){
+let data135 = data.externalSourceUri;
+const _errs462 = errors;
+if((typeof data135 !== "string") && (data135 !== null)){
+let dataType142 = typeof data135;
+let coerced142 = undefined;
+if(dataType142 == 'object' && Array.isArray(data135) && data135.length == 1){
+data135 = data135[0];
+dataType142 = typeof data135;
+if((typeof data135 === "string") && (data135 === null)){
+coerced142 = data135;
+}
+}
+if(!(coerced142 !== undefined)){
+if(dataType142 == "number" || dataType142 == "boolean"){
+coerced142 = "" + data135;
+}
+else if(data135 === null){
+coerced142 = "";
+}
+else if(data135 === "" || data135 === 0 || data135 === false){
+coerced142 = null;
+}
+else {
+validate181.errors = [{instancePath:instancePath+"/externalSourceUri",schemaPath:"#/properties/externalSourceUri/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+return false;
+}
+}
+if(coerced142 !== undefined){
+data135 = coerced142;
+if(data !== undefined){
+data["externalSourceUri"] = coerced142;
+}
+}
+}
+var valid0 = _errs462 === errors;
+}
+else {
+var valid0 = true;
+}
 }
 }
 }
