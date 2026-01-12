@@ -109,10 +109,10 @@ function Frame({editing, className, url, children, onEdit, onDelete}: FrameProps
     if (editing) {
         return (
             <div className={className} title="Edit">
-                <button className="control-button edit" title={t("edit")} onClick={onEdit}>
+                <button type="button" className="control-button edit" title={t("edit")} onClick={onEdit}>
                     <Icon icon={msEdit} size={16}/>
                 </button>
-                <button className="control-button delete" title={t("delete")} onClick={onDelete}>
+                <button type="button" className="control-button delete" title={t("delete")} onClick={onDelete}>
                     <Icon icon={msClose} size={16}/>
                 </button>
                 {children}
