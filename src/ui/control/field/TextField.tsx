@@ -15,6 +15,7 @@ interface Props {
     placeholder?: string;
     autoFocus?: boolean;
     anyValue?: boolean;
+    errorsOnly?: boolean;
     className?: string;
     autoComplete?: string;
     noFeedback?: boolean;
@@ -26,7 +27,7 @@ interface Props {
 }
 
 export function TextField({
-    name, title, rows = 3, maxHeight, maxLength, placeholder, autoFocus, anyValue, className, autoComplete,
+    name, title, rows = 3, maxHeight, maxLength, placeholder, autoFocus, anyValue, errorsOnly, className, autoComplete,
     noFeedback = false, disabled = false, groupClassName, initialValue, defaultValue, onKeyDown
 }: Props) {
 
@@ -61,7 +62,7 @@ export function TextField({
                     id={name}
                     className={cx(
                         "form-control", {
-                            "is-valid": !anyValue && touched && !error,
+                            "is-valid": !anyValue && !errorsOnly && touched && !error,
                             "is-invalid": !anyValue && touched && error,
                             [className!]: !!className
                         })}

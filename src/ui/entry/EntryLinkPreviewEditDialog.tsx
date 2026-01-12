@@ -27,8 +27,8 @@ function EntryLinkPreviewEditDialog() {
 
     return (
         <>
-            <InputField name="title" title={t("title")} maxLength={75} autoFocus/>
-            <TextField name="description" title={t("description")} maxHeight="5em" maxLength={120}/>
+            <InputField name="title" title={t("title")} maxLength={75} autoFocus errorsOnly/>
+            <TextField name="description" title={t("description")} maxHeight="5em" maxLength={120} errorsOnly/>
         </>
     );
 }
