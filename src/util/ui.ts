@@ -201,6 +201,13 @@ export function isElementCompletelyVisible(element: Element): boolean {
     }
 }
 
+export function isElementScrollableX(element: Element): boolean {
+    const ox = getComputedStyle(element).overflowX;
+    const cssScrollable = ox === "auto" || ox === "scroll" || ox === "overlay";
+    // > 1 handles 1px rounding / zoom weirdness
+    return cssScrollable && (element.scrollWidth - element.clientWidth > 1);
+}
+
 export function createPortalIfNeeded(
     children: ReactNode, container?: Element | DocumentFragment | null, key?: null | string
 ) {

@@ -6,6 +6,7 @@ import { PrincipalValue } from "api";
 import { Icon, MaterialSymbol } from "ui/material-symbols";
 import { Loading, Principal } from "ui/control";
 import Jump from "ui/navigation/Jump";
+import { isElementScrollableX } from "util/ui";
 import "./Tabs.css";
 
 type TabStyle = "tabs" | "pills";
@@ -43,8 +44,10 @@ export function Tabs<V = any>({
     className, tabs, tabStyle = "tabs", arrow, scroll = "mobile", value: selected, onChange, principalIcons,
     principalTitles, addIcon, addTitle, onAdd
 }: Props<V>) {
+    const navRef = useRef<HTMLUListElement>(null);
+
     return (
-        <ul className={cx("nav", "nav-" + tabStyle, "scroll-" + scroll, className)}>
+        <ul className={cx("nav", "nav-" + tabStyle, "scroll-" + scroll, className)} ref={navRef} role="tablist">
             {tabs
                 .filter(({visible}) => visible !== false)
                 .map(({title, value, href, active, count, principal, loading, className}, index) =>
@@ -54,6 +57,7 @@ export function Tabs<V = any>({
                             href={href}
                             onClick={onChange && value != null ? () => onChange(value) : undefined}
                             className={className}
+                            scrollerRef={navRef}
                         >
                             <TabArrowWrapper arrow={arrow}>
                                 {title}
@@ -85,17 +89,20 @@ interface TabLinkProps {
     href?: string;
     onClick?: () => void;
     className?: string;
+    scrollerRef: React.RefObject<HTMLUListElement>;
+    scrollable?: boolean
     children?: React.ReactNode;
 }
 
-function TabLink({active, href, onClick, className, children}: TabLinkProps) {
+function TabLink({active, href, onClick, className, scrollerRef, children}: TabLinkProps) {
     const itemRef = useRef<HTMLSpanElement>(null);
 
     useEffect(() => {
-        if (active && itemRef.current != null) {
+        const scrollable = scrollerRef.current != null && isElementScrollableX(scrollerRef.current);
+        if (scrollable && active && itemRef.current != null) {
             scrollIntoView(itemRef.current, {inline: "nearest", scrollMode: "if-needed"});
         }
-    });
+    }, [scrollerRef, active, itemRef]);
 
     if (active) {
         return (
