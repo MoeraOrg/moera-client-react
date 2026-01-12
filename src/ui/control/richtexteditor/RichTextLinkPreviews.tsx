@@ -115,12 +115,22 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, feature
             <EntryLinkSelector urls={urls.filter(url => value.status[url] === "deleted")} onSelect={onRestore}
                                disabled={disabled}/>
             {value.previews.map((preview, index) =>
-                <EntryLinkPreview key={index} nodeName={targetNodeName} url={preview.url} title={preview.title}
-                                  description={preview.description}
-                                  imageUploading={isImageUploading(linkPreviewsState, preview.url, targetNodeName)}
-                                  imageHash={preview.imageHash} siteName={preview.siteName} media={media} small={small}
-                                  editing disabled={disabled} onUpdate={onUpdate(preview.url)}
-                                  onDelete={onDelete(preview.url)}/>
+                <EntryLinkPreview
+                    key={index}
+                    nodeName={targetNodeName}
+                    url={preview.url}
+                    title={preview.title}
+                    description={preview.description}
+                    imageUploading={isImageUploading(linkPreviewsState, preview.url, targetNodeName)}
+                    imageHash={preview.imageHash}
+                    siteName={preview.siteName}
+                    media={media}
+                    small={small}
+                    editing
+                    disabled={disabled}
+                    onUpdate={onUpdate(preview.url)}
+                    onDelete={onDelete(preview.url)}
+                />
             )}
         </div>
     );

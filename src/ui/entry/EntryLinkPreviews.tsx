@@ -33,9 +33,17 @@ export default function EntryLinkPreviews({nodeName, linkPreviews, limit, small,
         <>
             {linkPreviews.map((linkPreview, index) =>
                 (linkPreview != null && (max == null || index < max)) &&
-                    <EntryLinkPreview key={index} nodeName={nodeName} url={linkPreview.url} title={linkPreview.title}
-                                      description={linkPreview.description} imageHash={linkPreview.imageHash}
-                                      siteName={linkPreview.siteName} media={media ?? null} small={small}/>
+                    <EntryLinkPreview
+                        key={index}
+                        nodeName={nodeName}
+                        url={linkPreview.url}
+                        title={linkPreview.title}
+                        description={linkPreview.description}
+                        imageHash={linkPreview.imageHash}
+                        siteName={linkPreview.siteName}
+                        media={media ?? null}
+                        small={small}
+                    />
             )}
             {(limit != null && linkPreviews.length > limit) &&
                 <>
