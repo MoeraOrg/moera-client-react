@@ -816,7 +816,7 @@
           "latest": "Последний пост"
         },
         "posting_body_font-magnitude": "Размер шрифта",
-        "posting_body_font-magnitude_mobile": "Размер шрифта в постах",
+        "posting_body_font-magnitude_mobile": "Размер шрифта",
         "posting_comments_addition_default": "Разрешить комментарии (по умолчанию)",
         "posting_comments_hide_default": "Автоматически скрывать комментарии (по умолчанию)",
         "posting_comments_visibility_default": "Комментарии видны (по умолчанию)",

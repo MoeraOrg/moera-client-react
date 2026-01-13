@@ -816,7 +816,7 @@
           "latest": "Останній пост"
         },
         "posting_body_font-magnitude": "Розмір шрифту",
-        "posting_body_font-magnitude_mobile": "Розмір шрифту у постах",
+        "posting_body_font-magnitude_mobile": "Розмір шрифту",
         "posting_comments_addition_default": "Дозволити коментарі (за замовчуванням)",
         "posting_comments_hide_default": "Автоматично приховувати коментарі (за замовчуванням)",
         "posting_comments_visibility_default": "Коментарі видно (за замовчуванням)",

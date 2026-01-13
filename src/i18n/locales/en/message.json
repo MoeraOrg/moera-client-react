@@ -816,7 +816,7 @@
           "latest": "The latest post"
         },
         "posting_body_font-magnitude": "Font size",
-        "posting_body_font-magnitude_mobile": "Post font size",
+        "posting_body_font-magnitude_mobile": "Font size",
         "posting_comments_addition_default": "Commenting allowed by default",
         "posting_comments_hide_default": "Automatically hide comments by default",
         "posting_comments_visibility_default": "Comments visibility by default",
