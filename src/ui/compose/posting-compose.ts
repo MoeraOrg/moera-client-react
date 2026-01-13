@@ -20,11 +20,11 @@ import { DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import { settingsUpdate } from "state/settings/actions";
 import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
-import { htmlToScripture, safeImportScripture } from "ui/control/richtexteditor/visual/scripture-html";
+import { htmlToScripture, normalizeDocument } from "ui/control/richtexteditor/visual/scripture-html";
 import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
 import { isScriptureEmpty } from "ui/control/richtexteditor/visual/scripture-editor";
 import { replaceSmileys } from "util/text";
-import { isHtmlEmpty, safeImportHtml } from "util/html";
+import { htmlToLinefeeds, isHtmlEmpty, plainTextToHtml, safeImportHtml } from "util/html";
 import { notNull } from "util/misc";
 
 export interface ValuesToPostingTextProps {
@@ -92,24 +92,29 @@ export interface ComposePageValues {
 const getPublishAt = (publications: FeedReference[] | null | undefined): Date | null =>
     publications != null && publications.length > 0 ? fromUnixTime(publications[0].publishedAt) : null;
 
-function getSharedText(props: ComposePageProps, format: SourceFormat): string | Scripture {
-    let content: string | Scripture;
+function getSharedText(props: ComposePageProps, format: SourceFormat): string {
+    if (props.sharedText == null) {
+        return "";
+    }
+
     if (props.sharedTextType === "html") {
         switch (format) {
+            case "plain-text":
+                return htmlToLinefeeds(props.sharedText);
             case "markdown":
-                content = htmlToMarkdown(safeImportHtml(props.sharedText));
-                break;
-            case "html/visual":
-                content = safeImportScripture(props.sharedText);
-                break;
+                return htmlToMarkdown(safeImportHtml(props.sharedText));
             default:
-                content = safeImportHtml(props.sharedText);
-                break;
+                return safeImportHtml(props.sharedText);
         }
     } else {
-        content = props.sharedText ?? "";
+        switch (format) {
+            case "plain-text":
+            case "markdown":
+                return props.sharedText;
+            default:
+                return plainTextToHtml(props.sharedText);
+        }
     }
-    return content;
 }
 
 const replaceSmileysIfNeeded = (enabled: boolean, text: string): string =>
@@ -257,7 +262,7 @@ export const composePageLogic = {
                 ? props.posting.bodySrc?.text ?? ""
                 : props.sharedText != null ? getSharedText(props, bodyFormat) : "";
         if (bodyFormat === "html/visual") {
-            body = htmlToScripture(body, false, media);
+            body = normalizeDocument(htmlToScripture(body, false, media));
         }
 
         const linkPreviewsInfo = props.draft != null
