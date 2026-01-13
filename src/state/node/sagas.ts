@@ -10,6 +10,7 @@ import { errorThrown } from "state/error/actions";
 import {
     NodeFeaturesLoadAction,
     nodeFeaturesLoaded,
+    nodeReady,
     OwnerLoadAction,
     ownerSet,
     ownerVerified,
@@ -29,6 +30,7 @@ export default [
 ];
 
 async function ownerLoadSaga(action: WithContext<OwnerLoadAction>): Promise<void> {
+    const ownerName = select(getOwnerName);
     const rootLocation = select(getNodeRootLocation);
     try {
         const {
@@ -39,6 +41,9 @@ async function ownerLoadSaga(action: WithContext<OwnerLoadAction>): Promise<void
             ownerSet(rootLocation, nodeName, nodeNameChanging, fullName, gender, title, avatar, type ?? "regular")
                 .causedBy(action)
         );
+        if (ownerName == null) { // NODE_READY was not sent by OWNER_SWITCH
+            dispatch(nodeReady().causedBy(action));
+        }
     } catch (e) {
         dispatch(errorThrown(e));
     }
