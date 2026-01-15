@@ -33,3 +33,13 @@
     transition: filter .5s ease;
     pointer-events: none;
 }
+
+@media only screen and (max-width: 991px) {
+    .ril-zoom-in {
+        display: none;
+    }
+
+    .ril-zoom-out {
+        display: none;
+    }
+}
