@@ -11,6 +11,7 @@ import { homeOwnerSet } from "state/home/actions";
 import { boot, jumpNear } from "state/navigation/actions";
 import { mnemonicSet, mnemonicStore, registerNameSucceeded } from "state/nodename/actions";
 import {
+    SIGN_UP_STAGE_CHECK_NAME,
     SIGN_UP_STAGE_CONNECT,
     SIGN_UP_STAGE_DOMAIN,
     SIGN_UP_STAGE_NAME,
@@ -49,6 +50,21 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
 
     const stage = select().signUp.stage;
     const provider = getProvider(providerName);
+
+    if (stage <= SIGN_UP_STAGE_CHECK_NAME) {
+        try {
+            const free = await Naming.isFree(action, name);
+            if (!free) {
+                onError("name", "Name is already taken");
+                dispatch(signUpFailed(SIGN_UP_STAGE_CHECK_NAME).causedBy(action));
+                return;
+            }
+        } catch (e) {
+            dispatch(signUpFailed(SIGN_UP_STAGE_CHECK_NAME).causedBy(action));
+            dispatch(errorThrown(e));
+            return;
+        }
+    }
 
     let nodeDomainName = select().signUp.nodeDomainName;
     if (nodeDomainName == null) {

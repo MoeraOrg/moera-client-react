@@ -1,6 +1,6 @@
 export type SignUpMode = "quick" | "advanced";
 
-export type SignUpStage = 0 | 1 | 2 | 3 | 4;
+export type SignUpStage = 0 | 1 | 2 | 3 | 4 | 5;
 
 export interface SignUpState {
     processing: boolean;

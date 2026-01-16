@@ -1,11 +1,12 @@
 import { actionWithPayload, ActionWithPayload } from "state/action-types";
 import { SignUpMode, SignUpStage } from "state/signup/state";
 
-export const SIGN_UP_STAGE_DOMAIN = 0 as const;
-export const SIGN_UP_STAGE_PASSWORD = 1 as const;
-export const SIGN_UP_STAGE_CONNECT = 2 as const;
-export const SIGN_UP_STAGE_PROFILE = 3 as const;
-export const SIGN_UP_STAGE_NAME = 4 as const;
+export const SIGN_UP_STAGE_CHECK_NAME = 0 as const;
+export const SIGN_UP_STAGE_DOMAIN = 1 as const;
+export const SIGN_UP_STAGE_PASSWORD = 2 as const;
+export const SIGN_UP_STAGE_CONNECT = 3 as const;
+export const SIGN_UP_STAGE_PROFILE = 4 as const;
+export const SIGN_UP_STAGE_NAME = 5 as const;
 
 type SignUpOnError = (fieldName: string, message: string) => void;
 export type SignUpAction = ActionWithPayload<"SIGN_UP", {
