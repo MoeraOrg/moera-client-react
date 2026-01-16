@@ -61,9 +61,16 @@ export const signUpDomainVerify = (
 ): SignUpDomainVerifyAction =>
     actionWithPayload("SIGN_UP_DOMAIN_VERIFY", {provider, name, onVerify});
 
+export type SignUpDomainRegisteredAction = ActionWithPayload<"SIGN_UP_DOMAIN_REGISTERED", {
+    domainName: string;
+}>;
+export const signUpDomainRegistered = (domainName: string): SignUpDomainRegisteredAction =>
+    actionWithPayload("SIGN_UP_DOMAIN_REGISTERED", {domainName});
+
 export type SignUpAnyAction =
     SignUpAction
     | SignUpFailedAction
     | SignUpNameVerifyAction
     | SignUpFindDomainAction
-    | SignUpDomainVerifyAction;
+    | SignUpDomainVerifyAction
+    | SignUpDomainRegisteredAction;

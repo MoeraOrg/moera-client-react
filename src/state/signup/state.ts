@@ -11,4 +11,5 @@ export interface SignUpState {
     password: string | null;
     email: string | null;
     backHref: string;
+    nodeDomainName: string | null;
 }

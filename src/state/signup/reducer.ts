@@ -10,7 +10,8 @@ const initialState: SignUpState = {
     domain: null,
     password: null,
     email: null,
-    backHref: ""
+    backHref: "",
+    nodeDomainName: null
 };
 
 export default (state: SignUpState = initialState, action: ClientAction): SignUpState => {
@@ -40,6 +41,12 @@ export default (state: SignUpState = initialState, action: ClientAction): SignUp
                 ...state,
                 processing: false,
                 stage: action.payload.stage
+            };
+
+        case "SIGN_UP_DOMAIN_REGISTERED":
+            return {
+                ...state,
+                nodeDomainName: action.payload.domainName
             };
 
         default:

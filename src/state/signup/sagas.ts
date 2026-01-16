@@ -17,6 +17,7 @@ import {
     SIGN_UP_STAGE_PASSWORD,
     SIGN_UP_STAGE_PROFILE,
     SignUpAction,
+    signUpDomainRegistered,
     SignUpDomainVerifyAction,
     signUpFailed,
     SignUpFindDomainAction,
@@ -49,22 +50,25 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
     const stage = select().signUp.stage;
     const provider = getProvider(providerName);
 
-    let nodeDomainName;
-    if (!domain) {
-        try {
-            const domain = await Node.isDomainAvailable(action, provider.controller, name);
-            nodeDomainName = domain.name;
-        } catch (e) {
-            dispatch(signUpFailed(SIGN_UP_STAGE_DOMAIN).causedBy(action));
-            if (e instanceof NodeApiError) {
-                onError("domain", e.message);
-            } else {
-                dispatch(errorThrown(e));
+    let nodeDomainName = select().signUp.nodeDomainName;
+    if (nodeDomainName == null) {
+        if (!domain) {
+            try {
+                const domain = await Node.isDomainAvailable(action, provider.controller, name);
+                nodeDomainName = domain.name;
+            } catch (e) {
+                dispatch(signUpFailed(SIGN_UP_STAGE_DOMAIN).causedBy(action));
+                if (e instanceof NodeApiError) {
+                    onError("domain", e.message);
+                } else {
+                    dispatch(errorThrown(e));
+                }
+                return;
             }
-            return;
+        } else {
+            nodeDomainName = domain + "." + provider.domain;
         }
-    } else {
-        nodeDomainName = domain + "." + provider.domain;
+        dispatch(signUpDomainRegistered(nodeDomainName).causedBy(action));
     }
 
     if (stage <= SIGN_UP_STAGE_DOMAIN) {
