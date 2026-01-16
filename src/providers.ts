@@ -27,10 +27,10 @@ const PROVIDERS: Provider[] = [
         dev: true,
         name: "local",
         title: "Local",
-        scheme: "http",
+        scheme: "https",
         domain: "localhost.localdomain",
         port: 8082,
-        controller: "http://balu-dev.localhost.localdomain:8082"
+        controller: "https://balu-dev.localhost.localdomain:8082"
     }
 ];
 
