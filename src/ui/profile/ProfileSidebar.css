@@ -91,12 +91,14 @@
 #profile-sidebar .bio {
     font-size: .88rem;
     margin-top: 1rem;
+    overflow-wrap: break-word;
 }
 
 #profile-sidebar .email {
     font-size: .88rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
+    overflow-wrap: break-word;
 }
 
 #profile-sidebar .email .not-verified {
