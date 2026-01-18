@@ -16,8 +16,7 @@ interface Props {
 
 export default function RichTextEditorEmojiButton({iconSize, onSelect}: Props) {
     const {
-        visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
-        placement, zIndex
+        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, placement, zIndex
     } = useButtonPopper("bottom", {closeOnSelect: false});
     const {focus} = useRichTextEditorCommands();
     const {t} = useTranslation();
@@ -37,11 +36,10 @@ export default function RichTextEditorEmojiButton({iconSize, onSelect}: Props) {
             <RichTextEditorButton ref={setButtonRef} icon={msSentimentSatisfied} iconSize={iconSize} title={t("emoji")}
                                   onClick={onClick}/>
             {visible &&
-                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
+                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}}
                      className={`fade popover bs-popover-${placement} shadow-sm show`}>
                     <EmojiPicker data={emojiData} locale={i18n.language} previewPosition="none"
                                  onEmojiSelect={onEmojiSelect}/>
-                    <div ref={setArrowRef} style={arrowStyles} className="popover-arrow"/>
                 </div>
             }
         </>

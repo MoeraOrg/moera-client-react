@@ -11,7 +11,7 @@ interface Props {
 
 export default function RichTextEditorHeadingButton({onSelect}: Props) {
     const {
-        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
+        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, zIndex
     } = useButtonPopper("bottom", {closeOnSelect: false});
     const {enableHeading, headingLevel, focus} = useRichTextEditorCommands();
     const {t} = useTranslation();
@@ -34,7 +34,7 @@ export default function RichTextEditorHeadingButton({onSelect}: Props) {
                 <span className="text">{headingTitle(headingLevel, t)}</span>
             </button>
             {visible &&
-                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
+                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}}
                      className={"fade dropdown-menu shadow-sm show"}>
                     {[0, 1, 2, 3, 4, 5].map(level =>
                         <div key={level} className={level === 0 ? "dropdown-item" : `dropdown-item fs-${level}`}

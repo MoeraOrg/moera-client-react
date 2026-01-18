@@ -1,26 +1,22 @@
 import { useCallback, useState } from 'react';
-import { usePopper } from 'react-popper';
-import { Options, Placement } from '@popperjs/core';
+import { arrow, flip, useFloating } from '@floating-ui/react';
+import { Placement } from '@floating-ui/utils';
 
 import { useOverlay } from "ui/overlays/overlays";
 
-type ButtonPopperOptions = Partial<Options> & {
+type ButtonPopperOptions = {
     closeOnSelect?: boolean;
     parentOverlayId?: string;
 }
 
-export function useButtonPopper(placement: Placement, options: ButtonPopperOptions = {}) {
+export function useButtonPopper(placement?: Placement, options: ButtonPopperOptions = {}) {
     const [visible, setVisible] = useState(false);
 
-    // Such usage of useState() is counter-intuitive, but required by react-popper
-    const [buttonRef, setButtonRef] = useState<Element | null>(null);
-    const [popperRef, setPopperRef] = useState<HTMLElement | null>(null);
+    // Such usage of useState() is counter-intuitive, but required by floating-ui
     const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null);
-    const {styles, attributes, state, forceUpdate} = usePopper(
-        buttonRef,
-        popperRef,
-        {placement, ...options, modifiers: [{name: "arrow", options: {element: arrowRef}}]}
-    );
+    const {
+        refs, floatingStyles, update, placement: finalPlacement, middlewareData
+    } = useFloating({placement, middleware: [flip(), arrow({element: arrowRef})]});
 
     const onToggle = (event: {preventDefault: () => void}) => {
         setVisible(visible => !visible);
@@ -32,7 +28,7 @@ export function useButtonPopper(placement: Placement, options: ButtonPopperOptio
     const hide = useCallback(() => setTimeout(() => setVisible(false)), []);
 
     const [zIndex, overlayId] = useOverlay(
-        popperRef,
+        refs.floating,
         {parentId: options.parentOverlayId, visible, onClose: hide, closeOnSelect: options.closeOnSelect ?? true}
     );
 
@@ -40,15 +36,18 @@ export function useButtonPopper(placement: Placement, options: ButtonPopperOptio
         visible,
         setVisible,
         hide,
-        forceUpdate,
+        popperUpdate: update,
         onToggle,
-        setButtonRef,
-        setPopperRef,
+        setButtonRef: refs.setReference,
+        setPopperRef: refs.setFloating,
         setArrowRef,
-        popperStyles: styles ? styles.popper : {},
-        popperAttributes: attributes ? attributes.popper : {},
-        arrowStyles: styles && styles.arrow ? styles.arrow : {},
-        placement: state ? state.placement.split("-")[0] : "",
+        popperStyles: floatingStyles,
+        arrowStyles: {
+            position: "absolute" as const,
+            left: middlewareData.arrow?.x,
+            top: middlewareData.arrow?.y
+        },
+        placement: finalPlacement.split("-")[0],
         zIndex,
         overlayId
     };

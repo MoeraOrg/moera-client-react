@@ -14,8 +14,8 @@ interface Props {
 export function Information({text, className}: Props) {
     const {
         visible, setVisible, hide, onToggle, setButtonRef, setArrowRef, setPopperRef, arrowStyles, popperStyles,
-        popperAttributes, zIndex, overlayId
-    } = useButtonPopper("auto");
+        placement, zIndex, overlayId
+    } = useButtonPopper();
     const tinyScreen = useIsTinyScreen();
 
     return (
@@ -35,7 +35,7 @@ export function Information({text, className}: Props) {
                 role="tooltip"
                 ref={setPopperRef}
                 style={{...popperStyles, zIndex: zIndex?.widget}}
-                {...popperAttributes}
+                data-popper-placement={placement}
             >
                 <div className="tooltip-arrow" ref={setArrowRef} style={arrowStyles}/>
                 <div className="tooltip-inner">

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Modifier, usePopper } from 'react-popper';
-import PopperJS from '@popperjs/core';
+import { arrow, flip, useFloating } from '@floating-ui/react';
+import { Placement } from '@floating-ui/utils';
 import cx from 'classnames';
 
 import { PopoverContext } from "ui/control";
@@ -11,7 +11,7 @@ import { createPortalIfNeeded } from "util/ui";
 export type DelayedPopoverElement = (ref: (dom: Element | null) => void) => any;
 
 interface Props {
-    placement: PopperJS.Placement;
+    placement: Placement;
     arrow?: boolean;
     className?: string;
     styles?: "popover" | "menu";
@@ -32,17 +32,15 @@ type ClickLocus = "out" | "main" | "popup";
 type TouchLocus = "none" | "touch" | "lock";
 
 export function DelayedPopover({
-    placement, arrow, className, styles = "popover", disabled, clickable, sticky, parentOverlayId, onPreparePopper,
-    onShow, onHide, element, popoverContainer, children
+    placement, arrow: withArrow, className, styles = "popover", disabled, clickable, sticky, parentOverlayId,
+    onPreparePopper, onShow, onHide, element, popoverContainer, children
 }: Props) {
     // Such usage of useState() is counter-intuitive, but required by react-popper
-    const [buttonRef, setButtonRef] = useState<Element | null>(null);
-    const [popperRef, setPopperRef] = useState<HTMLElement | null>(null);
     const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null);
-    const modifiers: Modifier<any>[] = [{name: "arrow", options: {element: arrowRef}}];
 
-    const {styles: popperStyles, attributes, state, forceUpdate} =
-        usePopper(buttonRef, popperRef, {placement, modifiers});
+    const {
+        refs, floatingStyles, placement: finalPlacement, update, middlewareData
+    } = useFloating({placement, middleware: [flip(), arrow({element: arrowRef})]});
 
     const locusRef = useRef<ClickLocus>("out");
     const touchRef = useRef<TouchLocus>("none");
@@ -92,8 +90,9 @@ export function DelayedPopover({
         }
     }, [onShow, getTouch, setTouch]);
 
-    [zIndex, overlayId]
-        = useOverlay(popperRef, {parentId: parentOverlayId, visible: popup, onClose: hide, closeOnSelect: !clickable});
+    [zIndex, overlayId] = useOverlay(
+        refs.floating, {parentId: parentOverlayId, visible: popup, onClose: hide, closeOnSelect: !clickable}
+    );
 
     const onTimeout = useCallback(() => {
         if (getTouch() !== "none" && scrollY != null && Math.abs(scrollY - window.scrollY) > 10) {
@@ -190,6 +189,7 @@ export function DelayedPopover({
     }, [getLocus, setLocus, setTouch]);
 
     useEffect(() => {
+        const buttonRef = refs.reference.current as Element | null;
         if (buttonRef != null) {
             buttonRef.addEventListener("mouseenter", mainEnter);
             if (!sticky) {
@@ -205,7 +205,7 @@ export function DelayedPopover({
                 buttonRef.removeEventListener("touchstart", mainTouch);
             }
         }
-    }, [buttonRef, mainEnter, mainLeave, mainTouch, sticky]);
+    }, [mainEnter, mainLeave, mainTouch, refs.reference, sticky]);
 
     const popupEnter = () => setLocus("popup");
 
@@ -217,18 +217,18 @@ export function DelayedPopover({
 
     return (
         <ParentContext.Provider value={{hide, overlayId}}>
-            <PopoverContext.Provider value={{update: forceUpdate ?? (() => {})}}>
-                {element(setButtonRef)}
+            <PopoverContext.Provider value={{update}}>
+                {element(refs.setReference)}
                 {popup && createPortalIfNeeded(
                     <div
-                        ref={setPopperRef}
-                        style={{...popperStyles.popper, zIndex: zIndex?.widget}}
-                        {...attributes.popper}
+                        ref={refs.setFloating}
+                        style={{...floatingStyles, zIndex: zIndex?.widget}}
+                        data-popper-placement={finalPlacement}
                         className={cx(
                             "shadow",
                             "fade",
                             "show",
-                            `bs-popover-${state?.placement}`, // activates Bootstrap style for .popover-arrow
+                            `bs-popover-${finalPlacement}`, // activates Bootstrap style for .popover-arrow
                             {
                                 "popover": styles === "popover",
                                 "dropdown-menu": styles === "menu",
@@ -236,11 +236,14 @@ export function DelayedPopover({
                             className
                         )}
                     >
-                        {arrow &&
+                        {withArrow &&
                             <div
                                 ref={setArrowRef}
-                                style={popperStyles.arrow}
-                                {...attributes.arrow}
+                                style={{
+                                    position: "absolute",
+                                    left: middlewareData.arrow?.x,
+                                    top: middlewareData.arrow?.y
+                                }}
                                 className="popover-arrow"
                             />
                         }

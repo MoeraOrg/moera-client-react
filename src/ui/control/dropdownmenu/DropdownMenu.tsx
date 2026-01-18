@@ -25,7 +25,7 @@ export function DropdownMenu({
     content, items, className, dropdownClassName, disabled, parentOverlayId, onDialogOpened, menuContainer, children
 }: Props) {
     const {
-        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex, overlayId
+        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, zIndex, overlayId
     } = useButtonPopper("bottom-end", {parentOverlayId});
 
     const {t} = useTranslation();
@@ -56,7 +56,6 @@ export function DropdownMenu({
                     <div
                         ref={setPopperRef}
                         style={{...popperStyles, zIndex: zIndex?.widget}}
-                        {...popperAttributes}
                         className={cx("fade dropdown-menu shadow-sm show", dropdownClassName)}
                     >
                         {content}

@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import * as ReactDOM from 'react-dom';
+import { Middleware } from '@floating-ui/dom';
+import { arrow, flip, offset, useFloating } from '@floating-ui/react';
+import { Placement, Strategy } from '@floating-ui/utils';
 import cx from 'classnames';
-import { Modifier, usePopper } from 'react-popper';
-import { Placement, PositioningStrategy } from '@popperjs/core';
 
 import { PopoverContext } from "ui/control";
 import { useOverlay } from "ui/overlays/overlays";
@@ -16,29 +17,28 @@ interface Props {
     title?: string;
     detached?: boolean;
     placement?: Placement;
-    strategy?: PositioningStrategy;
-    offset?: [number, number?];
+    strategy?: Strategy;
+    offset?: number;
     parentOverlayId?: string;
     onToggle?: (visible: boolean) => void;
     children: React.ReactNode;
 }
 
 export function Popover({
-    className, text, textClassName, title, detached, placement = "bottom", strategy = "fixed", offset, parentOverlayId,
-    onToggle, children
+    className, text, textClassName, title, detached, placement = "bottom", strategy = "fixed", offset: placementOffset,
+    parentOverlayId, onToggle, children
 }: Props) {
     const [visible, setVisible] = useState<boolean>(false);
 
-    // Such usage of useState() is counter-intuitive, but required by react-popper
-    const [buttonRef, setButtonRef] = useState<Element | null>(null);
-    const [popperRef, setPopperRef] = useState<HTMLElement | null>(null);
+    // Such usage of useState() is counter-intuitive, but required by floating-ui
     const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null);
-    const modifiers: Modifier<any>[] = [{name: "arrow", options: {element: arrowRef}}];
-    if (offset != null) {
-        modifiers.push({name: "offset", options: {offset}});
+    const middleware: Middleware[] = [flip(), arrow({element: arrowRef})];
+    if (placementOffset != null) {
+        middleware.unshift(offset(placementOffset));
     }
-    const {styles, attributes, state, forceUpdate} =
-        usePopper(buttonRef, popperRef, {placement, strategy, modifiers});
+    const {
+        refs, floatingStyles, placement: finalPlacement, update, middlewareData
+    } = useFloating({placement, strategy, middleware});
 
     useEffect(() => {
         if (onToggle != null) {
@@ -50,9 +50,9 @@ export function Popover({
         if (visible) {
             // setTimeout() is needed here, because forceUpdate() uses flushSync() that should not be called from
             // lifecycle methods
-            forceUpdate && setTimeout(() => forceUpdate());
+            update && setTimeout(() => update());
         }
-    }, [forceUpdate, visible]);
+    }, [update, visible]);
 
     const toggle = () => setVisible(!visible);
 
@@ -61,13 +61,13 @@ export function Popover({
     const hide = useCallback(() => setTimeout(() => setVisible(false)), []);
 
     const [zIndex, overlayId]
-        = useOverlay(popperRef, {parentId: parentOverlayId, visible: !detached || visible, onClose: hide});
+        = useOverlay(refs.floating, {parentId: parentOverlayId, visible: !detached || visible, onClose: hide});
 
     return (
         <ParentContext.Provider value={{hide, overlayId}}>
-            <PopoverContext.Provider value={{update: forceUpdate ?? (() => {})}}>
+            <PopoverContext.Provider value={{update}}>
                 <span
-                    ref={setButtonRef}
+                    ref={refs.setReference}
                     onClick={toggle}
                     title={title}
                     className={cx(textClassName, {"active": visible})}
@@ -77,21 +77,24 @@ export function Popover({
                 {ReactDOM.createPortal(
                     (!detached || visible) &&
                         <div
-                            ref={setPopperRef}
-                            style={{...styles.popper, zIndex: zIndex?.widget}}
-                            {...attributes.popper}
+                            ref={refs.setFloating}
+                            style={{...floatingStyles, zIndex: zIndex?.widget}}
+                            data-popper-placement={finalPlacement}
                             className={cx(
                                 "popover",
                                 "fade",
-                                `bs-popover-${state?.placement}`, // activates Bootstrap style for .popover-arrow
+                                `bs-popover-${finalPlacement}`, // activates Bootstrap style for .popover-arrow
                                 {"show": visible},
                                 className
                             )}
                         >
                             <div
                                 ref={setArrowRef}
-                                style={styles.arrow}
-                                {...attributes.arrow}
+                                style={{
+                                    position: "absolute",
+                                    left: middlewareData.arrow?.x,
+                                    top: middlewareData.arrow?.y
+                                }}
                                 className="popover-arrow"
                             />
                             <div className="popover-body">

@@ -1,7 +1,7 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense } from 'react';
 import * as ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Modifier, usePopper } from 'react-popper';
+import { flip, offset, useFloating } from '@floating-ui/react';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
@@ -14,10 +14,7 @@ import InstantBell from "ui/instant/InstantBell";
 const InstantsPopover = React.lazy(() => import("ui/instant/InstantsPopover"));
 
 export default function InstantButton() {
-    const [buttonRef, setButtonRef] = useState<Element | null>(null);
-    const [popperRef, setPopperRef] = useState<HTMLElement | null>(null);
-    const modifiers: Modifier<any>[] = [{name: "offset", options: {offset: [0, 15]}}];
-    const {styles, attributes, forceUpdate} = usePopper(buttonRef, popperRef, {placement: "bottom-end", modifiers});
+    const {refs, floatingStyles, update} = useFloating({placement: "bottom-end", middleware: [flip(), offset(15)]});
 
     const componentLoaded = useSelector((state: ClientState) => state.instants.componentLoaded);
     const visible = useSelector((state: ClientState) => state.instants.showPopover);
@@ -27,19 +24,20 @@ export default function InstantButton() {
 
     const hide = () => setTimeout(() => dispatch(closeInstantsPopover()));
 
-    const [zIndex, overlayId] = useOverlay(popperRef, {visible, onClose: hide});
+    const [zIndex, overlayId] = useOverlay(refs.floating, {visible, onClose: hide});
 
     return (
         <Suspense fallback={<InstantBell/>}>
             <ParentContext.Provider value={{hide, overlayId}}>
-                <PopoverContext.Provider value={{update: forceUpdate ?? (() => {})}}>
-                    <span className={cx({"active": visible})} ref={setButtonRef}><InstantBell onClick={onClick}/></span>
+                <PopoverContext.Provider value={{update}}>
+                    <span className={cx({"active": visible})} ref={refs.setReference}>
+                        <InstantBell onClick={onClick}/>
+                    </span>
                     {ReactDOM.createPortal(
                         componentLoaded &&
                             <div
-                                ref={setPopperRef}
-                                style={{...styles.popper, zIndex: zIndex?.widget}}
-                                {...attributes.popper}
+                                ref={refs.setFloating}
+                                style={{...floatingStyles, zIndex: zIndex?.widget}}
                                 className={cx(
                                     "popover",
                                     "fade",

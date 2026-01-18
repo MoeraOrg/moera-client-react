@@ -41,7 +41,7 @@ export default function FormattingMenuButton() {
     } = useRichTextEditorCommands();
 
     const {
-        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex, overlayId
+        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, zIndex, overlayId
     } = useButtonPopper(Browser.isMobile() ? "bottom" : "top", {closeOnSelect: false});
     const {t} = useTranslation();
 
@@ -58,7 +58,7 @@ export default function FormattingMenuButton() {
             {visible && ReactDOM.createPortal(
                 <ParentContext.Provider value={{hide, overlayId}}>
                     <DropdownMenuContext.Provider value={{}}>
-                        <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
+                        <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}}
                              className={"fade formatting-menu dropdown-menu shadow-sm show"}>
                             <FormattingMenuItem
                                 icon={msFormatBold}

@@ -33,7 +33,7 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
 
     const {overlayId: parentOverlayId} = useParent();
     const {
-        visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
+        visible, onToggle, setButtonRef, setPopperRef, popperStyles, zIndex
     } = useButtonPopper("bottom-start", {parentOverlayId});
 
     const {t} = useTranslation();
@@ -52,7 +52,6 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
                 <div
                     ref={setPopperRef}
                     style={{...popperStyles, zIndex: zIndex?.widget}}
-                    {...popperAttributes}
                     className="fade dropdown-menu border-primary-600 shadow-sm show"
                 >
                     {caption && <div className="caption">{caption}</div>}

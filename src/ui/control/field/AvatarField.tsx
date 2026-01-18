@@ -31,13 +31,12 @@ export function AvatarField({name, size, disabled}: Props) {
 
     const {overlayId: parentOverlayId} = useParent();
     const {
-        visible, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
-        placement, zIndex, forceUpdate
+        visible, onToggle, setButtonRef, setPopperRef, popperStyles, placement, zIndex, popperUpdate
     } = useButtonPopper("bottom-start", {parentOverlayId});
 
     useEffect(() => {
-        forceUpdate && forceUpdate();
-    }, [avatarsLoaded, forceUpdate]);
+        popperUpdate && popperUpdate();
+    }, [avatarsLoaded, popperUpdate]);
 
     const onClick = (event: React.MouseEvent) => {
         if (disabled) {
@@ -59,7 +58,7 @@ export function AvatarField({name, size, disabled}: Props) {
                 <Avatar avatar={value} ownerName={homeOwnerName} size={size}/>
             </div>
             {visible &&
-                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
+                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}}
                      className={`fade popover shadow-sm bs-popover-${placement} show`}>
                     <div className="selector">
                         {avatarsLoaded ?
@@ -74,7 +73,6 @@ export function AvatarField({name, size, disabled}: Props) {
                             (avatarsLoading ? <Loading/> : null)
                         }
                     </div>
-                    <div ref={setArrowRef} style={arrowStyles} className="popover-arrow"/>
                 </div>
             }
         </div>

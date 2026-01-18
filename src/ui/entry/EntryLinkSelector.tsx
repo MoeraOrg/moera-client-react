@@ -17,7 +17,7 @@ interface Props {
 export default function EntryLinkSelector({urls, onSelect, disabled}: Props) {
     const {overlayId: parentOverlayId} = useParent();
     const {
-        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes, zIndex
+        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, zIndex
     } = useButtonPopper("bottom-start", {parentOverlayId});
     const {t} = useTranslation();
 
@@ -41,7 +41,7 @@ export default function EntryLinkSelector({urls, onSelect, disabled}: Props) {
                     {t("links")} ({uniqueUrls.length})
                 </Button>
                 {visible &&
-                    <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
+                    <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}}
                          className="fade dropdown-menu popover shadow-sm show">
                         {uniqueUrls.map(url =>
                             <div key={url} className="item" onClick={onClick(url)}>

@@ -20,8 +20,7 @@ import "./RichTextEditorOtherButton.css";
 
 export default function RichTextEditorOtherButton() {
     const {
-        visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
-        placement, zIndex
+        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, placement, zIndex
     } = useButtonPopper("bottom", {closeOnSelect: false});
     const {
         supportsComplexBlocks, supportsEmbeddedMedia,
@@ -45,7 +44,7 @@ export default function RichTextEditorOtherButton() {
         <>
             <RichTextEditorButton ref={setButtonRef} icon={msMoreHoriz} title={t("more")} onClick={onClick}/>
             {visible &&
-                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}} {...popperAttributes}
+                <div ref={setPopperRef} style={{...popperStyles, zIndex: zIndex?.widget}}
                      className={`fade popover bs-popover-${placement} shadow-sm show`}>
                     <div className="other-buttons">
                         {supportsComplexBlocks &&
@@ -75,7 +74,6 @@ export default function RichTextEditorOtherButton() {
                                                   command={onCommand(() => formatImage(true))}/>
                         }
                     </div>
-                    <div ref={setArrowRef} style={arrowStyles} className="popover-arrow"/>
                 </div>
             }
         </>

@@ -20,7 +20,7 @@ export default function ConnectionsButton() {
                 }
                 detached
                 placement="bottom-end"
-                offset={[0, 15]}
+                offset={15}
             >
                 <Connections/>
             </Popover>

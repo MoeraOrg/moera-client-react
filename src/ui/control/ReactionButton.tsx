@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Placement } from '@popperjs/core';
+import { Placement } from '@floating-ui/utils';
 
 import {
     ADDITIONAL_NEGATIVE_REACTIONS,
