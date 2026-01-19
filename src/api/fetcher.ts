@@ -116,25 +116,27 @@ const parallelLimit = pLimit(50);
 
 async function retryFetch(url: string, options: FetcherOptions): Promise<Response> {
     let limit: number;
-    let signal: AbortSignal | null;
+    let timeout: number;
     if (options.method === "POST" || options.method === "PUT") {
         limit = 1;
         const largeBody = options.body instanceof Blob
             || (typeof (options.body) === "string" && options.body.length > LARGE_BODY_MIN);
-        signal = AbortSignal.timeout(largeBody ? UPDATE_TIMEOUT : FETCH_TIMEOUT);
+        timeout = largeBody ? UPDATE_TIMEOUT : FETCH_TIMEOUT;
     } else {
         limit = RETRY_LIMIT;
-        signal = AbortSignal.timeout(FETCH_TIMEOUT);
+        timeout = FETCH_TIMEOUT;
     }
 
     let exception: any;
     for (let i = 0; i < limit; i++) {
+        const signal = AbortSignal.timeout(timeout);
         try {
             return await fetch(url, {signal, ...options});
         } catch (e) {
             exception = e;
         }
         await delay(RETRY_DELAY);
+        timeout *= 2;
     }
 
     throw exception;
