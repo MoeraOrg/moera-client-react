@@ -44,7 +44,7 @@ export default function EntryImage({
         }
     }
 
-    const href = urlWithParameters(ut`/post/${postingId}`, {commentId, media: mediaFile.id});
+    const href = urlWithParameters(ut`/post/${postingId}`, {comment: commentId, media: mediaFile.id});
 
     let style: React.CSSProperties | undefined = undefined;
     if (flex === "row") {

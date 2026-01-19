@@ -28,8 +28,10 @@ import "./LightBox.css";
 
 export default function LightBox() {
     const posting = useSelector((state: ClientState) => getPosting(state, state.lightBox.postingId, REL_CURRENT));
+    // comment === null means commentId === null
+    // comment === undefined means the comment is not loaded yet
     const comment = useSelector((state: ClientState) =>
-        state.lightBox.commentId != null ? getComment(state, state.lightBox.commentId) : null
+        state.lightBox.commentId != null ? getComment(state, state.lightBox.commentId) ?? undefined : null
     );
     const mediaId = useSelector(getLightBoxMediaId);
     const mediaNodeName = useSelector((state: ClientState) => state.lightBox.nodeName);
@@ -158,14 +160,17 @@ export default function LightBox() {
                 ]}
                 zoomInLabel={t("zoom-in")}
                 zoomOutLabel={t("zoom-out")}
-                imageCaption={<LightBoxCaption posting={mediaPosting}/>}
+                imageCaption={mediaPosting?.body.text && <LightBoxCaption posting={mediaPosting}/>}
             />
         </ParentContext.Provider>
     );
 }
 
-function getGallery(posting: ExtPostingInfo | null, comment: ExtCommentInfo | null): MediaAttachment[] | null {
-    const entry = comment != null ? comment : posting;
+function getGallery(
+    posting: ExtPostingInfo | null, comment: ExtCommentInfo | null | undefined
+): MediaAttachment[] | null {
+    // important: !== not !=
+    const entry = comment !== null ? comment : posting;
     const media = entry?.media;
     if (media == null) {
         return null;

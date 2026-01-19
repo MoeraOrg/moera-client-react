@@ -4,16 +4,13 @@ import { ExtPostingInfo } from "state/postings/state";
 import EntryHtml from "ui/entry/EntryHtml";
 
 interface Props {
-    posting: ExtPostingInfo | null;
+    posting: ExtPostingInfo;
 }
 
 const LightBoxCaption = ({posting}: Props) => (
-    posting != null ?
-        <div className="lightbox-caption">
-            <EntryHtml postingId={posting.id} html={posting.body.text}/>
-        </div>
-    :
-        null
+    <div className="lightbox-caption">
+        <EntryHtml postingId={posting.id} html={posting.body.text}/>
+    </div>
 );
 
 export default LightBoxCaption;
