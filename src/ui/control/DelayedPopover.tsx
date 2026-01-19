@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { arrow, flip, useFloating } from '@floating-ui/react';
+import { arrow, flip, shift, useFloating } from '@floating-ui/react';
 import { Placement } from '@floating-ui/utils';
 import cx from 'classnames';
 
@@ -40,7 +40,7 @@ export function DelayedPopover({
 
     const {
         refs, floatingStyles, placement: finalPlacement, update, middlewareData
-    } = useFloating({placement, middleware: [flip(), arrow({element: arrowRef})]});
+    } = useFloating({placement, middleware: [flip(), shift(), arrow({element: arrowRef})]});
 
     const locusRef = useRef<ClickLocus>("out");
     const touchRef = useRef<TouchLocus>("none");

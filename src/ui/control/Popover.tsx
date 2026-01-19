@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import { Middleware } from '@floating-ui/dom';
-import { arrow, flip, offset, useFloating } from '@floating-ui/react';
+import { arrow, flip, offset, shift, useFloating } from '@floating-ui/react';
 import { Placement, Strategy } from '@floating-ui/utils';
 import cx from 'classnames';
 
@@ -32,7 +32,7 @@ export function Popover({
 
     // Such usage of useState() is counter-intuitive, but required by floating-ui
     const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null);
-    const middleware: Middleware[] = [flip(), arrow({element: arrowRef})];
+    const middleware: Middleware[] = [flip(), shift(), arrow({element: arrowRef})];
     if (placementOffset != null) {
         middleware.unshift(offset(placementOffset));
     }

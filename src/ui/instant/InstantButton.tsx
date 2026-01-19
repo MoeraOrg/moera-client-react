@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import * as ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { flip, offset, useFloating } from '@floating-ui/react';
+import { offset, useFloating } from '@floating-ui/react';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
@@ -14,7 +14,7 @@ import InstantBell from "ui/instant/InstantBell";
 const InstantsPopover = React.lazy(() => import("ui/instant/InstantsPopover"));
 
 export default function InstantButton() {
-    const {refs, floatingStyles, update} = useFloating({placement: "bottom-end", middleware: [flip(), offset(15)]});
+    const {refs, floatingStyles, update} = useFloating({placement: "bottom-end", middleware: [offset(15)]});
 
     const componentLoaded = useSelector((state: ClientState) => state.instants.componentLoaded);
     const visible = useSelector((state: ClientState) => state.instants.showPopover);

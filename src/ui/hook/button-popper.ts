@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { arrow, flip, useFloating } from '@floating-ui/react';
+import { arrow, flip, shift, useFloating } from '@floating-ui/react';
 import { Placement } from '@floating-ui/utils';
 
 import { useOverlay } from "ui/overlays/overlays";
@@ -16,7 +16,7 @@ export function useButtonPopper(placement?: Placement, options: ButtonPopperOpti
     const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null);
     const {
         refs, floatingStyles, update, placement: finalPlacement, middlewareData
-    } = useFloating({placement, middleware: [flip(), arrow({element: arrowRef})]});
+    } = useFloating({placement, middleware: [flip(), shift(), arrow({element: arrowRef})]});
 
     const onToggle = (event: {preventDefault: () => void}) => {
         setVisible(visible => !visible);
