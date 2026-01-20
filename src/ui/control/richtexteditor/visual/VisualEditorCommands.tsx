@@ -590,6 +590,10 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
 
     const redo = () => editor.redo();
 
+    const enterText = (text: string) => {
+        editor.insertText(text);
+    }
+
     return (
         <RichTextEditorCommandsContext.Provider value={{
             enableHeading, enableUndo, enableRedo,
@@ -601,7 +605,7 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
             focus, resetSelection, formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention,
             formatHorizontalRule, formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent,
             formatHeading, formatVideo, formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock,
-            formatFormula, formatMark, formatClear, formatImage, embedImage, undo, redo
+            formatFormula, formatMark, formatClear, formatImage, embedImage, undo, redo, enterText
         }}>
             {children}
         </RichTextEditorCommandsContext.Provider>

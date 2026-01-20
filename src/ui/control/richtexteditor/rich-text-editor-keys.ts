@@ -29,4 +29,10 @@ export const RICH_TEXT_EDITOR_KEYS = {
     CODE:               new RichTextEditorKey("Mod-Shift-C"),
     MARK:               new RichTextEditorKey("Mod-M"),
     CLEAR:              new RichTextEditorKey("Mod-0"),
+    EN_DASH:            new RichTextEditorKey("Mod-1"),
+    EM_DASH:            new RichTextEditorKey("Mod-2"),
+    ANGLE_QUOTE_LEFT:   new RichTextEditorKey("Mod-,"),
+    ANGLE_QUOTE_RIGHT:  new RichTextEditorKey("Mod-."),
+    DOUBLE_QUOTE_LEFT:  new RichTextEditorKey("Mod-Shift-,"),
+    DOUBLE_QUOTE_RIGHT: new RichTextEditorKey("Mod-Shift-."),
 };

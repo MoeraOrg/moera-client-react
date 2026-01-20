@@ -433,6 +433,12 @@ export default function MarkdownEditorCommands({
 
     const redo = () => {};
 
+    const enterText = (text: string) => {
+        if (textArea.current != null) {
+            insertText(textArea.current, text);
+        }
+    };
+
     return (
         <RichTextEditorCommandsContext.Provider value={{
             enableHeading: true, enableUndo: false, enableRedo: false,
@@ -446,7 +452,7 @@ export default function MarkdownEditorCommands({
             focus, resetSelection, formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention,
             formatHorizontalRule, formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent,
             formatHeading, formatVideo, formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock,
-            formatFormula, formatMark, formatClear, formatImage, embedImage, undo, redo,
+            formatFormula, formatMark, formatClear, formatImage, embedImage, undo, redo, enterText
         }}>
             {children}
         </RichTextEditorCommandsContext.Provider>

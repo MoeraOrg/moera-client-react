@@ -66,6 +66,7 @@ export interface RichTextEditorCommandsInterface {
     embedImage: (mediaFile: VerifiedMediaFile) => void;
     undo: () => void;
     redo: () => void;
+    enterText: (text: string) => void;
 }
 
 export const RichTextEditorCommandsContext = createContext<RichTextEditorCommandsInterface>({
@@ -131,6 +132,7 @@ export const RichTextEditorCommandsContext = createContext<RichTextEditorCommand
     embedImage: () => {},
     undo: () => {},
     redo: () => {},
+    enterText: () => {}
 });
 
 type RichTextEditorCommands = RichTextEditorCommandsInterface & {
@@ -171,6 +173,24 @@ export function useRichTextEditorCommands(): RichTextEditorCommands {
                 return true;
             } else if (context.supportsClear && RICH_TEXT_EDITOR_KEYS.CLEAR.check(event)) {
                 context.formatClear();
+                return true;
+            } else if (RICH_TEXT_EDITOR_KEYS.EN_DASH.check(event)) {
+                context.enterText("\u2013");
+                return true;
+            } else if (RICH_TEXT_EDITOR_KEYS.EM_DASH.check(event)) {
+                context.enterText("\u2014");
+                return true;
+            } else if (RICH_TEXT_EDITOR_KEYS.ANGLE_QUOTE_LEFT.check(event)) {
+                context.enterText("\u00AB");
+                return true;
+            } else if (RICH_TEXT_EDITOR_KEYS.ANGLE_QUOTE_RIGHT.check(event)) {
+                context.enterText("\u00BB");
+                return true;
+            } else if (RICH_TEXT_EDITOR_KEYS.DOUBLE_QUOTE_LEFT.check(event)) {
+                context.enterText("\u201C");
+                return true;
+            } else if (RICH_TEXT_EDITOR_KEYS.DOUBLE_QUOTE_RIGHT.check(event)) {
+                context.enterText("\u201D");
                 return true;
             }
         }
