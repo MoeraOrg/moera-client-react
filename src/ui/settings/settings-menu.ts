@@ -252,6 +252,7 @@ function collectUsedOptions(items: Item[] | Sheet[] | null, used: Set<string>): 
 export function getOtherOptions(tab: SettingsTabId, allNames: Iterable<string>): Option[] {
     const used = new Set<string>();
     collectUsedOptions(getSheets(tab), used);
+    collectUsedOptions(getSheets("profile"), used);
     const other = [];
     for (const name of allNames) {
         if (!used.has(name) && !name.startsWith(CLIENT_SETTINGS_PLUGIN_PREFIX)) {
