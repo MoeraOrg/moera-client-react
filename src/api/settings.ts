@@ -374,6 +374,12 @@ const META: ClientSettingMetaInfo[] = [
         modifiers: {}
     },
     {
+        name: "posting.delete.confirm",
+        type: "bool",
+        defaultValue: "true",
+        modifiers: {}
+    },
+    {
         name: "reactions.positive.disabled",
         type: "string",
         defaultValue: "",

@@ -37,6 +37,7 @@ import { DropdownMenu, DropdownMenuItems } from "ui/control";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { ut } from "util/url";
 import "ui/entry/EntryMenu.css";
+import { getSetting } from "state/settings/selectors";
 
 interface Props {
     posting: PostingInfo;
@@ -60,6 +61,7 @@ function PostingMenuItems({posting, story, detailed}: Props) {
     );
     const postingEditable = useSelector((state: ClientState) => isPermitted("edit", posting, "owner", state));
     const postingDeletable = useSelector((state: ClientState) => isPermitted("delete", posting, "private", state));
+    const confirmDelete = useSelector((state: ClientState) => getSetting(state, "posting.delete.confirm") as boolean);
     const storyEditable = useSelector((state: ClientState) =>
         story != null && isPermitted("edit", story, "admin", state)
     );
@@ -112,13 +114,17 @@ function PostingMenuItems({posting, story, detailed}: Props) {
     }
 
     const onDelete = () => {
-        dispatch(confirmBox({
-            message: t("delete-post", {heading: posting.heading}),
-            yes: t("delete"),
-            no: t("cancel"),
-            onYes: postingDelete(posting.id, REL_CURRENT),
-            variant: "danger"
-        }));
+        if (confirmDelete) {
+            dispatch(confirmBox({
+                message: t("delete-post", {heading: posting.heading}),
+                yes: t("delete"),
+                no: t("cancel"),
+                onYes: postingDelete(posting.id, REL_CURRENT),
+                variant: "danger"
+            }));
+        } else {
+            dispatch(postingDelete(posting.id, REL_CURRENT));
+        }
     };
 
     const onPin = () => story != null && dispatch(storyPinningUpdate(story.id, !story.pinned));

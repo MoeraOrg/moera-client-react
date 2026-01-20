@@ -820,6 +820,7 @@
         "posting_comments_addition_default": "Commenting allowed by default",
         "posting_comments_hide_default": "Automatically hide comments by default",
         "posting_comments_visibility_default": "Comments visibility by default",
+        "posting_delete_confirm": "Ask for confirmation before deleting a post",
         "posting_feed_news_enabled": "Add your own posts to your News feed",
         "posting_media_compress_default": "Compress images in posts by default",
         "posting_reactions-disabled_negative_default": "Default set of \"Oppose\" reactions to my post",

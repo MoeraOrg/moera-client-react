@@ -820,6 +820,7 @@
         "posting_comments_addition_default": "Дозволити коментарі (за замовчуванням)",
         "posting_comments_hide_default": "Автоматично приховувати коментарі (за замовчуванням)",
         "posting_comments_visibility_default": "Коментарі видно (за замовчуванням)",
+        "posting_delete_confirm": "Підтвердження перед видаленням поста",
         "posting_feed_news_enabled": "Додавати свої пости у стрічку новин",
         "posting_media_compress_default": "Стискати картинки у постах (за замовчуванням)",
         "posting_reactions-disabled_negative_default": "Набір несхвальних реакцій на мої пости (за замовчуванням)",

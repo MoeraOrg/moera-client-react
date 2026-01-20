@@ -820,6 +820,7 @@
         "posting_comments_addition_default": "Domyślnie zezwól na komentowanie",
         "posting_comments_hide_default": "Domyślnie ukrywaj komentarze automatycznie",
         "posting_comments_visibility_default": "Domyślna widoczność komentarzy",
+        "posting_delete_confirm": "Poproś o potwierdzenie przed usunięciem posta",
         "posting_feed_news_enabled": "Dodawaj wlasne posty do swoich \"Aktualności\"",
         "posting_media_compress_default": "Domyślnie kompresuj obrazy w postach",
         "posting_reactions-disabled_negative_default": "Domyślny zestaw reakcji \"Przeciwny\" na mój post",

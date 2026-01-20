@@ -820,6 +820,7 @@
         "posting_comments_addition_default": "Разрешить комментарии (по умолчанию)",
         "posting_comments_hide_default": "Автоматически скрывать комментарии (по умолчанию)",
         "posting_comments_visibility_default": "Комментарии видны (по умолчанию)",
+        "posting_delete_confirm": "Подтверждение перед удалением поста",
         "posting_feed_news_enabled": "Добавлять свои посты в ленту новостей",
         "posting_media_compress_default": "Сжимать картинки в постах (по умолчанию)",
         "posting_reactions-disabled_negative_default": "Набор неодобрительных реакций на мои посты (по умолчанию)",
