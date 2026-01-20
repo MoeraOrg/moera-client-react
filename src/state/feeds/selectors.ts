@@ -122,3 +122,10 @@ export function isFeedFutureToBeLoaded(state: ClientState, nodeName: RelNodeName
     const feed = getFeedState(state, nodeName, feedName);
     return feed.stories.length === 0 && !feed.loadingFuture && feed.before < Number.MAX_SAFE_INTEGER;
 }
+
+export function isFeedMomentLoaded(
+    state: ClientState, nodeName: RelNodeName | string, feedName: string, moment: number
+): boolean {
+    const feed = getFeedState(state, nodeName, feedName);
+    return moment <= feed.before && moment > feed.after;
+}

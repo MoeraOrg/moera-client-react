@@ -17,18 +17,21 @@ import {
 import { WithContext } from "state/action-types";
 import { isPostingCached } from "state/postings/selectors";
 import { StoryAddedAction, StoryUpdatedAction } from "state/stories/actions";
+import { isFeedMomentLoaded } from "state/feeds/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { flashBox } from "state/flashbox/actions";
-import { absoluteNodeName, REL_CURRENT } from "util/rel-node-name";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export default [
     trigger(
         ["STORY_ADDED", "STORY_UPDATED"],
         (state, signal: (WithContext<StoryAddedAction> | WithContext<StoryUpdatedAction>)) =>
             signal.payload.story.postingId != null
-            && absoluteNodeName(signal.payload.nodeName, signal.context) === signal.context.ownerNameOrUrl
-            && !isPostingCached(state, signal.payload.story.postingId, REL_CURRENT),
-        signal => postingLoad(signal.payload.story.postingId!, REL_CURRENT)
+            && isFeedMomentLoaded(
+                state, signal.payload.nodeName, signal.payload.story.feedName, signal.payload.story.moment
+            )
+            && !isPostingCached(state, signal.payload.story.postingId, signal.payload.nodeName),
+        signal => postingLoad(signal.payload.story.postingId!, signal.payload.nodeName)
     ),
     trigger("POSTING_COMMENTS_SUBSCRIBED", true, () => flashBox(i18n.t("following-comments"))),
     trigger("POSTING_COMMENTS_UNSUBSCRIBED", true, () => flashBox(i18n.t("not-following-comments"))),
