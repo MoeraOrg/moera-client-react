@@ -17,7 +17,7 @@ const initialState: SignUpState = {
 export default (state: SignUpState = initialState, action: ClientAction): SignUpState => {
     switch (action.type) {
         case "GO_TO_PAGE":
-            if (action.payload.page === "connect") {
+            if (action.payload.page === "signup") {
                 return {
                     ...initialState,
                     backHref: action.payload.details.backHref

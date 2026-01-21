@@ -15,8 +15,8 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
     info = info.sub("signup");
-    if (state.connectPage.backHref) {
-        info = info.withParameter("back", state.connectPage.backHref);
+    if (state.signUp.backHref) {
+        info = info.withParameter("back", state.signUp.backHref);
     }
     return info.noIndex().withTitle(i18n.t("sign-up"));
 }
