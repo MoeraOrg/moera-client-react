@@ -27,8 +27,9 @@ export const mediaHashStrip = (hash: string): string => hash.endsWith("=") ? has
 
 export const mediaImagePreview = (location: string, width: number): string => urlWithParameters(location, {width});
 
-export function mediaImageFindLargerPreview(previews: MediaFilePreviewInfo[] | null | undefined,
-                                            width: number): MediaFilePreviewInfo | null {
+export function mediaImageFindLargerPreview(
+    previews: MediaFilePreviewInfo[] | null | undefined, width: number
+): MediaFilePreviewInfo | null {
     if (previews == null) {
         return null;
     }
@@ -63,11 +64,13 @@ export function mediaSizes(previews: MediaFilePreviewInfo[] | null | undefined):
     return `(max-width: 400px) ${mobile}px, ${regular}px`;
 }
 
-export function mediaImageSize(targetWidth: number,
-                               width: number | string | null | undefined,
-                               height: number | string | null | undefined,
-                               mediaFile: PrivateMediaFileInfo,
-                               enlarge: boolean = true): number[] {
+export function mediaImageSize(
+    targetWidth: number,
+    width: number | string | null | undefined,
+    height: number | string | null | undefined,
+    mediaFile: PrivateMediaFileInfo,
+    enlarge: boolean = true
+): number[] {
     const iwidth = toInt(width);
     const iheight = toInt(height);
     const preview = mediaImageFindLargerPreview(mediaFile.previews, targetWidth);
@@ -98,8 +101,12 @@ export interface MediaImageTagAttributes {
 }
 
 export function mediaImageTagAttributes(
-    rootPage: string | null, mediaFile: PrivateMediaFileInfo, carte: string | null,
-    targetWidth: number, width?: string | number | null, height?: string | number | null
+    rootPage: string | null,
+    mediaFile: PrivateMediaFileInfo,
+    carte: string | null,
+    targetWidth: number,
+    width?: string | number | null,
+    height?: string | number | null
 ): MediaImageTagAttributes {
     const isPublic = (mediaFile.operations?.view ?? "public") === "public";
     const mediaPrefix = rootPage + "/media/";
