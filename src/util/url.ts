@@ -16,12 +16,9 @@ export function urlWithParameters(
     url: string, parameters: {[name: string]: string | number | boolean | null | undefined}
 ): string {
     let query = "";
-    for (let name in parameters) {
-        if (parameters.hasOwnProperty(name)) {
-            const value = parameters[name];
-            if (value != null) {
-                query += (query === "" ? "" : "&") + name + "=" + encodeURIComponent(value);
-            }
+    for (let [name, value] of Object.entries(parameters)) {
+        if (value != null) {
+            query += (query === "" ? "" : "&") + name + "=" + encodeURIComponent(value);
         }
     }
     if (query === "") {
@@ -97,7 +94,6 @@ export function hasSchemeOrDomain(url: string, prefix: string): boolean {
         return false;
     }
     return components.host === prefix || components.host.endsWith("." + prefix);
-
 }
 
 export function getSchemeOrDomain(url: string | null | undefined): string | null {
