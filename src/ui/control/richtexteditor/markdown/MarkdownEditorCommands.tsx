@@ -1,6 +1,9 @@
 import React, { ReactNode } from 'react';
+import { useSelector } from 'react-redux';
 
 import { NodeName, PrivateMediaFileInfo, SourceFormat, VerifiedMediaFile } from "api";
+import { ClientState } from "state/state";
+import { getSetting } from "state/settings/selectors";
 import { RichTextEditorCommandsContext } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import {
     getTextSelection,
@@ -24,6 +27,7 @@ import { htmlEntities } from "util/html";
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
 import { universalLocation } from "util/universal-url";
+import noTracking from "util/no-tracking";
 
 interface Props {
     format: SourceFormat;
@@ -60,6 +64,10 @@ export default function MarkdownEditorCommands({
     const {
         showLinkDialog, showSpoilerDialog, showMentionDialog, showFoldDialog, showFormulaDialog
     } = useRichTextEditorDialogs();
+
+    const removeTracking = useSelector((state: ClientState) =>
+        getSetting(state, "rich-text-editor.links.remove-tracking") as boolean
+    );
 
     const isMarkdown = () => format === "markdown";
 
@@ -131,6 +139,9 @@ export default function MarkdownEditorCommands({
             }
 
             if (ok) {
+                if (removeTracking) {
+                    href = noTracking(href) ?? undefined;
+                }
                 if (isMarkdown()) {
                     if (text) {
                         insertText(textArea.current, `[${text}](${htmlEntities(href ?? "")})`);

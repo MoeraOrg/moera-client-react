@@ -1,9 +1,12 @@
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { BaseOperation, createEditor, Descendant } from 'slate';
 import { ReactEditor, Slate, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
 import deepEqual from 'react-fast-compare';
 
+import { ClientState } from "state/state";
+import { getSetting } from "state/settings/selectors";
 import { useIsTinyScreen } from "ui/hook";
 import VisualEditorCommands from "ui/control/richtexteditor/visual/VisualEditorCommands";
 import RichTextEditorPanel, { RichTextEditorPanelMode } from "ui/control/richtexteditor/panel/RichTextEditorPanel";
@@ -42,11 +45,18 @@ export default function VisualEditor({
     commentQuote, panelMode = "float", noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, onChange, submitKey,
     onSubmit, onUrls, onBlur, children
 }: VisualEditorProps) {
+    const removeTracking = useSelector((state: ClientState) =>
+        getSetting(state, "rich-text-editor.links.remove-tracking") as boolean
+    );
     const {pasteImage} = useRichTextEditorMedia();
     const pasteImageRef = useRef(pasteImage);
     pasteImageRef.current = pasteImage;
     const [editor] = useState(
-        () => withScripture(withHistory(withReact(createEditor(), "x-scripture-fragment")), pasteImageRef)
+        () => withScripture(
+            withHistory(withReact(createEditor(), "x-scripture-fragment")),
+            pasteImageRef,
+            {removeTracking}
+        )
     );
 
     useEffect(() => {

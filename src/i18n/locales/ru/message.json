@@ -842,6 +842,7 @@
         "reactions_negative_disabled": "Используемые неодобрительные реакции",
         "reactions_positive_disabled": "Используемые одобрительные реакции",
         "rich-text-editor_link-previews_max-automatic": "Максимальное число ссылок, для которых автоматически создаётся предпросмотр",
+        "rich-text-editor_links_remove-tracking": "Автоматически удалять параметры отслеживания при вставке ссылок в редактор",
         "rich-text-editor_paste-rich": "При вставке текста с тегами форматирования",
         "rich-text-editor_paste-rich-items": {
           "ask": "Спрашивать",

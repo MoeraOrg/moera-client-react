@@ -439,6 +439,12 @@ const META: ClientSettingMetaInfo[] = [
         }
     },
     {
+        name: "rich-text-editor.links.remove-tracking",
+        type: "bool",
+        defaultValue: "true",
+        modifiers: {}
+    },
+    {
         name: "avatar.shape.default",
         type: "string",
         defaultValue: "circle",

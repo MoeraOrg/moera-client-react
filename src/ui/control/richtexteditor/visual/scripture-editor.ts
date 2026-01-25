@@ -49,6 +49,7 @@ import { smileyReplacer, TextReplacementFunction } from "util/text";
 import { URL_PATTERN } from "util/url";
 import { containsTags, plainTextToHtml } from "util/html";
 import { importQuirks } from "util/import-quirks";
+import noTracking from "util/no-tracking";
 
 interface WrappingElementOptions {
     at?: Path;
@@ -81,6 +82,10 @@ export const isSelectionInElement = (
 ): boolean =>
     findWrappingElement(editor, type) != null;
 
+export interface ScriptureEditorOptions {
+    removeTracking: boolean;
+}
+
 export type EditorChangeListener = (operation: BaseOperation) => void;
 
 interface ScriptureEditorInsertTextOptions extends TextInsertTextOptions {
@@ -88,6 +93,8 @@ interface ScriptureEditorInsertTextOptions extends TextInsertTextOptions {
 }
 
 export type ScriptureEditor<T extends DOMEditor> = T & {
+    options: ScriptureEditorOptions;
+
     insertText(text: string, options?: ScriptureEditorInsertTextOptions): void;
 
     changeListeners: EditorChangeListener[];
@@ -98,7 +105,8 @@ export type ScriptureEditor<T extends DOMEditor> = T & {
 
 export function withScripture<T extends DOMEditor>(
     editor: T,
-    pasteImageRef: MutableRefObject<(data: DataTransfer) => boolean>
+    pasteImageRef: MutableRefObject<(data: DataTransfer) => boolean>,
+    options: ScriptureEditorOptions
 ): ScriptureEditor<T> {
     const {
         isInline, isVoid, insertData, insertFragmentData, insertText, deleteBackward, deleteForward, deleteFragment,
@@ -106,6 +114,8 @@ export function withScripture<T extends DOMEditor>(
     } = editor;
 
     const scriptureEditor = editor as ScriptureEditor<T>;
+
+    scriptureEditor.options = options;
 
     scriptureEditor.isInline = (element: BaseElement): boolean =>
         (isScriptureElement(element) && isScriptureInline(element)) || isInline(element);
@@ -126,7 +136,7 @@ export function withScripture<T extends DOMEditor>(
 
         const html = data.getData("text/html");
         if (html && containsTags(html, "none")) {
-            editor.insertFragment(importReplaceUrls(safeImportScripture(importQuirks(html))));
+            editor.insertFragment(importReplaceUrls(safeImportScripture(importQuirks(html)), scriptureEditor.options));
             return true;
         }
 
@@ -322,7 +332,7 @@ export function withScripture<T extends DOMEditor>(
 
 const URLS = new RegExp("(?<!\\S)" + URL_PATTERN, "g");
 
-function importReplaceUrls(scripture: Scripture): Scripture {
+function importReplaceUrls(scripture: Scripture, options: ScriptureEditorOptions): Scripture {
     return ([] as Scripture).concat(...scripture.map(node => {
         if (isScriptureText(node)) {
             const subs: [boolean, string][] = [];
@@ -340,15 +350,34 @@ function importReplaceUrls(scripture: Scripture): Scripture {
                 return node;
             }
             subs.push([false, node.text.substring(tail)]);
-            return subs.map(([isUrl, text]) =>
-                isUrl ? createLinkElement(text, [createScriptureText(text)]) : createScriptureText(text)
-            );
+            return subs.map(([isUrl, text]) => {
+                if (isUrl) {
+                    const url = options.removeTracking ? noTracking(text) : text;
+                    return createLinkElement(url, [createScriptureText(url)]);
+                } else {
+                    return createScriptureText(text);
+                }
+            });
+        } else if (isLinkElement(node)) {
+            const linkNode = cloneDeep(node);
+            if (options.removeTracking) {
+                const href = noTracking(linkNode.href);
+                if (
+                    linkNode.children.length === 1
+                    && isScriptureText(linkNode.children[0])
+                    && linkNode.href === linkNode.children[0].text
+                ) {
+                    linkNode.children[0].text = href;
+                }
+                linkNode.href = href;
+            }
+            return linkNode;
         } else if (
-            isScriptureElement(node) && isScriptureBlock(node) && !isScriptureVoidBlock(node) && !isLinkElement(node)
+            isScriptureElement(node) && isScriptureBlock(node) && !isScriptureVoidBlock(node)
         ) {
             return {
                 ...node,
-                children: importReplaceUrls(node.children as Scripture)
+                children: importReplaceUrls(node.children as Scripture, options)
             };
         } else {
             return cloneDeep(node);
@@ -393,7 +422,7 @@ export function scriptureReplaceSmileys(editor: BaseEditor, removeEscapes: boole
 
 const URL_AT_END = new RegExp("(" + URL_PATTERN + ")\\s*$", "i");
 
-export function scriptureReplaceUrl(editor: BaseEditor, beforePoint: BasePoint): void {
+export function scriptureReplaceUrl(editor: ScriptureEditor<any>, beforePoint: BasePoint): void {
     let textNode;
     try {
         textNode = SlateNode.leaf(editor, beforePoint.path);
@@ -415,9 +444,10 @@ export function scriptureReplaceUrl(editor: BaseEditor, beforePoint: BasePoint):
     const at = {path: beforePoint.path, offset: m.index};
     editor.withoutNormalizing(() => {
         Transforms.delete(editor, {at, distance: m[1].length, unit: "character"});
+        const href = editor.options.removeTracking ? noTracking(m[1]) : m[1];
         editor.insertFragment([
             createScriptureText(""),
-            createLinkElement(m[1], [createScriptureText(m[1])]),
+            createLinkElement(href, [createScriptureText(href)]),
             createScriptureText("")
         ], {at});
     });

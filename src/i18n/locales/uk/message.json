@@ -842,6 +842,7 @@
         "reactions_negative_disabled": "Несхвальні реакції, якими користуюсь",
         "reactions_positive_disabled": "Схвальні реакції, якими користуюсь",
         "rich-text-editor_link-previews_max-automatic": "Максимальна кількість посилань, для яких автоматично створюється перегляд",
+        "rich-text-editor_links_remove-tracking": "Автоматично видаляти параметри відстеження при вставці посилань в редактор",
         "rich-text-editor_paste-rich": "При вставленні тексту з тегами форматування",
         "rich-text-editor_paste-rich-items": {
           "ask": "Запитувати",

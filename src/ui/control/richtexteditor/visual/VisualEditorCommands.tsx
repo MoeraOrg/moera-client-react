@@ -1,9 +1,12 @@
 import React, { ReactNode } from 'react';
+import { useSelector } from 'react-redux';
 import { Editor, Element, Node, Path, PathRef, Range, Transforms } from 'slate';
 import { ReactEditor, useSlateSelector, useSlateStatic } from 'slate-react';
 import { HistoryEditor } from 'slate-history';
 
 import { NodeName, VerifiedMediaFile } from "api";
+import { ClientState } from "state/state";
+import { getSetting } from "state/settings/selectors";
 import {
     createBlockquoteElement,
     createCodeBlockElement,
@@ -69,6 +72,7 @@ import { RichTextFormulaValues } from "ui/control/richtexteditor/dialog/RichText
 import { RichTextImageValues } from "ui/control/richtexteditor/media/RichTextImageDialog";
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
+import noTracking from "util/no-tracking";
 
 interface Props {
     noComplexBlocks?: boolean | null;
@@ -118,6 +122,10 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
         showLinkDialog, showSpoilerDialog, showMentionDialog, showVideoDialog, showFoldDialog, showFormulaDialog
     } = useRichTextEditorDialogs();
 
+    const removeTracking = useSelector((state: ClientState) =>
+        getSetting(state, "rich-text-editor.links.remove-tracking") as boolean
+    );
+
     const focus = () =>
         ReactEditor.focus(editor);
 
@@ -148,6 +156,9 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
             true, !noSelection, prevValues, (ok: boolean | null, {href = "", text = ""}: Partial<RichTextLinkValues>
         ) => {
             showLinkDialog(false);
+            if (removeTracking) {
+                href = noTracking(href);
+            }
             if (path != null) {
                 if (ok) {
                     editor.setNodes<LinkElement>({href}, {at: path});

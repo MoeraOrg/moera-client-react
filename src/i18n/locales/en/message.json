@@ -842,6 +842,7 @@
         "reactions_negative_disabled": "Usable \"Oppose\" reactions",
         "reactions_positive_disabled": "Usable \"Support\" reactions",
         "rich-text-editor_link-previews_max-automatic": "Maximal number of link previews created automatically",
+        "rich-text-editor_links_remove-tracking": "Automatically remove tracking parameters when pasting links into the editor",
         "rich-text-editor_paste-rich": "When pasting text with formatting tags",
         "rich-text-editor_paste-rich-items": {
           "ask": "Ask",

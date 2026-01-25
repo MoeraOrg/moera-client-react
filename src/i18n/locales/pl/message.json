@@ -842,6 +842,7 @@
         "reactions_negative_disabled": "Dostępne reakcje \"Przeciwny\"",
         "reactions_positive_disabled": "Dostępne reakcje \"Popieram\"",
         "rich-text-editor_link-previews_max-automatic": "Maksymalna liczba automatycznie utworzonych podglądów linków",
+        "rich-text-editor_links_remove-tracking": "Automatycznie usuń parametry śledzenia podczas wklejania linków do edytora",
         "rich-text-editor_paste-rich": "Podczas wklejania tekstu z tagami formatującymi",
         "rich-text-editor_paste-rich-items": {
           "ask": "Zapytaj",
