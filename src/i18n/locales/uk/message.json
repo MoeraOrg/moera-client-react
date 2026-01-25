@@ -101,6 +101,7 @@
   "collapse": "Згорнути ↑",
   "comment-button": "Коментувати",
   "comment-edited-conflict": "Коментар був кимось змінений.",
+  "comment-has-draft-want-load": "У цього коментаря є неопублікована чернетка. Бажаєте завантажити її?",
   "commenting-allowed-to": "Коментування дозволене",
   "comment-not-found": "Коментар не знайдено",
   "comment-optional": "Коментар (необов'язково)",

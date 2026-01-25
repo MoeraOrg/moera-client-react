@@ -101,6 +101,7 @@
   "collapse": "Свернуть ↑",
   "comment-button": "Комментировать",
   "comment-edited-conflict": "Комментарий был кем-то изменён.",
+  "comment-has-draft-want-load": "У этого комментария есть неопубликованный черновик. Хотите загрузить его?",
   "commenting-allowed-to": "Комментирование разрешено",
   "comment-not-found": "Комментарий не найден",
   "comment-optional": "Комментарий (необязательно)",

@@ -101,6 +101,7 @@
   "collapse": "Collapse ↑",
   "comment-button": "Comment",
   "comment-edited-conflict": "The comment was edited by somebody.",
+  "comment-has-draft-want-load": "This comment has an unpublished draft. Would you like to load it?",
   "commenting-allowed-to": "Commenting allowed to",
   "comment-not-found": "Comment not found",
   "comment-optional": "Comment (optional)",

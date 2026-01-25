@@ -31,6 +31,8 @@ import {
     commentDialogCommentLoadFailed,
     CommentDialogCommentResetAction,
     commentDraftAbsent,
+    commentDraftCompleteLoading,
+    CommentDraftCompleteLoadingAction, commentDraftDelete,
     CommentDraftDeleteAction,
     commentDraftDeleted,
     CommentDraftLoadAction,
@@ -113,6 +115,7 @@ import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { clipboardCopy } from "util/clipboard";
 import { delay, notNull } from "util/misc";
 import { ut } from "util/url";
+import { confirmBox } from "state/confirmbox/actions";
 
 export default [
     executor("DETAILED_POSTING_LOAD", "", detailedPostingLoadSaga),
@@ -127,6 +130,7 @@ export default [
     executor("COMMENT_LOAD", payload => payload.commentId, commentLoadSaga),
     executor("COMMENT_POST", null, commentPostSaga),
     executor("COMMENT_DRAFT_LOAD", "", commentDraftLoadSaga),
+    executor("COMMENT_DRAFT_COMPLETE_LOADING", "", commentDraftCompleteLoadingSaga),
     executor("COMMENT_DRAFT_SAVE", null, commentDraftSaveSaga),
     executor("COMMENT_DRAFT_DELETE", "", commentDraftDeleteSaga),
     executor("COMMENT_COMPOSE_CANCEL", "", commentComposeCancelSaga),
@@ -496,22 +500,55 @@ async function commentDraftLoadSaga(action: WithContext<CommentDraftLoadAction>)
         const drafts = await Node.getDrafts(action, REL_HOME, draftType, nodeName, postingId, commentId)
         const draft = drafts.length > 0 ? drafts[0] : null;
         if (draft != null) {
-            await loadRemoteMediaAttachments(action, nodeName, draft.media ?? null);
-            dispatch(commentDraftLoaded(draft).causedBy(action));
-
-            let repliedTo: RepliedTo | null = null;
-            if (commentId == null && draft.repliedToId != null) {
-                repliedTo = await loadRepliedTo(action, nodeName, postingId, draft.repliedToId);
-            }
-            if (repliedTo != null) {
-                dispatch(commentRepliedToSet(
-                    repliedTo.id, repliedTo.name, repliedTo.fullName ?? null, repliedTo.heading ?? ""
-                ).causedBy(action));
+            if (commentId != null) {
+                dispatch(confirmBox({
+                    message: i18n.t("comment-has-draft-want-load"),
+                    onYes: commentDraftCompleteLoading(isDialog, draft).causedBy(action),
+                    onNo: [
+                        commentDraftDelete(draft).causedBy(action),
+                        commentDraftAbsent(nodeName, postingId, commentId).causedBy(action),
+                    ],
+                    variant: "primary"
+                }).causedBy(action));
             } else {
-                dispatch(commentRepliedToUnset().causedBy(action));
+                dispatch(commentDraftCompleteLoading(isDialog, draft).causedBy(action));
             }
         } else {
             dispatch(commentDraftAbsent(nodeName, postingId, commentId).causedBy(action));
+        }
+    } catch (e) {
+        dispatch(commentDraftLoadFailed(nodeName, postingId, commentId).causedBy(action));
+        dispatch(errorThrown(e));
+    }
+}
+
+async function commentDraftCompleteLoadingSaga(action: WithContext<CommentDraftCompleteLoadingAction>): Promise<void> {
+    const {isDialog, draft} = action.payload;
+
+    const {nodeName, postingId, commentId} = select(state => ({
+        nodeName: getCommentsState(state).receiverName,
+        postingId: getCommentsState(state).receiverPostingId,
+        commentId: isDialog ? state.detailedPosting.commentDialog.commentId : null
+    }));
+
+    if (nodeName == null || postingId == null) {
+        return;
+    }
+
+    try {
+        await loadRemoteMediaAttachments(action, nodeName, draft.media ?? null);
+        dispatch(commentDraftLoaded(draft).causedBy(action));
+
+        let repliedTo: RepliedTo | null = null;
+        if (commentId == null && draft.repliedToId != null) {
+            repliedTo = await loadRepliedTo(action, nodeName, postingId, draft.repliedToId);
+        }
+        if (repliedTo != null) {
+            dispatch(commentRepliedToSet(
+                repliedTo.id, repliedTo.name, repliedTo.fullName ?? null, repliedTo.heading ?? ""
+            ).causedBy(action));
+        } else {
+            dispatch(commentRepliedToUnset().causedBy(action));
         }
     } catch (e) {
         dispatch(commentDraftLoadFailed(nodeName, postingId, commentId).causedBy(action));

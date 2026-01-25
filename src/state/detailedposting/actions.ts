@@ -232,6 +232,13 @@ export type CommentDraftLoadAction = ActionWithPayload<"COMMENT_DRAFT_LOAD", {
 export const commentDraftLoad = (isDialog: boolean): CommentDraftLoadAction =>
     actionWithPayload("COMMENT_DRAFT_LOAD", {isDialog});
 
+export type CommentDraftCompleteLoadingAction = ActionWithPayload<"COMMENT_DRAFT_COMPLETE_LOADING", {
+    isDialog: boolean;
+    draft: DraftInfo;
+}>;
+export const commentDraftCompleteLoading = (isDialog: boolean, draft: DraftInfo): CommentDraftCompleteLoadingAction =>
+    actionWithPayload("COMMENT_DRAFT_COMPLETE_LOADING", {isDialog, draft});
+
 export type CommentDraftLoadedAction = ActionWithPayload<"COMMENT_DRAFT_LOADED", {
     draft: DraftInfo;
 }>;
@@ -592,6 +599,7 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | CommentComposeCancelAction
     | CommentComposeCancelledAction
     | CommentDraftLoadAction
+    | CommentDraftCompleteLoadingAction
     | CommentDraftLoadedAction
     | CommentDraftLoadFailedAction
     | CommentDraftAbsentAction

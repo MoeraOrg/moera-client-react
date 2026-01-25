@@ -101,6 +101,7 @@
   "collapse": "Zwiń ↑",
   "comment-button": "Komentarz",
   "comment-edited-conflict": "Komentarz został edytowany przez kogoś.",
+  "comment-has-draft-want-load": "Ten komentarz ma nieopublikowany szkic. Czy chcesz go załadować?",
   "commenting-allowed-to": "Komentowanie dozwolone dla",
   "comment-not-found": "Nie znaleziono komentarza",
   "comment-optional": "Komentarz (opcjonalnie)",
