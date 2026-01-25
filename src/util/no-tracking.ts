@@ -1,3 +1,9 @@
+/*
+ * Catalog of rules used for removing tracking parameters from URLs.
+ *
+ * The catalog is collected from https://docs.clearurls.xyz
+ * The minified file is located at https://rules2.clearurls.xyz/data.minify.json
+ */
 import TRACKING_DATA from "util/no-tracking-data.json";
 
 export default function noTracking(url: string) : string;
@@ -11,7 +17,6 @@ export default function noTracking(url: string | null | undefined) : string | nu
     if (!url.includes("?")) {
         return url;
     }
-    console.log("noTracking", url);
     try {
         const components = new URL(url);
         for (const provider of Object.values(TRACKING_DATA.providers)) {
@@ -21,16 +26,13 @@ export default function noTracking(url: string | null | undefined) : string | nu
             executeRules(provider.rules, components.searchParams);
             executeRules(provider.referralMarketing, components.searchParams);
             if (components.searchParams.size === 0) {
-                console.log("noTracking return", components.toString());
                 return components.toString();
             }
         }
-        console.log("noTracking return", components.toString());
         return components.toString();
     } catch (e) {
         // ignore, return the original URL
     }
-    console.log("noTracking return", url);
     return url;
 }
 
