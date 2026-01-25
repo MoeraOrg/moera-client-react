@@ -396,6 +396,9 @@ export default function MarkdownEditorCommands({
                 ) => {
                     showImageDialog(false);
 
+                    if (removeTracking && href) {
+                        href = noTracking(href);
+                    }
                     if (ok && textArea.current != null) {
                         insertImage(textArea.current, href ?? "", standardSize, customWidth, customHeight, caption);
                     }

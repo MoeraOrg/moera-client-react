@@ -542,6 +542,9 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
             ) => {
                 showImageDialog(false);
 
+                if (removeTracking && href) {
+                    href = noTracking(href);
+                }
                 const src = href ?? mediaFiles?.[0];
 
                 if (ok && src) {
