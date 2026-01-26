@@ -213,6 +213,20 @@ export const feedFutureSliceSet = (
 ): FeedFutureSliceSetAction =>
     actionWithPayload("FEED_FUTURE_SLICE_SET", {nodeName, feedName, stories, before, after, totalInPast, totalInFuture});
 
+export type FeedCannotBeLoadedAction = ActionWithPayload<"FEED_CANNOT_BE_LOADED", {
+    nodeName: string;
+    feedName: string;
+}>;
+export const feedCannotBeLoaded = (nodeName: string, feedName: string): FeedCannotBeLoadedAction =>
+    actionWithPayload("FEED_CANNOT_BE_LOADED", {nodeName, feedName});
+
+export type FeedUnsetAction = ActionWithPayload<"FEED_UNSET", {
+    nodeName: string;
+    feedName: string;
+}>;
+export const feedUnset = (nodeName: string, feedName: string): FeedUnsetAction =>
+    actionWithPayload("FEED_UNSET", {nodeName, feedName});
+
 export type FeedSliceUpdateAction = ActionWithPayload<"FEED_SLICE_UPDATE", {
     nodeName: string;
     feedName: string;
@@ -290,6 +304,8 @@ export type FeedsAnyAction =
     | FeedFutureSliceLoadFailedAction
     | FeedPastSliceSetAction
     | FeedFutureSliceSetAction
+    | FeedCannotBeLoadedAction
+    | FeedUnsetAction
     | FeedSliceUpdateAction
     | FeedsUpdateAction
     | FeedScrolledAction

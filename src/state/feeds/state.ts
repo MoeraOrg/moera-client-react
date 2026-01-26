@@ -20,6 +20,7 @@ export interface FeedState extends Omit<FeedInfo, "feedName"> {
     status: FeedStatus;
     loadingFuture: boolean;
     loadingPast: boolean;
+    cannotBeLoaded: boolean;
     before: number;
     after: number;
     stories: ExtStoryInfo[];

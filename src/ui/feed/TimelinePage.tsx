@@ -72,7 +72,7 @@ export default function TimelinePage() {
                             onNavigationUpdate={onNavigationUpdate}
                         />
                     :
-                        <FeedNoContent feedName="timeline"/>
+                        <FeedNoContent nodeName={REL_CURRENT} feedName="timeline"/>
                     }
                 </main>
                 <div className="page-right-pane">

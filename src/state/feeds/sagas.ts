@@ -1,8 +1,9 @@
 import i18n from 'i18next';
 
-import { Node, NodeApiError, PrincipalValue, StoryInfo } from "api";
+import { NameResolvingError, Node, NodeApiError, PrincipalValue, StoryInfo } from "api";
 import { ClientAction } from "state/action";
 import {
+    feedCannotBeLoaded,
     FeedFutureSliceLoadAction,
     feedFutureSliceLoadFailed,
     feedFutureSliceSet,
@@ -51,6 +52,7 @@ import { flashBox } from "state/flashbox/actions";
 import { getInstantTypeDetails } from "ui/instant/instant-types";
 import { absoluteNodeName, REL_HOME } from "util/rel-node-name";
 import { delay } from "util/misc";
+import { NodeConnectionError } from "api/error";
 
 export default [
     executor(
@@ -246,10 +248,8 @@ async function feedPastSliceLoadSaga(action: WithContext<FeedPastSliceLoadAction
         ).causedBy(action));
         await fillSubscriptions(action, slice.stories);
     } catch (e) {
-        if (e instanceof NodeApiError) {
-            dispatch(feedPastSliceSet(
-                nodeName, feedName, [], Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER, 0, 0
-            ).causedBy(action));
+        if (e instanceof NodeApiError || e instanceof NodeConnectionError || e instanceof NameResolvingError) {
+            dispatch(feedCannotBeLoaded(nodeName, feedName).causedBy(action));
         } else {
             dispatch(feedPastSliceLoadFailed(nodeName, feedName).causedBy(action));
             dispatch(errorThrown(e));
@@ -271,10 +271,8 @@ async function feedFutureSliceLoadSaga(action: WithContext<FeedFutureSliceLoadAc
         ).causedBy(action));
         await fillSubscriptions(action, slice.stories);
     } catch (e) {
-        if (e instanceof NodeApiError) {
-            dispatch(feedPastSliceSet(
-                nodeName, feedName, [], Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER, 0, 0
-            ).causedBy(action));
+        if (e instanceof NodeApiError || e instanceof NodeConnectionError || e instanceof NameResolvingError) {
+            dispatch(feedCannotBeLoaded(nodeName, feedName).causedBy(action));
         } else {
             dispatch(feedFutureSliceLoadFailed(nodeName, feedName).causedBy(action));
             dispatch(errorThrown(e));

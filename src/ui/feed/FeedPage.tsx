@@ -186,7 +186,7 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
         && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER
     ) {
         return (
-            <FeedNoContent feedName={feedName}/>
+            <FeedNoContent nodeName={nodeName} feedName={feedName}/>
         );
     }
 

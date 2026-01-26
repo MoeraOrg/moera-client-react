@@ -26,6 +26,7 @@ export const emptyFeed: FeedState = {
     status: emptyStatus,
     loadingFuture: false,
     loadingPast: false,
+    cannotBeLoaded: false,
     before: Number.MAX_SAFE_INTEGER,
     after: Number.MAX_SAFE_INTEGER,
     stories: [],
