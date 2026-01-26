@@ -530,6 +530,7 @@
   "not-subscribed-friend": "Nie subskrybujesz jeszcze swojego znajomego. Czy chcesz subskrybować?",
   "not-valid-e-mail": "Nieprawidłowy adres e-mail",
   "numbered-list": "Lista numerowana",
+  "of": "{part} z {total}",
   "ok": "OK",
   "only-new": "Tylko nowe",
   "open": "Otwórz",

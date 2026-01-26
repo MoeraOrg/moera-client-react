@@ -33,9 +33,10 @@ interface Props {
     comment: ExtCommentInfo;
     previousId: string | null;
     focused: boolean;
+    index: number;
 }
 
-export default function Comment({comment, previousId, focused}: Props) {
+export default function Comment({comment, previousId, focused, index}: Props) {
     const connectedToHome = useSelector(isConnectedToHome);
     const isSheriff = useSelector((state: ClientState) => getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE);
     const postingId = useSelector(getDetailedPostingId);
@@ -55,7 +56,7 @@ export default function Comment({comment, previousId, focused}: Props) {
             "focused": focused,
             "single-emoji": comment.singleEmoji,
             "topic-starter": comment.ownerName === postingReceiverName
-        })} data-moment={comment.moment}>
+        })} data-moment={comment.moment} data-index={index}>
             {comment.deleting ?
                 <CommentDeleting/>
             :

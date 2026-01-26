@@ -530,6 +530,7 @@
   "not-subscribed-friend": "Ви ще не підписані на свого друга. Бажаєте підписатися?",
   "not-valid-e-mail": "Неприпустима адреса e-mail",
   "numbered-list": "Нумерований список",
+  "of": "{part} з {total}",
   "ok": "OK",
   "only-new": "Тільки нові",
   "open": "Відкрити",

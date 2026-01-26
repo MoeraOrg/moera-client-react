@@ -530,6 +530,7 @@
   "not-subscribed-friend": "You are not yet subscribed to your friend. Do you want to subscribe?",
   "not-valid-e-mail": "Not a valid e-mail address",
   "numbered-list": "Numbered list",
+  "of": "{part} of {total}",
   "ok": "OK",
   "only-new": "Only new",
   "open": "Open",

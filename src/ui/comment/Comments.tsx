@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -24,6 +24,8 @@ import {
     isDetailedPostingGalleryFocused
 } from "state/detailedposting/selectors";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
+import { FeedTopBox } from "ui/control";
+import CommentsNavigator from "ui/comment/CommentsNavigator";
 import CommentComposeLine from "ui/comment/compose/CommentComposeLine";
 import CommentsSentinelLine from "ui/comment/CommentsSentinelLine";
 import Comment from "ui/comment/Comment";
@@ -36,7 +38,8 @@ export default function Comments() {
     const visible = useSelector(isAtDetailedPostingPage);
     const galleryFocused = useSelector(isDetailedPostingGalleryFocused);
     const total = useSelector((state: ClientState) =>
-        isDetailedPostingCached(state) ? (getDetailedPosting(state)!.totalComments ?? 0) : 0);
+        isDetailedPostingCached(state) ? (getDetailedPosting(state)!.totalComments ?? 0) : 0
+    );
     const loadingFuture = useSelector((state: ClientState) => getCommentsState(state).loadingFuture);
     const loadingPast = useSelector((state: ClientState) => getCommentsState(state).loadingPast);
     const before = useSelector((state: ClientState) => getCommentsState(state).before);
@@ -44,14 +47,16 @@ export default function Comments() {
     const totalInPast = useSelector((state: ClientState) => getCommentsState(state).totalInPast);
     const totalInFuture = useSelector((state: ClientState) => getCommentsState(state).totalInFuture);
     const comments = useSelector((state: ClientState) =>
-        isCommentsShowInvisible(state) ? getCommentsWithVisibility(state) : getVisibleComments(state));
+        isCommentsShowInvisible(state) ? getCommentsWithVisibility(state) : getVisibleComments(state)
+    );
     const anchor = useSelector((state: ClientState) => getCommentsState(state).anchor);
     const focusedCommentId = useSelector((state: ClientState) => getCommentsState(state).focusedCommentId);
     const focused = useSelector(isCommentsFocused);
     const composerFocused = useSelector(isCommentComposerFocused);
     const showCommentDialog = useSelector((state: ClientState) => state.detailedPosting.commentDialog.show);
     const commentsVisible = useSelector((state: ClientState) =>
-        isPermitted("viewComments", getDetailedPosting(state), "public", state));
+        isPermitted("viewComments", getDetailedPosting(state), "public", state)
+    );
 
     const dispatch = useDispatch();
     const {t} = useTranslation();
@@ -112,6 +117,40 @@ export default function Comments() {
         dispatch(commentsPastSliceLoad(null));
     }
 
+    const [fromIndex, setFromIndex] = React.useState(-1);
+    const [toIndex, setToIndex] = React.useState(-1);
+
+    const onScroll = useCallback(() => {
+        const top = getPageHeaderHeight();
+        const bottom = window.innerHeight;
+        let topIndex = -1;
+        let bottomIndex = -1;
+        const comments = document.getElementsByClassName("comment");
+        for (let i = 0; i < comments.length; i++) {
+            const comment = comments.item(i) as HTMLElement;
+            if (comment == null) {
+                continue;
+            }
+            const index = commentIndex(comment);
+            if (comment.getBoundingClientRect().top <= top) {
+                topIndex = index;
+            }
+            if (comment.getBoundingClientRect().top > bottom) {
+                break;
+            }
+            bottomIndex = index;
+        }
+        setFromIndex(topIndex);
+        setToIndex(bottomIndex);
+    }, []);
+
+    useEffect(() => {
+        if (visible) {
+            window.addEventListener("scroll", onScroll);
+        }
+        return () => window.removeEventListener("scroll", onScroll);
+    }, [onScroll, visible]);
+
     if (!commentsVisible) {
         return <div id="comments" className="disabled">{t("comments-disabled")}</div>;
     }
@@ -121,12 +160,16 @@ export default function Comments() {
 
     return (
         <>
+            <FeedTopBox>
+                {fromIndex >= 0 && toIndex >= 0 && total > 1 &&
+                    <CommentsNavigator from={fromIndex} to={toIndex} total={total}/>
+                }
+            </FeedTopBox>
             <div id="comments">
                 {empty ||
                     <>
                         {comments.length > 0 &&
                             <CommentsSentinelLine
-                                end={false}
                                 loading={loadingPast}
                                 title={t("view-earlier-comments")}
                                 total={totalInPast}
@@ -140,10 +183,10 @@ export default function Comments() {
                                 comment={comment}
                                 previousId={index > 0 ? comments[index - 1].id : null}
                                 focused={comment.id === focusedCommentId}
+                                index={totalInPast + index}
                             />
                         )}
                         <CommentsSentinelLine
-                            end={true}
                             loading={loadingFuture}
                             title={
                                 comments.length !== 0
@@ -169,6 +212,10 @@ export default function Comments() {
 
 function commentMoment(comment: HTMLElement): number {
     return comment.dataset.moment != null ? parseInt(comment.dataset.moment) : 0;
+}
+
+function commentIndex(comment: HTMLElement): number {
+    return comment.dataset.index != null ? parseInt(comment.dataset.index) : 0;
 }
 
 function getTopmostMoment(): number | null {
