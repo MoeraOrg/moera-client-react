@@ -149,3 +149,9 @@ INPUT[type="search"]::-webkit-search-cancel-button {
 .react-datepicker__portal .react-datepicker__navigation-icon {
     line-height: 12px;
 }
+
+@supports (-webkit-touch-callout: none) {
+    .form-control {
+        font-size: max(1rem, 16px);
+    }
+}
