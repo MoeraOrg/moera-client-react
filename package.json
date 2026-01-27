@@ -1,6 +1,6 @@
 {
   "name": "moera-client-react",
-  "version": "0.17.16-SNAPSHOT",
+  "version": "0.17.16",
   "private": true,
   "homepage": "/",
   "dependencies": {
