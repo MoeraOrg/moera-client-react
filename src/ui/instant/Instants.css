@@ -47,12 +47,6 @@
     }
 }
 
-#instants .build-number {
-    color: var(--bs-gray-500);
-    font-size: .7rem;
-    align-self: flex-end;
-}
-
 #instants .action {
     color: var(--violet-600);
     font-size: 1rem;
@@ -68,7 +62,6 @@
     max-width: 800px;
     max-height: 70vh;
     overflow-y: auto;
-    overscroll-behavior-y: none;
 }
 
 @media only screen and (max-width: 991px) {
@@ -76,6 +69,12 @@
         max-width: 100vw;
         max-height: unset;
         height: calc(100vh - 5.75rem);
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    #instants > .content {
+        overscroll-behavior-y: none;
     }
 }
 
