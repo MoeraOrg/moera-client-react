@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { AvatarImage } from "api";
+import { AvatarImage, NodeName } from "api";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { getSetting } from "state/settings/selectors";
@@ -77,10 +77,11 @@ function AvatarImpl(
             fontSize: `${size / 3}px`,
             filter: `hue-rotate(${nameAngle(ownerName)}deg)`
         };
+        const shortName = NodeName.shorten(ownerName);
         return (
             <div title={alt} draggable={draggable} ref={ref} onClick={onClick}
                  className={cx("avatar", `avatar-${shape}`, "avatar-placeholder", className)} style={style}>
-                {(ownerName ?? "XX").substring(0, 2).toUpperCase()}
+                {(shortName ?? "XX").substring(0, 2).toUpperCase()}
             </div>
         );
     }
