@@ -37,8 +37,10 @@ const Emojis = ({className, emojis, total, onClick}: EmojisProps) => (
         null
 );
 
-function filterOutSeniorReaction(reactionTotals: ReactionTotalInfo[],
-                                 seniorReaction: ClientReactionInfo): ReactionTotalInfo[] {
+function filterOutSeniorReaction(
+    reactionTotals: ReactionTotalInfo[],
+    seniorReaction: ClientReactionInfo
+): ReactionTotalInfo[] {
     return reactionTotals.map(
         rt => rt.emoji !== seniorReaction.emoji || rt.total == null
             ? rt

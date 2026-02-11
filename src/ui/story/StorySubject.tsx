@@ -1,8 +1,8 @@
 import React from 'react';
 
 import Jump from "ui/navigation/Jump";
-import "./StorySubject.css";
 import { RelNodeName } from "util/rel-node-name";
+import "./StorySubject.css";
 
 interface Props {
     subjectHtml?: string | null;
