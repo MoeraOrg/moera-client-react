@@ -52,7 +52,7 @@ export default function FeedNoContent({nodeName, feedName}: Props) {
                         <NoPosts/>
                         <div className="caption">{tTitle(t("no-posts-yet"))}</div>
                         <div className="instructions">
-                            {atHome ? t("you-havent-posted-anything") : t("user-havent-posted-anything")}
+                            {atHome ? t("you-havent-posted-anything") : t("user-hasnt-posted-anything")}
                         </div>
                         {atHome &&
                             <Jump nodeName={REL_HOME} href="/compose" className="btn btn-primary">

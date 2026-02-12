@@ -1114,7 +1114,7 @@
   "used-by-addon": "Используется дополнением:",
   "user-asks-not-publish-complaint": "Пользователь просит не публиковать эту жалобу",
   "user-comments-hidden": "Комментарии этого пользователя скрываются",
-  "user-havent-posted-anything": "Пользователь пока ничего не написал",
+  "user-hasnt-posted-anything": "Пользователь пока ничего не написал",
   "validating-access-request": "Проверка запроса на доступ",
   "verification-code": "Код подтверждения",
   "verify-signature": "Проверить подпись",
