@@ -5,6 +5,7 @@ import { BlockedByUserInfo, BlockedUserInfo, FriendGroupDetails, ProfileInfo } f
 import { NodeCardsState, NodeCardState } from "state/nodecards/state";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
+import { safeHtml } from "util/html";
 
 const emptyProfileInfo: ProfileInfo = {
     fullName: null,
@@ -140,13 +141,15 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
 
         case "NODE_CARD_DETAILS_SET": {
             const {nodeName, profile} = action.payload;
+            const profileInfo = cloneDeep(profile);
+            profileInfo.bioHtml = safeHtml(profileInfo.bioHtml, null, false);
             return getCard(state, nodeName).istate
                 .assign(["cards", nodeName, "details"], {
                     loading: false,
                     loaded: true,
                     profile: {
                         ...cloneDeep(emptyProfileInfo),
-                        ...cloneDeep(profile)
+                        ...profileInfo
                     }
                 })
                 .value();

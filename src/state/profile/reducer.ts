@@ -4,6 +4,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { AvatarInfo } from "api";
 import { ProfileState } from "state/profile/state";
 import { ClientAction } from "state/action";
+import { safeHtml } from "util/html";
 import { arrayMove } from "util/misc";
 
 const emptyProfileInfo = {
@@ -67,11 +68,13 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
             };
 
         case "PROFILE_SET":
+            const profileInfo = cloneDeep(action.payload.profile);
+            profileInfo.bioHtml = safeHtml(profileInfo.bioHtml, null, false);
             return {
                 ...state,
                 profile: {
                     ...cloneDeep(emptyProfileInfo),
-                    ...cloneDeep(action.payload.profile)
+                    ...profileInfo
                 },
                 loading: false,
                 loaded: true,
