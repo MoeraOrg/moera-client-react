@@ -35,7 +35,7 @@ export type SearchContentUpdateType = "block" | "comment-add" | "comment-update"
     | "posting-update-heading" | "posting-update-media-text" | "posting-delete" | "reaction-add" | "reaction-delete"
     | "reactions-delete-all" | "subscribe" | "unblock" | "unfriend" | "unsubscribe";
 
-export type SearchEngine = "google" | "bing";
+export type SearchEngine = "google" | "bing" | "yandex";
 
 export type SearchEntryType = "all" | "posting" | "comment";
 
