@@ -174,6 +174,7 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
                 option(CLIENT_SETTINGS_PREFIX + "posting.media.compress.default", 0),
                 option(CLIENT_SETTINGS_PREFIX + "posting.smileys.enabled", 0),
                 option(CLIENT_SETTINGS_PREFIX + "rich-text-editor.links.remove-tracking", 0),
+                option(CLIENT_SETTINGS_PREFIX + "link.new-window", 0),
                 option(CLIENT_SETTINGS_PREFIX + "posting.time.relative"),
                 option(CLIENT_SETTINGS_PREFIX + "rich-text-editor.link-previews.max-automatic"),
             ]),
