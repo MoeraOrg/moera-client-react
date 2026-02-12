@@ -1,6 +1,7 @@
 import sanitizeHtml, { Attributes, IOptions, Tag, Transformer } from 'sanitize-html';
 import { EmojiEntity, parse as parseEmojis } from 'twemoji-parser';
 import * as HtmlEntities from 'html-entities';
+import * as immutable from 'object-path-immutable';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
 import { twemojiUrl } from "util/twemoji";
@@ -40,19 +41,26 @@ function createDimensionsTransformer(media: MediaAttachment[] | null | undefined
     }
 }
 
-function createAnchorTransformers(): { [tagName: string]: string | Transformer } {
+function createAnchorTransformers(noFollow: boolean): { [tagName: string]: string | Transformer } {
     const postPrefix = `${prefixIndex++}_`;
     return {
-        'a': (tagName: string, attribs: Attributes) => {
-            return !(attribs.href && attribs.href.startsWith('#')) ? { tagName, attribs } : {
-                tagName,
-                attribs: {...attribs, href: `#${postPrefix}${attribs.href.slice(1)}`}
-            };
+        "a": (tagName: string, attribs: Attributes) => {
+            const iattribs = immutable.wrap(attribs);
+            if (noFollow) {
+                iattribs.set("rel", "nofollow");
+            }
+            if (attribs.href && attribs.href.startsWith('#')) {
+                iattribs.set("href", `#${postPrefix}${attribs.href.slice(1)}`);
+            }
+            return { tagName, attribs: iattribs.value() };
         },
-        '*': (tagName: string, attribs: Attributes) => !attribs.id ? { tagName, attribs } : {
-            tagName,
-            attribs: {...attribs, id: postPrefix + attribs.id}
-        }
+        "*": (tagName: string, attribs: Attributes) =>
+            !attribs.id
+                ? { tagName, attribs }
+                : {
+                    tagName,
+                    attribs: {...attribs, id: postPrefix + attribs.id}
+                }
     }
 }
 
@@ -65,7 +73,7 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
         ...sanitizeHtml.defaults.allowedAttributes,
         "*": ["dir", "id", "data-*"],
         img: ["src", "srcset", "width", "height", "alt", "title", "style"],
-        a: ["href", "title", "data-nodename", "data-href"],
+        a: ["href", "title", "rel", "data-nodename", "data-href"],
         b: ["style"],
         p: ["style"],
         ol: ["start", "type"],
@@ -198,7 +206,11 @@ export function replaceEmojis(html: string | null | undefined): string {
     return current;
 }
 
-export function safePreviewHtml(html: string | null | undefined, media: MediaAttachment[] | null | undefined): string {
+export function safePreviewHtml(
+    html: string | null | undefined,
+    media: MediaAttachment[] | null | undefined,
+    noFollowOnLinks: boolean
+): string {
     if (!html) {
         return "";
     }
@@ -206,13 +218,17 @@ export function safePreviewHtml(html: string | null | undefined, media: MediaAtt
         ...SAFE_PREVIEW_HTML_SETTINGS,
         transformTags: {
             ...SAFE_PREVIEW_HTML_SETTINGS.transformTags,
-            ...createAnchorTransformers(),
+            ...createAnchorTransformers(noFollowOnLinks),
             img: createDimensionsTransformer(media)
         }
     });
 }
 
-export function safeHtml(html: string | null | undefined, media: MediaAttachment[] | null | undefined): string {
+export function safeHtml(
+    html: string | null | undefined,
+    media: MediaAttachment[] | null | undefined,
+    noFollowOnLinks: boolean
+): string {
     if (!html) {
         return "";
     }
@@ -220,7 +236,7 @@ export function safeHtml(html: string | null | undefined, media: MediaAttachment
         ...SAFE_HTML_SETTINGS,
         transformTags: {
             ...SAFE_HTML_SETTINGS.transformTags,
-            ...createAnchorTransformers(),
+            ...createAnchorTransformers(noFollowOnLinks),
             img: createDimensionsTransformer(media)
         }
     });

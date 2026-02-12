@@ -42,15 +42,24 @@ function Content({nodeName, posting}: ContentProps) {
     if (posting.bodyPreview != null && posting.bodyPreview.text) {
         return (
             <div className="content">
-                <EntryHtml postingId={posting.id} html={posting.bodyPreview.text} nodeName={nodeName}
-                           media={posting.media}/>
+                <EntryHtml
+                    postingId={posting.id}
+                    html={posting.bodyPreview.text}
+                    nodeName={nodeName}
+                    media={posting.media}
+                />
                 <Jump href={ut`/post/${posting.id}`} className="btn btn-link read-more">{t("continue-reading")}</Jump>
             </div>
         );
     } else {
         return (
-            <EntryHtml className="content" postingId={posting.id} html={posting.body.previewText} nodeName={nodeName}
-                       media={posting.media}/>
+            <EntryHtml
+                className="content"
+                postingId={posting.id}
+                html={posting.body.previewText}
+                nodeName={nodeName}
+                media={posting.media}
+            />
         );
     }
 }
@@ -82,19 +91,30 @@ export default function FeedPosting({nodeName, posting, story, hideRecommended}:
                     <br/>
                     <PostingDate posting={posting} publishedAt={story.publishedAt}/>
                     {posting.totalRevisions > 1 &&
-                        <PostingUpdated createdAt={posting.createdAt} editedAt={posting.editedAt}
-                                        publishedAt={story.publishedAt}/>
+                        <PostingUpdated
+                            createdAt={posting.createdAt}
+                            editedAt={posting.editedAt}
+                            publishedAt={story.publishedAt}
+                        />
                     }
                     <PostingVisibility posting={posting} editable={postingEditable}/>
                 </div>
             </div>
             <PostingSubject posting={posting} preview={true}/>
             <Content nodeName={nodeName} posting={posting}/>
-            <EntryGallery postingId={posting.id} nodeName={nodeName} media={posting.media ?? null}
-                          onExpand={() => dispatch(jumpNear(ut`/post/${posting.id}`, "expanded=true", null))}/>
-            <EntryLinkPreviews nodeName={nodeName}
-                               linkPreviews={posting.bodyPreview?.linkPreviews ?? posting.body.linkPreviews}
-                               limit={2} media={posting.media ?? null}/>
+            <EntryGallery
+                postingId={posting.id}
+                nodeName={nodeName}
+                media={posting.media ?? null}
+                onExpand={() => dispatch(jumpNear(ut`/post/${posting.id}`, "expanded=true", null))}
+            />
+            <EntryLinkPreviews
+                nodeName={nodeName}
+                linkPreviews={posting.bodyPreview?.linkPreviews ?? posting.body.linkPreviews}
+                noFollow={false}
+                limit={2}
+                media={posting.media ?? null}
+            />
             <div className="reactions-line">
                 <PostingReactions nodeName={nodeName} postingId={posting.id} reactions={posting.reactions}/>
                 <PostingComments postingId={posting.id} totalComments={posting.totalComments}/>

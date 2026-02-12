@@ -119,6 +119,7 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, feature
                     key={index}
                     nodeName={targetNodeName}
                     url={preview.url}
+                    noFollow={false}
                     title={preview.title}
                     description={preview.description}
                     imageUploading={isImageUploading(linkPreviewsState, preview.url, targetNodeName)}

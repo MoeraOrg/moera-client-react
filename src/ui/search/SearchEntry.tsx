@@ -26,8 +26,13 @@ interface PostingOwnerLineProps {
 
 const PostingOwnerLine = ({entry, href}: PostingOwnerLineProps) => (
     <div className="owner-line">
-        <AvatarWithPopup ownerName={entry.ownerName} ownerFullName={entry.ownerFullName}
-                         nodeName={REL_SEARCH} avatar={entry.ownerAvatar} size={40}/>
+        <AvatarWithPopup
+            ownerName={entry.ownerName}
+            ownerFullName={entry.ownerFullName}
+            nodeName={REL_SEARCH}
+            avatar={entry.ownerAvatar}
+            size={40}
+        />
         <div className="owner-info">
             <span className="owner">
                 <NodeName name={entry.ownerName} fullName={entry.ownerFullName} avatar={entry.ownerAvatar}/>
@@ -49,8 +54,13 @@ interface CommentOwnerLineProps {
 const CommentOwnerLine = ({entry}: CommentOwnerLineProps) => (
     <div className="owner-line">
         <span>
-            <AvatarWithPopup ownerName={entry.ownerName} ownerFullName={entry.ownerFullName}
-                             nodeName={REL_SEARCH} avatar={entry.ownerAvatar} size={32}/>
+            <AvatarWithPopup
+                ownerName={entry.ownerName}
+                ownerFullName={entry.ownerFullName}
+                nodeName={REL_SEARCH}
+                avatar={entry.ownerAvatar}
+                size={32}
+            />
             <span className="owner">
                 <NodeName name={entry.ownerName} fullName={entry.ownerFullName} avatar={entry.ownerAvatar}/>
             </span>
@@ -60,8 +70,12 @@ const CommentOwnerLine = ({entry}: CommentOwnerLineProps) => (
                 <Principal value={entry.operations?.view ?? "public"}/>
                 &middot;
             </span>
-            <CommentDate createdAt={entry.createdAt} nodeName={entry.nodeName} postingId={entry.postingId}
-                         commentId={entry.commentId ?? ""}/>
+            <CommentDate
+                createdAt={entry.createdAt}
+                nodeName={entry.nodeName}
+                postingId={entry.postingId}
+                commentId={entry.commentId ?? ""}
+            />
         </span>
     </div>
 );
@@ -96,9 +110,13 @@ export default function SearchEntry({entry}: Props) {
                     <p className="search-images" dir="auto">
                         {entry.mediaPreviewId != null && entry.mediaPreview != null ?
                             <>
-                                <SearchEntryImagePreview nodeName={entry.nodeName} postingId={entry.postingId}
-                                                         commentId={entry.commentId} mediaId={entry.mediaPreviewId}
-                                                         mediaFile={entry.mediaPreview}/>
+                                <SearchEntryImagePreview
+                                    nodeName={entry.nodeName}
+                                    postingId={entry.postingId}
+                                    commentId={entry.commentId}
+                                    mediaId={entry.mediaPreviewId}
+                                    mediaFile={entry.mediaPreview}
+                                />
                                 {entry.imageCount > 1 ? t("count-images", {count: entry.imageCount}) : ""}
                             </>
                         :
@@ -108,8 +126,13 @@ export default function SearchEntry({entry}: Props) {
                         }
                     </p>
                 }
-                <EntryLinkPreviews nodeName={entry.nodeName} linkPreviews={entry.bodyPreview?.linkPreviews}
-                                   limit={2} media={null}/>
+                <EntryLinkPreviews
+                    nodeName={entry.nodeName}
+                    linkPreviews={entry.bodyPreview?.linkPreviews}
+                    noFollow={false}
+                    limit={2}
+                    media={null}
+                />
                 <Jump nodeName={entry.nodeName} href={href} className="btn btn-link read-more">
                     {tTitle(t(entry.commentId == null ? "view-post" : "view-comment"))}
                 </Jump>

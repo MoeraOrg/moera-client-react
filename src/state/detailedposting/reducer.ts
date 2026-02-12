@@ -123,20 +123,23 @@ function isExtracted(comment: CommentInfo | ExtCommentInfo): comment is ExtComme
     return (comment as ExtCommentInfo).verificationStatus != null;
 }
 
-function extractComment(comment: CommentInfo | ExtCommentInfo): ExtCommentInfo {
+function extractComment(comment: CommentInfo | ExtCommentInfo, receiverName: string | null): ExtCommentInfo {
     if (isExtracted(comment)) { // Already extracted
         return comment;
     }
     const icomment = immutable.wrap(comment as ExtCommentInfo);
     if (comment.bodyPreview == null || !comment.bodyPreview.text) {
-        icomment.set("body.previewText", safePreviewHtml(comment.body.text ?? "", comment.media));
+        icomment.set(
+            "body.previewText",
+            safePreviewHtml(comment.body.text ?? "", comment.media, receiverName !== comment.ownerName)
+        );
     }
     if (comment.repliedTo && comment.repliedTo.heading) {
         icomment.set("repliedTo.headingHtml", replaceEmojis(htmlEntities(comment.repliedTo.heading)));
     }
     return icomment
-        .update("bodyPreview.text", text => safePreviewHtml(text, comment.media))
-        .update("body.text", text => safeHtml(text, comment.media))
+        .update("bodyPreview.text", text => safePreviewHtml(text, comment.media, receiverName !== comment.ownerName))
+        .update("body.text", text => safeHtml(text, comment.media, receiverName !== comment.ownerName))
         .set("deleting", false)
         .set("verificationStatus", "none")
         .set("singleEmoji", isSingleEmojiComment(comment))
@@ -144,8 +147,12 @@ function extractComment(comment: CommentInfo | ExtCommentInfo): ExtCommentInfo {
         .value();
 }
 
-function updateBlocked(state: DetailedPostingState, homeOwnerName: string | null, list: BlockedUserInfo[],
-                       append: boolean): DetailedPostingState {
+function updateBlocked(
+    state: DetailedPostingState,
+    homeOwnerName: string | null,
+    list: BlockedUserInfo[],
+    append: boolean
+): DetailedPostingState {
     const blockedUsers = list.filter(bu =>
         (homeOwnerName === state.comments.receiverName && bu.entryId === state.comments.receiverPostingId)
         || (bu.entryNodeName === state.comments.receiverName && bu.entryPostingId === state.comments.receiverPostingId)
@@ -280,7 +287,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                 const comments = state.comments.comments.slice();
                 action.payload.comments
                     .filter(c => c.moment <= state.comments.after)
-                    .forEach(c => comments.push(extractComment(c)));
+                    .forEach(c => comments.push(extractComment(c, state.comments.receiverName)));
                 comments.sort((a, b) => a.moment - b.moment);
                 istate.assign("comments", {
                     loadingPast: false,
@@ -307,7 +314,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                 const comments = state.comments.comments.slice();
                 action.payload.comments
                     .filter(c => c.moment > state.comments.before)
-                    .forEach(c => comments.push(extractComment(c)));
+                    .forEach(c => comments.push(extractComment(c, state.comments.receiverName)));
                 comments.sort((a, b) => a.moment - b.moment);
                 istate.assign("comments", {
                     loadingFuture: false,
@@ -334,7 +341,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                     .filter(c => c.moment > action.payload.before || c.moment <= action.payload.after);
             action.payload.comments
                 .filter(c => c.moment <= state.comments.before && c.moment > state.comments.after)
-                .forEach(c => comments.push(extractComment(c)));
+                .forEach(c => comments.push(extractComment(c, state.comments.receiverName)));
             comments.sort((a, b) => a.moment - b.moment);
             istate.assign("comments", {comments});
             if (action.payload.before === state.comments.before) {
@@ -640,7 +647,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                     return state;
                 }
                 const comments = state.comments.comments.filter(c => c.id !== comment.id);
-                comments.push(extractComment(comment));
+                comments.push(extractComment(comment, state.comments.receiverName));
                 comments.sort((a, b) => a.moment - b.moment);
                 return immutable.set(state, "comments.comments", comments);
             }
@@ -736,7 +743,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return immutable.assign(state, "comments", {
                 before: comment.moment,
                 after: comment.moment - 1,
-                comments: [extractComment(comment)],
+                comments: [extractComment(comment, state.comments.receiverName)],
                 totalInFuture: 0,
                 totalInPast: 0,
                 anchor: comment.moment,
@@ -884,7 +891,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return immutable.assign(state, "comments", {
                 loadingGlanceComment: false,
                 loadedGlanceComment: true,
-                glanceComment: extractComment(comment)
+                glanceComment: extractComment(comment, state.comments.receiverName)
             });
         }
 

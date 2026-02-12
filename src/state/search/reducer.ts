@@ -35,7 +35,7 @@ function safeguard(entry: SearchEntryInfo): ExtSearchEntryInfo {
         ientry.set("bodyPreview.subjectHtml", replaceEmojis(htmlEntities(ellipsize(subjectPreview, MAX_SHORT_TITLE))));
     }
     return ientry
-        .update("bodyPreview.text", text => safePreviewHtml(text, null))
+        .update("bodyPreview.text", text => safePreviewHtml(text, null, false))
         .value();
 }
 

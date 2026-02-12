@@ -55,7 +55,7 @@ export default function Comment({comment, previousId, focused, index}: Props) {
         <article className={cx("comment", "entry", {
             "focused": focused,
             "single-emoji": comment.singleEmoji,
-            "topic-starter": comment.ownerName === postingReceiverName
+            "topic-starter": comment.ownerName === realOwnerName
         })} data-moment={comment.moment} data-index={index}>
             {comment.deleting ?
                 <CommentDeleting/>
@@ -64,8 +64,12 @@ export default function Comment({comment, previousId, focused, index}: Props) {
                     <CommentMenu comment={comment} nodeName={realOwnerName} postingId={postingId}/>
                     <div className="owner-line">
                         <span>
-                            <CommentAvatar ownerName={comment.ownerName} ownerFullName={comment.ownerFullName}
-                                           avatar={comment.ownerAvatar} nodeName={realOwnerName}/>
+                            <CommentAvatar
+                                ownerName={comment.ownerName}
+                                ownerFullName={comment.ownerFullName}
+                                avatar={comment.ownerAvatar}
+                                nodeName={realOwnerName}
+                            />
                             <CommentOwner comment={comment} nodeName={realOwnerName}/>
                             {comment.invisible && <CommentInvisible/>}
                             {isSheriff &&
@@ -74,25 +78,42 @@ export default function Comment({comment, previousId, focused, index}: Props) {
                         </span>
                         <span>
                             <CommentVisibility comment={comment}/>
-                            <CommentDate nodeName={realOwnerName} postingId={realPostingId} commentId={comment.id}
-                                         createdAt={comment.createdAt}/>
+                            <CommentDate
+                                nodeName={realOwnerName}
+                                postingId={realPostingId}
+                                commentId={comment.id}
+                                createdAt={comment.createdAt}
+                            />
                             {comment.totalRevisions > 1 &&
                                 <CommentUpdated createdAt={comment.createdAt} editedAt={comment.editedAt}/>
                             }
                         </span>
                     </div>
                     <CommentContent comment={comment} previousId={previousId} receiverName={realOwnerName}/>
-                    <EntryGallery postingId={realPostingId} commentId={comment.id} nodeName={realOwnerName}
-                                  media={comment.media ?? null}/>
-                    <EntryLinkPreviews nodeName={realOwnerName} linkPreviews={comment.body.linkPreviews} limit={2}
-                                       media={comment.media ?? null} small/>
+                    <EntryGallery
+                        postingId={realPostingId}
+                        commentId={comment.id}
+                        nodeName={realOwnerName}
+                        media={comment.media ?? null}
+                    />
+                    <EntryLinkPreviews
+                        nodeName={realOwnerName}
+                        linkPreviews={comment.body.linkPreviews}
+                        noFollow={comment.ownerName !== realOwnerName}
+                        limit={2}
+                        media={comment.media ?? null}
+                        small
+                    />
                     <div className="reactions-line">
                         {comment.signature == null && <div className="unsigned">{t("unsigned")}</div>}
                         {connectedToHome && comment.signature != null &&
                             <CommentButtons nodeName={realOwnerName} postingId={realPostingId} comment={comment}/>
                         }
-                        <CommentReactions commentId={comment.id} reactions={comment.reactions ?? null}
-                                          seniorReaction={comment.seniorReaction ?? null}/>
+                        <CommentReactions
+                            commentId={comment.id}
+                            reactions={comment.reactions ?? null}
+                            seniorReaction={comment.seniorReaction ?? null}
+                        />
                     </div>
                 </>
             }

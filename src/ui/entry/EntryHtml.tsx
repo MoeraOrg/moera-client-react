@@ -177,6 +177,11 @@ export default function EntryHtml({
                 node.addEventListener("click", interceptLinkClick);
                 if (openInNewWindow) {
                     node.setAttribute("target", "_blank");
+                    let rel = node.getAttribute("rel");
+                    if (!rel?.includes("noreferrer")) {
+                        rel = rel ? rel + " noreferrer" : "noreferrer";
+                    }
+                    node.setAttribute("rel", rel);
                 }
             }
         });

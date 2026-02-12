@@ -18,7 +18,7 @@ const initialState: PostingsState = {
 function safeguard(posting: PostingInfo): ExtPostingInfo {
     const iposting = immutable.wrap(posting);
     if (posting.bodyPreview == null || !posting.bodyPreview.text) {
-        iposting.set("body.previewText", safePreviewHtml(posting.body.text, posting.media));
+        iposting.set("body.previewText", safePreviewHtml(posting.body.text, posting.media, false));
     }
     const subjectPreview = posting.bodyPreview?.subject || posting.body.subject;
     if (subjectPreview) {
@@ -28,8 +28,8 @@ function safeguard(posting: PostingInfo): ExtPostingInfo {
         iposting.set("body.subjectHtml", replaceEmojis(htmlEntities(posting.body.subject)));
     }
     return iposting
-        .update("bodyPreview.text", text => safePreviewHtml(text, posting.media))
-        .update("body.text", text => safeHtml(text, posting.media))
+        .update("bodyPreview.text", text => safePreviewHtml(text, posting.media, false))
+        .update("body.text", text => safeHtml(text, posting.media, false))
         .value();
 }
 

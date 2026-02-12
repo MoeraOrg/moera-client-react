@@ -19,6 +19,7 @@ interface Props {
     nodeName: RelNodeName | string;
     siteName?: string | null;
     url?: string | null;
+    noFollow: boolean;
     title?: string | null;
     description?: string | null;
     imageUploading?: boolean;
@@ -32,8 +33,8 @@ interface Props {
 }
 
 export function EntryLinkPreview({
-    nodeName, siteName, url, title, description, imageUploading, imageHash, media, small = false, editing, disabled,
-    onUpdate, onDelete
+    nodeName, siteName, url, noFollow, title, description, imageUploading, imageHash, media, small = false, editing,
+    disabled, onUpdate, onDelete
 }: Props) {
     const [edit, setEdit] = useState<boolean>(false);
 
@@ -68,7 +69,7 @@ export function EntryLinkPreview({
     }
 
     return (
-        <Frame className={cx("link-preview", {large, small})} url={url}
+        <Frame className={cx("link-preview", {large, small})} url={url} noFollow={noFollow}
                editing={editing && !disabled} onEdit={onEdit} onDelete={onDelete}>
             <EntryLinkPreviewImage nodeName={nodeName} mediaFile={mediaFile} loading={imageUploading ?? false}/>
             <div className="details">
@@ -97,12 +98,13 @@ interface FrameProps {
     editing?: boolean;
     className: string;
     url: string;
+    noFollow: boolean;
     onEdit?: MouseEventHandler;
     onDelete?: MouseEventHandler;
     children: React.ReactNode;
 }
 
-function Frame({editing, className, url, children, onEdit, onDelete}: FrameProps) {
+function Frame({editing, className, url, noFollow, children, onEdit, onDelete}: FrameProps) {
     const openInNewWindow = useSelector((state: ClientState) => getSetting(state, "link.new-window") as boolean);
     const {t} = useTranslation();
 
@@ -122,8 +124,9 @@ function Frame({editing, className, url, children, onEdit, onDelete}: FrameProps
         const onClick = (event: React.MouseEvent) => interceptLinkClick(event);
 
         return (
+            // eslint-disable-next-line react/jsx-no-target-blank
             <a className={className} href={url} onClick={onClick} target={openInNewWindow ? "_blank" : undefined}
-               rel="noreferrer">
+               rel={cx("noreferrer", {"nofollow": noFollow})}>
                 {children}
             </a>
         );

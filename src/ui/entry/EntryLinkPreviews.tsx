@@ -9,12 +9,13 @@ import { RelNodeName } from "util/rel-node-name";
 interface Props {
     nodeName: RelNodeName | string;
     linkPreviews: (LinkPreview | null | undefined)[] | null | undefined;
+    noFollow: boolean;
     limit?: number;
     small?: boolean | null;
     media: MediaAttachment[] | null;
 }
 
-export default function EntryLinkPreviews({nodeName, linkPreviews, limit, small, media}: Props) {
+export default function EntryLinkPreviews({nodeName, linkPreviews, noFollow, limit, small, media}: Props) {
     const [expanded, setExpanded] = useState<boolean>(false);
     const {t} = useTranslation();
 
@@ -37,6 +38,7 @@ export default function EntryLinkPreviews({nodeName, linkPreviews, limit, small,
                         key={index}
                         nodeName={nodeName}
                         url={linkPreview.url}
+                        noFollow={noFollow}
                         title={linkPreview.title}
                         description={linkPreview.description}
                         imageHash={linkPreview.imageHash}

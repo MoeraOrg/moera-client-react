@@ -3,7 +3,12 @@ import { useSelector } from 'react-redux';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
-import { getCommentsReceiverName, getCommentsState, getDetailedPostingId } from "state/detailedposting/selectors";
+import {
+    getCommentsReceiverName,
+    getCommentsState,
+    getDetailedPosting,
+    getDetailedPostingId
+} from "state/detailedposting/selectors";
 import { Loading } from "ui/control";
 import CommentOwner from "ui/comment/CommentOwner";
 import CommentDate from "ui/comment/CommentDate";
@@ -11,16 +16,17 @@ import CommentUpdated from "ui/comment/CommentUpdated";
 import EntryHtml from "ui/entry/EntryHtml";
 import EntryGallery from "ui/entry/EntryGallery";
 import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
-import { REL_CURRENT } from "util/rel-node-name";
 
 export default function GlanceComment() {
     const loading = useSelector((state: ClientState) => getCommentsState(state).loadingGlanceComment);
     const loaded = useSelector((state: ClientState) => getCommentsState(state).loadedGlanceComment);
     const postingId = useSelector(getDetailedPostingId);
+    const postingOwnerName = useSelector((state: ClientState) => getDetailedPosting(state)?.ownerName);
     const receiverName = useSelector(getCommentsReceiverName);
     const comment = useSelector((state: ClientState) => getCommentsState(state).glanceComment);
 
-    if (!loaded || loading || postingId == null || comment == null) {
+    const realOwnerName = receiverName ?? postingOwnerName;
+    if (!loaded || loading || postingId == null || realOwnerName == null || comment == null) {
         return (loading ? <Loading/> : null);
     }
 
@@ -36,13 +42,26 @@ export default function GlanceComment() {
                 </span>
             </div>
             <div className="content">
-                <EntryHtml postingId={comment.postingId} commentId={comment.id} html={comment.body.text}
-                           nodeName={receiverName ?? REL_CURRENT} media={comment.media}/>
+                <EntryHtml
+                    postingId={comment.postingId}
+                    commentId={comment.id}
+                    html={comment.body.text}
+                    nodeName={realOwnerName}
+                    media={comment.media}
+                />
             </div>
-            <EntryGallery postingId={comment.postingId} commentId={comment.id}
-                          nodeName={receiverName ?? REL_CURRENT} media={comment.media ?? null}/>
-            <EntryLinkPreviews nodeName={receiverName ?? REL_CURRENT} linkPreviews={comment.body.linkPreviews}
-                               media={comment.media ?? null}/>
+            <EntryGallery
+                postingId={comment.postingId}
+                commentId={comment.id}
+                nodeName={realOwnerName}
+                media={comment.media ?? null}
+            />
+            <EntryLinkPreviews
+                nodeName={realOwnerName}
+                linkPreviews={comment.body.linkPreviews}
+                noFollow={comment.ownerName !== realOwnerName}
+                media={comment.media ?? null}
+            />
         </div>
     );
 }

@@ -79,31 +79,51 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
                     <br/>
                     <PostingDate posting={posting} publishedAt={story != null ? story.publishedAt : posting.createdAt}/>
                     {posting.totalRevisions > 1 &&
-                        <PostingUpdated createdAt={posting.createdAt} editedAt={posting.editedAt}
-                                        publishedAt={story != null ? story.publishedAt : posting.createdAt}/>
+                        <PostingUpdated
+                            createdAt={posting.createdAt}
+                            editedAt={posting.editedAt}
+                            publishedAt={story != null ? story.publishedAt : posting.createdAt}
+                        />
                     }
                     <PostingVisibility posting={posting} editable={postingEditable}/>
                 </div>
             </div>
             <PostingSubject posting={posting} preview={false}/>
-            <EntryHtml className="content" postingId={posting.id} html={posting.body.text} nodeName={REL_CURRENT}
-                       media={posting.media}/>
+            <EntryHtml
+                className="content"
+                postingId={posting.id}
+                html={posting.body.text}
+                nodeName={REL_CURRENT}
+                media={posting.media}
+            />
             {!expanded &&
                 <div id="posting-gallery" className="gallery-collapsed">
-                    <EntryGallery postingId={posting.id} nodeName={REL_CURRENT} media={posting.media ?? null}
-                                  onExpand={onExpand}/>
+                    <EntryGallery
+                        postingId={posting.id}
+                        nodeName={REL_CURRENT}
+                        media={posting.media ?? null}
+                        onExpand={onExpand}
+                    />
                 </div>
             }
-            <EntryLinkPreviews nodeName={REL_CURRENT} linkPreviews={posting.body.linkPreviews}
-                               media={posting.media ?? null}/>
+            <EntryLinkPreviews
+                nodeName={REL_CURRENT}
+                linkPreviews={posting.body.linkPreviews}
+                noFollow={false}
+                media={posting.media ?? null}
+            />
             <div className="reactions-line">
                 <PostingReactions nodeName={REL_CURRENT} postingId={posting.id} reactions={posting.reactions}/>
                 <PostingComments postingId={posting.id} totalComments={posting.totalComments}/>
             </div>
             <PostingButtons posting={posting} story={story} menu/>
             {expanded &&
-                <EntryGalleryExpanded postingId={posting.id} nodeName={REL_CURRENT} media={posting.media ?? null}
-                                      onCollapse={onCollapse}/>
+                <EntryGalleryExpanded
+                    postingId={posting.id}
+                    nodeName={REL_CURRENT}
+                    media={posting.media ?? null}
+                    onCollapse={onCollapse}
+                />
             }
             {posting.receiverDeletedAt == null &&
                 <Comments/>
