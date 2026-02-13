@@ -42,6 +42,7 @@ import {
     settingsNodeMetaLoadFailed,
     SettingsNodeValuesLoadAction,
     settingsNodeValuesLoaded,
+    SettingsNodeValuesLoadedAction,
     settingsNodeValuesLoadFailed,
     SettingsPluginsDeleteAction,
     settingsPluginsDeleted,
@@ -60,6 +61,7 @@ import {
     SettingsTokensUpdateAction,
     settingsTokensUpdated,
     settingsTokensUpdateFailed,
+    settingsUpdate,
     SettingsUpdateAction,
     settingsUpdateFailed,
     settingsUpdateSucceeded,
@@ -67,7 +69,14 @@ import {
 } from "state/settings/actions";
 import { errorThrown } from "state/error/actions";
 import { executor } from "state/executor";
-import { getSetting, getSettingsClient, getSettingsClientMeta } from "state/settings/selectors";
+import {
+    getSetting,
+    getSettingNode,
+    getSettingsClient,
+    getSettingsClientMeta,
+    isSettingsClientValuesLoaded,
+    isSettingsNodeLoaded
+} from "state/settings/selectors";
 import { mnemonicSet } from "state/nodename/actions";
 import { flashBox } from "state/flashbox/actions";
 import { messageBox } from "state/messagebox/actions";
@@ -77,6 +86,7 @@ import { clipboardCopy } from "util/clipboard";
 
 export default [
     executor("SETTINGS_NODE_VALUES_LOAD", "", settingsNodeValuesLoadSaga),
+    executor("SETTINGS_NODE_VALUES_LOADED", "", settingsNodeValuesLoadedSaga),
     executor("SETTINGS_NODE_META_LOAD", "", settingsNodeMetaLoadSaga),
     executor("SETTINGS_CLIENT_VALUES_LOAD", "", settingsClientValuesLoadSaga),
     executor("SETTINGS_CLIENT_VALUES_LOADED", "", settingsClientValuesLoadedSaga),
@@ -169,12 +179,31 @@ async function updateLanguage(caller: ClientAction): Promise<void> {
             dispatch(settingsLanguageChanged().causedBy(caller));
         }
     }
+    updateEmailLanguage(caller);
 }
 
 async function settingsClientValuesLoadedSaga(action: SettingsClientValuesLoadedAction): Promise<void> {
     await updateLanguage(action);
     if (!action.payload.stored) {
         storeSettings();
+    }
+}
+
+function settingsNodeValuesLoadedSaga(action: SettingsNodeValuesLoadedAction): void {
+    updateEmailLanguage(action);
+}
+
+function updateEmailLanguage(caller: ClientAction): void {
+    const clientSettingsLoaded = select(isSettingsClientValuesLoaded);
+    const nodeSettingsLoaded = select(isSettingsNodeLoaded);
+
+    if (!clientSettingsLoaded || !nodeSettingsLoaded) {
+        return;
+    }
+
+    const lang = select(state => getSettingNode(state, "email.language") as string);
+    if (lang !== i18n.language) {
+        dispatch(settingsUpdate([{name: "email.language", value: i18n.language}]).causedBy(caller));
     }
 }
 

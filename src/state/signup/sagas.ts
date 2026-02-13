@@ -1,3 +1,5 @@
+import i18n from 'i18next';
+
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import PROVIDERS, { Provider } from "providers";
 import { CLIENT_SETTINGS_PREFIX, Naming, Node, NodeApiError, SettingInfo } from "api";
@@ -147,7 +149,10 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
             if (email) {
                 await Node.updateProfile(action, rootLocation, {email});
             }
-            const settings: SettingInfo[] = [{name: CLIENT_SETTINGS_PREFIX + "language", value: language}];
+            const settings: SettingInfo[] = [
+                {name: CLIENT_SETTINGS_PREFIX + "language", value: language},
+                {name: "email.language", value: i18n.language}
+            ];
             if (googlePlayAllowed) {
                 settings.push({name: "sheriffs.timeline", value: serializeSheriffs([SHERIFF_GOOGLE_PLAY_TIMELINE])});
             }

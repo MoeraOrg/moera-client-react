@@ -877,6 +877,8 @@
       "comment_max-size_soft": "Максимальный размер комментариев",
       "comment_revision_lifetime": "Стирать старые версии комментариев через",
       "credentials-reset_token_lifetime": "Аннулировать код для сброса пароля через",
+      "email_language": "Язык электронных писем",
+      "explore_lifetime": "Очистка ленты Обзор через",
       "feed_width": "Ширина ленты (в пикселах)",
       "friend-ofs_view": "Список добавивших меня в друзья виден",
       "friend-ofs_view-total": "Число добавивших меня в друзья видно",

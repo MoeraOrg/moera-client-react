@@ -877,6 +877,8 @@
       "comment_max-size_soft": "Maksymalny rozmiar komentarzy",
       "comment_revision_lifetime": "Usuń stare wersje komentarzy po",
       "credentials-reset_token_lifetime": "Unieważnij kod do resetowania hasła po",
+      "email_language": "Język e-maili",
+      "explore_lifetime": "Wyczyść kanał Eksploruj po",
       "feed_width": "Szerokość kanału (w pikselach)",
       "friend-ofs_view": "Lista osób, które mnie dodały jako znajomego, jest widoczna dla",
       "friend-ofs_view-total": "Liczba osób, które mnie dodały jako znajomego, jest widoczna dla",

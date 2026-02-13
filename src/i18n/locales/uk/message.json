@@ -877,6 +877,8 @@
       "comment_max-size_soft": "Максимальний розмір коментарів",
       "comment_revision_lifetime": "Стирати старі версії коментарів через",
       "credentials-reset_token_lifetime": "Анулювати код для скидання пароля через",
+      "email_language": "Мова електронних листів",
+      "explore_lifetime": "Очищення стрічці Explore після",
       "feed_width": "Ширина стрічки (у пікселах)",
       "friend-ofs_view": "Список тих, хто додав мене у друзі, видно",
       "friend-ofs_view-total": "Кількість тих, хто додав мене у друзі, видно",
