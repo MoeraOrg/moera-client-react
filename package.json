@@ -35,7 +35,7 @@
     "is-hotkey": "^0.2.0",
     "katex": "^0.16.21",
     "lodash.clonedeep": "^4.5.0",
-    "markdown-it": "^14.1.0",
+    "markdown-it": "^14.1.1",
     "markdown-it-deflist": "^3.0.0",
     "markdown-it-emoji": "^3.0.0",
     "markdown-it-sub": "^2.0.0",
