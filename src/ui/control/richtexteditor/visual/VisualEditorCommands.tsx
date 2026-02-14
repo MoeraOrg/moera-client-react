@@ -371,7 +371,7 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
             } else {
                 if (ok) {
                     if (editor.selection == null || Range.isCollapsed(editor.selection)) {
-                        editor.insertNode(createDetailsElement(summary, [createScriptureText("")]));
+                        editor.wrapNodes(createDetailsElement(summary, []));
                     } else {
                         editor.wrapNodes(createDetailsElement(summary, []), {split: true});
                     }
