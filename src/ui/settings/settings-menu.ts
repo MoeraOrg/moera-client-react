@@ -133,8 +133,6 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             option("posting.time.relative"),
             option("webui.allow-indexing"),
             option("webui.head.top.html"),
-            option("webmaster.name"),
-            option("webmaster.email"),
         ]),
         sheet("applications", [
             chapter("grants", null, [
