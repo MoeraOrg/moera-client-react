@@ -17,7 +17,6 @@ import { isUrl, urlWithParameters } from "util/url";
 
 interface OuterProps {
     location: string;
-    nodeRoot: string | null;
 }
 
 interface Values {
@@ -86,7 +85,7 @@ function isLocationValid(location: string) {
 const connectFormLogic = {
 
     mapPropsToValues: (props: OuterProps): Values => ({
-        location: props.location || props.nodeRoot || "",
+        location: props.location || "",
         password: ""
     }),
 

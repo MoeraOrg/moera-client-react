@@ -13,7 +13,6 @@ import { useWaitTill } from "ui/connectpage/wait-till";
 
 interface OuterProps {
     location: string;
-    nodeRoot: string | null;
 }
 
 interface Values {
@@ -49,7 +48,7 @@ function ForgotForm({location, values, dirty}: Props) {
 const forgotFormLogic = {
 
     mapPropsToValues: (props: OuterProps): Values => ({
-        location: props.location || props.nodeRoot || ""
+        location: props.location || ""
     }),
 
     validate: (values: Values): FormikErrors<Values> => {

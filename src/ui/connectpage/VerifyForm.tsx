@@ -13,7 +13,6 @@ import { useWaitTill } from "ui/connectpage/wait-till";
 
 interface OuterProps {
     location: string;
-    nodeRoot: string | null;
 }
 
 interface Values {
@@ -22,7 +21,7 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function VerifyForm({location, nodeRoot, values, dirty, resetForm}: Props) {
+function VerifyForm({location, values, dirty, resetForm}: Props) {
     const emailHint = useSelector((state: ClientState) => state.connectPage.emailHint);
     const processing = useSelector((state: ClientState) => state.connectPage.processing);
     const lastError = useSelector((state: ClientState) => state.connectPage.lastError);
@@ -38,7 +37,7 @@ function VerifyForm({location, nodeRoot, values, dirty, resetForm}: Props) {
     }, [formId]); // 'props' are missing on purpose
 
     const onTryAgain = (event: React.MouseEvent) => {
-        const target = location || nodeRoot || "";
+        const target = location || "";
         dispatch(connectPageResetPassword(target));
         event.preventDefault();
     }
@@ -87,7 +86,7 @@ const verifyFormLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        const location = formik.props.location || formik.props.nodeRoot || "";
+        const location = formik.props.location || "";
         dispatch(connectPageVerifyCode(location, values.resetToken.toUpperCase().trim()));
         formik.setSubmitting(false);
     }

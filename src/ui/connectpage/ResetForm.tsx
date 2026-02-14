@@ -13,7 +13,6 @@ import { useWaitTill } from "ui/connectpage/wait-till";
 
 interface OuterProps {
     location: string;
-    nodeRoot: string | null;
     resetToken: string;
 }
 
@@ -83,7 +82,7 @@ const resetFormLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        const location = formik.props.location || formik.props.nodeRoot || "";
+        const location = formik.props.location || "";
         dispatch(connectToHome(location, false, "admin", values.password, null, formik.props.resetToken));
         formik.setSubmitting(false);
     }
