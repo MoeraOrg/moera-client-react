@@ -39,9 +39,9 @@ export function isReactionsDialogReactionsToBeLoaded(state: ClientState): boolea
     return !isReactionsDialogReactionsAllLoaded(state) && getReactionsDialogItems(state).length === 0;
 }
 
-export function isReactionsDialogReactionsLoading(state: ClientState): boolean {
+export function isReactionsDialogLoading(state: ClientState): boolean {
     const reactions = getReactions(state);
-    return reactions != null && reactions.loading;
+    return (reactions != null && reactions.loading) || state.reactionsDialog.totals.loading;
 }
 
 export function getReactionsDialogItems(state: ClientState): ReactionInfo[] {

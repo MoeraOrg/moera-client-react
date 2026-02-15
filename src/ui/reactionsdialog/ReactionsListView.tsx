@@ -11,7 +11,7 @@ import {
     getReactionsDialogNodeName,
     getReactionsDialogRemainingCount,
     isReactionsDialogReactionsAllLoaded,
-    isReactionsDialogReactionsLoading
+    isReactionsDialogLoading
 } from "state/reactionsdialog/selectors";
 import { Avatar, Loading, SubscribeButton } from "ui/control";
 import { getSubscriptionStatus, SubscriptionStatus } from "ui/control/subscribebutton/subscription-status";
@@ -35,7 +35,7 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
     const commentId = useSelector((state: ClientState) => state.reactionsDialog.commentId);
     const reactionsNodeName = useSelector(getReactionsDialogNodeName);
     const remaining = useSelector(getReactionsDialogRemainingCount);
-    const reactionsLoading = useSelector(isReactionsDialogReactionsLoading);
+    const loading = useSelector(isReactionsDialogLoading);
     const reactionsLoaded = useSelector(isReactionsDialogReactionsAllLoaded);
     const reactions = useSelector(getReactionsDialogItems);
     const {hide} = useParent();
@@ -92,7 +92,7 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
                     </div>
                 )}
             </div>
-            {remaining > 0 && !reactionsLoading &&
+            {remaining > 0 && !loading &&
                 (reactionsLoaded ?
                     <div className="more">
                         {t("more-reactions-hidden", {remaining})}
@@ -103,7 +103,7 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
                     </button>
                 )
             }
-            {reactionsLoading && <Loading overlay large/>}
+            {loading && <Loading overlay large/>}
         </>
     );
 }

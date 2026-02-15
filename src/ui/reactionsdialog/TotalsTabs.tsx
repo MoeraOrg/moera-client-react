@@ -5,7 +5,7 @@ import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { reactionsDialogSelectTab } from "state/reactionsdialog/actions";
-import { CloseButton, Loading, UnderlinedTabDescription, UnderlinedTabs } from "ui/control";
+import { CloseButton, UnderlinedTabDescription, UnderlinedTabs } from "ui/control";
 import { useParent } from "ui/hook";
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function TotalsTabs({hidden, children}: Props) {
-    const {loading, loaded, total, emojis} = useSelector((state: ClientState) => state.reactionsDialog.totals);
+    const {loaded, total, emojis} = useSelector((state: ClientState) => state.reactionsDialog.totals);
     const activeTab = useSelector((state: ClientState) => state.reactionsDialog.activeTab);
     const {hide} = useParent();
     const dispatch = useDispatch();
@@ -39,13 +39,10 @@ export default function TotalsTabs({hidden, children}: Props) {
     );
 
     return (
-        <>
-            <UnderlinedTabs className={cx({invisible: !loaded})} tabs={tabs} value={activeTab ?? 0}
-                            onChange={tab => dispatch(reactionsDialogSelectTab(tab))}>
-                {children}
-                <CloseButton onClick={hide}/>
-            </UnderlinedTabs>
-            {loading && <Loading/>}
-        </>
+        <UnderlinedTabs className={cx({invisible: !loaded})} tabs={tabs} value={activeTab ?? 0}
+                        onChange={tab => dispatch(reactionsDialogSelectTab(tab))}>
+            {children}
+            <CloseButton onClick={hide}/>
+        </UnderlinedTabs>
     );
 }

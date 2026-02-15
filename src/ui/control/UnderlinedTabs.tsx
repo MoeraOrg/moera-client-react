@@ -14,6 +14,7 @@ export interface UnderlinedTabDescription<V = any> {
     href?: string;
     active?: boolean;
     visible?: boolean;
+    loading?: boolean;
     className?: string;
 }
 
