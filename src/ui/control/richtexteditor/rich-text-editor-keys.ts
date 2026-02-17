@@ -7,9 +7,12 @@ class RichTextEditorKey {
     readonly title: string;
     private readonly checker: (event: KeyboardEventLike) => boolean;
 
-    constructor(key: string) {
-        this.title = Browser.isMac() ? key.replace("Mod", "Cmd") : key.replace("Mod", "Ctrl");
-        this.checker = isHotkey(key.replaceAll("-", "+"));
+    constructor(key: string | string[]) {
+        const keys = Array.isArray(key) ? key : [key];
+        this.title = keys.map(item =>
+            Browser.isMac() ? item.replace("Mod", "Cmd") : item.replace("Mod", "Ctrl")
+        ).join(" / ");
+        this.checker = isHotkey(keys.map(item => item.replaceAll("-", "+").replaceAll("_", "-")));
     }
 
     check(event: KeyboardEventLike): boolean {
@@ -29,8 +32,8 @@ export const RICH_TEXT_EDITOR_KEYS = {
     CODE:               new RichTextEditorKey("Mod-Shift-C"),
     MARK:               new RichTextEditorKey("Mod-M"),
     CLEAR:              new RichTextEditorKey("Mod-0"),
-    EN_DASH:            new RichTextEditorKey("Mod-1"),
-    EM_DASH:            new RichTextEditorKey("Mod-2"),
+    EN_DASH:            new RichTextEditorKey(["Mod-1", "Mod-_"]),
+    EM_DASH:            new RichTextEditorKey(["Mod-2", "Mod-Shift-_"]),
     ANGLE_QUOTE_LEFT:   new RichTextEditorKey("Mod-,"),
     ANGLE_QUOTE_RIGHT:  new RichTextEditorKey("Mod-."),
     DOUBLE_QUOTE_LEFT:  new RichTextEditorKey("Mod-Shift-,"),
