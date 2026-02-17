@@ -62,7 +62,7 @@ export function SubscribeButton({nodeName, feedName, onDialogOpened, addon, butt
             <DropdownMenu
                 className="btn btn-sm"
                 content={
-                    <SubscribeButtonMenu nodeName={nodeName} feedName={feedName} addon={addon}/>
+                    <SubscribeButtonMenu nodeName={nodeName} feedName={feedName} addon={addon} buttonOnly={buttonOnly}/>
                 }
                 parentOverlayId={parentOverlayId}
                 menuContainer={document.getElementById("modal-root")}

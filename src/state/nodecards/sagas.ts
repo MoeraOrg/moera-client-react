@@ -289,9 +289,19 @@ async function nodeCardsPreloadSaga(action: WithContext<NodeCardsPreloadAction>)
 
     try {
         const contacts = await Node.fetchContacts(action, REL_HOME, {nodeNames});
-        if (contacts.length > 0) {
-            dispatch(nodeCardsPrefill(contacts).causedBy(action));
-        }
+        const returnedNames = new Set(contacts.map(contact => contact.contact.nodeName));
+        const missingContacts = nodeNames
+            .filter(nodeName => !returnedNames.has(nodeName))
+            .map(nodeName => ({
+                contact: {nodeName, distance: 3},
+                subscriber: null,
+                subscription: null,
+                friend: null,
+                friendOf: null,
+                blocked: null,
+                blockedBy: null
+            }));
+        dispatch(nodeCardsPrefill(contacts.concat(missingContacts)).causedBy(action));
     } catch (e) {
         if (!(e instanceof HomeNotConnectedError)) {
             dispatch(errorThrown(e));

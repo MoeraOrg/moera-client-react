@@ -27,9 +27,10 @@ interface Props {
     nodeName: string;
     feedName: string;
     addon?: MenuItem[];
+    buttonOnly?: boolean;
 }
 
-export default function SubscribeButtonMenu({nodeName, feedName, addon}: Props) {
+export default function SubscribeButtonMenu({nodeName, feedName, addon, buttonOnly = false}: Props) {
     const card = useSelector((state: ClientState) => getNodeCard(state, nodeName));
     const homeGender = useSelector(getHomeOwnerGender);
     const friendsId = useSelector(getHomeFriendsId);
@@ -151,7 +152,7 @@ export default function SubscribeButtonMenu({nodeName, feedName, addon}: Props) 
                 nodeName,
                 href: "/",
                 onClick: onSubscribe,
-                show: !subscribed && (subscribedToMe || friendCaption != null)
+                show: !subscribed && (subscribedToMe || friendCaption != null || buttonOnly)
             },
             {
                 title: t("unsubscribe"),
