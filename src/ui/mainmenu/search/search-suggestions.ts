@@ -8,8 +8,9 @@ import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
 import { jumpFar, jumpNear } from "state/navigation/actions";
 import { isAtSearchPage } from "state/navigation/selectors";
+import { SearchTab } from "state/search/state";
 import { searchHistoryDelete, searchHistoryPrepare } from "state/search/actions";
-import { getSearchNodeName, getSearchQuery } from "state/search/selectors";
+import { getSearchNodeName, getSearchQuery, isSearchInBlogAvailable } from "state/search/selectors";
 import { useSuggestions } from "ui/hook";
 import { SearchListItem } from "ui/mainmenu/search/SearchSuggestions";
 import { namesListQuery } from "util/names-list";
@@ -45,6 +46,7 @@ export function useSearchSuggestions(
     const atSearch = useSelector(isAtSearchPage);
     const searchNode = useSelector(getSearchNodeName);
     const defaultQuery = useSelector(getSearchQuery);
+    const defaultTab: SearchTab = useSelector(isSearchInBlogAvailable) ? "current-blog" : "content";
     const dispatch = useDispatch();
 
     const [focused, setFocused] = React.useState<boolean>(false);
@@ -74,7 +76,7 @@ export function useSearchSuggestions(
                     inputDom.current?.blur();
                     if (query) {
                         if (atNode) {
-                            dispatch(jumpNear("/search", ut`query=${query}`, null));
+                            dispatch(jumpNear("/search", ut`query=${query}&tab=${defaultTab}`, null));
                         } else {
                             dispatch(jumpFar(searchNode, null, "/search", ut`query=${query}`, null));
                         }
@@ -82,7 +84,7 @@ export function useSearchSuggestions(
                     break;
                 case "history":
                     inputDom.current?.blur();
-                    dispatch(jumpNear("/search", ut`query=${item.query}`, null));
+                    dispatch(jumpNear("/search", ut`query=${item.query}&tab=${defaultTab}`, null));
                     break;
             }
         } else {

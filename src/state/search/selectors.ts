@@ -1,6 +1,8 @@
 import { ClientState } from "state/state";
 import { SearchFilter, SearchMode, SearchTab } from "state/search/state";
 import { getSetting } from "state/settings/selectors";
+import { getOwnerName } from "state/node/selectors";
+import { getHomeOwnerName } from "state/home/selectors";
 
 export const SEARCH_PAGE_SIZE = 20;
 
@@ -34,4 +36,12 @@ export const getSafeSearchDefault = (state: ClientState): boolean =>
 export function isSearchHistoryQueryToBeLoaded(state: ClientState, query: string): boolean {
     const info = state.search.historyQueries[query];
     return info == null || (!info.loaded && !info.loading);
+}
+
+export function isSearchInBlogAvailable(state: ClientState): boolean {
+    const ownerName = getOwnerName(state);
+    const homeOwnerName = getHomeOwnerName(state);
+    const searchNodeName = getSearchNodeName(state);
+
+    return ownerName !== homeOwnerName && ownerName !== searchNodeName;
 }
