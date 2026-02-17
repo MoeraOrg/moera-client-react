@@ -29,7 +29,7 @@ import CommentsNavigator from "ui/comment/CommentsNavigator";
 import CommentComposeLine from "ui/comment/compose/CommentComposeLine";
 import CommentsSentinelLine from "ui/comment/CommentsSentinelLine";
 import Comment from "ui/comment/Comment";
-import { getPageHeaderHeight, isElementCompletelyVisible } from "util/ui";
+import { getPageFooterHeight, getPageHeaderHeight, isElementCompletelyVisible } from "util/ui";
 import "./Comments.css";
 
 const CommentDialog = React.lazy(() => import("ui/comment/compose/CommentDialog"));
@@ -122,7 +122,7 @@ export default function Comments() {
 
     const onScroll = useCallback(() => {
         const top = getPageHeaderHeight();
-        const bottom = window.innerHeight;
+        const bottom = window.innerHeight - getPageFooterHeight();
         let topIndex = -1;
         let bottomIndex = -1;
         const comments = document.getElementsByClassName("comment");

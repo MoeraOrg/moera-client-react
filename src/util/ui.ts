@@ -185,6 +185,10 @@ export function getPageHeaderHeight(): number {
     return mainMenuHeight + backBoxHeight;
 }
 
+export function getPageFooterHeight(): number {
+    return isTinyScreen() ? document.getElementById("bottom-menu")?.getBoundingClientRect().height ?? 0 : 0;
+}
+
 export function isElementVisible(element: Element, threshold: number = 0): boolean {
     const rect = element.getBoundingClientRect();
     const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
