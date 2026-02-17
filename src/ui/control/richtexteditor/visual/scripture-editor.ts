@@ -156,6 +156,10 @@ export function withScripture<T extends DOMEditor>(
             if (text.endsWith(" ")) {
                 const point = editor.selection.anchor;
                 scriptureReplaceUrl(editor, point);
+            } else if (text.length >= 10 && text.match(URL_AT_END) != null) {
+                insertText(" ", options);
+                const point = editor.selection.anchor;
+                scriptureReplaceUrl(editor, point);
             }
             if (text.endsWith("@")) {
                 const node = Node.get(editor, editor.selection.anchor.path);
