@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Trans } from 'react-i18next';
 
 import { NodeName } from "api";
@@ -14,6 +14,7 @@ import {
     isRegularNode
 } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
+import { sharePageCopyLink } from "state/sharedialog/actions";
 import { DonateButton, OnlyMobile } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
@@ -41,6 +42,9 @@ export default function ProfileTitle() {
     const subscribersTotal = card?.people.subscribersTotal ?? "?";
     const fundraisers = useSelector((state: ClientState) => state.profile.profile.fundraisers);
     const newsHref = useHomeNews();
+    const dispatch = useDispatch();
+
+    const onCopyLink = () => dispatch(sharePageCopyLink(REL_CURRENT, "/"));
 
     return (
         <>
@@ -66,8 +70,8 @@ export default function ProfileTitle() {
                             </>
                         }
                     </div>
-                    {!connectedToHome && <div className="full-name">{name}</div>}
-                    <div className="mention">{mentionName(nodeName)}</div>
+                    {!connectedToHome && <div className="full-name" onClick={onCopyLink}>{name}</div>}
+                    <div className="mention" onClick={onCopyLink}>{mentionName(nodeName)}</div>
                     <OperationStatus/>
                     {title && <div className="title">{title}</div>}
                     <div className="subscribe-line">
