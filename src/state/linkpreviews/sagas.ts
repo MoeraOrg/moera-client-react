@@ -24,10 +24,30 @@ async function linkPreviewLoadSaga(action: WithContext<LinkPreviewLoadAction>): 
     const {url} = action.payload;
     try {
         const info = await Node.proxyLinkPreview(action, REL_HOME, url);
+        info.imageUrl = resolveImageUrl(info.imageUrl, info.url ?? url);
         info.url = url; // canonical URL may differ, so we should force consistency throughout the app
         dispatch(linkPreviewLoaded(url, info).causedBy(action));
     } catch (e) {
         dispatch(linkPreviewLoadFailed(url).causedBy(action));
+    }
+}
+
+
+function resolveImageUrl(imageUrl: string | null | undefined, pageUrl: string): string | null {
+    if (imageUrl == null) {
+        return null;
+    }
+
+    try {
+        return new URL(imageUrl).toString();
+    } catch (e) {
+        // Image URL is not absolute
+    }
+
+    try {
+        return new URL(imageUrl, pageUrl).toString();
+    } catch (e) {
+        return imageUrl;
     }
 }
 
