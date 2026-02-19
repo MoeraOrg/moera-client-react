@@ -477,7 +477,7 @@
   "my-node": "My Blog",
   "my-profile": "My Profile",
   "name": "Name",
-  "name-already-taken": "Name is already taken. Note that you can add any number to the name (like 'Arthur_42')",
+  "name-already-taken": "Name is already taken. Note that you can add any number to the name (like 'Arthur42')",
   "named-key": "Named Key",
   "name-help": "The name must be 4-120 characters long. All characters are allowed, except whitespace and punctuation. Allowed punctuation: <0>!</0> <0>*</0> <0>-</0> <0>.</0>",
   "name-not-allowed": "Name is not allowed",
