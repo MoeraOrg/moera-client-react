@@ -10,6 +10,7 @@ import { getImageDimensions } from "ui/control/richtexteditor/media/rich-text-im
 import { isScriptureElement } from "ui/control/richtexteditor/visual/scripture";
 import { isSignificant } from "ui/control/richtexteditor/visual/scripture-html";
 import OpenLink from "ui/control/richtexteditor/visual/OpenLink";
+import DetailsSummary from "ui/control/richtexteditor/visual/DetailsSummary";
 import PreloadedImage from "ui/posting/PreloadedImage";
 import { BlockMath, InlineMath } from "ui/katex";
 import { useIsTinyScreen } from "ui/hook";
@@ -71,11 +72,11 @@ export default function VisualRenderElement(props: RenderElementProps) {
             case "details":
                 return (
                     // @ts-ignore
-                    <details open className="block-border block-border-blue" style={{"--bb-badge": `"${t("fold")}"`}}
+                    <div className="block-border block-border-blue" style={{"--bb-badge": `"${t("fold")}"`}}
                              {...attributes}>
-                        {element.summary && <summary contentEditable={false}>{element.summary}</summary>}
+                        <DetailsSummary summary={element.summary}/>
                         {children}
-                    </details>
+                    </div>
                 );
             case "code-block":
                 return (
