@@ -26,8 +26,6 @@ export default function GlobalTitle({back}: Props) {
 
     const backHref = back || (connectedToHome ? newsHref : null);
 
-    console.log(back, connectedToHome, newsHref, backHref);
-
     if (tinyScreen) {
         if (backHref) {
             return <MobileBack className="global-back" href={backHref} sticky><LogoImage width="4.6rem"/></MobileBack>;
