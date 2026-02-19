@@ -1,0 +1,16 @@
+DETAILS {
+    cursor: pointer;
+}
+
+DETAILS[open] {
+    cursor: unset;
+}
+
+DETAILS:not([open]) > SUMMARY.fs-1,
+DETAILS:not([open]) > SUMMARY.fs-2,
+DETAILS:not([open]) > SUMMARY.fs-3,
+DETAILS:not([open]) > SUMMARY.fs-4,
+DETAILS:not([open]) > SUMMARY.fs-5 {
+    font-size: 1rem !important;
+    font-weight: bold;
+}

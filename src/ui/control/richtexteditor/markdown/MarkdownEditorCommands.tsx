@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { NodeName, PrivateMediaFileInfo, SourceFormat, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
+import { detailsSummaryStyleToClassName } from "ui/control";
 import { RichTextEditorCommandsContext } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import {
     getTextSelection,
@@ -279,7 +280,7 @@ export default function MarkdownEditorCommands({
     }
 
     const formatFold = () => {
-        showFoldDialog(true, null, (ok: boolean | null, {summary}: Partial<RichTextFoldValues>) => {
+        showFoldDialog(true, null, (ok: boolean | null, {summary, style = "normal"}: Partial<RichTextFoldValues>) => {
             showFoldDialog(false);
 
             if (textArea.current == null) {
@@ -290,7 +291,12 @@ export default function MarkdownEditorCommands({
                 let wrapBegin = "<details>";
                 let wrapEnd = "</details>\n";
                 if (summary) {
-                    wrapBegin += `<summary>${htmlEntities(summary)}</summary>`;
+                    if (style === "normal") {
+                        wrapBegin += "<summary>";
+                    } else {
+                        wrapBegin += `<summary class="${detailsSummaryStyleToClassName(style)}">`;
+                    }
+                    wrapBegin += `${htmlEntities(summary)}</summary>`;
                 }
                 wrapBlock(textArea.current, wrapBegin, wrapEnd);
             }

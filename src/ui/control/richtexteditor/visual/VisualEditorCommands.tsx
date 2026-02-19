@@ -358,27 +358,33 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
 
     const formatFold = () => {
         const [element, path] = findWrappingElement(editor, "details") ?? [null, null];
-        const prevValues = element != null && isDetailsElement(element) ? {summary: element.summary} : null;
+        const prevValues = element != null && isDetailsElement(element)
+            ? {summary: element.summary, style: element.style}
+            : null;
 
-        showFoldDialog(true, prevValues, (ok: boolean | null, {summary = ""}: Partial<RichTextFoldValues>) => {
-            showFoldDialog(false);
-            if (path != null) {
-                if (ok) {
-                    editor.setNodes<DetailsElement>({summary}, {at: path});
-                } else if (ok == null) {
-                    editor.unwrapNodes({at: path});
-                }
-            } else {
-                if (ok) {
-                    if (editor.selection == null || Range.isCollapsed(editor.selection)) {
-                        editor.wrapNodes(createDetailsElement(summary, []));
-                    } else {
-                        editor.wrapNodes(createDetailsElement(summary, []), {split: true});
+        showFoldDialog(
+            true,
+            prevValues,
+            (ok: boolean | null, {summary = "", style = "normal"}: Partial<RichTextFoldValues>) => {
+                showFoldDialog(false);
+                if (path != null) {
+                    if (ok) {
+                        editor.setNodes<DetailsElement>({summary, style}, {at: path});
+                    } else if (ok == null) {
+                        editor.unwrapNodes({at: path});
+                    }
+                } else {
+                    if (ok) {
+                        if (editor.selection == null || Range.isCollapsed(editor.selection)) {
+                            editor.wrapNodes(createDetailsElement(summary, style, []));
+                        } else {
+                            editor.wrapNodes(createDetailsElement(summary, style, []), {split: true});
+                        }
                     }
                 }
+                focus();
             }
-            focus();
-        });
+        );
     }
 
     const formatCode = () =>

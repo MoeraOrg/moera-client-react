@@ -67,14 +67,6 @@
     content: var(--bb-badge);
 }
 
-.visual-text-area DETAILS {
-    padding-bottom: 0;
-}
-
-.visual-text-area DETAILS[open] {
-    padding-bottom: .5rem;
-}
-
 .visual-text-area .formula {
     cursor: pointer;
 }
@@ -107,7 +99,6 @@
 }
 
 .visual-text-area DIV.list-item + P,
-.visual-text-area DIV.list-item + DETAILS,
 .visual-text-area DIV.list-item + .block-border,
 .visual-text-area DIV.list-item + DIV.formula {
     margin-top: 1rem;

@@ -1,6 +1,7 @@
 import { Element as SlateElement, Text as SlateText } from 'slate';
 
 import { PrivateMediaFileInfo } from "api";
+import { DetailsSummaryStyle } from "ui/control";
 import { RichTextImageStandardSize } from "ui/control/richtexteditor/media/rich-text-image";
 
 /* P */
@@ -136,13 +137,16 @@ export const createIframeElement = (code: string): IframeElement =>
 export interface DetailsElement extends SlateElement {
     type: "details";
     summary: string;
+    style: DetailsSummaryStyle;
 }
 
 export const isDetailsElement = (value: any): value is DetailsElement =>
     isScriptureElement(value) && value.type === "details";
 
-export const createDetailsElement = (summary: string, children: Scripture): DetailsElement =>
-    ({type: "details", summary, children});
+export const createDetailsElement = (
+    summary: string, style: DetailsSummaryStyle, children: Scripture
+): DetailsElement =>
+    ({type: "details", summary, style, children});
 
 /* PRE */
 

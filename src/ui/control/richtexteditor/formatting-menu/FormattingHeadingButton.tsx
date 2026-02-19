@@ -54,4 +54,4 @@ const headingIcon = (headingLevel: number): MaterialSymbol =>
     headingLevel <= 0 ? msTitle : [msFormatH1, msFormatH2, msFormatH3, msFormatH4, msFormatH5][headingLevel - 1];
 
 const headingTitle = (headingLevel: number, t: TFunction): string =>
-    headingLevel <= 0 ? t("normal") : t("heading") + " " + headingLevel;
+    headingLevel <= 0 ? t("normal") : t("heading", {level: headingLevel});

@@ -59,14 +59,6 @@ ABBR[title] {
     cursor: pointer !important;
 }
 
-DETAILS {
-    cursor: pointer;
-}
-
-DETAILS[open] {
-    cursor: unset;
-}
-
 BLOCKQUOTE {
     border-left: 3px solid var(--bs-primary);
     padding: .2rem .2rem .2rem 2.7rem;

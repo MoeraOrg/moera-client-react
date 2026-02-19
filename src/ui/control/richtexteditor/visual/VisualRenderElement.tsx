@@ -74,7 +74,7 @@ export default function VisualRenderElement(props: RenderElementProps) {
                     // @ts-ignore
                     <div className="block-border block-border-blue" style={{"--bb-badge": `"${t("fold")}"`}}
                              {...attributes}>
-                        <DetailsSummary summary={element.summary}/>
+                        <DetailsSummary summary={element.summary} style={element.style}/>
                         {children}
                     </div>
                 );

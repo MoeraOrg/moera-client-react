@@ -1,6 +1,7 @@
 import { Descendant } from 'slate';
 
 import { PrivateMediaFileInfo } from "api";
+import { detailsSummaryClassNameToStyle, detailsSummaryStyleToClassName } from "ui/control";
 import {
     createBlockquoteElement,
     createCodeBlockElement,
@@ -214,7 +215,8 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
         case "DETAILS": {
             const summaryElement = element.querySelector(":scope > summary");
             const summary = unhtmlEntities(summaryElement?.textContent);
-            return createDetailsElement(summary, children);
+            const style = detailsSummaryClassNameToStyle(summaryElement?.getAttribute("class"));
+            return createDetailsElement(summary, style ?? "normal", children);
         }
         case "SUMMARY":
             return null;
@@ -348,7 +350,12 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
             case "details":
                 context.output += "<details>";
                 if (node.summary) {
-                    context.output += `<summary>${htmlEntities(node.summary)}</summary>`;
+                    if (node.style === "normal") {
+                        context.output += "<summary>";
+                    } else {
+                        context.output += `<summary class="${detailsSummaryStyleToClassName(node.style)}">`;
+                    }
+                    context.output += `${htmlEntities(node.summary)}</summary>`;
                 }
                 scriptureNodesToHtml(node.children as ScriptureDescendant[], context);
                 context.output += "</details>";

@@ -90,6 +90,7 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
         b: ["emoji"],
         span: ["katex", "mr-spoiler"],
         div: ["footnotes", "katex", "mr-spoiler", "mr-video"],
+        summary: ["fw-*", "fs-*"]
     },
     allowedIframeHostnames: [
         "c.simmer.io",
@@ -172,7 +173,7 @@ const SAFE_HTML_SETTINGS: IOptions = {
         th: ["table-*"],
         tr: ["table-*"],
         td: ["table-*"],
-        "*": ["bg-*", "border", "border-*", "text-*", "fs-*", "float-*"]
+        "*": ["bg-*", "border", "border-*", "text-*", "fw-*", "fs-*", "float-*"]
     }
 };
 

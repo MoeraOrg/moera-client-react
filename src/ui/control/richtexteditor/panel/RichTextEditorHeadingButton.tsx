@@ -49,4 +49,4 @@ export default function RichTextEditorHeadingButton({onSelect}: Props) {
 }
 
 const headingTitle = (headingLevel: number, t: TFunction) =>
-    headingLevel <= 0 ? t("normal") : t("heading") + " " + headingLevel;
+    headingLevel <= 0 ? t("normal") : t("heading", {level: headingLevel});

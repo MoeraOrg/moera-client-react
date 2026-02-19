@@ -10,6 +10,8 @@ export { ConflictWarning } from "ui/control/ConflictWarning";
 export { DelayedPopover } from "ui/control/DelayedPopover";
 export type { DelayedPopoverElement } from "ui/control/DelayedPopover";
 export { DonateButton } from "ui/control/DonateButton";
+export { detailsSummaryStyleToClassName, detailsSummaryClassNameToStyle } from "ui/control/details/details";
+export type { DetailsSummaryStyle } from "ui/control/details/details";
 export { DropdownMenu } from "ui/control/dropdownmenu/DropdownMenu";
 export { DropdownMenuItems } from "ui/control/dropdownmenu/DropdownMenuItems";
 export { useDropdownMenu } from "ui/control/dropdownmenu/dropdown-menu-types";
