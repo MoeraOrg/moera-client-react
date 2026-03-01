@@ -16,7 +16,10 @@ export default function ComposeComments() {
                             values={["signed", "subscribed", "friends", "private", "none"]}
                             title={t("commenting-allowed-to")} long setting="posting.comments.addition.default"/>
             <CheckboxField name="hideComments" title={t("auto-hide-comments")}
-                           setting="posting.comments.hide.default" anyValue labelClassName="mb-0"
+                           setting="posting.comments.hide.default" anyValue labelClassName="mb-1"
+                           groupClassName="mb-1"/>
+            <CheckboxField name="allowAnonymousComments" title={t("allow-anonymous-comments")}
+                           setting="posting.comments.allow-anonymous.default" anyValue labelClassName="mb-0"
                            groupClassName="mb-0"/>
         </div>
     );

@@ -180,6 +180,9 @@ export default function ComposePage() {
     const commentsHideDefault = useSelector((state: ClientState) =>
         getSetting(state, "posting.comments.hide.default") as boolean
     );
+    const commentsAllowAnonymousDefault = useSelector((state: ClientState) =>
+        getSetting(state, "posting.comments.allow-anonymous.default") as boolean
+    );
     const reactionsEnabledDefault = useSelector((state: ClientState) =>
         getSetting(state, "posting.reactions.enabled.default") as boolean
     );
@@ -220,6 +223,7 @@ export default function ComposePage() {
             commentsVisibilityDefault={commentsVisibilityDefault}
             commentAdditionDefault={commentAdditionDefault}
             commentsHideDefault={commentsHideDefault}
+            commentsAllowAnonymousDefault={commentsAllowAnonymousDefault}
             reactionsEnabledDefault={reactionsEnabledDefault}
             reactionsNegativeEnabledDefault={reactionsNegativeEnabledDefault}
             reactionsPositiveDefault={reactionsPositiveDefault}

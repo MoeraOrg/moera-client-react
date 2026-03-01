@@ -47,6 +47,7 @@ export interface ComposePageProps extends ValuesToPostingTextProps {
     commentsVisibilityDefault: PrincipalValue,
     commentAdditionDefault: PrincipalValue,
     commentsHideDefault: boolean,
+    commentsAllowAnonymousDefault: boolean,
     reactionsEnabledDefault: boolean,
     reactionsNegativeEnabledDefault: boolean,
     reactionsPositiveDefault: string,
@@ -73,6 +74,8 @@ export interface ComposePageValues {
     addCommentPrincipalDefault: PrincipalValue;
     hideComments: boolean;
     hideCommentsDefault: boolean;
+    allowAnonymousComments: boolean;
+    allowAnonymousCommentsDefault: boolean;
     reactionsEnabled: boolean;
     reactionsEnabledDefault: boolean;
     reactionsNegativeEnabled: boolean;
@@ -177,7 +180,8 @@ export const valuesToPostingText = (values: ComposePageValues, props: ValuesToPo
     },
     commentOperations: {
         view: values.hideComments ? "private" : "unset"
-    }
+    },
+    allowAnonymousComments: values.allowAnonymousComments
 });
 
 function isPostingContentEmpty(
@@ -217,6 +221,9 @@ export function isPostingTextChanged(postingText: PostingText, posting: PostingI
     const media = postingText.media ?? [];
     const prevMedia = posting.media != null ? posting.media.map(ma => ma.media?.id ?? ma.remoteMedia?.id) : [];
     if (!deepEqual(media, prevMedia)) {
+        return true;
+    }
+    if (postingText.allowAnonymousComments !== posting.allowAnonymousComments) {
         return true;
     }
     const prevOperations = {
@@ -297,6 +304,11 @@ export const composePageLogic = {
             : props.posting != null
                 ? (props.posting.commentOperations?.view ?? "public") === "private"
                 : props.commentsHideDefault;
+        const allowAnonymousComments = props.draft != null
+            ? props.draft.allowAnonymousComments ?? false
+            : props.posting != null
+                ? props.posting.allowAnonymousComments ?? false
+                : props.commentsAllowAnonymousDefault;
         const reactionsEnabled = props.draft != null
             ? (props.draft.operations?.addReaction ?? "signed") !== "none"
             : props.posting != null
@@ -343,6 +355,8 @@ export const composePageLogic = {
             addCommentPrincipalDefault: addCommentPrincipal,
             hideComments,
             hideCommentsDefault: hideComments,
+            allowAnonymousComments,
+            allowAnonymousCommentsDefault: allowAnonymousComments,
             reactionsEnabled,
             reactionsEnabledDefault: reactionsEnabled,
             reactionsNegativeEnabled,

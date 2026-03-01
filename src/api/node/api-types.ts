@@ -1439,6 +1439,7 @@ export interface DraftText {
     updateInfo?: UpdateInfo | null;
     operations?: PostingOperations | null;
     commentOperations?: CommentOperations | null;
+    allowAnonymousComments?: boolean | null;
 }
 
 export interface Features {
@@ -1525,6 +1526,7 @@ export interface PostingInfoBase<B> {
     clientReaction?: ClientReactionInfo | null;
     reactions?: ReactionTotalsInfo | null;
     sources?: PostingSourceInfo[] | null;
+    allowAnonymousComments?: boolean | null;
     totalComments?: number | null;
     recommended?: boolean | null;
     externalSourceUri?: string | null;
@@ -1570,6 +1572,7 @@ export interface PostingSourceText {
     commentOperations?: CommentOperations | null;
     reactionOperations?: ReactionOperations | null;
     commentReactionOperations?: ReactionOperations | null;
+    allowAnonymousComments?: boolean | null;
 }
 
 export interface PostingText {
@@ -1594,6 +1597,7 @@ export interface PostingText {
     commentOperations?: CommentOperations | null;
     reactionOperations?: ReactionOperations | null;
     commentReactionOperations?: ReactionOperations | null;
+    allowAnonymousComments?: boolean | null;
     externalSourceUri?: string | null;
 }
 
@@ -1756,6 +1760,7 @@ export interface DraftInfoBase<B> {
     updateInfo?: UpdateInfo | null;
     operations?: PostingOperations | null;
     commentOperations?: CommentOperations | null;
+    allowAnonymousComments?: boolean | null;
 }
 
 export type EncodedDraftInfo = DraftInfoBase<string>;
