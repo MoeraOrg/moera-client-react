@@ -179,8 +179,7 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             chapter("comments", null, [
                 option(CLIENT_SETTINGS_PREFIX + "posting.comments.visibility.default", 0),
                 option(CLIENT_SETTINGS_PREFIX + "posting.comments.addition.default", 2),
-                option(CLIENT_SETTINGS_PREFIX + "posting.comments.hide.default", 0),
-                option(CLIENT_SETTINGS_PREFIX + "posting.comments.allow-anonymous.default"),
+                option(CLIENT_SETTINGS_PREFIX + "posting.comments.hide.default"),
             ]),
             chapter("reactions", null, [
                 option(CLIENT_SETTINGS_PREFIX + "posting.reactions.enabled.default", 1),

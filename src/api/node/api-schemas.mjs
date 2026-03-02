@@ -4108,10 +4108,6 @@ export const NODE_API_SCHEMAS = {
                     },
                     nullable: true
                 },
-                "allowAnonymousComments": {
-                    type: "boolean",
-                    nullable: true
-                },
                 "totalComments": {
                     type: "integer",
                     nullable: true
@@ -5101,10 +5097,6 @@ export const NODE_API_SCHEMAS = {
                             type: "null"
                         }
                     ]
-                },
-                "allowAnonymousComments": {
-                    type: "boolean",
-                    nullable: true
                 },
             },
             required: [

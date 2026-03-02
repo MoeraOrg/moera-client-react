@@ -302,12 +302,6 @@ const META: ClientSettingMetaInfo[] = [
         modifiers: {}
     },
     {
-        name: "posting.comments.allow-anonymous.default",
-        type: "bool",
-        defaultValue: "false",
-        modifiers: {}
-    },
-    {
         name: "posting.body-src-format.default",
         type: "string",
         defaultValue: "html/visual",
