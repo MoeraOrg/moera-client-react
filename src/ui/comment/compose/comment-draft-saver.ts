@@ -6,7 +6,7 @@ import { CommentText, DraftText, SourceFormat, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
-import { getHomeOwnerFullName, getHomeOwnerGender } from "state/home/selectors";
+import { getHomeOwnerFullName, getHomeOwnerGender, isConnectedToHome } from "state/home/selectors";
 import {
     getCommentComposerRepliedToId,
     getCommentDialogComment,
@@ -35,6 +35,7 @@ const toDraftText = (
 } as DraftText);
 
 export function useCommentDraftSaver(commentId: string | null): DraftSavingState {
+    const connectedToHome = useSelector(isConnectedToHome);
     const ownerName = useSelector(getOwnerName);
     const ownerFullName = useSelector(getHomeOwnerFullName);
     const ownerGender = useSelector(getHomeOwnerGender);
@@ -87,7 +88,7 @@ export function useCommentDraftSaver(commentId: string | null): DraftSavingState
 
     const save = useCallback(
         (text: CommentText, values: CommentComposeValues): void => {
-            if (ownerName != null && receiverPostingId != null) {
+            if (connectedToHome && ownerName != null && receiverPostingId != null) {
                 const media = new Map(
                     (values.body.media ?? [])
                         .concat(values.linkPreviews.media)
@@ -101,22 +102,27 @@ export function useCommentDraftSaver(commentId: string | null): DraftSavingState
                 ));
             }
         },
-        [ownerName, receiverPostingId, draft?.id, receiverName, commentId, repliedToId, formId, dispatch]
+        [
+            connectedToHome, ownerName, receiverPostingId, draft?.id, receiverName, commentId, repliedToId, formId,
+            dispatch
+        ]
     );
 
     const drop = useCallback(
         (): void => {
-            if (commentId != null) {
-                if (draft?.id != null) {
-                    dispatch(commentDialogCommentReset(draft.id, false));
-                }
-            } else {
-                if (draft != null) {
-                    dispatch(commentDraftDelete(draft));
+            if (connectedToHome) {
+                if (commentId != null) {
+                    if (draft?.id != null) {
+                        dispatch(commentDialogCommentReset(draft.id, false));
+                    }
+                } else {
+                    if (draft != null) {
+                        dispatch(commentDraftDelete(draft));
+                    }
                 }
             }
         },
-        [commentId, draft, dispatch]
+        [connectedToHome, commentId, draft, dispatch]
     );
 
     return useDraftSaver({

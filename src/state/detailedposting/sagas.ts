@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 
 import {
+    ANONYMOUS_NODE_NAME,
     CommentInfo,
     CommentText,
     DraftInfo,
@@ -32,7 +33,8 @@ import {
     CommentDialogCommentResetAction,
     commentDraftAbsent,
     commentDraftCompleteLoading,
-    CommentDraftCompleteLoadingAction, commentDraftDelete,
+    CommentDraftCompleteLoadingAction,
+    commentDraftDelete,
     CommentDraftDeleteAction,
     commentDraftDeleted,
     CommentDraftLoadAction,
@@ -105,8 +107,10 @@ import { postingCommentCountUpdate, postingCommentsSet, postingsSet } from "stat
 import { getPosting, isPostingCached } from "state/postings/selectors";
 import { postingGetLink } from "state/postings/sagas";
 import { getOwnerFullName, getOwnerName, isPermitted, isPrincipalIn } from "state/node/selectors";
+import { isConnectedToHome } from "state/home/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { fillSubscription } from "state/subscriptions/sagas";
+import { confirmBox } from "state/confirmbox/actions";
 import * as Browser from "ui/browser";
 import { uiEventCommentQuote } from "ui/ui-events";
 import { toAvatarDescription } from "util/avatar";
@@ -115,7 +119,6 @@ import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { clipboardCopy } from "util/clipboard";
 import { delay, notNull } from "util/misc";
 import { ut } from "util/url";
-import { confirmBox } from "state/confirmbox/actions";
 
 export default [
     executor("DETAILED_POSTING_LOAD", "", detailedPostingLoadSaga),
@@ -404,7 +407,7 @@ async function commentPostSaga(action: WithContext<CommentPostAction>): Promise<
             deleteObsoleteDraft(receiverName, receiverPostingId, commentId, formId);
         }
 
-        if (receiverName !== commentText.ownerName) {
+        if (receiverName !== commentText.ownerName && commentText.ownerName !== ANONYMOUS_NODE_NAME) {
             await Node.updateRemoteComment(
                 action, REL_HOME, receiverName, receiverPostingId, comment.id, commentSourceText
             );
@@ -485,13 +488,19 @@ async function loadRepliedTo(
 async function commentDraftLoadSaga(action: WithContext<CommentDraftLoadAction>): Promise<void> {
     const {isDialog} = action.payload;
 
-    const {nodeName, postingId, commentId} = select(state => ({
+    const {connectedToHome, nodeName, postingId, commentId} = select(state => ({
+        connectedToHome: isConnectedToHome(state),
         nodeName: getCommentsState(state).receiverName,
         postingId: getCommentsState(state).receiverPostingId,
         commentId: isDialog ? state.detailedPosting.commentDialog.commentId : null
     }));
 
     if (nodeName == null || postingId == null) {
+        return;
+    }
+
+    if (!connectedToHome) {
+        dispatch(commentDraftAbsent(nodeName, postingId, commentId).causedBy(action));
         return;
     }
 

@@ -1,8 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
-import { AvatarImage } from "api";
+import { ANONYMOUS_NODE_NAME, AvatarImage } from "api";
 import { getNamingNameDetails } from "state/naming/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ClientState } from "state/state";
@@ -33,6 +34,7 @@ export default function NodeName({
 }: Props) {
     const details = useSelector((state: ClientState) => getNamingNameDetails(state, name));
     const mode = useSelector((state: ClientState) => getSetting(state, "full-name.display") as NameDisplayMode);
+    const {t} = useTranslation();
 
     if (!name) {
         return null;
@@ -46,7 +48,8 @@ export default function NodeName({
         },
         className
     );
-    linked = linked && (!details.loaded || details.nodeUri != null);
+    const anonymous = name === ANONYMOUS_NODE_NAME;
+    linked = linked && !anonymous && (!details.loaded || details.nodeUri != null);
     return (
         <NodeNamePopup nodeName={name} fullName={fullName} avatar={avatar} avatarNodeName={avatarNodeName}
                        disabled={!popup}>
@@ -56,7 +59,7 @@ export default function NodeName({
                         <NodeNameText name={name} fullName={fullName} mode={display ?? mode}/>
                     </Jump>
                 :
-                    <span className={klass} ref={ref}>
+                    <span className={klass} title={anonymous ? t("anonymous-user") : undefined} ref={ref}>
                         <NodeNameText name={name} fullName={fullName} mode={display ?? mode}/>
                     </span>
             }

@@ -3,7 +3,7 @@ import * as NamingRules from "api/naming/rules";
 import * as SettingTypes from "api/setting-types";
 
 export { Node, NamingRules, SettingTypes }
-export { NamingApi, Naming } from "api/naming";
+export { NamingApi, Naming, ANONYMOUS_NODE_NAME } from "api/naming";
 export * from "api/node/api-types";
 export { selectApi } from "api/node/call";
 export type { VerifiedMediaFile } from "api/node/images-upload";

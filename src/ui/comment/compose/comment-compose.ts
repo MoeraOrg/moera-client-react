@@ -1,7 +1,8 @@
-import { FormikBag } from 'formik';
+import { FormikBag, FormikErrors } from 'formik';
 import deepEqual from 'react-fast-compare';
 
 import {
+    ANONYMOUS_NODE_NAME,
     AvatarImage,
     CommentInfo,
     CommentSourceText,
@@ -41,19 +42,16 @@ interface ValuesToCommentTextProps {
 
 export interface CommentComposeValues {
     avatar: AvatarImage | null;
+    ownerFullName: string;
     body: RichTextValue;
     bodyUrls: string[];
     linkPreviews: RichTextLinkPreviewsValue;
 }
 
 export function valuesToCommentText(values: CommentComposeValues, props: ValuesToCommentTextProps): CommentText | null {
-    if (props.ownerName == null) {
-        return null;
-    }
-
     return {
-        ownerName: props.ownerName,
-        ownerFullName: props.ownerFullName,
+        ownerName: props.ownerName ?? ANONYMOUS_NODE_NAME,
+        ownerFullName: values.ownerFullName || props.ownerFullName,
         ownerGender: props.ownerGender,
         ownerAvatar: toAvatarDescription(values.avatar),
         bodySrc: JSON.stringify({
@@ -124,6 +122,7 @@ export function isCommentTextChanged(commentText: CommentText, comment: CommentI
 export interface CommentComposeProps extends PropsToValuesProps, ValuesToCommentTextProps {
     formId: number | null;
     receiverPostingId: string | null;
+    connectedToHome: boolean;
 }
 
 export const commentComposeLogic = {
@@ -132,6 +131,9 @@ export const commentComposeLogic = {
         const avatar = props.draft != null
             ? props.draft.ownerAvatar ?? null
             : props.comment != null ? props.comment.ownerAvatar ?? null : props.avatarDefault;
+        const ownerFullName = props.draft != null
+            ? props.draft.ownerFullName ?? ""
+            : props.comment?.ownerFullName ?? "";
         const attachments = props.draft != null ? props.draft.media : props.comment?.media;
         let media = attachments != null
             ? attachments
@@ -157,10 +159,21 @@ export const commentComposeLogic = {
 
         return {
             avatar,
+            ownerFullName,
             body: new RichTextValue(body, bodyFormat, media),
             bodyUrls,
             linkPreviews
         };
+    },
+
+    validate: (values: CommentComposeValues, props: CommentComposeProps): FormikErrors<CommentComposeValues> => {
+        const errors: FormikErrors<CommentComposeValues> = {};
+
+        if (!props.connectedToHome && !values.ownerFullName.trim()) {
+            errors.ownerFullName = "must-not-empty";
+        }
+
+        return errors;
     },
 
     handleSubmit(values: CommentComposeValues, formik: FormikBag<CommentComposeProps, CommentComposeValues>): void {

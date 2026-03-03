@@ -84,7 +84,7 @@ function CommentComposePanel() {
                 </span>
             </div>
             <div className="right-pane">
-            {ready &&
+                {ready &&
                     <span className="draft-status">
                         {!unsaved && saving && <Icon icon={msCloudUpload}/>}
                         {!unsaved && saved && <Icon icon={msCloudDone}/>}

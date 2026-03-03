@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { AvatarImage, NodeName } from "api";
+import { ANONYMOUS_NODE_NAME, AvatarImage, NodeName } from "api";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { getSetting } from "state/settings/selectors";
@@ -69,17 +69,17 @@ function AvatarImpl(
                  className={cx("avatar", `avatar-${shape}`, className)} style={style}/>
         );
     } else {
-        alt = t("avatar-placeholder");
+        const anonymous = ownerName == null || ownerName === ANONYMOUS_NODE_NAME;
         shape = effectiveShape("circle", shapeLocal, shapeGlobal);
         style = {
             width: `${size}px`,
             height: `${size}px`,
             fontSize: `${size / 3}px`,
-            filter: `hue-rotate(${nameAngle(ownerName)}deg)`
+            filter: !anonymous ? `hue-rotate(${nameAngle(ownerName)}deg)` : "grayscale(100%) brightness(110%)"
         };
-        const shortName = NodeName.shorten(ownerName);
+        const shortName = !anonymous ? NodeName.shorten(ownerName) : "\u2205";
         return (
-            <div title={alt} draggable={draggable} ref={ref} onClick={onClick}
+            <div draggable={draggable} ref={ref} onClick={onClick}
                  className={cx("avatar", `avatar-${shape}`, "avatar-placeholder", className)} style={style}>
                 {(shortName ?? "XX").substring(0, 2).toUpperCase()}
             </div>

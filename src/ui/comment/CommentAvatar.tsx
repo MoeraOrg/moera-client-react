@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { AvatarImage } from "api";
-import { AvatarWithPopup } from "ui/control";
+import { ANONYMOUS_NODE_NAME, AvatarImage } from "api";
+import { Avatar, AvatarWithPopup } from "ui/control";
 
 interface Props {
     ownerName: string;
@@ -11,7 +11,11 @@ interface Props {
 }
 
 const CommentAvatar = ({ownerName, ownerFullName, avatar, nodeName}: Props) => (
-    <AvatarWithPopup ownerName={ownerName} ownerFullName={ownerFullName} avatar={avatar} nodeName={nodeName} size={32}/>
+    ownerName !== ANONYMOUS_NODE_NAME ?
+        <AvatarWithPopup ownerName={ownerName} ownerFullName={ownerFullName} avatar={avatar} nodeName={nodeName}
+                         size={32}/>
+    :
+        <Avatar ownerName={ownerName} avatar={avatar} nodeName={nodeName} size={32}/>
 );
 
 export default CommentAvatar;

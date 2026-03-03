@@ -13,7 +13,7 @@ import {
     getCommentsReceiverPostingId,
     isCommentComposerReady
 } from "state/detailedposting/selectors";
-import { AvatarField } from "ui/control/field";
+import { AvatarField, InputField } from "ui/control/field";
 import { RichTextField } from "ui/control/richtexteditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { isScriptureEmpty } from "ui/control/richtexteditor/visual/scripture-editor";
@@ -68,6 +68,10 @@ function CommentCompose(props: Props) {
             <Form>
                 <AvatarField name="avatar" size={32} disabled={!ready || beingPosted}/>
                 <div className="content">
+                    {!props.connectedToHome &&
+                        <InputField name="ownerFullName" placeholder={t("your-name")} maxLength={96} className="mb-3"
+                                    errorsOnly noFeedback/>
+                    }
                     <CommentComposeRepliedTo disabled={!ready || beingPosted}/>
                     <RichTextField
                         name="body"

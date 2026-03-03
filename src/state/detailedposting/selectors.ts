@@ -190,12 +190,11 @@ export function isCommentComposerFocused(state: ClientState): boolean {
 }
 
 export function isCommentComposeDraftToBeLoaded(state: ClientState): boolean {
-    const ownerName = getOwnerName(state);
     const posting = getDetailedPosting(state);
-    if (ownerName == null || posting == null) {
+    if (posting == null) {
         return false;
     }
-    return isConnectedToHome(state) && !isCommentsReceiverToBeSwitched(state)
+    return !isCommentsReceiverToBeSwitched(state)
         && !state.detailedPosting.compose.loadedDraft && !state.detailedPosting.compose.loadingDraft;
 }
 

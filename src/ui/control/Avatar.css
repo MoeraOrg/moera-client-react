@@ -12,4 +12,9 @@
     font-weight: 400;
     display: grid;
     place-items: center;
+    user-select: none;
+}
+
+A:hover:has(.avatar-placeholder), .entry A:hover:has(.avatar-placeholder){
+    text-decoration: none;
 }

@@ -6,7 +6,13 @@ import cx from 'classnames';
 import { tTitle } from "i18n";
 import { SourceFormat } from "api";
 import { ClientState } from "state/state";
-import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
+import {
+    getHomeOwnerAvatar,
+    getHomeOwnerFullName,
+    getHomeOwnerGender,
+    getHomeOwnerName,
+    isConnectedToHome
+} from "state/home/selectors";
 import { isPermitted, isPrincipalIn } from "state/node/selectors";
 import {
     getCommentComposerRepliedToId,
@@ -24,6 +30,7 @@ import "./CommentComposeLine.css";
 const CommentCompose = React.lazy(() => import("ui/comment/compose/CommentCompose"));
 
 export default function CommentComposeLine() {
+    const connectedToHome = useSelector(isConnectedToHome);
     const ownerName = useSelector(getHomeOwnerName);
     const ownerFullName = useSelector(getHomeOwnerFullName);
     const ownerGender = useSelector(getHomeOwnerGender);
@@ -55,20 +62,19 @@ export default function CommentComposeLine() {
     const tinyScreen = useIsTinyScreen();
     const {t} = useTranslation();
 
-    if (!ownerName) {
-        return (
-            <div id="comment-compose" className="nologin">
-                <Jump
-                    className={cx("btn", {"btn-primary": tinyScreen, "btn-outline-primary": !tinyScreen})}
-                    href={Browser.urlWithBackHref("/connect")}
-                >
-                    {tTitle(t("add-comment"))}
-                </Jump>
-            </div>
-        );
-    }
-
     if (!commentingAllowed) {
+        if (!ownerName) {
+            return (
+                <div id="comment-compose" className="nologin">
+                    <Jump
+                        className={cx("btn", {"btn-primary": tinyScreen, "btn-outline-primary": !tinyScreen})}
+                        href={Browser.urlWithBackHref("/connect")}
+                    >
+                        {tTitle(t("add-comment"))}
+                    </Jump>
+                </div>
+            );
+        }
         if (discussionClosed) {
             return (
                 <div id="comment-compose" className="disabled">{t("discussion-closed")}</div>
@@ -88,6 +94,7 @@ export default function CommentComposeLine() {
                 comment={null}
                 draft={draft}
                 formId={formId}
+                connectedToHome={connectedToHome}
                 ownerName={ownerName}
                 ownerFullName={ownerFullName}
                 ownerGender={ownerGender}

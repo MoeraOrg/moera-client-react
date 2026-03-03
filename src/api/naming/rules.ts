@@ -61,3 +61,5 @@ function isNameCharacterValid(c: string): boolean {
             return false;
     }
 }
+
+export const ANONYMOUS_NODE_NAME = "unk_0";

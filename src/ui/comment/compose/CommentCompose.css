@@ -24,6 +24,10 @@
     margin-bottom: 0;
 }
 
+#comment-compose .content INPUT::placeholder {
+    color: var(--bs-gray-400);
+}
+
 #comment-compose .buttons {
     flex: 100%;
 }

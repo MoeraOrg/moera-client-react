@@ -13,7 +13,8 @@ export default function ComposeComments() {
                             title={t("comments-visible-to")} long setting="posting.comments.visibility.default"
                             groupClassName="mb-1"/>
             <PrincipalField name="addCommentPrincipal"
-                            values={["signed", "subscribed", "friends", "private", "none"]}
+                            values={["public", "signed", "subscribed", "friends", "private", "none"]}
+                            titles={{"public": t("public-anonymously")}}
                             title={t("commenting-allowed-to")} long setting="posting.comments.addition.default"/>
             <CheckboxField name="hideComments" title={t("auto-hide-comments")}
                            setting="posting.comments.hide.default" anyValue labelClassName="mb-0"

@@ -5,7 +5,13 @@ import { useTranslation } from 'react-i18next';
 
 import { SourceFormat } from "api";
 import { ClientState } from "state/state";
-import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
+import {
+    getHomeOwnerAvatar,
+    getHomeOwnerFullName,
+    getHomeOwnerGender,
+    getHomeOwnerName,
+    isConnectedToHome
+} from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import {
     closeCommentDialog,
@@ -131,6 +137,7 @@ function CommentDialogInner(props: Props) {
 const CommentDialogOuter = withFormik(commentComposeLogic)(CommentDialogInner);
 
 export default function CommentDialog() {
+    const connectedToHome = useSelector(isConnectedToHome);
     const ownerName = useSelector(getHomeOwnerName);
     const ownerFullName = useSelector(getHomeOwnerFullName);
     const ownerGender = useSelector(getHomeOwnerGender);
@@ -153,6 +160,7 @@ export default function CommentDialog() {
             comment={comment}
             draft={draft}
             formId={null}
+            connectedToHome={connectedToHome}
             ownerName={ownerName}
             ownerFullName={ownerFullName}
             ownerGender={ownerGender}
