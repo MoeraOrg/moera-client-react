@@ -277,9 +277,13 @@ const defaultIsPrincipalEqualsOptions: IsPrincipalEqualsOptions = {
     useOperations: "normal"
 };
 
-export function isPrincipalIn(operation: string, object: ProtectedObject | null, defaultValue: PrincipalValue,
-                              value: PrincipalValue | PrincipalValue[],
-                              options: Partial<IsPrincipalEqualsOptions> = {}): boolean {
+export function isPrincipalIn(
+    operation: string,
+    object: ProtectedObject | null,
+    defaultValue: PrincipalValue,
+    value: PrincipalValue | PrincipalValue[],
+    options: Partial<IsPrincipalEqualsOptions> = {}
+): boolean {
     const op: IsPrincipalEqualsOptions = {
         ...defaultIsPrincipalEqualsOptions,
         useOperations: object?.receiverName != null ? "receiver" : "normal",
