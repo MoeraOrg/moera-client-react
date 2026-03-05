@@ -46,6 +46,7 @@ export interface ComposePageProps extends ValuesToPostingTextProps {
     visibilityDefault: PrincipalValue,
     commentsVisibilityDefault: PrincipalValue,
     commentAdditionDefault: PrincipalValue,
+    commentTrustDefault: PrincipalValue,
     commentsHideDefault: boolean,
     reactionsEnabledDefault: boolean,
     reactionsNegativeEnabledDefault: boolean,
@@ -71,6 +72,8 @@ export interface ComposePageValues {
     viewCommentsPrincipalDefault: PrincipalValue;
     addCommentPrincipal: PrincipalValue;
     addCommentPrincipalDefault: PrincipalValue;
+    trustCommentPrincipal: PrincipalValue;
+    trustCommentPrincipalDefault: PrincipalValue;
     hideComments: boolean;
     hideCommentsDefault: boolean;
     reactionsEnabled: boolean;
@@ -158,6 +161,7 @@ export const valuesToPostingText = (values: ComposePageValues, props: ValuesToPo
         view: values.viewPrincipal,
         viewComments: values.viewCommentsPrincipal,
         addComment: values.addCommentPrincipal,
+        trustComment: values.trustCommentPrincipal,
         viewReactions: values.reactionsEnabled ? (values.reactionsVisible ? "public" : "private") : "none",
         viewNegativeReactions: values.reactionsEnabled && values.reactionsNegativeEnabled
             ? (values.reactionsVisible ? "public" : "private")
@@ -223,6 +227,7 @@ export function isPostingTextChanged(postingText: PostingText, posting: PostingI
         view: posting.operations?.view ?? "public",
         viewComments: posting.operations?.viewComments ?? "public",
         addComment: posting.operations?.addComment ?? "signed",
+        trustComment: posting.operations?.trustComment ?? "signed",
         viewReactions: posting.operations?.viewReactions ?? "public",
         viewNegativeReactions: posting.operations?.viewNegativeReactions ?? "public",
         viewReactionTotals: posting.operations?.viewReactionTotals ?? "public",
@@ -292,6 +297,11 @@ export const composePageLogic = {
             : props.posting != null
                 ? props.posting.operations?.addComment ?? "signed"
                 : props.commentAdditionDefault;
+        const trustCommentPrincipal = props.draft != null
+            ? props.draft.operations?.trustComment ?? "signed"
+            : props.posting != null
+                ? props.posting.operations?.trustComment ?? "signed"
+                : props.commentTrustDefault;
         const hideComments = props.draft != null
             ? (props.draft.commentOperations?.view ?? "public") === "private"
             : props.posting != null
@@ -341,6 +351,8 @@ export const composePageLogic = {
             viewCommentsPrincipalDefault: viewCommentsPrincipal,
             addCommentPrincipal,
             addCommentPrincipalDefault: addCommentPrincipal,
+            trustCommentPrincipal,
+            trustCommentPrincipalDefault: trustCommentPrincipal,
             hideComments,
             hideCommentsDefault: hideComments,
             reactionsEnabled,

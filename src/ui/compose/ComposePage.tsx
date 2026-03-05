@@ -177,6 +177,9 @@ export default function ComposePage() {
     const commentAdditionDefault = useSelector((state: ClientState) =>
         getSetting(state, "posting.comments.addition.default") as PrincipalValue
     );
+    const commentTrustDefault = useSelector((state: ClientState) =>
+        getSetting(state, "posting.comments.trust.default") as PrincipalValue
+    );
     const commentsHideDefault = useSelector((state: ClientState) =>
         getSetting(state, "posting.comments.hide.default") as boolean
     );
@@ -219,6 +222,7 @@ export default function ComposePage() {
             visibilityDefault={visibilityDefault}
             commentsVisibilityDefault={commentsVisibilityDefault}
             commentAdditionDefault={commentAdditionDefault}
+            commentTrustDefault={commentTrustDefault}
             commentsHideDefault={commentsHideDefault}
             reactionsEnabledDefault={reactionsEnabledDefault}
             reactionsNegativeEnabledDefault={reactionsNegativeEnabledDefault}

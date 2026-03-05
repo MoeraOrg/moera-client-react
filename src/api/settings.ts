@@ -292,7 +292,15 @@ const META: ClientSettingMetaInfo[] = [
         type: "Principal",
         defaultValue: "signed",
         modifiers: {
-            principals: ["signed", "subscribed", "friends", "private", "none"]
+            principals: ["public", "signed", "subscribed", "friends", "private", "none"]
+        }
+    },
+    {
+        name: "posting.comments.trust.default",
+        type: "Principal",
+        defaultValue: "signed",
+        modifiers: {
+            principals: ["public", "signed", "subscribed", "friends", "private"]
         }
     },
     {

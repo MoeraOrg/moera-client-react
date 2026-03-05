@@ -26,8 +26,8 @@ async function postingReplySaga(action: WithContext<PostingReplyAction>): Promis
     const {
         posting, nodeRootPage, homeOwnerName, homeRootPage, homeRootLocation, subjectPrefix, preambleTemplate,
         preambleTemplateHtml, quoteAll, visibilityDefault, sourceFormatDefault, commentsVisibilityDefault,
-        commentAdditionDefault, reactionsEnabledDefault, reactionsNegativeEnabledDefault, reactionsPositiveDefault,
-        reactionsNegativeDefault, reactionsVisibleDefault, reactionTotalsVisibleDefault
+        commentAdditionDefault, commentTrustDefault, reactionsEnabledDefault, reactionsNegativeEnabledDefault,
+        reactionsPositiveDefault, reactionsNegativeDefault, reactionsVisibleDefault, reactionTotalsVisibleDefault
     } = select(state => ({
             posting: getPosting(state, action.payload.id, REL_CURRENT),
             nodeRootPage: getNodeRootPage(state),
@@ -42,6 +42,7 @@ async function postingReplySaga(action: WithContext<PostingReplyAction>): Promis
             sourceFormatDefault: getSetting(state, "posting.body-src-format.default") as SourceFormat,
             commentsVisibilityDefault: getSetting(state, "posting.comments.visibility.default") as PrincipalValue,
             commentAdditionDefault: getSetting(state, "posting.comments.addition.default") as PrincipalValue,
+            commentTrustDefault: getSetting(state, "posting.comments.trust.default") as PrincipalValue,
             reactionsEnabledDefault: getSetting(state, "posting.reactions.enabled.default") as boolean,
             reactionsNegativeEnabledDefault: getSetting(state, "posting.reactions.negative.enabled.default") as boolean,
             reactionsPositiveDefault: getSetting(state, "posting.reactions-disabled.positive.default") as string,
@@ -101,6 +102,7 @@ async function postingReplySaga(action: WithContext<PostingReplyAction>): Promis
                 view: visibilityDefault,
                 viewComments: commentsVisibilityDefault,
                 addComment: commentAdditionDefault,
+                trustComment: commentTrustDefault,
                 viewReactions: reactionsVisibleDefault ? "public" : "private",
                 viewNegativeReactions: reactionsVisibleDefault ? "public" : "private",
                 viewReactionTotals: reactionTotalsVisibleDefault ? "public" : "private",
