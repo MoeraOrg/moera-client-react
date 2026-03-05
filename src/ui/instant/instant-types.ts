@@ -5,7 +5,7 @@ import { StoryInfo, StorySummaryData, StoryType } from "api";
 import { ActionContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { ExtStoryInfo } from "state/feeds/state";
-import { // material-symbols
+import {
     MaterialSymbol,
     msAlternateEmail,
     msBlock,
@@ -18,6 +18,7 @@ import { // material-symbols
     msPerson,
     msPersonOff,
     msReplySolid,
+    msRule,
     msShieldPerson,
     msVisibility,
     msVisibilityOff
@@ -30,6 +31,7 @@ import {
     buildCommentAddedSummary,
     buildCommentMediaReactionAddedSummary,
     buildCommentMediaReactionFailedSummary,
+    buildCommentNeedsApprovalSummary,
     buildCommentPostTaskFailedSummary,
     buildCommentReactionAddedSummary,
     buildCommentReactionTaskFailedSummary,
@@ -434,6 +436,15 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         icon: msInkPen,
         summary: () => "",
         target: story => ({nodeName: REL_HOME, href: "/"})
+    },
+    "comment-needs-approval": {
+        color: "var(--bs-indigo)",
+        icon: msRule,
+        summary: (data, homeOwnerName, t) => buildCommentNeedsApprovalSummary(data, t),
+        target: story => ({
+            nodeName: REL_HOME,
+            href: ut`/post/${getStoryPostingId(story)}?comment=${story.commentId}`
+        })
     },
 };
 

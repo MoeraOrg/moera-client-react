@@ -204,6 +204,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "trustComment": {
+                    type: "string",
+                    nullable: true
+                },
                 "overrideComment": {
                     type: "string",
                     nullable: true
@@ -5360,6 +5364,10 @@ export const NODE_API_SCHEMAS = {
                 },
                 "total": {
                     type: "integer"
+                },
+                "premoderating": {
+                    type: "boolean",
+                    nullable: true
                 },
             },
             required: [

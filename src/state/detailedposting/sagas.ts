@@ -389,6 +389,9 @@ async function commentPostSaga(action: WithContext<CommentPostAction>): Promise<
             dispatch(postingCommentCountUpdate(receiverPostingId, receiverName, 1).causedBy(action));
             const created = await Node.createComment(action, receiverName, receiverPostingId, commentText);
             dispatch(postingCommentsSet(postingId, created.total, REL_CURRENT).causedBy(action));
+            if (created.premoderating) {
+                dispatch(flashBox(i18n.t("your-comment-published-once-approved")).causedBy(action));
+            }
             comment = created.comment;
         } else {
             comment = await Node.updateComment(action, receiverName, receiverPostingId, commentId, commentText);

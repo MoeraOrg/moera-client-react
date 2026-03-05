@@ -107,6 +107,7 @@ import { ReactComponent as msReport } from "ui/material-symbols/report.isvg";
 import { ReactComponent as msRestartAlt16 } from "ui/material-symbols/restart_alt16.isvg";
 import { ReactComponent as msRotate90DegreesCcw } from "ui/material-symbols/rotate_90_degrees_ccw.isvg";
 import { ReactComponent as msRotate90DegreesCw } from "ui/material-symbols/rotate_90_degrees_cw.isvg";
+import { ReactComponent as msRule } from "ui/material-symbols/rule.isvg";
 import { ReactComponent as msSatellite } from "ui/material-symbols/satellite.isvg";
 import { ReactComponent as msSchedule } from "ui/material-symbols/schedule.isvg";
 import { ReactComponent as msSearch } from "ui/material-symbols/search.isvg";
@@ -249,6 +250,7 @@ export {
     msRestartAlt16,
     msRotate90DegreesCcw,
     msRotate90DegreesCw,
+    msRule,
     msSatellite,
     msSchedule,
     msSearch,
