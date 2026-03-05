@@ -91,9 +91,9 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
         }
     };
 
-    const onHide = () => dispatch(commentSetVisibility(comment.id, false));
+    const onHide = () => dispatch(commentSetVisibility(comment.id, comment.premoderating ?? false, false));
 
-    const onShow = () => dispatch(commentSetVisibility(comment.id, true));
+    const onShow = () => dispatch(commentSetVisibility(comment.id, comment.premoderating ?? false, true));
 
     const onBlockDialog = () => {
         if (receiverName != null && receiverPostingId != null) {

@@ -389,10 +389,10 @@ async function commentPostSaga(action: WithContext<CommentPostAction>): Promise<
             dispatch(postingCommentCountUpdate(receiverPostingId, receiverName, 1).causedBy(action));
             const created = await Node.createComment(action, receiverName, receiverPostingId, commentText);
             dispatch(postingCommentsSet(postingId, created.total, REL_CURRENT).causedBy(action));
-            if (created.premoderating) {
+            comment = created.comment;
+            if (comment.premoderating) {
                 dispatch(flashBox(i18n.t("your-comment-published-once-approved")).causedBy(action));
             }
-            comment = created.comment;
         } else {
             comment = await Node.updateComment(action, receiverName, receiverPostingId, commentId, commentText);
         }
@@ -641,7 +641,7 @@ async function commentDeleteSaga(action: WithContext<CommentDeleteAction>): Prom
 }
 
 async function commentSetVisibilitySaga(action: WithContext<CommentSetVisibilityAction>): Promise<void> {
-    const {commentId, visible} = action.payload;
+    const {commentId, premoderating, visible} = action.payload;
 
     const {
         receiverName, receiverPostingId, isOwner, ownerVisible, isSenior, seniorVisible
@@ -665,6 +665,9 @@ async function commentSetVisibilitySaga(action: WithContext<CommentSetVisibility
     if (isSenior && seniorVisible !== visible && !(isOwner && !visible)) {
         commentText.seniorOperations = {
             view: visible ? "unset" : "private"
+        }
+        if (premoderating && visible) {
+            commentText.premoderating = false;
         }
     }
     if (isOwner && ownerVisible !== visible) {

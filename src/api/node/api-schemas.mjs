@@ -4774,6 +4774,10 @@ export const NODE_API_SCHEMAS = {
                     type: "integer",
                     nullable: true
                 },
+                "premoderating": {
+                    type: "boolean",
+                    nullable: true
+                },
                 "operations": {
                     anyOf: [
                         {
@@ -5364,10 +5368,6 @@ export const NODE_API_SCHEMAS = {
                 },
                 "total": {
                     type: "integer"
-                },
-                "premoderating": {
-                    type: "boolean",
-                    nullable: true
                 },
             },
             required: [

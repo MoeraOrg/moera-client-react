@@ -1408,6 +1408,7 @@ export interface CommentText {
     repliedToId?: string | null;
     signature?: string | null;
     signatureVersion?: number | null;
+    premoderating?: boolean | null;
     operations?: CommentOperations | null;
     reactionOperations?: ReactionOperations | null;
     seniorOperations?: CommentOperations | null;
@@ -1704,6 +1705,7 @@ export interface CommentInfoBase<B> {
     digest?: string | null;
     signature?: string | null;
     signatureVersion?: number | null;
+    premoderating?: boolean | null;
     operations?: CommentOperations | null;
     reactionOperations?: ReactionOperations | null;
     ownerOperations?: CommentOperations | null;
@@ -1824,7 +1826,6 @@ export type StoryInfo = StoryInfoBase<Body>;
 export interface CommentCreatedBase<B> {
     comment: CommentInfoBase<B>;
     total: number;
-    premoderating?: boolean | null;
 }
 
 export type EncodedCommentCreated = CommentCreatedBase<string>;

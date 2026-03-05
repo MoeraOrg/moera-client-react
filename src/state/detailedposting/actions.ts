@@ -389,10 +389,13 @@ export const commentDeleteFailed = (
 
 export type CommentSetVisibilityAction = ActionWithPayload<"COMMENT_SET_VISIBILITY", {
     commentId: string;
+    premoderating: boolean;
     visible: boolean;
 }>;
-export const commentSetVisibility = (commentId: string, visible: boolean): CommentSetVisibilityAction =>
-    actionWithPayload("COMMENT_SET_VISIBILITY", {commentId, visible});
+export const commentSetVisibility = (
+    commentId: string, premoderating: boolean, visible: boolean
+): CommentSetVisibilityAction =>
+    actionWithPayload("COMMENT_SET_VISIBILITY", {commentId, premoderating, visible});
 
 export type FocusCommentAction = ActionWithoutPayload<"FOCUS_COMMENT">;
 export const focusComment = (): FocusCommentAction =>
