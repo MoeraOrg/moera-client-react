@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
-import { getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
+import { getHomeOwnerName } from "state/home/selectors";
 import { ExtCommentInfo } from "state/detailedposting/state";
 import {
     getCommentsReceiverName,
@@ -37,7 +37,6 @@ interface Props {
 }
 
 export default function Comment({comment, previousId, focused, index}: Props) {
-    const connectedToHome = useSelector(isConnectedToHome);
     const isSheriff = useSelector((state: ClientState) => getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE);
     const postingId = useSelector(getDetailedPostingId);
     const postingOwnerName = useSelector((state: ClientState) => getDetailedPosting(state)?.ownerName);
@@ -105,8 +104,9 @@ export default function Comment({comment, previousId, focused, index}: Props) {
                         small
                     />
                     <div className="reactions-line">
-                        {comment.signature == null && <div className="unsigned">{t("unsigned")}</div>}
-                        {connectedToHome && comment.signature != null &&
+                        {comment.signature == null ?
+                            <div className="unsigned">{t("unsigned")}</div>
+                        :
                             <CommentButtons nodeName={realOwnerName} postingId={realPostingId} comment={comment}/>
                         }
                         <CommentReactions

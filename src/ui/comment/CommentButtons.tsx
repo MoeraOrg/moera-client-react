@@ -7,7 +7,7 @@ import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
 import { isPermitted, IsPermittedOptions } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
-import { getCommentsReceiverFeatures } from "state/detailedposting/selectors";
+import { getCommentsReceiverFeatures, getDetailedPosting } from "state/detailedposting/selectors";
 import { msThumbDown, msThumbUp } from "ui/material-symbols";
 import CommentReactionButton from "ui/comment/CommentReactionButton";
 import CommentReplyButton from "ui/comment/CommentReplyButton";
@@ -25,11 +25,14 @@ export default function CommentButtons({nodeName, postingId, comment}: Props) {
         objectSourceFeatures: useSelector(getCommentsReceiverFeatures)
     };
     const homeOwnerName = useSelector(getHomeOwnerName);
+    const commentingAllowed = useSelector((state: ClientState) =>
+        isPermitted("addComment", getDetailedPosting(state), "signed", state, options)
+    );
     const enableSelf = useSelector((state: ClientState) =>
         getSetting(state, "comment.reactions.self.enabled") as boolean
     );
     const reactionsEnabled = useSelector((state: ClientState) =>
-        isPermitted("addReaction", comment, "public", state, options)
+        isPermitted("addReaction", comment, "signed", state, options)
     );
     const reactionsNegativeEnabled = useSelector((state: ClientState) =>
         isPermitted("addNegativeReaction", comment, "signed", state, options)
@@ -60,8 +63,10 @@ export default function CommentButtons({nodeName, postingId, comment}: Props) {
                 emoji={cr.negative ? cr.emoji : null}
                 rejected={comment.rejectedReactions?.negative}
             />
-            <CommentReplyButton id={comment.id} ownerName={comment.ownerName}
-                                ownerFullName={comment.ownerFullName ?? null} heading={comment.heading}/>
+            {commentingAllowed &&
+                <CommentReplyButton id={comment.id} ownerName={comment.ownerName}
+                                    ownerFullName={comment.ownerFullName ?? null} heading={comment.heading}/>
+            }
             <CommentShareButton nodeName={nodeName} postingId={postingId} commentId={comment.id}/>
         </div>
     );
