@@ -48,7 +48,8 @@ import {
     buildPostingReactionTaskFailedSummary,
     buildPostingSubscribeTaskFailedSummary,
     buildPostingUpdatedSummary,
-    buildPostingUpdateTaskFailedSummary,
+    buildPostingUpdateTaskFailedSummary, buildPremoderatedCommentAcceptedSummary,
+    buildPremoderatedCommentRejectedSummary,
     buildReactionAddedSummary,
     buildRemoteCommentAddedSummary,
     buildReplyCommentSummary,
@@ -444,6 +445,24 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         target: story => ({
             nodeName: REL_HOME,
             href: ut`/post/${getStoryPostingId(story)}?comment=${story.commentId}`
+        })
+    },
+    "premoderated-comment-accepted": {
+        color: "var(--correct)",
+        icon: msRule,
+        summary: (data, homeOwnerName, t) => buildPremoderatedCommentAcceptedSummary(data, homeOwnerName, t),
+        target: story => ({
+            nodeName: story.summaryNodeName ?? REL_HOME,
+            href: ut`/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
+        })
+    },
+    "premoderated-comment-rejected": {
+        color: "var(--incorrect)",
+        icon: msRule,
+        summary: (data, homeOwnerName, t) => buildPremoderatedCommentRejectedSummary(data, homeOwnerName, t),
+        target: story => ({
+            nodeName: story.summaryNodeName ?? REL_HOME,
+            href: ut`/post/${story.remotePostingId}`
         })
     },
 };

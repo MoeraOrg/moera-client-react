@@ -73,6 +73,10 @@ function isByFirstCommentOwner(data: StorySummaryData, node: StorySummaryNode | 
     return data.totalComments === 1 && data.comments?.length === 1 && node?.ownerName === data.comments[0].ownerName;
 }
 
+function isByPostingOwner(data: StorySummaryData, node: StorySummaryNode | StorySummaryEntry): boolean {
+    return node.ownerName === data.posting?.ownerName;
+}
+
 function formatSomebodysPosting(
     data: StorySummaryData,
     homeOwnerName: string | null,
@@ -507,5 +511,29 @@ export function buildCommentNeedsApprovalSummary(data: StorySummaryData, t: TFun
     return t("instant-summary.story.comment-needs-approval", {
         node: formatNodeName(data.comment),
         heading: formatHeading(data.posting),
+    });
+}
+
+export function buildPremoderatedCommentAcceptedSummary(
+    data: StorySummaryData, homeOwnerName: string | null, t: TFunction
+): string {
+    return t("instant-summary.story.premoderated-comment-accepted", {
+        node: formatNodeName(data.posting),
+        nodeGender: tGender(data.posting?.ownerGender),
+        commentHeading: formatHeading(data.comment),
+        posting: formatOnSomebodysPosting(data, homeOwnerName, isByPostingOwner, data.posting?.ownerGender, t),
+        postingHeading: formatHeading(data.posting)
+    });
+}
+
+export function buildPremoderatedCommentRejectedSummary(
+    data: StorySummaryData, homeOwnerName: string | null, t: TFunction
+): string {
+    return t("instant-summary.story.premoderated-comment-rejected", {
+        node: formatNodeName(data.posting),
+        nodeGender: tGender(data.posting?.ownerGender),
+        commentHeading: formatHeading(data.comment),
+        posting: formatOnSomebodysPosting(data, homeOwnerName, isByPostingOwner, data.posting?.ownerGender, t),
+        postingHeading: formatHeading(data.posting)
     });
 }

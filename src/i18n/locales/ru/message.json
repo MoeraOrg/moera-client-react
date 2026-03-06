@@ -409,6 +409,8 @@
       "posting-subscribe-task-failed": "Не удалось подписаться на комментарии к посту {node} {heading}",
       "posting-updated": "{node} {nodeGender, select, female {обновила} other {обновил}} свой пост {heading}",
       "posting-update-task-failed": "Не удалось подписать ваш пост {heading} в блоге {node}",
+      "premoderated-comment-accepted": "{node} {nodeGender, select, female {опубликовала} other {опубликовал}} ваш комментарий {commentHeading} к {posting} {postingHeading}",
+      "premoderated-comment-rejected": "{node} {nodeGender, select, female {отклонила} other {отклонил}} публикацию вашего комментария {commentHeading} к {posting} {postingHeading}",
       "reaction-added": "{reactions} ваш пост {heading}",
       "remote-comment-added": "{comments} {count, plural, =1 {{gender, select, female {прокомментировала} other {прокомментировал}}} other {прокомментировали}} {posting} {heading}, {reason}",
       "reply-comment": "{replies} {count, plural, =1 {{gender, select, female {ответила} other {ответил}}} other {ответили}} на ваш комментарий {heading} к {posting}",

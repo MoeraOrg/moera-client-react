@@ -409,6 +409,8 @@
       "posting-subscribe-task-failed": "Failed to subscribe to comments to {node} post {heading}",
       "posting-updated": "{node} updated their post {heading}",
       "posting-update-task-failed": "Failed to sign your post {heading} in {node} blog",
+      "premoderated-comment-accepted": "{node} has published your comment {commentHeading} on {posting} {postingHeading}",
+      "premoderated-comment-rejected": "{node} has declined to publish your comment {commentHeading} on {posting} {postingHeading}",
       "reaction-added": "{reactions} your post {heading}",
       "remote-comment-added": "{comments} commented on {posting} {heading} {reason}",
       "reply-comment": "{replies} replied to your comment {heading} on {posting}",

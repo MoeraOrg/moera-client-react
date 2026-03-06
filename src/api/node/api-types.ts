@@ -60,10 +60,11 @@ export type StoryType = "asked-to-friend" | "asked-to-subscribe" | "blocked-user
     | "mention-comment" | "mention-posting" | "posting-added" | "posting-media-reaction-added-negative"
     | "posting-media-reaction-added-positive" | "posting-media-reaction-failed" | "posting-post-task-failed"
     | "posting-reaction-task-failed" | "posting-subscribe-task-failed" | "posting-update-task-failed"
-    | "posting-updated" | "reaction-added-negative" | "reaction-added-positive" | "reminder-avatar" | "reminder-email"
-    | "reminder-full-name" | "reminder-sheriff-allow" | "remote-comment-added" | "reply-comment" | "search-report"
-    | "sheriff-complaint-added" | "sheriff-complaint-decided" | "sheriff-marked" | "sheriff-unmarked"
-    | "subscriber-added" | "subscriber-deleted" | "unblocked-user" | "unblocked-user-in-posting";
+    | "posting-updated" | "premoderated-comment-accepted" | "premoderated-comment-rejected" | "reaction-added-negative"
+    | "reaction-added-positive" | "reminder-avatar" | "reminder-email" | "reminder-full-name" | "reminder-sheriff-allow"
+    | "remote-comment-added" | "reply-comment" | "search-report" | "sheriff-complaint-added"
+    | "sheriff-complaint-decided" | "sheriff-marked" | "sheriff-unmarked" | "subscriber-added" | "subscriber-deleted"
+    | "unblocked-user" | "unblocked-user-in-posting";
 
 export type SubscriptionReason = "user" | "mention" | "comment" | "auto";
 
