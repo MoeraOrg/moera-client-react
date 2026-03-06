@@ -10,6 +10,7 @@ import { toWsUrl } from "util/url";
 const emptyConnection: Omit<HomeState, "roots"> = {
     introduced: false,
     connecting: false,
+    anonymousFullName: null,
     root: {
         location: null,
         page: null,
@@ -131,6 +132,9 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
                 };
             }
             return state;
+
+        case "ANONYMOUS_FULL_NAME_SET":
+            return immutable.set(state, "anonymousFullName", action.payload.anonymousFullName);
 
         case "CONNECTIONS_SET":
             return {

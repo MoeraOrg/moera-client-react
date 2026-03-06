@@ -69,6 +69,12 @@ export type HomeOwnerVerifiedAction = ActionWithPayload<"HOME_OWNER_VERIFIED", {
 export const homeOwnerVerified = (name: string, correct: boolean): HomeOwnerVerifiedAction =>
     actionWithPayload("HOME_OWNER_VERIFIED", {name, correct});
 
+export type AnonymousFullNameSetAction = ActionWithPayload<"ANONYMOUS_FULL_NAME_SET", {
+    anonymousFullName: string | null;
+}>;
+export const anonymousFullNameSet = (anonymousFullName: string | null): AnonymousFullNameSetAction =>
+    actionWithPayload("ANONYMOUS_FULL_NAME_SET", {anonymousFullName});
+
 export type ConnectionsSetAction = ActionWithPayload<"CONNECTIONS_SET", {
     roots: RootInfo[];
 }>;
@@ -129,6 +135,7 @@ export type HomeAnyAction =
     | HomeOwnerVerifyAction
     | HomeOwnerSetAction
     | HomeOwnerVerifiedAction
+    | AnonymousFullNameSetAction
     | ConnectionsSetAction
     | HomeAvatarsLoadAction
     | HomeAvatarsLoadedAction

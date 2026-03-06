@@ -163,6 +163,7 @@ export default function CommentDialog() {
             connectedToHome={connectedToHome}
             ownerName={ownerName}
             ownerFullName={ownerFullName}
+            ownerFullNameDefault={null}
             ownerGender={ownerGender}
             smileysEnabled={smileysEnabled}
             sourceFormatDefault={sourceFormatDefault}

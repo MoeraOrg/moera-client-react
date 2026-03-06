@@ -19,7 +19,8 @@ function buildData(
     currentRoot?: string | null,
     clientData?: Data.ClientData,
     roots?: Data.RootInfo[],
-    names?: Data.NameDetails[]
+    names?: Data.NameDetails[],
+    anonymousFullName?: string | null,
 ): StoredData {
     let data = {};
     if (currentRoot) {
@@ -31,6 +32,9 @@ function buildData(
     }
     if (names != null) {
         data = {...data, names}
+    }
+    if (anonymousFullName != null) {
+        data = {...data, anonymousFullName}
     }
     return data;
 }
@@ -47,15 +51,16 @@ export function findNameServerUrl(settings: [string, string | null][] | null | u
 }
 
 export function loadData(): StoredData {
+    const anonymousFullName = Data.getStorageItem("anonymousFullName");
     const homeRoot = Data.getStorageItem("currentRoot");
     const roots = Data.getStorageItem("roots") ?? [];
     if (!homeRoot) {
-        return buildData();
+        return buildData(undefined, undefined, roots, undefined, anonymousFullName);
     }
     const clientData = Data.getStorageItem("clientData", homeRoot) ?? {};
     ObjectPath.set(clientData, "home.nodeName", Data.findRootName(roots, homeRoot));
     const names = Data.getNames(findNameServerUrl(clientData.settings));
-    return buildData(homeRoot, clientData, roots, names);
+    return buildData(homeRoot, clientData, roots, names, anonymousFullName);
 }
 
 export function storeData(data: StoredData): Data.RootInfo[] {
@@ -148,4 +153,8 @@ export function loadNames(serverUrl: string | null): Data.NameDetails[] {
         serverUrl = null;
     }
     return Data.getNames(serverUrl);
+}
+
+export function storeAnonymousFullName(anonymousFullName: string | null): void {
+    Data.setStorageItem("anonymousFullName", null, anonymousFullName ?? "");
 }

@@ -7,6 +7,7 @@ import { tTitle } from "i18n";
 import { SourceFormat } from "api";
 import { ClientState } from "state/state";
 import {
+    getAnonymousFullName,
     getHomeOwnerAvatar,
     getHomeOwnerFullName,
     getHomeOwnerGender,
@@ -33,6 +34,7 @@ export default function CommentComposeLine() {
     const connectedToHome = useSelector(isConnectedToHome);
     const ownerName = useSelector(getHomeOwnerName);
     const ownerFullName = useSelector(getHomeOwnerFullName);
+    const ownerFullNameDefault = useSelector(getAnonymousFullName);
     const ownerGender = useSelector(getHomeOwnerGender);
     const avatarDefault = useSelector(getHomeOwnerAvatar);
     const commentingAllowed = useSelector(
@@ -97,6 +99,7 @@ export default function CommentComposeLine() {
                 connectedToHome={connectedToHome}
                 ownerName={ownerName}
                 ownerFullName={ownerFullName}
+                ownerFullNameDefault={ownerFullNameDefault}
                 ownerGender={ownerGender}
                 smileysEnabled={smileysEnabled}
                 sourceFormatDefault={sourceFormatDefault}

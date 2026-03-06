@@ -5,6 +5,7 @@ import { dispatch, select } from "state/store-sagas";
 import { cartesSet } from "state/cartes/actions";
 import { getCartesListTtl } from "state/cartes/selectors";
 import {
+    anonymousFullNameSet,
     connectedToHome,
     connectionsSet,
     disconnectedFromHome,
@@ -54,6 +55,10 @@ function loadedData(data: Access.StoredData): void {
     if (getCartesListTtl(data.cartes) < 5 * 60) {
         data.cartesIp = null;
         data.cartes = [];
+    }
+
+    if (data.anonymousFullName) {
+        dispatch(anonymousFullNameSet(data.anonymousFullName ?? null));
     }
 
     const {
@@ -148,4 +153,8 @@ export function reloadNames(cause: ClientAction | null, serverUrl: string) {
     const names = Access.loadNames(serverUrl);
     dispatch(namingNamesSwitchServer(serverUrl).causedBy(cause));
     dispatch(namingNamesPopulate(serverUrl, names).causedBy(cause));
+}
+
+export function storeAnonymousFullName(anonymousFullName: string | null): void {
+    Access.storeAnonymousFullName(anonymousFullName);
 }

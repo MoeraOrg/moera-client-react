@@ -26,6 +26,7 @@ interface PropsToValuesProps {
     comment: CommentInfo | null;
     draft: DraftInfo | null;
     avatarDefault: AvatarImage | null;
+    ownerFullNameDefault: string | null;
     sourceFormatDefault: SourceFormat;
 }
 
@@ -133,7 +134,7 @@ export const commentComposeLogic = {
             : props.comment != null ? props.comment.ownerAvatar ?? null : props.avatarDefault;
         const ownerFullName = props.draft != null
             ? props.draft.ownerFullName ?? ""
-            : props.comment?.ownerFullName ?? "";
+            : props.comment?.ownerFullName ?? props.ownerFullNameDefault ?? "";
         const attachments = props.draft != null ? props.draft.media : props.comment?.media;
         let media = attachments != null
             ? attachments

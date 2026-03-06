@@ -4,6 +4,7 @@ import { RootInfo } from "storage";
 export interface HomeState {
     introduced: boolean;
     connecting: boolean;
+    anonymousFullName: string | null;
     root: {
         location: string | null;
         page: string | null;

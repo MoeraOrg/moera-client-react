@@ -51,6 +51,10 @@ export const getRelNodeNameContext = createSelector(
     (ownerNameOrUrl, homeOwnerNameOrUrl, searchName) => ({ownerNameOrUrl, homeOwnerNameOrUrl, searchName})
 );
 
+export function getAnonymousFullName(state: ClientState): string | null {
+    return state.home.anonymousFullName;
+}
+
 export function getHomeOwnerCard(state: ClientState): NodeCardState | null {
     return getNodeCard(state, getHomeOwnerNameOrUrl(state));
 }

@@ -13,6 +13,7 @@ import {
     ReactionInfo,
     RepliedTo
 } from "api";
+import { Storage } from "storage";
 import { WithContext } from "state/action-types";
 import { executor } from "state/executor";
 import { barrier, dispatch, select } from "state/store-sagas";
@@ -107,6 +108,7 @@ import { postingCommentCountUpdate, postingCommentsSet, postingsSet } from "stat
 import { getPosting, isPostingCached } from "state/postings/selectors";
 import { postingGetLink } from "state/postings/sagas";
 import { getOwnerFullName, getOwnerName, isPermitted, isPrincipalIn } from "state/node/selectors";
+import { anonymousFullNameSet } from "state/home/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { fillSubscription } from "state/subscriptions/sagas";
@@ -378,6 +380,12 @@ async function commentLoadSaga(action: WithContext<CommentLoadAction>): Promise<
 
 async function commentPostSaga(action: WithContext<CommentPostAction>): Promise<void> {
     const {commentId, postingId, commentText, commentSourceText, formId} = action.payload;
+
+    if (commentText.ownerName === ANONYMOUS_NODE_NAME) {
+        const fullName = commentText.ownerFullName?.trim() || null;
+        Storage.storeAnonymousFullName(fullName);
+        dispatch(anonymousFullNameSet(fullName));
+    }
 
     const {receiverName, receiverPostingId} = select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
