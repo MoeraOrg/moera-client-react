@@ -57,8 +57,8 @@ export default function FeedGotoButton({nodeName, feedName, atBottom}: Props) {
                     <CloseButton onClick={deactivate}/>
                     <DatePicker
                         selected={fromUnixTime(timestamp >= 0 ? timestamp : 0)}
-                        onChange={v => {
-                            if (v instanceof Date) {
+                        onChange={(v: Date | null) => {
+                            if (v != null) {
                                 goToTimestamp(v);
                             }
                         }}

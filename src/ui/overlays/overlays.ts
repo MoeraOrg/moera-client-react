@@ -22,7 +22,7 @@ export interface OverlayZIndex {
 
 export class Overlay<E extends Element> {
 
-    readonly element: React.RefObject<E> | E | null;
+    readonly element: React.RefObject<E | null> | E | null;
     private onClose: (() => void) | undefined;
     closeOnClick: boolean = false;
     closeOnSelect: boolean = false;
@@ -41,7 +41,7 @@ export class Overlay<E extends Element> {
     mouseDownY: number | undefined = undefined;
 
     constructor(
-        element: React.RefObject<E> | E | null, lower: Overlay<Element> | null, parent: Overlay<Element> | null
+        element: React.RefObject<E | null> | E | null, lower: Overlay<Element> | null, parent: Overlay<Element> | null
     ) {
         this.element = element;
         this.parent = parent;
@@ -113,7 +113,7 @@ export class OverlaysManager {
     }
 
     open<E extends Element>(
-        id: string, element: React.RefObject<E> | E | null, parentId: string | null | undefined
+        id: string, element: React.RefObject<E | null> | E | null, parentId: string | null | undefined
     ): Overlay<E> {
         const parent = parentId != null ? this.overlays.get(parentId) : null;
         const overlay = new Overlay<E>(element, this.topOverlay, parent ?? this.rootOverlay);
@@ -247,14 +247,14 @@ export class OverlaysManager {
 
 }
 
-function isRef<E extends Element>(ref: React.RefObject<E> | E): ref is React.RefObject<E> {
+function isRef<E extends Element>(ref: React.RefObject<E | null> | E): ref is React.RefObject<E | null> {
     return 'current' in ref;
 }
 
 type UseOverlayProps = Partial<OverlayProps> & {visible?: boolean};
 
 export function useOverlay<E extends Element>(
-    ref: React.RefObject<E> | E | null, props: UseOverlayProps = {}
+    ref: React.RefObject<E | null> | E | null, props: UseOverlayProps = {}
 ): [OverlayZIndex | undefined, string] {
     const id = useRef<string>(randomId(4)).current;
     const subscribe = useCallback(() => {

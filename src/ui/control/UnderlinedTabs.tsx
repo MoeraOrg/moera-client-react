@@ -59,7 +59,7 @@ interface TabLinkProps {
     active: boolean;
     onClick?: () => void;
     className?: string;
-    scrollerRef: React.RefObject<HTMLDivElement>;
+    scrollerRef: React.RefObject<HTMLDivElement | null>;
     children?: React.ReactNode;
 }
 

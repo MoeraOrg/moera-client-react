@@ -32,7 +32,7 @@ import noTracking from "util/no-tracking";
 
 interface Props {
     format: SourceFormat;
-    textArea: React.RefObject<HTMLTextAreaElement>,
+    textArea: React.RefObject<HTMLTextAreaElement | null>,
     noComplexBlocks?: boolean | null;
     noEmbeddedMedia?: boolean | null;
     noMedia?: boolean | null;

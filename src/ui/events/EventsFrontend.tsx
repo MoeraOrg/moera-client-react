@@ -15,7 +15,7 @@ import { nodeUrlToEvents, nodeUrlToLocation } from "util/url";
 const NODE_OR_RECEIVER: EventSource[] = ["NODE" as const, "RECEIVER" as const];
 
 export default function EventsFrontend() {
-    const eventWorker = useRef<Worker>();
+    const eventWorker = useRef<Worker>(undefined);
     const dispatch = useDispatch();
 
     const onMessage = useCallback((event: MessageEvent) => dispatch(event.data as Action), [dispatch]);

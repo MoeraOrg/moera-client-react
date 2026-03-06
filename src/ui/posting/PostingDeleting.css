@@ -1,8 +1,3 @@
 .posting .deleting {
     color: var(--bs-gray-500);
 }
-
-.posting .deleting .loading {
-    color: var(--bs-gray-500);
-    fill: var(--bs-gray-500) !important;
-}

@@ -33,8 +33,8 @@ interface UseSearchSuggestionsResult {
     handleClick: (index: number) => () => void;
     submit: (success: boolean, item: SearchListItem) => void;
     handleHistoryDelete: (index: number) => (event: React.MouseEvent) => void;
-    inputDom: React.RefObject<HTMLInputElement>;
-    listDom: React.RefObject<HTMLDivElement>;
+    inputDom: React.RefObject<HTMLInputElement | null>;
+    listDom: React.RefObject<HTMLDivElement | null>;
 }
 
 export function useSearchSuggestions(

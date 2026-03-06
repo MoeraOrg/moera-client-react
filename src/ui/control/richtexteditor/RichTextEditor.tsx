@@ -33,7 +33,7 @@ export function RichTextEditor({
     rejectedReactions, onChange, submitKey, onSubmit, onBlur, onUrls, noComplexBlocks, noEmbeddedMedia, noMedia,
     noVideo, children
 }: Props) {
-    const textRef = React.useRef<string | Scripture>();
+    const textRef = React.useRef<string | Scripture>(null);
     textRef.current = value.value;
     const mediaRef = React.useRef<(VerifiedMediaFile | null)[] | null>(null);
     mediaRef.current = value.media ?? null;

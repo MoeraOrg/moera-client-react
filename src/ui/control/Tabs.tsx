@@ -89,7 +89,7 @@ interface TabLinkProps {
     href?: string;
     onClick?: () => void;
     className?: string;
-    scrollerRef: React.RefObject<HTMLUListElement>;
+    scrollerRef: React.RefObject<HTMLUListElement | null>;
     scrollable?: boolean
     children?: React.ReactNode;
 }

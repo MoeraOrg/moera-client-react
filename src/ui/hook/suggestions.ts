@@ -11,8 +11,8 @@ interface UseSuggestionsOptions<L> {
     onSubmit: (query: string | null, success: boolean, result: L | null) => void;
     submitOnEscape?: boolean;
     submitOnAt?: boolean;
-    inputDom: React.RefObject<HTMLInputElement>;
-    listDom: React.RefObject<HTMLDivElement>;
+    inputDom: React.RefObject<HTMLInputElement | null>;
+    listDom: React.RefObject<HTMLDivElement | null>;
     autoFocus?: boolean;
 }
 

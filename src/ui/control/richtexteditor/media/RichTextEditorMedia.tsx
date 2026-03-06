@@ -55,9 +55,9 @@ export default function RichTextEditorMedia({
     const uploadedImagesRef = useRef<(VerifiedMediaFile | null)[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
     // value and onChange may change
-    const valueRef = useRef<(VerifiedMediaFile | null)[]>();
+    const valueRef = useRef<(VerifiedMediaFile | null)[]>(null);
     valueRef.current = value;
-    const onChangeRef = useRef<ChangeHandler | undefined>();
+    const onChangeRef = useRef<ChangeHandler | undefined>(undefined);
     onChangeRef.current = onChange;
 
     const onImageUploadSuccess = (
@@ -122,7 +122,7 @@ export default function RichTextEditorMedia({
     };
 
     const compressDefault = useRef<boolean>(forceCompress || compressImages);
-    const onInsertRef = useRef<OnInsertHandler | undefined>();
+    const onInsertRef = useRef<OnInsertHandler | undefined>(undefined);
 
     const openUploadImages = (files: File[]) => {
         if (files.length === 0) {

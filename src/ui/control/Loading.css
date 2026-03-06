@@ -1,8 +1,4 @@
-.loading {
-    display: inline-block;
-}
-
-.loading-overlay:has(.loading) {
+.loading-overlay {
     position: absolute;
     inset: 0;
     background-color: white;

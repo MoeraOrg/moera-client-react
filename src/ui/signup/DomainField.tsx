@@ -18,7 +18,7 @@ interface Props {
 }
 
 export default function DomainField({name, title, disabled, onDomainInput, onDomainBlur, onAutoChange}: Props) {
-    const inputDom = useRef<HTMLInputElement>();
+    const inputDom = useRef<HTMLInputElement>(null);
     const {t} = useTranslation();
 
     const onInputInput = (event: Event) => {

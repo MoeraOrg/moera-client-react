@@ -1,4 +1,4 @@
-import { MutableRefObject } from 'react';
+import { RefObject } from 'react';
 import {
     BaseEditor,
     BaseElement,
@@ -105,7 +105,7 @@ export type ScriptureEditor<T extends DOMEditor> = T & {
 
 export function withScripture<T extends DOMEditor>(
     editor: T,
-    pasteImageRef: MutableRefObject<(data: DataTransfer) => boolean>,
+    pasteImageRef: RefObject<(data: DataTransfer) => boolean>,
     options: ScriptureEditorOptions
 ): ScriptureEditor<T> {
     const {

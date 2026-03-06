@@ -1,4 +1,4 @@
-import { MutableRefObject, ProfilerOnRenderCallback, useRef } from 'react';
+import { ProfilerOnRenderCallback, RefObject, useRef } from 'react';
 import deepEqual from 'react-fast-compare';
 
 /*
@@ -15,7 +15,7 @@ import deepEqual from 'react-fast-compare';
 interface TracedValue<T> {
     name: string;
     value: T;
-    prevValue: MutableRefObject<T | undefined>;
+    prevValue: RefObject<T | undefined>;
 }
 
 export function useTracedValue<T>(name: string, value: T): TracedValue<T> {
@@ -23,7 +23,7 @@ export function useTracedValue<T>(name: string, value: T): TracedValue<T> {
     return {name, value, prevValue};
 }
 
-function traceValue<T>(name: string, value: T, prevValue: MutableRefObject<T | null>): void {
+function traceValue<T>(name: string, value: T, prevValue: RefObject<T | null>): void {
     if (prevValue.current !== undefined) {
         if (!Object.is(value, prevValue.current)) {
             if (deepEqual(value, prevValue.current)) {
@@ -40,8 +40,8 @@ function traceValue<T>(name: string, value: T, prevValue: MutableRefObject<T | n
 
 export function traceRender(...tracedValues: TracedValue<any>[]): ProfilerOnRenderCallback {
     return (
-        id: string, phase: "mount" | "update", actualDuration: number, baseDuration: number, startTime: number,
-        commitTime: number
+        id: string, phase: Parameters<ProfilerOnRenderCallback>[1], actualDuration: number, baseDuration: number,
+        startTime: number, commitTime: number
     ) => {
         console.log(id, phase, actualDuration, baseDuration, startTime, commitTime);
         tracedValues.forEach(tv => traceValue(tv.name, tv.value, tv.prevValue));

@@ -59,7 +59,7 @@ function calcListMaxHeight(): Property.MaxHeight {
     return `${maxHeight}px`;
 }
 
-export function useDisableScrollX<T extends HTMLElement>(ref: React.RefObject<T>): void {
+export function useDisableScrollX<T extends HTMLElement>(ref: React.RefObject<T | null>): void {
     const resetScroll = useCallback(() => {
         if (ref.current?.scrollLeft !== 0) {
             ref.current?.scrollTo(0, 0);

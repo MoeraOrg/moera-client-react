@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ReactLoading from 'react-loading';
+import { PulseLoader } from "react-spinners";
 import cx from 'classnames';
 
 import { Wrapper } from "ui/control";
@@ -25,8 +25,13 @@ export function Loading({className = null, large = false, overlay = false}: Load
 
     return (
         <Wrapper className={cx({"loading-overlay": overlay})}>
-            <ReactLoading className={cx("loading", className)} type="bubbles" color="black" width={large ? 80 : 32}
-                          height={large ? 60 : 24}/>
+            <PulseLoader
+                className={cx("loading", className)}
+                color="#adb5bd"
+                cssOverride={{display: "inline-block"}}
+                size={large ? 25 : 10}
+                loading
+            />
         </Wrapper>
     );
 }

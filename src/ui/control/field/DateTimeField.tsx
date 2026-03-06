@@ -50,8 +50,8 @@ export const DateTimeField = ({
                         name={name}
                         className={inputClassName}
                         selected={value}
-                        onChange={v => {
-                            if (v instanceof Date) {
+                        onChange={(v: Date | null) => {
+                            if (v != null) {
                                 setValue(v);
                             }
                         }}

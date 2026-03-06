@@ -13,7 +13,7 @@ export interface RichTextEditorDialogProps<V> {
 }
 
 export type RichTextEditorDialogBodyProps<P> = P & {
-    okButtonRef: React.RefObject<HTMLButtonElement>
+    okButtonRef: React.RefObject<HTMLButtonElement | null>
 };
 
 export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V extends FormikValues>(
