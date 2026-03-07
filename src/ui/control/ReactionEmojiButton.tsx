@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, MouseEventHandler } from 'react';
+import React, { MouseEventHandler } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { REACTION_EMOJIS } from "api";
@@ -14,11 +14,11 @@ interface Props {
     invisible?: boolean;
     onReactionAdd: MouseEventHandler<HTMLButtonElement>;
     onReactionDelete: MouseEventHandler<HTMLButtonElement>;
+    ref?: React.Ref<HTMLButtonElement>;
 }
 
-function ReactionEmojiButtonImpl(
-    {icon, emoji, negative, caption, className, invisible, onReactionAdd, onReactionDelete}: Props,
-    ref: ForwardedRef<HTMLButtonElement>
+export function ReactionEmojiButton(
+    {icon, emoji, negative, caption, className, invisible, onReactionAdd, onReactionDelete, ref}: Props
 ) {
     const {t} = useTranslation();
 
@@ -31,7 +31,3 @@ function ReactionEmojiButtonImpl(
                             className={className} ref={ref} onClick={onReactionDelete}/>;
     }
 }
-
-const ReactionEmojiButton = forwardRef(ReactionEmojiButtonImpl);
-
-export { ReactionEmojiButton };

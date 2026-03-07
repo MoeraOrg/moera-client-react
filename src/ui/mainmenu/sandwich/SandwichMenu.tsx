@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -18,9 +18,10 @@ import { REL_HOME, REL_SEARCH } from "util/rel-node-name";
 import "./SandwichMenu.css";
 
 interface Props {
+    ref?: React.Ref<HTMLDivElement>;
 }
 
-function SandwichMenu(_: Props, ref: ForwardedRef<HTMLDivElement>) {
+export default function SandwichMenu({ref}: Props) {
     const nodeName = useSelector(getHomeOwnerName);
     const fullName = useSelector(getHomeOwnerFullName);
     const avatar = useSelector(getHomeOwnerAvatar);
@@ -115,5 +116,3 @@ function SandwichMenu(_: Props, ref: ForwardedRef<HTMLDivElement>) {
         </div>
     );
 }
-
-export default forwardRef(SandwichMenu);

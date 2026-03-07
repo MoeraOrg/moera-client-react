@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, MouseEventHandler } from 'react';
+import React, { MouseEventHandler } from 'react';
 import cx from 'classnames';
 
 import { Icon, MaterialSymbol } from "ui/material-symbols";
@@ -12,11 +12,11 @@ interface Props {
     invisible?: boolean;
     className?: string;
     onClick?: MouseEventHandler<HTMLButtonElement>;
+    ref?: React.Ref<HTMLButtonElement>;
 }
 
-const EmojiButton = forwardRef((
-    {icon, emoji, caption, color, invisible, className, onClick}: Props,
-    ref: ForwardedRef<HTMLButtonElement>
+const EmojiButton = (
+    {icon, emoji, caption, color, invisible, className, onClick, ref}: Props
 ) => (
     <button className={cx(className, {"invisible": invisible})} style={color ? {color} : undefined} onClick={onClick}
             ref={ref}>
@@ -24,6 +24,6 @@ const EmojiButton = forwardRef((
         {emoji && <Twemoji code={emoji}/>}
         <span className="caption">{caption}</span>
     </button>
-));
+);
 
 export { EmojiButton };

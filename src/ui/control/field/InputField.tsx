@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 import composeRefs from '@seznam/compose-react-refs';
@@ -33,15 +33,15 @@ interface Props {
     noFeedback?: boolean;
     initialValue?: string | null;
     defaultValue?: string | null;
+    ref?: React.Ref<HTMLInputElement>;
 }
 
-function InputFieldImpl(
+export function InputField(
     {
         name, title, placeholder, tooltip, type = "text", disabled, maxLength, horizontal = false, layout,
         groupClassName, labelClassName, inputClassName, col, autoFocus, anyValue, errorsOnly, error: externalError,
-        className, autoComplete, noFeedback = false, initialValue, defaultValue
-    }: Props,
-    ref: ForwardedRef<HTMLInputElement>
+        className, autoComplete, noFeedback = false, initialValue, defaultValue, ref
+    }: Props
 ) {
     const [showPassword, setShowPassword] = React.useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -108,7 +108,3 @@ function InputFieldImpl(
         </FormGroup>
     );
 }
-
-const InputField = forwardRef(InputFieldImpl);
-
-export { InputField };

@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef } from 'react';
+import React from 'react';
 import cx from 'classnames';
 
 import { Icon, MaterialSymbol } from "ui/material-symbols";
@@ -15,11 +15,11 @@ interface Props {
     disabled?: boolean;
     onClick?: (event: React.MouseEvent) => void;
     command?: () => void;
+    ref?: React.Ref<HTMLButtonElement>;
 }
 
-export function RichTextEditorButtonImpl(
-    {icon, iconSize = 24, title, hotkey, className, active, disabled, onClick, command}: Props,
-    ref: ForwardedRef<HTMLButtonElement>
+export function RichTextEditorButton(
+    {icon, iconSize = 24, title, hotkey, className, active, disabled, onClick, command, ref}: Props
 ) {
     const {focus} = useRichTextEditorCommands();
 
@@ -36,5 +36,3 @@ export function RichTextEditorButtonImpl(
         </button>
     );
 }
-
-export const RichTextEditorButton = forwardRef(RichTextEditorButtonImpl);

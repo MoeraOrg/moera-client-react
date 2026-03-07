@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import cx from 'classnames';
 import composeRefs from '@seznam/compose-react-refs';
 import { TOptions } from 'i18next';
@@ -35,14 +35,15 @@ interface Props {
     defaultValue?: string | null;
     disabled?: boolean;
     setting?: string;
+    ref?: React.Ref<HTMLSelectElement>;
 }
 
-function SelectFieldImpl(
+export function SelectField(
     {
         name, title, horizontal = false, layout, groupClassName, labelClassName, col, size, choices = [], multiple,
-        autoFocus, anyValue, className, autoComplete, noFeedback = false, initialValue, defaultValue, disabled, setting
-    }: Props,
-    ref: ForwardedRef<HTMLSelectElement>
+        autoFocus, anyValue, className, autoComplete, noFeedback = false, initialValue, defaultValue, disabled, setting,
+        ref
+    }: Props
 ) {
     const {t} = useTranslation();
 
@@ -99,7 +100,3 @@ function SelectFieldImpl(
         </FormGroup>
     );
 }
-
-const SelectField = forwardRef(SelectFieldImpl);
-
-export { SelectField };

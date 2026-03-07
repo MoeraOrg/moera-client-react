@@ -1,10 +1,12 @@
-import React, { ForwardedRef, forwardRef, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import autosize from 'autosize';
 import composeRefs from '@seznam/compose-react-refs';
 
-type Props = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
+type Props = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
+    ref?: React.Ref<HTMLTextAreaElement>;
+};
 
-function TextareaAutosizeImpl(props: Props, ref: ForwardedRef<HTMLTextAreaElement>) {
+export function TextareaAutosize({ref, ...props}: Props) {
     const ownRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
@@ -25,7 +27,3 @@ function TextareaAutosizeImpl(props: Props, ref: ForwardedRef<HTMLTextAreaElemen
 
     return <textarea ref={composeRefs(ownRef, ref)} {...props}/>
 }
-
-const TextareaAutosize = forwardRef(TextareaAutosizeImpl);
-
-export { TextareaAutosize };

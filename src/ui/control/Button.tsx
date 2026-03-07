@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import composeRefs from '@seznam/compose-react-refs';
 import cx from 'classnames';
 
@@ -14,14 +14,14 @@ type Props = {
     invisible?: boolean;
     active?: boolean;
     loading?: boolean;
+    ref?: React.Ref<HTMLButtonElement>;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-function ButtonImpl(
+export function Button(
     {
         variant, size, compact = false, borderless = false, invisible = false, active = false, loading = false,
-        disabled = false, className = "", type = "button", autoFocus, ...props
-    }: Props,
-    ref: ForwardedRef<HTMLButtonElement>
+        disabled = false, className = "", type = "button", autoFocus, ref, ...props
+    }: Props
 ) {
     const tinyScreen = useIsTinyScreen();
     const domRef = useRef<HTMLButtonElement>(null);
@@ -56,6 +56,3 @@ function ButtonImpl(
         </button>
     );
 }
-const Button = forwardRef(ButtonImpl);
-
-export { Button };

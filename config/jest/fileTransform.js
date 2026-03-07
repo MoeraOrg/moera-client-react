@@ -21,17 +21,18 @@ module.exports = {
       module.exports = {
         __esModule: true,
         default: ${assetFilename},
-        ReactComponent: React.forwardRef(function ${componentName}(props, ref) {
+        ReactComponent: function ${componentName}(props) {
+          const { ref, ...rest } = props;
           return {
             $$typeof: Symbol.for('react.element'),
             type: 'svg',
             ref: ref,
             key: null,
-            props: Object.assign({}, props, {
+            props: Object.assign({}, rest, {
               children: ${assetFilename}
             })
           };
-        }),
+        },
       };`;
     }
 

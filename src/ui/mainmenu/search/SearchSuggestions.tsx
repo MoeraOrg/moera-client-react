@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
@@ -20,11 +20,11 @@ interface Props {
     handleClick: (index: number) => () => void;
     onHistoryDelete: (index: number) => (event: React.MouseEvent) => void;
     visible?: boolean;
+    ref?: React.Ref<HTMLDivElement>;
 }
 
-function SearchSuggestions(
-    {query, searchList, selectedIndex, handleClick, onHistoryDelete, visible = true}: Props,
-    ref: ForwardedRef<HTMLDivElement>
+export default function SearchSuggestions(
+    {query, searchList, selectedIndex, handleClick, onHistoryDelete, visible = true, ref}: Props
 ) {
     const homeName = useSelector(getHomeOwnerName);
     const homeAvatar = useSelector(getHomeOwnerAvatar);
@@ -89,5 +89,3 @@ function SearchSuggestions(
         </div>
     );
 }
-
-export default forwardRef(SearchSuggestions);

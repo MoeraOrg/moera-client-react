@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as URI from 'uri-js';
 
@@ -27,14 +27,15 @@ interface Props {
     readId?: string | null;
     onNear?: JumpCallback;
     onFar?: JumpCallback;
+    ref?: React.Ref<HTMLAnchorElement>;
     children?: any;
 }
 
-function Jump(
+export default function Jump(
     {
-        nodeName = REL_CURRENT, nodeUri, href, id, dataIndex, className, style, title, readId, onNear, onFar, children
-    }: Props,
-    ref: ForwardedRef<HTMLAnchorElement>
+        nodeName = REL_CURRENT, nodeUri, href, id, dataIndex, className, style, title, readId, onNear, onFar, ref,
+        children
+    }: Props
 ) {
     const ownerNameOrUrl = useSelector(getOwnerNameOrUrl);
     const rootPage = useSelector(getNodeRootPage);
@@ -142,5 +143,3 @@ function Jump(
         );
     }
 }
-
-export default forwardRef(Jump);

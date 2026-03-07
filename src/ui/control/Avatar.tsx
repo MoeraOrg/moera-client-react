@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -39,11 +39,13 @@ interface Props {
     draggable?: boolean;
     nodeName?: RelNodeName | string; // Node the avatar is loaded from
     onClick?: (event: React.MouseEvent) => void;
+    ref?: React.Ref<HTMLImageElement>;
 }
 
-function AvatarImpl(
-    {avatar, ownerName, size, shape: shapeLocal, className, draggable = true, nodeName = REL_CURRENT, onClick}: Props,
-    ref: ForwardedRef<HTMLImageElement>
+export function Avatar(
+    {
+        avatar, ownerName, size, shape: shapeLocal, className, draggable = true, nodeName = REL_CURRENT, onClick, ref
+    }: Props
 ) {
     const rootPage = useSelector((state: ClientState) =>
         getNamingNameRoot(state, nodeName)
@@ -86,7 +88,3 @@ function AvatarImpl(
         );
     }
 }
-
-const Avatar = forwardRef(AvatarImpl);
-
-export { Avatar };

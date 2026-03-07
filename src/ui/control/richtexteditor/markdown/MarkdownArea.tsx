@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import composeRefs from '@seznam/compose-react-refs';
 import { useTranslation } from 'react-i18next';
@@ -41,14 +41,15 @@ export interface MarkdownAreaProps {
     onChange?: (event: React.FormEvent) => void;
     onBlur?: (event: React.FocusEvent) => void;
     onUrls?: (urls: string[]) => void;
+    ref?: React.Ref<HTMLTextAreaElement>;
 }
 
-function MarkdownArea(
+export default function MarkdownArea(
     {
         name, value, format, className, autoFocus, autoComplete, minHeight, maxHeight, placeholder, rows = 3, disabled,
         smileysEnabled, commentQuote, submitKey, onSubmit, onChange, onBlur, onUrls,
-    }: MarkdownAreaProps,
-    ref: ForwardedRef<HTMLTextAreaElement>
+        ref
+    }: MarkdownAreaProps
 ) {
     const pasteRich = useSelector((state: ClientState) => getSetting(state, "rich-text-editor.paste-rich") as string);
     const dispatch = useDispatch();
@@ -301,5 +302,3 @@ function shouldPastePlainText(text: string, html: string): boolean {
 function shouldPasteHtml(html: string): boolean {
     return !containsTags(safeImportHtml(html), "all");
 }
-
-export default forwardRef(MarkdownArea);

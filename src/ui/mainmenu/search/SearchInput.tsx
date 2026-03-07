@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { Icon, msCancelFilled, msSearch } from "ui/material-symbols";
@@ -12,11 +12,11 @@ interface Props {
     handleFocus: () => void;
     handleBlur: () => void;
     handleClear: () => void;
+    ref?: React.Ref<HTMLInputElement>;
 }
 
-function SearchInput(
-    {query, placeholder = "search", handleKeyDown, handleChange, handleFocus, handleBlur, handleClear}: Props,
-    ref: ForwardedRef<HTMLInputElement>
+export default function SearchInput(
+    {query, placeholder = "search", handleKeyDown, handleChange, handleFocus, handleBlur, handleClear, ref}: Props
 ) {
     const {t} = useTranslation();
 
@@ -42,5 +42,3 @@ function SearchInput(
         </>
     );
 }
-
-export default forwardRef(SearchInput);

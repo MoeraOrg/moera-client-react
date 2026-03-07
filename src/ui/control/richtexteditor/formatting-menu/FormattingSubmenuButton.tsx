@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import { Icon, MaterialSymbol, msChevronRight, msKeyboardArrowDown } from "ui/material-symbols";
 import { usePopover } from "ui/control/popover-context";
@@ -7,11 +7,11 @@ type Props = {
     icon: MaterialSymbol;
     title: string;
     expanded?: boolean;
+    ref?: React.Ref<HTMLButtonElement>;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-function FormattingSubmenuButton(
-    {icon, title, disabled, expanded, ...props}: Props,
-    ref: ForwardedRef<HTMLButtonElement>
+export default function FormattingSubmenuButton(
+    {icon, title, disabled, expanded, ref, ...props}: Props
 ) {
     const {update: updatePopover} = usePopover();
 
@@ -29,5 +29,3 @@ function FormattingSubmenuButton(
         </button>
     );
 }
-
-export default forwardRef(FormattingSubmenuButton);

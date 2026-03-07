@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef } from 'react';
+import React from 'react';
 import cx from 'classnames';
 
 import { Icon, MaterialSymbol } from "ui/material-symbols";
@@ -16,11 +16,11 @@ interface Props {
     disabled?: boolean;
     onClick?: (event: React.MouseEvent) => void;
     command?: () => void;
+    ref?: React.Ref<HTMLButtonElement>;
 }
 
-export function FormattingMenuItemImpl(
-    {icon, iconSize = 20, title, hotkey, className, active, disabled, onClick, command}: Props,
-    ref: ForwardedRef<HTMLButtonElement>
+export function FormattingMenuItem(
+    {icon, iconSize = 20, title, hotkey, className, active, disabled, onClick, command, ref}: Props
 ) {
     const {focus} = useRichTextEditorCommands();
     const {hide} = useParent();
@@ -43,5 +43,3 @@ export function FormattingMenuItemImpl(
         </button>
     );
 }
-
-export const FormattingMenuItem = forwardRef(FormattingMenuItemImpl);
