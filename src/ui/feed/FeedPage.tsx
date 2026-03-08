@@ -25,6 +25,7 @@ import FeedNoContent from "ui/feed/nocontent/FeedNoContent";
 import { REL_HOME, RelNodeName } from "util/rel-node-name";
 import { getPageHeaderHeight } from "util/ui";
 import "./FeedPage.css";
+import { PostingState } from "state/postings/state";
 
 type NavigationUpdateHandler = (navigable: boolean, atBottom: boolean) => void;
 
@@ -246,10 +247,12 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
     );
 }
 
+const EMPTY_MAP: Record<string, PostingState> = {};
+
 const getStories = createSelector(
     (state: ClientState, nodeName: RelNodeName | string, feedName: string) =>
         getFeedState(state, nodeName, feedName).stories,
-    (state: ClientState) => state.postings[getOwnerNameOrUrl(state)] ?? {}, // FIXME it is an overly general dependency
+    (state: ClientState) => state.postings[getOwnerNameOrUrl(state)] ?? EMPTY_MAP, // FIXME it is an overly general dependency
     isGooglePlayHiding,
     (stories, postings, hiding) =>
         stories

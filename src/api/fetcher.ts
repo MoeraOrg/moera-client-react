@@ -2,7 +2,7 @@ import pLimit from 'p-limit';
 
 import { delay } from "util/misc";
 
-class XhrResponse implements Response {
+export class XhrResponse {
 
     readonly body: ReadableStream<Uint8Array> | null = null;
     readonly bodyUsed: boolean = false;
@@ -47,7 +47,7 @@ class XhrResponse implements Response {
         return Promise.resolve(new Uint8Array());
     }
 
-    clone(): Response {
+    clone(): XhrResponse {
         return new XhrResponse(this.xhr, this.url);
     }
 
@@ -78,7 +78,7 @@ export interface FetcherOptions {
     onProgress?: ProgressHandler;
 }
 
-function xhrFetch(url: string, options: FetcherOptions): Promise<Response> {
+function xhrFetch(url: string, options: FetcherOptions): Promise<XhrResponse> {
     return new Promise(function (resolve, reject) {
         const xhr = new XMLHttpRequest();
         xhr.open(options.method ?? "GET", url, true);
@@ -142,6 +142,6 @@ async function retryFetch(url: string, options: FetcherOptions): Promise<Respons
     throw exception;
 }
 
-export async function fetcher(url: string, options: FetcherOptions): Promise<Response> {
+export async function fetcher(url: string, options: FetcherOptions): Promise<Response | XhrResponse> {
     return options.onProgress != null ? xhrFetch(url, options) : parallelLimit(() => retryFetch(url, options));
 }

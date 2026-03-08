@@ -278,8 +278,9 @@ export interface ScriptureMarks {
     mark?: boolean;
 }
 
-export const equalScriptureMarks = (a: ScriptureMarks, b: ScriptureMarks): boolean =>
-    Boolean(a.bold) === Boolean(b.bold)
+export const equalScriptureMarks = (a: ScriptureMarks | null, b: ScriptureMarks): boolean =>
+    a != null
+    && Boolean(a.bold) === Boolean(b.bold)
     && Boolean(a.italic) === Boolean(b.italic)
     && Boolean(a.strikeout) === Boolean(b.strikeout)
     && Boolean(a.code) === Boolean(b.code)

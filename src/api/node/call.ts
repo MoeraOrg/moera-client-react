@@ -2,7 +2,7 @@ import i18n from 'i18next';
 
 import { formatSchemaErrors, HomeNotConnectedError, NameResolvingError, NodeApiError, NodeError } from "api";
 import { validateSchema } from "api/node/safe";
-import { fetcher, ProgressHandler } from "api/fetcher";
+import { fetcher, ProgressHandler, XhrResponse } from "api/fetcher";
 import { CausedError, NodeConnectionError, TooManyRequestsError } from "api/error";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
@@ -92,7 +92,7 @@ export async function callApi<T>({
             continue;
         }
 
-        let response: Response;
+        let response: Response | XhrResponse;
         try {
             response = await fetcher(apiUrl(rootApi, location, method), {
                 method,
