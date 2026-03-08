@@ -1,11 +1,12 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { createSelector } from 'reselect';
 
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { complaintsInboxSet, complaintsPastSliceLoad } from "state/complaints/actions";
+import { useDispatcher } from "ui/hook";
 import { Button } from "ui/control";
 import { Icon, msInbox } from "ui/material-symbols";
 import { Page } from "ui/page/Page";
@@ -32,7 +33,7 @@ export default function ComplaintsListPage() {
     const before = useSelector((state: ClientState) => state.complaints.before);
     const inboxOnly = useSelector((state: ClientState) => state.complaints.inboxOnly);
     const newsHref = useHomeNews();
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onLoadPast = () => dispatch(complaintsPastSliceLoad());

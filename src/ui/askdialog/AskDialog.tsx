@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -8,6 +8,7 @@ import { dispatch } from "state/store-sagas";
 import { getNodeCard } from "state/nodecards/selectors";
 import { getSetting } from "state/settings/selectors";
 import { askDialogSend, closeAskDialog } from "state/askdialog/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { InputField, SelectField, SelectFieldChoice } from "ui/control/field";
 import { NameDisplayMode } from "ui/types";
@@ -33,7 +34,7 @@ function AskDialogInner({nodeName}: Props) {
     const nameDisplayMode = useSelector(
         (state: ClientState) => getSetting(state, "full-name.display")
     ) as NameDisplayMode;
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const name = formatFullName(nodeName, card?.details.profile.fullName, nameDisplayMode);

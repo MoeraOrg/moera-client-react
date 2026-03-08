@@ -1,10 +1,11 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { feedStatusUpdate } from "state/feeds/actions";
 import { getFeedState } from "state/feeds/selectors";
+import { useDispatcher } from "ui/hook";
 import { OnlyDesktop } from "ui/control";
 import { msMarkEmailRead } from "ui/material-symbols";
 import { Page } from "ui/page/Page";
@@ -22,7 +23,7 @@ import "./InstantsPage.css";
 export default function InstantsPage() {
     const stories = useSelector((state: ClientState) => getFeedState(state, REL_HOME, "instant").stories);
     const newsHref = useHomeNews();
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onReadAll = () => {

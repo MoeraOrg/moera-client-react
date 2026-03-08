@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
 
 import { PrivateMediaFileInfo } from "api";
@@ -7,6 +7,7 @@ import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { openLightBox } from "state/lightbox/actions";
+import { useDispatcher } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import PreloadedImage from "ui/posting/PreloadedImage";
 import { mediaImageTagAttributes } from "util/media-images";
@@ -32,7 +33,7 @@ export default function EntryImage({
 }: Props) {
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, nodeName));
     const carte = useSelector(getCurrentViewMediaCarte);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const {
         src, srcSet, sizes, width: imageWidth, height: imageHeight, alt: imageAlt

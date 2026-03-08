@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
@@ -9,10 +9,10 @@ import { ClientState } from "state/state";
 import { openConnectionsDialog } from "state/home/actions";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName, getHomeRootLocation } from "state/home/selectors";
 import { confirmBox } from "state/confirmbox/actions";
+import { useParent, useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
 import { Avatar } from "ui/control";
 import { Icon, msComment, msExplore, msLogout, msSwapHoriz, msTrendingUp } from "ui/material-symbols";
-import { useParent } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import { REL_HOME, REL_SEARCH } from "util/rel-node-name";
 import "./SandwichMenu.css";
@@ -28,7 +28,7 @@ export default function SandwichMenu({ref}: Props) {
     const location = useSelector(getHomeRootLocation);
     const login = useSelector((state: ClientState) => state.home.login);
     const {hide} = useParent();
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onJump = (_: string, performJump: () => void) => {

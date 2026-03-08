@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { feedScrollToAnchor } from "state/feeds/actions";
+import { useDispatcher } from "ui/hook";
 import { Icon, msArrowDownward, msKeepFilled16 } from "ui/material-symbols";
 import { RelNodeName } from "util/rel-node-name";
 import { PINNED_TIME } from "util/misc";
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function FeedSkipPinnedButton({nodeName, feedName}: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const [visible, setVisible] = useState(isAtPinned);
 

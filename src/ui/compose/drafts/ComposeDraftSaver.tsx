@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
 import { DraftText, PostingText, StoryAttributes, VerifiedMediaFile } from "api";
@@ -9,6 +9,7 @@ import { getOwnerName } from "state/node/selectors";
 import { composeDraftListItemDelete, composeDraftSave, composeUpdateDraftDelete } from "state/compose/actions";
 import { getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
+import { useDispatcher } from "ui/hook";
 import { ComposePageValues, isPostingTextChanged, valuesToPostingText } from "ui/compose/posting-compose";
 import { useDraftSaver } from "ui/draft/draft-saver";
 import { notNull } from "util/misc";
@@ -33,7 +34,6 @@ const toDraftText = (
     publishAt: getPublishAt(postingText.publications)
 } as DraftText);
 
-
 export default function ComposeDraftSaver() {
     const ownerName = useSelector(getOwnerName);
     const gender = useSelector(getHomeOwnerGender);
@@ -50,7 +50,7 @@ export default function ComposeDraftSaver() {
     const avatarShapeDefault = useSelector((state: ClientState) =>
         getSetting(state, "avatar.shape.default") as string
     );
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const toText = useCallback(
         (values: ComposePageValues): PostingText =>

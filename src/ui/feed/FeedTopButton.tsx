@@ -1,8 +1,9 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+
 import { useTranslation } from 'react-i18next';
 
 import { feedScrollToAnchor } from "state/feeds/actions";
+import { useDispatcher } from "ui/hook";
 import { Icon, msArrowUpward } from "ui/material-symbols";
 import { RelNodeName } from "util/rel-node-name";
 
@@ -19,7 +20,7 @@ interface Props {
 export default function FeedTopButton({
     nodeName, feedName, atTop, totalAfterTop, notViewed, notViewedMoment, momentAbove
 }: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     if (atTop) {

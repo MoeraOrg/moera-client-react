@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { Field, Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { closeShareDialog, shareDialogCopyLink } from "state/sharedialog/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { Icon, msContentCopy } from "ui/material-symbols";
 import CopyQuoteButton from "ui/sharedialog/CopyQuoteButton";
@@ -29,7 +30,7 @@ type Props = OuterProps & FormikProps<Values>
 
 function ShareDialogInner({title, url, values, resetForm}: Props) {
     const socialButtons = useSelector(getSocialButtons);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const {t} = useTranslation();
 

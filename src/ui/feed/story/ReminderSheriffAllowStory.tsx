@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { getHomeOwnerGender } from "state/home/selectors";
 import { ExtStoryInfo } from "state/feeds/state";
 import { reminderSheriffAllow } from "state/stories/actions";
+import { useDispatcher } from "ui/hook";
 import { Button } from "ui/control";
 import StoryMenu from "ui/story/StoryMenu";
 import StoryBadges from "ui/story/StoryBadges";
@@ -16,7 +17,7 @@ interface Props {
 
 function ReminderSheriffAllowStory({feedName, story}: Props) {
     const gender = useSelector(getHomeOwnerGender);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const [submitting, setSubmitting] = useState<boolean>(false);

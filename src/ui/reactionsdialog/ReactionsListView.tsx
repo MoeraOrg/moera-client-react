@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { NodeName as Name } from "api";
@@ -13,9 +13,9 @@ import {
     isReactionsDialogReactionsAllLoaded,
     isReactionsDialogLoading
 } from "state/reactionsdialog/selectors";
+import { useParent, useDispatcher } from "ui/hook";
 import { Avatar, Loading, SubscribeButton } from "ui/control";
 import { getSubscriptionStatus, SubscriptionStatus } from "ui/control/subscribebutton/subscription-status";
-import { useParent } from "ui/hook";
 import { Icon, msFinance } from "ui/material-symbols";
 import Twemoji from "ui/twemoji/Twemoji";
 import NodeName from "ui/nodename/NodeName";
@@ -39,7 +39,7 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
     const reactionsLoaded = useSelector(isReactionsDialogReactionsAllLoaded);
     const reactions = useSelector(getReactionsDialogItems);
     const {hide} = useParent();
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const cards = useSelector((state: ClientState) => state.nodeCards.cards);

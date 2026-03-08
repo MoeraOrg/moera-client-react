@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
@@ -12,9 +12,9 @@ import { isConnectedToHome } from "state/home/selectors";
 import { detailedPostingLoad } from "state/detailedposting/actions";
 import { getDetailedPosting, isDetailedPostingBeingDeleted } from "state/detailedposting/selectors";
 import { getPostingFeedReference, isPostingSheriffProhibited } from "state/postings/selectors";
+import { useIsTinyScreen, useDispatcher } from "ui/hook";
 import { Button, Loading, OnlyDesktop } from "ui/control";
 import { MinimalStoryInfo } from "ui/types";
-import { useIsTinyScreen } from "ui/hook";
 import { useHomeNews } from "ui/feed/feeds";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
@@ -89,7 +89,7 @@ export default function DetailedPostingPage() {
     const googlePlayHiding = useSelector(isGooglePlayHiding);
     const newsHref = useHomeNews();
     const tinyScreen = useIsTinyScreen();
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const {story = null, backNodeName, backHref, backTitle} = useMemo(

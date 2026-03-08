@@ -1,14 +1,15 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { mnemonicDialogOpen } from "state/nodename/actions";
 import { hasNodeNameStoredMnemonic } from "state/nodename/selectors";
+import { useDispatcher } from "ui/hook";
 import { Button } from "ui/control";
 
 export default function SettingsItemMnemonic() {
     const storedMnemonic = useSelector(hasNodeNameStoredMnemonic);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     if (!storedMnemonic) {

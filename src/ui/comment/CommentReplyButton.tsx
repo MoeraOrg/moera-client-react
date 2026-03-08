@@ -1,8 +1,9 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+
 import { useTranslation } from 'react-i18next';
 
 import { commentReply } from "state/detailedposting/actions";
+import { useDispatcher } from "ui/hook";
 import { Icon, msReplySolid } from "ui/material-symbols";
 
 interface Props {
@@ -13,7 +14,7 @@ interface Props {
 }
 
 export default function CommentReplyButton({id, ownerName, ownerFullName, heading}: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onClick = () => dispatch(commentReply(id, ownerName, ownerFullName, heading));

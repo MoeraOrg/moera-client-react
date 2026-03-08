@@ -1,10 +1,11 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { PublicMediaFileInfo } from "api";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { openLightBox } from "state/lightbox/actions";
+import { useDispatcher } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import { REL_SEARCH, RelNodeName } from "util/rel-node-name";
 import { urlWithParameters, ut } from "util/url";
@@ -20,7 +21,7 @@ interface Props {
 
 export default function SearchEntryImagePreview({nodeName, postingId, commentId, mediaId, mediaFile}: Props) {
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, REL_SEARCH));
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const onNear = () => {
         if (postingId != null) {

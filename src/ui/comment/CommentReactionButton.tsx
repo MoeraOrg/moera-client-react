@@ -1,8 +1,9 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { commentReact, commentReactionDelete } from "state/detailedposting/actions";
 import { getCommentsReceiverPostingId } from "state/detailedposting/selectors";
+import { useDispatcher } from "ui/hook";
 import { ReactionButton } from "ui/control";
 import { MaterialSymbol } from "ui/material-symbols";
 import "./CommentButton.css";
@@ -19,7 +20,7 @@ interface Props {
 
 export default function CommentReactionButton({icon, caption, invisible, id, negative, emoji, rejected}: Props) {
     const postingId = useSelector(getCommentsReceiverPostingId);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     if (postingId == null) {
         return null;

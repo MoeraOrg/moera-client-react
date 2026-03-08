@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
@@ -8,6 +8,7 @@ import { ExtPostingInfo } from "state/postings/state";
 import { getHomeOwnerName } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
 import { jumpNear } from "state/navigation/actions";
+import { useDispatcher } from "ui/hook";
 import { MinimalStoryInfo } from "ui/types";
 import PostingMenu from "ui/posting/PostingMenu";
 import StoryBadges from "ui/story/StoryBadges";
@@ -74,7 +75,7 @@ interface FeedPostingProps {
 export default function FeedPosting({nodeName, posting, story, hideRecommended}: FeedPostingProps) {
     const postingEditable = useSelector((state: ClientState) => isPermitted("edit", posting, "owner", state));
     const isSheriff = useSelector(getHomeOwnerName) === SHERIFF_GOOGLE_PLAY_TIMELINE;
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     return (
         <>

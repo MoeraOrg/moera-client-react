@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { ClientReactionInfo } from "api";
 import { ClientState } from "state/state";
@@ -8,9 +8,9 @@ import { getHomeOwnerName } from "state/home/selectors";
 import { getLightBoxMediaPostingId, getLightBoxNodeName } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
+import { useIsTinyScreen, useDispatcher } from "ui/hook";
 import { ReactionButton } from "ui/control";
 import { msThumbDown, msThumbUp } from "ui/material-symbols";
-import { useIsTinyScreen } from "ui/hook";
 import PostingReactions from "ui/posting/PostingReactions";
 import "./LightBoxReactions.css";
 
@@ -23,7 +23,7 @@ export default function LightBoxReactions() {
     const enableSelf = useSelector((state: ClientState) =>
         getSetting(state, "posting.reactions.self.enabled") as boolean
     );
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const tinyScreen = useIsTinyScreen();
 
     if (posting == null) {

@@ -1,13 +1,13 @@
 import React, { Suspense } from 'react';
 import * as ReactDOM from 'react-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { offset, useFloating } from '@floating-ui/react';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { closeInstantsPopover, openInstantsPopover } from "state/instants/actions";
+import { ParentContext, useDispatcher } from "ui/hook";
 import { PopoverContext } from "ui/control";
-import { ParentContext } from "ui/hook";
 import { useOverlay } from "ui/overlays/overlays";
 import InstantBell from "ui/instant/InstantBell";
 
@@ -20,7 +20,7 @@ export default function InstantButton() {
 
     const componentLoaded = useSelector((state: ClientState) => state.instants.componentLoaded);
     const visible = useSelector((state: ClientState) => state.instants.showPopover);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const onClick = () => dispatch(!visible ? openInstantsPopover() : closeInstantsPopover());
 

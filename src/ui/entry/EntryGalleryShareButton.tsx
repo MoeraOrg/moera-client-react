@@ -1,8 +1,9 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+
 import { useTranslation } from 'react-i18next';
 
 import { shareDialogPrepare } from "state/sharedialog/actions";
+import { useDispatcher } from "ui/hook";
 import { Icon, msShare } from "ui/material-symbols";
 import { urlWithParameters, ut } from "util/url";
 import { REL_CURRENT } from "util/rel-node-name";
@@ -17,7 +18,7 @@ interface Props {
 export default function EntryGalleryShareButton({
     postingId, postingReceiverName, postingReceiverPostingId, mediaId
 }: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onClick = () => {

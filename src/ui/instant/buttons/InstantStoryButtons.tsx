@@ -1,8 +1,9 @@
-import { useDispatch } from 'react-redux';
+
 import { useTranslation } from 'react-i18next';
 
 import { storySatisfy } from "state/stories/actions";
 import { ExtStoryInfo } from "state/feeds/state";
+import { useDispatcher } from "ui/hook";
 import { Button } from "ui/control";
 import { Icon, msCheck } from "ui/material-symbols";
 import { REL_HOME } from "util/rel-node-name";
@@ -22,7 +23,7 @@ interface Props extends InstantStoryButtonsProps {
 }
 
 export function InstantStoryButtons({story, ready, accepting, accepted, acceptTitle, acceptedTitle, onAccept}: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     if (!ready) {

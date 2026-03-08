@@ -1,14 +1,15 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+
 import { useTranslation } from 'react-i18next';
 
 import { closeConnectionsDialog } from "state/home/actions";
+import { useDispatcher } from "ui/hook";
 import { ModalDialog } from "ui/control";
 import Connections from "ui/mainmenu/connections/Connections";
 import "./ConnectionsDialog.css";
 
 export default function ConnectionsDialog() {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onClose = () => dispatch(closeConnectionsDialog());

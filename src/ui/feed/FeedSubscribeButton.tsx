@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
@@ -8,6 +8,7 @@ import { getOwnerCard, getOwnerName, isAtHomeNode, isOwnerNameSet, isRegularNode
 import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
 import { isFeedGeneralLoading, isFeedGeneralReady } from "state/feeds/selectors";
 import { shareDialogPrepare, sharePageCopyLink } from "state/sharedialog/actions";
+import { useDispatcher } from "ui/hook";
 import { Loading, SubscribeButton } from "ui/control";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import "./FeedSubscribeButton.css";
@@ -28,7 +29,7 @@ export default function FeedSubscribeButton({nodeName, feedName, sharing, classN
     const generalReady = useSelector((state: ClientState) => isFeedGeneralReady(state, nodeName, feedName));
     const generalLoading = useSelector((state: ClientState) => isFeedGeneralLoading(state, nodeName, feedName));
     const subscription = useSelector((state: ClientState) => getOwnerCard(state)?.subscription);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     if (ownerName == null || !regularNode || !show) {

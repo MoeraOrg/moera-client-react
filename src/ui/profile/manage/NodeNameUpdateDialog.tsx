@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import * as immutable from 'object-path-immutable';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +8,7 @@ import { NamingRules, NodeName } from "api";
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { nodeNameUpdate, nodeNameUpdateDialogCancel } from "state/nodename/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { InputField } from "ui/control/field";
 import { range } from "util/misc";
@@ -46,7 +47,7 @@ type Props = OuterProps & FormikProps<Values>;
 
 function NodeNameUpdateDialogInner({showChangeName}: Props) {
     const updating = useSelector((state: ClientState) => state.nodeName.updating);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onClose = () => dispatch(nodeNameUpdateDialogCancel());

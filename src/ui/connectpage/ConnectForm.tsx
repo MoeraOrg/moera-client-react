@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -9,6 +9,7 @@ import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { connectToHome } from "state/home/actions";
 import { connectPageSetForm } from "state/connectpage/actions";
+import { useDispatcher } from "ui/hook";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
 import Jump from "ui/navigation/Jump";
@@ -35,7 +36,7 @@ function ConnectForm(props: Props) {
     const waitConnect = useWaitTill(connectAfter);
     const formId = useSelector((state: ClientState) => state.connectPage.formId);
     const backHref = useSelector((state: ClientState) => state.connectPage.backHref);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     useEffect(() => {

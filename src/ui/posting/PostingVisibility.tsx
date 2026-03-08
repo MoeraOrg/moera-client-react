@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { format, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
@@ -8,6 +8,7 @@ import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
 import { postingOperationsUpdate } from "state/postings/actions";
 import { getSetting } from "state/settings/selectors";
+import { useDispatcher } from "ui/hook";
 import { Principal, PrincipalSelect } from "ui/control";
 import { Icon, msDelete } from "ui/material-symbols";
 import { REL_CURRENT } from "util/rel-node-name";
@@ -20,7 +21,7 @@ interface Props {
 
 export default function PostingVisibility({posting, editable}: Props) {
     const timeRelative = useSelector((state: ClientState) => getSetting(state, "posting.time.relative") as boolean);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onChange = (value: PrincipalValue) =>

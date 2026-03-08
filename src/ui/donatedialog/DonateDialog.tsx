@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
 import QRCode from 'react-qr-code';
 import { Trans, useTranslation } from 'react-i18next';
@@ -9,6 +9,7 @@ import { ClientState } from "state/state";
 import { closeDonateDialog } from "state/donatedialog/actions";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
+import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import FundraiserIcon from "ui/donatedialog/FundraiserIcon";
 import { getFundraiserAutoHref } from "ui/donatedialog/fundraiser-util";
@@ -34,7 +35,7 @@ export default function DonateDialog() {
         getSetting(state, "fundraiser.preferred.auto") as boolean);
     const preferredPrefix = useSelector((state: ClientState) =>
         getSetting(state, "fundraiser.preferred.prefix") as string);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const [fundraiserIndex, setFundraiserIndex] = useState<number>(0);
 

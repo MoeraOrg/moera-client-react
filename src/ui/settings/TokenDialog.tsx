@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +7,7 @@ import { Scope, TokenInfo } from "api";
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { settingsTokensCreate, settingsTokensDialogClose, settingsTokensUpdate } from "state/settings/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { InputField } from "ui/control/field";
 import PermissionSelector from "ui/settings/PermissionSelector";
@@ -25,7 +26,7 @@ type Props = OuterProps & FormikProps<Values>;
 
 function TokenDialogInner({token}: Props) {
     const updating = useSelector((state: ClientState) => state.settings.tokens.dialog.updating);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onClose = () => dispatch(settingsTokensDialogClose());

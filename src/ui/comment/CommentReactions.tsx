@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { ClientReactionInfo, ReactionTotalsInfo } from "api";
 import {
@@ -8,6 +8,7 @@ import {
     getDetailedPostingId
 } from "state/detailedposting/selectors";
 import { openReactionsDialog } from "state/reactionsdialog/actions";
+import { useDispatcher } from "ui/hook";
 import { ReactionTotals } from "ui/control";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./CommentReactions.css";
@@ -22,7 +23,7 @@ export default function CommentReactions({commentId, reactions, seniorReaction}:
     const postingId = useSelector(getDetailedPostingId);
     const seniorName = useSelector(getCommentsReceiverName);
     const seniorFullName = useSelector(getCommentsReceiverFullName);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     if (postingId == null) {
         return null;

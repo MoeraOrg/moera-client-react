@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -13,6 +13,7 @@ import { NodeCardState } from "state/nodecards/state";
 import { getNodeCard } from "state/nodecards/selectors";
 import { friendshipSetVisibility } from "state/people/actions";
 import { closePeopleHideDialog } from "state/peoplehidedialog/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField } from "ui/control/field";
 
@@ -34,7 +35,7 @@ interface OuterProps {
 type Props = OuterProps & FormikProps<Values>;
 
 function PeopleHideDialogInner({nodeName, card, subscribersHidden, subscriptionsHidden, friendsHidden}: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     if (nodeName == null) {

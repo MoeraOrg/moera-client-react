@@ -1,13 +1,13 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { nodeNameUpdateDialog, registerNameDialog } from "state/nodename/actions";
 import { isNodeNameDefined, isNodeNameManageable, isNodeNameOperationPending } from "state/nodename/selectors";
 import { isProfileEditable } from "state/profile/selectors";
 import { shareDialogPrepare, sharePageCopyLink } from "state/sharedialog/actions";
+import { useIsTinyScreen, useDispatcher } from "ui/hook";
 import { DropdownMenuItems } from "ui/control";
-import { useIsTinyScreen } from "ui/hook";
 import { REL_CURRENT } from "util/rel-node-name";
 
 export default function ManagementMenuItems() {
@@ -16,7 +16,7 @@ export default function ManagementMenuItems() {
     const operationPending = useSelector(isNodeNameOperationPending);
     const profileEditable = useSelector(isProfileEditable);
     const tinyScreen = useIsTinyScreen();
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onCopyLink = () => dispatch(sharePageCopyLink(REL_CURRENT, "/"));

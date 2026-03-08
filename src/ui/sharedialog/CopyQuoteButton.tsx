@@ -1,9 +1,9 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { flashBox } from "state/flashbox/actions";
 import { closeShareDialog } from "state/sharedialog/actions";
+import { useDispatcher } from "ui/hook";
 import { Icon, msCode } from "ui/material-symbols";
 import * as Browser from "ui/browser";
 import { ShareTextMode } from "ui/sharedialog/share-text-mode";
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export default function CopyQuoteButton({url, title, mode}: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, useFormikContext, withFormik } from 'formik';
 import { add, getUnixTime } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
@@ -10,6 +10,7 @@ import { dispatch } from "state/store-sagas";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { blockDialogSubmit, closeBlockDialog } from "state/blockdialog/actions";
+import { useDispatcher } from "ui/hook";
 import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, NumberField, RadioField } from "ui/control/field";
@@ -68,7 +69,7 @@ type Props = OuterProps & FormikProps<Values>;
 
 function BlockDialogInner({entryNodeName, srcFormatDefault}: Props) {
     const homeOwnerName = useSelector(getHomeOwnerName);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {values, isSubmitting} = useFormikContext<Values>();
     const {t} = useTranslation();
 

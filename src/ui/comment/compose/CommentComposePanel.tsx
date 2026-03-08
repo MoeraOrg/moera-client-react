@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useFormikContext } from 'formik';
 import cx from 'classnames';
 
@@ -8,6 +8,7 @@ import { ClientState } from "state/state";
 import { confirmBox } from "state/confirmbox/actions";
 import { commentComposeCancel } from "state/detailedposting/actions";
 import { isCommentComposerReady } from "state/detailedposting/selectors";
+import { useDispatcher } from "ui/hook";
 import {
     Icon,
     msCloudDone,
@@ -36,7 +37,7 @@ function CommentComposePanel() {
     const ready = useSelector(isCommentComposerReady);
     const draft = useSelector((state: ClientState) => state.detailedPosting.compose.draft);
     const beingPosted = useSelector((state: ClientState) => state.detailedPosting.compose.beingPosted);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const {t} = useTranslation();
 

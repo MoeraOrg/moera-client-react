@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { StoryInfo } from "api";
@@ -7,13 +7,14 @@ import { getHomeFriendsId } from "state/home/selectors";
 import { nodeCardPrepare } from "state/nodecards/actions";
 import { getNodeCard } from "state/nodecards/selectors";
 import { friendshipUpdate } from "state/people/actions";
+import { useDispatcher } from "ui/hook";
 import { InstantStoryButtonsActionSupplier } from "ui/instant/instant-types";
 import { InstantStoryButtons, InstantStoryButtonsProps } from "ui/instant/buttons/InstantStoryButtons";
 
 export default function InstantStoryFriendButtons({story, hide}: InstantStoryButtonsProps) {
     const friendship = useSelector((state: ClientState) => getNodeCard(state, story.remoteNodeName)?.friendship);
     const friendsId = useSelector(getHomeFriendsId);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const friendGroup = story.summaryData?.friendGroup;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
@@ -24,6 +24,7 @@ import { confirmBox } from "state/confirmbox/actions";
 import { shareDialogPrepare } from "state/sharedialog/actions";
 import { openBlockDialog } from "state/blockdialog/actions";
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
+import { useDispatcher } from "ui/hook";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
 import { REL_CURRENT } from "util/rel-node-name";
 import { ut } from "util/url";
@@ -55,7 +56,7 @@ function CommentMenuItems({nodeName, postingId, comment}: Props) {
         isPermitted("delete", comment, "private", state, options)
     );
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const googlePlayGoverned = isPostingSheriff(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);

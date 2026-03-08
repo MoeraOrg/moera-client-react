@@ -1,4 +1,4 @@
-import { Dispatch, Middleware, MiddlewareAPI } from 'redux';
+import { Dispatch, isAction, Middleware, MiddlewareAPI } from 'redux';
 
 import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
@@ -17,7 +17,7 @@ interface Barrier {
 
 export type StoreMiddlewareApi = MiddlewareAPI<Dispatch<ClientAction>, ClientState>;
 
-export interface StoreMiddleware extends Middleware<{}, ClientState> {
+export interface StoreMiddleware extends Middleware<{}, ClientState, Dispatch<ClientAction>> {
     barrier: (
         actions: BarrierActionType[], condition: BarrierCondition, timeoutMs?: number
     ) => Promise<ClientAction | null>;
@@ -67,17 +67,20 @@ export function createStoreMiddleware(triggers: TriggerMap, executors: ExecutorM
         }
     }
 
-    const middleware: StoreMiddleware = storeApi => next => (action: WithContext<ClientAction>) => {
+    const middleware: Middleware<{}, ClientState, Dispatch<ClientAction>> = storeApi => next => action => {
         const result = next(action);
 
-        action.context = new DynamicActionContext();
-        resolveBarriers(storeApi.getState(), action);
-        invokeTriggers(triggers, action, storeApi);
-        invokeExecutor(executors, action, storeApi);
+        if (isAction(action)) {
+            const caction = action as WithContext<ClientAction>;
+            caction.context = new DynamicActionContext();
+            resolveBarriers(storeApi.getState(), caction);
+            invokeTriggers(triggers, caction, storeApi);
+            invokeExecutor(executors, caction, storeApi);
+        }
 
         return result;
     }
-    middleware.barrier = addBarrier;
+    (middleware as any).barrier = addBarrier;
 
-    return middleware;
+    return middleware as StoreMiddleware;
 }

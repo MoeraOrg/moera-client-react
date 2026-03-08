@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -14,9 +14,9 @@ import {
 import { getPosting } from "state/postings/selectors";
 import { getComment } from "state/detailedposting/selectors";
 import { getOwnerName } from "state/node/selectors";
+import { useParent, useDispatcher } from "ui/hook";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
 import { Icon, msShare } from "ui/material-symbols";
-import { useParent } from "ui/hook";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { urlWithParameters, ut } from "util/url";
 import './LightBoxShareButton.css';
@@ -34,7 +34,7 @@ function LightBoxShareItems({mediaNodeName, mediaHref}: Props) {
         return commentId != null ? getComment(state, commentId) : null;
     });
     const mediaId = useSelector(getLightBoxMediaId);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     if (sourceNodeName == null) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useField } from 'formik';
 import deepEqual from 'react-fast-compare';
 import * as immutable from 'object-path-immutable';
@@ -11,6 +11,7 @@ import { getRelNodeNameContext } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { linkPreviewImageUpload, linkPreviewLoad } from "state/linkpreviews/actions";
 import { LinkPreviewsState } from "state/linkpreviews/state";
+import { useDispatcher } from "ui/hook";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
 import EntryLinkSelector from "ui/entry/EntryLinkSelector";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
@@ -64,7 +65,7 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, feature
     const linkPreviewsState = useSelector((state: ClientState) => state.linkPreviews);
     const maxAutomatic = useSelector((state: ClientState) =>
         getSetting(state, "rich-text-editor.link-previews.max-automatic") as number);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const [, {value}, {setValue}] = useField<RichTextLinkPreviewsValue>(name);
     const [, {value: urls}] = useField<string[]>(urlsField);

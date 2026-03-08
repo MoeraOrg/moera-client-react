@@ -1,6 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Icon, msCheck16 } from "ui/material-symbols";
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
 
 import { ContactWithRelationships, NodeName } from "api";
@@ -8,7 +7,9 @@ import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import { peopleSelectToggle } from "state/people/actions";
 import { getPeopleTab } from "state/people/selectors";
+import { useDispatcher } from "ui/hook";
 import { Avatar, AvatarWithPopup, OnlyDesktop, OnlyMobile, Principal, SubscribeButton } from "ui/control";
+import { Icon, msCheck16 } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
 import SubscriberVisibility from "ui/people/SubscriberVisibility";
 import PeopleContactStatuses from "ui/people/PeopleContactStatuses";
@@ -23,7 +24,7 @@ export default function PeoplePerson({contact}: Props) {
     const selecting = useSelector((state: ClientState) => state.people.selecting);
     const selected = useSelector((state: ClientState) => state.people.selected[contact.contact.nodeName] ?? false);
     const tab = useSelector(getPeopleTab);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const onSelectClick = () => dispatch(peopleSelectToggle(contact.contact.nodeName));
 

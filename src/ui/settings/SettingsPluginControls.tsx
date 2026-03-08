@@ -1,9 +1,9 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { settingsPluginsDelete } from "state/settings/actions";
 import { confirmBox } from "state/confirmbox/actions";
+import { useDispatcher } from "ui/hook";
 import { Button } from "ui/control";
 import { Icon, msDelete } from "ui/material-symbols";
 import { PluginProps } from "ui/settings/settings-menu";
@@ -11,7 +11,7 @@ import { PluginProps } from "ui/settings/settings-menu";
 type Props = PluginProps;
 
 export default function SettingsPluginControls({plugin}: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     if (!plugin.local || plugin.tokenId == null) {

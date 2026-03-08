@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -27,6 +27,7 @@ import {
 } from "state/detailedposting/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { getPostingFeatures } from "state/compose/selectors";
+import { useDispatcher } from "ui/hook";
 import { Icon, msCloudDone, msCloudUpload } from "ui/material-symbols";
 import NodeName from "ui/nodename/NodeName";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
@@ -55,7 +56,7 @@ function CommentDialogInner(props: Props) {
     const beingPosted = useSelector((state: ClientState) => state.detailedPosting.commentDialog.beingPosted);
     const submitKey = useSelector((state: ClientState) => getSetting(state, "comment.submit-key") as string);
     const features = useSelector(getPostingFeatures);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     useEffect(() => {

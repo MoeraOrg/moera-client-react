@@ -1,6 +1,7 @@
-import { useDrag } from "@use-gesture/react";
-import { useDispatch } from "react-redux";
+import { useDrag } from '@use-gesture/react';
+
 import { boot } from "state/navigation/actions";
+import { useDispatcher } from "ui/hook";
 import { useIsTinyScreen } from "ui/hook/media-query";
 
 const EDGE_HOTZONE = 50;
@@ -8,7 +9,7 @@ const GESTURE_TIMEOUT = 1000;
 const GESTURE_DISTANCE = 50;
 
 export function useReload() {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const tinyScreen = useIsTinyScreen();
 
     useDrag(

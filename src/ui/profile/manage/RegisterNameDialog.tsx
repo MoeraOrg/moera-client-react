@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikBag, FormikErrors, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +7,7 @@ import { NamingRules } from "api";
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { registerName, registerNameDialogCancel } from "state/nodename/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { InputField } from "ui/control/field";
 
@@ -16,7 +17,7 @@ interface Values {
 
 function RegisterNameDialog() {
     const registering = useSelector((state: ClientState) => state.nodeName.registering);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onClose = () => dispatch(registerNameDialogCancel());

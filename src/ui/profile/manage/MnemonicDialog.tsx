@@ -1,10 +1,11 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+
 import { useTranslation } from 'react-i18next';
 import { Form, FormikBag, FormikErrors, withFormik } from 'formik';
 
 import { dispatch } from "state/store-sagas";
 import { mnemonicDelete, mnemonicDialogClose } from "state/nodename/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField } from "ui/control/field";
 import MnemonicDocument from "ui/profile/manage/MnemonicDocument";
@@ -15,7 +16,7 @@ interface Values {
 }
 
 function MnemonicDialog() {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onCancel = () => dispatch(mnemonicDialogClose());

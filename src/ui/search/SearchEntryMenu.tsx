@@ -1,10 +1,10 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { searchEntryCopyLink } from "state/search/actions";
 import { ExtSearchEntryInfo } from "state/search/state";
 import { shareDialogPrepare } from "state/sharedialog/actions";
+import { useDispatcher } from "ui/hook";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
 import { REL_CURRENT } from "util/rel-node-name";
 import { ut } from "util/url";
@@ -15,7 +15,7 @@ interface Props {
 }
 
 function SearchEntryMenuItems({entry}: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const entryHref = entry.commentId == null

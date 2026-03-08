@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { searchScrolled } from "state/search/actions";
 import { getSearchTab, hasSearchMoreResults } from "state/search/selectors";
-import { useDebounce } from "ui/hook";
+import { useDebounce, useDispatcher } from "ui/hook";
 import { FeedTopBox, Loading } from "ui/control";
 import { Icon, msArrowUpward } from "ui/material-symbols";
 import SearchNode from "ui/search/SearchNode";
@@ -22,7 +22,7 @@ export default function SearchFeed() {
     const loaded = useSelector((state: ClientState) => state.search.loaded);
     const moreResults = useSelector(hasSearchMoreResults);
     const [scrollPosition, setScrollPosition] = useDebounce(0, 250);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     useEffect(() => {

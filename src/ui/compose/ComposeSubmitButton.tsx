@@ -1,9 +1,10 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+
 import { useTranslation } from 'react-i18next';
 import { useField } from 'formik';
 
 import { composePreview } from "state/compose/actions";
+import { useDispatcher } from "ui/hook";
 import { Icon, msBadge, msKeyboardArrowDown, msKeyboardArrowUp, msPreview, msSchedule } from "ui/material-symbols";
 import { Button, DropdownMenu } from "ui/control";
 import ChangePublishDateDialog from "ui/compose/ChangePublishDateDialog";
@@ -24,7 +25,7 @@ export default function ComposeSubmitButton({loading, update, disabled}: Props) 
     const [showChangeFullNameDialog, setShowChangeFullNameDialog] = React.useState<boolean>(false);
     const [, {value: fullName, initialValue: defaultFullName}, {setValue: setFullName}] = useField<string>("fullName");
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onPreview = () =>

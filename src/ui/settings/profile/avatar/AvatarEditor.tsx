@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useField } from 'formik';
 
 import { AvatarInfo } from "api";
@@ -11,7 +11,7 @@ import {
     profileAvatarsReorder,
     profileOpenAvatarEditDialog
 } from "state/profile/actions";
-import { useButtonPopper } from "ui/hook";
+import { useButtonPopper, useDispatcher } from "ui/hook";
 import { Avatar, Button } from "ui/control";
 import { Icon, msEdit } from "ui/material-symbols";
 import AvatarSelector from "ui/settings/profile/avatar/AvatarSelector";
@@ -29,7 +29,7 @@ export default function AvatarEditor({name, onChange}: Props) {
     const avatars = useSelector((state: ClientState) => state.profile.avatars.avatars);
     const nodeName = useSelector(getOwnerName);
     const showAvatarEditDialog = useSelector((state: ClientState) => state.profile.avatarEditDialog.show);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const [, {value}, {setValue}] = useField<AvatarInfo | null>(name);
 

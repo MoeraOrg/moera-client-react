@@ -1,8 +1,8 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 
 import { ANONYMOUS_NODE_NAME, AvatarImage } from "api";
 import { nodeCardPrepare } from "state/nodecards/actions";
+import { useDispatcher } from "ui/hook";
 import { DelayedPopover, DelayedPopoverElement } from "ui/control";
 import NodeCard from "ui/nodename/NodeCard";
 import { RelNodeName } from "util/rel-node-name";
@@ -18,7 +18,7 @@ interface Props {
 
 export default function NodeNamePopup({nodeName, fullName, avatar, avatarNodeName, disabled, children}: Props) {
     const anonymous = nodeName === ANONYMOUS_NODE_NAME;
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const onPreparePopper = () => dispatch(nodeCardPrepare(nodeName));
 

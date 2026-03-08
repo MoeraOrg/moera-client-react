@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
 import { formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +10,7 @@ import { isHomeGooglePlayHiding } from "state/home/selectors";
 import { storyReadingUpdate } from "state/stories/actions";
 import { ExtStoryInfo } from "state/feeds/state";
 import { getSetting } from "state/settings/selectors";
+import { useDispatcher } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import { Avatar } from "ui/control";
 import { Icon, msCircleFilled } from "ui/material-symbols";
@@ -27,7 +28,7 @@ export default function InstantStory({story, hide}: Props) {
     useSelector((state: ClientState) => state.pulse.pulse); // To force re-rendering only
     const profileLink = useSelector((state: ClientState) => getSetting(state, "instants.profile-link") as boolean);
     const googlePlayHiding = useSelector(isHomeGooglePlayHiding);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onJump = (_: string, performJump: () => void) => {

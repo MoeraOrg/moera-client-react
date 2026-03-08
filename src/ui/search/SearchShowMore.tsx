@@ -1,8 +1,8 @@
-import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { tTitle } from "i18n";
 import { searchLoadMore } from "state/search/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, Loading } from "ui/control";
 import "./SearchShowMore.css";
 
@@ -12,7 +12,7 @@ interface Props {
 
 export default function SearchShowMore({loading}: Props) {
     const {t} = useTranslation();
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     return (
         <div className="show-more">

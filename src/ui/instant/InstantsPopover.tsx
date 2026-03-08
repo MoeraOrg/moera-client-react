@@ -1,11 +1,11 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { feedStatusUpdate } from "state/feeds/actions";
 import { getFeedState } from "state/feeds/selectors";
-import { useParent } from "ui/hook";
+import { useParent, useDispatcher } from "ui/hook";
 import { Icon, msClose } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
 import Instants from "ui/instant/Instants";
@@ -13,7 +13,7 @@ import { REL_HOME } from "util/rel-node-name";
 
 export default function InstantsPopover() {
     const stories = useSelector((state: ClientState) => getFeedState(state, REL_HOME, "instant").stories);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const {hide} = useParent();

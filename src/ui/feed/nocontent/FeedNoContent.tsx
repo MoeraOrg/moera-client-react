@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { tTitle } from "i18n";
@@ -8,6 +8,7 @@ import { isAtHomeNode } from "state/node/selectors";
 import { getRelNodeNameContext } from "state/home/selectors";
 import { feedUnset } from "state/feeds/actions";
 import { getFeedState } from "state/feeds/selectors";
+import { useDispatcher } from "ui/hook";
 import { Button } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import { ReactComponent as NoPosts } from "ui/feed/nocontent/NoPosts.isvg";
@@ -25,7 +26,7 @@ export default function FeedNoContent({nodeName, feedName}: Props) {
     const nodeNameContext = useSelector(getRelNodeNameContext);
     const atHome = useSelector(isAtHomeNode);
     const cannotBeLoaded = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).cannotBeLoaded);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onTryAgain = () => dispatch(feedUnset(absoluteNodeName(nodeName, nodeNameContext), feedName));

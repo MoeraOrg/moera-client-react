@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
 import { restoreFar, restoreNear } from "state/navigation/actions";
 import { cartesLoad } from "state/cartes/actions";
 import { getInstantCount } from "state/feeds/selectors";
 import { getNodeRootLocation } from "state/node/selectors";
+import { useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
 import { asyncReturn } from "util/async-calls";
 
@@ -15,7 +16,7 @@ export default function Navigation() {
     const canonicalUrl = useSelector((state: ClientState) => state.navigation.canonicalUrl);
     const noIndex = useSelector((state: ClientState) => state.navigation.noIndex);
     const count = useSelector(getInstantCount);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const stack = useRef<string[]>([]);
 

@@ -92,7 +92,6 @@ export function isAtVerifyEmailPage(state: ClientState): boolean {
     return state.navigation.page === "verify-email";
 }
 
-
 export function isAtTrendingPage(state: ClientState): boolean {
     return state.navigation.page === "trending";
 }

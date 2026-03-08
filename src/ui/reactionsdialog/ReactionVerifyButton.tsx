@@ -1,11 +1,12 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { SignatureVerifyButton } from "ui/control";
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { reactionVerify } from "state/reactionsdialog/actions";
 import { getReactionVerificationStatus } from "state/reactionsdialog/selectors";
+import { useDispatcher } from "ui/hook";
+import { SignatureVerifyButton } from "ui/control";
 
 interface Props {
     postingId: string;
@@ -16,7 +17,7 @@ interface Props {
 export default function ReactionVerifyButton({postingId, commentId, ownerName}: Props) {
     const connectedToHome = useSelector(isConnectedToHome);
     const status = useSelector((state: ClientState) => getReactionVerificationStatus(state, ownerName));
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const onVerify = () => dispatch(reactionVerify(postingId, commentId, ownerName));
 

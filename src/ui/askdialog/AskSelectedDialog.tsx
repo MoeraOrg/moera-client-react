@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikBag, FormikErrors, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -8,6 +8,7 @@ import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { closeAskDialog } from "state/askdialog/actions";
 import { peopleSelectedAsk } from "state/people/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { InputField, SelectField, SelectFieldChoice } from "ui/control/field";
 
@@ -26,7 +27,7 @@ function AskSelectedDialog() {
     const nodeName = useSelector((state: ClientState) => state.askDialog.nodeName);
     const nodeCount = useSelector((state: ClientState) => state.askDialog.nodeCount);
     const sending = useSelector((state: ClientState) => state.askDialog.sending);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     if (nodeName != null) {

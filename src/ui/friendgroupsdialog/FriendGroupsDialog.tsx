@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -13,6 +13,7 @@ import { getNodeCard } from "state/nodecards/selectors";
 import { getSetting } from "state/settings/selectors";
 import { closeFriendGroupsDialog, nodeChangeFriendGroups } from "state/friendgroupsdialog/actions";
 import { peopleSelectedChangeFriendGroups } from "state/people/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, InputField, PrincipalField } from "ui/control/field";
 import { NameDisplayMode } from "ui/types";
@@ -42,7 +43,7 @@ function FriendGroupsDialogInner({nodeName, nodeCard, values, setFieldValue}: Pr
     const changing = useSelector((state: ClientState) => state.friendGroupsDialog.changing);
     const nameDisplayMode = useSelector((state: ClientState) =>
         getSetting(state, "full-name.display") as NameDisplayMode);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const name = formatFullName(nodeName, nodeCard?.details.profile.fullName, nameDisplayMode);

@@ -1,11 +1,12 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { closeSheriffOrderDetailsDialog } from "state/sherifforderdetailsdialog/actions";
+import { useDispatcher } from "ui/hook";
 import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog } from "ui/control";
 import Jump from "ui/navigation/Jump";
@@ -19,7 +20,7 @@ export default function SheriffOrderDetailsDialog() {
     const info = useSelector((state: ClientState) => state.sheriffOrderDetailsDialog.info);
     const nameDisplayMode = useSelector((state: ClientState) =>
         getSetting(state, "full-name.display") as NameDisplayMode);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onClose = () => dispatch(closeSheriffOrderDetailsDialog());

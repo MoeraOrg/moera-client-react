@@ -1,5 +1,5 @@
 import React, { Suspense, useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -24,6 +24,7 @@ import {
     isDetailedPostingGalleryFocused
 } from "state/detailedposting/selectors";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
+import { useDispatcher } from "ui/hook";
 import { FeedTopBox } from "ui/control";
 import CommentsNavigator from "ui/comment/CommentsNavigator";
 import CommentComposeLine from "ui/comment/compose/CommentComposeLine";
@@ -58,7 +59,7 @@ export default function Comments() {
         isPermitted("viewComments", getDetailedPosting(state), "public", state)
     );
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     useEffect(() => {

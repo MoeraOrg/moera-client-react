@@ -1,9 +1,10 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { isConnectedToHome } from "state/home/selectors";
 import { commentVerify } from "state/detailedposting/actions";
 import { ExtCommentInfo } from "state/detailedposting/state";
+import { useDispatcher } from "ui/hook";
 import { SignatureVerifyButton } from "ui/control";
 
 interface Props {
@@ -12,7 +13,7 @@ interface Props {
 
 export default function CommentVerifyButton({comment}: Props) {
     const connectedToHome = useSelector(isConnectedToHome);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     if (!connectedToHome || !comment.signature) {
         return null;

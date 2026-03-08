@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { reactionsDialogSelectTab } from "state/reactionsdialog/actions";
+import { useParent, useDispatcher } from "ui/hook";
 import { CloseButton, UnderlinedTabDescription, UnderlinedTabs } from "ui/control";
-import { useParent } from "ui/hook";
 
 interface Props {
     hidden?: boolean;
@@ -17,7 +17,7 @@ export default function TotalsTabs({hidden, children}: Props) {
     const {loaded, total, emojis} = useSelector((state: ClientState) => state.reactionsDialog.totals);
     const activeTab = useSelector((state: ClientState) => state.reactionsDialog.activeTab);
     const {hide} = useParent();
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const tabs = useMemo<UnderlinedTabDescription<number>[]>(() =>

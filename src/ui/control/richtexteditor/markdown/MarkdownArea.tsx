@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import composeRefs from '@seznam/compose-react-refs';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +7,7 @@ import { CLIENT_SETTINGS_PREFIX, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
+import { useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
 import { UI_EVENT_COMMENT_QUOTE, UiEventCommentQuote } from "ui/ui-events";
 import { TextareaAutosize } from "ui/control";
@@ -52,7 +53,7 @@ export default function MarkdownArea(
     }: MarkdownAreaProps
 ) {
     const pasteRich = useSelector((state: ClientState) => getSetting(state, "rich-text-editor.paste-rich") as string);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {focus, formatMention, handleHotKeys} = useRichTextEditorCommands();
     const {pasteImage} = useRichTextEditorMedia();
 

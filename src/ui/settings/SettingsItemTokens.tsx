@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { format, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
@@ -8,6 +8,7 @@ import { ClientState } from "state/state";
 import { getHomeToken } from "state/home/selectors";
 import { settingsTokensDelete, settingsTokensDialogOpen } from "state/settings/actions";
 import { confirmBox } from "state/confirmbox/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, Loading } from "ui/control";
 import { Icon, msDelete, msEdit, msKey } from "ui/material-symbols";
 import TokenDialog from "ui/settings/TokenDialog";
@@ -21,7 +22,7 @@ export default function SettingsItemTokens() {
     const homeToken = useSelector(getHomeToken);
     const showTokenDialog = useSelector((state: ClientState) => state.settings.tokens.dialog.show);
     const showNewTokenDialog = useSelector((state: ClientState) => state.settings.tokens.dialog.newToken != null);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const [expanded, setExpanded] = useState<string | null>(null);
     const {t} = useTranslation();

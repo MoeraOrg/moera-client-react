@@ -1,14 +1,15 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { getHomeOwnerName } from "state/home/selectors";
 import { openSheriffOrderDetailsDialog } from "state/sherifforderdetailsdialog/actions";
+import { useDispatcher } from "ui/hook";
 import { Button } from "ui/control";
 import { InstantStoryButtonsProps } from "ui/instant/buttons/InstantStoryButtons";
 
 export default function InstantStorySheriffOrderButtons({story, hide}: InstantStoryButtonsProps) {
     const homeOwnerName = useSelector(getHomeOwnerName);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onClick = () => {

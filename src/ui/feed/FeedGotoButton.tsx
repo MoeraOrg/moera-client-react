@@ -1,5 +1,5 @@
 import React, { Suspense, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { endOfDay, fromUnixTime, getUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
@@ -7,9 +7,9 @@ import cx from 'classnames';
 import { ClientState } from "state/state";
 import { getFeedAtTimestamp } from "state/feeds/selectors";
 import { feedScrollToAnchor } from "state/feeds/actions";
+import { useIsTinyScreen, useDispatcher } from "ui/hook";
 import { Button, CloseButton, Loading } from "ui/control";
 import { Icon, msArrowDownward, msCalendarMonth } from "ui/material-symbols";
-import { useIsTinyScreen } from "ui/hook";
 import { RelNodeName } from "util/rel-node-name";
 import "./FeedGotoButton.css";
 
@@ -23,7 +23,7 @@ interface Props {
 
 export default function FeedGotoButton({nodeName, feedName, atBottom}: Props) {
     const timestamp = useSelector((state: ClientState) => getFeedAtTimestamp(state, nodeName, feedName));
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const [active, setActive] = useState<boolean>(false);
     const tinyScreen = useIsTinyScreen();

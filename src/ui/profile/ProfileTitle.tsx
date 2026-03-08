@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Trans } from 'react-i18next';
 
 import { NodeName } from "api";
@@ -15,6 +15,7 @@ import {
 } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { sharePageCopyLink } from "state/sharedialog/actions";
+import { useDispatcher } from "ui/hook";
 import { DonateButton, OnlyMobile } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
@@ -42,7 +43,7 @@ export default function ProfileTitle() {
     const subscribersTotal = card?.people.subscribersTotal ?? "?";
     const fundraisers = useSelector((state: ClientState) => state.profile.profile.fundraisers);
     const newsHref = useHomeNews();
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const onCopyLink = () => dispatch(sharePageCopyLink(REL_CURRENT, "/"));
 

@@ -1,7 +1,7 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 
 import { postingReact, postingReactionDelete } from "state/postings/actions";
+import { useDispatcher } from "ui/hook";
 import { ReactionButton } from "ui/control";
 import { MaterialSymbol } from "ui/material-symbols";
 import { REL_CURRENT } from "util/rel-node-name";
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export default function PostingReactionButton({icon, caption, invisible, id, negative, emoji, rejected}: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     return (
         <ReactionButton

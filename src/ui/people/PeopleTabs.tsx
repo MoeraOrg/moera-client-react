@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
@@ -7,9 +7,9 @@ import { ClientState } from "state/state";
 import { getNodeFriendGroups, isAtHomeNode } from "state/node/selectors";
 import { openFriendGroupAddDialog } from "state/friendgroupadddialog/actions";
 import { PeopleTab } from "state/people/state";
+import { useMediaQuery, useDispatcher } from "ui/hook";
 import { Tabs } from "ui/control";
 import { getFriendGroupTitle } from "ui/control/principal-display";
-import { useMediaQuery } from "ui/hook";
 import { msGroupAdd, msLock } from "ui/material-symbols";
 import { ut } from "util/url";
 import "./PeopleTabs.css";
@@ -37,7 +37,7 @@ export default function PeopleTabs({active}: PeopleTabsProps) {
     const inFriendGroup = friendGroups.some(({id}) => id === active);
     const atHome = useSelector(isAtHomeNode);
     const smallScreen = useMediaQuery("(max-width: 1435px)");
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onAdd = () => dispatch(openFriendGroupAddDialog());

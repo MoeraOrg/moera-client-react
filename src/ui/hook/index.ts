@@ -5,5 +5,6 @@ export { useMediaQuery, useIsTinyScreen, isTinyScreen } from "ui/hook/media-quer
 export { useDebounce, useThrottle } from "ui/hook/misc";
 export { useParent, ParentContext } from "ui/hook/parent-context";
 export type { ParentInterface } from "ui/hook/parent-context";
+export { useDispatcher } from "ui/hook/redux";
 export { useSuggestions } from "ui/hook/suggestions";
 export { useVirtualKeyboard } from "ui/hook/virtual-keyboard";

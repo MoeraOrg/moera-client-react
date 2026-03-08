@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, useFormikContext, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import deepEqual from 'react-fast-compare';
@@ -12,6 +12,7 @@ import { getSetting } from "state/settings/selectors";
 import { searchCloseFilterDialog, searchLoad } from "state/search/actions";
 import { emptySearchFilter } from "state/search/empty";
 import { SearchFilter, SearchFilterBeforeDate, SearchFilterDatePeriod, SearchTab } from "state/search/state";
+import { useDispatcher } from "ui/hook";
 import {
     getSafeSearchDefault,
     getSearchFilter,
@@ -122,7 +123,7 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
     const mode = useSelector(getSearchMode);
     const sheriffName = useSelector((state: ClientState) => getSetting(state, "search.sheriff-name") as string);
     const {values, setValues} = useFormikContext<Values>();
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onClose = () => dispatch(searchCloseFilterDialog());

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import { ConfirmBoxButtonAction } from "state/confirmbox/state";
 import { closeConfirmBox } from "state/confirmbox/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, Checkbox, ModalDialog } from "ui/control";
 import { htmlEntities } from "util/html";
 
@@ -14,7 +15,7 @@ export default function ConfirmBox() {
         message, yes, no, cancel, onYes, onNo, onCancel, variant, dontShowAgain: dontAskAgain, dontShowAgainBox,
         parentOverlayId
     } = useSelector((state: ClientState) => state.confirmBox);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const [dontShowAgain, setDontShowAgain] = useState<boolean>(false);

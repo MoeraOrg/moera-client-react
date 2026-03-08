@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -7,11 +7,11 @@ import { getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
 import { feedSubscribe } from "state/feeds/actions";
 import { openBlockingDetailsDialog } from "state/blockingdetailsdialog/actions";
+import { useParent, useDispatcher } from "ui/hook";
 import { Button, DropdownMenu, MenuButton } from "ui/control";
 import { MenuItem } from "ui/control/dropdownmenu/dropdown-menu-types";
 import { getSubscriptionStatus } from "ui/control/subscribebutton/subscription-status";
 import SubscribeButtonMenu from "ui/control/subscribebutton/SubscribeButtonMenu";
-import { useParent } from "ui/hook";
 import "./SubscribeButton.css";
 
 interface Props {
@@ -32,7 +32,7 @@ export function SubscribeButton({nodeName, feedName, onDialogOpened, addon, butt
     const {caption, blocked, blockedBy} = getSubscriptionStatus(card, homeGender, t);
 
     const {overlayId: parentOverlayId} = useParent();
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     if (nodeName === homeOwnerName) {
         return null;

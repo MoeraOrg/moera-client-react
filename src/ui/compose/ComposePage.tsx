@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -10,6 +10,7 @@ import { getSetting } from "state/settings/selectors";
 import { isAtHomeNode } from "state/node/selectors";
 import { composeConflictClose } from "state/compose/actions";
 import { getPostingFeatures, isComposeReady } from "state/compose/selectors";
+import { useDispatcher } from "ui/hook";
 import {
     areImagesUploaded,
     areValuesEmpty,
@@ -55,7 +56,7 @@ function ComposePageInner(props: Props) {
     const beingPosted = useSelector((state: ClientState) => state.compose.beingPosted);
     const showPreview = useSelector((state: ClientState) => state.compose.showPreview);
     const newsHref = useHomeNews();
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const [postWarningClosed, setPostWarningClosed] = useState<boolean>(false);

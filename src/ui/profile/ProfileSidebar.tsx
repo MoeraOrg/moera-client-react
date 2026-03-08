@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
@@ -12,6 +12,8 @@ import {
     isAtHomeNode,
     isRegularNode
 } from "state/node/selectors";
+import { profileEmailVerify } from "state/profile/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, DonateButton, OnlyDesktop } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
@@ -22,7 +24,6 @@ import EntryHtml from "ui/entry/EntryHtml";
 import { mentionName } from "util/names";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./ProfileSidebar.css";
-import { profileEmailVerify } from "state/profile/actions";
 
 export default function ProfileSidebar() {
     const atHome = useSelector(isAtHomeNode);
@@ -36,7 +37,7 @@ export default function ProfileSidebar() {
     const storiesTotal = card?.stories.storiesTotal ?? "?";
     const subscribersTotal = card?.people.subscribersTotal ?? "?";
     const fundraisers = card?.details.profile.fundraisers;
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     return (

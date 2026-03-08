@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import * as URI from 'uri-js';
 
 import { ClientState } from "state/state";
@@ -8,6 +8,7 @@ import { getHomeOwnerNameOrUrl, getHomeRootPage } from "state/home/selectors";
 import { getNodeRootPage, getOwnerNameOrUrl } from "state/node/selectors";
 import { jumpFar, jumpNear } from "state/navigation/actions";
 import { getSearchNodeName } from "state/search/selectors";
+import { useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
 import { absoluteNodeName, REL_CURRENT, RelNodeName } from "util/rel-node-name";
@@ -44,7 +45,7 @@ export default function Jump(
     const searchName = useSelector(getSearchNodeName);
     const nodeOwnerName = absoluteNodeName(nodeName, {ownerNameOrUrl, homeOwnerNameOrUrl, searchName});
     const details = useSelector((state: ClientState) => getNamingNameDetails(state, nodeOwnerName));
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const onNearClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
         if (e.button !== 0 || e.shiftKey || e.ctrlKey || e.altKey) {

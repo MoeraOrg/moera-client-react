@@ -1,10 +1,11 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
 import { ClientState } from "state/state";
 import { grantConfirm } from "state/grant/actions";
+import { useDispatcher } from "ui/hook";
 import { Button } from "ui/control";
 
 export default function GrantConfirmation() {
@@ -14,7 +15,7 @@ export default function GrantConfirmation() {
     const scopes = useSelector((state: ClientState) => state.grant.scopes);
     const confirming = useSelector((state: ClientState) => state.grant.confirming);
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const onConfirm = () => dispatch(grantConfirm());
 

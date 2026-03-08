@@ -80,7 +80,6 @@ export default function VisualEditor({
         }
     }, [editor, touched, value]);
 
-
     const updateUrls = useCallback(() => {
         onUrls && onUrls(scriptureExtractUrls(editor.children as Scripture));
     }, [editor.children, onUrls]);

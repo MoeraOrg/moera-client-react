@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';
 import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 
@@ -21,9 +21,9 @@ import {
 } from "state/signup/actions";
 import { SignUpMode, SignUpStage } from "state/signup/state";
 import { getSetting, getSettingMeta } from "state/settings/selectors";
+import { useDebounce, useDispatcher } from "ui/hook";
 import { Button } from "ui/control";
 import { CheckboxField, InputField, SelectField, SelectFieldChoice } from "ui/control/field";
-import { useDebounce } from "ui/hook";
 import * as Browser from "ui/browser";
 import Jump from "ui/navigation/Jump";
 import GlobalTitle from "ui/mainmenu/GlobalTitle";
@@ -71,7 +71,7 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
     const processing = useSelector((state: ClientState) => state.signUp.processing);
     const languages = useSelector((state: ClientState) => getSettingMeta(state, "language")?.modifiers?.items);
     const connectedToHome = useSelector(isConnectedToHome);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const languageSelectRef = useRef<HTMLSelectElement>(null);

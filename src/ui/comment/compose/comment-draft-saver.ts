@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
 import { CommentText, DraftText, SourceFormat, VerifiedMediaFile } from "api";
@@ -13,6 +13,7 @@ import {
     getCommentsState
 } from "state/detailedposting/selectors";
 import { commentDialogCommentReset, commentDraftDelete, commentDraftSave } from "state/detailedposting/actions";
+import { useDispatcher } from "ui/hook";
 import { CommentComposeValues, isCommentTextChanged, valuesToCommentText } from "ui/comment/compose/comment-compose";
 import { DraftSavingState, useDraftSaver } from "ui/draft/draft-saver";
 import { notNull } from "util/misc";
@@ -64,7 +65,7 @@ export function useCommentDraftSaver(commentId: string | null): DraftSavingState
     const sourceFormatDefault = useSelector((state: ClientState) =>
         getSetting(state, "comment.body-src-format.default") as SourceFormat
     );
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const toText = useCallback(
         (values: CommentComposeValues): CommentText | null =>

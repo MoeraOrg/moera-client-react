@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 
 import { peopleSetSearchPrefix } from "state/people/actions";
+import { useDispatcher } from "ui/hook";
 import { Icon, msCancelFilled, msSearch } from "ui/material-symbols";
 import "./PeopleSearch.css";
 
@@ -10,7 +10,7 @@ export default function PeopleSearch() {
     const inputRef = useRef<HTMLInputElement>(null);
     const [clear, setClear] = React.useState<boolean>(false);
     const {t} = useTranslation();
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const onClear = () => {
         setClear(false);

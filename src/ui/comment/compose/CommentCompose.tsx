@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikProps, withFormik } from 'formik';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,7 @@ import {
     getCommentsReceiverPostingId,
     isCommentComposerReady
 } from "state/detailedposting/selectors";
+import { useDispatcher } from "ui/hook";
 import { AvatarField, InputField } from "ui/control/field";
 import { RichTextField } from "ui/control/richtexteditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
@@ -39,7 +40,7 @@ function CommentCompose(props: Props) {
     const beingPosted = useSelector((state: ClientState) => state.detailedPosting.compose.beingPosted);
     const submitKey = useSelector((state: ClientState) => getSetting(state, "comment.submit-key") as string);
     const features = useSelector(getPostingFeatures);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     useEffect(() => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
 
@@ -13,13 +13,14 @@ import {
     peopleSelectedUnfriend,
     peopleSelectedUnsubscribe
 } from "state/people/actions";
+import { useDispatcher } from "ui/hook";
 import { DropdownMenu } from "ui/control";
 import { REL_CURRENT } from "util/rel-node-name";
 
 export default function PeopleSelectedButton() {
     const totalSelected = useSelector(getTotalSelected);
     const summary = useSelector(getSelectedSummary);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     if (totalSelected <= 0) {

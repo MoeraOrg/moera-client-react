@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { errorDismiss } from "state/error/actions";
+import { useDispatcher } from "ui/hook";
 import { CloseButton } from "ui/control";
 import "./ErrorPane.css";
 
@@ -11,7 +12,7 @@ export default function ErrorPane() {
     const message = useSelector((state: ClientState) => state.error.message);
     const messageVerbose = useSelector((state: ClientState) => state.error.messageVerbose);
     const visible = useSelector((state: ClientState) => state.error.visible);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     useEffect(() => {
         if (visible && message) {

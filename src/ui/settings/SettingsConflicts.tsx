@@ -1,9 +1,10 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { profileEditConflictClose } from "state/profile/actions";
+import { useDispatcher } from "ui/hook";
 import {
     settingsClientConflictClose,
     settingsNodeConflictClose,
@@ -17,7 +18,7 @@ export default function SettingsConflicts() {
     const nodeConflict = useSelector((state: ClientState) => state.settings.node.conflict);
     const clientConflict = useSelector((state: ClientState) => state.settings.client.conflict);
     const pluginsConflict = useSelector((state: ClientState) => state.settings.plugins.conflict);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     return (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useField } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +7,7 @@ import { CLIENT_SETTINGS_PREFIX, SettingTypes, SettingValue } from "api";
 import { ClientState } from "state/state";
 import { getSetting, getSettingMeta } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
+import { useDispatcher } from "ui/hook";
 import { msStarFilled16 } from "ui/material-symbols";
 import { LabelButton } from "ui/control/LabelButton";
 
@@ -18,7 +19,7 @@ interface Props {
 export default function SetDefaultButton({name, setting}: Props) {
     const settingMeta = useSelector((state: ClientState) => getSettingMeta(state, setting));
     const settingValue = useSelector((state: ClientState) => getSetting(state, setting));
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const [, {value}] = useField<SettingValue>(name);
 

@@ -1,5 +1,5 @@
 import React, { ReactNode, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import * as immutable from 'object-path-immutable';
 
@@ -7,6 +7,7 @@ import { PostingFeatures, RejectedReactions, SourceFormat, VerifiedMediaFile } f
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { richTextEditorImageCopy, richTextEditorImagesUpload } from "state/richtexteditor/actions";
+import { useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
 import {
     OnInsertHandler,
@@ -50,7 +51,7 @@ export default function RichTextEditorMedia({
 }: Props) {
     const compressImages = useSelector((state: ClientState) =>
         getSetting(state, "posting.media.compress.default") as boolean);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const uploadedImagesRef = useRef<(VerifiedMediaFile | null)[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -11,6 +11,7 @@ import { getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { closeSheriffOrderDialog, sheriffOrderDialogSubmit } from "state/sherifforderdialog/actions";
 import { SheriffOrderTarget } from "state/sherifforderdialog/state";
+import { useDispatcher } from "ui/hook";
 import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, SelectField, SelectFieldChoice } from "ui/control/field";
@@ -40,7 +41,7 @@ function SheriffOrderDialogInner({target}: Props) {
     const nameDisplayMode = useSelector((state: ClientState) =>
         getSetting(state, "full-name.display") as NameDisplayMode
     );
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     if (target == null) {

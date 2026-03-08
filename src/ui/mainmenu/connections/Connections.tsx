@@ -1,13 +1,13 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { Storage } from "storage";
 import { ClientState } from "state/state";
 import { getHomeRootLocation } from "state/home/selectors";
 import { confirmBox } from "state/confirmbox/actions";
+import { useParent, useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
-import { useParent } from "ui/hook";
 import { Icon, msAdd } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
 import NodeName from "ui/nodename/NodeName";
@@ -24,7 +24,7 @@ export default function Connections({noActiveRoot}: Props) {
     const owner = useSelector((state: ClientState) => state.home.owner);
     const roots = useSelector((state: ClientState) => state.home.roots);
     const activeRoot = roots.find(root => root.url === location);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const {hide} = useParent();

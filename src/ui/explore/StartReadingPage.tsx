@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';
 import * as immutable from 'object-path-immutable';
 
@@ -7,6 +7,7 @@ import { tTitle } from "i18n";
 import { ClientState } from "state/state";
 import { getSettingNode } from "state/settings/selectors";
 import { feedSubscribe } from "state/feeds/actions";
+import { useDispatcher } from "ui/hook";
 import { Avatar, Loading } from "ui/control";
 import { Icon, msAddCircle, msCheck } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
@@ -25,7 +26,7 @@ export default function StartReadingPage() {
         [activePeople, autoSubscription]
     );
     const [selection, setSelection] = useState<Record<string, boolean>>({});
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onClick = (nodeName: string) => () => {

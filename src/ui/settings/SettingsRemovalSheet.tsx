@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikBag, withFormik } from 'formik';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -7,6 +7,7 @@ import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { isConnectedToHome } from "state/home/selectors";
 import { settingsDeleteNodeRequestCancel, settingsDeleteNodeRequestSend } from "state/settings/actions";
+import { useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
 import { Button, Loading } from "ui/control";
 import { TextField } from "ui/control/field";
@@ -26,7 +27,7 @@ function SettingsRemovalSheet() {
     const loading = useSelector((state: ClientState) => state.settings.deleteNode.loading);
     const requested = useSelector((state: ClientState) => state.settings.deleteNode.requested);
     const updating = useSelector((state: ClientState) => state.settings.deleteNode.updating);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const onCancelRequest = () => dispatch(settingsDeleteNodeRequestCancel());
 

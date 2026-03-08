@@ -1,11 +1,12 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { GrantInfo, NodeName as NodeNameUtil } from "api";
 import { ClientState } from "state/state";
 import { settingsGrantsDelete, settingsGrantsDialogOpen } from "state/settings/actions";
 import { confirmBox } from "state/confirmbox/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, Loading } from "ui/control";
 import { Icon, msDelete, msEdit, msPublic } from "ui/material-symbols";
 import NodeName from "ui/nodename/NodeName";
@@ -16,7 +17,7 @@ export default function SettingsItemGrants() {
     const loaded = useSelector((state: ClientState) => state.settings.grants.loaded);
     const grants = useSelector((state: ClientState) => state.settings.grants.grants);
     const showDialog = useSelector((state: ClientState) => state.settings.grants.dialog.show);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const {t} = useTranslation();
 

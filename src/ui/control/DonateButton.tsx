@@ -1,14 +1,14 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { FundraiserInfo } from "api";
 import { openDonateDialog } from "state/donatedialog/actions";
+import { useParent, useDispatcher } from "ui/hook";
 import { Button } from "ui/control";
 import * as Browser from "ui/browser";
 import { Icon, msVolunteerActivism } from "ui/material-symbols";
-import { useParent } from "ui/hook";
 
 interface Props {
     name: string | null;
@@ -19,7 +19,7 @@ interface Props {
 }
 
 export function DonateButton({name, fullName, fundraisers, styles = "large", className}: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const {hide: hidePopover} = useParent();

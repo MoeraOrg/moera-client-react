@@ -1,12 +1,12 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { settingsGoToSheet } from "state/settings/actions";
+import { useIsTinyScreen, useDispatcher } from "ui/hook";
 import { Tabs } from "ui/control";
 import { msKeyboardArrowRight } from "ui/material-symbols";
-import { useIsTinyScreen } from "ui/hook";
 import { getActualSheetName, getActualTab, getSheets } from "ui/settings/settings-menu";
 import { ut } from "util/url";
 import "./SettingsMenu.css";
@@ -19,7 +19,7 @@ export default function SettingsMenu({onSelect}: Props) {
     const tab = useSelector((state: ClientState) => getActualTab(state.settings.tab));
     const sheetName = useSelector((state: ClientState) => getActualSheetName(state.settings.tab, state.settings.sheet));
     const tinyScreen = useIsTinyScreen();
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onChange = (name: string) => {

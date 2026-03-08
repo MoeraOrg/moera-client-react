@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
 import { createSelector } from 'reselect';
 import cloneDeep from 'lodash.clonedeep';
@@ -9,7 +9,7 @@ import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
 import { getNamesInComments } from "state/detailedposting/selectors";
-import { useSuggestions } from "ui/hook";
+import { useSuggestions, useDispatcher } from "ui/hook";
 import { NameSuggestion } from "ui/control/NameSuggestion";
 import { nameListInsertFirst, NameListItem, namesListQuery } from "util/names-list";
 import "./NameSelector.css";
@@ -28,7 +28,7 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit}: Props) {
     const contactNames = useSelector(getNames);
     const homeName = useSelector(getHomeOwnerName);
     const homeAvatar = useSelector(getHomeOwnerAvatar);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const inputDom = useRef<HTMLInputElement>(null);
     const listDom = useRef<HTMLDivElement>(null);

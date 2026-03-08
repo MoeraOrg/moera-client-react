@@ -1,15 +1,16 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { settingsTokensNewTokenClose, settingsTokensNewTokenCopy } from "state/settings/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { Icon, msContentCopy } from "ui/material-symbols";
 
 export default function NewTokenDialog() {
     const newToken = useSelector((state: ClientState) => state.settings.tokens.dialog.newToken);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     if (newToken == null) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikBag, withFormik } from 'formik';
 import { fromUnixTime, getUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { closeChangeDateDialog, storyChangeDate } from "state/changedatedialog/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { DateTimeField } from "ui/control/field";
 
@@ -21,7 +22,7 @@ interface Values {
 
 function ChangeDateDialogInner() {
     const changing = useSelector((state: ClientState) => state.changeDateDialog.changing);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onClose = () => dispatch(closeChangeDateDialog());

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
 
@@ -15,8 +15,8 @@ import {
 } from "state/feeds/actions";
 import { getFeedState } from "state/feeds/selectors";
 import { isPostingSheriffProhibited } from "state/postings/selectors";
+import { useDebounce, useDispatcher } from "ui/hook";
 import { FeedTopBox } from "ui/control";
-import { useDebounce } from "ui/hook";
 import FeedTopButton from "ui/feed/FeedTopButton";
 import FeedSkipPinnedButton from "ui/feed/FeedSkipPinnedButton";
 import FeedStory from "ui/feed/FeedStory";
@@ -50,7 +50,7 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
     );
     const anchor = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).anchor);
     const atHomeNode = useSelector(isAtHomeNode);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const [atTop, setAtTop] = useState<boolean>(true);
     const [atBottom, setAtBottom] = useState<boolean>(false);

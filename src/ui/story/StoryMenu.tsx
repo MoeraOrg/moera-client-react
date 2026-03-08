@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { StoryInfo } from "api";
@@ -6,6 +6,7 @@ import { ClientState } from "state/state";
 import { isPermitted } from "state/node/selectors";
 import { storyDelete, storyPinningUpdate, storyTypeBlock } from "state/stories/actions";
 import { confirmBox } from "state/confirmbox/actions";
+import { useDispatcher } from "ui/hook";
 import { DropdownMenu } from "ui/control";
 import { REL_CURRENT } from "util/rel-node-name";
 
@@ -16,7 +17,7 @@ interface Props {
 export default function StoryMenu({story}: Props) {
     const storyEditable = useSelector((state: ClientState) => isPermitted("edit", story, "admin", state));
     const storyDeletable = useSelector((state: ClientState) => isPermitted("delete", story, "admin", state));
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onPin = () => dispatch(storyPinningUpdate(story.id, !story.pinned));

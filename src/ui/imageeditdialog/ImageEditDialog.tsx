@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -12,6 +12,7 @@ import { getSetting } from "state/settings/selectors";
 import { ExtPostingInfo } from "state/postings/state";
 import { getPosting } from "state/postings/selectors";
 import { closeImageEditDialog, imageEditDialogPost } from "state/imageeditdialog/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { RichTextField, RichTextValue } from "ui/control/richtexteditor";
 import { mediaImageTagAttributes } from "util/media-images";
@@ -39,7 +40,7 @@ function ImageEditDialogInner(props: Props) {
     const carte = useSelector(getCurrentViewMediaCarte);
     const loading = useSelector((state: ClientState) => state.imageEditDialog.loading);
     const saving = useSelector((state: ClientState) => state.imageEditDialog.saving);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     useEffect(() => {

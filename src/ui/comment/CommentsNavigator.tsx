@@ -1,8 +1,9 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+
 import { useTranslation } from 'react-i18next';
 
 import { commentsScrollToAnchor } from "state/detailedposting/actions";
+import { useDispatcher } from "ui/hook";
 import { Icon, msArrowDownward, msArrowUpward } from "ui/material-symbols";
 import "./CommentsNavigator.css";
 
@@ -13,7 +14,7 @@ interface Props {
 }
 
 export default function CommentsNavigator({from, to, total}: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onRewindUp = () => dispatch(commentsScrollToAnchor(Number.MIN_SAFE_INTEGER + 1));

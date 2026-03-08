@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import * as ReactDOM from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { closeReactionsDialog } from "state/reactionsdialog/actions";
 import { isReactionsDialogPermitted } from "state/reactionsdialog/selectors";
+import { ParentContext, useDispatcher } from "ui/hook";
 import { useOverlay } from "ui/overlays/overlays";
-import { ParentContext } from "ui/hook";
 import MobileBack from "ui/page/MobileBack";
 import ReactionsChartView from "ui/reactionsdialog/ReactionsChartView";
 import ReactionsListView from "ui/reactionsdialog/ReactionsListView";
@@ -18,7 +18,7 @@ export default function ReactionsDialog() {
         isReactionsDialogPermitted("viewReactions", "public", state)
     );
     const modalDialog = useRef<HTMLDivElement>(null);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onClose = useCallback(() => dispatch(closeReactionsDialog()), [dispatch]);

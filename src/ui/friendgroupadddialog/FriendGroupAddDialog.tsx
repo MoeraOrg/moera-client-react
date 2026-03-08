@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Form, FormikBag, FormikErrors, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +7,7 @@ import { PrincipalValue } from "api";
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { closeFriendGroupAddDialog, friendGroupAdd } from "state/friendgroupadddialog/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { InputField, PrincipalField } from "ui/control/field";
 
@@ -17,7 +18,7 @@ interface Values {
 
 function FriendGroupAddDialog() {
     const submitting = useSelector((state: ClientState) => state.friendGroupAddDialog.submitting);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onClose = () => dispatch(closeFriendGroupAddDialog());

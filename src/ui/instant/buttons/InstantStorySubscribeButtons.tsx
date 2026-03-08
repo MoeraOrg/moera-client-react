@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { StoryInfo } from "api";
@@ -6,12 +6,13 @@ import { ClientState } from "state/state";
 import { feedSubscribe } from "state/feeds/actions";
 import { nodeCardPrepare } from "state/nodecards/actions";
 import { getNodeCard } from "state/nodecards/selectors";
+import { useDispatcher } from "ui/hook";
 import { InstantStoryButtonsActionSupplier } from "ui/instant/instant-types";
 import { InstantStoryButtons, InstantStoryButtonsProps } from "ui/instant/buttons/InstantStoryButtons";
 
 export default function InstantStorySubscribeButtons({story, hide}: InstantStoryButtonsProps) {
     const subscription = useSelector((state: ClientState) => getNodeCard(state, story.remoteNodeName)?.subscription);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onSubscribe = () => {

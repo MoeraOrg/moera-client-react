@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import cx from 'classnames';
@@ -7,12 +7,12 @@ import { useTranslation } from 'react-i18next';
 
 import { VerifiedMediaFile } from "api";
 import { openImageEditDialog } from "state/imageeditdialog/actions";
+import { useParent, useDispatcher } from "ui/hook";
 import { Icon, msMoreVert12 } from "ui/material-symbols";
 import { DropdownMenu } from "ui/control";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import AttachedImage from "ui/control/richtexteditor/media/AttachedImage";
-import { useParent } from "ui/hook";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import "./UploadedImage.css";
 
@@ -32,7 +32,7 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
     };
     const {deleteImage} = useRichTextEditorMedia();
     const {embedImage} = useRichTextEditorCommands();
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const {overlayId: parentOverlayId} = useParent();

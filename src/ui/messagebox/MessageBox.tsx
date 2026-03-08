@@ -1,9 +1,10 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { closeMessageBox } from "state/messagebox/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { htmlEntities, replaceEmojis } from "util/html";
 
@@ -11,7 +12,7 @@ export default function MessageBox() {
     const message = useSelector((state: ClientState) => state.messageBox.message);
     const onClose = useSelector((state: ClientState) => state.messageBox.onClose);
     const parentOverlayId = useSelector((state: ClientState) => state.messageBox.parentOverlayId);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onCloseClick = () => {

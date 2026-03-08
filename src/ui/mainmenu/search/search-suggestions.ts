@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import deepEqual from "react-fast-compare";
 
 import { ClientState } from "state/state";
@@ -11,7 +11,7 @@ import { isAtSearchPage } from "state/navigation/selectors";
 import { SearchTab } from "state/search/state";
 import { searchHistoryDelete, searchHistoryPrepare } from "state/search/actions";
 import { getSearchNodeName, getSearchQuery, isSearchInBlogAvailable } from "state/search/selectors";
-import { useSuggestions } from "ui/hook";
+import { useSuggestions, useDispatcher } from "ui/hook";
 import { SearchListItem } from "ui/mainmenu/search/SearchSuggestions";
 import { namesListQuery } from "util/names-list";
 import { ut } from "util/url";
@@ -47,7 +47,7 @@ export function useSearchSuggestions(
     const searchNode = useSelector(getSearchNodeName);
     const defaultQuery = useSelector(getSearchQuery);
     const defaultTab: SearchTab = useSelector(isSearchInBlogAvailable) ? "current-blog" : "content";
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const [focused, setFocused] = React.useState<boolean>(false);
     const inputBlurTimeout = useRef<number | NodeJS.Timeout | null>(null);

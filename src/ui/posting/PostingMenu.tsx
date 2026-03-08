@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
@@ -22,6 +22,7 @@ import { shareDialogPrepare } from "state/sharedialog/actions";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { getHomeOwnerName } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
+import { getSetting } from "state/settings/selectors";
 import {
     getPostingCommentAddedInstantBlockId,
     getPostingCommentsSubscriptionId,
@@ -32,12 +33,12 @@ import { commentsShowInvisibleSet } from "state/detailedposting/actions";
 import { hasInvisibleComments, isCommentsShowInvisible } from "state/detailedposting/selectors";
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
 import { recommendationDont } from "state/feeds/actions";
+import { useDispatcher } from "ui/hook";
 import { MinimalStoryInfo } from "ui/types";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { ut } from "util/url";
 import "ui/entry/EntryMenu.css";
-import { getSetting } from "state/settings/selectors";
 
 interface Props {
     posting: PostingInfo;
@@ -70,7 +71,7 @@ function PostingMenuItems({posting, story, detailed}: Props) {
         getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE
     );
     const googlePlayProhibited = isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onCopyLink = () => dispatch(postingCopyLink(posting.id, REL_CURRENT));

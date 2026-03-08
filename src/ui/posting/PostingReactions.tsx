@@ -1,8 +1,8 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 
 import { ReactionTotalsInfo } from "api";
 import { openReactionsDialog } from "state/reactionsdialog/actions";
+import { useDispatcher } from "ui/hook";
 import { ReactionTotals } from "ui/control";
 import { RelNodeName } from "util/rel-node-name";
 
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function PostingReactions({nodeName, postingId, reactions}: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const onClick = (negative: boolean) =>
         dispatch(openReactionsDialog(nodeName, postingId, null, negative));

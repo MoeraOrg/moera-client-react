@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { PostingInfo } from "api";
@@ -8,6 +8,7 @@ import { detailedPostingExpandGallery, detailedPostingLoadAttached } from "state
 import { isPermitted } from "state/node/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import { MinimalStoryInfo } from "ui/types";
+import { useDispatcher } from "ui/hook";
 import PostingMenu from "ui/posting/PostingMenu";
 import StoryBadges from "ui/story/StoryBadges";
 import PostingDate from "ui/posting/PostingDate";
@@ -41,7 +42,7 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
     const expanded = useSelector((state: ClientState) => state.detailedPosting.galleryExpanded);
     const postingEditable = useSelector((state: ClientState) => isPermitted("edit", posting, "owner", state));
     const isSheriff = useSelector((state: ClientState) => getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     if (deleting) {
         return (

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useField } from 'formik';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +8,7 @@ import { AvatarInfo } from "api";
 import { ClientState } from "state/state";
 import { homeAvatarsLoad } from "state/home/actions";
 import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
-import { useButtonPopper, useParent } from "ui/hook";
+import { useButtonPopper, useParent, useDispatcher } from "ui/hook";
 import { Avatar, Loading } from "ui/control";
 import "./AvatarField.css";
 
@@ -24,7 +24,7 @@ export function AvatarField({name, size, disabled}: Props) {
     const avatars = useSelector((state: ClientState) => state.home.avatars.avatars);
     const avatarDefault = useSelector(getHomeOwnerAvatar);
     const homeOwnerName = useSelector(getHomeOwnerName);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const [, {value}, {setValue}] = useField<AvatarInfo | null>(name);

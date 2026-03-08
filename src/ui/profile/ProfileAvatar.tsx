@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
@@ -7,6 +7,7 @@ import { AvatarImage, AvatarInfo } from "api";
 import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import { profileOpenAvatarEditDialog, profileUpdate } from "state/profile/actions";
+import { useDispatcher } from "ui/hook";
 import { Avatar, Button, Wrapper } from "ui/control";
 import "./ProfileAvatar.css";
 
@@ -21,7 +22,7 @@ interface Props {
 export default function ProfileAvatar({avatar, ownerName, size}: Props) {
     const atHome = useSelector(isAtHomeNode);
     const showAvatarEditDialog = useSelector((state: ClientState) => state.profile.avatarEditDialog.show);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onSelect = (avatar: AvatarInfo) => {

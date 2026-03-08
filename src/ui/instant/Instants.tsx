@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad } from "state/feeds/actions";
-import { useParent } from "ui/hook";
+import { useParent, useDispatcher } from "ui/hook";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
 import NoInstants from "ui/instant/NoInstants";
@@ -17,7 +17,7 @@ export default function Instants() {
     const after = useSelector((state: ClientState) => getFeedState(state, REL_HOME, "instant").after);
     const stories = useSelector((state: ClientState) => getFeedState(state, REL_HOME, "instant").stories);
     const instantBorder = useSelector((state: ClientState) => state.instants.border);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const pastIntersecting = useRef<boolean>(true);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { commentRepliedToUnset } from "state/detailedposting/actions";
 import {
@@ -9,6 +9,7 @@ import {
     getCommentComposerRepliedToName,
     getDetailedPostingId
 } from "state/detailedposting/selectors";
+import { useDispatcher } from "ui/hook";
 import RepliedTo from "ui/comment/RepliedTo";
 import { htmlEntities, replaceEmojis } from "util/html";
 
@@ -22,7 +23,7 @@ export default function CommentComposeRepliedTo({disabled}: Props) {
     const ownerName = useSelector(getCommentComposerRepliedToName);
     const ownerFullName = useSelector(getCommentComposerRepliedToFullName);
     const heading = useSelector(getCommentComposerRepliedToHeading);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const onUnset = () => dispatch(commentRepliedToUnset());
 

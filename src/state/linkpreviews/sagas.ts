@@ -32,7 +32,6 @@ async function linkPreviewLoadSaga(action: WithContext<LinkPreviewLoadAction>): 
     }
 }
 
-
 function resolveImageUrl(imageUrl: string | null | undefined, pageUrl: string): string | null {
     if (imageUrl == null) {
         return null;

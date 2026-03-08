@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
     BlueskyIcon,
     BlueskyShareButton,
@@ -35,6 +35,7 @@ import { ClientState } from "state/state";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
 import { closeShareDialog } from "state/sharedialog/actions";
+import { useDispatcher } from "ui/hook";
 
 const ICON_SIZE = 48;
 
@@ -48,7 +49,7 @@ export default function SocialButton({type, url, title}: Props) {
     const usage = useSelector((state: ClientState) =>
         getSetting(state, "share.social-buttons.usage") as any as Partial<Record<string, number>>
     );
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const onClick = () => {
         dispatch(closeShareDialog());

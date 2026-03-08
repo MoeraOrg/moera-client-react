@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +15,7 @@ import { getPosting } from "state/postings/selectors";
 import { ExtCommentInfo } from "state/detailedposting/state";
 import { getComment } from "state/detailedposting/selectors";
 import { getSetting } from "state/settings/selectors";
-import { ParentContext } from "ui/hook";
+import { ParentContext, useDispatcher } from "ui/hook";
 import LightBoxCaption from "ui/lightbox/LightBoxCaption";
 import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import LightBoxCopyTextButton from "ui/lightbox/LightBoxCopyTextButton";
@@ -41,7 +41,7 @@ export default function LightBox() {
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, state.lightBox.nodeName));
     const carte = useSelector(getCurrentViewMediaCarte);
     const loopGallery = useSelector((state: ClientState) => getSetting(state, "entry.gallery.loop") as boolean);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onCloseRequest = useCallback(() => dispatch(closeLightBox()), [dispatch]);

@@ -1,11 +1,12 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import { peopleSetSort, peopleStartSelection, peopleStopSelection } from "state/people/actions";
 import { getPeopleContactsMaxInTabs, getPeopleContactsTotal } from "state/people/selectors";
+import { useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
 import { Button } from "ui/control";
 import { Icon, msArrowSelectorToolFilled, msClose, msSort, msSortByAlpha } from "ui/material-symbols";
@@ -20,7 +21,7 @@ export default function PeopleSelectionPanel() {
     const contactsMax = useSelector(getPeopleContactsMaxInTabs);
     const selecting = useSelector((state: ClientState) => state.people.selecting);
     const sortAlpha = useSelector((state: ClientState) => state.people.sortAlpha);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     if (!atHome || loadingGeneral || contactsTotal === 0 || (!Browser.isDevMode() && contactsMax <= 12)) {

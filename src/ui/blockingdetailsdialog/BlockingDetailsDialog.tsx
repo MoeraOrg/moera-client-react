@@ -1,11 +1,12 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { format, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { closeBlockingDetailsDialog } from "state/blockingdetailsdialog/actions";
+import { useDispatcher } from "ui/hook";
 import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog } from "ui/control";
 import EntryHtml from "ui/entry/EntryHtml";
@@ -26,7 +27,7 @@ export default function BlockingDetailsDialog() {
     const nameDisplayMode = useSelector(
         (state: ClientState) => getSetting(state, "full-name.display") as NameDisplayMode
     );
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onClose = () => dispatch(closeBlockingDetailsDialog());

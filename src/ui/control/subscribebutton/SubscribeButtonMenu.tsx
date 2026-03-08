@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
@@ -19,6 +19,7 @@ import { openPeopleHideDialog } from "state/peoplehidedialog/actions";
 import { openBlockDialog } from "state/blockdialog/actions";
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
 import { confirmBox } from "state/confirmbox/actions";
+import { useDispatcher } from "ui/hook";
 import { Button, DropdownMenuItems } from "ui/control";
 import { MenuItem } from "ui/control/dropdownmenu/dropdown-menu-types";
 import { REL_CURRENT } from "util/rel-node-name";
@@ -44,7 +45,7 @@ export default function SubscribeButtonMenu({nodeName, feedName, addon, buttonOn
     const googlePlayMarked = useSelector((state: ClientState) =>
         isFeedSheriffMarked(state, REL_CURRENT, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE)
     );
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const fullName = card?.details.profile.fullName ?? null;
     const blogName = fullName || NodeName.shorten(nodeName);

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import ReactAvatarEditor from 'react-avatar-editor';
 import Dropzone from 'react-dropzone';
 import cx from 'classnames';
@@ -9,6 +9,7 @@ import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import { profileAvatarCreate, profileCloseAvatarEditDialog, profileImageUpload } from "state/profile/actions";
+import { useDispatcher } from "ui/hook";
 import { ACCEPTED_IMAGE_TYPES } from "ui/image-types";
 import { Button, ModalDialog } from "ui/control";
 import avatarPlaceholder from "ui/control/avatar.jpg";
@@ -29,7 +30,7 @@ export default function AvatarEditDialog() {
     const creating = useSelector((state: ClientState) => state.profile.avatarEditDialog.avatarCreating);
     const rootPage = useSelector(getNodeRootPage);
     const shapeDefault = useSelector((state: ClientState) => getSetting(state, "avatar.shape.default") as string);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const domFile = useRef<HTMLInputElement>(null);

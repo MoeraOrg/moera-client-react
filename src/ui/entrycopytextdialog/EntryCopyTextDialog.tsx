@@ -1,18 +1,18 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { closeEntryCopyTextDialog, entryCopyText, EntryCopyTextMode } from "state/entrycopytextdialog/actions";
-import { ModalDialog } from "ui/control/ModalDialog";
-import { Button } from "ui/control/Button";
+import { useDispatcher } from "ui/hook";
+import { Button, ModalDialog } from "ui/control";
 import "./EntryCopyTextDialog.css";
 
 export default function EntryCopyTextDialog() {
     const body = useSelector((state: ClientState) => state.entryCopyTextDialog.body);
     const nodeName = useSelector((state: ClientState) => state.entryCopyTextDialog.nodeName);
     const media = useSelector((state: ClientState) => state.entryCopyTextDialog.media);
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onSubmit = (mode: EntryCopyTextMode) => () => {

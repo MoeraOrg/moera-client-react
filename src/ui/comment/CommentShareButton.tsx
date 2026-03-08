@@ -1,8 +1,9 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+
 import { useTranslation } from 'react-i18next';
 
 import { shareDialogPrepare } from "state/sharedialog/actions";
+import { useDispatcher } from "ui/hook";
 import { Icon, msShare } from "ui/material-symbols";
 import { ut } from "util/url";
 
@@ -13,7 +14,7 @@ interface Props {
 }
 
 export default function CommentShareButton({nodeName, postingId, commentId}: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
     const {t} = useTranslation();
 
     const onClick = () => {

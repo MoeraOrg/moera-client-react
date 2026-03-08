@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import deepEqual from 'react-fast-compare';
 
@@ -17,6 +17,7 @@ import {
     getSearchQuery,
     getSearchTab
 } from "state/search/selectors";
+import { useDispatcher } from "ui/hook";
 import { UnderlinedTabDescription, UnderlinedTabs } from "ui/control";
 import { Icon, msTune } from "ui/material-symbols";
 import "./SearchTabs.css";
@@ -52,7 +53,7 @@ export default function SearchTabs() {
         [homeOwnerName, mode, ownerName, searchNodeName, t, tab]
     );
     const filterActive = useSelector((state: ClientState) => !deepEqual(getSearchFilter(state), emptySearchFilter));
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const onClick = (tab: SearchTab) => dispatch(searchLoad(query, tab, emptySearchFilter));
 

@@ -1,12 +1,12 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { composeDraftListItemDelete, composeDraftSelect } from "state/compose/actions";
 import { isComposeReady } from "state/compose/selectors";
-import { useButtonPopper } from "ui/hook";
+import { useButtonPopper, useDispatcher } from "ui/hook";
 import { Button, Loading, LoadingInline } from "ui/control";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import ComposeDraftItem from "ui/compose/drafts/ComposeDraftItem";
@@ -22,7 +22,7 @@ export default function ComposeDraftSelector() {
     const loadedDraftList = useSelector((state: ClientState) => state.compose.loadedDraftList);
     useSelector((state: ClientState) => state.pulse.pulse); // To force re-rendering only
     const {focus} = useRichTextEditorCommands();
-    const dispatch = useDispatch();
+    const dispatch = useDispatcher();
 
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, zIndex
