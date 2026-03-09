@@ -21,7 +21,7 @@ import {
 import { getNodeUri } from "state/naming/sagas";
 import * as Browser from "ui/browser";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
-import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/url";
+import { nodeUrlToLocation, normalizeUrl } from "util/url";
 
 const MAX_EMPTY_RESULT_RETRIES = 3;
 
@@ -78,7 +78,8 @@ export async function callApi<T>({
         (e, details) => new NodeError(method, rootApi, location, errorTitle, e, details, caller);
     const headers = {
         "Accept": "application/json",
-        "Content-Type": body instanceof Blob ? body.type : "application/json"
+        "Content-Type": body instanceof Blob ? body.type : "application/json",
+        "Client-ID": Browser.clientId
     };
 
     let cartesRenewed = false;
@@ -94,7 +95,7 @@ export async function callApi<T>({
 
         let response: Response | XhrResponse;
         try {
-            response = await fetcher(apiUrl(rootApi, location, method), {
+            response = await fetcher(rootApi + location, {
                 method,
                 headers,
                 body: encodeBody(body),
@@ -257,14 +258,6 @@ function authorize(
         return true;
     }
     return !select(state => isConnectedToHome(state) && isHomeOwnerNameSet(state));
-}
-
-function apiUrl(rootApi: string, location: string, method: HttpMethod): string {
-    if (["POST", "PUT", "DELETE"].includes(method)) {
-        return urlWithParameters(rootApi + location, {"cid": Browser.clientId});
-    } else {
-        return rootApi + location;
-    }
 }
 
 function encodeBody(body: null): null;
