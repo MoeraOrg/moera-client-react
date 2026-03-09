@@ -5,7 +5,8 @@ import {
     homeInvisibleUsersLoad,
     homeOwnerSet,
     homeOwnerVerify,
-    homeReady
+    homeReady,
+    maintainClientId
 } from "state/home/actions";
 import { EventAction, NodeNameChangedEvent } from "api/events";
 import { ClientState } from "state/state";
@@ -22,6 +23,7 @@ export default [
     trigger("HOME_OWNER_SET", inv(isHomeIntroduced), homeReady),
     trigger("HOME_READY", isConnectedToHome, homeFriendGroupsLoad),
     trigger("HOME_READY", isConnectedToHome, homeInvisibleUsersLoad),
+    trigger("PULSE_10MIN", true, maintainClientId),
     trigger(
         "EVENT_HOME_NODE_NAME_CHANGED",
         true,

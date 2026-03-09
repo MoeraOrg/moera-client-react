@@ -9,10 +9,57 @@ import { DocumentLocation, DocumentLocator, parseUniversalLocation, toDocumentLo
 type UserAgent = "firefox" | "chrome" | "opera" | "yandex" | "brave" | "vivaldi" | "dolphin" | "unknown";
 type UserAgentOs = "android" | "ios" | "windows" | "linux" | "mac" | "unknown";
 
-export const clientId: string = randomId();
+const CLIENT_ID_STORAGE_KEY = "clientId";
+const CLIENT_ID_SAVED_AT_STORAGE_KEY = "clientIdSavedAt";
+const CLIENT_ID_TTL = 3 * 60 * 60 * 1000; // ms
+
+export const clientId: string = initClientId();
 export const [userAgent, userAgentOs] = initUserAgent();
 export const androidAppFlavor: AndroidAppFlavor | null = initAndroidAppFlavor();
 export const parameters: Map<string, string> = initParameters();
+
+function initClientId(): string {
+    let id = loadClientId();
+    if (id != null) {
+        return id;
+    }
+    id = randomId();
+    storeClientId(id);
+    return id;
+}
+
+function loadClientId(): string | null {
+    try {
+        const savedClientId = window.localStorage.getItem(CLIENT_ID_STORAGE_KEY);
+        const savedAt = window.localStorage.getItem(CLIENT_ID_SAVED_AT_STORAGE_KEY);
+        if (!savedClientId || !savedAt) {
+            return null;
+        }
+        const savedAtMs = Number(savedAt);
+        if (!Number.isFinite(savedAtMs)) {
+            return null;
+        }
+        if (Date.now() - savedAtMs > CLIENT_ID_TTL) {
+            return null;
+        }
+        return savedClientId;
+    } catch {
+        return null;
+    }
+}
+
+function storeClientId(id: string): void {
+    try {
+        window.localStorage.setItem(CLIENT_ID_STORAGE_KEY, id);
+        window.localStorage.setItem(CLIENT_ID_SAVED_AT_STORAGE_KEY, `${Date.now()}`);
+    } catch {
+        // ignore local storage write failures
+    }
+}
+
+export function maintainClientId(): void {
+    storeClientId(clientId);
+}
 
 function initUserAgent(): [UserAgent, UserAgentOs] {
     let userAgent: UserAgent = "unknown";

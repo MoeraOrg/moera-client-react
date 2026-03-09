@@ -8,7 +8,7 @@ import { isSpaces } from "util/misc";
 export function randomId(len: number = 16): string {
     let buf = new Uint8Array(len);
     window.crypto.getRandomValues(buf);
-    return Base64js.fromByteArray(buf);
+    return Base64js.fromByteArray(buf).replace(/=+$/, "");
 }
 
 export function hasWindowSelection(): boolean {

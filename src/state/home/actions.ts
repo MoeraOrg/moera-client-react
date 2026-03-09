@@ -126,6 +126,10 @@ export type CloseConnectionsDialogAction = ActionWithoutPayload<"CLOSE_CONNECTIO
 export const closeConnectionsDialog = (): CloseConnectionsDialogAction =>
     actionWithoutPayload("CLOSE_CONNECTIONS_DIALOG");
 
+export type MaintainClientIdAction = ActionWithoutPayload<"MAINTAIN_CLIENT_ID">;
+export const maintainClientId = (): MaintainClientIdAction =>
+    actionWithoutPayload("MAINTAIN_CLIENT_ID");
+
 export type HomeAnyAction =
     ConnectToHomeAction
     | ConnectionToHomeFailedAction
@@ -145,4 +149,5 @@ export type HomeAnyAction =
     | HomeInvisibleUsersLoadAction
     | HomeInvisibleUsersLoadedAction
     | OpenConnectionsDialogAction
-    | CloseConnectionsDialogAction;
+    | CloseConnectionsDialogAction
+    | MaintainClientIdAction;

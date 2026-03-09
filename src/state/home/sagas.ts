@@ -14,13 +14,15 @@ import { errorThrown } from "state/error/actions";
 import { getHomeInvisibleUsersChecksum, getHomeOwnerName } from "state/home/selectors";
 import { NodeFeaturesLoadedAction } from "state/node/actions";
 import { executor } from "state/executor";
+import * as Browser from "ui/browser";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
     executor("HOME_AVATARS_LOAD", "", homeAvatarsLoadSaga),
     executor("HOME_FRIEND_GROUPS_LOAD", "", homeFriendGroupsLoadSaga),
     executor("HOME_INVISIBLE_USERS_LOAD", "", homeInvisibleUsersLoadSaga),
-    executor("NODE_FEATURES_LOADED", "", nodeFeaturesLoadedSaga)
+    executor("NODE_FEATURES_LOADED", "", nodeFeaturesLoadedSaga),
+    executor("MAINTAIN_CLIENT_ID", "", maintainClientIdSaga)
 ];
 
 async function homeAvatarsLoadSaga(action: WithContext<HomeAvatarsLoadAction>): Promise<void> {
@@ -75,4 +77,8 @@ async function nodeFeaturesLoadedSaga(action: WithContext<NodeFeaturesLoadedActi
     } catch (e) {
         dispatch(errorThrown(e));
     }
+}
+
+function maintainClientIdSaga(): void {
+    Browser.maintainClientId();
 }
