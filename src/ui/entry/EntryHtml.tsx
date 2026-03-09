@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { attributesToProps, DOMNode, domToReact, htmlToDOM, Text } from 'html-react-parser';
+import { attributesToProps, DOMNode, domToReact, htmlToDOM } from 'html-react-parser';
 import { isTag } from 'domhandler';
 import 'katex/dist/katex.min.css';
 
@@ -16,7 +16,8 @@ import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { mediaHashStrip } from "util/media-images";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
-import { hasClass, wrapHashtags } from "ui/entry/wrap-hashtags";
+import { wrapHashtags } from "ui/entry/wrap-hashtags";
+import { hasClass, textContent } from "util/domhandler";
 import { ut } from "util/url";
 
 interface Props {
@@ -53,7 +54,7 @@ export default function EntryHtml({
                     const href = node.attribs["data-href"];
 
                     if (!href || href === "/") {
-                        const text = node.childNodes[0] instanceof Text ? node.childNodes[0].data : "";
+                        const text = textContent(node);
                         const fullName = text.startsWith("@") ? text.substring(1) : text;
                         return <NodeNameMention name={name} fullName={fullName} text={text}/>;
                     } else {
@@ -125,19 +126,11 @@ export default function EntryHtml({
             }
 
             if (node.name === "span" && hasClass(node, "katex")) {
-                if (node.childNodes.length === 0 || !(node.childNodes[0] instanceof Text)) {
-                    return;
-                }
-
-                return <InlineMath math={node.childNodes[0].data}/>;
+                return <InlineMath math={textContent(node)}/>;
             }
 
             if (node.name === "div" && hasClass(node, "katex")) {
-                if (node.childNodes.length === 0 || !(node.childNodes[0] instanceof Text)) {
-                    return;
-                }
-
-                return <BlockMath math={node.childNodes[0].data}/>;
+                return <BlockMath math={textContent(node)}/>;
             }
 
             if (node.name === "mr-spoiler") {

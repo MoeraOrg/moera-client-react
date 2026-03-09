@@ -1,5 +1,7 @@
 import { ChildNode, Element, hasChildren, isTag, isText, Node, Text } from 'domhandler';
 
+import { hasClass } from "util/domhandler";
+
 const HASHTAG = /(?:^|[\s([{>])(#[\p{L}\p{Nd}_]*[\p{L}_][\p{L}\p{Nd}_]*)/gu;
 
 const SKIPPED_TAGS = new Set(["a", "code", "pre", "video", "audio", "object", "iframe"]);
@@ -136,8 +138,4 @@ function replaceNodeWithNodes(node: ChildNode, replacements: ChildNode[]): void 
     node.parent = null;
     node.prev = null;
     node.next = null;
-}
-
-export function hasClass(element: Element, className: string): boolean {
-    return element.attribs.class?.split(/\s+/).includes(className) ?? false;
 }
