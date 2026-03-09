@@ -1,9 +1,9 @@
-import { RefObject, useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 export function useIntersect(
     callback: (intersecting: boolean) => void,
     options?: IntersectionObserverInit
-): RefObject<any> {
+): React.RefObject<any> {
     const element = useRef<any>(null);
 
     const onIntersect = useCallback((entries: IntersectionObserverEntry[]) => {

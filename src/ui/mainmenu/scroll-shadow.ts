@@ -1,4 +1,4 @@
-import { RefObject, useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { useIntersect } from "ui/hook";
 
@@ -8,7 +8,7 @@ interface Props {
 
 interface ScrollShadow {
     shadow: boolean;
-    sentinel: RefObject<any>;
+    sentinel: React.RefObject<any>;
 }
 
 export function useScrollShadow({margin = 0}: Props = {}): ScrollShadow {

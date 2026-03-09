@@ -1,4 +1,4 @@
-import { ProfilerOnRenderCallback, RefObject, useRef } from 'react';
+import React, { ProfilerOnRenderCallback, useRef } from 'react';
 import deepEqual from 'react-fast-compare';
 
 /*
@@ -15,7 +15,7 @@ import deepEqual from 'react-fast-compare';
 interface TracedValue<T> {
     name: string;
     value: T;
-    prevValue: RefObject<T | undefined>;
+    prevValue: React.RefObject<T | undefined>;
 }
 
 export function useTracedValue<T>(name: string, value: T): TracedValue<T> {
@@ -23,7 +23,7 @@ export function useTracedValue<T>(name: string, value: T): TracedValue<T> {
     return {name, value, prevValue};
 }
 
-function traceValue<T>(name: string, value: T, prevValue: RefObject<T | null>): void {
+function traceValue<T>(name: string, value: T, prevValue: React.RefObject<T | null>): void {
     if (prevValue.current !== undefined) {
         if (!Object.is(value, prevValue.current)) {
             if (deepEqual(value, prevValue.current)) {
