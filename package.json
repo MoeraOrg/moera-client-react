@@ -29,6 +29,7 @@
     "formik": "^2.4.9",
     "general-category": "^1.6.0",
     "html-entities": "^2.6.0",
+    "html-react-parser": "^5.2.17",
     "i18next": "^25.8.14",
     "i18next-icu": "^2.4.3",
     "intl-messageformat": "^11.1.2",

@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
-import { createRoot } from 'react-dom/client';
-import { Provider, useSelector } from 'react-redux';
+import React, { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { attributesToProps, DOMNode, domToReact, htmlToDOM, Text } from 'html-react-parser';
+import { isTag } from 'domhandler';
 import 'katex/dist/katex.min.css';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
@@ -15,7 +16,7 @@ import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { mediaHashStrip } from "util/media-images";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
-import { wrapHashtags } from "ui/entry/wrap-hashtags";
+import { hasClass, wrapHashtags } from "ui/entry/wrap-hashtags";
 import { ut } from "util/url";
 
 interface Props {
@@ -33,170 +34,134 @@ export default function EntryHtml({
 }: Props) {
     const openInNewWindow = useSelector((state: ClientState) => getSetting(state, "link.new-window") as boolean);
 
-    const dom = useRef<HTMLDivElement>(null);
-    const mediaMap: Map<string, PrivateMediaFileInfo> = new Map(
+    const mediaMap: Map<string, PrivateMediaFileInfo> = useMemo(() => new Map(
         (media ?? [])
             .map(ma => ma.media)
             .filter(notNull)
             .map(mf => [mediaHashStrip(mf.hash), mf])
-    );
+    ), [media]);
 
-    const hydrate = () => {
-        if (dom.current == null) {
-            return;
-        }
-
-        wrapHashtags(dom.current);
-
-        dom.current.querySelectorAll("a[data-nodename]").forEach(node => {
-            const name = node.getAttribute("data-nodename");
-            const href = node.getAttribute("data-href");
-
-            const span = document.createElement("span");
-            node.replaceWith(span);
-
-            if (!href || href === "/") {
-                span.appendChild(node);
-
-                const text = (node as HTMLElement).innerText;
-                const fullName = text.startsWith("@") ? text.substring(1) : text;
-                createRoot(span).render(
-                    <Provider store={window.store}>
-                        <NodeNameMention name={name} fullName={fullName} text={text}/>
-                    </Provider>
-                );
-            } else {
-                const html = node.innerHTML;
-                createRoot(span).render(
-                    <Provider store={window.store}>
-                        <Jump nodeName={name ?? undefined} href={href}>
-                            <span dangerouslySetInnerHTML={{__html: html}}/>
-                        </Jump>
-                    </Provider>
-                );
-            }
-        });
-        dom.current.querySelectorAll("span[data-hashtag]").forEach(node => {
-            const hashtag = node.getAttribute("data-hashtag");
-            createRoot(node).render(
-                <Provider store={window.store}>
-                    <Jump href={ut`/search?query=${hashtag}`}>{hashtag}</Jump>
-                </Provider>
-            );
-        });
-        dom.current.querySelectorAll("img").forEach(node => {
-            const src = node.getAttribute("src");
-            const mediaFile = src?.startsWith("hash:")
-                ? mediaMap.get(mediaHashStrip(src.substring(5)))
-                : null;
-            if (mediaFile != null) {
-                const width = node.getAttribute("width");
-                const height = node.getAttribute("height");
-                const alt = node.getAttribute("alt");
-                const title = node.getAttribute("title");
-                const style = node.getAttribute("style");
-
-                const span = document.createElement("span");
-                if (style != null) {
-                    span.setAttribute("style", style);
-                }
-                span.className = "preload-placeholder";
-                node.replaceWith(span);
-
-                createRoot(span).render(
-                    <Provider store={window.store}>
-                        <EntryImage postingId={postingId} commentId={commentId} nodeName={nodeName ?? null}
-                                    mediaFile={mediaFile} width={width} height={height} alt={alt} title={title}/>
-                    </Provider>
-                );
-            } else if (src?.startsWith("hash:")) {
-                node.remove();
-            } else {
-                const width = node.getAttribute("width");
-                const height = node.getAttribute("height");
-                let style = node.getAttribute("style") ?? "";
-                if (isNumericString(width)) {
-                    style += `; --width: ${width}px`;
-                }
-                if (isNumericString(height)) {
-                    style += `; --height: ${height}px`;
-                }
-                node.setAttribute("style", style);
-            }
-        });
-        dom.current.querySelectorAll("span.katex").forEach(node => {
-            createRoot(node).render(
-                <InlineMath math={(node as HTMLElement).innerText}/>
-            );
-        });
-        dom.current.querySelectorAll("div.katex").forEach(node => {
-            createRoot(node).render(
-                <BlockMath math={(node as HTMLElement).innerText}/>
-            );
-        });
-        dom.current.querySelectorAll("mr-spoiler").forEach(node => {
-            const title = node.getAttribute("title") || undefined;
-            const html = node.innerHTML;
-
-            createRoot(node).render(
-                <Provider store={window.store}>
-                    <MrSpoiler title={title}><span dangerouslySetInnerHTML={{__html: html}}/></MrSpoiler>
-                </Provider>
-            );
-        });
-        dom.current.querySelectorAll("div.mr-spoiler").forEach(node => {
-            const title = node.getAttribute("data-title") || undefined;
-            const html = node.innerHTML;
-
-            createRoot(node).render(
-                <Provider store={window.store}>
-                    <MrSpoiler title={title}><span dangerouslySetInnerHTML={{__html: html}}/></MrSpoiler>
-                </Provider>
-            );
-        });
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(() => hydrate(), [html]);
-
-    useEffect(() => {
-        const root = dom.current;
-
-        if (root == null) {
-            return;
-        }
-
-        root.querySelectorAll("a").forEach(node => {
-            const href = node.getAttribute("href");
-            if (!href || href.startsWith("#")) {
+    const options = useMemo(() => ({
+        replace: (node: DOMNode) => {
+            if (!isTag(node)) {
                 return;
             }
 
-            const name = node.getAttribute("data-nodename");
-            if (!name) {
-                node.addEventListener("click", interceptLinkClick);
+            if (node.name === "a") {
+                if ("data-nodename" in node.attribs) {
+                    const name = node.attribs["data-nodename"];
+                    const href = node.attribs["data-href"];
+
+                    if (!href || href === "/") {
+                        const text = node.childNodes[0] instanceof Text ? node.childNodes[0].data : "";
+                        const fullName = text.startsWith("@") ? text.substring(1) : text;
+                        return <NodeNameMention name={name} fullName={fullName} text={text}/>;
+                    } else {
+                        return (
+                            <Jump nodeName={name} href={href}>
+                                {domToReact(node.children as DOMNode[], options)}
+                            </Jump>
+                        );
+                    }
+                }
+
+                const props = attributesToProps(node.attribs);
                 if (openInNewWindow) {
-                    node.setAttribute("target", "_blank");
-                    let rel = node.getAttribute("rel");
+                    props["target"] = "_blank";
+                    let rel = node.attribs.rel;
                     if (!rel?.includes("noreferrer")) {
                         rel = rel ? rel + " noreferrer" : "noreferrer";
                     }
-                    node.setAttribute("rel", rel);
+                    props["rel"] = rel;
+                }
+                return (
+                    <a {...props} onClick={interceptLinkClick}>
+                        {domToReact(node.children as DOMNode[], options)}
+                    </a>
+                );
+            }
+
+            if (node.name === "span" && "data-hashtag" in node.attribs) {
+                const hashtag = node.attribs["data-hashtag"];
+
+                return <Jump href={ut`/search?query=${hashtag}`}>{hashtag}</Jump>;
+            }
+
+            if (node.name === "img") {
+                const src: string | undefined = node.attribs.src;
+                const mediaFile = src?.startsWith("hash:")
+                    ? mediaMap.get(mediaHashStrip(src.substring(5)))
+                    : null;
+                if (mediaFile != null) {
+                    const width = node.attribs.width;
+                    const height = node.attribs.height;
+                    const alt = node.attribs.alt;
+                    const title = node.attribs.title;
+                    const style = node.attribs.style;
+
+                    return (
+                        <span className="preload-placeholder" {...attributesToProps({style})}>
+                            <EntryImage postingId={postingId} commentId={commentId} nodeName={nodeName ?? null}
+                                        mediaFile={mediaFile} width={width} height={height} alt={alt} title={title}/>
+                        </span>
+                    );
+                } else if (src?.startsWith("hash:")) {
+                    return <></>;
+                } else {
+                    const width = node.attribs.width;
+                    const height = node.attribs.height;
+                    let style = node.attribs.style ?? "";
+                    if (isNumericString(width)) {
+                        style += `; --width: ${width}px`;
+                    }
+                    if (isNumericString(height)) {
+                        style += `; --height: ${height}px`;
+                    }
+
+                    const props = attributesToProps({...node.attribs, style});
+                    // eslint-disable-next-line jsx-a11y/alt-text
+                    return <img {...props}/>;
                 }
             }
-        });
 
-        return () => {
-            root.querySelectorAll("a").forEach(node => {
-                const name = node.getAttribute("data-nodename");
-                if (!name) {
-                    node.removeEventListener("click", interceptLinkClick);
-                    node.removeAttribute("target");
+            if (node.name === "span" && hasClass(node, "katex")) {
+                if (node.childNodes.length === 0 || !(node.childNodes[0] instanceof Text)) {
+                    return;
                 }
-            });
-        }
-    }, [html, openInNewWindow]);
 
-    return <div ref={dom} className={className} style={{fontSize: "var(--posting-font-magnitude)"}} onClick={onClick}
-                dangerouslySetInnerHTML={{__html: html ?? ""}}/>
+                return <InlineMath math={node.childNodes[0].data}/>;
+            }
+
+            if (node.name === "div" && hasClass(node, "katex")) {
+                if (node.childNodes.length === 0 || !(node.childNodes[0] instanceof Text)) {
+                    return;
+                }
+
+                return <BlockMath math={node.childNodes[0].data}/>;
+            }
+
+            if (node.name === "mr-spoiler") {
+                const title = node.attribs.title || undefined;
+
+                return <MrSpoiler title={title}>{domToReact(node.children as DOMNode[], options)}</MrSpoiler>;
+            }
+
+            if (node.name === "div" && hasClass(node, "mr-spoiler")) {
+                const title = node.attribs["data-title"] || undefined;
+
+                return <MrSpoiler title={title}>{domToReact(node.children as DOMNode[], options)}</MrSpoiler>;
+            }
+        }
+    }), [commentId, mediaMap, nodeName, openInNewWindow, postingId]);
+
+    const content = useMemo(
+        () => domToReact(wrapHashtags(htmlToDOM(html ?? "", {lowerCaseAttributeNames: false})) as DOMNode[], options),
+        [html, options]
+    );
+
+    return (
+        <div className={className} style={{fontSize: "var(--posting-font-magnitude)"}} onClick={onClick}>
+            {content}
+        </div>
+    );
 }
