@@ -5,6 +5,7 @@ import scrollIntoView from 'scroll-into-view-if-needed';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { isConnectedToHome } from "state/home/selectors";
 import { getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
 import { bottomMenuHide, bottomMenuShow } from "state/navigation/actions";
@@ -33,6 +34,7 @@ function CommentCompose(props: Props) {
         resetForm, submitForm
     } = props;
 
+    const connectedToHome = useSelector(isConnectedToHome);
     const ready = useSelector(isCommentComposerReady);
     const receiverName = useSelector(getCommentsReceiverName);
     const receiverPostingId = useSelector(getCommentsReceiverPostingId);
@@ -82,6 +84,7 @@ function CommentCompose(props: Props) {
                         features={features}
                         nodeName={receiverName ?? REL_CURRENT}
                         forceImageCompress
+                        noMedia={!connectedToHome}
                         noEmbeddedMedia
                         anyValue
                         placeholder={t("write-comment")}
