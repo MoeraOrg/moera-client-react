@@ -1,4 +1,4 @@
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { Features, Node } from "api";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
@@ -15,8 +15,8 @@ import {
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("ASK_DIALOG_LOAD", payload => payload.nodeName, askDialogLoadSaga),
-    executor("ASK_DIALOG_SEND", null, askDialogSendSaga)
+    saga("ASK_DIALOG_LOAD", payload => payload.nodeName, askDialogLoadSaga),
+    saga("ASK_DIALOG_SEND", null, askDialogSendSaga)
 ];
 
 async function askDialogLoadSaga(action: WithContext<AskDialogLoadAction>): Promise<void> {

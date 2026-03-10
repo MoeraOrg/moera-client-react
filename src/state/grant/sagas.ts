@@ -1,6 +1,6 @@
 import * as URI from 'uri-js';
 
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { Node } from "api";
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
@@ -20,9 +20,9 @@ import { REL_HOME } from "util/rel-node-name";
 import { urlWithParameters } from "util/url";
 
 export default [
-    executor("GRANT_VALIDATE", null, grantValidateSaga),
-    executor("GRANT_CONFIRM", null, grantConfirmSaga),
-    executor("GRANT_CONFIRMED", null, grantConfirmedSaga)
+    saga("GRANT_VALIDATE", null, grantValidateSaga),
+    saga("GRANT_CONFIRM", null, grantConfirmSaga),
+    saga("GRANT_CONFIRMED", null, grantConfirmedSaga)
 ];
 
 async function grantValidateSaga(action: WithContext<GrantValidateAction>): Promise<void> {

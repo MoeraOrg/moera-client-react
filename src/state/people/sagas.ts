@@ -51,7 +51,7 @@ import {
     subscriptionsLoaded,
     subscriptionsLoadFailed
 } from "state/people/actions";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { ClientAction } from "state/action";
 import { dispatch, select } from "state/store-sagas";
 import { homeIntroduced } from "state/init-barriers";
@@ -84,25 +84,25 @@ import { getSetting } from "state/settings/selectors";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("PEOPLE_GO_TO_DEFAULT_TAB", "", peopleGoToDefaultTabSaga),
-    executor("PEOPLE_GENERAL_LOAD", "", peopleGeneralLoadSaga),
-    executor("SUBSCRIBERS_LOAD", "", subscribersLoadSaga),
-    executor("SUBSCRIPTIONS_LOAD", "", subscriptionsLoadSaga),
-    executor("FRIENDS_LOAD", "", friendsLoadSaga),
-    executor("FRIEND_OFS_LOAD", "", friendOfsLoadSaga),
-    executor("BLOCKED_LOAD", "", blockedLoadSaga),
-    executor("BLOCKED_BY_LOAD", "", blockedByLoadSaga),
-    executor("FRIENDSHIP_UPDATE", payload => payload.nodeName, friendshipUpdateSaga),
-    executor("FRIENDSHIP_SET_VISIBILITY", payload => payload.nodeName, friendshipSetVisibilitySaga),
-    executor("PEOPLE_SELECTED_SUBSCRIBE", "", peopleSelectedSubscribeSaga),
-    executor("PEOPLE_SELECTED_UNSUBSCRIBE", "", peopleSelectedUnsubscribeSaga),
-    executor("PEOPLE_SELECTED_FRIEND", "", peopleSelectedFriendSaga),
-    executor("PEOPLE_SELECTED_UNFRIEND", "", peopleSelectedUnfriendSaga),
-    executor("PEOPLE_SELECTED_ASK", "", peopleSelectedAskSaga),
-    executor("PEOPLE_SELECTED_SUBSCRIBER_SET_VISIBILITY", "", peopleSelectedSubscriberSetVisibilitySaga),
-    executor("PEOPLE_SELECTED_SUBSCRIPTION_SET_VISIBILITY", "", peopleSelectedSubscriptionSetVisibilitySaga),
-    executor("PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY", "", peopleSelectedFriendshipSetVisibilitySaga),
-    executor("PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS", "", peopleSelectedChangeFriendGroupsSaga)
+    saga("PEOPLE_GO_TO_DEFAULT_TAB", "", peopleGoToDefaultTabSaga),
+    saga("PEOPLE_GENERAL_LOAD", "", peopleGeneralLoadSaga),
+    saga("SUBSCRIBERS_LOAD", "", subscribersLoadSaga),
+    saga("SUBSCRIPTIONS_LOAD", "", subscriptionsLoadSaga),
+    saga("FRIENDS_LOAD", "", friendsLoadSaga),
+    saga("FRIEND_OFS_LOAD", "", friendOfsLoadSaga),
+    saga("BLOCKED_LOAD", "", blockedLoadSaga),
+    saga("BLOCKED_BY_LOAD", "", blockedByLoadSaga),
+    saga("FRIENDSHIP_UPDATE", payload => payload.nodeName, friendshipUpdateSaga),
+    saga("FRIENDSHIP_SET_VISIBILITY", payload => payload.nodeName, friendshipSetVisibilitySaga),
+    saga("PEOPLE_SELECTED_SUBSCRIBE", "", peopleSelectedSubscribeSaga),
+    saga("PEOPLE_SELECTED_UNSUBSCRIBE", "", peopleSelectedUnsubscribeSaga),
+    saga("PEOPLE_SELECTED_FRIEND", "", peopleSelectedFriendSaga),
+    saga("PEOPLE_SELECTED_UNFRIEND", "", peopleSelectedUnfriendSaga),
+    saga("PEOPLE_SELECTED_ASK", "", peopleSelectedAskSaga),
+    saga("PEOPLE_SELECTED_SUBSCRIBER_SET_VISIBILITY", "", peopleSelectedSubscriberSetVisibilitySaga),
+    saga("PEOPLE_SELECTED_SUBSCRIPTION_SET_VISIBILITY", "", peopleSelectedSubscriptionSetVisibilitySaga),
+    saga("PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY", "", peopleSelectedFriendshipSetVisibilitySaga),
+    saga("PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS", "", peopleSelectedChangeFriendGroupsSaga)
 ];
 
 function peopleGoToDefaultTabSaga(action: PeopleGoToDefaultTabAction): void {

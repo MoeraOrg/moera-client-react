@@ -1,7 +1,7 @@
 import { addMinutes } from 'date-fns';
 import * as URI from 'uri-js';
 
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { Node, NodeApiError, TooManyRequestsError } from "api";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
@@ -24,9 +24,9 @@ import { flashBox } from "state/flashbox/actions";
 import i18n from "i18next";
 
 export default [
-    executor("CONNECT_PAGE_RESET_PASSWORD", payload => payload.location, connectPageResetPasswordSaga),
-    executor("CONNECT_PAGE_VERIFY_CODE", payload => payload.location, connectPageVerifyCodeSaga),
-    executor("CONNECT_PAGE_CHANGE_PASSWORD", "", connectPageChangePasswordSaga)
+    saga("CONNECT_PAGE_RESET_PASSWORD", payload => payload.location, connectPageResetPasswordSaga),
+    saga("CONNECT_PAGE_VERIFY_CODE", payload => payload.location, connectPageVerifyCodeSaga),
+    saga("CONNECT_PAGE_CHANGE_PASSWORD", "", connectPageChangePasswordSaga)
 ];
 
 async function connectPageResetPasswordSaga(action: WithContext<ConnectPageResetPasswordAction>): Promise<void> {

@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { dispatch, select } from "state/store-sagas";
 import { EntryCopyTextAction, openEntryCopyTextDialog } from "state/entrycopytextdialog/actions";
 import { flashBox } from "state/flashbox/actions";
@@ -16,7 +16,7 @@ import { urlWithParameters } from "util/url";
 import { notNull } from "util/misc";
 
 export default [
-    executor("ENTRY_COPY_TEXT", null, entryCopyTextSaga)
+    saga("ENTRY_COPY_TEXT", null, entryCopyTextSaga)
 ];
 
 async function entryCopyTextSaga(action: EntryCopyTextAction): Promise<void> {

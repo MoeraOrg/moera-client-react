@@ -11,7 +11,7 @@ import {
     SubscriberInfo,
     SubscriptionInfo
 } from "api";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { homeIntroduced, mutuallyIntroduced } from "state/init-barriers";
 import { dispatch, select } from "state/store-sagas";
 import {
@@ -57,18 +57,18 @@ import { getNodeCard } from "state/nodecards/selectors";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("NODE_CARD_PREPARE_OWNERS", "", nodeCardPrepareOwnersSaga),
-    executor("NODE_CARD_PREPARE", payload => payload.nodeName, nodeCardPrepareSaga),
-    executor("NODE_CARD_DETAILS_LOAD", payload => payload.nodeName, nodeCardDetailsLoadSaga),
-    executor("NODE_CARD_PEOPLE_LOAD", payload => payload.nodeName, nodeCardPeopleLoadSaga),
-    executor("NODE_CARD_STORIES_LOAD", payload => payload.nodeName, nodeCardStoriesLoadSaga),
-    executor("NODE_CARD_SUBSCRIPTION_LOAD", payload => payload.nodeName, nodeCardSubscriptionLoadSaga),
-    executor("NODE_CARD_FRIENDSHIP_LOAD", payload => payload.nodeName, nodeCardFriendshipLoadSaga),
-    executor("NODE_CARD_BLOCKING_LOAD", payload => payload.nodeName, nodeCardBlockingLoadSaga),
-    executor("NODE_CARDS_PRELOAD", null, nodeCardsPreloadSaga),
-    executor("NODE_CARD_SHERIFF_LIST_LOAD", payload => payload.nodeName, nodeCardSheriffListLoadSaga),
-    executor("SHERIFF_LIST_ADD", payload => payload.nodeName, sheriffListAddSaga),
-    executor("SHERIFF_LIST_DELETE", payload => payload.nodeName, sheriffListDeleteSaga)
+    saga("NODE_CARD_PREPARE_OWNERS", "", nodeCardPrepareOwnersSaga),
+    saga("NODE_CARD_PREPARE", payload => payload.nodeName, nodeCardPrepareSaga),
+    saga("NODE_CARD_DETAILS_LOAD", payload => payload.nodeName, nodeCardDetailsLoadSaga),
+    saga("NODE_CARD_PEOPLE_LOAD", payload => payload.nodeName, nodeCardPeopleLoadSaga),
+    saga("NODE_CARD_STORIES_LOAD", payload => payload.nodeName, nodeCardStoriesLoadSaga),
+    saga("NODE_CARD_SUBSCRIPTION_LOAD", payload => payload.nodeName, nodeCardSubscriptionLoadSaga),
+    saga("NODE_CARD_FRIENDSHIP_LOAD", payload => payload.nodeName, nodeCardFriendshipLoadSaga),
+    saga("NODE_CARD_BLOCKING_LOAD", payload => payload.nodeName, nodeCardBlockingLoadSaga),
+    saga("NODE_CARDS_PRELOAD", null, nodeCardsPreloadSaga),
+    saga("NODE_CARD_SHERIFF_LIST_LOAD", payload => payload.nodeName, nodeCardSheriffListLoadSaga),
+    saga("SHERIFF_LIST_ADD", payload => payload.nodeName, sheriffListAddSaga),
+    saga("SHERIFF_LIST_DELETE", payload => payload.nodeName, sheriffListDeleteSaga)
 ];
 
 async function nodeCardPrepareOwnersSaga(action: WithContext<NodeCardPrepareOwnersAction>): Promise<void> {

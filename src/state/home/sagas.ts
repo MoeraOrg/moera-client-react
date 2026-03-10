@@ -13,16 +13,16 @@ import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
 import { getHomeInvisibleUsersChecksum, getHomeOwnerName } from "state/home/selectors";
 import { NodeFeaturesLoadedAction } from "state/node/actions";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import * as Browser from "ui/browser";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("HOME_AVATARS_LOAD", "", homeAvatarsLoadSaga),
-    executor("HOME_FRIEND_GROUPS_LOAD", "", homeFriendGroupsLoadSaga),
-    executor("HOME_INVISIBLE_USERS_LOAD", "", homeInvisibleUsersLoadSaga),
-    executor("NODE_FEATURES_LOADED", "", nodeFeaturesLoadedSaga),
-    executor("MAINTAIN_CLIENT_ID", "", maintainClientIdSaga)
+    saga("HOME_AVATARS_LOAD", "", homeAvatarsLoadSaga),
+    saga("HOME_FRIEND_GROUPS_LOAD", "", homeFriendGroupsLoadSaga),
+    saga("HOME_INVISIBLE_USERS_LOAD", "", homeInvisibleUsersLoadSaga),
+    saga("NODE_FEATURES_LOADED", "", nodeFeaturesLoadedSaga),
+    saga("MAINTAIN_CLIENT_ID", "", maintainClientIdSaga)
 ];
 
 async function homeAvatarsLoadSaga(action: WithContext<HomeAvatarsLoadAction>): Promise<void> {

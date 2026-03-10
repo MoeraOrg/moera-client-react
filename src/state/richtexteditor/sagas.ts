@@ -5,12 +5,12 @@ import { dispatch } from "state/store-sagas";
 import { RichTextEditorImageCopyAction, RichTextEditorImagesUploadAction } from "state/richtexteditor/actions";
 import { postingSet } from "state/postings/actions";
 import { errorThrown } from "state/error/actions";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { absoluteNodeName, REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("RICH_TEXT_EDITOR_IMAGES_UPLOAD", null, richTextEditorImagesUploadSaga),
-    executor("RICH_TEXT_EDITOR_IMAGE_COPY", null, richTextEditorImageCopySaga)
+    saga("RICH_TEXT_EDITOR_IMAGES_UPLOAD", null, richTextEditorImagesUploadSaga),
+    saga("RICH_TEXT_EDITOR_IMAGE_COPY", null, richTextEditorImageCopySaga)
 ];
 
 async function richTextEditorImageUpload(

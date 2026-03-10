@@ -6,7 +6,7 @@ import { WithContext } from "state/action-types";
 import { DynamicActionContext } from "state/context";
 import { BarrierActionType, BarrierCondition } from "state/store-sagas";
 import { invokeTriggers, TriggerMap } from "state/trigger";
-import { ExecutorMap, invokeExecutor } from "state/executor";
+import { SagaMap, invokeSaga } from "state/saga";
 
 interface Barrier {
     actions: BarrierActionType[];
@@ -23,7 +23,7 @@ export interface StoreMiddleware extends Middleware<{}, ClientState, Dispatch<Cl
     ) => Promise<ClientAction | null>;
 }
 
-export function createStoreMiddleware(triggers: TriggerMap, executors: ExecutorMap): StoreMiddleware {
+export function createStoreMiddleware(triggers: TriggerMap, sagas: SagaMap): StoreMiddleware {
     const barriers = new Map<BarrierActionType, Barrier[]>();
 
     const addBarrier = (
@@ -75,7 +75,7 @@ export function createStoreMiddleware(triggers: TriggerMap, executors: ExecutorM
             caction.context = new DynamicActionContext();
             resolveBarriers(storeApi.getState(), caction);
             invokeTriggers(triggers, caction, storeApi);
-            invokeExecutor(executors, caction, storeApi);
+            invokeSaga(sagas, caction);
         }
 
         return result;

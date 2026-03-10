@@ -2,7 +2,7 @@ import i18n from 'i18next';
 
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { getNodeUri } from "state/naming/sagas";
 import { postingLoad } from "state/postings/actions";
 import { flashBox } from "state/flashbox/actions";
@@ -15,9 +15,9 @@ import { universalLocation } from "util/universal-url";
 import { clipboardCopy } from "util/clipboard";
 
 export default [
-    executor("LIGHT_BOX_MEDIA_POSTING_LOAD", null, lightBoxMediaPostingLoadSaga),
-    executor("LIGHT_BOX_MEDIA_SET", null, lightBoxMediaSetSaga),
-    executor("LIGHT_BOX_COPY_LINK", null, lightBoxCopyLinkSaga)
+    saga("LIGHT_BOX_MEDIA_POSTING_LOAD", null, lightBoxMediaPostingLoadSaga),
+    saga("LIGHT_BOX_MEDIA_SET", null, lightBoxMediaSetSaga),
+    saga("LIGHT_BOX_COPY_LINK", null, lightBoxCopyLinkSaga)
 ];
 
 function lightBoxMediaPostingLoadSaga(action: LightBoxMediaPostingLoadAction): void {

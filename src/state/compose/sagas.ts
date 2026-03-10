@@ -31,7 +31,7 @@ import {
     ComposeUpdateDraftDeleteAction
 } from "state/compose/actions";
 import { getComposeDraftId, getComposePostingId, isComposePostingEditing } from "state/compose/selectors";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { flashBox } from "state/flashbox/actions";
@@ -39,16 +39,16 @@ import { mutuallyIntroduced } from "state/init-barriers";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("COMPOSE_POSTING_LOAD", "", composePostingLoadSaga),
-    executor("COMPOSE_POST", null, composePostSaga),
-    executor("COMPOSE_DRAFT_LOAD", "", composeDraftLoadSaga),
-    executor("COMPOSE_DRAFT_SAVE", null, composeDraftSaveSaga),
-    executor("COMPOSE_DRAFT_DELETE", "", composeDraftDeleteSaga),
-    executor("COMPOSE_DRAFT_LIST_LOAD", "", composeDraftListLoadSaga),
-    executor("COMPOSE_DRAFT_LIST_ITEM_RELOAD", payload => payload.id, composeDraftListItemReloadSaga),
-    executor("COMPOSE_DRAFT_LIST_ITEM_DELETE", payload => payload.id, composeDraftListItemDeleteSaga),
-    executor("COMPOSE_UPDATE_DRAFT_DELETE", "", composeUpdateDraftDeleteSaga),
-    executor("COMPOSE_SHARED_TEXT_LOAD", "", composeSharedTextLoadSaga)
+    saga("COMPOSE_POSTING_LOAD", "", composePostingLoadSaga),
+    saga("COMPOSE_POST", null, composePostSaga),
+    saga("COMPOSE_DRAFT_LOAD", "", composeDraftLoadSaga),
+    saga("COMPOSE_DRAFT_SAVE", null, composeDraftSaveSaga),
+    saga("COMPOSE_DRAFT_DELETE", "", composeDraftDeleteSaga),
+    saga("COMPOSE_DRAFT_LIST_LOAD", "", composeDraftListLoadSaga),
+    saga("COMPOSE_DRAFT_LIST_ITEM_RELOAD", payload => payload.id, composeDraftListItemReloadSaga),
+    saga("COMPOSE_DRAFT_LIST_ITEM_DELETE", payload => payload.id, composeDraftListItemDeleteSaga),
+    saga("COMPOSE_UPDATE_DRAFT_DELETE", "", composeUpdateDraftDeleteSaga),
+    saga("COMPOSE_SHARED_TEXT_LOAD", "", composeSharedTextLoadSaga)
 ];
 
 async function composePostingLoadSaga(action: WithContext<ComposePostingLoadAction>): Promise<void> {

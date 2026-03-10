@@ -1,6 +1,6 @@
 import { Naming, NodeName, RegisteredName } from "api";
 import { Storage } from "storage";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { namingInitialized } from "state/init-barriers";
 import { ClientAction } from "state/action";
 import { dispatch, select } from "state/store-sagas";
@@ -28,10 +28,10 @@ const NAME_USAGE_UPDATE_PERIOD = 60;
 const MAX_NAMES_SIZE = 500;
 
 export default [
-    executor("NAMING_NAMES_USED", null, namingNamesUsedSaga),
-    executor("NAMING_NAME_LOAD", payload => payload.name, namingNameLoadSaga),
-    executor("NAMING_NAMES_MAINTENANCE", "", namingNamesMaintenanceSaga),
-    executor("NAMING_NAMES_RELOAD", "", namingNamesReloadSaga)
+    saga("NAMING_NAMES_USED", null, namingNamesUsedSaga),
+    saga("NAMING_NAME_LOAD", payload => payload.name, namingNameLoadSaga),
+    saga("NAMING_NAMES_MAINTENANCE", "", namingNamesMaintenanceSaga),
+    saga("NAMING_NAMES_RELOAD", "", namingNamesReloadSaga)
 ];
 
 async function namingNamesUsedSaga(action: NamingNamesUsedAction): Promise<void> {

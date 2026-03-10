@@ -68,7 +68,7 @@ import {
     SettingsUpdateSucceededAction
 } from "state/settings/actions";
 import { errorThrown } from "state/error/actions";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import {
     getSetting,
     getSettingNode,
@@ -85,27 +85,27 @@ import { REL_HOME } from "util/rel-node-name";
 import { clipboardCopy } from "util/clipboard";
 
 export default [
-    executor("SETTINGS_NODE_VALUES_LOAD", "", settingsNodeValuesLoadSaga),
-    executor("SETTINGS_NODE_VALUES_LOADED", "", settingsNodeValuesLoadedSaga),
-    executor("SETTINGS_NODE_META_LOAD", "", settingsNodeMetaLoadSaga),
-    executor("SETTINGS_CLIENT_VALUES_LOAD", "", settingsClientValuesLoadSaga),
-    executor("SETTINGS_CLIENT_VALUES_LOADED", "", settingsClientValuesLoadedSaga),
-    executor("SETTINGS_UPDATE", null, settingsUpdateSaga),
-    executor("SETTINGS_UPDATE_SUCCEEDED", null, settingsUpdateSucceededSaga),
-    executor("SETTINGS_MNEMONIC_LOAD", "", settingsMnemonicLoadSaga),
-    executor("SETTINGS_GRANTS_LOAD", "", settingsGrantsLoadSaga),
-    executor("SETTINGS_GRANTS_DIALOG_CONFIRM", payload => payload.nodeName, settingsGrantsDialogConfirmSaga),
-    executor("SETTINGS_GRANTS_DELETE", payload => payload.nodeName, settingsGrantsDeleteSaga),
-    executor("SETTINGS_TOKENS_LOAD", "", settingsTokensLoadSaga),
-    executor("SETTINGS_TOKENS_CREATE", null, settingsTokensCreateSaga),
-    executor("SETTINGS_TOKENS_UPDATE", payload => payload.id, settingsTokensUpdateSaga),
-    executor("SETTINGS_TOKENS_DELETE", payload => payload.id, settingsTokensDeleteSaga),
-    executor("SETTINGS_TOKENS_NEW_TOKEN_COPY", null, settingsTokensNewTokenCopySaga),
-    executor("SETTINGS_PLUGINS_LOAD", "", settingsPluginsLoadSaga),
-    executor("SETTINGS_PLUGINS_DELETE", payload => payload.name, settingsPluginsDeleteSaga),
-    executor("SETTINGS_DELETE_NODE_REQUEST_LOAD", "", settingsDeleteNodeRequestLoadSaga),
-    executor("SETTINGS_DELETE_NODE_REQUEST_SEND", "", settingsDeleteNodeRequestSendSaga),
-    executor("SETTINGS_DELETE_NODE_REQUEST_CANCEL", "", settingsDeleteNodeRequestCancelSaga)
+    saga("SETTINGS_NODE_VALUES_LOAD", "", settingsNodeValuesLoadSaga),
+    saga("SETTINGS_NODE_VALUES_LOADED", "", settingsNodeValuesLoadedSaga),
+    saga("SETTINGS_NODE_META_LOAD", "", settingsNodeMetaLoadSaga),
+    saga("SETTINGS_CLIENT_VALUES_LOAD", "", settingsClientValuesLoadSaga),
+    saga("SETTINGS_CLIENT_VALUES_LOADED", "", settingsClientValuesLoadedSaga),
+    saga("SETTINGS_UPDATE", null, settingsUpdateSaga),
+    saga("SETTINGS_UPDATE_SUCCEEDED", null, settingsUpdateSucceededSaga),
+    saga("SETTINGS_MNEMONIC_LOAD", "", settingsMnemonicLoadSaga),
+    saga("SETTINGS_GRANTS_LOAD", "", settingsGrantsLoadSaga),
+    saga("SETTINGS_GRANTS_DIALOG_CONFIRM", payload => payload.nodeName, settingsGrantsDialogConfirmSaga),
+    saga("SETTINGS_GRANTS_DELETE", payload => payload.nodeName, settingsGrantsDeleteSaga),
+    saga("SETTINGS_TOKENS_LOAD", "", settingsTokensLoadSaga),
+    saga("SETTINGS_TOKENS_CREATE", null, settingsTokensCreateSaga),
+    saga("SETTINGS_TOKENS_UPDATE", payload => payload.id, settingsTokensUpdateSaga),
+    saga("SETTINGS_TOKENS_DELETE", payload => payload.id, settingsTokensDeleteSaga),
+    saga("SETTINGS_TOKENS_NEW_TOKEN_COPY", null, settingsTokensNewTokenCopySaga),
+    saga("SETTINGS_PLUGINS_LOAD", "", settingsPluginsLoadSaga),
+    saga("SETTINGS_PLUGINS_DELETE", payload => payload.name, settingsPluginsDeleteSaga),
+    saga("SETTINGS_DELETE_NODE_REQUEST_LOAD", "", settingsDeleteNodeRequestLoadSaga),
+    saga("SETTINGS_DELETE_NODE_REQUEST_SEND", "", settingsDeleteNodeRequestSendSaga),
+    saga("SETTINGS_DELETE_NODE_REQUEST_CANCEL", "", settingsDeleteNodeRequestCancelSaga)
 ];
 
 async function settingsNodeValuesLoadSaga(action: WithContext<SettingsNodeValuesLoadAction>): Promise<void> {

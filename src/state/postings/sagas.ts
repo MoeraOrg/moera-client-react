@@ -5,7 +5,7 @@ import { errorThrown } from "state/error/actions";
 import { ClientAction } from "state/action";
 import { dispatch, select } from "state/store-sagas";
 import { homeIntroduced } from "state/init-barriers";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import {
     EntryReactionAttributes,
     PostingCommentAddedBlockAction,
@@ -60,19 +60,19 @@ import { universalLocation } from "util/universal-url";
 import { ut } from "util/url";
 
 export default [
-    executor("POSTING_DELETE", payload => payload.id, postingDeleteSaga),
-    executor("POSTING_LOAD", payload => payload.id, postingLoadSaga),
-    executor("POSTING_VERIFY", payload => payload.id, postingVerifySaga),
-    executor("POSTING_OPERATIONS_UPDATE", payload => payload.id, postingOperationsUpdateSaga),
-    executor("POSTING_REACT", null, postingReactSaga),
-    executor("POSTING_REACTION_LOAD", payload => payload.id, postingReactionLoadSaga),
-    executor("POSTING_REACTIONS_RELOAD", "", postingReactionsReloadSaga),
-    executor("POSTING_REACTION_DELETE", payload => payload.id, postingReactionDeleteSaga),
-    executor("POSTING_COPY_LINK", payload => payload.id, postingCopyLinkSaga),
-    executor("POSTING_COMMENTS_SUBSCRIBE", payload => payload.id, postingCommentsSubscribeSaga),
-    executor("POSTING_COMMENTS_UNSUBSCRIBE", payload => payload.id, postingCommentsUnsubscribeSaga),
-    executor("POSTING_COMMENT_ADDED_BLOCK", payload => payload.id, postingCommentAddedBlockSaga),
-    executor("POSTING_COMMENT_ADDED_UNBLOCK", payload => payload.id, postingCommentAddedUnblockSaga)
+    saga("POSTING_DELETE", payload => payload.id, postingDeleteSaga),
+    saga("POSTING_LOAD", payload => payload.id, postingLoadSaga),
+    saga("POSTING_VERIFY", payload => payload.id, postingVerifySaga),
+    saga("POSTING_OPERATIONS_UPDATE", payload => payload.id, postingOperationsUpdateSaga),
+    saga("POSTING_REACT", null, postingReactSaga),
+    saga("POSTING_REACTION_LOAD", payload => payload.id, postingReactionLoadSaga),
+    saga("POSTING_REACTIONS_RELOAD", "", postingReactionsReloadSaga),
+    saga("POSTING_REACTION_DELETE", payload => payload.id, postingReactionDeleteSaga),
+    saga("POSTING_COPY_LINK", payload => payload.id, postingCopyLinkSaga),
+    saga("POSTING_COMMENTS_SUBSCRIBE", payload => payload.id, postingCommentsSubscribeSaga),
+    saga("POSTING_COMMENTS_UNSUBSCRIBE", payload => payload.id, postingCommentsUnsubscribeSaga),
+    saga("POSTING_COMMENT_ADDED_BLOCK", payload => payload.id, postingCommentAddedBlockSaga),
+    saga("POSTING_COMMENT_ADDED_UNBLOCK", payload => payload.id, postingCommentAddedUnblockSaga)
 ];
 
 async function postingDeleteSaga(action: WithContext<PostingDeleteAction>): Promise<void> {

@@ -2,7 +2,7 @@ import * as URI from 'uri-js';
 import i18n from 'i18next';
 
 import { Node, NodeName } from "api";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { mutuallyIntroduced, namingInitialized } from "state/init-barriers";
 import { dispatch, select } from "state/store-sagas";
 import { WithContext } from "state/action-types";
@@ -24,9 +24,9 @@ import { normalizeUrl, rootUrl } from "util/url";
 import { REL_CURRENT } from "util/rel-node-name";
 
 export default [
-    executor("OWNER_LOAD", null, ownerLoadSaga),
-    executor("OWNER_VERIFY", null, ownerVerifySaga),
-    executor("NODE_FEATURES_LOAD", null, nodeFeaturesLoadSaga)
+    saga("OWNER_LOAD", null, ownerLoadSaga),
+    saga("OWNER_VERIFY", null, ownerVerifySaga),
+    saga("NODE_FEATURES_LOAD", null, nodeFeaturesLoadSaga)
 ];
 
 async function ownerLoadSaga(action: WithContext<OwnerLoadAction>): Promise<void> {

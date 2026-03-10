@@ -8,7 +8,7 @@ import { ClientState } from "state/state";
 import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";
 import { barrier, dispatch, select } from "state/store-sagas";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { homeOwnerSet } from "state/home/actions";
 import { boot, jumpNear } from "state/navigation/actions";
 import { mnemonicSet, mnemonicStore, registerNameSucceeded } from "state/nodename/actions";
@@ -31,10 +31,10 @@ import { serializeSheriffs } from "util/sheriff";
 import { rootUrl } from "util/url";
 
 export default [
-    executor("SIGN_UP", "", signUpSaga),
-    executor("SIGN_UP_NAME_VERIFY", "", signUpNameVerifySaga),
-    executor("SIGN_UP_FIND_DOMAIN", "", signUpFindDomainSaga),
-    executor("SIGN_UP_DOMAIN_VERIFY", "", signUpDomainVerifySaga)
+    saga("SIGN_UP", "", signUpSaga),
+    saga("SIGN_UP_NAME_VERIFY", "", signUpNameVerifySaga),
+    saga("SIGN_UP_FIND_DOMAIN", "", signUpFindDomainSaga),
+    saga("SIGN_UP_DOMAIN_VERIFY", "", signUpDomainVerifySaga)
 ];
 
 function getProvider(name: string): Provider {

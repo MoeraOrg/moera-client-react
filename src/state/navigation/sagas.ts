@@ -4,7 +4,7 @@ import * as URI from 'uri-js';
 import { Storage } from "storage";
 import { locationBuild, LocationInfo, locationTransform } from "location";
 import { clearSettingsCache } from "api/setting-types";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { ClientAction } from "state/action";
 import { dispatch, select } from "state/store-sagas";
 import {
@@ -32,13 +32,13 @@ import { REL_HOME } from "util/rel-node-name";
 import { universalLocation } from "util/universal-url";
 
 export default [
-    executor("BOOT", "", bootSaga),
-    executor("JUMP_FAR", "", navigateFarSaga),
-    executor("JUMP_NEAR", payload => `${payload.path}:${payload.query}:${payload.hash}`, navigateNearSaga),
-    executor("RESTORE_FAR", "", navigateFarSaga),
-    executor("RESTORE_NEAR", payload => `${payload.path}:${payload.query}:${payload.hash}`, navigateNearSaga),
-    executor("NEW_LOCATION", null, newLocationSaga),
-    executor("UPDATE_LOCATION", null, updateLocationSaga),
+    saga("BOOT", "", bootSaga),
+    saga("JUMP_FAR", "", navigateFarSaga),
+    saga("JUMP_NEAR", payload => `${payload.path}:${payload.query}:${payload.hash}`, navigateNearSaga),
+    saga("RESTORE_FAR", "", navigateFarSaga),
+    saga("RESTORE_NEAR", payload => `${payload.path}:${payload.query}:${payload.hash}`, navigateNearSaga),
+    saga("NEW_LOCATION", null, newLocationSaga),
+    saga("UPDATE_LOCATION", null, updateLocationSaga),
 ];
 
 function bootSaga(action: BootAction): void {

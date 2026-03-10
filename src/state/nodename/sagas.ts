@@ -1,5 +1,5 @@
 import { Naming, Node } from "api";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { homeIntroduced } from "state/init-barriers";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
@@ -23,11 +23,11 @@ import { jumpNear } from "state/navigation/actions";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("NODE_NAME_LOAD", "", nodeNameLoadSaga),
-    executor("REGISTER_NAME", payload => payload.name, registerNameSaga),
-    executor("NODE_NAME_UPDATE", null, nodeNameUpdateSaga),
-    executor("MNEMONIC_STORE", null, mnemonicStoreSaga),
-    executor("MNEMONIC_DELETE", null, mnemonicDeleteSaga),
+    saga("NODE_NAME_LOAD", "", nodeNameLoadSaga),
+    saga("REGISTER_NAME", payload => payload.name, registerNameSaga),
+    saga("NODE_NAME_UPDATE", null, nodeNameUpdateSaga),
+    saga("MNEMONIC_STORE", null, mnemonicStoreSaga),
+    saga("MNEMONIC_DELETE", null, mnemonicDeleteSaga),
 ];
 
 async function nodeNameLoadSaga(action: WithContext<NodeNameLoadAction>): Promise<void> {

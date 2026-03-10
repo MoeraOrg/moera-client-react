@@ -1,6 +1,6 @@
 import { endOfDay, getUnixTime, startOfDay, subDays, subMonths, subWeeks, subYears } from 'date-fns';
 
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import i18n from "i18next";
 import { Node, SearchEntryType, SearchHashtagFilter, SearchNodeFilter, SearchTextFilter } from "api";
 import { homeIntroduced } from "state/init-barriers";
@@ -42,12 +42,12 @@ import { ut } from "util/url";
 import { clipboardCopy } from "util/clipboard";
 
 export default [
-    executor("SEARCH_LOAD", null, searchLoadSaga),
-    executor("SEARCH_LOAD_MORE", null, searchLoadMoreSaga),
-    executor("SEARCH_RESTORE_SCROLL", null, searchRestoreScrollSaga),
-    executor("SEARCH_HISTORY_LOAD", payload => payload.query, searchHistoryLoadSaga),
-    executor("SEARCH_HISTORY_DELETE", payload => payload.query, searchHistoryDeleteSaga),
-    executor("SEARCH_ENTRY_COPY_LINK", null, searchEntryCopyLinkSaga)
+    saga("SEARCH_LOAD", null, searchLoadSaga),
+    saga("SEARCH_LOAD_MORE", null, searchLoadMoreSaga),
+    saga("SEARCH_RESTORE_SCROLL", null, searchRestoreScrollSaga),
+    saga("SEARCH_HISTORY_LOAD", payload => payload.query, searchHistoryLoadSaga),
+    saga("SEARCH_HISTORY_DELETE", payload => payload.query, searchHistoryDeleteSaga),
+    saga("SEARCH_ENTRY_COPY_LINK", null, searchEntryCopyLinkSaga)
 ];
 
 async function searchLoadSaga(action: WithContext<SearchLoadAction>): Promise<void> {

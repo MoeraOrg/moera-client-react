@@ -10,14 +10,14 @@ import {
 } from "state/linkpreviews/actions";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { getLinkPreviewInfo } from "state/linkpreviews/selectors";
 import { randomId } from "util/ui";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("LINK_PREVIEW_LOAD", payload => payload.url, linkPreviewLoadSaga),
-    executor("LINK_PREVIEW_IMAGE_UPLOAD", payload => payload.url, linkPreviewImageUploadSaga)
+    saga("LINK_PREVIEW_LOAD", payload => payload.url, linkPreviewLoadSaga),
+    saga("LINK_PREVIEW_IMAGE_UPLOAD", payload => payload.url, linkPreviewImageUploadSaga)
 ];
 
 async function linkPreviewLoadSaga(action: WithContext<LinkPreviewLoadAction>): Promise<void> {

@@ -2,7 +2,7 @@ import { Node } from "api";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import {
     ImageEditDialogLoadAction,
     imageEditDialogLoaded,
@@ -16,8 +16,8 @@ import { fillActivityReaction } from "state/activityreactions/sagas";
 import { absoluteNodeName, REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("IMAGE_EDIT_DIALOG_LOAD", "", imageEditDialogLoadSaga),
-    executor("IMAGE_EDIT_DIALOG_POST", "", imageEditDialogPostSaga)
+    saga("IMAGE_EDIT_DIALOG_LOAD", "", imageEditDialogLoadSaga),
+    saga("IMAGE_EDIT_DIALOG_POST", "", imageEditDialogPostSaga)
 ];
 
 async function imageEditDialogLoadSaga(action: WithContext<ImageEditDialogLoadAction>): Promise<void> {

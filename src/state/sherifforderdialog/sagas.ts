@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { Node } from "api";
 import { WithContext } from "state/action-types";
@@ -17,8 +17,8 @@ import {
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("SHERIFF_ORDER_DIALOG_SUBMIT", "", sheriffOrderDialogSubmitSaga),
-    executor("SHERIFF_ORDER_DELETE", "", sheriffOrderDeleteSaga)
+    saga("SHERIFF_ORDER_DIALOG_SUBMIT", "", sheriffOrderDialogSubmitSaga),
+    saga("SHERIFF_ORDER_DELETE", "", sheriffOrderDeleteSaga)
 ];
 
 async function sheriffOrderDialogSubmitSaga(action: WithContext<SheriffOrderDialogSubmitAction>): Promise<void> {

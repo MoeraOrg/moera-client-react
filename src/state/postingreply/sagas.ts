@@ -9,7 +9,7 @@ import { getNodeUri } from "state/naming/sagas";
 import { jumpFar, jumpNear } from "state/navigation/actions";
 import { getHomeOwnerName, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
 import { getNodeRootPage } from "state/node/selectors";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
 import { getWindowSelectionHtml } from "util/ui";
 import { mentionName } from "util/names";
@@ -19,7 +19,7 @@ import { universalLocation } from "util/universal-url";
 import { ut } from "util/url";
 
 export default [
-    executor("POSTING_REPLY", "", postingReplySaga)
+    saga("POSTING_REPLY", "", postingReplySaga)
 ];
 
 async function postingReplySaga(action: WithContext<PostingReplyAction>): Promise<void> {

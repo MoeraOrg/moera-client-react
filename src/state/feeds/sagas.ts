@@ -41,7 +41,7 @@ import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { homeIntroduced } from "state/init-barriers";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { getSettingNode } from "state/settings/selectors";
 import { StoryAddedAction, storySatisfy, StoryUpdatedAction } from "state/stories/actions";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
@@ -55,27 +55,27 @@ import { delay } from "util/misc";
 import { NodeConnectionError } from "api/error";
 
 export default [
-    executor(
+    saga(
         "FEED_GENERAL_LOAD",
         (payload, context) => `${context?.homeOwnerName}:${payload.nodeName}:${payload.feedName}`,
         feedGeneralLoadSaga
     ),
-    executor("FEED_SUBSCRIBE", payload => `${payload.nodeName}:${payload.feedName}`, feedSubscribeSaga),
-    executor("FEED_UNSUBSCRIBE", payload => `${payload.nodeName}:${payload.feedName}`, feedUnsubscribeSaga),
-    executor("FEED_SUBSCRIBER_SET_VISIBILITY", payload => payload.subscriberId, feedSubscriberSetVisibilitySaga),
-    executor("FEED_SUBSCRIPTION_SET_VISIBILITY", payload => payload.subscriptionId, feedSubscriptionSetVisibilitySaga),
-    executor("FEED_STATUS_LOAD", payload => `${payload.nodeName}:${payload.feedName}`, feedStatusLoadSaga),
-    executor("FEED_STATUS_UPDATE", payload => `${payload.nodeName}:${payload.feedName}`, feedStatusUpdateSaga),
-    executor("FEED_PAST_SLICE_LOAD", null, feedPastSliceLoadSaga),
-    executor("FEED_FUTURE_SLICE_LOAD", null, feedFutureSliceLoadSaga),
-    executor("FEED_STATUS_SET", payload => `${payload.nodeName}:${payload.feedName}`, feedStatusSetSaga),
-    executor("FEEDS_UPDATE", "", feedsUpdateSaga),
-    executor("FEED_PAST_SLICE_SET", null, feedExecuteSliceButtonsActions),
-    executor("FEED_FUTURE_SLICE_SET", null, feedExecuteSliceButtonsActions),
-    executor("FEED_SLICE_UPDATE", null, feedExecuteSliceButtonsActions),
-    executor("STORY_ADDED", null, feedExecuteButtonsActions),
-    executor("STORY_UPDATED", null, feedExecuteButtonsActions),
-    executor("RECOMMENDATION_DONT", null, recommendationDontSaga)
+    saga("FEED_SUBSCRIBE", payload => `${payload.nodeName}:${payload.feedName}`, feedSubscribeSaga),
+    saga("FEED_UNSUBSCRIBE", payload => `${payload.nodeName}:${payload.feedName}`, feedUnsubscribeSaga),
+    saga("FEED_SUBSCRIBER_SET_VISIBILITY", payload => payload.subscriberId, feedSubscriberSetVisibilitySaga),
+    saga("FEED_SUBSCRIPTION_SET_VISIBILITY", payload => payload.subscriptionId, feedSubscriptionSetVisibilitySaga),
+    saga("FEED_STATUS_LOAD", payload => `${payload.nodeName}:${payload.feedName}`, feedStatusLoadSaga),
+    saga("FEED_STATUS_UPDATE", payload => `${payload.nodeName}:${payload.feedName}`, feedStatusUpdateSaga),
+    saga("FEED_PAST_SLICE_LOAD", null, feedPastSliceLoadSaga),
+    saga("FEED_FUTURE_SLICE_LOAD", null, feedFutureSliceLoadSaga),
+    saga("FEED_STATUS_SET", payload => `${payload.nodeName}:${payload.feedName}`, feedStatusSetSaga),
+    saga("FEEDS_UPDATE", "", feedsUpdateSaga),
+    saga("FEED_PAST_SLICE_SET", null, feedExecuteSliceButtonsActions),
+    saga("FEED_FUTURE_SLICE_SET", null, feedExecuteSliceButtonsActions),
+    saga("FEED_SLICE_UPDATE", null, feedExecuteSliceButtonsActions),
+    saga("STORY_ADDED", null, feedExecuteButtonsActions),
+    saga("STORY_UPDATED", null, feedExecuteButtonsActions),
+    saga("RECOMMENDATION_DONT", null, recommendationDontSaga)
 ];
 
 async function feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>): Promise<void> {

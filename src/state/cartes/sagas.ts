@@ -2,7 +2,7 @@ import i18n from 'i18next';
 
 import { CarteAttributes, Node, NodeApiError } from "api";
 import { Storage } from "storage";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { CartesLoadAction, cartesLoaded, cartesSet, ClockOffsetWarnAction } from "state/cartes/actions";
 import { WithContext } from "state/action-types";
 import { messageBox } from "state/messagebox/actions";
@@ -11,8 +11,8 @@ import { now } from "util/misc";
 import { dispatch } from "state/store-sagas";
 
 export default [
-    executor("CARTES_LOAD", "", cartesLoadSaga),
-    executor("CLOCK_OFFSET_WARN", "", clockOffsetWarnSaga)
+    saga("CARTES_LOAD", "", cartesLoadSaga),
+    saga("CLOCK_OFFSET_WARN", "", clockOffsetWarnSaga)
 ];
 
 async function cartesLoadSaga(action: WithContext<CartesLoadAction>): Promise<void> {

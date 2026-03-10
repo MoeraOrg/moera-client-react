@@ -4,11 +4,11 @@ import { dispatch } from "state/store-sagas";
 import { storyUpdated } from "state/stories/actions";
 import { errorThrown } from "state/error/actions";
 import { closeChangeDateDialog, StoryChangeDateAction, storyChangeDateFailed } from "state/changedatedialog/actions";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { REL_CURRENT } from "util/rel-node-name";
 
 export default [
-    executor("STORY_CHANGE_DATE", null, storyChangeDateSaga)
+    saga("STORY_CHANGE_DATE", null, storyChangeDateSaga)
 ];
 
 async function storyChangeDateSaga(action: WithContext<StoryChangeDateAction>): Promise<void> {

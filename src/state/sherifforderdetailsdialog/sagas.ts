@@ -1,6 +1,6 @@
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { Node } from "api";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
@@ -11,7 +11,7 @@ import {
 } from "state/sherifforderdetailsdialog/actions";
 
 export default [
-    executor("SHERIFF_ORDER_DETAILS_DIALOG_LOAD", "", sheriffOrderDetailsDialogLoadSaga)
+    saga("SHERIFF_ORDER_DETAILS_DIALOG_LOAD", "", sheriffOrderDetailsDialogLoadSaga)
 ];
 
 async function sheriffOrderDetailsDialogLoadSaga(

@@ -1,10 +1,10 @@
 import { FlashBoxAction, flashBoxClose, flashBoxDismiss } from "state/flashbox/actions";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { dispatch } from "state/store-sagas";
 import { delay } from "util/misc";
 
 export default [
-    executor("FLASH_BOX", null, flashBoxSaga)
+    saga("FLASH_BOX", null, flashBoxSaga)
 ];
 
 async function flashBoxSaga(action: FlashBoxAction): Promise<void> {

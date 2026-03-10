@@ -1,4 +1,4 @@
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { homeIntroduced } from "state/init-barriers";
 import { Node, SheriffComplaintStatus } from "api";
 import { WithContext } from "state/action-types";
@@ -25,11 +25,11 @@ import { REL_CURRENT } from "util/rel-node-name";
 import { dispatch, select } from "state/store-sagas";
 
 export default [
-    executor("COMPLAINTS_PAST_SLICE_LOAD", "", complaintsPastSliceLoadSaga),
-    executor("COMPLAINTS_FUTURE_SLICE_LOAD", "", complaintsFutureSliceLoadSaga),
-    executor("COMPLAINTS_GROUP_LOAD", null, complaintsGroupLoadSaga),
-    executor("COMPLAINTS_COMPLAINTS_LOAD", null, complaintsComplaintsLoadSaga),
-    executor("COMPLAINTS_DECISION_POST", payload => payload.groupId, complaintsDecisionPostSaga)
+    saga("COMPLAINTS_PAST_SLICE_LOAD", "", complaintsPastSliceLoadSaga),
+    saga("COMPLAINTS_FUTURE_SLICE_LOAD", "", complaintsFutureSliceLoadSaga),
+    saga("COMPLAINTS_GROUP_LOAD", null, complaintsGroupLoadSaga),
+    saga("COMPLAINTS_COMPLAINTS_LOAD", null, complaintsComplaintsLoadSaga),
+    saga("COMPLAINTS_DECISION_POST", payload => payload.groupId, complaintsDecisionPostSaga)
 ];
 
 async function complaintsPastSliceLoadSaga(action: WithContext<ComplaintsPastSliceLoadAction>): Promise<void> {

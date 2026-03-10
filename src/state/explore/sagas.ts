@@ -1,6 +1,6 @@
 import { addDays, getUnixTime, isFuture } from 'date-fns';
 
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { CLIENT_SETTINGS_PREFIX, Node, RecommendedPostingInfo } from "api";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
@@ -26,10 +26,10 @@ import { getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
 import { settingsUpdate } from "state/settings/actions";
 
 export default [
-    executor("ACTIVE_PEOPLE_LOAD", "", activePeopleLoadSaga),
-    executor("TRENDING_LOAD", "", trendingLoadSaga),
-    executor("DISCUSSIONS_LOAD", "", discussionsLoadSaga),
-    executor("DISCUSSIONS_VISITED", "", discussionsVisitedSaga),
+    saga("ACTIVE_PEOPLE_LOAD", "", activePeopleLoadSaga),
+    saga("TRENDING_LOAD", "", trendingLoadSaga),
+    saga("DISCUSSIONS_LOAD", "", discussionsLoadSaga),
+    saga("DISCUSSIONS_VISITED", "", discussionsVisitedSaga),
 ];
 
 function getSheriffName(): string | undefined {

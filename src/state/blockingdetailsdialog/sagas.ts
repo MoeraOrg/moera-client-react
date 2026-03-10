@@ -1,6 +1,6 @@
 import { BlockedByUserInfo, BlockedUserInfo, Node } from "api";
 import { WithContext } from "state/action-types";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
 import {
@@ -10,7 +10,7 @@ import {
 } from "state/blockingdetailsdialog/actions";
 
 export default [
-    executor("BLOCKING_DETAILS_DIALOG_LOAD", "", blockingDetailsDialogLoadSaga)
+    saga("BLOCKING_DETAILS_DIALOG_LOAD", "", blockingDetailsDialogLoadSaga)
 ];
 
 async function blockingDetailsDialogLoadSaga(action: WithContext<BlockingDetailsDialogLoadAction>): Promise<void> {

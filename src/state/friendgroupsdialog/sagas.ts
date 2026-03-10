@@ -1,5 +1,5 @@
 import { FriendGroupAssignment, FriendGroupInfo, Node } from "api";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
@@ -13,7 +13,7 @@ import { getHomeFriendsId } from "state/home/selectors";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("NODE_CHANGE_FRIEND_GROUPS", payload => payload.nodeName, nodeChangeFriendGroupsSaga)
+    saga("NODE_CHANGE_FRIEND_GROUPS", payload => payload.nodeName, nodeChangeFriendGroupsSaga)
 ];
 
 async function nodeChangeFriendGroupsSaga(action: WithContext<NodeChangeFriendGroupsAction>): Promise<void> {

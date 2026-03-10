@@ -27,7 +27,7 @@ import {
     profileUpdateFailed,
     profileUpdateSucceeded
 } from "state/profile/actions";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { flashBox } from "state/flashbox/actions";
 import { messageBox } from "state/messagebox/actions";
 import { getAvatars } from "state/profile/selectors";
@@ -35,14 +35,14 @@ import { settingsUpdate } from "state/settings/actions";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("PROFILE_LOAD", "", profileLoadSaga),
-    executor("PROFILE_UPDATE", null, profileUpdateSaga),
-    executor("PROFILE_IMAGE_UPLOAD", null, profileImageUploadSaga),
-    executor("PROFILE_AVATARS_LOAD", "", profileAvatarsLoadSaga),
-    executor("PROFILE_AVATAR_CREATE", "", profileAvatarCreateSaga),
-    executor("PROFILE_AVATAR_DELETE", payload => payload.id, profileAvatarDeleteSaga),
-    executor("PROFILE_AVATARS_REORDER", "", profileAvatarsReorderSaga),
-    executor("PROFILE_EMAIL_VERIFY", "", profileEmailVerifySaga)
+    saga("PROFILE_LOAD", "", profileLoadSaga),
+    saga("PROFILE_UPDATE", null, profileUpdateSaga),
+    saga("PROFILE_IMAGE_UPLOAD", null, profileImageUploadSaga),
+    saga("PROFILE_AVATARS_LOAD", "", profileAvatarsLoadSaga),
+    saga("PROFILE_AVATAR_CREATE", "", profileAvatarCreateSaga),
+    saga("PROFILE_AVATAR_DELETE", payload => payload.id, profileAvatarDeleteSaga),
+    saga("PROFILE_AVATARS_REORDER", "", profileAvatarsReorderSaga),
+    saga("PROFILE_EMAIL_VERIFY", "", profileEmailVerifySaga)
 ];
 
 async function profileLoadSaga(action: WithContext<ProfileLoadAction>): Promise<void> {

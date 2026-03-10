@@ -1,4 +1,4 @@
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { ClientState } from "state/state";
 import { barrier, dispatch, select } from "state/store-sagas";
 import { feedStatusUpdate } from "state/feeds/actions";
@@ -7,7 +7,7 @@ import { instantsBorderSet } from "state/instants/actions";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("INSTANTS_MARK_VIEWED", "", instantsMarkViewedSaga)
+    saga("INSTANTS_MARK_VIEWED", "", instantsMarkViewedSaga)
 ];
 
 const isInstantStatusLoaded = (state: ClientState) => getFeedState(state, REL_HOME, "instant").loadedStatus;

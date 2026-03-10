@@ -1,4 +1,4 @@
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { Node, NodeName } from "api";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
@@ -11,7 +11,7 @@ import { getSafeSearchDefault } from "state/search/selectors";
 import { REL_SEARCH } from "util/rel-node-name";
 
 export default [
-    executor("CONTACTS_LOAD", payload => payload.query, contactsLoadSaga)
+    saga("CONTACTS_LOAD", payload => payload.query, contactsLoadSaga)
 ];
 
 async function contactsLoadSaga(action: WithContext<ContactsLoadAction>): Promise<void> {

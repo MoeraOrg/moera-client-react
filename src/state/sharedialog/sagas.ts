@@ -9,7 +9,7 @@ import {
 } from "state/sharedialog/actions";
 import { WithContext } from "state/action-types";
 import { dispatch } from "state/store-sagas";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { getNodeUri } from "state/naming/sagas";
 import { messageBox } from "state/messagebox/actions";
 import { flashBox } from "state/flashbox/actions";
@@ -21,9 +21,9 @@ import { universalLocation } from "util/universal-url";
 import { clipboardCopy } from "util/clipboard";
 
 export default [
-    executor("SHARE_DIALOG_PREPARE", "", shareDialogPrepareSaga),
-    executor("SHARE_DIALOG_COPY_LINK", payload => payload.url, shareDialogCopyLinkSaga),
-    executor("SHARE_PAGE_COPY_LINK", null, sharePageCopyLinkSaga)
+    saga("SHARE_DIALOG_PREPARE", "", shareDialogPrepareSaga),
+    saga("SHARE_DIALOG_COPY_LINK", payload => payload.url, shareDialogCopyLinkSaga),
+    saga("SHARE_PAGE_COPY_LINK", null, sharePageCopyLinkSaga)
 ];
 
 function share(action: ShareDialogPrepareAction, url: string, text: string): void {

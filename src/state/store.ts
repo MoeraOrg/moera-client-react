@@ -55,52 +55,52 @@ import signUp from "state/signup/reducer";
 import refresh from "state/refresh/reducer";
 import instants from "state/instants/reducer";
 
-import { collectExecutors } from "state/executor";
+import { collectSagas } from "state/saga";
 import { pulseSaga, signalPostInitSaga } from "state/pulse/sagas";
-import navigationExecutors from "state/navigation/sagas";
-import errorExecutors from "state/error/sagas";
-import nodeExecutors from "state/node/sagas";
-import connectExecutors from "state/home/connect";
-import connectPageExecutors from "state/connectpage/sagas";
-import homeExecutors from "state/home/sagas";
-import cartesExecutors from "state/cartes/sagas";
-import nodeNameExecutors from "state/nodename/sagas";
-import profileExecutors from "state/profile/sagas";
-import feedExecutors from "state/feeds/sagas";
-import detailedPostingExecutors from "state/detailedposting/sagas";
-import composeExecutors from "state/compose/sagas";
-import postingsExecutors from "state/postings/sagas";
-import settingsExecutors from "state/settings/sagas";
-import complaintsExecutors from "state/complaints/sagas";
-import namingExecutors from "state/naming/sagas";
-import reactionsDialogExecutors from "state/reactionsdialog/sagas";
-import postingReplyExecutors from "state/postingreply/sagas";
-import storiesExecutors from "state/stories/sagas";
-import changeDateDialogExecutors from "state/changedatedialog/sagas";
-import peopleExecutors from "state/people/sagas";
-import nodeCardsExecutors from "state/nodecards/sagas";
-import contactsExecutors from "state/contacts/sagas";
-import searchExecutors from "state/search/sagas";
-import grantExecutors from "state/grant/sagas";
-import exploreExecutors from "state/explore/sagas";
-import shareDialogExecutors from "state/sharedialog/sagas";
-import sourceDialogExecutors from "state/sourcedialog/sagas";
-import imageEditDialogExecutors from "state/imageeditdialog/sagas";
-import lightBoxExecutors from "state/lightbox/sagas";
-import richTextEditorExecutors from "state/richtexteditor/sagas";
-import entryCopyTextDialogExecutors from "state/entrycopytextdialog/sagas";
-import linkPreviewsExecutors from "state/linkpreviews/sagas";
-import friendGroupAddDialogExecutors from "state/friendgroupadddialog/sagas";
-import friendGroupsDialogExecutors from "state/friendgroupsdialog/sagas";
-import askDialogExecutors from "state/askdialog/sagas";
-import blockDialogExecutors from "state/blockdialog/sagas";
-import blockingDetailsDialogExecutors from "state/blockingdetailsdialog/sagas";
-import sheriffOrderDialogExecutors from "state/sherifforderdialog/sagas";
-import sheriffOrderDetailsDialogExecutors from "state/sherifforderdetailsdialog/sagas";
-import flashBoxExecutors from "state/flashbox/sagas";
-import signUpExecutors from "state/signup/sagas";
-import refreshExecutors from "state/refresh/sagas";
-import instantsExecutors from "state/instants/sagas";
+import navigationSagas from "state/navigation/sagas";
+import errorSagas from "state/error/sagas";
+import nodeSagas from "state/node/sagas";
+import connectSagas from "state/home/connect";
+import connectPageSagas from "state/connectpage/sagas";
+import homeSagas from "state/home/sagas";
+import cartesSagas from "state/cartes/sagas";
+import nodeNameSagas from "state/nodename/sagas";
+import profileSagas from "state/profile/sagas";
+import feedSagas from "state/feeds/sagas";
+import detailedPostingSagas from "state/detailedposting/sagas";
+import composeSagas from "state/compose/sagas";
+import postingsSagas from "state/postings/sagas";
+import settingsSagas from "state/settings/sagas";
+import complaintsSagas from "state/complaints/sagas";
+import namingSagas from "state/naming/sagas";
+import reactionsDialogSagas from "state/reactionsdialog/sagas";
+import postingReplySagas from "state/postingreply/sagas";
+import storiesSagas from "state/stories/sagas";
+import changeDateDialogSagas from "state/changedatedialog/sagas";
+import peopleSagas from "state/people/sagas";
+import nodeCardsSagas from "state/nodecards/sagas";
+import contactsSagas from "state/contacts/sagas";
+import searchSagas from "state/search/sagas";
+import grantSagas from "state/grant/sagas";
+import exploreSagas from "state/explore/sagas";
+import shareDialogSagas from "state/sharedialog/sagas";
+import sourceDialogSagas from "state/sourcedialog/sagas";
+import imageEditDialogSagas from "state/imageeditdialog/sagas";
+import lightBoxSagas from "state/lightbox/sagas";
+import richTextEditorSagas from "state/richtexteditor/sagas";
+import entryCopyTextDialogSagas from "state/entrycopytextdialog/sagas";
+import linkPreviewsSagas from "state/linkpreviews/sagas";
+import friendGroupAddDialogSagas from "state/friendgroupadddialog/sagas";
+import friendGroupsDialogSagas from "state/friendgroupsdialog/sagas";
+import askDialogSagas from "state/askdialog/sagas";
+import blockDialogSagas from "state/blockdialog/sagas";
+import blockingDetailsDialogSagas from "state/blockingdetailsdialog/sagas";
+import sheriffOrderDialogSagas from "state/sherifforderdialog/sagas";
+import sheriffOrderDetailsDialogSagas from "state/sherifforderdetailsdialog/sagas";
+import flashBoxSagas from "state/flashbox/sagas";
+import signUpSagas from "state/signup/sagas";
+import refreshSagas from "state/refresh/sagas";
+import instantsSagas from "state/instants/sagas";
 
 import { collectTriggers } from "state/trigger";
 import homeTriggers from "state/home/triggers";
@@ -225,55 +225,55 @@ const triggers = collectTriggers(
     instantsTriggers
 );
 
-const executors = collectExecutors(
-    navigationExecutors,
-    errorExecutors,
-    nodeExecutors,
-    connectExecutors,
-    connectPageExecutors,
-    homeExecutors,
-    nodeNameExecutors,
-    cartesExecutors,
-    profileExecutors,
-    feedExecutors,
-    detailedPostingExecutors,
-    composeExecutors,
-    postingsExecutors,
-    settingsExecutors,
-    complaintsExecutors,
-    namingExecutors,
-    reactionsDialogExecutors,
-    postingReplyExecutors,
-    storiesExecutors,
-    changeDateDialogExecutors,
-    peopleExecutors,
-    nodeCardsExecutors,
-    contactsExecutors,
-    searchExecutors,
-    grantExecutors,
-    exploreExecutors,
-    shareDialogExecutors,
-    sourceDialogExecutors,
-    imageEditDialogExecutors,
-    lightBoxExecutors,
-    richTextEditorExecutors,
-    entryCopyTextDialogExecutors,
-    linkPreviewsExecutors,
-    friendGroupAddDialogExecutors,
-    friendGroupsDialogExecutors,
-    askDialogExecutors,
-    blockDialogExecutors,
-    blockingDetailsDialogExecutors,
-    sheriffOrderDialogExecutors,
-    sheriffOrderDetailsDialogExecutors,
-    flashBoxExecutors,
-    signUpExecutors,
-    refreshExecutors,
-    instantsExecutors
+const sagas = collectSagas(
+    navigationSagas,
+    errorSagas,
+    nodeSagas,
+    connectSagas,
+    connectPageSagas,
+    homeSagas,
+    nodeNameSagas,
+    cartesSagas,
+    profileSagas,
+    feedSagas,
+    detailedPostingSagas,
+    composeSagas,
+    postingsSagas,
+    settingsSagas,
+    complaintsSagas,
+    namingSagas,
+    reactionsDialogSagas,
+    postingReplySagas,
+    storiesSagas,
+    changeDateDialogSagas,
+    peopleSagas,
+    nodeCardsSagas,
+    contactsSagas,
+    searchSagas,
+    grantSagas,
+    exploreSagas,
+    shareDialogSagas,
+    sourceDialogSagas,
+    imageEditDialogSagas,
+    lightBoxSagas,
+    richTextEditorSagas,
+    entryCopyTextDialogSagas,
+    linkPreviewsSagas,
+    friendGroupAddDialogSagas,
+    friendGroupsDialogSagas,
+    askDialogSagas,
+    blockDialogSagas,
+    blockingDetailsDialogSagas,
+    sheriffOrderDialogSagas,
+    sheriffOrderDetailsDialogSagas,
+    flashBoxSagas,
+    signUpSagas,
+    refreshSagas,
+    instantsSagas
 );
 
 export default function initStore(): void {
-    window.middleware = createStoreMiddleware(triggers, executors);
+    window.middleware = createStoreMiddleware(triggers, sagas);
     window.store = legacy_createStore(combinedReducer, applyMiddleware(window.middleware));
     signalPostInitSaga();
     pulseSaga();

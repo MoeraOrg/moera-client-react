@@ -1,12 +1,12 @@
 import { CommentInfo, Node, PostingInfo } from "api";
 import { WithContext } from "state/action-types";
 import { dispatch } from "state/store-sagas";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { errorThrown } from "state/error/actions";
 import { OpenSourceDialogAction, sourceDialogLoaded, sourceDialogLoadFailed } from "state/sourcedialog/actions";
 
 export default [
-    executor("OPEN_SOURCE_DIALOG", "", openSourceDialogSaga)
+    saga("OPEN_SOURCE_DIALOG", "", openSourceDialogSaga)
 ];
 
 async function openSourceDialogSaga(action: WithContext<OpenSourceDialogAction>): Promise<void> {

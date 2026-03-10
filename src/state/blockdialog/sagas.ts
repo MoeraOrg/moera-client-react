@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { CLIENT_SETTINGS_PREFIX, Node, NodeApiError } from "api";
 import { WithContext } from "state/action-types";
 import {
@@ -23,9 +23,9 @@ import { confirmBox } from "state/confirmbox/actions";
 import { REL_HOME } from "util/rel-node-name";
 
 export default [
-    executor("BLOCK_DIALOG_SUBMIT", "", blockDialogSubmitSaga),
-    executor("BLOCKED_USER_UNFRIEND", "", blockedUserUnfriendSaga),
-    executor("BLOCKED_USER_UNSUBSCRIBE", "", blockedUserUnsubscribeSaga)
+    saga("BLOCK_DIALOG_SUBMIT", "", blockDialogSubmitSaga),
+    saga("BLOCKED_USER_UNFRIEND", "", blockedUserUnfriendSaga),
+    saga("BLOCKED_USER_UNSUBSCRIBE", "", blockedUserUnsubscribeSaga)
 ];
 
 async function blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>): Promise<void> {

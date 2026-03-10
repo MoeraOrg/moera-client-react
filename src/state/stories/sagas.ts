@@ -20,7 +20,7 @@ import {
     storyUpdated,
     StoryViewingUpdateAction
 } from "state/stories/actions";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { profileSet } from "state/profile/actions";
 import { settingsUpdate } from "state/settings/actions";
 import { getSettingNode } from "state/settings/selectors";
@@ -29,16 +29,16 @@ import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { deserializeSheriffs, serializeSheriffs } from "util/sheriff";
 
 export default [
-    executor("STORY_PINNING_UPDATE", null, storyPinningUpdateSaga),
-    executor("STORY_VIEWING_UPDATE", null, storyViewingUpdateSaga),
-    executor("STORY_READING_UPDATE", null, storyReadingUpdateSaga),
-    executor("STORY_SATISFY", null, storySatisfySaga),
-    executor("STORY_DELETE", null, storyDeleteSaga),
-    executor("STORY_TYPE_BLOCK", null, storyTypeBlockSaga),
-    executor("REMINDER_FULL_NAME_UPDATE", null, reminderFullNameUpdateSaga),
-    executor("REMINDER_AVATAR_UPDATE", null, reminderAvatarUpdateSaga),
-    executor("REMINDER_EMAIL_UPDATE", null, reminderEmailUpdateSaga),
-    executor("REMINDER_SHERIFF_ALLOW", null, reminderSheriffAllowSaga),
+    saga("STORY_PINNING_UPDATE", null, storyPinningUpdateSaga),
+    saga("STORY_VIEWING_UPDATE", null, storyViewingUpdateSaga),
+    saga("STORY_READING_UPDATE", null, storyReadingUpdateSaga),
+    saga("STORY_SATISFY", null, storySatisfySaga),
+    saga("STORY_DELETE", null, storyDeleteSaga),
+    saga("STORY_TYPE_BLOCK", null, storyTypeBlockSaga),
+    saga("REMINDER_FULL_NAME_UPDATE", null, reminderFullNameUpdateSaga),
+    saga("REMINDER_AVATAR_UPDATE", null, reminderAvatarUpdateSaga),
+    saga("REMINDER_EMAIL_UPDATE", null, reminderEmailUpdateSaga),
+    saga("REMINDER_SHERIFF_ALLOW", null, reminderSheriffAllowSaga),
 ];
 
 async function storyPinningUpdateSaga(action: WithContext<StoryPinningUpdateAction>): Promise<void> {

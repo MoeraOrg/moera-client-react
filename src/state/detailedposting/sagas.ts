@@ -15,7 +15,7 @@ import {
 } from "api";
 import { Storage } from "storage";
 import { WithContext } from "state/action-types";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { barrier, dispatch, select } from "state/store-sagas";
 import { homeIntroduced } from "state/init-barriers";
 import { errorThrown } from "state/error/actions";
@@ -123,34 +123,34 @@ import { delay, notNull } from "util/misc";
 import { ut } from "util/url";
 
 export default [
-    executor("DETAILED_POSTING_LOAD", "", detailedPostingLoadSaga),
-    executor("DETAILED_POSTING_LOAD_ATTACHED", "", detailedPostingLoadAttachedSaga),
-    executor("COMMENTS_RECEIVER_SWITCH", "", commentsReceiverSwitchSaga),
-    executor("COMMENTS_RECEIVER_FEATURES_LOAD", "", commentsReceiverFeaturesLoadSaga),
-    executor("COMMENTS_LOAD_ALL", "", commentsLoadAllSaga),
-    executor("COMMENTS_PAST_SLICE_LOAD", "", commentsPastSliceLoadSaga),
-    executor("COMMENTS_FUTURE_SLICE_LOAD", "", commentsFutureSliceLoadSaga),
-    executor("COMMENTS_UPDATE", "", commentsUpdateSaga),
-    executor("COMMENTS_BLOCKED_USERS_LOAD", "", commentsBlockedUsersLoadSaga),
-    executor("COMMENT_LOAD", payload => payload.commentId, commentLoadSaga),
-    executor("COMMENT_POST", null, commentPostSaga),
-    executor("COMMENT_DRAFT_LOAD", "", commentDraftLoadSaga),
-    executor("COMMENT_DRAFT_COMPLETE_LOADING", "", commentDraftCompleteLoadingSaga),
-    executor("COMMENT_DRAFT_SAVE", null, commentDraftSaveSaga),
-    executor("COMMENT_DRAFT_DELETE", "", commentDraftDeleteSaga),
-    executor("COMMENT_COMPOSE_CANCEL", "", commentComposeCancelSaga),
-    executor("COMMENT_DELETE", payload => payload.commentId, commentDeleteSaga),
-    executor("COMMENT_SET_VISIBILITY", payload => payload.commentId, commentSetVisibilitySaga),
-    executor("FOCUSED_COMMENT_LOAD", "", focusedCommentLoadSaga),
-    executor("COMMENT_COPY_LINK", null, commentCopyLinkSaga),
-    executor("COMMENT_DIALOG_COMMENT_LOAD", "", commentDialogCommentLoadSaga),
-    executor("COMMENT_DIALOG_COMMENT_RESET", "", commentDialogCommentResetSaga),
-    executor("COMMENT_VERIFY", payload => payload.commentId, commentVerifySaga),
-    executor("COMMENT_REACT", null, commentReactSaga),
-    executor("COMMENT_REACTION_LOAD", payload => `${payload.id}:${payload.postingId}`, commentReactionLoadSaga),
-    executor("COMMENT_REACTION_DELETE", payload => `${payload.id}:${payload.postingId}`, commentReactionDeleteSaga),
-    executor("COMMENT_REPLY", "", commentReplySaga),
-    executor("GLANCE_COMMENT_LOAD", null, glanceCommentLoadSaga)
+    saga("DETAILED_POSTING_LOAD", "", detailedPostingLoadSaga),
+    saga("DETAILED_POSTING_LOAD_ATTACHED", "", detailedPostingLoadAttachedSaga),
+    saga("COMMENTS_RECEIVER_SWITCH", "", commentsReceiverSwitchSaga),
+    saga("COMMENTS_RECEIVER_FEATURES_LOAD", "", commentsReceiverFeaturesLoadSaga),
+    saga("COMMENTS_LOAD_ALL", "", commentsLoadAllSaga),
+    saga("COMMENTS_PAST_SLICE_LOAD", "", commentsPastSliceLoadSaga),
+    saga("COMMENTS_FUTURE_SLICE_LOAD", "", commentsFutureSliceLoadSaga),
+    saga("COMMENTS_UPDATE", "", commentsUpdateSaga),
+    saga("COMMENTS_BLOCKED_USERS_LOAD", "", commentsBlockedUsersLoadSaga),
+    saga("COMMENT_LOAD", payload => payload.commentId, commentLoadSaga),
+    saga("COMMENT_POST", null, commentPostSaga),
+    saga("COMMENT_DRAFT_LOAD", "", commentDraftLoadSaga),
+    saga("COMMENT_DRAFT_COMPLETE_LOADING", "", commentDraftCompleteLoadingSaga),
+    saga("COMMENT_DRAFT_SAVE", null, commentDraftSaveSaga),
+    saga("COMMENT_DRAFT_DELETE", "", commentDraftDeleteSaga),
+    saga("COMMENT_COMPOSE_CANCEL", "", commentComposeCancelSaga),
+    saga("COMMENT_DELETE", payload => payload.commentId, commentDeleteSaga),
+    saga("COMMENT_SET_VISIBILITY", payload => payload.commentId, commentSetVisibilitySaga),
+    saga("FOCUSED_COMMENT_LOAD", "", focusedCommentLoadSaga),
+    saga("COMMENT_COPY_LINK", null, commentCopyLinkSaga),
+    saga("COMMENT_DIALOG_COMMENT_LOAD", "", commentDialogCommentLoadSaga),
+    saga("COMMENT_DIALOG_COMMENT_RESET", "", commentDialogCommentResetSaga),
+    saga("COMMENT_VERIFY", payload => payload.commentId, commentVerifySaga),
+    saga("COMMENT_REACT", null, commentReactSaga),
+    saga("COMMENT_REACTION_LOAD", payload => `${payload.id}:${payload.postingId}`, commentReactionLoadSaga),
+    saga("COMMENT_REACTION_DELETE", payload => `${payload.id}:${payload.postingId}`, commentReactionDeleteSaga),
+    saga("COMMENT_REPLY", "", commentReplySaga),
+    saga("GLANCE_COMMENT_LOAD", null, glanceCommentLoadSaga)
 ];
 
 async function detailedPostingLoadSaga(action: WithContext<DetailedPostingLoadAction>): Promise<void> {

@@ -8,14 +8,14 @@ import { errorDismiss, errorShow, ErrorThrownAction } from "state/error/actions"
 import { jumpNear } from "state/navigation/actions";
 import { messageBox } from "state/messagebox/actions";
 import { getHomeRootLocation } from "state/home/selectors";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { dispatch, select } from "state/store-sagas";
 import * as Browser from "ui/browser";
 import { delay } from "util/misc";
 
 export default [
-    executor("ERROR_THROWN", "", errorThrownSaga),
-    executor("ERROR_AUTH_INVALID", "", errorAuthInvalidSaga)
+    saga("ERROR_THROWN", "", errorThrownSaga),
+    saga("ERROR_AUTH_INVALID", "", errorAuthInvalidSaga)
 ];
 
 async function errorThrownSaga(action: ErrorThrownAction): Promise<void> {

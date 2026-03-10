@@ -1,7 +1,7 @@
 import { Node } from "api";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { nodeCardsPreload } from "state/nodecards/actions";
 import {
     ReactionsDialogPastReactionsLoadAction,
@@ -19,9 +19,9 @@ import { REL_HOME } from "util/rel-node-name";
 import { notNull } from "util/misc";
 
 export default [
-    executor("REACTIONS_DIALOG_PAST_REACTIONS_LOAD", "", reactionsDialogPastReactionsLoadSaga),
-    executor("REACTIONS_DIALOG_TOTALS_LOAD", "", reactionsDialogTotalsLoadSaga),
-    executor(
+    saga("REACTIONS_DIALOG_PAST_REACTIONS_LOAD", "", reactionsDialogPastReactionsLoadSaga),
+    saga("REACTIONS_DIALOG_TOTALS_LOAD", "", reactionsDialogTotalsLoadSaga),
+    saga(
         "REACTION_VERIFY",
         payload => `${payload.postingId}:${payload.commentId}:${payload.ownerName}`,
         reactionVerifySaga

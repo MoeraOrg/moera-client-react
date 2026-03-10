@@ -14,15 +14,15 @@ import { dispatch, select } from "state/store-sagas";
 import { getHomeConnectionData, getHomeRootPage } from "state/home/selectors";
 import { isAtNode } from "state/node/selectors";
 import { boot } from "state/navigation/actions";
-import { executor } from "state/executor";
+import { saga } from "state/saga";
 import { connectPageConnectAfter, connectPageSetForm } from "state/connectpage/actions";
 import { normalizeUrl } from "util/url";
 import { REL_HOME } from "util/rel-node-name";
 import { toDocumentLocation } from "util/universal-url";
 
 export default [
-    executor("CONNECT_TO_HOME", null, connectToHomeSaga),
-    executor("HOME_OWNER_VERIFY", null, homeOwnerVerifySaga)
+    saga("CONNECT_TO_HOME", null, connectToHomeSaga),
+    saga("HOME_OWNER_VERIFY", null, homeOwnerVerifySaga)
 ];
 
 function connectToHomeFailure(action: WithContext<ConnectToHomeAction>, error: any): void {
