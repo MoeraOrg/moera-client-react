@@ -436,7 +436,7 @@ export function scriptureReplaceUrl(editor: ScriptureEditor<any>, beforePoint: B
         if (findWrappingElement(editor, "link", {at: beforePoint.path}) != null) {
             return;
         }
-    } catch (e) {
+    } catch {
         return;
     }
 

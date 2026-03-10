@@ -30,7 +30,7 @@ export default function noTracking(url: string | null | undefined) : string | nu
             }
         }
         return components.toString();
-    } catch (e) {
+    } catch {
         // ignore, return the original URL
     }
     return url;

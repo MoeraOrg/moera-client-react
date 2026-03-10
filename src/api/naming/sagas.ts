@@ -80,7 +80,7 @@ async function fetchNaming(method: string, params: any[], exception: CallExcepti
         let data;
         try {
             data = await response.json();
-        } catch (e) {
+        } catch {
             if (emptyResultRetries >= MAX_EMPTY_RESULT_RETRIES) {
                 throw exception("Server returned empty result");
             }

@@ -64,7 +64,7 @@ async function saveToHistory(query: string, action: WithContext<ClientAction>): 
     try {
         const history = await Node.saveToSearchHistory(action, REL_HOME, {query});
         dispatch(searchHistoryAdd(history));
-    } catch (e) {
+    } catch {
         // ignore
     }
 }
@@ -205,7 +205,7 @@ async function load(
                 dispatch(searchTextLoaded(page).causedBy(action));
             }
         }
-    } catch (e) {
+    } catch {
         dispatch(searchLoadFailed().causedBy(action));
     }
 }
@@ -219,7 +219,7 @@ async function searchHistoryLoadSaga(action: WithContext<SearchHistoryLoadAction
     try {
         const history = await Node.getSearchHistory(action, REL_HOME, action.payload.query, 15);
         dispatch(searchHistoryLoaded(action.payload.query, history).causedBy(action));
-    } catch (e) {
+    } catch {
         dispatch(searchHistoryLoadFailed(action.payload.query).causedBy(action));
     }
 }

@@ -87,7 +87,7 @@ async function mnemonicStoreSaga(action: WithContext<MnemonicStoreAction>): Prom
         } else {
             dispatch(jumpNear("/start-reading", null, null).causedBy(action));
         }
-    } catch (e) {
+    } catch {
         dispatch(jumpNear("/mnemonic", null, null).causedBy(action));
     }
 }

@@ -57,7 +57,7 @@ async function storyViewingUpdateSaga(action: WithContext<StoryViewingUpdateActi
     try {
         const story = await Node.updateStory(action, nodeName, id, {viewed});
         dispatch(storyUpdated(nodeName, story).causedBy(action));
-    } catch (e) {
+    } catch {
         // ignore, not important
     }
 }
@@ -68,7 +68,7 @@ async function storyReadingUpdateSaga(action: WithContext<StoryReadingUpdateActi
     try {
         const story = await Node.updateStory(action, nodeName, id, {read});
         dispatch(storyUpdated(nodeName, story).causedBy(action));
-    } catch (e) {
+    } catch {
         // ignore, not important
     }
 }

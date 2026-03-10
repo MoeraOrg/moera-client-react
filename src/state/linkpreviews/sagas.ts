@@ -27,7 +27,7 @@ async function linkPreviewLoadSaga(action: WithContext<LinkPreviewLoadAction>): 
         info.imageUrl = resolveImageUrl(info.imageUrl, info.url ?? url);
         info.url = url; // canonical URL may differ, so we should force consistency throughout the app
         dispatch(linkPreviewLoaded(url, info).causedBy(action));
-    } catch (e) {
+    } catch {
         dispatch(linkPreviewLoadFailed(url).causedBy(action));
     }
 }
@@ -39,13 +39,13 @@ function resolveImageUrl(imageUrl: string | null | undefined, pageUrl: string): 
 
     try {
         return new URL(imageUrl).toString();
-    } catch (e) {
+    } catch {
         // Image URL is not absolute
     }
 
     try {
         return new URL(imageUrl, pageUrl).toString();
-    } catch (e) {
+    } catch {
         return imageUrl;
     }
 }
@@ -74,7 +74,7 @@ async function linkPreviewImageUploadSaga(action: WithContext<LinkPreviewImageUp
         } else {
             dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
         }
-    } catch (e) {
+    } catch {
         dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
     }
 }

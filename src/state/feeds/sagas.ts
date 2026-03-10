@@ -228,7 +228,7 @@ async function feedStatusUpdateSaga(action: WithContext<FeedStatusUpdateAction>)
         try {
             const status = await Node.updateFeedStatus(action, nodeName, feedName, {viewed, read, before});
             dispatch(feedStatusSet(nodeName, feedName, status).causedBy(action));
-        } catch (e) {
+        } catch {
             dispatch(feedStatusUpdateFailed(nodeName, feedName).causedBy(action));
         }
     }

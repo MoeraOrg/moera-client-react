@@ -44,7 +44,7 @@ export function getStorageItem(key: StorageKey, index?: string | null): any {
     const value = window.localStorage.getItem(fullKey);
     try {
         return value != null ? JSON.parse(value) : null;
-    } catch (e) {
+    } catch {
         return null;
     }
 }

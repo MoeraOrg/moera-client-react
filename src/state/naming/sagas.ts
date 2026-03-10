@@ -115,7 +115,7 @@ async function fetchName(caller: ClientAction | null, nodeName: string, includeS
                 dispatch(namingNameLoaded(serverUrl, nodeNameFound, nodeUri, now()).causedBy(caller));
             }
         }
-    } catch (e) {
+    } catch {
         dispatch(namingNameLoadFailed(nodeName).causedBy(caller));
     }
 

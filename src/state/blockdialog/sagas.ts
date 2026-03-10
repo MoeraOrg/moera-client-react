@@ -62,7 +62,7 @@ async function blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction
             dispatch(blockedUsersAdded(blockedUsers).causedBy(action));
             dispatch(blockedUserUnfriend(nodeName, formattedName).causedBy(action));
         }
-    } catch (e) {
+    } catch {
         dispatch(blockDialogSubmitFailed().causedBy(action));
     }
 }

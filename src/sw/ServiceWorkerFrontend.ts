@@ -112,7 +112,7 @@ async function checkValidServiceWorker(swUrl: string | URL, config: ServiceWorke
             // Service worker found. Proceed as normal.
             await registerValidServiceWorker(swUrl, config);
         }
-    } catch (e) {
+    } catch {
         console.log("No internet connection found. App is running in offline mode.");
     }
 }

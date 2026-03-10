@@ -14,7 +14,7 @@ export function getCartesListTtl(cartes: CarteInfo[] | null | undefined): number
             (latest, carte) => latest > carte.deadline ? latest : carte.deadline, 0
         );
         return latest - now();
-    } catch (e) {
+    } catch {
         return -now();
     }
 }

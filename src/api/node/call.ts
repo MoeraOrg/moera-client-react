@@ -115,7 +115,7 @@ export async function callApi<T>({
             } else {
                 data = await response.json();
             }
-        } catch (e) {
+        } catch {
             if (!response.ok) {
                 throw exception("Server returned error status");
             } else {
