@@ -3,6 +3,7 @@ import { arrow, flip, shift, useFloating } from '@floating-ui/react';
 import { Placement } from '@floating-ui/utils';
 import cx from 'classnames';
 
+import * as Browser from "ui/browser";
 import { PopoverContext } from "ui/control";
 import { OverlayZIndex, useOverlay } from "ui/overlays/overlays";
 import { ParentContext } from "ui/hook";
@@ -35,7 +36,7 @@ export function DelayedPopover({
     placement, arrow: withArrow, className, styles = "popover", disabled, clickable, sticky, parentOverlayId,
     onPreparePopper, onShow, onHide, element, popoverContainer, children
 }: Props) {
-    // Such usage of useState() is counter-intuitive, but required by react-popper
+    // Such usage of useState() is counter-intuitive, but required by floating-ui
     const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null);
 
     const {
@@ -121,7 +122,7 @@ export function DelayedPopover({
         if (getLocus() === "main" && onPreparePopper) {
             onPreparePopper();
         }
-        const id = setTimeout(onTimeout, 1000);
+        const id = setTimeout(onTimeout, Browser.isTouchScreen() ? 300 : 1000);
         return () => clearTimeout(id);
     }, [disabled, getLocus, onPreparePopper, onTimeout, locusUpdates]);
 
