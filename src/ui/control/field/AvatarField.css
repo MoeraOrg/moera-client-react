@@ -1,11 +1,17 @@
 .avatar-field {
     cursor: pointer;
+    pointer-events: none;
     position: relative;
     width: min-content;
     padding: .25rem;
 }
 
-.avatar-field.disabled {
+.avatar-field .avatar-button {
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.avatar-field.disabled .avatar-button {
     cursor: default;
 }
 

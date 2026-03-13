@@ -54,7 +54,7 @@ export function AvatarField({name, size, disabled}: Props) {
 
     return (
         <div className={cx("avatar-field", {"disabled": !value && !avatarDefault})}>
-            <div ref={setButtonRef} aria-label={t("select")} onClick={onClick}>
+            <div ref={setButtonRef} className="avatar-button" aria-label={t("select")} onClick={onClick}>
                 <Avatar avatar={value} ownerName={homeOwnerName} size={size}/>
             </div>
             {visible &&
