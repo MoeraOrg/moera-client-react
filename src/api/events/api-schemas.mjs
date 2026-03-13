@@ -1400,6 +1400,10 @@ export const EVENT_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "commentId": {
+                    type: "string",
+                    nullable: true
+                },
                 "viewed": {
                     type: "boolean",
                     nullable: true
@@ -1511,6 +1515,10 @@ export const EVENT_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "commentId": {
+                    type: "string",
+                    nullable: true
+                },
             },
             required: [
                 "type",
@@ -1547,6 +1555,10 @@ export const EVENT_SCHEMAS = {
                     type: "integer"
                 },
                 "postingId": {
+                    type: "string",
+                    nullable: true
+                },
+                "commentId": {
                     type: "string",
                     nullable: true
                 },

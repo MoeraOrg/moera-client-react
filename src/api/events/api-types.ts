@@ -351,6 +351,7 @@ export interface StoryAddedEvent extends BaseEvent<"STORY_ADDED"> {
     pinned: boolean;
     moment: number;
     postingId?: string | null;
+    commentId?: string | null;
     viewed?: boolean | null;
     read?: boolean | null;
     satisfied?: boolean | null;
@@ -372,6 +373,7 @@ export interface StoryDeletedEvent extends BaseEvent<"STORY_DELETED"> {
     feedName: string;
     moment: number;
     postingId?: string | null;
+    commentId?: string | null;
 }
 
 export interface StoryUpdatedEvent extends BaseEvent<"STORY_UPDATED"> {
@@ -382,6 +384,7 @@ export interface StoryUpdatedEvent extends BaseEvent<"STORY_UPDATED"> {
     pinned: boolean;
     moment: number;
     postingId?: string | null;
+    commentId?: string | null;
     viewed?: boolean | null;
     read?: boolean | null;
     satisfied?: boolean | null;
