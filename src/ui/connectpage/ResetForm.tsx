@@ -37,7 +37,7 @@ function ResetForm({dirty, values, resetForm}: Props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formId]); // 'props' are missing on purpose
 
-    const formError = !dirty ? lastError : undefined;
+    const formError = !dirty && !connecting ? lastError : undefined;
     const disabled = !values.password || values.password !== values.confirmPassword || connecting;
 
     return (

@@ -42,7 +42,7 @@ function VerifyForm({location, values, dirty, resetForm}: Props) {
         event.preventDefault();
     }
 
-    const formError = !dirty ? lastError : undefined;
+    const formError = !dirty && !processing ? lastError : undefined;
     const disabled = !values.resetToken || processing;
 
     return (

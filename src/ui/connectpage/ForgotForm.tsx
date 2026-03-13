@@ -28,7 +28,7 @@ function ForgotForm({location, values, dirty}: Props) {
     const waitMail = useWaitTill(mailAfter);
     const {t} = useTranslation();
 
-    const formError = !dirty ? lastError : undefined;
+    const formError = !dirty && !processing ? lastError : undefined;
     const disabled = !values.location || processing || !!waitMail;
 
     return (

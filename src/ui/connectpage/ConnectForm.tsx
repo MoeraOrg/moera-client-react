@@ -50,7 +50,7 @@ function ConnectForm(props: Props) {
         event.preventDefault();
     }
 
-    const formError = !dirty ? lastError : undefined;
+    const formError = !dirty && !connecting ? lastError : undefined;
     const disabled = !values.location || !values.password || !isLocationValid(values.location) || connecting
         || !!waitConnect;
 

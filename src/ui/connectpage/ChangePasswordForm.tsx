@@ -34,7 +34,7 @@ function ChangePasswordForm({dirty, values, errors, resetForm}: Props) {
         event.preventDefault();
     }
 
-    const formError = !dirty ? lastError : Object.values(errors).filter(e => e !== "must-not-empty")[0];
+    const formError = !dirty && !processing ? lastError : Object.values(errors).filter(e => e !== "must-not-empty")[0];
     const disabled = !values.oldPassword || !values.password || !values.confirmPassword || processing;
 
     return (
