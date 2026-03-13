@@ -6,11 +6,36 @@ DETAILS[open] {
     cursor: unset;
 }
 
-DETAILS:not([open]) > SUMMARY.fs-1,
-DETAILS:not([open]) > SUMMARY.fs-2,
-DETAILS:not([open]) > SUMMARY.fs-3,
-DETAILS:not([open]) > SUMMARY.fs-4,
+DETAILS > SUMMARY.fs-1,
+DETAILS > SUMMARY.fs-2,
+DETAILS > SUMMARY.fs-3,
+DETAILS > SUMMARY.fs-4,
+DETAILS > SUMMARY.fs-5 {
+    line-height: 1.2;
+}
+
+DETAILS:not([open]) > SUMMARY.fs-1 {
+    font-size: 1.25rem !important;
+    font-weight: bold;
+}
+
+DETAILS:not([open]) > SUMMARY.fs-2 {
+    font-size: 1.2rem !important;
+    font-weight: bold;
+}
+
+DETAILS:not([open]) > SUMMARY.fs-3 {
+    font-size: 1.1rem !important;
+    font-weight: bold;
+}
+
+DETAILS:not([open]) > SUMMARY.fs-4 {
+    font-size: 1rem !important;
+    font-style: italic;
+    font-weight: bold;
+}
+
 DETAILS:not([open]) > SUMMARY.fs-5 {
     font-size: 1rem !important;
-    font-weight: bold;
+    font-style: italic;
 }
