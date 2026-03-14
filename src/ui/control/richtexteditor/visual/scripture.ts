@@ -3,6 +3,7 @@ import { Element as SlateElement, Text as SlateText } from 'slate';
 import { PrivateMediaFileInfo } from "api";
 import { DetailsSummaryStyle } from "ui/control";
 import { RichTextImageStandardSize } from "ui/control/richtexteditor/media/rich-text-image";
+import { randomId } from "util/ui";
 
 /* P */
 
@@ -138,6 +139,7 @@ export interface DetailsElement extends SlateElement {
     type: "details";
     summary: string;
     style: DetailsSummaryStyle;
+    id: string;
 }
 
 export const isDetailsElement = (value: any): value is DetailsElement =>
@@ -146,7 +148,7 @@ export const isDetailsElement = (value: any): value is DetailsElement =>
 export const createDetailsElement = (
     summary: string, style: DetailsSummaryStyle, children: Scripture
 ): DetailsElement =>
-    ({type: "details", summary, style, children});
+    ({type: "details", summary, style, id: randomId(), children});
 
 /* PRE */
 

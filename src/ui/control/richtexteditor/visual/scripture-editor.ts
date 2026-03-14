@@ -8,6 +8,7 @@ import {
     Element as SlateElement,
     Node,
     Node as SlateNode,
+    NodeElementsOptions,
     NodeEntry,
     Operation,
     Path,
@@ -72,6 +73,17 @@ export function findWrappingElement<T extends ScriptureElement>(
             && ((Array.isArray(type) && type.includes(element.type)) || element.type === type)
         ) {
             return [element as T, path];
+        }
+    }
+    return null;
+}
+
+export function findFirstElement(
+    root: SlateNode, match: (ne: NodeEntry) => boolean, options?: NodeElementsOptions
+): NodeEntry | null {
+    for (const entry of SlateNode.elements(root, options)) {
+        if (match(entry)) {
+            return entry;
         }
     }
     return null;

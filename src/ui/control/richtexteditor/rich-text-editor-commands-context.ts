@@ -54,7 +54,7 @@ export interface RichTextEditorCommandsInterface {
     formatIndent: (delta: number) => void;
     formatHeading: (level: number) => void;
     formatVideo: () => void;
-    formatFold: () => void;
+    formatFold: (elementId: string | null) => void;
     formatCode: () => void;
     formatCodeBlock: () => void;
     formatSubscript: () => void;

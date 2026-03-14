@@ -49,7 +49,7 @@ export default function RichTextEditorOtherButton() {
                     <div className="other-buttons">
                         {supportsComplexBlocks &&
                             <RichTextEditorButton icon={msExpandCircleDown} title={t("fold")} active={inFold}
-                                                  command={onCommand(formatFold)}/>
+                                                  command={onCommand(() => formatFold(null))}/>
                         }
                         <RichTextEditorButton icon={msCode} title={t("code")} hotkey={RICH_TEXT_EDITOR_KEYS.CODE.title}
                                               active={inCode} command={onCommand(formatCode)}/>

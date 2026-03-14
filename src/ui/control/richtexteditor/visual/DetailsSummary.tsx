@@ -6,13 +6,15 @@ import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-e
 interface Props {
     summary: string | null | undefined;
     style: DetailsSummaryStyle;
+    elementId: string;
 }
 
-export default function DetailsSummary({summary, style}: Props) {
+export default function DetailsSummary({summary, style, elementId}: Props) {
     const {formatFold} = useRichTextEditorCommands();
 
     return (
-        <div contentEditable={false} className={detailsSummaryStyleToClassName(style)} onClick={() => formatFold()}>
+        <div contentEditable={false} className={detailsSummaryStyleToClassName(style)}
+             onClick={() => formatFold(elementId)}>
             ⯆ {summary || "Details"}
         </div>
     );

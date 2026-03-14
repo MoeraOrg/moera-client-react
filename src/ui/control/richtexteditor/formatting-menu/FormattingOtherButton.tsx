@@ -36,7 +36,7 @@ export default function FormattingOtherButton() {
             <div className="formatting-menu-sub" {...getCollapseProps()}>
                 {supportsComplexBlocks &&
                     <FormattingMenuItem icon={msExpandCircleDown} title={t("fold")} active={inFold}
-                                        command={formatFold}/>
+                                        command={() => formatFold(null)}/>
                 }
                 <FormattingMenuItem icon={msCode} title={t("code")} hotkey={RICH_TEXT_EDITOR_KEYS.CODE.title}
                                     active={inCode} command={formatCode}/>

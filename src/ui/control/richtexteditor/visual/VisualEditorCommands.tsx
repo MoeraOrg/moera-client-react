@@ -60,6 +60,7 @@ import { RichTextEditorCommandsContext } from "ui/control/richtexteditor/rich-te
 import { useRichTextEditorDialogs } from "ui/control/richtexteditor/dialog/rich-text-editor-dialogs-context";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import {
+    findFirstElement,
     findWrappingElement,
     isSelectionInElement,
     ScriptureEditor
@@ -356,8 +357,12 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
         });
     }
 
-    const formatFold = () => {
-        const [element, path] = findWrappingElement(editor, "details") ?? [null, null];
+    const formatFold = (id: string | null) => {
+        const [element, path] = (
+            id != null
+                ? findFirstElement(editor, ([e]) => isDetailsElement(e) && e.id === id)
+                : findWrappingElement(editor, "details")
+        ) ?? [null, null];
         const prevValues = element != null && isDetailsElement(element)
             ? {summary: element.summary, style: element.style}
             : null;
