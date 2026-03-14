@@ -80,5 +80,5 @@ async function nodeFeaturesLoadedSaga(action: WithContext<NodeFeaturesLoadedActi
 }
 
 function maintainClientIdSaga(): void {
-    Browser.maintainClientId();
+    Browser.maintainSessionId();
 }
