@@ -76,7 +76,7 @@ export function Avatar(
         style = {
             width: `${size}px`,
             height: `${size}px`,
-            fontSize: `${size / 3}px`,
+            fontSize: !anonymous ? `${size / 3}px` : `${size / 1.5}px`,
             filter: !anonymous ? `hue-rotate(${nameAngle(ownerName)}deg)` : "grayscale(100%) brightness(110%)"
         };
         const shortName = !anonymous ? NodeName.shorten(ownerName) : "\u2205";
