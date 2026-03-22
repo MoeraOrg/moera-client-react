@@ -32,7 +32,7 @@
 
 @media only screen and (max-width: 991px) {
     .posting.preview > .content {
-        max-height: 170vh;
+        max-height: 180vh;
     }
 }
 

@@ -1,22 +1,23 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { attributesToProps, DOMNode, domToReact, htmlToDOM } from 'html-react-parser';
 import { isTag } from 'domhandler';
 import 'katex/dist/katex.min.css';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
+import { ClientState } from "state/state";
+import { getSetting } from "state/settings/selectors";
 import { BlockMath, InlineMath } from "ui/katex";
 import NodeNameMention from "ui/nodename/NodeNameMention";
 import Jump from "ui/navigation/Jump";
-import EntryImage from "ui/entry/EntryImage";
 import { interceptLinkClick } from "ui/entry/link-click-intercept";
+import { wrapHashtags } from "ui/entry/wrap-hashtags";
+import EntryImage from "ui/entry/EntryImage";
+import EntryExpandAllDetailsButton from "ui/entry/EntryExpandAllDetailsButton";
 import MrSpoiler from "ui/entry/MrSpoiler";
 import { isNumericString, notNull } from "util/misc";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { mediaHashStrip } from "util/media-images";
-import { ClientState } from "state/state";
-import { getSetting } from "state/settings/selectors";
-import { wrapHashtags } from "ui/entry/wrap-hashtags";
 import { hasClass, textContent } from "util/domhandler";
 import { ut } from "util/url";
 
@@ -34,6 +35,7 @@ export default function EntryHtml({
     className, postingId, commentId, html, nodeName = REL_CURRENT, media, onClick
 }: Props) {
     const openInNewWindow = useSelector((state: ClientState) => getSetting(state, "link.new-window") as boolean);
+    const contentRef = useRef<HTMLDivElement>(null);
 
     const mediaMap: Map<string, PrivateMediaFileInfo> = useMemo(() => new Map(
         (media ?? [])
@@ -147,14 +149,35 @@ export default function EntryHtml({
         }
     }), [commentId, mediaMap, nodeName, openInNewWindow, postingId]);
 
-    const content = useMemo(
-        () => domToReact(wrapHashtags(htmlToDOM(html ?? "", {lowerCaseAttributeNames: false})) as DOMNode[], options),
-        [html, options]
+    const parsedHtml = useMemo(
+        () => wrapHashtags(htmlToDOM(html ?? "", {lowerCaseAttributeNames: false})) as DOMNode[],
+        [html]
     );
+    const totalDetails = useMemo(() => countDetails(parsedHtml), [parsedHtml]);
+    const content = useMemo(() => domToReact(parsedHtml, options), [parsedHtml, options]);
 
     return (
-        <div className={className} style={{fontSize: "var(--posting-font-magnitude)"}} onClick={onClick}>
-            {content}
+        <div className={className} style={{fontSize: "var(--posting-font-magnitude)"}}>
+            {totalDetails >= 3 &&
+                <EntryExpandAllDetailsButton contentRef={contentRef}/>
+            }
+            <div ref={contentRef} onClick={onClick}>
+                {content}
+            </div>
         </div>
     );
+}
+
+function countDetails(nodes: DOMNode[]): number {
+    let count = 0;
+    for (const node of nodes) {
+        if (!isTag(node)) {
+            continue;
+        }
+        if (node.name === "details") {
+            count++;
+        }
+        count += countDetails(node.children as DOMNode[]);
+    }
+    return count;
 }
