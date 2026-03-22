@@ -28,6 +28,7 @@ interface Props {
     anyValue?: boolean;
     errorsOnly?: boolean;
     error?: string | null;
+    note?: string | null;
     className?: string;
     autoComplete?: string;
     noFeedback?: boolean;
@@ -40,7 +41,7 @@ export function InputField(
     {
         name, title, placeholder, tooltip, type = "text", disabled, maxLength, horizontal = false, layout,
         groupClassName, labelClassName, inputClassName, col, autoFocus, anyValue, errorsOnly, error: externalError,
-        className, autoComplete, noFeedback = false, initialValue, defaultValue, ref
+        note, className, autoComplete, noFeedback = false, initialValue, defaultValue, ref
     }: Props
 ) {
     const [showPassword, setShowPassword] = React.useState<boolean>(false);
@@ -92,7 +93,11 @@ export function InputField(
                         maxLength={maxLength}
                         ref={composeRefs(ref, inputRef)}
                     />
-                    {!noFeedback && error && <FieldError error={error}/>}
+                    {!noFeedback && error ?
+                        <FieldError error={error}/>
+                    :
+                        note && <small className="form-text">{note}</small>
+                    }
                     {type === "password" && (anyValue || (!error && errorsOnly)) &&
                         <button
                             className="show-password"

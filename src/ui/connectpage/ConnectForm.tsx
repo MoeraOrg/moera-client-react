@@ -58,7 +58,7 @@ function ConnectForm(props: Props) {
         <Form>
             <div className="title">{t("connect")}</div>
             <InputField name="location" title={tTitle(t("blog-name"))} placeholder={t("enter-blog-name")} errorsOnly
-                        noFeedback error={formError} autoFocus/>
+                        noFeedback note={t("case-sensitive")} error={formError} autoFocus/>
             <InputField type="password" name="password" title={t("password")} placeholder={t("password")} errorsOnly
                         noFeedback error={formError}/>
             {formError && <div className="form-error">{t(formError)}</div>}

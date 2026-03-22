@@ -77,6 +77,7 @@
   "cannot-resolve-name ": "Cannot resolve name:",
   "caption-optional": "Caption under the image (optional)",
   "careful-grant-access": "Please be careful and don't grant access to any application you're not familiar with.",
+  "case-sensitive": "'A' and 'a' are considered different letters",
   "change": "Change",
   "change-author-name": "Change author's name",
   "change-date-time": "Change date/time",

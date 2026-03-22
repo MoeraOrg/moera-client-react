@@ -77,6 +77,7 @@
   "cannot-resolve-name ": "Nie można rozwiązać nazwy:",
   "caption-optional": "Podpis pod obrazkiem (opcjonalnie)",
   "careful-grant-access": "Proszę zachować ostrożność i nie udzielać dostępu aplikacjom, których nie znasz.",
+  "case-sensitive": "„A” i „a” są uważane za różne litery",
   "change": "Zmień",
   "change-author-name": "Zmień imię autora",
   "change-date-time": "Zmień datę/czas",
