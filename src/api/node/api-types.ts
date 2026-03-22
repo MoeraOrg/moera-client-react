@@ -208,6 +208,9 @@ export interface AvatarDescription {
 export interface AvatarImage {
     mediaId: string;
     path: string;
+    directPath?: string | null;
+    directPathExpiresAt?: number | null;
+    mimeType?: string | null;
     width?: number | null;
     height?: number | null;
     shape?: string | null;
@@ -217,6 +220,9 @@ export interface AvatarInfo {
     id: string;
     mediaId: string;
     path: string;
+    directPath?: string | null;
+    directPathExpiresAt?: number | null;
+    mimeType?: string | null;
     width?: number | null;
     height?: number | null;
     shape?: string | null;
@@ -519,7 +525,10 @@ export interface LinkPreviewInfo {
 
 export interface MediaFilePreviewInfo {
     targetWidth: number;
+    hash: string;
     directPath?: string | null;
+    directPathExpiresAt?: number | null;
+    mimeType: string;
     width: number;
     height: number;
     original?: boolean | null;
@@ -605,6 +614,7 @@ export interface PrivateMediaFileInfo {
     hash: string;
     path: string;
     directPath?: string | null;
+    directPathExpiresAt?: number | null;
     mimeType: string;
     width: number;
     height: number;
@@ -645,6 +655,9 @@ export interface ProfileInfo {
 export interface PublicMediaFileInfo {
     id: string;
     path: string;
+    directPath?: string | null;
+    directPathExpiresAt?: number | null;
+    mimeType?: string | null;
     width?: number | null;
     height?: number | null;
     orientation?: number | null;

@@ -61,8 +61,9 @@ export function Avatar(
 
     let src: string, alt: string, shape: string | null, style: React.CSSProperties | undefined;
     if (avatar != null) {
-        src = window.loadedAvatars.get(avatar.path) ?? `${rootPage}/media/${avatar.path}`;
-        window.loadedAvatars.set(avatar.path, src);
+        const path = avatar.directPath ?? avatar.path;
+        src = window.loadedAvatars.get(path) ?? `${rootPage}/media/${path}`;
+        window.loadedAvatars.set(path, src);
         alt = t("avatar");
         shape = effectiveShape(avatar.shape ?? null, shapeLocal, shapeGlobal);
         style = undefined;

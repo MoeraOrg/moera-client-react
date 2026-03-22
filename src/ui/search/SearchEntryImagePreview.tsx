@@ -31,6 +31,7 @@ export default function SearchEntryImagePreview({nodeName, postingId, commentId,
 
     const href = urlWithParameters(ut`/post/${postingId}`, {commentId, media: mediaId});
 
+    const imagePath = mediaFile.directPath ?? mediaFile.path;
     const height = mediaFile.height ?? 300;
     const style: React.CSSProperties = {
         "--width": "300px",
@@ -42,7 +43,7 @@ export default function SearchEntryImagePreview({nodeName, postingId, commentId,
 
     return (
         <Jump nodeName={nodeName} href={href} onNear={onNear} className="preview">
-            <img src={`${rootPage}/media/${mediaFile.path}`} style={style} alt=""/>
+            <img src={`${rootPage}/media/${imagePath}`} style={style} alt=""/>
         </Jump>
     );
 }
