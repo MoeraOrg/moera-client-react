@@ -42,6 +42,10 @@
     }
 }
 
+.posting.preview > .content:has(DETAILS[open]) {
+    max-height: unset;
+}
+
 .posting > .content P {
     margin-top: 1rem;
 }
