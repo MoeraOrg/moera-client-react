@@ -11,6 +11,7 @@ import { isScriptureElement } from "ui/control/richtexteditor/visual/scripture";
 import { isSignificant } from "ui/control/richtexteditor/visual/scripture-html";
 import OpenLink from "ui/control/richtexteditor/visual/OpenLink";
 import DetailsSummary from "ui/control/richtexteditor/visual/DetailsSummary";
+import VisualRenderIframe from "ui/control/richtexteditor/visual/VisualRenderIframe";
 import PreloadedImage from "ui/posting/PreloadedImage";
 import { BlockMath, InlineMath } from "ui/katex";
 import { useIsTinyScreen } from "ui/hook";
@@ -64,11 +65,7 @@ export default function VisualRenderElement(props: RenderElementProps) {
                 return React.createElement(tagName, attributes, ...children);
             }
             case "iframe":
-                return (
-                    <div {...attributes} contentEditable={false}>
-                        {children}<div dangerouslySetInnerHTML={{__html: element.code}}/>
-                    </div>
-                );
+                return <VisualRenderIframe attributes={attributes} code={element.code}>{children}</VisualRenderIframe>;
             case "details":
                 return (
                     // @ts-ignore
