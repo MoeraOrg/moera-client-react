@@ -36,7 +36,7 @@ import {
     isCommentDialogShown,
     isCommentMomentInLoadedRange,
     isCommentPosted,
-    isCommentsBlockedUsersToBeLoaded,
+    isCommentsBlockedUsersToBeLoaded, isCommentsMediaExpiring,
     isCommentsReceiverFeaturesToBeLoaded,
     isCommentsReceiverPostingId,
     isCommentsReceiverToBeSwitched,
@@ -61,6 +61,8 @@ export default [
     trigger(["HOME_READY", "WAKE_UP"], isDetailedPostingDefined, detailedPostingLoad),
     trigger("WAKE_UP", isAtDetailedPostingPage, commentsUpdate),
     trigger("WAKE_UP", inv(isAtDetailedPostingPage), commentsUnset),
+    trigger("PULSE_10MIN", conj(isAtDetailedPostingPage, isCommentsMediaExpiring), commentsUpdate),
+    trigger("PULSE_10MIN", conj(inv(isAtDetailedPostingPage), isCommentsMediaExpiring), commentsUnset),
     trigger(
         "DETAILED_POSTING_LOADED",
         true,

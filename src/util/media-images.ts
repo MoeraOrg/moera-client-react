@@ -157,3 +157,9 @@ function scriptureMediaHashesExtract(scripture: Scripture, hashes: Set<string>):
 export function mediaImageExtensions(mimeType: string | null | undefined): string[] {
     return mimeType != null && mimeType in MEDIA_IMAGE_EXTENSIONS ? MEDIA_IMAGE_EXTENSIONS[mimeType] : [];
 }
+
+export function isMediaDirectPathExpiring(media: PrivateMediaFileInfo | null | undefined): boolean {
+    return media?.directPath != null
+        && media.directPathExpiresAt != null
+        && (Date.now() / 1000 - media.directPathExpiresAt) < 24 * 60 * 60;
+}

@@ -15,6 +15,7 @@ import { CommentsState, ExtCommentInfo } from "state/detailedposting/state";
 import * as Browser from "ui/browser";
 import { isSheriffMarked } from "util/sheriff";
 import { REL_CURRENT } from "util/rel-node-name";
+import { isMediaDirectPathExpiring } from "util/media-images";
 
 export function getDetailedPostingId(state: ClientState): string | null {
     return state.detailedPosting.id;
@@ -123,6 +124,17 @@ export function getComments(state: ClientState): ExtCommentInfo[] {
 
 export function getComment(state: ClientState, id: string): ExtCommentInfo | null {
     return getCommentsState(state).comments.find(c => c.id === id) ?? null;
+}
+
+export function isCommentsMediaExpiring(state: ClientState): boolean {
+    const comments = getCommentsState(state).comments;
+    for (const comment of comments) {
+        const expiring = comment.media?.find(m => isMediaDirectPathExpiring(m.media));
+        if (expiring) {
+            return true;
+        }
+    }
+    return false;
 }
 
 export function getFocusedCommentId(state: ClientState): string | null {

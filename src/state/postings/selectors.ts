@@ -6,6 +6,7 @@ import { ExtPostingInfo, PostingsState, PostingState } from "state/postings/stat
 import { isSheriffGoverned, isSheriffMarked } from "util/sheriff";
 import { now } from "util/misc";
 import { absoluteNodeName, RelNodeName } from "util/rel-node-name";
+import { isMediaDirectPathExpiring } from "util/media-images";
 
 function getPostingState(
     state: ClientState, id: string | null, nodeName: RelNodeName | string
@@ -121,4 +122,19 @@ export function isPostingSheriffProhibited(
     posting: PostingInfo | null | undefined, sheriffName: string | null
 ): boolean {
     return !isPostingSheriff(posting, sheriffName) || isPostingSheriffMarked(posting, sheriffName);
+}
+
+export function isPostingsMediaExpiring(state: ClientState): boolean {
+    for (const postings of Object.values(state.postings)) {
+        if (postings == null) {
+            continue;
+        }
+        for (const posting of Object.values(postings)) {
+            const expiring = posting?.posting.media?.find(m => isMediaDirectPathExpiring(m.media));
+            if (expiring) {
+                return true;
+            }
+        }
+    }
+    return false;
 }

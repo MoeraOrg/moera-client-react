@@ -44,6 +44,7 @@ import { isConnectedToHome } from "state/home/selectors";
 import { getOwnerName } from "state/node/selectors";
 import { storyAdded, storyDeleted, storyUpdated } from "state/stories/actions";
 import { postingSubscriptionSet, remotePostingSubscriptionSet } from "state/postings/actions";
+import { isPostingsMediaExpiring } from "state/postings/selectors";
 import { WithContext } from "state/action-types";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { now } from "util/misc";
@@ -113,6 +114,7 @@ export default [
         feedGeneralLoad(REL_CURRENT, "timeline")
     ),
     trigger("WAKE_UP", true, feedsUpdate),
+    trigger("PULSE_10MIN", isPostingsMediaExpiring, feedsUpdate),
     trigger("HOME_READY", isConnectedToHome, feedStatusLoad(REL_HOME, "instant")),
     trigger("HOME_READY", isConnectedToHome, feedStatusLoad(REL_HOME, "news")),
     trigger("HOME_READY", isConnectedToHome, feedStatusLoad(REL_HOME, "explore")),
