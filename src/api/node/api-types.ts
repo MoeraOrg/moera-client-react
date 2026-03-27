@@ -147,6 +147,7 @@ export interface PostingOperations {
 
 export interface PrivateMediaFileOperations {
     view?: PrincipalValue | null;
+    edit?: PrincipalValue | null;
 }
 
 export interface ProfileOperations {
@@ -609,6 +610,10 @@ export interface PostingSourceInfo {
     createdAt: number;
 }
 
+export interface PrivateMediaFileAttributes {
+    title?: string | null;
+}
+
 export interface PrivateMediaFileInfo {
     id: string;
     hash: string;
@@ -620,6 +625,7 @@ export interface PrivateMediaFileInfo {
     height: number;
     orientation: number;
     size: number;
+    title?: string | null;
     textContent?: string | null;
     postingId?: string | null;
     previews?: MediaFilePreviewInfo[] | null;
@@ -859,7 +865,8 @@ export interface SearchCommentMediaTextUpdate {
     postingId: string;
     commentId: string;
     mediaId: string;
-    textContent: string;
+    title?: string | null;
+    textContent?: string | null;
 }
 
 export interface SearchCommentUpdate {
@@ -924,7 +931,8 @@ export interface SearchPostingHeadingUpdate {
 export interface SearchPostingMediaTextUpdate {
     postingId: string;
     mediaId: string;
-    textContent: string;
+    title?: string | null;
+    textContent?: string | null;
 }
 
 export interface SearchPostingUpdate {

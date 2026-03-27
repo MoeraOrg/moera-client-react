@@ -263,6 +263,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "edit": {
+                    type: "string",
+                    nullable: true
+                },
             },
             additionalProperties: false
         },
@@ -1553,6 +1557,10 @@ export const NODE_API_SCHEMAS = {
                 },
                 "size": {
                     type: "integer"
+                },
+                "title": {
+                    type: "string",
+                    nullable: true
                 },
                 "textContent": {
                     type: "string",

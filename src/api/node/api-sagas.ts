@@ -1049,6 +1049,18 @@ export async function getPrivateMediaInfo(
     });
 }
 
+export async function updatePrivateMediaInfo(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    attributes: API.PrivateMediaFileAttributes, errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.PrivateMediaFileInfo> {
+
+    const location = ut`/media/private/${id}/info`;
+    return callApi<API.PrivateMediaFileInfo>({
+        caller, nodeName, method: "PUT", location, body: attributes, auth, schema: "PrivateMediaFileInfo",
+        errorFilter
+    });
+}
+
 export async function getPrivateMediaParentEntry(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
