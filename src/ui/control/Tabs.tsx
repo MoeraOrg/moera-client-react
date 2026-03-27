@@ -12,6 +12,7 @@ import "./Tabs.css";
 type TabStyle = "tabs" | "pills";
 
 export interface TabDescription<V = any> {
+    icon?: MaterialSymbol;
     title: string;
     value?: V;
     href?: string;
@@ -50,7 +51,7 @@ export function Tabs<V = any>({
         <ul className={cx("nav", "nav-" + tabStyle, "scroll-" + scroll, className)} ref={navRef} role="tablist">
             {tabs
                 .filter(({visible}) => visible !== false)
-                .map(({title, value, href, active, count, principal, loading, className}, index) =>
+                .map(({icon, title, value, href, active, count, principal, loading, className}, index) =>
                     <li key={index} className="nav-item">
                         <TabLink
                             active={active ?? value === selected}
@@ -60,6 +61,7 @@ export function Tabs<V = any>({
                             scrollerRef={navRef}
                         >
                             <TabArrowWrapper arrow={arrow}>
+                                {icon && <Icon icon={icon} size="1.4em" className="icon"/>}
                                 {title}
                                 {principal &&
                                     <>{" "}<Principal value={principal} defaultValue="public" icons={principalIcons}

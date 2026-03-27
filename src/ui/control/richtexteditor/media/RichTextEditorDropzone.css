@@ -1,7 +1,11 @@
+.rich-text-editor-dropzone-tabs {
+    margin-top: .75rem;
+}
+
 .rich-text-editor-dropzone {
     border: 1px dashed var(--bs-primary);
     border-radius: .5rem;
-    margin-top: .75rem;
+    margin-top: .25rem;
 }
 
 .rich-text-editor-dropzone.drag-accept {

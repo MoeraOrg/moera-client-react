@@ -77,6 +77,11 @@
     }
 }
 
+.nav.nav-tabs .nav-link .icon, .nav.nav-pills .nav-link .icon {
+    margin-right: .35em;
+    vertical-align: -.35em;
+}
+
 .nav.nav-tabs .nav-link .badge, .nav.nav-pills .nav-link .badge {
     background-color: var(--bs-gray-100);
     color: var(--bs-gray-600);

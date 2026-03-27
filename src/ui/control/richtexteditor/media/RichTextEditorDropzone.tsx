@@ -1,7 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import cx from 'classnames';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { msAttachFile, msImage } from "ui/material-symbols";
+import { Tabs } from "ui/control";
 import { RichTextValue } from "ui/control/richtexteditor";
 import { UploadProgress, useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import RichTextEditorImageList from "ui/control/richtexteditor/media/RichTextEditorImageList";
@@ -37,6 +39,8 @@ function calcProgressSummary(progress: UploadProgress[]): UploadProgressSummary 
     return {loadedFiles, totalFiles: progress.length, progress: total !== 0 ? Math.round(loaded * 100 / total) : 0};
 }
 
+type AttachmentType = "image" | "file";
+
 interface Props {
     value: RichTextValue;
     hiding?: boolean;
@@ -50,6 +54,7 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName,
         getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, downloading, copyImage,
     } = useRichTextEditorMedia();
     const {t} = useTranslation();
+    const [attachmentType, setAttachmentType] = useState<AttachmentType>("image");
 
     const onCopyImage = (e: React.MouseEvent) => {
         copyImage();
@@ -69,10 +74,30 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName,
         && uploadProgress.length === 0
         && !downloading;
     const progressSummary = useMemo(() => calcProgressSummary(uploadProgress), [uploadProgress])
-    const buttonsTitle = !tinyScreen ? "upload-or-copy-or-drop-images" : "upload-images";
+    const buttonsTitle = attachmentType === "image"
+        ? (!tinyScreen ? "upload-or-copy-or-drop-images" : "upload-images")
+        : (!tinyScreen ? "upload-or-drop-files" : "upload-files");
 
     return (
         <>
+            <Tabs<AttachmentType>
+                tabs={[
+                    {
+                        icon: msImage,
+                        title: t("images"),
+                        value: "image",
+                    },
+                    {
+                        icon: msAttachFile,
+                        title: t("files"),
+                        value: "file",
+                    }
+                ]}
+                value={attachmentType}
+                onChange={setAttachmentType}
+                className="rich-text-editor-dropzone-tabs"
+                scroll="never"
+            />
             <div className={cx(
                 "rich-text-editor-dropzone",
                 {"d-none": hidden, "drag-accept": isDragAccept, "drag-reject": isDragReject}

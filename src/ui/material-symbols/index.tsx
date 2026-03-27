@@ -9,6 +9,7 @@ import { ReactComponent as msArrowBack } from "ui/material-symbols/arrow_back.is
 import { ReactComponent as msArrowDownward } from "ui/material-symbols/arrow_downward.isvg";
 import { ReactComponent as msArrowSelectorToolFilled } from "ui/material-symbols/arrow_selector_tool_filled.isvg";
 import { ReactComponent as msArrowUpward } from "ui/material-symbols/arrow_upward.isvg";
+import { ReactComponent as msAttachFile } from "ui/material-symbols/attach_file.isvg";
 import { ReactComponent as msBackspaceFilled16 } from "ui/material-symbols/backspace_filled16.isvg";
 import { ReactComponent as msBadge } from "ui/material-symbols/badge.isvg";
 import { ReactComponent as msBlock } from "ui/material-symbols/block.isvg";
@@ -65,6 +66,7 @@ import { ReactComponent as msGroups } from "ui/material-symbols/groups.isvg";
 import { ReactComponent as msHelpFilled40 } from "ui/material-symbols/help_filled40.isvg";
 import { ReactComponent as msHistory } from "ui/material-symbols/history.isvg";
 import { ReactComponent as msHorizontalRule } from "ui/material-symbols/horizontal_rule.isvg";
+import { ReactComponent as msImage } from "ui/material-symbols/image.isvg";
 import { ReactComponent as msInbox } from "ui/material-symbols/inbox.isvg";
 import { ReactComponent as msInfo } from "ui/material-symbols/info.isvg";
 import { ReactComponent as msInkPen } from "ui/material-symbols/ink_pen.isvg";
@@ -152,6 +154,7 @@ export {
     msArrowDownward,
     msArrowSelectorToolFilled,
     msArrowUpward,
+    msAttachFile,
     msBackspaceFilled16,
     msBadge,
     msBlock,
@@ -208,6 +211,7 @@ export {
     msHelpFilled40,
     msHistory,
     msHorizontalRule,
+    msImage,
     msInbox,
     msInfo,
     msInkPen,
