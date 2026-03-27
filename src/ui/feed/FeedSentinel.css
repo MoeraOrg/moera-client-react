@@ -1,13 +1,15 @@
 .feed-sentinel {
+    background-color: white;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    padding: 1.25rem;
     text-align: center;
-    font-size: large;
-    font-weight: bold;
-    height: 1.6em;
-    color: var(--bs-cyan);
-    border: .1em var(--body-bg) solid;
-    border-radius: .5em;
-    background-color: var(--bs-gray-100);
-    cursor: pointer;
+}
+
+@media only screen and (max-width: 991px) {
+    .feed-sentinel BUTTON {
+        width: 100%;
+    }
 }
 
 .feed-sentinel.bottom {
@@ -17,8 +19,4 @@
 .feed-sentinel.loading {
     background-color: transparent;
     border-color: transparent;
-}
-
-.feed-sentinel:hover {
-    background-color: var(--bs-gray-100);
 }

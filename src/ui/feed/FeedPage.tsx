@@ -209,7 +209,6 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
             </FeedTopBox>
             <FeedSentinel
                 loading={loadingFuture}
-                title={t("load-newer-posts")}
                 margin="50% 0px 0px 0px"
                 visible={before < Number.MAX_SAFE_INTEGER}
                 onSentinel={onSentinelFuture}
@@ -230,7 +229,6 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
             <FeedSentinel
                 bottom
                 loading={loadingPast}
-                title={t("load-older-posts")}
                 margin="0px 0px 50% 0px"
                 visible={after > Number.MIN_SAFE_INTEGER}
                 onSentinel={onSentinelPast}
