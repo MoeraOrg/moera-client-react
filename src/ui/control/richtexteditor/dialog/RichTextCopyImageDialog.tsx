@@ -36,4 +36,5 @@ const RichTextCopyImageDialog = ({forceCompress}: Props) => {
 }
 
 export default richTextEditorDialog<Props, RichTextCopyImageValues>(
-    "copy-image-from-internet", mapPropsToValues, RichTextCopyImageDialog);
+    "copy-image-from-internet", mapPropsToValues, RichTextCopyImageDialog
+);

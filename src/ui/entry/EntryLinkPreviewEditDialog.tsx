@@ -34,4 +34,5 @@ function EntryLinkPreviewEditDialog() {
 }
 
 export default richTextEditorDialog<Props, EntryLinkPreviewEditValues>(
-    "edit-link-preview", mapPropsToValues, EntryLinkPreviewEditDialog);
+    "edit-link-preview", mapPropsToValues, EntryLinkPreviewEditDialog
+);
