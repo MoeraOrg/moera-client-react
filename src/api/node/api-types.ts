@@ -629,6 +629,7 @@ export interface PrivateMediaFileInfo {
     textContent?: string | null;
     postingId?: string | null;
     previews?: MediaFilePreviewInfo[] | null;
+    attachment?: boolean | null;
     operations?: PrivateMediaFileOperations | null;
 }
 

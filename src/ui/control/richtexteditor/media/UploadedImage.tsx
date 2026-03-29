@@ -75,7 +75,7 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
                     <Icon icon={msMoreVert12} size={12}/>
                 </DropdownMenu>
             }
-            <div ref={sortable.setNodeRef} style={sortableStyle}{...sortable.attributes} {...sortable.listeners}>
+            <div ref={sortable.setNodeRef} style={sortableStyle} {...sortable.attributes} {...sortable.listeners}>
                 <AttachedImage media={media} nodeName={nodeName} onClick={onEdit}/>
             </div>
         </div>

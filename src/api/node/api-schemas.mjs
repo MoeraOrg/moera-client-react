@@ -1577,6 +1577,10 @@ export const NODE_API_SCHEMAS = {
                     },
                     nullable: true
                 },
+                "attachment": {
+                    type: "boolean",
+                    nullable: true
+                },
                 "operations": {
                     anyOf: [
                         {

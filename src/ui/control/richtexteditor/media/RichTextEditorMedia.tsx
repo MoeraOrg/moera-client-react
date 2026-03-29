@@ -10,6 +10,7 @@ import { richTextEditorImageCopy, richTextEditorImagesUpload } from "state/richt
 import { useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
 import {
+    AttachmentType,
     OnInsertHandler,
     RichTextEditorMediaContext,
     UploadProgress,
@@ -50,9 +51,11 @@ export default function RichTextEditorMedia({
     value, features, nodeName, forceCompress = false, srcFormat, rejectedReactions, onChange, children
 }: Props) {
     const compressImages = useSelector((state: ClientState) =>
-        getSetting(state, "posting.media.compress.default") as boolean);
+        getSetting(state, "posting.media.compress.default") as boolean
+    );
     const dispatch = useDispatcher();
 
+    const [attachmentType, setAttachmentType] = useState<AttachmentType>("image");
     const uploadedImagesRef = useRef<(VerifiedMediaFile | null)[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
     // value and onChange may change
@@ -130,6 +133,11 @@ export default function RichTextEditorMedia({
             return;
         }
 
+        if (attachmentType === "file") {
+            uploadImages(files, false);
+            return;
+        }
+
         if (forceCompress && onInsertRef.current == null) {
             uploadImages(files, true);
             return;
@@ -174,9 +182,11 @@ export default function RichTextEditorMedia({
         useDropzone({
             noClick: true,
             noKeyboard: true,
-            accept: {
-                "image/*": imageExtensions
-            },
+            accept: attachmentType === "image"
+                ? {
+                    "image/*": imageExtensions
+                }
+                : undefined,
             useFsAccessApi: !Browser.isDevMode(),
             onDrop: openUploadImages
         });
@@ -283,7 +293,7 @@ export default function RichTextEditorMedia({
     return (
         <RichTextEditorMediaContext.Provider value={{
             getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, deleteImage, reorderImage,
-            pasteImage, showImageDialog, downloading, copyImage,
+            pasteImage, showImageDialog, downloading, copyImage, attachmentType, setAttachmentType,
         }}>
             {children}
             <input {...getInputProps()}/>

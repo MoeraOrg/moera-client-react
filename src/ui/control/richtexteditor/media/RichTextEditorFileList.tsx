@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
 import {
     DndContext,
     DragEndEvent,
-    DragOverlay,
     DragStartEvent,
     KeyboardSensor,
     PointerSensor,
@@ -16,21 +14,15 @@ import cx from 'classnames';
 import { VerifiedMediaFile } from "api";
 import { RichTextValue } from "ui/control/richtexteditor";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
-import UploadedImage from "ui/control/richtexteditor/media/UploadedImage";
-import AttachedImage from "ui/control/richtexteditor/media/AttachedImage";
-import { mediaHashesExtract } from "util/media-images";
-import { RelNodeName } from "util/rel-node-name";
+import UploadedFile from "ui/control/richtexteditor/media/UploadedFile";
 import { notNull } from "util/misc";
-import "./RichTextEditorImageList.css";
 
 interface Props {
     value: RichTextValue;
     className?: string;
-    nodeName: RelNodeName | string;
-    noEmbeddedMedia?: boolean | null;
 }
 
-export default function RichTextEditorImageList({value, className, nodeName, noEmbeddedMedia}: Props) {
+export default function RichTextEditorFileList({value, className}: Props) {
     const {reorderImage} = useRichTextEditorMedia();
 
     const mouseSensor = useSensor(PointerSensor, {
@@ -51,11 +43,9 @@ export default function RichTextEditorImageList({value, className, nodeName, noE
         return null;
     }
 
-    const embedded = mediaHashesExtract(value.value);
     const mediaList = value.media
         .filter(notNull)
-        .filter(media => !media.attachment)
-        .filter(media => !embedded.has(media.hash));
+        .filter(media => media.attachment);
     const mediaIds = mediaList.map(mf => mf.id);
 
     const onDragStart = ({active}: DragStartEvent) =>
@@ -72,23 +62,13 @@ export default function RichTextEditorImageList({value, className, nodeName, noE
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragCancel={onDragCancel}>
             <SortableContext items={mediaIds}>
                 {mediaList.length > 0 &&
-                    <div className={cx("rich-text-editor-image-list", className)}>
+                    <div className={cx("rich-text-editor-file-list", className)}>
                         {mediaList.map(media =>
-                            <UploadedImage key={media.id} media={media} nodeName={nodeName}
-                                           dragged={dragged?.id === media.id} showMenu={!dragged}
-                                           noEmbeddedMedia={noEmbeddedMedia}/>
+                            <UploadedFile key={media.id} media={media} dragged={dragged?.id === media.id}/>
                         )}
                     </div>
                 }
             </SortableContext>
-            {ReactDOM.createPortal(
-                <DragOverlay zIndex={1080} dropAnimation={null}>
-                    {dragged &&
-                        <AttachedImage media={dragged} nodeName={nodeName} dragging/>
-                    }
-                </DragOverlay>,
-                document.querySelector("#modal-root")!
-            )}
         </DndContext>
     );
 }

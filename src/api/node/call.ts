@@ -76,11 +76,14 @@ export async function callApi<T>({
 
     const exception: CallException =
         (e, details) => new NodeError(method, rootApi, location, errorTitle, e, details, caller);
-    const headers = {
+    const headers: Record<string, string> = {
         "Accept": "application/json",
         "Content-Type": body instanceof Blob ? body.type : "application/json",
         "Client-ID": Browser.clientId
     };
+    if (body instanceof File) {
+        headers["Content-Disposition"] = `attachment; filename="${body.name}"`;
+    }
 
     let cartesRenewed = false;
     let emptyResultRetries = 0;

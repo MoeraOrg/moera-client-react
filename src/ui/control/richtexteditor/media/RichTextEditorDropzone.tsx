@@ -1,12 +1,12 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import cx from 'classnames';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { msAttachFile, msImage } from "ui/material-symbols";
-import { Tabs } from "ui/control";
 import { RichTextValue } from "ui/control/richtexteditor";
 import { UploadProgress, useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
+import RichTextEditorDropzoneTabs from "ui/control/richtexteditor/media/RichTextEditorDropzoneTabs";
 import RichTextEditorImageList from "ui/control/richtexteditor/media/RichTextEditorImageList";
+import RichTextEditorFileList from "ui/control/richtexteditor/media/RichTextEditorFileList";
 import { isOverlayClosedRecently } from "ui/overlays/overlays";
 import { useIsTinyScreen } from "ui/hook";
 import { RelNodeName } from "util/rel-node-name";
@@ -39,8 +39,6 @@ function calcProgressSummary(progress: UploadProgress[]): UploadProgressSummary 
     return {loadedFiles, totalFiles: progress.length, progress: total !== 0 ? Math.round(loaded * 100 / total) : 0};
 }
 
-type AttachmentType = "image" | "file";
-
 interface Props {
     value: RichTextValue;
     hiding?: boolean;
@@ -51,10 +49,9 @@ interface Props {
 export default function RichTextEditorDropzone({value, hiding = false, nodeName, noEmbeddedMedia}: Props) {
     const tinyScreen = useIsTinyScreen();
     const {
-        getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, downloading, copyImage,
+        getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, downloading, copyImage, attachmentType
     } = useRichTextEditorMedia();
     const {t} = useTranslation();
-    const [attachmentType, setAttachmentType] = useState<AttachmentType>("image");
 
     const onCopyImage = (e: React.MouseEvent) => {
         copyImage();
@@ -80,30 +77,17 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName,
 
     return (
         <>
-            <Tabs<AttachmentType>
-                tabs={[
-                    {
-                        icon: msImage,
-                        title: t("images"),
-                        value: "image",
-                    },
-                    {
-                        icon: msAttachFile,
-                        title: t("files"),
-                        value: "file",
-                    }
-                ]}
-                value={attachmentType}
-                onChange={setAttachmentType}
-                className="rich-text-editor-dropzone-tabs"
-                scroll="never"
-            />
+            <RichTextEditorDropzoneTabs value={value}/>
             <div className={cx(
                 "rich-text-editor-dropzone",
                 {"d-none": hidden, "drag-accept": isDragAccept, "drag-reject": isDragReject}
             )} {...getRootProps()}>
-                <RichTextEditorImageList value={value} className={hiding ? "pb-3" : undefined} nodeName={nodeName}
-                                         noEmbeddedMedia={noEmbeddedMedia}/>
+                {attachmentType === "image" ?
+                    <RichTextEditorImageList value={value} className={hiding ? "pb-3" : undefined} nodeName={nodeName}
+                                             noEmbeddedMedia={noEmbeddedMedia}/>
+                :
+                    <RichTextEditorFileList value={value} className={hiding ? "pb-3" : undefined}/>
+                }
                 <div className="upload">
                     {uploadProgress.length > 0 ?
                         t("uploading-files", {...progressSummary})

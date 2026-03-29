@@ -22,6 +22,8 @@ export type OnInsertHandler = (
     caption?: string | null
 ) => void;
 
+export type AttachmentType = "image" | "file";
+
 export interface RichTextEditorMediaInterface {
     getRootProps: (props?: DropzoneRootProps) => DropzoneRootProps;
     isDragAccept: boolean;
@@ -38,6 +40,8 @@ export interface RichTextEditorMediaInterface {
     ) => void;
     downloading: boolean;
     copyImage: () => void;
+    attachmentType: AttachmentType;
+    setAttachmentType: (type: AttachmentType) => void;
 }
 
 export const RichTextEditorMediaContext = createContext<RichTextEditorMediaInterface>({
@@ -52,6 +56,8 @@ export const RichTextEditorMediaContext = createContext<RichTextEditorMediaInter
     showImageDialog: () => {},
     downloading: false,
     copyImage: () => {},
+    attachmentType: "image",
+    setAttachmentType: () => {},
 });
 
 export const useRichTextEditorMedia = (): RichTextEditorMediaInterface => useContext(RichTextEditorMediaContext);
