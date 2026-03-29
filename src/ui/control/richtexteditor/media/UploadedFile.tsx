@@ -23,15 +23,31 @@ export default function UploadedFile({media, dragged = false}: Props) {
         transform: CSS.Transform.toString(sortable.transform),
         transition: sortable.transition ?? undefined,
     };
-    const {deleteImage} = useRichTextEditorMedia();
+    const {deleteImage, renameMedia} = useRichTextEditorMedia();
     const {t} = useTranslation();
 
     const fileName = media.title ? media.title + "." + mime.getExtension(media.mimeType) : media.path.split("/").pop();
+
+    const onRename = () => {
+        if (!dragged) {
+            renameMedia(media.id, media.title ?? "");
+        }
+    }
 
     return (
         <div className={cx("rich-text-editor-uploaded-file", {"dragged": dragged})} ref={sortable.setNodeRef}
              style={sortableStyle} {...sortable.attributes} {...sortable.listeners}>
             <DropdownMenu items={[
+                {
+                    title: t("rename"),
+                    nodeName: REL_CURRENT,
+                    href: "/",
+                    onClick: onRename,
+                    show: true
+                },
+                {
+                    divider: true
+                },
                 {
                     title: t("delete"),
                     nodeName: REL_CURRENT,
@@ -40,7 +56,7 @@ export default function UploadedFile({media, dragged = false}: Props) {
                     show: true
                 }
             ]} menuContainer={document.getElementById("modal-root")} disabled={dragged ?? false}/>
-            <div className="file-name">{fileName}</div>
+            <div className="file-name" onClick={onRename}>{fileName}</div>
         </div>
     );
 }

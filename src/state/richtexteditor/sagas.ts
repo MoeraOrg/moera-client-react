@@ -2,7 +2,11 @@ import { Node, PostingText } from "api";
 import { imageUpload } from "api/node/images-upload";
 import { WithContext } from "state/action-types";
 import { dispatch } from "state/store-sagas";
-import { RichTextEditorImageCopyAction, RichTextEditorImagesUploadAction } from "state/richtexteditor/actions";
+import {
+    RichTextEditorImageCopyAction,
+    RichTextEditorImagesUploadAction,
+    RichTextEditorMediaRenameAction
+} from "state/richtexteditor/actions";
 import { postingSet } from "state/postings/actions";
 import { errorThrown } from "state/error/actions";
 import { saga } from "state/saga";
@@ -10,7 +14,8 @@ import { absoluteNodeName, REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
     saga("RICH_TEXT_EDITOR_IMAGES_UPLOAD", null, richTextEditorImagesUploadSaga),
-    saga("RICH_TEXT_EDITOR_IMAGE_COPY", null, richTextEditorImageCopySaga)
+    saga("RICH_TEXT_EDITOR_IMAGE_COPY", null, richTextEditorImageCopySaga),
+    saga("RICH_TEXT_EDITOR_MEDIA_RENAME", null, richTextEditorMediaRenameSaga),
 ];
 
 async function richTextEditorImageUpload(
@@ -70,6 +75,17 @@ async function richTextEditorImageCopySaga(action: WithContext<RichTextEditorIma
     try {
         const blob = await Node.proxyMedia(action, REL_HOME, url);
         onSuccess(new File([blob], "moera-editor.img", {type: blob.type}));
+    } catch (e) {
+        onFailure();
+        dispatch(errorThrown(e));
+    }
+}
+
+async function richTextEditorMediaRenameSaga(action: WithContext<RichTextEditorMediaRenameAction>): Promise<void> {
+    const {id, title, onSuccess, onFailure} = action.payload;
+    try {
+        const media = await Node.updatePrivateMediaInfo(action, REL_HOME, id, {title});
+        onSuccess(media);
     } catch (e) {
         onFailure();
         dispatch(errorThrown(e));

@@ -3,10 +3,14 @@ import { useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import * as immutable from 'object-path-immutable';
 
-import { PostingFeatures, RejectedReactions, SourceFormat, VerifiedMediaFile } from "api";
+import { PostingFeatures, PrivateMediaFileInfo, RejectedReactions, SourceFormat, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
-import { richTextEditorImageCopy, richTextEditorImagesUpload } from "state/richtexteditor/actions";
+import {
+    richTextEditorImageCopy,
+    richTextEditorImagesUpload,
+    richTextEditorMediaRename
+} from "state/richtexteditor/actions";
 import { useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
 import {
@@ -25,6 +29,9 @@ import RichTextCopyImageDialog, {
 import { RelNodeName } from "util/rel-node-name";
 import { mediaImageExtensions } from "util/media-images";
 import { arrayMove } from "util/misc";
+import RichTextRenameMediaDialog, {
+    RichTextRenameMediaValues
+} from "ui/control/richtexteditor/dialog/RichTextRenameMediaDialog";
 
 function updateStatus(progress: UploadProgress[], index: number, status: UploadStatus): UploadProgress[] {
     const updated = immutable.set(progress, [index, "status"], status);
@@ -290,10 +297,37 @@ export default function RichTextEditorMedia({
         );
     }
 
+    const [renameMediaShow, setRenameMediaShow] = useState<boolean>(false);
+    const [renameMediaId, setRenameMediaId] = useState<string>("");
+    const [renameMediaTitle, setRenameMediaTitle] = useState<string>("");
+
+    const renameMedia = (mediaId: string, title: string) => {
+        setRenameMediaId(mediaId);
+        setRenameMediaTitle(title);
+        setRenameMediaShow(true);
+    }
+
+    const onRenameMediaSuccess = (info: PrivateMediaFileInfo) => {
+        const media = (valueRef.current ?? []).map(m => m == null || m.id !== info.id ? m : {...m, title: info.title});
+        onChangeRef.current?.(media);
+    }
+
+    const onRenameMediaFailure = () => {
+    }
+
+    const submitRenameMedia = (ok: boolean | null, values: Partial<RichTextRenameMediaValues>) => {
+        setRenameMediaShow(false);
+        if (ok && values.title != null) {
+            dispatch(
+                richTextEditorMediaRename(renameMediaId, values.title, onRenameMediaSuccess, onRenameMediaFailure)
+            );
+        }
+    }
+
     return (
         <RichTextEditorMediaContext.Provider value={{
             getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, deleteImage, reorderImage,
-            pasteImage, showImageDialog, downloading, copyImage, attachmentType, setAttachmentType,
+            pasteImage, showImageDialog, downloading, copyImage, attachmentType, setAttachmentType, renameMedia,
         }}>
             {children}
             <input {...getInputProps()}/>
@@ -316,6 +350,12 @@ export default function RichTextEditorMedia({
                     forceCompress={forceCompress}
                     compressDefault={compressDefault.current}
                     onSubmit={submitCopyImage}
+                />
+            }
+            {renameMediaShow &&
+                <RichTextRenameMediaDialog
+                    title={renameMediaTitle}
+                    onSubmit={submitRenameMedia}
                 />
             }
         </RichTextEditorMediaContext.Provider>

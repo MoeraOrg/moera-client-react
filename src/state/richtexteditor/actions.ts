@@ -1,5 +1,5 @@
 import { actionWithPayload, ActionWithPayload } from "state/action-types";
-import { PostingFeatures, RejectedReactions, SourceFormat, VerifiedMediaFile } from "api";
+import { PostingFeatures, PrivateMediaFileInfo, RejectedReactions, SourceFormat, VerifiedMediaFile } from "api";
 import { RelNodeName } from "util/rel-node-name";
 
 type ImagesUploadSuccessHandler = (index: number, mediaFile: VerifiedMediaFile) => void;
@@ -53,6 +53,24 @@ export const richTextEditorImageCopy = (
 ): RichTextEditorImageCopyAction =>
     actionWithPayload("RICH_TEXT_EDITOR_IMAGE_COPY", {url, onSuccess, onFailure});
 
+type MediaRenameSuccessHandler = (media: PrivateMediaFileInfo) => void;
+type MediaRenameFailureHandler = () => void;
+
+export type RichTextEditorMediaRenameAction = ActionWithPayload<"RICH_TEXT_EDITOR_MEDIA_RENAME", {
+    id: string;
+    title: string;
+    onSuccess: MediaRenameSuccessHandler;
+    onFailure: MediaRenameFailureHandler;
+}>;
+export const richTextEditorMediaRename = (
+    id: string,
+    title: string,
+    onSuccess: MediaRenameSuccessHandler,
+    onFailure: MediaRenameFailureHandler
+): RichTextEditorMediaRenameAction =>
+    actionWithPayload("RICH_TEXT_EDITOR_MEDIA_RENAME", {id, title, onSuccess, onFailure});
+
 export type RichTextEditorAnyAction =
     RichTextEditorImagesUploadAction
-    | RichTextEditorImageCopyAction;
+    | RichTextEditorImageCopyAction
+    | RichTextEditorMediaRenameAction;

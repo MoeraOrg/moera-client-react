@@ -42,6 +42,7 @@ export interface RichTextEditorMediaInterface {
     copyImage: () => void;
     attachmentType: AttachmentType;
     setAttachmentType: (type: AttachmentType) => void;
+    renameMedia: (mediaId: string, title: string) => void;
 }
 
 export const RichTextEditorMediaContext = createContext<RichTextEditorMediaInterface>({
@@ -58,6 +59,7 @@ export const RichTextEditorMediaContext = createContext<RichTextEditorMediaInter
     copyImage: () => {},
     attachmentType: "image",
     setAttachmentType: () => {},
+    renameMedia: () => {},
 });
 
 export const useRichTextEditorMedia = (): RichTextEditorMediaInterface => useContext(RichTextEditorMediaContext);
