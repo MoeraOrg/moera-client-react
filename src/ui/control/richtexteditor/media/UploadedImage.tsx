@@ -30,7 +30,7 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
         transform: CSS.Transform.toString(sortable.transform),
         transition: sortable.transition ?? undefined,
     };
-    const {deleteImage} = useRichTextEditorMedia();
+    const {deleteMedia} = useRichTextEditorMedia();
     const {embedImage} = useRichTextEditorCommands();
     const dispatch = useDispatcher();
     const {t} = useTranslation();
@@ -68,7 +68,7 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
                         title: t("delete"),
                         nodeName: REL_CURRENT,
                         href: "/",
-                        onClick: () => deleteImage(media.id),
+                        onClick: () => deleteMedia(media.id),
                         show: true
                     }
                 ]} menuContainer={document.getElementById("modal-root")}>

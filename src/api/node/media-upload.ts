@@ -16,11 +16,11 @@ export interface VerifiedMediaFile extends PrivateMediaFileInfo {
     digest?: string | null;
 }
 
-type ImageUploadProgressHandler = (loaded: number, total: number) => void;
+type MediaUploadProgressHandler = (loaded: number, total: number) => void;
 
-export async function imageUpload(
+export async function mediaUpload(
     caller: WithContext<ClientAction>, features: PostingFeatures | null, nodeName: RelNodeName | string,
-    clientNodeName: string, file: File, compress: boolean, onProgress?: ImageUploadProgressHandler
+    clientNodeName: string, file: File, compress: boolean, onProgress?: MediaUploadProgressHandler
 ): Promise<VerifiedMediaFile | null> {
     try {
         if (features != null) {

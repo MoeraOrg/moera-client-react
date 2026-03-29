@@ -2,18 +2,18 @@ import { actionWithPayload, ActionWithPayload } from "state/action-types";
 import { PostingFeatures, PrivateMediaFileInfo, RejectedReactions, SourceFormat, VerifiedMediaFile } from "api";
 import { RelNodeName } from "util/rel-node-name";
 
-type ImagesUploadSuccessHandler = (index: number, mediaFile: VerifiedMediaFile) => void;
-type ImagesUploadFailureHandler = (index: number) => void;
-type ImagesUploadProgressHandler = (index: number, loaded: number, total: number) => void;
+type MediaUploadSuccessHandler = (index: number, mediaFile: VerifiedMediaFile) => void;
+type MediaUploadFailureHandler = (index: number) => void;
+type MediaUploadProgressHandler = (index: number, loaded: number, total: number) => void;
 
-export type RichTextEditorImagesUploadAction = ActionWithPayload<"RICH_TEXT_EDITOR_IMAGES_UPLOAD", {
+export type RichTextEditorMediaUploadAction = ActionWithPayload<"RICH_TEXT_EDITOR_MEDIA_UPLOAD", {
     nodeName: RelNodeName | string;
     files: File[];
     features: PostingFeatures | null;
     compress: boolean;
-    onSuccess: ImagesUploadSuccessHandler;
-    onFailure: ImagesUploadFailureHandler;
-    onProgress: ImagesUploadProgressHandler;
+    onSuccess: MediaUploadSuccessHandler;
+    onFailure: MediaUploadFailureHandler;
+    onProgress: MediaUploadProgressHandler;
     captionSrc?: string | null;
     captionSrcFormat?: SourceFormat | null;
     rejectedReactions?: RejectedReactions | null;
@@ -23,15 +23,15 @@ export const richTextEditorImagesUpload = (
     files: File[],
     features: PostingFeatures | null,
     compress: boolean,
-    onSuccess: ImagesUploadSuccessHandler,
-    onFailure: ImagesUploadFailureHandler,
-    onProgress: ImagesUploadProgressHandler,
+    onSuccess: MediaUploadSuccessHandler,
+    onFailure: MediaUploadFailureHandler,
+    onProgress: MediaUploadProgressHandler,
     captionSrc?: string | null,
     captionSrcFormat?: SourceFormat | null,
     rejectedReactions?: RejectedReactions | null
-): RichTextEditorImagesUploadAction =>
+): RichTextEditorMediaUploadAction =>
     actionWithPayload(
-        "RICH_TEXT_EDITOR_IMAGES_UPLOAD",
+        "RICH_TEXT_EDITOR_MEDIA_UPLOAD",
         {
             nodeName, files, features, compress, onSuccess, onFailure, onProgress, captionSrc, captionSrcFormat,
             rejectedReactions
@@ -71,6 +71,6 @@ export const richTextEditorMediaRename = (
     actionWithPayload("RICH_TEXT_EDITOR_MEDIA_RENAME", {id, title, onSuccess, onFailure});
 
 export type RichTextEditorAnyAction =
-    RichTextEditorImagesUploadAction
+    RichTextEditorMediaUploadAction
     | RichTextEditorImageCopyAction
     | RichTextEditorMediaRenameAction;

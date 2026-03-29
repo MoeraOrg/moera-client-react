@@ -1,10 +1,10 @@
 import { Node, PostingText } from "api";
-import { imageUpload } from "api/node/images-upload";
+import { mediaUpload } from "api/node/media-upload";
 import { WithContext } from "state/action-types";
 import { dispatch } from "state/store-sagas";
 import {
     RichTextEditorImageCopyAction,
-    RichTextEditorImagesUploadAction,
+    RichTextEditorMediaUploadAction,
     RichTextEditorMediaRenameAction
 } from "state/richtexteditor/actions";
 import { postingSet } from "state/postings/actions";
@@ -13,13 +13,13 @@ import { saga } from "state/saga";
 import { absoluteNodeName, REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
-    saga("RICH_TEXT_EDITOR_IMAGES_UPLOAD", null, richTextEditorImagesUploadSaga),
+    saga("RICH_TEXT_EDITOR_MEDIA_UPLOAD", null, richTextEditorMediaUploadSaga),
     saga("RICH_TEXT_EDITOR_IMAGE_COPY", null, richTextEditorImageCopySaga),
     saga("RICH_TEXT_EDITOR_MEDIA_RENAME", null, richTextEditorMediaRenameSaga),
 ];
 
-async function richTextEditorImageUpload(
-    action: WithContext<RichTextEditorImagesUploadAction>, index: number
+async function richTextEditorMediaUpload(
+    action: WithContext<RichTextEditorMediaUploadAction>, index: number
 ): Promise<void> {
     const {
         features, nodeName, files, compress, onSuccess, onProgress, onFailure, captionSrc, captionSrcFormat,
@@ -32,7 +32,7 @@ async function richTextEditorImageUpload(
         return;
     }
 
-    const mediaFile = await imageUpload(
+    const mediaFile = await mediaUpload(
         action, features, nodeName, homeOwnerName, files[index], compress,
         (loaded: number, total: number) => onProgress(index, loaded, total)
     );
@@ -64,9 +64,9 @@ async function richTextEditorImageUpload(
     }
 }
 
-function richTextEditorImagesUploadSaga(action: WithContext<RichTextEditorImagesUploadAction>): void {
+function richTextEditorMediaUploadSaga(action: WithContext<RichTextEditorMediaUploadAction>): void {
     for (let i = 0; i < action.payload.files.length; i++) {
-        richTextEditorImageUpload(action, i);
+        richTextEditorMediaUpload(action, i);
     }
 }
 

@@ -23,7 +23,7 @@ export default function UploadedFile({media, dragged = false}: Props) {
         transform: CSS.Transform.toString(sortable.transform),
         transition: sortable.transition ?? undefined,
     };
-    const {deleteImage, renameMedia} = useRichTextEditorMedia();
+    const {deleteMedia, renameMedia} = useRichTextEditorMedia();
     const {t} = useTranslation();
 
     const fileName = media.title ? media.title + "." + mime.getExtension(media.mimeType) : media.path.split("/").pop();
@@ -52,7 +52,7 @@ export default function UploadedFile({media, dragged = false}: Props) {
                     title: t("delete"),
                     nodeName: REL_CURRENT,
                     href: "/",
-                    onClick: () => deleteImage(media.id),
+                    onClick: () => deleteMedia(media.id),
                     show: true
                 }
             ]} menuContainer={document.getElementById("modal-root")} disabled={dragged ?? false}/>

@@ -117,7 +117,7 @@ export type ScriptureEditor<T extends DOMEditor> = T & {
 
 export function withScripture<T extends DOMEditor>(
     editor: T,
-    pasteImageRef: React.RefObject<(data: DataTransfer) => boolean>,
+    pasteMediaRef: React.RefObject<(data: DataTransfer) => boolean>,
     options: ScriptureEditorOptions
 ): ScriptureEditor<T> {
     const {
@@ -136,7 +136,7 @@ export function withScripture<T extends DOMEditor>(
         (isScriptureElement(element) && isScriptureVoid(element)) || isVoid(element);
 
     scriptureEditor.insertData = (data: DataTransfer): void => {
-        if (pasteImageRef.current != null && !pasteImageRef.current(data)) {
+        if (pasteMediaRef.current != null && !pasteMediaRef.current(data)) {
             insertData(data);
         }
     };

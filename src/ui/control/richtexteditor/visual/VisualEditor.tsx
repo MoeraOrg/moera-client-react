@@ -48,13 +48,13 @@ export default function VisualEditor({
     const removeTracking = useSelector((state: ClientState) =>
         getSetting(state, "rich-text-editor.links.remove-tracking") as boolean
     );
-    const {pasteImage} = useRichTextEditorMedia();
-    const pasteImageRef = useRef(pasteImage);
-    pasteImageRef.current = pasteImage;
+    const {pasteMedia} = useRichTextEditorMedia();
+    const pasteMediaRef = useRef(pasteMedia);
+    pasteMediaRef.current = pasteMedia;
     const [editor] = useState(
         () => withScripture(
             withHistory(withReact(createEditor(), "x-scripture-fragment")),
-            pasteImageRef,
+            pasteMediaRef,
             {removeTracking}
         )
     );

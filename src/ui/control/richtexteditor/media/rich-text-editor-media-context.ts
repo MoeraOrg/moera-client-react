@@ -30,9 +30,9 @@ export interface RichTextEditorMediaInterface {
     isDragReject: boolean;
     openLocalFiles: (onUploaded?: OnInsertHandler) => void;
     uploadProgress: UploadProgress[];
-    deleteImage: (id: string) => void;
-    reorderImage: (moveId: string, overId: string) => void;
-    pasteImage: (data: DataTransfer) => boolean;
+    deleteMedia: (id: string) => void;
+    reorderMedia: (moveId: string, overId: string) => void;
+    pasteMedia: (data: DataTransfer) => boolean;
     showImageDialog: (
         show: boolean, files?: File[] | null, mediaFiles?: VerifiedMediaFile[] | null, href?: string | null,
         insert?: boolean, prevValues?: RichTextImageValues | null,
@@ -51,9 +51,9 @@ export const RichTextEditorMediaContext = createContext<RichTextEditorMediaInter
     isDragReject: false,
     openLocalFiles: () => {},
     uploadProgress: [],
-    deleteImage: () => {},
-    reorderImage: () => {},
-    pasteImage: () => false,
+    deleteMedia: () => {},
+    reorderMedia: () => {},
+    pasteMedia: () => false,
     showImageDialog: () => {},
     downloading: false,
     copyImage: () => {},

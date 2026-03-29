@@ -55,7 +55,7 @@ export default function MarkdownArea(
     const pasteRich = useSelector((state: ClientState) => getSetting(state, "rich-text-editor.paste-rich") as string);
     const dispatch = useDispatcher();
     const {focus, formatMention, handleHotKeys} = useRichTextEditorCommands();
-    const {pasteImage} = useRichTextEditorMedia();
+    const {pasteMedia} = useRichTextEditorMedia();
 
     const textArea = useRef<HTMLTextAreaElement>(null);
 
@@ -135,7 +135,7 @@ export default function MarkdownArea(
             return;
         }
 
-        if (pasteImage(event.clipboardData)) {
+        if (pasteMedia(event.clipboardData)) {
             return;
         }
 
@@ -156,7 +156,7 @@ export default function MarkdownArea(
             setPasteText(text);
             setPasteHtml(html);
         }
-    }, [format, pasteRich, pasteImage, pasteRichText]);
+    }, [format, pasteRich, pasteMedia, pasteRichText]);
 
     useEffect(() => {
         if (textArea.current) {

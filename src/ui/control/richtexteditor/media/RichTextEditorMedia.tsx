@@ -203,14 +203,14 @@ export default function RichTextEditorMedia({
         openDropzone();
     }
 
-    const deleteImage = (id: string) => {
+    const deleteMedia = (id: string) => {
         if (onChange != null && value != null) {
             const media = value.filter(v => v == null || v.id !== id);
             onChange(media);
         }
     }
 
-    const reorderImage = (moveId: string, overId: string) => {
+    const reorderMedia = (moveId: string, overId: string) => {
         if (onChange != null && value != null && moveId !== overId) {
             const index = value.findIndex(v => v != null && v.id === moveId);
             const overIndex = value.findIndex(v => v != null && v.id === overId);
@@ -222,11 +222,12 @@ export default function RichTextEditorMedia({
         }
     }
 
-    const pasteImage = (data: DataTransfer): boolean => {
+    const pasteMedia = (data: DataTransfer): boolean => {
         // clipboardData.items is array-like, not a real array, thus weird calling convention
         const imageItem: DataTransferItem = Array.prototype.find.call(
             data.items,
-            ({kind, type}: DataTransferItem) => kind === "file" && features?.imageFormats.includes(type)
+            ({kind, type}: DataTransferItem) =>
+                kind === "file" && (attachmentType === "file" || features?.imageFormats.includes(type))
         );
 
         if (imageItem) {
@@ -326,8 +327,8 @@ export default function RichTextEditorMedia({
 
     return (
         <RichTextEditorMediaContext.Provider value={{
-            getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, deleteImage, reorderImage,
-            pasteImage, showImageDialog, downloading, copyImage, attachmentType, setAttachmentType, renameMedia,
+            getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, deleteMedia, reorderMedia,
+            pasteMedia, showImageDialog, downloading, copyImage, attachmentType, setAttachmentType, renameMedia,
         }}>
             {children}
             <input {...getInputProps()}/>

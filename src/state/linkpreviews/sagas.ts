@@ -1,5 +1,5 @@
 import { Node } from "api";
-import { imageUpload } from "api/node/images-upload";
+import { mediaUpload } from "api/node/media-upload";
 import {
     LinkPreviewImageUploadAction,
     linkPreviewImageUploaded,
@@ -68,7 +68,7 @@ async function linkPreviewImageUploadSaga(action: WithContext<LinkPreviewImageUp
     try {
         const blob = await Node.proxyMedia(action, REL_HOME, imageUrl);
         const file = new File([blob], `moera-lp-${randomId()}.img`, {type: blob.type});
-        const mediaFile = await imageUpload(action, features, nodeName, homeOwnerName, file, true);
+        const mediaFile = await mediaUpload(action, features, nodeName, homeOwnerName, file, true);
         if (mediaFile != null) {
             dispatch(linkPreviewImageUploaded(url, nodeName, mediaFile).causedBy(action));
         } else {

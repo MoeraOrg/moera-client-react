@@ -77,7 +77,7 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName,
 
     return (
         <>
-            <RichTextEditorDropzoneTabs value={value}/>
+            {!hidden && <RichTextEditorDropzoneTabs value={value}/>}
             <div className={cx(
                 "rich-text-editor-dropzone",
                 {"d-none": hidden, "drag-accept": isDragAccept, "drag-reject": isDragReject}

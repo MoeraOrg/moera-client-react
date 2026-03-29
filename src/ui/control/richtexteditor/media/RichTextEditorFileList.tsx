@@ -23,7 +23,7 @@ interface Props {
 }
 
 export default function RichTextEditorFileList({value, className}: Props) {
-    const {reorderImage} = useRichTextEditorMedia();
+    const {reorderMedia} = useRichTextEditorMedia();
 
     const mouseSensor = useSensor(PointerSensor, {
         activationConstraint: {
@@ -52,7 +52,7 @@ export default function RichTextEditorFileList({value, className}: Props) {
         setDragged(mediaList.find(mf => mf.id === active.id) ?? null);
     const onDragEnd = ({active, over}: DragEndEvent) => {
         if (over != null && active.id !== over.id) {
-            reorderImage(String(active.id), String(over.id));
+            reorderMedia(String(active.id), String(over.id));
         }
         setDragged(null);
     };
