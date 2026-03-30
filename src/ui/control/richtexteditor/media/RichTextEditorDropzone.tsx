@@ -41,12 +41,12 @@ function calcProgressSummary(progress: UploadProgress[]): UploadProgressSummary 
 
 interface Props {
     value: RichTextValue;
-    hiding?: boolean;
+    compact?: boolean;
     nodeName: RelNodeName | string;
     noEmbeddedMedia?: boolean | null;
 }
 
-export default function RichTextEditorDropzone({value, hiding = false, nodeName, noEmbeddedMedia}: Props) {
+export default function RichTextEditorDropzone({value, compact = false, nodeName, noEmbeddedMedia}: Props) {
     const tinyScreen = useIsTinyScreen();
     const {
         getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, downloading, copyImage, attachmentType
@@ -66,7 +66,7 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName,
     }
 
     const hidden =
-        hiding
+        compact
         && (value.media == null || value.media.length === 0)
         && uploadProgress.length === 0
         && !downloading;
@@ -77,16 +77,17 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName,
 
     return (
         <>
-            {!hidden && <RichTextEditorDropzoneTabs value={value}/>}
+            {!compact && <RichTextEditorDropzoneTabs value={value}/>}
             <div className={cx(
                 "rich-text-editor-dropzone",
                 {"d-none": hidden, "drag-accept": isDragAccept, "drag-reject": isDragReject}
             )} {...getRootProps()}>
-                {attachmentType === "image" ?
-                    <RichTextEditorImageList value={value} className={hiding ? "pb-3" : undefined} nodeName={nodeName}
+                {(attachmentType === "image" || compact) &&
+                    <RichTextEditorImageList value={value} className={compact ? "pb-3" : undefined} nodeName={nodeName}
                                              noEmbeddedMedia={noEmbeddedMedia}/>
-                :
-                    <RichTextEditorFileList value={value} className={hiding ? "pb-3" : undefined}/>
+                }
+                {(attachmentType === "file" || compact) &&
+                    <RichTextEditorFileList value={value} className={compact ? "pb-3" : undefined}/>
                 }
                 <div className="upload">
                     {uploadProgress.length > 0 ?
@@ -95,7 +96,7 @@ export default function RichTextEditorDropzone({value, hiding = false, nodeName,
                         downloading ?
                             t("downloading-image")
                         :
-                            !hiding &&
+                            !compact &&
                                 <div className="upload-button" role="button" tabIndex={0} onClick={onSelectImages}>
                                     <Trans i18nKey={buttonsTitle}>
                                         <b/>

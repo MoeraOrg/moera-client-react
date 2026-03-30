@@ -36,6 +36,7 @@
   "ask-count": "Zapytaj {count} {count, plural, one {użytkownika} few {użytkowników} many {użytkowników} other {użytkowników}}",
   "asking-access-permissions": "prosi o dostęp do Twojego bloga z następującymi uprawnieniami:",
   "ask-node": "Zapytaj {name}",
+  "attach": "Dołącz",
   "author": "Autor",
   "auto": "Auto",
   "auto-hide-comments": "Automatycznie ukrywaj komentarze",

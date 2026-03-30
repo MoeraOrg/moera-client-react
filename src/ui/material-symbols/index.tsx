@@ -34,6 +34,7 @@ import { ReactComponent as msContentCopy } from "ui/material-symbols/content_cop
 import { ReactComponent as msCropSquare } from "ui/material-symbols/crop_square.isvg";
 import { ReactComponent as msDelete } from "ui/material-symbols/delete.isvg";
 import { ReactComponent as msDownload } from "ui/material-symbols/download.isvg";
+import { ReactComponent as msDraft } from "ui/material-symbols/draft.isvg";
 import { ReactComponent as msEdit } from "ui/material-symbols/edit.isvg";
 import { ReactComponent as msError } from "ui/material-symbols/error.isvg";
 import { ReactComponent as msExpandCircleDown } from "ui/material-symbols/expand_circle_down.isvg";
@@ -179,6 +180,7 @@ export {
     msCropSquare,
     msDelete,
     msDownload,
+    msDraft,
     msEdit,
     msError,
     msExpandCircleDown,

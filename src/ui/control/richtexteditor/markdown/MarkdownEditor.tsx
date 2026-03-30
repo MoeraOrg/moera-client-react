@@ -77,7 +77,7 @@ export function MarkdownEditor({
                 children
             }
             {!noMedia &&
-                <RichTextEditorDropzone value={value} hiding={panelMode === "none"} nodeName={nodeName}
+                <RichTextEditorDropzone value={value} compact={panelMode === "none"} nodeName={nodeName}
                                         noEmbeddedMedia={noEmbeddedMedia}/>
             }
         </MarkdownEditorCommands>

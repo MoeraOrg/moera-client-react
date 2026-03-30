@@ -36,6 +36,7 @@
   "ask-count": "Попросити {count} {count, plural, one {користувача} other {користувачів}}",
   "asking-access-permissions": "просить доступ до вашого блогу з наступними дозволами:",
   "ask-node": "Попросити {name}",
+  "attach": "Прикріпити",
   "author": "Автор",
   "auto": "Авто",
   "auto-hide-comments": "Автоматично приховувати коментарі",

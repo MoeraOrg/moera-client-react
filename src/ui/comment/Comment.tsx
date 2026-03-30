@@ -25,6 +25,7 @@ import CommentDeleting from "ui/comment/CommentDeleting";
 import CommentContent from "ui/comment/CommentContent";
 import CommentButtons from "ui/comment/CommentButtons";
 import CommentReactions from "ui/comment/CommentReactions";
+import EntryAttachments from "ui/entry/EntryAttachments";
 import EntryGallery from "ui/entry/EntryGallery";
 import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
 import "./Comment.css";
@@ -89,6 +90,7 @@ export default function Comment({comment, previousId, focused, index}: Props) {
                         </span>
                     </div>
                     <CommentContent comment={comment} previousId={previousId} receiverName={realOwnerName}/>
+                    <EntryAttachments nodeName={realOwnerName} media={comment.media ?? null}/>
                     <EntryGallery
                         postingId={realPostingId}
                         commentId={comment.id}

@@ -14,6 +14,7 @@ import CommentOwner from "ui/comment/CommentOwner";
 import CommentDate from "ui/comment/CommentDate";
 import CommentUpdated from "ui/comment/CommentUpdated";
 import EntryHtml from "ui/entry/EntryHtml";
+import EntryAttachments from "ui/entry/EntryAttachments";
 import EntryGallery from "ui/entry/EntryGallery";
 import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
 
@@ -33,7 +34,7 @@ export default function GlanceComment() {
     return (
         <div className={cx("comment", "entry", {"single-emoji": comment.singleEmoji})}>
             <div className="owner-line">
-                <CommentOwner comment={comment} popup={false}/>
+                <CommentOwner comment={comment} popup={false} verify={false}/>
                 <span>
                     <CommentDate postingId={postingId} commentId={comment.id} createdAt={comment.createdAt}/>
                     {comment.totalRevisions > 1 &&
@@ -50,6 +51,7 @@ export default function GlanceComment() {
                     media={comment.media}
                 />
             </div>
+            <EntryAttachments nodeName={realOwnerName} media={comment.media ?? null}/>
             <EntryGallery
                 postingId={comment.postingId}
                 commentId={comment.id}

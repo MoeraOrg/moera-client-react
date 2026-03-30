@@ -11,15 +11,17 @@ import { isCommentComposerReady } from "state/detailedposting/selectors";
 import { useDispatcher } from "ui/hook";
 import {
     Icon,
+    msAttachFile,
     msCloudDone,
     msCloudUpload,
     msDelete,
+    msDraft,
     msFileSave,
-    msMediaLink,
-    msPhotoLibrary
+    msImage,
+    msMediaLink
 } from "ui/material-symbols";
 import * as Browser from "ui/browser";
-import { OnlyDesktop } from "ui/control";
+import { DropdownMenu, OnlyDesktop } from "ui/control";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEditorButton";
@@ -28,10 +30,11 @@ import FormattingMenuButton from "ui/control/richtexteditor/formatting-menu/Form
 import { areImagesUploaded, areValuesEmpty, CommentComposeValues } from "ui/comment/compose/comment-compose";
 import { useCommentDraftSaver } from "ui/comment/compose/comment-draft-saver";
 import CommentSubmitButton from "ui/comment/compose/CommentSubmitButton";
+import { REL_CURRENT } from "util/rel-node-name";
 import "./CommentComposePanel.css";
 
 function CommentComposePanel() {
-    const {openLocalFiles, copyImage} = useRichTextEditorMedia();
+    const {openLocalFiles, copyImage, setAttachmentType} = useRichTextEditorMedia();
     const {focus, supportsMedia, supportsVideo, formatEmoji, formatVideo} = useRichTextEditorCommands();
 
     const ready = useSelector(isCommentComposerReady);
@@ -56,6 +59,16 @@ function CommentComposePanel() {
         e.preventDefault();
     };
 
+    const onAttachImages = () => {
+        setAttachmentType("image");
+        openLocalFiles();
+    };
+
+    const onAttachFiles = () => {
+        setAttachmentType("file");
+        openLocalFiles();
+    };
+
     const {unsaved, saving, saved} = useCommentDraftSaver(null);
     const {values, submitForm} = useFormikContext<CommentComposeValues>();
     const notReady = !ready || (draft == null && areValuesEmpty(values)) || !areImagesUploaded(values);
@@ -66,7 +79,26 @@ function CommentComposePanel() {
                 <RichTextEditorButton icon={msDelete} className={cx("delete", {"invisible": notReady})}
                                       title={t("cancel")} onClick={onCancel}/>
                 {supportsMedia &&
-                    <RichTextEditorButton icon={msPhotoLibrary} title={t("image")} command={() => openLocalFiles()}/>
+                    <DropdownMenu items={[
+                        {
+                            icon: msImage,
+                            title: t("images"),
+                            nodeName: REL_CURRENT,
+                            href: "/",
+                            onClick: onAttachImages,
+                            show: true
+                        },
+                        {
+                            icon: msDraft,
+                            title: t("files"),
+                            nodeName: REL_CURRENT,
+                            href: "/",
+                            onClick: onAttachFiles,
+                            show: true
+                        },
+                    ]} className="rich-text-editor-button">
+                        <Icon icon={msAttachFile} title={t("attach")}/>
+                    </DropdownMenu>
                 }
                 {supportsVideo &&
                     <RichTextEditorButton icon={msMediaLink} title={t("video-internet")} command={formatVideo}/>

@@ -9,13 +9,14 @@ interface Props {
     comment: ExtCommentInfo;
     nodeName?: string;
     popup?: boolean;
+    verify?: boolean;
 }
 
-const CommentOwner = ({comment, nodeName, popup = true}: Props) => (
+const CommentOwner = ({comment, nodeName, popup = true, verify = true}: Props) => (
     <span className="owner">
         <NodeName name={comment.ownerName} fullName={comment.ownerFullName} avatar={comment.ownerAvatar}
                   avatarNodeName={nodeName} popup={popup}/>
-        {" "}<CommentVerifyButton comment={comment}/>
+        {" "}{verify && <CommentVerifyButton comment={comment}/>}
     </span>
 );
 

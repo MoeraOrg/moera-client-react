@@ -36,6 +36,7 @@
   "ask-count": "Ask {count} {count, plural, one {user} other {users}}",
   "asking-access-permissions": "is asking to access your blog with the following permissions:",
   "ask-node": "Ask {name}",
+  "attach": "Attach",
   "author": "Author",
   "auto": "Auto",
   "auto-hide-comments": "Automatically hide comments",

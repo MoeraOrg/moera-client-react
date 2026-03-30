@@ -25,6 +25,10 @@
     color: var(--bs-primary);
 }
 
+.rich-text-editor-button.menu.active {
+    color: var(--bs-gray-600);
+}
+
 .rich-text-editor-button:hover:not(:disabled) {
     background-color: var(--bs-gray-100);
     color: var(--bs-gray-800);
@@ -33,6 +37,11 @@
 .rich-text-editor-button.active:hover {
     background-color: var(--bs-primary-bg-subtle);
     color: var(--bs-primary);
+}
+
+.rich-text-editor-button.menu.active:hover {
+    background-color: var(--bs-gray-100);
+    color: var(--bs-gray-800);
 }
 
 .rich-text-editor-button .text {
