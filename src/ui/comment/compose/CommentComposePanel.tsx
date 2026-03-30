@@ -22,7 +22,7 @@ import {
 } from "ui/material-symbols";
 import * as Browser from "ui/browser";
 import { DropdownMenu, OnlyDesktop } from "ui/control";
-import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
+import { AttachmentType, useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { RichTextEditorButton } from "ui/control/richtexteditor/panel/RichTextEditorButton";
 import RichTextEditorEmojiButton from "ui/control/richtexteditor/panel/RichTextEditorEmojiButton";
@@ -34,7 +34,7 @@ import { REL_CURRENT } from "util/rel-node-name";
 import "./CommentComposePanel.css";
 
 function CommentComposePanel() {
-    const {openLocalFiles, copyImage, setAttachmentType} = useRichTextEditorMedia();
+    const {openLocalFiles, copyImage, attachmentType, setAttachmentType} = useRichTextEditorMedia();
     const {focus, supportsMedia, supportsVideo, formatEmoji, formatVideo} = useRichTextEditorCommands();
 
     const ready = useSelector(isCommentComposerReady);
@@ -59,14 +59,13 @@ function CommentComposePanel() {
         e.preventDefault();
     };
 
-    const onAttachImages = () => {
-        setAttachmentType("image");
-        openLocalFiles();
-    };
-
-    const onAttachFiles = () => {
-        setAttachmentType("file");
-        openLocalFiles();
+    const onAttach = (type: AttachmentType) => () => {
+        if (attachmentType === type) {
+            openLocalFiles();
+        } else {
+            setAttachmentType(type);
+            setTimeout(() => openLocalFiles(), 200);
+        }
     };
 
     const {unsaved, saving, saved} = useCommentDraftSaver(null);
@@ -85,7 +84,7 @@ function CommentComposePanel() {
                             title: t("images"),
                             nodeName: REL_CURRENT,
                             href: "/",
-                            onClick: onAttachImages,
+                            onClick: onAttach("image"),
                             show: true
                         },
                         {
@@ -93,7 +92,7 @@ function CommentComposePanel() {
                             title: t("files"),
                             nodeName: REL_CURRENT,
                             href: "/",
-                            onClick: onAttachFiles,
+                            onClick: onAttach("file"),
                             show: true
                         },
                     ]} className="rich-text-editor-button">
