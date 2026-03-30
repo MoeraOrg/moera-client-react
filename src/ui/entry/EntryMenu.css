@@ -1,4 +1,4 @@
-.entry .menu {
+.entry > .menu, .entry .posting-buttons > .menu {
     position: absolute;
     top: -.2rem;
     right: .4rem;
@@ -7,6 +7,6 @@
     font-size: 1.1rem;
 }
 
-.entry .menu .no-actions {
+.entry > .menu .no-actions, .entry .posting-buttons > .menu .no-actions {
     font-style: italic;
 }

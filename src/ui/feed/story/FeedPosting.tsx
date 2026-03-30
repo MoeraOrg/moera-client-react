@@ -31,6 +31,7 @@ import { RelNodeName } from "util/rel-node-name";
 import { ut } from "util/url";
 import "ui/posting/Posting.css";
 import "ui/entry/Entry.css";
+import EntryAttachments from "ui/entry/EntryAttachments";
 
 interface ContentProps {
     nodeName: RelNodeName | string;
@@ -40,7 +41,7 @@ interface ContentProps {
 function Content({nodeName, posting}: ContentProps) {
     const {t} = useTranslation();
 
-    if (posting.bodyPreview != null && posting.bodyPreview.text) {
+    if (posting.bodyPreview?.text) {
         return (
             <div className="content">
                 <EntryHtml
@@ -103,6 +104,9 @@ export default function FeedPosting({nodeName, posting, story, hideRecommended}:
             </div>
             <PostingSubject posting={posting} preview={true}/>
             <Content nodeName={nodeName} posting={posting}/>
+            {!posting.bodyPreview?.text &&
+                <EntryAttachments nodeName={nodeName} media={posting.media ?? null}/>
+            }
             <EntryGallery
                 postingId={posting.id}
                 nodeName={nodeName}

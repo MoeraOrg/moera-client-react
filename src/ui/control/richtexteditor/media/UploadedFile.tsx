@@ -4,13 +4,12 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
-import mime from 'mime';
 
 import { VerifiedMediaFile } from "api";
 import { DropdownMenu } from "ui/control";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
+import { mediaFileName } from "util/media-images";
 import { REL_CURRENT } from "util/rel-node-name";
-import "./UploadedFile.css";
 
 interface Props {
     media: VerifiedMediaFile;
@@ -26,8 +25,6 @@ export default function UploadedFile({media, dragged = false}: Props) {
     const {deleteMedia, renameMedia} = useRichTextEditorMedia();
     const {t} = useTranslation();
 
-    const fileName = media.title ? media.title + "." + mime.getExtension(media.mimeType) : media.path.split("/").pop();
-
     const onRename = () => {
         if (!dragged) {
             renameMedia(media.id, media.title ?? "");
@@ -35,7 +32,7 @@ export default function UploadedFile({media, dragged = false}: Props) {
     }
 
     return (
-        <div className={cx("rich-text-editor-uploaded-file", {"dragged": dragged})} ref={sortable.setNodeRef}
+        <div className={cx("attached-file", {"dragged": dragged})} ref={sortable.setNodeRef}
              style={sortableStyle} {...sortable.attributes} {...sortable.listeners}>
             <DropdownMenu items={[
                 {
@@ -56,7 +53,7 @@ export default function UploadedFile({media, dragged = false}: Props) {
                     show: true
                 }
             ]} menuContainer={document.getElementById("modal-root")} disabled={dragged ?? false}/>
-            <div className="file-name" onClick={onRename}>{fileName}</div>
+            <div className="file-name" onClick={onRename}>{mediaFileName(media)}</div>
         </div>
     );
 }

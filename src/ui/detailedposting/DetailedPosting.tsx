@@ -4,7 +4,10 @@ import { useSelector } from 'react-redux';
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { PostingInfo } from "api";
 import { ClientState } from "state/state";
-import { detailedPostingExpandGallery, detailedPostingLoadAttached } from "state/detailedposting/actions";
+import {
+    detailedPostingExpandGallery,
+    detailedPostingLoadAttached
+} from "state/detailedposting/actions";
 import { isPermitted } from "state/node/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import { MinimalStoryInfo } from "ui/types";
@@ -30,6 +33,7 @@ import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
 import { REL_CURRENT } from "util/rel-node-name";
 import { getPageHeaderHeight } from "util/ui";
+import EntryAttachments from "ui/entry/EntryAttachments";
 
 interface Props {
     story: MinimalStoryInfo | null;
@@ -97,6 +101,7 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
                 nodeName={REL_CURRENT}
                 media={posting.media}
             />
+            <EntryAttachments nodeName={REL_CURRENT} media={posting.media ?? null}/>
             {!expanded &&
                 <div id="posting-gallery" className="gallery-collapsed">
                     <EntryGallery

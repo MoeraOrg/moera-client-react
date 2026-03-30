@@ -7,10 +7,12 @@ import {
     DraftInfo,
     DraftText,
     Features,
+    PrivateMediaFileInfo,
     PostingInfo,
     ReactionAttributes,
     ReactionTotalsInfo
 } from "api";
+import { RelNodeName } from "util/rel-node-name";
 
 export type DetailedPostingLoadAction = ActionWithoutPayload<"DETAILED_POSTING_LOAD">;
 export const detailedPostingLoad = (): DetailedPostingLoadAction =>
@@ -426,6 +428,15 @@ export type CommentCopyLinkAction = ActionWithPayload<"COMMENT_COPY_LINK", {
 export const commentCopyLink = (id: string, postingId: string): CommentCopyLinkAction =>
     actionWithPayload("COMMENT_COPY_LINK", {id, postingId});
 
+export type AttachmentCopyLinkAction = ActionWithPayload<"ATTACHMENT_COPY_LINK", {
+    nodeName: string | RelNodeName;
+    media: PrivateMediaFileInfo;
+}>;
+export const attachmentCopyLink = (
+    nodeName: string | RelNodeName, media: PrivateMediaFileInfo
+): AttachmentCopyLinkAction =>
+    actionWithPayload("ATTACHMENT_COPY_LINK", {nodeName, media});
+
 export type OpenCommentDialogAction = ActionWithPayload<"OPEN_COMMENT_DIALOG", {
     commentId: string;
 }>;
@@ -626,6 +637,7 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | FocusedCommentLoadedAction
     | FocusedCommentLoadFailedAction
     | CommentCopyLinkAction
+    | AttachmentCopyLinkAction
     | OpenCommentDialogAction
     | CloseCommentDialogAction
     | CommentDialogCommentResetAction

@@ -41,7 +41,8 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
     const images = media
         .filter(ma => !ma.embedded)
         .map(ma => ma.media)
-        .filter(notNull);
+        .filter(notNull)
+        .filter(m => !m.attachment);
     if (images.length === 0) {
         return null;
     }

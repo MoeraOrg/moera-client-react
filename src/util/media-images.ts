@@ -1,3 +1,5 @@
+import mime from 'mime';
+
 import { MediaFilePreviewInfo, PrivateMediaFileInfo } from "api";
 import {
     isFigureImageElement,
@@ -162,4 +164,13 @@ export function isMediaDirectPathExpiring(media: PrivateMediaFileInfo | null | u
     return media?.directPath != null
         && media.directPathExpiresAt != null
         && (Date.now() / 1000 - media.directPathExpiresAt) < 24 * 60 * 60;
+}
+
+export function mediaFileName(media: null | undefined): undefined;
+export function mediaFileName(media: PrivateMediaFileInfo): string;
+export function mediaFileName(media: PrivateMediaFileInfo | null | undefined): string | undefined {
+    if (media == null) {
+        return undefined;
+    }
+    return media.title ? media.title + "." + mime.getExtension(media.mimeType) : media.path.split("/").pop();
 }

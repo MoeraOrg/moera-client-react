@@ -10,6 +10,7 @@ import { Avatar, Button, ModalDialog } from "ui/control";
 import DraftOwner from "ui/draft/DraftOwner";
 import DraftSubject from "ui/draft/DraftSubject";
 import EntryHtml from "ui/entry/EntryHtml";
+import EntryAttachments from "ui/entry/EntryAttachments";
 import EntryGallery from "ui/entry/EntryGallery";
 import StoryDate from "ui/story/StoryDate";
 import { REL_CURRENT } from "util/rel-node-name";
@@ -41,6 +42,7 @@ export default function ComposePreviewDialog() {
                         <DraftSubject draft={draft}/>
                         <EntryHtml className="content" html={draft.body.text} nodeName={REL_CURRENT}
                                    media={draft.media}/>
+                        <EntryAttachments nodeName={REL_CURRENT} media={draft.media ?? null}/>
                         <EntryGallery nodeName={REL_CURRENT} media={draft.media ?? null}/>
                     </div>
                 }

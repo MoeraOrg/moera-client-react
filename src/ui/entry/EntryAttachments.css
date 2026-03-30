@@ -1,5 +1,5 @@
-.rich-text-editor-uploaded-file {
-    grid-template-columns: 2.5rem 1fr;
+.attached-file {
+    grid-template-columns: 2.5rem 1fr 1.5em;
     align-items: start;
     padding: .25rem .5rem .25rem 0;
     margin: .5rem;
@@ -8,30 +8,50 @@
     cursor: pointer;
 }
 
+.attached-file:hover {
+    background-color: var(--bs-gray-200);
+}
+
 @media only screen and (min-width: 992px) {
-    .rich-text-editor-uploaded-file {
+    .attached-file {
         display: inline-grid;
         width: calc(50% - 1rem);
     }
 }
 
 @media only screen and (max-width: 991px) {
-    .rich-text-editor-uploaded-file {
+    .attached-file {
         display: grid;
         width: calc(99.6vw - 4rem);
     }
 }
 
-.rich-text-editor-uploaded-file.dragged {
+.attached-file.dragged {
     cursor: grabbing;
 }
 
-.rich-text-editor-uploaded-file .menu {
+.attached-file .menu {
     background-color: transparent;
     border: 0;
 }
 
-.rich-text-editor-uploaded-file .file-name {
+.attached-file .file-name {
+    display: block;
     padding: .3rem .25rem 0;
     overflow-wrap: break-word;
+    color: var(--bs-gray-800);
+}
+
+.attached-file A.file-name {
+    color: var(--bs-gray-800);
+}
+
+.attached-file A.file-name:hover {
+    text-decoration: none;
+}
+
+.attached-file A.download-icon {
+    display: block;
+    color: var(--bs-gray-800);
+    margin-top: .25rem;
 }
