@@ -227,12 +227,20 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
                 return state;
             }
             let result;
-            if (state.postingId == null && state.draftId === action.payload.id && action.payload.resetForm) {
-                result = {
-                    ...state,
-                    ...emptyPosting,
-                    formId: state.formId + 1,
-                    ready: true
+            if (state.postingId == null && state.draftId === action.payload.id) {
+                if (action.payload.resetForm) {
+                    result = {
+                        ...state,
+                        ...emptyPosting,
+                        formId: state.formId + 1,
+                        ready: true
+                    }
+                } else {
+                    result = {
+                        ...state,
+                        draftId: null,
+                        draft: null,
+                    }
                 }
             } else {
                 result = {
