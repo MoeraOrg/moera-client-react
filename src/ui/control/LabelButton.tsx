@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const LabelButton = ({icon, className, title, onClick}: Props) => (
-    <button className={cx("form-label-button", className)} title={title} onClick={onClick}>
+    <button type="button" className={cx("form-label-button", className)} title={title} onClick={onClick}>
         <Icon icon={icon} size="16"/>
     </button>
 );
