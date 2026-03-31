@@ -2106,9 +2106,17 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "mimeType": {
+                    type: "string"
+                },
+                "attachment": {
+                    type: "boolean",
+                    nullable: true
+                },
             },
             required: [
                 "id",
+                "mimeType",
             ],
             additionalProperties: false
         },

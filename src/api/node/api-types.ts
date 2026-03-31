@@ -793,12 +793,16 @@ export interface RemoteMedia {
     id: string;
     hash?: string | null;
     digest?: string | null;
+    mimeType: string;
+    attachment?: boolean | null;
 }
 
 export interface RemoteMediaInfo {
     id: string;
     hash?: string | null;
     digest?: string | null;
+    mimeType: string;
+    attachment?: boolean | null;
 }
 
 export interface RemotePosting {

@@ -24190,7 +24190,7 @@ return errors === 0;
 }
 
 export const RemoteMediaInfo = validate101;
-const schema117 = {"type":"object","properties":{"id":{"type":"string"},"hash":{"type":"string","nullable":true},"digest":{"type":"string","nullable":true}},"required":["id"],"additionalProperties":false};
+const schema117 = {"type":"object","properties":{"id":{"type":"string"},"hash":{"type":"string","nullable":true},"digest":{"type":"string","nullable":true},"mimeType":{"type":"string"},"attachment":{"type":"boolean","nullable":true}},"required":["id","mimeType"],"additionalProperties":false};
 
 function validate101(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
 let vErrors = null;
@@ -24198,14 +24198,14 @@ let errors = 0;
 if(errors === 0){
 if(data && typeof data == "object" && !Array.isArray(data)){
 let missing0;
-if((data.id === undefined) && (missing0 = "id")){
+if(((data.id === undefined) && (missing0 = "id")) || ((data.mimeType === undefined) && (missing0 = "mimeType"))){
 validate101.errors = [{instancePath,schemaPath:"#/required",keyword:"required",params:{missingProperty: missing0},message:"must have required property '"+missing0+"'"}];
 return false;
 }
 else {
 const _errs1 = errors;
 for(const key0 in data){
-if(!(((key0 === "id") || (key0 === "hash")) || (key0 === "digest"))){
+if(!(((((key0 === "id") || (key0 === "hash")) || (key0 === "digest")) || (key0 === "mimeType")) || (key0 === "attachment"))){
 delete data[key0];
 }
 }
@@ -24328,6 +24328,87 @@ var valid0 = _errs7 === errors;
 }
 else {
 var valid0 = true;
+}
+if(valid0){
+if(data.mimeType !== undefined){
+let data3 = data.mimeType;
+const _errs10 = errors;
+if(typeof data3 !== "string"){
+let dataType3 = typeof data3;
+let coerced3 = undefined;
+if(dataType3 == 'object' && Array.isArray(data3) && data3.length == 1){
+data3 = data3[0];
+dataType3 = typeof data3;
+if(typeof data3 === "string"){
+coerced3 = data3;
+}
+}
+if(!(coerced3 !== undefined)){
+if(dataType3 == "number" || dataType3 == "boolean"){
+coerced3 = "" + data3;
+}
+else if(data3 === null){
+coerced3 = "";
+}
+else {
+validate101.errors = [{instancePath:instancePath+"/mimeType",schemaPath:"#/properties/mimeType/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+return false;
+}
+}
+if(coerced3 !== undefined){
+data3 = coerced3;
+if(data !== undefined){
+data["mimeType"] = coerced3;
+}
+}
+}
+var valid0 = _errs10 === errors;
+}
+else {
+var valid0 = true;
+}
+if(valid0){
+if(data.attachment !== undefined){
+let data4 = data.attachment;
+const _errs12 = errors;
+if((typeof data4 !== "boolean") && (data4 !== null)){
+let dataType4 = typeof data4;
+let coerced4 = undefined;
+if(dataType4 == 'object' && Array.isArray(data4) && data4.length == 1){
+data4 = data4[0];
+dataType4 = typeof data4;
+if((typeof data4 === "boolean") && (data4 === null)){
+coerced4 = data4;
+}
+}
+if(!(coerced4 !== undefined)){
+if(data4 === "false" || data4 === 0 || data4 === null){
+coerced4 = false;
+}
+else if(data4 === "true" || data4 === 1){
+coerced4 = true;
+}
+else if(data4 === "" || data4 === 0 || data4 === false){
+coerced4 = null;
+}
+else {
+validate101.errors = [{instancePath:instancePath+"/attachment",schemaPath:"#/properties/attachment/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
+return false;
+}
+}
+if(coerced4 !== undefined){
+data4 = coerced4;
+if(data !== undefined){
+data["attachment"] = coerced4;
+}
+}
+}
+var valid0 = _errs12 === errors;
+}
+else {
+var valid0 = true;
+}
+}
 }
 }
 }
@@ -46141,7 +46222,7 @@ const _errs12 = errors;
 if(errors === _errs12){
 if(data1 && typeof data1 == "object" && !Array.isArray(data1)){
 let missing1;
-if((data1.id === undefined) && (missing1 = "id")){
+if(((data1.id === undefined) && (missing1 = "id")) || ((data1.mimeType === undefined) && (missing1 = "mimeType"))){
 const err4 = {instancePath:instancePath+"/remoteMedia",schemaPath:"node#/definitions/RemoteMediaInfo/required",keyword:"required",params:{missingProperty: missing1},message:"must have required property '"+missing1+"'"};
 if(vErrors === null){
 vErrors = [err4];
@@ -46154,7 +46235,7 @@ errors++;
 else {
 const _errs14 = errors;
 for(const key1 in data1){
-if(!(((key1 === "id") || (key1 === "hash")) || (key1 === "digest"))){
+if(!(((((key1 === "id") || (key1 === "hash")) || (key1 === "digest")) || (key1 === "mimeType")) || (key1 === "attachment"))){
 delete data1[key1];
 }
 }
@@ -46296,13 +46377,29 @@ var valid4 = _errs20 === errors;
 else {
 var valid4 = true;
 }
+if(valid4){
+if(data1.mimeType !== undefined){
+let data5 = data1.mimeType;
+const _errs23 = errors;
+if(typeof data5 !== "string"){
+let dataType6 = typeof data5;
+let coerced6 = undefined;
+if(dataType6 == 'object' && Array.isArray(data5) && data5.length == 1){
+data5 = data5[0];
+dataType6 = typeof data5;
+if(typeof data5 === "string"){
+coerced6 = data5;
 }
 }
+if(!(coerced6 !== undefined)){
+if(dataType6 == "number" || dataType6 == "boolean"){
+coerced6 = "" + data5;
 }
-}
+else if(data5 === null){
+coerced6 = "";
 }
 else {
-const err8 = {instancePath:instancePath+"/remoteMedia",schemaPath:"node#/definitions/RemoteMediaInfo/type",keyword:"type",params:{type: "object"},message:"must be object"};
+const err8 = {instancePath:instancePath+"/remoteMedia/mimeType",schemaPath:"node#/definitions/RemoteMediaInfo/properties/mimeType/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
 vErrors = [err8];
 }
@@ -46312,26 +46409,44 @@ vErrors.push(err8);
 errors++;
 }
 }
-var _valid1 = _errs11 === errors;
-valid2 = valid2 || _valid1;
-if(!valid2){
-const _errs25 = errors;
-if(data1 !== null){
-let dataType6 = typeof data1;
-let coerced6 = undefined;
-if(dataType6 == 'object' && Array.isArray(data1) && data1.length == 1){
-data1 = data1[0];
-dataType6 = typeof data1;
-if(data1 === null){
-coerced6 = data1;
+if(coerced6 !== undefined){
+data5 = coerced6;
+if(data1 !== undefined){
+data1["mimeType"] = coerced6;
 }
 }
-if(!(coerced6 !== undefined)){
-if(data1 === "" || data1 === 0 || data1 === false){
-coerced6 = null;
+}
+var valid4 = _errs23 === errors;
 }
 else {
-const err9 = {instancePath:instancePath+"/remoteMedia",schemaPath:"#/properties/remoteMedia/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
+var valid4 = true;
+}
+if(valid4){
+if(data1.attachment !== undefined){
+let data6 = data1.attachment;
+const _errs25 = errors;
+if((typeof data6 !== "boolean") && (data6 !== null)){
+let dataType7 = typeof data6;
+let coerced7 = undefined;
+if(dataType7 == 'object' && Array.isArray(data6) && data6.length == 1){
+data6 = data6[0];
+dataType7 = typeof data6;
+if((typeof data6 === "boolean") && (data6 === null)){
+coerced7 = data6;
+}
+}
+if(!(coerced7 !== undefined)){
+if(data6 === "false" || data6 === 0 || data6 === null){
+coerced7 = false;
+}
+else if(data6 === "true" || data6 === 1){
+coerced7 = true;
+}
+else if(data6 === "" || data6 === 0 || data6 === false){
+coerced7 = null;
+}
+else {
+const err9 = {instancePath:instancePath+"/remoteMedia/attachment",schemaPath:"node#/definitions/RemoteMediaInfo/properties/attachment/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"};
 if(vErrors === null){
 vErrors = [err9];
 }
@@ -46341,23 +46456,82 @@ vErrors.push(err9);
 errors++;
 }
 }
-if(coerced6 !== undefined){
-data1 = coerced6;
-if(data !== undefined){
-data["remoteMedia"] = coerced6;
+if(coerced7 !== undefined){
+data6 = coerced7;
+if(data1 !== undefined){
+data1["attachment"] = coerced7;
 }
 }
 }
-var _valid1 = _errs25 === errors;
-valid2 = valid2 || _valid1;
+var valid4 = _errs25 === errors;
 }
-if(!valid2){
-const err10 = {instancePath:instancePath+"/remoteMedia",schemaPath:"#/properties/remoteMedia/anyOf",keyword:"anyOf",params:{},message:"must match a schema in anyOf"};
+else {
+var valid4 = true;
+}
+}
+}
+}
+}
+}
+}
+}
+else {
+const err10 = {instancePath:instancePath+"/remoteMedia",schemaPath:"node#/definitions/RemoteMediaInfo/type",keyword:"type",params:{type: "object"},message:"must be object"};
 if(vErrors === null){
 vErrors = [err10];
 }
 else {
 vErrors.push(err10);
+}
+errors++;
+}
+}
+var _valid1 = _errs11 === errors;
+valid2 = valid2 || _valid1;
+if(!valid2){
+const _errs30 = errors;
+if(data1 !== null){
+let dataType8 = typeof data1;
+let coerced8 = undefined;
+if(dataType8 == 'object' && Array.isArray(data1) && data1.length == 1){
+data1 = data1[0];
+dataType8 = typeof data1;
+if(data1 === null){
+coerced8 = data1;
+}
+}
+if(!(coerced8 !== undefined)){
+if(data1 === "" || data1 === 0 || data1 === false){
+coerced8 = null;
+}
+else {
+const err11 = {instancePath:instancePath+"/remoteMedia",schemaPath:"#/properties/remoteMedia/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
+if(vErrors === null){
+vErrors = [err11];
+}
+else {
+vErrors.push(err11);
+}
+errors++;
+}
+}
+if(coerced8 !== undefined){
+data1 = coerced8;
+if(data !== undefined){
+data["remoteMedia"] = coerced8;
+}
+}
+}
+var _valid1 = _errs30 === errors;
+valid2 = valid2 || _valid1;
+}
+if(!valid2){
+const err12 = {instancePath:instancePath+"/remoteMedia",schemaPath:"#/properties/remoteMedia/anyOf",keyword:"anyOf",params:{},message:"must match a schema in anyOf"};
+if(vErrors === null){
+vErrors = [err12];
+}
+else {
+vErrors.push(err12);
 }
 errors++;
 validate179.errors = vErrors;
@@ -46381,38 +46555,38 @@ var valid0 = true;
 }
 if(valid0){
 if(data.embedded !== undefined){
-let data5 = data.embedded;
-const _errs27 = errors;
-if(typeof data5 !== "boolean"){
-let dataType7 = typeof data5;
-let coerced7 = undefined;
-if(dataType7 == 'object' && Array.isArray(data5) && data5.length == 1){
-data5 = data5[0];
-dataType7 = typeof data5;
-if(typeof data5 === "boolean"){
-coerced7 = data5;
+let data7 = data.embedded;
+const _errs32 = errors;
+if(typeof data7 !== "boolean"){
+let dataType9 = typeof data7;
+let coerced9 = undefined;
+if(dataType9 == 'object' && Array.isArray(data7) && data7.length == 1){
+data7 = data7[0];
+dataType9 = typeof data7;
+if(typeof data7 === "boolean"){
+coerced9 = data7;
 }
 }
-if(!(coerced7 !== undefined)){
-if(data5 === "false" || data5 === 0 || data5 === null){
-coerced7 = false;
+if(!(coerced9 !== undefined)){
+if(data7 === "false" || data7 === 0 || data7 === null){
+coerced9 = false;
 }
-else if(data5 === "true" || data5 === 1){
-coerced7 = true;
+else if(data7 === "true" || data7 === 1){
+coerced9 = true;
 }
 else {
 validate179.errors = [{instancePath:instancePath+"/embedded",schemaPath:"#/properties/embedded/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
 return false;
 }
 }
-if(coerced7 !== undefined){
-data5 = coerced7;
+if(coerced9 !== undefined){
+data7 = coerced9;
 if(data !== undefined){
-data["embedded"] = coerced7;
+data["embedded"] = coerced9;
 }
 }
 }
-var valid0 = _errs27 === errors;
+var valid0 = _errs32 === errors;
 }
 else {
 var valid0 = true;

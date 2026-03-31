@@ -25,7 +25,9 @@ const toDraftText = (
     media: postingText.media?.filter(notNull).map(id => ({
         id,
         hash: media.get(id)?.hash,
-        digest: media.get(id)?.digest
+        digest: media.get(id)?.digest,
+        mimeType: media.get(id)?.mimeType ?? "image/jpeg",
+        attachment: media.get(id)?.attachment
     })),
     publications: undefined,
     receiverName: ownerName,

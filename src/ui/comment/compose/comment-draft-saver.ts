@@ -26,7 +26,9 @@ const toDraftText = (
     media: commentText.media?.map(id => ({
         id,
         hash: media.get(id)?.hash,
-        digest: media.get(id)?.digest
+        digest: media.get(id)?.digest,
+        mimeType: media.get(id)?.mimeType ?? "image/jpeg",
+        attachment: media.get(id)?.attachment
     })),
     receiverName,
     draftType: commentId == null ? "new-comment" : "comment-update",

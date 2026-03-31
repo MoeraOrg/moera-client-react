@@ -3,6 +3,7 @@ import cx from 'classnames';
 import LinesEllipsis from 'react-lines-ellipsis';
 import { formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
+import mime from 'mime';
 
 import { tDistanceToNow } from "i18n/time";
 import { ExtDraftInfo } from "state/compose/state";
@@ -60,18 +61,30 @@ function getDraftText(draft: ExtDraftInfo): string {
     if (draft.media) {
         const linkMedia = new Set(draft.body.linkPreviews?.map(lp => lp.imageHash));
         let hasGallery = false;
+        let hasFiles = false;
         for (const media of draft.media) {
             if (media.media?.hash == null || linkMedia.has(media.media.hash)) {
                 continue;
             }
-            if (media.media.textContent) {
-                text += " " + media.media.textContent;
+            if (media.media.attachment) {
+                if (media.media.title) {
+                    text += " " + media.media.title + "." + mime.getExtension(media.media.mimeType);
+                } else {
+                    hasFiles = true;
+                }
             } else {
-                hasGallery = true;
+                if (media.media.textContent) {
+                    text += " " + media.media.textContent;
+                } else {
+                    hasGallery = true;
+                }
             }
         }
         if (hasGallery) {
             text += " " + String.fromCodePoint(0x1f5bc);
+        }
+        if (hasFiles) {
+            text += " " + String.fromCodePoint(0x1f4c4);
         }
     }
     return text.trim();
