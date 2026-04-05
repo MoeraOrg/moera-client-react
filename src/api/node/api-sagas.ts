@@ -1751,6 +1751,17 @@ export async function verifyRemoteCommentReaction(
     });
 }
 
+export async function downloadRemoteMedia(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
+    auth: true | string = true
+): Promise<API.PrivateMediaFileInfo> {
+
+    const location = "/nodes/{nodeName}/media/private/{id}/download";
+    return callApi<API.PrivateMediaFileInfo>({
+        caller, nodeName, method: "POST", location, auth, schema: "PrivateMediaFileInfo", errorFilter
+    });
+}
+
 export async function createRemotePosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
     posting: API.PostingSourceText, errorFilter: ErrorFilter = false, auth: true | string = true
