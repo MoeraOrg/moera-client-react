@@ -46,26 +46,26 @@ export default function EntryAttachments({nodeName, media}: Props) {
         <div>
             {files
                 .map(file => ({file, url: downloadUrl(rootPage, file, carte)}))
-                .map(({file, url}) => {
-                    return <div className="attached-file" key={file.id}>
-                            <DropdownMenu items={[
-                                {
-                                    title: t("copy-link"),
-                                    nodeName,
-                                    href: "/media/" + file.path + "?download=true",
-                                    onClick: onCopyLink(file),
-                                    show: true
-                                }
-                            ]} menuContainer={document.getElementById("modal-root")}/>
-                            <a className="file-name" download href={url} title={t("download")}>
-                                {mediaFileName(file)}
-                            </a>
-                            <a className="download-icon" download href={url} title={t("download")}>
-                                <Icon icon={msDownload} size="1.3em"/>
-                            </a>
-                        </div>;
-                    }
-                )}
+                .map(({file, url}) => (
+                    <div className="attached-file" key={file.id}>
+                        <DropdownMenu items={[
+                            {
+                                title: t("copy-link"),
+                                nodeName,
+                                href: "/media/" + file.path + "?download=true",
+                                onClick: onCopyLink(file),
+                                show: true
+                            }
+                        ]} menuContainer={document.getElementById("modal-root")}/>
+                        <a className="file-name" download href={url} title={t("download")}>
+                            {mediaFileName(file)}
+                        </a>
+                        <a className="download-icon" download href={url} title={t("download")}>
+                            <Icon icon={msDownload} size="1.3em"/>
+                        </a>
+                    </div>
+                ))
+            }
         </div>
     );
 }
