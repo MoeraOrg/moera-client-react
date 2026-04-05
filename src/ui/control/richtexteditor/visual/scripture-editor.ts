@@ -157,7 +157,7 @@ export function withScripture<T extends DOMEditor>(
 
     scriptureEditor.insertTextData = (data: DataTransfer): boolean => {
         const text = data.getData("text/plain");
-        editor.insertFragment(safeImportScripture(plainTextToHtml(text)));
+        editor.insertFragment(importReplaceUrls(safeImportScripture(plainTextToHtml(text)), scriptureEditor.options));
 
         return true;
     };
