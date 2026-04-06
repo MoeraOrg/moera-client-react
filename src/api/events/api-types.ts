@@ -12,6 +12,7 @@ import {
     FriendInfo,
     FriendOfInfo,
     GrantInfo,
+    PrivateMediaFileInfo,
     SheriffComplaintGroupInfo,
     SheriffComplaintInfo,
     SheriffMark,
@@ -245,6 +246,19 @@ export interface RemoteCommentVerifiedEvent extends BaseEvent<"REMOTE_COMMENT_VE
 
 export interface RemoteFriendshipUpdatedEvent extends BaseEvent<"REMOTE_FRIENDSHIP_UPDATED"> {
     friendOf: FriendOfInfo;
+}
+
+export interface RemoteMediaDownloadFailedEvent extends BaseEvent<"REMOTE_MEDIA_DOWNLOAD_FAILED"> {
+    nodeName: string;
+    mediaId: string;
+    errorCode: string;
+    errorMessage: string;
+}
+
+export interface RemoteMediaDownloadedEvent extends BaseEvent<"REMOTE_MEDIA_DOWNLOADED"> {
+    nodeName: string;
+    mediaId: string;
+    media: PrivateMediaFileInfo;
 }
 
 export interface RemoteNodeAvatarChangedEvent extends BaseEvent<"REMOTE_NODE_AVATAR_CHANGED"> {

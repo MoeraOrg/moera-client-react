@@ -49,6 +49,8 @@ import {
     RemoteCommentVerificationFailedEvent,
     RemoteCommentVerifiedEvent,
     RemoteFriendshipUpdatedEvent,
+    RemoteMediaDownloadFailedEvent,
+    RemoteMediaDownloadedEvent,
     RemoteNodeAvatarChangedEvent,
     RemoteNodeFullNameChangedEvent,
     RemotePostingAddedEvent,
@@ -138,6 +140,8 @@ export type ClientEventAction =
     | EventAction<RemoteCommentVerificationFailedEvent>
     | EventAction<RemoteCommentVerifiedEvent>
     | EventAction<RemoteFriendshipUpdatedEvent>
+    | EventAction<RemoteMediaDownloadFailedEvent>
+    | EventAction<RemoteMediaDownloadedEvent>
     | EventAction<RemoteNodeAvatarChangedEvent>
     | EventAction<RemoteNodeFullNameChangedEvent>
     | EventAction<RemotePostingAddedEvent>

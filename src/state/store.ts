@@ -39,6 +39,7 @@ import lightBox from "state/lightbox/reducer";
 import donateDialog from "state/donatedialog/reducer";
 import entryCopyTextDialog from "state/entrycopytextdialog/reducer";
 import linkPreviews from "state/linkpreviews/reducer";
+import mediaDownloadDialog from "state/mediadownloaddialog/reducer";
 import peopleHideDialog from "state/peoplehidedialog/reducer";
 import friendGroupAddDialog from "state/friendgroupadddialog/reducer";
 import friendGroupsDialog from "state/friendgroupsdialog/reducer";
@@ -90,6 +91,7 @@ import lightBoxSagas from "state/lightbox/sagas";
 import richTextEditorSagas from "state/richtexteditor/sagas";
 import entryCopyTextDialogSagas from "state/entrycopytextdialog/sagas";
 import linkPreviewsSagas from "state/linkpreviews/sagas";
+import mediaDownloadDialogSagas from "state/mediadownloaddialog/sagas";
 import friendGroupAddDialogSagas from "state/friendgroupadddialog/sagas";
 import friendGroupsDialogSagas from "state/friendgroupsdialog/sagas";
 import askDialogSagas from "state/askdialog/sagas";
@@ -129,6 +131,7 @@ import lightBoxTriggers from "state/lightbox/triggers";
 import askDialogTriggers from "state/askdialog/triggers";
 import blockingDetailsDialogTriggers from "state/blockingdetailsdialog/triggers";
 import blockedOperationsTriggers from "state/blockedoperations/triggers";
+import mediaDownloadDialogTriggers from "state/mediadownloaddialog/triggers";
 import sheriffOrderDetailsDialogTriggers from "state/sherifforderdetailsdialog/triggers";
 import refreshTriggers from "state/refresh/triggers";
 import instantsTriggers from "state/instants/triggers";
@@ -166,6 +169,7 @@ const reducers = combineReducers({
     donateDialog,
     entryCopyTextDialog,
     linkPreviews,
+    mediaDownloadDialog,
     peopleHideDialog,
     friendGroupAddDialog,
     friendGroupsDialog,
@@ -220,6 +224,7 @@ const triggers = collectTriggers(
     askDialogTriggers,
     blockingDetailsDialogTriggers,
     blockedOperationsTriggers,
+    mediaDownloadDialogTriggers,
     sheriffOrderDetailsDialogTriggers,
     refreshTriggers,
     instantsTriggers
@@ -259,6 +264,7 @@ const sagas = collectSagas(
     richTextEditorSagas,
     entryCopyTextDialogSagas,
     linkPreviewsSagas,
+    mediaDownloadDialogSagas,
     friendGroupAddDialogSagas,
     friendGroupsDialogSagas,
     askDialogSagas,

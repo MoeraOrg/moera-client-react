@@ -174,3 +174,12 @@ export function mediaFileName(media: PrivateMediaFileInfo | null | undefined): s
     }
     return media.title ? media.title + "." + mime.getExtension(media.mimeType) : media.path.split("/").pop();
 }
+
+export function mediaDownloadUrl(rootPage: string | null, media: PrivateMediaFileInfo, carte: string | null): string {
+    const auth = carte != null ? "carte:" + carte : null;
+    if (media.directPath) {
+        return urlWithParameters((rootPage ?? "") + "/media/" + media.directPath, {download: true});
+    } else {
+        return urlWithParameters((rootPage ?? "") + "/media/" + media.path, {auth, download: true});
+    }
+}

@@ -6,3 +6,9 @@ apply: always
 2. Always use double quotes for imports when importing a module from the project. Use single quotes when importing
    a third-party module.
 3. Put third-party imports at the top of the file and local imports below. Put a blank line between them.
+4. Do not touch files under src/i18n/locales.
+5. Do not write texts verbatim, just use `t()` function with an identifier.
+
+# Actions
+1. Literal names of actions should correspond to their function names and type names. For example, literal: "DO_SMTH",
+   function: `doSmth()`, type: DoSmthAction.

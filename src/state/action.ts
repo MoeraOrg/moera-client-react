@@ -24,6 +24,7 @@ import { ImageEditDialogAnyAction } from "state/imageeditdialog/actions";
 import { InstantsAnyAction } from "state/instants/actions";
 import { LightBoxAnyAction } from "state/lightbox/actions";
 import { LinkPreviewsAnyAction } from "state/linkpreviews/actions";
+import { MediaDownloadDialogAnyAction } from "state/mediadownloaddialog/actions";
 import { MessageBoxAnyAction } from "state/messagebox/actions";
 import { NamingAnyAction } from "state/naming/actions";
 import { NavigationAnyAction } from "state/navigation/actions";
@@ -78,6 +79,7 @@ export type ClientAction =
     | InstantsAnyAction
     | LightBoxAnyAction
     | LinkPreviewsAnyAction
+    | MediaDownloadDialogAnyAction
     | MessageBoxAnyAction
     | NamingAnyAction
     | NavigationAnyAction

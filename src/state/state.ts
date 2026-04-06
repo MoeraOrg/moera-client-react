@@ -23,6 +23,7 @@ import { ImageEditDialogState } from "state/imageeditdialog/state";
 import { InstantsState } from "state/instants/state";
 import { LightBoxState } from "state/lightbox/state";
 import { LinkPreviewsState } from "state/linkpreviews/state";
+import { MediaDownloadDialogState } from "state/mediadownloaddialog/state";
 import { MessageBoxState } from "state/messagebox/state";
 import { NamingState } from "state/naming/state";
 import { NavigationState } from "state/navigation/state";
@@ -72,6 +73,7 @@ export interface ClientState {
     instants: InstantsState;
     lightBox: LightBoxState;
     linkPreviews: LinkPreviewsState;
+    mediaDownloadDialog: MediaDownloadDialogState;
     messageBox: MessageBoxState;
     naming: NamingState;
     navigation: NavigationState;

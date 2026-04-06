@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
+import { getHomeOwnerName, getRelNodeNameContext } from "state/home/selectors";
+import { openMediaDownloadDialog } from "state/mediadownloaddialog/actions";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
@@ -10,9 +12,8 @@ import { attachmentCopyLink } from "state/detailedposting/actions";
 import { Icon, msDownload } from "ui/material-symbols";
 import { DropdownMenu } from "ui/control";
 import { useDispatcher } from "ui/hook";
-import { mediaFileName } from "util/media-images";
-import { RelNodeName } from "util/rel-node-name";
-import { urlWithParameters } from "util/url";
+import { mediaDownloadUrl, mediaFileName } from "util/media-images";
+import { absoluteNodeName, RelNodeName } from "util/rel-node-name";
 import { notNull } from "util/misc";
 import "./EntryAttachments.css";
 
@@ -22,6 +23,10 @@ interface Props {
 }
 
 export default function EntryAttachments({nodeName, media}: Props) {
+    const homeOwnerName = useSelector(getHomeOwnerName);
+    const targetNodeName = useSelector((state: ClientState) =>
+        absoluteNodeName(nodeName, getRelNodeNameContext(state))
+    );
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, nodeName));
     const carte = useSelector(getCurrentViewMediaCarte);
     const dispatch = useDispatcher();
@@ -42,10 +47,18 @@ export default function EntryAttachments({nodeName, media}: Props) {
     const onCopyLink = (file: PrivateMediaFileInfo) => () =>
         dispatch(attachmentCopyLink(nodeName, file));
 
+    const onDownload = (file: PrivateMediaFileInfo) => (event: React.MouseEvent<HTMLAnchorElement>) => {
+        if (targetNodeName === homeOwnerName) {
+            return;
+        }
+        event.preventDefault();
+        dispatch(openMediaDownloadDialog(targetNodeName, file.id));
+    };
+
     return (
         <div>
             {files
-                .map(file => ({file, url: downloadUrl(rootPage, file, carte)}))
+                .map(file => ({file, url: mediaDownloadUrl(rootPage, file, carte)}))
                 .map(({file, url}) => (
                     <div className="attached-file" key={file.id}>
                         <DropdownMenu items={[
@@ -57,10 +70,11 @@ export default function EntryAttachments({nodeName, media}: Props) {
                                 show: true
                             }
                         ]} menuContainer={document.getElementById("modal-root")}/>
-                        <a className="file-name" download href={url} title={t("download")}>
+                        <a className="file-name" download href={url} title={t("download")} onClick={onDownload(file)}>
                             {mediaFileName(file)}
                         </a>
-                        <a className="download-icon" download href={url} title={t("download")}>
+                        <a className="download-icon" download href={url} title={t("download")}
+                           onClick={onDownload(file)}>
                             <Icon icon={msDownload} size="1.3em"/>
                         </a>
                     </div>
@@ -68,15 +82,4 @@ export default function EntryAttachments({nodeName, media}: Props) {
             }
         </div>
     );
-}
-
-function downloadUrl(rootPage: string | null, media: PrivateMediaFileInfo, carte: string | null): string {
-    const auth = carte != null ? "carte:" + carte : null;
-    if (media.directPath) {
-        const mainHref = "/media/" + media.directPath;
-        return urlWithParameters(rootPage + mainHref, {download: true});
-    } else {
-        const mainHref = "/media/" + media.path;
-        return urlWithParameters(rootPage + mainHref, {auth, download: true});
-    }
 }

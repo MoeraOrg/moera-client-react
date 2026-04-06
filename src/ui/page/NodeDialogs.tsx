@@ -7,6 +7,7 @@ import ChangeDateDialog from "ui/changedatedialog/ChangeDateDialog";
 import SourceDialog from "ui/sourcedialog/SourceDialog";
 import EntryCopyTextDialog from "ui/entrycopytextdialog/EntryCopyTextDialog";
 import BlockingDetailsDialog from "ui/blockingdetailsdialog/BlockingDetailsDialog";
+import MediaDownloadDialog from "ui/mediadownloaddialog/MediaDownloadDialog";
 
 const ReactionsDialog = React.lazy(() => import("ui/reactionsdialog/ReactionsDialog"));
 const LightBox = React.lazy(() => import("ui/lightbox/LightBox"));
@@ -25,6 +26,7 @@ export default function NodeDialogs() {
     const showImageEditDialog = useSelector((state: ClientState) => state.imageEditDialog.show);
     const showDonateDialog = useSelector((state: ClientState) => state.donateDialog.show);
     const showEntryCopyTextDialog = useSelector((state: ClientState) => state.entryCopyTextDialog.show);
+    const showMediaDownloadDialog = useSelector((state: ClientState) => state.mediaDownloadDialog.show);
     const showPeopleHideDialog = useSelector((state: ClientState) => state.peopleHideDialog.show);
     const showFriendGroupsDialog = useSelector((state: ClientState) => state.friendGroupsDialog.show);
     const showBlockDialog = useSelector((state: ClientState) => state.blockDialog.show);
@@ -51,6 +53,7 @@ export default function NodeDialogs() {
                 {showDonateDialog && <DonateDialog/>}
             </Suspense>
             {showEntryCopyTextDialog && <EntryCopyTextDialog/>}
+            {showMediaDownloadDialog && <MediaDownloadDialog/>}
             <Suspense fallback={null}>
                 {showPeopleHideDialog && <PeopleHideDialog/>}
             </Suspense>

@@ -965,6 +965,60 @@ export const EVENT_SCHEMAS = {
             additionalProperties: false
         },
 
+        RemoteMediaDownloadFailedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "nodeName": {
+                    type: "string"
+                },
+                "mediaId": {
+                    type: "string"
+                },
+                "errorCode": {
+                    type: "string"
+                },
+                "errorMessage": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "nodeName",
+                "mediaId",
+                "errorCode",
+                "errorMessage",
+            ],
+            additionalProperties: false
+        },
+
+        RemoteMediaDownloadedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "nodeName": {
+                    type: "string"
+                },
+                "mediaId": {
+                    type: "string"
+                },
+                "media": {
+                    $ref: "node#/definitions/PrivateMediaFileInfo"
+                },
+            },
+            required: [
+                "type",
+                "nodeName",
+                "mediaId",
+                "media",
+            ],
+            additionalProperties: false
+        },
+
         RemoteNodeAvatarChangedEvent: {
             type: "object",
             properties: {
