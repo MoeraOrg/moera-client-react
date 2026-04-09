@@ -908,6 +908,7 @@
       },
       "instants_prioritize": "Uporządkuj powiadomienia zgodnie z ich ważnością",
       "instants_viewed_lifetime": "Usuń wyświetlone powiadomienia po",
+      "malware_sources": "Węzły usług wykrywania złośliwego oprogramowania",
       "media_max-size": "Maksymalny rozmiar przesłanego pliku multimedialnego",
       "media_preview-gain": "Współczynnik powiększenia podglądu pliku multimedialnego",
       "media_verification_max-size": "Maksymalny rozmiar pobranego pliku multimedialnego do weryfikacji",

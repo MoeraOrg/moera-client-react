@@ -908,6 +908,7 @@
       },
       "instants_prioritize": "Arrange notifications according to their importance",
       "instants_viewed_lifetime": "Purge viewed notifications after",
+      "malware_sources": "Nodes serving as malware detection services",
       "media_max-size": "Maximal size of an uploaded media",
       "media_preview-gain": "Media preview gain factor",
       "media_verification_max-size": "Maximal size of a media downloaded for verification",
