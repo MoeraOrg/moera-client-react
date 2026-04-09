@@ -1028,11 +1028,14 @@ export async function uploadPrivateMedia(
 
 export async function getPrivateMedia(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
-    width: number | null = null, download: boolean | null = null, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
+    width: number | null = null, download: boolean | null = null, ignoremalware: boolean | null = null,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): Promise<Blob> {
 
-    const location = urlWithParameters(ut`/media/private/${id}/data`, {width, download});
+    const location = urlWithParameters(
+        ut`/media/private/${id}/data`,
+        {width, download, ignoremalware}
+    );
     return callApi<Blob>({
         caller, nodeName, method: "GET", location, auth, schema: "blob", errorFilter
     });

@@ -1581,6 +1581,10 @@ export const NODE_API_SCHEMAS = {
                     type: "boolean",
                     nullable: true
                 },
+                "malware": {
+                    type: "boolean",
+                    nullable: true
+                },
                 "operations": {
                     anyOf: [
                         {

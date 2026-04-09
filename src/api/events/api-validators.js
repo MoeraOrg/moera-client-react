@@ -12933,7 +12933,7 @@ return errors === 0;
 
 export const RemoteMediaDownloadedEvent = validate80;
 const schema80 = {"type":"object","properties":{"type":{"type":"string"},"nodeName":{"type":"string"},"mediaId":{"type":"string"},"media":{"$ref":"node#/definitions/PrivateMediaFileInfo"}},"required":["type","nodeName","mediaId","media"],"additionalProperties":false};
-const schema81 = {"type":"object","properties":{"id":{"type":"string"},"hash":{"type":"string"},"path":{"type":"string"},"directPath":{"type":"string","nullable":true},"directPathExpiresAt":{"type":"integer","nullable":true},"mimeType":{"type":"string"},"width":{"type":"integer","default":0},"height":{"type":"integer","default":0},"orientation":{"type":"integer","default":1},"size":{"type":"integer"},"title":{"type":"string","nullable":true},"textContent":{"type":"string","nullable":true},"postingId":{"type":"string","nullable":true},"previews":{"type":"array","items":{"$ref":"node#/definitions/MediaFilePreviewInfo"},"nullable":true},"attachment":{"type":"boolean","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/PrivateMediaFileOperations","type":"object","nullable":true},{"type":"null"}]}},"required":["id","hash","path","mimeType","width","height","orientation","size"],"additionalProperties":false};
+const schema81 = {"type":"object","properties":{"id":{"type":"string"},"hash":{"type":"string"},"path":{"type":"string"},"directPath":{"type":"string","nullable":true},"directPathExpiresAt":{"type":"integer","nullable":true},"mimeType":{"type":"string"},"width":{"type":"integer","default":0},"height":{"type":"integer","default":0},"orientation":{"type":"integer","default":1},"size":{"type":"integer"},"title":{"type":"string","nullable":true},"textContent":{"type":"string","nullable":true},"postingId":{"type":"string","nullable":true},"previews":{"type":"array","items":{"$ref":"node#/definitions/MediaFilePreviewInfo"},"nullable":true},"attachment":{"type":"boolean","nullable":true},"malware":{"type":"boolean","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/PrivateMediaFileOperations","type":"object","nullable":true},{"type":"null"}]}},"required":["id","hash","path","mimeType","width","height","orientation","size"],"additionalProperties":false};
 const schema82 = {"type":"object","properties":{"targetWidth":{"type":"integer"},"hash":{"type":"string"},"directPath":{"type":"string","nullable":true},"directPathExpiresAt":{"type":"integer","nullable":true},"mimeType":{"type":"string"},"width":{"type":"integer"},"height":{"type":"integer"},"original":{"type":"boolean","nullable":true}},"required":["targetWidth","hash","mimeType","width","height"],"additionalProperties":false};
 const schema83 = {"type":"object","properties":{"view":{"type":"string","nullable":true},"edit":{"type":"string","nullable":true}},"additionalProperties":false};
 
@@ -13877,25 +13877,66 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.operations !== undefined){
-let data24 = data.operations;
+if(data.malware !== undefined){
+let data24 = data.malware;
 const _errs62 = errors;
-const _errs63 = errors;
-let valid4 = false;
-const _errs64 = errors;
-if((!(data24 && typeof data24 == "object" && !Array.isArray(data24))) && (data24 !== null)){
+if((typeof data24 !== "boolean") && (data24 !== null)){
 let dataType23 = typeof data24;
 let coerced23 = undefined;
 if(dataType23 == 'object' && Array.isArray(data24) && data24.length == 1){
 data24 = data24[0];
 dataType23 = typeof data24;
-if((data24 && typeof data24 == "object" && !Array.isArray(data24)) && (data24 === null)){
+if((typeof data24 === "boolean") && (data24 === null)){
 coerced23 = data24;
 }
 }
 if(!(coerced23 !== undefined)){
-if(data24 === "" || data24 === 0 || data24 === false){
+if(data24 === "false" || data24 === 0 || data24 === null){
+coerced23 = false;
+}
+else if(data24 === "true" || data24 === 1){
+coerced23 = true;
+}
+else if(data24 === "" || data24 === 0 || data24 === false){
 coerced23 = null;
+}
+else {
+validate81.errors = [{instancePath:instancePath+"/malware",schemaPath:"#/properties/malware/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
+return false;
+}
+}
+if(coerced23 !== undefined){
+data24 = coerced23;
+if(data !== undefined){
+data["malware"] = coerced23;
+}
+}
+}
+var valid0 = _errs62 === errors;
+}
+else {
+var valid0 = true;
+}
+if(valid0){
+if(data.operations !== undefined){
+let data25 = data.operations;
+const _errs65 = errors;
+const _errs66 = errors;
+let valid4 = false;
+const _errs67 = errors;
+if((!(data25 && typeof data25 == "object" && !Array.isArray(data25))) && (data25 !== null)){
+let dataType24 = typeof data25;
+let coerced24 = undefined;
+if(dataType24 == 'object' && Array.isArray(data25) && data25.length == 1){
+data25 = data25[0];
+dataType24 = typeof data25;
+if((data25 && typeof data25 == "object" && !Array.isArray(data25)) && (data25 === null)){
+coerced24 = data25;
+}
+}
+if(!(coerced24 !== undefined)){
+if(data25 === "" || data25 === 0 || data25 === false){
+coerced24 = null;
 }
 else {
 const err0 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf/0/type",keyword:"type",params:{type: "object"},message:"must be object"};
@@ -13908,72 +13949,25 @@ vErrors.push(err0);
 errors++;
 }
 }
-if(coerced23 !== undefined){
-data24 = coerced23;
-if(data !== undefined){
-data["operations"] = coerced23;
-}
-}
-}
-const _errs65 = errors;
-if(errors === _errs65){
-if(data24 && typeof data24 == "object" && !Array.isArray(data24)){
-const _errs67 = errors;
-for(const key2 in data24){
-if(!((key2 === "view") || (key2 === "edit"))){
-delete data24[key2];
-}
-}
-if(_errs67 === errors){
-if(data24.view !== undefined){
-let data25 = data24.view;
-const _errs68 = errors;
-if((typeof data25 !== "string") && (data25 !== null)){
-let dataType24 = typeof data25;
-let coerced24 = undefined;
-if(dataType24 == 'object' && Array.isArray(data25) && data25.length == 1){
-data25 = data25[0];
-dataType24 = typeof data25;
-if((typeof data25 === "string") && (data25 === null)){
-coerced24 = data25;
-}
-}
-if(!(coerced24 !== undefined)){
-if(dataType24 == "number" || dataType24 == "boolean"){
-coerced24 = "" + data25;
-}
-else if(data25 === null){
-coerced24 = "";
-}
-else if(data25 === "" || data25 === 0 || data25 === false){
-coerced24 = null;
-}
-else {
-const err1 = {instancePath:instancePath+"/operations/view",schemaPath:"node#/definitions/PrivateMediaFileOperations/properties/view/type",keyword:"type",params:{type: "string"},message:"must be string"};
-if(vErrors === null){
-vErrors = [err1];
-}
-else {
-vErrors.push(err1);
-}
-errors++;
-}
-}
 if(coerced24 !== undefined){
 data25 = coerced24;
-if(data24 !== undefined){
-data24["view"] = coerced24;
+if(data !== undefined){
+data["operations"] = coerced24;
 }
 }
 }
-var valid6 = _errs68 === errors;
+const _errs68 = errors;
+if(errors === _errs68){
+if(data25 && typeof data25 == "object" && !Array.isArray(data25)){
+const _errs70 = errors;
+for(const key2 in data25){
+if(!((key2 === "view") || (key2 === "edit"))){
+delete data25[key2];
 }
-else {
-var valid6 = true;
 }
-if(valid6){
-if(data24.edit !== undefined){
-let data26 = data24.edit;
+if(_errs70 === errors){
+if(data25.view !== undefined){
+let data26 = data25.view;
 const _errs71 = errors;
 if((typeof data26 !== "string") && (data26 !== null)){
 let dataType25 = typeof data26;
@@ -13996,6 +13990,53 @@ else if(data26 === "" || data26 === 0 || data26 === false){
 coerced25 = null;
 }
 else {
+const err1 = {instancePath:instancePath+"/operations/view",schemaPath:"node#/definitions/PrivateMediaFileOperations/properties/view/type",keyword:"type",params:{type: "string"},message:"must be string"};
+if(vErrors === null){
+vErrors = [err1];
+}
+else {
+vErrors.push(err1);
+}
+errors++;
+}
+}
+if(coerced25 !== undefined){
+data26 = coerced25;
+if(data25 !== undefined){
+data25["view"] = coerced25;
+}
+}
+}
+var valid6 = _errs71 === errors;
+}
+else {
+var valid6 = true;
+}
+if(valid6){
+if(data25.edit !== undefined){
+let data27 = data25.edit;
+const _errs74 = errors;
+if((typeof data27 !== "string") && (data27 !== null)){
+let dataType26 = typeof data27;
+let coerced26 = undefined;
+if(dataType26 == 'object' && Array.isArray(data27) && data27.length == 1){
+data27 = data27[0];
+dataType26 = typeof data27;
+if((typeof data27 === "string") && (data27 === null)){
+coerced26 = data27;
+}
+}
+if(!(coerced26 !== undefined)){
+if(dataType26 == "number" || dataType26 == "boolean"){
+coerced26 = "" + data27;
+}
+else if(data27 === null){
+coerced26 = "";
+}
+else if(data27 === "" || data27 === 0 || data27 === false){
+coerced26 = null;
+}
+else {
 const err2 = {instancePath:instancePath+"/operations/edit",schemaPath:"node#/definitions/PrivateMediaFileOperations/properties/edit/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
 vErrors = [err2];
@@ -14006,14 +14047,14 @@ vErrors.push(err2);
 errors++;
 }
 }
-if(coerced25 !== undefined){
-data26 = coerced25;
-if(data24 !== undefined){
-data24["edit"] = coerced25;
+if(coerced26 !== undefined){
+data27 = coerced26;
+if(data25 !== undefined){
+data25["edit"] = coerced26;
 }
 }
 }
-var valid6 = _errs71 === errors;
+var valid6 = _errs74 === errors;
 }
 else {
 var valid6 = true;
@@ -14032,23 +14073,23 @@ vErrors.push(err3);
 errors++;
 }
 }
-var _valid0 = _errs64 === errors;
+var _valid0 = _errs67 === errors;
 valid4 = valid4 || _valid0;
 if(!valid4){
-const _errs76 = errors;
-if(data24 !== null){
-let dataType26 = typeof data24;
-let coerced26 = undefined;
-if(dataType26 == 'object' && Array.isArray(data24) && data24.length == 1){
-data24 = data24[0];
-dataType26 = typeof data24;
-if(data24 === null){
-coerced26 = data24;
+const _errs79 = errors;
+if(data25 !== null){
+let dataType27 = typeof data25;
+let coerced27 = undefined;
+if(dataType27 == 'object' && Array.isArray(data25) && data25.length == 1){
+data25 = data25[0];
+dataType27 = typeof data25;
+if(data25 === null){
+coerced27 = data25;
 }
 }
-if(!(coerced26 !== undefined)){
-if(data24 === "" || data24 === 0 || data24 === false){
-coerced26 = null;
+if(!(coerced27 !== undefined)){
+if(data25 === "" || data25 === 0 || data25 === false){
+coerced27 = null;
 }
 else {
 const err4 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
@@ -14061,14 +14102,14 @@ vErrors.push(err4);
 errors++;
 }
 }
-if(coerced26 !== undefined){
-data24 = coerced26;
+if(coerced27 !== undefined){
+data25 = coerced27;
 if(data !== undefined){
-data["operations"] = coerced26;
+data["operations"] = coerced27;
 }
 }
 }
-var _valid0 = _errs76 === errors;
+var _valid0 = _errs79 === errors;
 valid4 = valid4 || _valid0;
 }
 if(!valid4){
@@ -14084,20 +14125,21 @@ validate81.errors = vErrors;
 return false;
 }
 else {
-errors = _errs63;
+errors = _errs66;
 if(vErrors !== null){
-if(_errs63){
-vErrors.length = _errs63;
+if(_errs66){
+vErrors.length = _errs66;
 }
 else {
 vErrors = null;
 }
 }
 }
-var valid0 = _errs62 === errors;
+var valid0 = _errs65 === errors;
 }
 else {
 var valid0 = true;
+}
 }
 }
 }
