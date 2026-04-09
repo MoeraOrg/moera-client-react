@@ -5,6 +5,9 @@
     margin: .5rem;
     background-color: var(--bs-gray-100);
     border-radius: .5rem;
+}
+
+.attached-file:not:has(.malware-icon) {
     cursor: pointer;
 }
 
@@ -22,7 +25,7 @@
 @media only screen and (max-width: 991px) {
     .attached-file {
         display: grid;
-        width: calc(99.6vw - 4rem);
+        width: calc(99.6vw - 3.5rem);
     }
 }
 
@@ -54,4 +57,13 @@
     display: block;
     color: var(--bs-gray-800);
     margin-top: .25rem;
+}
+
+.attached-file .malware-icon {
+    display: block;
+    border: none;
+    background: none;
+    padding: 0;
+    margin-top: .25rem;
+    color: var(--incorrect);
 }

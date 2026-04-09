@@ -466,6 +466,7 @@
   "main": "Main",
   "male": "Male",
   "male-short": "m.",
+  "malware-detected-in-file": "<b>Malware was detected</b> in this file. Downloading has been blocked.",
   "many": "Many",
   "mark": "Mark",
   "mark-all-read": "Mark All as Read",

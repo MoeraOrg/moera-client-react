@@ -9,9 +9,9 @@ import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { attachmentCopyLink } from "state/detailedposting/actions";
-import { Icon, msDownload } from "ui/material-symbols";
-import { DropdownMenu } from "ui/control";
-import { useDispatcher } from "ui/hook";
+import { Icon, msDangerous, msDownload } from "ui/material-symbols";
+import { DropdownMenu, Tooltip } from "ui/control";
+import { useDispatcher, useIsTinyScreen } from "ui/hook";
 import { mediaDownloadUrl, mediaFileName } from "util/media-images";
 import { absoluteNodeName, RelNodeName } from "util/rel-node-name";
 import { notNull } from "util/misc";
@@ -29,6 +29,7 @@ export default function EntryAttachments({nodeName, media}: Props) {
     );
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, nodeName));
     const carte = useSelector(getCurrentViewMediaCarte);
+    const tinyScreen = useIsTinyScreen();
     const dispatch = useDispatcher();
     const {t} = useTranslation();
 
@@ -67,16 +68,29 @@ export default function EntryAttachments({nodeName, media}: Props) {
                                 nodeName,
                                 href: "/media/" + file.path + "?download=true",
                                 onClick: onCopyLink(file),
-                                show: true
+                                show: !file.malware
                             }
                         ]} menuContainer={document.getElementById("modal-root")}/>
-                        <a className="file-name" download href={url} title={t("download")} onClick={onDownload(file)}>
-                            {mediaFileName(file)}
-                        </a>
-                        <a className="download-icon" download href={url} title={t("download")}
-                           onClick={onDownload(file)}>
-                            <Icon icon={msDownload} size="1.3em"/>
-                        </a>
+                        {!file.malware ?
+                            <>
+                                <a className="file-name" download href={url} title={t("download")}
+                                   onClick={onDownload(file)}>
+                                    {mediaFileName(file)}
+                                </a>
+                                <a className="download-icon" download href={url} title={t("download")}
+                                   onClick={onDownload(file)}>
+                                    <Icon icon={msDownload} size="1.3em"/>
+                                </a>
+                            </>
+                        :
+                            <>
+                                <div className="file-name">{mediaFileName(file)}</div>
+                                <Tooltip className="malware-icon" text="malware-detected-in-file"
+                                         placement={tinyScreen ? "left" : undefined}>
+                                    <Icon icon={msDangerous} size="1.6em"/>
+                                </Tooltip>
+                            </>
+                        }
                     </div>
                 ))
             }

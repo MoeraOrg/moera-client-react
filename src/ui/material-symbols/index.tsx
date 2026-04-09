@@ -32,6 +32,7 @@ import { ReactComponent as msComment } from "ui/material-symbols/comment.isvg";
 import { ReactComponent as msCommentRegular } from "ui/material-symbols/comment-regular.isvg"; // FontAwesome
 import { ReactComponent as msContentCopy } from "ui/material-symbols/content_copy.isvg";
 import { ReactComponent as msCropSquare } from "ui/material-symbols/crop_square.isvg";
+import { ReactComponent as msDangerous } from "ui/material-symbols/dangerous.isvg";
 import { ReactComponent as msDelete } from "ui/material-symbols/delete.isvg";
 import { ReactComponent as msDownload } from "ui/material-symbols/download.isvg";
 import { ReactComponent as msDraft } from "ui/material-symbols/draft.isvg";
@@ -178,6 +179,7 @@ export {
     msCommentRegular,
     msContentCopy,
     msCropSquare,
+    msDangerous,
     msDelete,
     msDownload,
     msDraft,

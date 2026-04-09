@@ -25,7 +25,9 @@ export default function MediaDownloadDialog() {
     const loading = errorCode === "media.download-pending";
     const text = loading ? "attached-files-downloaded-home"
         : errorCode === "media.digest-incorrect" ? "file-not-recommended-to-download"
+        : errorCode === "media.malware" ? "malware-detected-in-file"
         : errorCode != null ? "file-cannot-be-downloaded"
+        : media?.malware ? "malware-detected-in-file"
         : "file-can-be-downloaded";
 
     return (
@@ -34,7 +36,7 @@ export default function MediaDownloadDialog() {
                 <Trans i18nKey={text} components={{b: <b/>}}/>
             </div>
             <div className="modal-footer justify-content-center">
-                {media == null ?
+                {media == null || media.malware ?
                     <Button variant="primary" disabled loading={loading}>
                         <Icon icon={msDownload} size="1.3em" className="download-icon"/>{t("download")}
                     </Button>

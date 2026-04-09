@@ -23,7 +23,10 @@ async function openMediaDownloadDialogSaga(action: WithContext<OpenMediaDownload
         try {
             const media = await Node.downloadRemoteMedia(
                 action, REL_HOME, nodeName, mediaId,
-                ["media.digest-incorrect", "media.download-failed", "media.storage-error", "media.download-pending"]
+                [
+                    "media.digest-incorrect", "media.download-failed", "media.malware", "media.storage-error",
+                    "media.download-pending"
+                ]
             );
             dispatch(mediaDownloadSucceeded(nodeName, mediaId, media).causedBy(action));
             break;

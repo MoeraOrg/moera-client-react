@@ -466,6 +466,7 @@
   "main": "Główny",
   "male": "Mężczyzna",
   "male-short": "m.",
+  "malware-detected-in-file": "W tym pliku <b>wykryto złośliwe oprogramowanie</b>. Pobieranie заблоковано.",
   "many": "Wiele",
   "mark": "Zaznacz",
   "mark-all-read": "Oznacz wszystko jako przeczytane",
