@@ -102,10 +102,6 @@
     }
 }
 
-.posting > .menu .menu-button svg {
-    vertical-align: -.2em;
-}
-
 .posting > .reactions-line {
     display: flex;
     justify-content: space-between;
