@@ -492,7 +492,7 @@
   "name": "Nazwa",
   "name-already-taken": "Nazwa jest już zajęta. Zauważ, że możesz dodać do nazwy dowolną liczbę (np. 'Arthur42')",
   "named-key": "Klucz nazwy",
-  "name-help": "Nazwa musi mieć 4-120 znaków. Dozwolone są wszystkie znaki, z wyjątkiem białych znaków i interpunkcji. Dozwolona interpunkcja: <0>!</0> <0>*</0> <0>-</0> <0>.</0>",
+  "name-help": "Nazwa musi mieć 4-120 znaków. Dozwolone są wszystkie znaki, z wyjątkiem białych znaków i interpunkcji. Dozwolona interpunkcja: <b>!</b> <b>*</b> <b>-</b> <b>.</b>",
   "name-not-allowed": "Nazwa jest niedozwolona",
   "name-operation-started": "Rozpoczęto operację nazwy",
   "name-or-node-url-not-valid": "Nazwa bloga lub URL jest nieprawidłowa",

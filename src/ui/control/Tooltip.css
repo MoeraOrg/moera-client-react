@@ -1,0 +1,9 @@
+.tooltip.tooltip-popup {
+    pointer-events: none;
+}
+
+.tooltip.tooltip-popup .tooltip-inner {
+    text-align: start;
+
+    --bs-tooltip-max-width: min(25rem, 80vw);
+}

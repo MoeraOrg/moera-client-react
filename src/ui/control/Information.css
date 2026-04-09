@@ -4,13 +4,3 @@
     padding: 0;
     color: var(--bs-gray-600);
 }
-
-.information + .tooltip {
-    pointer-events: none;
-}
-
-.information + .tooltip .tooltip-inner {
-    text-align: start;
-
-    --bs-tooltip-max-width: min(25rem, 80vw);
-}
