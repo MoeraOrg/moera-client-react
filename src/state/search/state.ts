@@ -20,6 +20,7 @@ export interface SearchFilter {
     repliedToMe: boolean;
     minImageCount: number | null;
     videoPresent: boolean;
+    attachmentPresent: boolean;
     safeSearch: boolean | null;
     beforeDate: SearchFilterBeforeDate;
     datePeriod: SearchFilterDatePeriod;

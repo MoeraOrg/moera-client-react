@@ -26,26 +26,30 @@ import { BooleanString, toBoolean, toBooleanString } from "util/bool-string";
 import "./SearchFilterDialog.css";
 
 type FilterField =
-    "entryType" | "inNewsfeed" | "ownedByMe" | "repliedToMe" | "minImageCount" | "videoPresent" | "safeSearch"
-    | "period";
+    "entryType" | "inNewsfeed" | "ownedByMe" | "repliedToMe" | "minImageCount" | "videoPresent"
+    | "attachmentPresent" | "safeSearch" | "period";
 
 const ENABLED_FIELDS: Record<SearchTab, FilterField[]> = {
     "people": ["safeSearch"],
-    "content": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch", "period"],
-    "postings": ["ownedByMe", "minImageCount", "videoPresent", "safeSearch", "period"],
-    "comments": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch", "period"],
-    "current-blog": ["entryType", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch", "period"],
+    "content": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "attachmentPresent", "safeSearch", "period"],
+    "postings": ["ownedByMe", "minImageCount", "videoPresent", "attachmentPresent", "safeSearch", "period"],
+    "comments": ["ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "attachmentPresent", "safeSearch", "period"],
+    "current-blog": [
+        "entryType", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "attachmentPresent",
+        "safeSearch", "period"
+    ],
     "own-blog": [
-        "entryType", "inNewsfeed", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "safeSearch", "period"
+        "entryType", "inNewsfeed", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent",
+        "attachmentPresent", "safeSearch", "period"
     ]
 }
 
 const ENABLED_FIELDS_NO_USER: Record<SearchTab, FilterField[]> = {
     "people": ["safeSearch"],
-    "content": ["minImageCount", "videoPresent", "safeSearch", "period"],
-    "postings": ["minImageCount", "videoPresent", "safeSearch", "period"],
-    "comments": ["minImageCount", "videoPresent", "safeSearch", "period"],
-    "current-blog": ["entryType", "minImageCount", "videoPresent", "safeSearch", "period"],
+    "content": ["minImageCount", "videoPresent", "attachmentPresent", "safeSearch", "period"],
+    "postings": ["minImageCount", "videoPresent", "attachmentPresent", "safeSearch", "period"],
+    "comments": ["minImageCount", "videoPresent", "attachmentPresent", "safeSearch", "period"],
+    "current-blog": ["entryType", "minImageCount", "videoPresent", "attachmentPresent", "safeSearch", "period"],
     "own-blog": []
 }
 
@@ -73,6 +77,11 @@ const IMAGE_NUMBER: SelectFieldChoice[] = [
 ];
 
 const VIDEO: SelectFieldChoiceBase<BooleanString>[] = [
+    {title: "not-matter", value: "false"},
+    {title: "present", value: "true"}
+];
+
+const ATTACHMENTS: SelectFieldChoiceBase<BooleanString>[] = [
     {title: "not-matter", value: "false"},
     {title: "present", value: "true"}
 ];
@@ -111,6 +120,7 @@ interface Values {
     repliedToMe: boolean;
     minImageCount: string;
     videoPresent: BooleanString;
+    attachmentPresent: BooleanString;
     safeSearch: boolean;
     beforeDate: SearchFilterBeforeDate;
     datePeriod: SearchFilterDatePeriod;
@@ -202,6 +212,16 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     anyValue
                                 />
                             }
+                            {fieldName === "attachmentPresent" &&
+                                <SelectField
+                                    name="attachmentPresent"
+                                    title={t("files")}
+                                    choices={ATTACHMENTS}
+                                    labelClassName="col-4 col-lg-3"
+                                    horizontal
+                                    anyValue
+                                />
+                            }
                             {fieldName === "safeSearch" && sheriffName &&
                                 <CheckboxField
                                     name="safeSearch"
@@ -252,6 +272,7 @@ const filterToValues = (filter: SearchFilter, safeSearchDefault: boolean): Value
     repliedToMe: filter.repliedToMe,
     minImageCount: (filter.minImageCount ?? 0).toString(),
     videoPresent: toBooleanString(filter.videoPresent),
+    attachmentPresent: toBooleanString(filter.attachmentPresent),
     safeSearch: filter.safeSearch ?? safeSearchDefault,
     beforeDate: filter.beforeDate,
     datePeriod: filter.datePeriod
@@ -264,6 +285,7 @@ const valuesTofilter = (values: Values, safeSearchDefault: boolean): SearchFilte
     repliedToMe: values.repliedToMe,
     minImageCount: values.minImageCount === "0" ? null : parseInt(values.minImageCount),
     videoPresent: toBoolean(values.videoPresent),
+    attachmentPresent: toBoolean(values.attachmentPresent),
     safeSearch: values.safeSearch === safeSearchDefault ? null : values.safeSearch,
     beforeDate: values.beforeDate,
     datePeriod: values.datePeriod

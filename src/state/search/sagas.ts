@@ -152,6 +152,7 @@ async function load(
         : undefined;
     const minImageCount = filter.minImageCount ?? undefined;
     const videoPresent = filter.videoPresent;
+    const attachmentPresent = filter.attachmentPresent;
     const sheriffName = (filter.safeSearch ?? safeSearchDefault) && sheriffNameDefault ? sheriffNameDefault : undefined;
 
     try {
@@ -167,6 +168,7 @@ async function load(
                 owners,
                 minImageCount,
                 videoPresent,
+                attachmentPresent,
                 sheriffName,
                 before,
                 limit: SEARCH_PAGE_SIZE
@@ -195,6 +197,7 @@ async function load(
                     repliedTo,
                     minImageCount,
                     videoPresent,
+                    attachmentPresent,
                     sheriffName,
                     createdBefore: toUnixTime(createdBefore),
                     createdAfter: toUnixTime(createdAfter),

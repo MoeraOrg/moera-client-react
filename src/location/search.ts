@@ -33,6 +33,9 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (dstInfo.parameters["video"] != null) {
         filter.videoPresent = toBoolean(dstInfo.parameters["video"]);
     }
+    if (dstInfo.parameters["files"] != null) {
+        filter.attachmentPresent = toBoolean(dstInfo.parameters["files"]);
+    }
     if (dstInfo.parameters["safe"] != null) {
         filter.safeSearch = toBoolean(dstInfo.parameters["safe"]);
     }
@@ -74,6 +77,9 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     }
     if (filter.videoPresent) {
         info = info.withParameter("video", "true");
+    }
+    if (filter.attachmentPresent) {
+        info = info.withParameter("files", "true");
     }
     if (filter.safeSearch != null && filter.safeSearch !== safeSearchDefault) {
         info = info.withParameter("safe", toBooleanString(filter.safeSearch));

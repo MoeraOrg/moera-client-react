@@ -893,6 +893,7 @@ export interface SearchHashtagFilter {
     minImageCount?: number | null;
     maxImageCount?: number | null;
     videoPresent?: boolean | null;
+    attachmentPresent?: boolean | null;
     sheriffName?: string | null;
     after?: number | null;
     before?: number | null;
@@ -980,6 +981,7 @@ export interface SearchTextFilter {
     minImageCount?: number | null;
     maxImageCount?: number | null;
     videoPresent?: boolean | null;
+    attachmentPresent?: boolean | null;
     createdAfter?: number | null;
     createdBefore?: number | null;
     sheriffName?: string | null;
@@ -1644,6 +1646,7 @@ export interface SearchEntryInfoBase<B> {
     heading: string;
     imageCount?: number | null;
     videoPresent?: boolean | null;
+    attachmentPresent?: boolean | null;
     mediaPreview?: PublicMediaFileInfo | null;
     mediaPreviewId?: string | null;
     repliedTo?: SearchRepliedTo | null;
