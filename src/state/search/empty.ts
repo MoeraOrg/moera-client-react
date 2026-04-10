@@ -6,8 +6,8 @@ export const emptySearchFilter: SearchFilter = {
     ownedByMe: false,
     repliedToMe: false,
     minImageCount: null,
-    videoPresent: false,
-    attachmentPresent: false,
+    videoPresent: null,
+    attachmentPresent: null,
     safeSearch: null,
     beforeDate: "now",
     datePeriod: "any"

@@ -22,7 +22,7 @@ import {
 } from "state/search/selectors";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, SelectField, SelectFieldChoice, SelectFieldChoiceBase } from "ui/control/field";
-import { BooleanString, toBoolean, toBooleanString } from "util/bool-string";
+import { BooleanOrNullString, BooleanString, toBoolean, toBooleanOrNull, toBooleanOrNullString, toBooleanString } from "util/bool-string";
 import "./SearchFilterDialog.css";
 
 type FilterField =
@@ -76,13 +76,13 @@ const IMAGE_NUMBER: SelectFieldChoice[] = [
     {title: "many", value: "6"}
 ];
 
-const VIDEO: SelectFieldChoiceBase<BooleanString>[] = [
-    {title: "not-matter", value: "false"},
+const VIDEO: SelectFieldChoiceBase<BooleanOrNullString>[] = [
+    {title: "not-matter", value: "null"},
     {title: "present", value: "true"}
 ];
 
-const ATTACHMENTS: SelectFieldChoiceBase<BooleanString>[] = [
-    {title: "not-matter", value: "false"},
+const ATTACHMENTS: SelectFieldChoiceBase<BooleanOrNullString>[] = [
+    {title: "not-matter", value: "null"},
     {title: "present", value: "true"}
 ];
 
@@ -119,8 +119,8 @@ interface Values {
     ownedByMe: BooleanString;
     repliedToMe: boolean;
     minImageCount: string;
-    videoPresent: BooleanString;
-    attachmentPresent: BooleanString;
+    videoPresent: BooleanOrNullString;
+    attachmentPresent: BooleanOrNullString;
     safeSearch: boolean;
     beforeDate: SearchFilterBeforeDate;
     datePeriod: SearchFilterDatePeriod;
@@ -271,8 +271,8 @@ const filterToValues = (filter: SearchFilter, safeSearchDefault: boolean): Value
     ownedByMe: toBooleanString(filter.ownedByMe),
     repliedToMe: filter.repliedToMe,
     minImageCount: (filter.minImageCount ?? 0).toString(),
-    videoPresent: toBooleanString(filter.videoPresent),
-    attachmentPresent: toBooleanString(filter.attachmentPresent),
+    videoPresent: toBooleanOrNullString(filter.videoPresent),
+    attachmentPresent: toBooleanOrNullString(filter.attachmentPresent),
     safeSearch: filter.safeSearch ?? safeSearchDefault,
     beforeDate: filter.beforeDate,
     datePeriod: filter.datePeriod
@@ -284,8 +284,8 @@ const valuesTofilter = (values: Values, safeSearchDefault: boolean): SearchFilte
     ownedByMe: toBoolean(values.ownedByMe),
     repliedToMe: values.repliedToMe,
     minImageCount: values.minImageCount === "0" ? null : parseInt(values.minImageCount),
-    videoPresent: toBoolean(values.videoPresent),
-    attachmentPresent: toBoolean(values.attachmentPresent),
+    videoPresent: toBooleanOrNull(values.videoPresent),
+    attachmentPresent: toBooleanOrNull(values.attachmentPresent),
     safeSearch: values.safeSearch === safeSearchDefault ? null : values.safeSearch,
     beforeDate: values.beforeDate,
     datePeriod: values.datePeriod

@@ -19,8 +19,8 @@ export interface SearchFilter {
     ownedByMe: boolean;
     repliedToMe: boolean;
     minImageCount: number | null;
-    videoPresent: boolean;
-    attachmentPresent: boolean;
+    videoPresent: boolean | null;
+    attachmentPresent: boolean | null;
     safeSearch: boolean | null;
     beforeDate: SearchFilterBeforeDate;
     datePeriod: SearchFilterDatePeriod;

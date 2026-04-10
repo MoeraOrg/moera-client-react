@@ -9,7 +9,7 @@ import { SearchFilterBeforeDate, SearchFilterDatePeriod, SearchTab } from "state
 import { emptySearchFilter } from "state/search/empty";
 import { getSafeSearchDefault, getSearchFilter, getSearchQuery, getSearchTab } from "state/search/selectors";
 import { LocationInfo } from "location/LocationInfo";
-import { toBoolean, toBooleanString } from "util/bool-string";
+import { toBoolean, toBooleanOrNull, toBooleanString } from "util/bool-string";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     const query = dstInfo.parameters["query"] ?? "";
@@ -31,10 +31,10 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
         filter.minImageCount = parseInt(dstInfo.parameters["imin"]);
     }
     if (dstInfo.parameters["video"] != null) {
-        filter.videoPresent = toBoolean(dstInfo.parameters["video"]);
+        filter.videoPresent = toBooleanOrNull(dstInfo.parameters["video"]);
     }
     if (dstInfo.parameters["files"] != null) {
-        filter.attachmentPresent = toBoolean(dstInfo.parameters["files"]);
+        filter.attachmentPresent = toBooleanOrNull(dstInfo.parameters["files"]);
     }
     if (dstInfo.parameters["safe"] != null) {
         filter.safeSearch = toBoolean(dstInfo.parameters["safe"]);

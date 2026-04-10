@@ -151,8 +151,8 @@ async function load(
         ? [action.context.homeOwnerName]
         : undefined;
     const minImageCount = filter.minImageCount ?? undefined;
-    const videoPresent = filter.videoPresent;
-    const attachmentPresent = filter.attachmentPresent;
+    const videoPresent = filter.videoPresent ?? undefined;
+    const attachmentPresent = filter.attachmentPresent ?? undefined;
     const sheriffName = (filter.safeSearch ?? safeSearchDefault) && sheriffNameDefault ? sheriffNameDefault : undefined;
 
     try {
