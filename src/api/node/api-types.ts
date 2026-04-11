@@ -1646,7 +1646,7 @@ export interface SearchEntryInfoBase<B> {
     heading: string;
     imageCount?: number | null;
     videoPresent?: boolean | null;
-    attachmentPresent?: boolean | null;
+    attachmentCount?: number | null;
     mediaPreview?: PublicMediaFileInfo | null;
     mediaPreviewId?: string | null;
     repliedTo?: SearchRepliedTo | null;

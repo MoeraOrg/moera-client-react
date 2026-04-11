@@ -1,0 +1,8 @@
+.search-attachments {
+    color: var(--bs-gray-600);
+}
+
+.search-attachments .icon {
+    margin-right: .25rem;
+    vertical-align: -.25em;
+}

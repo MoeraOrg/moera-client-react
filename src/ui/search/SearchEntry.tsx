@@ -18,6 +18,7 @@ import Jump from "ui/navigation/Jump";
 import { replaceEmojis } from "util/html";
 import { REL_SEARCH } from "util/rel-node-name";
 import { ut } from "util/url";
+import SearchEntryAttachments from "ui/search/SearchEntryAttachments";
 
 interface PostingOwnerLineProps {
     entry: ExtSearchEntryInfo;
@@ -106,6 +107,7 @@ export default function SearchEntry({entry}: Props) {
             <StorySubject subjectHtml={entry.bodyPreview.subjectHtml} nodeName={entry.nodeName} href={href}/>
             <div className="content pb-0">
                 <EntryHtml html={entry.bodyPreview.text}/>
+                <SearchEntryAttachments count={entry.attachmentCount ?? 0}/>
                 {entry.imageCount != null && entry.imageCount > 0 &&
                     <p className="search-images" dir="auto">
                         {entry.mediaPreviewId != null && entry.mediaPreview != null ?

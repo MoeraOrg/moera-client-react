@@ -4420,8 +4420,8 @@ export const NODE_API_SCHEMAS = {
                     type: "boolean",
                     nullable: true
                 },
-                "attachmentPresent": {
-                    type: "boolean",
+                "attachmentCount": {
+                    type: "integer",
                     nullable: true
                 },
                 "mediaPreview": {

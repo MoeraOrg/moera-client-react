@@ -159,6 +159,7 @@
   "copy-text-image": "Copy text from image",
   "copy-with-formatting": "Copy text with formatting",
   "count-comments": "{count} {count, plural, one {comment} other {comments}}",
+  "count-files": "{count} {count, plural, one {file} other {files}}",
   "count-images": "{count} {count, plural, one {image} other {images}}",
   "count-more": "{count} more",
   "count-new-comments": "{count} {count, plural, one {new comment} other {new comments}}",

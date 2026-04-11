@@ -159,6 +159,7 @@
   "copy-text-image": "Копировать текст с картинки",
   "copy-with-formatting": "Копировать текст с форматированием",
   "count-comments": "{count} {count, plural, one {комментарий} few {комментария} other {комментариев}}",
+  "count-files": "{count} {count, plural, one {файл} few {файла} other {файлов}}",
   "count-images": "{count} {count, plural, one {картинка} few {картинки} other {картинок}}",
   "count-more": "Ещё {count}",
   "count-new-comments": "{count} {count, plural, one {новый комментарий} few {новых комментария} other {новых комментариев}}",

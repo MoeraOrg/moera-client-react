@@ -55682,7 +55682,7 @@ return errors === 0;
 }
 
 export const SearchEntryInfo = validate196;
-const schema215 = {"type":"object","properties":{"nodeName":{"type":"string"},"postingId":{"type":"string"},"commentId":{"type":"string","nullable":true},"ownerName":{"type":"string"},"ownerFullName":{"type":"string","nullable":true},"ownerAvatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"bodyPreview":{"type":"string"},"bodyFormat":{"type":"string","nullable":true},"heading":{"type":"string"},"imageCount":{"type":"integer","nullable":true},"videoPresent":{"type":"boolean","nullable":true},"attachmentPresent":{"type":"boolean","nullable":true},"mediaPreview":{"anyOf":[{"$ref":"node#/definitions/PublicMediaFileInfo","type":"object","nullable":true},{"type":"null"}]},"mediaPreviewId":{"type":"string","nullable":true},"repliedTo":{"anyOf":[{"$ref":"node#/definitions/SearchRepliedTo","type":"object","nullable":true},{"type":"null"}]},"createdAt":{"type":"integer"},"operations":{"anyOf":[{"$ref":"node#/definitions/SearchEntryOperations","type":"object","nullable":true},{"type":"null"}]},"moment":{"type":"integer"}},"required":["nodeName","postingId","ownerName","bodyPreview","heading","createdAt","moment"],"additionalProperties":false};
+const schema215 = {"type":"object","properties":{"nodeName":{"type":"string"},"postingId":{"type":"string"},"commentId":{"type":"string","nullable":true},"ownerName":{"type":"string"},"ownerFullName":{"type":"string","nullable":true},"ownerAvatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"bodyPreview":{"type":"string"},"bodyFormat":{"type":"string","nullable":true},"heading":{"type":"string"},"imageCount":{"type":"integer","nullable":true},"videoPresent":{"type":"boolean","nullable":true},"attachmentCount":{"type":"integer","nullable":true},"mediaPreview":{"anyOf":[{"$ref":"node#/definitions/PublicMediaFileInfo","type":"object","nullable":true},{"type":"null"}]},"mediaPreviewId":{"type":"string","nullable":true},"repliedTo":{"anyOf":[{"$ref":"node#/definitions/SearchRepliedTo","type":"object","nullable":true},{"type":"null"}]},"createdAt":{"type":"integer"},"operations":{"anyOf":[{"$ref":"node#/definitions/SearchEntryOperations","type":"object","nullable":true},{"type":"null"}]},"moment":{"type":"integer"}},"required":["nodeName","postingId","ownerName","bodyPreview","heading","createdAt","moment"],"additionalProperties":false};
 
 function validate196(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
 let vErrors = null;
@@ -56607,38 +56607,36 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.attachmentPresent !== undefined){
-let data19 = data.attachmentPresent;
+if(data.attachmentCount !== undefined){
+let data19 = data.attachmentCount;
 const _errs59 = errors;
-if((typeof data19 !== "boolean") && (data19 !== null)){
+if((!(((typeof data19 == "number") && (!(data19 % 1) && !isNaN(data19))) && (isFinite(data19)))) && (data19 !== null)){
 let dataType20 = typeof data19;
 let coerced20 = undefined;
 if(dataType20 == 'object' && Array.isArray(data19) && data19.length == 1){
 data19 = data19[0];
 dataType20 = typeof data19;
-if((typeof data19 === "boolean") && (data19 === null)){
+if((((typeof data19 == "number") && (!(data19 % 1) && !isNaN(data19))) && (isFinite(data19))) && (data19 === null)){
 coerced20 = data19;
 }
 }
 if(!(coerced20 !== undefined)){
-if(data19 === "false" || data19 === 0 || data19 === null){
-coerced20 = false;
-}
-else if(data19 === "true" || data19 === 1){
-coerced20 = true;
+if(dataType20 === "boolean" || data19 === null
+              || (dataType20 === "string" && data19 && data19 == +data19 && !(data19 % 1))){
+coerced20 = +data19;
 }
 else if(data19 === "" || data19 === 0 || data19 === false){
 coerced20 = null;
 }
 else {
-validate196.errors = [{instancePath:instancePath+"/attachmentPresent",schemaPath:"#/properties/attachmentPresent/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
+validate196.errors = [{instancePath:instancePath+"/attachmentCount",schemaPath:"#/properties/attachmentCount/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced20 !== undefined){
 data19 = coerced20;
 if(data !== undefined){
-data["attachmentPresent"] = coerced20;
+data["attachmentCount"] = coerced20;
 }
 }
 }
