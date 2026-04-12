@@ -2111,7 +2111,8 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "mimeType": {
-                    type: "string"
+                    type: "string",
+                    nullable: true
                 },
                 "attachment": {
                     type: "boolean",
@@ -2120,7 +2121,6 @@ export const NODE_API_SCHEMAS = {
             },
             required: [
                 "id",
-                "mimeType",
             ],
             additionalProperties: false
         },

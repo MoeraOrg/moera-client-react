@@ -802,7 +802,7 @@ export interface RemoteMediaInfo {
     id: string;
     hash?: string | null;
     digest?: string | null;
-    mimeType: string;
+    mimeType?: string | null;
     attachment?: boolean | null;
 }
 
