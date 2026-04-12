@@ -8,8 +8,8 @@ import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import {
     richTextEditorImageCopy,
-    richTextEditorImagesUpload,
-    richTextEditorMediaRename
+    richTextEditorMediaRename,
+    richTextEditorMediaUpload
 } from "state/richtexteditor/actions";
 import { useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
@@ -117,7 +117,7 @@ export default function RichTextEditorMedia({
         if (files.length > 0) {
             setUploadProgress(files.map(file => ({status: "loading", loaded: 0, total: file.size})));
             imageUploadStarted(files.length);
-            dispatch(richTextEditorImagesUpload(
+            dispatch(richTextEditorMediaUpload(
                 nodeName,
                 files,
                 features,

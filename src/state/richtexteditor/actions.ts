@@ -18,7 +18,7 @@ export type RichTextEditorMediaUploadAction = ActionWithPayload<"RICH_TEXT_EDITO
     captionSrcFormat?: SourceFormat | null;
     rejectedReactions?: RejectedReactions | null;
 }>;
-export const richTextEditorImagesUpload = (
+export const richTextEditorMediaUpload = (
     nodeName: RelNodeName | string,
     files: File[],
     features: PostingFeatures | null,
