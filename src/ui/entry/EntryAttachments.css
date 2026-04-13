@@ -41,7 +41,7 @@
 .attached-file .file-name {
     display: block;
     padding: .3rem .25rem 0;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
     color: var(--bs-gray-800);
 }
 
