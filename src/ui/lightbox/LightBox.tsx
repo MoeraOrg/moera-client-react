@@ -171,8 +171,8 @@ function getGallery(
 ): MediaAttachment[] | null {
     // important: !== not !=
     const entry = comment !== null ? comment : posting;
-    const media = entry?.media;
-    if (media == null) {
+    const media = (entry?.media ?? []).filter(mf => !mf.media?.attachment);
+    if (media.length === 0) {
         return null;
     }
     const linkPreviews = entry?.body.linkPreviews ?? [];
