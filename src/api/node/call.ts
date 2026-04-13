@@ -82,7 +82,7 @@ export async function callApi<T>({
         "Client-ID": Browser.clientId
     };
     if (body instanceof File) {
-        headers["Content-Disposition"] = `attachment; filename="${body.name}"`;
+        headers["Content-Disposition"] = `attachment; filename*=UTF-8''${encodeURIComponent(body.name)}`;
     }
 
     let cartesRenewed = false;

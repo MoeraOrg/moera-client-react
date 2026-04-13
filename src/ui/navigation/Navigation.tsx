@@ -6,7 +6,7 @@ import { restoreFar, restoreNear } from "state/navigation/actions";
 import { cartesLoad } from "state/cartes/actions";
 import { getInstantCount } from "state/feeds/selectors";
 import { getNodeRootLocation } from "state/node/selectors";
-import { useDispatcher } from "ui/hook";
+import { useAndroidMessages, useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
 import { asyncReturn } from "util/async-calls";
 
@@ -32,18 +32,12 @@ export default function Navigation() {
         event.preventDefault();
     }, [dispatch, rootLocation]);
 
-    const messageReceived = useCallback((event: MessageEvent) => {
-        const data = event.data;
-        if (data === null || typeof data !== "string") {
-            return;
-        }
-        const message = JSON.parse(data) as AndroidMessage;
+    useEffect(() => {
+        window.addEventListener("popstate", popState);
+        return () => window.removeEventListener("popstate", popState);
+    }, [popState]);
 
-        // Only accept messages that we know are ours
-        if (message.source !== "moera-android") {
-            return;
-        }
-
+    const messageReceived = useCallback((message: AndroidMessage) => {
         switch (message.action) {
             case "back":
                 window.overlays.mobileBack();
@@ -62,19 +56,7 @@ export default function Navigation() {
         }
     }, [dispatch]);
 
-    useEffect(() => {
-        window.addEventListener("popstate", popState);
-        if (Browser.isAndroidApp()) {
-            window.addEventListener("message", messageReceived);
-        }
-
-        return () => {
-            window.removeEventListener("popstate", popState);
-            if (Browser.isAndroidApp()) {
-                window.removeEventListener("message", messageReceived);
-            }
-        }
-    }, [messageReceived, popState]);
+    useAndroidMessages(messageReceived);
 
     useEffect(() => {
         const counter = count > 0 ? `(${count}) ` : "";

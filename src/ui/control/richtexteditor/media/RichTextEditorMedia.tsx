@@ -1,7 +1,8 @@
-import React, { ReactNode, useMemo, useRef, useState } from 'react';
+import React, { ReactNode, useCallback, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import * as immutable from 'object-path-immutable';
+import * as Base64js from 'base64-js';
 
 import { PostingFeatures, PrivateMediaFileInfo, RejectedReactions, SourceFormat, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
@@ -11,7 +12,7 @@ import {
     richTextEditorMediaRename,
     richTextEditorMediaUpload
 } from "state/richtexteditor/actions";
-import { useDispatcher } from "ui/hook";
+import { useAndroidMessages, useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
 import {
     AttachmentType,
@@ -177,6 +178,23 @@ export default function RichTextEditorMedia({
             }
         );
     }
+
+    const onAndroidMessage = useCallback((message: AndroidMessage) => {
+        if (message.action === "content-selected" && message.uris != null) {
+            const files: File[] = message.uris.map(uri => {
+                const mimeType = window.Android?.getContentUriMimeType(uri) ?? "application/octet-stream";
+                const content = Uint8Array.from(Base64js.toByteArray(window.Android?.readContentUri(uri) ?? ""));
+                return new File(
+                    [content],
+                    window.Android?.getContentUriFileName(uri) ?? "moera-upload.bin",
+                    {type: mimeType}
+                );
+            });
+            uploadImages(files, false);
+        }
+    }, [uploadImages]);
+
+    useAndroidMessages(onAndroidMessage);
 
     const imageExtensions = useMemo(
         () => features?.imageFormats

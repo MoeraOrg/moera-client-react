@@ -91,23 +91,26 @@ type SharedTextType = "html" | "text";
 type AndroidAppFlavor = "google-play" | "apk";
 
 interface AndroidJsInterface {
-    locationChanged(url: string, location: string): void;
+    back(): void;
+    changeLanguage(lang: string | null): void;
     connectedToHome(url: string | null, token: string | null, ownerName: string | null): void;
-    loadSettingsMeta(): string;
-    loadSettings(): string;
-    storeSettings(data: string): void;
-    share(url: string, title: string): void;
+    getApiVersion(): number;
+    getContentUriFileName(uriString: string): string | null;
+    getContentUriMimeType(uriString: string): string | null;
+    getFlavor(): AndroidAppFlavor;
     getSharedText(): string;
     getSharedTextType(): SharedTextType;
-    saveImage(url: string, mimeType: string): void;
-    back(): void;
-    toast(text: string): void;
-    setSwipeRefreshEnabled(enabled: boolean): void;
     isDonationsEnabled(): boolean; // deprecated
-    getFlavor(): AndroidAppFlavor;
-    getApiVersion(): number;
-    changeLanguage(lang: string | null): void;
+    loadSettings(): string;
+    loadSettingsMeta(): string;
+    locationChanged(url: string, location: string): void;
     log(text: string): void;
+    readContentUri(uriString: string): string | null;
+    saveImage(url: string, mimeType: string): void;
+    setSwipeRefreshEnabled(enabled: boolean): void;
+    share(url: string, title: string): void;
+    storeSettings(data: string): void;
+    toast(text: string): void;
 }
 
 interface AndroidMessageBack {
@@ -127,10 +130,17 @@ interface AndroidMessageNetworkChanged {
     action: "network-changed";
 }
 
+interface AndroidMessageContentSelected {
+    source: string;
+    action: "content-selected";
+    uris: string[];
+}
+
 type AndroidMessage =
     AndroidMessageBack
     | AndroidMessageCallReturn
-    | AndroidMessageNetworkChanged;
+    | AndroidMessageNetworkChanged
+    | AndroidMessageContentSelected;
 
 interface Window {
     Android?: AndroidJsInterface;
