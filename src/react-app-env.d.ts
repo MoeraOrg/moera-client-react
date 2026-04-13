@@ -106,6 +106,7 @@ interface AndroidJsInterface {
     locationChanged(url: string, location: string): void;
     log(text: string): void;
     readContentUri(uriString: string): string | null;
+    saveFile(url: string, fileName: string, mimeType: string): void
     saveImage(url: string, mimeType: string): void;
     setSwipeRefreshEnabled(enabled: boolean): void;
     share(url: string, title: string): void;
