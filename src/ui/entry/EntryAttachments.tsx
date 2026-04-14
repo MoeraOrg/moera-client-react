@@ -49,7 +49,7 @@ export default function EntryAttachments({nodeName, media}: Props) {
         dispatch(attachmentCopyLink(nodeName, file));
 
     const onDownload = (file: PrivateMediaFileInfo, url: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
-        if (targetNodeName === homeOwnerName) {
+        if (homeOwnerName == null || targetNodeName === homeOwnerName) {
             if (window.Android && "saveFile" in window.Android) {
                 window.Android.saveFile(url, mediaFileName(file), file.mimeType);
                 event.preventDefault();
