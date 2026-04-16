@@ -106,7 +106,7 @@ export default function RichTextEditorMedia({
         uploadedImagesRef.current = new Array(count).fill(null);
     }
 
-    const uploadImages = (
+    const uploadImages = useCallback((
         files: File[],
         compress: boolean,
         onInsert?: OnInsertHandler,
@@ -131,7 +131,7 @@ export default function RichTextEditorMedia({
                 rejectedReactions
             ));
         }
-    };
+    }, [dispatch, features, nodeName, rejectedReactions, srcFormat]);
 
     const compressDefault = useRef<boolean>(forceCompress || compressImages);
     const onInsertRef = useRef<OnInsertHandler | undefined>(undefined);
