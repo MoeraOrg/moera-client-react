@@ -37,4 +37,4 @@ export interface ILightBoxProps {
     closeLabel?: string;
 }
 
-export default class Lightbox extends React.Component<ILightBoxProps, never> { }
+export default class Lightbox extends React.Component<ILightBoxProps, never> {}
