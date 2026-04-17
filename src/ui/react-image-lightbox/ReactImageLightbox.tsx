@@ -1,7 +1,7 @@
-import React, {useEffect, useReducer, useRef, useState} from "react";
-import Modal from "react-modal";
-import {Loading} from "ui/control";
+import React, {useEffect, useReducer, useRef, useState} from 'react';
+import Modal from 'react-modal';
 
+import { Loading } from "ui/control";
 import {
     getHighestSafeWindowContext,
     getWindowHeight,
