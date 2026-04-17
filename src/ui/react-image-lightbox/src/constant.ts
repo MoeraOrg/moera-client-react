@@ -20,7 +20,7 @@ export const KEYS = {
     ESC: 27,
     LEFT_ARROW: 37,
     RIGHT_ARROW: 39
-};
+} as const;
 
 // Actions
 export const ACTION_NONE = 0;

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Lightbox from 'react-image-lightbox';
-import 'react-image-lightbox/style.css';
+import Lightbox from 'ui/react-image-lightbox/src';
+import 'ui/react-image-lightbox/src/style.css';
 import { useTranslation } from 'react-i18next';
 
 import { MediaAttachment } from "api";

@@ -1,17 +1,35 @@
-import * as React from 'react';
+import * as React from "react";
 
-export interface ILightBoxProps {
+export type LightboxTriggerEvent = Event | React.SyntheticEvent;
+
+export type LightboxImageSourceName =
+    | "mainSrc"
+    | "mainSrcThumbnail"
+    | "nextSrc"
+    | "nextSrcThumbnail"
+    | "prevSrc"
+    | "prevSrcThumbnail";
+
+export interface LightboxProps {
     mainSrc: string;
-    nextSrc?: string;
-    prevSrc?: string;
-    mainSrcThumbnail?: string;
-    prevSrcThumbnail?: string;
-    nextSrcThumbnail?: string;
-    onCloseRequest(): void;
-    onMovePrevRequest?(): void;
-    onMoveNextRequest?(): void;
-    onImageLoad?(): void;
-    onImageLoadError?(): void;
+    nextSrc?: string | null;
+    prevSrc?: string | null;
+    mainSrcThumbnail?: string | null;
+    prevSrcThumbnail?: string | null;
+    nextSrcThumbnail?: string | null;
+    onCloseRequest(event?: LightboxTriggerEvent): void;
+    onMovePrevRequest?(event?: LightboxTriggerEvent): void;
+    onMoveNextRequest?(event?: LightboxTriggerEvent): void;
+    onImageLoad?(
+        imageSrc: string,
+        srcType: LightboxImageSourceName,
+        image: HTMLImageElement
+    ): void;
+    onImageLoadError?(
+        imageSrc: string,
+        srcType: LightboxImageSourceName,
+        errorEvent: Event
+    ): void;
     imageLoadErrorMessage?: React.ReactNode;
     onAfterOpen?(): void;
     discourageDownloads?: boolean;
@@ -20,12 +38,15 @@ export interface ILightBoxProps {
     animationDuration?: number;
     keyRepeatLimit?: number;
     keyRepeatKeyupBonus?: number;
-    imageTitle?: React.ReactNode | string;
-    imageCaption?: React.ReactNode | string;
-    imageCrossOrigin?: string;
-    toolbarButtons?: React.ReactNode[];
-    reactModalStyle?: any;
-    reactModalProps?: any;
+    imageTitle?: React.ReactNode;
+    imageCaption?: React.ReactNode;
+    imageCrossOrigin?: React.ImgHTMLAttributes<HTMLImageElement>["crossOrigin"] | null;
+    toolbarButtons?: React.ReactNode[] | null;
+    reactModalStyle?: {
+        overlay?: React.CSSProperties;
+        content?: React.CSSProperties;
+    };
+    reactModalProps?: Record<string, unknown>;
     imagePadding?: number;
     clickOutsideToClose?: boolean;
     enableZoom?: boolean;
@@ -35,6 +56,42 @@ export interface ILightBoxProps {
     zoomInLabel?: string;
     zoomOutLabel?: string;
     closeLabel?: string;
+    loader?: React.ReactNode | undefined;
 }
 
-export default class Lightbox extends React.Component<ILightBoxProps, never> {}
+export interface ILightBoxProps extends LightboxProps {}
+
+declare const Lightbox: React.ComponentType<LightboxProps> & {
+    getTransform(args: {
+        targetWidth: number;
+        width: number;
+        x?: number;
+        y?: number;
+        zoom?: number;
+    }): React.CSSProperties;
+    isTargetMatchImage(target: EventTarget | null): boolean;
+    parseMouseEvent(mouseEvent: { clientX: number; clientY: number }): {
+        id: number | string;
+        source: number;
+        x: number;
+        y: number;
+    };
+    parsePointerEvent(pointerEvent: PointerEvent): {
+        id: number | string;
+        source: number;
+        x: number;
+        y: number;
+    };
+    parseTouchPointer(touchPointer: {
+        identifier: number;
+        clientX: number;
+        clientY: number;
+    }): {
+        id: number | string;
+        source: number;
+        x: number;
+        y: number;
+    };
+};
+
+export default Lightbox;
