@@ -187,126 +187,13 @@
     animation-name: close-window;
 }
 
-@keyframes point-fade {
-    0%,
-    19.999%,
-    100% {
-        opacity: 0;
-    }
-
-    20% {
-        opacity: 1;
-    }
-}
-
-.ril__loadingCircle {
-    width: 60px;
-    height: 60px;
-    position: relative;
-}
-
-.ril__loadingCirclePoint {
-    width: 100%;
-    height: 100%;
+.ril__loadingContainer,
+.ril__errorContainer {
     position: absolute;
     inset: 0;
-}
-
-.ril__loadingCirclePoint::before {
-    content: "";
-    display: block;
-    margin: 0 auto;
-    width: 11%;
-    height: 30%;
-    background-color: #fff;
-    border-radius: 30%;
-    animation: point-fade 800ms infinite ease-in-out both;
-}
-
-.ril__loadingCirclePoint:nth-of-type(1) {
-    transform: rotate(0deg);
-}
-
-.ril__loadingCirclePoint:nth-of-type(1)::before {
-    animation-delay: -800ms;
-}
-
-.ril__loadingCirclePoint:nth-of-type(2) {
-    transform: rotate(30deg);
-}
-
-.ril__loadingCirclePoint:nth-of-type(2)::before,
-.ril__loadingCirclePoint:nth-of-type(8)::before {
-    animation-delay: -666ms;
-}
-
-.ril__loadingCirclePoint:nth-of-type(3) {
-    transform: rotate(60deg);
-}
-
-.ril__loadingCirclePoint:nth-of-type(3)::before,
-.ril__loadingCirclePoint:nth-of-type(9)::before {
-    animation-delay: -533ms;
-}
-
-.ril__loadingCirclePoint:nth-of-type(4) {
-    transform: rotate(90deg);
-}
-
-.ril__loadingCirclePoint:nth-of-type(4)::before,
-.ril__loadingCirclePoint:nth-of-type(10)::before {
-    animation-delay: -400ms;
-}
-
-.ril__loadingCirclePoint:nth-of-type(5) {
-    transform: rotate(120deg);
-}
-
-.ril__loadingCirclePoint:nth-of-type(5)::before,
-.ril__loadingCirclePoint:nth-of-type(11)::before {
-    animation-delay: -266ms;
-}
-
-.ril__loadingCirclePoint:nth-of-type(6) {
-    transform: rotate(150deg);
-}
-
-.ril__loadingCirclePoint:nth-of-type(6)::before,
-.ril__loadingCirclePoint:nth-of-type(12)::before {
-    animation-delay: -133ms;
-}
-
-.ril__loadingCirclePoint:nth-of-type(7) {
-    transform: rotate(180deg);
-}
-
-.ril__loadingCirclePoint:nth-of-type(7)::before {
-    animation-delay: 0ms;
-}
-
-.ril__loadingCirclePoint:nth-of-type(8) {
-    transform: rotate(210deg);
-}
-
-.ril__loadingCirclePoint:nth-of-type(9) {
-    transform: rotate(240deg);
-}
-
-.ril__loadingCirclePoint:nth-of-type(10) {
-    transform: rotate(270deg);
-}
-
-.ril__loadingCirclePoint:nth-of-type(11) {
-    transform: rotate(300deg);
-}
-
-.ril__loadingCirclePoint:nth-of-type(12) {
-    transform: rotate(330deg);
-}
-
-.ril__loadingContainer {
-    position: absolute;
-    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .ril__imagePrev .ril__loadingContainer,
@@ -315,23 +202,10 @@
 }
 
 .ril__errorContainer {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     color: #fff;
 }
 
 .ril__imagePrev .ril__errorContainer,
 .ril__imageNext .ril__errorContainer {
     display: none;
-}
-
-.ril__loadingContainer__icon {
-    color: #fff;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
 }

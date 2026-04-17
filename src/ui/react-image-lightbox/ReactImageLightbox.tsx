@@ -1,5 +1,6 @@
 import React, {useEffect, useReducer, useRef, useState} from "react";
 import Modal from "react-modal";
+import {Loading} from "ui/control";
 
 import {
     getHighestSafeWindowContext,
@@ -1522,19 +1523,11 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
             return;
         }
         if (bestImageInfo === null) {
-            const loadingIcon =
+            const loadingContent =
                 loader !== undefined ? (
                     loader
                 ) : (
-                    <div className="ril-loading-circle ril__loadingCircle ril__loadingContainer__icon">
-                        {[...new Array(12)].map((_, index) => (
-                            <div
-                                // eslint-disable-next-line react/no-array-index-key
-                                key={index}
-                                className="ril-loading-circle-point ril__loadingCirclePoint"
-                            />
-                        ))}
-                    </div>
+                    <Loading large/>
                 );
 
             images.push(
@@ -1543,7 +1536,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                     style={imageStyle}
                     key={props[srcType] + keyEndings[srcType]}
                 >
-                    <div className="ril__loadingContainer">{loadingIcon}</div>
+                    <div className="ril__loadingContainer">{loadingContent}</div>
                 </div>
             );
 
