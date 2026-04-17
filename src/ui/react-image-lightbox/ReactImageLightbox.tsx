@@ -1,4 +1,5 @@
 import React, {useEffect, useReducer, useRef, useState} from "react";
+import Modal from "react-modal";
 
 import {
     getHighestSafeWindowContext,
@@ -36,21 +37,8 @@ type LightboxImageSourceName =
     | "prevSrc"
     | "prevSrcThumbnail";
 type LightboxPrimarySourceName = "mainSrc" | "nextSrc" | "prevSrc";
-
-interface ReactModalStyle {
-    overlay?: React.CSSProperties;
-    content?: React.CSSProperties;
-}
-
-interface ReactModalProps extends Record<string, unknown> {
-    appElement?: HTMLElement;
-    children?: React.ReactNode;
-    contentLabel?: string;
-    isOpen: boolean;
-    onAfterOpen?: () => void;
-    onRequestClose?: (event?: LightboxTriggerEvent) => void;
-    style?: ReactModalStyle;
-}
+type ReactModalProps = React.ComponentProps<typeof Modal>;
+type ReactModalStyle = NonNullable<ReactModalProps["style"]>;
 
 interface LightboxProps {
     animationDisabled?: boolean;
@@ -89,7 +77,7 @@ interface LightboxProps {
     prevLabel?: string;
     prevSrc?: string | null;
     prevSrcThumbnail?: string | null;
-    reactModalProps?: Record<string, unknown>;
+    reactModalProps?: Partial<ReactModalProps>;
     reactModalStyle?: ReactModalStyle;
     toolbarButtons?: React.ReactNode[] | null;
     wrapperClassName?: string;
@@ -194,8 +182,6 @@ interface TouchListLike {
     length: number;
 }
 
-const Modal = require("react-modal") as React.ComponentType<ReactModalProps>;
-
 const thumbnailSourceTypes: Record<LightboxPrimarySourceName, Extract<LightboxImageSourceName, `${string}Thumbnail`>> = {
     mainSrc: "mainSrcThumbnail",
     nextSrc: "nextSrcThumbnail",
@@ -245,7 +231,7 @@ type LightboxDefaultProps = {
     prevLabel: string;
     prevSrc: string | null;
     prevSrcThumbnail: string | null;
-    reactModalProps: Record<string, unknown>;
+    reactModalProps: Partial<ReactModalProps>;
     reactModalStyle: ReactModalStyle;
     toolbarButtons: React.ReactNode[] | null;
     wrapperClassName: string;

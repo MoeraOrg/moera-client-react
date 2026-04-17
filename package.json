@@ -105,6 +105,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/react-lines-ellipsis": "^0.15.6",
+    "@types/react-modal": "^3.16.3",
     "@types/sanitize-html": "^2.16.1",
     "@types/twemoji-parser": "^13.1.1",
     "babel-jest": "^30.2.0",
