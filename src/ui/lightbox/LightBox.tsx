@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Lightbox from 'ui/react-image-lightbox/src';
-import 'ui/react-image-lightbox/src/style.css';
 import { useTranslation } from 'react-i18next';
 
 import { MediaAttachment } from "api";
@@ -16,6 +14,7 @@ import { ExtCommentInfo } from "state/detailedposting/state";
 import { getComment } from "state/detailedposting/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ParentContext, useDispatcher } from "ui/hook";
+import Lightbox from 'ui/react-image-lightbox/ReactImageLightbox';
 import LightBoxCaption from "ui/lightbox/LightBoxCaption";
 import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import LightBoxCopyTextButton from "ui/lightbox/LightBoxCopyTextButton";
