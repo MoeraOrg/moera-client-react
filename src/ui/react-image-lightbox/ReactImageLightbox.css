@@ -43,12 +43,6 @@
     user-select: none;
 }
 
-.ril__imageDiscourager {
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-}
-
 .ril__navButtons {
     border: none;
     position: absolute;
@@ -86,13 +80,6 @@
         url("./svg/right_arrow.svg")
         no-repeat center;
     background-size: 20px 34px;
-}
-
-.ril__downloadBlocker {
-    position: absolute;
-    inset: 0;
-    background-image: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
-    background-size: cover;
 }
 
 .ril__caption,

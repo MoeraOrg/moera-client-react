@@ -58,7 +58,6 @@ interface LightboxProps {
     animationOnKeyInput?: boolean;
     clickOutsideToClose?: boolean;
     closeLabel?: string;
-    discourageDownloads?: boolean;
     enableZoom?: boolean;
     imageCaption?: React.ReactNode;
     imageCrossOrigin?: React.ImgHTMLAttributes<HTMLImageElement>["crossOrigin"] | null;
@@ -217,7 +216,6 @@ type LightboxDefaultProps = {
     animationOnKeyInput: boolean;
     clickOutsideToClose: boolean;
     closeLabel: string;
-    discourageDownloads: boolean;
     enableZoom: boolean;
     imageCaption: React.ReactNode;
     imageCrossOrigin: React.ImgHTMLAttributes<HTMLImageElement>["crossOrigin"] | null;
@@ -261,7 +259,6 @@ const defaultProps: LightboxDefaultProps = {
     animationOnKeyInput: false,
     clickOutsideToClose: true,
     closeLabel: "Close lightbox",
-    discourageDownloads: false,
     enableZoom: true,
     imageCaption: null,
     imageCrossOrigin: null,
@@ -1464,7 +1461,6 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
         animationDisabled,
         animationDuration,
         clickOutsideToClose,
-        discourageDownloads,
         enableZoom,
         imageTitle,
         nextSrc,
@@ -1569,36 +1565,21 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
         }
 
         const imageSrc = bestImageInfo.src;
-        if (discourageDownloads) {
-            imageStyle.backgroundImage = `url('${imageSrc}')`;
-            images.push(
-                <div
-                    className={`${imageClass} ril__image ril__imageDiscourager`}
-                    onDoubleClick={handleImageDoubleClick}
-                    onWheel={handleImageMouseWheel}
-                    style={imageStyle}
-                    key={imageSrc + keyEndings[srcType]}
-                >
-                    <div className="ril-download-blocker ril__downloadBlocker" />
-                </div>
-            );
-        } else {
-            const crossOrigin = imageCrossOrigin ?? undefined;
-            images.push(
-                <img
-                    {...(crossOrigin ? {crossOrigin} : {})}
-                    className={`${imageClass} ril__image`}
-                    onDoubleClick={handleImageDoubleClick}
-                    onWheel={handleImageMouseWheel}
-                    onDragStart={event => event.preventDefault()}
-                    style={imageStyle}
-                    src={imageSrc}
-                    key={imageSrc + keyEndings[srcType]}
-                    alt={typeof imageTitle === "string" ? imageTitle : translate("Image")}
-                    draggable={false}
-                />
-            );
-        }
+        const crossOrigin = imageCrossOrigin ?? undefined;
+        images.push(
+            <img
+                {...(crossOrigin ? {crossOrigin} : {})}
+                className={`${imageClass} ril__image`}
+                onDoubleClick={handleImageDoubleClick}
+                onWheel={handleImageMouseWheel}
+                onDragStart={event => event.preventDefault()}
+                style={imageStyle}
+                src={imageSrc}
+                key={imageSrc + keyEndings[srcType]}
+                alt={typeof imageTitle === "string" ? imageTitle : translate("Image")}
+                draggable={false}
+            />
+        );
     };
 
     const zoomMultiplier = getZoomMultiplier();
