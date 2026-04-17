@@ -29,8 +29,8 @@ import {
 import "./ReactImageLightbox.css";
 
 type TimeoutId = ReturnType<typeof globalThis.setTimeout>;
-type LightboxTriggerEvent = Event | React.SyntheticEvent;
-type LightboxImageSourceName =
+export type LightboxTriggerEvent = Event | React.SyntheticEvent;
+export type LightboxImageSourceName =
     | "mainSrc"
     | "mainSrcThumbnail"
     | "nextSrc"
@@ -41,7 +41,7 @@ type LightboxPrimarySourceName = "mainSrc" | "nextSrc" | "prevSrc";
 type ReactModalProps = React.ComponentProps<typeof Modal>;
 type ReactModalStyle = NonNullable<ReactModalProps["style"]>;
 
-interface LightboxProps {
+export interface LightboxProps {
     animationDisabled?: boolean;
     animationDuration?: number;
     animationOnKeyInput?: boolean;
@@ -1765,10 +1765,3 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
         </Modal>
     );
 }
-
-export type {
-    LightboxImageSourceName,
-    LightboxProps,
-    LightboxTriggerEvent,
-    ReactModalStyle
-};
