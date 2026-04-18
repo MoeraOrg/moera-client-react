@@ -143,7 +143,6 @@ export default function LightBox() {
                 prevSrc={prevSrc}
                 nextSrc={nextSrc}
                 imageTitle={title}
-                onCloseRequest={onCloseRequest}
                 closeLabel={t("close")}
                 onMovePrevRequest={onMovePrevRequest}
                 prevLabel={t("previous-image")}

@@ -33,6 +33,7 @@ import {
     ZOOM_BUTTON_INCREMENT_SIZE,
     ZOOM_RATIO
 } from "./constant";
+import { useParent } from "ui/hook";
 import "./ReactImageLightbox.css";
 
 type TimeoutId = ReturnType<typeof globalThis.setTimeout>;
@@ -50,7 +51,6 @@ export interface LightboxProps {
     mainSrc: string;
     nextLabel?: string;
     nextSrc?: string | null;
-    onCloseRequest(event?: LightboxTriggerEvent): void;
     onImageLoad?(
         imageSrc: string,
         srcType: LightboxImageSourceName,
@@ -190,6 +190,7 @@ type LightboxPropsWithDefaults =
     & LightboxDefaultProps;
 
 export default function ReactImageLightbox(incomingProps: LightboxProps) {
+    const {hide} = useParent();
     const props = {
         ...defaultProps,
         ...incomingProps
@@ -1023,7 +1024,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
     };
 
     const requestClose = (event?: LightboxTriggerEvent): void => {
-        const closeLightbox = (): void => propsRef.current.onCloseRequest(event);
+        const closeLightbox = (): void => hide();
 
         if (!event || event.type === "keydown") {
             closeLightbox();
