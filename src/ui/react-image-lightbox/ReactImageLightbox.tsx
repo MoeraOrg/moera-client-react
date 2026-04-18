@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import React, { useEffect, useEffectEvent, useReducer, useRef, useState } from 'react';
 import Modal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -93,18 +93,7 @@ interface SourceDescriptor {
     name: LightboxImageSourceName;
 }
 
-interface ActionsRefValue {
-    handleMouseUp: (event: MouseEvent) => void;
-    handlePointerEvent: (event: PointerEvent) => void;
-    handleTouchEnd: (event: TouchEvent) => void;
-    handleWindowResize: () => void;
-    loadAllImages: (nextProps?: LightboxProps) => void;
-}
-
 const noop = (): void => {};
-const noopMouseUp = (_event: MouseEvent): void => {};
-const noopPointerEvent = (_event: PointerEvent): void => {};
-const noopTouchEnd = (_event: TouchEvent): void => {};
 
 // Min image zoom level
 const MIN_ZOOM_LEVEL = 0;
@@ -192,13 +181,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const keyCounterRef = useRef(0);
     const moveRequestedRef = useRef(false);
     const previousPropsRef = useRef(props);
-    const actionsRef = useRef<ActionsRefValue>({
-        handleMouseUp: noopMouseUp,
-        handlePointerEvent: noopPointerEvent,
-        handleTouchEnd: noopTouchEnd,
-        handleWindowResize: noop,
-        loadAllImages: () => {}
-    });
 
     const getSrcTypes = (): SourceDescriptor[] => [
         {
@@ -722,14 +704,21 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
     };
 
-    const handleMouseUp = (event: MouseEvent): void => {
+    const handleMouseUp = useEffectEvent((event: MouseEvent): void => {
         if (shouldHandleEvent(SOURCE_MOUSE)) {
             removePointer(parseMouseEvent(event));
             multiPointerEnd(event);
         }
-    };
+    });
 
-    const handlePointerEvent = (event: PointerEvent): void => {
+    useEffect(() => {
+        window.addEventListener("mouseup", handleMouseUp);
+        return () => {
+            window.removeEventListener("mouseup", handleMouseUp);
+        };
+    }, [handleMouseUp]);
+
+    const handlePointerEvent = useEffectEvent((event: PointerEvent): void => {
         if (shouldHandleEvent(SOURCE_POINTER)) {
             switch (event.type) {
                 case "pointerdown":
@@ -750,7 +739,20 @@ export default function ReactImageLightbox(props: LightboxProps) {
                     break;
             }
         }
-    };
+    });
+
+    useEffect(() => {
+        window.addEventListener("pointerdown", handlePointerEvent);
+        window.addEventListener("pointermove", handlePointerEvent);
+        window.addEventListener("pointerup", handlePointerEvent);
+        window.addEventListener("pointercancel", handlePointerEvent);
+        return () => {
+            window.removeEventListener("pointerdown", handlePointerEvent);
+            window.removeEventListener("pointermove", handlePointerEvent);
+            window.removeEventListener("pointerup", handlePointerEvent);
+            window.removeEventListener("pointercancel", handlePointerEvent);
+        };
+    }, [handlePointerEvent]);
 
     const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>): void => {
         if (shouldHandleEvent(SOURCE_TOUCH) && isTargetMatchImage(event.target)) {
@@ -772,23 +774,39 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
     };
 
-    const handleTouchEnd = (event: TouchEvent): void => {
+    const handleTouchEnd = useEffectEvent((event: TouchEvent): void => {
         if (shouldHandleEvent(SOURCE_TOUCH)) {
             getTouches(event.changedTouches).forEach(touch =>
                 removePointer(parseTouchPointer(touch))
             );
             multiPointerEnd(event);
         }
-    };
+    });
+
+    useEffect(() => {
+        window.addEventListener("touchend", handleTouchEnd);
+        window.addEventListener("touchcancel", handleTouchEnd);
+        return () => {
+            window.removeEventListener("touchend", handleTouchEnd);
+            window.removeEventListener("touchcancel", handleTouchEnd);
+        };
+    }, [handleTouchEnd]);
 
     const resizeTimeout = useManagedTimeout();
 
-    const handleWindowResize = (): void => {
+    const handleWindowResize = useEffectEvent((): void => {
         resizeTimeout.clear();
         resizeTimeout.set(() => {
             forceUpdate();
         }, 100);
-    };
+    });
+
+    useEffect(() => {
+        window.addEventListener("resize", handleWindowResize);
+        return () => {
+            window.removeEventListener("resize", handleWindowResize);
+        };
+    }, [handleWindowResize]);
 
     const handleZoomInButtonClick = (): void => {
         const nextZoomLevel = zoomLevel + ZOOM_BUTTON_INCREMENT_SIZE;
@@ -867,7 +885,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         inMemoryImage.src = imageSrc;
     };
 
-    const loadAllImages = (nextProps = propsRef.current): void => {
+    const loadAllImages = useEffectEvent((nextProps = propsRef.current): void => {
         const generateLoadDoneCallback = (
             srcType: LightboxImageSourceName,
             imageSrc: string
@@ -898,7 +916,12 @@ export default function ReactImageLightbox(props: LightboxProps) {
                 );
             }
         });
-    };
+    });
+
+    useEffect(() => {
+        setIsClosing(false);
+        loadAllImages();
+    }, [loadAllImages]);
 
     const closeTimeout = useManagedTimeout();
 
@@ -1046,40 +1069,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
     };
 
-    actionsRef.current = {
-        handleWindowResize,
-        handleMouseUp,
-        handleTouchEnd,
-        handlePointerEvent,
-        loadAllImages
-    };
-
-    useEffect(() => {
-        setIsClosing(false);
-
-        const listeners: Record<string, EventListener> = {
-            resize: () => actionsRef.current.handleWindowResize(),
-            mouseup: event => actionsRef.current.handleMouseUp(event as MouseEvent),
-            touchend: event => actionsRef.current.handleTouchEnd(event as TouchEvent),
-            touchcancel: event => actionsRef.current.handleTouchEnd(event as TouchEvent),
-            pointerdown: event => actionsRef.current.handlePointerEvent(event as PointerEvent),
-            pointermove: event => actionsRef.current.handlePointerEvent(event as PointerEvent),
-            pointerup: event => actionsRef.current.handlePointerEvent(event as PointerEvent),
-            pointercancel: event => actionsRef.current.handlePointerEvent(event as PointerEvent)
-        };
-        Object.keys(listeners).forEach(type => {
-            window.addEventListener(type, listeners[type]);
-        });
-
-        actionsRef.current.loadAllImages();
-
-        return () => {
-            Object.keys(listeners).forEach(type => {
-                window.removeEventListener(type, listeners[type]);
-            });
-        };
-    }, []);
-
     useEffect(() => {
         const prevProps = previousPropsRef.current;
         let sourcesChanged = false;
@@ -1116,7 +1105,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
 
         previousPropsRef.current = props;
-    });
+    }, [loadAllImages, props]);
 
     const {
         imageTitle,
