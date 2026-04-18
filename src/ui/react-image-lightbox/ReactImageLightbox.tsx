@@ -4,7 +4,6 @@ import cx from 'classnames';
 
 import { Loading } from "ui/control";
 import {
-    getHighestSafeWindowContext,
     getWindowHeight,
     getWindowWidth,
     translate
@@ -314,7 +313,6 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
 
     const didUnmountRef = useRef(false);
     const listenersRef = useRef<Record<string, EventListener>>({});
-    const windowContextRef = useRef<Window | null>(null);
     const timeoutsRef = useRef<TimeoutId[]>([]);
     const currentActionRef = useRef(ACTION_NONE);
     const eventsSourceRef = useRef(SOURCE_ANY);
@@ -1254,8 +1252,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
     useEffect(() => {
         setState({isClosing: false});
 
-        const windowContext = getHighestSafeWindowContext();
-        windowContextRef.current = windowContext;
+        const windowContext = globalThis.window;
 
         listenersRef.current = {
             resize: () => actionsRef.current.handleWindowResize(),
