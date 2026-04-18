@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 type TimeoutId = number;
 
@@ -11,7 +11,7 @@ export interface ManagedTimeout {
 export function useManagedTimeout(): ManagedTimeout {
     const timeoutRef = useRef<TimeoutId | null>(null);
 
-    const clear = useCallback((): void => {
+    const clear = useCallback(() => {
         if (timeoutRef.current === null) {
             return;
         }
@@ -29,13 +29,9 @@ export function useManagedTimeout(): ManagedTimeout {
         }, delay);
     }, [clear]);
 
-    const isActive = useCallback((): boolean => timeoutRef.current !== null, []);
+    const isActive = useCallback(() => timeoutRef.current !== null, []);
 
     useEffect(() => clear, [clear]);
 
-    return {
-        clear,
-        isActive,
-        set
-    };
+    return useMemo(() => ({clear, isActive, set}), [clear, isActive, set]);
 }
