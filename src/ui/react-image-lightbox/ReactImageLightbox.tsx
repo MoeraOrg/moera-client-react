@@ -1,5 +1,6 @@
 import React, {useEffect, useReducer, useRef, useState} from 'react';
 import Modal from 'react-modal';
+import cx from 'classnames';
 
 import { Loading } from "ui/control";
 import {
@@ -1335,8 +1336,9 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
 
     const boxSize = getLightboxRect();
     let transitionStyle: React.CSSProperties = {};
+    const animating = isAnimating();
 
-    if (isAnimating()) {
+    if (animating) {
         transitionStyle = {
             ...transitionStyle,
             transition: `transform ${ANIMATION_DURATION_MS}ms`
@@ -1375,7 +1377,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
         if (bestImageInfo === null && loadErrorStatus[srcType]) {
             images.push(
                 <div
-                    className={`${imageClass} ril__image ril-errored`}
+                    className={cx(imageClass, "ril__image", "ril-errored")}
                     style={imageStyle}
                     key={props[srcType] + keyEndings[srcType]}
                 >
@@ -1390,7 +1392,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
         if (bestImageInfo === null) {
             images.push(
                 <div
-                    className={`${imageClass} ril__image ril-not-loaded`}
+                    className={cx(imageClass, "ril__image", "ril-not-loaded")}
                     style={imageStyle}
                     key={props[srcType] + keyEndings[srcType]}
                 >
@@ -1406,7 +1408,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
         const imageSrc = bestImageInfo.src;
         images.push(
             <img
-                className={`${imageClass} ril__image`}
+                className={cx(imageClass, "ril__image")}
                 onDoubleClick={handleImageDoubleClick}
                 onWheel={handleImageMouseWheel}
                 onDragStart={event => event.preventDefault()}
@@ -1470,12 +1472,10 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
             }
         >
             <div // eslint-disable-line jsx-a11y/no-static-element-interactions
-                className={[
-                    "ril-outer",
-                    "ril__outer",
-                    "ril__outerAnimating",
-                    ...(isClosing ? ["ril-closing", "ril__outerClosing"] : [])
-                ].join(" ")}
+                className={cx("ril-outer", "ril__outer", "ril__outerAnimating", {
+                    "ril-closing": isClosing,
+                    "ril__outerClosing": isClosing
+                })}
                 style={{
                     transition: `opacity ${ANIMATION_DURATION_MS}ms`,
                     animationDuration: `${ANIMATION_DURATION_MS}ms`,
@@ -1505,7 +1505,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                         key="prev"
                         aria-label={prevLabel}
                         title={prevLabel}
-                        onClick={!isAnimating() ? requestMovePrev : undefined}
+                        onClick={!animating ? requestMovePrev : undefined}
                     />
                 )}
 
@@ -1516,7 +1516,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                         key="next"
                         aria-label={nextLabel}
                         title={nextLabel}
-                        onClick={!isAnimating() ? requestMoveNext : undefined}
+                        onClick={!animating ? requestMoveNext : undefined}
                     />
                 )}
 
@@ -1545,19 +1545,19 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                                 key="zoom-in"
                                 aria-label={zoomInLabel}
                                 title={zoomInLabel}
-                                className={[
+                                className={cx(
                                     "ril-zoom-in",
                                     "ril__toolbarItemChild",
                                     "ril__builtinButton",
                                     "ril__zoomInButton",
-                                    ...(zoomLevel === MAX_ZOOM_LEVEL
-                                        ? ["ril__builtinButtonDisabled"]
-                                        : [])
-                                ].join(" ")}
+                                    {
+                                        "ril__builtinButtonDisabled": zoomLevel === MAX_ZOOM_LEVEL
+                                    }
+                                )}
                                 ref={zoomInBtn}
-                                disabled={isAnimating() || zoomLevel === MAX_ZOOM_LEVEL}
+                                disabled={animating || zoomLevel === MAX_ZOOM_LEVEL}
                                 onClick={
-                                    !isAnimating() && zoomLevel !== MAX_ZOOM_LEVEL
+                                    !animating && zoomLevel !== MAX_ZOOM_LEVEL
                                         ? handleZoomInButtonClick
                                         : undefined
                                 }
@@ -1570,19 +1570,19 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                                 key="zoom-out"
                                 aria-label={zoomOutLabel}
                                 title={zoomOutLabel}
-                                className={[
+                                className={cx(
                                     "ril-zoom-out",
                                     "ril__toolbarItemChild",
                                     "ril__builtinButton",
                                     "ril__zoomOutButton",
-                                    ...(zoomLevel === MIN_ZOOM_LEVEL
-                                        ? ["ril__builtinButtonDisabled"]
-                                        : [])
-                                ].join(" ")}
+                                    {
+                                        "ril__builtinButtonDisabled": zoomLevel === MIN_ZOOM_LEVEL
+                                    }
+                                )}
                                 ref={zoomOutBtn}
-                                disabled={isAnimating() || zoomLevel === MIN_ZOOM_LEVEL}
+                                disabled={animating || zoomLevel === MIN_ZOOM_LEVEL}
                                 onClick={
-                                    !isAnimating() && zoomLevel !== MIN_ZOOM_LEVEL
+                                    !animating && zoomLevel !== MIN_ZOOM_LEVEL
                                         ? handleZoomOutButtonClick
                                         : undefined
                                 }
@@ -1596,7 +1596,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                                 aria-label={closeLabel}
                                 title={closeLabel}
                                 className="ril-close ril-toolbar__item__child ril__toolbarItemChild ril__builtinButton ril__closeButton"
-                                onClick={!isAnimating() ? requestClose : undefined}
+                                onClick={!animating ? requestClose : undefined}
                             />
                         </li>
                     </ul>
