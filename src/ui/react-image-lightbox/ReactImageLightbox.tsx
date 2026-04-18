@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { useParent } from "ui/hook";
+import { useManagedTimeout, useParent } from "ui/hook";
 import { Loading } from "ui/control";
 import type { InputPointer, TransformInput } from "./util";
 import {
@@ -20,7 +20,6 @@ import {
 } from "./util";
 import "./ReactImageLightbox.css";
 
-type TimeoutId = ReturnType<typeof window.setTimeout>;
 export type LightboxTriggerEvent = Event | React.SyntheticEvent;
 export type LightboxImageSourceName = | "mainSrc" | "nextSrc" | "prevSrc";
 
@@ -171,18 +170,13 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const propsRef = useRef(props);
     propsRef.current = props;
 
-    const timeoutsRef = useRef<TimeoutId[]>([]);
     const currentActionRef = useRef(ACTION_NONE);
     const eventsSourceRef = useRef(SOURCE_ANY);
     const pointerListRef = useRef<InputPointer[]>([]);
     const preventInnerCloseRef = useRef(false);
-    const preventInnerCloseTimeoutRef = useRef<TimeoutId | null>(null);
     const keyPressedRef = useRef(false);
     const imageCacheRef = useRef<Record<string, ImageCacheEntry>>({});
     const lastKeyDownTimeRef = useRef(0);
-    const resizeTimeoutRef = useRef<TimeoutId | null>(null);
-    const wheelActionTimeoutRef = useRef<TimeoutId | null>(null);
-    const resetScrollTimeoutRef = useRef<TimeoutId | null>(null);
     const scrollXRef = useRef(0);
     const scrollYRef = useRef(0);
     const moveStartXRef = useRef(0);
@@ -205,24 +199,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
         handleWindowResize: noop,
         loadAllImages: () => {}
     });
-
-    const setManagedTimeout = (func: () => void, time: number): TimeoutId => {
-        const id = globalThis.setTimeout(() => {
-            timeoutsRef.current = timeoutsRef.current.filter(tid => tid !== id);
-            func();
-        }, time);
-        timeoutsRef.current.push(id);
-        return id;
-    };
-
-    const clearManagedTimeout = (id: TimeoutId | null): void => {
-        if (id === null) {
-            return;
-        }
-
-        timeoutsRef.current = timeoutsRef.current.filter(tid => tid !== id);
-        window.clearTimeout(id);
-    };
 
     const getSrcTypes = (): SourceDescriptor[] => [
         {
@@ -421,14 +397,13 @@ export default function ReactImageLightbox(props: LightboxProps) {
         setOffsetY(nextOffsetY);
     };
 
+    const preventInnerCloseTimeout = useManagedTimeout();
+
     const setPreventInnerClose = (): void => {
-        if (preventInnerCloseTimeoutRef.current) {
-            clearManagedTimeout(preventInnerCloseTimeoutRef.current);
-        }
+        preventInnerCloseTimeout.clear();
         preventInnerCloseRef.current = true;
-        preventInnerCloseTimeoutRef.current = setManagedTimeout(() => {
+        preventInnerCloseTimeout.set(() => {
             preventInnerCloseRef.current = false;
-            preventInnerCloseTimeoutRef.current = null;
         }, 100);
     };
 
@@ -448,6 +423,8 @@ export default function ReactImageLightbox(props: LightboxProps) {
             setOffsetY(newOffsetY);
         }
     };
+
+    const animationTimeout = useManagedTimeout();
 
     const handleMoveEnd = (): void => {
         currentActionRef.current = ACTION_NONE;
@@ -472,7 +449,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
             setOffsetX(nextOffsetX);
             setOffsetY(nextOffsetY);
             setShouldAnimate(true);
-            setManagedTimeout(() => {
+            animationTimeout.set(() => {
                 setShouldAnimate(false);
             }, ANIMATION_DURATION_MS);
         }
@@ -494,7 +471,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const requestMove = (direction: "next" | "prev", event?: LightboxTriggerEvent): void => {
         if (!keyPressedRef.current) {
             setShouldAnimate(true);
-            setManagedTimeout(
+            animationTimeout.set(
                 () => setShouldAnimate(false),
                 ANIMATION_DURATION_MS
             );
@@ -804,9 +781,11 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
     };
 
+    const resizeTimeout = useManagedTimeout();
+
     const handleWindowResize = (): void => {
-        clearManagedTimeout(resizeTimeoutRef.current);
-        resizeTimeoutRef.current = setManagedTimeout(() => {
+        resizeTimeout.clear();
+        resizeTimeout.set(() => {
             forceUpdate();
         }, 100);
     };
@@ -844,13 +823,22 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
     };
 
+    const mainSrcReadyTimeout = useManagedTimeout();
+    const nextSrcReadyTimeout = useManagedTimeout();
+    const prevSrcReadyTimeout = useManagedTimeout();
+    const imageReadyTimeouts = {
+        mainSrc: mainSrcReadyTimeout,
+        nextSrc: nextSrcReadyTimeout,
+        prevSrc: prevSrcReadyTimeout
+    };
+
     const loadImage = (
         srcType: LightboxImageSourceName,
         imageSrc: string,
         done: (error?: Event) => void
     ): void => {
         if (isImageLoaded(imageSrc)) {
-            setManagedTimeout(() => {
+            imageReadyTimeouts[srcType].set(() => {
                 done();
             }, 1);
             return;
@@ -912,6 +900,8 @@ export default function ReactImageLightbox(props: LightboxProps) {
         });
     };
 
+    const closeTimeout = useManagedTimeout();
+
     const requestClose = (event?: LightboxTriggerEvent): void => {
         if (!event || event.type === "keydown") {
             hide();
@@ -919,7 +909,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
 
         setIsClosing(true);
-        setManagedTimeout(() => hide(), ANIMATION_DURATION_MS);
+        closeTimeout.set(() => hide(), ANIMATION_DURATION_MS);
     };
 
     const closeIfClickInner = (event: React.MouseEvent<HTMLDivElement>): void => {
@@ -982,6 +972,9 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
     };
 
+    const resetScrollTimeout = useManagedTimeout();
+    const wheelActionTimeout = useManagedTimeout();
+
     const handleOuterMousewheel = (event: React.WheelEvent<HTMLDivElement>): void => {
         event.stopPropagation();
 
@@ -989,13 +982,13 @@ export default function ReactImageLightbox(props: LightboxProps) {
         let actionDelay = 0;
         const imageMoveDelay = 500;
 
-        clearManagedTimeout(resetScrollTimeoutRef.current);
-        resetScrollTimeoutRef.current = setManagedTimeout(() => {
+        resetScrollTimeout.clear();
+        resetScrollTimeout.set(() => {
             scrollXRef.current = 0;
             scrollYRef.current = 0;
         }, 300);
 
-        if (wheelActionTimeoutRef.current !== null || animating) {
+        if (wheelActionTimeout.isActive() || animating) {
             return;
         }
 
@@ -1019,9 +1012,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
 
         if (actionDelay !== 0) {
-            wheelActionTimeoutRef.current = setManagedTimeout(() => {
-                wheelActionTimeoutRef.current = null;
-            }, actionDelay);
+            wheelActionTimeout.set(noop, actionDelay);
         }
     };
 
@@ -1086,7 +1077,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
             Object.keys(listeners).forEach(type => {
                 window.removeEventListener(type, listeners[type]);
             });
-            timeoutsRef.current.forEach(tid => window.clearTimeout(tid));
         };
     }, []);
 
