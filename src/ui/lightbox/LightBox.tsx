@@ -144,7 +144,7 @@ export default function LightBox() {
                 onMovePrevRequest={onMovePrevRequest}
                 onMoveNextRequest={onMoveNextRequest}
                 onImageLoad={onImageLoad}
-                reactModalStyle={{overlay: {zIndex: zIndex?.shadow}}}
+                zIndex={zIndex?.shadow}
                 toolbarButtons={[
                     mainTextContent && <LightBoxCopyTextButton text={mainTextContent}/>,
                     <LightBoxShareButton mediaNodeName={mediaNodeName} mediaHref={mainHref}/>,

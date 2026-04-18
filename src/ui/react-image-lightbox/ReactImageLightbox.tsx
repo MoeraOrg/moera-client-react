@@ -3,18 +3,8 @@ import Modal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
+import { useParent } from "ui/hook";
 import { Loading } from "ui/control";
-import type { InputPointer, TransformInput } from "./util";
-import {
-    getTouches,
-    getTransform,
-    getWindowHeight,
-    getWindowWidth,
-    isTargetMatchImage,
-    parseMouseEvent,
-    parsePointerEvent,
-    parseTouchPointer
-} from "./util";
 import {
     ACTION_MOVE,
     ACTION_NONE,
@@ -33,32 +23,38 @@ import {
     ZOOM_BUTTON_INCREMENT_SIZE,
     ZOOM_RATIO
 } from "./constant";
-import { useParent } from "ui/hook";
+import type { InputPointer, TransformInput } from "./util";
+import {
+    getTouches,
+    getTransform,
+    getWindowHeight,
+    getWindowWidth,
+    isTargetMatchImage,
+    parseMouseEvent,
+    parsePointerEvent,
+    parseTouchPointer
+} from "./util";
 import "./ReactImageLightbox.css";
 
 type TimeoutId = ReturnType<typeof globalThis.setTimeout>;
 export type LightboxTriggerEvent = Event | React.SyntheticEvent;
-export type LightboxImageSourceName =
-    | "mainSrc"
-    | "nextSrc"
-    | "prevSrc";
-type ReactModalStyle = NonNullable<React.ComponentProps<typeof Modal>["style"]>;
+export type LightboxImageSourceName = | "mainSrc" | "nextSrc" | "prevSrc";
 
 export interface LightboxProps {
     imageCaption?: React.ReactNode;
     imageTitle?: React.ReactNode;
     mainSrc: string;
     nextSrc?: string | null;
-    onImageLoad?(
+    onImageLoad(
         imageSrc: string,
         srcType: LightboxImageSourceName,
         image: HTMLImageElement
     ): void;
-    onMoveNextRequest?(event?: LightboxTriggerEvent): void;
-    onMovePrevRequest?(event?: LightboxTriggerEvent): void;
+    onMoveNextRequest(event?: LightboxTriggerEvent): void;
+    onMovePrevRequest(event?: LightboxTriggerEvent): void;
     prevSrc?: string | null;
-    reactModalStyle?: ReactModalStyle;
-    toolbarButtons?: React.ReactNode[] | null;
+    toolbarButtons: React.ReactNode[];
+    zIndex?: number;
 }
 
 interface LightboxState {
@@ -126,12 +122,10 @@ interface ActionsRefValue {
     handlePointerEvent: (event: PointerEvent) => void;
     handleTouchEnd: (event: TouchEvent) => void;
     handleWindowResize: () => void;
-    loadAllImages: (nextProps?: LightboxPropsWithDefaults) => void;
+    loadAllImages: (nextProps?: LightboxProps) => void;
 }
 
 const noop = (): void => {};
-const noopImageLoad = (): void => {};
-const noopMoveRequest = (): void => {};
 const noopMouseUp = (_event: MouseEvent): void => {};
 const noopPointerEvent = (_event: PointerEvent): void => {};
 const noopTouchEnd = (_event: TouchEvent): void => {};
@@ -141,45 +135,12 @@ const IMAGE_PADDING_PX = 10;
 const KEY_REPEAT_KEYUP_BONUS_MS = 40;
 const KEY_REPEAT_LIMIT_MS = 180;
 
-type LightboxDefaultProps = {
-    imageCaption: React.ReactNode;
-    imageTitle: React.ReactNode;
-    nextSrc: string | null;
-    onImageLoad: (
-        imageSrc: string,
-        srcType: LightboxImageSourceName,
-        image: HTMLImageElement
-    ) => void;
-    onMoveNextRequest: (event?: LightboxTriggerEvent) => void;
-    onMovePrevRequest: (event?: LightboxTriggerEvent) => void;
-    prevSrc: string | null;
-    reactModalStyle: ReactModalStyle;
-    toolbarButtons: React.ReactNode[] | null;
-};
-
-const defaultProps: LightboxDefaultProps = {
-    imageCaption: null,
-    imageTitle: null,
-    nextSrc: null,
-    onImageLoad: noopImageLoad,
-    onMoveNextRequest: noopMoveRequest,
-    onMovePrevRequest: noopMoveRequest,
-    prevSrc: null,
-    reactModalStyle: {},
-    toolbarButtons: null
-};
-
-type LightboxPropsWithDefaults =
-    Omit<LightboxProps, keyof LightboxDefaultProps>
-    & LightboxDefaultProps;
-
 export default function ReactImageLightbox(incomingProps: LightboxProps) {
     const {hide} = useParent();
     const {t} = useTranslation();
     const props = {
-        ...defaultProps,
         ...incomingProps
-    } as LightboxPropsWithDefaults;
+    } as LightboxProps;
 
     const [state, setLightboxState] = useState<LightboxState>({
         //-----------------------------
@@ -1236,8 +1197,8 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
         nextSrc,
         prevSrc,
         toolbarButtons,
-        reactModalStyle,
         imageCaption,
+        zIndex,
     } = props;
     const boxSize = getLightboxRect();
     let transitionStyle: React.CSSProperties = {};
@@ -1339,11 +1300,10 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
         x: -1 * boxSize.width
     });
 
-    const modalStyle: ReactModalStyle = {
+    const modalStyle = {
         overlay: {
-            zIndex: 1000,
+            zIndex: zIndex ?? 1000,
             backgroundColor: "transparent",
-            ...(reactModalStyle.overlay ?? {})
         },
         content: {
             backgroundColor: "transparent",
@@ -1355,7 +1315,6 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
             left: 0,
             right: 0,
             bottom: 0,
-            ...(reactModalStyle.content ?? {})
         }
     };
 
