@@ -55,9 +55,11 @@ export interface LightboxProps {
     zIndex?: number;
 }
 
+type LoadErrorStatus = Partial<Record<LightboxImageSourceName, boolean>>;
+
 interface LightboxState {
     isClosing: boolean;
-    loadErrorStatus: Partial<Record<LightboxImageSourceName, boolean>>;
+    loadErrorStatus: LoadErrorStatus;
     offsetX: number;
     offsetY: number;
     shouldAnimate: boolean;
@@ -137,37 +139,24 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const {hide} = useParent();
     const {t} = useTranslation();
 
-    const [state, setLightboxState] = useState<LightboxState>({
-        //-----------------------------
-        // Animation
-        //-----------------------------
+    // Lightbox is closing
+    // When Lightbox is mounted, it opens with the reverse of the closing animation.
+    const [isClosing, setIsClosing] = useState(true);
 
-        // Lightbox is closing
-        // When Lightbox is mounted, it opens with the reverse of the closing animation.
-        isClosing: true,
+    // Component parts should animate (e.g., when images are moving, or image is being zoomed)
+    const [shouldAnimate, setShouldAnimate] = useState(false);
 
-        // Component parts should animate (e.g., when images are moving, or image is being zoomed)
-        shouldAnimate: false,
+    // Zoom level of image
+    const [zoomLevel, setZoomLevel] = useState(MIN_ZOOM_LEVEL);
 
-        //-----------------------------
-        // Zoom settings
-        //-----------------------------
-        // Zoom level of image
-        zoomLevel: MIN_ZOOM_LEVEL,
+    // Horizontal image offset from center
+    const [offsetX, setOffsetX] = useState(0);
 
-        //-----------------------------
-        // Image position settings
-        //-----------------------------
-        // Horizontal offset from center
-        offsetX: 0,
+    // Vertical image offset from center
+    const [offsetY, setOffsetY] = useState(0);
 
-        // Vertical offset from center
-        offsetY: 0,
-
-        // image load error for srcType
-        loadErrorStatus: {}
-    });
-    const {zoomLevel, offsetX, offsetY, isClosing, loadErrorStatus} = state;
+    // image load error for srcType
+    const [loadErrorStatus, setLoadErrorStatus] = useState<LoadErrorStatus>({});
     const [, forceUpdate] = useReducer((value: number) => value + 1, 0);
 
     const outerEl = useRef<HTMLDivElement | null>(null);
@@ -178,8 +167,22 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const propsRef = useRef(props);
     propsRef.current = props;
 
-    const stateRef = useRef(state);
-    stateRef.current = state;
+    const stateRef = useRef<LightboxState>({
+        isClosing,
+        loadErrorStatus,
+        offsetX,
+        offsetY,
+        shouldAnimate,
+        zoomLevel
+    });
+    stateRef.current = {
+        isClosing,
+        loadErrorStatus,
+        offsetX,
+        offsetY,
+        shouldAnimate,
+        zoomLevel
+    };
 
     const didUnmountRef = useRef(false);
     const listenersRef = useRef<Record<string, EventListener>>({});
@@ -217,15 +220,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
         handleWindowResize: noop,
         loadAllImages: () => {}
     });
-
-    const setState = (
-        update: Partial<LightboxState> | ((prevState: LightboxState) => Partial<LightboxState>)
-    ): void => {
-        setLightboxState(prevState => ({
-            ...prevState,
-            ...(typeof update === "function" ? update(prevState) : update)
-        }));
-    };
 
     const setManagedTimeout = (func: () => void, time: number): TimeoutId => {
         const id = globalThis.setTimeout(() => {
@@ -375,11 +369,9 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
 
         if (nextZoomLevel === MIN_ZOOM_LEVEL) {
-            setState({
-                zoomLevel: nextZoomLevel,
-                offsetX: 0,
-                offsetY: 0
-            });
+            setZoomLevel(nextZoomLevel);
+            setOffsetX(0);
+            setOffsetY(0);
 
             return;
         }
@@ -442,11 +434,9 @@ export default function ReactImageLightbox(props: LightboxProps) {
             }
         }
 
-        setState({
-            zoomLevel: nextZoomLevel,
-            offsetX: nextOffsetX,
-            offsetY: nextOffsetY
-        });
+        setZoomLevel(nextZoomLevel);
+        setOffsetX(nextOffsetX);
+        setOffsetY(nextOffsetY);
     };
 
     const setPreventInnerClose = (): void => {
@@ -478,10 +468,8 @@ export default function ReactImageLightbox(props: LightboxProps) {
             currentState.offsetX !== newOffsetX
             || currentState.offsetY !== newOffsetY
         ) {
-            setState({
-                offsetX: newOffsetX,
-                offsetY: newOffsetY
-            });
+            setOffsetX(newOffsetX);
+            setOffsetY(newOffsetY);
         }
     };
 
@@ -506,13 +494,11 @@ export default function ReactImageLightbox(props: LightboxProps) {
             nextOffsetX !== currentState.offsetX
             || nextOffsetY !== currentState.offsetY
         ) {
-            setState({
-                offsetX: nextOffsetX,
-                offsetY: nextOffsetY,
-                shouldAnimate: true
-            });
+            setOffsetX(nextOffsetX);
+            setOffsetY(nextOffsetY);
+            setShouldAnimate(true);
             setManagedTimeout(() => {
-                setState({shouldAnimate: false});
+                setShouldAnimate(false);
             }, ANIMATION_DURATION_MS);
         }
     };
@@ -531,30 +517,25 @@ export default function ReactImageLightbox(props: LightboxProps) {
     };
 
     const requestMove = (direction: "next" | "prev", event?: LightboxTriggerEvent): void => {
-        const nextState: Partial<LightboxState> = {
-            zoomLevel: MIN_ZOOM_LEVEL,
-            offsetX: 0,
-            offsetY: 0
-        };
-
         if (!keyPressedRef.current) {
-            nextState.shouldAnimate = true;
+            setShouldAnimate(true);
             setManagedTimeout(
-                () => setState({shouldAnimate: false}),
+                () => setShouldAnimate(false),
                 ANIMATION_DURATION_MS
             );
         }
         keyPressedRef.current = false;
 
         moveRequestedRef.current = true;
+        setZoomLevel(MIN_ZOOM_LEVEL);
+        setOffsetX(0);
+        setOffsetY(0);
 
         if (direction === "prev") {
             keyCounterRef.current -= 1;
-            setState(nextState);
             propsRef.current.onMovePrevRequest(event);
         } else {
             keyCounterRef.current += 1;
-            setState(nextState);
             propsRef.current.onMoveNextRequest(event);
         }
     };
@@ -906,9 +887,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         const inMemoryImage = new Image();
 
         inMemoryImage.addEventListener("error", errorEvent => {
-            setState(prevState => ({
-                loadErrorStatus: {...prevState.loadErrorStatus, [srcType]: true}
-            }));
+            setLoadErrorStatus(prevState => ({...prevState, [srcType]: true}));
 
             done(errorEvent);
         }, {once: true});
@@ -949,9 +928,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
             const currentState = stateRef.current;
 
             if (nextProps[type] && currentState.loadErrorStatus[type]) {
-                setState(prevState => ({
-                    loadErrorStatus: {...prevState.loadErrorStatus, [type]: false}
-                }));
+                setLoadErrorStatus(prevState => ({...prevState, [type]: false}));
             }
 
             if (nextProps[type] && !isImageLoaded(nextProps[type])) {
@@ -972,7 +949,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
             return;
         }
 
-        setState({isClosing: true});
+        setIsClosing(true);
         setManagedTimeout(closeLightbox, ANIMATION_DURATION_MS);
     };
 
@@ -1120,7 +1097,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
     };
 
     useEffect(() => {
-        setState({isClosing: false});
+        setIsClosing(false);
 
         const windowContext = window;
 
