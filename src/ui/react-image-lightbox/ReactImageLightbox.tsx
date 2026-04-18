@@ -171,7 +171,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const propsRef = useRef(props);
     propsRef.current = props;
 
-    const listenersRef = useRef<Record<string, EventListener>>({});
     const timeoutsRef = useRef<TimeoutId[]>([]);
     const currentActionRef = useRef(ACTION_NONE);
     const eventsSourceRef = useRef(SOURCE_ANY);
@@ -1068,9 +1067,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
     useEffect(() => {
         setIsClosing(false);
 
-        const windowContext = window;
-
-        listenersRef.current = {
+        const listeners: Record<string, EventListener> = {
             resize: () => actionsRef.current.handleWindowResize(),
             mouseup: event => actionsRef.current.handleMouseUp(event as MouseEvent),
             touchend: event => actionsRef.current.handleTouchEnd(event as TouchEvent),
@@ -1080,15 +1077,15 @@ export default function ReactImageLightbox(props: LightboxProps) {
             pointerup: event => actionsRef.current.handlePointerEvent(event as PointerEvent),
             pointercancel: event => actionsRef.current.handlePointerEvent(event as PointerEvent)
         };
-        Object.keys(listenersRef.current).forEach(type => {
-            windowContext.addEventListener(type, listenersRef.current[type]);
+        Object.keys(listeners).forEach(type => {
+            window.addEventListener(type, listeners[type]);
         });
 
         actionsRef.current.loadAllImages();
 
         return () => {
-            Object.keys(listenersRef.current).forEach(type => {
-                windowContext.removeEventListener(type, listenersRef.current[type]);
+            Object.keys(listeners).forEach(type => {
+                window.removeEventListener(type, listeners[type]);
             });
             timeoutsRef.current.forEach(tid => window.clearTimeout(tid));
         };
