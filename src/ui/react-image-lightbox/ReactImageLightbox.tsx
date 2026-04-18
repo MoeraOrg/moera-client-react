@@ -1310,7 +1310,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
             contentLabel={t("lightbox")}
             appElement={document.body}
         >
-            <div // eslint-disable-line jsx-a11y/no-static-element-interactions
+            <div
                 className={cx("ril-outer", "ril__outer", "ril__outerAnimating", {
                     "ril-closing": isClosing,
                     "ril__outerClosing": isClosing
@@ -1330,10 +1330,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                 onKeyDown={handleKeyInput}
                 onKeyUp={handleKeyInput}
             >
-                <div // eslint-disable-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
-                    className="ril-inner ril__inner"
-                    onClick={closeIfClickInner}
-                >
+                <div className="ril-inner ril__inner" onClick={closeIfClickInner}>
                     {images}
                 </div>
 
@@ -1439,8 +1436,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                     </ul>
                 </div>
 
-                {imageCaption && (
-                    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+                {imageCaption &&
                     <div
                         onWheel={handleCaptionMousewheel}
                         onMouseDown={event => event.stopPropagation()}
@@ -1451,7 +1447,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                             {imageCaption}
                         </div>
                     </div>
-                )}
+                }
             </div>
         </Modal>
     );
