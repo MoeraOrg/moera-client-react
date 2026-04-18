@@ -1,8 +1,10 @@
-import React, {useEffect, useReducer, useRef, useState} from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 import Modal from 'react-modal';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { Loading } from "ui/control";
+import type { InputPointer, TransformInput } from "./util";
 import {
     getTouches,
     getTransform,
@@ -11,10 +13,8 @@ import {
     isTargetMatchImage,
     parseMouseEvent,
     parsePointerEvent,
-    parseTouchPointer,
-    translate
+    parseTouchPointer
 } from "./util";
-import type { InputPointer, TransformInput } from "./util";
 import {
     ACTION_MOVE,
     ACTION_NONE,
@@ -45,11 +45,9 @@ export type LightboxImageSourceName =
 type ReactModalStyle = NonNullable<React.ComponentProps<typeof Modal>["style"]>;
 
 export interface LightboxProps {
-    closeLabel?: string;
     imageCaption?: React.ReactNode;
     imageTitle?: React.ReactNode;
     mainSrc: string;
-    nextLabel?: string;
     nextSrc?: string | null;
     onImageLoad?(
         imageSrc: string,
@@ -58,12 +56,9 @@ export interface LightboxProps {
     ): void;
     onMoveNextRequest?(event?: LightboxTriggerEvent): void;
     onMovePrevRequest?(event?: LightboxTriggerEvent): void;
-    prevLabel?: string;
     prevSrc?: string | null;
     reactModalStyle?: ReactModalStyle;
     toolbarButtons?: React.ReactNode[] | null;
-    zoomInLabel?: string;
-    zoomOutLabel?: string;
 }
 
 interface LightboxState {
@@ -143,15 +138,12 @@ const noopTouchEnd = (_event: TouchEvent): void => {};
 
 const ANIMATION_DURATION_MS = 300;
 const IMAGE_PADDING_PX = 10;
-const IMAGE_LOAD_ERROR_MESSAGE = "This image failed to load";
 const KEY_REPEAT_KEYUP_BONUS_MS = 40;
 const KEY_REPEAT_LIMIT_MS = 180;
 
 type LightboxDefaultProps = {
-    closeLabel: string;
     imageCaption: React.ReactNode;
     imageTitle: React.ReactNode;
-    nextLabel: string;
     nextSrc: string | null;
     onImageLoad: (
         imageSrc: string,
@@ -160,29 +152,21 @@ type LightboxDefaultProps = {
     ) => void;
     onMoveNextRequest: (event?: LightboxTriggerEvent) => void;
     onMovePrevRequest: (event?: LightboxTriggerEvent) => void;
-    prevLabel: string;
     prevSrc: string | null;
     reactModalStyle: ReactModalStyle;
     toolbarButtons: React.ReactNode[] | null;
-    zoomInLabel: string;
-    zoomOutLabel: string;
 };
 
 const defaultProps: LightboxDefaultProps = {
-    closeLabel: "Close lightbox",
     imageCaption: null,
     imageTitle: null,
-    nextLabel: "Next image",
     nextSrc: null,
     onImageLoad: noopImageLoad,
     onMoveNextRequest: noopMoveRequest,
     onMovePrevRequest: noopMoveRequest,
-    prevLabel: "Previous image",
     prevSrc: null,
     reactModalStyle: {},
-    toolbarButtons: null,
-    zoomInLabel: "Zoom in",
-    zoomOutLabel: "Zoom out"
+    toolbarButtons: null
 };
 
 type LightboxPropsWithDefaults =
@@ -191,6 +175,7 @@ type LightboxPropsWithDefaults =
 
 export default function ReactImageLightbox(incomingProps: LightboxProps) {
     const {hide} = useParent();
+    const {t} = useTranslation();
     const props = {
         ...defaultProps,
         ...incomingProps
@@ -1252,14 +1237,8 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
         prevSrc,
         toolbarButtons,
         reactModalStyle,
-        prevLabel,
-        nextLabel,
-        zoomInLabel,
-        zoomOutLabel,
-        closeLabel,
         imageCaption,
     } = props;
-
     const boxSize = getLightboxRect();
     let transitionStyle: React.CSSProperties = {};
     const animating = isAnimating();
@@ -1308,7 +1287,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                     key={props[srcType] + keyEndings[srcType]}
                 >
                     <div className="ril__errorContainer">
-                        {IMAGE_LOAD_ERROR_MESSAGE}
+                        {t("couldnt-load-image")}
                     </div>
                 </div>
             );
@@ -1341,7 +1320,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                 style={imageStyle}
                 src={imageSrc}
                 key={imageSrc + keyEndings[srcType]}
-                alt={typeof imageTitle === "string" ? imageTitle : translate("Image")}
+                alt={typeof imageTitle === "string" ? imageTitle : t("image")}
                 draggable={false}
             />
         );
@@ -1390,7 +1369,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                 }
             }}
             style={modalStyle}
-            contentLabel={translate("Lightbox")}
+            contentLabel={t("lightbox")}
             appElement={
                 typeof globalThis.window !== "undefined"
                     ? globalThis.window.document.body
@@ -1429,8 +1408,8 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                         type="button"
                         className="ril-prev-button ril__navButtons ril__navButtonPrev"
                         key="prev"
-                        aria-label={prevLabel}
-                        title={prevLabel}
+                        aria-label={t("previous-image")}
+                        title={t("previous-image")}
                         onClick={!animating ? requestMovePrev : undefined}
                     />
                 )}
@@ -1440,8 +1419,8 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                         type="button"
                         className="ril-next-button ril__navButtons ril__navButtonNext"
                         key="next"
-                        aria-label={nextLabel}
-                        title={nextLabel}
+                        aria-label={t("next-image")}
+                        title={t("next-image")}
                         onClick={!animating ? requestMoveNext : undefined}
                     />
                 )}
@@ -1469,8 +1448,8 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                             <button
                                 type="button"
                                 key="zoom-in"
-                                aria-label={zoomInLabel}
-                                title={zoomInLabel}
+                                aria-label={t("zoom-in")}
+                                title={t("zoom-in")}
                                 className={cx(
                                     "ril-zoom-in",
                                     "ril__toolbarItemChild",
@@ -1494,8 +1473,8 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                             <button
                                 type="button"
                                 key="zoom-out"
-                                aria-label={zoomOutLabel}
-                                title={zoomOutLabel}
+                                aria-label={t("zoom-out")}
+                                title={t("zoom-out")}
                                 className={cx(
                                     "ril-zoom-out",
                                     "ril__toolbarItemChild",
@@ -1519,8 +1498,8 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                             <button
                                 type="button"
                                 key="close"
-                                aria-label={closeLabel}
-                                title={closeLabel}
+                                aria-label={t("close")}
+                                title={t("close")}
                                 className="ril-close ril-toolbar__item__child ril__toolbarItemChild ril__builtinButton ril__closeButton"
                                 onClick={!animating ? requestClose : undefined}
                             />

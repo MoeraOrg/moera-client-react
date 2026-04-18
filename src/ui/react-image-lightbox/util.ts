@@ -6,8 +6,6 @@ import {
     SOURCE_TOUCH
 } from "./constant";
 
-type ReplaceStrings = Record<string, string>;
-
 interface CoordinateEventLike {
     clientX: number;
     clientY: number;
@@ -35,24 +33,6 @@ export interface TransformInput {
     x?: number;
     y?: number;
     zoom?: number;
-}
-
-/**
- * Placeholder for future translate functionality
- */
-export function translate(str: string | null | undefined, replaceStrings: ReplaceStrings | null = null): string {
-    if (!str) {
-        return "";
-    }
-
-    let translated = str;
-    if (replaceStrings) {
-        Object.keys(replaceStrings).forEach(placeholder => {
-            translated = translated.replace(placeholder, replaceStrings[placeholder]);
-        });
-    }
-
-    return translated;
 }
 
 export function getWindowWidth(): number {

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 
 import { MediaAttachment } from "api";
 import { ClientState } from "state/state";
@@ -41,7 +40,6 @@ export default function LightBox() {
     const carte = useSelector(getCurrentViewMediaCarte);
     const loopGallery = useSelector((state: ClientState) => getSetting(state, "entry.gallery.loop") as boolean);
     const dispatch = useDispatcher();
-    const {t} = useTranslation();
 
     const onCloseRequest = useCallback(() => dispatch(closeLightBox()), [dispatch]);
 
@@ -143,12 +141,9 @@ export default function LightBox() {
                 prevSrc={prevSrc}
                 nextSrc={nextSrc}
                 imageTitle={title}
-                closeLabel={t("close")}
                 onMovePrevRequest={onMovePrevRequest}
-                prevLabel={t("previous-image")}
                 onMoveNextRequest={onMoveNextRequest}
                 onImageLoad={onImageLoad}
-                nextLabel={t("next-image")}
                 reactModalStyle={{overlay: {zIndex: zIndex?.shadow}}}
                 toolbarButtons={[
                     mainTextContent && <LightBoxCopyTextButton text={mainTextContent}/>,
@@ -156,8 +151,6 @@ export default function LightBox() {
                     <LightBoxDownloadButton mediaUrl={mainSrc} mediaMimeType={mainMimeType}/>,
                     <LightBoxReactions/>
                 ]}
-                zoomInLabel={t("zoom-in")}
-                zoomOutLabel={t("zoom-out")}
                 imageCaption={mediaPosting?.body.text && <LightBoxCaption posting={mediaPosting}/>}
             />
         </ParentContext.Provider>
