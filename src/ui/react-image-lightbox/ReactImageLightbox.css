@@ -56,6 +56,12 @@
     opacity: 0.7;
 }
 
+@media only screen and (min-width: 992px) {
+    .ril__navButtons {
+        height: calc(100vh - 100px - 13rem) !important;
+    }
+}
+
 .ril__navButtons:hover {
     opacity: 1;
 }
@@ -106,6 +112,14 @@
 .ril__toolbar {
     top: 0;
     height: 50px;
+}
+
+.ril__outer.transparent .ril__toolbar,
+.ril__outer.transparent .ril__navButtons,
+.ril__outer.transparent .ril__caption {
+    filter: opacity(0);
+    transition: filter .5s ease;
+    pointer-events: none;
 }
 
 .ril__toolbarSide {
@@ -181,6 +195,16 @@
 .ril__zoomOutButton {
     background: url("./svg/zoom_out.svg") no-repeat center;
     background-size: 20px 20px;
+}
+
+@media only screen and (max-width: 991px) {
+    .ril__zoomInButton {
+        display: none;
+    }
+
+    .ril__zoomOutButton {
+        display: none;
+    }
 }
 
 .ril__outerAnimating {

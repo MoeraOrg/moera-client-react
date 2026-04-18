@@ -1451,7 +1451,6 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                                 aria-label={t("zoom-in")}
                                 title={t("zoom-in")}
                                 className={cx(
-                                    "ril-zoom-in",
                                     "ril__toolbarItemChild",
                                     "ril__builtinButton",
                                     "ril__zoomInButton",
@@ -1476,7 +1475,6 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                                 aria-label={t("zoom-out")}
                                 title={t("zoom-out")}
                                 className={cx(
-                                    "ril-zoom-out",
                                     "ril__toolbarItemChild",
                                     "ril__builtinButton",
                                     "ril__zoomOutButton",
