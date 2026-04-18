@@ -197,7 +197,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
         zoomLevel
     };
 
-    const didUnmountRef = useRef(false);
     const listenersRef = useRef<Record<string, EventListener>>({});
     const timeoutsRef = useRef<TimeoutId[]>([]);
     const currentActionRef = useRef(ACTION_NONE);
@@ -929,7 +928,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                 return;
             }
 
-            if (propsRef.current[srcType] !== imageSrc || didUnmountRef.current) {
+            if (propsRef.current[srcType] !== imageSrc) {
                 return;
             }
 
@@ -1127,7 +1126,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
         actionsRef.current.loadAllImages();
 
         return () => {
-            didUnmountRef.current = true;
             Object.keys(listenersRef.current).forEach(type => {
                 windowContext.removeEventListener(type, listenersRef.current[type]);
             });
