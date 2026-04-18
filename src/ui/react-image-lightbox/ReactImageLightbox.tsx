@@ -5,24 +5,6 @@ import { useTranslation } from 'react-i18next';
 
 import { useParent } from "ui/hook";
 import { Loading } from "ui/control";
-import {
-    ACTION_MOVE,
-    ACTION_NONE,
-    ACTION_PINCH,
-    ACTION_SWIPE,
-    KEYS,
-    MAX_ZOOM_LEVEL,
-    MIN_SWIPE_DISTANCE,
-    MIN_ZOOM_LEVEL,
-    SOURCE_ANY,
-    SOURCE_MOUSE,
-    SOURCE_POINTER,
-    SOURCE_TOUCH,
-    WHEEL_MOVE_X_THRESHOLD,
-    WHEEL_MOVE_Y_THRESHOLD,
-    ZOOM_BUTTON_INCREMENT_SIZE,
-    ZOOM_RATIO
-} from "./constant";
 import type { InputPointer, TransformInput } from "./util";
 import {
     getTouches,
@@ -30,7 +12,11 @@ import {
     isTargetMatchImage,
     parseMouseEvent,
     parsePointerEvent,
-    parseTouchPointer
+    parseTouchPointer,
+    SOURCE_ANY,
+    SOURCE_MOUSE,
+    SOURCE_POINTER,
+    SOURCE_TOUCH
 } from "./util";
 import "./ReactImageLightbox.css";
 
@@ -129,6 +115,33 @@ const noop = (): void => {};
 const noopMouseUp = (_event: MouseEvent): void => {};
 const noopPointerEvent = (_event: PointerEvent): void => {};
 const noopTouchEnd = (_event: TouchEvent): void => {};
+
+// Min image zoom level
+const MIN_ZOOM_LEVEL = 0;
+
+// Max image zoom level
+const MAX_ZOOM_LEVEL = 300;
+
+// Size ratio between previous and next zoom levels
+const ZOOM_RATIO = 1.007;
+
+// How much to increase/decrease the zoom level when the zoom buttons are clicked
+const ZOOM_BUTTON_INCREMENT_SIZE = 100;
+
+// Used to judge the amount of horizontal scroll needed to initiate a image move
+const WHEEL_MOVE_X_THRESHOLD = 200;
+
+// Used to judge the amount of vertical scroll needed to initiate a zoom action
+const WHEEL_MOVE_Y_THRESHOLD = 1;
+
+// Actions
+const ACTION_NONE = 0;
+const ACTION_MOVE = 1;
+const ACTION_SWIPE = 2;
+const ACTION_PINCH = 3;
+
+// Minimal swipe distance
+const MIN_SWIPE_DISTANCE = 200;
 
 const ANIMATION_DURATION_MS = 300;
 const IMAGE_PADDING_PX = 10;
@@ -335,14 +348,14 @@ export default function ReactImageLightbox(props: LightboxProps) {
         const boxSize = getLightboxRect();
         const zoomMultiplier = getZoomMultiplier(nextZoomLevel);
 
-        let maxX = 0;
+        let maxX;
         if (zoomMultiplier * currentImageInfo.width - boxSize.width < 0) {
             maxX = (boxSize.width - zoomMultiplier * currentImageInfo.width) / 2;
         } else {
             maxX = (zoomMultiplier * currentImageInfo.width - boxSize.width) / 2;
         }
 
-        let maxY = 0;
+        let maxY;
         if (zoomMultiplier * currentImageInfo.height - boxSize.height < 0) {
             maxY = (boxSize.height - zoomMultiplier * currentImageInfo.height) / 2;
         } else {
@@ -942,15 +955,13 @@ export default function ReactImageLightbox(props: LightboxProps) {
     };
 
     const requestClose = (event?: LightboxTriggerEvent): void => {
-        const closeLightbox = (): void => hide();
-
         if (!event || event.type === "keydown") {
-            closeLightbox();
+            hide();
             return;
         }
 
         setIsClosing(true);
-        setManagedTimeout(closeLightbox, ANIMATION_DURATION_MS);
+        setManagedTimeout(() => hide(), ANIMATION_DURATION_MS);
     };
 
     const closeIfClickInner = (event: React.MouseEvent<HTMLDivElement>): void => {
@@ -975,23 +986,23 @@ export default function ReactImageLightbox(props: LightboxProps) {
             return;
         }
 
-        const keyCode = event.which || event.keyCode;
         const currentTime = Date.now();
         if (
             currentTime - lastKeyDownTimeRef.current
                 < KEY_REPEAT_LIMIT_MS
-            && keyCode !== KEYS.ESC
+            && event.key !== "Escape" && event.key !== "Esc"
         ) {
             return;
         }
         lastKeyDownTimeRef.current = currentTime;
 
-        switch (keyCode) {
-            case KEYS.ESC:
+        switch (event.key) {
+            case "Escape":
+            case "Esc":
                 event.preventDefault();
                 requestClose(event);
                 break;
-            case KEYS.LEFT_ARROW:
+            case "ArrowLeft":
                 if (!propsRef.current.prevSrc) {
                     return;
                 }
@@ -1000,7 +1011,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                 keyPressedRef.current = true;
                 requestMovePrev(event);
                 break;
-            case KEYS.RIGHT_ARROW:
+            case "ArrowRight":
                 if (!propsRef.current.nextSrc) {
                     return;
                 }
@@ -1057,11 +1068,9 @@ export default function ReactImageLightbox(props: LightboxProps) {
     };
 
     const handleImageMouseWheel = (event: React.WheelEvent<HTMLElement>): void => {
-        const yThreshold = WHEEL_MOVE_Y_THRESHOLD;
-
         if (Math.abs(event.deltaY) >= Math.abs(event.deltaX)) {
             event.stopPropagation();
-            if (Math.abs(event.deltaY) < yThreshold) {
+            if (Math.abs(event.deltaY) < WHEEL_MOVE_Y_THRESHOLD) {
                 return;
             }
 

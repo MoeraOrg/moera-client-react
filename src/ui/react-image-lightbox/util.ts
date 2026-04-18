@@ -1,7 +1,5 @@
 import type { CSSProperties } from 'react';
 
-import { SOURCE_MOUSE, SOURCE_POINTER, SOURCE_TOUCH } from "./constant";
-
 interface CoordinateEventLike {
     clientX: number;
     clientY: number;
@@ -13,6 +11,12 @@ export interface InputPointer {
     x: number;
     y: number;
 }
+
+// Events source
+export const SOURCE_ANY = 0;
+export const SOURCE_MOUSE = 1;
+export const SOURCE_TOUCH = 2;
+export const SOURCE_POINTER = 3;
 
 interface TouchPointerLike extends CoordinateEventLike {
     identifier: number;
