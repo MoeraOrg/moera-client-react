@@ -133,12 +133,9 @@ const IMAGE_PADDING_PX = 10;
 const KEY_REPEAT_KEYUP_BONUS_MS = 40;
 const KEY_REPEAT_LIMIT_MS = 180;
 
-export default function ReactImageLightbox(incomingProps: LightboxProps) {
+export default function ReactImageLightbox(props: LightboxProps) {
     const {hide} = useParent();
     const {t} = useTranslation();
-    const props = {
-        ...incomingProps
-    } as LightboxProps;
 
     const [state, setLightboxState] = useState<LightboxState>({
         //-----------------------------
