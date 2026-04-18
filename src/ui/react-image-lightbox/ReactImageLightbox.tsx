@@ -4,10 +4,17 @@ import cx from 'classnames';
 
 import { Loading } from "ui/control";
 import {
+    getTouches,
+    getTransform,
     getWindowHeight,
     getWindowWidth,
+    isTargetMatchImage,
+    parseMouseEvent,
+    parsePointerEvent,
+    parseTouchPointer,
     translate
 } from "./util";
+import type { InputPointer, TransformInput } from "./util";
 import {
     ACTION_MOVE,
     ACTION_NONE,
@@ -68,13 +75,6 @@ interface LightboxState {
     zoomLevel: number;
 }
 
-interface InputPointer {
-    id: number | string;
-    source: number;
-    x: number;
-    y: number;
-}
-
 interface ImageCacheEntry {
     height: number;
     loaded: boolean;
@@ -126,23 +126,6 @@ interface SourceDescriptor {
     name: LightboxImageSourceName;
 }
 
-interface TransformInput {
-    targetWidth: number;
-    width: number;
-    x?: number;
-    y?: number;
-    zoom?: number;
-}
-
-interface CoordinateEventLike {
-    clientX: number;
-    clientY: number;
-}
-
-interface TouchPointerLike extends CoordinateEventLike {
-    identifier: number;
-}
-
 interface ActionsRefValue {
     handleMouseUp: (event: MouseEvent) => void;
     handlePointerEvent: (event: PointerEvent) => void;
@@ -151,17 +134,13 @@ interface ActionsRefValue {
     loadAllImages: (nextProps?: LightboxPropsWithDefaults) => void;
 }
 
-interface TouchListLike {
-    item(index: number): TouchPointerLike | null;
-    length: number;
-}
-
 const noop = (): void => {};
 const noopImageLoad = (): void => {};
 const noopMoveRequest = (): void => {};
 const noopMouseUp = (_event: MouseEvent): void => {};
 const noopPointerEvent = (_event: PointerEvent): void => {};
 const noopTouchEnd = (_event: TouchEvent): void => {};
+
 const ANIMATION_DURATION_MS = 300;
 const IMAGE_PADDING_PX = 10;
 const IMAGE_LOAD_ERROR_MESSAGE = "This image failed to load";
@@ -209,57 +188,6 @@ const defaultProps: LightboxDefaultProps = {
 type LightboxPropsWithDefaults =
     Omit<LightboxProps, keyof LightboxDefaultProps>
     & LightboxDefaultProps;
-
-function isTargetMatchImage(target: EventTarget | null): boolean {
-    return target instanceof Element
-        && /\bril-image-current\b/.test(target.getAttribute("class") ?? "");
-}
-
-function parseMouseEvent(mouseEvent: CoordinateEventLike): InputPointer {
-    return {
-        id: "mouse",
-        source: SOURCE_MOUSE,
-        x: Math.trunc(mouseEvent.clientX),
-        y: Math.trunc(mouseEvent.clientY)
-    };
-}
-
-function parseTouchPointer(touchPointer: TouchPointerLike): InputPointer {
-    return {
-        id: touchPointer.identifier,
-        source: SOURCE_TOUCH,
-        x: Math.trunc(touchPointer.clientX),
-        y: Math.trunc(touchPointer.clientY)
-    };
-}
-
-function parsePointerEvent(pointerEvent: PointerEvent): InputPointer {
-    return {
-        id: pointerEvent.pointerId,
-        source: SOURCE_POINTER,
-        x: Math.trunc(pointerEvent.clientX),
-        y: Math.trunc(pointerEvent.clientY)
-    };
-}
-
-function getTouches(touchList: TouchListLike): TouchPointerLike[] {
-    return Array.from({length: touchList.length}, (_, index) => touchList.item(index)).filter(
-        (touch): touch is TouchPointerLike => touch !== null
-    );
-}
-
-function getTransform({x = 0, y = 0, zoom = 1, width, targetWidth}: TransformInput): React.CSSProperties {
-    let nextX = x;
-    const windowWidth = getWindowWidth();
-    if (width > windowWidth) {
-        nextX += (windowWidth - width) / 2;
-    }
-    const scaleFactor = zoom * (targetWidth / width);
-
-    return {
-        transform: `translate3d(${nextX}px,${y}px,0) scale3d(${scaleFactor},${scaleFactor},1)`
-    };
-}
 
 export default function ReactImageLightbox(incomingProps: LightboxProps) {
     const props = {
