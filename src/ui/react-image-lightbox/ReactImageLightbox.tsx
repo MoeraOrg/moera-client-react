@@ -27,8 +27,6 @@ import type { InputPointer, TransformInput } from "./util";
 import {
     getTouches,
     getTransform,
-    getWindowHeight,
-    getWindowWidth,
     isTargetMatchImage,
     parseMouseEvent,
     parsePointerEvent,
@@ -36,7 +34,7 @@ import {
 } from "./util";
 import "./ReactImageLightbox.css";
 
-type TimeoutId = ReturnType<typeof globalThis.setTimeout>;
+type TimeoutId = ReturnType<typeof window.setTimeout>;
 export type LightboxTriggerEvent = Event | React.SyntheticEvent;
 export type LightboxImageSourceName = | "mainSrc" | "nextSrc" | "prevSrc";
 
@@ -247,7 +245,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
         }
 
         timeoutsRef.current = timeoutsRef.current.filter(tid => tid !== id);
-        globalThis.clearTimeout(id);
+        window.clearTimeout(id);
     };
 
     const getSrcTypes = (): SourceDescriptor[] => [
@@ -274,8 +272,8 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
         }
 
         return {
-            width: getWindowWidth(),
-            height: getWindowHeight(),
+            width: window.innerWidth,
+            height: window.innerHeight,
             top: 0,
             right: 0,
             bottom: 0,
@@ -1127,7 +1125,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
     useEffect(() => {
         setState({isClosing: false});
 
-        const windowContext = globalThis.window;
+        const windowContext = window;
 
         listenersRef.current = {
             resize: () => actionsRef.current.handleWindowResize(),
@@ -1150,7 +1148,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
             Object.keys(listenersRef.current).forEach(type => {
                 windowContext.removeEventListener(type, listenersRef.current[type]);
             });
-            timeoutsRef.current.forEach(tid => globalThis.clearTimeout(tid));
+            timeoutsRef.current.forEach(tid => window.clearTimeout(tid));
         };
     }, []);
 
@@ -1329,11 +1327,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
             }}
             style={modalStyle}
             contentLabel={t("lightbox")}
-            appElement={
-                typeof globalThis.window !== "undefined"
-                    ? globalThis.window.document.body
-                    : undefined
-            }
+            appElement={document.body}
         >
             <div // eslint-disable-line jsx-a11y/no-static-element-interactions
                 className={cx("ril-outer", "ril__outer", "ril__outerAnimating", {

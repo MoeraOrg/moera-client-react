@@ -1,10 +1,6 @@
 import type { CSSProperties } from 'react';
 
-import {
-    SOURCE_MOUSE,
-    SOURCE_POINTER,
-    SOURCE_TOUCH
-} from "./constant";
+import { SOURCE_MOUSE, SOURCE_POINTER, SOURCE_TOUCH } from "./constant";
 
 interface CoordinateEventLike {
     clientX: number;
@@ -33,14 +29,6 @@ export interface TransformInput {
     x?: number;
     y?: number;
     zoom?: number;
-}
-
-export function getWindowWidth(): number {
-    return typeof globalThis.window !== "undefined" ? globalThis.window.innerWidth : 0;
-}
-
-export function getWindowHeight(): number {
-    return typeof globalThis.window !== "undefined" ? globalThis.window.innerHeight : 0;
 }
 
 export function isTargetMatchImage(target: EventTarget | null): boolean {
@@ -89,7 +77,7 @@ export function getTransform({
     targetWidth
 }: TransformInput): CSSProperties {
     let nextX = x;
-    const windowWidth = getWindowWidth();
+    const windowWidth = window.innerWidth;
     if (width > windowWidth) {
         nextX += (windowWidth - width) / 2;
     }
