@@ -43,15 +43,6 @@ export interface LightboxProps {
 
 type LoadErrorStatus = Partial<Record<LightboxImageSourceName, boolean>>;
 
-interface LightboxState {
-    isClosing: boolean;
-    loadErrorStatus: LoadErrorStatus;
-    offsetX: number;
-    offsetY: number;
-    shouldAnimate: boolean;
-    zoomLevel: number;
-}
-
 interface ImageCacheEntry {
     height: number;
     loaded: boolean;
@@ -180,23 +171,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const propsRef = useRef(props);
     propsRef.current = props;
 
-    const stateRef = useRef<LightboxState>({
-        isClosing,
-        loadErrorStatus,
-        offsetX,
-        offsetY,
-        shouldAnimate,
-        zoomLevel
-    });
-    stateRef.current = {
-        isClosing,
-        loadErrorStatus,
-        offsetX,
-        offsetY,
-        shouldAnimate,
-        zoomLevel
-    };
-
     const listenersRef = useRef<Record<string, EventListener>>({});
     const timeoutsRef = useRef<TimeoutId[]>([]);
     const currentActionRef = useRef(ACTION_NONE);
@@ -266,7 +240,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
     ];
 
-    const getZoomMultiplier = (nextZoomLevel = stateRef.current.zoomLevel): number =>
+    const getZoomMultiplier = (nextZoomLevel = zoomLevel): number =>
         ZOOM_RATIO ** nextZoomLevel;
 
     const getLightboxRect = (): LightboxRect => {
@@ -285,7 +259,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
     };
 
     const isAnimating = (): boolean =>
-        stateRef.current.shouldAnimate || stateRef.current.isClosing;
+        shouldAnimate || isClosing;
 
     const isImageLoaded = (imageSrc?: string | null): imageSrc is string =>
         Boolean(
@@ -338,7 +312,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         };
     };
 
-    const getMaxOffsets = (nextZoomLevel = stateRef.current.zoomLevel): OffsetBounds => {
+    const getMaxOffsets = (nextZoomLevel = zoomLevel): OffsetBounds => {
         const currentImageInfo = getBestImageForType("mainSrc");
         if (currentImageInfo === null) {
             return {maxX: 0, minX: 0, maxY: 0, minY: 0};
@@ -374,9 +348,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
             MIN_ZOOM_LEVEL,
             Math.min(MAX_ZOOM_LEVEL, nextLevel)
         );
-        const currentState = stateRef.current;
-
-        if (nextZoomLevel === currentState.zoomLevel) {
+        if (nextZoomLevel === zoomLevel) {
             return;
         }
 
@@ -411,8 +383,8 @@ export default function ReactImageLightbox(props: LightboxProps) {
         const currentImageOffsetY =
             (boxRect.height - imageBaseSize.height * currentZoomMultiplier) / 2;
 
-        const currentImageRealOffsetX = currentImageOffsetX - currentState.offsetX;
-        const currentImageRealOffsetY = currentImageOffsetY - currentState.offsetY;
+        const currentImageRealOffsetX = currentImageOffsetX - offsetX;
+        const currentImageRealOffsetY = currentImageOffsetY - offsetY;
 
         const currentPointerXRelativeToImage =
             (pointerX - currentImageRealOffsetX) / currentZoomMultiplier;
@@ -434,7 +406,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
 
         if (currentActionRef.current !== ACTION_PINCH) {
             const maxOffsets = getMaxOffsets();
-            if (currentState.zoomLevel > nextZoomLevel) {
+            if (zoomLevel > nextZoomLevel) {
                 nextOffsetX = Math.max(
                     maxOffsets.minX,
                     Math.min(maxOffsets.maxX, nextOffsetX)
@@ -466,20 +438,14 @@ export default function ReactImageLightbox(props: LightboxProps) {
         currentActionRef.current = ACTION_MOVE;
         moveStartXRef.current = clientX;
         moveStartYRef.current = clientY;
-        moveStartOffsetXRef.current = stateRef.current.offsetX;
-        moveStartOffsetYRef.current = stateRef.current.offsetY;
+        moveStartOffsetXRef.current = offsetX;
+        moveStartOffsetYRef.current = offsetY;
     };
 
     const handleMove = ({x: clientX, y: clientY}: InputPointer): void => {
-        const currentState = stateRef.current;
-        const newOffsetX =
-            moveStartXRef.current - clientX + moveStartOffsetXRef.current;
-        const newOffsetY =
-            moveStartYRef.current - clientY + moveStartOffsetYRef.current;
-        if (
-            currentState.offsetX !== newOffsetX
-            || currentState.offsetY !== newOffsetY
-        ) {
+        const newOffsetX = moveStartXRef.current - clientX + moveStartOffsetXRef.current;
+        const newOffsetY = moveStartYRef.current - clientY + moveStartOffsetYRef.current;
+        if (offsetX !== newOffsetX || offsetY !== newOffsetY) {
             setOffsetX(newOffsetX);
             setOffsetY(newOffsetY);
         }
@@ -492,19 +458,18 @@ export default function ReactImageLightbox(props: LightboxProps) {
         moveStartOffsetXRef.current = 0;
         moveStartOffsetYRef.current = 0;
 
-        const currentState = stateRef.current;
         const maxOffsets = getMaxOffsets();
         const nextOffsetX = Math.max(
             maxOffsets.minX,
-            Math.min(maxOffsets.maxX, currentState.offsetX)
+            Math.min(maxOffsets.maxX, offsetX)
         );
         const nextOffsetY = Math.max(
             maxOffsets.minY,
-            Math.min(maxOffsets.maxY, currentState.offsetY)
+            Math.min(maxOffsets.maxY, offsetY)
         );
         if (
-            nextOffsetX !== currentState.offsetX
-            || nextOffsetY !== currentState.offsetY
+            nextOffsetX !== offsetX
+            || nextOffsetY !== offsetY
         ) {
             setOffsetX(nextOffsetX);
             setOffsetY(nextOffsetY);
@@ -631,8 +596,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         });
 
         const newDistance = calculatePinchDistance(pinchTouchListRef.current);
-        const nextZoomLevel =
-            stateRef.current.zoomLevel + newDistance - pinchDistanceRef.current;
+        const nextZoomLevel = zoomLevel + newDistance - pinchDistanceRef.current;
 
         pinchDistanceRef.current = newDistance;
         const {x: clientX, y: clientY} = calculatePinchCenter(pinchTouchListRef.current);
@@ -662,7 +626,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
     };
 
     const decideMoveOrSwipe = (pointer: InputPointer): void => {
-        if (stateRef.current.zoomLevel <= MIN_ZOOM_LEVEL) {
+        if (zoomLevel <= MIN_ZOOM_LEVEL) {
             handleSwipeStart(pointer);
         } else {
             handleMoveStart(pointer);
@@ -850,8 +814,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
     };
 
     const handleZoomInButtonClick = (): void => {
-        const nextZoomLevel =
-            stateRef.current.zoomLevel + ZOOM_BUTTON_INCREMENT_SIZE;
+        const nextZoomLevel = zoomLevel + ZOOM_BUTTON_INCREMENT_SIZE;
         changeZoom(nextZoomLevel);
         if (nextZoomLevel === MAX_ZOOM_LEVEL && zoomOutBtn.current) {
             zoomOutBtn.current.focus();
@@ -859,8 +822,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
     };
 
     const handleZoomOutButtonClick = (): void => {
-        const nextZoomLevel =
-            stateRef.current.zoomLevel - ZOOM_BUTTON_INCREMENT_SIZE;
+        const nextZoomLevel = zoomLevel - ZOOM_BUTTON_INCREMENT_SIZE;
         changeZoom(nextZoomLevel);
         if (nextZoomLevel === MIN_ZOOM_LEVEL && zoomInBtn.current) {
             zoomInBtn.current.focus();
@@ -937,9 +899,8 @@ export default function ReactImageLightbox(props: LightboxProps) {
 
         getSrcTypes().forEach(srcType => {
             const type = srcType.name;
-            const currentState = stateRef.current;
 
-            if (nextProps[type] && currentState.loadErrorStatus[type]) {
+            if (nextProps[type] && loadErrorStatus[type]) {
                 setLoadErrorStatus(prevState => ({...prevState, [type]: false}));
             }
 
@@ -1077,7 +1038,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
             scrollYRef.current += event.deltaY;
 
             changeZoom(
-                stateRef.current.zoomLevel - event.deltaY,
+                zoomLevel - event.deltaY,
                 event.clientX,
                 event.clientY
             );
@@ -1085,11 +1046,11 @@ export default function ReactImageLightbox(props: LightboxProps) {
     };
 
     const handleImageDoubleClick = (event: React.MouseEvent<HTMLElement>): void => {
-        if (stateRef.current.zoomLevel > MIN_ZOOM_LEVEL) {
+        if (zoomLevel > MIN_ZOOM_LEVEL) {
             changeZoom(MIN_ZOOM_LEVEL, event.clientX, event.clientY);
         } else {
             changeZoom(
-                stateRef.current.zoomLevel + ZOOM_BUTTON_INCREMENT_SIZE,
+                zoomLevel + ZOOM_BUTTON_INCREMENT_SIZE,
                 event.clientX,
                 event.clientY
             );
