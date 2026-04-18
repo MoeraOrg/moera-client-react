@@ -257,8 +257,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         };
     };
 
-    const isAnimating = (): boolean =>
-        shouldAnimate || isClosing;
+    const animating = shouldAnimate || isClosing;
 
     const isImageLoaded = (imageSrc?: string | null): imageSrc is string =>
         Boolean(
@@ -535,7 +534,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         swipeEndXRef.current = 0;
         swipeEndYRef.current = 0;
 
-        if (!event || isAnimating() || xDiffAbs < yDiffAbs * 1.5) {
+        if (!event || animating || xDiffAbs < yDiffAbs * 1.5) {
             return;
         }
 
@@ -936,7 +935,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const handleKeyInput = (event: React.KeyboardEvent<HTMLDivElement>): void => {
         event.stopPropagation();
 
-        if (isAnimating()) {
+        if (animating) {
             return;
         }
 
@@ -996,7 +995,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
             scrollYRef.current = 0;
         }, 300);
 
-        if (wheelActionTimeoutRef.current !== null || isAnimating()) {
+        if (wheelActionTimeoutRef.current !== null || animating) {
             return;
         }
 
@@ -1139,8 +1138,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
     } = props;
     const boxSize = getLightboxRect();
     let transitionStyle: React.CSSProperties = {};
-    const animating = isAnimating();
-
     if (animating) {
         transitionStyle = {
             ...transitionStyle,
