@@ -1279,24 +1279,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
         x: -1 * boxSize.width
     });
 
-    const modalStyle = {
-        overlay: {
-            zIndex: zIndex ?? 1000,
-            backgroundColor: "transparent",
-        },
-        content: {
-            backgroundColor: "transparent",
-            overflow: "hidden",
-            border: "none",
-            borderRadius: 0,
-            padding: 0,
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-        }
-    };
-
     return (
         <Modal
             isOpen
@@ -1306,7 +1288,20 @@ export default function ReactImageLightbox(props: LightboxProps) {
                     outerEl.current.focus();
                 }
             }}
-            style={modalStyle}
+            style={{
+                overlay: {
+                    zIndex: zIndex ?? 1000,
+                    backgroundColor: "transparent",
+                },
+                content: {
+                    backgroundColor: "transparent",
+                    overflow: "hidden",
+                    border: "none",
+                    borderRadius: 0,
+                    padding: 0,
+                    inset: 0,
+                }
+            }}
             contentLabel={t("lightbox")}
             appElement={document.body}
         >
