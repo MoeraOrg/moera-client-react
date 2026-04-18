@@ -32,56 +32,29 @@ type TimeoutId = ReturnType<typeof globalThis.setTimeout>;
 export type LightboxTriggerEvent = Event | React.SyntheticEvent;
 export type LightboxImageSourceName =
     | "mainSrc"
-    | "mainSrcThumbnail"
     | "nextSrc"
-    | "nextSrcThumbnail"
-    | "prevSrc"
-    | "prevSrcThumbnail";
-type LightboxPrimarySourceName = "mainSrc" | "nextSrc" | "prevSrc";
-type ReactModalProps = React.ComponentProps<typeof Modal>;
-type ReactModalStyle = NonNullable<ReactModalProps["style"]>;
+    | "prevSrc";
+type ReactModalStyle = NonNullable<React.ComponentProps<typeof Modal>["style"]>;
 
 export interface LightboxProps {
-    animationDisabled?: boolean;
-    animationDuration?: number;
-    animationOnKeyInput?: boolean;
-    clickOutsideToClose?: boolean;
     closeLabel?: string;
-    enableZoom?: boolean;
     imageCaption?: React.ReactNode;
-    imageCrossOrigin?: React.ImgHTMLAttributes<HTMLImageElement>["crossOrigin"] | null;
-    imageLoadErrorMessage?: React.ReactNode;
-    imagePadding?: number;
     imageTitle?: React.ReactNode;
-    keyRepeatKeyupBonus?: number;
-    keyRepeatLimit?: number;
-    loader?: React.ReactNode | undefined;
     mainSrc: string;
-    mainSrcThumbnail?: string | null;
     nextLabel?: string;
     nextSrc?: string | null;
-    nextSrcThumbnail?: string | null;
-    onAfterOpen?: () => void;
     onCloseRequest(event?: LightboxTriggerEvent): void;
     onImageLoad?(
         imageSrc: string,
         srcType: LightboxImageSourceName,
         image: HTMLImageElement
     ): void;
-    onImageLoadError?(
-        imageSrc: string,
-        srcType: LightboxImageSourceName,
-        errorEvent: Event
-    ): void;
     onMoveNextRequest?(event?: LightboxTriggerEvent): void;
     onMovePrevRequest?(event?: LightboxTriggerEvent): void;
     prevLabel?: string;
     prevSrc?: string | null;
-    prevSrcThumbnail?: string | null;
-    reactModalProps?: Partial<ReactModalProps>;
     reactModalStyle?: ReactModalStyle;
     toolbarButtons?: React.ReactNode[] | null;
-    wrapperClassName?: string;
     zoomInLabel?: string;
     zoomOutLabel?: string;
 }
@@ -183,94 +156,52 @@ interface TouchListLike {
     length: number;
 }
 
-const thumbnailSourceTypes: Record<LightboxPrimarySourceName, Extract<LightboxImageSourceName, `${string}Thumbnail`>> = {
-    mainSrc: "mainSrcThumbnail",
-    nextSrc: "nextSrcThumbnail",
-    prevSrc: "prevSrcThumbnail"
-};
-
-const noopAfterOpen = (): void => {};
+const noop = (): void => {};
 const noopImageLoad = (): void => {};
-const noopImageLoadError = (): void => {};
 const noopMoveRequest = (): void => {};
 const noopMouseUp = (_event: MouseEvent): void => {};
 const noopPointerEvent = (_event: PointerEvent): void => {};
 const noopTouchEnd = (_event: TouchEvent): void => {};
+const ANIMATION_DURATION_MS = 300;
+const IMAGE_PADDING_PX = 10;
+const IMAGE_LOAD_ERROR_MESSAGE = "This image failed to load";
+const KEY_REPEAT_KEYUP_BONUS_MS = 40;
+const KEY_REPEAT_LIMIT_MS = 180;
 
 type LightboxDefaultProps = {
-    animationDisabled: boolean;
-    animationDuration: number;
-    animationOnKeyInput: boolean;
-    clickOutsideToClose: boolean;
     closeLabel: string;
-    enableZoom: boolean;
     imageCaption: React.ReactNode;
-    imageCrossOrigin: React.ImgHTMLAttributes<HTMLImageElement>["crossOrigin"] | null;
-    imageLoadErrorMessage: React.ReactNode;
-    imagePadding: number;
     imageTitle: React.ReactNode;
-    keyRepeatKeyupBonus: number;
-    keyRepeatLimit: number;
-    loader: React.ReactNode | undefined;
-    mainSrcThumbnail: string | null;
     nextLabel: string;
     nextSrc: string | null;
-    nextSrcThumbnail: string | null;
-    onAfterOpen: () => void;
     onImageLoad: (
         imageSrc: string,
         srcType: LightboxImageSourceName,
         image: HTMLImageElement
     ) => void;
-    onImageLoadError: (
-        imageSrc: string,
-        srcType: LightboxImageSourceName,
-        errorEvent: Event
-    ) => void;
     onMoveNextRequest: (event?: LightboxTriggerEvent) => void;
     onMovePrevRequest: (event?: LightboxTriggerEvent) => void;
     prevLabel: string;
     prevSrc: string | null;
-    prevSrcThumbnail: string | null;
-    reactModalProps: Partial<ReactModalProps>;
     reactModalStyle: ReactModalStyle;
     toolbarButtons: React.ReactNode[] | null;
-    wrapperClassName: string;
     zoomInLabel: string;
     zoomOutLabel: string;
 };
 
 const defaultProps: LightboxDefaultProps = {
-    animationDisabled: false,
-    animationDuration: 300,
-    animationOnKeyInput: false,
-    clickOutsideToClose: true,
     closeLabel: "Close lightbox",
-    enableZoom: true,
     imageCaption: null,
-    imageCrossOrigin: null,
-    imageLoadErrorMessage: "This image failed to load",
-    imagePadding: 10,
     imageTitle: null,
-    keyRepeatKeyupBonus: 40,
-    keyRepeatLimit: 180,
-    loader: undefined,
-    mainSrcThumbnail: null,
     nextLabel: "Next image",
     nextSrc: null,
-    nextSrcThumbnail: null,
-    onAfterOpen: noopAfterOpen,
     onImageLoad: noopImageLoad,
-    onImageLoadError: noopImageLoadError,
     onMoveNextRequest: noopMoveRequest,
     onMovePrevRequest: noopMoveRequest,
     prevLabel: "Previous image",
     prevSrc: null,
-    prevSrcThumbnail: null,
-    reactModalProps: {},
     reactModalStyle: {},
     toolbarButtons: null,
-    wrapperClassName: "",
     zoomInLabel: "Zoom in",
     zoomOutLabel: "Zoom out"
 };
@@ -278,9 +209,6 @@ const defaultProps: LightboxDefaultProps = {
 type LightboxPropsWithDefaults =
     Omit<LightboxProps, keyof LightboxDefaultProps>
     & LightboxDefaultProps;
-
-const hasTrueValue = (object: Partial<Record<LightboxImageSourceName, boolean>>): boolean =>
-    Object.values(object).some(Boolean);
 
 function isTargetMatchImage(target: EventTarget | null): boolean {
     return target instanceof Element
@@ -345,8 +273,8 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
         //-----------------------------
 
         // Lightbox is closing
-        // When Lightbox is mounted, if animation is enabled it will open with the reverse of the closing animation
-        isClosing: !props.animationDisabled,
+        // When Lightbox is mounted, it opens with the reverse of the closing animation.
+        isClosing: true,
 
         // Component parts should animate (e.g., when images are moving, or image is being zoomed)
         shouldAnimate: false,
@@ -412,13 +340,12 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
     const pinchDistanceRef = useRef(0);
     const keyCounterRef = useRef(0);
     const moveRequestedRef = useRef(false);
-    const mountedAnimationDisabledRef = useRef(props.animationDisabled);
     const previousPropsRef = useRef(props);
     const actionsRef = useRef<ActionsRefValue>({
         handleMouseUp: noopMouseUp,
         handlePointerEvent: noopPointerEvent,
         handleTouchEnd: noopTouchEnd,
-        handleWindowResize: noopAfterOpen,
+        handleWindowResize: noop,
         loadAllImages: () => {}
     });
 
@@ -455,24 +382,12 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
             keyEnding: `i${keyCounterRef.current}`
         },
         {
-            name: "mainSrcThumbnail",
-            keyEnding: `t${keyCounterRef.current}`
-        },
-        {
             name: "nextSrc",
             keyEnding: `i${keyCounterRef.current + 1}`
         },
         {
-            name: "nextSrcThumbnail",
-            keyEnding: `t${keyCounterRef.current + 1}`
-        },
-        {
             name: "prevSrc",
             keyEnding: `i${keyCounterRef.current - 1}`
-        },
-        {
-            name: "prevSrcThumbnail",
-            keyEnding: `t${keyCounterRef.current - 1}`
         }
     ];
 
@@ -504,15 +419,13 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
             && imageCacheRef.current[imageSrc].loaded
         );
 
-    const getFitSizes = (width: number, height: number, stretch = false): FitSize => {
+    const getFitSizes = (width: number, height: number): FitSize => {
         const boxSize = getLightboxRect();
-        let maxHeight = boxSize.height - propsRef.current.imagePadding * 2;
-        let maxWidth = boxSize.width - propsRef.current.imagePadding * 2;
+        let maxHeight = boxSize.height - IMAGE_PADDING_PX * 2;
+        let maxWidth = boxSize.width - IMAGE_PADDING_PX * 2;
 
-        if (!stretch) {
-            maxHeight = Math.min(maxHeight, height);
-            maxWidth = Math.min(maxWidth, width);
-        }
+        maxHeight = Math.min(maxHeight, height);
+        maxWidth = Math.min(maxWidth, width);
 
         const maxRatio = maxWidth / maxHeight;
         const srcRatio = width / height;
@@ -530,29 +443,16 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
         };
     };
 
-    const getBestImageForType = (srcType: LightboxPrimarySourceName): ImageInfo | null => {
-        let imageSrc = propsRef.current[srcType];
-        let fitSizes: FitSize;
-
-        if (isImageLoaded(imageSrc)) {
-            fitSizes = getFitSizes(
-                imageCacheRef.current[imageSrc].width,
-                imageCacheRef.current[imageSrc].height
-            );
-        } else {
-            const thumbnailType = thumbnailSourceTypes[srcType];
-            const thumbnailSrc = propsRef.current[thumbnailType];
-            if (!isImageLoaded(thumbnailSrc)) {
-                return null;
-            }
-
-            imageSrc = thumbnailSrc;
-            fitSizes = getFitSizes(
-                imageCacheRef.current[imageSrc].width,
-                imageCacheRef.current[imageSrc].height,
-                true
-            );
+    const getBestImageForType = (srcType: LightboxImageSourceName): ImageInfo | null => {
+        const imageSrc = propsRef.current[srcType];
+        if (!isImageLoaded(imageSrc)) {
+            return null;
         }
+
+        const fitSizes = getFitSizes(
+            imageCacheRef.current[imageSrc].width,
+            imageCacheRef.current[imageSrc].height
+        );
 
         return {
             src: imageSrc,
@@ -595,10 +495,6 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
     };
 
     const changeZoom = (nextLevel: number, clientX?: number, clientY?: number): void => {
-        if (!propsRef.current.enableZoom) {
-            return;
-        }
-
         const nextZoomLevel = Math.max(
             MIN_ZOOM_LEVEL,
             Math.min(MAX_ZOOM_LEVEL, nextLevel)
@@ -696,9 +592,6 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
     };
 
     const handleMoveStart = ({x: clientX, y: clientY}: InputPointer): void => {
-        if (!propsRef.current.enableZoom) {
-            return;
-        }
         currentActionRef.current = ACTION_MOVE;
         moveStartXRef.current = clientX;
         moveStartYRef.current = clientY;
@@ -751,7 +644,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
             });
             setManagedTimeout(() => {
                 setState({shouldAnimate: false});
-            }, propsRef.current.animationDuration);
+            }, ANIMATION_DURATION_MS);
         }
     };
 
@@ -775,14 +668,11 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
             offsetY: 0
         };
 
-        if (
-            !propsRef.current.animationDisabled
-            && (!keyPressedRef.current || propsRef.current.animationOnKeyInput)
-        ) {
+        if (!keyPressedRef.current) {
             nextState.shouldAnimate = true;
             setManagedTimeout(
                 () => setState({shouldAnimate: false}),
-                propsRef.current.animationDuration
+                ANIMATION_DURATION_MS
             );
         }
         keyPressedRef.current = false;
@@ -858,9 +748,6 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
     });
 
     const handlePinchStart = (pointerList: InputPointer[]): void => {
-        if (!propsRef.current.enableZoom) {
-            return;
-        }
         currentActionRef.current = ACTION_PINCH;
         pinchTouchListRef.current = pointerList.map(({id, x, y}) => ({id, x, y}));
         pinchDistanceRef.current = calculatePinchDistance(pinchTouchListRef.current);
@@ -1149,13 +1036,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
 
         const inMemoryImage = new Image();
 
-        if (propsRef.current.imageCrossOrigin) {
-            inMemoryImage.crossOrigin = propsRef.current.imageCrossOrigin;
-        }
-
         inMemoryImage.addEventListener("error", errorEvent => {
-            propsRef.current.onImageLoadError(imageSrc, srcType, errorEvent);
-
             setState(prevState => ({
                 loadErrorStatus: {...prevState.loadErrorStatus, [srcType]: true}
             }));
@@ -1217,17 +1098,13 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
     const requestClose = (event?: LightboxTriggerEvent): void => {
         const closeLightbox = (): void => propsRef.current.onCloseRequest(event);
 
-        if (
-            !event
-            || propsRef.current.animationDisabled
-            || (event.type === "keydown" && !propsRef.current.animationOnKeyInput)
-        ) {
+        if (!event || event.type === "keydown") {
             closeLightbox();
             return;
         }
 
         setState({isClosing: true});
-        setManagedTimeout(closeLightbox, propsRef.current.animationDuration);
+        setManagedTimeout(closeLightbox, ANIMATION_DURATION_MS);
     };
 
     const closeIfClickInner = (event: React.MouseEvent<HTMLDivElement>): void => {
@@ -1248,7 +1125,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
         }
 
         if (event.type === "keyup") {
-            lastKeyDownTimeRef.current -= propsRef.current.keyRepeatKeyupBonus;
+            lastKeyDownTimeRef.current -= KEY_REPEAT_KEYUP_BONUS_MS;
             return;
         }
 
@@ -1256,7 +1133,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
         const currentTime = Date.now();
         if (
             currentTime - lastKeyDownTimeRef.current
-                < propsRef.current.keyRepeatLimit
+                < KEY_REPEAT_LIMIT_MS
             && keyCode !== KEYS.ESC
         ) {
             return;
@@ -1374,9 +1251,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
     };
 
     useEffect(() => {
-        if (!mountedAnimationDisabledRef.current) {
-            setState({isClosing: false});
-        }
+        setState({isClosing: false});
 
         const windowContext = getHighestSafeWindowContext();
         windowContextRef.current = windowContext;
@@ -1445,36 +1320,26 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
     });
 
     const {
-        animationDisabled,
-        animationDuration,
-        clickOutsideToClose,
-        enableZoom,
         imageTitle,
         nextSrc,
         prevSrc,
         toolbarButtons,
         reactModalStyle,
-        onAfterOpen,
-        imageCrossOrigin,
-        reactModalProps,
-        loader,
-        wrapperClassName,
         prevLabel,
         nextLabel,
         zoomInLabel,
         zoomOutLabel,
         closeLabel,
         imageCaption,
-        imageLoadErrorMessage
     } = props;
 
     const boxSize = getLightboxRect();
     let transitionStyle: React.CSSProperties = {};
 
-    if (!animationDisabled && isAnimating()) {
+    if (isAnimating()) {
         transitionStyle = {
             ...transitionStyle,
-            transition: `transform ${animationDuration}ms`
+            transition: `transform ${ANIMATION_DURATION_MS}ms`
         };
     }
 
@@ -1485,7 +1350,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
 
     const images: React.ReactElement[] = [];
     const addImage = (
-        srcType: LightboxPrimarySourceName,
+        srcType: LightboxImageSourceName,
         imageClass: string,
         transforms: Partial<TransformInput>
     ): void => {
@@ -1507,7 +1372,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
             imageStyle.cursor = "move";
         }
 
-        if (bestImageInfo === null && hasTrueValue(loadErrorStatus)) {
+        if (bestImageInfo === null && loadErrorStatus[srcType]) {
             images.push(
                 <div
                     className={`${imageClass} ril__image ril-errored`}
@@ -1515,7 +1380,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                     key={props[srcType] + keyEndings[srcType]}
                 >
                     <div className="ril__errorContainer">
-                        {imageLoadErrorMessage}
+                        {IMAGE_LOAD_ERROR_MESSAGE}
                     </div>
                 </div>
             );
@@ -1523,20 +1388,15 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
             return;
         }
         if (bestImageInfo === null) {
-            const loadingContent =
-                loader !== undefined ? (
-                    loader
-                ) : (
-                    <Loading large/>
-                );
-
             images.push(
                 <div
                     className={`${imageClass} ril__image ril-not-loaded`}
                     style={imageStyle}
                     key={props[srcType] + keyEndings[srcType]}
                 >
-                    <div className="ril__loadingContainer">{loadingContent}</div>
+                    <div className="ril__loadingContainer">
+                        <Loading large/>
+                    </div>
                 </div>
             );
 
@@ -1544,10 +1404,8 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
         }
 
         const imageSrc = bestImageInfo.src;
-        const crossOrigin = imageCrossOrigin ?? undefined;
         images.push(
             <img
-                {...(crossOrigin ? {crossOrigin} : {})}
                 className={`${imageClass} ril__image`}
                 onDoubleClick={handleImageDoubleClick}
                 onWheel={handleImageMouseWheel}
@@ -1597,13 +1455,11 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
     return (
         <Modal
             isOpen
-            onRequestClose={clickOutsideToClose ? requestClose : undefined}
+            onRequestClose={requestClose}
             onAfterOpen={() => {
                 if (outerEl.current) {
                     outerEl.current.focus();
                 }
-
-                onAfterOpen();
             }}
             style={modalStyle}
             contentLabel={translate("Lightbox")}
@@ -1612,15 +1468,17 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                     ? globalThis.window.document.body
                     : undefined
             }
-            {...reactModalProps}
         >
             <div // eslint-disable-line jsx-a11y/no-static-element-interactions
-                className={`ril-outer ril__outer ril__outerAnimating ${wrapperClassName} ${
-                    isClosing ? "ril-closing ril__outerClosing" : ""
-                }`}
+                className={[
+                    "ril-outer",
+                    "ril__outer",
+                    "ril__outerAnimating",
+                    ...(isClosing ? ["ril-closing", "ril__outerClosing"] : [])
+                ].join(" ")}
                 style={{
-                    transition: `opacity ${animationDuration}ms`,
-                    animationDuration: `${animationDuration}ms`,
+                    transition: `opacity ${ANIMATION_DURATION_MS}ms`,
+                    animationDuration: `${ANIMATION_DURATION_MS}ms`,
                     animationDirection: isClosing ? "normal" : "reverse"
                 }}
                 ref={outerEl}
@@ -1635,7 +1493,7 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
             >
                 <div // eslint-disable-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
                     className="ril-inner ril__inner"
-                    onClick={clickOutsideToClose ? closeIfClickInner : undefined}
+                    onClick={closeIfClickInner}
                 >
                     {images}
                 </div>
@@ -1681,59 +1539,55 @@ export default function ReactImageLightbox(incomingProps: LightboxProps) {
                             </li>
                         ))}
 
-                        {enableZoom && (
-                            <li className="ril-toolbar__item ril__toolbarItem">
-                                <button
-                                    type="button"
-                                    key="zoom-in"
-                                    aria-label={zoomInLabel}
-                                    title={zoomInLabel}
-                                    className={[
-                                        "ril-zoom-in",
-                                        "ril__toolbarItemChild",
-                                        "ril__builtinButton",
-                                        "ril__zoomInButton",
-                                        ...(zoomLevel === MAX_ZOOM_LEVEL
-                                            ? ["ril__builtinButtonDisabled"]
-                                            : [])
-                                    ].join(" ")}
-                                    ref={zoomInBtn}
-                                    disabled={isAnimating() || zoomLevel === MAX_ZOOM_LEVEL}
-                                    onClick={
-                                        !isAnimating() && zoomLevel !== MAX_ZOOM_LEVEL
-                                            ? handleZoomInButtonClick
-                                            : undefined
-                                    }
-                                />
-                            </li>
-                        )}
+                        <li className="ril-toolbar__item ril__toolbarItem">
+                            <button
+                                type="button"
+                                key="zoom-in"
+                                aria-label={zoomInLabel}
+                                title={zoomInLabel}
+                                className={[
+                                    "ril-zoom-in",
+                                    "ril__toolbarItemChild",
+                                    "ril__builtinButton",
+                                    "ril__zoomInButton",
+                                    ...(zoomLevel === MAX_ZOOM_LEVEL
+                                        ? ["ril__builtinButtonDisabled"]
+                                        : [])
+                                ].join(" ")}
+                                ref={zoomInBtn}
+                                disabled={isAnimating() || zoomLevel === MAX_ZOOM_LEVEL}
+                                onClick={
+                                    !isAnimating() && zoomLevel !== MAX_ZOOM_LEVEL
+                                        ? handleZoomInButtonClick
+                                        : undefined
+                                }
+                            />
+                        </li>
 
-                        {enableZoom && (
-                            <li className="ril-toolbar__item ril__toolbarItem">
-                                <button
-                                    type="button"
-                                    key="zoom-out"
-                                    aria-label={zoomOutLabel}
-                                    title={zoomOutLabel}
-                                    className={[
-                                        "ril-zoom-out",
-                                        "ril__toolbarItemChild",
-                                        "ril__builtinButton",
-                                        "ril__zoomOutButton",
-                                        ...(zoomLevel === MIN_ZOOM_LEVEL
-                                            ? ["ril__builtinButtonDisabled"]
-                                            : [])
-                                    ].join(" ")}
-                                    ref={zoomOutBtn}
-                                    disabled={isAnimating() || zoomLevel === MIN_ZOOM_LEVEL}
-                                    onClick={
-                                        !isAnimating() && zoomLevel !== MIN_ZOOM_LEVEL
-                                            ? handleZoomOutButtonClick
-                                            : undefined
-                                    }
-                                />
-                            </li>
-                        )}
+                        <li className="ril-toolbar__item ril__toolbarItem">
+                            <button
+                                type="button"
+                                key="zoom-out"
+                                aria-label={zoomOutLabel}
+                                title={zoomOutLabel}
+                                className={[
+                                    "ril-zoom-out",
+                                    "ril__toolbarItemChild",
+                                    "ril__builtinButton",
+                                    "ril__zoomOutButton",
+                                    ...(zoomLevel === MIN_ZOOM_LEVEL
+                                        ? ["ril__builtinButtonDisabled"]
+                                        : [])
+                                ].join(" ")}
+                                ref={zoomOutBtn}
+                                disabled={isAnimating() || zoomLevel === MIN_ZOOM_LEVEL}
+                                onClick={
+                                    !isAnimating() && zoomLevel !== MIN_ZOOM_LEVEL
+                                        ? handleZoomOutButtonClick
+                                        : undefined
+                                }
+                            />
+                        </li>
 
                         <li className="ril-toolbar__item ril__toolbarItem">
                             <button
