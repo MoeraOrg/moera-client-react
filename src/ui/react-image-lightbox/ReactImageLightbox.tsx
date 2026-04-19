@@ -4,12 +4,14 @@ import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { useManagedTimeout, useParent } from "ui/hook";
-import { Loading } from "ui/control";
-import type { InputPointer, TransformInput } from "./util";
 import {
+    ANIMATION_DURATION_MS,
     getTouches,
-    getTransform,
+    InputPointer,
     isTargetMatchImage,
+    LightboxRect,
+    MAX_ZOOM_LEVEL,
+    MIN_ZOOM_LEVEL,
     parseMouseEvent,
     parsePointerEvent,
     parseTouchPointer,
@@ -19,13 +21,14 @@ import {
     SOURCE_TOUCH
 } from "./util";
 import "./ReactImageLightbox.css";
+import LightboxImage, { ImageInfo } from "ui/react-image-lightbox/LightboxImage";
 
 export type LightboxTriggerEvent = Event | React.SyntheticEvent;
 export type LightboxImageSourceName = | "mainSrc" | "nextSrc" | "prevSrc";
 
 export interface LightboxProps {
     imageCaption?: React.ReactNode;
-    imageTitle?: React.ReactNode;
+    imageTitle?: string;
     mainSrc: string;
     nextSrc?: string | null;
     onImageLoad(
@@ -53,26 +56,9 @@ interface FitSize {
     width: number;
 }
 
-interface ImageInfo {
-    height: number;
-    src: string;
-    targetHeight: number;
-    targetWidth: number;
-    width: number;
-}
-
 interface Point {
     x: number;
     y: number;
-}
-
-interface LightboxRect {
-    bottom: number;
-    height: number;
-    left: number;
-    right: number;
-    top: number;
-    width: number;
 }
 
 interface OffsetBounds {
@@ -95,12 +81,6 @@ interface SourceDescriptor {
 
 const noop = (): void => {};
 
-// Min image zoom level
-const MIN_ZOOM_LEVEL = 0;
-
-// Max image zoom level
-const MAX_ZOOM_LEVEL = 300;
-
 // Size ratio between previous and next zoom levels
 const ZOOM_RATIO = 1.007;
 
@@ -122,12 +102,20 @@ const ACTION_PINCH = 3;
 // Minimal swipe distance
 const MIN_SWIPE_DISTANCE = 200;
 
-const ANIMATION_DURATION_MS = 300;
 const IMAGE_PADDING_PX = 10;
 const KEY_REPEAT_KEYUP_BONUS_MS = 40;
 const KEY_REPEAT_LIMIT_MS = 180;
 
 export default function ReactImageLightbox(props: LightboxProps) {
+    const {
+        imageTitle,
+        nextSrc,
+        mainSrc,
+        prevSrc,
+        toolbarButtons,
+        imageCaption,
+        zIndex,
+    } = props;
     const {hide} = useParent();
     const {t} = useTranslation();
 
@@ -248,8 +236,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         };
     };
 
-    const getBestImageForType = (srcType: LightboxImageSourceName): ImageInfo | null => {
-        const imageSrc = propsRef.current[srcType];
+    const getBestImageForType = (imageSrc: string | null | undefined): ImageInfo | null => {
         if (!isImageLoaded(imageSrc)) {
             return null;
         }
@@ -269,8 +256,8 @@ export default function ReactImageLightbox(props: LightboxProps) {
     };
 
     const getMaxOffsets = (nextZoomLevel = zoomLevel): OffsetBounds => {
-        const currentImageInfo = getBestImageForType("mainSrc");
-        if (currentImageInfo === null) {
+        const mainImageInfo = getBestImageForType(mainSrc);
+        if (mainImageInfo === null) {
             return {maxX: 0, minX: 0, maxY: 0, minY: 0};
         }
 
@@ -278,17 +265,17 @@ export default function ReactImageLightbox(props: LightboxProps) {
         const zoomMultiplier = getZoomMultiplier(nextZoomLevel);
 
         let maxX;
-        if (zoomMultiplier * currentImageInfo.width - boxSize.width < 0) {
-            maxX = (boxSize.width - zoomMultiplier * currentImageInfo.width) / 2;
+        if (zoomMultiplier * mainImageInfo.width - boxSize.width < 0) {
+            maxX = (boxSize.width - zoomMultiplier * mainImageInfo.width) / 2;
         } else {
-            maxX = (zoomMultiplier * currentImageInfo.width - boxSize.width) / 2;
+            maxX = (zoomMultiplier * mainImageInfo.width - boxSize.width) / 2;
         }
 
         let maxY;
-        if (zoomMultiplier * currentImageInfo.height - boxSize.height < 0) {
-            maxY = (boxSize.height - zoomMultiplier * currentImageInfo.height) / 2;
+        if (zoomMultiplier * mainImageInfo.height - boxSize.height < 0) {
+            maxY = (boxSize.height - zoomMultiplier * mainImageInfo.height) / 2;
         } else {
-            maxY = (zoomMultiplier * currentImageInfo.height - boxSize.height) / 2;
+            maxY = (zoomMultiplier * mainImageInfo.height - boxSize.height) / 2;
         }
 
         return {
@@ -316,8 +303,8 @@ export default function ReactImageLightbox(props: LightboxProps) {
             return;
         }
 
-        const imageBaseSize = getBestImageForType("mainSrc");
-        if (imageBaseSize === null) {
+        const mainImageInfo = getBestImageForType(mainSrc);
+        if (mainImageInfo === null) {
             return;
         }
 
@@ -335,9 +322,9 @@ export default function ReactImageLightbox(props: LightboxProps) {
                 : boxRect.height / 2;
 
         const currentImageOffsetX =
-            (boxRect.width - imageBaseSize.width * currentZoomMultiplier) / 2;
+            (boxRect.width - mainImageInfo.width * currentZoomMultiplier) / 2;
         const currentImageOffsetY =
-            (boxRect.height - imageBaseSize.height * currentZoomMultiplier) / 2;
+            (boxRect.height - mainImageInfo.height * currentZoomMultiplier) / 2;
 
         const currentImageRealOffsetX = currentImageOffsetX - offsetX;
         const currentImageRealOffsetY = currentImageOffsetY - offsetY;
@@ -353,9 +340,9 @@ export default function ReactImageLightbox(props: LightboxProps) {
             pointerY - currentPointerYRelativeToImage * nextZoomMultiplier;
 
         const nextImageOffsetX =
-            (boxRect.width - imageBaseSize.width * nextZoomMultiplier) / 2;
+            (boxRect.width - mainImageInfo.width * nextZoomMultiplier) / 2;
         const nextImageOffsetY =
-            (boxRect.height - imageBaseSize.height * nextZoomMultiplier) / 2;
+            (boxRect.height - mainImageInfo.height * nextZoomMultiplier) / 2;
 
         let nextOffsetX = nextImageOffsetX - nextImageRealOffsetX;
         let nextOffsetY = nextImageOffsetY - nextImageRealOffsetY;
@@ -1107,111 +1094,13 @@ export default function ReactImageLightbox(props: LightboxProps) {
         previousPropsRef.current = props;
     }, [loadAllImages, props]);
 
-    const {
-        imageTitle,
-        nextSrc,
-        prevSrc,
-        toolbarButtons,
-        imageCaption,
-        zIndex,
-    } = props;
     const boxSize = getLightboxRect();
-    let transitionStyle: React.CSSProperties = {};
-    if (animating) {
-        transitionStyle = {
-            ...transitionStyle,
-            transition: `transform ${ANIMATION_DURATION_MS}ms`
-        };
-    }
+    const zoomMultiplier = getZoomMultiplier();
 
     const keyEndings = getSrcTypes().reduce<Record<LightboxImageSourceName, string>>((result, {name, keyEnding}) => {
         result[name] = keyEnding;
         return result;
     }, {} as Record<LightboxImageSourceName, string>);
-
-    const images: React.ReactElement[] = [];
-    const addImage = (
-        srcType: LightboxImageSourceName,
-        imageClass: string,
-        transforms: Partial<TransformInput>
-    ): void => {
-        if (!props[srcType]) {
-            return;
-        }
-        const bestImageInfo = getBestImageForType(srcType);
-
-        const imageStyle: React.CSSProperties = {
-            ...transitionStyle,
-            ...getTransform({
-                width: bestImageInfo?.width ?? boxSize.width,
-                targetWidth: bestImageInfo?.targetWidth ?? boxSize.width,
-                ...transforms
-            })
-        };
-
-        if (zoomLevel > MIN_ZOOM_LEVEL) {
-            imageStyle.cursor = "move";
-        }
-
-        if (bestImageInfo === null && loadErrorStatus[srcType]) {
-            images.push(
-                <div
-                    className={cx(imageClass, "ril__image", "ril-errored")}
-                    style={imageStyle}
-                    key={props[srcType] + keyEndings[srcType]}
-                >
-                    <div className="ril__errorContainer">
-                        {t("couldnt-load-image")}
-                    </div>
-                </div>
-            );
-
-            return;
-        }
-        if (bestImageInfo === null) {
-            images.push(
-                <div
-                    className={cx(imageClass, "ril__image", "ril-not-loaded")}
-                    style={imageStyle}
-                    key={props[srcType] + keyEndings[srcType]}
-                >
-                    <div className="ril__loadingContainer">
-                        <Loading large/>
-                    </div>
-                </div>
-            );
-
-            return;
-        }
-
-        const imageSrc = bestImageInfo.src;
-        images.push(
-            <img
-                className={cx(imageClass, "ril__image")}
-                onDoubleClick={handleImageDoubleClick}
-                onWheel={handleImageMouseWheel}
-                onDragStart={event => event.preventDefault()}
-                style={imageStyle}
-                src={imageSrc}
-                key={imageSrc + keyEndings[srcType]}
-                alt={typeof imageTitle === "string" ? imageTitle : t("image")}
-                draggable={false}
-            />
-        );
-    };
-
-    const zoomMultiplier = getZoomMultiplier();
-    addImage("nextSrc", "ril-image-next ril__imageNext", {
-        x: boxSize.width
-    });
-    addImage("mainSrc", "ril-image-current", {
-        x: -1 * offsetX,
-        y: -1 * offsetY,
-        zoom: zoomMultiplier
-    });
-    addImage("prevSrc", "ril-image-prev ril__imagePrev", {
-        x: -1 * boxSize.width
-    });
 
     return (
         <Modal
@@ -1260,7 +1149,59 @@ export default function ReactImageLightbox(props: LightboxProps) {
                 onKeyUp={handleKeyInput}
             >
                 <div className="ril-inner ril__inner" onClick={closeIfClickInner}>
-                    {images}
+                    {nextSrc &&
+                        <LightboxImage
+                            imageInfo={getBestImageForType(nextSrc)}
+                            loadError={loadErrorStatus["nextSrc"]}
+                            title={imageTitle}
+                            boxRect={boxSize}
+                            zoomLevel={zoomLevel}
+                            className="ril-image-next ril__imageNext"
+                            animating={animating}
+                            transforms={{
+                                x: boxSize.width
+                            }}
+                            onDoubleClick={handleImageDoubleClick}
+                            onWheel={handleImageMouseWheel}
+                            key={nextSrc + keyEndings["nextSrc"]}
+                        />
+                    }
+                    {mainSrc &&
+                        <LightboxImage
+                            imageInfo={getBestImageForType(mainSrc)}
+                            loadError={loadErrorStatus["mainSrc"]}
+                            title={imageTitle}
+                            boxRect={boxSize}
+                            zoomLevel={zoomLevel}
+                            className="ril-image-current"
+                            animating={animating}
+                            transforms={{
+                                x: -1 * offsetX,
+                                y: -1 * offsetY,
+                                zoom: zoomMultiplier
+                            }}
+                            onDoubleClick={handleImageDoubleClick}
+                            onWheel={handleImageMouseWheel}
+                            key={mainSrc + keyEndings["mainSrc"]}
+                        />
+                    }
+                    {prevSrc &&
+                        <LightboxImage
+                            imageInfo={getBestImageForType(prevSrc)}
+                            loadError={loadErrorStatus["prevSrc"]}
+                            title={imageTitle}
+                            boxRect={boxSize}
+                            zoomLevel={zoomLevel}
+                            className="ril-image-prev ril__imagePrev"
+                            animating={animating}
+                            transforms={{
+                                x: -1 * boxSize.width
+                            }}
+                            onDoubleClick={handleImageDoubleClick}
+                            onWheel={handleImageMouseWheel}
+                            key={prevSrc + keyEndings["prevSrc"]}
+                        />
+                    }
                 </div>
 
                 {prevSrc && (
@@ -1307,7 +1248,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
                         <li className="ril-toolbar__item ril__toolbarItem">
                             <button
                                 type="button"
-                                key="zoom-in"
                                 aria-label={t("zoom-in")}
                                 title={t("zoom-in")}
                                 className={cx(
@@ -1331,7 +1271,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
                         <li className="ril-toolbar__item ril__toolbarItem">
                             <button
                                 type="button"
-                                key="zoom-out"
                                 aria-label={t("zoom-out")}
                                 title={t("zoom-out")}
                                 className={cx(
@@ -1355,7 +1294,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
                         <li className="ril-toolbar__item ril__toolbarItem">
                             <button
                                 type="button"
-                                key="close"
                                 aria-label={t("close")}
                                 title={t("close")}
                                 className="ril-close ril-toolbar__item__child ril__toolbarItemChild ril__builtinButton ril__closeButton"
