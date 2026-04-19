@@ -115,6 +115,8 @@ export default function ReactImageLightbox(props: LightboxProps) {
         toolbarButtons,
         imageCaption,
         zIndex,
+        onMovePrevRequest,
+        onMoveNextRequest,
     } = props;
     const {hide} = useParent();
     const {t} = useTranslation();
@@ -236,7 +238,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         };
     };
 
-    const getBestImageForType = (imageSrc: string | null | undefined): ImageInfo | null => {
+    const getImageInfo = (imageSrc: string | null | undefined): ImageInfo | null => {
         if (!isImageLoaded(imageSrc)) {
             return null;
         }
@@ -255,8 +257,11 @@ export default function ReactImageLightbox(props: LightboxProps) {
         };
     };
 
+    const nextImageInfo = getImageInfo(nextSrc);
+    const mainImageInfo = getImageInfo(mainSrc);
+    const prevImageInfo = getImageInfo(prevSrc);
+
     const getMaxOffsets = (nextZoomLevel = zoomLevel): OffsetBounds => {
-        const mainImageInfo = getBestImageForType(mainSrc);
         if (mainImageInfo === null) {
             return {maxX: 0, minX: 0, maxY: 0, minY: 0};
         }
@@ -303,7 +308,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
             return;
         }
 
-        const mainImageInfo = getBestImageForType(mainSrc);
         if (mainImageInfo === null) {
             return;
         }
@@ -454,10 +458,10 @@ export default function ReactImageLightbox(props: LightboxProps) {
 
         if (direction === "prev") {
             keyCounterRef.current -= 1;
-            propsRef.current.onMovePrevRequest(event);
+            onMovePrevRequest(event);
         } else {
             keyCounterRef.current += 1;
-            propsRef.current.onMoveNextRequest(event);
+            onMoveNextRequest(event);
         }
     };
 
@@ -946,8 +950,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
 
         const currentTime = Date.now();
         if (
-            currentTime - lastKeyDownTimeRef.current
-                < KEY_REPEAT_LIMIT_MS
+            currentTime - lastKeyDownTimeRef.current < KEY_REPEAT_LIMIT_MS
             && event.key !== "Escape" && event.key !== "Esc"
         ) {
             return;
@@ -961,7 +964,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                 requestClose(event);
                 break;
             case "ArrowLeft":
-                if (!propsRef.current.prevSrc) {
+                if (!prevSrc) {
                     return;
                 }
 
@@ -970,7 +973,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                 requestMovePrev(event);
                 break;
             case "ArrowRight":
-                if (!propsRef.current.nextSrc) {
+                if (!nextSrc) {
                     return;
                 }
 
@@ -1151,7 +1154,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                 <div className="ril-inner ril__inner" onClick={closeIfClickInner}>
                     {nextSrc &&
                         <LightboxImage
-                            imageInfo={getBestImageForType(nextSrc)}
+                            imageInfo={nextImageInfo}
                             loadError={loadErrorStatus["nextSrc"]}
                             title={imageTitle}
                             boxRect={boxSize}
@@ -1168,7 +1171,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                     }
                     {mainSrc &&
                         <LightboxImage
-                            imageInfo={getBestImageForType(mainSrc)}
+                            imageInfo={mainImageInfo}
                             loadError={loadErrorStatus["mainSrc"]}
                             title={imageTitle}
                             boxRect={boxSize}
@@ -1187,7 +1190,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                     }
                     {prevSrc &&
                         <LightboxImage
-                            imageInfo={getBestImageForType(prevSrc)}
+                            imageInfo={prevImageInfo}
                             loadError={loadErrorStatus["prevSrc"]}
                             title={imageTitle}
                             boxRect={boxSize}
