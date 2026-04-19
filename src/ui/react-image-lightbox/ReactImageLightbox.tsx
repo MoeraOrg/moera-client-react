@@ -316,19 +316,11 @@ export default function ReactImageLightbox(props: LightboxProps) {
         const nextZoomMultiplier = getZoomMultiplier(nextZoomLevel);
 
         const boxRect = getLightboxRect();
-        const pointerX =
-            typeof clientX !== "undefined"
-                ? clientX - boxRect.left
-                : boxRect.width / 2;
-        const pointerY =
-            typeof clientY !== "undefined"
-                ? clientY - boxRect.top
-                : boxRect.height / 2;
+        const pointerX = typeof clientX !== "undefined" ? clientX - boxRect.left : boxRect.width / 2;
+        const pointerY = typeof clientY !== "undefined" ? clientY - boxRect.top : boxRect.height / 2;
 
-        const currentImageOffsetX =
-            (boxRect.width - mainImageInfo.width * currentZoomMultiplier) / 2;
-        const currentImageOffsetY =
-            (boxRect.height - mainImageInfo.height * currentZoomMultiplier) / 2;
+        const currentImageOffsetX = (boxRect.width - mainImageInfo.width * currentZoomMultiplier) / 2;
+        const currentImageOffsetY = (boxRect.height - mainImageInfo.height * currentZoomMultiplier) / 2;
 
         const currentImageRealOffsetX = currentImageOffsetX - offsetX;
         const currentImageRealOffsetY = currentImageOffsetY - offsetY;
