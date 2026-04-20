@@ -1,13 +1,8 @@
-.ril__image,
-.ril__imageMain,
-.ril__imagePrev,
-.ril__imageNext {
+.ril__image {
     position: absolute;
     inset: 0;
     margin: auto;
-    max-width: none;
-    -ms-content-zooming: none;
-    -ms-touch-select: none;
+    max-inline-size: none;
     touch-action: none;
     user-select: none;
 }
@@ -16,21 +11,14 @@
 .ril__errorContainer {
     position: absolute;
     inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.ril__imagePrev .ril__loadingContainer,
-.ril__imageNext .ril__loadingContainer {
-    display: none;
+    display: grid;
+    place-items: center;
 }
 
 .ril__errorContainer {
     color: #fff;
 }
 
-.ril__imagePrev .ril__errorContainer,
-.ril__imageNext .ril__errorContainer {
+:is(.ril__imagePrev, .ril__imageNext) :is(.ril__loadingContainer, .ril__errorContainer) {
     display: none;
 }

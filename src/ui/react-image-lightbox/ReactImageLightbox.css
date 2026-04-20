@@ -9,14 +9,18 @@
 }
 
 .ril__outer {
+    --ril-toolbar-size: 50px;
+    --ril-toolbar-padding: 20px;
+    --ril-nav-width: 60px;
+
+    position: relative;
     background-color: rgb(0 0 0 / 85%);
     outline: none;
     inset: 0;
     z-index: 1000;
-    width: 100%;
-    height: 100%;
-    -ms-content-zooming: none;
-    -ms-touch-select: none;
+    inline-size: 100%;
+    block-size: 100%;
+    overscroll-behavior: contain;
     touch-action: none;
     user-select: none;
 }
@@ -31,25 +35,24 @@
 }
 
 .ril__navButtons {
+    position: absolute;
+    inset-block: 0;
+    inline-size: var(--ril-nav-width);
+    block-size: 80px;
+    margin-block: auto;
     border: none;
+    padding: 0;
     background-color: rgb(0 0 0 / 20%);
     color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 60px;
-    height: 80px;
-    margin: auto;
+    display: grid;
+    place-items: center;
     cursor: pointer;
     opacity: .7;
 }
 
-@media only screen and (min-width: 992px) {
+@media (min-width: 992px) {
     .ril__navButtons {
-        height: calc(100vh - 100px - 13rem) !important;
+        block-size: calc(100dvh - 100px - 13rem);
     }
 }
 
@@ -62,77 +65,83 @@
 }
 
 .ril__navButtonPrev {
-    left: 0;
+    inset-inline-start: 0;
 }
 
 .ril__navButtonNext {
-    right: 0;
+    inset-inline-end: 0;
 }
 
 .ril__toolbar {
-    background-color: rgb(0 0 0 / 50%);
     position: absolute;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: space-between;
-    top: 0;
-    height: 50px;
+    inset-block-start: 0;
+    inset-inline: 0;
+    block-size: var(--ril-toolbar-size);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    align-items: center;
+    background-color: rgb(0 0 0 / 50%);
 }
 
-.ril__outer.transparent .ril__toolbar,
-.ril__outer.transparent .ril__navButtons {
-    filter: opacity(0);
-    transition: filter .5s ease;
+.ril__outer.transparent :is(.ril__toolbar, .ril__navButtons, .ril__caption) {
+    opacity: 0;
+    transition: opacity .5s ease;
     pointer-events: none;
 }
 
 .ril__toolbarSide {
-    height: 50px;
+    block-size: var(--ril-toolbar-size);
     margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    align-items: center;
 }
 
 .ril__toolbarLeftSide {
-    padding-left: 20px;
-    padding-right: 0;
-    flex: 0 1 auto;
+    min-inline-size: 0;
+    padding-inline: var(--ril-toolbar-padding) 0;
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .ril__toolbarRightSide {
-    padding-left: 0;
-    padding-right: 20px;
-    flex: 0 0 auto;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    justify-content: end;
+    padding-inline: 0 var(--ril-toolbar-padding);
 }
 
 .ril__toolbarItem {
-    display: inline-block;
-    line-height: 50px;
-    padding: 0;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    block-size: 100%;
     color: #fff;
     font-size: 120%;
-    max-width: 100%;
+    display: grid;
+    align-items: center;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .ril__toolbarItemChild {
-    vertical-align: middle;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .ril__builtinButton {
-    width: 40px;
-    height: 35px;
+    inline-size: 40px;
+    block-size: 35px;
     cursor: pointer;
     border: none;
     opacity: .7;
     background: transparent;
     color: #fff;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display: inline-grid;
+    place-items: center;
     padding: 0;
 }
 
