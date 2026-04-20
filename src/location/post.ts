@@ -2,7 +2,7 @@ import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import { getNodeRootLocation } from "state/node/selectors";
 import { goToPosting } from "state/navigation/actions";
-import { openLightBox } from "state/lightbox/actions";
+import { openLightbox } from "state/lightbox/actions";
 import {
     getDetailedPosting,
     getDetailedPostingId,
@@ -21,7 +21,7 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     const actions: ClientAction[] = [goToPosting(postingId, commentId, expanded)];
     const mediaId = dstInfo.parameters["media"];
     if (mediaId != null) {
-        actions.push(openLightBox(REL_CURRENT, postingId, commentId ?? null, mediaId));
+        actions.push(openLightbox(REL_CURRENT, postingId, commentId ?? null, mediaId));
     }
     return actions;
 }

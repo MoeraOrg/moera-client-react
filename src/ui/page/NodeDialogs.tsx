@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
-import { isLightBoxShown } from "state/lightbox/selectors";
+import { isLightboxShown } from "state/lightbox/selectors";
 import ChangeDateDialog from "ui/changedatedialog/ChangeDateDialog";
 import SourceDialog from "ui/sourcedialog/SourceDialog";
 import EntryCopyTextDialog from "ui/entrycopytextdialog/EntryCopyTextDialog";
@@ -22,7 +22,7 @@ export default function NodeDialogs() {
     const showReactionsDialog = useSelector((state: ClientState) => state.reactionsDialog.show);
     const showChangeDateDialog = useSelector((state: ClientState) => state.changeDateDialog.show);
     const showSourceDialog = useSelector((state: ClientState) => state.sourceDialog.show);
-    const showLightBox = useSelector(isLightBoxShown);
+    const showLightbox = useSelector(isLightboxShown);
     const showImageEditDialog = useSelector((state: ClientState) => state.imageEditDialog.show);
     const showDonateDialog = useSelector((state: ClientState) => state.donateDialog.show);
     const showEntryCopyTextDialog = useSelector((state: ClientState) => state.entryCopyTextDialog.show);
@@ -44,7 +44,7 @@ export default function NodeDialogs() {
             {showChangeDateDialog && <ChangeDateDialog/>}
             {showSourceDialog && <SourceDialog/>}
             <Suspense fallback={null}>
-                {showLightBox && <GalleryLightbox/>}
+                {showLightbox && <GalleryLightbox/>}
             </Suspense>
             <Suspense fallback={null}>
                 {showImageEditDialog && <ImageEditDialog/>}

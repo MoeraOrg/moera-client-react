@@ -1,44 +1,44 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { RelNodeName } from "util/rel-node-name";
 
-export type OpenLightBoxAction = ActionWithPayload<"OPEN_LIGHT_BOX", {
+export type OpenLightboxAction = ActionWithPayload<"OPEN_LIGHTBOX", {
     nodeName: RelNodeName | string;
     postingId: string;
     commentId: string | null;
     mediaId: string | null;
 }>;
-export const openLightBox = (
+export const openLightbox = (
     nodeName: RelNodeName | string, postingId: string, commentId: string | null, mediaId: string | null
-): OpenLightBoxAction =>
-    actionWithPayload("OPEN_LIGHT_BOX", {nodeName, postingId, commentId, mediaId});
+): OpenLightboxAction =>
+    actionWithPayload("OPEN_LIGHTBOX", {nodeName, postingId, commentId, mediaId});
 
-export type CloseLightBoxAction = ActionWithoutPayload<"CLOSE_LIGHT_BOX">;
-export const closeLightBox = (): CloseLightBoxAction =>
-    actionWithoutPayload("CLOSE_LIGHT_BOX");
+export type CloseLightboxAction = ActionWithoutPayload<"CLOSE_LIGHTBOX">;
+export const closeLightbox = (): CloseLightboxAction =>
+    actionWithoutPayload("CLOSE_LIGHTBOX");
 
-export type LightBoxMediaSequence = "normal" | "next-loop" | "prev-loop";
+export type LightboxMediaSequence = "normal" | "next-loop" | "prev-loop";
 
-export type LightBoxMediaSetAction = ActionWithPayload<"LIGHT_BOX_MEDIA_SET", {
+export type LightboxMediaSetAction = ActionWithPayload<"LIGHTBOX_MEDIA_SET", {
     mediaId: string;
-    sequence: LightBoxMediaSequence;
+    sequence: LightboxMediaSequence;
 }>;
-export const lightBoxMediaSet = (mediaId: string, sequence: LightBoxMediaSequence): LightBoxMediaSetAction =>
-    actionWithPayload("LIGHT_BOX_MEDIA_SET", {mediaId, sequence});
+export const lightboxMediaSet = (mediaId: string, sequence: LightboxMediaSequence): LightboxMediaSetAction =>
+    actionWithPayload("LIGHTBOX_MEDIA_SET", {mediaId, sequence});
 
-export type LightBoxMediaPostingLoadAction = ActionWithoutPayload<"LIGHT_BOX_MEDIA_POSTING_LOAD">;
-export const lightBoxMediaPostingLoad = (): LightBoxMediaPostingLoadAction =>
-    actionWithoutPayload("LIGHT_BOX_MEDIA_POSTING_LOAD");
+export type LightboxMediaPostingLoadAction = ActionWithoutPayload<"LIGHTBOX_MEDIA_POSTING_LOAD">;
+export const lightboxMediaPostingLoad = (): LightboxMediaPostingLoadAction =>
+    actionWithoutPayload("LIGHTBOX_MEDIA_POSTING_LOAD");
 
-export type LightBoxCopyLinkAction = ActionWithPayload<"LIGHT_BOX_COPY_LINK", {
+export type LightboxCopyLinkAction = ActionWithPayload<"LIGHTBOX_COPY_LINK", {
     nodeName: RelNodeName | string;
     url: string;
 }>;
-export const lightBoxCopyLink = (nodeName: RelNodeName | string, url: string): LightBoxCopyLinkAction =>
-    actionWithPayload("LIGHT_BOX_COPY_LINK", {nodeName, url});
+export const lightboxCopyLink = (nodeName: RelNodeName | string, url: string): LightboxCopyLinkAction =>
+    actionWithPayload("LIGHTBOX_COPY_LINK", {nodeName, url});
 
-export type LightBoxAnyAction =
-    OpenLightBoxAction
-    | CloseLightBoxAction
-    | LightBoxMediaSetAction
-    | LightBoxMediaPostingLoadAction
-    | LightBoxCopyLinkAction;
+export type LightboxAnyAction =
+    OpenLightboxAction
+    | CloseLightboxAction
+    | LightboxMediaSetAction
+    | LightboxMediaPostingLoadAction
+    | LightboxCopyLinkAction;

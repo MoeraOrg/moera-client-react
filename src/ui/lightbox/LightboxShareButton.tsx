@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { shareDialogPrepare } from "state/sharedialog/actions";
-import { lightBoxCopyLink } from "state/lightbox/actions";
+import { lightboxCopyLink } from "state/lightbox/actions";
 import {
-    getLightBoxCommentId,
-    getLightBoxMediaId,
-    getLightBoxNodeName,
-    getLightBoxPostingId
+    getLightboxCommentId,
+    getLightboxMediaId,
+    getLightboxNodeName,
+    getLightboxPostingId
 } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
 import { getComment } from "state/detailedposting/selectors";
@@ -26,13 +26,13 @@ interface Props {
 }
 
 function LightboxShareItems({mediaNodeName, mediaHref}: Props) {
-    const sourceNodeName = useSelector((state: ClientState) => getLightBoxNodeName(state) || getOwnerName(state));
-    const posting = useSelector((state: ClientState) => getPosting(state, getLightBoxPostingId(state), REL_CURRENT));
+    const sourceNodeName = useSelector((state: ClientState) => getLightboxNodeName(state) || getOwnerName(state));
+    const posting = useSelector((state: ClientState) => getPosting(state, getLightboxPostingId(state), REL_CURRENT));
     const comment = useSelector((state: ClientState) => {
-        const commentId = getLightBoxCommentId(state);
+        const commentId = getLightboxCommentId(state);
         return commentId != null ? getComment(state, commentId) : null;
     });
-    const mediaId = useSelector(getLightBoxMediaId);
+    const mediaId = useSelector(getLightboxMediaId);
     const dispatch = useDispatcher();
     const {t} = useTranslation();
 
@@ -78,14 +78,14 @@ function LightboxShareItems({mediaNodeName, mediaHref}: Props) {
                 title: t("copy-link"),
                 nodeName: nodeName,
                 href: href,
-                onClick: () => dispatch(lightBoxCopyLink(nodeName, href)),
+                onClick: () => dispatch(lightboxCopyLink(nodeName, href)),
                 show: true
             },
             {
                 title: t("copy-image-link"),
                 nodeName: mediaNodeName,
                 href: mediaHref,
-                onClick: () => dispatch(lightBoxCopyLink(mediaNodeName, mediaHref)),
+                onClick: () => dispatch(lightboxCopyLink(mediaNodeName, mediaHref)),
                 show: true
             },
         ]}/>

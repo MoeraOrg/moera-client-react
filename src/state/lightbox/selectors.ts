@@ -3,43 +3,43 @@ import { getPosting, isPostingCached } from "state/postings/selectors";
 import { getComment } from "state/detailedposting/selectors";
 import { REL_CURRENT } from "util/rel-node-name";
 
-export function isLightBoxToBeLoaded(state: ClientState) {
-    return state.lightBox.postingId != null && !isPostingCached(state, state.lightBox.postingId, REL_CURRENT);
+export function isLightboxToBeLoaded(state: ClientState) {
+    return state.lightbox.postingId != null && !isPostingCached(state, state.lightbox.postingId, REL_CURRENT);
 }
 
-export function isLightBoxShown(state: ClientState) {
-    return state.lightBox.show;
+export function isLightboxShown(state: ClientState) {
+    return state.lightbox.show;
 }
 
-export function getLightBoxNodeName(state: ClientState) {
-    return state.lightBox.nodeName;
+export function getLightboxNodeName(state: ClientState) {
+    return state.lightbox.nodeName;
 }
 
-export function getLightBoxPostingId(state: ClientState) {
-    return state.lightBox.postingId;
+export function getLightboxPostingId(state: ClientState) {
+    return state.lightbox.postingId;
 }
 
-export function getLightBoxCommentId(state: ClientState) {
-    return state.lightBox.commentId;
+export function getLightboxCommentId(state: ClientState) {
+    return state.lightbox.commentId;
 }
 
-export function getLightBoxMediaId(state: ClientState) {
-    return state.lightBox.mediaId;
+export function getLightboxMediaId(state: ClientState) {
+    return state.lightbox.mediaId;
 }
 
-export function getLightBoxMediaPostingId(state: ClientState) {
-    const comment = state.lightBox.commentId != null ? getComment(state, state.lightBox.commentId) : null;
-    const posting = state.lightBox.postingId != null ? getPosting(state, state.lightBox.postingId, REL_CURRENT) : null;
+export function getLightboxMediaPostingId(state: ClientState) {
+    const comment = state.lightbox.commentId != null ? getComment(state, state.lightbox.commentId) : null;
+    const posting = state.lightbox.postingId != null ? getPosting(state, state.lightbox.postingId, REL_CURRENT) : null;
     const media = comment != null ? comment?.media : posting?.media;
-    const mediaId = getLightBoxMediaId(state);
+    const mediaId = getLightboxMediaId(state);
     if (media == null || media.length === 0 || mediaId == null) {
         return null;
     }
     return media.find(attachment => attachment.media?.id === mediaId)?.media?.postingId ?? null;
 }
 
-export function isLightBoxMediaPostingToBeLoaded(state: ClientState) {
-    const nodeName = getLightBoxNodeName(state);
-    const postingId = getLightBoxMediaPostingId(state);
+export function isLightboxMediaPostingToBeLoaded(state: ClientState) {
+    const nodeName = getLightboxNodeName(state);
+    const postingId = getLightboxMediaPostingId(state);
     return postingId != null && !isPostingCached(state, postingId, nodeName);
 }

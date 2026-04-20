@@ -5,8 +5,8 @@ import { MediaAttachment } from "api";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
-import { closeLightBox, LightBoxMediaSequence, lightBoxMediaSet } from "state/lightbox/actions";
-import { getLightBoxMediaId, getLightBoxMediaPostingId } from "state/lightbox/selectors";
+import { closeLightbox, LightboxMediaSequence, lightboxMediaSet } from "state/lightbox/actions";
+import { getLightboxMediaId, getLightboxMediaPostingId } from "state/lightbox/selectors";
 import { ExtPostingInfo } from "state/postings/state";
 import { getPosting } from "state/postings/selectors";
 import { ExtCommentInfo } from "state/detailedposting/state";
@@ -24,23 +24,23 @@ import { REL_CURRENT } from "util/rel-node-name";
 import { urlWithParameters } from "util/url";
 
 export default function GalleryLightbox() {
-    const posting = useSelector((state: ClientState) => getPosting(state, state.lightBox.postingId, REL_CURRENT));
+    const posting = useSelector((state: ClientState) => getPosting(state, state.lightbox.postingId, REL_CURRENT));
     // comment === null means commentId === null
     // comment === undefined means the comment is not loaded yet
     const comment = useSelector((state: ClientState) =>
-        state.lightBox.commentId != null ? getComment(state, state.lightBox.commentId) ?? undefined : null
+        state.lightbox.commentId != null ? getComment(state, state.lightbox.commentId) ?? undefined : null
     );
-    const mediaId = useSelector(getLightBoxMediaId);
-    const mediaNodeName = useSelector((state: ClientState) => state.lightBox.nodeName);
+    const mediaId = useSelector(getLightboxMediaId);
+    const mediaNodeName = useSelector((state: ClientState) => state.lightbox.nodeName);
     const mediaPosting = useSelector((state: ClientState) =>
-        getPosting(state, getLightBoxMediaPostingId(state), mediaNodeName)
+        getPosting(state, getLightboxMediaPostingId(state), mediaNodeName)
     );
-    const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, state.lightBox.nodeName));
+    const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, state.lightbox.nodeName));
     const carte = useSelector(getCurrentViewMediaCarte);
     const loopGallery = useSelector((state: ClientState) => getSetting(state, "entry.gallery.loop") as boolean);
     const dispatch = useDispatcher();
 
-    const onCloseRequest = useCallback(() => dispatch(closeLightBox()), [dispatch]);
+    const onCloseRequest = useCallback(() => dispatch(closeLightbox()), [dispatch]);
 
     const [zIndex, overlayId] = useOverlay(null, {closeOnClick: false, closeOnEscape: false, onClose: onCloseRequest});
 
@@ -52,10 +52,10 @@ export default function GalleryLightbox() {
     let mainTextContent: string | undefined = undefined;
     let prevSrc: string | undefined = undefined;
     let prevMediaId: string | undefined = undefined;
-    let prevSequence: LightBoxMediaSequence = "normal";
+    let prevSequence: LightboxMediaSequence = "normal";
     let nextSrc: string | undefined = undefined;
     let nextMediaId: string | undefined = undefined;
-    let nextSequence: LightBoxMediaSequence = "normal";
+    let nextSequence: LightboxMediaSequence = "normal";
     let statusText = "";
     if (media != null && media.length > 0) {
         const loop = loopGallery && media.length > 1;
@@ -102,9 +102,9 @@ export default function GalleryLightbox() {
         statusText = `${index + 1} / ${media.length}`;
     }
 
-    const onMovePrevRequest = () => prevMediaId != null ? dispatch(lightBoxMediaSet(prevMediaId, prevSequence)) : null;
+    const onMovePrevRequest = () => prevMediaId != null ? dispatch(lightboxMediaSet(prevMediaId, prevSequence)) : null;
 
-    const onMoveNextRequest = () => nextMediaId != null ? dispatch(lightBoxMediaSet(nextMediaId, nextSequence)) : null;
+    const onMoveNextRequest = () => nextMediaId != null ? dispatch(lightboxMediaSet(nextMediaId, nextSequence)) : null;
 
     return (
         <ParentContext.Provider value={{hide: onCloseRequest, overlayId}}>

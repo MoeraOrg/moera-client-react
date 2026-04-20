@@ -5,7 +5,7 @@ import { ClientReactionInfo } from "api";
 import { ClientState } from "state/state";
 import { postingReact, postingReactionDelete } from "state/postings/actions";
 import { getHomeOwnerName } from "state/home/selectors";
-import { getLightBoxMediaPostingId, getLightBoxNodeName } from "state/lightbox/selectors";
+import { getLightboxMediaPostingId, getLightboxNodeName } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
 import { useIsTinyScreen, useDispatcher } from "ui/hook";
@@ -15,9 +15,9 @@ import PostingReactions from "ui/posting/PostingReactions";
 import "./LightboxReactions.css";
 
 export default function LightboxReactions() {
-    const nodeName = useSelector(getLightBoxNodeName);
+    const nodeName = useSelector(getLightboxNodeName);
     const posting = useSelector((state: ClientState) =>
-        getPosting(state, getLightBoxMediaPostingId(state), nodeName)
+        getPosting(state, getLightboxMediaPostingId(state), nodeName)
     );
     const homeOwnerName = useSelector(getHomeOwnerName);
     const enableSelf = useSelector((state: ClientState) =>

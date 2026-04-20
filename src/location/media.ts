@@ -1,21 +1,21 @@
 import { ClientState } from "state/state";
 import { LocationInfo } from "location/LocationInfo";
 import { getNodeRootLocation } from "state/node/selectors";
-import { getLightBoxCommentId, getLightBoxMediaId, getLightBoxPostingId } from "state/lightbox/selectors";
+import { getLightboxCommentId, getLightboxMediaId, getLightboxPostingId } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
 import { atOwner } from "util/names";
 import { REL_CURRENT } from "util/rel-node-name";
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
-    const postingId = getLightBoxPostingId(state);
+    const postingId = getLightboxPostingId(state);
     if (postingId != null) {
         info = info.sub("post").sub(postingId);
     }
-    const commentId = getLightBoxCommentId(state);
+    const commentId = getLightboxCommentId(state);
     if (commentId != null) {
         info = info.withParameter("comment", commentId);
     }
-    const mediaId = getLightBoxMediaId(state);
+    const mediaId = getLightboxMediaId(state);
     if (mediaId != null) {
         info = info.withParameter("media", mediaId);
     }

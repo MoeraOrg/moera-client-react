@@ -35,7 +35,7 @@ import explore from "state/explore/reducer";
 import shareDialog from "state/sharedialog/reducer";
 import sourceDialog from "state/sourcedialog/reducer";
 import imageEditDialog from "state/imageeditdialog/reducer";
-import lightBox from "state/lightbox/reducer";
+import lightbox from "state/lightbox/reducer";
 import donateDialog from "state/donatedialog/reducer";
 import entryCopyTextDialog from "state/entrycopytextdialog/reducer";
 import linkPreviews from "state/linkpreviews/reducer";
@@ -87,7 +87,7 @@ import exploreSagas from "state/explore/sagas";
 import shareDialogSagas from "state/sharedialog/sagas";
 import sourceDialogSagas from "state/sourcedialog/sagas";
 import imageEditDialogSagas from "state/imageeditdialog/sagas";
-import lightBoxSagas from "state/lightbox/sagas";
+import lightboxSagas from "state/lightbox/sagas";
 import richTextEditorSagas from "state/richtexteditor/sagas";
 import entryCopyTextDialogSagas from "state/entrycopytextdialog/sagas";
 import linkPreviewsSagas from "state/linkpreviews/sagas";
@@ -127,7 +127,7 @@ import searchTriggers from "state/search/triggers";
 import grantTriggers from "state/grant/triggers";
 import exploreTriggers from "state/explore/triggers";
 import imageEditDialogTriggers from "state/imageeditdialog/triggers";
-import lightBoxTriggers from "state/lightbox/triggers";
+import lightboxTriggers from "state/lightbox/triggers";
 import askDialogTriggers from "state/askdialog/triggers";
 import blockingDetailsDialogTriggers from "state/blockingdetailsdialog/triggers";
 import blockedOperationsTriggers from "state/blockedoperations/triggers";
@@ -165,7 +165,7 @@ const reducers = combineReducers({
     shareDialog,
     sourceDialog,
     imageEditDialog,
-    lightBox,
+    lightbox,
     donateDialog,
     entryCopyTextDialog,
     linkPreviews,
@@ -220,7 +220,7 @@ const triggers = collectTriggers(
     grantTriggers,
     exploreTriggers,
     imageEditDialogTriggers,
-    lightBoxTriggers,
+    lightboxTriggers,
     askDialogTriggers,
     blockingDetailsDialogTriggers,
     blockedOperationsTriggers,
@@ -260,7 +260,7 @@ const sagas = collectSagas(
     shareDialogSagas,
     sourceDialogSagas,
     imageEditDialogSagas,
-    lightBoxSagas,
+    lightboxSagas,
     richTextEditorSagas,
     entryCopyTextDialogSagas,
     linkPreviewsSagas,

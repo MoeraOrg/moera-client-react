@@ -41,7 +41,7 @@ import { build as mediaBuild } from "location/media";
 import { LocationInfo } from "location/LocationInfo";
 import { ClientAction } from "state/action";
 import { ClientState } from "state/state";
-import { isLightBoxShown } from "state/lightbox/selectors";
+import { isLightboxShown } from "state/lightbox/selectors";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     if (dstInfo.directories.length === 0) {
@@ -103,7 +103,7 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
 }
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
-    if (isLightBoxShown(state)) {
+    if (isLightboxShown(state)) {
         return mediaBuild(state, info);
     }
     if (isAtTimelinePage(state)) {

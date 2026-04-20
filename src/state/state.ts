@@ -21,7 +21,7 @@ import { FriendGroupsDialogState } from "state/friendgroupsdialog/state";
 import { GrantState } from "state/grant/state";
 import { ImageEditDialogState } from "state/imageeditdialog/state";
 import { InstantsState } from "state/instants/state";
-import { LightBoxState } from "state/lightbox/state";
+import { LightboxState } from "state/lightbox/state";
 import { LinkPreviewsState } from "state/linkpreviews/state";
 import { MediaDownloadDialogState } from "state/mediadownloaddialog/state";
 import { MessageBoxState } from "state/messagebox/state";
@@ -71,7 +71,7 @@ export interface ClientState {
     home: HomeState;
     imageEditDialog: ImageEditDialogState;
     instants: InstantsState;
-    lightBox: LightBoxState;
+    lightbox: LightboxState;
     linkPreviews: LinkPreviewsState;
     mediaDownloadDialog: MediaDownloadDialogState;
     messageBox: MessageBoxState;

@@ -22,7 +22,7 @@ import { GrantAnyAction } from "state/grant/actions";
 import { HomeAnyAction } from "state/home/actions";
 import { ImageEditDialogAnyAction } from "state/imageeditdialog/actions";
 import { InstantsAnyAction } from "state/instants/actions";
-import { LightBoxAnyAction } from "state/lightbox/actions";
+import { LightboxAnyAction } from "state/lightbox/actions";
 import { LinkPreviewsAnyAction } from "state/linkpreviews/actions";
 import { MediaDownloadDialogAnyAction } from "state/mediadownloaddialog/actions";
 import { MessageBoxAnyAction } from "state/messagebox/actions";
@@ -77,7 +77,7 @@ export type ClientAction =
     | HomeAnyAction
     | ImageEditDialogAnyAction
     | InstantsAnyAction
-    | LightBoxAnyAction
+    | LightboxAnyAction
     | LinkPreviewsAnyAction
     | MediaDownloadDialogAnyAction
     | MessageBoxAnyAction

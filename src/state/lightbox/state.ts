@@ -1,6 +1,6 @@
 import { RelNodeName } from "util/rel-node-name";
 
-export interface LightBoxState {
+export interface LightboxState {
     show: boolean;
     nodeName: RelNodeName | string;
     postingId: string | null;

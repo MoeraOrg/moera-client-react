@@ -6,7 +6,7 @@ import { PrivateMediaFileInfo } from "api";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
-import { openLightBox } from "state/lightbox/actions";
+import { openLightbox } from "state/lightbox/actions";
 import { useDispatcher } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import PreloadedImage from "ui/posting/PreloadedImage";
@@ -41,7 +41,7 @@ export default function EntryImage({
 
     const onNear = () => {
         if (postingId != null) {
-            dispatch(openLightBox(nodeName, postingId, commentId ?? null, mediaFile.id));
+            dispatch(openLightbox(nodeName, postingId, commentId ?? null, mediaFile.id));
         }
     }
 

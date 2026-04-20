@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { PublicMediaFileInfo } from "api";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
-import { openLightBox } from "state/lightbox/actions";
+import { openLightbox } from "state/lightbox/actions";
 import { useDispatcher } from "ui/hook";
 import Jump from "ui/navigation/Jump";
 import { REL_SEARCH, RelNodeName } from "util/rel-node-name";
@@ -25,7 +25,7 @@ export default function SearchEntryImagePreview({nodeName, postingId, commentId,
 
     const onNear = () => {
         if (postingId != null) {
-            dispatch(openLightBox(nodeName, postingId, commentId ?? null, mediaId));
+            dispatch(openLightbox(nodeName, postingId, commentId ?? null, mediaId));
         }
     }
 

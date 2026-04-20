@@ -1,8 +1,8 @@
 import { ClientAction } from "state/action";
-import { LightBoxState } from "state/lightbox/state";
+import { LightboxState } from "state/lightbox/state";
 import { REL_CURRENT } from "util/rel-node-name";
 
-const initialState: LightBoxState = {
+const initialState: LightboxState = {
     show: false,
     nodeName: REL_CURRENT,
     postingId: null,
@@ -10,9 +10,9 @@ const initialState: LightBoxState = {
     mediaId: null
 }
 
-export default (state: LightBoxState = initialState, action: ClientAction): LightBoxState => {
+export default (state: LightboxState = initialState, action: ClientAction): LightboxState => {
     switch (action.type) {
-        case "OPEN_LIGHT_BOX":
+        case "OPEN_LIGHTBOX":
             return {
                 ...state,
                 show: true,
@@ -22,13 +22,13 @@ export default (state: LightBoxState = initialState, action: ClientAction): Ligh
                 mediaId: action.payload.mediaId
             }
 
-        case "CLOSE_LIGHT_BOX":
+        case "CLOSE_LIGHTBOX":
             return {
                 ...state,
                 show: false
             }
 
-        case "LIGHT_BOX_MEDIA_SET":
+        case "LIGHTBOX_MEDIA_SET":
             return {
                 ...state,
                 mediaId: action.payload.mediaId

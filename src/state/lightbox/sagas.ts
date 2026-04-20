@@ -7,30 +7,30 @@ import { getNodeUri } from "state/naming/sagas";
 import { postingLoad } from "state/postings/actions";
 import { flashBox } from "state/flashbox/actions";
 import { errorThrown } from "state/error/actions";
-import { LightBoxCopyLinkAction, LightBoxMediaPostingLoadAction, LightBoxMediaSetAction } from "state/lightbox/actions";
-import { getLightBoxMediaPostingId, getLightBoxNodeName } from "state/lightbox/selectors";
+import { LightboxCopyLinkAction, LightboxMediaPostingLoadAction, LightboxMediaSetAction } from "state/lightbox/actions";
+import { getLightboxMediaPostingId, getLightboxNodeName } from "state/lightbox/selectors";
 import * as Browser from "ui/browser";
 import { absoluteNodeName } from "util/rel-node-name";
 import { universalLocation } from "util/universal-url";
 import { clipboardCopy } from "util/clipboard";
 
 export default [
-    saga("LIGHT_BOX_MEDIA_POSTING_LOAD", null, lightBoxMediaPostingLoadSaga),
-    saga("LIGHT_BOX_MEDIA_SET", null, lightBoxMediaSetSaga),
-    saga("LIGHT_BOX_COPY_LINK", null, lightBoxCopyLinkSaga)
+    saga("LIGHTBOX_MEDIA_POSTING_LOAD", null, lightboxMediaPostingLoadSaga),
+    saga("LIGHTBOX_MEDIA_SET", null, lightboxMediaSetSaga),
+    saga("LIGHTBOX_COPY_LINK", null, lightboxCopyLinkSaga)
 ];
 
-function lightBoxMediaPostingLoadSaga(action: LightBoxMediaPostingLoadAction): void {
+function lightboxMediaPostingLoadSaga(action: LightboxMediaPostingLoadAction): void {
     const {nodeName, postingId} = select(state => ({
-        nodeName: getLightBoxNodeName(state),
-        postingId: getLightBoxMediaPostingId(state)
+        nodeName: getLightboxNodeName(state),
+        postingId: getLightboxMediaPostingId(state)
     }));
     if (postingId != null) {
         dispatch(postingLoad(postingId, nodeName).causedBy(action));
     }
 }
 
-function lightBoxMediaSetSaga(action: LightBoxMediaSetAction): void {
+function lightboxMediaSetSaga(action: LightboxMediaSetAction): void {
     switch (action.payload.sequence) {
         case "next-loop":
             dispatch(flashBox(i18n.t("returned-to-beginning"), true).causedBy(action));
@@ -41,7 +41,7 @@ function lightBoxMediaSetSaga(action: LightBoxMediaSetAction): void {
     }
 }
 
-async function lightBoxCopyLinkSaga(action: WithContext<LightBoxCopyLinkAction>): Promise<void> {
+async function lightboxCopyLinkSaga(action: WithContext<LightboxCopyLinkAction>): Promise<void> {
     let {nodeName, url} = action.payload;
     nodeName = absoluteNodeName(nodeName, action.context);
     try {
