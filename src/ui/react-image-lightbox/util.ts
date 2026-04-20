@@ -1,3 +1,5 @@
+// Based on react-image-lightbox 5.1.4 by Chris Fritz (MIT License).
+
 // Min image zoom level
 export const MIN_ZOOM_LEVEL = 0;
 

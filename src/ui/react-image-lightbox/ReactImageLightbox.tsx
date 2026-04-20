@@ -1,3 +1,5 @@
+// Based on react-image-lightbox 5.1.4 by Chris Fritz (MIT License).
+
 import React, { useEffect, useEffectEvent, useRef, useState } from 'react';
 import Modal from 'react-modal';
 import cx from 'classnames';

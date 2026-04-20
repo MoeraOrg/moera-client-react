@@ -1,3 +1,5 @@
+// Based on react-image-lightbox 5.1.4 by Chris Fritz (MIT License).
+
 import React, { useRef } from 'react';
 
 import "./LightboxCaption.css";

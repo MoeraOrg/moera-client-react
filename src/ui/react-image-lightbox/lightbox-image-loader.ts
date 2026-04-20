@@ -1,3 +1,5 @@
+// Based on react-image-lightbox 5.1.4 by Chris Fritz (MIT License).
+
 import { useCallback, useEffect, useSyncExternalStore } from 'react';
 
 import { LightboxCachedImage, LightboxImageCache } from "ui/react-image-lightbox/lightbox-image-cache";

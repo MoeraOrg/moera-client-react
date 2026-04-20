@@ -1,3 +1,5 @@
+// Based on react-image-lightbox 5.1.4 by Chris Fritz (MIT License).
+
 import React, { CSSProperties } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
