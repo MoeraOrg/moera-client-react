@@ -15,12 +15,13 @@ interface Props {
     className?: string;
     animating: boolean;
     transforms: Partial<TransformInput>;
+    onClick?: (event: React.MouseEvent<HTMLElement>) => void;
     onDoubleClick: (event: React.MouseEvent<HTMLElement>) => void;
     onWheel: (event: React.WheelEvent<HTMLElement>) => void;
 }
 
 export default function LightboxImage({
-    imageInfo, title, boxSize, zoomLevel, className, animating, transforms, onDoubleClick, onWheel
+    imageInfo, title, boxSize, zoomLevel, className, animating, transforms, onClick, onDoubleClick, onWheel
 }: Props) {
     const {t} = useTranslation();
 
@@ -68,6 +69,7 @@ export default function LightboxImage({
     return (
         <img
             className={cx(className, "ril__image")}
+            onClick={onClick}
             onDoubleClick={onDoubleClick}
             onWheel={onWheel}
             onDragStart={event => event.preventDefault()}

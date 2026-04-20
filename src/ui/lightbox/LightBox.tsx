@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { MediaAttachment } from "api";
@@ -103,33 +103,6 @@ export default function LightBox() {
         title = `${index + 1} / ${media.length}`;
     }
 
-    const [loadedCount, setLoadedCount] = useState<number>(0);
-
-    const onImageLoad = () => setLoadedCount(count => count + 1);
-
-    const dyed = useRef<boolean>(false);
-
-    const imageClick = useCallback(
-        () => {
-            if (!dyed.current) {
-                document.getElementsByClassName("ril__outer")[0]?.classList.add("transparent");
-            } else {
-                document.getElementsByClassName("ril__outer")[0]?.classList.remove("transparent");
-            }
-            dyed.current = !dyed.current;
-        },
-        []
-    );
-
-    useEffect(() => {
-        const image = document.getElementsByClassName("ril-image-current")[0];
-        if (image == null) {
-            return () => {};
-        }
-        image.addEventListener("click", imageClick);
-        return () => image.removeEventListener("click", imageClick);
-    }, [imageClick, mainSrc, loadedCount]);
-
     const onMovePrevRequest = () => prevMediaId != null ? dispatch(lightBoxMediaSet(prevMediaId, prevSequence)) : null;
 
     const onMoveNextRequest = () => nextMediaId != null ? dispatch(lightBoxMediaSet(nextMediaId, nextSequence)) : null;
@@ -143,7 +116,6 @@ export default function LightBox() {
                 imageTitle={title}
                 onMovePrevRequest={onMovePrevRequest}
                 onMoveNextRequest={onMoveNextRequest}
-                onImageLoad={onImageLoad}
                 zIndex={zIndex?.shadow}
                 toolbarButtons={[
                     mainTextContent && <LightBoxCopyTextButton text={mainTextContent}/>,

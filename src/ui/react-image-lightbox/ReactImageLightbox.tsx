@@ -25,18 +25,12 @@ import {
 import "./ReactImageLightbox.css";
 
 export type LightboxTriggerEvent = Event | React.SyntheticEvent;
-export type LightboxImageSourceName = | "mainSrc" | "nextSrc" | "prevSrc";
 
 export interface LightboxProps {
     imageCaption?: React.ReactNode;
     imageTitle?: string;
     mainSrc: string;
     nextSrc?: string | null;
-    onImageLoad(
-        imageSrc: string,
-        srcType: LightboxImageSourceName,
-        image: HTMLImageElement
-    ): void;
     onMoveNextRequest(event?: LightboxTriggerEvent): void;
     onMovePrevRequest(event?: LightboxTriggerEvent): void;
     prevSrc?: string | null;
@@ -110,8 +104,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
     // Component parts should animate (e.g., when images are moving, or image is being zoomed)
     const [shouldAnimate, setShouldAnimate] = useState(false);
 
-    // Zoom level of image
-    const [zoomLevel, setZoomLevel] = useState(MIN_ZOOM_LEVEL);
+    const animating = shouldAnimate || isClosing;
 
     // Horizontal image offset from center
     const [offsetX, setOffsetX] = useState(0);
@@ -142,20 +135,21 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const pinchDistanceRef = useRef(0);
     const [keyCounter, setKeyCounter] = useState<number>(0);
 
-    const getZoomMultiplier = (nextZoomLevel = zoomLevel): number =>
-        ZOOM_RATIO ** nextZoomLevel;
-
     const [outerElement, outerSize] = useElementSize<HTMLDivElement>();
     const windowSize = useWindowSize();
     const boxSize = outerSize.width !== 0 && outerSize.height !== 0 ? outerSize : windowSize;
-
-    const animating = shouldAnimate || isClosing;
 
     const imageCache = useLightboxImageCache();
 
     const nextImageInfo = useLightboxImageLoader(nextSrc, imageCache, boxSize);
     const mainImageInfo = useLightboxImageLoader(mainSrc, imageCache, boxSize);
     const prevImageInfo = useLightboxImageLoader(prevSrc, imageCache, boxSize);
+
+    // Zoom level of image
+    const [zoomLevel, setZoomLevel] = useState(MIN_ZOOM_LEVEL);
+
+    const getZoomMultiplier = (nextZoomLevel = zoomLevel): number =>
+        ZOOM_RATIO ** nextZoomLevel;
 
     const getMaxOffsets = (nextZoomLevel = zoomLevel): OffsetBounds => {
         if (mainImageInfo == null || mainImageInfo.error) {
@@ -813,6 +807,22 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
     };
 
+    const [dyed, setDyed] = useState<boolean>(false);
+
+    const handleImageClick= () => setDyed(dyed => !dyed);
+
+    const handleImageDoubleClick = (event: React.MouseEvent<HTMLElement>): void => {
+        if (zoomLevel > MIN_ZOOM_LEVEL) {
+            changeZoom(MIN_ZOOM_LEVEL, event.clientX, event.clientY);
+        } else {
+            changeZoom(
+                zoomLevel + ZOOM_BUTTON_INCREMENT_SIZE,
+                event.clientX,
+                event.clientY
+            );
+        }
+    };
+
     const handleImageMouseWheel = (event: React.WheelEvent<HTMLElement>): void => {
         if (Math.abs(event.deltaY) >= Math.abs(event.deltaX)) {
             event.stopPropagation();
@@ -829,20 +839,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
             );
         }
     };
-
-    const handleImageDoubleClick = (event: React.MouseEvent<HTMLElement>): void => {
-        if (zoomLevel > MIN_ZOOM_LEVEL) {
-            changeZoom(MIN_ZOOM_LEVEL, event.clientX, event.clientY);
-        } else {
-            changeZoom(
-                zoomLevel + ZOOM_BUTTON_INCREMENT_SIZE,
-                event.clientX,
-                event.clientY
-            );
-        }
-    };
-
-    const zoomMultiplier = getZoomMultiplier();
 
     return (
         <Modal
@@ -873,7 +869,8 @@ export default function ReactImageLightbox(props: LightboxProps) {
             <div
                 className={cx("ril-outer", "ril__outer", "ril__outerAnimating", {
                     "ril-closing": isClosing,
-                    "ril__outerClosing": isClosing
+                    "ril__outerClosing": isClosing,
+                    "transparent": dyed
                 })}
                 style={{
                     transition: `opacity ${ANIMATION_DURATION_MS}ms`,
@@ -918,8 +915,9 @@ export default function ReactImageLightbox(props: LightboxProps) {
                             transforms={{
                                 x: -1 * offsetX,
                                 y: -1 * offsetY,
-                                zoom: zoomMultiplier
+                                zoom: getZoomMultiplier()
                             }}
+                            onClick={handleImageClick}
                             onDoubleClick={handleImageDoubleClick}
                             onWheel={handleImageMouseWheel}
                             key={`${mainSrc}i${keyCounter}`}
