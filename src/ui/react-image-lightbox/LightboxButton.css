@@ -1,4 +1,4 @@
-.ril__builtinButton {
+.ril__button {
     inline-size: 40px;
     block-size: 35px;
     cursor: pointer;
@@ -11,19 +11,20 @@
     padding: 0;
 }
 
-.ril__builtinButton:hover {
+.ril__button:hover {
+    color: #fff;
     opacity: 1;
 }
 
-.ril__builtinButton:active {
+.ril__button:active {
     outline: none;
 }
 
-.ril__builtinButtonDisabled {
+.ril__buttonDisabled {
     cursor: default;
     opacity: .5;
 }
 
-.ril__builtinButtonDisabled:hover {
+.ril__buttonDisabled:hover {
     opacity: .5;
 }

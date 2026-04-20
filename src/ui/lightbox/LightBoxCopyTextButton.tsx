@@ -22,7 +22,7 @@ export default function LightBoxCopyTextButton({text}: Props) {
     }
 
     return (
-        <button type="button" className="lightbox-button" onClick={onCopy} title={t("copy-text-image")}>
+        <button type="button" className="ril__button" onClick={onCopy} title={t("copy-text-image")}>
             <Icon icon={msContentCopy} size="1.5em"/>
         </button>
     );

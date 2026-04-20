@@ -13,6 +13,7 @@ import { ExtCommentInfo } from "state/detailedposting/state";
 import { getComment } from "state/detailedposting/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ParentContext, useDispatcher } from "ui/hook";
+import EntryHtml from "ui/entry/EntryHtml";
 import Lightbox from 'ui/react-image-lightbox/ReactImageLightbox';
 import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import LightBoxCopyTextButton from "ui/lightbox/LightBoxCopyTextButton";
@@ -21,8 +22,6 @@ import LightBoxDownloadButton from "ui/lightbox/LightBoxDownloadButton";
 import { useOverlay } from "ui/overlays/overlays";
 import { REL_CURRENT } from "util/rel-node-name";
 import { urlWithParameters } from "util/url";
-import "./LightBox.css";
-import EntryHtml from "ui/entry/EntryHtml";
 
 export default function LightBox() {
     const posting = useSelector((state: ClientState) => getPosting(state, state.lightBox.postingId, REL_CURRENT));

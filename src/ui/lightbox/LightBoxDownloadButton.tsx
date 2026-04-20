@@ -21,7 +21,7 @@ export default function LightBoxDownloadButton({mediaUrl, mediaMimeType}: Props)
         : undefined;
 
     return (
-        <a className="lightbox-button lightbox-download" download onClick={onDownload}
+        <a className="ril__button lightbox-download" download onClick={onDownload}
            href={urlWithParameters(mediaUrl, {download: true})} title={t("download")}>
             <Icon icon={msDownload} size="1.5em"/>
         </a>
