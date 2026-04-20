@@ -6,9 +6,10 @@ import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { useElementSize, useManagedTimeout, useParent, useWindowSize } from "ui/hook";
-import { Icon, msChevronLeft, msChevronRight, msClose, msZoomIn, msZoomOut } from "ui/material-symbols";
+import { Icon, msChevronLeft, msChevronRight } from "ui/material-symbols";
 import LightboxCaption from "ui/react-image-lightbox/LightboxCaption";
 import LightboxImage from "ui/react-image-lightbox/LightboxImage";
+import LightboxToolbar from "ui/react-image-lightbox/LightboxToolbar";
 import { useLightboxImageCache } from "ui/react-image-lightbox/lightbox-image-cache";
 import { useLightboxImageLoader } from "ui/react-image-lightbox/lightbox-image-loader";
 import {
@@ -27,7 +28,6 @@ import {
     SOURCE_TOUCH
 } from "ui/react-image-lightbox/util";
 import "./ReactImageLightbox.css";
-import LightboxButton from "ui/react-image-lightbox/LightboxButton";
 
 export type LightboxTriggerEvent = Event | React.SyntheticEvent;
 
@@ -960,51 +960,18 @@ export default function ReactImageLightbox(props: LightboxProps) {
                     </button>
                 )}
 
-                <div className="ril__toolbar">
-                    <ul className="ril__toolbarSide ril__toolbarLeftSide">
-                        <li className="ril__toolbarItem">
-                            <span className="ril__toolbarItemChild">
-                                {imageTitle}
-                            </span>
-                        </li>
-                    </ul>
-
-                    <ul className="ril__toolbarSide ril__toolbarRightSide">
-                        {toolbarButtons && toolbarButtons.map((button, i) =>
-                            <li key={i} className="ril__toolbarItem">
-                                {button}
-                            </li>
-                        )}
-
-                        <LightboxButton
-                            title={t("zoom-in")}
-                            icon={msZoomIn}
-                            className="ril__zoomButton"
-                            disabled={zoomLevel === MAX_ZOOM_LEVEL}
-                            animating={animating}
-                            onClick={handleZoomInButtonClick}
-                            ref={zoomInBtn}
-                        />
-
-                        <LightboxButton
-                            title={t("zoom-out")}
-                            icon={msZoomOut}
-                            className="ril__zoomButton"
-                            disabled={zoomLevel === MIN_ZOOM_LEVEL}
-                            animating={animating}
-                            onClick={handleZoomOutButtonClick}
-                            ref={zoomOutBtn}
-                        />
-
-                        <LightboxButton
-                            title={t("close")}
-                            icon={msClose}
-                            iconSize="1.75em"
-                            animating={animating}
-                            onClick={requestClose}
-                        />
-                    </ul>
-                </div>
+                <LightboxToolbar
+                    imageTitle={imageTitle}
+                    toolbarButtons={toolbarButtons}
+                    animating={animating}
+                    zoomInDisabled={zoomLevel === MAX_ZOOM_LEVEL}
+                    zoomOutDisabled={zoomLevel === MIN_ZOOM_LEVEL}
+                    onZoomIn={handleZoomInButtonClick}
+                    onZoomOut={handleZoomOutButtonClick}
+                    onClose={requestClose}
+                    zoomInRef={zoomInBtn}
+                    zoomOutRef={zoomOutBtn}
+                />
 
                 {imageCaption &&
                     <LightboxCaption>
