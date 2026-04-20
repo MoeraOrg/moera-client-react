@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { dispatch } from "state/store-sagas";
 import { flashBox } from "state/flashbox/actions";
 import * as Browser from "ui/browser";
-import { Icon, msContentCopy } from "ui/material-symbols";
+import { msContentCopy } from "ui/material-symbols";
+import LightboxButton from "ui/react-image-lightbox/LightboxButton";
 import { clipboardCopy } from "util/clipboard";
 
 interface Props {
@@ -19,11 +20,13 @@ export default function LightBoxCopyTextButton({text}: Props) {
         if (!Browser.isAndroidBrowser()) {
             dispatch(flashBox(t("text-copied")));
         }
-    }
+    };
 
     return (
-        <button type="button" className="ril__button" onClick={onCopy} title={t("copy-text-image")}>
-            <Icon icon={msContentCopy} size="1.5em"/>
-        </button>
+        <LightboxButton
+            title={t("copy-text-image")}
+            icon={msContentCopy}
+            onClick={onCopy}
+        />
     );
 }

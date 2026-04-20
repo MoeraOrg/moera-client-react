@@ -19,26 +19,24 @@ const LightboxButton = ({title, icon, iconSize = "1.5em", className, disabled, o
     const {animating} = useLightbox();
 
     return (
-        <li className="ril__toolbarItem">
-            <button
-                type="button"
-                aria-label={title}
-                title={title}
-                className={cx(
-                    "ril__toolbarItemChild",
-                    "ril__button",
-                    className,
-                    {
-                        "ril__buttonDisabled": disabled
-                    }
-                )}
-                onClick={onClick}
-                disabled={animating || disabled}
-                ref={ref}
-            >
-                <Icon icon={icon} size={iconSize}/>
-            </button>
-        </li>
+        <button
+            type="button"
+            aria-label={title}
+            title={title}
+            className={cx(
+                "ril__toolbarItemChild",
+                "ril__button",
+                className,
+                {
+                    "ril__buttonDisabled": disabled
+                }
+            )}
+            onClick={onClick}
+            disabled={animating || disabled}
+            ref={ref}
+        >
+            <Icon icon={icon} size={iconSize}/>
+        </button>
     );
 };
 

@@ -53,30 +53,36 @@ export default function LightboxToolbar({statusText, toolbarButtons, onClose}: P
                     </li>
                 )}
 
-                <LightboxButton
-                    title={t("zoom-in")}
-                    icon={msZoomIn}
-                    className="ril__zoomButton"
-                    disabled={zoomLevel === MAX_ZOOM_LEVEL}
-                    onClick={handleZoomInButtonClick}
-                    ref={zoomInBtn}
-                />
+                <li className="ril__toolbarItem">
+                    <LightboxButton
+                        title={t("zoom-in")}
+                        icon={msZoomIn}
+                        className="ril__zoomButton"
+                        disabled={zoomLevel === MAX_ZOOM_LEVEL}
+                        onClick={handleZoomInButtonClick}
+                        ref={zoomInBtn}
+                    />
+                </li>
 
-                <LightboxButton
-                    title={t("zoom-out")}
-                    icon={msZoomOut}
-                    className="ril__zoomButton"
-                    disabled={zoomLevel === MIN_ZOOM_LEVEL}
-                    onClick={handleZoomOutButtonClick}
-                    ref={zoomOutBtn}
-                />
+                <li className="ril__toolbarItem">
+                    <LightboxButton
+                        title={t("zoom-out")}
+                        icon={msZoomOut}
+                        className="ril__zoomButton"
+                        disabled={zoomLevel === MIN_ZOOM_LEVEL}
+                        onClick={handleZoomOutButtonClick}
+                        ref={zoomOutBtn}
+                    />
+                </li>
 
-                <LightboxButton
-                    title={t("close")}
-                    icon={msClose}
-                    iconSize="1.75em"
-                    onClick={onClose}
-                />
+                <li className="ril__toolbarItem">
+                    <LightboxButton
+                        title={t("close")}
+                        icon={msClose}
+                        iconSize="1.75em"
+                        onClick={onClose}
+                    />
+                </li>
             </ul>
         </div>
     );
