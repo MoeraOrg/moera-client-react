@@ -62,11 +62,6 @@ interface PinchPointer {
     y: number;
 }
 
-interface SourceDescriptor {
-    keyEnding: string;
-    name: LightboxImageSourceName;
-}
-
 const noop = (): void => {};
 
 // Size ratio between previous and next zoom levels
@@ -128,9 +123,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const zoomOutBtn = useRef<HTMLButtonElement | null>(null);
     const caption = useRef<HTMLDivElement | null>(null);
 
-    const propsRef = useRef(props);
-    propsRef.current = props;
-
     const currentActionRef = useRef(ACTION_NONE);
     const eventsSourceRef = useRef(SOURCE_ANY);
     const pointerListRef = useRef<InputPointer[]>([]);
@@ -149,23 +141,8 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const swipeEndYRef = useRef(0);
     const pinchTouchListRef = useRef<PinchPointer[] | null>(null);
     const pinchDistanceRef = useRef(0);
-    const keyCounterRef = useRef(0);
+    const [keyCounter, setKeyCounter] = useState<number>(0);
     const moveRequestedRef = useRef(false);
-
-    const getSrcTypes = (): SourceDescriptor[] => [
-        {
-            name: "mainSrc",
-            keyEnding: `i${keyCounterRef.current}`
-        },
-        {
-            name: "nextSrc",
-            keyEnding: `i${keyCounterRef.current + 1}`
-        },
-        {
-            name: "prevSrc",
-            keyEnding: `i${keyCounterRef.current - 1}`
-        }
-    ];
 
     const getZoomMultiplier = (nextZoomLevel = zoomLevel): number =>
         ZOOM_RATIO ** nextZoomLevel;
@@ -366,10 +343,10 @@ export default function ReactImageLightbox(props: LightboxProps) {
         setOffsetY(0);
 
         if (direction === "prev") {
-            keyCounterRef.current -= 1;
+            setKeyCounter(current => current - 1);
             onMovePrevRequest(event);
         } else {
-            keyCounterRef.current += 1;
+            setKeyCounter(current => current + 1);
             onMoveNextRequest(event);
         }
     };
@@ -403,10 +380,10 @@ export default function ReactImageLightbox(props: LightboxProps) {
             }
         }
 
-        if (xDiff > 0 && propsRef.current.prevSrc) {
+        if (xDiff > 0 && prevSrc) {
             event.preventDefault();
             requestMovePrev();
-        } else if (xDiff < 0 && propsRef.current.nextSrc) {
+        } else if (xDiff < 0 && nextSrc) {
             event.preventDefault();
             requestMoveNext();
         }
@@ -873,11 +850,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
 
     const zoomMultiplier = getZoomMultiplier();
 
-    const keyEndings = getSrcTypes().reduce<Record<LightboxImageSourceName, string>>((result, {name, keyEnding}) => {
-        result[name] = keyEnding;
-        return result;
-    }, {} as Record<LightboxImageSourceName, string>);
-
     return (
         <Modal
             isOpen
@@ -938,7 +910,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                             }}
                             onDoubleClick={handleImageDoubleClick}
                             onWheel={handleImageMouseWheel}
-                            key={nextSrc + keyEndings["nextSrc"]}
+                            key={`${nextSrc}i${keyCounter + 1}`}
                         />
                     }
                     {mainSrc &&
@@ -956,7 +928,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                             }}
                             onDoubleClick={handleImageDoubleClick}
                             onWheel={handleImageMouseWheel}
-                            key={mainSrc + keyEndings["mainSrc"]}
+                            key={`${mainSrc}i${keyCounter}`}
                         />
                     }
                     {prevSrc &&
@@ -972,7 +944,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                             }}
                             onDoubleClick={handleImageDoubleClick}
                             onWheel={handleImageMouseWheel}
-                            key={prevSrc + keyEndings["prevSrc"]}
+                            key={`${prevSrc}i${keyCounter - 1}`}
                         />
                     }
                 </div>
@@ -1009,14 +981,11 @@ export default function ReactImageLightbox(props: LightboxProps) {
                     </ul>
 
                     <ul className="ril-toolbar-right ril__toolbarSide ril__toolbarRightSide">
-                        {toolbarButtons && toolbarButtons.map((button, i) => (
-                            <li
-                                key={`button_${i + 1}`}
-                                className="ril-toolbar__item ril__toolbarItem"
-                            >
+                        {toolbarButtons && toolbarButtons.map((button, i) =>
+                            <li key={i} className="ril-toolbar__item ril__toolbarItem">
                                 {button}
                             </li>
-                        ))}
+                        )}
 
                         <li className="ril-toolbar__item ril__toolbarItem">
                             <button
