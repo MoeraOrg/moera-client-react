@@ -14,7 +14,6 @@ import { getComment } from "state/detailedposting/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ParentContext, useDispatcher } from "ui/hook";
 import Lightbox from 'ui/react-image-lightbox/ReactImageLightbox';
-import LightBoxCaption from "ui/lightbox/LightBoxCaption";
 import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import LightBoxCopyTextButton from "ui/lightbox/LightBoxCopyTextButton";
 import LightBoxShareButton from "ui/lightbox/LightBoxShareButton";
@@ -23,6 +22,7 @@ import { useOverlay } from "ui/overlays/overlays";
 import { REL_CURRENT } from "util/rel-node-name";
 import { urlWithParameters } from "util/url";
 import "./LightBox.css";
+import EntryHtml from "ui/entry/EntryHtml";
 
 export default function LightBox() {
     const posting = useSelector((state: ClientState) => getPosting(state, state.lightBox.postingId, REL_CURRENT));
@@ -123,7 +123,9 @@ export default function LightBox() {
                     <LightBoxDownloadButton mediaUrl={mainSrc} mediaMimeType={mainMimeType}/>,
                     <LightBoxReactions/>
                 ]}
-                imageCaption={mediaPosting?.body.text && <LightBoxCaption posting={mediaPosting}/>}
+                imageCaption={mediaPosting?.body.text &&
+                    <EntryHtml postingId={mediaPosting.id} html={mediaPosting.body.text}/>
+                }
             />
         </ParentContext.Provider>
     );
