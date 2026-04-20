@@ -1,5 +1,3 @@
-import type { CSSProperties } from 'react';
-
 // Min image zoom level
 export const MIN_ZOOM_LEVEL = 0;
 
@@ -33,14 +31,6 @@ interface TouchPointerLike extends CoordinateEventLike {
 interface TouchListLike {
     item(index: number): TouchPointerLike | null;
     length: number;
-}
-
-export interface TransformInput {
-    targetWidth: number;
-    width: number;
-    x?: number;
-    y?: number;
-    zoom?: number;
 }
 
 export function isTargetMatchImage(target: EventTarget | null): boolean {
@@ -79,23 +69,4 @@ export function getTouches(touchList: TouchListLike): TouchPointerLike[] {
     return Array.from({length: touchList.length}, (_, index) => touchList.item(index)).filter(
         (touch): touch is TouchPointerLike => touch !== null
     );
-}
-
-export function getTransform({
-    x = 0,
-    y = 0,
-    zoom = 1,
-    width,
-    targetWidth
-}: TransformInput): CSSProperties {
-    let nextX = x;
-    const windowWidth = window.innerWidth;
-    if (width > windowWidth) {
-        nextX += (windowWidth - width) / 2;
-    }
-    const scaleFactor = zoom * (targetWidth / width);
-
-    return {
-        transform: `translate3d(${nextX}px,${y}px,0) scale3d(${scaleFactor},${scaleFactor},1)`
-    };
 }

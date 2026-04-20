@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { ElementSize } from "ui/hook";
 import { Loading } from "ui/control";
 import { ImageInfo } from "ui/react-image-lightbox/lightbox-image-loader";
-import { ANIMATION_DURATION_MS, getTransform, MIN_ZOOM_LEVEL, type TransformInput } from "ui/react-image-lightbox/util";
+import { ANIMATION_DURATION_MS, MIN_ZOOM_LEVEL } from "ui/react-image-lightbox/util";
 
 interface Props {
     imageInfo: ImageInfo | null;
@@ -79,4 +79,31 @@ export default function LightboxImage({
             draggable={false}
         />
     );
+}
+
+interface TransformInput {
+    targetWidth: number;
+    width: number;
+    x?: number;
+    y?: number;
+    zoom?: number;
+}
+
+function getTransform({
+    x = 0,
+    y = 0,
+    zoom = 1,
+    width,
+    targetWidth
+}: TransformInput): CSSProperties {
+    let nextX = x;
+    const windowWidth = window.innerWidth;
+    if (width > windowWidth) {
+        nextX += (windowWidth - width) / 2;
+    }
+    const scaleFactor = zoom * (targetWidth / width);
+
+    return {
+        transform: `translate3d(${nextX}px,${y}px,0) scale3d(${scaleFactor},${scaleFactor},1)`
+    };
 }
