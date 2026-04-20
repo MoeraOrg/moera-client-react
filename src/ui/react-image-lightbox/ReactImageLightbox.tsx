@@ -6,9 +6,10 @@ import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { useElementSize, useManagedTimeout, useParent, useWindowSize } from "ui/hook";
-import { Icon, msChevronLeft, msChevronRight } from "ui/material-symbols";
+import { msChevronLeft, msChevronRight } from "ui/material-symbols";
 import LightboxCaption from "ui/react-image-lightbox/LightboxCaption";
 import LightboxImage from "ui/react-image-lightbox/LightboxImage";
+import LightboxNavButton from "ui/react-image-lightbox/LightboxNavButton";
 import LightboxToolbar from "ui/react-image-lightbox/LightboxToolbar";
 import { LightboxContext } from "ui/react-image-lightbox/lightbox-context";
 import { useLightboxImageCache } from "ui/react-image-lightbox/lightbox-image-cache";
@@ -872,31 +873,25 @@ export default function ReactImageLightbox(props: LightboxProps) {
                         }
                     </div>
 
-                    {prevSrc && (
-                        <button
-                            type="button"
-                            className="ril__navButtons ril__navButtonPrev"
+                    {prevSrc &&
+                        <LightboxNavButton
+                            className="ril__navButtonPrev"
                             key="prev"
-                            aria-label={t("previous-image")}
                             title={t("previous-image")}
-                            onClick={!animating ? requestMovePrev : undefined}
-                        >
-                            <Icon icon={msChevronLeft} size={40}/>
-                        </button>
-                    )}
+                            icon={msChevronLeft}
+                            onClick={requestMovePrev}
+                        />
+                    }
 
-                    {nextSrc && (
-                        <button
-                            type="button"
-                            className="ril__navButtons ril__navButtonNext"
+                    {nextSrc &&
+                        <LightboxNavButton
+                            className="ril__navButtonNext"
                             key="next"
-                            aria-label={t("next-image")}
                             title={t("next-image")}
-                            onClick={!animating ? requestMoveNext : undefined}
-                        >
-                            <Icon icon={msChevronRight} size={40}/>
-                        </button>
-                    )}
+                            icon={msChevronRight}
+                            onClick={requestMoveNext}
+                        />
+                    }
 
                     <LightboxToolbar
                         statusText={statusText}

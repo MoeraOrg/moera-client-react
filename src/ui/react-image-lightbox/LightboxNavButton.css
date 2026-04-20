@@ -1,0 +1,37 @@
+.ril__navButtons {
+    position: absolute;
+    inset-block: 0;
+    inline-size: var(--ril-nav-width);
+    block-size: 80px;
+    margin-block: auto;
+    border: none;
+    padding: 0;
+    background-color: rgb(0 0 0 / 20%);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    opacity: .7;
+}
+
+@media (min-width: 992px) {
+    .ril__navButtons {
+        block-size: calc(100dvh - 100px - 13rem);
+    }
+}
+
+.ril__navButtons:hover {
+    opacity: 1;
+}
+
+.ril__navButtons:active {
+    opacity: .7;
+}
+
+.ril__navButtonPrev {
+    inset-inline-start: 0;
+}
+
+.ril__navButtonNext {
+    inset-inline-end: 0;
+}
