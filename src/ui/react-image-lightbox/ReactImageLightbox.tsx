@@ -10,13 +10,14 @@ import { Icon, msChevronLeft, msChevronRight } from "ui/material-symbols";
 import LightboxCaption from "ui/react-image-lightbox/LightboxCaption";
 import LightboxImage from "ui/react-image-lightbox/LightboxImage";
 import LightboxToolbar from "ui/react-image-lightbox/LightboxToolbar";
+import { LightboxContext } from "ui/react-image-lightbox/lightbox-context";
 import { useLightboxImageCache } from "ui/react-image-lightbox/lightbox-image-cache";
 import { useLightboxImageLoader } from "ui/react-image-lightbox/lightbox-image-loader";
 import {
     ANIMATION_DURATION_MS,
     getTouches,
     InputPointer,
-    isTargetMatchImage,
+    isTargetMainImage,
     MAX_ZOOM_LEVEL,
     MIN_ZOOM_LEVEL,
     parseMouseEvent,
@@ -66,14 +67,8 @@ const noop = (): void => {};
 // Size ratio between previous and next zoom levels
 const ZOOM_RATIO = 1.007;
 
-// How much to increase/decrease the zoom level when the zoom buttons are clicked
-const ZOOM_BUTTON_INCREMENT_SIZE = 100;
-
 // Used to judge the amount of horizontal scroll needed to initiate a image move
 const WHEEL_MOVE_X_THRESHOLD = 200;
-
-// Used to judge the amount of vertical scroll needed to initiate a zoom action
-const WHEEL_MOVE_Y_THRESHOLD = 1;
 
 // Actions
 const ACTION_NONE = 0;
@@ -116,9 +111,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
 
     // Vertical image offset from center
     const [offsetY, setOffsetY] = useState(0);
-
-    const zoomInBtn = useRef<HTMLButtonElement | null>(null);
-    const zoomOutBtn = useRef<HTMLButtonElement | null>(null);
 
     const currentActionRef = useRef(ACTION_NONE);
     const eventsSourceRef = useRef(SOURCE_ANY);
@@ -571,7 +563,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
     };
 
     const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>): void => {
-        if (shouldHandleEvent(SOURCE_MOUSE) && isTargetMatchImage(event.target)) {
+        if (shouldHandleEvent(SOURCE_MOUSE) && isTargetMainImage(event.target)) {
             addPointer(parseMouseEvent(event));
             multiPointerStart(event);
         }
@@ -601,7 +593,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         if (shouldHandleEvent(SOURCE_POINTER)) {
             switch (event.type) {
                 case "pointerdown":
-                    if (isTargetMatchImage(event.target)) {
+                    if (isTargetMainImage(event.target)) {
                         addPointer(parsePointerEvent(event));
                         multiPointerStart(event);
                     }
@@ -634,7 +626,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
     }, [handlePointerEvent]);
 
     const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>): void => {
-        if (shouldHandleEvent(SOURCE_TOUCH) && isTargetMatchImage(event.target)) {
+        if (shouldHandleEvent(SOURCE_TOUCH) && isTargetMainImage(event.target)) {
             getTouches(event.changedTouches).forEach(eventTouch =>
                 addPointer(parseTouchPointer(eventTouch))
             );
@@ -670,22 +662,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
             window.removeEventListener("touchcancel", handleTouchEnd);
         };
     }, [handleTouchEnd]);
-
-    const handleZoomInButtonClick = (): void => {
-        const nextZoomLevel = zoomLevel + ZOOM_BUTTON_INCREMENT_SIZE;
-        changeZoom(nextZoomLevel);
-        if (nextZoomLevel === MAX_ZOOM_LEVEL && zoomOutBtn.current) {
-            zoomOutBtn.current.focus();
-        }
-    };
-
-    const handleZoomOutButtonClick = (): void => {
-        const nextZoomLevel = zoomLevel - ZOOM_BUTTON_INCREMENT_SIZE;
-        changeZoom(nextZoomLevel);
-        if (nextZoomLevel === MIN_ZOOM_LEVEL && zoomInBtn.current) {
-            zoomInBtn.current.focus();
-        }
-    };
 
     useEffect(() => setIsClosing(false), []);
 
@@ -763,6 +739,10 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const resetScrollTimeout = useManagedTimeout();
     const wheelActionTimeout = useManagedTimeout();
 
+    const resetWheelScroll = (): void => {
+        scrollXRef.current = 0;
+    };
+
     const handleOuterMousewheel = (event: React.WheelEvent<HTMLDivElement>): void => {
         event.stopPropagation();
 
@@ -772,7 +752,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
 
         resetScrollTimeout.clear();
         resetScrollTimeout.set(() => {
-            scrollXRef.current = 0;
+            resetWheelScroll();
         }, 300);
 
         if (wheelActionTimeout.isActive() || animating) {
@@ -786,14 +766,14 @@ export default function ReactImageLightbox(props: LightboxProps) {
             if (scrollXRef.current >= xThreshold || event.deltaX >= bigLeapX) {
                 requestMoveNext(event);
                 actionDelay = imageMoveDelay;
-                scrollXRef.current = 0;
+                resetWheelScroll();
             } else if (
                 scrollXRef.current <= -1 * xThreshold
                 || event.deltaX <= -1 * bigLeapX
             ) {
                 requestMovePrev(event);
                 actionDelay = imageMoveDelay;
-                scrollXRef.current = 0;
+                resetWheelScroll();
             }
         }
 
@@ -810,35 +790,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
 
         setDyed(dyed => !dyed);
-    };
-
-    const handleImageDoubleClick = (event: React.MouseEvent<HTMLElement>): void => {
-        if (zoomLevel > MIN_ZOOM_LEVEL) {
-            changeZoom(MIN_ZOOM_LEVEL, event.clientX, event.clientY);
-        } else {
-            changeZoom(
-                zoomLevel + ZOOM_BUTTON_INCREMENT_SIZE,
-                event.clientX,
-                event.clientY
-            );
-        }
-    };
-
-    const handleImageMouseWheel = (event: React.WheelEvent<HTMLElement>): void => {
-        if (Math.abs(event.deltaY) >= Math.abs(event.deltaX)) {
-            event.stopPropagation();
-            if (Math.abs(event.deltaY) < WHEEL_MOVE_Y_THRESHOLD) {
-                return;
-            }
-
-            scrollXRef.current = 0;
-
-            changeZoom(
-                zoomLevel - event.deltaY,
-                event.clientX,
-                event.clientY
-            );
-        }
     };
 
     return (
@@ -867,118 +818,105 @@ export default function ReactImageLightbox(props: LightboxProps) {
             contentLabel={t("lightbox")}
             appElement={document.body}
         >
-            <div
-                className={cx("ril__outer", "ril__outerAnimating", {
-                    "ril__outerClosing": isClosing,
-                    "transparent": dyed
-                })}
-                style={{
-                    transition: `opacity ${ANIMATION_DURATION_MS}ms`,
-                    animationDuration: `${ANIMATION_DURATION_MS}ms`,
-                    animationDirection: isClosing ? "normal" : "reverse"
-                }}
-                ref={outerElement}
-                onWheel={handleOuterMousewheel}
-                onMouseMove={handleMouseMove}
-                onMouseDown={handleMouseDown}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                tabIndex={-1}
-                onKeyDown={handleKeyInput}
-                onKeyUp={handleKeyInput}
-            >
-                <div className="ril__inner" onClick={closeIfClickInner}>
-                    {nextSrc &&
-                        <LightboxImage
-                            imageInfo={nextImageInfo}
-                            boxSize={boxSize}
-                            zoomLevel={zoomLevel}
-                            className="ril__imageNext"
-                            animating={animating}
-                            transforms={{
-                                x: boxSize.width
-                            }}
-                            key={`${nextSrc}i${keyCounter + 1}`}
-                        />
-                    }
-                    {mainSrc &&
-                        <LightboxImage
-                            imageInfo={mainImageInfo}
-                            boxSize={boxSize}
-                            zoomLevel={zoomLevel}
-                            className="ril__imageMain"
-                            animating={animating}
-                            transforms={{
-                                x: -1 * offsetX,
-                                y: -1 * offsetY,
-                                zoom: getZoomMultiplier()
-                            }}
-                            onClick={handleImageClick}
-                            onDoubleClick={handleImageDoubleClick}
-                            onWheel={handleImageMouseWheel}
-                            key={`${mainSrc}i${keyCounter}`}
-                        />
-                    }
-                    {prevSrc &&
-                        <LightboxImage
-                            imageInfo={prevImageInfo}
-                            boxSize={boxSize}
-                            zoomLevel={zoomLevel}
-                            className="ril__imagePrev"
-                            animating={animating}
-                            transforms={{
-                                x: -1 * boxSize.width
-                            }}
-                            key={`${prevSrc}i${keyCounter - 1}`}
-                        />
+            <LightboxContext.Provider value={{animating, zoomLevel, changeZoom, resetWheelScroll}}>
+                <div
+                    className={cx("ril__outer", "ril__outerAnimating", {
+                        "ril__outerClosing": isClosing,
+                        "transparent": dyed
+                    })}
+                    style={{
+                        transition: `opacity ${ANIMATION_DURATION_MS}ms`,
+                        animationDuration: `${ANIMATION_DURATION_MS}ms`,
+                        animationDirection: isClosing ? "normal" : "reverse"
+                    }}
+                    ref={outerElement}
+                    onWheel={handleOuterMousewheel}
+                    onMouseMove={handleMouseMove}
+                    onMouseDown={handleMouseDown}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    tabIndex={-1}
+                    onKeyDown={handleKeyInput}
+                    onKeyUp={handleKeyInput}
+                >
+                    <div className="ril__inner" onClick={closeIfClickInner}>
+                        {nextSrc &&
+                            <LightboxImage
+                                imageInfo={nextImageInfo}
+                                boxSize={boxSize}
+                                className="ril__imageNext"
+                                transforms={{
+                                    x: boxSize.width
+                                }}
+                                key={`${nextSrc}i${keyCounter + 1}`}
+                            />
+                        }
+                        {mainSrc &&
+                            <LightboxImage
+                                imageInfo={mainImageInfo}
+                                boxSize={boxSize}
+                                className="ril__imageMain"
+                                transforms={{
+                                    x: -1 * offsetX,
+                                    y: -1 * offsetY,
+                                    zoom: getZoomMultiplier()
+                                }}
+                                onClick={handleImageClick}
+                                key={`${mainSrc}i${keyCounter}`}
+                            />
+                        }
+                        {prevSrc &&
+                            <LightboxImage
+                                imageInfo={prevImageInfo}
+                                boxSize={boxSize}
+                                className="ril__imagePrev"
+                                transforms={{
+                                    x: -1 * boxSize.width
+                                }}
+                                key={`${prevSrc}i${keyCounter - 1}`}
+                            />
+                        }
+                    </div>
+
+                    {prevSrc && (
+                        <button
+                            type="button"
+                            className="ril__navButtons ril__navButtonPrev"
+                            key="prev"
+                            aria-label={t("previous-image")}
+                            title={t("previous-image")}
+                            onClick={!animating ? requestMovePrev : undefined}
+                        >
+                            <Icon icon={msChevronLeft} size={40}/>
+                        </button>
+                    )}
+
+                    {nextSrc && (
+                        <button
+                            type="button"
+                            className="ril__navButtons ril__navButtonNext"
+                            key="next"
+                            aria-label={t("next-image")}
+                            title={t("next-image")}
+                            onClick={!animating ? requestMoveNext : undefined}
+                        >
+                            <Icon icon={msChevronRight} size={40}/>
+                        </button>
+                    )}
+
+                    <LightboxToolbar
+                        statusText={statusText}
+                        toolbarButtons={toolbarButtons}
+                        onClose={requestClose}
+                    />
+
+                    {imageCaption &&
+                        <LightboxCaption>
+                            {imageCaption}
+                        </LightboxCaption>
                     }
                 </div>
-
-                {prevSrc && (
-                    <button
-                        type="button"
-                        className="ril__navButtons ril__navButtonPrev"
-                        key="prev"
-                        aria-label={t("previous-image")}
-                        title={t("previous-image")}
-                        onClick={!animating ? requestMovePrev : undefined}
-                    >
-                        <Icon icon={msChevronLeft} size={40}/>
-                    </button>
-                )}
-
-                {nextSrc && (
-                    <button
-                        type="button"
-                        className="ril__navButtons ril__navButtonNext"
-                        key="next"
-                        aria-label={t("next-image")}
-                        title={t("next-image")}
-                        onClick={!animating ? requestMoveNext : undefined}
-                    >
-                        <Icon icon={msChevronRight} size={40}/>
-                    </button>
-                )}
-
-                <LightboxToolbar
-                    statusText={statusText}
-                    toolbarButtons={toolbarButtons}
-                    animating={animating}
-                    zoomInDisabled={zoomLevel === MAX_ZOOM_LEVEL}
-                    zoomOutDisabled={zoomLevel === MIN_ZOOM_LEVEL}
-                    onZoomIn={handleZoomInButtonClick}
-                    onZoomOut={handleZoomOutButtonClick}
-                    onClose={requestClose}
-                    zoomInRef={zoomInBtn}
-                    zoomOutRef={zoomOutBtn}
-                />
-
-                {imageCaption &&
-                    <LightboxCaption>
-                        {imageCaption}
-                    </LightboxCaption>
-                }
-            </div>
+            </LightboxContext.Provider>
         </Modal>
     );
 }

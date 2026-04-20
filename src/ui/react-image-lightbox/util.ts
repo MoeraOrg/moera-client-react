@@ -8,6 +8,9 @@ export const MAX_ZOOM_LEVEL = 300;
 
 export const ANIMATION_DURATION_MS = 300;
 
+// How much to increase/decrease the zoom level when the zoom buttons are clicked
+export const ZOOM_BUTTON_INCREMENT_SIZE = 100;
+
 interface CoordinateEventLike {
     clientX: number;
     clientY: number;
@@ -35,7 +38,7 @@ interface TouchListLike {
     length: number;
 }
 
-export function isTargetMatchImage(target: EventTarget | null): boolean {
+export function isTargetMainImage(target: EventTarget | null): boolean {
     return target instanceof Element
         && target.classList.contains("ril__imageMain");
 }

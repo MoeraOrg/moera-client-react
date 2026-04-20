@@ -6,26 +6,55 @@ import { useTranslation } from 'react-i18next';
 
 import { ElementSize } from "ui/hook";
 import { Loading } from "ui/control";
+import { useLightbox } from "ui/react-image-lightbox/lightbox-context";
 import { ImageInfo } from "ui/react-image-lightbox/lightbox-image-loader";
-import { ANIMATION_DURATION_MS, MIN_ZOOM_LEVEL } from "ui/react-image-lightbox/util";
+import {
+    ANIMATION_DURATION_MS,
+    isTargetMainImage,
+    MIN_ZOOM_LEVEL,
+    ZOOM_BUTTON_INCREMENT_SIZE
+} from "ui/react-image-lightbox/util";
 import "./LightboxImage.css";
 
 interface Props {
     imageInfo: ImageInfo | null;
     boxSize: ElementSize;
-    zoomLevel: number;
     className?: string;
-    animating: boolean;
     transforms: Partial<TransformInput>;
     onClick?: (event: React.MouseEvent<HTMLElement>) => void;
-    onDoubleClick?: (event: React.MouseEvent<HTMLElement>) => void;
-    onWheel?: (event: React.WheelEvent<HTMLElement>) => void;
 }
 
-export default function LightboxImage({
-    imageInfo, boxSize, zoomLevel, className, animating, transforms, onClick, onDoubleClick, onWheel
-}: Props) {
+export default function LightboxImage({imageInfo, boxSize, className, transforms, onClick}: Props) {
+    const {animating, zoomLevel, changeZoom, resetWheelScroll} = useLightbox();
     const {t} = useTranslation();
+
+    const handleDoubleClick = (event: React.MouseEvent<HTMLImageElement>): void => {
+        if (!isTargetMainImage(event.currentTarget)) {
+            return;
+        }
+
+        if (zoomLevel > MIN_ZOOM_LEVEL) {
+            changeZoom(MIN_ZOOM_LEVEL, event.clientX, event.clientY);
+        } else {
+            changeZoom(zoomLevel + ZOOM_BUTTON_INCREMENT_SIZE, event.clientX, event.clientY);
+        }
+    };
+
+    const handleMouseWheel = (event: React.WheelEvent<HTMLImageElement>): void => {
+        if (!isTargetMainImage(event.currentTarget)) {
+            return;
+        }
+
+        if (Math.abs(event.deltaY) >= Math.abs(event.deltaX)) {
+            event.stopPropagation();
+            if (Math.abs(event.deltaY) < WHEEL_MOVE_Y_THRESHOLD) {
+                return;
+            }
+
+            resetWheelScroll();
+            changeZoom(zoomLevel - event.deltaY, event.clientX, event.clientY);
+        }
+    };
 
     const transitionStyle: React.CSSProperties = animating ? {transition: `transform ${ANIMATION_DURATION_MS}ms`} : {};
 
@@ -66,8 +95,8 @@ export default function LightboxImage({
         <img
             className={cx(className, "ril__image")}
             onClick={onClick}
-            onDoubleClick={onDoubleClick}
-            onWheel={onWheel}
+            onDoubleClick={handleDoubleClick}
+            onWheel={handleMouseWheel}
             onDragStart={event => event.preventDefault()}
             style={imageStyle}
             src={imageInfo.src}
@@ -77,6 +106,8 @@ export default function LightboxImage({
     );
 }
 
+const WHEEL_MOVE_Y_THRESHOLD = 1;
+
 interface TransformInput {
     targetWidth: number;
     width: number;
@@ -85,17 +116,10 @@ interface TransformInput {
     zoom?: number;
 }
 
-function getTransform({
-    x = 0,
-    y = 0,
-    zoom = 1,
-    width,
-    targetWidth
-}: TransformInput): CSSProperties {
+function getTransform({x = 0, y = 0, zoom = 1, width, targetWidth}: TransformInput): CSSProperties {
     let nextX = x;
-    const windowWidth = window.innerWidth;
-    if (width > windowWidth) {
-        nextX += (windowWidth - width) / 2;
+    if (width > window.innerWidth) {
+        nextX += (window.innerWidth - width) / 2;
     }
     const scaleFactor = zoom * (targetWidth / width);
 
