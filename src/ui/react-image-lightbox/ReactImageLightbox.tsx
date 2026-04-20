@@ -693,7 +693,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         if (
             !preventInnerCloseRef.current
             && event.target instanceof Element
-            && /\bril-inner\b/.test(event.target.getAttribute("class") ?? "")
+            && event.target.classList.contains("ril__inner")
         ) {
             requestClose(event);
         }
@@ -850,8 +850,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
             appElement={document.body}
         >
             <div
-                className={cx("ril-outer", "ril__outer", "ril__outerAnimating", {
-                    "ril-closing": isClosing,
+                className={cx("ril__outer", "ril__outerAnimating", {
                     "ril__outerClosing": isClosing,
                     "transparent": dyed
                 })}
@@ -870,13 +869,13 @@ export default function ReactImageLightbox(props: LightboxProps) {
                 onKeyDown={handleKeyInput}
                 onKeyUp={handleKeyInput}
             >
-                <div className="ril-inner ril__inner" onClick={closeIfClickInner}>
+                <div className="ril__inner" onClick={closeIfClickInner}>
                     {nextSrc &&
                         <LightboxImage
                             imageInfo={nextImageInfo}
                             boxSize={boxSize}
                             zoomLevel={zoomLevel}
-                            className="ril-image-next ril__imageNext"
+                            className="ril__imageNext"
                             animating={animating}
                             transforms={{
                                 x: boxSize.width
@@ -889,7 +888,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                             imageInfo={mainImageInfo}
                             boxSize={boxSize}
                             zoomLevel={zoomLevel}
-                            className="ril-image-current"
+                            className="ril__imageMain"
                             animating={animating}
                             transforms={{
                                 x: -1 * offsetX,
@@ -907,7 +906,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                             imageInfo={prevImageInfo}
                             boxSize={boxSize}
                             zoomLevel={zoomLevel}
-                            className="ril-image-prev ril__imagePrev"
+                            className="ril__imagePrev"
                             animating={animating}
                             transforms={{
                                 x: -1 * boxSize.width
@@ -920,7 +919,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                 {prevSrc && (
                     <button
                         type="button"
-                        className="ril-prev-button ril__navButtons ril__navButtonPrev"
+                        className="ril__navButtons ril__navButtonPrev"
                         key="prev"
                         aria-label={t("previous-image")}
                         title={t("previous-image")}
@@ -931,7 +930,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                 {nextSrc && (
                     <button
                         type="button"
-                        className="ril-next-button ril__navButtons ril__navButtonNext"
+                        className="ril__navButtons ril__navButtonNext"
                         key="next"
                         aria-label={t("next-image")}
                         title={t("next-image")}
@@ -939,23 +938,23 @@ export default function ReactImageLightbox(props: LightboxProps) {
                     />
                 )}
 
-                <div className="ril-toolbar ril__toolbar">
-                    <ul className="ril-toolbar-left ril__toolbarSide ril__toolbarLeftSide">
-                        <li className="ril-toolbar__item ril__toolbarItem">
-                            <span className="ril-toolbar__item__child ril__toolbarItemChild">
+                <div className="ril__toolbar">
+                    <ul className="ril__toolbarSide ril__toolbarLeftSide">
+                        <li className="ril__toolbarItem">
+                            <span className="ril__toolbarItemChild">
                                 {imageTitle}
                             </span>
                         </li>
                     </ul>
 
-                    <ul className="ril-toolbar-right ril__toolbarSide ril__toolbarRightSide">
+                    <ul className="ril__toolbarSide ril__toolbarRightSide">
                         {toolbarButtons && toolbarButtons.map((button, i) =>
-                            <li key={i} className="ril-toolbar__item ril__toolbarItem">
+                            <li key={i} className="ril__toolbarItem">
                                 {button}
                             </li>
                         )}
 
-                        <li className="ril-toolbar__item ril__toolbarItem">
+                        <li className="ril__toolbarItem">
                             <button
                                 type="button"
                                 aria-label={t("zoom-in")}
@@ -978,7 +977,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                             />
                         </li>
 
-                        <li className="ril-toolbar__item ril__toolbarItem">
+                        <li className="ril__toolbarItem">
                             <button
                                 type="button"
                                 aria-label={t("zoom-out")}
@@ -1001,12 +1000,12 @@ export default function ReactImageLightbox(props: LightboxProps) {
                             />
                         </li>
 
-                        <li className="ril-toolbar__item ril__toolbarItem">
+                        <li className="ril__toolbarItem">
                             <button
                                 type="button"
                                 aria-label={t("close")}
                                 title={t("close")}
-                                className="ril-close ril-toolbar__item__child ril__toolbarItemChild ril__builtinButton ril__closeButton"
+                                className="ril__toolbarItemChild ril__builtinButton ril__closeButton"
                                 onClick={!animating ? requestClose : undefined}
                             />
                         </li>

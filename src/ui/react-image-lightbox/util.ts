@@ -35,7 +35,7 @@ interface TouchListLike {
 
 export function isTargetMatchImage(target: EventTarget | null): boolean {
     return target instanceof Element
-        && /\bril-image-current\b/.test(target.getAttribute("class") ?? "");
+        && target.classList.contains("ril__imageMain");
 }
 
 export function parseMouseEvent(mouseEvent: CoordinateEventLike): InputPointer {

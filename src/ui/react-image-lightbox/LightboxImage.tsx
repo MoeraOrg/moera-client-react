@@ -41,10 +41,7 @@ export default function LightboxImage({
 
     if (imageInfo == null) {
         return (
-            <div
-                className={cx(className, "ril__image", "ril-not-loaded")}
-                style={imageStyle}
-            >
+            <div className={cx(className, "ril__image")} style={imageStyle}>
                 <div className="ril__loadingContainer">
                     <Loading large/>
                 </div>
@@ -54,10 +51,7 @@ export default function LightboxImage({
 
     if (imageInfo.error) {
         return (
-            <div
-                className={cx(className, "ril__image", "ril-errored")}
-                style={imageStyle}
-            >
+            <div className={cx(className, "ril__image")} style={imageStyle}>
                 <div className="ril__errorContainer">
                     {t("couldnt-load-image")}
                 </div>
