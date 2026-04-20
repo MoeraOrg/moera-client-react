@@ -11,6 +11,11 @@ export const ANIMATION_DURATION_MS = 300;
 // How much to increase/decrease the zoom level when the zoom buttons are clicked
 export const ZOOM_BUTTON_INCREMENT_SIZE = 100;
 
+// Used to judge the amount of horizontal scroll needed to initiate an image move
+export const WHEEL_MOVE_X_THRESHOLD = 200;
+
+export const WHEEL_MOVE_Y_THRESHOLD = 1;
+
 interface CoordinateEventLike {
     clientX: number;
     clientY: number;
@@ -31,11 +36,6 @@ export const SOURCE_POINTER = 3;
 
 interface TouchPointerLike extends CoordinateEventLike {
     identifier: number;
-}
-
-interface TouchListLike {
-    item(index: number): TouchPointerLike | null;
-    length: number;
 }
 
 export function isTargetMainImage(target: EventTarget | null): boolean {
@@ -68,10 +68,4 @@ export function parsePointerEvent(pointerEvent: PointerEvent): InputPointer {
         x: Math.trunc(pointerEvent.clientX),
         y: Math.trunc(pointerEvent.clientY)
     };
-}
-
-export function getTouches(touchList: TouchListLike): TouchPointerLike[] {
-    return Array.from({length: touchList.length}, (_, index) => touchList.item(index)).filter(
-        (touch): touch is TouchPointerLike => touch !== null
-    );
 }

@@ -15,7 +15,6 @@ import { useLightboxImageCache } from "ui/react-image-lightbox/lightbox-image-ca
 import { useLightboxImageLoader } from "ui/react-image-lightbox/lightbox-image-loader";
 import {
     ANIMATION_DURATION_MS,
-    getTouches,
     InputPointer,
     isTargetMainImage,
     MAX_ZOOM_LEVEL,
@@ -26,7 +25,8 @@ import {
     SOURCE_ANY,
     SOURCE_MOUSE,
     SOURCE_POINTER,
-    SOURCE_TOUCH
+    SOURCE_TOUCH,
+    WHEEL_MOVE_X_THRESHOLD
 } from "ui/react-image-lightbox/util";
 import "./ReactImageLightbox.css";
 
@@ -66,9 +66,6 @@ const noop = (): void => {};
 
 // Size ratio between previous and next zoom levels
 const ZOOM_RATIO = 1.007;
-
-// Used to judge the amount of horizontal scroll needed to initiate a image move
-const WHEEL_MOVE_X_THRESHOLD = 200;
 
 // Actions
 const ACTION_NONE = 0;
@@ -627,7 +624,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
 
     const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>): void => {
         if (shouldHandleEvent(SOURCE_TOUCH) && isTargetMainImage(event.target)) {
-            getTouches(event.changedTouches).forEach(eventTouch =>
+            Array.from(event.changedTouches).forEach(eventTouch =>
                 addPointer(parseTouchPointer(eventTouch))
             );
             multiPointerStart(event);
@@ -638,7 +635,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         if (shouldHandleEvent(SOURCE_TOUCH)) {
             multiPointerMove(
                 event,
-                getTouches(event.changedTouches).map(eventTouch =>
+                Array.from(event.changedTouches).map(eventTouch =>
                     parseTouchPointer(eventTouch)
                 )
             );
@@ -647,7 +644,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
 
     const handleTouchEnd = useEffectEvent((event: TouchEvent): void => {
         if (shouldHandleEvent(SOURCE_TOUCH)) {
-            getTouches(event.changedTouches).forEach(touch =>
+            Array.from(event.changedTouches).forEach(touch =>
                 removePointer(parseTouchPointer(touch))
             );
             multiPointerEnd(event);
@@ -818,7 +815,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
             contentLabel={t("lightbox")}
             appElement={document.body}
         >
-            <LightboxContext.Provider value={{animating, zoomLevel, changeZoom, resetWheelScroll}}>
+            <LightboxContext.Provider value={{animating, boxSize, zoomLevel, changeZoom, resetWheelScroll}}>
                 <div
                     className={cx("ril__outer", "ril__outerAnimating", {
                         "ril__outerClosing": isClosing,
@@ -843,7 +840,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
                         {nextSrc &&
                             <LightboxImage
                                 imageInfo={nextImageInfo}
-                                boxSize={boxSize}
                                 className="ril__imageNext"
                                 transforms={{
                                     x: boxSize.width
@@ -854,7 +850,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
                         {mainSrc &&
                             <LightboxImage
                                 imageInfo={mainImageInfo}
-                                boxSize={boxSize}
                                 className="ril__imageMain"
                                 transforms={{
                                     x: -1 * offsetX,
@@ -868,7 +863,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
                         {prevSrc &&
                             <LightboxImage
                                 imageInfo={prevImageInfo}
-                                boxSize={boxSize}
                                 className="ril__imagePrev"
                                 transforms={{
                                     x: -1 * boxSize.width
@@ -910,11 +904,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                         onClose={requestClose}
                     />
 
-                    {imageCaption &&
-                        <LightboxCaption>
-                            {imageCaption}
-                        </LightboxCaption>
-                    }
+                    {imageCaption && <LightboxCaption>{imageCaption}</LightboxCaption>}
                 </div>
             </LightboxContext.Provider>
         </Modal>

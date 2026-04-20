@@ -4,7 +4,6 @@ import React, { CSSProperties } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { ElementSize } from "ui/hook";
 import { Loading } from "ui/control";
 import { useLightbox } from "ui/react-image-lightbox/lightbox-context";
 import { ImageInfo } from "ui/react-image-lightbox/lightbox-image-loader";
@@ -12,20 +11,20 @@ import {
     ANIMATION_DURATION_MS,
     isTargetMainImage,
     MIN_ZOOM_LEVEL,
+    WHEEL_MOVE_Y_THRESHOLD,
     ZOOM_BUTTON_INCREMENT_SIZE
 } from "ui/react-image-lightbox/util";
 import "./LightboxImage.css";
 
 interface Props {
     imageInfo: ImageInfo | null;
-    boxSize: ElementSize;
     className?: string;
     transforms: Partial<TransformInput>;
     onClick?: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
-export default function LightboxImage({imageInfo, boxSize, className, transforms, onClick}: Props) {
-    const {animating, zoomLevel, changeZoom, resetWheelScroll} = useLightbox();
+export default function LightboxImage({imageInfo, className, transforms, onClick}: Props) {
+    const {animating, boxSize, zoomLevel, changeZoom, resetWheelScroll} = useLightbox();
     const {t} = useTranslation();
 
     const handleDoubleClick = (event: React.MouseEvent<HTMLImageElement>): void => {
@@ -105,8 +104,6 @@ export default function LightboxImage({imageInfo, boxSize, className, transforms
         />
     );
 }
-
-const WHEEL_MOVE_Y_THRESHOLD = 1;
 
 interface TransformInput {
     targetWidth: number;
