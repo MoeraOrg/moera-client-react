@@ -57,7 +57,7 @@ export default function LightBox() {
     let nextSrc: string | undefined = undefined;
     let nextMediaId: string | undefined = undefined;
     let nextSequence: LightBoxMediaSequence = "normal";
-    let title = "";
+    let statusText = "";
     if (media != null && media.length > 0) {
         const loop = loopGallery && media.length > 1;
         let index = media.findIndex(attachment => attachment.media?.id === mediaId);
@@ -100,7 +100,7 @@ export default function LightBox() {
             nextMediaId = nextMedia?.id;
             nextSequence = nextIndex < index ? "next-loop" : "normal";
         }
-        title = `${index + 1} / ${media.length}`;
+        statusText = `${index + 1} / ${media.length}`;
     }
 
     const onMovePrevRequest = () => prevMediaId != null ? dispatch(lightBoxMediaSet(prevMediaId, prevSequence)) : null;
@@ -113,7 +113,7 @@ export default function LightBox() {
                 mainSrc={mainSrc}
                 prevSrc={prevSrc}
                 nextSrc={nextSrc}
-                imageTitle={title}
+                statusText={statusText}
                 onMovePrevRequest={onMovePrevRequest}
                 onMoveNextRequest={onMoveNextRequest}
                 zIndex={zIndex?.shadow}

@@ -6,7 +6,7 @@ import LightboxButton from "ui/react-image-lightbox/LightboxButton";
 import "./LightboxToolbar.css";
 
 interface Props {
-    imageTitle?: string;
+    statusText?: string;
     toolbarButtons?: React.ReactNode[];
     animating: boolean;
     zoomInDisabled: boolean;
@@ -19,7 +19,7 @@ interface Props {
 }
 
 export default function LightboxToolbar({
-    imageTitle,
+    statusText,
     toolbarButtons,
     animating,
     zoomInDisabled,
@@ -37,7 +37,7 @@ export default function LightboxToolbar({
             <ul className="ril__toolbarSide ril__toolbarLeftSide">
                 <li className="ril__toolbarItem">
                     <span className="ril__toolbarItemChild">
-                        {imageTitle}
+                        {statusText}
                     </span>
                 </li>
             </ul>

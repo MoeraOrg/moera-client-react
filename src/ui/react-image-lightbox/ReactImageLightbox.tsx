@@ -33,12 +33,12 @@ export type LightboxTriggerEvent = Event | React.SyntheticEvent;
 
 export interface LightboxProps {
     imageCaption?: React.ReactNode;
-    imageTitle?: string;
     mainSrc: string;
     nextSrc?: string | null;
     onMoveNextRequest(event?: LightboxTriggerEvent): void;
     onMovePrevRequest(event?: LightboxTriggerEvent): void;
     prevSrc?: string | null;
+    statusText?: string;
     toolbarButtons: React.ReactNode[];
     zIndex?: number;
 }
@@ -89,10 +89,10 @@ const KEY_REPEAT_LIMIT_MS = 180;
 
 export default function ReactImageLightbox(props: LightboxProps) {
     const {
-        imageTitle,
         nextSrc,
         mainSrc,
         prevSrc,
+        statusText,
         toolbarButtons,
         imageCaption,
         zIndex,
@@ -961,7 +961,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                 )}
 
                 <LightboxToolbar
-                    imageTitle={imageTitle}
+                    statusText={statusText}
                     toolbarButtons={toolbarButtons}
                     animating={animating}
                     zoomInDisabled={zoomLevel === MAX_ZOOM_LEVEL}
