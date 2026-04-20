@@ -1,6 +1,6 @@
 .lightbox-reactions {
     position: absolute;
-    top: 50px;
+    top: var(--ril-toolbar-size);
 }
 
 .lightbox-reaction-button {
