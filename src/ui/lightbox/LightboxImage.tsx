@@ -72,8 +72,8 @@ export default function LightboxImage({imageInfo, className, transforms, onClick
 
     if (imageInfo == null) {
         return (
-            <div className={cx(className, "ril__image")} style={imageStyle}>
-                <div className="ril__loadingContainer">
+            <div className={cx(className, "lightbox-image")} style={imageStyle}>
+                <div className="lightbox-loading-container">
                     <Loading large/>
                 </div>
             </div>
@@ -82,8 +82,8 @@ export default function LightboxImage({imageInfo, className, transforms, onClick
 
     if (imageInfo.error) {
         return (
-            <div className={cx(className, "ril__image")} style={imageStyle}>
-                <div className="ril__errorContainer">
+            <div className={cx(className, "lightbox-image")} style={imageStyle}>
+                <div className="lightbox-error-container">
                     {t("couldnt-load-image")}
                 </div>
             </div>
@@ -92,7 +92,7 @@ export default function LightboxImage({imageInfo, className, transforms, onClick
 
     return (
         <img
-            className={cx(className, "ril__image")}
+            className={cx(className, "lightbox-image")}
             onClick={onClick}
             onDoubleClick={handleDoubleClick}
             onWheel={handleMouseWheel}

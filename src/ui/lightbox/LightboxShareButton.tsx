@@ -98,7 +98,7 @@ export default function LightboxShareButton({mediaNodeName, mediaHref}: Props) {
     const {overlayId: parentOverlayId} = useParent();
 
     return (
-        <DropdownMenu parentOverlayId={parentOverlayId} className="ril__button" content={
+        <DropdownMenu parentOverlayId={parentOverlayId} className="lightbox-button" content={
             <LightboxShareItems mediaNodeName={mediaNodeName} mediaHref={mediaHref}/>
         }>
             <Icon icon={msShare} title={t("share")} size="1.2em"/>

@@ -1,7 +1,7 @@
-.ril__navButtons {
+.lightbox-nav-buttons {
     position: absolute;
     inset-block: 0;
-    inline-size: var(--ril-nav-width);
+    inline-size: var(--lightbox-nav-width);
     block-size: 80px;
     margin-block: auto;
     border: none;
@@ -15,23 +15,23 @@
 }
 
 @media (min-width: 992px) {
-    .ril__navButtons {
+    .lightbox-nav-buttons {
         block-size: calc(100dvh - 100px - 13rem);
     }
 }
 
-.ril__navButtons:hover {
+.lightbox-nav-buttons:hover {
     opacity: 1;
 }
 
-.ril__navButtons:active {
+.lightbox-nav-buttons:active {
     opacity: .7;
 }
 
-.ril__navButtonPrev {
+.lightbox-nav-button-prev {
     inset-inline-start: 0;
 }
 
-.ril__navButtonNext {
+.lightbox-nav-button-next {
     inset-inline-end: 0;
 }

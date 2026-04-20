@@ -1,6 +1,6 @@
 /* Based on react-image-lightbox 5.1.4 by Chris Fritz (MIT License). */
 
-.ril__image {
+.lightbox-image {
     position: absolute;
     inset: 0;
     margin: auto;
@@ -9,18 +9,18 @@
     user-select: none;
 }
 
-.ril__loadingContainer,
-.ril__errorContainer {
+.lightbox-loading-container,
+.lightbox-error-container {
     position: absolute;
     inset: 0;
     display: grid;
     place-items: center;
 }
 
-.ril__errorContainer {
-    color: #fff;
+.lightbox-error-container {
+    color: white;
 }
 
-:is(.ril__imagePrev, .ril__imageNext) :is(.ril__loadingContainer, .ril__errorContainer) {
+:is(.lightbox-image-prev, .lightbox-image-next) :is(.lightbox-loading-container, .lightbox-error-container) {
     display: none;
 }

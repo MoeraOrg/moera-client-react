@@ -1,4 +1,4 @@
-.ril__button {
+.lightbox-button {
     inline-size: 40px;
     block-size: 35px;
     cursor: pointer;
@@ -11,20 +11,20 @@
     padding: 0;
 }
 
-.ril__button:hover {
+.lightbox-button:hover {
     color: #fff;
     opacity: 1;
 }
 
-.ril__button:active {
+.lightbox-button:active {
     outline: none;
 }
 
-.ril__buttonDisabled {
+.lightbox-button-disabled {
     cursor: default;
     opacity: .5;
 }
 
-.ril__buttonDisabled:hover {
+.lightbox-button-disabled:hover {
     opacity: .5;
 }

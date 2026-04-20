@@ -20,7 +20,7 @@ const LightboxNavButton = ({title, icon, className, onClick}: Props) => {
             type="button"
             aria-label={title}
             title={title}
-            className={cx("ril__navButtons", className)}
+            className={cx("lightbox-nav-buttons", className)}
             onClick={onClick}
             disabled={animating}
         >

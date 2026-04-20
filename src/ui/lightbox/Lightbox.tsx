@@ -679,7 +679,7 @@ export default function Lightbox(props: LightboxProps) {
         if (
             !preventInnerCloseRef.current
             && event.target instanceof Element
-            && event.target.classList.contains("ril__inner")
+            && event.target.classList.contains("lightbox-inner")
         ) {
             requestClose(event);
         }
@@ -818,8 +818,8 @@ export default function Lightbox(props: LightboxProps) {
         >
             <LightboxContext.Provider value={{animating, boxSize, zoomLevel, changeZoom, resetWheelScroll}}>
                 <div
-                    className={cx("ril__outer", "ril__outerAnimating", {
-                        "ril__outerClosing": isClosing,
+                    className={cx("lightbox-outer", "lightbox-outer-animating", {
+                        "lightbox-outer-closing": isClosing,
                         "transparent": dyed
                     })}
                     style={{
@@ -837,11 +837,11 @@ export default function Lightbox(props: LightboxProps) {
                     onKeyDown={handleKeyInput}
                     onKeyUp={handleKeyInput}
                 >
-                    <div className="ril__inner" onClick={closeIfClickInner}>
+                    <div className="lightbox-inner" onClick={closeIfClickInner}>
                         {nextSrc &&
                             <LightboxImage
                                 imageInfo={nextImageInfo}
-                                className="ril__imageNext"
+                                className="lightbox-image-next"
                                 transforms={{
                                     x: boxSize.width
                                 }}
@@ -851,7 +851,7 @@ export default function Lightbox(props: LightboxProps) {
                         {mainSrc &&
                             <LightboxImage
                                 imageInfo={mainImageInfo}
-                                className="ril__imageMain"
+                                className="lightbox-image-main"
                                 transforms={{
                                     x: -1 * offsetX,
                                     y: -1 * offsetY,
@@ -864,7 +864,7 @@ export default function Lightbox(props: LightboxProps) {
                         {prevSrc &&
                             <LightboxImage
                                 imageInfo={prevImageInfo}
-                                className="ril__imagePrev"
+                                className="lightbox-image-prev"
                                 transforms={{
                                     x: -1 * boxSize.width
                                 }}
@@ -875,7 +875,7 @@ export default function Lightbox(props: LightboxProps) {
 
                     {prevSrc &&
                         <LightboxNavButton
-                            className="ril__navButtonPrev"
+                            className="lightbox-nav-button-prev"
                             key="prev"
                             title={t("previous-image")}
                             icon={msChevronLeft}
@@ -885,7 +885,7 @@ export default function Lightbox(props: LightboxProps) {
 
                     {nextSrc &&
                         <LightboxNavButton
-                            className="ril__navButtonNext"
+                            className="lightbox-nav-button-next"
                             key="next"
                             title={t("next-image")}
                             icon={msChevronRight}

@@ -37,45 +37,45 @@ export default function LightboxToolbar({statusText, toolbarButtons, onClose}: P
     };
 
     return (
-        <div className="ril__toolbar">
-            <ul className="ril__toolbarSide ril__toolbarLeftSide">
-                <li className="ril__toolbarItem">
-                    <span className="ril__toolbarItemChild">
+        <div className="lightbox-toolbar">
+            <ul className="lightbox-toolbar-side lightbox-toolbar-left-side">
+                <li className="lightbox-toolbar-item">
+                    <span className="lightbox-toolbar-item-child">
                         {statusText}
                     </span>
                 </li>
             </ul>
 
-            <ul className="ril__toolbarSide ril__toolbarRightSide">
+            <ul className="lightbox-toolbar-side lightbox-toolbar-right-side">
                 {toolbarButtons && toolbarButtons.map((button, i) =>
-                    <li key={i} className="ril__toolbarItem">
+                    <li key={i} className="lightbox-toolbar-item">
                         {button}
                     </li>
                 )}
 
-                <li className="ril__toolbarItem">
+                <li className="lightbox-toolbar-item">
                     <LightboxButton
                         title={t("zoom-in")}
                         icon={msZoomIn}
-                        className="ril__zoomButton"
+                        className="lightbox-zoom-button"
                         disabled={zoomLevel === MAX_ZOOM_LEVEL}
                         onClick={handleZoomInButtonClick}
                         ref={zoomInBtn}
                     />
                 </li>
 
-                <li className="ril__toolbarItem">
+                <li className="lightbox-toolbar-item">
                     <LightboxButton
                         title={t("zoom-out")}
                         icon={msZoomOut}
-                        className="ril__zoomButton"
+                        className="lightbox-zoom-button"
                         disabled={zoomLevel === MIN_ZOOM_LEVEL}
                         onClick={handleZoomOutButtonClick}
                         ref={zoomOutBtn}
                     />
                 </li>
 
-                <li className="ril__toolbarItem">
+                <li className="lightbox-toolbar-item">
                     <LightboxButton
                         title={t("close")}
                         icon={msClose}

@@ -24,11 +24,11 @@ const LightboxButton = ({title, icon, iconSize = "1.5em", className, disabled, o
             aria-label={title}
             title={title}
             className={cx(
-                "ril__toolbarItemChild",
-                "ril__button",
+                "lightbox-toolbar-item-child",
+                "lightbox-button",
                 className,
                 {
-                    "ril__buttonDisabled": disabled
+                    "lightbox-button-disabled": disabled
                 }
             )}
             onClick={onClick}

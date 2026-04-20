@@ -40,7 +40,7 @@ interface TouchPointerLike extends CoordinateEventLike {
 
 export function isTargetMainImage(target: EventTarget | null): boolean {
     return target instanceof Element
-        && target.classList.contains("ril__imageMain");
+        && target.classList.contains("lightbox-image-main");
 }
 
 export function parseMouseEvent(mouseEvent: CoordinateEventLike): InputPointer {

@@ -32,10 +32,10 @@ export default function LightboxCaption({children}: Props) {
         <div
             onWheel={handleMousewheel}
             onMouseDown={event => event.stopPropagation()}
-            className="ril__caption"
+            className="lightbox-caption"
             ref={caption}
         >
-            <div className="ril__captionContent">
+            <div className="lightbox-caption-content">
                 {children}
             </div>
         </div>

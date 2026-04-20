@@ -1,16 +1,16 @@
-.ril__toolbar {
+.lightbox-toolbar {
     position: absolute;
     inset-block-start: 0;
     inset-inline: 0;
-    block-size: var(--ril-toolbar-size);
+    block-size: var(--lightbox-toolbar-size);
     display: grid;
     grid-template-columns: minmax(0, 1fr) max-content;
     align-items: center;
     background-color: rgb(0 0 0 / 50%);
 }
 
-.ril__toolbarSide {
-    block-size: var(--ril-toolbar-size);
+.lightbox-toolbar-side {
+    block-size: var(--lightbox-toolbar-size);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -18,20 +18,20 @@
     align-items: center;
 }
 
-.ril__toolbarLeftSide {
+.lightbox-toolbar-left-side {
     min-inline-size: 0;
-    padding-inline: var(--ril-toolbar-padding) 0;
+    padding-inline: var(--lightbox-toolbar-padding) 0;
     overflow: hidden;
 }
 
-.ril__toolbarRightSide {
+.lightbox-toolbar-right-side {
     grid-auto-flow: column;
     grid-auto-columns: max-content;
     justify-content: end;
-    padding-inline: 0 var(--ril-toolbar-padding);
+    padding-inline: 0 var(--lightbox-toolbar-padding);
 }
 
-.ril__toolbarItem {
+.lightbox-toolbar-item {
     min-inline-size: 0;
     max-inline-size: 100%;
     block-size: 100%;
@@ -44,7 +44,7 @@
     white-space: nowrap;
 }
 
-.ril__toolbarItemChild {
+.lightbox-toolbar-item-child {
     min-inline-size: 0;
     max-inline-size: 100%;
     overflow: hidden;
@@ -53,7 +53,7 @@
 }
 
 @media only screen and (max-width: 991px) {
-    .ril__zoomButton {
+    .lightbox-zoom-button {
         display: none;
     }
 }
