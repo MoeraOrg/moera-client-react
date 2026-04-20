@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { useElementSize, useManagedTimeout, useParent, useWindowSize } from "ui/hook";
+import LightboxCaption from "ui/react-image-lightbox/LightboxCaption";
 import LightboxImage from "ui/react-image-lightbox/LightboxImage";
 import { useLightboxImageCache } from "ui/react-image-lightbox/lightbox-image-cache";
 import { useLightboxImageLoader } from "ui/react-image-lightbox/lightbox-image-loader";
@@ -114,7 +115,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
 
     const zoomInBtn = useRef<HTMLButtonElement | null>(null);
     const zoomOutBtn = useRef<HTMLButtonElement | null>(null);
-    const caption = useRef<HTMLDivElement | null>(null);
 
     const currentActionRef = useRef(ACTION_NONE);
     const eventsSourceRef = useRef(SOURCE_ANY);
@@ -675,23 +675,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
     };
 
-    const handleCaptionMousewheel = (event: React.WheelEvent<HTMLDivElement>): void => {
-        event.stopPropagation();
-
-        if (!caption.current) {
-            return;
-        }
-
-        const {height} = caption.current.getBoundingClientRect();
-        const {scrollHeight, scrollTop} = caption.current;
-        if (
-            (event.deltaY > 0 && height + scrollTop >= scrollHeight)
-            || (event.deltaY < 0 && scrollTop <= 0)
-        ) {
-            event.preventDefault();
-        }
-    };
-
     useEffect(() => setIsClosing(false), []);
 
     const closeTimeout = useManagedTimeout();
@@ -891,7 +874,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
                     {nextSrc &&
                         <LightboxImage
                             imageInfo={nextImageInfo}
-                            title={imageTitle}
                             boxSize={boxSize}
                             zoomLevel={zoomLevel}
                             className="ril-image-next ril__imageNext"
@@ -899,15 +881,12 @@ export default function ReactImageLightbox(props: LightboxProps) {
                             transforms={{
                                 x: boxSize.width
                             }}
-                            onDoubleClick={handleImageDoubleClick}
-                            onWheel={handleImageMouseWheel}
                             key={`${nextSrc}i${keyCounter + 1}`}
                         />
                     }
                     {mainSrc &&
                         <LightboxImage
                             imageInfo={mainImageInfo}
-                            title={imageTitle}
                             boxSize={boxSize}
                             zoomLevel={zoomLevel}
                             className="ril-image-current"
@@ -926,7 +905,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
                     {prevSrc &&
                         <LightboxImage
                             imageInfo={prevImageInfo}
-                            title={imageTitle}
                             boxSize={boxSize}
                             zoomLevel={zoomLevel}
                             className="ril-image-prev ril__imagePrev"
@@ -934,8 +912,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
                             transforms={{
                                 x: -1 * boxSize.width
                             }}
-                            onDoubleClick={handleImageDoubleClick}
-                            onWheel={handleImageMouseWheel}
                             key={`${prevSrc}i${keyCounter - 1}`}
                         />
                     }
@@ -1038,16 +1014,9 @@ export default function ReactImageLightbox(props: LightboxProps) {
                 </div>
 
                 {imageCaption &&
-                    <div
-                        onWheel={handleCaptionMousewheel}
-                        onMouseDown={event => event.stopPropagation()}
-                        className="ril-caption ril__caption"
-                        ref={caption}
-                    >
-                        <div className="ril-caption-content ril__captionContent">
-                            {imageCaption}
-                        </div>
-                    </div>
+                    <LightboxCaption>
+                        {imageCaption}
+                    </LightboxCaption>
                 }
             </div>
         </Modal>

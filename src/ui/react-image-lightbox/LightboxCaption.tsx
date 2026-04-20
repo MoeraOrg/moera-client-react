@@ -1,0 +1,41 @@
+import React, { useRef } from 'react';
+
+import "./LightboxCaption.css";
+
+interface Props {
+    children: React.ReactNode;
+}
+
+export default function LightboxCaption({children}: Props) {
+    const caption = useRef<HTMLDivElement | null>(null);
+
+    const handleMousewheel = (event: React.WheelEvent<HTMLDivElement>): void => {
+        event.stopPropagation();
+
+        if (!caption.current) {
+            return;
+        }
+
+        const {height} = caption.current.getBoundingClientRect();
+        const {scrollHeight, scrollTop} = caption.current;
+        if (
+            (event.deltaY > 0 && height + scrollTop >= scrollHeight)
+            || (event.deltaY < 0 && scrollTop <= 0)
+        ) {
+            event.preventDefault();
+        }
+    };
+
+    return (
+        <div
+            onWheel={handleMousewheel}
+            onMouseDown={event => event.stopPropagation()}
+            className="ril__caption"
+            ref={caption}
+        >
+            <div className="ril__captionContent">
+                {children}
+            </div>
+        </div>
+    );
+}

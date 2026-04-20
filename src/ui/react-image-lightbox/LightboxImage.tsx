@@ -9,19 +9,18 @@ import { ANIMATION_DURATION_MS, MIN_ZOOM_LEVEL } from "ui/react-image-lightbox/u
 
 interface Props {
     imageInfo: ImageInfo | null;
-    title?: string;
     boxSize: ElementSize;
     zoomLevel: number;
     className?: string;
     animating: boolean;
     transforms: Partial<TransformInput>;
     onClick?: (event: React.MouseEvent<HTMLElement>) => void;
-    onDoubleClick: (event: React.MouseEvent<HTMLElement>) => void;
-    onWheel: (event: React.WheelEvent<HTMLElement>) => void;
+    onDoubleClick?: (event: React.MouseEvent<HTMLElement>) => void;
+    onWheel?: (event: React.WheelEvent<HTMLElement>) => void;
 }
 
 export default function LightboxImage({
-    imageInfo, title, boxSize, zoomLevel, className, animating, transforms, onClick, onDoubleClick, onWheel
+    imageInfo, boxSize, zoomLevel, className, animating, transforms, onClick, onDoubleClick, onWheel
 }: Props) {
     const {t} = useTranslation();
 
@@ -75,7 +74,7 @@ export default function LightboxImage({
             onDragStart={event => event.preventDefault()}
             style={imageStyle}
             src={imageInfo.src}
-            alt={title ?? t("image")}
+            alt={t("image")}
             draggable={false}
         />
     );
