@@ -1,0 +1,29 @@
+.ril__builtinButton {
+    inline-size: 40px;
+    block-size: 35px;
+    cursor: pointer;
+    border: none;
+    opacity: .7;
+    background: transparent;
+    color: #fff;
+    display: inline-grid;
+    place-items: center;
+    padding: 0;
+}
+
+.ril__builtinButton:hover {
+    opacity: 1;
+}
+
+.ril__builtinButton:active {
+    outline: none;
+}
+
+.ril__builtinButtonDisabled {
+    cursor: default;
+    opacity: .5;
+}
+
+.ril__builtinButtonDisabled:hover {
+    opacity: .5;
+}

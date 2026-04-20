@@ -27,6 +27,7 @@ import {
     SOURCE_TOUCH
 } from "ui/react-image-lightbox/util";
 import "./ReactImageLightbox.css";
+import LightboxButton from "ui/react-image-lightbox/LightboxButton";
 
 export type LightboxTriggerEvent = Event | React.SyntheticEvent;
 
@@ -975,67 +976,33 @@ export default function ReactImageLightbox(props: LightboxProps) {
                             </li>
                         )}
 
-                        <li className="ril__toolbarItem">
-                            <button
-                                type="button"
-                                aria-label={t("zoom-in")}
-                                title={t("zoom-in")}
-                                className={cx(
-                                    "ril__toolbarItemChild",
-                                    "ril__builtinButton",
-                                    "ril__zoomButton",
-                                    {
-                                        "ril__builtinButtonDisabled": zoomLevel === MAX_ZOOM_LEVEL
-                                    }
-                                )}
-                                ref={zoomInBtn}
-                                disabled={animating || zoomLevel === MAX_ZOOM_LEVEL}
-                                onClick={
-                                    !animating && zoomLevel !== MAX_ZOOM_LEVEL
-                                        ? handleZoomInButtonClick
-                                        : undefined
-                                }
-                            >
-                                <Icon icon={msZoomIn} size="1.5em"/>
-                            </button>
-                        </li>
+                        <LightboxButton
+                            title={t("zoom-in")}
+                            icon={msZoomIn}
+                            className="ril__zoomButton"
+                            disabled={zoomLevel === MAX_ZOOM_LEVEL}
+                            animating={animating}
+                            onClick={handleZoomInButtonClick}
+                            ref={zoomInBtn}
+                        />
 
-                        <li className="ril__toolbarItem">
-                            <button
-                                type="button"
-                                aria-label={t("zoom-out")}
-                                title={t("zoom-out")}
-                                className={cx(
-                                    "ril__toolbarItemChild",
-                                    "ril__builtinButton",
-                                    "ril__zoomButton",
-                                    {
-                                        "ril__builtinButtonDisabled": zoomLevel === MIN_ZOOM_LEVEL
-                                    }
-                                )}
-                                ref={zoomOutBtn}
-                                disabled={animating || zoomLevel === MIN_ZOOM_LEVEL}
-                                onClick={
-                                    !animating && zoomLevel !== MIN_ZOOM_LEVEL
-                                        ? handleZoomOutButtonClick
-                                        : undefined
-                                }
-                            >
-                                <Icon icon={msZoomOut} size="1.5em"/>
-                            </button>
-                        </li>
+                        <LightboxButton
+                            title={t("zoom-out")}
+                            icon={msZoomOut}
+                            className="ril__zoomButton"
+                            disabled={zoomLevel === MIN_ZOOM_LEVEL}
+                            animating={animating}
+                            onClick={handleZoomOutButtonClick}
+                            ref={zoomOutBtn}
+                        />
 
-                        <li className="ril__toolbarItem">
-                            <button
-                                type="button"
-                                aria-label={t("close")}
-                                title={t("close")}
-                                className="ril__toolbarItemChild ril__builtinButton"
-                                onClick={!animating ? requestClose : undefined}
-                            >
-                                <Icon icon={msClose} size="1.75em"/>
-                            </button>
-                        </li>
+                        <LightboxButton
+                            title={t("close")}
+                            icon={msClose}
+                            iconSize="1.75em"
+                            animating={animating}
+                            onClick={requestClose}
+                        />
                     </ul>
                 </div>
 
