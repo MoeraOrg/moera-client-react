@@ -10,7 +10,7 @@ import BlockingDetailsDialog from "ui/blockingdetailsdialog/BlockingDetailsDialo
 import MediaDownloadDialog from "ui/mediadownloaddialog/MediaDownloadDialog";
 
 const ReactionsDialog = React.lazy(() => import("ui/reactionsdialog/ReactionsDialog"));
-const LightBox = React.lazy(() => import("ui/lightbox/LightBox"));
+const GalleryLightbox = React.lazy(() => import("ui/lightbox/GalleryLightbox"));
 const ImageEditDialog = React.lazy(() => import("ui/imageeditdialog/ImageEditDialog"));
 const DonateDialog = React.lazy(() => import("ui/donatedialog/DonateDialog"));
 const PeopleHideDialog = React.lazy(() => import("ui/peoplehidedialog/PeopleHideDialog"));
@@ -44,7 +44,7 @@ export default function NodeDialogs() {
             {showChangeDateDialog && <ChangeDateDialog/>}
             {showSourceDialog && <SourceDialog/>}
             <Suspense fallback={null}>
-                {showLightBox && <LightBox/>}
+                {showLightBox && <GalleryLightbox/>}
             </Suspense>
             <Suspense fallback={null}>
                 {showImageEditDialog && <ImageEditDialog/>}

@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next';
 
 import { urlWithParameters } from "util/url";
 import { Icon, msDownload } from "ui/material-symbols";
-import './LightBoxDownloadButton.css';
+import './LightboxDownloadButton.css';
 
 interface Props {
     mediaUrl: string;
     mediaMimeType: string;
 }
 
-export default function LightBoxDownloadButton({mediaUrl, mediaMimeType}: Props) {
+export default function LightboxDownloadButton({mediaUrl, mediaMimeType}: Props) {
     const {t} = useTranslation();
 
     const onDownload = window.Android

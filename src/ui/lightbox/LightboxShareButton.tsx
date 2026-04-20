@@ -25,7 +25,7 @@ interface Props {
     mediaHref: string;
 }
 
-function LightBoxShareItems({mediaNodeName, mediaHref}: Props) {
+function LightboxShareItems({mediaNodeName, mediaHref}: Props) {
     const sourceNodeName = useSelector((state: ClientState) => getLightBoxNodeName(state) || getOwnerName(state));
     const posting = useSelector((state: ClientState) => getPosting(state, getLightBoxPostingId(state), REL_CURRENT));
     const comment = useSelector((state: ClientState) => {
@@ -92,14 +92,14 @@ function LightBoxShareItems({mediaNodeName, mediaHref}: Props) {
     );
 }
 
-export default function LightBoxShareButton({mediaNodeName, mediaHref}: Props) {
+export default function LightboxShareButton({mediaNodeName, mediaHref}: Props) {
     const {t} = useTranslation();
 
     const {overlayId: parentOverlayId} = useParent();
 
     return (
         <DropdownMenu parentOverlayId={parentOverlayId} className="ril__button" content={
-            <LightBoxShareItems mediaNodeName={mediaNodeName} mediaHref={mediaHref}/>
+            <LightboxShareItems mediaNodeName={mediaNodeName} mediaHref={mediaHref}/>
         }>
             <Icon icon={msShare} title={t("share")} size="1.2em"/>
         </DropdownMenu>

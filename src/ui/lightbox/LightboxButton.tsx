@@ -2,7 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 
 import { Icon, MaterialSymbol } from "ui/material-symbols";
-import { useLightbox } from "ui/react-image-lightbox/lightbox-context";
+import { useLightbox } from "ui/lightbox/lightbox-context";
 import "./LightboxButton.css";
 
 interface Props {

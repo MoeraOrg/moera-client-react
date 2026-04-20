@@ -5,14 +5,14 @@ import { dispatch } from "state/store-sagas";
 import { flashBox } from "state/flashbox/actions";
 import * as Browser from "ui/browser";
 import { msContentCopy } from "ui/material-symbols";
-import LightboxButton from "ui/react-image-lightbox/LightboxButton";
+import LightboxButton from "ui/lightbox/LightboxButton";
 import { clipboardCopy } from "util/clipboard";
 
 interface Props {
     text: string;
 }
 
-export default function LightBoxCopyTextButton({text}: Props) {
+export default function LightboxCopyTextButton({text}: Props) {
     const {t} = useTranslation();
 
     const onCopy = () => {

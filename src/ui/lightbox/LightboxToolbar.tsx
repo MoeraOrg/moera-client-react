@@ -2,9 +2,9 @@ import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { msClose, msZoomIn, msZoomOut } from "ui/material-symbols";
-import LightboxButton from "ui/react-image-lightbox/LightboxButton";
-import { useLightbox } from "ui/react-image-lightbox/lightbox-context";
-import { MAX_ZOOM_LEVEL, MIN_ZOOM_LEVEL, ZOOM_BUTTON_INCREMENT_SIZE } from "ui/react-image-lightbox/util";
+import LightboxButton from "ui/lightbox/LightboxButton";
+import { useLightbox } from "ui/lightbox/lightbox-context";
+import { MAX_ZOOM_LEVEL, MIN_ZOOM_LEVEL, ZOOM_BUTTON_INCREMENT_SIZE } from "ui/lightbox/util";
 import "./LightboxToolbar.css";
 
 interface Props {

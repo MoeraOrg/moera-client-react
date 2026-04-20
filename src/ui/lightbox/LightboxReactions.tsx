@@ -12,9 +12,9 @@ import { useIsTinyScreen, useDispatcher } from "ui/hook";
 import { ReactionButton } from "ui/control";
 import { msThumbDown, msThumbUp } from "ui/material-symbols";
 import PostingReactions from "ui/posting/PostingReactions";
-import "./LightBoxReactions.css";
+import "./LightboxReactions.css";
 
-export default function LightBoxReactions() {
+export default function LightboxReactions() {
     const nodeName = useSelector(getLightBoxNodeName);
     const posting = useSelector((state: ClientState) =>
         getPosting(state, getLightBoxMediaPostingId(state), nodeName)

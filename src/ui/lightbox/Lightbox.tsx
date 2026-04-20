@@ -7,13 +7,13 @@ import { useTranslation } from 'react-i18next';
 
 import { useElementSize, useManagedTimeout, useParent, useWindowSize } from "ui/hook";
 import { msChevronLeft, msChevronRight } from "ui/material-symbols";
-import LightboxCaption from "ui/react-image-lightbox/LightboxCaption";
-import LightboxImage from "ui/react-image-lightbox/LightboxImage";
-import LightboxNavButton from "ui/react-image-lightbox/LightboxNavButton";
-import LightboxToolbar from "ui/react-image-lightbox/LightboxToolbar";
-import { LightboxContext } from "ui/react-image-lightbox/lightbox-context";
-import { useLightboxImageCache } from "ui/react-image-lightbox/lightbox-image-cache";
-import { useLightboxImageLoader } from "ui/react-image-lightbox/lightbox-image-loader";
+import LightboxCaption from "ui/lightbox/LightboxCaption";
+import LightboxImage from "ui/lightbox/LightboxImage";
+import LightboxNavButton from "ui/lightbox/LightboxNavButton";
+import LightboxToolbar from "ui/lightbox/LightboxToolbar";
+import { LightboxContext } from "ui/lightbox/lightbox-context";
+import { useLightboxImageCache } from "ui/lightbox/lightbox-image-cache";
+import { useLightboxImageLoader } from "ui/lightbox/lightbox-image-loader";
 import {
     ANIMATION_DURATION_MS,
     InputPointer,
@@ -28,8 +28,8 @@ import {
     SOURCE_POINTER,
     SOURCE_TOUCH,
     WHEEL_MOVE_X_THRESHOLD
-} from "ui/react-image-lightbox/util";
-import "./ReactImageLightbox.css";
+} from "ui/lightbox/util";
+import "./Lightbox.css";
 
 export type LightboxTriggerEvent = Event | React.SyntheticEvent;
 
@@ -80,7 +80,7 @@ const MIN_SWIPE_DISTANCE = 200;
 const KEY_REPEAT_KEYUP_BONUS_MS = 40;
 const KEY_REPEAT_LIMIT_MS = 180;
 
-export default function ReactImageLightbox(props: LightboxProps) {
+export default function Lightbox(props: LightboxProps) {
     const {
         nextSrc,
         mainSrc,

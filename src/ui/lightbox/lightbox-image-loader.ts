@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useSyncExternalStore } from 'react';
 
-import { LightboxCachedImage, LightboxImageCache } from "ui/react-image-lightbox/lightbox-image-cache";
+import { LightboxCachedImage, LightboxImageCache } from "ui/lightbox/lightbox-image-cache";
 import { ElementSize } from "ui/hook";
 
 const IMAGE_PADDING_PX = 10;

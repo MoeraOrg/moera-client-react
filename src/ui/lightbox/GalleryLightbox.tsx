@@ -14,16 +14,16 @@ import { getComment } from "state/detailedposting/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ParentContext, useDispatcher } from "ui/hook";
 import EntryHtml from "ui/entry/EntryHtml";
-import Lightbox from 'ui/react-image-lightbox/ReactImageLightbox';
-import LightBoxReactions from "ui/lightbox/LightBoxReactions";
-import LightBoxCopyTextButton from "ui/lightbox/LightBoxCopyTextButton";
-import LightBoxShareButton from "ui/lightbox/LightBoxShareButton";
-import LightBoxDownloadButton from "ui/lightbox/LightBoxDownloadButton";
+import Lightbox from 'ui/lightbox/Lightbox';
+import LightboxReactions from "ui/lightbox/LightboxReactions";
+import LightboxCopyTextButton from "ui/lightbox/LightboxCopyTextButton";
+import LightboxShareButton from "ui/lightbox/LightboxShareButton";
+import LightboxDownloadButton from "ui/lightbox/LightboxDownloadButton";
 import { useOverlay } from "ui/overlays/overlays";
 import { REL_CURRENT } from "util/rel-node-name";
 import { urlWithParameters } from "util/url";
 
-export default function LightBox() {
+export default function GalleryLightbox() {
     const posting = useSelector((state: ClientState) => getPosting(state, state.lightBox.postingId, REL_CURRENT));
     // comment === null means commentId === null
     // comment === undefined means the comment is not loaded yet
@@ -117,10 +117,10 @@ export default function LightBox() {
                 onMoveNextRequest={onMoveNextRequest}
                 zIndex={zIndex?.shadow}
                 toolbarButtons={[
-                    mainTextContent && <LightBoxCopyTextButton text={mainTextContent}/>,
-                    <LightBoxShareButton mediaNodeName={mediaNodeName} mediaHref={mainHref}/>,
-                    <LightBoxDownloadButton mediaUrl={mainSrc} mediaMimeType={mainMimeType}/>,
-                    <LightBoxReactions/>
+                    mainTextContent && <LightboxCopyTextButton text={mainTextContent}/>,
+                    <LightboxShareButton mediaNodeName={mediaNodeName} mediaHref={mainHref}/>,
+                    <LightboxDownloadButton mediaUrl={mainSrc} mediaMimeType={mainMimeType}/>,
+                    <LightboxReactions/>
                 ]}
                 imageCaption={mediaPosting?.body.text &&
                     <EntryHtml postingId={mediaPosting.id} html={mediaPosting.body.text}/>

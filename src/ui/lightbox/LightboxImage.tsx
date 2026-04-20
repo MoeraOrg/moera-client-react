@@ -5,15 +5,15 @@ import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { Loading } from "ui/control";
-import { useLightbox } from "ui/react-image-lightbox/lightbox-context";
-import { ImageInfo } from "ui/react-image-lightbox/lightbox-image-loader";
+import { useLightbox } from "ui/lightbox/lightbox-context";
+import { ImageInfo } from "ui/lightbox/lightbox-image-loader";
 import {
     ANIMATION_DURATION_MS,
     isTargetMainImage,
     MIN_ZOOM_LEVEL,
     WHEEL_MOVE_Y_THRESHOLD,
     ZOOM_BUTTON_INCREMENT_SIZE
-} from "ui/react-image-lightbox/util";
+} from "ui/lightbox/util";
 import "./LightboxImage.css";
 
 interface Props {
