@@ -3,13 +3,12 @@ import Modal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { useManagedTimeout, useParent } from "ui/hook";
+import { useElementSize, useManagedTimeout, useParent, useWindowSize } from "ui/hook";
 import {
     ANIMATION_DURATION_MS,
     getTouches,
     InputPointer,
     isTargetMatchImage,
-    LightboxRect,
     MAX_ZOOM_LEVEL,
     MIN_ZOOM_LEVEL,
     parseMouseEvent,
@@ -141,7 +140,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const [loadErrorStatus, setLoadErrorStatus] = useState<LoadErrorStatus>({});
     const [, forceUpdate] = useReducer((value: number) => value + 1, 0);
 
-    const outerEl = useRef<HTMLDivElement | null>(null);
     const zoomInBtn = useRef<HTMLButtonElement | null>(null);
     const zoomOutBtn = useRef<HTMLButtonElement | null>(null);
     const caption = useRef<HTMLDivElement | null>(null);
@@ -190,20 +188,9 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const getZoomMultiplier = (nextZoomLevel = zoomLevel): number =>
         ZOOM_RATIO ** nextZoomLevel;
 
-    const getLightboxRect = (): LightboxRect => {
-        if (outerEl.current) {
-            return outerEl.current.getBoundingClientRect();
-        }
-
-        return {
-            width: window.innerWidth,
-            height: window.innerHeight,
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-        };
-    };
+    const [outerElement, outerSize] = useElementSize<HTMLDivElement>();
+    const windowSize = useWindowSize();
+    const boxSize = outerSize.width !== 0 && outerSize.height !== 0 ? outerSize : windowSize;
 
     const animating = shouldAnimate || isClosing;
 
@@ -215,7 +202,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
         );
 
     const getFitSizes = (width: number, height: number): FitSize => {
-        const boxSize = getLightboxRect();
         let maxHeight = boxSize.height - IMAGE_PADDING_PX * 2;
         let maxWidth = boxSize.width - IMAGE_PADDING_PX * 2;
 
@@ -266,7 +252,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
             return {maxX: 0, minX: 0, maxY: 0, minY: 0};
         }
 
-        const boxSize = getLightboxRect();
         const zoomMultiplier = getZoomMultiplier(nextZoomLevel);
 
         let maxX;
@@ -315,12 +300,11 @@ export default function ReactImageLightbox(props: LightboxProps) {
         const currentZoomMultiplier = getZoomMultiplier();
         const nextZoomMultiplier = getZoomMultiplier(nextZoomLevel);
 
-        const boxRect = getLightboxRect();
-        const pointerX = typeof clientX !== "undefined" ? clientX - boxRect.left : boxRect.width / 2;
-        const pointerY = typeof clientY !== "undefined" ? clientY - boxRect.top : boxRect.height / 2;
+        const pointerX = typeof clientX !== "undefined" ? clientX : boxSize.width / 2;
+        const pointerY = typeof clientY !== "undefined" ? clientY : boxSize.height / 2;
 
-        const currentImageOffsetX = (boxRect.width - mainImageInfo.width * currentZoomMultiplier) / 2;
-        const currentImageOffsetY = (boxRect.height - mainImageInfo.height * currentZoomMultiplier) / 2;
+        const currentImageOffsetX = (boxSize.width - mainImageInfo.width * currentZoomMultiplier) / 2;
+        const currentImageOffsetY = (boxSize.height - mainImageInfo.height * currentZoomMultiplier) / 2;
 
         const currentImageRealOffsetX = currentImageOffsetX - offsetX;
         const currentImageRealOffsetY = currentImageOffsetY - offsetY;
@@ -335,10 +319,8 @@ export default function ReactImageLightbox(props: LightboxProps) {
         const nextImageRealOffsetY =
             pointerY - currentPointerYRelativeToImage * nextZoomMultiplier;
 
-        const nextImageOffsetX =
-            (boxRect.width - mainImageInfo.width * nextZoomMultiplier) / 2;
-        const nextImageOffsetY =
-            (boxRect.height - mainImageInfo.height * nextZoomMultiplier) / 2;
+        const nextImageOffsetX = (boxSize.width - mainImageInfo.width * nextZoomMultiplier) / 2;
+        const nextImageOffsetY = (boxSize.height - mainImageInfo.height * nextZoomMultiplier) / 2;
 
         let nextOffsetX = nextImageOffsetX - nextImageRealOffsetX;
         let nextOffsetY = nextImageOffsetY - nextImageRealOffsetY;
@@ -481,8 +463,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
 
         if (xDiffAbs < MIN_SWIPE_DISTANCE) {
-            const boxRect = getLightboxRect();
-            if (xDiffAbs < boxRect.width / 4) {
+            if (xDiffAbs < boxSize.width / 4) {
                 return;
             }
         }
@@ -774,22 +755,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
             window.removeEventListener("touchcancel", handleTouchEnd);
         };
     }, [handleTouchEnd]);
-
-    const resizeTimeout = useManagedTimeout();
-
-    const handleWindowResize = useEffectEvent((): void => {
-        resizeTimeout.clear();
-        resizeTimeout.set(() => {
-            forceUpdate();
-        }, 100);
-    });
-
-    useEffect(() => {
-        window.addEventListener("resize", handleWindowResize);
-        return () => {
-            window.removeEventListener("resize", handleWindowResize);
-        };
-    }, [handleWindowResize]);
 
     const handleZoomInButtonClick = (): void => {
         const nextZoomLevel = zoomLevel + ZOOM_BUTTON_INCREMENT_SIZE;
@@ -1089,7 +1054,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
         previousPropsRef.current = props;
     }, [loadAllImages, props]);
 
-    const boxSize = getLightboxRect();
     const zoomMultiplier = getZoomMultiplier();
 
     const keyEndings = getSrcTypes().reduce<Record<LightboxImageSourceName, string>>((result, {name, keyEnding}) => {
@@ -1102,8 +1066,8 @@ export default function ReactImageLightbox(props: LightboxProps) {
             isOpen
             onRequestClose={requestClose}
             onAfterOpen={() => {
-                if (outerEl.current) {
-                    outerEl.current.focus();
+                if (outerElement.current) {
+                    outerElement.current.focus();
                 }
             }}
             style={{
@@ -1133,7 +1097,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                     animationDuration: `${ANIMATION_DURATION_MS}ms`,
                     animationDirection: isClosing ? "normal" : "reverse"
                 }}
-                ref={outerEl}
+                ref={outerElement}
                 onWheel={handleOuterMousewheel}
                 onMouseMove={handleMouseMove}
                 onMouseDown={handleMouseDown}
@@ -1149,7 +1113,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                             imageInfo={nextImageInfo}
                             loadError={loadErrorStatus["nextSrc"]}
                             title={imageTitle}
-                            boxRect={boxSize}
+                            boxSize={boxSize}
                             zoomLevel={zoomLevel}
                             className="ril-image-next ril__imageNext"
                             animating={animating}
@@ -1166,7 +1130,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                             imageInfo={mainImageInfo}
                             loadError={loadErrorStatus["mainSrc"]}
                             title={imageTitle}
-                            boxRect={boxSize}
+                            boxSize={boxSize}
                             zoomLevel={zoomLevel}
                             className="ril-image-current"
                             animating={animating}
@@ -1185,7 +1149,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                             imageInfo={prevImageInfo}
                             loadError={loadErrorStatus["prevSrc"]}
                             title={imageTitle}
-                            boxRect={boxSize}
+                            boxSize={boxSize}
                             zoomLevel={zoomLevel}
                             className="ril-image-prev ril__imagePrev"
                             animating={animating}

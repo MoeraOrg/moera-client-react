@@ -9,5 +9,7 @@ export { useDebounce, useThrottle } from "ui/hook/misc";
 export { useParent, ParentContext } from "ui/hook/parent-context";
 export type { ParentInterface } from "ui/hook/parent-context";
 export { useDispatcher } from "ui/hook/redux";
+export { useElementSize, useWindowSize } from "ui/hook/size";
+export type { ElementSize } from "ui/hook/size";
 export { useSuggestions } from "ui/hook/suggestions";
 export { useVirtualKeyboard } from "ui/hook/virtual-keyboard";

@@ -8,15 +8,6 @@ export const MAX_ZOOM_LEVEL = 300;
 
 export const ANIMATION_DURATION_MS = 300;
 
-export interface LightboxRect {
-    bottom: number;
-    height: number;
-    left: number;
-    right: number;
-    top: number;
-    width: number;
-}
-
 interface CoordinateEventLike {
     clientX: number;
     clientY: number;

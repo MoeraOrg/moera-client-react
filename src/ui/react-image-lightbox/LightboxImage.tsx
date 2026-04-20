@@ -2,8 +2,9 @@ import React from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
+import { ElementSize } from "ui/hook";
 import { Loading } from "ui/control";
-import { ANIMATION_DURATION_MS, getTransform, LightboxRect, MIN_ZOOM_LEVEL, type TransformInput } from "./util";
+import { ANIMATION_DURATION_MS, getTransform, MIN_ZOOM_LEVEL, type TransformInput } from "./util";
 
 export interface ImageInfo {
     height: number;
@@ -17,7 +18,7 @@ interface Props {
     imageInfo: ImageInfo | null;
     loadError: boolean | undefined;
     title?: string;
-    boxRect: LightboxRect;
+    boxSize: ElementSize;
     zoomLevel: number;
     className?: string;
     animating: boolean;
@@ -27,7 +28,7 @@ interface Props {
 }
 
 export default function LightboxImage({
-    imageInfo, loadError, title, boxRect, zoomLevel, className, animating, transforms, onDoubleClick, onWheel
+    imageInfo, loadError, title, boxSize, zoomLevel, className, animating, transforms, onDoubleClick, onWheel
 }: Props) {
     const {t} = useTranslation();
 
@@ -36,8 +37,8 @@ export default function LightboxImage({
     const imageStyle: React.CSSProperties = {
         ...transitionStyle,
         ...getTransform({
-            width: imageInfo?.width ?? boxRect.width,
-            targetWidth: imageInfo?.targetWidth ?? boxRect.width,
+            width: imageInfo?.width ?? boxSize.width,
+            targetWidth: imageInfo?.targetWidth ?? boxSize.width,
             ...transforms
         })
     };
