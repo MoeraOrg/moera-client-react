@@ -128,6 +128,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const moveStartYRef = useRef(0);
     const moveStartOffsetXRef = useRef(0);
     const moveStartOffsetYRef = useRef(0);
+    const didPanImageRef = useRef(false);
     const swipeStartXRef = useRef(0);
     const swipeStartYRef = useRef(0);
     const swipeEndXRef = useRef(0);
@@ -265,20 +266,27 @@ export default function ReactImageLightbox(props: LightboxProps) {
         moveStartYRef.current = clientY;
         moveStartOffsetXRef.current = offsetX;
         moveStartOffsetYRef.current = offsetY;
+        didPanImageRef.current = false;
     };
 
     const handleMove = ({x: clientX, y: clientY}: InputPointer): void => {
         const newOffsetX = moveStartXRef.current - clientX + moveStartOffsetXRef.current;
         const newOffsetY = moveStartYRef.current - clientY + moveStartOffsetYRef.current;
         if (offsetX !== newOffsetX || offsetY !== newOffsetY) {
+            didPanImageRef.current = true;
             setOffsetX(newOffsetX);
             setOffsetY(newOffsetY);
         }
     };
 
     const animationTimeout = useManagedTimeout();
+    const ignoreImageClickTimeout = useManagedTimeout();
 
     const handleMoveEnd = (): void => {
+        if (didPanImageRef.current) {
+            ignoreImageClickTimeout.set(noop, 100);
+        }
+        didPanImageRef.current = false;
         currentActionRef.current = ACTION_NONE;
         moveStartXRef.current = 0;
         moveStartYRef.current = 0;
@@ -793,7 +801,13 @@ export default function ReactImageLightbox(props: LightboxProps) {
 
     const [dyed, setDyed] = useState<boolean>(false);
 
-    const handleImageClick= () => setDyed(dyed => !dyed);
+    const handleImageClick = () => {
+        if (ignoreImageClickTimeout.isActive()) {
+            return;
+        }
+
+        setDyed(dyed => !dyed);
+    };
 
     const handleImageDoubleClick = (event: React.MouseEvent<HTMLElement>): void => {
         if (zoomLevel > MIN_ZOOM_LEVEL) {
