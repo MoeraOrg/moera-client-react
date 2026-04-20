@@ -130,7 +130,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const keyPressedRef = useRef(false);
     const lastKeyDownTimeRef = useRef(0);
     const scrollXRef = useRef(0);
-    const scrollYRef = useRef(0);
     const moveStartXRef = useRef(0);
     const moveStartYRef = useRef(0);
     const moveStartOffsetXRef = useRef(0);
@@ -142,7 +141,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const pinchTouchListRef = useRef<PinchPointer[] | null>(null);
     const pinchDistanceRef = useRef(0);
     const [keyCounter, setKeyCounter] = useState<number>(0);
-    const moveRequestedRef = useRef(false);
 
     const getZoomMultiplier = (nextZoomLevel = zoomLevel): number =>
         ZOOM_RATIO ** nextZoomLevel;
@@ -337,7 +335,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
         keyPressedRef.current = false;
 
-        moveRequestedRef.current = true;
         setZoomLevel(MIN_ZOOM_LEVEL);
         setOffsetX(0);
         setOffsetY(0);
@@ -787,7 +784,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
         resetScrollTimeout.clear();
         resetScrollTimeout.set(() => {
             scrollXRef.current = 0;
-            scrollYRef.current = 0;
         }, 300);
 
         if (wheelActionTimeout.isActive() || animating) {
@@ -795,7 +791,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
 
         if (Math.abs(event.deltaY) < Math.abs(event.deltaX)) {
-            scrollYRef.current = 0;
             scrollXRef.current += event.deltaX;
 
             const bigLeapX = xThreshold / 2;
@@ -826,7 +821,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
             }
 
             scrollXRef.current = 0;
-            scrollYRef.current += event.deltaY;
 
             changeZoom(
                 zoomLevel - event.deltaY,
