@@ -30,20 +30,6 @@
     inset: 0;
 }
 
-.ril__image,
-.ril__imageMain,
-.ril__imagePrev,
-.ril__imageNext {
-    position: absolute;
-    inset: 0;
-    margin: auto;
-    max-width: none;
-    -ms-content-zooming: none;
-    -ms-touch-select: none;
-    touch-action: none;
-    user-select: none;
-}
-
 .ril__navButtons {
     border: none;
     position: absolute;
@@ -194,27 +180,4 @@
 
 .ril__outerAnimating {
     animation-name: close-window;
-}
-
-.ril__loadingContainer,
-.ril__errorContainer {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.ril__imagePrev .ril__loadingContainer,
-.ril__imageNext .ril__loadingContainer {
-    display: none;
-}
-
-.ril__errorContainer {
-    color: #fff;
-}
-
-.ril__imagePrev .ril__errorContainer,
-.ril__imageNext .ril__errorContainer {
-    display: none;
 }

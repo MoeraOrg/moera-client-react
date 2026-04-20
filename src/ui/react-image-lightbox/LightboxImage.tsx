@@ -6,6 +6,7 @@ import { ElementSize } from "ui/hook";
 import { Loading } from "ui/control";
 import { ImageInfo } from "ui/react-image-lightbox/lightbox-image-loader";
 import { ANIMATION_DURATION_MS, MIN_ZOOM_LEVEL } from "ui/react-image-lightbox/util";
+import "./LightboxImage.css";
 
 interface Props {
     imageInfo: ImageInfo | null;
