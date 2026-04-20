@@ -32,12 +32,16 @@
 
 .ril__navButtons {
     border: none;
+    background-color: rgb(0 0 0 / 20%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 20px;
-    height: 34px;
-    padding: 40px 30px;
+    width: 60px;
+    height: 80px;
     margin: auto;
     cursor: pointer;
     opacity: 0.7;
@@ -59,20 +63,10 @@
 
 .ril__navButtonPrev {
     left: 0;
-    background:
-        rgb(0 0 0 / 20%)
-        url("./svg/left_arrow.svg")
-        no-repeat center;
-    background-size: 20px 34px;
 }
 
 .ril__navButtonNext {
     right: 0;
-    background:
-        rgb(0 0 0 / 20%)
-        url("./svg/right_arrow.svg")
-        no-repeat center;
-    background-size: 20px 34px;
 }
 
 .ril__toolbar {
@@ -134,6 +128,12 @@
     cursor: pointer;
     border: none;
     opacity: 0.7;
+    background: transparent;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 }
 
 .ril__builtinButton:hover {
@@ -153,27 +153,8 @@
     opacity: 0.5;
 }
 
-.ril__closeButton {
-    background: url("./svg/x.svg") no-repeat center;
-    background-size: 20px 20px;
-}
-
-.ril__zoomInButton {
-    background: url("./svg/zoom_in.svg") no-repeat center;
-    background-size: 20px 20px;
-}
-
-.ril__zoomOutButton {
-    background: url("./svg/zoom_out.svg") no-repeat center;
-    background-size: 20px 20px;
-}
-
 @media only screen and (max-width: 991px) {
-    .ril__zoomInButton {
-        display: none;
-    }
-
-    .ril__zoomOutButton {
+    .ril__zoomButton {
         display: none;
     }
 }

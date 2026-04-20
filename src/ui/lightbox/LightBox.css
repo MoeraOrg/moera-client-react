@@ -14,10 +14,3 @@
     color: white;
     opacity: 1;
 }
-
-.lightbox-download {
-    padding: 1px 0 1px 10px;
-    position: relative;
-    top: -.1em;
-    left: -.25em;
-}

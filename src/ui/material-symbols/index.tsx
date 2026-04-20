@@ -19,6 +19,7 @@ import { ReactComponent as msCancelFilled } from "ui/material-symbols/cancel_fil
 import { ReactComponent as msCheck } from "ui/material-symbols/check.isvg";
 import { ReactComponent as msCheck16 } from "ui/material-symbols/check16.isvg";
 import { ReactComponent as msCheckCircle } from "ui/material-symbols/check_circle.isvg";
+import { ReactComponent as msChevronLeft } from "ui/material-symbols/chevron_left.isvg";
 import { ReactComponent as msChevronRight } from "ui/material-symbols/chevron_right.isvg";
 import { ReactComponent as msCircle } from "ui/material-symbols/circle.isvg";
 import { ReactComponent as msCircleFilled } from "ui/material-symbols/circle_filled.isvg";
@@ -145,6 +146,8 @@ import { ReactComponent as msVideoLibrary } from "ui/material-symbols/video_libr
 import { ReactComponent as msVisibility } from "ui/material-symbols/visibility.isvg";
 import { ReactComponent as msVisibilityOff } from "ui/material-symbols/visibility_off.isvg";
 import { ReactComponent as msVolunteerActivism } from "ui/material-symbols/volunteer_activism.isvg";
+import { ReactComponent as msZoomIn } from "ui/material-symbols/zoom_in.isvg";
+import { ReactComponent as msZoomOut } from "ui/material-symbols/zoom_out.isvg";
 
 export {
     msAdd,
@@ -166,6 +169,7 @@ export {
     msCheck,
     msCheck16,
     msCheckCircle,
+    msChevronLeft,
     msChevronRight,
     msCircle,
     msCircleFilled,
@@ -292,6 +296,8 @@ export {
     msVisibility,
     msVisibilityOff,
     msVolunteerActivism,
+    msZoomIn,
+    msZoomOut,
 };
 
 export type MaterialSymbol = React.FunctionComponent<React.SVGProps<SVGSVGElement> & { title?: string }>;

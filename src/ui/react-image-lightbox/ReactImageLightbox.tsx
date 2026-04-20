@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { useElementSize, useManagedTimeout, useParent, useWindowSize } from "ui/hook";
+import { Icon, msChevronLeft, msChevronRight, msClose, msZoomIn, msZoomOut } from "ui/material-symbols";
 import LightboxCaption from "ui/react-image-lightbox/LightboxCaption";
 import LightboxImage from "ui/react-image-lightbox/LightboxImage";
 import { useLightboxImageCache } from "ui/react-image-lightbox/lightbox-image-cache";
@@ -924,7 +925,9 @@ export default function ReactImageLightbox(props: LightboxProps) {
                         aria-label={t("previous-image")}
                         title={t("previous-image")}
                         onClick={!animating ? requestMovePrev : undefined}
-                    />
+                    >
+                        <Icon icon={msChevronLeft} size={40}/>
+                    </button>
                 )}
 
                 {nextSrc && (
@@ -935,7 +938,9 @@ export default function ReactImageLightbox(props: LightboxProps) {
                         aria-label={t("next-image")}
                         title={t("next-image")}
                         onClick={!animating ? requestMoveNext : undefined}
-                    />
+                    >
+                        <Icon icon={msChevronRight} size={40}/>
+                    </button>
                 )}
 
                 <div className="ril__toolbar">
@@ -962,7 +967,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                                 className={cx(
                                     "ril__toolbarItemChild",
                                     "ril__builtinButton",
-                                    "ril__zoomInButton",
+                                    "ril__zoomButton",
                                     {
                                         "ril__builtinButtonDisabled": zoomLevel === MAX_ZOOM_LEVEL
                                     }
@@ -974,7 +979,9 @@ export default function ReactImageLightbox(props: LightboxProps) {
                                         ? handleZoomInButtonClick
                                         : undefined
                                 }
-                            />
+                            >
+                                <Icon icon={msZoomIn} size="1.5em"/>
+                            </button>
                         </li>
 
                         <li className="ril__toolbarItem">
@@ -985,7 +992,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
                                 className={cx(
                                     "ril__toolbarItemChild",
                                     "ril__builtinButton",
-                                    "ril__zoomOutButton",
+                                    "ril__zoomButton",
                                     {
                                         "ril__builtinButtonDisabled": zoomLevel === MIN_ZOOM_LEVEL
                                     }
@@ -997,7 +1004,9 @@ export default function ReactImageLightbox(props: LightboxProps) {
                                         ? handleZoomOutButtonClick
                                         : undefined
                                 }
-                            />
+                            >
+                                <Icon icon={msZoomOut} size="1.5em"/>
+                            </button>
                         </li>
 
                         <li className="ril__toolbarItem">
@@ -1005,9 +1014,11 @@ export default function ReactImageLightbox(props: LightboxProps) {
                                 type="button"
                                 aria-label={t("close")}
                                 title={t("close")}
-                                className="ril__toolbarItemChild ril__builtinButton ril__closeButton"
+                                className="ril__toolbarItemChild ril__builtinButton"
                                 onClick={!animating ? requestClose : undefined}
-                            />
+                            >
+                                <Icon icon={msClose} size="1.75em"/>
+                            </button>
                         </li>
                     </ul>
                 </div>

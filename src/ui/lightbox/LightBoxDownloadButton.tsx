@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { urlWithParameters } from "util/url";
 import { Icon, msDownload } from "ui/material-symbols";
+import './LightBoxDownloadButton.css';
 
 interface Props {
     mediaUrl: string;

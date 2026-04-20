@@ -6,7 +6,6 @@ import { flashBox } from "state/flashbox/actions";
 import * as Browser from "ui/browser";
 import { Icon, msContentCopy } from "ui/material-symbols";
 import { clipboardCopy } from "util/clipboard";
-import "./LightBoxCopyTextButton.css";
 
 interface Props {
     text: string;
@@ -23,8 +22,7 @@ export default function LightBoxCopyTextButton({text}: Props) {
     }
 
     return (
-        <button type="button" className="lightbox-button lightbox-copy-text" onClick={onCopy}
-                title={t("copy-text-image")}>
+        <button type="button" className="lightbox-button" onClick={onCopy} title={t("copy-text-image")}>
             <Icon icon={msContentCopy} size="1.5em"/>
         </button>
     );

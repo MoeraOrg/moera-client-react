@@ -19,7 +19,6 @@ import { DropdownMenu, DropdownMenuItems } from "ui/control";
 import { Icon, msShare } from "ui/material-symbols";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { urlWithParameters, ut } from "util/url";
-import './LightBoxShareButton.css';
 
 interface Props {
     mediaNodeName: RelNodeName | string;
@@ -99,7 +98,7 @@ export default function LightBoxShareButton({mediaNodeName, mediaHref}: Props) {
     const {overlayId: parentOverlayId} = useParent();
 
     return (
-        <DropdownMenu parentOverlayId={parentOverlayId} className="lightbox-button lightbox-share" content={
+        <DropdownMenu parentOverlayId={parentOverlayId} className="lightbox-button" content={
             <LightBoxShareItems mediaNodeName={mediaNodeName} mediaHref={mediaHref}/>
         }>
             <Icon icon={msShare} title={t("share")} size="1.2em"/>
