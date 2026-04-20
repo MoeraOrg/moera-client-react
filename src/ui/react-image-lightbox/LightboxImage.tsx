@@ -4,19 +4,11 @@ import { useTranslation } from 'react-i18next';
 
 import { ElementSize } from "ui/hook";
 import { Loading } from "ui/control";
-import { ANIMATION_DURATION_MS, getTransform, MIN_ZOOM_LEVEL, type TransformInput } from "./util";
-
-export interface ImageInfo {
-    height: number;
-    src: string;
-    targetHeight: number;
-    targetWidth: number;
-    width: number;
-}
+import { ImageInfo } from "ui/react-image-lightbox/lightbox-image-loader";
+import { ANIMATION_DURATION_MS, getTransform, MIN_ZOOM_LEVEL, type TransformInput } from "ui/react-image-lightbox/util";
 
 interface Props {
     imageInfo: ImageInfo | null;
-    loadError: boolean | undefined;
     title?: string;
     boxSize: ElementSize;
     zoomLevel: number;
@@ -28,7 +20,7 @@ interface Props {
 }
 
 export default function LightboxImage({
-    imageInfo, loadError, title, boxSize, zoomLevel, className, animating, transforms, onDoubleClick, onWheel
+    imageInfo, title, boxSize, zoomLevel, className, animating, transforms, onDoubleClick, onWheel
 }: Props) {
     const {t} = useTranslation();
 
@@ -47,19 +39,7 @@ export default function LightboxImage({
         imageStyle.cursor = "move";
     }
 
-    if (imageInfo === null && loadError) {
-        return (
-            <div
-                className={cx(className, "ril__image", "ril-errored")}
-                style={imageStyle}
-            >
-                <div className="ril__errorContainer">
-                    {t("couldnt-load-image")}
-                </div>
-            </div>
-        );
-    }
-    if (imageInfo === null) {
+    if (imageInfo == null) {
         return (
             <div
                 className={cx(className, "ril__image", "ril-not-loaded")}
@@ -67,6 +47,19 @@ export default function LightboxImage({
             >
                 <div className="ril__loadingContainer">
                     <Loading large/>
+                </div>
+            </div>
+        );
+    }
+
+    if (imageInfo.error) {
+        return (
+            <div
+                className={cx(className, "ril__image", "ril-errored")}
+                style={imageStyle}
+            >
+                <div className="ril__errorContainer">
+                    {t("couldnt-load-image")}
                 </div>
             </div>
         );

@@ -1,11 +1,12 @@
-import React, { useEffect, useEffectEvent, useReducer, useRef, useState } from 'react';
+import React, { useEffect, useEffectEvent, useRef, useState } from 'react';
 import Modal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { useElementSize, useManagedTimeout, useParent, useWindowSize } from "ui/hook";
-import LightboxImage, { ImageInfo } from "ui/react-image-lightbox/LightboxImage";
+import LightboxImage from "ui/react-image-lightbox/LightboxImage";
 import { useLightboxImageCache } from "ui/react-image-lightbox/lightbox-image-cache";
+import { useLightboxImageLoader } from "ui/react-image-lightbox/lightbox-image-loader";
 import {
     ANIMATION_DURATION_MS,
     getTouches,
@@ -41,13 +42,6 @@ export interface LightboxProps {
     prevSrc?: string | null;
     toolbarButtons: React.ReactNode[];
     zIndex?: number;
-}
-
-type LoadErrorStatus = Partial<Record<LightboxImageSourceName, boolean>>;
-
-interface FitSize {
-    height: number;
-    width: number;
 }
 
 interface Point {
@@ -96,7 +90,6 @@ const ACTION_PINCH = 3;
 // Minimal swipe distance
 const MIN_SWIPE_DISTANCE = 200;
 
-const IMAGE_PADDING_PX = 10;
 const KEY_REPEAT_KEYUP_BONUS_MS = 40;
 const KEY_REPEAT_LIMIT_MS = 180;
 
@@ -131,10 +124,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
     // Vertical image offset from center
     const [offsetY, setOffsetY] = useState(0);
 
-    // image load error for srcType
-    const [loadErrorStatus, setLoadErrorStatus] = useState<LoadErrorStatus>({});
-    const [, forceUpdate] = useReducer((value: number) => value + 1, 0);
-
     const zoomInBtn = useRef<HTMLButtonElement | null>(null);
     const zoomOutBtn = useRef<HTMLButtonElement | null>(null);
     const caption = useRef<HTMLDivElement | null>(null);
@@ -162,7 +151,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
     const pinchDistanceRef = useRef(0);
     const keyCounterRef = useRef(0);
     const moveRequestedRef = useRef(false);
-    const previousPropsRef = useRef(props);
 
     const getSrcTypes = (): SourceDescriptor[] => [
         {
@@ -190,59 +178,12 @@ export default function ReactImageLightbox(props: LightboxProps) {
 
     const imageCache = useLightboxImageCache();
 
-    const isImageLoaded = (imageSrc?: string | null): imageSrc is string =>
-        Boolean(imageSrc && (imageCache.get(imageSrc)?.loaded ?? false));
-
-    const getFitSizes = (width: number, height: number): FitSize => {
-        let maxHeight = boxSize.height - IMAGE_PADDING_PX * 2;
-        let maxWidth = boxSize.width - IMAGE_PADDING_PX * 2;
-
-        maxHeight = Math.min(maxHeight, height);
-        maxWidth = Math.min(maxWidth, width);
-
-        const maxRatio = maxWidth / maxHeight;
-        const srcRatio = width / height;
-
-        if (maxRatio > srcRatio) {
-            return {
-                width: (width * maxHeight) / height,
-                height: maxHeight
-            };
-        }
-
-        return {
-            width: maxWidth,
-            height: (height * maxWidth) / width
-        };
-    };
-
-    const getImageInfo = (imageSrc: string | null | undefined): ImageInfo | null => {
-        if (!imageSrc) {
-            return null;
-        }
-
-        const image = imageCache.get(imageSrc);
-        if (image === undefined) {
-            return null;
-        }
-
-        const fitSizes = getFitSizes(image.width, image.height);
-
-        return {
-            src: imageSrc,
-            height: image.height,
-            width: image.width,
-            targetHeight: fitSizes.height,
-            targetWidth: fitSizes.width
-        };
-    };
-
-    const nextImageInfo = getImageInfo(nextSrc);
-    const mainImageInfo = getImageInfo(mainSrc);
-    const prevImageInfo = getImageInfo(prevSrc);
+    const nextImageInfo = useLightboxImageLoader(nextSrc, imageCache, boxSize);
+    const mainImageInfo = useLightboxImageLoader(mainSrc, imageCache, boxSize);
+    const prevImageInfo = useLightboxImageLoader(prevSrc, imageCache, boxSize);
 
     const getMaxOffsets = (nextZoomLevel = zoomLevel): OffsetBounds => {
-        if (mainImageInfo === null) {
+        if (mainImageInfo == null || mainImageInfo.error) {
             return {maxX: 0, minX: 0, maxY: 0, minY: 0};
         }
 
@@ -287,7 +228,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
             return;
         }
 
-        if (mainImageInfo === null) {
+        if (mainImageInfo == null || mainImageInfo.error) {
             return;
         }
 
@@ -783,87 +724,7 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
     };
 
-    const mainSrcReadyTimeout = useManagedTimeout();
-    const nextSrcReadyTimeout = useManagedTimeout();
-    const prevSrcReadyTimeout = useManagedTimeout();
-    const imageReadyTimeouts = {
-        mainSrc: mainSrcReadyTimeout,
-        nextSrc: nextSrcReadyTimeout,
-        prevSrc: prevSrcReadyTimeout
-    };
-
-    const loadImage = (
-        srcType: LightboxImageSourceName,
-        imageSrc: string,
-        done: (error?: Event) => void
-    ): void => {
-        if (isImageLoaded(imageSrc)) {
-            imageReadyTimeouts[srcType].set(() => {
-                done();
-            }, 1);
-            return;
-        }
-
-        const inMemoryImage = new Image();
-
-        inMemoryImage.addEventListener("error", errorEvent => {
-            setLoadErrorStatus(prevState => ({...prevState, [srcType]: true}));
-
-            done(errorEvent);
-        }, {once: true});
-
-        inMemoryImage.addEventListener("load", () => {
-            propsRef.current.onImageLoad(imageSrc, srcType, inMemoryImage);
-
-            imageCache.put(imageSrc, {
-                loaded: true,
-                width: inMemoryImage.width,
-                height: inMemoryImage.height
-            });
-
-            done();
-        }, {once: true});
-
-        inMemoryImage.src = imageSrc;
-    };
-
-    const loadAllImages = useEffectEvent((nextProps = propsRef.current): void => {
-        const generateLoadDoneCallback = (
-            srcType: LightboxImageSourceName,
-            imageSrc: string
-        ) => (err?: Event): void => {
-            if (err) {
-                return;
-            }
-
-            if (propsRef.current[srcType] !== imageSrc) {
-                return;
-            }
-
-            forceUpdate();
-        };
-
-        getSrcTypes().forEach(srcType => {
-            const type = srcType.name;
-
-            if (nextProps[type] && loadErrorStatus[type]) {
-                setLoadErrorStatus(prevState => ({...prevState, [type]: false}));
-            }
-
-            if (nextProps[type] && !isImageLoaded(nextProps[type])) {
-                loadImage(
-                    type,
-                    nextProps[type],
-                    generateLoadDoneCallback(type, nextProps[type])
-                );
-            }
-        });
-    });
-
-    useEffect(() => {
-        setIsClosing(false);
-        loadAllImages();
-    }, [loadAllImages]);
+    useEffect(() => setIsClosing(false), []);
 
     const closeTimeout = useManagedTimeout();
 
@@ -1010,41 +871,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
         }
     };
 
-    useEffect(() => {
-        const prevProps = previousPropsRef.current;
-        let sourcesChanged = false;
-        const prevSrcDict: Record<string, true> = {};
-        const nextSrcDict: Record<string, true> = {};
-
-        getSrcTypes().forEach(srcType => {
-            if (prevProps[srcType.name] !== props[srcType.name]) {
-                sourcesChanged = true;
-
-                const prevSrc = prevProps[srcType.name];
-                const nextSrc = props[srcType.name];
-                if (prevSrc) {
-                    prevSrcDict[prevSrc] = true;
-                }
-                if (nextSrc) {
-                    nextSrcDict[nextSrc] = true;
-                }
-            }
-        });
-
-        if (sourcesChanged || moveRequestedRef.current) {
-            Object.keys(prevSrcDict).forEach(prevSrc => {
-                if (!(prevSrc in nextSrcDict) && imageCache.has(prevSrc)) {
-                    imageCache.put(prevSrc, {loaded: false});
-                }
-            });
-
-            moveRequestedRef.current = false;
-            loadAllImages(props);
-        }
-
-        previousPropsRef.current = props;
-    }, [imageCache, loadAllImages, props]);
-
     const zoomMultiplier = getZoomMultiplier();
 
     const keyEndings = getSrcTypes().reduce<Record<LightboxImageSourceName, string>>((result, {name, keyEnding}) => {
@@ -1102,7 +928,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
                     {nextSrc &&
                         <LightboxImage
                             imageInfo={nextImageInfo}
-                            loadError={loadErrorStatus["nextSrc"]}
                             title={imageTitle}
                             boxSize={boxSize}
                             zoomLevel={zoomLevel}
@@ -1119,7 +944,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
                     {mainSrc &&
                         <LightboxImage
                             imageInfo={mainImageInfo}
-                            loadError={loadErrorStatus["mainSrc"]}
                             title={imageTitle}
                             boxSize={boxSize}
                             zoomLevel={zoomLevel}
@@ -1138,7 +962,6 @@ export default function ReactImageLightbox(props: LightboxProps) {
                     {prevSrc &&
                         <LightboxImage
                             imageInfo={prevImageInfo}
-                            loadError={loadErrorStatus["prevSrc"]}
                             title={imageTitle}
                             boxSize={boxSize}
                             zoomLevel={zoomLevel}
