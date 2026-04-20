@@ -44,7 +44,7 @@
     height: 80px;
     margin: auto;
     cursor: pointer;
-    opacity: 0.7;
+    opacity: .7;
 }
 
 @media only screen and (min-width: 992px) {
@@ -58,7 +58,7 @@
 }
 
 .ril__navButtons:active {
-    opacity: 0.7;
+    opacity: .7;
 }
 
 .ril__navButtonPrev {
@@ -127,7 +127,7 @@
     height: 35px;
     cursor: pointer;
     border: none;
-    opacity: 0.7;
+    opacity: .7;
     background: transparent;
     color: #fff;
     display: inline-flex;
@@ -146,11 +146,11 @@
 
 .ril__builtinButtonDisabled {
     cursor: default;
-    opacity: 0.5;
+    opacity: .5;
 }
 
 .ril__builtinButtonDisabled:hover {
-    opacity: 0.5;
+    opacity: .5;
 }
 
 @media only screen and (max-width: 991px) {
