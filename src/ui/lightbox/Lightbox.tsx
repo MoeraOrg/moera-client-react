@@ -686,6 +686,11 @@ export default function Lightbox(props: LightboxProps) {
     };
 
     const handleKeyInput = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+        if (event.key === "Escape" || event.key === "Esc") {
+            // will be handled by the overlay manager
+            return;
+        }
+
         event.stopPropagation();
 
         if (animating) {
@@ -698,20 +703,12 @@ export default function Lightbox(props: LightboxProps) {
         }
 
         const currentTime = Date.now();
-        if (
-            currentTime - lastKeyDownTimeRef.current < KEY_REPEAT_LIMIT_MS
-            && event.key !== "Escape" && event.key !== "Esc"
-        ) {
+        if (currentTime - lastKeyDownTimeRef.current < KEY_REPEAT_LIMIT_MS) {
             return;
         }
         lastKeyDownTimeRef.current = currentTime;
 
         switch (event.key) {
-            case "Escape":
-            case "Esc":
-                event.preventDefault();
-                requestClose(event);
-                break;
             case "ArrowLeft":
                 if (!prevSrc) {
                     return;
