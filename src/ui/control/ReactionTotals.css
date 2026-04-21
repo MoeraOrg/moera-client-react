@@ -12,7 +12,7 @@
     margin-right: .55em;
 }
 
-.reactions .positive, .reactions .negative {
+.reactions :is(.positive, .negative) {
     border-radius: .9em;
     padding: .44em 1.1em;
 }
@@ -28,11 +28,11 @@
     background-color: var(--reactions-negative);
 }
 
-.reactions .positive:hover, .reactions .negative:hover {
+.reactions :is(.positive, .negative):hover {
     cursor: pointer;
 }
 
-.reactions .senior-positive, .reactions .senior-negative {
+.reactions :is(.senior-positive, .senior-negative) {
     border-radius: 1em;
     font-size: 1.3em;
     padding: .35em .4em .4em;
@@ -48,6 +48,6 @@
     background-color: var(--reactions-negative);
 }
 
-.reactions .senior-positive:hover, .reactions .senior-negative:hover {
+.reactions :is(.senior-positive, .senior-negative):hover {
     cursor: pointer;
 }

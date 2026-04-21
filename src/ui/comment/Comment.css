@@ -59,7 +59,7 @@
     }
 }
 
-.comment .content IMG, .comment .content IFRAME, .comment .content .preload-placeholder {
+.comment .content :is(IMG, IFRAME), .comment .content .preload-placeholder {
     max-width: min(100vw - 7rem, var(--feed-width) - 6.5rem, var(--width, 100vw));
     max-height: min(16rem, var(--height, 200vh));
 }
@@ -90,13 +90,13 @@
 }
 
 @media only screen and (min-width: 992px) {
-    .comment A.link-preview, .comment DIV.link-preview {
+    .comment :is(A, DIV).link-preview {
         width: 400px;
     }
 }
 
 @media only screen and (max-width: 991px) {
-    .comment A.link-preview, .comment DIV.link-preview {
+    .comment :is(A, DIV).link-preview {
         width: calc(100vw - 32px);
     }
 

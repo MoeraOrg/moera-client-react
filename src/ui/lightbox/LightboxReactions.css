@@ -28,7 +28,7 @@
     line-height: 1;
 }
 
-.lightbox-reactions .reactions .positive, .lightbox-reactions .reactions .negative {
+.lightbox-reactions .reactions :is(.positive, .negative) {
     position: absolute;
     top: 0;
     margin-right: 0;

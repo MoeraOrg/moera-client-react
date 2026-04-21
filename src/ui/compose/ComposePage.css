@@ -38,7 +38,7 @@
     margin-top: -.25rem;
 }
 
-.composer .input-resettable > INPUT, .composer .input-resettable > BUTTON, .composer .input-resettable > .rw-widget {
+.composer .input-resettable > :is(INPUT, BUTTON), .composer .input-resettable > .rw-widget {
     display: inline-block;
 }
 

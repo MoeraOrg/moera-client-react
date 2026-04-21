@@ -1,4 +1,4 @@
-.donate-editor .fundraiser, .donate-editor .new-fundraiser, .fundraiser-overlay {
+.donate-editor :is(.fundraiser, .new-fundraiser), .fundraiser-overlay {
     border-radius: 1em;
     margin-right: .5em;
     margin-bottom: .25em;

@@ -21,13 +21,13 @@
 }
 
 @media only screen and (min-width: 992px) {
-    .comment-dialog A.link-preview, .comment-dialog DIV.link-preview {
+    .comment-dialog :is(A, DIV).link-preview {
         width: 400px;
     }
 }
 
 @media only screen and (max-width: 991px) {
-    .comment-dialog A.link-preview, .comment-dialog DIV.link-preview {
+    .comment-dialog :is(A, DIV).link-preview {
         width: calc(100vw - 2rem);
     }
 }

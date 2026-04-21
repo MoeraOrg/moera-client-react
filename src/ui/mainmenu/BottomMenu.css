@@ -44,7 +44,7 @@
     filter: brightness(140%);
 }
 
-#bottom-menu .item .icon.bell, #bottom-menu .item .icon.news, #bottom-menu .item .icon.explore {
+#bottom-menu .item .icon:is(.bell, .news, .explore) {
     position: relative;
 }
 

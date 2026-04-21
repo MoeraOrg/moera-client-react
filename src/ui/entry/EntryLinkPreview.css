@@ -1,4 +1,4 @@
-A.link-preview, DIV.link-preview {
+:is(A, DIV).link-preview {
     background-color: var(--bs-gray-200);
     color: black;
     border: solid 1px var(--bs-gray-400);
@@ -11,7 +11,7 @@ DIV.link-preview {
 }
 
 @media only screen and (min-width: 992px) {
-    A.link-preview, DIV.link-preview {
+    :is(A, DIV).link-preview {
         display: inline-flex;
         width: calc(50% - .25rem);
         margin-right: .25rem;
@@ -19,7 +19,7 @@ DIV.link-preview {
 }
 
 @media only screen and (max-width: 991px) {
-    A.link-preview, DIV.link-preview {
+    :is(A, DIV).link-preview {
         display: flex;
     }
 
@@ -40,11 +40,11 @@ A.link-preview:hover {
     background-color: var(--bs-gray-300);
 }
 
-A.link-preview.large, DIV.link-preview.large {
+:is(A, DIV).link-preview.large {
     flex-direction: column;
 }
 
-A.link-preview.small, DIV.link-preview.small {
+:is(A, DIV).link-preview.small {
     font-size: .875rem;
 }
 

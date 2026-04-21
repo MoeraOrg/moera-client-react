@@ -80,7 +80,7 @@ BLOCKQUOTE:not(BLOCKQUOTE BLOCKQUOTE)::before {
     top: -1.5rem;
 }
 
-BLOCKQUOTE BLOCKQUOTE:last-child, BLOCKQUOTE P:last-child {
+BLOCKQUOTE :is(BLOCKQUOTE, P):last-child {
     margin-bottom: 0;
 }
 
