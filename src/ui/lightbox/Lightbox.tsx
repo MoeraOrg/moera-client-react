@@ -788,32 +788,32 @@ export default function Lightbox(props: LightboxProps) {
     };
 
     return (
-        <Modal
-            isOpen
-            onRequestClose={requestClose}
-            onAfterOpen={() => {
-                if (outerElement.current) {
-                    outerElement.current.focus();
-                }
-            }}
-            style={{
-                overlay: {
-                    zIndex: zIndex ?? 1000,
-                    backgroundColor: "transparent",
-                },
-                content: {
-                    backgroundColor: "transparent",
-                    overflow: "hidden",
-                    border: "none",
-                    borderRadius: 0,
-                    padding: 0,
-                    inset: 0,
-                }
-            }}
-            contentLabel={t("lightbox")}
-            appElement={document.body}
-        >
-            <LightboxContext.Provider value={{animating, boxSize, zoomLevel, changeZoom, resetWheelScroll}}>
+        <LightboxContext.Provider value={{animating, boxSize, zoomLevel, changeZoom, resetWheelScroll}}>
+            <Modal
+                isOpen
+                onRequestClose={requestClose}
+                onAfterOpen={() => {
+                    if (outerElement.current) {
+                        outerElement.current.focus();
+                    }
+                }}
+                style={{
+                    overlay: {
+                        zIndex: zIndex ?? 1000,
+                        backgroundColor: "transparent",
+                    },
+                    content: {
+                        backgroundColor: "transparent",
+                        overflow: "hidden",
+                        border: "none",
+                        borderRadius: 0,
+                        padding: 0,
+                        inset: 0,
+                    }
+                }}
+                contentLabel={t("lightbox")}
+                appElement={document.body}
+            >
                 <div
                     className={cx("lightbox-outer", "lightbox-outer-animating", {
                         "lightbox-outer-closing": isClosing,
@@ -898,7 +898,7 @@ export default function Lightbox(props: LightboxProps) {
 
                     {imageCaption && <LightboxCaption>{imageCaption}</LightboxCaption>}
                 </div>
-            </LightboxContext.Provider>
-        </Modal>
+            </Modal>
+        </LightboxContext.Provider>
     );
 }
