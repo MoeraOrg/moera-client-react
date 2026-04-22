@@ -194,7 +194,7 @@ export class OverlaysManager {
     }
 
     private onKeyDown = (event: KeyboardEvent) => {
-        if ((event.key === "Escape" || event.key === "Esc") && this.topOverlay.closeOnEscape) {
+        if (event.key === "Escape" && this.topOverlay.closeOnEscape) {
             this.closeOverlay(this.topOverlay);
         }
     };

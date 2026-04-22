@@ -80,7 +80,6 @@ export function useSuggestions<L>({
     const handleKeyDown = (event: React.KeyboardEvent) => {
         switch (event.key) {
             case "Escape":
-            case "Esc":
                 if (submitOnEscape) {
                     handleSubmit(false, -1);
                 }

@@ -21,7 +21,7 @@ export default function PeopleSearch() {
     }
 
     const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === "Escape" || event.key === "Esc") {
+        if (event.key === "Escape") {
             onClear();
         }
     };

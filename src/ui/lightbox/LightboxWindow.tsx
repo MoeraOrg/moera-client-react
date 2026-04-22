@@ -443,7 +443,7 @@ export default function LightboxWindow({
     };
 
     const handleKeyInput = (event: React.KeyboardEvent<HTMLDivElement>): void => {
-        if (event.key === "Escape" || event.key === "Esc") {
+        if (event.key === "Escape") {
             // will be handled by react-modal
             return;
         }
