@@ -157,18 +157,9 @@ export default function LightboxWindow({
         moveStartOffsetYRef.current = 0;
 
         const maxOffsets = getMaxOffsets();
-        const nextOffsetX = Math.max(
-            maxOffsets.minX,
-            Math.min(maxOffsets.maxX, offsetX)
-        );
-        const nextOffsetY = Math.max(
-            maxOffsets.minY,
-            Math.min(maxOffsets.maxY, offsetY)
-        );
-        if (
-            nextOffsetX !== offsetX
-            || nextOffsetY !== offsetY
-        ) {
+        const nextOffsetX = Math.max(maxOffsets.minX, Math.min(maxOffsets.maxX, offsetX));
+        const nextOffsetY = Math.max(maxOffsets.minY, Math.min(maxOffsets.maxY, offsetY));
+        if (nextOffsetX !== offsetX || nextOffsetY !== offsetY) {
             onOffsetChange(nextOffsetX, nextOffsetY);
             onAnimationRequest();
         }
