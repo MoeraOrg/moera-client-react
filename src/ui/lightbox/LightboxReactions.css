@@ -1,6 +1,13 @@
 .lightbox-reactions {
     position: absolute;
     top: var(--lightbox-toolbar-size);
+    width: max-content;
+}
+
+.lightbox-outer.transparent .lightbox-reactions {
+    opacity: 0;
+    transition: opacity .5s ease;
+    pointer-events: none;
 }
 
 .lightbox-reaction-button {
@@ -32,7 +39,6 @@
     position: absolute;
     top: 0;
     margin-right: 0;
-    opacity: .7;
 }
 
 @media only screen and (min-width: 992px) {

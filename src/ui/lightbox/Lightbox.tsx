@@ -3,18 +3,14 @@
 import React, { useEffect, useState } from 'react';
 
 import { useElementSize, useManagedTimeout, useParent, useWindowSize } from "ui/hook";
-import LightboxImage from "ui/lightbox/LightboxImage";
-import { LightboxContext } from "ui/lightbox/lightbox-context";
-import type { LightboxChangeZoomOptions } from "ui/lightbox/lightbox-context";
+import { type LightboxChangeZoomOptions, LightboxContext } from "ui/lightbox/lightbox-context";
 import { useLightboxImageCache } from "ui/lightbox/lightbox-image-cache";
 import { useLightboxImageLoader } from "ui/lightbox/lightbox-image-loader";
-import LightboxWindow, { MoveDirection } from "ui/lightbox/LightboxWindow";
-import type { OffsetBounds } from "ui/lightbox/LightboxWindow";
-import {
-    ANIMATION_DURATION_MS,
-    MAX_ZOOM_LEVEL,
-    MIN_ZOOM_LEVEL
-} from "ui/lightbox/util";
+import LightboxWindow, { MoveDirection, type OffsetBounds } from "ui/lightbox/LightboxWindow";
+import LightboxImage from "ui/lightbox/LightboxImage";
+import LightboxToolbar from "ui/lightbox/LightboxToolbar";
+import LightboxCaption from "ui/lightbox/LightboxCaption";
+import { ANIMATION_DURATION_MS, MAX_ZOOM_LEVEL, MIN_ZOOM_LEVEL } from "ui/lightbox/util";
 
 export type LightboxTriggerEvent = Event | React.SyntheticEvent;
 
@@ -27,6 +23,7 @@ export interface LightboxProps {
     prevSrc?: string | null;
     statusText?: string;
     toolbarButtons: React.ReactNode[];
+    controls: React.ReactNode[];
     zIndex?: number;
 }
 
@@ -40,6 +37,7 @@ export default function Lightbox(props: LightboxProps) {
         prevSrc,
         statusText,
         toolbarButtons,
+        controls,
         caption,
         zIndex,
         onMovePrev,
@@ -238,19 +236,25 @@ export default function Lightbox(props: LightboxProps) {
             <LightboxWindow
                 hasNext={!!nextSrc}
                 hasPrev={!!prevSrc}
-                caption={caption}
                 isClosing={isClosing}
                 offsetX={offsetX}
                 offsetY={offsetY}
-                statusText={statusText}
-                toolbarButtons={toolbarButtons}
                 zIndex={zIndex}
                 getMaxOffsets={getMaxOffsets}
+                onOffsetChange={changeOffset}
                 onAnimationRequest={requestAnimation}
                 onMove={requestMove}
-                onOffsetChange={changeOffset}
-                onRequestClose={requestClose}
+                onClose={requestClose}
                 ref={outerElement}
+                controls={[
+                    <LightboxToolbar
+                        statusText={statusText}
+                        toolbarButtons={toolbarButtons}
+                        onClose={requestClose}
+                    />,
+                    caption && <LightboxCaption>{caption}</LightboxCaption>,
+                    ...(controls ?? [])
+                ]}
             >
                 {nextSrc &&
                     <LightboxImage

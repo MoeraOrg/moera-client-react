@@ -72,7 +72,7 @@ export default function GalleryLightbox() {
             mainSrc = urlWithParameters(rootPage + mainHref, {auth});
         }
         mainMimeType = mainMedia?.mimeType ?? "image/jpeg";
-        mainTextContent = mainMedia?.textContent ?? undefined;
+        mainTextContent = mainMedia?.textContent ?? "Some text";
         const prevIndex = index > 0
             ? index - 1
             : (index === 0 && loop ? media.length - 1 : null);
@@ -120,7 +120,9 @@ export default function GalleryLightbox() {
                     mainTextContent && <LightboxCopyTextButton text={mainTextContent}/>,
                     <LightboxShareButton mediaNodeName={mediaNodeName} mediaHref={mainHref}/>,
                     <LightboxDownloadButton mediaUrl={mainSrc} mediaMimeType={mainMimeType}/>,
-                    <LightboxReactions/>
+                ]}
+                controls={[
+                    <LightboxReactions/>,
                 ]}
                 caption={mediaPosting?.body.text &&
                     <EntryHtml postingId={mediaPosting.id} html={mediaPosting.body.text}/>

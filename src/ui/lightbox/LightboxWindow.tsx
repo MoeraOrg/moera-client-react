@@ -7,11 +7,9 @@ import { useTranslation } from 'react-i18next';
 
 import { useManagedTimeout } from "ui/hook";
 import { msChevronLeft, msChevronRight } from "ui/material-symbols";
-import LightboxCaption from "ui/lightbox/LightboxCaption";
 import { useLightbox } from "ui/lightbox/lightbox-context";
 import { LightboxWindowContext } from "ui/lightbox/lightbox-window-context";
 import LightboxNavButton from "ui/lightbox/LightboxNavButton";
-import LightboxToolbar from "ui/lightbox/LightboxToolbar";
 import type { InputPointer } from "ui/lightbox/util";
 import {
     ANIMATION_DURATION_MS,
@@ -26,7 +24,7 @@ import {
     SOURCE_TOUCH,
     WHEEL_MOVE_X_THRESHOLD
 } from "ui/lightbox/util";
-import "./Lightbox.css";
+import "./LightboxWindow.css";
 
 type LightboxTriggerEvent = Event | React.SyntheticEvent;
 
@@ -51,21 +49,19 @@ interface PinchPointer {
 export type MoveDirection = "next" | "prev";
 
 interface Props {
-    children?: React.ReactNode;
-    caption?: React.ReactNode;
     hasNext: boolean;
     hasPrev: boolean;
     isClosing: boolean;
     offsetX: number;
     offsetY: number;
-    statusText?: string;
-    toolbarButtons: React.ReactNode[];
+    controls: React.ReactNode[];
     zIndex?: number;
     getMaxOffsets(): OffsetBounds;
+    onOffsetChange(offsetX: number, offsetY: number): void;
     onAnimationRequest(): void;
     onMove(direction: MoveDirection, animate?: boolean): void;
-    onOffsetChange(offsetX: number, offsetY: number): void;
-    onRequestClose(event?: LightboxTriggerEvent): void;
+    onClose(event?: LightboxTriggerEvent): void;
+    children?: React.ReactNode;
     ref: React.RefObject<HTMLDivElement | null>;
 }
 
@@ -84,21 +80,19 @@ const KEY_REPEAT_KEYUP_BONUS_MS = 40;
 const KEY_REPEAT_LIMIT_MS = 180;
 
 export default function LightboxWindow({
-    children,
-    caption,
     hasNext,
     hasPrev,
     isClosing,
     offsetX,
     offsetY,
-    statusText,
-    toolbarButtons,
+    controls,
     zIndex,
     getMaxOffsets,
+    onOffsetChange,
     onAnimationRequest,
     onMove,
-    onOffsetChange,
-    onRequestClose,
+    onClose,
+    children,
     ref,
 }: Props) {
     const {t} = useTranslation();
@@ -530,7 +524,7 @@ export default function LightboxWindow({
             && event.target instanceof Element
             && event.target.classList.contains("lightbox-inner")
         ) {
-            onRequestClose(event);
+            onClose(event);
             return;
         }
 
@@ -627,7 +621,7 @@ export default function LightboxWindow({
     return (
         <Modal
             isOpen
-            onRequestClose={onRequestClose}
+            onRequestClose={onClose}
             onAfterOpen={() => {
                 if (ref.current) {
                     ref.current.focus();
@@ -695,13 +689,7 @@ export default function LightboxWindow({
                         />
                     }
 
-                    <LightboxToolbar
-                        statusText={statusText}
-                        toolbarButtons={toolbarButtons}
-                        onClose={onRequestClose}
-                    />
-
-                    {caption && <LightboxCaption>{caption}</LightboxCaption>}
+                    {controls}
                 </div>
             </LightboxWindowContext.Provider>
         </Modal>
