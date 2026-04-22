@@ -48,11 +48,13 @@ interface PinchPointer {
     y: number;
 }
 
+export type MoveDirection = "next" | "prev";
+
 interface Props {
     children?: React.ReactNode;
+    caption?: React.ReactNode;
     hasNext: boolean;
     hasPrev: boolean;
-    imageCaption?: React.ReactNode;
     isClosing: boolean;
     offsetX: number;
     offsetY: number;
@@ -61,8 +63,7 @@ interface Props {
     zIndex?: number;
     getMaxOffsets(): OffsetBounds;
     onAnimationRequest(): void;
-    onMoveNextRequest(event?: LightboxTriggerEvent, animate?: boolean): void;
-    onMovePrevRequest(event?: LightboxTriggerEvent, animate?: boolean): void;
+    onMove(direction: MoveDirection, animate?: boolean): void;
     onOffsetChange(offsetX: number, offsetY: number): void;
     onRequestClose(event?: LightboxTriggerEvent): void;
     ref: React.RefObject<HTMLDivElement | null>;
@@ -84,9 +85,9 @@ const KEY_REPEAT_LIMIT_MS = 180;
 
 export default function LightboxWindow({
     children,
+    caption,
     hasNext,
     hasPrev,
-    imageCaption,
     isClosing,
     offsetX,
     offsetY,
@@ -95,8 +96,7 @@ export default function LightboxWindow({
     zIndex,
     getMaxOffsets,
     onAnimationRequest,
-    onMoveNextRequest,
-    onMovePrevRequest,
+    onMove,
     onOffsetChange,
     onRequestClose,
     ref,
@@ -200,23 +200,11 @@ export default function LightboxWindow({
         swipeEndYRef.current = clientY;
     };
 
-    const requestMove = (direction: "next" | "prev", event?: LightboxTriggerEvent): void => {
+    const requestMove = (direction: MoveDirection): void => {
         const animate = !keyPressedRef.current;
         keyPressedRef.current = false;
 
-        if (direction === "prev") {
-            onMovePrevRequest(event, animate);
-        } else {
-            onMoveNextRequest(event, animate);
-        }
-    };
-
-    const requestMoveNext = (event?: LightboxTriggerEvent): void => {
-        requestMove("next", event);
-    };
-
-    const requestMovePrev = (event?: LightboxTriggerEvent): void => {
-        requestMove("prev", event);
+        onMove(direction, animate);
     };
 
     const handleSwipeEnd = (event?: LightboxTriggerEvent | null): void => {
@@ -242,10 +230,10 @@ export default function LightboxWindow({
 
         if (xDiff > 0 && hasPrev) {
             event.preventDefault();
-            requestMovePrev();
+            requestMove("prev");
         } else if (xDiff < 0 && hasNext) {
             event.preventDefault();
-            requestMoveNext();
+            requestMove("next");
         }
     };
 
@@ -582,7 +570,7 @@ export default function LightboxWindow({
 
                 event.preventDefault();
                 keyPressedRef.current = true;
-                requestMovePrev(event);
+                requestMove("prev");
                 break;
             case "ArrowRight":
                 if (!hasNext) {
@@ -591,7 +579,7 @@ export default function LightboxWindow({
 
                 event.preventDefault();
                 keyPressedRef.current = true;
-                requestMoveNext(event);
+                requestMove("next");
                 break;
             default:
         }
@@ -618,14 +606,14 @@ export default function LightboxWindow({
 
             const bigLeapX = xThreshold / 2;
             if (scrollXRef.current >= xThreshold || event.deltaX >= bigLeapX) {
-                requestMoveNext(event);
+                requestMove("next");
                 actionDelay = imageMoveDelay;
                 resetWheelScroll();
             } else if (
                 scrollXRef.current <= -1 * xThreshold
                 || event.deltaX <= -1 * bigLeapX
             ) {
-                requestMovePrev(event);
+                requestMove("prev");
                 actionDelay = imageMoveDelay;
                 resetWheelScroll();
             }
@@ -693,7 +681,7 @@ export default function LightboxWindow({
                             key="prev"
                             title={t("previous-image")}
                             icon={msChevronLeft}
-                            onClick={requestMovePrev}
+                            onClick={() => requestMove("prev")}
                         />
                     }
 
@@ -703,7 +691,7 @@ export default function LightboxWindow({
                             key="next"
                             title={t("next-image")}
                             icon={msChevronRight}
-                            onClick={requestMoveNext}
+                            onClick={() => requestMove("next")}
                         />
                     }
 
@@ -713,7 +701,7 @@ export default function LightboxWindow({
                         onClose={onRequestClose}
                     />
 
-                    {imageCaption && <LightboxCaption>{imageCaption}</LightboxCaption>}
+                    {caption && <LightboxCaption>{caption}</LightboxCaption>}
                 </div>
             </LightboxWindowContext.Provider>
         </Modal>

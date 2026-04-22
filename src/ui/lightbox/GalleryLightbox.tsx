@@ -102,9 +102,9 @@ export default function GalleryLightbox() {
         statusText = `${index + 1} / ${media.length}`;
     }
 
-    const onMovePrevRequest = () => prevMediaId != null ? dispatch(lightboxMediaSet(prevMediaId, prevSequence)) : null;
+    const onMovePrev = () => prevMediaId != null ? dispatch(lightboxMediaSet(prevMediaId, prevSequence)) : null;
 
-    const onMoveNextRequest = () => nextMediaId != null ? dispatch(lightboxMediaSet(nextMediaId, nextSequence)) : null;
+    const onMoveNext = () => nextMediaId != null ? dispatch(lightboxMediaSet(nextMediaId, nextSequence)) : null;
 
     return (
         <ParentContext.Provider value={{hide: onCloseRequest, overlayId}}>
@@ -113,8 +113,8 @@ export default function GalleryLightbox() {
                 prevSrc={prevSrc}
                 nextSrc={nextSrc}
                 statusText={statusText}
-                onMovePrevRequest={onMovePrevRequest}
-                onMoveNextRequest={onMoveNextRequest}
+                onMovePrev={onMovePrev}
+                onMoveNext={onMoveNext}
                 zIndex={zIndex?.shadow}
                 toolbarButtons={[
                     mainTextContent && <LightboxCopyTextButton text={mainTextContent}/>,
@@ -122,7 +122,7 @@ export default function GalleryLightbox() {
                     <LightboxDownloadButton mediaUrl={mainSrc} mediaMimeType={mainMimeType}/>,
                     <LightboxReactions/>
                 ]}
-                imageCaption={mediaPosting?.body.text &&
+                caption={mediaPosting?.body.text &&
                     <EntryHtml postingId={mediaPosting.id} html={mediaPosting.body.text}/>
                 }
             />

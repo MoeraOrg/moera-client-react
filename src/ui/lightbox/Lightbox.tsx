@@ -8,7 +8,7 @@ import { LightboxContext } from "ui/lightbox/lightbox-context";
 import type { LightboxChangeZoomOptions } from "ui/lightbox/lightbox-context";
 import { useLightboxImageCache } from "ui/lightbox/lightbox-image-cache";
 import { useLightboxImageLoader } from "ui/lightbox/lightbox-image-loader";
-import LightboxWindow from "ui/lightbox/LightboxWindow";
+import LightboxWindow, { MoveDirection } from "ui/lightbox/LightboxWindow";
 import type { OffsetBounds } from "ui/lightbox/LightboxWindow";
 import {
     ANIMATION_DURATION_MS,
@@ -19,11 +19,11 @@ import {
 export type LightboxTriggerEvent = Event | React.SyntheticEvent;
 
 export interface LightboxProps {
-    imageCaption?: React.ReactNode;
+    caption?: React.ReactNode;
     mainSrc: string;
     nextSrc?: string | null;
-    onMoveNextRequest(event?: LightboxTriggerEvent): void;
-    onMovePrevRequest(event?: LightboxTriggerEvent): void;
+    onMoveNext(): void;
+    onMovePrev(): void;
     prevSrc?: string | null;
     statusText?: string;
     toolbarButtons: React.ReactNode[];
@@ -40,10 +40,10 @@ export default function Lightbox(props: LightboxProps) {
         prevSrc,
         statusText,
         toolbarButtons,
-        imageCaption,
+        caption,
         zIndex,
-        onMovePrevRequest,
-        onMoveNextRequest,
+        onMovePrev,
+        onMoveNext,
     } = props;
     const {hide} = useParent();
 
@@ -199,11 +199,7 @@ export default function Lightbox(props: LightboxProps) {
         setOffsetY(nextOffsetY);
     };
 
-    const requestMove = (
-        direction: "next" | "prev",
-        event?: LightboxTriggerEvent,
-        animate = true
-    ): void => {
+    const requestMove = (direction: MoveDirection, animate = true): void => {
         if (animate) {
             requestAnimation();
         }
@@ -214,19 +210,11 @@ export default function Lightbox(props: LightboxProps) {
 
         if (direction === "prev") {
             setKeyCounter(current => current - 1);
-            onMovePrevRequest(event);
+            onMovePrev();
         } else {
             setKeyCounter(current => current + 1);
-            onMoveNextRequest(event);
+            onMoveNext();
         }
-    };
-
-    const requestMoveNext = (event?: LightboxTriggerEvent, animate = true): void => {
-        requestMove("next", event, animate);
-    };
-
-    const requestMovePrev = (event?: LightboxTriggerEvent, animate = true): void => {
-        requestMove("prev", event, animate);
     };
 
     const requestClose = (event?: LightboxTriggerEvent): void => {
@@ -250,7 +238,7 @@ export default function Lightbox(props: LightboxProps) {
             <LightboxWindow
                 hasNext={!!nextSrc}
                 hasPrev={!!prevSrc}
-                imageCaption={imageCaption}
+                caption={caption}
                 isClosing={isClosing}
                 offsetX={offsetX}
                 offsetY={offsetY}
@@ -259,8 +247,7 @@ export default function Lightbox(props: LightboxProps) {
                 zIndex={zIndex}
                 getMaxOffsets={getMaxOffsets}
                 onAnimationRequest={requestAnimation}
-                onMoveNextRequest={requestMoveNext}
-                onMovePrevRequest={requestMovePrev}
+                onMove={requestMove}
                 onOffsetChange={changeOffset}
                 onRequestClose={requestClose}
                 ref={outerElement}
