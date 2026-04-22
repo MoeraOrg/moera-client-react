@@ -22,20 +22,13 @@ interface CoordinateEventLike {
 }
 
 export interface InputPointer {
-    id: number | string;
-    source: number;
+    id: number;
     x: number;
     y: number;
 }
 
-// Events source
-export const SOURCE_ANY = 0;
-export const SOURCE_MOUSE = 1;
-export const SOURCE_TOUCH = 2;
-export const SOURCE_POINTER = 3;
-
-interface TouchPointerLike extends CoordinateEventLike {
-    identifier: number;
+interface PointerEventLike extends CoordinateEventLike {
+    pointerId: number;
 }
 
 export function isTargetMainImage(target: EventTarget | null): boolean {
@@ -43,28 +36,9 @@ export function isTargetMainImage(target: EventTarget | null): boolean {
         && target.classList.contains("lightbox-image-main");
 }
 
-export function parseMouseEvent(mouseEvent: CoordinateEventLike): InputPointer {
-    return {
-        id: "mouse",
-        source: SOURCE_MOUSE,
-        x: Math.trunc(mouseEvent.clientX),
-        y: Math.trunc(mouseEvent.clientY)
-    };
-}
-
-export function parseTouchPointer(touchPointer: TouchPointerLike): InputPointer {
-    return {
-        id: touchPointer.identifier,
-        source: SOURCE_TOUCH,
-        x: Math.trunc(touchPointer.clientX),
-        y: Math.trunc(touchPointer.clientY)
-    };
-}
-
-export function parsePointerEvent(pointerEvent: PointerEvent): InputPointer {
+export function parsePointerEvent(pointerEvent: PointerEventLike): InputPointer {
     return {
         id: pointerEvent.pointerId,
-        source: SOURCE_POINTER,
         x: Math.trunc(pointerEvent.clientX),
         y: Math.trunc(pointerEvent.clientY)
     };

@@ -15,13 +15,7 @@ import {
     ANIMATION_DURATION_MS,
     isTargetMainImage,
     MIN_ZOOM_LEVEL,
-    parseMouseEvent,
     parsePointerEvent,
-    parseTouchPointer,
-    SOURCE_ANY,
-    SOURCE_MOUSE,
-    SOURCE_POINTER,
-    SOURCE_TOUCH,
     WHEEL_MOVE_X_THRESHOLD
 } from "ui/lightbox/util";
 import "./LightboxWindow.css";
@@ -41,7 +35,7 @@ export interface OffsetBounds {
 }
 
 interface PinchPointer {
-    id: number | string;
+    id: number;
     x: number;
     y: number;
 }
@@ -99,7 +93,6 @@ export default function LightboxWindow({
     const {animating, boxSize, dyed, zoomLevel, changeZoom, toggleDyed} = useLightbox();
 
     const currentActionRef = useRef(ACTION_NONE);
-    const eventsSourceRef = useRef(SOURCE_ANY);
     const pointerListRef = useRef<InputPointer[]>([]);
     const preventInnerCloseRef = useRef(false);
     const keyPressedRef = useRef(false);
@@ -114,7 +107,7 @@ export default function LightboxWindow({
     const swipeStartYRef = useRef(0);
     const swipeEndXRef = useRef(0);
     const swipeEndYRef = useRef(0);
-    const pinchTouchListRef = useRef<PinchPointer[] | null>(null);
+    const pinchPointerListRef = useRef<PinchPointer[] | null>(null);
     const pinchDistanceRef = useRef(0);
 
     const preventInnerCloseTimeout = useManagedTimeout();
@@ -231,7 +224,7 @@ export default function LightboxWindow({
         }
     };
 
-    const calculatePinchDistance = (pointerList = pinchTouchListRef.current ?? []): number => {
+    const calculatePinchDistance = (pointerList = pinchPointerListRef.current ?? []): number => {
         if (pointerList.length < 2) {
             return 0;
         }
@@ -242,19 +235,19 @@ export default function LightboxWindow({
         );
     };
 
-    const calculatePinchCenter = (pointerList = pinchTouchListRef.current ?? []): Point => ({
+    const calculatePinchCenter = (pointerList = pinchPointerListRef.current ?? []): Point => ({
         x: (pointerList[0].x + pointerList[1].x) / 2,
         y: (pointerList[0].y + pointerList[1].y) / 2
     });
 
     const handlePinchStart = (pointerList: InputPointer[]): void => {
         currentActionRef.current = ACTION_PINCH;
-        pinchTouchListRef.current = pointerList.map(({id, x, y}) => ({id, x, y}));
-        pinchDistanceRef.current = calculatePinchDistance(pinchTouchListRef.current);
+        pinchPointerListRef.current = pointerList.map(({id, x, y}) => ({id, x, y}));
+        pinchDistanceRef.current = calculatePinchDistance(pinchPointerListRef.current);
     };
 
     const handlePinch = (pointerList: InputPointer[]): void => {
-        pinchTouchListRef.current = (pinchTouchListRef.current ?? []).map(oldPointer => {
+        pinchPointerListRef.current = (pinchPointerListRef.current ?? []).map(oldPointer => {
             for (let i = 0; i < pointerList.length; i += 1) {
                 if (pointerList[i].id === oldPointer.id) {
                     return {
@@ -268,17 +261,17 @@ export default function LightboxWindow({
             return oldPointer;
         });
 
-        const newDistance = calculatePinchDistance(pinchTouchListRef.current);
+        const newDistance = calculatePinchDistance(pinchPointerListRef.current);
         const nextZoomLevel = zoomLevel + newDistance - pinchDistanceRef.current;
 
         pinchDistanceRef.current = newDistance;
-        const {x: clientX, y: clientY} = calculatePinchCenter(pinchTouchListRef.current);
+        const {x: clientX, y: clientY} = calculatePinchCenter(pinchPointerListRef.current);
         changeZoom(nextZoomLevel, clientX, clientY, {constrainOffsets: false});
     };
 
     const handlePinchEnd = (): void => {
         currentActionRef.current = ACTION_NONE;
-        pinchTouchListRef.current = null;
+        pinchPointerListRef.current = null;
         pinchDistanceRef.current = 0;
     };
 
@@ -322,10 +315,7 @@ export default function LightboxWindow({
         }
     };
 
-    const multiPointerMove = (
-        event: LightboxTriggerEvent,
-        pointerList: InputPointer[]
-    ): void => {
+    const multiPointerMove = (event: LightboxTriggerEvent, pointerList: InputPointer[]): void => {
         switch (currentActionRef.current) {
             case ACTION_MOVE:
                 event.preventDefault();
@@ -350,9 +340,6 @@ export default function LightboxWindow({
             handleEnd(event);
         }
         switch (pointerListRef.current.length) {
-            case 0:
-                eventsSourceRef.current = SOURCE_ANY;
-                break;
             case 1:
                 event.preventDefault();
                 decideMoveOrSwipe(pointerListRef.current[0]);
@@ -366,39 +353,26 @@ export default function LightboxWindow({
         }
     };
 
-    const shouldHandleEvent = (source: number): boolean => {
-        if (eventsSourceRef.current === source) {
-            return true;
-        }
-        if (eventsSourceRef.current === SOURCE_ANY) {
-            eventsSourceRef.current = source;
-            return true;
-        }
-        switch (source) {
-            case SOURCE_MOUSE:
-                return false;
-            case SOURCE_TOUCH:
-                eventsSourceRef.current = SOURCE_TOUCH;
-                pointerListRef.current = pointerListRef.current.filter(
-                    ({source: pointerSource}) => pointerSource === eventsSourceRef.current
-                );
-                return true;
-            case SOURCE_POINTER:
-                if (eventsSourceRef.current === SOURCE_MOUSE) {
-                    eventsSourceRef.current = SOURCE_POINTER;
-                    pointerListRef.current = pointerListRef.current.filter(
-                        ({source: pointerSource}) => pointerSource === eventsSourceRef.current
-                    );
-                    return true;
-                }
-                return false;
-            default:
-                return false;
-        }
+    const addPointer = (pointer: InputPointer): void => {
+        pointerListRef.current = [
+            ...pointerListRef.current.filter(({id}) => id !== pointer.id),
+            pointer
+        ];
     };
 
-    const addPointer = (pointer: InputPointer): void => {
-        pointerListRef.current.push(pointer);
+    const updatePointer = (pointer: InputPointer): boolean => {
+        let found = false;
+
+        pointerListRef.current = pointerListRef.current.map(currentPointer => {
+            if (currentPointer.id !== pointer.id) {
+                return currentPointer;
+            }
+
+            found = true;
+            return pointer;
+        });
+
+        return found;
     };
 
     const removePointer = (pointer: InputPointer): void => {
@@ -407,106 +381,43 @@ export default function LightboxWindow({
         );
     };
 
-    const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>): void => {
-        if (shouldHandleEvent(SOURCE_MOUSE) && isTargetMainImage(event.target)) {
-            addPointer(parseMouseEvent(event));
+    const hasPointer = (pointer: InputPointer): boolean =>
+        pointerListRef.current.some(({id}) => id === pointer.id);
+
+    const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>): void => {
+        if (isTargetMainImage(event.target)) {
+            addPointer(parsePointerEvent(event));
             multiPointerStart(event);
         }
     };
 
-    const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>): void => {
-        if (shouldHandleEvent(SOURCE_MOUSE)) {
-            multiPointerMove(event, [parseMouseEvent(event)]);
-        }
-    };
+    const handlePointerMove = useEffectEvent((event: PointerEvent): void => {
+        const pointer = parsePointerEvent(event);
 
-    const handleMouseUp = useEffectEvent((event: MouseEvent): void => {
-        if (shouldHandleEvent(SOURCE_MOUSE)) {
-            removePointer(parseMouseEvent(event));
+        if (updatePointer(pointer)) {
+            multiPointerMove(event, [pointer]);
+        }
+    });
+
+    const handlePointerEnd = useEffectEvent((event: PointerEvent): void => {
+        const pointer = parsePointerEvent(event);
+
+        if (hasPointer(pointer)) {
+            removePointer(pointer);
             multiPointerEnd(event);
         }
     });
 
     useEffect(() => {
-        window.addEventListener("mouseup", handleMouseUp);
+        window.addEventListener("pointermove", handlePointerMove);
+        window.addEventListener("pointerup", handlePointerEnd);
+        window.addEventListener("pointercancel", handlePointerEnd);
         return () => {
-            window.removeEventListener("mouseup", handleMouseUp);
+            window.removeEventListener("pointermove", handlePointerMove);
+            window.removeEventListener("pointerup", handlePointerEnd);
+            window.removeEventListener("pointercancel", handlePointerEnd);
         };
-    }, [handleMouseUp]);
-
-    const handlePointerEvent = useEffectEvent((event: PointerEvent): void => {
-        if (shouldHandleEvent(SOURCE_POINTER)) {
-            switch (event.type) {
-                case "pointerdown":
-                    if (isTargetMainImage(event.target)) {
-                        addPointer(parsePointerEvent(event));
-                        multiPointerStart(event);
-                    }
-                    break;
-                case "pointermove":
-                    multiPointerMove(event, [parsePointerEvent(event)]);
-                    break;
-                case "pointerup":
-                case "pointercancel":
-                    removePointer(parsePointerEvent(event));
-                    multiPointerEnd(event);
-                    break;
-                default:
-                    break;
-            }
-        }
-    });
-
-    useEffect(() => {
-        window.addEventListener("pointerdown", handlePointerEvent);
-        window.addEventListener("pointermove", handlePointerEvent);
-        window.addEventListener("pointerup", handlePointerEvent);
-        window.addEventListener("pointercancel", handlePointerEvent);
-        return () => {
-            window.removeEventListener("pointerdown", handlePointerEvent);
-            window.removeEventListener("pointermove", handlePointerEvent);
-            window.removeEventListener("pointerup", handlePointerEvent);
-            window.removeEventListener("pointercancel", handlePointerEvent);
-        };
-    }, [handlePointerEvent]);
-
-    const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>): void => {
-        if (shouldHandleEvent(SOURCE_TOUCH) && isTargetMainImage(event.target)) {
-            Array.from(event.changedTouches).forEach(eventTouch =>
-                addPointer(parseTouchPointer(eventTouch))
-            );
-            multiPointerStart(event);
-        }
-    };
-
-    const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>): void => {
-        if (shouldHandleEvent(SOURCE_TOUCH)) {
-            multiPointerMove(
-                event,
-                Array.from(event.changedTouches).map(eventTouch =>
-                    parseTouchPointer(eventTouch)
-                )
-            );
-        }
-    };
-
-    const handleTouchEnd = useEffectEvent((event: TouchEvent): void => {
-        if (shouldHandleEvent(SOURCE_TOUCH)) {
-            Array.from(event.changedTouches).forEach(touch =>
-                removePointer(parseTouchPointer(touch))
-            );
-            multiPointerEnd(event);
-        }
-    });
-
-    useEffect(() => {
-        window.addEventListener("touchend", handleTouchEnd);
-        window.addEventListener("touchcancel", handleTouchEnd);
-        return () => {
-            window.removeEventListener("touchend", handleTouchEnd);
-            window.removeEventListener("touchcancel", handleTouchEnd);
-        };
-    }, [handleTouchEnd]);
+    }, [handlePointerMove, handlePointerEnd]);
 
     const handleImageClick = (): void => {
         if (ignoreImageClickTimeout.isActive()) {
@@ -577,7 +488,7 @@ export default function LightboxWindow({
         }
     };
 
-    const handleOuterMousewheel = (event: React.WheelEvent<HTMLDivElement>): void => {
+    const handleWheel = (event: React.WheelEvent<HTMLDivElement>): void => {
         event.stopPropagation();
 
         const xThreshold = WHEEL_MOVE_X_THRESHOLD;
@@ -651,11 +562,8 @@ export default function LightboxWindow({
                         animationDirection: isClosing ? "normal" : "reverse"
                     }}
                     ref={ref}
-                    onWheel={handleOuterMousewheel}
-                    onMouseMove={handleMouseMove}
-                    onMouseDown={handleMouseDown}
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
+                    onWheel={handleWheel}
+                    onPointerDown={handlePointerDown}
                     tabIndex={-1}
                     onKeyDown={handleKeyInput}
                     onKeyUp={handleKeyInput}
