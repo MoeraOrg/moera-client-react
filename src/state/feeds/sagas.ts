@@ -240,7 +240,9 @@ async function feedPastSliceLoadSaga(action: WithContext<FeedPastSliceLoadAction
     nodeName = absoluteNodeName(nodeName, action.context);
     try {
         const before = (select(state => getFeedState(state, nodeName, feedName))).after;
-        const slice = await Node.getFeedSlice(action, nodeName, feedName, null, before, 20, ["feed.not-found"]);
+        const slice = await Node.getFeedSlice(
+            action, nodeName, feedName, null, before, 20, ["not-found", "feed.not-found"]
+        );
         await fillActivityReactionsInStories(action, slice.stories);
         await fillBlockedOperationsInStories(action, slice.stories);
         dispatch(feedPastSliceSet(
@@ -263,7 +265,9 @@ async function feedFutureSliceLoadSaga(action: WithContext<FeedFutureSliceLoadAc
     nodeName = absoluteNodeName(nodeName, action.context);
     try {
         const after = (select(state => getFeedState(state, nodeName, feedName))).before;
-        const slice = await Node.getFeedSlice(action, nodeName, feedName, after, null, 20, ["feed.not-found"]);
+        const slice = await Node.getFeedSlice(
+            action, nodeName, feedName, after, null, 20, ["not-found", "feed.not-found"]
+        );
         await fillActivityReactionsInStories(action, slice.stories);
         await fillBlockedOperationsInStories(action, slice.stories);
         dispatch(feedFutureSliceSet(
