@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Loading } from "ui/control";
 import { useLightbox } from "ui/lightbox/lightbox-context";
 import { ImageInfo } from "ui/lightbox/lightbox-image-loader";
+import { useLightboxWindow } from "ui/lightbox/lightbox-window-context";
 import {
     ANIMATION_DURATION_MS,
     isTargetMainImage,
@@ -24,7 +25,8 @@ interface Props {
 }
 
 export default function LightboxImage({imageInfo, className, transforms, onClick}: Props) {
-    const {animating, boxSize, zoomLevel, changeZoom, resetWheelScroll} = useLightbox();
+    const {animating, boxSize, zoomLevel, changeZoom} = useLightbox();
+    const {resetWheelScroll} = useLightboxWindow();
     const {t} = useTranslation();
 
     const handleDoubleClick = (event: React.MouseEvent<HTMLImageElement>): void => {
