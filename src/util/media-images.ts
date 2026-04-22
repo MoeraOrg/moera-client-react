@@ -1,5 +1,3 @@
-import mime from 'mime';
-
 import { MediaFilePreviewInfo, PrivateMediaFileInfo } from "api";
 import {
     isFigureImageElement,
@@ -10,8 +8,8 @@ import {
     Scripture
 } from "ui/control/richtexteditor/visual/scripture";
 import { urlWithParameters } from "util/url";
+import { extension } from "util/mime-type";
 import { isNumber } from "util/misc";
-import MEDIA_IMAGE_EXTENSIONS from "util/media-image-extensions.json";
 
 function toInt(s: number | string | null | undefined): number {
     if (s == null) {
@@ -156,10 +154,6 @@ function scriptureMediaHashesExtract(scripture: Scripture, hashes: Set<string>):
     });
 }
 
-export function mediaImageExtensions(mimeType: string | null | undefined): string[] {
-    return mimeType != null && mimeType in MEDIA_IMAGE_EXTENSIONS ? MEDIA_IMAGE_EXTENSIONS[mimeType] : [];
-}
-
 export function isMediaDirectPathExpiring(media: PrivateMediaFileInfo | null | undefined): boolean {
     return media?.directPath != null
         && media.directPathExpiresAt != null
@@ -172,7 +166,7 @@ export function mediaFileName(media: PrivateMediaFileInfo | null | undefined): s
     if (media == null) {
         return undefined;
     }
-    return media.title ? media.title + "." + mime.getExtension(media.mimeType) : media.path.split("/").pop();
+    return media.title ? media.title + "." + extension(media.mimeType) : media.path.split("/").pop();
 }
 
 export function mediaDownloadUrl(rootPage: string | null, media: PrivateMediaFileInfo, carte: string | null): string {

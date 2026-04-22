@@ -27,12 +27,12 @@ import RichTextImageDialog, { RichTextImageValues } from "ui/control/richtextedi
 import RichTextCopyImageDialog, {
     RichTextCopyImageValues
 } from "ui/control/richtexteditor/dialog/RichTextCopyImageDialog";
-import { RelNodeName } from "util/rel-node-name";
-import { mediaImageExtensions } from "util/media-images";
-import { arrayMove } from "util/misc";
 import RichTextRenameMediaDialog, {
     RichTextRenameMediaValues
 } from "ui/control/richtexteditor/dialog/RichTextRenameMediaDialog";
+import { RelNodeName } from "util/rel-node-name";
+import { extension } from "util/mime-type";
+import { arrayMove } from "util/misc";
 
 function updateStatus(progress: UploadProgress[], index: number, status: UploadStatus): UploadProgress[] {
     const updated = immutable.set(progress, [index, "status"], status);
@@ -198,7 +198,7 @@ export default function RichTextEditorMedia({
 
     const imageExtensions = useMemo(
         () => features?.imageFormats
-            ? features.imageFormats.flatMap(format => mediaImageExtensions(format)).map(ext => "." + ext)
+            ? features.imageFormats.flatMap(format => extension(format)).map(ext => "." + ext)
             : [],
         [features]
     );

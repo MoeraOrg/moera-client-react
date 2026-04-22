@@ -3,12 +3,12 @@ import cx from 'classnames';
 import LinesEllipsis from 'react-lines-ellipsis';
 import { formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
-import mime from 'mime';
 
 import { tDistanceToNow } from "i18n/time";
 import { ExtDraftInfo } from "state/compose/state";
 import { Button } from "ui/control";
 import { Icon, msDelete } from "ui/material-symbols";
+import { extension } from "util/mime-type";
 import "./ComposeDraftItem.css";
 
 interface Props {
@@ -68,7 +68,7 @@ function getDraftText(draft: ExtDraftInfo): string {
             }
             if (media.media.attachment) {
                 if (media.media.title) {
-                    text += " " + media.media.title + "." + mime.getExtension(media.media.mimeType);
+                    text += " " + media.media.title + "." + extension(media.media.mimeType);
                 } else {
                     hasFiles = true;
                 }
