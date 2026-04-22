@@ -535,7 +535,7 @@ export default function LightboxWindow({
 
     const handleKeyInput = (event: React.KeyboardEvent<HTMLDivElement>): void => {
         if (event.key === "Escape" || event.key === "Esc") {
-            // will be handled by the overlay manager
+            // will be handled by react-modal
             return;
         }
 
