@@ -599,14 +599,11 @@ export default function LightboxWindow({
             scrollXRef.current += event.deltaX;
 
             const bigLeapX = xThreshold / 2;
-            if (scrollXRef.current >= xThreshold || event.deltaX >= bigLeapX) {
+            if ((scrollXRef.current >= xThreshold || event.deltaX >= bigLeapX) && hasNext) {
                 requestMove("next");
                 actionDelay = imageMoveDelay;
                 resetWheelScroll();
-            } else if (
-                scrollXRef.current <= -1 * xThreshold
-                || event.deltaX <= -1 * bigLeapX
-            ) {
+            } else if ((scrollXRef.current <= -1 * xThreshold || event.deltaX <= -1 * bigLeapX) && hasPrev) {
                 requestMove("prev");
                 actionDelay = imageMoveDelay;
                 resetWheelScroll();
