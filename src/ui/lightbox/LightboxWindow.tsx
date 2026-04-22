@@ -231,9 +231,7 @@ export default function LightboxWindow({
         }
     };
 
-    const calculatePinchDistance = (
-        pointerList = pinchTouchListRef.current ?? []
-    ): number => {
+    const calculatePinchDistance = (pointerList = pinchTouchListRef.current ?? []): number => {
         if (pointerList.length < 2) {
             return 0;
         }
@@ -245,8 +243,8 @@ export default function LightboxWindow({
     };
 
     const calculatePinchCenter = (pointerList = pinchTouchListRef.current ?? []): Point => ({
-        x: pointerList[0].x - (pointerList[0].x - pointerList[1].x) / 2,
-        y: pointerList[0].y - (pointerList[0].y - pointerList[1].y) / 2
+        x: (pointerList[0].x + pointerList[1].x) / 2,
+        y: (pointerList[0].y + pointerList[1].y) / 2
     });
 
     const handlePinchStart = (pointerList: InputPointer[]): void => {
