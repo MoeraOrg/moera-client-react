@@ -12,6 +12,7 @@ import { attachmentCopyLink } from "state/detailedposting/actions";
 import { Icon, msDangerous, msDownload } from "ui/material-symbols";
 import { DropdownMenu, Tooltip } from "ui/control";
 import { useDispatcher, useIsTinyScreen } from "ui/hook";
+import { formatFileSize } from "util/info-quantity";
 import { mediaDownloadUrl, mediaFileName } from "util/media-images";
 import { absoluteNodeName, RelNodeName } from "util/rel-node-name";
 import { notNull } from "util/misc";
@@ -63,8 +64,13 @@ export default function EntryAttachments({nodeName, media}: Props) {
     return (
         <div>
             {files
-                .map(file => ({file, url: mediaDownloadUrl(rootPage, file, carte), fileName: mediaFileName(file)}))
-                .map(({file, url, fileName}) => (
+                .map(file => {
+                    const url = mediaDownloadUrl(rootPage, file, carte);
+                    const fileName = mediaFileName(file);
+                    const fileLabel = `${fileName}, ${formatFileSize(file.size)}`;
+                    return {file, url, fileName, fileLabel};
+                })
+                .map(({file, url, fileName, fileLabel}) => (
                     <div className="attached-file" key={file.id}>
                         <DropdownMenu items={[
                             {
@@ -79,7 +85,7 @@ export default function EntryAttachments({nodeName, media}: Props) {
                             <>
                                 <a className="file-name" download={fileName} href={url} title={t("download")}
                                    onClick={onDownload(file, url)}>
-                                    {fileName}
+                                    {fileLabel}
                                 </a>
                                 <a className="download-icon" download={fileName} href={url} title={t("download")}
                                    onClick={onDownload(file, url)}>
@@ -88,7 +94,7 @@ export default function EntryAttachments({nodeName, media}: Props) {
                             </>
                         :
                             <>
-                                <div className="file-name">{fileName}</div>
+                                <div className="file-name">{fileLabel}</div>
                                 <Tooltip className="malware-icon" text="malware-detected-in-file"
                                          placement={tinyScreen ? "left" : undefined}>
                                     <Icon icon={msDangerous} size="1.6em"/>

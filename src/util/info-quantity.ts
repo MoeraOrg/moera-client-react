@@ -82,3 +82,9 @@ export class InfoQuantity {
 
 export const formatMib = (size: number): string =>
     (size / 1024 / 1024).toLocaleString("en-US", {maximumFractionDigits: 2}) + "\u00a0MiB";
+
+export const formatKib = (size: number): string =>
+    (Math.ceil(size / 1024 * 10) / 10).toLocaleString("en-US", {maximumFractionDigits: 1}) + "\u00a0KiB";
+
+export const formatFileSize = (size: number): string =>
+    size < 1024 * 1024 ? formatKib(size) : formatMib(size);

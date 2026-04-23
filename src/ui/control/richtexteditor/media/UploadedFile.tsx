@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { VerifiedMediaFile } from "api";
 import { DropdownMenu } from "ui/control";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
+import { formatFileSize } from "util/info-quantity";
 import { mediaFileName } from "util/media-images";
 import { REL_CURRENT } from "util/rel-node-name";
 
@@ -31,6 +32,9 @@ export default function UploadedFile({media, dragged = false}: Props) {
         }
     }
 
+    const fileName = mediaFileName(media);
+    const fileLabel = `${fileName}, ${formatFileSize(media.size)}`;
+
     return (
         <div className={cx("attached-file", {"dragged": dragged})} ref={sortable.setNodeRef}
              style={sortableStyle} {...sortable.attributes} {...sortable.listeners}>
@@ -53,7 +57,7 @@ export default function UploadedFile({media, dragged = false}: Props) {
                     show: true
                 }
             ]} menuContainer={document.getElementById("modal-root")} disabled={dragged ?? false}/>
-            <div className="file-name" onClick={onRename}>{mediaFileName(media)}</div>
+            <div className="file-name" onClick={onRename}>{fileLabel}</div>
         </div>
     );
 }
