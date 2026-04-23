@@ -82,7 +82,7 @@ function FriendGroupsDialogInner({nodeName, nodeCard, values, setFieldValue}: Pr
                             <CheckboxField<string[]> name="addedGroups" value={String(index)}
                                                      isChecked={(v: string[]) => v.includes(String(index))} anyValue/>
                             <InputField name={`addedGroupTitles[${index}]`} maxLength={63}
-                                        groupClassName="add-group-name"/>
+                                        groupClassName="add-group-name" errorsOnly/>
                             <PrincipalField name={`addedGroupView[${index}]`} values={["public", "private", "admin"]}
                                             titles={{
                                                 "public": t("friend-group-visibility.public"),

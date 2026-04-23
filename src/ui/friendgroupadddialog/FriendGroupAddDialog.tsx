@@ -27,7 +27,7 @@ function FriendGroupAddDialog() {
         <ModalDialog title={t("add-friend-group")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
-                    <InputField name="title" title={t("name")} maxLength={63}/>
+                    <InputField name="title" title={t("name")} maxLength={63} errorsOnly/>
                     <PrincipalField name="view" title={t("visibility")} values={["public", "private", "admin"]}
                                     titles={{
                                         "public": t("friend-group-visibility.public"),
