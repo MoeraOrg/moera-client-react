@@ -72,7 +72,7 @@ export default function GalleryLightbox() {
             mainSrc = urlWithParameters(rootPage + mainHref, {auth});
         }
         mainMimeType = mainMedia?.mimeType ?? "image/jpeg";
-        mainTextContent = mainMedia?.textContent ?? "Some text";
+        mainTextContent = mainMedia?.textContent ?? undefined;
         const prevIndex = index > 0
             ? index - 1
             : (index === 0 && loop ? media.length - 1 : null);
