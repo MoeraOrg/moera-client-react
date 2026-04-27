@@ -1,7 +1,9 @@
 import mime from 'mime';
 
 const ADDITIONAL_MIME_TYPES: Record<string, string> = {
-    "text/markdown": "md"
+    "image/x-png": "png",
+    "image/x-webp": "webp",
+    "text/markdown": "md",
 };
 
 export function extension(mimeType: null | undefined): undefined;
