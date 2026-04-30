@@ -51,9 +51,7 @@ export function mediaSources(
     return previews.map(preview => {
         const url = preview.original
             ? originalLocation
-            : preview.directPath
-                ? mediaPrefix + preview.directPath
-                : mediaImagePreview(originalLocation, preview.targetWidth);
+            : preview.directPath ? mediaPrefix + preview.directPath : mediaPrefix + preview.path;
         return `${url} ${preview.width}w`;
     }).join(",");
 }
@@ -110,13 +108,13 @@ export function mediaImageTagAttributes(
     const mediaPrefix = rootPage + "/media/";
     let mediaLocation: string;
     let src: string;
+    const preview = mediaImageFindLargerPreview(mediaFile.previews, targetWidth);
     if (mediaFile.directPath) {
         mediaLocation = mediaPrefix + mediaFile.directPath;
-        const preview = mediaImageFindLargerPreview(mediaFile.previews, targetWidth);
         src = rootPage + "/media/" + (preview?.directPath ?? mediaFile.directPath);
     } else {
         mediaLocation = mediaPrefix + mediaFile.path;
-        src = mediaImagePreview(mediaLocation, targetWidth);
+        src = rootPage + "/media/" + (preview?.path ?? mediaImagePreview(mediaLocation, targetWidth));
     }
     const srcSet = mediaSources(mediaLocation, mediaPrefix, mediaFile.previews);
     const sizes = mediaSizes(mediaFile.previews ?? []);
