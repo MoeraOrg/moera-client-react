@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
-import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { mediaImageTagAttributes } from "util/media-images";
 import { RelNodeName } from "util/rel-node-name";
 
@@ -17,11 +16,10 @@ interface Props {
 
 export default function AttachedImage({media, nodeName, dragging = false, onClick}: Props) {
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, nodeName));
-    const carte = useSelector(getCurrentViewMediaCarte);
 
     const {
         src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
-    } = mediaImageTagAttributes(rootPage, media, carte, 150, 150, 150);
+    } = mediaImageTagAttributes(rootPage, media, 150, 150, 150);
 
     const cursor: React.CSSProperties["cursor"] = dragging ? "grabbing" : (onClick ? "pointer" : "default");
 

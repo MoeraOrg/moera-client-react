@@ -524,9 +524,14 @@ export interface LinkPreviewInfo {
     imageUrl?: string | null;
 }
 
+export interface MediaDownloadAttributes {
+    grant: string;
+}
+
 export interface MediaFilePreviewInfo {
     targetWidth: number;
     hash: string;
+    path: string;
     directPath?: string | null;
     directPathExpiresAt?: number | null;
     mimeType: string;
@@ -631,6 +636,7 @@ export interface PrivateMediaFileInfo {
     previews?: MediaFilePreviewInfo[] | null;
     attachment?: boolean | null;
     malware?: boolean | null;
+    grant?: string | null;
     operations?: PrivateMediaFileOperations | null;
 }
 

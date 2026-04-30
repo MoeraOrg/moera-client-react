@@ -4,11 +4,12 @@ import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWi
 export type OpenMediaDownloadDialogAction = ActionWithPayload<"OPEN_MEDIA_DOWNLOAD_DIALOG", {
     nodeName: string;
     mediaId: string;
+    grant: string | null;
 }>;
 export const openMediaDownloadDialog = (
-    nodeName: string, mediaId: string
+    nodeName: string, mediaId: string, grant: string | null
 ): OpenMediaDownloadDialogAction =>
-    actionWithPayload("OPEN_MEDIA_DOWNLOAD_DIALOG", {nodeName, mediaId});
+    actionWithPayload("OPEN_MEDIA_DOWNLOAD_DIALOG", {nodeName, mediaId, grant});
 
 export type CloseMediaDownloadDialogAction = ActionWithoutPayload<"CLOSE_MEDIA_DOWNLOAD_DIALOG">;
 export const closeMediaDownloadDialog = (): CloseMediaDownloadDialogAction =>

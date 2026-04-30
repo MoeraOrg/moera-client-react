@@ -17,12 +17,17 @@ export default [
 ];
 
 async function openMediaDownloadDialogSaga(action: WithContext<OpenMediaDownloadDialogAction>): Promise<void> {
-    const {nodeName, mediaId} = action.payload;
+    const {nodeName, mediaId, grant} = action.payload;
+
+    if (grant == null) {
+        dispatch(mediaDownloadFailed(nodeName, mediaId, "media.download-failed").causedBy(action));
+        return;
+    }
 
     while (true) {
         try {
             const media = await Node.downloadRemoteMedia(
-                action, REL_HOME, nodeName, mediaId,
+                action, REL_HOME, nodeName, mediaId, {grant},
                 [
                     "media.digest-incorrect", "media.download-failed", "media.malware", "media.storage-error",
                     "media.download-pending"

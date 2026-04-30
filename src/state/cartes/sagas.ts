@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 
-import { CarteAttributes, Node, NodeApiError } from "api";
+import { Node, NodeApiError } from "api";
 import { Storage } from "storage";
 import { saga } from "state/saga";
 import { CartesLoadAction, cartesLoaded, cartesSet, ClockOffsetWarnAction } from "state/cartes/actions";
@@ -17,14 +17,9 @@ export default [
 
 async function cartesLoadSaga(action: WithContext<CartesLoadAction>): Promise<void> {
     try {
-        let attrs: CarteAttributes = {clientScope: ["all"]};
-        const {cartesIp, cartes: allCartes, createdAt} =
-            await Node.createCartes(action, REL_HOME, attrs, ["node-name-not-set"]);
-        dispatch(cartesSet(cartesIp ?? null, allCartes, createdAt - now()).causedBy(action));
-
-        attrs = {clientScope: ["view-media"]};
-        const {cartes: viewMediaCartes} = await Node.createCartes(action, REL_HOME, attrs, ["node-name-not-set"]);
-        const cartes = allCartes.concat(viewMediaCartes);
+        const {cartesIp, cartes, createdAt} = await Node.createCartes(
+            action, REL_HOME, {clientScope: ["all"]}, ["node-name-not-set"]
+        );
         Storage.storeCartesData(cartesIp ?? null, cartes);
         dispatch(cartesSet(cartesIp ?? null, cartes, createdAt - now()).causedBy(action));
     } catch (e) {

@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { getHomeRootPage } from "state/home/selectors";
-import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { Button } from "ui/control";
 import { Icon, msDownload } from "ui/material-symbols";
 import { mediaDownloadUrl, mediaFileName } from "util/media-images";
@@ -17,7 +16,6 @@ interface Props {
 export default function MediaDownloadButton({loading}: Props) {
     const media = useSelector((state: ClientState) => state.mediaDownloadDialog.media);
     const homeRootPage = useSelector(getHomeRootPage);
-    const carte = useSelector(getCurrentViewMediaCarte);
     const {t} = useTranslation();
 
     if (media == null || media.malware) {
@@ -29,7 +27,7 @@ export default function MediaDownloadButton({loading}: Props) {
     }
 
     const fileName = mediaFileName(media);
-    const url = mediaDownloadUrl(homeRootPage, media, carte);
+    const url = mediaDownloadUrl(homeRootPage, media);
 
     const onDownload = window.Android && "saveFile" in window.Android
         ? (e: React.MouseEvent) => {

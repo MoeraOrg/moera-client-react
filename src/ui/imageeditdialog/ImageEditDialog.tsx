@@ -7,7 +7,6 @@ import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
-import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ExtPostingInfo } from "state/postings/state";
 import { getPosting } from "state/postings/selectors";
@@ -37,7 +36,6 @@ function ImageEditDialogInner(props: Props) {
     const parentOverlayId = useSelector((state: ClientState) => state.imageEditDialog.parentOverlayId);
     const media = useSelector((state: ClientState) => state.imageEditDialog.media);
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, state.imageEditDialog.nodeName));
-    const carte = useSelector(getCurrentViewMediaCarte);
     const loading = useSelector((state: ClientState) => state.imageEditDialog.loading);
     const saving = useSelector((state: ClientState) => state.imageEditDialog.saving);
     const dispatch = useDispatcher();
@@ -57,7 +55,7 @@ function ImageEditDialogInner(props: Props) {
 
     const {
         src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
-    } = mediaImageTagAttributes(rootPage, media, carte, 800);
+    } = mediaImageTagAttributes(rootPage, media, 800);
 
     return (
         <ModalDialog title={t("edit-image")} parentOverlayId={parentOverlayId} loading={loading} onClose={onClose}>

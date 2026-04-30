@@ -7,7 +7,6 @@ import { getHomeOwnerName, getRelNodeNameContext } from "state/home/selectors";
 import { openMediaDownloadDialog } from "state/mediadownloaddialog/actions";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
-import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { attachmentCopyLink } from "state/detailedposting/actions";
 import { Icon, msDangerous, msDownload } from "ui/material-symbols";
 import { DropdownMenu, Tooltip } from "ui/control";
@@ -29,7 +28,6 @@ export default function EntryAttachments({nodeName, media}: Props) {
         absoluteNodeName(nodeName, getRelNodeNameContext(state))
     );
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, nodeName));
-    const carte = useSelector(getCurrentViewMediaCarte);
     const tinyScreen = useIsTinyScreen();
     const dispatch = useDispatcher();
     const {t} = useTranslation();
@@ -58,14 +56,14 @@ export default function EntryAttachments({nodeName, media}: Props) {
             return;
         }
         event.preventDefault();
-        dispatch(openMediaDownloadDialog(targetNodeName, file.id));
+        dispatch(openMediaDownloadDialog(targetNodeName, file.id, file.grant ?? null));
     };
 
     return (
         <div>
             {files
                 .map(file => {
-                    const url = mediaDownloadUrl(rootPage, file, carte);
+                    const url = mediaDownloadUrl(rootPage, file);
                     const fileName = mediaFileName(file);
                     const fileLabel = `${fileName}, ${formatFileSize(file.size)}`;
                     return {file, url, fileName, fileLabel};

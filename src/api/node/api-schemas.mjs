@@ -1313,6 +1313,9 @@ export const NODE_API_SCHEMAS = {
                 "hash": {
                     type: "string"
                 },
+                "path": {
+                    type: "string"
+                },
                 "directPath": {
                     type: "string",
                     nullable: true
@@ -1338,6 +1341,7 @@ export const NODE_API_SCHEMAS = {
             required: [
                 "targetWidth",
                 "hash",
+                "path",
                 "mimeType",
                 "width",
                 "height",
@@ -1583,6 +1587,10 @@ export const NODE_API_SCHEMAS = {
                 },
                 "malware": {
                     type: "boolean",
+                    nullable: true
+                },
+                "grant": {
+                    type: "string",
                     nullable: true
                 },
                 "operations": {

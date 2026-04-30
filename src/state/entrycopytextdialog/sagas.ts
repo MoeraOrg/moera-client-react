@@ -6,13 +6,11 @@ import { dispatch, select } from "state/store-sagas";
 import { EntryCopyTextAction, openEntryCopyTextDialog } from "state/entrycopytextdialog/actions";
 import { flashBox } from "state/flashbox/actions";
 import { getNamingNameRoot } from "state/naming/selectors";
-import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import * as Browser from "ui/browser";
 import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
 import { clipboardCopy } from "util/clipboard";
 import { clearHtml, containsTags, htmlEntities } from "util/html";
 import { mediaImagePreview } from "util/media-images";
-import { urlWithParameters } from "util/url";
 import { notNull } from "util/misc";
 
 export default [
@@ -43,13 +41,10 @@ async function entryCopyTextSaga(action: EntryCopyTextAction): Promise<void> {
         text = clearHtml(text);
         html = text;
     } else {
-        const {rootPage, carte} = select(state => ({
-            rootPage: getNamingNameRoot(state, nodeName),
-            carte: getCurrentViewMediaCarte(state)
-        }));
+        const rootPage = select(state => getNamingNameRoot(state, nodeName));
         if (rootPage != null) {
-            text = replaceMediaUrls(text, rootPage, carte, media);
-            html = replaceMediaUrls(bodyText, rootPage, carte, media);
+            text = replaceMediaUrls(text, rootPage, media);
+            html = replaceMediaUrls(bodyText, rootPage, media);
         }
     }
     await clipboardCopy(text, html);
@@ -58,8 +53,7 @@ async function entryCopyTextSaga(action: EntryCopyTextAction): Promise<void> {
     }
 }
 
-function replaceMediaUrls(html: string, rootPage: string, carte: string | null,
-                          media: MediaAttachment[] | null): string {
+function replaceMediaUrls(html: string, rootPage: string, media: MediaAttachment[] | null): string {
     const mediaMap: Map<string, PrivateMediaFileInfo> = new Map(
         (media ?? [])
             .map(ma => ma.media)
@@ -67,19 +61,17 @@ function replaceMediaUrls(html: string, rootPage: string, carte: string | null,
             .map(mf => [mf.hash, mf])
     );
     return html.replace(/(<img[^>]*src=")hash:([^"]*)("[^>]*>)/gi,
-        (g0, g1, g2, g3) => g1 + mediaUrl(rootPage, carte, mediaMap.get(g2)) + g3)
+        (g0, g1, g2, g3) => g1 + mediaUrl(rootPage, mediaMap.get(g2)) + g3)
 
 }
 
-function mediaUrl(rootPage: string, carte: string | null, mediaFile: PrivateMediaFileInfo | undefined): string {
+function mediaUrl(rootPage: string, mediaFile: PrivateMediaFileInfo | undefined): string {
     if (mediaFile == null) {
         return "";
     }
     if (mediaFile.directPath) {
         return htmlEntities(rootPage + "/media/" + mediaFile.directPath)
     } else {
-        const auth = carte != null ? "carte:" + carte : null;
-        const mediaLocation = urlWithParameters(rootPage + "/media/" + mediaFile.path, {auth});
-        return htmlEntities(mediaImagePreview(mediaLocation, 900));
+        return htmlEntities(mediaImagePreview(rootPage + "/media/" + mediaFile.path, 900));
     }
 }

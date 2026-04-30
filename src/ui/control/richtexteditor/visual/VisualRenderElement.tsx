@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { DefaultElement, RenderElementProps } from 'slate-react';
 
 import { getNodeRootPage } from "state/node/selectors";
-import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { getImageDimensions } from "ui/control/richtexteditor/media/rich-text-image";
 import { isScriptureElement } from "ui/control/richtexteditor/visual/scripture";
@@ -22,7 +21,6 @@ export default function VisualRenderElement(props: RenderElementProps) {
 
     const tinyScreen = useIsTinyScreen();
     const rootPage = useSelector(getNodeRootPage);
-    const carte = useSelector(getCurrentViewMediaCarte);
     const {formatFormula, formatImage} = useRichTextEditorCommands();
     const {t} = useTranslation();
 
@@ -121,7 +119,7 @@ export default function VisualRenderElement(props: RenderElementProps) {
                 } else if (element.mediaFile != null) {
                     const {
                         src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
-                    } = mediaImageTagAttributes(rootPage, element.mediaFile, carte, 900, width, height);
+                    } = mediaImageTagAttributes(rootPage, element.mediaFile, 900, width, height);
                     return (
                         <span className="image-attached" {...attributes} contentEditable={false}
                               onClick={onImageClick}>
@@ -163,7 +161,7 @@ export default function VisualRenderElement(props: RenderElementProps) {
                 } else if (element.mediaFile != null) {
                     const {
                         src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
-                    } = mediaImageTagAttributes(rootPage, element.mediaFile, carte, 900, width, height);
+                    } = mediaImageTagAttributes(rootPage, element.mediaFile, 900, width, height);
                     return (
                         <div className="figure-image-attached" {...attributes} contentEditable={false}
                              onClick={onImageClick}>

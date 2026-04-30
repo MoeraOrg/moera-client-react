@@ -103,12 +103,10 @@ export interface MediaImageTagAttributes {
 export function mediaImageTagAttributes(
     rootPage: string | null,
     mediaFile: PrivateMediaFileInfo,
-    carte: string | null,
     targetWidth: number,
     width?: string | number | null,
     height?: string | number | null
 ): MediaImageTagAttributes {
-    const isPublic = (mediaFile.operations?.view ?? "public") === "public";
     const mediaPrefix = rootPage + "/media/";
     let mediaLocation: string;
     let src: string;
@@ -117,8 +115,7 @@ export function mediaImageTagAttributes(
         const preview = mediaImageFindLargerPreview(mediaFile.previews, targetWidth);
         src = rootPage + "/media/" + (preview?.directPath ?? mediaFile.directPath);
     } else {
-        const auth = !isPublic && carte != null ? "carte:" + carte : null;
-        mediaLocation = urlWithParameters(mediaPrefix + mediaFile.path, {auth});
+        mediaLocation = mediaPrefix + mediaFile.path;
         src = mediaImagePreview(mediaLocation, targetWidth);
     }
     const srcSet = mediaSources(mediaLocation, mediaPrefix, mediaFile.previews);
@@ -169,11 +166,6 @@ export function mediaFileName(media: PrivateMediaFileInfo | null | undefined): s
     return media.title ? media.title + "." + extension(media.mimeType) : media.path.split("/").pop();
 }
 
-export function mediaDownloadUrl(rootPage: string | null, media: PrivateMediaFileInfo, carte: string | null): string {
-    const auth = carte != null ? "carte:" + carte : null;
-    if (media.directPath) {
-        return urlWithParameters((rootPage ?? "") + "/media/" + media.directPath, {download: true});
-    } else {
-        return urlWithParameters((rootPage ?? "") + "/media/" + media.path, {auth, download: true});
-    }
+export function mediaDownloadUrl(rootPage: string | null, media: PrivateMediaFileInfo): string {
+    return urlWithParameters((rootPage ?? "") + "/media/" + (media.directPath || media.path), {download: true});
 }

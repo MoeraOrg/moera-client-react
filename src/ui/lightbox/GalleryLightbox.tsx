@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { MediaAttachment } from "api";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
-import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { closeLightbox, LightboxMediaSequence, lightboxMediaSet } from "state/lightbox/actions";
 import { getLightboxMediaId, getLightboxMediaPostingId } from "state/lightbox/selectors";
 import { ExtPostingInfo } from "state/postings/state";
@@ -21,7 +20,6 @@ import LightboxShareButton from "ui/lightbox/LightboxShareButton";
 import LightboxDownloadButton from "ui/lightbox/LightboxDownloadButton";
 import { useOverlay } from "ui/overlays/overlays";
 import { REL_CURRENT } from "util/rel-node-name";
-import { urlWithParameters } from "util/url";
 
 export default function GalleryLightbox() {
     const posting = useSelector((state: ClientState) => getPosting(state, state.lightbox.postingId, REL_CURRENT));
@@ -36,7 +34,6 @@ export default function GalleryLightbox() {
         getPosting(state, getLightboxMediaPostingId(state), mediaNodeName)
     );
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, state.lightbox.nodeName));
-    const carte = useSelector(getCurrentViewMediaCarte);
     const loopGallery = useSelector((state: ClientState) => getSetting(state, "entry.gallery.loop") as boolean);
     const dispatch = useDispatcher();
 
@@ -45,7 +42,6 @@ export default function GalleryLightbox() {
     const [zIndex, overlayId] = useOverlay(null, {closeOnClick: false, closeOnEscape: false, onClose: onCloseRequest});
 
     const media = useMemo(() => getGallery(posting, comment), [comment, posting]);
-    const auth = carte != null ? "carte:" + carte : null;
     let mainHref = "";
     let mainSrc = "";
     let mainMimeType = "";
@@ -64,13 +60,8 @@ export default function GalleryLightbox() {
             index = 0;
         }
         const mainMedia = media[index].media;
-        if (mainMedia?.directPath) {
-            mainHref = "/media/" + mainMedia.directPath;
-            mainSrc = rootPage + mainHref;
-        } else {
-            mainHref = "/media/" + mainMedia?.path;
-            mainSrc = urlWithParameters(rootPage + mainHref, {auth});
-        }
+        mainHref = "/media/" + (mainMedia?.directPath || mainMedia?.path);
+        mainSrc = rootPage + mainHref;
         mainMimeType = mainMedia?.mimeType ?? "image/jpeg";
         mainTextContent = mainMedia?.textContent ?? undefined;
         const prevIndex = index > 0
@@ -84,7 +75,7 @@ export default function GalleryLightbox() {
             if (prevMedia?.directPath) {
                 prevSrc = rootPage + "/media/" + prevMedia.directPath;
             } else {
-                prevSrc = urlWithParameters(rootPage + "/media/" + prevMedia?.path, {auth});
+                prevSrc = rootPage + "/media/" + prevMedia?.path;
             }
             prevMediaId = prevMedia?.id;
             prevSequence = prevIndex > index ? "prev-loop" : "normal";
@@ -94,7 +85,7 @@ export default function GalleryLightbox() {
             if (nextMedia?.directPath) {
                 nextSrc = rootPage + "/media/" + nextMedia.directPath;
             } else {
-                nextSrc = urlWithParameters(rootPage + "/media/" + nextMedia?.path, {auth});
+                nextSrc = rootPage + "/media/" + nextMedia?.path;
             }
             nextMediaId = nextMedia?.id;
             nextSequence = nextIndex < index ? "next-loop" : "normal";

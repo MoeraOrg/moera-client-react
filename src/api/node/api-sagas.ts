@@ -1028,13 +1028,13 @@ export async function uploadPrivateMedia(
 
 export async function getPrivateMedia(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
-    width: number | null = null, download: boolean | null = null, ignoremalware: boolean | null = null,
-    errorFilter: ErrorFilter = false, auth: boolean | string = true
+    width: number | null = null, download: boolean | null = null, grant: string | null = null,
+    ignoremalware: boolean | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): Promise<Blob> {
 
     const location = urlWithParameters(
         ut`/media/private/${id}/data`,
-        {width, download, ignoremalware}
+        {width, download, grant, ignoremalware}
     );
     return callApi<Blob>({
         caller, nodeName, method: "GET", location, auth, schema: "blob", errorFilter
@@ -1043,10 +1043,10 @@ export async function getPrivateMedia(
 
 export async function getPrivateMediaInfo(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
-    errorFilter: ErrorFilter = false, auth: boolean | string = true
+    grant: string | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): Promise<API.PrivateMediaFileInfo> {
 
-    const location = ut`/media/private/${id}/info`;
+    const location = urlWithParameters(ut`/media/private/${id}/info`, {grant});
     return callApi<API.PrivateMediaFileInfo>({
         caller, nodeName, method: "GET", location, auth, schema: "PrivateMediaFileInfo", errorFilter
     });
@@ -1066,10 +1066,10 @@ export async function updatePrivateMediaInfo(
 
 export async function getPrivateMediaParentEntry(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
-    errorFilter: ErrorFilter = false, auth: boolean | string = true
+    grant: string | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): Promise<API.EntryInfo[]> {
 
-    const location = ut`/media/private/${id}/parent`;
+    const location = urlWithParameters(ut`/media/private/${id}/parent`, {grant});
     return callApi<API.EntryInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "EntryInfoArray", decodeBodies: true,
         errorFilter
@@ -1756,12 +1756,13 @@ export async function verifyRemoteCommentReaction(
 
 export async function downloadRemoteMedia(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string, id: string,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    attributes: API.MediaDownloadAttributes, errorFilter: ErrorFilter = false, auth: true | string = true
 ): Promise<API.PrivateMediaFileInfo> {
 
     const location = ut`/nodes/${remoteNodeName}/media/private/${id}/download`;
     return callApi<API.PrivateMediaFileInfo>({
-        caller, nodeName, method: "POST", location, auth, schema: "PrivateMediaFileInfo", errorFilter
+        caller, nodeName, method: "POST", location, body: attributes, auth, schema: "PrivateMediaFileInfo",
+        errorFilter
     });
 }
 

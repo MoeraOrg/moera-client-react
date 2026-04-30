@@ -5,7 +5,6 @@ import cx from 'classnames';
 import { PrivateMediaFileInfo } from "api";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
-import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { openLightbox } from "state/lightbox/actions";
 import { useDispatcher } from "ui/hook";
 import Jump from "ui/navigation/Jump";
@@ -32,12 +31,11 @@ export default function EntryImage({
     postingId, commentId, nodeName, mediaFile, width, height, alt, title, flex, count
 }: Props) {
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, nodeName));
-    const carte = useSelector(getCurrentViewMediaCarte);
     const dispatch = useDispatcher();
 
     const {
         src, srcSet, sizes, width: imageWidth, height: imageHeight, alt: imageAlt
-    } = mediaImageTagAttributes(rootPage, mediaFile, carte, 900, width, height);
+    } = mediaImageTagAttributes(rootPage, mediaFile, 900, width, height);
 
     const onNear = () => {
         if (postingId != null) {

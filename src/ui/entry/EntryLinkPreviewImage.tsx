@@ -5,10 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { PrivateMediaFileInfo } from "api";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
-import { getCurrentViewMediaCarte } from "state/cartes/selectors";
-import PreloadedImage from "ui/posting/PreloadedImage";
 import { Loading } from 'ui/control';
 import { useIsTinyScreen } from "ui/hook";
+import PreloadedImage from "ui/posting/PreloadedImage";
 import { mediaImageTagAttributes } from "util/media-images";
 import { RelNodeName } from "util/rel-node-name";
 import "./EntryLinkPreviewImage.css";
@@ -21,7 +20,6 @@ interface Props {
 
 export default function EntryLinkPreviewImage({nodeName, mediaFile, loading}: Props) {
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, nodeName));
-    const carte = useSelector(getCurrentViewMediaCarte);
     const tinyScreen = useIsTinyScreen();
     const {t} = useTranslation();
 
@@ -34,7 +32,7 @@ export default function EntryLinkPreviewImage({nodeName, mediaFile, loading}: Pr
 
     const {
         src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
-    } = mediaImageTagAttributes(rootPage, mediaFile, carte, 800);
+    } = mediaImageTagAttributes(rootPage, mediaFile, 800);
 
     const vertical = tinyScreen ? imageHeight > imageWidth * 0.55 : imageHeight > imageWidth;
 

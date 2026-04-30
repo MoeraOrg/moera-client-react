@@ -31,10 +31,6 @@ function isAllCarte(carte: CarteInfo): boolean {
     return carte.clientScope == null || carte.clientScope.includes("other");
 }
 
-function isViewMediaCarte(carte: CarteInfo): boolean {
-    return carte.clientScope != null && carte.clientScope.length === 1 && carte.clientScope[0] === "view-media";
-}
-
 function getCurrentCarte(state: ClientState, filter: (carte: CarteInfo) => boolean): string | null {
     const current = now() - (getSetting(state, "clock.offset") as number) * 60 * 60;
     const carte = state.cartes.cartes
@@ -44,10 +40,6 @@ function getCurrentCarte(state: ClientState, filter: (carte: CarteInfo) => boole
 
 export function getCurrentAllCarte(state: ClientState): string | null {
     return getCurrentCarte(state, isAllCarte);
-}
-
-export function getCurrentViewMediaCarte(state: ClientState): string | null {
-    return getCurrentCarte(state, isViewMediaCarte);
 }
 
 export function isCartesInitialized(state: ClientState): boolean {
