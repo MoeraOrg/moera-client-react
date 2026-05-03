@@ -74,9 +74,14 @@ export default function RichTextEditorImageList({value, className, nodeName, noE
                 {mediaList.length > 0 &&
                     <div className={cx("rich-text-editor-image-list", className)}>
                         {mediaList.map(media =>
-                            <UploadedImage key={media.id} media={media} nodeName={nodeName}
-                                           dragged={dragged?.id === media.id} showMenu={!dragged}
-                                           noEmbeddedMedia={noEmbeddedMedia}/>
+                            <UploadedImage
+                                key={media.id}
+                                media={media}
+                                nodeName={nodeName}
+                                dragged={dragged?.id === media.id}
+                                showMenu={!dragged}
+                                noEmbeddedMedia={noEmbeddedMedia}
+                            />
                         )}
                     </div>
                 }

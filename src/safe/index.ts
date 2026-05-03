@@ -18,6 +18,7 @@ import {
     EncodedDraftInfo,
     EncodedEntryInfo,
     EncodedFeedSliceInfo,
+    EncodedMediaCaption,
     EncodedPostingInfo,
     EncodedPostingRevisionInfo,
     EncodedSearchEntryInfo,
@@ -26,6 +27,7 @@ import {
     EncodedStoryInfo,
     EntryInfo,
     FeedSliceInfo,
+    MediaCaption,
     PostingInfo,
     PostingRevisionInfo,
     SearchEntryInfo,
@@ -80,11 +82,11 @@ function decodeBody(encoded: string, format: BodyFormat | SourceFormat | null): 
 }
 
 type Entities = Partial<PostingInfo | PostingRevisionInfo | CommentInfo | CommentRevisionInfo | StoryInfo
-    | CommentCreated | DraftInfo | FeedSliceInfo | CommentsSliceInfo | EntryInfo | SearchEntryInfo>;
+    | CommentCreated | DraftInfo | FeedSliceInfo | CommentsSliceInfo | EntryInfo | SearchEntryInfo | MediaCaption>;
 type EncodedEntities = Partial<EncodedPostingInfo | EncodedPostingRevisionInfo | EncodedCommentInfo
     | EncodedCommentRevisionInfo | EncodedStoryInfo | EncodedCommentCreated | EncodedDraftInfo | EncodedFeedSliceInfo
     | EncodedCommentsSliceInfo | EncodedEntryInfo | EncodedSearchEntryInfo | EncodedSearchHashtagSliceInfo
-    | EncodedSearchTextPageInfo>;
+    | EncodedSearchTextPageInfo | EncodedMediaCaption>;
 
 function decodeBodies(data: EncodedEntities[]): Entities[];
 function decodeBodies(data: EncodedEntities): Entities;
@@ -103,6 +105,9 @@ function decodeBodies(data: EncodedEntities | EncodedEntities[]): Entities | Ent
     if ("entries" in data && data.entries != null) {
         decoded.entries = data.entries.map(e => decodeBodies(e));
     }
+    if ("mediaCaptions" in data && data.mediaCaptions != null) {
+        decoded.mediaCaptions = data.mediaCaptions.map(e => decodeBodies(e));
+    }
     if ("comment" in data && data.comment != null) {
         decoded.comment = decodeBodies(data.comment);
     }
@@ -117,6 +122,9 @@ function decodeBodies(data: EncodedEntities | EncodedEntities[]): Entities | Ent
     }
     if ("bodySrc" in data && data.bodySrc != null) {
         decoded.bodySrc = decodeBody(data.bodySrc, data.bodySrcFormat ?? null);
+    }
+    if ("captionSrc" in data && data.captionSrc != null) {
+        decoded.captionSrc = decodeBody(data.captionSrc, data.captionSrcFormat ?? null);
     }
     return decoded;
 }

@@ -13,6 +13,7 @@ import {
     ReactionInfo,
     RepliedTo
 } from "api";
+import { updateMediaCaptions } from "api/node/media-upload";
 import { Storage } from "storage";
 import { WithContext } from "state/action-types";
 import { saga } from "state/saga";
@@ -189,9 +190,7 @@ async function detailedPostingLoadAttachedSaga(action: WithContext<DetailedPosti
             return true;
         }
         return media
-            .map(ma => ma.media)
-            .filter(notNull)
-            .map(m => m.postingId)
+            .map(ma => ma.postingId)
             .filter(notNull)
             .every(p => isPostingCached(state, p, REL_CURRENT));
     });
@@ -383,7 +382,7 @@ async function commentLoadSaga(action: WithContext<CommentLoadAction>): Promise<
 }
 
 async function commentPostSaga(action: WithContext<CommentPostAction>): Promise<void> {
-    const {commentId, postingId, commentText, commentSourceText, formId} = action.payload;
+    const {commentId, postingId, commentText, commentSourceText, captions, formId} = action.payload;
 
     if (commentText.ownerName === ANONYMOUS_NODE_NAME) {
         const fullName = commentText.ownerFullName?.trim() || null;
@@ -408,6 +407,7 @@ async function commentPostSaga(action: WithContext<CommentPostAction>): Promise<
         } else {
             comment = await Node.updateComment(action, receiverName, receiverPostingId, commentId, commentText);
         }
+        await updateMediaCaptions(action, receiverName, comment.media, captions);
         dispatch(commentSet(receiverName, comment).causedBy(action));
 
         const draftId = select(state =>

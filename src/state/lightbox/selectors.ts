@@ -35,7 +35,7 @@ export function getLightboxMediaPostingId(state: ClientState) {
     if (media == null || media.length === 0 || mediaId == null) {
         return null;
     }
-    return media.find(attachment => attachment.media?.id === mediaId)?.media?.postingId ?? null;
+    return media.find(attachment => attachment.media?.id === mediaId)?.postingId ?? null;
 }
 
 export function isLightboxMediaPostingToBeLoaded(state: ClientState) {

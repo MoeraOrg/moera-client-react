@@ -6,72 +6,34 @@ import { saga } from "state/saga";
 import {
     ImageEditDialogLoadAction,
     imageEditDialogLoaded,
-    imageEditDialogLoadFailed,
-    ImageEditDialogPostAction,
-    imageEditDialogPostFailed,
-    imageEditDialogPostSucceeded
+    imageEditDialogLoadFailed
 } from "state/imageeditdialog/actions";
 import { postingSet } from "state/postings/actions";
 import { fillActivityReaction } from "state/activityreactions/sagas";
-import { absoluteNodeName, REL_CURRENT, REL_HOME } from "util/rel-node-name";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export default [
     saga("IMAGE_EDIT_DIALOG_LOAD", "", imageEditDialogLoadSaga),
-    saga("IMAGE_EDIT_DIALOG_POST", "", imageEditDialogPostSaga)
 ];
 
 async function imageEditDialogLoadSaga(action: WithContext<ImageEditDialogLoadAction>): Promise<void> {
-    const {id, nodeName} = select(state => ({
-        id: state.imageEditDialog.media?.postingId,
+    const {media, nodeName} = select(state => ({
+        media: state.imageEditDialog.media,
         nodeName: state.imageEditDialog.nodeName
     }));
 
-    if (id == null) {
+    if (media?.captionPostingId == null || media.caption != null) {
         dispatch(imageEditDialogLoaded().causedBy(action));
         return;
     }
 
     try {
-        const posting = await Node.getPosting(action, nodeName, id, true, ["posting.not-found"]);
+        const posting = await Node.getPosting(action, nodeName, media.captionPostingId, true, ["posting.not-found"]);
         await fillActivityReaction(action, posting);
         dispatch(postingSet(posting, REL_CURRENT).causedBy(action));
         dispatch(imageEditDialogLoaded().causedBy(action));
     } catch (e) {
         dispatch(imageEditDialogLoadFailed().causedBy(action));
-        dispatch(errorThrown(e));
-    }
-}
-
-async function imageEditDialogPostSaga(action: WithContext<ImageEditDialogPostAction>): Promise<void> {
-    const {postingText} = action.payload;
-
-    const {id, nodeName} = select(state => ({
-        id: state.imageEditDialog.media?.postingId,
-        nodeName: state.imageEditDialog.nodeName
-    }));
-
-    if (id == null) {
-        dispatch(imageEditDialogPostFailed().causedBy(action));
-        return;
-    }
-
-    try {
-        const posting = await Node.updatePosting(action, nodeName, id, postingText);
-        dispatch(imageEditDialogPostSucceeded().causedBy(action));
-        await fillActivityReaction(action, posting);
-        dispatch(postingSet(posting, REL_CURRENT).causedBy(action));
-
-        const remoteNodeName = absoluteNodeName(nodeName, action.context);
-        if (remoteNodeName != null && remoteNodeName !== postingText.ownerName) {
-            const sourceText = {
-                bodySrc: postingText.bodySrc,
-                bodySrcFormat: postingText.bodySrcFormat,
-                rejectedReactions: postingText.rejectedReactions
-            }
-            await Node.updateRemotePosting(action, REL_HOME, remoteNodeName, id, sourceText);
-        }
-    } catch (e) {
-        dispatch(imageEditDialogPostFailed().causedBy(action));
         dispatch(errorThrown(e));
     }
 }

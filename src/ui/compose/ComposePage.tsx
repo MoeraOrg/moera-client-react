@@ -39,10 +39,7 @@ import "./ComposePage.css";
 type Props = ComposePageProps & FormikProps<ComposePageValues>;
 
 function ComposePageInner(props: Props) {
-    const {
-        postingId, features, avatarDefault, posting, sharedText, smileysEnabled, reactionsPositiveDefault,
-        reactionsNegativeDefault, values, resetForm
-    } = props;
+    const {postingId, features, avatarDefault, posting, sharedText, smileysEnabled, values, resetForm} = props;
 
     const ready = useSelector(isComposeReady);
     const formId = useSelector((state: ClientState) => state.compose.formId);
@@ -125,7 +122,6 @@ function ComposePageInner(props: Props) {
                             disabled={!ready || beingPosted}
                             format={values.bodyFormat}
                             smileysEnabled={smileysEnabled}
-                            rejectedReactions={{positive: reactionsPositiveDefault, negative: reactionsNegativeDefault}}
                             features={features}
                             nodeName={REL_CURRENT}
                             urlsField="bodyUrls"

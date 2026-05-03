@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { PostingFeatures, RejectedReactions, SourceFormat } from "api";
+import { PostingFeatures, SourceFormat } from "api";
 import { FormGroup } from "ui/control";
 import {
     RichTextEditor,
@@ -41,7 +41,6 @@ interface Props {
     commentQuote?: boolean;
     panelMode?: RichTextEditorPanelMode;
     format: SourceFormat;
-    rejectedReactions?: RejectedReactions | null;
     submitKey?: string;
     onSubmit?: () => void;
     urlsField?: string;
@@ -54,7 +53,7 @@ export function RichTextField({
     name, title, rows = 3, minHeight, maxHeight, features, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo,
     nodeName = REL_CURRENT, forceImageCompress, placeholder, autoFocus, anyValue, className, autoComplete,
     noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled, commentQuote, panelMode, format,
-    rejectedReactions, submitKey, onSubmit, urlsField, linkPreviewsField, linkPreviewsSmall, children
+    submitKey, onSubmit, urlsField, linkPreviewsField, linkPreviewsSmall, children
 }: Props) {
     const [{value, onBlur}, {touched, error}, {setTouched}, {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
@@ -80,56 +79,53 @@ export function RichTextField({
             onUndo={onUndo}
             onReset={onReset}
         >
-            <>
-                <RichTextEditor
-                    name={name}
-                    value={value}
-                    touched={touched}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    className={cx(
-                        "form-control", {
-                            "is-valid": !anyValue && touched && !error,
-                            "is-invalid": !anyValue && touched && error,
-                            [className!]: !!className
-                        }
-                    )}
-                    autoFocus={autoFocus}
-                    autoComplete={autoComplete}
-                    minHeight={minHeight}
-                    maxHeight={maxHeight}
-                    placeholder={placeholder ?? t("enter-text-here")}
-                    rows={rows}
-                    features={features ?? null}
-                    disabled={disabled}
-                    smileysEnabled={smileysEnabled}
-                    commentQuote={commentQuote}
-                    panelMode={panelMode}
-                    format={format}
-                    submitKey={submitKey}
-                    onSubmit={onSubmit}
-                    onUrls={urlsField != null ? onUrls : undefined}
-                    noComplexBlocks={noComplexBlocks}
-                    noEmbeddedMedia={noEmbeddedMedia}
-                    noMedia={noMedia}
-                    noVideo={noVideo}
+            <RichTextEditor
+                name={name}
+                value={value}
+                touched={touched}
+                onChange={onChange}
+                onBlur={onBlur}
+                className={cx(
+                    "form-control", {
+                        "is-valid": !anyValue && touched && !error,
+                        "is-invalid": !anyValue && touched && error,
+                        [className!]: !!className
+                    }
+                )}
+                autoFocus={autoFocus}
+                autoComplete={autoComplete}
+                minHeight={minHeight}
+                maxHeight={maxHeight}
+                placeholder={placeholder ?? t("enter-text-here")}
+                rows={rows}
+                features={features ?? null}
+                disabled={disabled}
+                smileysEnabled={smileysEnabled}
+                commentQuote={commentQuote}
+                panelMode={panelMode}
+                format={format}
+                submitKey={submitKey}
+                onSubmit={onSubmit}
+                onUrls={urlsField != null ? onUrls : undefined}
+                noComplexBlocks={noComplexBlocks}
+                noEmbeddedMedia={noEmbeddedMedia}
+                noMedia={noMedia}
+                noVideo={noVideo}
+                nodeName={nodeName}
+                forceImageCompress={forceImageCompress}
+                children={children}
+            />
+            {!noFeedback && touched && <FieldError error={(error as any)?.text}/>}
+            {urlsField != null && linkPreviewsField != null &&
+                <RichTextLinkPreviews
+                    name={linkPreviewsField}
+                    urlsField={urlsField}
                     nodeName={nodeName}
-                    forceImageCompress={forceImageCompress}
-                    rejectedReactions={rejectedReactions}
-                    children={children}
+                    features={features}
+                    small={linkPreviewsSmall}
+                    disabled={disabled}
                 />
-                {!noFeedback && touched && <FieldError error={(error as any)?.text}/>}
-                {urlsField != null && linkPreviewsField != null &&
-                    <RichTextLinkPreviews
-                        name={linkPreviewsField}
-                        urlsField={urlsField}
-                        nodeName={nodeName}
-                        features={features}
-                        small={linkPreviewsSmall}
-                        disabled={disabled}
-                    />
-                }
-            </>
+            }
         </FormGroup>
     );
 }

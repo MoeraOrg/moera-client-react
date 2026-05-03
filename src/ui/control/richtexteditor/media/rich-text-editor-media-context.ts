@@ -1,10 +1,11 @@
 import { createContext, useContext } from 'react';
 import { DropzoneRootProps } from 'react-dropzone';
 
-import { VerifiedMediaFile } from "api";
+import { MediaCaption, VerifiedMediaFile } from "api";
 import { RichTextImageStandardSize } from "ui/control/richtexteditor/media/rich-text-image";
 import { RichTextImageValues } from "ui/control/richtexteditor/media/RichTextImageDialog";
 import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
+import { MediaFileWithCaption } from "ui/control/richtexteditor/rich-text-value";
 
 export type UploadStatus = "loading" | "success" | "failure";
 
@@ -15,7 +16,7 @@ export interface UploadProgress {
 }
 
 export type OnInsertHandler = (
-    media: VerifiedMediaFile[],
+    media: MediaFileWithCaption[],
     standardSize: RichTextImageStandardSize,
     customWidth?: number | null,
     customHeight?: number | null,
@@ -43,6 +44,7 @@ export interface RichTextEditorMediaInterface {
     attachmentType: AttachmentType;
     setAttachmentType: (type: AttachmentType) => void;
     renameMedia: (mediaId: string, title: string) => void;
+    setMediaCaption: (mediaId: string, caption?: MediaCaption | null) => void;
 }
 
 export const RichTextEditorMediaContext = createContext<RichTextEditorMediaInterface>({
@@ -60,6 +62,7 @@ export const RichTextEditorMediaContext = createContext<RichTextEditorMediaInter
     attachmentType: "image",
     setAttachmentType: () => {},
     renameMedia: () => {},
+    setMediaCaption: () => {},
 });
 
 export const useRichTextEditorMedia = (): RichTextEditorMediaInterface => useContext(RichTextEditorMediaContext);

@@ -42,8 +42,7 @@ type Props = CommentComposeProps & FormikProps<CommentComposeValues>;
 
 function CommentDialogInner(props: Props) {
     const {
-        ownerName, ownerFullName, draft, comment, smileysEnabled, sourceFormatDefault, reactionsPositiveDefault,
-        reactionsNegativeDefault, resetForm, submitForm
+        ownerName, ownerFullName, draft, comment, smileysEnabled, sourceFormatDefault, resetForm, submitForm
     } = props;
 
     const commentId = comment?.id ?? null;
@@ -108,7 +107,6 @@ function CommentDialogInner(props: Props) {
                         disabled={!ready || beingPosted}
                         smileysEnabled={smileysEnabled}
                         format={sourceFormatDefault}
-                        rejectedReactions={{positive: reactionsPositiveDefault, negative: reactionsNegativeDefault}}
                         submitKey={submitKey}
                         onSubmit={() => submitForm()}
                         urlsField="bodyUrls"

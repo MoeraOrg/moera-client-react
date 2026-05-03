@@ -7,8 +7,9 @@ import {
     DraftInfo,
     DraftText,
     Features,
-    PrivateMediaFileInfo,
+    MediaCaption,
     PostingInfo,
+    PrivateMediaFileInfo,
     ReactionAttributes,
     ReactionTotalsInfo
 } from "api";
@@ -317,13 +318,18 @@ export type CommentPostAction = ActionWithPayload<"COMMENT_POST", {
     commentId: string | null;
     commentText: CommentText;
     commentSourceText: CommentSourceText;
+    captions: Record<string, MediaCaption>;
     formId: number | null;
 }>;
 export const commentPost = (
-    postingId: string, commentId: string | null, commentText: CommentText, commentSourceText: CommentSourceText,
+    postingId: string,
+    commentId: string | null,
+    commentText: CommentText,
+    commentSourceText: CommentSourceText,
+    captions: Record<string, MediaCaption>,
     formId: number | null
 ): CommentPostAction =>
-    actionWithPayload("COMMENT_POST", {postingId, commentId, commentText, commentSourceText, formId});
+    actionWithPayload("COMMENT_POST", {postingId, commentId, commentText, commentSourceText, captions, formId});
 
 export type CommentPostedAction = ActionWithPayload<"COMMENT_POSTED", {
     nodeName: string;

@@ -25,6 +25,7 @@ export default (state: ImageEditDialogState = initialState, action: ClientAction
         case "CLOSE_IMAGE_EDIT_DIALOG":
             return {
                 ...state,
+                saving: false,
                 show: false
             }
 
@@ -39,25 +40,6 @@ export default (state: ImageEditDialogState = initialState, action: ClientAction
             return {
                 ...state,
                 loading: false
-            }
-
-        case "IMAGE_EDIT_DIALOG_POST":
-            return {
-                ...state,
-                saving: true
-            }
-
-        case "IMAGE_EDIT_DIALOG_POST_SUCCEEDED":
-            return {
-                ...state,
-                saving: false,
-                show: false
-            }
-
-        case "IMAGE_EDIT_DIALOG_POST_FAILED":
-            return {
-                ...state,
-                saving: false
             }
 
         default:

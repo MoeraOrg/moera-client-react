@@ -11,7 +11,6 @@ import EntryHtml from "ui/entry/EntryHtml";
 import PostingReactions from "ui/posting/PostingReactions";
 import EntryGalleryButtons from "ui/entry/EntryGalleryButtons";
 import { RelNodeName } from "util/rel-node-name";
-import { notNull } from "util/misc";
 import "./EntryGalleryExpanded.css";
 
 interface Props {
@@ -63,9 +62,7 @@ function getMediaPostings(
     }
     return new Map(media
         .filter(ma => !ma.embedded)
-        .map(ma => ma.media)
-        .filter(notNull)
-        .map(m => [m.id, getPosting(state, m.postingId ?? null, nodeName)])
-        .filter((r): r is [string, PostingInfo] => r[1] != null)
+        .map(ma => [ma.media?.id, getPosting(state, ma.postingId ?? null, nodeName)])
+        .filter((r): r is [string, PostingInfo] => r[0] != null && r[1] != null)
     );
 }

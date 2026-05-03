@@ -2,6 +2,7 @@ import i18n from 'i18next';
 
 import { errorThrown } from "state/error/actions";
 import { Node, NodeApiError } from "api";
+import { updateMediaCaptions } from "api/node/media-upload";
 import {
     ComposeDraftDeleteAction,
     ComposeDraftListItemDeleteAction,
@@ -73,7 +74,7 @@ async function composePostingLoadSaga(action: WithContext<ComposePostingLoadActi
 }
 
 async function composePostSaga(action: WithContext<ComposePostAction>): Promise<void> {
-    const {id, postingText, prevState} = action.payload;
+    const {id, postingText, captions, prevState} = action.payload;
 
     try {
         let posting;
@@ -82,6 +83,7 @@ async function composePostSaga(action: WithContext<ComposePostAction>): Promise<
         } else {
             posting = await Node.updatePosting(action, REL_CURRENT, id, postingText);
         }
+        await updateMediaCaptions(action, REL_CURRENT, posting.media, captions);
         dispatch(composePostSucceeded(posting).causedBy(action));
 
         if (id != null) {

@@ -1,8 +1,8 @@
 import React, { ReactNode, useEffect } from 'react';
 import cx from 'classnames';
 
-import { PostingFeatures, RejectedReactions, SourceFormat, VerifiedMediaFile } from "api";
-import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
+import { PostingFeatures, SourceFormat } from "api";
+import { MediaFileWithCaption, RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { htmlToMarkdown, markdownToHtml } from "ui/control/richtexteditor/markdown/markdown-html";
 import { MarkdownEditor, MarkdownEditorProps } from "ui/control/richtexteditor/markdown/MarkdownEditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
@@ -22,7 +22,6 @@ type Props = {
     className?: string;
     features: PostingFeatures | null;
     forceImageCompress?: boolean;
-    rejectedReactions?: RejectedReactions | null;
     onChange?: (value: RichTextValue, converted: boolean) => void;
     children?: ReactNode;
 } & Omit<MarkdownEditorProps, "onChange"> & Omit<VisualEditorProps, "onChange">;
@@ -30,12 +29,11 @@ type Props = {
 export function RichTextEditor({
     name, value, touched, features, rows, minHeight, maxHeight, placeholder, className, autoFocus, autoComplete,
     disabled, smileysEnabled = true, commentQuote, panelMode, format, nodeName = REL_CURRENT, forceImageCompress,
-    rejectedReactions, onChange, submitKey, onSubmit, onBlur, onUrls, noComplexBlocks, noEmbeddedMedia, noMedia,
-    noVideo, children
+    onChange, submitKey, onSubmit, onBlur, onUrls, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, children
 }: Props) {
     const textRef = React.useRef<string | Scripture>(null);
     textRef.current = value.value;
-    const mediaRef = React.useRef<(VerifiedMediaFile | null)[] | null>(null);
+    const mediaRef = React.useRef<(MediaFileWithCaption | null)[] | null>(null);
     mediaRef.current = value.media ?? null;
 
     const onTextChange = (text: string | Scripture) => {
@@ -43,7 +41,7 @@ export function RichTextEditor({
         onChange?.(new RichTextValue(text, format, mediaRef.current), false);
     };
 
-    const onMediaChange = (media: (VerifiedMediaFile | null)[]) => {
+    const onMediaChange = (media: (MediaFileWithCaption | null)[]) => {
         mediaRef.current = media;
         onChange?.(new RichTextValue(textRef.current ?? "", format, media), false);
     };
@@ -65,8 +63,8 @@ export function RichTextEditor({
                     features={features}
                     nodeName={nodeName}
                     forceCompress={forceImageCompress}
+                    noMedia={noMedia}
                     srcFormat={format}
-                    rejectedReactions={rejectedReactions}
                     onChange={onMediaChange}
                 >
                     {format.endsWith("/visual") ?

@@ -11,7 +11,6 @@ import MediaDownloadDialog from "ui/mediadownloaddialog/MediaDownloadDialog";
 
 const ReactionsDialog = React.lazy(() => import("ui/reactionsdialog/ReactionsDialog"));
 const GalleryLightbox = React.lazy(() => import("ui/lightbox/GalleryLightbox"));
-const ImageEditDialog = React.lazy(() => import("ui/imageeditdialog/ImageEditDialog"));
 const DonateDialog = React.lazy(() => import("ui/donatedialog/DonateDialog"));
 const PeopleHideDialog = React.lazy(() => import("ui/peoplehidedialog/PeopleHideDialog"));
 const FriendGroupsDialog = React.lazy(() => import("ui/friendgroupsdialog/FriendGroupsDialog"));
@@ -23,7 +22,6 @@ export default function NodeDialogs() {
     const showChangeDateDialog = useSelector((state: ClientState) => state.changeDateDialog.show);
     const showSourceDialog = useSelector((state: ClientState) => state.sourceDialog.show);
     const showLightbox = useSelector(isLightboxShown);
-    const showImageEditDialog = useSelector((state: ClientState) => state.imageEditDialog.show);
     const showDonateDialog = useSelector((state: ClientState) => state.donateDialog.show);
     const showEntryCopyTextDialog = useSelector((state: ClientState) => state.entryCopyTextDialog.show);
     const showMediaDownloadDialog = useSelector((state: ClientState) => state.mediaDownloadDialog.show);
@@ -45,9 +43,6 @@ export default function NodeDialogs() {
             {showSourceDialog && <SourceDialog/>}
             <Suspense fallback={null}>
                 {showLightbox && <GalleryLightbox/>}
-            </Suspense>
-            <Suspense fallback={null}>
-                {showImageEditDialog && <ImageEditDialog/>}
             </Suspense>
             <Suspense fallback={null}>
                 {showDonateDialog && <DonateDialog/>}

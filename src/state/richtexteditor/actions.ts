@@ -1,8 +1,9 @@
 import { actionWithPayload, ActionWithPayload } from "state/action-types";
-import { PostingFeatures, PrivateMediaFileInfo, RejectedReactions, SourceFormat, VerifiedMediaFile } from "api";
+import { Body, PostingFeatures, PrivateMediaFileInfo, SourceFormat } from "api";
+import { MediaFileWithCaption } from "ui/control/richtexteditor";
 import { RelNodeName } from "util/rel-node-name";
 
-type MediaUploadSuccessHandler = (index: number, mediaFile: VerifiedMediaFile) => void;
+type MediaUploadSuccessHandler = (index: number, mediaFile: MediaFileWithCaption) => void;
 type MediaUploadFailureHandler = (index: number) => void;
 type MediaUploadProgressHandler = (index: number, loaded: number, total: number) => void;
 
@@ -14,9 +15,8 @@ export type RichTextEditorMediaUploadAction = ActionWithPayload<"RICH_TEXT_EDITO
     onSuccess: MediaUploadSuccessHandler;
     onFailure: MediaUploadFailureHandler;
     onProgress: MediaUploadProgressHandler;
-    captionSrc?: string | null;
+    captionSrc?: Body | null;
     captionSrcFormat?: SourceFormat | null;
-    rejectedReactions?: RejectedReactions | null;
 }>;
 export const richTextEditorMediaUpload = (
     nodeName: RelNodeName | string,
@@ -26,16 +26,12 @@ export const richTextEditorMediaUpload = (
     onSuccess: MediaUploadSuccessHandler,
     onFailure: MediaUploadFailureHandler,
     onProgress: MediaUploadProgressHandler,
-    captionSrc?: string | null,
-    captionSrcFormat?: SourceFormat | null,
-    rejectedReactions?: RejectedReactions | null
+    captionSrc?: Body | null,
+    captionSrcFormat?: SourceFormat | null
 ): RichTextEditorMediaUploadAction =>
     actionWithPayload(
         "RICH_TEXT_EDITOR_MEDIA_UPLOAD",
-        {
-            nodeName, files, features, compress, onSuccess, onFailure, onProgress, captionSrc, captionSrcFormat,
-            rejectedReactions
-        }
+        {nodeName, files, features, compress, onSuccess, onFailure, onProgress, captionSrc, captionSrcFormat}
     );
 
 type ImageDownloadSuccessHandler = (file: File) => void;

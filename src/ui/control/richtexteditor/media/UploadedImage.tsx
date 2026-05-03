@@ -5,11 +5,11 @@ import { CSS } from '@dnd-kit/utilities';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { VerifiedMediaFile } from "api";
 import { openImageEditDialog } from "state/imageeditdialog/actions";
 import { useParent, useDispatcher } from "ui/hook";
 import { Icon, msMoreVert12 } from "ui/material-symbols";
 import { DropdownMenu } from "ui/control";
+import { MediaFileWithCaption } from "ui/control/richtexteditor/rich-text-value";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import AttachedImage from "ui/control/richtexteditor/media/AttachedImage";
@@ -17,7 +17,7 @@ import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import "./UploadedImage.css";
 
 interface Props {
-    media: VerifiedMediaFile;
+    media: MediaFileWithCaption;
     nodeName: RelNodeName | string;
     dragged?: boolean | null;
     showMenu?: boolean | null;
@@ -52,7 +52,7 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
                         nodeName: REL_CURRENT,
                         href: "/",
                         onClick: onEdit,
-                        show: media.postingId != null
+                        show: true
                     },
                     {
                         title: t("insert-into-text"),

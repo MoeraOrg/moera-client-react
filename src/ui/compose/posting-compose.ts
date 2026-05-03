@@ -18,14 +18,19 @@ import { dispatch } from "state/store-sagas";
 import { composePost } from "state/compose/actions";
 import { DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import { settingsUpdate } from "state/settings/actions";
-import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
+import {
+    attachmentsToMedia,
+    bodyToLinkPreviews,
+    mediaToCaptions,
+    RichTextLinkPreviewsValue,
+    RichTextValue
+} from "ui/control/richtexteditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { htmlToScripture, normalizeDocument } from "ui/control/richtexteditor/visual/scripture-html";
 import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
 import { isScriptureEmpty } from "ui/control/richtexteditor/visual/scripture-editor";
 import { replaceSmileys } from "util/text";
 import { htmlToLinefeeds, isHtmlEmpty, plainTextToHtml, safeImportHtml } from "util/html";
-import { notNull } from "util/misc";
 
 export interface ValuesToPostingTextProps {
     gender: string | null;
@@ -254,9 +259,7 @@ export const composePageLogic = {
             ? props.draft.bodySrc?.subject ?? ""
             : props.posting != null ? props.posting.bodySrc?.subject ?? "" : "";
         const attachments = props.draft != null ? props.draft.media : props.posting?.media;
-        let media = attachments != null
-            ? attachments.map(ma => ma.media ?? null).filter(notNull)
-            : [];
+        let media = attachmentsToMedia(attachments, props.draft?.mediaCaptions);
         const bodyFormat = props.draft != null
             ? props.draft.bodySrcFormat ?? "markdown"
             : props.posting != null ? props.posting.bodySrcFormat ?? "markdown" : props.sourceFormatDefault;
@@ -377,6 +380,7 @@ export const composePageLogic = {
         dispatch(composePost(
             formik.props.postingId,
             valuesToPostingText(values, formik.props),
+            mediaToCaptions(values.body.media),
             {hideComments: values.hideCommentsDefault}
         ));
         let settings = [];

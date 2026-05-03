@@ -9,18 +9,22 @@ import {
     CommentText,
     DraftInfo,
     PrivateMediaFileInfo,
-    SourceFormat,
-    VerifiedMediaFile
+    SourceFormat
 } from "api";
 import { dispatch } from "state/store-sagas";
 import { commentPost } from "state/detailedposting/actions";
-import { bodyToLinkPreviews, RichTextLinkPreviewsValue, RichTextValue } from "ui/control/richtexteditor";
+import {
+    attachmentsToMedia,
+    bodyToLinkPreviews,
+    mediaToCaptions,
+    RichTextLinkPreviewsValue,
+    RichTextValue
+} from "ui/control/richtexteditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { isScriptureEmpty } from "ui/control/richtexteditor/visual/scripture-editor";
 import { htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { toAvatarDescription } from "util/avatar";
 import { isHtmlEmpty } from "util/html";
-import { notNull } from "util/misc";
 
 interface PropsToValuesProps {
     comment: CommentInfo | null;
@@ -136,11 +140,7 @@ export const commentComposeLogic = {
             ? props.draft.ownerFullName ?? ""
             : props.comment?.ownerFullName ?? props.ownerFullNameDefault ?? "";
         const attachments = props.draft != null ? props.draft.media : props.comment?.media;
-        let media = attachments != null
-            ? attachments
-                .map(ma => ma.media != null ? {...ma.media, digest: ma.remoteMedia?.digest} as VerifiedMediaFile : null)
-                .filter(notNull)
-            : [];
+        let media = attachmentsToMedia(attachments, props.draft?.mediaCaptions);
         const bodyFormat = props.draft != null
                 ? props.draft.bodySrcFormat ?? "markdown"
                 : props.comment != null ? props.comment.bodySrcFormat ?? "markdown" : props.sourceFormatDefault;
@@ -187,6 +187,7 @@ export const commentComposeLogic = {
                 formik.props.comment != null ? formik.props.comment.id : null,
                 commentText,
                 commentSourceText,
+                mediaToCaptions(values.body.media),
                 formik.props.formId
             ));
         }

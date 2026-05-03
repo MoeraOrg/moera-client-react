@@ -1,16 +1,16 @@
-import { Node, PostingText } from "api";
+import { Node } from "api";
 import { mediaUpload } from "api/node/media-upload";
 import { WithContext } from "state/action-types";
 import { dispatch } from "state/store-sagas";
 import {
     RichTextEditorImageCopyAction,
-    RichTextEditorMediaUploadAction,
-    RichTextEditorMediaRenameAction
+    RichTextEditorMediaRenameAction,
+    RichTextEditorMediaUploadAction
 } from "state/richtexteditor/actions";
-import { postingSet } from "state/postings/actions";
 import { errorThrown } from "state/error/actions";
 import { saga } from "state/saga";
-import { absoluteNodeName, REL_CURRENT, REL_HOME } from "util/rel-node-name";
+import { MediaFileWithCaption } from "ui/control/richtexteditor";
+import { REL_HOME } from "util/rel-node-name";
 
 export default [
     saga("RICH_TEXT_EDITOR_MEDIA_UPLOAD", null, richTextEditorMediaUploadSaga),
@@ -22,10 +22,9 @@ async function richTextEditorMediaUpload(
     action: WithContext<RichTextEditorMediaUploadAction>, index: number
 ): Promise<void> {
     const {
-        features, nodeName, files, compress, onSuccess, onProgress, onFailure, captionSrc, captionSrcFormat,
-        rejectedReactions
+        features, nodeName, files, compress, onSuccess, onProgress, onFailure, captionSrc, captionSrcFormat
     } = action.payload;
-    const {homeOwnerName, homeOwnerFullName} = action.context;
+    const {homeOwnerName} = action.context;
 
     if (homeOwnerName == null) {
         onFailure(index);
@@ -37,28 +36,18 @@ async function richTextEditorMediaUpload(
         (loaded: number, total: number) => onProgress(index, loaded, total)
     );
     if (mediaFile != null) {
-        if (mediaFile.postingId != null) {
-            const postingText: PostingText = {
-                ownerName: homeOwnerName,
-                ownerFullName: homeOwnerFullName,
-                bodySrc: captionSrc || "{}",
-                bodySrcFormat: captionSrcFormat || "markdown",
-                rejectedReactions
-            };
-            const posting = await Node.updatePosting(action, nodeName, mediaFile.postingId, postingText);
-            dispatch(postingSet(posting, REL_CURRENT).causedBy(action));
-
-            const remoteNodeName = absoluteNodeName(nodeName, action.context);
-            if (remoteNodeName != null && remoteNodeName !== postingText.ownerName) {
-                const sourceText = {
-                    bodySrc: postingText.bodySrc,
-                    bodySrcFormat: postingText.bodySrcFormat,
-                    rejectedReactions: postingText.rejectedReactions
+        const mediaFileWithCaption: MediaFileWithCaption = {
+            ...mediaFile,
+            captionPostingId: null,
+            caption: captionSrc
+                ? {
+                    mediaId: mediaFile.id,
+                    captionSrc,
+                    captionSrcFormat: captionSrcFormat ?? "markdown",
                 }
-                await Node.updateRemotePosting(action, REL_HOME, remoteNodeName, mediaFile.postingId, sourceText);
-            }
+                : undefined
         }
-        onSuccess(index, mediaFile);
+        onSuccess(index, mediaFileWithCaption);
     } else {
         onFailure(index);
     }

@@ -14,6 +14,7 @@ import { LinkPreviewsState } from "state/linkpreviews/state";
 import { useDispatcher } from "ui/hook";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
 import EntryLinkSelector from "ui/entry/EntryLinkSelector";
+import { MediaFileWithCaption } from "ui/control/richtexteditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { scriptureExtractUrls } from "ui/control/richtexteditor/visual/scripture-editor";
 import { extractUrls } from "util/text";
@@ -40,8 +41,8 @@ export interface RichTextLinkPreviewsValue {
 }
 
 export function bodyToLinkPreviews(
-    body: string | Scripture, linkPreviewsInfo: LinkPreview[], media: VerifiedMediaFile[]
-): [RichTextLinkPreviewsValue, string[], VerifiedMediaFile[]] {
+    body: string | Scripture, linkPreviewsInfo: LinkPreview[], media: MediaFileWithCaption[]
+): [RichTextLinkPreviewsValue, string[], MediaFileWithCaption[]] {
     const bodyUrls = typeof body !== "string" ? scriptureExtractUrls(body) : extractUrls(body);
     const linkPreviewsUrls = new Set(linkPreviewsInfo.map(lp => lp.url));
     const linkPreviewsImages = new Set(

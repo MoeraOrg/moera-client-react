@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
-import { DraftText, PostingText, StoryAttributes, VerifiedMediaFile } from "api";
+import { DraftText, MediaCaption, PostingText, StoryAttributes, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerGender } from "state/home/selectors";
 import { getOwnerName } from "state/node/selectors";
@@ -10,16 +10,21 @@ import { composeDraftListItemDelete, composeDraftSave, composeUpdateDraftDelete 
 import { getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
 import { useDispatcher } from "ui/hook";
+import { Icon, msCloudDone, msCloudUpload } from "ui/material-symbols";
+import { mediaCaptionsToCaptionsText, MediaFileWithCaption } from "ui/control/richtexteditor";
 import { ComposePageValues, isPostingTextChanged, valuesToPostingText } from "ui/compose/posting-compose";
 import { useDraftSaver } from "ui/draft/draft-saver";
 import { notNull } from "util/misc";
-import { Icon, msCloudDone, msCloudUpload } from "ui/material-symbols";
 
 const getPublishAt = (publications: StoryAttributes[] | null | undefined): number | null | undefined =>
     publications != null && publications.length > 0 ? publications[0].publishAt : null;
 
 const toDraftText = (
-    ownerName: string, postingId: string | null, postingText: PostingText, media: Map<string, VerifiedMediaFile>
+    ownerName: string,
+    postingId: string | null,
+    postingText: PostingText,
+    media: Map<string, VerifiedMediaFile>,
+    mediaCaptions: MediaCaption[] | undefined
 ): DraftText => ({
     ...cloneDeep(postingText),
     media: postingText.media?.filter(notNull).map(id => ({
@@ -29,12 +34,20 @@ const toDraftText = (
         mimeType: media.get(id)?.mimeType ?? "image/jpeg",
         attachment: media.get(id)?.attachment
     })),
+    mediaCaptions: mediaCaptionsToCaptionsText(mediaCaptions),
     publications: undefined,
     receiverName: ownerName,
     draftType: postingId == null ? "new-posting" : "posting-update",
     receiverPostingId: postingId == null ? null /* important: should not be undefined */ : postingId,
     publishAt: getPublishAt(postingText.publications)
 } as DraftText);
+
+const toCaptionsList = (media: (MediaFileWithCaption | null)[] | null | undefined): MediaCaption[] | undefined =>
+    media?.filter(notNull).map(m => m.caption).filter(notNull);
+
+const areCaptionsEmpty = (captions: MediaCaption[] | undefined): boolean => captions == null || captions.length === 0;
+
+type ComposeValue = [PostingText, MediaCaption[] | undefined];
 
 export default function ComposeDraftSaver() {
     const ownerName = useSelector(getOwnerName);
@@ -55,29 +68,32 @@ export default function ComposeDraftSaver() {
     const dispatch = useDispatcher();
 
     const toText = useCallback(
-        (values: ComposePageValues): PostingText =>
+        (values: ComposePageValues): ComposeValue => ([
             valuesToPostingText(
                 values,
                 {gender, postingId, features, smileysEnabled, newsFeedEnabled, avatarShapeDefault}
             ),
+            toCaptionsList(values.body.media)
+        ]),
         [avatarShapeDefault, features, gender, newsFeedEnabled, postingId, smileysEnabled]
     );
 
     const isChanged = useCallback(
-        (postingText: PostingText): boolean => isPostingTextChanged(postingText, posting),
+        ([postingText, captions]: ComposeValue): boolean =>
+            isPostingTextChanged(postingText, posting) || !areCaptionsEmpty(captions),
         [posting]
     );
 
     const save = useCallback(
-        (text: PostingText, values: ComposePageValues): void => {
+        ([text, mediaCaptions]: ComposeValue, values: ComposePageValues): void => {
             if (ownerName != null) {
                 const media = new Map(
-                    (values.body.media ?? [])
+                    ((values.body.media ?? []) as (VerifiedMediaFile | null)[])
                         .concat(values.linkPreviews.media)
                         .filter(notNull)
                         .map(rm => [rm.id, rm])
                 );
-                dispatch(composeDraftSave(draftId, toDraftText(ownerName, postingId, text, media)));
+                dispatch(composeDraftSave(draftId, toDraftText(ownerName, postingId, text, media, mediaCaptions)));
             }
         },
         [ownerName, draftId, postingId, dispatch]

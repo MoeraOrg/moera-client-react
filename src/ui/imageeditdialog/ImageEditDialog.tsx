@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
+import { MediaCaption } from "api";
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { getNamingNameRoot } from "state/naming/selectors";
@@ -10,18 +11,21 @@ import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ExtPostingInfo } from "state/postings/state";
 import { getPosting } from "state/postings/selectors";
-import { closeImageEditDialog, imageEditDialogPost } from "state/imageeditdialog/actions";
+import { closeImageEditDialog } from "state/imageeditdialog/actions";
 import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
-import { RichTextField, RichTextValue } from "ui/control/richtexteditor";
+import { MediaFileWithCaption, RichTextField, RichTextValue } from "ui/control/richtexteditor";
+import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { mediaImageTagAttributes } from "util/media-images";
 import "./ImageEditDialog.css";
 
 interface OuterProps {
     homeOwnerName: string | null;
     homeOwnerFullName: string | null;
+    media: MediaFileWithCaption | null;
     posting: ExtPostingInfo | null;
     smileysEnabled: boolean;
+    setMediaCaption: (mediaId: string, caption?: MediaCaption | null) => void;
 }
 
 interface Values {
@@ -91,19 +95,27 @@ function ImageEditDialogInner(props: Props) {
 const logic = {
 
     mapPropsToValues: (props: OuterProps): Values => ({
-        caption: new RichTextValue(props.posting?.bodySrc?.text ?? "", props.posting?.bodySrcFormat || "markdown")
+        caption: new RichTextValue(
+            props.media?.caption?.captionSrc?.text ?? props.posting?.bodySrc?.text ?? "",
+            (props.media?.caption?.captionSrcFormat ?? props.posting?.bodySrcFormat) || "markdown"
+        )
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.setStatus("submitted");
-        dispatch(imageEditDialogPost({
-            ownerName: formik.props.homeOwnerName,
-            ownerFullName: formik.props.homeOwnerFullName,
-            bodySrc: JSON.stringify({
-                text: values.caption.toText(formik.props.smileysEnabled)
-            }),
-            bodySrcFormat: formik.props.posting?.bodySrcFormat || "markdown"
-        }));
+        if (formik.props.media?.id != null) {
+            formik.props.setMediaCaption(
+                formik.props.media?.id,
+                {
+                    mediaId: formik.props.media.id,
+                    captionSrc: {
+                        text: values.caption.toText(formik.props.smileysEnabled)
+                    },
+                    captionSrcFormat: formik.props.posting?.bodySrcFormat || "markdown",
+                }
+            );
+        }
+        dispatch(closeImageEditDialog());
         formik.setSubmitting(false);
     }
 
@@ -112,12 +124,23 @@ const logic = {
 const ImageEditDialogOuter = withFormik(logic)(ImageEditDialogInner);
 
 export default function ImageEditDialog() {
+    const {setMediaCaption} = useRichTextEditorMedia();
     const homeOwnerName = useSelector(getHomeOwnerName);
     const homeOwnerFullName = useSelector(getHomeOwnerFullName);
+    const media = useSelector((state: ClientState) => state.imageEditDialog.media);
     const posting = useSelector((state: ClientState) =>
-        getPosting(state, state.imageEditDialog.media?.postingId ?? null, state.imageEditDialog.nodeName));
+        getPosting(state, state.imageEditDialog.media?.captionPostingId ?? null, state.imageEditDialog.nodeName)
+    );
     const smileysEnabled = useSelector((state: ClientState) => getSetting(state, "posting.smileys.enabled") as boolean);
 
-    return <ImageEditDialogOuter homeOwnerName={homeOwnerName} homeOwnerFullName={homeOwnerFullName} posting={posting}
-                                 smileysEnabled={smileysEnabled}/>;
+    return (
+        <ImageEditDialogOuter
+            homeOwnerName={homeOwnerName}
+            homeOwnerFullName={homeOwnerFullName}
+            media={media}
+            posting={posting}
+            smileysEnabled={smileysEnabled}
+            setMediaCaption={setMediaCaption}
+        />
+    );
 }

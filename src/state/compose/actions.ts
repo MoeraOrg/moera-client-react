@@ -1,4 +1,4 @@
-import { DraftInfo, DraftText, PostingInfo, PostingText } from "api";
+import { DraftInfo, DraftText, MediaCaption, PostingInfo, PostingText } from "api";
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 
 export type ComposePostingLoadAction = ActionWithoutPayload<"COMPOSE_POSTING_LOAD">;
@@ -29,12 +29,13 @@ interface ComposePostPrevState {
 export type ComposePostAction = ActionWithPayload<"COMPOSE_POST", {
     id: string | null;
     postingText: PostingText;
+    captions: Record<string, MediaCaption>;
     prevState: ComposePostPrevState;
 }>;
 export const composePost = (
-    id: string | null, postingText: PostingText, prevState: ComposePostPrevState
+    id: string | null, postingText: PostingText, captions: Record<string, MediaCaption>, prevState: ComposePostPrevState
 ): ComposePostAction =>
-    actionWithPayload("COMPOSE_POST", {id, postingText, prevState});
+    actionWithPayload("COMPOSE_POST", {id, postingText, captions, prevState});
 
 export type ComposePostSucceededAction = ActionWithPayload<"COMPOSE_POST_SUCCEEDED", {
     posting: PostingInfo;

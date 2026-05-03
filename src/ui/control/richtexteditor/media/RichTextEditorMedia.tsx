@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import * as immutable from 'object-path-immutable';
 import * as Base64js from 'base64-js';
 
-import { PostingFeatures, PrivateMediaFileInfo, RejectedReactions, SourceFormat, VerifiedMediaFile } from "api";
+import { MediaCaption, PostingFeatures, PrivateMediaFileInfo, SourceFormat, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import {
@@ -22,6 +22,7 @@ import {
     UploadStatus
 } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
+import { MediaFileWithCaption } from "ui/control/richtexteditor/rich-text-value";
 import { RichTextImageStandardSize } from "ui/control/richtexteditor/media/rich-text-image";
 import RichTextImageDialog, { RichTextImageValues } from "ui/control/richtexteditor/media/RichTextImageDialog";
 import RichTextCopyImageDialog, {
@@ -30,6 +31,7 @@ import RichTextCopyImageDialog, {
 import RichTextRenameMediaDialog, {
     RichTextRenameMediaValues
 } from "ui/control/richtexteditor/dialog/RichTextRenameMediaDialog";
+import ImageEditDialog from "ui/imageeditdialog/ImageEditDialog";
 import { RelNodeName } from "util/rel-node-name";
 import { extension } from "util/mime-type";
 import { arrayMove } from "util/misc";
@@ -39,35 +41,36 @@ function updateStatus(progress: UploadProgress[], index: number, status: UploadS
     return updated.some(p => p.status === "loading") ? updated : [];
 }
 
-const isAllUploaded = (media: (VerifiedMediaFile | null)[]): media is VerifiedMediaFile[] =>
+const isAllUploaded = (media: (MediaFileWithCaption | null)[]): media is MediaFileWithCaption[] =>
     media.every(v => v != null);
 
-type ChangeHandler = (value: (VerifiedMediaFile | null)[]) => void;
+type ChangeHandler = (value: (MediaFileWithCaption | null)[]) => void;
 
 interface Props {
-    value: (VerifiedMediaFile | null)[];
+    value: (MediaFileWithCaption | null)[];
     features: PostingFeatures | null;
     nodeName: RelNodeName | string;
     forceCompress?: boolean;
+    noMedia?: boolean | null;
     srcFormat: SourceFormat;
-    rejectedReactions?: RejectedReactions | null;
     onChange?: ChangeHandler;
     children: ReactNode;
 }
 
 export default function RichTextEditorMedia({
-    value, features, nodeName, forceCompress = false, srcFormat, rejectedReactions, onChange, children
+    value, features, nodeName, forceCompress = false, noMedia, srcFormat, onChange, children
 }: Props) {
     const compressImages = useSelector((state: ClientState) =>
         getSetting(state, "posting.media.compress.default") as boolean
     );
+    const imageEditDialogShow = useSelector((state: ClientState) => state.imageEditDialog.show);
     const dispatch = useDispatcher();
 
     const [attachmentType, setAttachmentType] = useState<AttachmentType>("image");
-    const uploadedImagesRef = useRef<(VerifiedMediaFile | null)[]>([]);
+    const uploadedImagesRef = useRef<(MediaFileWithCaption | null)[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
     // value and onChange may change
-    const valueRef = useRef<(VerifiedMediaFile | null)[]>(null);
+    const valueRef = useRef<(MediaFileWithCaption | null)[]>(null);
     valueRef.current = value;
     const onChangeRef = useRef<ChangeHandler | undefined>(undefined);
     onChangeRef.current = onChange;
@@ -75,7 +78,7 @@ export default function RichTextEditorMedia({
     const onImageUploadSuccess = (
         onInsert?: OnInsertHandler, standardSize?: RichTextImageStandardSize, customWidth?: number | null,
         customHeight?: number | null, caption?: string
-    ) => (index: number, mediaFile: VerifiedMediaFile) => {
+    ) => (index: number, mediaFile: MediaFileWithCaption) => {
         setUploadProgress(progress => updateStatus(progress, index, "success"));
 
         if (uploadedImagesRef.current.some(v => v != null && v.id === mediaFile.id)) {
@@ -127,11 +130,10 @@ export default function RichTextEditorMedia({
                 onImageUploadFailure,
                 onImageUploadProgress,
                 null,
-                srcFormat,
-                rejectedReactions
+                srcFormat
             ));
         }
-    }, [dispatch, features, nodeName, rejectedReactions, srcFormat]);
+    }, [dispatch, features, nodeName, srcFormat]);
 
     const compressDefault = useRef<boolean>(forceCompress || compressImages);
     const onInsertRef = useRef<OnInsertHandler | undefined>(undefined);
@@ -343,10 +345,20 @@ export default function RichTextEditorMedia({
         }
     }
 
+    const setMediaCaption = (mediaId: string, caption?: MediaCaption | null) => {
+        if (onChange != null && value != null && caption != null) {
+            const media = value.map(
+                m => m == null || m.id !== mediaId ? m : {...m, caption: {...caption, mediaId}}
+            );
+            onChange(media);
+        }
+    }
+
     return (
         <RichTextEditorMediaContext.Provider value={{
             getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, deleteMedia, reorderMedia,
             pasteMedia, showImageDialog, downloading, copyImage, attachmentType, setAttachmentType, renameMedia,
+            setMediaCaption
         }}>
             {children}
             <input {...getInputProps()}/>
@@ -377,6 +389,7 @@ export default function RichTextEditorMedia({
                     onSubmit={submitRenameMedia}
                 />
             }
+            {!noMedia && imageEditDialogShow && <ImageEditDialog/>}
         </RichTextEditorMediaContext.Provider>
     );
 };

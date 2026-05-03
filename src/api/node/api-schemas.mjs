@@ -1570,10 +1570,6 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
-                "postingId": {
-                    type: "string",
-                    nullable: true
-                },
                 "previews": {
                     type: "array",
                     items: {
@@ -3864,12 +3860,37 @@ export const NODE_API_SCHEMAS = {
                         }
                     ]
                 },
+                "postingId": {
+                    type: "string",
+                    nullable: true
+                },
                 "embedded": {
                     type: "boolean"
                 },
             },
             required: [
                 "embedded",
+            ],
+            additionalProperties: false
+        },
+
+        MediaCaption: {
+            type: "object",
+            properties: {
+                "mediaId": {
+                    type: "string"
+                },
+                "captionSrc": {
+                    type: "string",
+                    nullable: true
+                },
+                "captionSrcFormat": {
+                    type: "string",
+                    nullable: true
+                },
+            },
+            required: [
+                "mediaId",
             ],
             additionalProperties: false
         },
@@ -3919,6 +3940,10 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "parentMediaId": {
+                    type: "string",
+                    nullable: true
+                },
+                "parentMediaEntryId": {
                     type: "string",
                     nullable: true
                 },
@@ -5148,6 +5173,13 @@ export const NODE_API_SCHEMAS = {
                     type: "array",
                     items: {
                         $ref: "node#/definitions/MediaAttachment"
+                    },
+                    nullable: true
+                },
+                "mediaCaptions": {
+                    type: "array",
+                    items: {
+                        $ref: "node#/definitions/MediaCaption"
                     },
                     nullable: true
                 },

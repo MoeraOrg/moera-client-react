@@ -632,7 +632,6 @@ export interface PrivateMediaFileInfo {
     size: number;
     title?: string | null;
     textContent?: string | null;
-    postingId?: string | null;
     previews?: MediaFilePreviewInfo[] | null;
     attachment?: boolean | null;
     malware?: boolean | null;
@@ -1460,25 +1459,6 @@ export interface ContactWithRelationships {
     blockedBy?: BlockedByUserInfo[] | null;
 }
 
-export interface DraftText {
-    draftType: DraftType;
-    receiverName: string;
-    receiverPostingId?: string | null;
-    receiverCommentId?: string | null;
-    repliedToId?: string | null;
-    ownerFullName?: string | null;
-    ownerAvatar?: AvatarDescription | null;
-    rejectedReactions?: RejectedReactions | null;
-    commentRejectedReactions?: RejectedReactions | null;
-    bodySrc?: string | null;
-    bodySrcFormat?: SourceFormat | null;
-    media?: RemoteMedia[] | null;
-    publishAt?: number | null;
-    updateInfo?: UpdateInfo | null;
-    operations?: PostingOperations | null;
-    commentOperations?: CommentOperations | null;
-}
-
 export interface Features {
     posting: PostingFeatures;
     plugins?: string[] | null;
@@ -1507,7 +1487,23 @@ export interface FriendDescription {
 export interface MediaAttachment {
     media?: PrivateMediaFileInfo | null;
     remoteMedia?: RemoteMediaInfo | null;
+    postingId?: string | null;
     embedded: boolean;
+}
+
+export interface MediaCaptionBase<B> {
+    mediaId: string;
+    captionSrc?: B | null;
+    captionSrcFormat?: SourceFormat | null;
+}
+
+export type EncodedMediaCaption = MediaCaptionBase<string>;
+export type MediaCaption = MediaCaptionBase<Body>;
+
+export interface MediaCaptionText {
+    mediaId: string;
+    captionSrc?: string | null;
+    captionSrcFormat?: SourceFormat | null;
 }
 
 export interface PostingInfoBase<B> {
@@ -1521,6 +1517,7 @@ export interface PostingInfoBase<B> {
     receiverAvatar?: AvatarImage | null;
     receiverPostingId?: string | null;
     parentMediaId?: string | null;
+    parentMediaEntryId?: string | null;
     ownerName: string;
     ownerFullName?: string | null;
     ownerGender?: string | null;
@@ -1791,6 +1788,7 @@ export interface DraftInfoBase<B> {
     body: B;
     bodyFormat?: BodyFormat | null;
     media?: MediaAttachment[] | null;
+    mediaCaptions?: MediaCaptionBase<B>[] | null;
     heading: string;
     publishAt?: number | null;
     updateInfo?: UpdateInfo | null;
@@ -1800,6 +1798,26 @@ export interface DraftInfoBase<B> {
 
 export type EncodedDraftInfo = DraftInfoBase<string>;
 export type DraftInfo = DraftInfoBase<Body>;
+
+export interface DraftText {
+    draftType: DraftType;
+    receiverName: string;
+    receiverPostingId?: string | null;
+    receiverCommentId?: string | null;
+    repliedToId?: string | null;
+    ownerFullName?: string | null;
+    ownerAvatar?: AvatarDescription | null;
+    rejectedReactions?: RejectedReactions | null;
+    commentRejectedReactions?: RejectedReactions | null;
+    bodySrc?: string | null;
+    bodySrcFormat?: SourceFormat | null;
+    media?: RemoteMedia[] | null;
+    mediaCaptions?: MediaCaptionText[] | null;
+    publishAt?: number | null;
+    updateInfo?: UpdateInfo | null;
+    operations?: PostingOperations | null;
+    commentOperations?: CommentOperations | null;
+}
 
 export interface EntryInfoBase<B> {
     posting?: PostingInfoBase<B> | null;

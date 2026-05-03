@@ -1,17 +1,22 @@
-import { MediaWithDigest, SourceFormat, VerifiedMediaFile } from "api";
+import { MediaAttachment, MediaCaption, MediaCaptionText, MediaWithDigest, SourceFormat, VerifiedMediaFile } from "api";
+import { Scripture } from "ui/control/richtexteditor/visual/scripture";
+import { htmlToScripture, scriptureToHtml } from "ui/control/richtexteditor/visual/scripture-html";
 import { mediaHashesExtract } from "util/media-images";
 import { replaceSmileys } from "util/text";
-import { Scripture } from "ui/control/richtexteditor/visual/scripture";
-import { scriptureToHtml, htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { notNull } from "util/misc";
+
+export interface MediaFileWithCaption extends VerifiedMediaFile {
+    captionPostingId: string | null;
+    caption?: MediaCaption;
+}
 
 export class RichTextValue {
 
     readonly format: SourceFormat;
     readonly value: string | Scripture;
-    readonly media?: (VerifiedMediaFile | null)[] | null;
+    readonly media?: (MediaFileWithCaption | null)[] | null;
 
-    constructor(value: string | Scripture, format: SourceFormat, media?: (VerifiedMediaFile | null)[] | null) {
+    constructor(value: string | Scripture, format: SourceFormat, media?: (MediaFileWithCaption | null)[] | null) {
         if (format === "html/visual") {
             value = htmlToScripture(value, false, media?.filter(notNull));
         }
@@ -56,4 +61,61 @@ export class RichTextValue {
         return list != null ? list.map(md => md.id) : null;
     }
 
+}
+
+export function attachmentsToMedia(
+    attachments: MediaAttachment[] | null | undefined,
+    captions?: MediaCaption[] | null
+): MediaFileWithCaption[] {
+    if (attachments == null) {
+        return [];
+    }
+
+    const captionsByMediaId = captions != null ? new Map(captions.map(caption => [caption.mediaId, caption])) : null;
+
+    return attachments
+        .map(ma =>
+            ma.media?.id != null
+                ? {
+                    ...ma.media,
+                    digest: ma.remoteMedia?.digest,
+                    captionPostingId: ma.postingId ?? null,
+                    caption: captionsByMediaId?.get(ma.media.id)
+                }
+                : null
+        )
+        .filter(notNull);
+}
+
+export function mediaToCaptions(
+    media: (MediaFileWithCaption | null)[] | null | undefined
+): Record<string, MediaCaption> {
+    if (media == null) {
+        return {};
+    }
+
+    const captions: Record<string, MediaCaption> = {};
+    for (const mf of media) {
+        if (mf?.caption != null) {
+            captions[mf.id] = {...mf.caption, mediaId: mf.caption.mediaId ?? mf.id};
+        }
+    }
+
+    return captions;
+}
+
+export function mediaCaptionsToCaptionsText(
+    captions: MediaCaption[] | null | undefined
+): MediaCaptionText[] | undefined {
+    if (captions == null) {
+        return undefined;
+    }
+
+    return captions.map(c =>
+        ({
+            mediaId: c.mediaId,
+            captionSrc: c.captionSrc != null ? JSON.stringify(c.captionSrc) : undefined,
+            captionSrcFormat: c.captionSrcFormat
+        })
+    );
 }

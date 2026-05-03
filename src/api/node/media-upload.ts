@@ -2,14 +2,16 @@ import * as Base64js from 'base64-js';
 import imageCompression from 'browser-image-compression';
 import i18n from 'i18next';
 
-import { Node, PostingFeatures, PrivateMediaFileInfo } from "api";
+import { MediaAttachment, MediaCaption, Node, PostingFeatures, PostingText, PrivateMediaFileInfo } from "api";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { dispatch } from "state/store-sagas";
 import { messageBox } from "state/messagebox/actions";
 import { errorThrown } from "state/error/actions";
+import { fillActivityReaction } from "state/activityreactions/sagas";
+import { postingSet } from "state/postings/actions";
 import { readAsArrayBuffer } from "util/read-file";
-import { RelNodeName } from "util/rel-node-name";
+import { absoluteNodeName, REL_HOME, RelNodeName } from "util/rel-node-name";
 import { formatMib } from "util/info-quantity";
 
 export interface VerifiedMediaFile extends PrivateMediaFileInfo {
@@ -56,4 +58,46 @@ export async function mediaUpload(
         dispatch(errorThrown(e));
         return null;
     }
+}
+
+async function updateMediaCaption(
+    caller: WithContext<ClientAction>, nodeName: RelNodeName | string, postingId: string, caption: MediaCaption
+): Promise<void> {
+    const postingText: PostingText = {
+        bodySrc: JSON.stringify(caption.captionSrc),
+        bodySrcFormat: caption.captionSrcFormat,
+    };
+
+    const posting = await Node.updatePosting(caller, nodeName, postingId, postingText);
+    await fillActivityReaction(caller, posting);
+    dispatch(postingSet(posting, nodeName).causedBy(caller));
+
+    const remoteNodeName = absoluteNodeName(nodeName, caller.context);
+    if (remoteNodeName != null && remoteNodeName !== posting.ownerName) {
+        const sourceText = {
+            bodySrc: postingText.bodySrc,
+            bodySrcFormat: postingText.bodySrcFormat,
+        }
+        await Node.updateRemotePosting(caller, REL_HOME, remoteNodeName, postingId, sourceText);
+    }
+}
+
+export async function updateMediaCaptions(
+    caller: WithContext<ClientAction>,
+    nodeName: RelNodeName | string,
+    attachments: MediaAttachment[] | null | undefined,
+    captions: Record<string, MediaCaption>
+): Promise<void> {
+    if (attachments == null) {
+        return;
+    }
+
+    await Promise.all(
+        attachments
+            .map(ma => [ma.postingId, ma.media?.id])
+            .filter((r): r is [string, string] => r[0] != null && r[1] != null)
+            .map(([postingId, mediaId]) => [postingId, captions[mediaId]])
+            .filter((r): r is [string, MediaCaption] => r[1] != null)
+            .map(async ([postingId, caption]) => await updateMediaCaption(caller, nodeName, postingId, caption))
+    );
 }

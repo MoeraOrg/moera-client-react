@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
-import { CommentText, DraftText, SourceFormat, VerifiedMediaFile } from "api";
+import { CommentText, DraftText, MediaCaption, SourceFormat, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
@@ -14,13 +14,19 @@ import {
 } from "state/detailedposting/selectors";
 import { commentDialogCommentReset, commentDraftDelete, commentDraftSave } from "state/detailedposting/actions";
 import { useDispatcher } from "ui/hook";
+import { mediaCaptionsToCaptionsText, MediaFileWithCaption } from "ui/control/richtexteditor";
 import { CommentComposeValues, isCommentTextChanged, valuesToCommentText } from "ui/comment/compose/comment-compose";
 import { DraftSavingState, useDraftSaver } from "ui/draft/draft-saver";
 import { notNull } from "util/misc";
 
 const toDraftText = (
-    receiverName: string, postingId: string, commentId: string | null, repliedToId: string | null,
-    commentText: CommentText, media: Map<string, VerifiedMediaFile>
+    receiverName: string,
+    postingId: string,
+    commentId: string | null,
+    repliedToId: string | null,
+    commentText: CommentText,
+    media: Map<string, VerifiedMediaFile>,
+    mediaCaptions: MediaCaption[] | undefined
 ): DraftText => ({
     ...cloneDeep(commentText),
     media: commentText.media?.map(id => ({
@@ -30,12 +36,20 @@ const toDraftText = (
         mimeType: media.get(id)?.mimeType ?? "image/jpeg",
         attachment: media.get(id)?.attachment
     })),
+    mediaCaptions: mediaCaptionsToCaptionsText(mediaCaptions),
     receiverName,
     draftType: commentId == null ? "new-comment" : "comment-update",
     receiverPostingId: postingId,
     receiverCommentId: commentId ?? null, /* important, should not be undefined */
     repliedToId
 } as DraftText);
+
+const toCaptionsList = (media: (MediaFileWithCaption | null)[] | null | undefined): MediaCaption[] | undefined =>
+    media?.filter(notNull).map(m => m.caption).filter(notNull);
+
+const areCaptionsEmpty = (captions: MediaCaption[] | undefined): boolean => captions == null || captions.length === 0;
+
+type CommentValue = [CommentText, MediaCaption[] | undefined];
 
 export function useCommentDraftSaver(commentId: string | null): DraftSavingState {
     const connectedToHome = useSelector(isConnectedToHome);
@@ -70,14 +84,16 @@ export function useCommentDraftSaver(commentId: string | null): DraftSavingState
     const dispatch = useDispatcher();
 
     const toText = useCallback(
-        (values: CommentComposeValues): CommentText | null =>
-            valuesToCommentText(
+        (values: CommentComposeValues): CommentValue | null => {
+            const text = valuesToCommentText(
                 values,
                 {
                     ownerName, ownerFullName, ownerGender, smileysEnabled, sourceFormatDefault,
                     reactionsPositiveDefault, reactionsNegativeDefault, repliedToId
                 }
-            ),
+            );
+            return text != null ? [text, toCaptionsList(values.body.media)] : null;
+        },
         [
             ownerName, ownerFullName, ownerGender, smileysEnabled, sourceFormatDefault, reactionsPositiveDefault,
             reactionsNegativeDefault, repliedToId
@@ -85,22 +101,31 @@ export function useCommentDraftSaver(commentId: string | null): DraftSavingState
     );
 
     const isChanged = useCallback(
-        (commentText: CommentText): boolean => isCommentTextChanged(commentText, comment),
+        ([commentText, captions]: CommentValue): boolean =>
+            isCommentTextChanged(commentText, comment) || !areCaptionsEmpty(captions),
         [comment]
     );
 
     const save = useCallback(
-        (text: CommentText, values: CommentComposeValues): void => {
+        ([text, mediaCaptions]: CommentValue, values: CommentComposeValues): void => {
             if (connectedToHome && ownerName != null && receiverPostingId != null) {
                 const media = new Map(
-                    (values.body.media ?? [])
+                    ((values.body.media ?? []) as (VerifiedMediaFile | null)[])
                         .concat(values.linkPreviews.media)
                         .filter(notNull)
                         .map(rm => [rm.id, rm])
                 );
                 dispatch(commentDraftSave(
                     draft?.id ?? null,
-                    toDraftText(receiverName ?? ownerName, receiverPostingId, commentId, repliedToId, text, media),
+                    toDraftText(
+                        receiverName ?? ownerName,
+                        receiverPostingId,
+                        commentId,
+                        repliedToId,
+                        text,
+                        media,
+                        mediaCaptions
+                    ),
                     formId
                 ));
             }

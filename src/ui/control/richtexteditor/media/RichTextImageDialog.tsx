@@ -95,9 +95,12 @@ function RichTextImageDialog({
             }
             {mediaFiles != null &&
                 <div className="rich-text-editor-image-list pt-0 mb-3">
-                    {mediaFiles.map(mediaFile =>
-                        <UploadedImage key={mediaFile.id} media={mediaFile} nodeName={nodeName} showMenu={false}/>
-                    )}
+                    {mediaFiles
+                        .map(mediaFile => ({...mediaFile, captionPostingId: null}))
+                        .map(mediaFile =>
+                            <UploadedImage key={mediaFile.id} media={mediaFile} nodeName={nodeName} showMenu={false}/>
+                        )
+                    }
                 </div>
             }
             {files == null && mediaFiles == null &&
