@@ -117,11 +117,13 @@ async function nodeCardDetailsLoadSaga(action: WithContext<NodeCardDetailsLoadAc
     await mutuallyIntroduced();
     const {nodeName} = action.payload;
     try {
-        const profile = await Node.getProfile(action, nodeName);
+        const profile = await Node.getProfile(action, nodeName, false, ["not-found", "authentication.required"]);
         dispatch(nodeCardDetailsSet(nodeName, profile).causedBy(action));
     } catch (e) {
         dispatch(nodeCardDetailsLoadFailed(nodeName).causedBy(action));
-        dispatch(errorThrown(e));
+        if (!(e instanceof NodeApiError)) {
+            dispatch(errorThrown(e));
+        }
     }
 }
 
@@ -129,13 +131,15 @@ async function nodeCardPeopleLoadSaga(action: WithContext<NodeCardPeopleLoadActi
     await mutuallyIntroduced();
     const {nodeName} = action.payload;
     try {
-        const info = await Node.getPeopleGeneral(action, nodeName);
+        const info = await Node.getPeopleGeneral(action, nodeName, ["not-found", "authentication.required"]);
         dispatch(nodeCardPeopleSet(
             nodeName, info.feedSubscribersTotal ?? null, info.feedSubscriptionsTotal ?? null
         ).causedBy(action));
     } catch (e) {
         dispatch(nodeCardPeopleLoadFailed(nodeName).causedBy(action));
-        dispatch(errorThrown(e));
+        if (!(e instanceof NodeApiError)) {
+            dispatch(errorThrown(e));
+        }
     }
 }
 
@@ -143,11 +147,15 @@ async function nodeCardStoriesLoadSaga(action: WithContext<NodeCardStoriesLoadAc
     await mutuallyIntroduced();
     const {nodeName} = action.payload;
     try {
-        const {total, lastCreatedAt = null} = await Node.getFeedGeneral(action, nodeName, "timeline");
+        const {total, lastCreatedAt = null} = await Node.getFeedGeneral(
+            action, nodeName, "timeline", ["not-found", "feed.not-found", "authentication.required"]
+        );
         dispatch(nodeCardStoriesSet(nodeName, total, lastCreatedAt).causedBy(action));
     } catch (e) {
         dispatch(nodeCardDetailsLoadFailed(nodeName).causedBy(action));
-        dispatch(errorThrown(e));
+        if (!(e instanceof NodeApiError)) {
+            dispatch(errorThrown(e));
+        }
     }
 }
 
@@ -176,7 +184,7 @@ async function loadSubscriber(
         return null;
     }
     const subscribers = await Node.getSubscribers(
-        action, REL_HOME, nodeName, "feed" as const, null, null, ["authentication.required"]
+        action, REL_HOME, nodeName, "feed" as const, null, null, ["not-found", "authentication.required"]
     );
     return subscribers?.[0];
 }
@@ -189,7 +197,7 @@ async function loadSubscription(
         return null;
     }
     const subscriptions = await Node.getSubscriptions(
-        action, REL_HOME, nodeName, "feed" as const, ["authentication.required"]
+        action, REL_HOME, nodeName, "feed" as const, ["not-found", "authentication.required"]
     );
     return subscriptions?.[0];
 }
@@ -229,7 +237,7 @@ async function loadRemoteFriendGroups(
     if (!homeOwnerName || !nodeName || nodeName === homeOwnerName) {
         return null;
     }
-    const {groups} = await Node.getFriend(action, nodeName, homeOwnerName);
+    const {groups} = await Node.getFriend(action, nodeName, homeOwnerName, ["not-found", "authentication.required"]);
     return groups;
 }
 

@@ -83,11 +83,15 @@ async function feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>): 
     let {nodeName, feedName} = action.payload;
     nodeName = absoluteNodeName(nodeName, action.context);
     try {
-        const info = await Node.getFeedGeneral(action, nodeName, feedName);
+        const info = await Node.getFeedGeneral(
+            action, nodeName, feedName, ["not-found", "feed.not-found", "authentication.required"]
+        );
         dispatch(feedGeneralSet(nodeName, feedName, info).causedBy(action));
     } catch (e) {
         dispatch(feedGeneralLoadFailed(nodeName, feedName).causedBy(action));
-        dispatch(errorThrown(e));
+        if (!(e instanceof NodeApiError)) {
+            dispatch(errorThrown(e));
+        }
     }
 }
 
@@ -208,7 +212,7 @@ async function feedStatusLoadSaga(action: WithContext<FeedStatusLoadAction>): Pr
     nodeName = absoluteNodeName(nodeName, action.context);
     try {
         const status = await Node.getFeedStatus(
-            action, nodeName, feedName, ["feed.not-found", "authentication.required"]
+            action, nodeName, feedName, ["not-found", "feed.not-found", "authentication.required"]
         );
         dispatch(feedStatusSet(nodeName, feedName, status).causedBy(action));
     } catch (e) {

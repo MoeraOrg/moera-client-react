@@ -1,7 +1,7 @@
 import * as URI from 'uri-js';
 import i18n from 'i18next';
 
-import { Node, NodeName } from "api";
+import { Node, NodeApiError, NodeName } from "api";
 import { saga } from "state/saga";
 import { mutuallyIntroduced, namingInitialized } from "state/init-barriers";
 import { dispatch, select } from "state/store-sagas";
@@ -36,7 +36,7 @@ async function ownerLoadSaga(action: WithContext<OwnerLoadAction>): Promise<void
         const {
             nodeName = null, nodeNameChanging = false, fullName = null, gender = null, title = null, avatar = null,
             type
-        } = await Node.whoAmI(action, REL_CURRENT);
+        } = await Node.whoAmI(action, REL_CURRENT, ["not-found"]);
         dispatch(
             ownerSet(rootLocation, nodeName, nodeNameChanging, fullName, gender, title, avatar, type ?? "regular")
                 .causedBy(action)
@@ -45,7 +45,9 @@ async function ownerLoadSaga(action: WithContext<OwnerLoadAction>): Promise<void
             dispatch(nodeReady().causedBy(action));
         }
     } catch (e) {
-        dispatch(errorThrown(e));
+        if (!(e instanceof NodeApiError)) {
+            dispatch(errorThrown(e));
+        }
     }
 }
 
@@ -96,9 +98,11 @@ async function nodeFeaturesLoadSaga(action: WithContext<NodeFeaturesLoadAction>)
     }
 
     try {
-        const features = await Node.getFeatures(action, nodeName);
+        const features = await Node.getFeatures(action, nodeName, ["not-found", "authentication.required"]);
         dispatch(nodeFeaturesLoaded(nodeName, features, false).causedBy(action));
     } catch (e) {
-        dispatch(errorThrown(e));
+        if (!(e instanceof NodeApiError)) {
+            dispatch(errorThrown(e));
+        }
     }
 }
