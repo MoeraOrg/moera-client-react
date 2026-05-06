@@ -79,7 +79,7 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
                 <Jump className="counter" nodeName={nodeName} href="/people/subscriptions">
                     <Trans i18nKey="count-subscriptions" values={{count: subscriptionsTotal}}><em/></Trans>
                 </Jump>
-                <span className="counter">
+                <Jump className="counter" nodeName={nodeName} href="/timeline">
                     <Trans i18nKey="count-posts" values={{count: storiesTotal}}><em/></Trans>
                     {storiesLastDate &&
                         <>
@@ -90,7 +90,7 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
                             </time>
                         </>
                     }
-                </span>
+                </Jump>
             </div>
             <div className="buttons">
                 <div>

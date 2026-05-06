@@ -16,6 +16,7 @@ import { profileEmailVerify } from "state/profile/actions";
 import { useDispatcher } from "ui/hook";
 import { Button, DonateButton, OnlyDesktop } from "ui/control";
 import Jump from "ui/navigation/Jump";
+import { useTimeline } from "ui/feed/feeds";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import ProfileAvatar from "ui/profile/ProfileAvatar";
 import ManagementMenu from "ui/profile/manage/ManagementMenu";
@@ -37,6 +38,7 @@ export default function ProfileSidebar() {
     const storiesTotal = card?.stories.storiesTotal ?? "?";
     const subscribersTotal = card?.people.subscribersTotal ?? "?";
     const fundraisers = card?.details.profile.fundraisers;
+    const timelineHref = useTimeline();
     const dispatch = useDispatcher();
     const {t} = useTranslation();
 
@@ -73,9 +75,9 @@ export default function ProfileSidebar() {
                 {regularNode &&
                     <>
                         <div className="counters-line">
-                            <div className="counter">
+                            <Jump className="counter" href={timelineHref}>
                                 <Trans i18nKey="count-posts" values={{count: storiesTotal}}><em/></Trans>
-                            </div>
+                            </Jump>
                             <Jump className="counter" href="/people/subscribers">
                                 <Trans i18nKey="count-subscribers" values={{count: subscribersTotal}}><em/></Trans>
                             </Jump>

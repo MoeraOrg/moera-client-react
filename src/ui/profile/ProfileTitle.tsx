@@ -23,7 +23,7 @@ import MobileBack from "ui/page/MobileBack";
 import ProfileAvatar from "ui/profile/ProfileAvatar";
 import ManagementMenuItems from "ui/profile/manage/ManagementMenuItems";
 import OperationStatus from "ui/profile/manage/OperationStatus";
-import { useHomeNews } from "ui/feed/feeds";
+import { useHomeNews, useTimeline } from "ui/feed/feeds";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import { mentionName } from "util/names";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
@@ -42,6 +42,7 @@ export default function ProfileTitle() {
     const storiesTotal = card?.stories.storiesTotal ?? "?";
     const subscribersTotal = card?.people.subscribersTotal ?? "?";
     const fundraisers = useSelector((state: ClientState) => state.profile.profile.fundraisers);
+    const timelineHref = useTimeline();
     const newsHref = useHomeNews();
     const dispatch = useDispatcher();
 
@@ -62,9 +63,9 @@ export default function ProfileTitle() {
                         <ProfileAvatar avatar={avatar} ownerName={nodeName} size={64}/>
                         {regularNode &&
                             <>
-                                <div className="counter">
+                                <Jump className="counter" href={timelineHref}>
                                     <Trans i18nKey="count-posts" values={{count: storiesTotal}}><em/></Trans>
-                                </div>
+                                </Jump>
                                 <Jump className="counter" href="/people/subscribers">
                                     <Trans i18nKey="count-subscribers" values={{count: subscribersTotal}}><em/></Trans>
                                 </Jump>
