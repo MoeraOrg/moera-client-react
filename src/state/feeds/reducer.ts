@@ -343,18 +343,25 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
 
         case "FEED_CANNOT_BE_LOADED": {
             const {nodeName, feedName} = action.payload;
-            const {istate} = getFeed(state, nodeName, feedName);
-            istate.assign([nodeName, feedName], {
-                loadingFuture: false,
-                loadingPast: false,
-                cannotBeLoaded: true,
-                before: Number.MAX_SAFE_INTEGER,
-                after: Number.MIN_SAFE_INTEGER,
-                stories: [],
-                pending: [],
-                totalInPast: 0,
-                totalInFuture: 0,
-            });
+            const {istate, feed} = getFeed(state, nodeName, feedName);
+            if (feed.stories.length > 0) {
+                istate.assign([nodeName, feedName], {
+                    loadingFuture: false,
+                    loadingPast: false,
+                });
+            } else {
+                istate.assign([nodeName, feedName], {
+                    loadingFuture: false,
+                    loadingPast: false,
+                    cannotBeLoaded: true,
+                    before: Number.MAX_SAFE_INTEGER,
+                    after: Number.MIN_SAFE_INTEGER,
+                    stories: [],
+                    pending: [],
+                    totalInPast: 0,
+                    totalInFuture: 0,
+                });
+            }
             return istate.value();
         }
 
