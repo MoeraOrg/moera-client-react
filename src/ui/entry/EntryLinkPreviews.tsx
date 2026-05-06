@@ -41,6 +41,7 @@ export default function EntryLinkPreviews({nodeName, linkPreviews, noFollow, lim
                         noFollow={noFollow}
                         title={linkPreview.title}
                         description={linkPreview.description}
+                        publishedAt={linkPreview.publishedAt}
                         imageHash={linkPreview.imageHash}
                         siteName={linkPreview.siteName}
                         media={media ?? null}

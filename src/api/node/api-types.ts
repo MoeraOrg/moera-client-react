@@ -514,6 +514,7 @@ export interface LinkPreview {
     title?: string | null;
     description?: string | null;
     imageHash?: string | null;
+    publishedAt?: number | null;
 }
 
 export interface LinkPreviewInfo {
@@ -522,6 +523,7 @@ export interface LinkPreviewInfo {
     title?: string | null;
     description?: string | null;
     imageUrl?: string | null;
+    publishedAt?: number | null;
 }
 
 export interface MediaDownloadAttributes {
@@ -1390,29 +1392,6 @@ export interface CommentMassAttributes {
     seniorRejectedReactions?: RejectedReactions | null;
 }
 
-export interface CommentRevisionInfoBase<B> {
-    id: string;
-    postingRevisionId: string;
-    bodyPreview?: B | null;
-    bodySrcHash: string;
-    bodySrcFormat?: SourceFormat | null;
-    body: B;
-    bodyFormat?: BodyFormat | null;
-    heading: string;
-    description?: string | null;
-    createdAt: number;
-    deletedAt?: number | null;
-    deadline?: number | null;
-    digest?: string | null;
-    signature?: string | null;
-    signatureVersion?: number | null;
-    clientReaction?: ClientReactionInfo | null;
-    reactions?: ReactionTotalsInfo | null;
-}
-
-export type EncodedCommentRevisionInfo = CommentRevisionInfoBase<string>;
-export type CommentRevisionInfo = CommentRevisionInfoBase<Body>;
-
 export interface CommentSourceText {
     ownerAvatar?: AvatarDescription | null;
     bodySrc?: string | null;
@@ -1756,6 +1735,30 @@ export interface CommentInfoBase<B> {
 
 export type EncodedCommentInfo = CommentInfoBase<string>;
 export type CommentInfo = CommentInfoBase<Body>;
+
+export interface CommentRevisionInfoBase<B> {
+    id: string;
+    postingRevisionId: string;
+    bodyPreview?: B | null;
+    bodySrcHash: string;
+    bodySrcFormat?: SourceFormat | null;
+    body: B;
+    bodyFormat?: BodyFormat | null;
+    media?: MediaAttachment[] | null;
+    heading: string;
+    description?: string | null;
+    createdAt: number;
+    deletedAt?: number | null;
+    deadline?: number | null;
+    digest?: string | null;
+    signature?: string | null;
+    signatureVersion?: number | null;
+    clientReaction?: ClientReactionInfo | null;
+    reactions?: ReactionTotalsInfo | null;
+}
+
+export type EncodedCommentRevisionInfo = CommentRevisionInfoBase<string>;
+export type CommentRevisionInfo = CommentRevisionInfoBase<Body>;
 
 export interface CommentsSliceInfoBase<B> {
     before: number;

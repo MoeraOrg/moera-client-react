@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import cx from 'classnames';
 
 interface Props {
     src: string;
@@ -42,7 +43,7 @@ export default function PreloadedImage({src, srcSet, sizes, width, height, alt, 
         <>
             {!loaded &&
                 <img width={width} height={height} alt={alt ?? ""} title={title} style={style}
-                     className="preload-placeholder"/>
+                     className={cx("preload-placeholder", className)}/>
             }
             <img ref={imgRef} src={src} srcSet={srcSet} sizes={sizes} width={width} height={height} alt={alt ?? ""}
                  title={title} className={className} style={loaded ? style : {display: "none"}} onLoad={onLoad}/>

@@ -1273,6 +1273,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "publishedAt": {
+                    type: "integer",
+                    nullable: true
+                },
             },
             additionalProperties: false
         },
@@ -1298,6 +1302,10 @@ export const NODE_API_SCHEMAS = {
                 },
                 "imageUrl": {
                     type: "string",
+                    nullable: true
+                },
+                "publishedAt": {
+                    type: "integer",
                     nullable: true
                 },
             },
@@ -3542,106 +3550,6 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
-        CommentRevisionInfo: {
-            type: "object",
-            properties: {
-                "id": {
-                    type: "string"
-                },
-                "postingRevisionId": {
-                    type: "string"
-                },
-                "bodyPreview": {
-                    type: "string",
-                    nullable: true
-                },
-                "bodySrcHash": {
-                    type: "string"
-                },
-                "bodySrcFormat": {
-                    type: "string",
-                    nullable: true
-                },
-                "body": {
-                    type: "string"
-                },
-                "bodyFormat": {
-                    type: "string",
-                    nullable: true
-                },
-                "heading": {
-                    type: "string"
-                },
-                "description": {
-                    type: "string",
-                    nullable: true
-                },
-                "createdAt": {
-                    type: "integer"
-                },
-                "deletedAt": {
-                    type: "integer",
-                    nullable: true
-                },
-                "deadline": {
-                    type: "integer",
-                    nullable: true
-                },
-                "digest": {
-                    type: "string",
-                    nullable: true
-                },
-                "signature": {
-                    type: "string",
-                    nullable: true
-                },
-                "signatureVersion": {
-                    type: "integer",
-                    nullable: true
-                },
-                "clientReaction": {
-                    anyOf: [
-                        {
-                            $ref: "node#/definitions/ClientReactionInfo",
-                            type: "object",
-                            nullable: true
-                        },
-                        {
-                            type: "null"
-                        }
-                    ]
-                },
-                "reactions": {
-                    anyOf: [
-                        {
-                            $ref: "node#/definitions/ReactionTotalsInfo",
-                            type: "object",
-                            nullable: true
-                        },
-                        {
-                            type: "null"
-                        }
-                    ]
-                },
-            },
-            required: [
-                "id",
-                "postingRevisionId",
-                "bodySrcHash",
-                "body",
-                "heading",
-                "createdAt",
-            ],
-            additionalProperties: false
-        },
-
-        CommentRevisionInfoArray: {
-            type: "array",
-            items: {
-                $ref: "node#/definitions/CommentRevisionInfo"
-            }
-        },
-
         ContactWithRelationships: {
             type: "object",
             properties: {
@@ -5041,6 +4949,113 @@ export const NODE_API_SCHEMAS = {
                 "revisionCreatedAt",
             ],
             additionalProperties: false
+        },
+
+        CommentRevisionInfo: {
+            type: "object",
+            properties: {
+                "id": {
+                    type: "string"
+                },
+                "postingRevisionId": {
+                    type: "string"
+                },
+                "bodyPreview": {
+                    type: "string",
+                    nullable: true
+                },
+                "bodySrcHash": {
+                    type: "string"
+                },
+                "bodySrcFormat": {
+                    type: "string",
+                    nullable: true
+                },
+                "body": {
+                    type: "string"
+                },
+                "bodyFormat": {
+                    type: "string",
+                    nullable: true
+                },
+                "media": {
+                    type: "array",
+                    items: {
+                        $ref: "node#/definitions/MediaAttachment"
+                    },
+                    nullable: true
+                },
+                "heading": {
+                    type: "string"
+                },
+                "description": {
+                    type: "string",
+                    nullable: true
+                },
+                "createdAt": {
+                    type: "integer"
+                },
+                "deletedAt": {
+                    type: "integer",
+                    nullable: true
+                },
+                "deadline": {
+                    type: "integer",
+                    nullable: true
+                },
+                "digest": {
+                    type: "string",
+                    nullable: true
+                },
+                "signature": {
+                    type: "string",
+                    nullable: true
+                },
+                "signatureVersion": {
+                    type: "integer",
+                    nullable: true
+                },
+                "clientReaction": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ClientReactionInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+                "reactions": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ReactionTotalsInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+            },
+            required: [
+                "id",
+                "postingRevisionId",
+                "bodySrcHash",
+                "body",
+                "heading",
+                "createdAt",
+            ],
+            additionalProperties: false
+        },
+
+        CommentRevisionInfoArray: {
+            type: "array",
+            items: {
+                $ref: "node#/definitions/CommentRevisionInfo"
+            }
         },
 
         CommentsSliceInfo: {

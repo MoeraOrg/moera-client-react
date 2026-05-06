@@ -124,6 +124,7 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, feature
                     noFollow={false}
                     title={preview.title}
                     description={preview.description}
+                    publishedAt={preview.publishedAt}
                     imageUploading={isImageUploading(linkPreviewsState, preview.url, targetNodeName)}
                     imageHash={preview.imageHash}
                     siteName={preview.siteName}
@@ -203,7 +204,8 @@ function buildValue(
                     url: lpState?.info?.url,
                     title: lpState?.info?.title,
                     description: lpState?.info?.description,
-                    imageHash: imageState?.info?.hash
+                    imageHash: imageState?.info?.hash,
+                    publishedAt: lpState?.info?.publishedAt
                 });
                 totalVisible++;
                 break;

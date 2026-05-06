@@ -2,9 +2,12 @@ import React, { MouseEventHandler, useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as URI from 'uri-js';
 import cx from 'classnames';
+import { format, fromUnixTime } from 'date-fns';
+import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
+import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { Icon, msClose, msEdit } from "ui/material-symbols";
@@ -22,6 +25,7 @@ interface Props {
     noFollow: boolean;
     title?: string | null;
     description?: string | null;
+    publishedAt?: number | null;
     imageUploading?: boolean;
     imageHash?: string | null;
     media: MediaAttachment[] | null;
@@ -33,9 +37,15 @@ interface Props {
 }
 
 export function EntryLinkPreview({
-    nodeName, siteName, url, noFollow, title, description, imageUploading, imageHash, media, small = false, editing,
-    disabled, onUpdate, onDelete
+    nodeName, siteName, url, noFollow, title, description, publishedAt, imageUploading, imageHash, media, small = false,
+    editing, disabled, onUpdate, onDelete
 }: Props) {
+    const timeRelative = useSelector((state: ClientState) => getSetting(state, "posting.time.relative") as boolean);
+    useSelector((state: ClientState) =>
+        getSetting(state, "posting.time.relative") ? state.pulse.pulse : null
+    ); // To force re-rendering only
+    const {t} = useTranslation();
+
     const [edit, setEdit] = useState<boolean>(false);
 
     if (url == null) {
@@ -46,6 +56,7 @@ export function EntryLinkPreview({
     if (host == null) {
         return null;
     }
+    const metaLabel = formatMetaLabel(host, publishedAt, timeRelative, t);
 
     let large;
     let mediaFile: PrivateMediaFileInfo | null = null;
@@ -79,12 +90,17 @@ export function EntryLinkPreview({
                 {description &&
                     <div className="description">{ellipsize(description, small ? 70 : 120)}</div>
                 }
-                <div className="site">
-                    {siteName &&
-                        <>{ellipsize(siteName, 40)}{" "}<span className="bullet">&bull;</span>{" "}</>
-                    }
-                    {host.toUpperCase()}
-                </div>
+                {(siteName || metaLabel) &&
+                    <div className="site">
+                        {siteName &&
+                            <>
+                                {ellipsize(siteName, 40)}
+                                {metaLabel && <>{" "}<span className="bullet">&bull;</span>{" "}</>}
+                            </>
+                        }
+                        {metaLabel}
+                    </div>
+                }
             </div>
             {edit &&
                 <EntryLinkPreviewEditDialog title={title ?? ""} description={description ?? ""}
@@ -131,4 +147,18 @@ function Frame({editing, className, url, noFollow, children, onEdit, onDelete}: 
             </a>
         );
     }
+}
+
+function formatMetaLabel(
+    host: string, publishedAt: number | null | undefined, timeRelative: boolean, t: TFunction
+): string | null {
+    const hostLabel = host.toUpperCase();
+    if (hostLabel === "MOERA.PAGE" || hostLabel.endsWith(".MOERA.PAGE")) {
+        if (publishedAt == null) {
+            return null;
+        }
+        const date = fromUnixTime(publishedAt);
+        return timeRelative ? tDistanceToNow(date, t) : format(date, "dd-MM-yyyy");
+    }
+    return hostLabel;
 }
