@@ -14,6 +14,7 @@ import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
 import Jump from "ui/navigation/Jump";
 import { useWaitTill } from "ui/connectpage/wait-till";
+import { trimNodeLocation } from "ui/connectpage/util";
 import { isUrl, urlWithParameters } from "util/url";
 
 interface OuterProps {
@@ -39,6 +40,8 @@ function ConnectForm(props: Props) {
     const dispatch = useDispatcher();
     const {t} = useTranslation();
 
+    const location = trimNodeLocation(values.location);
+
     useEffect(() => {
         const values = connectFormLogic.mapPropsToValues(props);
         resetForm({values});
@@ -46,13 +49,12 @@ function ConnectForm(props: Props) {
     }, [formId]); // 'props' are missing on purpose
 
     const onForgotPassword = (event: React.MouseEvent) => {
-        dispatch(connectPageSetForm(values.location, "admin", "forgot"));
+        dispatch(connectPageSetForm(location, "admin", "forgot"));
         event.preventDefault();
-    }
+    };
 
     const formError = !dirty && !connecting ? lastError : undefined;
-    const disabled = !values.location || !values.password || !isLocationValid(values.location) || connecting
-        || !!waitConnect;
+    const disabled = !location || !values.password || !isLocationValid(values.location) || connecting || !!waitConnect;
 
     return (
         <Form>
@@ -80,7 +82,9 @@ function ConnectForm(props: Props) {
 }
 
 function isLocationValid(location: string) {
-    return isUrl(location) || NamingRules.isRegisteredNameValid(location);
+    const nLocation = trimNodeLocation(location);
+
+    return isUrl(nLocation) || NamingRules.isRegisteredNameValid(nLocation);
 }
 
 const connectFormLogic = {
@@ -93,7 +97,7 @@ const connectFormLogic = {
     validate: (values: Values): FormikErrors<Values> => {
         const errors: FormikErrors<Values> = {};
 
-        const location = values.location.trim();
+        const location = trimNodeLocation(values.location);
         if (!location) {
             errors.location = "must-not-empty";
         } else if (!isLocationValid(location)) {
@@ -107,7 +111,7 @@ const connectFormLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        dispatch(connectToHome(values.location.trim(), false, "admin", values.password));
+        dispatch(connectToHome(trimNodeLocation(values.location), false, "admin", values.password));
         formik.setSubmitting(false);
     }
 

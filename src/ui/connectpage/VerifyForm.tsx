@@ -10,6 +10,7 @@ import { connectPageResetPassword, connectPageVerifyCode } from "state/connectpa
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
 import { useWaitTill } from "ui/connectpage/wait-till";
+import { trimNodeLocation } from "ui/connectpage/util";
 
 interface OuterProps {
     location: string;
@@ -37,10 +38,10 @@ function VerifyForm({location, values, dirty, resetForm}: Props) {
     }, [formId]); // 'props' are missing on purpose
 
     const onTryAgain = (event: React.MouseEvent) => {
-        const target = location || "";
+        const target = trimNodeLocation(location || "");
         dispatch(connectPageResetPassword(target));
         event.preventDefault();
-    }
+    };
 
     const formError = !dirty && !processing ? lastError : undefined;
     const disabled = !values.resetToken || processing;
@@ -86,7 +87,7 @@ const verifyFormLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        const location = formik.props.location || "";
+        const location = trimNodeLocation(formik.props.location || "");
         dispatch(connectPageVerifyCode(location, values.resetToken.toUpperCase().trim()));
         formik.setSubmitting(false);
     }

@@ -10,6 +10,7 @@ import { connectToHome } from "state/home/actions";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
 import { useWaitTill } from "ui/connectpage/wait-till";
+import { trimNodeLocation } from "ui/connectpage/util";
 
 interface OuterProps {
     location: string;
@@ -82,7 +83,7 @@ const resetFormLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        const location = formik.props.location || "";
+        const location = trimNodeLocation(formik.props.location || "");
         dispatch(connectToHome(location, false, "admin", values.password, null, formik.props.resetToken));
         formik.setSubmitting(false);
     }

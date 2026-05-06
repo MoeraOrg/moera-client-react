@@ -10,6 +10,7 @@ import { connectPageResetPassword } from "state/connectpage/actions";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
 import { useWaitTill } from "ui/connectpage/wait-till";
+import { trimNodeLocation } from "ui/connectpage/util";
 
 interface OuterProps {
     location: string;
@@ -29,7 +30,7 @@ function ForgotForm({location, values, dirty}: Props) {
     const {t} = useTranslation();
 
     const formError = !dirty && !processing ? lastError : undefined;
-    const disabled = !values.location || processing || !!waitMail;
+    const disabled = !trimNodeLocation(values.location) || processing || !!waitMail;
 
     return (
         <Form>
@@ -54,7 +55,7 @@ const forgotFormLogic = {
     validate: (values: Values): FormikErrors<Values> => {
         const errors: FormikErrors<Values> = {};
 
-        if (!values.location.trim()) {
+        if (!trimNodeLocation(values.location)) {
             errors.location = "must-not-empty";
         }
 
@@ -62,7 +63,7 @@ const forgotFormLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        dispatch(connectPageResetPassword(values.location.trim()));
+        dispatch(connectPageResetPassword(trimNodeLocation(values.location)));
         formik.setSubmitting(false);
     }
 

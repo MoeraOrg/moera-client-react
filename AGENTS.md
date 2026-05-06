@@ -17,3 +17,5 @@
 1. Literal names of actions should correspond to their function names and type
    names. For example, literal: "DO_SMTH", function: `doSmth()`,
    type: DoSmthAction.
+2. Action functions are for creating action objects only. Do not add any
+   additional logic to these functions.
