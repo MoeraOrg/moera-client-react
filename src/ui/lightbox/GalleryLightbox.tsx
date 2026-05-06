@@ -39,7 +39,7 @@ export default function GalleryLightbox() {
 
     const onCloseRequest = useCallback(() => dispatch(closeLightbox()), [dispatch]);
 
-    const [zIndex, overlayId] = useOverlay(null, {closeOnClick: false, closeOnEscape: false, onClose: onCloseRequest});
+    const [zIndex, overlayId] = useOverlay(null, {closeOnClick: false, onClose: onCloseRequest});
 
     const media = useMemo(() => getGallery(posting, comment), [comment, posting]);
     let mainHref = "";

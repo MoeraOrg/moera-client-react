@@ -518,7 +518,7 @@ export default function LightboxWindow({
     return (
         <Modal
             isOpen
-            onRequestClose={onClose}
+            shouldCloseOnEsc={false}
             onAfterOpen={() => {
                 if (ref.current) {
                     ref.current.focus();
