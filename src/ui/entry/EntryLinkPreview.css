@@ -30,7 +30,7 @@ DIV.link-preview {
     }
 
     DIV.link-preview {
-        width: calc(99.6vw - 2rem);
+        width: calc(99.6vw - 5rem);
         margin-left: -.5rem;
         margin-right: -.5rem;
     }
