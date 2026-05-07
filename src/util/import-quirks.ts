@@ -12,7 +12,7 @@ export function importQuirks(html: string | null): string | null {
 
 function twitterImportQuirks(html: string): string {
     if (/<span\s+class="css-\S* r-/.test(html)) {
-        return linefeedsToHtml(html);
+        return linefeedsToHtml(html.trim());
     }
     return html;
 }
