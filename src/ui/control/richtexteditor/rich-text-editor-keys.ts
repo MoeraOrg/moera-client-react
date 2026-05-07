@@ -10,7 +10,7 @@ class RichTextEditorKey {
     constructor(key: string | string[]) {
         const keys = Array.isArray(key) ? key : [key];
         this.title = keys.map(item =>
-            Browser.isMac() ? item.replace("Mod", "Cmd") : item.replace("Mod", "Ctrl")
+            Browser.isMac() ? item.replace("Mod", "Cmd").replace("Alt", "Opt") : item.replace("Mod", "Ctrl")
         ).join(" / ");
         this.checker = isHotkey(keys.map(item => item.replaceAll("-", "+").replaceAll("_", "-")));
     }
@@ -34,8 +34,8 @@ export const RICH_TEXT_EDITOR_KEYS = {
     CLEAR:              new RichTextEditorKey("Mod-0"),
     EN_DASH:            new RichTextEditorKey(["Mod-1", "Mod-_"]),
     EM_DASH:            new RichTextEditorKey(["Mod-2", "Mod-Shift-_"]),
-    ANGLE_QUOTE_LEFT:   new RichTextEditorKey("Mod-,"),
-    ANGLE_QUOTE_RIGHT:  new RichTextEditorKey("Mod-."),
-    DOUBLE_QUOTE_LEFT:  new RichTextEditorKey("Mod-Shift-,"),
-    DOUBLE_QUOTE_RIGHT: new RichTextEditorKey("Mod-Shift-."),
+    ANGLE_QUOTE_LEFT:   new RichTextEditorKey("Alt-,"),
+    ANGLE_QUOTE_RIGHT:  new RichTextEditorKey("Alt-."),
+    DOUBLE_QUOTE_LEFT:  new RichTextEditorKey("Alt-Shift-,"),
+    DOUBLE_QUOTE_RIGHT: new RichTextEditorKey("Alt-Shift-."),
 };

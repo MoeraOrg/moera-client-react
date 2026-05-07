@@ -143,7 +143,7 @@ export function useRichTextEditorCommands(): RichTextEditorCommands {
     const context = useContext(RichTextEditorCommandsContext);
     
     const handleHotKeys = (event: React.KeyboardEvent) => {
-        if (event.ctrlKey && !event.altKey && !event.metaKey) {
+        if ((event.ctrlKey || event.altKey) && !event.metaKey) {
             if (RICH_TEXT_EDITOR_KEYS.BOLD.check(event)) {
                 context.formatBold();
                 return true;
