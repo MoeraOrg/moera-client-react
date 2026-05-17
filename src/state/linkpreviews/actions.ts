@@ -1,5 +1,5 @@
 import { actionWithPayload, ActionWithPayload } from "state/action-types";
-import { LinkPreviewInfo, PostingFeatures, VerifiedMediaFile } from "api";
+import { LinkPreviewInfo, PostingFeatures, PrivateMediaFileInfo } from "api";
 
 export type LinkPreviewLoadAction = ActionWithPayload<"LINK_PREVIEW_LOAD", {
     url: string;
@@ -33,10 +33,10 @@ export const linkPreviewImageUpload = (
 export type LinkPreviewImageUploadedAction = ActionWithPayload<"LINK_PREVIEW_IMAGE_UPLOADED", {
     url: string;
     nodeName: string;
-    info: VerifiedMediaFile;
+    info: PrivateMediaFileInfo;
 }>;
 export const linkPreviewImageUploaded = (
-    url: string, nodeName: string, info: VerifiedMediaFile
+    url: string, nodeName: string, info: PrivateMediaFileInfo
 ): LinkPreviewImageUploadedAction =>
     actionWithPayload("LINK_PREVIEW_IMAGE_UPLOADED", {url, nodeName, info});
 

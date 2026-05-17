@@ -50,6 +50,7 @@ import { fillActivityReaction } from "state/activityreactions/sagas";
 import { fillBlockedOperations } from "state/blockedoperations/sagas";
 import { getNodeUri } from "state/naming/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
+import { loadRemoteMediaInEntry } from "state/remotemedia/sagas";
 import { isConnectedToHome } from "state/home/selectors";
 import * as Browser from "ui/browser";
 import { toAvatarDescription } from "util/avatar";
@@ -98,6 +99,7 @@ async function postingLoadSaga(action: WithContext<PostingLoadAction>): Promise<
         await fillActivityReaction(action, posting);
         await fillBlockedOperations(action, posting);
         dispatch(postingSet(posting, nodeName).causedBy(action));
+        loadRemoteMediaInEntry(action, posting);
         await fillSubscription(action, posting);
     } catch (e) {
         dispatch(postingLoadFailed(id, nodeName).causedBy(action));

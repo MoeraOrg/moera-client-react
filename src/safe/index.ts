@@ -16,7 +16,6 @@ import {
     EncodedCommentRevisionInfo,
     EncodedCommentsSliceInfo,
     EncodedDraftInfo,
-    EncodedEntryInfo,
     EncodedFeedSliceInfo,
     EncodedMediaCaption,
     EncodedPostingInfo,
@@ -25,7 +24,6 @@ import {
     EncodedSearchHashtagSliceInfo,
     EncodedSearchTextPageInfo,
     EncodedStoryInfo,
-    EntryInfo,
     FeedSliceInfo,
     MediaCaption,
     PostingInfo,
@@ -82,10 +80,10 @@ function decodeBody(encoded: string, format: BodyFormat | SourceFormat | null): 
 }
 
 type Entities = Partial<PostingInfo | PostingRevisionInfo | CommentInfo | CommentRevisionInfo | StoryInfo
-    | CommentCreated | DraftInfo | FeedSliceInfo | CommentsSliceInfo | EntryInfo | SearchEntryInfo | MediaCaption>;
+    | CommentCreated | DraftInfo | FeedSliceInfo | CommentsSliceInfo | SearchEntryInfo | MediaCaption>;
 type EncodedEntities = Partial<EncodedPostingInfo | EncodedPostingRevisionInfo | EncodedCommentInfo
     | EncodedCommentRevisionInfo | EncodedStoryInfo | EncodedCommentCreated | EncodedDraftInfo | EncodedFeedSliceInfo
-    | EncodedCommentsSliceInfo | EncodedEntryInfo | EncodedSearchEntryInfo | EncodedSearchHashtagSliceInfo
+    | EncodedCommentsSliceInfo | EncodedSearchEntryInfo | EncodedSearchHashtagSliceInfo
     | EncodedSearchTextPageInfo | EncodedMediaCaption>;
 
 function decodeBodies(data: EncodedEntities[]): Entities[];

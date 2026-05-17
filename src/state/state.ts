@@ -38,6 +38,7 @@ import { ProgressBoxState } from "state/progressbox/state";
 import { PulseState } from "state/pulse/state";
 import { ReactionsDialogState } from "state/reactionsdialog/state";
 import { RefreshState } from "state/refresh/state";
+import { RemoteMediaState } from "state/remotemedia/state";
 import { SearchState } from "state/search/state";
 import { SettingsState } from "state/settings/state";
 import { ShareDialogState } from "state/sharedialog/state";
@@ -88,6 +89,7 @@ export interface ClientState {
     pulse: PulseState;
     reactionsDialog: ReactionsDialogState;
     refresh: RefreshState;
+    remoteMedia: RemoteMediaState;
     search: SearchState;
     settings: SettingsState;
     shareDialog: ShareDialogState;

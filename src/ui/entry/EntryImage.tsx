@@ -1,15 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import cx from 'classnames';
 
-import { PrivateMediaFileInfo } from "api";
-import { ClientState } from "state/state";
-import { getNamingNameRoot } from "state/naming/selectors";
+import { PrivateMediaFileInfo, RemoteMediaInfo } from "api";
 import { openLightbox } from "state/lightbox/actions";
 import { useDispatcher } from "ui/hook";
 import Jump from "ui/navigation/Jump";
-import PreloadedImage from "ui/posting/PreloadedImage";
-import { mediaImageTagAttributes } from "util/media-images";
+import { useMediaAttributes } from "ui/entry/media";
+import ImagePlaceholder from "ui/entry/ImagePlaceholder";
+import PreloadedImage from "ui/entry/PreloadedImage";
 import { RelNodeName } from "util/rel-node-name";
 import { urlWithParameters, ut } from "util/url";
 import "./EntryImage.css";
@@ -18,7 +16,8 @@ interface Props {
     postingId?: string | null;
     commentId?: string | null;
     nodeName: RelNodeName | string;
-    mediaFile: PrivateMediaFileInfo;
+    mediaFile: PrivateMediaFileInfo | null;
+    remoteMedia: RemoteMediaInfo | null;
     width?: string | null;
     height?: string | null;
     alt?: string | null;
@@ -28,22 +27,21 @@ interface Props {
 }
 
 export default function EntryImage({
-    postingId, commentId, nodeName, mediaFile, width, height, alt, title, flex, count
+    postingId, commentId, nodeName, mediaFile, remoteMedia, width, height, alt, title, flex, count
 }: Props) {
-    const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, nodeName));
-    const dispatch = useDispatcher();
-
     const {
         src, srcSet, sizes, width: imageWidth, height: imageHeight, alt: imageAlt
-    } = mediaImageTagAttributes(rootPage, mediaFile, 900, width, height);
+    } = useMediaAttributes(nodeName, mediaFile, remoteMedia, width, height);
+    const dispatch = useDispatcher();
+
+    const mediaId = mediaFile?.id ?? remoteMedia?.id;
+    const href = urlWithParameters(ut`/post/${postingId}`, {comment: commentId, media: mediaId});
 
     const onNear = () => {
-        if (postingId != null) {
-            dispatch(openLightbox(nodeName, postingId, commentId ?? null, mediaFile.id));
+        if (postingId != null && mediaId != null) {
+            dispatch(openLightbox(nodeName, postingId, commentId ?? null, mediaId));
         }
     }
-
-    const href = urlWithParameters(ut`/post/${postingId}`, {comment: commentId, media: mediaFile.id});
 
     let style: React.CSSProperties | undefined = undefined;
     if (flex === "row") {
@@ -56,8 +54,12 @@ export default function EntryImage({
         <Jump nodeName={nodeName} href={href} onNear={onNear}
               className={cx("entry-image", {"counted": count != null && count > 0})} style={style}>
             {(count != null && count > 0) && <div className="count">+{count}</div>}
-            <PreloadedImage src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}
-                            alt={alt ?? imageAlt ?? undefined} title={title ?? undefined}/>
+            {src != null ?
+                <PreloadedImage src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}
+                                alt={alt ?? imageAlt ?? undefined} title={title ?? undefined}/>
+            :
+                <ImagePlaceholder width={imageWidth} height={imageHeight}/>
+            }
         </Jump>
     );
 }

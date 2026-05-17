@@ -97,7 +97,7 @@ export default function DetailedPostingPage() {
         [atHome, newsHref, nodeFullName, nodeName, posting, t]
     );
     const googlePlayProhibited = googlePlayHiding && isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);
-    const postingReady = posting != null && posting.parentMediaId == null && !googlePlayProhibited;
+    const postingReady = posting != null && posting.parentMedia == null && !googlePlayProhibited;
 
     const onTryAgain = () => dispatch(detailedPostingLoad());
 

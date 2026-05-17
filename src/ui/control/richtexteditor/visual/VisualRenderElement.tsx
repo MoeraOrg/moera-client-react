@@ -11,7 +11,7 @@ import { isSignificant } from "ui/control/richtexteditor/visual/scripture-html";
 import OpenLink from "ui/control/richtexteditor/visual/OpenLink";
 import DetailsSummary from "ui/control/richtexteditor/visual/DetailsSummary";
 import VisualRenderIframe from "ui/control/richtexteditor/visual/VisualRenderIframe";
-import PreloadedImage from "ui/posting/PreloadedImage";
+import PreloadedImage from "ui/entry/PreloadedImage";
 import { BlockMath, InlineMath } from "ui/katex";
 import { useIsTinyScreen } from "ui/hook";
 import { mediaImageTagAttributes } from "util/media-images";

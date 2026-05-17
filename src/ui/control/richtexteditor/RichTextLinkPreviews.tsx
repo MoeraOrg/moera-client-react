@@ -5,7 +5,7 @@ import deepEqual from 'react-fast-compare';
 import * as immutable from 'object-path-immutable';
 import * as URI from 'uri-js';
 
-import { LinkPreview, MediaAttachment, PostingFeatures, VerifiedMediaFile } from "api";
+import { LinkPreview, MediaAttachment, PostingFeatures, PrivateMediaFileInfo } from "api";
 import { ClientState } from "state/state";
 import { getRelNodeNameContext } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
@@ -36,7 +36,7 @@ export type RichTextLinkPreviewsStatus = Partial<Record<string, RichTextLinkPrev
 
 export interface RichTextLinkPreviewsValue {
     previews: LinkPreview[];
-    media: VerifiedMediaFile[];
+    media: PrivateMediaFileInfo[];
     status: RichTextLinkPreviewsStatus;
 }
 
@@ -158,7 +158,7 @@ function buildValue(
     const loadUrls: string[] = [];
     const loadImages: string[] = [];
     const previews: LinkPreview[] = [];
-    const media: VerifiedMediaFile[] = [];
+    const media: PrivateMediaFileInfo[] = [];
     const addedUrls: string[] = [];
     let totalVisible = 0;
     for (const url of urlSet) {

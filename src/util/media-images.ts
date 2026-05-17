@@ -69,24 +69,39 @@ export function mediaImageSize(
     mediaFile: PrivateMediaFileInfo,
     enlarge: boolean = true
 ): number[] {
-    const iwidth = toInt(width);
-    const iheight = toInt(height);
     const preview = mediaImageFindLargerPreview(mediaFile.previews, targetWidth);
     const sizeX = preview != null ? preview.width : mediaFile.width;
     const sizeY = preview != null ? preview.height : mediaFile.height;
+    return mediaImageRect(width, height, sizeX, sizeY, enlarge);
+}
+
+export function mediaImageRect(
+    width: number | string | null | undefined,
+    height: number | string | null | undefined,
+    rectWidth: number | null | undefined,
+    rectHeight: number | null | undefined,
+    enlarge: boolean = true
+): number[] {
+    const iwidth = toInt(width);
+    const iheight = toInt(height);
+
+    if (rectWidth == null || rectWidth === 0 || rectHeight == null || rectHeight === 0) {
+        return [iwidth, iheight];
+    }
+
     let scale: number;
     if (iwidth === 0 && iheight === 0) {
         scale = 1;
     } else {
-        const scaleX = iwidth !== 0 ? iwidth / sizeX : 1;
-        const scaleY = iheight !== 0 ? iheight / sizeY : 1;
+        const scaleX = iwidth !== 0 ? iwidth / rectWidth : 1;
+        const scaleY = iheight !== 0 ? iheight / rectHeight : 1;
         scale = Math.min(scaleX, scaleY);
     }
     if (!enlarge && scale > 1) {
         scale = 1;
     }
 
-    return [Math.round(scale * sizeX), Math.round(scale * sizeY)];
+    return [Math.round(scale * rectWidth), Math.round(scale * rectHeight)];
 }
 
 export interface MediaImageTagAttributes {

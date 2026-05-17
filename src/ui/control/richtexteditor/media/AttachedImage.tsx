@@ -1,14 +1,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { VerifiedMediaFile } from "api";
+import { PrivateMediaFileInfo } from "api";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { mediaImageTagAttributes } from "util/media-images";
 import { RelNodeName } from "util/rel-node-name";
 
 interface Props {
-    media: VerifiedMediaFile;
+    media: PrivateMediaFileInfo;
     nodeName: RelNodeName | string;
     dragging?: boolean;
     onClick?: React.MouseEventHandler<HTMLImageElement>;

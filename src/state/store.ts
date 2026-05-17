@@ -54,6 +54,7 @@ import flashBox from "state/flashbox/reducer";
 import progressBox from "state/progressbox/reducer";
 import signUp from "state/signup/reducer";
 import refresh from "state/refresh/reducer";
+import remoteMedia from "state/remotemedia/reducer";
 import instants from "state/instants/reducer";
 
 import { collectSagas } from "state/saga";
@@ -102,6 +103,7 @@ import sheriffOrderDetailsDialogSagas from "state/sherifforderdetailsdialog/saga
 import flashBoxSagas from "state/flashbox/sagas";
 import signUpSagas from "state/signup/sagas";
 import refreshSagas from "state/refresh/sagas";
+import remoteMediaSagas from "state/remotemedia/sagas";
 import instantsSagas from "state/instants/sagas";
 
 import { collectTriggers } from "state/trigger";
@@ -134,6 +136,7 @@ import blockedOperationsTriggers from "state/blockedoperations/triggers";
 import mediaDownloadDialogTriggers from "state/mediadownloaddialog/triggers";
 import sheriffOrderDetailsDialogTriggers from "state/sherifforderdetailsdialog/triggers";
 import refreshTriggers from "state/refresh/triggers";
+import remoteMediaTriggers from "state/remotemedia/triggers";
 import instantsTriggers from "state/instants/triggers";
 
 const reducers = combineReducers({
@@ -184,6 +187,7 @@ const reducers = combineReducers({
     progressBox,
     signUp,
     refresh,
+    remoteMedia,
     instants
 });
 
@@ -227,6 +231,7 @@ const triggers = collectTriggers(
     mediaDownloadDialogTriggers,
     sheriffOrderDetailsDialogTriggers,
     refreshTriggers,
+    remoteMediaTriggers,
     instantsTriggers
 );
 
@@ -275,6 +280,7 @@ const sagas = collectSagas(
     flashBoxSagas,
     signUpSagas,
     refreshSagas,
+    remoteMediaSagas,
     instantsSagas
 );
 

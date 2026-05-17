@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
-import { CommentText, DraftText, MediaCaption, SourceFormat, VerifiedMediaFile } from "api";
+import { CommentText, DraftText, MediaCaption, PrivateMediaFileInfo, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
@@ -25,7 +25,7 @@ const toDraftText = (
     commentId: string | null,
     repliedToId: string | null,
     commentText: CommentText,
-    media: Map<string, VerifiedMediaFile>,
+    media: Map<string, PrivateMediaFileInfo>,
     mediaCaptions: MediaCaption[] | undefined
 ): DraftText => ({
     ...cloneDeep(commentText),
@@ -110,7 +110,7 @@ export function useCommentDraftSaver(commentId: string | null): DraftSavingState
         ([text, mediaCaptions]: CommentValue, values: CommentComposeValues): void => {
             if (connectedToHome && ownerName != null && receiverPostingId != null) {
                 const media = new Map(
-                    ((values.body.media ?? []) as (VerifiedMediaFile | null)[])
+                    ((values.body.media ?? []) as (PrivateMediaFileInfo | null)[])
                         .concat(values.linkPreviews.media)
                         .filter(notNull)
                         .map(rm => [rm.id, rm])

@@ -4,7 +4,7 @@ import { attributesToProps, DOMNode, domToReact, htmlToDOM } from 'html-react-pa
 import { isTag } from 'domhandler';
 import 'katex/dist/katex.min.css';
 
-import { MediaAttachment, PrivateMediaFileInfo } from "api";
+import { MediaAttachment } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { BlockMath, InlineMath } from "ui/katex";
@@ -15,7 +15,7 @@ import { wrapHashtags } from "ui/entry/wrap-hashtags";
 import EntryImage from "ui/entry/EntryImage";
 import EntryExpandAllDetailsButton from "ui/entry/EntryExpandAllDetailsButton";
 import MrSpoiler from "ui/entry/MrSpoiler";
-import { isNumericString, notNull } from "util/misc";
+import { isNumericString } from "util/misc";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { mediaHashStrip } from "util/media-images";
 import { hasClass, textContent } from "util/domhandler";
@@ -37,11 +37,11 @@ export default function EntryHtml({
     const openInNewWindow = useSelector((state: ClientState) => getSetting(state, "link.new-window") as boolean);
     const contentRef = useRef<HTMLDivElement>(null);
 
-    const mediaMap: Map<string, PrivateMediaFileInfo> = useMemo(() => new Map(
+    const mediaMap: Map<string, MediaAttachment> = useMemo(() => new Map(
         (media ?? [])
-            .map(ma => ma.media)
-            .filter(notNull)
-            .map(mf => [mediaHashStrip(mf.hash), mf])
+            .map(ma => [ma.media?.hash ?? ma.remoteMedia?.hash, ma] as [string | null, MediaAttachment])
+            .filter((r): r is [string, MediaAttachment] => r[0] != null)
+            .map(r => [mediaHashStrip(r[0]), r[1]])
     ), [media]);
 
     const options = useMemo(() => ({
@@ -92,10 +92,10 @@ export default function EntryHtml({
 
             if (node.name === "img") {
                 const src: string | undefined = node.attribs.src;
-                const mediaFile = src?.startsWith("hash:")
+                const media = src?.startsWith("hash:")
                     ? mediaMap.get(mediaHashStrip(src.substring(5)))
                     : null;
-                if (mediaFile != null) {
+                if (media != null) {
                     const width = node.attribs.width;
                     const height = node.attribs.height;
                     const alt = node.attribs.alt;
@@ -105,7 +105,8 @@ export default function EntryHtml({
                     return (
                         <span className="preload-placeholder" {...attributesToProps({style})}>
                             <EntryImage postingId={postingId} commentId={commentId} nodeName={nodeName ?? null}
-                                        mediaFile={mediaFile} width={width} height={height} alt={alt} title={title}/>
+                                        mediaFile={media.media ?? null} remoteMedia={media.remoteMedia ?? null}
+                                        width={width} height={height} alt={alt} title={title}/>
                         </span>
                     );
                 } else if (src?.startsWith("hash:")) {

@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react';
 import { DropzoneRootProps } from 'react-dropzone';
 
-import { MediaCaption, VerifiedMediaFile } from "api";
+import { MediaCaption, PrivateMediaFileInfo } from "api";
 import { RichTextImageStandardSize } from "ui/control/richtexteditor/media/rich-text-image";
 import { RichTextImageValues } from "ui/control/richtexteditor/media/RichTextImageDialog";
 import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
@@ -35,7 +35,7 @@ export interface RichTextEditorMediaInterface {
     reorderMedia: (moveId: string, overId: string) => void;
     pasteMedia: (data: DataTransfer) => boolean;
     showImageDialog: (
-        show: boolean, files?: File[] | null, mediaFiles?: VerifiedMediaFile[] | null, href?: string | null,
+        show: boolean, files?: File[] | null, mediaFiles?: PrivateMediaFileInfo[] | null, href?: string | null,
         insert?: boolean, prevValues?: RichTextImageValues | null,
         onSubmit?: RichTextEditorDialogSubmit<RichTextImageValues>
     ) => void;

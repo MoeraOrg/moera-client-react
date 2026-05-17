@@ -1,8 +1,8 @@
-import { LinkPreviewInfo, VerifiedMediaFile } from "api";
+import { LinkPreviewInfo, PrivateMediaFileInfo } from "api";
 
 export interface LinkImageState {
     uploading: boolean;
-    info: VerifiedMediaFile | null;
+    info: PrivateMediaFileInfo | null;
 }
 
 export interface LinkPreviewState {

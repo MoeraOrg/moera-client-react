@@ -1,6 +1,6 @@
-import { AvatarImage, CarteInfo, Features } from "api";
+import { AvatarImage, CarteInfo, Features, PrivateMediaFileInfo } from "api";
 
-type StorageKey = "currentRoot" | "clientData" | "roots" | "names" | "anonymousFullName";
+type StorageKey = "currentRoot" | "clientData" | "roots" | "names" | "remoteMedia" | "anonymousFullName";
 
 export interface RootInfo {
     name: string | null;
@@ -12,6 +12,8 @@ export interface NameDetails {
     nodeUri: string;
     updated: number;
 }
+
+export type RemoteMediaData = Partial<Record<string, Partial<Record<string, PrivateMediaFileInfo>>>>;
 
 export interface ClientHomeData {
     fullName?: string | null;
@@ -38,6 +40,7 @@ export function getStorageItem(key: "currentRoot"): string | null;
 export function getStorageItem(key: "roots"): RootInfo[] | null;
 export function getStorageItem(key: "clientData", index: string): ClientData | null;
 export function getStorageItem(key: "names", index: string | null): NameDetails[] | null;
+export function getStorageItem(key: "remoteMedia", index: string): RemoteMediaData | null;
 export function getStorageItem(key: "anonymousFullName"): string | null;
 export function getStorageItem(key: StorageKey, index?: string | null): any {
     const fullKey = index != null ? `${key};${index}` : key;
@@ -53,6 +56,7 @@ export function setStorageItem(key: "currentRoot", index: null, value: string): 
 export function setStorageItem(key: "roots", index: null, value: RootInfo[]): void;
 export function setStorageItem(key: "clientData", index: string, value: ClientData): void;
 export function setStorageItem(key: "names", index: string | null, value: NameDetails[]): void;
+export function setStorageItem(key: "remoteMedia", index: string, value: RemoteMediaData): void;
 export function setStorageItem(key: "anonymousFullName", index: null, value: string): void;
 export function setStorageItem(key: StorageKey, index: string | null, value: null): void;
 export function setStorageItem(key: StorageKey, index: string | null, value: any): void {

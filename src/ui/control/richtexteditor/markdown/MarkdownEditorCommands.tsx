@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 
-import { NodeName, PrivateMediaFileInfo, SourceFormat, VerifiedMediaFile } from "api";
+import { NodeName, PrivateMediaFileInfo, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { detailsSummaryStyleToClassName } from "ui/control";
@@ -425,7 +425,7 @@ export default function MarkdownEditorCommands({
         }
     }
 
-    const embedImage = (mediaFile: VerifiedMediaFile) => {
+    const embedImage = (mediaFile: PrivateMediaFileInfo) => {
         showImageDialog(
             true,
             null,

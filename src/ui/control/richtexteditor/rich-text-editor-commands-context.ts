@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react';
 
-import { VerifiedMediaFile } from "api";
+import { PrivateMediaFileInfo } from "api";
 import { RICH_TEXT_EDITOR_KEYS } from "ui/control/richtexteditor/rich-text-editor-keys";
 
 export interface RichTextEditorCommandsInterface {
@@ -63,7 +63,7 @@ export interface RichTextEditorCommandsInterface {
     formatMark: () => void;
     formatClear: () => void;
     formatImage: (embedded?: boolean) => void;
-    embedImage: (mediaFile: VerifiedMediaFile) => void;
+    embedImage: (mediaFile: PrivateMediaFileInfo) => void;
     undo: () => void;
     redo: () => void;
     enterText: (text: string) => void;

@@ -1,5 +1,5 @@
 import * as Storage from "./storage";
-import { NameDetails, RootInfo } from "./data";
+import { NameDetails, RemoteMediaData, RootInfo } from "./data";
 
-export type { NameDetails, RootInfo };
+export type { NameDetails, RemoteMediaData, RootInfo };
 export { Storage };

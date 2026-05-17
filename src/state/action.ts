@@ -40,6 +40,7 @@ import { ProgressBoxAnyAction } from "state/progressbox/actions";
 import { PulseAnyAction } from "state/pulse/actions";
 import { ReactionsDialogAnyAction } from "state/reactionsdialog/actions";
 import { RefreshAnyAction } from "state/refresh/actions";
+import { RemoteMediaAnyAction } from "state/remotemedia/actions";
 import { RichTextEditorAnyAction } from "state/richtexteditor/actions";
 import { SearchAnyAction } from "state/search/actions";
 import { SettingsAnyAction } from "state/settings/actions";
@@ -95,6 +96,7 @@ export type ClientAction =
     | PulseAnyAction
     | ReactionsDialogAnyAction
     | RefreshAnyAction
+    | RemoteMediaAnyAction
     | RichTextEditorAnyAction
     | SearchAnyAction
     | SettingsAnyAction

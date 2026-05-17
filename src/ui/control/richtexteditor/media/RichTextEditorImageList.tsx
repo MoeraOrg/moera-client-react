@@ -13,7 +13,7 @@ import {
 import { SortableContext } from '@dnd-kit/sortable';
 import cx from 'classnames';
 
-import { VerifiedMediaFile } from "api";
+import { PrivateMediaFileInfo } from "api";
 import { RichTextValue } from "ui/control/richtexteditor";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import UploadedImage from "ui/control/richtexteditor/media/UploadedImage";
@@ -45,7 +45,7 @@ export default function RichTextEditorImageList({value, className, nodeName, noE
         keyboardSensor,
     );
 
-    const [dragged, setDragged] = useState<VerifiedMediaFile | null>(null);
+    const [dragged, setDragged] = useState<PrivateMediaFileInfo | null>(null);
 
     if (value.media == null || value.media.length === 0) {
         return null;

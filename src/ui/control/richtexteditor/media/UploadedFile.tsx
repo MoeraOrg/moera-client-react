@@ -5,7 +5,7 @@ import { CSS } from '@dnd-kit/utilities';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { VerifiedMediaFile } from "api";
+import { PrivateMediaFileInfo } from "api";
 import { DropdownMenu } from "ui/control";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { formatFileSize } from "util/info-quantity";
@@ -13,7 +13,7 @@ import { mediaFileName } from "util/media-images";
 import { REL_CURRENT } from "util/rel-node-name";
 
 interface Props {
-    media: VerifiedMediaFile;
+    media: PrivateMediaFileInfo;
     dragged?: boolean | null;
 }
 

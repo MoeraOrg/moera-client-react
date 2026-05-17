@@ -28,7 +28,7 @@ export type Scope = "none" | "identify" | "other" | "view-media" | "view-content
     | "add-comment" | "update-comment" | "react" | "delete-own-content" | "delete-others-content" | "view-people"
     | "block" | "friend" | "remote-identify" | "drafts" | "view-feeds" | "update-feeds" | "name" | "plugins"
     | "view-profile" | "update-profile" | "sheriff" | "view-settings" | "update-settings" | "subscribe" | "tokens"
-    | "user-lists" | "grant" | "upload-public-media" | "upload-private-media" | "view-all" | "all";
+    | "user-lists" | "grant" | "upload-public-media" | "upload-private-media" | "lease-media" | "view-all" | "all";
 
 export type SearchContentUpdateType = "block" | "comment-add" | "comment-update" | "comment-update-heading"
     | "comment-update-media-text" | "comment-delete" | "friend" | "profile" | "posting-add" | "posting-update"
@@ -542,6 +542,13 @@ export interface MediaFilePreviewInfo {
     original?: boolean | null;
 }
 
+export interface MediaLeaseAttributes {
+    nodeName: string;
+    mediaId: string;
+    postingId?: string | null;
+    commentId?: string | null;
+}
+
 export interface MediaWithDigest {
     id: string;
     digest?: string | null;
@@ -572,6 +579,13 @@ export interface NodeNameInfo {
     operationErrorMessage?: string | null;
     storedMnemonic?: boolean | null;
     operations?: NodeNameOperations | null;
+}
+
+export interface ParentMediaInfo {
+    nodeName?: string | null;
+    mediaId: string;
+    postingId: string;
+    commentId?: string | null;
 }
 
 export interface PeopleGeneralInfo {
@@ -624,6 +638,7 @@ export interface PrivateMediaFileAttributes {
 export interface PrivateMediaFileInfo {
     id: string;
     hash: string;
+    digest: string;
     path: string;
     directPath?: string | null;
     directPathExpiresAt?: number | null;
@@ -638,6 +653,7 @@ export interface PrivateMediaFileInfo {
     attachment?: boolean | null;
     malware?: boolean | null;
     grant?: string | null;
+    grantExpiresAt?: number | null;
     operations?: PrivateMediaFileOperations | null;
 }
 
@@ -807,10 +823,16 @@ export interface RemoteMedia {
 
 export interface RemoteMediaInfo {
     id: string;
+    nodeName: string;
+    mediaId: string;
     hash?: string | null;
     digest?: string | null;
     mimeType?: string | null;
     attachment?: boolean | null;
+    width?: number | null;
+    height?: number | null;
+    size?: number | null;
+    grant?: string | null;
 }
 
 export interface RemotePosting {
@@ -1485,6 +1507,11 @@ export interface MediaCaptionText {
     captionSrcFormat?: SourceFormat | null;
 }
 
+export interface MediaLeaseInfo {
+    id: string;
+    media: PrivateMediaFileInfo;
+}
+
 export interface PostingInfoBase<B> {
     id: string;
     revisionId: string;
@@ -1495,8 +1522,7 @@ export interface PostingInfoBase<B> {
     receiverGender?: string | null;
     receiverAvatar?: AvatarImage | null;
     receiverPostingId?: string | null;
-    parentMediaId?: string | null;
-    parentMediaEntryId?: string | null;
+    parentMedia?: ParentMediaInfo | null;
     ownerName: string;
     ownerFullName?: string | null;
     ownerGender?: string | null;
@@ -1821,14 +1847,6 @@ export interface DraftText {
     operations?: PostingOperations | null;
     commentOperations?: CommentOperations | null;
 }
-
-export interface EntryInfoBase<B> {
-    posting?: PostingInfoBase<B> | null;
-    comment?: CommentInfoBase<B> | null;
-}
-
-export type EncodedEntryInfo = EntryInfoBase<string>;
-export type EntryInfo = EntryInfoBase<Body>;
 
 export interface SettingDescriptor {
     name: string;

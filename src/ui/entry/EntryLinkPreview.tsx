@@ -6,7 +6,7 @@ import { format, fromUnixTime } from 'date-fns';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
-import { MediaAttachment, PrivateMediaFileInfo } from "api";
+import { MediaAttachment } from "api";
 import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
@@ -59,10 +59,11 @@ export function EntryLinkPreview({
     const metaLabel = formatMetaLabel(host, publishedAt, timeRelative, t);
 
     let large;
-    let mediaFile: PrivateMediaFileInfo | null = null;
+    let attachment: MediaAttachment | null = null;
     if (imageHash != null && media != null) {
-        mediaFile = media.find(ma => ma.media?.hash === imageHash)?.media ?? null;
-        large = !small && mediaFile != null && mediaFile.width > 450;
+        attachment = media.find(ma => ma.media?.hash === imageHash || ma.remoteMedia?.hash === imageHash) ?? null;
+        const width = attachment?.media?.width ?? attachment?.remoteMedia?.width ?? 0;
+        large = !small && width > 450;
     } else {
         large = imageUploading;
     }
@@ -82,7 +83,12 @@ export function EntryLinkPreview({
     return (
         <Frame className={cx("link-preview", {large, small})} url={url} noFollow={noFollow}
                editing={editing && !disabled} onEdit={onEdit} onDelete={onDelete}>
-            <EntryLinkPreviewImage nodeName={nodeName} mediaFile={mediaFile} loading={imageUploading ?? false}/>
+            <EntryLinkPreviewImage
+                nodeName={nodeName}
+                mediaFile={attachment?.media ?? null}
+                remoteMedia={attachment?.remoteMedia ?? null}
+                loading={imageUploading ?? false}
+            />
             <div className="details">
                 {title &&
                     <div className="title">{ellipsize(title, small ? 35 : 81)}</div>

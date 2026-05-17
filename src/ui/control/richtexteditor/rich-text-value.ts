@@ -1,11 +1,18 @@
-import { MediaAttachment, MediaCaption, MediaCaptionText, MediaWithDigest, SourceFormat, VerifiedMediaFile } from "api";
+import {
+    MediaAttachment,
+    MediaCaption,
+    MediaCaptionText,
+    MediaWithDigest,
+    PrivateMediaFileInfo,
+    SourceFormat
+} from "api";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { htmlToScripture, scriptureToHtml } from "ui/control/richtexteditor/visual/scripture-html";
 import { mediaHashesExtract } from "util/media-images";
 import { replaceSmileys } from "util/text";
 import { notNull } from "util/misc";
 
-export interface MediaFileWithCaption extends VerifiedMediaFile {
+export interface MediaFileWithCaption extends PrivateMediaFileInfo {
     captionPostingId: string | null;
     caption?: MediaCaption;
 }
@@ -78,7 +85,6 @@ export function attachmentsToMedia(
             ma.media?.id != null
                 ? {
                     ...ma.media,
-                    digest: ma.remoteMedia?.digest,
                     captionPostingId: ma.postingId ?? null,
                     caption: captionsByMediaId?.get(ma.media.id)
                 }

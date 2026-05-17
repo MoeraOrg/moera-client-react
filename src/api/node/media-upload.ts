@@ -14,16 +14,12 @@ import { readAsArrayBuffer } from "util/read-file";
 import { absoluteNodeName, REL_HOME, RelNodeName } from "util/rel-node-name";
 import { formatMib } from "util/info-quantity";
 
-export interface VerifiedMediaFile extends PrivateMediaFileInfo {
-    digest?: string | null;
-}
-
 type MediaUploadProgressHandler = (loaded: number, total: number) => void;
 
 export async function mediaUpload(
     caller: WithContext<ClientAction>, features: PostingFeatures | null, nodeName: RelNodeName | string,
     clientNodeName: string, file: File, compress: boolean, onProgress?: MediaUploadProgressHandler
-): Promise<VerifiedMediaFile | null> {
+): Promise<PrivateMediaFileInfo | null> {
     try {
         if (features != null) {
             if (compress) {
@@ -46,7 +42,7 @@ export async function mediaUpload(
             }
         }
 
-        let digest: string | null = null;
+        let digest: string = "";
         if (window.crypto.subtle) {
             const fileContent = await readAsArrayBuffer(file);
             digest = Base64js.fromByteArray(new Uint8Array(await window.crypto.subtle.digest("SHA-256", fileContent)));

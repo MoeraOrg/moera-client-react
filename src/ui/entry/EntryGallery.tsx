@@ -1,12 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { MediaAttachment, PrivateMediaFileInfo } from "api";
+import { MediaAttachment } from "api";
 import { getFeedWidth } from "state/settings/selectors";
 import EntryImage from "ui/entry/EntryImage";
 import EntryGalleryExpandButton from "ui/entry/EntryGalleryExpandButton";
 import { RelNodeName } from "util/rel-node-name";
-import { notNull } from "util/misc";
 import "./EntryGallery.css";
 
 interface Props {
@@ -18,15 +17,20 @@ interface Props {
     onExpand?: () => void;
 }
 
-function singleImageHeight(image: PrivateMediaFileInfo, feedWidth: number, isComment: boolean): number {
+function singleImageHeight(image: MediaAttachment, feedWidth: number, isComment: boolean): number {
     const maxWidth = isComment ? (feedWidth - 65) / 2 : feedWidth - 25;
-    return image.width <= maxWidth ? image.height : Math.round(image.height * maxWidth / image.width);
+    const width = image.media?.width ?? image.remoteMedia?.width ?? 0;
+    const height = image.media?.height ?? image.remoteMedia?.height ?? 0;
+    return width <= maxWidth ? height : Math.round(height * maxWidth / width);
 }
 
-function majorOrientation(images: PrivateMediaFileInfo[]) {
+function majorOrientation(images: MediaAttachment[]) {
     let balance = 0;
     for (let i = 0; i < 6 && i < images.length; i++) {
-        balance += images[i].height < images[i].width ? 1 : -1;
+        const image = images[i];
+        const width = image.media?.width ?? image.remoteMedia?.width ?? 0;
+        const height = image.media?.height ?? image.remoteMedia?.height ?? 0;
+        balance += height < width ? 1 : -1;
     }
     return balance >= 0 ? "vertical" : "horizontal";
 }
@@ -40,22 +44,21 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
 
     const images = media
         .filter(ma => !ma.embedded)
-        .map(ma => ma.media)
-        .filter(notNull)
-        .filter(m => !m.attachment);
+        .filter(ma => !(ma.media?.attachment ?? ma.remoteMedia?.attachment))
+        .filter(ma => ma.media || ma.remoteMedia?.nodeName)
     if (images.length === 0) {
         return null;
     }
 
     interface ImageProps {
-        mediaFile: PrivateMediaFileInfo;
+        image: MediaAttachment;
         flex?: "row" | "column";
         count?: number;
     }
 
-    const Image = ({mediaFile, flex, count}: ImageProps) => (
-        <EntryImage postingId={postingId} commentId={commentId} nodeName={nodeName} mediaFile={mediaFile} flex={flex}
-                    count={count}/>
+    const Image = ({image, flex, count}: ImageProps) => (
+        <EntryImage postingId={postingId} commentId={commentId} nodeName={nodeName} mediaFile={image.media ?? null}
+                    remoteMedia={image.remoteMedia ?? null} flex={flex} count={count}/>
     );
 
     const orientation = majorOrientation(images);
@@ -67,7 +70,7 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
                 <div className={`gallery single ${orientation}`}
                      style={{"--image-height": singleImageHeight(images[0], feedWidth, commentId != null) + "px"} as any}>
                     {onCollapse && <EntryGalleryExpandButton onClick={onCollapse} collapse/>}
-                    <Image mediaFile={images[0]}/>
+                    <Image image={images[0]}/>
                 </div>
             );
 
@@ -75,8 +78,8 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
             return (
                 <div className={`gallery ${orientation}`}>
                     {onExpand && <EntryGalleryExpandButton onClick={onExpand}/>}
-                    <Image mediaFile={images[0]} flex="row"/>
-                    <Image mediaFile={images[1]} flex="row"/>
+                    <Image image={images[0]} flex="row"/>
+                    <Image image={images[1]} flex="row"/>
                 </div>
             );
 
@@ -85,11 +88,11 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
                 <div className={`gallery ${orientation}`}>
                     {onExpand && <EntryGalleryExpandButton onClick={onExpand}/>}
                     <div className="gallery-row">
-                        <Image mediaFile={images[0]}/>
+                        <Image image={images[0]}/>
                     </div>
                     <div className="gallery-row">
-                        <Image mediaFile={images[1]} flex="row"/>
-                        <Image mediaFile={images[2]} flex="row"/>
+                        <Image image={images[1]} flex="row"/>
+                        <Image image={images[2]} flex="row"/>
                     </div>
                 </div>
             );
@@ -99,12 +102,12 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
                 <div className={`gallery ${orientation}`}>
                     {onExpand && <EntryGalleryExpandButton onClick={onExpand}/>}
                     <div className="gallery-row">
-                        <Image mediaFile={images[0]} flex="row"/>
-                        <Image mediaFile={images[1]} flex="row"/>
+                        <Image image={images[0]} flex="row"/>
+                        <Image image={images[1]} flex="row"/>
                     </div>
                     <div className="gallery-row">
-                        <Image mediaFile={images[2]} flex="row"/>
-                        <Image mediaFile={images[3]} flex="row"/>
+                        <Image image={images[2]} flex="row"/>
+                        <Image image={images[3]} flex="row"/>
                     </div>
                 </div>
             );
@@ -114,13 +117,13 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
                 <div className={`gallery ${orientation}`}>
                     {onExpand && <EntryGalleryExpandButton onClick={onExpand}/>}
                     <div className="gallery-row">
-                        <Image mediaFile={images[0]} flex="row"/>
-                        <Image mediaFile={images[1]} flex="row"/>
+                        <Image image={images[0]} flex="row"/>
+                        <Image image={images[1]} flex="row"/>
                     </div>
                     <div className="gallery-row">
-                        <Image mediaFile={images[2]} flex="row"/>
-                        <Image mediaFile={images[3]} flex="row"/>
-                        <Image mediaFile={images[4]} flex="row"/>
+                        <Image image={images[2]} flex="row"/>
+                        <Image image={images[3]} flex="row"/>
+                        <Image image={images[4]} flex="row"/>
                     </div>
                 </div>
             );
@@ -130,16 +133,16 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
                 <div className={`gallery ${orientation}`}>
                     {onExpand && <EntryGalleryExpandButton onClick={onExpand}/>}
                     <div className="gallery-row">
-                        <Image mediaFile={images[0]} flex="row"/>
-                        <Image mediaFile={images[1]} flex="row"/>
+                        <Image image={images[0]} flex="row"/>
+                        <Image image={images[1]} flex="row"/>
                     </div>
                     <div className="gallery-row">
-                        <Image mediaFile={images[2]} flex="row"/>
-                        <Image mediaFile={images[3]} flex="row"/>
+                        <Image image={images[2]} flex="row"/>
+                        <Image image={images[3]} flex="row"/>
                     </div>
                     <div className="gallery-row">
-                        <Image mediaFile={images[4]} flex="row"/>
-                        <Image mediaFile={images[5]} flex="row" count={images.length - 6}/>
+                        <Image image={images[4]} flex="row"/>
+                        <Image image={images[5]} flex="row" count={images.length - 6}/>
                     </div>
                 </div>
             );

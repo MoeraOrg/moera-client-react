@@ -4,7 +4,7 @@ import { Editor, Element, Node, Path, PathRef, Range, Transforms } from 'slate';
 import { ReactEditor, useSlateSelector, useSlateStatic } from 'slate-react';
 import { HistoryEditor } from 'slate-history';
 
-import { NodeName, VerifiedMediaFile } from "api";
+import { NodeName, PrivateMediaFileInfo } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import {
@@ -584,7 +584,7 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
         );
     }
 
-    const embedImage = (mediaFile: VerifiedMediaFile) => {
+    const embedImage = (mediaFile: PrivateMediaFileInfo) => {
         showImageDialog(
             true,
             null,

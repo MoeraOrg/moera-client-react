@@ -1400,6 +1400,31 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
+        ParentMediaInfo: {
+            type: "object",
+            properties: {
+                "nodeName": {
+                    type: "string",
+                    nullable: true
+                },
+                "mediaId": {
+                    type: "string"
+                },
+                "postingId": {
+                    type: "string"
+                },
+                "commentId": {
+                    type: "string",
+                    nullable: true
+                },
+            },
+            required: [
+                "mediaId",
+                "postingId",
+            ],
+            additionalProperties: false
+        },
+
         PeopleGeneralInfo: {
             type: "object",
             properties: {
@@ -1541,6 +1566,9 @@ export const NODE_API_SCHEMAS = {
                 "hash": {
                     type: "string"
                 },
+                "digest": {
+                    type: "string"
+                },
                 "path": {
                     type: "string"
                 },
@@ -1597,6 +1625,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "grantExpiresAt": {
+                    type: "integer",
+                    nullable: true
+                },
                 "operations": {
                     anyOf: [
                         {
@@ -1613,6 +1645,7 @@ export const NODE_API_SCHEMAS = {
             required: [
                 "id",
                 "hash",
+                "digest",
                 "path",
                 "mimeType",
                 "width",
@@ -2114,6 +2147,12 @@ export const NODE_API_SCHEMAS = {
                 "id": {
                     type: "string"
                 },
+                "nodeName": {
+                    type: "string"
+                },
+                "mediaId": {
+                    type: "string"
+                },
                 "hash": {
                     type: "string",
                     nullable: true
@@ -2130,9 +2169,27 @@ export const NODE_API_SCHEMAS = {
                     type: "boolean",
                     nullable: true
                 },
+                "width": {
+                    type: "integer",
+                    nullable: true
+                },
+                "height": {
+                    type: "integer",
+                    nullable: true
+                },
+                "size": {
+                    type: "integer",
+                    nullable: true
+                },
+                "grant": {
+                    type: "string",
+                    nullable: true
+                },
             },
             required: [
                 "id",
+                "nodeName",
+                "mediaId",
             ],
             additionalProperties: false
         },
@@ -3803,6 +3860,23 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
+        MediaLeaseInfo: {
+            type: "object",
+            properties: {
+                "id": {
+                    type: "string"
+                },
+                "media": {
+                    $ref: "node#/definitions/PrivateMediaFileInfo"
+                },
+            },
+            required: [
+                "id",
+                "media",
+            ],
+            additionalProperties: false
+        },
+
         PostingInfo: {
             type: "object",
             properties: {
@@ -3847,13 +3921,17 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
-                "parentMediaId": {
-                    type: "string",
-                    nullable: true
-                },
-                "parentMediaEntryId": {
-                    type: "string",
-                    nullable: true
+                "parentMedia": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ParentMediaInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
                 "ownerName": {
                     type: "string"
@@ -5257,44 +5335,6 @@ export const NODE_API_SCHEMAS = {
             type: "array",
             items: {
                 $ref: "node#/definitions/DraftInfo"
-            }
-        },
-
-        EntryInfo: {
-            type: "object",
-            properties: {
-                "posting": {
-                    anyOf: [
-                        {
-                            $ref: "node#/definitions/PostingInfo",
-                            type: "object",
-                            nullable: true
-                        },
-                        {
-                            type: "null"
-                        }
-                    ]
-                },
-                "comment": {
-                    anyOf: [
-                        {
-                            $ref: "node#/definitions/CommentInfo",
-                            type: "object",
-                            nullable: true
-                        },
-                        {
-                            type: "null"
-                        }
-                    ]
-                },
-            },
-            additionalProperties: false
-        },
-
-        EntryInfoArray: {
-            type: "array",
-            items: {
-                $ref: "node#/definitions/EntryInfo"
             }
         },
 

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useField } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { VerifiedMediaFile } from "api";
+import { PrivateMediaFileInfo } from "api";
 import { CheckboxField, InputField, NumberField, SelectField } from "ui/control/field";
 import { RichTextImageStandardSize, STANDARD_SIZES } from "ui/control/richtexteditor/media/rich-text-image";
 import UploadedImage from "ui/control/richtexteditor/media/UploadedImage";
@@ -17,7 +17,7 @@ import "./RichTextImageDialog.css";
 
 export interface RichTextImageValues {
     files?: File[] | null;
-    mediaFiles?: VerifiedMediaFile[] | null;
+    mediaFiles?: PrivateMediaFileInfo[] | null;
     href?: string | null;
     compress?: boolean;
     standardSize?: RichTextImageStandardSize;
@@ -28,7 +28,7 @@ export interface RichTextImageValues {
 
 type Props = {
     files?: File[] | null;
-    mediaFiles?: VerifiedMediaFile[] | null;
+    mediaFiles?: PrivateMediaFileInfo[] | null;
     href?: string | null;
     insert?: boolean;
     nodeName?: RelNodeName | string;

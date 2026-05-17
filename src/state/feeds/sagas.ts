@@ -49,6 +49,7 @@ import { fillActivityReactionsInStories } from "state/activityreactions/sagas";
 import { fillBlockedOperationsInStories } from "state/blockedoperations/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
 import { flashBox } from "state/flashbox/actions";
+import { loadRemoteMediaInStories } from "state/remotemedia/sagas";
 import { getInstantTypeDetails } from "ui/instant/instant-types";
 import { absoluteNodeName, REL_HOME } from "util/rel-node-name";
 import { delay } from "util/misc";
@@ -252,6 +253,7 @@ async function feedPastSliceLoadSaga(action: WithContext<FeedPastSliceLoadAction
         dispatch(feedPastSliceSet(
             nodeName, feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
         ).causedBy(action));
+        loadRemoteMediaInStories(action, slice.stories);
         await fillSubscriptions(action, slice.stories);
     } catch (e) {
         if (e instanceof NodeApiError || e instanceof NodeConnectionError || e instanceof NameResolvingError) {
@@ -277,6 +279,7 @@ async function feedFutureSliceLoadSaga(action: WithContext<FeedFutureSliceLoadAc
         dispatch(feedFutureSliceSet(
             nodeName, feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
         ).causedBy(action));
+        loadRemoteMediaInStories(action, slice.stories);
         await fillSubscriptions(action, slice.stories);
     } catch (e) {
         if (e instanceof NodeApiError || e instanceof NodeConnectionError || e instanceof NameResolvingError) {
@@ -326,6 +329,7 @@ async function feedUpdateSlice(
             dispatch(feedSliceUpdate(
                 nodeName, feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
             ).causedBy(action));
+            loadRemoteMediaInStories(action, slice.stories);
             await fillSubscriptions(action, slice.stories);
             if (after === slice.before) {
                 break;

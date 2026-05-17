@@ -116,6 +116,7 @@ import { flashBox } from "state/flashbox/actions";
 import { fillSubscription } from "state/subscriptions/sagas";
 import { confirmBox } from "state/confirmbox/actions";
 import { getNodeUri } from "state/naming/sagas";
+import { loadRemoteMediaInEntries, loadRemoteMediaInEntry } from "state/remotemedia/sagas";
 import * as Browser from "ui/browser";
 import { uiEventCommentQuote } from "ui/ui-events";
 import { toAvatarDescription } from "util/avatar";
@@ -171,6 +172,7 @@ async function detailedPostingLoadSaga(action: WithContext<DetailedPostingLoadAc
         await fillActivityReaction(action, posting);
         await fillBlockedOperations(action, posting);
         dispatch(detailedPostingLoaded(posting).causedBy(action));
+        loadRemoteMediaInEntry(action, posting);
         await fillSubscription(action, posting);
     } catch (e) {
         dispatch(detailedPostingLoadFailed().causedBy(action));
@@ -255,6 +257,7 @@ async function commentsLoadAllSaga(action: WithContext<CommentsLoadAllAction>): 
                 receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total,
                 slice.totalInPast, slice.totalInFuture, null
             ).causedBy(action));
+            loadRemoteMediaInEntries(action, slice.comments);
             after = slice.after;
         }
         while (before < Number.MAX_SAFE_INTEGER) {
@@ -263,6 +266,7 @@ async function commentsLoadAllSaga(action: WithContext<CommentsLoadAllAction>): 
                 receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total,
                 slice.totalInPast, slice.totalInFuture, null
             ).causedBy(action));
+            loadRemoteMediaInEntries(action, slice.comments);
             before = slice.before;
         }
     } catch (e) {
@@ -283,6 +287,7 @@ async function commentsPastSliceLoadSaga(action: WithContext<CommentsPastSliceLo
             receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total,
             slice.totalInPast, slice.totalInFuture, action.payload.anchor
         ).causedBy(action));
+        loadRemoteMediaInEntries(action, slice.comments);
     } catch (e) {
         dispatch(commentsPastSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
         dispatch(errorThrown(e));
@@ -302,6 +307,7 @@ async function commentsFutureSliceLoadSaga(action: WithContext<CommentsFutureSli
             receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total, slice.totalInPast,
             slice.totalInFuture, action.payload.anchor
         ).causedBy(action));
+        loadRemoteMediaInEntries(action, slice.comments);
     } catch (e) {
         dispatch(commentsFutureSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
         dispatch(errorThrown(e));
@@ -321,6 +327,7 @@ async function commentsUpdateSaga(action: WithContext<CommentsUpdateAction>): Pr
                 receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total,
                 slice.totalInPast, slice.totalInFuture
             ).causedBy(action));
+            loadRemoteMediaInEntries(action, slice.comments);
             if (after === slice.before) {
                 break;
             }
@@ -375,6 +382,7 @@ async function commentLoadSaga(action: WithContext<CommentLoadAction>): Promise<
             action, receiverName, receiverPostingId, commentId, false, ["comment.not-found"]
         );
         dispatch(commentSet(receiverName, comment).causedBy(action));
+        loadRemoteMediaInEntry(action, comment);
     } catch (e) {
         dispatch(commentLoadFailed(receiverName, receiverPostingId, commentId).causedBy(action));
         dispatch(errorThrown(e));
@@ -409,6 +417,7 @@ async function commentPostSaga(action: WithContext<CommentPostAction>): Promise<
         }
         await updateMediaCaptions(action, receiverName, comment.media, captions);
         dispatch(commentSet(receiverName, comment).causedBy(action));
+        loadRemoteMediaInEntry(action, comment);
 
         const draftId = select(state =>
             (commentId == null ? state.detailedPosting.compose.draft : state.detailedPosting.commentDialog.draft)?.id
@@ -467,14 +476,18 @@ async function refreshComment(commentReceiverName: string, commentPostingId: str
     }
 }
 
-async function loadRemoteMediaAttachments(
-    action: WithContext<ClientAction>, nodeName: string, attachments: MediaAttachment[] | null
+async function loadRemoteMediaAttachments( // FIXME obsolete
+    action: WithContext<ClientAction>, attachments: MediaAttachment[] | null
 ): Promise<void> {
-    if (attachments != null) {
-        for (const attachment of attachments) {
-            if (attachment.media == null && attachment.remoteMedia != null) {
-                attachment.media = await Node.getPrivateMediaInfo(action, nodeName, attachment.remoteMedia.id);
-            }
+    if (attachments == null) {
+        return;
+    }
+
+    for (const attachment of attachments) {
+        if (attachment.media == null && attachment.remoteMedia != null) {
+            attachment.media = await Node.getPrivateMediaInfo(
+                action, attachment.remoteMedia.nodeName, attachment.remoteMedia.mediaId
+            );
         }
     }
 }
@@ -560,7 +573,7 @@ async function commentDraftCompleteLoadingSaga(action: WithContext<CommentDraftC
     }
 
     try {
-        await loadRemoteMediaAttachments(action, nodeName, draft.media ?? null);
+        await loadRemoteMediaAttachments(action, draft.media ?? null);
         dispatch(commentDraftLoaded(draft).causedBy(action));
 
         let repliedTo: RepliedTo | null = null;
@@ -705,6 +718,7 @@ async function focusedCommentLoadSaga(action: WithContext<FocusedCommentLoadActi
         const comment = await Node.getComment(action, receiverName, receiverPostingId, focusedCommentId, false,
             ["comment.not-found"]);
         dispatch(focusedCommentLoaded(receiverName, comment).causedBy(action));
+        loadRemoteMediaInEntry(action, comment);
     } catch (e) {
         dispatch(focusedCommentLoadFailed(receiverName, receiverPostingId).causedBy(action));
         if (!(e instanceof NodeApiError) || e.errorCode !== "comment.not-found") {
@@ -742,6 +756,7 @@ async function commentDialogCommentLoadSaga(action: WithContext<CommentDialogCom
             action, receiverName, receiverPostingId, commentId, true, ["comment.not-found"]
         );
         dispatch(commentDialogCommentLoaded(comment).causedBy(action));
+        loadRemoteMediaInEntry(action, comment);
     } catch (e) {
         dispatch(commentDialogCommentLoadFailed().causedBy(action));
         dispatch(errorThrown(e));
@@ -923,6 +938,7 @@ async function glanceCommentLoadSaga(action: WithContext<GlanceCommentLoadAction
             action, receiverName, receiverPostingId, commentId, false, ["comment.not-found"]
         );
         dispatch(glanceCommentLoaded(receiverName, comment).causedBy(action));
+        loadRemoteMediaInEntry(action, comment);
     } catch (e) {
         dispatch(glanceCommentLoadFailed(receiverName, receiverPostingId).causedBy(action));
         dispatch(errorThrown(e));

@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
-import { DraftText, MediaCaption, PostingText, StoryAttributes, VerifiedMediaFile } from "api";
+import { DraftText, MediaCaption, PostingText, PrivateMediaFileInfo, StoryAttributes } from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerGender } from "state/home/selectors";
 import { getOwnerName } from "state/node/selectors";
@@ -23,7 +23,7 @@ const toDraftText = (
     ownerName: string,
     postingId: string | null,
     postingText: PostingText,
-    media: Map<string, VerifiedMediaFile>,
+    media: Map<string, PrivateMediaFileInfo>,
     mediaCaptions: MediaCaption[] | undefined
 ): DraftText => ({
     ...cloneDeep(postingText),
@@ -88,7 +88,7 @@ export default function ComposeDraftSaver() {
         ([text, mediaCaptions]: ComposeValue, values: ComposePageValues): void => {
             if (ownerName != null) {
                 const media = new Map(
-                    ((values.body.media ?? []) as (VerifiedMediaFile | null)[])
+                    ((values.body.media ?? []) as (PrivateMediaFileInfo | null)[])
                         .concat(values.linkPreviews.media)
                         .filter(notNull)
                         .map(rm => [rm.id, rm])

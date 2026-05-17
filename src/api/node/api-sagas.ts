@@ -1064,18 +1064,6 @@ export async function updatePrivateMediaInfo(
     });
 }
 
-export async function getPrivateMediaParentEntry(
-    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
-    grant: string | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
-): Promise<API.EntryInfo[]> {
-
-    const location = urlWithParameters(ut`/media/private/${id}/parent`, {grant});
-    return callApi<API.EntryInfo[]>({
-        caller, nodeName, method: "GET", location, auth, schema: "EntryInfoArray", decodeBodies: true,
-        errorFilter
-    });
-}
-
 export async function uploadPublicMedia(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, file: File,
     onProgress?: ProgressHandler, errorFilter: ErrorFilter = false, auth: true | string = true
@@ -1107,6 +1095,29 @@ export async function getPublicMediaInfo(
     const location = ut`/media/public/${id}/info`;
     return callApi<API.PublicMediaFileInfo>({
         caller, nodeName, method: "GET", location, schema: "PublicMediaFileInfo", errorFilter
+    });
+}
+
+export async function createMediaLease(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, attributes: API.MediaLeaseAttributes,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.MediaLeaseInfo> {
+
+    const location = "/media/leases";
+    return callApi<API.MediaLeaseInfo>({
+        caller, nodeName, method: "POST", location, body: attributes, auth, schema: "MediaLeaseInfo",
+        errorFilter
+    });
+}
+
+export async function deleteMediaLease(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.Result> {
+
+    const location = ut`/media/leases/${id}`;
+    return callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 

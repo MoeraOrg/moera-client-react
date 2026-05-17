@@ -19,7 +19,8 @@ import LightboxCopyTextButton from "ui/lightbox/LightboxCopyTextButton";
 import LightboxShareButton from "ui/lightbox/LightboxShareButton";
 import LightboxDownloadButton from "ui/lightbox/LightboxDownloadButton";
 import { useOverlay } from "ui/overlays/overlays";
-import { REL_CURRENT } from "util/rel-node-name";
+import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
+import { getRemoteMedia } from "state/remotemedia/selectors";
 
 export default function GalleryLightbox() {
     const posting = useSelector((state: ClientState) => getPosting(state, state.lightbox.postingId, REL_CURRENT));
@@ -33,7 +34,6 @@ export default function GalleryLightbox() {
     const mediaPosting = useSelector((state: ClientState) =>
         getPosting(state, getLightboxMediaPostingId(state), mediaNodeName)
     );
-    const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, state.lightbox.nodeName));
     const loopGallery = useSelector((state: ClientState) => getSetting(state, "entry.gallery.loop") as boolean);
     const dispatch = useDispatcher();
 
@@ -42,56 +42,38 @@ export default function GalleryLightbox() {
     const [zIndex, overlayId] = useOverlay(null, {closeOnClick: false, onClose: onCloseRequest});
 
     const media = useMemo(() => getGallery(posting, comment), [comment, posting]);
-    let mainHref = "";
-    let mainSrc = "";
-    let mainMimeType = "";
-    let mainTextContent: string | undefined = undefined;
-    let prevSrc: string | undefined = undefined;
-    let prevMediaId: string | undefined = undefined;
-    let prevSequence: LightboxMediaSequence = "normal";
-    let nextSrc: string | undefined = undefined;
-    let nextMediaId: string | undefined = undefined;
-    let nextSequence: LightboxMediaSequence = "normal";
-    let statusText = "";
-    if (media != null && media.length > 0) {
-        const loop = loopGallery && media.length > 1;
-        let index = media.findIndex(attachment => attachment.media?.id === mediaId);
-        if (index < 0) {
-            index = 0;
-        }
-        const mainMedia = media[index].media;
-        mainHref = "/media/" + (mainMedia?.directPath || mainMedia?.path);
-        mainSrc = rootPage + mainHref;
-        mainMimeType = mainMedia?.mimeType ?? "image/jpeg";
-        mainTextContent = mainMedia?.textContent ?? undefined;
-        const prevIndex = index > 0
-            ? index - 1
-            : (index === 0 && loop ? media.length - 1 : null);
-        const nextIndex = index < media.length - 1
-            ? index + 1
-            : (index === media.length - 1 && loop ? 0 : null);
-        if (prevIndex != null) {
-            const prevMedia = media[prevIndex].media;
-            if (prevMedia?.directPath) {
-                prevSrc = rootPage + "/media/" + prevMedia.directPath;
-            } else {
-                prevSrc = rootPage + "/media/" + prevMedia?.path;
-            }
-            prevMediaId = prevMedia?.id;
-            prevSequence = prevIndex > index ? "prev-loop" : "normal";
-        }
-        if (nextIndex != null) {
-            const nextMedia = media[nextIndex].media;
-            if (nextMedia?.directPath) {
-                nextSrc = rootPage + "/media/" + nextMedia.directPath;
-            } else {
-                nextSrc = rootPage + "/media/" + nextMedia?.path;
-            }
-            nextMediaId = nextMedia?.id;
-            nextSequence = nextIndex < index ? "next-loop" : "normal";
-        }
-        statusText = `${index + 1} / ${media.length}`;
+    const loop = loopGallery && media != null && media.length > 1;
+
+    let index = media?.findIndex(attachment =>
+        attachment.media?.id === mediaId || attachment.remoteMedia?.id === mediaId
+    ) ?? 0;
+    if (index < 0) {
+        index = 0;
     }
+
+    const {
+        href: mainHref, src: mainSrc, mimeType: mainMimeType, textContent: mainTextContent
+    } = useLightboxMedia(mediaNodeName, media != null ? media[index] : undefined);
+
+    const prevIndex = index > 0
+        ? index - 1
+        : (media != null && index === 0 ? media.length - 1 : null);
+    const prevSequence: LightboxMediaSequence = prevIndex != null && prevIndex > index ? "prev-loop" : "normal";
+
+    const {
+        src: prevSrc, mediaId: prevMediaId
+    } = useLightboxMedia(mediaNodeName, media != null && prevIndex != null ? media[prevIndex] : undefined);
+
+    const nextIndex = media != null && index < media.length - 1
+        ? index + 1
+        : (media != null && index === media.length - 1 && loop ? 0 : null);
+    const nextSequence: LightboxMediaSequence = nextIndex != null && nextIndex < index ? "next-loop" : "normal";
+
+    const {
+        src: nextSrc, mediaId: nextMediaId
+    } = useLightboxMedia(mediaNodeName, media != null && nextIndex != null ? media[nextIndex] : undefined);
+
+    const statusText = media != null && media.length > 0 ? `${index + 1} / ${media.length}` : "";
 
     const onMovePrev = () => prevMediaId != null ? dispatch(lightboxMediaSet(prevMediaId, prevSequence)) : null;
 
@@ -100,7 +82,7 @@ export default function GalleryLightbox() {
     return (
         <ParentContext.Provider value={{hide: onCloseRequest, overlayId}}>
             <Lightbox
-                mainSrc={mainSrc}
+                mainSrc={mainSrc ?? ""}
                 prevSrc={prevSrc}
                 nextSrc={nextSrc}
                 statusText={statusText}
@@ -109,8 +91,8 @@ export default function GalleryLightbox() {
                 zIndex={zIndex?.shadow}
                 toolbarButtons={[
                     mainTextContent && <LightboxCopyTextButton text={mainTextContent}/>,
-                    <LightboxShareButton mediaNodeName={mediaNodeName} mediaHref={mainHref}/>,
-                    <LightboxDownloadButton mediaUrl={mainSrc} mediaMimeType={mainMimeType}/>,
+                    <LightboxShareButton mediaNodeName={mediaNodeName} mediaHref={mainHref ?? ""}/>,
+                    <LightboxDownloadButton mediaUrl={mainSrc ?? ""} mediaMimeType={mainMimeType}/>,
                 ]}
                 controls={[
                     <LightboxReactions/>,
@@ -128,7 +110,7 @@ function getGallery(
 ): MediaAttachment[] | null {
     // important: !== not !=
     const entry = comment !== null ? comment : posting;
-    const media = (entry?.media ?? []).filter(mf => !mf.media?.attachment);
+    const media = (entry?.media ?? []).filter(mf => !mf.media?.attachment && !mf.remoteMedia?.attachment);
     if (media.length === 0) {
         return null;
     }
@@ -137,5 +119,38 @@ function getGallery(
         return media;
     }
     const linkPreviewImages = new Set(linkPreviews.map(lp => lp.imageHash));
-    return media.filter(mf => !linkPreviewImages.has(mf.media?.hash));
+    return media.filter(mf => !linkPreviewImages.has(mf.media?.hash) && !linkPreviewImages.has(mf.remoteMedia?.hash));
+}
+
+interface LightboxMediaAttributes {
+    mediaId: string | undefined;
+    href: string | undefined;
+    src: string | undefined;
+    mimeType: string;
+    textContent: string | undefined;
+}
+
+function useLightboxMedia(
+    nodeName: string | RelNodeName, media: MediaAttachment | null | undefined
+): LightboxMediaAttributes {
+    const mediaFile = media?.media;
+    const remoteMedia = media?.remoteMedia;
+    const remoteMediaFile = useSelector((state: ClientState) =>
+        getRemoteMedia(state, remoteMedia?.nodeName, remoteMedia?.mediaId)
+    );
+    const actualNodeName = (mediaFile != null ? nodeName : remoteMedia?.nodeName) ?? nodeName;
+    const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, actualNodeName));
+    const actualMediaFile = mediaFile ?? remoteMediaFile;
+
+    if (actualMediaFile == null) {
+        return {mediaId: undefined, href: undefined, src: undefined, mimeType: "image/jpeg", textContent: undefined};
+    }
+
+    const mediaId = actualMediaFile.id;
+    const href = "/media/" + (actualMediaFile.directPath || actualMediaFile.path);
+    const src = rootPage + href;
+    const mimeType = actualMediaFile.mimeType;
+    const textContent = actualMediaFile.textContent ?? undefined;
+
+    return {mediaId, href, src, mimeType, textContent};
 }

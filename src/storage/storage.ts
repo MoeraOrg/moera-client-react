@@ -1,3 +1,5 @@
+import * as immutable from 'object-path-immutable';
+
 import { AvatarImage, BlockedUserInfo, CarteInfo, CLIENT_SETTINGS_PREFIX, Features } from "api";
 import { ClientAction } from "state/action";
 import { ClientState } from "state/state";
@@ -15,10 +17,13 @@ import {
 import { getHomeConnectionData } from "state/home/selectors";
 import { namingNamesPopulate, namingNamesSwitchServer } from "state/naming/actions";
 import { boot } from "state/navigation/actions";
+import { nodeFeaturesLoaded } from "state/node/actions";
+import { remoteMediaMaintenance, remoteMediaPopulate } from "state/remotemedia/actions";
+import { RemoteMediaState } from "state/remotemedia/state";
 import { settingsClientValuesLoaded } from "state/settings/actions";
 import { DocumentLocation } from "util/universal-url";
-import * as Access from "./access"
-import { nodeFeaturesLoaded } from "state/node/actions";
+import { RemoteMediaData } from "./data";
+import * as Access from "./access";
 
 function loadedData(data: Access.StoredData): void {
     if (!data) {
@@ -40,6 +45,11 @@ function loadedData(data: Access.StoredData): void {
         const serverUrl = Access.findNameServerUrl(data.settings) ?? Access.DEFAULT_NAMING_SERVER;
         dispatch(namingNamesSwitchServer(serverUrl));
         dispatch(namingNamesPopulate(serverUrl, data.names));
+    }
+
+    if (data.remoteMedia != null) {
+        dispatch(remoteMediaPopulate(data.remoteMedia));
+        dispatch(remoteMediaMaintenance());
     }
 
     if (data.invisibleUsers != null) {
@@ -153,6 +163,25 @@ export function reloadNames(cause: ClientAction | null, serverUrl: string) {
     const names = Access.loadNames(serverUrl);
     dispatch(namingNamesSwitchServer(serverUrl).causedBy(cause));
     dispatch(namingNamesPopulate(serverUrl, names).causedBy(cause));
+}
+
+function buildRemoteMediaData(remoteMedia: RemoteMediaState): RemoteMediaData {
+    let data: RemoteMediaData = {};
+    for (const [nodeName, node] of Object.entries(remoteMedia)) {
+        if (node == null) {
+            continue;
+        }
+        for (const [mediaId, status] of Object.entries(node)) {
+            if (status?.loaded && !status.error && status.media != null) {
+                data = immutable.set(data, [nodeName, mediaId], status.media);
+            }
+        }
+    }
+    return data;
+}
+
+export function storeRemoteMedia(remoteMedia: RemoteMediaState): void {
+    Access.storeRemoteMedia(buildRemoteMediaData(remoteMedia));
 }
 
 export function storeAnonymousFullName(anonymousFullName: string | null): void {

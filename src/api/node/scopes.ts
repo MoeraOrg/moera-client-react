@@ -4,6 +4,7 @@ export const SCOPES: Scope[] = [
     "view-media",
     "upload-public-media",
     "upload-private-media",
+    "lease-media",
     "view-content",
     "add-post",
     "update-post",

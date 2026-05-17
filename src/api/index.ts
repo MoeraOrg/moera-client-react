@@ -6,7 +6,6 @@ export { Node, NamingRules, SettingTypes }
 export { NamingApi, Naming, ANONYMOUS_NODE_NAME } from "api/naming";
 export * from "api/node/api-types";
 export { selectApi } from "api/node/call";
-export type { VerifiedMediaFile } from "api/node/media-upload";
 // mediaUpload from "api/node/media-upload" is not included here, because it drags all sagas as dependencies
 // into web workers
 export {

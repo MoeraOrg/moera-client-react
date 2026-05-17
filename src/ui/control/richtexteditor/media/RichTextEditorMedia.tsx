@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import * as immutable from 'object-path-immutable';
 import * as Base64js from 'base64-js';
 
-import { MediaCaption, PostingFeatures, PrivateMediaFileInfo, SourceFormat, VerifiedMediaFile } from "api";
+import { MediaCaption, PostingFeatures, PrivateMediaFileInfo, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import {
@@ -263,7 +263,7 @@ export default function RichTextEditorMedia({
 
     const [imageDialog, setImageDialog] = useState<boolean>(false);
     const [imageDialogFiles, setImageDialogFiles] = useState<File[] | null>(null);
-    const [imageDialogMediaFiles, setImageDialogMediaFiles] = useState<VerifiedMediaFile[] | null>(null);
+    const [imageDialogMediaFiles, setImageDialogMediaFiles] = useState<PrivateMediaFileInfo[] | null>(null);
     const [imageDialogHref, setImageDialogHref] = useState<string | null>(null);
     const [imageDialogInsert, setImageDialogInsert] = useState<boolean>(false);
     const [imageDialogPrevValues, setImageDialogPrevValues] = useState<RichTextImageValues | null>(null);
@@ -271,7 +271,7 @@ export default function RichTextEditorMedia({
         useState<RichTextEditorDialogSubmit<RichTextImageValues>>(() => () => {});
 
     const showImageDialog = (
-        show: boolean, files: File[] | null = null, mediaFiles: VerifiedMediaFile[] | null = null,
+        show: boolean, files: File[] | null = null, mediaFiles: PrivateMediaFileInfo[] | null = null,
         href: string | null = null, insert: boolean = false, prevValues: RichTextImageValues | null = null,
         onSubmit?: RichTextEditorDialogSubmit<RichTextImageValues>
     ) => {

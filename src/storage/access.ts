@@ -2,6 +2,7 @@ import ObjectPath from 'object-path';
 
 import { now } from "util/misc";
 import * as Data from "./data"
+import { ClientData, NameDetails, RemoteMediaData, RootInfo } from "./data";
 
 const MAX_NAMES_SIZE = 500;
 export const DEFAULT_NAMING_SERVER = "https://naming.moera.org/moera-naming";
@@ -12,15 +13,17 @@ export interface StoredData extends Data.ClientData {
         nodeName?: string | null;
     };
     names?: Data.NameDetails[];
+    remoteMedia?: Data.RemoteMediaData;
     roots?: Data.RootInfo[];
 }
 
 function buildData(
     currentRoot?: string | null,
-    clientData?: Data.ClientData,
-    roots?: Data.RootInfo[],
-    names?: Data.NameDetails[],
-    anonymousFullName?: string | null,
+    clientData?: ClientData,
+    roots?: RootInfo[],
+    names?: NameDetails[],
+    remoteMedia?: RemoteMediaData | null,
+    anonymousFullName?: string | null
 ): StoredData {
     let data = {};
     if (currentRoot) {
@@ -32,6 +35,9 @@ function buildData(
     }
     if (names != null) {
         data = {...data, names}
+    }
+    if (remoteMedia != null) {
+        data = {...data, remoteMedia}
     }
     if (anonymousFullName != null) {
         data = {...data, anonymousFullName}
@@ -55,12 +61,13 @@ export function loadData(): StoredData {
     const homeRoot = Data.getStorageItem("currentRoot");
     const roots = Data.getStorageItem("roots") ?? [];
     if (!homeRoot) {
-        return buildData(undefined, undefined, roots, undefined, anonymousFullName);
+        return buildData(undefined, undefined, roots, undefined, undefined, anonymousFullName);
     }
     const clientData = Data.getStorageItem("clientData", homeRoot) ?? {};
     ObjectPath.set(clientData, "home.nodeName", Data.findRootName(roots, homeRoot));
     const names = Data.getNames(findNameServerUrl(clientData.settings));
-    return buildData(homeRoot, clientData, roots, names, anonymousFullName);
+    const remoteMedia = Data.getStorageItem("remoteMedia", homeRoot);
+    return buildData(homeRoot, clientData, roots, names, remoteMedia, anonymousFullName);
 }
 
 export function storeData(data: StoredData): Data.RootInfo[] {
@@ -106,6 +113,7 @@ export function deleteData(location: string | null): boolean {
     roots = roots.filter(r => r.url !== location);
     Data.setStorageItem("roots", null, roots);
     Data.removeStorageItem("clientData", location);
+    Data.removeStorageItem("remoteMedia", location);
 
     if (location === homeRoot || homeRoot == null) {
         if (roots.length === 0) {
@@ -153,6 +161,27 @@ export function loadNames(serverUrl: string | null): Data.NameDetails[] {
         serverUrl = null;
     }
     return Data.getNames(serverUrl);
+}
+
+function isRemoteMediaEmpty(remoteMedia: Data.RemoteMediaData): boolean {
+    for (const node of Object.values(remoteMedia)) {
+        if (node != null && Object.keys(node).length > 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+export function storeRemoteMedia(remoteMedia: Data.RemoteMediaData): void {
+    const homeRoot = Data.getStorageItem("currentRoot");
+    if (!homeRoot) {
+        return;
+    }
+    if (!isRemoteMediaEmpty(remoteMedia)) {
+        Data.setStorageItem("remoteMedia", homeRoot, remoteMedia);
+    } else {
+        Data.removeStorageItem("remoteMedia", homeRoot);
+    }
 }
 
 export function storeAnonymousFullName(anonymousFullName: string | null): void {
