@@ -234,6 +234,7 @@
   "do-want-allow-android-google-play": "<0>Do you want non-public content of your blog to be accessible with Moera for Android app installed from Google Play?</0> For this, you need to allow the Sheriff to read the non-public contents of your blog and decide (in accordance with Google Play rules) which posts or comments should be hidden in Moera for Android.",
   "download": "Download",
   "download-attachment": "Download attachment",
+  "downloading": "Downloading",
   "downloading-image": "Downloading image...",
   "do-you-have-blog": "Do you have a Moera blog?",
   "draft-not-found": "Draft not found",

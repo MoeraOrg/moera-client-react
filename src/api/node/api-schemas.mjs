@@ -1489,9 +1489,6 @@ export const NODE_API_SCHEMAS = {
                         type: "string"
                     }
                 },
-                "mediaMaxSize": {
-                    type: "integer"
-                },
                 "imageRecommendedSize": {
                     type: "integer"
                 },
@@ -1508,7 +1505,6 @@ export const NODE_API_SCHEMAS = {
             required: [
                 "subjectPresent",
                 "sourceFormats",
-                "mediaMaxSize",
                 "imageRecommendedSize",
                 "imageRecommendedPixels",
                 "imageFormats",
@@ -2165,10 +2161,6 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
-                "attachment": {
-                    type: "boolean",
-                    nullable: true
-                },
                 "width": {
                     type: "integer",
                     nullable: true
@@ -2179,6 +2171,14 @@ export const NODE_API_SCHEMAS = {
                 },
                 "size": {
                     type: "integer",
+                    nullable: true
+                },
+                "title": {
+                    type: "string",
+                    nullable: true
+                },
+                "attachment": {
+                    type: "boolean",
                     nullable: true
                 },
                 "grant": {
@@ -3812,6 +3812,10 @@ export const NODE_API_SCHEMAS = {
                             type: "null"
                         }
                     ]
+                },
+                "mediaLeaseId": {
+                    type: "string",
+                    nullable: true
                 },
                 "remoteMedia": {
                     anyOf: [

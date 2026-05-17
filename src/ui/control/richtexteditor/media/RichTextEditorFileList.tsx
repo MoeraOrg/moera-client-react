@@ -11,10 +11,10 @@ import {
 import { SortableContext } from '@dnd-kit/sortable';
 import cx from 'classnames';
 
-import { PrivateMediaFileInfo } from "api";
 import { RichTextValue } from "ui/control/richtexteditor";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import UploadedFile from "ui/control/richtexteditor/media/UploadedFile";
+import { MediaWithCaption } from "util/media-with-caption";
 import { notNull } from "util/misc";
 
 interface Props {
@@ -37,7 +37,7 @@ export default function RichTextEditorFileList({value, className}: Props) {
         keyboardSensor,
     );
 
-    const [dragged, setDragged] = useState<PrivateMediaFileInfo | null>(null);
+    const [dragged, setDragged] = useState<MediaWithCaption | null>(null);
 
     if (value.media == null || value.media.length === 0) {
         return null;
@@ -46,10 +46,10 @@ export default function RichTextEditorFileList({value, className}: Props) {
     const mediaList = value.media
         .filter(notNull)
         .filter(media => media.attachment);
-    const mediaIds = mediaList.map(mf => mf.id);
+    const mediaIds = mediaList.map(mf => mf.mediaId ?? "");
 
     const onDragStart = ({active}: DragStartEvent) =>
-        setDragged(mediaList.find(mf => mf.id === active.id) ?? null);
+        setDragged(mediaList.find(mf => mf.mediaId === active.id) ?? null);
     const onDragEnd = ({active, over}: DragEndEvent) => {
         if (over != null && active.id !== over.id) {
             reorderMedia(String(active.id), String(over.id));
@@ -64,7 +64,11 @@ export default function RichTextEditorFileList({value, className}: Props) {
                 {mediaList.length > 0 &&
                     <div className={cx("rich-text-editor-file-list", className)}>
                         {mediaList.map(media =>
-                            <UploadedFile key={media.id} media={media} dragged={dragged?.id === media.id}/>
+                            <UploadedFile
+                                key={media.mediaId}
+                                media={media}
+                                dragged={dragged?.mediaId === media.mediaId}
+                            />
                         )}
                     </div>
                 }

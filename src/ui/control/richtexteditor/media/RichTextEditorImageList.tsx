@@ -13,11 +13,11 @@ import {
 import { SortableContext } from '@dnd-kit/sortable';
 import cx from 'classnames';
 
-import { PrivateMediaFileInfo } from "api";
 import { RichTextValue } from "ui/control/richtexteditor";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import UploadedImage from "ui/control/richtexteditor/media/UploadedImage";
 import AttachedImage from "ui/control/richtexteditor/media/AttachedImage";
+import { MediaWithCaption } from "util/media-with-caption";
 import { mediaHashesExtract } from "util/media-images";
 import { RelNodeName } from "util/rel-node-name";
 import { notNull } from "util/misc";
@@ -45,7 +45,7 @@ export default function RichTextEditorImageList({value, className, nodeName, noE
         keyboardSensor,
     );
 
-    const [dragged, setDragged] = useState<PrivateMediaFileInfo | null>(null);
+    const [dragged, setDragged] = useState<MediaWithCaption | null>(null);
 
     if (value.media == null || value.media.length === 0) {
         return null;
@@ -55,11 +55,11 @@ export default function RichTextEditorImageList({value, className, nodeName, noE
     const mediaList = value.media
         .filter(notNull)
         .filter(media => !media.attachment)
-        .filter(media => !embedded.has(media.hash));
-    const mediaIds = mediaList.map(mf => mf.id);
+        .filter(media => !embedded.has(media.hash ?? ""));
+    const mediaIds = mediaList.map(mf => mf.mediaId ?? "");
 
     const onDragStart = ({active}: DragStartEvent) =>
-        setDragged(mediaList.find(mf => mf.id === active.id) ?? null);
+        setDragged(mediaList.find(mf => mf.mediaId === active.id) ?? null);
     const onDragEnd = ({active, over}: DragEndEvent) => {
         if (over != null && active.id !== over.id) {
             reorderMedia(String(active.id), String(over.id));
@@ -75,10 +75,10 @@ export default function RichTextEditorImageList({value, className, nodeName, noE
                     <div className={cx("rich-text-editor-image-list", className)}>
                         {mediaList.map(media =>
                             <UploadedImage
-                                key={media.id}
+                                key={media.mediaId}
                                 media={media}
                                 nodeName={nodeName}
-                                dragged={dragged?.id === media.id}
+                                dragged={dragged?.mediaId === media.mediaId}
                                 showMenu={!dragged}
                                 noEmbeddedMedia={noEmbeddedMedia}
                             />

@@ -1,7 +1,8 @@
 import { Node } from "api";
 import { mediaUpload } from "api/node/media-upload";
 import { WithContext } from "state/action-types";
-import { dispatch } from "state/store-sagas";
+import { dispatch, select } from "state/store-sagas";
+import { remoteMediaLoaded } from "state/remotemedia/actions";
 import {
     RichTextEditorImageCopyAction,
     RichTextEditorMediaRenameAction,
@@ -9,8 +10,10 @@ import {
 } from "state/richtexteditor/actions";
 import { errorThrown } from "state/error/actions";
 import { saga } from "state/saga";
-import { MediaFileWithCaption } from "ui/control/richtexteditor";
-import { REL_HOME } from "util/rel-node-name";
+import { getSettingNode } from "state/settings/selectors";
+import { localMediaToLeasedRemoteMediaInfo } from "ui/control/richtexteditor";
+import { absoluteNodeName, REL_HOME } from "util/rel-node-name";
+import { MediaWithCaption } from "util/media-with-caption";
 
 export default [
     saga("RICH_TEXT_EDITOR_MEDIA_UPLOAD", null, richTextEditorMediaUploadSaga),
@@ -31,21 +34,33 @@ async function richTextEditorMediaUpload(
         return;
     }
 
+    const mediaMaxSize = select(state => getSettingNode(state, "media.max-size") as number);
+
     const mediaFile = await mediaUpload(
-        action, features, nodeName, homeOwnerName, files[index], compress,
+        action, features, mediaMaxSize, homeOwnerName, files[index], compress,
         (loaded: number, total: number) => onProgress(index, loaded, total)
     );
     if (mediaFile != null) {
-        const mediaFileWithCaption: MediaFileWithCaption = {
-            ...mediaFile,
-            captionPostingId: null,
-            caption: captionSrc
-                ? {
-                    mediaId: mediaFile.id,
-                    captionSrc,
-                    captionSrcFormat: captionSrcFormat ?? "markdown",
-                }
-                : undefined
+        const caption = captionSrc
+            ? {
+                mediaId: mediaFile.id,
+                captionSrc,
+                captionSrcFormat: captionSrcFormat ?? "markdown",
+            }
+            : undefined;
+        const targetNodeName = absoluteNodeName(nodeName, action.context);
+        let mediaFileWithCaption: MediaWithCaption;
+        if (targetNodeName === homeOwnerName) {
+            mediaFileWithCaption = new MediaWithCaption(mediaFile, undefined, undefined, caption);
+        } else {
+            const lease = await Node.createMediaLease(
+                action, REL_HOME, {nodeName: targetNodeName, mediaId: mediaFile.id}
+            );
+            const remoteMedia = localMediaToLeasedRemoteMediaInfo(mediaFile, homeOwnerName, lease.id);
+            if (remoteMedia != null) {
+                dispatch(remoteMediaLoaded(remoteMedia.nodeName, remoteMedia.mediaId, mediaFile).causedBy(action));
+            }
+            mediaFileWithCaption = new MediaWithCaption(undefined, remoteMedia, undefined, caption);
         }
         onSuccess(index, mediaFileWithCaption);
     } else {

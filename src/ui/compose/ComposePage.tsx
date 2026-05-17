@@ -7,7 +7,7 @@ import { PrincipalValue, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
-import { isAtHomeNode } from "state/node/selectors";
+import { getOwnerName, isAtHomeNode } from "state/node/selectors";
 import { composeConflictClose } from "state/compose/actions";
 import { getPostingFeatures, isComposeReady } from "state/compose/selectors";
 import { useDispatcher } from "ui/hook";
@@ -147,6 +147,8 @@ function ComposePageInner(props: Props) {
 const ComposePageOuter = withFormik(composePageLogic)(ComposePageInner);
 
 export default function ComposePage() {
+    const nodeName = useSelector(getOwnerName);
+    const homeOwnerName = useSelector(getHomeOwnerName);
     const gender = useSelector(getHomeOwnerGender);
     const fullNameDefault = useSelector(getHomeOwnerFullName);
     const avatarDefault = useSelector(getHomeOwnerAvatar);
@@ -204,6 +206,8 @@ export default function ComposePage() {
 
     return (
         <ComposePageOuter
+            nodeName={nodeName}
+            homeOwnerName={homeOwnerName}
             gender={gender}
             fullNameDefault={fullNameDefault}
             avatarDefault={avatarDefault}

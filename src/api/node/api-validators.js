@@ -15366,7 +15366,7 @@ return errors === 0;
 }
 
 export const PostingFeatures = validate80;
-const schema86 = {"type":"object","properties":{"post":{"type":"boolean","nullable":true},"subjectPresent":{"type":"boolean"},"sourceFormats":{"type":"array","items":{"type":"string"}},"mediaMaxSize":{"type":"integer"},"imageRecommendedSize":{"type":"integer"},"imageRecommendedPixels":{"type":"integer"},"imageFormats":{"type":"array","items":{"type":"string"}}},"required":["subjectPresent","sourceFormats","mediaMaxSize","imageRecommendedSize","imageRecommendedPixels","imageFormats"],"additionalProperties":false};
+const schema86 = {"type":"object","properties":{"post":{"type":"boolean","nullable":true},"subjectPresent":{"type":"boolean"},"sourceFormats":{"type":"array","items":{"type":"string"}},"imageRecommendedSize":{"type":"integer"},"imageRecommendedPixels":{"type":"integer"},"imageFormats":{"type":"array","items":{"type":"string"}}},"required":["subjectPresent","sourceFormats","imageRecommendedSize","imageRecommendedPixels","imageFormats"],"additionalProperties":false};
 
 function validate80(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
 let vErrors = null;
@@ -15374,14 +15374,14 @@ let errors = 0;
 if(errors === 0){
 if(data && typeof data == "object" && !Array.isArray(data)){
 let missing0;
-if(((((((data.subjectPresent === undefined) && (missing0 = "subjectPresent")) || ((data.sourceFormats === undefined) && (missing0 = "sourceFormats"))) || ((data.mediaMaxSize === undefined) && (missing0 = "mediaMaxSize"))) || ((data.imageRecommendedSize === undefined) && (missing0 = "imageRecommendedSize"))) || ((data.imageRecommendedPixels === undefined) && (missing0 = "imageRecommendedPixels"))) || ((data.imageFormats === undefined) && (missing0 = "imageFormats"))){
+if((((((data.subjectPresent === undefined) && (missing0 = "subjectPresent")) || ((data.sourceFormats === undefined) && (missing0 = "sourceFormats"))) || ((data.imageRecommendedSize === undefined) && (missing0 = "imageRecommendedSize"))) || ((data.imageRecommendedPixels === undefined) && (missing0 = "imageRecommendedPixels"))) || ((data.imageFormats === undefined) && (missing0 = "imageFormats"))){
 validate80.errors = [{instancePath,schemaPath:"#/required",keyword:"required",params:{missingProperty: missing0},message:"must have required property '"+missing0+"'"}];
 return false;
 }
 else {
 const _errs1 = errors;
 for(const key0 in data){
-if(!(((((((key0 === "post") || (key0 === "subjectPresent")) || (key0 === "sourceFormats")) || (key0 === "mediaMaxSize")) || (key0 === "imageRecommendedSize")) || (key0 === "imageRecommendedPixels")) || (key0 === "imageFormats"))){
+if(!((((((key0 === "post") || (key0 === "subjectPresent")) || (key0 === "sourceFormats")) || (key0 === "imageRecommendedSize")) || (key0 === "imageRecommendedPixels")) || (key0 === "imageFormats"))){
 delete data[key0];
 }
 }
@@ -15544,8 +15544,8 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.mediaMaxSize !== undefined){
-let data4 = data.mediaMaxSize;
+if(data.imageRecommendedSize !== undefined){
+let data4 = data.imageRecommendedSize;
 const _errs11 = errors;
 if(!(((typeof data4 == "number") && (!(data4 % 1) && !isNaN(data4))) && (isFinite(data4)))){
 let dataType4 = typeof data4;
@@ -15563,14 +15563,14 @@ if(dataType4 === "boolean" || data4 === null
 coerced4 = +data4;
 }
 else {
-validate80.errors = [{instancePath:instancePath+"/mediaMaxSize",schemaPath:"#/properties/mediaMaxSize/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate80.errors = [{instancePath:instancePath+"/imageRecommendedSize",schemaPath:"#/properties/imageRecommendedSize/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced4 !== undefined){
 data4 = coerced4;
 if(data !== undefined){
-data["mediaMaxSize"] = coerced4;
+data["imageRecommendedSize"] = coerced4;
 }
 }
 }
@@ -15580,8 +15580,8 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.imageRecommendedSize !== undefined){
-let data5 = data.imageRecommendedSize;
+if(data.imageRecommendedPixels !== undefined){
+let data5 = data.imageRecommendedPixels;
 const _errs13 = errors;
 if(!(((typeof data5 == "number") && (!(data5 % 1) && !isNaN(data5))) && (isFinite(data5)))){
 let dataType5 = typeof data5;
@@ -15599,14 +15599,14 @@ if(dataType5 === "boolean" || data5 === null
 coerced5 = +data5;
 }
 else {
-validate80.errors = [{instancePath:instancePath+"/imageRecommendedSize",schemaPath:"#/properties/imageRecommendedSize/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate80.errors = [{instancePath:instancePath+"/imageRecommendedPixels",schemaPath:"#/properties/imageRecommendedPixels/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced5 !== undefined){
 data5 = coerced5;
 if(data !== undefined){
-data["imageRecommendedSize"] = coerced5;
+data["imageRecommendedPixels"] = coerced5;
 }
 }
 }
@@ -15616,33 +15616,76 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.imageRecommendedPixels !== undefined){
-let data6 = data.imageRecommendedPixels;
+if(data.imageFormats !== undefined){
+let data6 = data.imageFormats;
 const _errs15 = errors;
-if(!(((typeof data6 == "number") && (!(data6 % 1) && !isNaN(data6))) && (isFinite(data6)))){
+if(!(Array.isArray(data6))){
 let dataType6 = typeof data6;
 let coerced6 = undefined;
 if(dataType6 == 'object' && Array.isArray(data6) && data6.length == 1){
 data6 = data6[0];
 dataType6 = typeof data6;
-if(((typeof data6 == "number") && (!(data6 % 1) && !isNaN(data6))) && (isFinite(data6))){
+if(Array.isArray(data6)){
 coerced6 = data6;
 }
 }
 if(!(coerced6 !== undefined)){
-if(dataType6 === "boolean" || data6 === null
-              || (dataType6 === "string" && data6 && data6 == +data6 && !(data6 % 1))){
-coerced6 = +data6;
+if(dataType6 === "string" || dataType6 === "number"
+              || dataType6 === "boolean" || data6 === null){
+coerced6 = [data6];
 }
 else {
-validate80.errors = [{instancePath:instancePath+"/imageRecommendedPixels",schemaPath:"#/properties/imageRecommendedPixels/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate80.errors = [{instancePath:instancePath+"/imageFormats",schemaPath:"#/properties/imageFormats/type",keyword:"type",params:{type: "array"},message:"must be array"}];
 return false;
 }
 }
 if(coerced6 !== undefined){
 data6 = coerced6;
 if(data !== undefined){
-data["imageRecommendedPixels"] = coerced6;
+data["imageFormats"] = coerced6;
+}
+}
+}
+if(errors === _errs15){
+if(Array.isArray(data6)){
+var valid2 = true;
+const len1 = data6.length;
+for(let i1=0; i1<len1; i1++){
+let data7 = data6[i1];
+const _errs17 = errors;
+if(typeof data7 !== "string"){
+let dataType7 = typeof data7;
+let coerced7 = undefined;
+if(dataType7 == 'object' && Array.isArray(data7) && data7.length == 1){
+data7 = data7[0];
+dataType7 = typeof data7;
+if(typeof data7 === "string"){
+coerced7 = data7;
+}
+}
+if(!(coerced7 !== undefined)){
+if(dataType7 == "number" || dataType7 == "boolean"){
+coerced7 = "" + data7;
+}
+else if(data7 === null){
+coerced7 = "";
+}
+else {
+validate80.errors = [{instancePath:instancePath+"/imageFormats/" + i1,schemaPath:"#/properties/imageFormats/items/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+return false;
+}
+}
+if(coerced7 !== undefined){
+data7 = coerced7;
+if(data6 !== undefined){
+data6[i1] = coerced7;
+}
+}
+}
+var valid2 = _errs17 === errors;
+if(!valid2){
+break;
+}
 }
 }
 }
@@ -15650,86 +15693,6 @@ var valid0 = _errs15 === errors;
 }
 else {
 var valid0 = true;
-}
-if(valid0){
-if(data.imageFormats !== undefined){
-let data7 = data.imageFormats;
-const _errs17 = errors;
-if(!(Array.isArray(data7))){
-let dataType7 = typeof data7;
-let coerced7 = undefined;
-if(dataType7 == 'object' && Array.isArray(data7) && data7.length == 1){
-data7 = data7[0];
-dataType7 = typeof data7;
-if(Array.isArray(data7)){
-coerced7 = data7;
-}
-}
-if(!(coerced7 !== undefined)){
-if(dataType7 === "string" || dataType7 === "number"
-              || dataType7 === "boolean" || data7 === null){
-coerced7 = [data7];
-}
-else {
-validate80.errors = [{instancePath:instancePath+"/imageFormats",schemaPath:"#/properties/imageFormats/type",keyword:"type",params:{type: "array"},message:"must be array"}];
-return false;
-}
-}
-if(coerced7 !== undefined){
-data7 = coerced7;
-if(data !== undefined){
-data["imageFormats"] = coerced7;
-}
-}
-}
-if(errors === _errs17){
-if(Array.isArray(data7)){
-var valid2 = true;
-const len1 = data7.length;
-for(let i1=0; i1<len1; i1++){
-let data8 = data7[i1];
-const _errs19 = errors;
-if(typeof data8 !== "string"){
-let dataType8 = typeof data8;
-let coerced8 = undefined;
-if(dataType8 == 'object' && Array.isArray(data8) && data8.length == 1){
-data8 = data8[0];
-dataType8 = typeof data8;
-if(typeof data8 === "string"){
-coerced8 = data8;
-}
-}
-if(!(coerced8 !== undefined)){
-if(dataType8 == "number" || dataType8 == "boolean"){
-coerced8 = "" + data8;
-}
-else if(data8 === null){
-coerced8 = "";
-}
-else {
-validate80.errors = [{instancePath:instancePath+"/imageFormats/" + i1,schemaPath:"#/properties/imageFormats/items/type",keyword:"type",params:{type: "string"},message:"must be string"}];
-return false;
-}
-}
-if(coerced8 !== undefined){
-data8 = coerced8;
-if(data7 !== undefined){
-data7[i1] = coerced8;
-}
-}
-}
-var valid2 = _errs19 === errors;
-if(!valid2){
-break;
-}
-}
-}
-}
-var valid0 = _errs17 === errors;
-}
-else {
-var valid0 = true;
-}
 }
 }
 }
@@ -24662,7 +24625,7 @@ return errors === 0;
 }
 
 export const RemoteMediaInfo = validate102;
-const schema118 = {"type":"object","properties":{"id":{"type":"string"},"nodeName":{"type":"string"},"mediaId":{"type":"string"},"hash":{"type":"string","nullable":true},"digest":{"type":"string","nullable":true},"mimeType":{"type":"string","nullable":true},"attachment":{"type":"boolean","nullable":true},"width":{"type":"integer","nullable":true},"height":{"type":"integer","nullable":true},"size":{"type":"integer","nullable":true},"grant":{"type":"string","nullable":true}},"required":["id","nodeName","mediaId"],"additionalProperties":false};
+const schema118 = {"type":"object","properties":{"id":{"type":"string"},"nodeName":{"type":"string"},"mediaId":{"type":"string"},"hash":{"type":"string","nullable":true},"digest":{"type":"string","nullable":true},"mimeType":{"type":"string","nullable":true},"width":{"type":"integer","nullable":true},"height":{"type":"integer","nullable":true},"size":{"type":"integer","nullable":true},"title":{"type":"string","nullable":true},"attachment":{"type":"boolean","nullable":true},"grant":{"type":"string","nullable":true}},"required":["id","nodeName","mediaId"],"additionalProperties":false};
 
 function validate102(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
 let vErrors = null;
@@ -24919,38 +24882,36 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.attachment !== undefined){
-let data6 = data.attachment;
+if(data.width !== undefined){
+let data6 = data.width;
 const _errs17 = errors;
-if((typeof data6 !== "boolean") && (data6 !== null)){
+if((!(((typeof data6 == "number") && (!(data6 % 1) && !isNaN(data6))) && (isFinite(data6)))) && (data6 !== null)){
 let dataType6 = typeof data6;
 let coerced6 = undefined;
 if(dataType6 == 'object' && Array.isArray(data6) && data6.length == 1){
 data6 = data6[0];
 dataType6 = typeof data6;
-if((typeof data6 === "boolean") && (data6 === null)){
+if((((typeof data6 == "number") && (!(data6 % 1) && !isNaN(data6))) && (isFinite(data6))) && (data6 === null)){
 coerced6 = data6;
 }
 }
 if(!(coerced6 !== undefined)){
-if(data6 === "false" || data6 === 0 || data6 === null){
-coerced6 = false;
-}
-else if(data6 === "true" || data6 === 1){
-coerced6 = true;
+if(dataType6 === "boolean" || data6 === null
+              || (dataType6 === "string" && data6 && data6 == +data6 && !(data6 % 1))){
+coerced6 = +data6;
 }
 else if(data6 === "" || data6 === 0 || data6 === false){
 coerced6 = null;
 }
 else {
-validate102.errors = [{instancePath:instancePath+"/attachment",schemaPath:"#/properties/attachment/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
+validate102.errors = [{instancePath:instancePath+"/width",schemaPath:"#/properties/width/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced6 !== undefined){
 data6 = coerced6;
 if(data !== undefined){
-data["attachment"] = coerced6;
+data["width"] = coerced6;
 }
 }
 }
@@ -24960,8 +24921,8 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.width !== undefined){
-let data7 = data.width;
+if(data.height !== undefined){
+let data7 = data.height;
 const _errs20 = errors;
 if((!(((typeof data7 == "number") && (!(data7 % 1) && !isNaN(data7))) && (isFinite(data7)))) && (data7 !== null)){
 let dataType7 = typeof data7;
@@ -24982,14 +24943,14 @@ else if(data7 === "" || data7 === 0 || data7 === false){
 coerced7 = null;
 }
 else {
-validate102.errors = [{instancePath:instancePath+"/width",schemaPath:"#/properties/width/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate102.errors = [{instancePath:instancePath+"/height",schemaPath:"#/properties/height/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced7 !== undefined){
 data7 = coerced7;
 if(data !== undefined){
-data["width"] = coerced7;
+data["height"] = coerced7;
 }
 }
 }
@@ -24999,8 +24960,8 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.height !== undefined){
-let data8 = data.height;
+if(data.size !== undefined){
+let data8 = data.size;
 const _errs23 = errors;
 if((!(((typeof data8 == "number") && (!(data8 % 1) && !isNaN(data8))) && (isFinite(data8)))) && (data8 !== null)){
 let dataType8 = typeof data8;
@@ -25021,14 +24982,14 @@ else if(data8 === "" || data8 === 0 || data8 === false){
 coerced8 = null;
 }
 else {
-validate102.errors = [{instancePath:instancePath+"/height",schemaPath:"#/properties/height/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate102.errors = [{instancePath:instancePath+"/size",schemaPath:"#/properties/size/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced8 !== undefined){
 data8 = coerced8;
 if(data !== undefined){
-data["height"] = coerced8;
+data["size"] = coerced8;
 }
 }
 }
@@ -25038,36 +24999,38 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.size !== undefined){
-let data9 = data.size;
+if(data.title !== undefined){
+let data9 = data.title;
 const _errs26 = errors;
-if((!(((typeof data9 == "number") && (!(data9 % 1) && !isNaN(data9))) && (isFinite(data9)))) && (data9 !== null)){
+if((typeof data9 !== "string") && (data9 !== null)){
 let dataType9 = typeof data9;
 let coerced9 = undefined;
 if(dataType9 == 'object' && Array.isArray(data9) && data9.length == 1){
 data9 = data9[0];
 dataType9 = typeof data9;
-if((((typeof data9 == "number") && (!(data9 % 1) && !isNaN(data9))) && (isFinite(data9))) && (data9 === null)){
+if((typeof data9 === "string") && (data9 === null)){
 coerced9 = data9;
 }
 }
 if(!(coerced9 !== undefined)){
-if(dataType9 === "boolean" || data9 === null
-              || (dataType9 === "string" && data9 && data9 == +data9 && !(data9 % 1))){
-coerced9 = +data9;
+if(dataType9 == "number" || dataType9 == "boolean"){
+coerced9 = "" + data9;
+}
+else if(data9 === null){
+coerced9 = "";
 }
 else if(data9 === "" || data9 === 0 || data9 === false){
 coerced9 = null;
 }
 else {
-validate102.errors = [{instancePath:instancePath+"/size",schemaPath:"#/properties/size/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate102.errors = [{instancePath:instancePath+"/title",schemaPath:"#/properties/title/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
 if(coerced9 !== undefined){
 data9 = coerced9;
 if(data !== undefined){
-data["size"] = coerced9;
+data["title"] = coerced9;
 }
 }
 }
@@ -25077,38 +25040,38 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.grant !== undefined){
-let data10 = data.grant;
+if(data.attachment !== undefined){
+let data10 = data.attachment;
 const _errs29 = errors;
-if((typeof data10 !== "string") && (data10 !== null)){
+if((typeof data10 !== "boolean") && (data10 !== null)){
 let dataType10 = typeof data10;
 let coerced10 = undefined;
 if(dataType10 == 'object' && Array.isArray(data10) && data10.length == 1){
 data10 = data10[0];
 dataType10 = typeof data10;
-if((typeof data10 === "string") && (data10 === null)){
+if((typeof data10 === "boolean") && (data10 === null)){
 coerced10 = data10;
 }
 }
 if(!(coerced10 !== undefined)){
-if(dataType10 == "number" || dataType10 == "boolean"){
-coerced10 = "" + data10;
+if(data10 === "false" || data10 === 0 || data10 === null){
+coerced10 = false;
 }
-else if(data10 === null){
-coerced10 = "";
+else if(data10 === "true" || data10 === 1){
+coerced10 = true;
 }
 else if(data10 === "" || data10 === 0 || data10 === false){
 coerced10 = null;
 }
 else {
-validate102.errors = [{instancePath:instancePath+"/grant",schemaPath:"#/properties/grant/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+validate102.errors = [{instancePath:instancePath+"/attachment",schemaPath:"#/properties/attachment/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
 return false;
 }
 }
 if(coerced10 !== undefined){
 data10 = coerced10;
 if(data !== undefined){
-data["grant"] = coerced10;
+data["attachment"] = coerced10;
 }
 }
 }
@@ -25116,6 +25079,48 @@ var valid0 = _errs29 === errors;
 }
 else {
 var valid0 = true;
+}
+if(valid0){
+if(data.grant !== undefined){
+let data11 = data.grant;
+const _errs32 = errors;
+if((typeof data11 !== "string") && (data11 !== null)){
+let dataType11 = typeof data11;
+let coerced11 = undefined;
+if(dataType11 == 'object' && Array.isArray(data11) && data11.length == 1){
+data11 = data11[0];
+dataType11 = typeof data11;
+if((typeof data11 === "string") && (data11 === null)){
+coerced11 = data11;
+}
+}
+if(!(coerced11 !== undefined)){
+if(dataType11 == "number" || dataType11 == "boolean"){
+coerced11 = "" + data11;
+}
+else if(data11 === null){
+coerced11 = "";
+}
+else if(data11 === "" || data11 === 0 || data11 === false){
+coerced11 = null;
+}
+else {
+validate102.errors = [{instancePath:instancePath+"/grant",schemaPath:"#/properties/grant/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+return false;
+}
+}
+if(coerced11 !== undefined){
+data11 = coerced11;
+if(data !== undefined){
+data["grant"] = coerced11;
+}
+}
+}
+var valid0 = _errs32 === errors;
+}
+else {
+var valid0 = true;
+}
 }
 }
 }
@@ -44296,14 +44301,14 @@ const _errs3 = errors;
 if(errors === _errs3){
 if(data0 && typeof data0 == "object" && !Array.isArray(data0)){
 let missing1;
-if(((((((data0.subjectPresent === undefined) && (missing1 = "subjectPresent")) || ((data0.sourceFormats === undefined) && (missing1 = "sourceFormats"))) || ((data0.mediaMaxSize === undefined) && (missing1 = "mediaMaxSize"))) || ((data0.imageRecommendedSize === undefined) && (missing1 = "imageRecommendedSize"))) || ((data0.imageRecommendedPixels === undefined) && (missing1 = "imageRecommendedPixels"))) || ((data0.imageFormats === undefined) && (missing1 = "imageFormats"))){
+if((((((data0.subjectPresent === undefined) && (missing1 = "subjectPresent")) || ((data0.sourceFormats === undefined) && (missing1 = "sourceFormats"))) || ((data0.imageRecommendedSize === undefined) && (missing1 = "imageRecommendedSize"))) || ((data0.imageRecommendedPixels === undefined) && (missing1 = "imageRecommendedPixels"))) || ((data0.imageFormats === undefined) && (missing1 = "imageFormats"))){
 validate171.errors = [{instancePath:instancePath+"/posting",schemaPath:"node#/definitions/PostingFeatures/required",keyword:"required",params:{missingProperty: missing1},message:"must have required property '"+missing1+"'"}];
 return false;
 }
 else {
 const _errs5 = errors;
 for(const key1 in data0){
-if(!(((((((key1 === "post") || (key1 === "subjectPresent")) || (key1 === "sourceFormats")) || (key1 === "mediaMaxSize")) || (key1 === "imageRecommendedSize")) || (key1 === "imageRecommendedPixels")) || (key1 === "imageFormats"))){
+if(!((((((key1 === "post") || (key1 === "subjectPresent")) || (key1 === "sourceFormats")) || (key1 === "imageRecommendedSize")) || (key1 === "imageRecommendedPixels")) || (key1 === "imageFormats"))){
 delete data0[key1];
 }
 }
@@ -44466,8 +44471,8 @@ else {
 var valid2 = true;
 }
 if(valid2){
-if(data0.mediaMaxSize !== undefined){
-let data5 = data0.mediaMaxSize;
+if(data0.imageRecommendedSize !== undefined){
+let data5 = data0.imageRecommendedSize;
 const _errs15 = errors;
 if(!(((typeof data5 == "number") && (!(data5 % 1) && !isNaN(data5))) && (isFinite(data5)))){
 let dataType4 = typeof data5;
@@ -44485,14 +44490,14 @@ if(dataType4 === "boolean" || data5 === null
 coerced4 = +data5;
 }
 else {
-validate171.errors = [{instancePath:instancePath+"/posting/mediaMaxSize",schemaPath:"node#/definitions/PostingFeatures/properties/mediaMaxSize/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate171.errors = [{instancePath:instancePath+"/posting/imageRecommendedSize",schemaPath:"node#/definitions/PostingFeatures/properties/imageRecommendedSize/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced4 !== undefined){
 data5 = coerced4;
 if(data0 !== undefined){
-data0["mediaMaxSize"] = coerced4;
+data0["imageRecommendedSize"] = coerced4;
 }
 }
 }
@@ -44502,8 +44507,8 @@ else {
 var valid2 = true;
 }
 if(valid2){
-if(data0.imageRecommendedSize !== undefined){
-let data6 = data0.imageRecommendedSize;
+if(data0.imageRecommendedPixels !== undefined){
+let data6 = data0.imageRecommendedPixels;
 const _errs17 = errors;
 if(!(((typeof data6 == "number") && (!(data6 % 1) && !isNaN(data6))) && (isFinite(data6)))){
 let dataType5 = typeof data6;
@@ -44521,14 +44526,14 @@ if(dataType5 === "boolean" || data6 === null
 coerced5 = +data6;
 }
 else {
-validate171.errors = [{instancePath:instancePath+"/posting/imageRecommendedSize",schemaPath:"node#/definitions/PostingFeatures/properties/imageRecommendedSize/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate171.errors = [{instancePath:instancePath+"/posting/imageRecommendedPixels",schemaPath:"node#/definitions/PostingFeatures/properties/imageRecommendedPixels/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced5 !== undefined){
 data6 = coerced5;
 if(data0 !== undefined){
-data0["imageRecommendedSize"] = coerced5;
+data0["imageRecommendedPixels"] = coerced5;
 }
 }
 }
@@ -44538,33 +44543,76 @@ else {
 var valid2 = true;
 }
 if(valid2){
-if(data0.imageRecommendedPixels !== undefined){
-let data7 = data0.imageRecommendedPixels;
+if(data0.imageFormats !== undefined){
+let data7 = data0.imageFormats;
 const _errs19 = errors;
-if(!(((typeof data7 == "number") && (!(data7 % 1) && !isNaN(data7))) && (isFinite(data7)))){
+if(!(Array.isArray(data7))){
 let dataType6 = typeof data7;
 let coerced6 = undefined;
 if(dataType6 == 'object' && Array.isArray(data7) && data7.length == 1){
 data7 = data7[0];
 dataType6 = typeof data7;
-if(((typeof data7 == "number") && (!(data7 % 1) && !isNaN(data7))) && (isFinite(data7))){
+if(Array.isArray(data7)){
 coerced6 = data7;
 }
 }
 if(!(coerced6 !== undefined)){
-if(dataType6 === "boolean" || data7 === null
-              || (dataType6 === "string" && data7 && data7 == +data7 && !(data7 % 1))){
-coerced6 = +data7;
+if(dataType6 === "string" || dataType6 === "number"
+              || dataType6 === "boolean" || data7 === null){
+coerced6 = [data7];
 }
 else {
-validate171.errors = [{instancePath:instancePath+"/posting/imageRecommendedPixels",schemaPath:"node#/definitions/PostingFeatures/properties/imageRecommendedPixels/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate171.errors = [{instancePath:instancePath+"/posting/imageFormats",schemaPath:"node#/definitions/PostingFeatures/properties/imageFormats/type",keyword:"type",params:{type: "array"},message:"must be array"}];
 return false;
 }
 }
 if(coerced6 !== undefined){
 data7 = coerced6;
 if(data0 !== undefined){
-data0["imageRecommendedPixels"] = coerced6;
+data0["imageFormats"] = coerced6;
+}
+}
+}
+if(errors === _errs19){
+if(Array.isArray(data7)){
+var valid4 = true;
+const len1 = data7.length;
+for(let i1=0; i1<len1; i1++){
+let data8 = data7[i1];
+const _errs21 = errors;
+if(typeof data8 !== "string"){
+let dataType7 = typeof data8;
+let coerced7 = undefined;
+if(dataType7 == 'object' && Array.isArray(data8) && data8.length == 1){
+data8 = data8[0];
+dataType7 = typeof data8;
+if(typeof data8 === "string"){
+coerced7 = data8;
+}
+}
+if(!(coerced7 !== undefined)){
+if(dataType7 == "number" || dataType7 == "boolean"){
+coerced7 = "" + data8;
+}
+else if(data8 === null){
+coerced7 = "";
+}
+else {
+validate171.errors = [{instancePath:instancePath+"/posting/imageFormats/" + i1,schemaPath:"node#/definitions/PostingFeatures/properties/imageFormats/items/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+return false;
+}
+}
+if(coerced7 !== undefined){
+data8 = coerced7;
+if(data7 !== undefined){
+data7[i1] = coerced7;
+}
+}
+}
+var valid4 = _errs21 === errors;
+if(!valid4){
+break;
+}
 }
 }
 }
@@ -44572,86 +44620,6 @@ var valid2 = _errs19 === errors;
 }
 else {
 var valid2 = true;
-}
-if(valid2){
-if(data0.imageFormats !== undefined){
-let data8 = data0.imageFormats;
-const _errs21 = errors;
-if(!(Array.isArray(data8))){
-let dataType7 = typeof data8;
-let coerced7 = undefined;
-if(dataType7 == 'object' && Array.isArray(data8) && data8.length == 1){
-data8 = data8[0];
-dataType7 = typeof data8;
-if(Array.isArray(data8)){
-coerced7 = data8;
-}
-}
-if(!(coerced7 !== undefined)){
-if(dataType7 === "string" || dataType7 === "number"
-              || dataType7 === "boolean" || data8 === null){
-coerced7 = [data8];
-}
-else {
-validate171.errors = [{instancePath:instancePath+"/posting/imageFormats",schemaPath:"node#/definitions/PostingFeatures/properties/imageFormats/type",keyword:"type",params:{type: "array"},message:"must be array"}];
-return false;
-}
-}
-if(coerced7 !== undefined){
-data8 = coerced7;
-if(data0 !== undefined){
-data0["imageFormats"] = coerced7;
-}
-}
-}
-if(errors === _errs21){
-if(Array.isArray(data8)){
-var valid4 = true;
-const len1 = data8.length;
-for(let i1=0; i1<len1; i1++){
-let data9 = data8[i1];
-const _errs23 = errors;
-if(typeof data9 !== "string"){
-let dataType8 = typeof data9;
-let coerced8 = undefined;
-if(dataType8 == 'object' && Array.isArray(data9) && data9.length == 1){
-data9 = data9[0];
-dataType8 = typeof data9;
-if(typeof data9 === "string"){
-coerced8 = data9;
-}
-}
-if(!(coerced8 !== undefined)){
-if(dataType8 == "number" || dataType8 == "boolean"){
-coerced8 = "" + data9;
-}
-else if(data9 === null){
-coerced8 = "";
-}
-else {
-validate171.errors = [{instancePath:instancePath+"/posting/imageFormats/" + i1,schemaPath:"node#/definitions/PostingFeatures/properties/imageFormats/items/type",keyword:"type",params:{type: "string"},message:"must be string"}];
-return false;
-}
-}
-if(coerced8 !== undefined){
-data9 = coerced8;
-if(data8 !== undefined){
-data8[i1] = coerced8;
-}
-}
-}
-var valid4 = _errs23 === errors;
-if(!valid4){
-break;
-}
-}
-}
-}
-var valid2 = _errs21 === errors;
-}
-else {
-var valid2 = true;
-}
 }
 }
 }
@@ -44673,142 +44641,142 @@ var valid0 = true;
 }
 if(valid0){
 if(data.plugins !== undefined){
-let data10 = data.plugins;
-const _errs25 = errors;
-if((!(Array.isArray(data10))) && (data10 !== null)){
-let dataType9 = typeof data10;
-let coerced9 = undefined;
-if(dataType9 == 'object' && Array.isArray(data10) && data10.length == 1){
-data10 = data10[0];
-dataType9 = typeof data10;
-if((Array.isArray(data10)) && (data10 === null)){
-coerced9 = data10;
+let data9 = data.plugins;
+const _errs23 = errors;
+if((!(Array.isArray(data9))) && (data9 !== null)){
+let dataType8 = typeof data9;
+let coerced8 = undefined;
+if(dataType8 == 'object' && Array.isArray(data9) && data9.length == 1){
+data9 = data9[0];
+dataType8 = typeof data9;
+if((Array.isArray(data9)) && (data9 === null)){
+coerced8 = data9;
 }
 }
-if(!(coerced9 !== undefined)){
-if(dataType9 === "string" || dataType9 === "number"
-              || dataType9 === "boolean" || data10 === null){
-coerced9 = [data10];
+if(!(coerced8 !== undefined)){
+if(dataType8 === "string" || dataType8 === "number"
+              || dataType8 === "boolean" || data9 === null){
+coerced8 = [data9];
 }
-else if(data10 === "" || data10 === 0 || data10 === false){
-coerced9 = null;
+else if(data9 === "" || data9 === 0 || data9 === false){
+coerced8 = null;
 }
 else {
 validate171.errors = [{instancePath:instancePath+"/plugins",schemaPath:"#/properties/plugins/type",keyword:"type",params:{type: "array"},message:"must be array"}];
 return false;
 }
 }
-if(coerced9 !== undefined){
-data10 = coerced9;
+if(coerced8 !== undefined){
+data9 = coerced8;
 if(data !== undefined){
-data["plugins"] = coerced9;
+data["plugins"] = coerced8;
 }
 }
 }
-if(errors === _errs25){
-if(Array.isArray(data10)){
+if(errors === _errs23){
+if(Array.isArray(data9)){
 var valid5 = true;
-const len2 = data10.length;
+const len2 = data9.length;
 for(let i2=0; i2<len2; i2++){
-let data11 = data10[i2];
-const _errs28 = errors;
-if(typeof data11 !== "string"){
-let dataType10 = typeof data11;
-let coerced10 = undefined;
-if(dataType10 == 'object' && Array.isArray(data11) && data11.length == 1){
-data11 = data11[0];
-dataType10 = typeof data11;
-if(typeof data11 === "string"){
-coerced10 = data11;
+let data10 = data9[i2];
+const _errs26 = errors;
+if(typeof data10 !== "string"){
+let dataType9 = typeof data10;
+let coerced9 = undefined;
+if(dataType9 == 'object' && Array.isArray(data10) && data10.length == 1){
+data10 = data10[0];
+dataType9 = typeof data10;
+if(typeof data10 === "string"){
+coerced9 = data10;
 }
 }
-if(!(coerced10 !== undefined)){
-if(dataType10 == "number" || dataType10 == "boolean"){
-coerced10 = "" + data11;
+if(!(coerced9 !== undefined)){
+if(dataType9 == "number" || dataType9 == "boolean"){
+coerced9 = "" + data10;
 }
-else if(data11 === null){
-coerced10 = "";
+else if(data10 === null){
+coerced9 = "";
 }
 else {
 validate171.errors = [{instancePath:instancePath+"/plugins/" + i2,schemaPath:"#/properties/plugins/items/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
-if(coerced10 !== undefined){
-data11 = coerced10;
-if(data10 !== undefined){
-data10[i2] = coerced10;
+if(coerced9 !== undefined){
+data10 = coerced9;
+if(data9 !== undefined){
+data9[i2] = coerced9;
 }
 }
 }
-var valid5 = _errs28 === errors;
+var valid5 = _errs26 === errors;
 if(!valid5){
 break;
 }
 }
 }
 }
-var valid0 = _errs25 === errors;
+var valid0 = _errs23 === errors;
 }
 else {
 var valid0 = true;
 }
 if(valid0){
 if(data.feedWidth !== undefined){
-let data12 = data.feedWidth;
-const _errs30 = errors;
-if(!(((typeof data12 == "number") && (!(data12 % 1) && !isNaN(data12))) && (isFinite(data12)))){
-let dataType11 = typeof data12;
-let coerced11 = undefined;
-if(dataType11 == 'object' && Array.isArray(data12) && data12.length == 1){
-data12 = data12[0];
-dataType11 = typeof data12;
-if(((typeof data12 == "number") && (!(data12 % 1) && !isNaN(data12))) && (isFinite(data12))){
-coerced11 = data12;
+let data11 = data.feedWidth;
+const _errs28 = errors;
+if(!(((typeof data11 == "number") && (!(data11 % 1) && !isNaN(data11))) && (isFinite(data11)))){
+let dataType10 = typeof data11;
+let coerced10 = undefined;
+if(dataType10 == 'object' && Array.isArray(data11) && data11.length == 1){
+data11 = data11[0];
+dataType10 = typeof data11;
+if(((typeof data11 == "number") && (!(data11 % 1) && !isNaN(data11))) && (isFinite(data11))){
+coerced10 = data11;
 }
 }
-if(!(coerced11 !== undefined)){
-if(dataType11 === "boolean" || data12 === null
-              || (dataType11 === "string" && data12 && data12 == +data12 && !(data12 % 1))){
-coerced11 = +data12;
+if(!(coerced10 !== undefined)){
+if(dataType10 === "boolean" || data11 === null
+              || (dataType10 === "string" && data11 && data11 == +data11 && !(data11 % 1))){
+coerced10 = +data11;
 }
 else {
 validate171.errors = [{instancePath:instancePath+"/feedWidth",schemaPath:"#/properties/feedWidth/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
-if(coerced11 !== undefined){
-data12 = coerced11;
+if(coerced10 !== undefined){
+data11 = coerced10;
 if(data !== undefined){
-data["feedWidth"] = coerced11;
+data["feedWidth"] = coerced10;
 }
 }
 }
-var valid0 = _errs30 === errors;
+var valid0 = _errs28 === errors;
 }
 else {
 var valid0 = true;
 }
 if(valid0){
 if(data.friendGroups !== undefined){
-let data13 = data.friendGroups;
-const _errs32 = errors;
-const _errs33 = errors;
+let data12 = data.friendGroups;
+const _errs30 = errors;
+const _errs31 = errors;
 let valid6 = false;
-const _errs34 = errors;
-if((!(data13 && typeof data13 == "object" && !Array.isArray(data13))) && (data13 !== null)){
-let dataType12 = typeof data13;
-let coerced12 = undefined;
-if(dataType12 == 'object' && Array.isArray(data13) && data13.length == 1){
-data13 = data13[0];
-dataType12 = typeof data13;
-if((data13 && typeof data13 == "object" && !Array.isArray(data13)) && (data13 === null)){
-coerced12 = data13;
+const _errs32 = errors;
+if((!(data12 && typeof data12 == "object" && !Array.isArray(data12))) && (data12 !== null)){
+let dataType11 = typeof data12;
+let coerced11 = undefined;
+if(dataType11 == 'object' && Array.isArray(data12) && data12.length == 1){
+data12 = data12[0];
+dataType11 = typeof data12;
+if((data12 && typeof data12 == "object" && !Array.isArray(data12)) && (data12 === null)){
+coerced11 = data12;
 }
 }
-if(!(coerced12 !== undefined)){
-if(data13 === "" || data13 === 0 || data13 === false){
-coerced12 = null;
+if(!(coerced11 !== undefined)){
+if(data12 === "" || data12 === 0 || data12 === false){
+coerced11 = null;
 }
 else {
 const err0 = {instancePath:instancePath+"/friendGroups",schemaPath:"#/properties/friendGroups/anyOf/0/type",keyword:"type",params:{type: "object"},message:"must be object"};
@@ -44821,34 +44789,34 @@ vErrors.push(err0);
 errors++;
 }
 }
-if(coerced12 !== undefined){
-data13 = coerced12;
+if(coerced11 !== undefined){
+data12 = coerced11;
 if(data !== undefined){
-data["friendGroups"] = coerced12;
+data["friendGroups"] = coerced11;
 }
 }
 }
-if(!(validate57(data13, {instancePath:instancePath+"/friendGroups",parentData:data,parentDataProperty:"friendGroups",rootData}))){
+if(!(validate57(data12, {instancePath:instancePath+"/friendGroups",parentData:data,parentDataProperty:"friendGroups",rootData}))){
 vErrors = vErrors === null ? validate57.errors : vErrors.concat(validate57.errors);
 errors = vErrors.length;
 }
-var _valid0 = _errs34 === errors;
+var _valid0 = _errs32 === errors;
 valid6 = valid6 || _valid0;
 if(!valid6){
-const _errs37 = errors;
-if(data13 !== null){
-let dataType13 = typeof data13;
-let coerced13 = undefined;
-if(dataType13 == 'object' && Array.isArray(data13) && data13.length == 1){
-data13 = data13[0];
-dataType13 = typeof data13;
-if(data13 === null){
-coerced13 = data13;
+const _errs35 = errors;
+if(data12 !== null){
+let dataType12 = typeof data12;
+let coerced12 = undefined;
+if(dataType12 == 'object' && Array.isArray(data12) && data12.length == 1){
+data12 = data12[0];
+dataType12 = typeof data12;
+if(data12 === null){
+coerced12 = data12;
 }
 }
-if(!(coerced13 !== undefined)){
-if(data13 === "" || data13 === 0 || data13 === false){
-coerced13 = null;
+if(!(coerced12 !== undefined)){
+if(data12 === "" || data12 === 0 || data12 === false){
+coerced12 = null;
 }
 else {
 const err1 = {instancePath:instancePath+"/friendGroups",schemaPath:"#/properties/friendGroups/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
@@ -44861,14 +44829,14 @@ vErrors.push(err1);
 errors++;
 }
 }
-if(coerced13 !== undefined){
-data13 = coerced13;
+if(coerced12 !== undefined){
+data12 = coerced12;
 if(data !== undefined){
-data["friendGroups"] = coerced13;
+data["friendGroups"] = coerced12;
 }
 }
 }
-var _valid0 = _errs37 === errors;
+var _valid0 = _errs35 === errors;
 valid6 = valid6 || _valid0;
 }
 if(!valid6){
@@ -44884,140 +44852,140 @@ validate171.errors = vErrors;
 return false;
 }
 else {
-errors = _errs33;
+errors = _errs31;
 if(vErrors !== null){
-if(_errs33){
-vErrors.length = _errs33;
+if(_errs31){
+vErrors.length = _errs31;
 }
 else {
 vErrors = null;
 }
 }
 }
-var valid0 = _errs32 === errors;
+var valid0 = _errs30 === errors;
 }
 else {
 var valid0 = true;
 }
 if(valid0){
 if(data.ask !== undefined){
-let data14 = data.ask;
-const _errs39 = errors;
-if((!(Array.isArray(data14))) && (data14 !== null)){
-let dataType14 = typeof data14;
-let coerced14 = undefined;
-if(dataType14 == 'object' && Array.isArray(data14) && data14.length == 1){
-data14 = data14[0];
-dataType14 = typeof data14;
-if((Array.isArray(data14)) && (data14 === null)){
-coerced14 = data14;
+let data13 = data.ask;
+const _errs37 = errors;
+if((!(Array.isArray(data13))) && (data13 !== null)){
+let dataType13 = typeof data13;
+let coerced13 = undefined;
+if(dataType13 == 'object' && Array.isArray(data13) && data13.length == 1){
+data13 = data13[0];
+dataType13 = typeof data13;
+if((Array.isArray(data13)) && (data13 === null)){
+coerced13 = data13;
 }
 }
-if(!(coerced14 !== undefined)){
-if(dataType14 === "string" || dataType14 === "number"
-              || dataType14 === "boolean" || data14 === null){
-coerced14 = [data14];
+if(!(coerced13 !== undefined)){
+if(dataType13 === "string" || dataType13 === "number"
+              || dataType13 === "boolean" || data13 === null){
+coerced13 = [data13];
 }
-else if(data14 === "" || data14 === 0 || data14 === false){
-coerced14 = null;
+else if(data13 === "" || data13 === 0 || data13 === false){
+coerced13 = null;
 }
 else {
 validate171.errors = [{instancePath:instancePath+"/ask",schemaPath:"#/properties/ask/type",keyword:"type",params:{type: "array"},message:"must be array"}];
 return false;
 }
 }
-if(coerced14 !== undefined){
-data14 = coerced14;
+if(coerced13 !== undefined){
+data13 = coerced13;
 if(data !== undefined){
-data["ask"] = coerced14;
+data["ask"] = coerced13;
 }
 }
 }
-if(errors === _errs39){
-if(Array.isArray(data14)){
+if(errors === _errs37){
+if(Array.isArray(data13)){
 var valid7 = true;
-const len3 = data14.length;
+const len3 = data13.length;
 for(let i3=0; i3<len3; i3++){
-let data15 = data14[i3];
-const _errs42 = errors;
-if(typeof data15 !== "string"){
-let dataType15 = typeof data15;
-let coerced15 = undefined;
-if(dataType15 == 'object' && Array.isArray(data15) && data15.length == 1){
-data15 = data15[0];
-dataType15 = typeof data15;
-if(typeof data15 === "string"){
-coerced15 = data15;
+let data14 = data13[i3];
+const _errs40 = errors;
+if(typeof data14 !== "string"){
+let dataType14 = typeof data14;
+let coerced14 = undefined;
+if(dataType14 == 'object' && Array.isArray(data14) && data14.length == 1){
+data14 = data14[0];
+dataType14 = typeof data14;
+if(typeof data14 === "string"){
+coerced14 = data14;
 }
 }
-if(!(coerced15 !== undefined)){
-if(dataType15 == "number" || dataType15 == "boolean"){
-coerced15 = "" + data15;
+if(!(coerced14 !== undefined)){
+if(dataType14 == "number" || dataType14 == "boolean"){
+coerced14 = "" + data14;
 }
-else if(data15 === null){
-coerced15 = "";
+else if(data14 === null){
+coerced14 = "";
 }
 else {
 validate171.errors = [{instancePath:instancePath+"/ask/" + i3,schemaPath:"#/properties/ask/items/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
-if(coerced15 !== undefined){
-data15 = coerced15;
-if(data14 !== undefined){
-data14[i3] = coerced15;
+if(coerced14 !== undefined){
+data14 = coerced14;
+if(data13 !== undefined){
+data13[i3] = coerced14;
 }
 }
 }
-var valid7 = _errs42 === errors;
+var valid7 = _errs40 === errors;
 if(!valid7){
 break;
 }
 }
 }
 }
-var valid0 = _errs39 === errors;
+var valid0 = _errs37 === errors;
 }
 else {
 var valid0 = true;
 }
 if(valid0){
 if(data.subscribed !== undefined){
-let data16 = data.subscribed;
-const _errs44 = errors;
-if((typeof data16 !== "boolean") && (data16 !== null)){
-let dataType16 = typeof data16;
-let coerced16 = undefined;
-if(dataType16 == 'object' && Array.isArray(data16) && data16.length == 1){
-data16 = data16[0];
-dataType16 = typeof data16;
-if((typeof data16 === "boolean") && (data16 === null)){
-coerced16 = data16;
+let data15 = data.subscribed;
+const _errs42 = errors;
+if((typeof data15 !== "boolean") && (data15 !== null)){
+let dataType15 = typeof data15;
+let coerced15 = undefined;
+if(dataType15 == 'object' && Array.isArray(data15) && data15.length == 1){
+data15 = data15[0];
+dataType15 = typeof data15;
+if((typeof data15 === "boolean") && (data15 === null)){
+coerced15 = data15;
 }
 }
-if(!(coerced16 !== undefined)){
-if(data16 === "false" || data16 === 0 || data16 === null){
-coerced16 = false;
+if(!(coerced15 !== undefined)){
+if(data15 === "false" || data15 === 0 || data15 === null){
+coerced15 = false;
 }
-else if(data16 === "true" || data16 === 1){
-coerced16 = true;
+else if(data15 === "true" || data15 === 1){
+coerced15 = true;
 }
-else if(data16 === "" || data16 === 0 || data16 === false){
-coerced16 = null;
+else if(data15 === "" || data15 === 0 || data15 === false){
+coerced15 = null;
 }
 else {
 validate171.errors = [{instancePath:instancePath+"/subscribed",schemaPath:"#/properties/subscribed/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
 return false;
 }
 }
-if(coerced16 !== undefined){
-data16 = coerced16;
+if(coerced15 !== undefined){
+data15 = coerced15;
 if(data !== undefined){
-data["subscribed"] = coerced16;
+data["subscribed"] = coerced15;
 }
 }
 }
-var valid0 = _errs44 === errors;
+var valid0 = _errs42 === errors;
 }
 else {
 var valid0 = true;
@@ -45687,7 +45655,7 @@ return errors === 0;
 }
 
 export const MediaAttachment = validate176;
-const schema191 = {"type":"object","properties":{"media":{"anyOf":[{"$ref":"node#/definitions/PrivateMediaFileInfo","type":"object","nullable":true},{"type":"null"}]},"remoteMedia":{"anyOf":[{"$ref":"node#/definitions/RemoteMediaInfo","type":"object","nullable":true},{"type":"null"}]},"postingId":{"type":"string","nullable":true},"embedded":{"type":"boolean"}},"required":["embedded"],"additionalProperties":false};
+const schema191 = {"type":"object","properties":{"media":{"anyOf":[{"$ref":"node#/definitions/PrivateMediaFileInfo","type":"object","nullable":true},{"type":"null"}]},"mediaLeaseId":{"type":"string","nullable":true},"remoteMedia":{"anyOf":[{"$ref":"node#/definitions/RemoteMediaInfo","type":"object","nullable":true},{"type":"null"}]},"postingId":{"type":"string","nullable":true},"embedded":{"type":"boolean"}},"required":["embedded"],"additionalProperties":false};
 
 function validate176(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
 let vErrors = null;
@@ -45702,7 +45670,7 @@ return false;
 else {
 const _errs1 = errors;
 for(const key0 in data){
-if(!((((key0 === "media") || (key0 === "remoteMedia")) || (key0 === "postingId")) || (key0 === "embedded"))){
+if(!(((((key0 === "media") || (key0 === "mediaLeaseId")) || (key0 === "remoteMedia")) || (key0 === "postingId")) || (key0 === "embedded"))){
 delete data[key0];
 }
 }
@@ -45817,25 +45785,66 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.remoteMedia !== undefined){
-let data1 = data.remoteMedia;
+if(data.mediaLeaseId !== undefined){
+let data1 = data.mediaLeaseId;
 const _errs9 = errors;
-const _errs10 = errors;
-let valid2 = false;
-const _errs11 = errors;
-if((!(data1 && typeof data1 == "object" && !Array.isArray(data1))) && (data1 !== null)){
+if((typeof data1 !== "string") && (data1 !== null)){
 let dataType2 = typeof data1;
 let coerced2 = undefined;
 if(dataType2 == 'object' && Array.isArray(data1) && data1.length == 1){
 data1 = data1[0];
 dataType2 = typeof data1;
-if((data1 && typeof data1 == "object" && !Array.isArray(data1)) && (data1 === null)){
+if((typeof data1 === "string") && (data1 === null)){
 coerced2 = data1;
 }
 }
 if(!(coerced2 !== undefined)){
-if(data1 === "" || data1 === 0 || data1 === false){
+if(dataType2 == "number" || dataType2 == "boolean"){
+coerced2 = "" + data1;
+}
+else if(data1 === null){
+coerced2 = "";
+}
+else if(data1 === "" || data1 === 0 || data1 === false){
 coerced2 = null;
+}
+else {
+validate176.errors = [{instancePath:instancePath+"/mediaLeaseId",schemaPath:"#/properties/mediaLeaseId/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+return false;
+}
+}
+if(coerced2 !== undefined){
+data1 = coerced2;
+if(data !== undefined){
+data["mediaLeaseId"] = coerced2;
+}
+}
+}
+var valid0 = _errs9 === errors;
+}
+else {
+var valid0 = true;
+}
+if(valid0){
+if(data.remoteMedia !== undefined){
+let data2 = data.remoteMedia;
+const _errs12 = errors;
+const _errs13 = errors;
+let valid2 = false;
+const _errs14 = errors;
+if((!(data2 && typeof data2 == "object" && !Array.isArray(data2))) && (data2 !== null)){
+let dataType3 = typeof data2;
+let coerced3 = undefined;
+if(dataType3 == 'object' && Array.isArray(data2) && data2.length == 1){
+data2 = data2[0];
+dataType3 = typeof data2;
+if((data2 && typeof data2 == "object" && !Array.isArray(data2)) && (data2 === null)){
+coerced3 = data2;
+}
+}
+if(!(coerced3 !== undefined)){
+if(data2 === "" || data2 === 0 || data2 === false){
+coerced3 = null;
 }
 else {
 const err3 = {instancePath:instancePath+"/remoteMedia",schemaPath:"#/properties/remoteMedia/anyOf/0/type",keyword:"type",params:{type: "object"},message:"must be object"};
@@ -45848,18 +45857,18 @@ vErrors.push(err3);
 errors++;
 }
 }
-if(coerced2 !== undefined){
-data1 = coerced2;
+if(coerced3 !== undefined){
+data2 = coerced3;
 if(data !== undefined){
-data["remoteMedia"] = coerced2;
+data["remoteMedia"] = coerced3;
 }
 }
 }
-const _errs12 = errors;
-if(errors === _errs12){
-if(data1 && typeof data1 == "object" && !Array.isArray(data1)){
+const _errs15 = errors;
+if(errors === _errs15){
+if(data2 && typeof data2 == "object" && !Array.isArray(data2)){
 let missing1;
-if((((data1.id === undefined) && (missing1 = "id")) || ((data1.nodeName === undefined) && (missing1 = "nodeName"))) || ((data1.mediaId === undefined) && (missing1 = "mediaId"))){
+if((((data2.id === undefined) && (missing1 = "id")) || ((data2.nodeName === undefined) && (missing1 = "nodeName"))) || ((data2.mediaId === undefined) && (missing1 = "mediaId"))){
 const err4 = {instancePath:instancePath+"/remoteMedia",schemaPath:"node#/definitions/RemoteMediaInfo/required",keyword:"required",params:{missingProperty: missing1},message:"must have required property '"+missing1+"'"};
 if(vErrors === null){
 vErrors = [err4];
@@ -45870,60 +45879,16 @@ vErrors.push(err4);
 errors++;
 }
 else {
-const _errs14 = errors;
-for(const key1 in data1){
-if(!(func2.call(schema118.properties, key1))){
-delete data1[key1];
-}
-}
-if(_errs14 === errors){
-if(data1.id !== undefined){
-let data2 = data1.id;
-const _errs15 = errors;
-if(typeof data2 !== "string"){
-let dataType3 = typeof data2;
-let coerced3 = undefined;
-if(dataType3 == 'object' && Array.isArray(data2) && data2.length == 1){
-data2 = data2[0];
-dataType3 = typeof data2;
-if(typeof data2 === "string"){
-coerced3 = data2;
-}
-}
-if(!(coerced3 !== undefined)){
-if(dataType3 == "number" || dataType3 == "boolean"){
-coerced3 = "" + data2;
-}
-else if(data2 === null){
-coerced3 = "";
-}
-else {
-const err5 = {instancePath:instancePath+"/remoteMedia/id",schemaPath:"node#/definitions/RemoteMediaInfo/properties/id/type",keyword:"type",params:{type: "string"},message:"must be string"};
-if(vErrors === null){
-vErrors = [err5];
-}
-else {
-vErrors.push(err5);
-}
-errors++;
-}
-}
-if(coerced3 !== undefined){
-data2 = coerced3;
-if(data1 !== undefined){
-data1["id"] = coerced3;
-}
-}
-}
-var valid4 = _errs15 === errors;
-}
-else {
-var valid4 = true;
-}
-if(valid4){
-if(data1.nodeName !== undefined){
-let data3 = data1.nodeName;
 const _errs17 = errors;
+for(const key1 in data2){
+if(!(func2.call(schema118.properties, key1))){
+delete data2[key1];
+}
+}
+if(_errs17 === errors){
+if(data2.id !== undefined){
+let data3 = data2.id;
+const _errs18 = errors;
 if(typeof data3 !== "string"){
 let dataType4 = typeof data3;
 let coerced4 = undefined;
@@ -45942,32 +45907,32 @@ else if(data3 === null){
 coerced4 = "";
 }
 else {
-const err6 = {instancePath:instancePath+"/remoteMedia/nodeName",schemaPath:"node#/definitions/RemoteMediaInfo/properties/nodeName/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err5 = {instancePath:instancePath+"/remoteMedia/id",schemaPath:"node#/definitions/RemoteMediaInfo/properties/id/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err6];
+vErrors = [err5];
 }
 else {
-vErrors.push(err6);
+vErrors.push(err5);
 }
 errors++;
 }
 }
 if(coerced4 !== undefined){
 data3 = coerced4;
-if(data1 !== undefined){
-data1["nodeName"] = coerced4;
+if(data2 !== undefined){
+data2["id"] = coerced4;
 }
 }
 }
-var valid4 = _errs17 === errors;
+var valid4 = _errs18 === errors;
 }
 else {
 var valid4 = true;
 }
 if(valid4){
-if(data1.mediaId !== undefined){
-let data4 = data1.mediaId;
-const _errs19 = errors;
+if(data2.nodeName !== undefined){
+let data4 = data2.nodeName;
+const _errs20 = errors;
 if(typeof data4 !== "string"){
 let dataType5 = typeof data4;
 let coerced5 = undefined;
@@ -45986,39 +45951,39 @@ else if(data4 === null){
 coerced5 = "";
 }
 else {
-const err7 = {instancePath:instancePath+"/remoteMedia/mediaId",schemaPath:"node#/definitions/RemoteMediaInfo/properties/mediaId/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err6 = {instancePath:instancePath+"/remoteMedia/nodeName",schemaPath:"node#/definitions/RemoteMediaInfo/properties/nodeName/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err7];
+vErrors = [err6];
 }
 else {
-vErrors.push(err7);
+vErrors.push(err6);
 }
 errors++;
 }
 }
 if(coerced5 !== undefined){
 data4 = coerced5;
-if(data1 !== undefined){
-data1["mediaId"] = coerced5;
+if(data2 !== undefined){
+data2["nodeName"] = coerced5;
 }
 }
 }
-var valid4 = _errs19 === errors;
+var valid4 = _errs20 === errors;
 }
 else {
 var valid4 = true;
 }
 if(valid4){
-if(data1.hash !== undefined){
-let data5 = data1.hash;
-const _errs21 = errors;
-if((typeof data5 !== "string") && (data5 !== null)){
+if(data2.mediaId !== undefined){
+let data5 = data2.mediaId;
+const _errs22 = errors;
+if(typeof data5 !== "string"){
 let dataType6 = typeof data5;
 let coerced6 = undefined;
 if(dataType6 == 'object' && Array.isArray(data5) && data5.length == 1){
 data5 = data5[0];
 dataType6 = typeof data5;
-if((typeof data5 === "string") && (data5 === null)){
+if(typeof data5 === "string"){
 coerced6 = data5;
 }
 }
@@ -46029,35 +45994,32 @@ coerced6 = "" + data5;
 else if(data5 === null){
 coerced6 = "";
 }
-else if(data5 === "" || data5 === 0 || data5 === false){
-coerced6 = null;
-}
 else {
-const err8 = {instancePath:instancePath+"/remoteMedia/hash",schemaPath:"node#/definitions/RemoteMediaInfo/properties/hash/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err7 = {instancePath:instancePath+"/remoteMedia/mediaId",schemaPath:"node#/definitions/RemoteMediaInfo/properties/mediaId/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err8];
+vErrors = [err7];
 }
 else {
-vErrors.push(err8);
+vErrors.push(err7);
 }
 errors++;
 }
 }
 if(coerced6 !== undefined){
 data5 = coerced6;
-if(data1 !== undefined){
-data1["hash"] = coerced6;
+if(data2 !== undefined){
+data2["mediaId"] = coerced6;
 }
 }
 }
-var valid4 = _errs21 === errors;
+var valid4 = _errs22 === errors;
 }
 else {
 var valid4 = true;
 }
 if(valid4){
-if(data1.digest !== undefined){
-let data6 = data1.digest;
+if(data2.hash !== undefined){
+let data6 = data2.hash;
 const _errs24 = errors;
 if((typeof data6 !== "string") && (data6 !== null)){
 let dataType7 = typeof data6;
@@ -46080,20 +46042,20 @@ else if(data6 === "" || data6 === 0 || data6 === false){
 coerced7 = null;
 }
 else {
-const err9 = {instancePath:instancePath+"/remoteMedia/digest",schemaPath:"node#/definitions/RemoteMediaInfo/properties/digest/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err8 = {instancePath:instancePath+"/remoteMedia/hash",schemaPath:"node#/definitions/RemoteMediaInfo/properties/hash/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err9];
+vErrors = [err8];
 }
 else {
-vErrors.push(err9);
+vErrors.push(err8);
 }
 errors++;
 }
 }
 if(coerced7 !== undefined){
 data6 = coerced7;
-if(data1 !== undefined){
-data1["digest"] = coerced7;
+if(data2 !== undefined){
+data2["hash"] = coerced7;
 }
 }
 }
@@ -46103,8 +46065,8 @@ else {
 var valid4 = true;
 }
 if(valid4){
-if(data1.mimeType !== undefined){
-let data7 = data1.mimeType;
+if(data2.digest !== undefined){
+let data7 = data2.digest;
 const _errs27 = errors;
 if((typeof data7 !== "string") && (data7 !== null)){
 let dataType8 = typeof data7;
@@ -46127,6 +46089,53 @@ else if(data7 === "" || data7 === 0 || data7 === false){
 coerced8 = null;
 }
 else {
+const err9 = {instancePath:instancePath+"/remoteMedia/digest",schemaPath:"node#/definitions/RemoteMediaInfo/properties/digest/type",keyword:"type",params:{type: "string"},message:"must be string"};
+if(vErrors === null){
+vErrors = [err9];
+}
+else {
+vErrors.push(err9);
+}
+errors++;
+}
+}
+if(coerced8 !== undefined){
+data7 = coerced8;
+if(data2 !== undefined){
+data2["digest"] = coerced8;
+}
+}
+}
+var valid4 = _errs27 === errors;
+}
+else {
+var valid4 = true;
+}
+if(valid4){
+if(data2.mimeType !== undefined){
+let data8 = data2.mimeType;
+const _errs30 = errors;
+if((typeof data8 !== "string") && (data8 !== null)){
+let dataType9 = typeof data8;
+let coerced9 = undefined;
+if(dataType9 == 'object' && Array.isArray(data8) && data8.length == 1){
+data8 = data8[0];
+dataType9 = typeof data8;
+if((typeof data8 === "string") && (data8 === null)){
+coerced9 = data8;
+}
+}
+if(!(coerced9 !== undefined)){
+if(dataType9 == "number" || dataType9 == "boolean"){
+coerced9 = "" + data8;
+}
+else if(data8 === null){
+coerced9 = "";
+}
+else if(data8 === "" || data8 === 0 || data8 === false){
+coerced9 = null;
+}
+else {
 const err10 = {instancePath:instancePath+"/remoteMedia/mimeType",schemaPath:"node#/definitions/RemoteMediaInfo/properties/mimeType/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
 vErrors = [err10];
@@ -46137,57 +46146,10 @@ vErrors.push(err10);
 errors++;
 }
 }
-if(coerced8 !== undefined){
-data7 = coerced8;
-if(data1 !== undefined){
-data1["mimeType"] = coerced8;
-}
-}
-}
-var valid4 = _errs27 === errors;
-}
-else {
-var valid4 = true;
-}
-if(valid4){
-if(data1.attachment !== undefined){
-let data8 = data1.attachment;
-const _errs30 = errors;
-if((typeof data8 !== "boolean") && (data8 !== null)){
-let dataType9 = typeof data8;
-let coerced9 = undefined;
-if(dataType9 == 'object' && Array.isArray(data8) && data8.length == 1){
-data8 = data8[0];
-dataType9 = typeof data8;
-if((typeof data8 === "boolean") && (data8 === null)){
-coerced9 = data8;
-}
-}
-if(!(coerced9 !== undefined)){
-if(data8 === "false" || data8 === 0 || data8 === null){
-coerced9 = false;
-}
-else if(data8 === "true" || data8 === 1){
-coerced9 = true;
-}
-else if(data8 === "" || data8 === 0 || data8 === false){
-coerced9 = null;
-}
-else {
-const err11 = {instancePath:instancePath+"/remoteMedia/attachment",schemaPath:"node#/definitions/RemoteMediaInfo/properties/attachment/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"};
-if(vErrors === null){
-vErrors = [err11];
-}
-else {
-vErrors.push(err11);
-}
-errors++;
-}
-}
 if(coerced9 !== undefined){
 data8 = coerced9;
-if(data1 !== undefined){
-data1["attachment"] = coerced9;
+if(data2 !== undefined){
+data2["mimeType"] = coerced9;
 }
 }
 }
@@ -46197,8 +46159,8 @@ else {
 var valid4 = true;
 }
 if(valid4){
-if(data1.width !== undefined){
-let data9 = data1.width;
+if(data2.width !== undefined){
+let data9 = data2.width;
 const _errs33 = errors;
 if((!(((typeof data9 == "number") && (!(data9 % 1) && !isNaN(data9))) && (isFinite(data9)))) && (data9 !== null)){
 let dataType10 = typeof data9;
@@ -46219,20 +46181,20 @@ else if(data9 === "" || data9 === 0 || data9 === false){
 coerced10 = null;
 }
 else {
-const err12 = {instancePath:instancePath+"/remoteMedia/width",schemaPath:"node#/definitions/RemoteMediaInfo/properties/width/type",keyword:"type",params:{type: "integer"},message:"must be integer"};
+const err11 = {instancePath:instancePath+"/remoteMedia/width",schemaPath:"node#/definitions/RemoteMediaInfo/properties/width/type",keyword:"type",params:{type: "integer"},message:"must be integer"};
 if(vErrors === null){
-vErrors = [err12];
+vErrors = [err11];
 }
 else {
-vErrors.push(err12);
+vErrors.push(err11);
 }
 errors++;
 }
 }
 if(coerced10 !== undefined){
 data9 = coerced10;
-if(data1 !== undefined){
-data1["width"] = coerced10;
+if(data2 !== undefined){
+data2["width"] = coerced10;
 }
 }
 }
@@ -46242,8 +46204,8 @@ else {
 var valid4 = true;
 }
 if(valid4){
-if(data1.height !== undefined){
-let data10 = data1.height;
+if(data2.height !== undefined){
+let data10 = data2.height;
 const _errs36 = errors;
 if((!(((typeof data10 == "number") && (!(data10 % 1) && !isNaN(data10))) && (isFinite(data10)))) && (data10 !== null)){
 let dataType11 = typeof data10;
@@ -46264,20 +46226,20 @@ else if(data10 === "" || data10 === 0 || data10 === false){
 coerced11 = null;
 }
 else {
-const err13 = {instancePath:instancePath+"/remoteMedia/height",schemaPath:"node#/definitions/RemoteMediaInfo/properties/height/type",keyword:"type",params:{type: "integer"},message:"must be integer"};
+const err12 = {instancePath:instancePath+"/remoteMedia/height",schemaPath:"node#/definitions/RemoteMediaInfo/properties/height/type",keyword:"type",params:{type: "integer"},message:"must be integer"};
 if(vErrors === null){
-vErrors = [err13];
+vErrors = [err12];
 }
 else {
-vErrors.push(err13);
+vErrors.push(err12);
 }
 errors++;
 }
 }
 if(coerced11 !== undefined){
 data10 = coerced11;
-if(data1 !== undefined){
-data1["height"] = coerced11;
+if(data2 !== undefined){
+data2["height"] = coerced11;
 }
 }
 }
@@ -46287,8 +46249,8 @@ else {
 var valid4 = true;
 }
 if(valid4){
-if(data1.size !== undefined){
-let data11 = data1.size;
+if(data2.size !== undefined){
+let data11 = data2.size;
 const _errs39 = errors;
 if((!(((typeof data11 == "number") && (!(data11 % 1) && !isNaN(data11))) && (isFinite(data11)))) && (data11 !== null)){
 let dataType12 = typeof data11;
@@ -46309,20 +46271,20 @@ else if(data11 === "" || data11 === 0 || data11 === false){
 coerced12 = null;
 }
 else {
-const err14 = {instancePath:instancePath+"/remoteMedia/size",schemaPath:"node#/definitions/RemoteMediaInfo/properties/size/type",keyword:"type",params:{type: "integer"},message:"must be integer"};
+const err13 = {instancePath:instancePath+"/remoteMedia/size",schemaPath:"node#/definitions/RemoteMediaInfo/properties/size/type",keyword:"type",params:{type: "integer"},message:"must be integer"};
 if(vErrors === null){
-vErrors = [err14];
+vErrors = [err13];
 }
 else {
-vErrors.push(err14);
+vErrors.push(err13);
 }
 errors++;
 }
 }
 if(coerced12 !== undefined){
 data11 = coerced12;
-if(data1 !== undefined){
-data1["size"] = coerced12;
+if(data2 !== undefined){
+data2["size"] = coerced12;
 }
 }
 }
@@ -46332,8 +46294,8 @@ else {
 var valid4 = true;
 }
 if(valid4){
-if(data1.grant !== undefined){
-let data12 = data1.grant;
+if(data2.title !== undefined){
+let data12 = data2.title;
 const _errs42 = errors;
 if((typeof data12 !== "string") && (data12 !== null)){
 let dataType13 = typeof data12;
@@ -46356,7 +46318,54 @@ else if(data12 === "" || data12 === 0 || data12 === false){
 coerced13 = null;
 }
 else {
-const err15 = {instancePath:instancePath+"/remoteMedia/grant",schemaPath:"node#/definitions/RemoteMediaInfo/properties/grant/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err14 = {instancePath:instancePath+"/remoteMedia/title",schemaPath:"node#/definitions/RemoteMediaInfo/properties/title/type",keyword:"type",params:{type: "string"},message:"must be string"};
+if(vErrors === null){
+vErrors = [err14];
+}
+else {
+vErrors.push(err14);
+}
+errors++;
+}
+}
+if(coerced13 !== undefined){
+data12 = coerced13;
+if(data2 !== undefined){
+data2["title"] = coerced13;
+}
+}
+}
+var valid4 = _errs42 === errors;
+}
+else {
+var valid4 = true;
+}
+if(valid4){
+if(data2.attachment !== undefined){
+let data13 = data2.attachment;
+const _errs45 = errors;
+if((typeof data13 !== "boolean") && (data13 !== null)){
+let dataType14 = typeof data13;
+let coerced14 = undefined;
+if(dataType14 == 'object' && Array.isArray(data13) && data13.length == 1){
+data13 = data13[0];
+dataType14 = typeof data13;
+if((typeof data13 === "boolean") && (data13 === null)){
+coerced14 = data13;
+}
+}
+if(!(coerced14 !== undefined)){
+if(data13 === "false" || data13 === 0 || data13 === null){
+coerced14 = false;
+}
+else if(data13 === "true" || data13 === 1){
+coerced14 = true;
+}
+else if(data13 === "" || data13 === 0 || data13 === false){
+coerced14 = null;
+}
+else {
+const err15 = {instancePath:instancePath+"/remoteMedia/attachment",schemaPath:"node#/definitions/RemoteMediaInfo/properties/attachment/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"};
 if(vErrors === null){
 vErrors = [err15];
 }
@@ -46366,14 +46375,61 @@ vErrors.push(err15);
 errors++;
 }
 }
-if(coerced13 !== undefined){
-data12 = coerced13;
-if(data1 !== undefined){
-data1["grant"] = coerced13;
+if(coerced14 !== undefined){
+data13 = coerced14;
+if(data2 !== undefined){
+data2["attachment"] = coerced14;
 }
 }
 }
-var valid4 = _errs42 === errors;
+var valid4 = _errs45 === errors;
+}
+else {
+var valid4 = true;
+}
+if(valid4){
+if(data2.grant !== undefined){
+let data14 = data2.grant;
+const _errs48 = errors;
+if((typeof data14 !== "string") && (data14 !== null)){
+let dataType15 = typeof data14;
+let coerced15 = undefined;
+if(dataType15 == 'object' && Array.isArray(data14) && data14.length == 1){
+data14 = data14[0];
+dataType15 = typeof data14;
+if((typeof data14 === "string") && (data14 === null)){
+coerced15 = data14;
+}
+}
+if(!(coerced15 !== undefined)){
+if(dataType15 == "number" || dataType15 == "boolean"){
+coerced15 = "" + data14;
+}
+else if(data14 === null){
+coerced15 = "";
+}
+else if(data14 === "" || data14 === 0 || data14 === false){
+coerced15 = null;
+}
+else {
+const err16 = {instancePath:instancePath+"/remoteMedia/grant",schemaPath:"node#/definitions/RemoteMediaInfo/properties/grant/type",keyword:"type",params:{type: "string"},message:"must be string"};
+if(vErrors === null){
+vErrors = [err16];
+}
+else {
+vErrors.push(err16);
+}
+errors++;
+}
+}
+if(coerced15 !== undefined){
+data14 = coerced15;
+if(data2 !== undefined){
+data2["grant"] = coerced15;
+}
+}
+}
+var valid4 = _errs48 === errors;
 }
 else {
 var valid4 = true;
@@ -46391,37 +46447,9 @@ var valid4 = true;
 }
 }
 }
-else {
-const err16 = {instancePath:instancePath+"/remoteMedia",schemaPath:"node#/definitions/RemoteMediaInfo/type",keyword:"type",params:{type: "object"},message:"must be object"};
-if(vErrors === null){
-vErrors = [err16];
 }
 else {
-vErrors.push(err16);
-}
-errors++;
-}
-}
-var _valid1 = _errs11 === errors;
-valid2 = valid2 || _valid1;
-if(!valid2){
-const _errs47 = errors;
-if(data1 !== null){
-let dataType14 = typeof data1;
-let coerced14 = undefined;
-if(dataType14 == 'object' && Array.isArray(data1) && data1.length == 1){
-data1 = data1[0];
-dataType14 = typeof data1;
-if(data1 === null){
-coerced14 = data1;
-}
-}
-if(!(coerced14 !== undefined)){
-if(data1 === "" || data1 === 0 || data1 === false){
-coerced14 = null;
-}
-else {
-const err17 = {instancePath:instancePath+"/remoteMedia",schemaPath:"#/properties/remoteMedia/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
+const err17 = {instancePath:instancePath+"/remoteMedia",schemaPath:"node#/definitions/RemoteMediaInfo/type",keyword:"type",params:{type: "object"},message:"must be object"};
 if(vErrors === null){
 vErrors = [err17];
 }
@@ -46431,18 +46459,26 @@ vErrors.push(err17);
 errors++;
 }
 }
-if(coerced14 !== undefined){
-data1 = coerced14;
-if(data !== undefined){
-data["remoteMedia"] = coerced14;
-}
-}
-}
-var _valid1 = _errs47 === errors;
+var _valid1 = _errs14 === errors;
 valid2 = valid2 || _valid1;
-}
 if(!valid2){
-const err18 = {instancePath:instancePath+"/remoteMedia",schemaPath:"#/properties/remoteMedia/anyOf",keyword:"anyOf",params:{},message:"must match a schema in anyOf"};
+const _errs53 = errors;
+if(data2 !== null){
+let dataType16 = typeof data2;
+let coerced16 = undefined;
+if(dataType16 == 'object' && Array.isArray(data2) && data2.length == 1){
+data2 = data2[0];
+dataType16 = typeof data2;
+if(data2 === null){
+coerced16 = data2;
+}
+}
+if(!(coerced16 !== undefined)){
+if(data2 === "" || data2 === 0 || data2 === false){
+coerced16 = null;
+}
+else {
+const err18 = {instancePath:instancePath+"/remoteMedia",schemaPath:"#/properties/remoteMedia/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
 if(vErrors === null){
 vErrors = [err18];
 }
@@ -46450,103 +46486,125 @@ else {
 vErrors.push(err18);
 }
 errors++;
+}
+}
+if(coerced16 !== undefined){
+data2 = coerced16;
+if(data !== undefined){
+data["remoteMedia"] = coerced16;
+}
+}
+}
+var _valid1 = _errs53 === errors;
+valid2 = valid2 || _valid1;
+}
+if(!valid2){
+const err19 = {instancePath:instancePath+"/remoteMedia",schemaPath:"#/properties/remoteMedia/anyOf",keyword:"anyOf",params:{},message:"must match a schema in anyOf"};
+if(vErrors === null){
+vErrors = [err19];
+}
+else {
+vErrors.push(err19);
+}
+errors++;
 validate176.errors = vErrors;
 return false;
 }
 else {
-errors = _errs10;
+errors = _errs13;
 if(vErrors !== null){
-if(_errs10){
-vErrors.length = _errs10;
+if(_errs13){
+vErrors.length = _errs13;
 }
 else {
 vErrors = null;
 }
 }
 }
-var valid0 = _errs9 === errors;
+var valid0 = _errs12 === errors;
 }
 else {
 var valid0 = true;
 }
 if(valid0){
 if(data.postingId !== undefined){
-let data13 = data.postingId;
-const _errs49 = errors;
-if((typeof data13 !== "string") && (data13 !== null)){
-let dataType15 = typeof data13;
-let coerced15 = undefined;
-if(dataType15 == 'object' && Array.isArray(data13) && data13.length == 1){
-data13 = data13[0];
-dataType15 = typeof data13;
-if((typeof data13 === "string") && (data13 === null)){
-coerced15 = data13;
+let data15 = data.postingId;
+const _errs55 = errors;
+if((typeof data15 !== "string") && (data15 !== null)){
+let dataType17 = typeof data15;
+let coerced17 = undefined;
+if(dataType17 == 'object' && Array.isArray(data15) && data15.length == 1){
+data15 = data15[0];
+dataType17 = typeof data15;
+if((typeof data15 === "string") && (data15 === null)){
+coerced17 = data15;
 }
 }
-if(!(coerced15 !== undefined)){
-if(dataType15 == "number" || dataType15 == "boolean"){
-coerced15 = "" + data13;
+if(!(coerced17 !== undefined)){
+if(dataType17 == "number" || dataType17 == "boolean"){
+coerced17 = "" + data15;
 }
-else if(data13 === null){
-coerced15 = "";
+else if(data15 === null){
+coerced17 = "";
 }
-else if(data13 === "" || data13 === 0 || data13 === false){
-coerced15 = null;
+else if(data15 === "" || data15 === 0 || data15 === false){
+coerced17 = null;
 }
 else {
 validate176.errors = [{instancePath:instancePath+"/postingId",schemaPath:"#/properties/postingId/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
-if(coerced15 !== undefined){
-data13 = coerced15;
+if(coerced17 !== undefined){
+data15 = coerced17;
 if(data !== undefined){
-data["postingId"] = coerced15;
+data["postingId"] = coerced17;
 }
 }
 }
-var valid0 = _errs49 === errors;
+var valid0 = _errs55 === errors;
 }
 else {
 var valid0 = true;
 }
 if(valid0){
 if(data.embedded !== undefined){
-let data14 = data.embedded;
-const _errs52 = errors;
-if(typeof data14 !== "boolean"){
-let dataType16 = typeof data14;
-let coerced16 = undefined;
-if(dataType16 == 'object' && Array.isArray(data14) && data14.length == 1){
-data14 = data14[0];
-dataType16 = typeof data14;
-if(typeof data14 === "boolean"){
-coerced16 = data14;
+let data16 = data.embedded;
+const _errs58 = errors;
+if(typeof data16 !== "boolean"){
+let dataType18 = typeof data16;
+let coerced18 = undefined;
+if(dataType18 == 'object' && Array.isArray(data16) && data16.length == 1){
+data16 = data16[0];
+dataType18 = typeof data16;
+if(typeof data16 === "boolean"){
+coerced18 = data16;
 }
 }
-if(!(coerced16 !== undefined)){
-if(data14 === "false" || data14 === 0 || data14 === null){
-coerced16 = false;
+if(!(coerced18 !== undefined)){
+if(data16 === "false" || data16 === 0 || data16 === null){
+coerced18 = false;
 }
-else if(data14 === "true" || data14 === 1){
-coerced16 = true;
+else if(data16 === "true" || data16 === 1){
+coerced18 = true;
 }
 else {
 validate176.errors = [{instancePath:instancePath+"/embedded",schemaPath:"#/properties/embedded/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
 return false;
 }
 }
-if(coerced16 !== undefined){
-data14 = coerced16;
+if(coerced18 !== undefined){
+data16 = coerced18;
 if(data !== undefined){
-data["embedded"] = coerced16;
+data["embedded"] = coerced18;
 }
 }
 }
-var valid0 = _errs52 === errors;
+var valid0 = _errs58 === errors;
 }
 else {
 var valid0 = true;
+}
 }
 }
 }

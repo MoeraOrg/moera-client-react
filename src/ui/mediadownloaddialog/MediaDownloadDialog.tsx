@@ -30,7 +30,7 @@ export default function MediaDownloadDialog() {
                 <Trans i18nKey={text} components={{b: <b/>}}/>
             </div>
             <div className="modal-footer justify-content-center">
-                <MediaDownloadButton loading={loading}/>
+                <MediaDownloadButton loading={loading} onClose={onClose}/>
             </div>
         </ModalDialog>
     );

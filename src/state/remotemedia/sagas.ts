@@ -5,6 +5,8 @@ import { Storage } from "storage";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { saga } from "state/saga";
+import { getHomeOwnerName } from "state/home/selectors";
+import { getOwnerName } from "state/node/selectors";
 import {
     remoteMediaLoad,
     RemoteMediaLoadAction,
@@ -104,5 +106,47 @@ export function loadRemoteMediaInStories(
     for (const story of stories) {
         loadRemoteMediaInEntry(action, story.posting);
         loadRemoteMediaInEntry(action, story.comment);
+    }
+}
+
+export function loadRemoteMediaInDraftAttachments(
+    action: WithContext<ClientAction>, attachments: MediaAttachment[] | null | undefined
+): void {
+    if (attachments == null) {
+        return;
+    }
+
+    const targetNodeName = select(getOwnerName);
+    const homeOwnerName = select(getHomeOwnerName);
+
+    if (targetNodeName === homeOwnerName || homeOwnerName == null) {
+        loadRemoteMediaInAttachments(action, attachments);
+        return;
+    }
+
+    for (const attachment of attachments) {
+        const {media, remoteMedia} = attachment;
+
+        if (media != null) {
+            dispatch(remoteMediaLoaded(homeOwnerName, media.id, media).causedBy(action));
+        } else if (remoteMedia != null) {
+            const skip =
+                remoteMedia.nodeName === targetNodeName // loaded from the entry that provides a grant
+                || (remoteMedia.nodeName !== homeOwnerName && remoteMedia.grant == null) // unable to load
+            if (skip) {
+                continue;
+            }
+
+            const toBeLoaded = select(state =>
+                isRemoteMediaToBeLoaded(state, remoteMedia.nodeName, remoteMedia.mediaId)
+            );
+            if (!toBeLoaded) {
+                continue;
+            }
+
+            dispatch(remoteMediaLoad(
+                remoteMedia.nodeName, remoteMedia.mediaId, remoteMedia.grant ?? null
+            ).causedBy(action));
+        }
     }
 }

@@ -1,24 +1,29 @@
 import React from 'react';
-
+import { useSelector } from 'react-redux';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { PrivateMediaFileInfo } from "api";
+import { getHomeOwnerName } from "state/home/selectors";
+import { isAtHomeNode } from "state/node/selectors";
 import { DropdownMenu } from "ui/control";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { formatFileSize } from "util/info-quantity";
+import { MediaWithCaption } from "util/media-with-caption";
 import { mediaFileName } from "util/media-images";
 import { REL_CURRENT } from "util/rel-node-name";
 
 interface Props {
-    media: PrivateMediaFileInfo;
+    media: MediaWithCaption;
     dragged?: boolean | null;
 }
 
 export default function UploadedFile({media, dragged = false}: Props) {
-    const sortable = useSortable({id: media.id});
+    const atHomeNode = useSelector(isAtHomeNode);
+    const homeOwnerName = useSelector(getHomeOwnerName);
+
+    const sortable = useSortable({id: media.mediaId ?? ""});
     const sortableStyle = {
         transform: CSS.Transform.toString(sortable.transform),
         transition: sortable.transition ?? undefined,
@@ -27,13 +32,13 @@ export default function UploadedFile({media, dragged = false}: Props) {
     const {t} = useTranslation();
 
     const onRename = () => {
-        if (!dragged) {
-            renameMedia(media.id, media.title ?? "");
+        if (!dragged && media.mediaId != null) {
+            renameMedia(media.mediaId, media.title ?? "");
         }
     }
 
     const fileName = mediaFileName(media);
-    const fileLabel = `${fileName}, ${formatFileSize(media.size)}`;
+    const fileLabel = media.size != null ? `${fileName}, ${formatFileSize(media.size)}` : fileName;
 
     return (
         <div className={cx("attached-file", {"dragged": dragged})} ref={sortable.setNodeRef}
@@ -44,7 +49,7 @@ export default function UploadedFile({media, dragged = false}: Props) {
                     nodeName: REL_CURRENT,
                     href: "/",
                     onClick: onRename,
-                    show: true
+                    show: (atHomeNode && media.media != null) || media.remoteMedia?.nodeName === homeOwnerName
                 },
                 {
                     divider: true
@@ -53,7 +58,7 @@ export default function UploadedFile({media, dragged = false}: Props) {
                     title: t("delete"),
                     nodeName: REL_CURRENT,
                     href: "/",
-                    onClick: () => deleteMedia(media.id),
+                    onClick: () => media.mediaId && deleteMedia(media.mediaId),
                     show: true
                 }
             ]} menuContainer={document.getElementById("modal-root")} disabled={dragged ?? false}/>

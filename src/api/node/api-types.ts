@@ -549,11 +549,6 @@ export interface MediaLeaseAttributes {
     commentId?: string | null;
 }
 
-export interface MediaWithDigest {
-    id: string;
-    digest?: string | null;
-}
-
 export interface NameToRegister {
     name: string;
 }
@@ -616,7 +611,6 @@ export interface PostingFeatures {
     post?: boolean | null;
     subjectPresent: boolean;
     sourceFormats: SourceFormat[];
-    mediaMaxSize: number;
     imageRecommendedSize: number;
     imageRecommendedPixels: number;
     imageFormats: string[];
@@ -814,11 +808,17 @@ export interface RemoteFeed {
 }
 
 export interface RemoteMedia {
-    id: string;
-    hash?: string | null;
-    digest?: string | null;
+    nodeName: string;
+    mediaId: string;
+    hash: string;
+    digest: string;
     mimeType: string;
+    width?: number | null;
+    height?: number | null;
+    size: number;
+    title?: string | null;
     attachment?: boolean | null;
+    leaseId?: string | null;
 }
 
 export interface RemoteMediaInfo {
@@ -828,10 +828,11 @@ export interface RemoteMediaInfo {
     hash?: string | null;
     digest?: string | null;
     mimeType?: string | null;
-    attachment?: boolean | null;
     width?: number | null;
     height?: number | null;
     size?: number | null;
+    title?: string | null;
+    attachment?: boolean | null;
     grant?: string | null;
 }
 
@@ -1414,42 +1415,6 @@ export interface CommentMassAttributes {
     seniorRejectedReactions?: RejectedReactions | null;
 }
 
-export interface CommentSourceText {
-    ownerAvatar?: AvatarDescription | null;
-    bodySrc?: string | null;
-    bodySrcFormat?: SourceFormat | null;
-    media?: MediaWithDigest[] | null;
-    rejectedReactions?: RejectedReactions | null;
-    seniorRejectedReactions?: RejectedReactions | null;
-    repliedToId?: string | null;
-    operations?: CommentOperations | null;
-    reactionOperations?: ReactionOperations | null;
-    seniorOperations?: CommentOperations | null;
-}
-
-export interface CommentText {
-    ownerName?: string | null;
-    ownerFullName?: string | null;
-    ownerGender?: string | null;
-    ownerAvatar?: AvatarDescription | null;
-    bodyPreview?: string | null;
-    bodySrc?: string | null;
-    bodySrcFormat?: SourceFormat | null;
-    body?: string | null;
-    bodyFormat?: BodyFormat | null;
-    media?: string[] | null;
-    createdAt?: number | null;
-    rejectedReactions?: RejectedReactions | null;
-    seniorRejectedReactions?: RejectedReactions | null;
-    repliedToId?: string | null;
-    signature?: string | null;
-    signatureVersion?: number | null;
-    premoderating?: boolean | null;
-    operations?: CommentOperations | null;
-    reactionOperations?: ReactionOperations | null;
-    seniorOperations?: CommentOperations | null;
-}
-
 export interface ContactWithRelationships {
     contact: ContactInfo;
     subscriber?: SubscriberInfo | null;
@@ -1487,6 +1452,7 @@ export interface FriendDescription {
 
 export interface MediaAttachment {
     media?: PrivateMediaFileInfo | null;
+    mediaLeaseId?: string | null;
     remoteMedia?: RemoteMediaInfo | null;
     postingId?: string | null;
     embedded: boolean;
@@ -1510,6 +1476,12 @@ export interface MediaCaptionText {
 export interface MediaLeaseInfo {
     id: string;
     media: PrivateMediaFileInfo;
+}
+
+export interface MediaToAttach {
+    localMediaId?: string | null;
+    localMediaLeaseId?: string | null;
+    remoteMedia?: RemoteMedia | null;
 }
 
 export interface PostingInfoBase<B> {
@@ -1603,7 +1575,8 @@ export interface PostingSourceText {
     ownerAvatar?: AvatarDescription | null;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
-    media?: MediaWithDigest[] | null;
+    media?: MediaToAttach[] | null;
+    mediaCaptions?: MediaCaptionText[] | null;
     rejectedReactions?: RejectedReactions | null;
     commentRejectedReactions?: RejectedReactions | null;
     operations?: PostingOperations | null;
@@ -1622,7 +1595,7 @@ export interface PostingText {
     bodySrcFormat?: SourceFormat | null;
     body?: string | null;
     bodyFormat?: BodyFormat | null;
-    media?: string[] | null;
+    media?: MediaToAttach[] | null;
     createdAt?: number | null;
     rejectedReactions?: RejectedReactions | null;
     commentRejectedReactions?: RejectedReactions | null;
@@ -1798,6 +1771,43 @@ export interface CommentsSliceInfoBase<B> {
 export type EncodedCommentsSliceInfo = CommentsSliceInfoBase<string>;
 export type CommentsSliceInfo = CommentsSliceInfoBase<Body>;
 
+export interface CommentSourceText {
+    ownerAvatar?: AvatarDescription | null;
+    bodySrc?: string | null;
+    bodySrcFormat?: SourceFormat | null;
+    media?: MediaToAttach[] | null;
+    mediaCaptions?: MediaCaptionText[] | null;
+    rejectedReactions?: RejectedReactions | null;
+    seniorRejectedReactions?: RejectedReactions | null;
+    repliedToId?: string | null;
+    operations?: CommentOperations | null;
+    reactionOperations?: ReactionOperations | null;
+    seniorOperations?: CommentOperations | null;
+}
+
+export interface CommentText {
+    ownerName?: string | null;
+    ownerFullName?: string | null;
+    ownerGender?: string | null;
+    ownerAvatar?: AvatarDescription | null;
+    bodyPreview?: string | null;
+    bodySrc?: string | null;
+    bodySrcFormat?: SourceFormat | null;
+    body?: string | null;
+    bodyFormat?: BodyFormat | null;
+    media?: MediaToAttach[] | null;
+    createdAt?: number | null;
+    rejectedReactions?: RejectedReactions | null;
+    seniorRejectedReactions?: RejectedReactions | null;
+    repliedToId?: string | null;
+    signature?: string | null;
+    signatureVersion?: number | null;
+    premoderating?: boolean | null;
+    operations?: CommentOperations | null;
+    reactionOperations?: ReactionOperations | null;
+    seniorOperations?: CommentOperations | null;
+}
+
 export interface DraftInfoBase<B> {
     id: string;
     draftType: DraftType;
@@ -1840,7 +1850,7 @@ export interface DraftText {
     commentRejectedReactions?: RejectedReactions | null;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
-    media?: RemoteMedia[] | null;
+    media?: MediaToAttach[] | null;
     mediaCaptions?: MediaCaptionText[] | null;
     publishAt?: number | null;
     updateInfo?: UpdateInfo | null;

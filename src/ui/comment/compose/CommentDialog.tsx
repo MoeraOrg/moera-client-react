@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { SourceFormat } from "api";
 import { ClientState } from "state/state";
+import { getOwnerName } from "state/node/selectors";
 import {
     getHomeOwnerAvatar,
     getHomeOwnerFullName,
@@ -137,6 +138,7 @@ const CommentDialogOuter = withFormik(commentComposeLogic)(CommentDialogInner);
 
 export default function CommentDialog() {
     const connectedToHome = useSelector(isConnectedToHome);
+    const nodeName = useSelector(getOwnerName);
     const ownerName = useSelector(getHomeOwnerName);
     const ownerFullName = useSelector(getHomeOwnerFullName);
     const ownerGender = useSelector(getHomeOwnerGender);
@@ -154,6 +156,8 @@ export default function CommentDialog() {
 
     return (
         <CommentDialogOuter
+            nodeName={nodeName}
+            homeOwnerName={ownerName}
             avatarDefault={avatarDefault}
             receiverPostingId={receiverPostingId}
             comment={comment}

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { MediaAttachment } from "api";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
+import { getRemoteMedia } from "state/remotemedia/selectors";
 import { closeLightbox, LightboxMediaSequence, lightboxMediaSet } from "state/lightbox/actions";
 import { getLightboxMediaId, getLightboxMediaPostingId } from "state/lightbox/selectors";
 import { ExtPostingInfo } from "state/postings/state";
@@ -20,7 +21,6 @@ import LightboxShareButton from "ui/lightbox/LightboxShareButton";
 import LightboxDownloadButton from "ui/lightbox/LightboxDownloadButton";
 import { useOverlay } from "ui/overlays/overlays";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
-import { getRemoteMedia } from "state/remotemedia/selectors";
 
 export default function GalleryLightbox() {
     const posting = useSelector((state: ClientState) => getPosting(state, state.lightbox.postingId, REL_CURRENT));
@@ -45,7 +45,7 @@ export default function GalleryLightbox() {
     const loop = loopGallery && media != null && media.length > 1;
 
     let index = media?.findIndex(attachment =>
-        attachment.media?.id === mediaId || attachment.remoteMedia?.id === mediaId
+        attachment.media?.id === mediaId || attachment.remoteMedia?.mediaId === mediaId
     ) ?? 0;
     if (index < 0) {
         index = 0;
@@ -146,7 +146,7 @@ function useLightboxMedia(
         return {mediaId: undefined, href: undefined, src: undefined, mimeType: "image/jpeg", textContent: undefined};
     }
 
-    const mediaId = actualMediaFile.id;
+    const mediaId = mediaFile?.id ?? remoteMedia?.mediaId;
     const href = "/media/" + (actualMediaFile.directPath || actualMediaFile.path);
     const src = rootPage + href;
     const mimeType = actualMediaFile.mimeType;

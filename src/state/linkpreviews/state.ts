@@ -1,8 +1,9 @@
-import { LinkPreviewInfo, PrivateMediaFileInfo } from "api";
+import { LinkPreviewInfo } from "api";
+import { MediaWithCaption } from "util/media-with-caption";
 
 export interface LinkImageState {
     uploading: boolean;
-    info: PrivateMediaFileInfo | null;
+    info: MediaWithCaption | null;
 }
 
 export interface LinkPreviewState {

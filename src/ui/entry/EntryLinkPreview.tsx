@@ -16,6 +16,7 @@ import EntryLinkPreviewEditDialog, { EntryLinkPreviewEditValues } from "ui/entry
 import { interceptLinkClick } from "ui/entry/link-click-intercept";
 import { ellipsize } from "util/text";
 import { RelNodeName } from "util/rel-node-name";
+import { MediaWithCaption } from "util/media-with-caption";
 import "./EntryLinkPreview.css";
 
 interface Props {
@@ -28,7 +29,7 @@ interface Props {
     publishedAt?: number | null;
     imageUploading?: boolean;
     imageHash?: string | null;
-    media: MediaAttachment[] | null;
+    media: (MediaAttachment | MediaWithCaption)[] | null;
     small?: boolean | null;
     editing?: boolean;
     disabled?: boolean;
@@ -59,7 +60,7 @@ export function EntryLinkPreview({
     const metaLabel = formatMetaLabel(host, publishedAt, timeRelative, t);
 
     let large;
-    let attachment: MediaAttachment | null = null;
+    let attachment: MediaAttachment | MediaWithCaption | null = null;
     if (imageHash != null && media != null) {
         attachment = media.find(ma => ma.media?.hash === imageHash || ma.remoteMedia?.hash === imageHash) ?? null;
         const width = attachment?.media?.width ?? attachment?.remoteMedia?.width ?? 0;

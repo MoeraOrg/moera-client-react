@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 
-import { NodeName, PrivateMediaFileInfo, SourceFormat } from "api";
+import { NodeName, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { detailsSummaryStyleToClassName } from "ui/control";
@@ -24,6 +24,7 @@ import { RichTextFormulaValues } from "ui/control/richtexteditor/dialog/RichText
 import { RichTextImageValues } from "ui/control/richtexteditor/media/RichTextImageDialog";
 import { getImageDimensions, RichTextImageStandardSize } from "ui/control/richtexteditor/media/rich-text-image";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
+import { MediaWithCaption } from "util/media-with-caption";
 import { htmlEntities } from "util/html";
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
@@ -40,7 +41,7 @@ interface Props {
 }
 
 function insertImage(
-    field: HTMLTextAreaElement, src: string | PrivateMediaFileInfo, standardSize: RichTextImageStandardSize = "large",
+    field: HTMLTextAreaElement, src: string | MediaWithCaption, standardSize: RichTextImageStandardSize = "large",
     customWidth?: number | null, customHeight?: number | null, caption?: string | null
 ) {
     const href = typeof src === "string" ? src : "hash:" + src.hash;
@@ -425,7 +426,7 @@ export default function MarkdownEditorCommands({
         }
     }
 
-    const embedImage = (mediaFile: PrivateMediaFileInfo) => {
+    const embedImage = (mediaFile: MediaWithCaption) => {
         showImageDialog(
             true,
             null,

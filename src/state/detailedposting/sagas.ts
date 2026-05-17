@@ -116,7 +116,11 @@ import { flashBox } from "state/flashbox/actions";
 import { fillSubscription } from "state/subscriptions/sagas";
 import { confirmBox } from "state/confirmbox/actions";
 import { getNodeUri } from "state/naming/sagas";
-import { loadRemoteMediaInEntries, loadRemoteMediaInEntry } from "state/remotemedia/sagas";
+import {
+    loadRemoteMediaInDraftAttachments,
+    loadRemoteMediaInEntries,
+    loadRemoteMediaInEntry
+} from "state/remotemedia/sagas";
 import * as Browser from "ui/browser";
 import { uiEventCommentQuote } from "ui/ui-events";
 import { toAvatarDescription } from "util/avatar";
@@ -124,7 +128,7 @@ import { getWindowSelectionHtml } from "util/ui";
 import { absoluteNodeName, REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { clipboardCopy } from "util/clipboard";
 import { delay, notNull } from "util/misc";
-import { ut } from "util/url";
+import { urlWithParameters, ut } from "util/url";
 import { universalLocation } from "util/universal-url";
 
 export default [
@@ -549,6 +553,7 @@ async function commentDraftLoadSaga(action: WithContext<CommentDraftLoadAction>)
                 }).causedBy(action));
             } else {
                 dispatch(commentDraftCompleteLoading(isDialog, draft).causedBy(action));
+                loadRemoteMediaInDraftAttachments(action, draft.media);
             }
         } else {
             dispatch(commentDraftAbsent(nodeName, postingId, commentId).causedBy(action));
@@ -951,7 +956,9 @@ async function attachmentCopyLinkSaga(action: WithContext<AttachmentCopyLinkActi
     nodeName = absoluteNodeName(nodeName, action.context);
     try {
         const nodeUri = await getNodeUri(action, nodeName);
-        await clipboardCopy(universalLocation(null, nodeName, nodeUri, "/media/" + media.path + "?download=true"));
+        await clipboardCopy(
+            universalLocation(null, nodeName, nodeUri, urlWithParameters("/media/" + media.path, {download: true}))
+        );
         if (!Browser.isAndroidBrowser()) {
             dispatch(flashBox(i18n.t("link-copied")).causedBy(action));
         }

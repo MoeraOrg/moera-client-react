@@ -1,11 +1,11 @@
-import { MediaFileWithCaption } from "ui/control/richtexteditor";
+import { MediaWithCaption } from "util/media-with-caption";
 import { RelNodeName } from "util/rel-node-name";
 
 export interface ImageEditDialogState {
     show: boolean;
     parentOverlayId: string | undefined;
     nodeName: RelNodeName | string;
-    media: MediaFileWithCaption | null;
+    media: MediaWithCaption | null;
     loading: boolean;
     saving: boolean;
 }

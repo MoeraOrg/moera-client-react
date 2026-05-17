@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect } from 'react';
 import cx from 'classnames';
 
 import { PostingFeatures, SourceFormat } from "api";
-import { MediaFileWithCaption, RichTextValue } from "ui/control/richtexteditor/rich-text-value";
+import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { htmlToMarkdown, markdownToHtml } from "ui/control/richtexteditor/markdown/markdown-html";
 import { MarkdownEditor, MarkdownEditorProps } from "ui/control/richtexteditor/markdown/MarkdownEditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
@@ -14,6 +14,7 @@ import {
 import VisualEditor, { VisualEditorProps } from "ui/control/richtexteditor/visual/VisualEditor";
 import RichTextEditorDialogs from "ui/control/richtexteditor/dialog/RichTextEditorDialogs";
 import RichTextEditorMedia from "ui/control/richtexteditor/media/RichTextEditorMedia";
+import { MediaWithCaption } from "util/media-with-caption";
 import { REL_CURRENT } from "util/rel-node-name";
 import { htmlToLinefeeds, plainTextToHtml, prettyHtml } from "util/html";
 import "./RichTextEditor.css";
@@ -33,7 +34,7 @@ export function RichTextEditor({
 }: Props) {
     const textRef = React.useRef<string | Scripture>(null);
     textRef.current = value.value;
-    const mediaRef = React.useRef<(MediaFileWithCaption | null)[] | null>(null);
+    const mediaRef = React.useRef<(MediaWithCaption | null)[] | null>(null);
     mediaRef.current = value.media ?? null;
 
     const onTextChange = (text: string | Scripture) => {
@@ -41,7 +42,7 @@ export function RichTextEditor({
         onChange?.(new RichTextValue(text, format, mediaRef.current), false);
     };
 
-    const onMediaChange = (media: (MediaFileWithCaption | null)[]) => {
+    const onMediaChange = (media: (MediaWithCaption | null)[]) => {
         mediaRef.current = media;
         onChange?.(new RichTextValue(textRef.current ?? "", format, media), false);
     };

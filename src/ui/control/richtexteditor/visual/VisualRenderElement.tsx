@@ -1,26 +1,24 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { DefaultElement, RenderElementProps } from 'slate-react';
 
-import { getNodeRootPage } from "state/node/selectors";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { getImageDimensions } from "ui/control/richtexteditor/media/rich-text-image";
 import { isScriptureElement } from "ui/control/richtexteditor/visual/scripture";
 import { isSignificant } from "ui/control/richtexteditor/visual/scripture-html";
 import OpenLink from "ui/control/richtexteditor/visual/OpenLink";
 import DetailsSummary from "ui/control/richtexteditor/visual/DetailsSummary";
+import VisualRenderFigure from "ui/control/richtexteditor/visual/VisualRenderFigure";
 import VisualRenderIframe from "ui/control/richtexteditor/visual/VisualRenderIframe";
-import PreloadedImage from "ui/entry/PreloadedImage";
+import VisualRenderImage from "ui/control/richtexteditor/visual/VisualRenderImage";
 import { BlockMath, InlineMath } from "ui/katex";
 import { useIsTinyScreen } from "ui/hook";
-import { mediaImageTagAttributes } from "util/media-images";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export default function VisualRenderElement(props: RenderElementProps) {
     const {element, attributes, children} = props;
 
     const tinyScreen = useIsTinyScreen();
-    const rootPage = useSelector(getNodeRootPage);
     const {formatFormula, formatImage} = useRichTextEditorCommands();
     const {t} = useTranslation();
 
@@ -117,16 +115,11 @@ export default function VisualRenderElement(props: RenderElementProps) {
                         </span>
                     );
                 } else if (element.mediaFile != null) {
-                    const {
-                        src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
-                    } = mediaImageTagAttributes(rootPage, element.mediaFile, 900, width, height);
                     return (
-                        <span className="image-attached" {...attributes} contentEditable={false}
-                              onClick={onImageClick}>
+                        <VisualRenderImage attributes={attributes} media={element.mediaFile} nodeName={REL_CURRENT}
+                                           width={width} height={height} onClick={onImageClick}>
                             {children}
-                            <PreloadedImage src={src} srcSet={srcSet} sizes={sizes}
-                                            width={imageWidth} height={imageHeight} alt={alt ?? ""}/>
-                        </span>
+                        </VisualRenderImage>
                     );
                 } else {
                     return <DefaultElement {...props}/>;
@@ -159,19 +152,12 @@ export default function VisualRenderElement(props: RenderElementProps) {
                         </div>
                     );
                 } else if (element.mediaFile != null) {
-                    const {
-                        src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
-                    } = mediaImageTagAttributes(rootPage, element.mediaFile, 900, width, height);
                     return (
-                        <div className="figure-image-attached" {...attributes} contentEditable={false}
-                             onClick={onImageClick}>
+                        <VisualRenderFigure attributes={attributes} media={element.mediaFile} nodeName={REL_CURRENT}
+                                           width={width} height={height} caption={element.caption}
+                                            onClick={onImageClick}>
                             {children}
-                            <figure>
-                                <PreloadedImage src={src} srcSet={srcSet} sizes={sizes}
-                                                width={imageWidth} height={imageHeight} alt={alt ?? ""}/>
-                                <figcaption>{element.caption}</figcaption>
-                            </figure>
-                        </div>
+                        </VisualRenderFigure>
                     );
                 } else {
                     return <DefaultElement {...props}/>;

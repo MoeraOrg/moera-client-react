@@ -8,7 +8,7 @@ import { getHomeOwnerName } from "state/home/selectors";
 import { getLightboxMediaPostingId, getLightboxNodeName } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
-import { useIsTinyScreen, useDispatcher } from "ui/hook";
+import { useDispatcher, useIsTinyScreen } from "ui/hook";
 import { ReactionButton } from "ui/control";
 import { msThumbDown, msThumbUp } from "ui/material-symbols";
 import PostingReactions from "ui/posting/PostingReactions";

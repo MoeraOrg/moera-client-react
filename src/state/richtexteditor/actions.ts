@@ -1,9 +1,9 @@
 import { actionWithPayload, ActionWithPayload } from "state/action-types";
 import { Body, PostingFeatures, PrivateMediaFileInfo, SourceFormat } from "api";
-import { MediaFileWithCaption } from "ui/control/richtexteditor";
+import { MediaWithCaption } from "util/media-with-caption";
 import { RelNodeName } from "util/rel-node-name";
 
-type MediaUploadSuccessHandler = (index: number, mediaFile: MediaFileWithCaption) => void;
+type MediaUploadSuccessHandler = (index: number, mediaFile: MediaWithCaption) => void;
 type MediaUploadFailureHandler = (index: number) => void;
 type MediaUploadProgressHandler = (index: number, loaded: number, total: number) => void;
 

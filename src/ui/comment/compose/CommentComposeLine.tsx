@@ -14,7 +14,7 @@ import {
     getHomeOwnerName,
     isConnectedToHome
 } from "state/home/selectors";
-import { isPermitted, isPrincipalIn } from "state/node/selectors";
+import { getOwnerName, isPermitted, isPrincipalIn } from "state/node/selectors";
 import {
     getCommentComposerRepliedToId,
     getCommentsReceiverFeatures,
@@ -32,6 +32,7 @@ const CommentCompose = React.lazy(() => import("ui/comment/compose/CommentCompos
 
 export default function CommentComposeLine() {
     const connectedToHome = useSelector(isConnectedToHome);
+    const nodeName = useSelector(getOwnerName);
     const ownerName = useSelector(getHomeOwnerName);
     const ownerFullName = useSelector(getHomeOwnerFullName);
     const ownerFullNameDefault = useSelector(getAnonymousFullName);
@@ -91,6 +92,8 @@ export default function CommentComposeLine() {
     return (
         <Suspense fallback={null}>
             <CommentCompose
+                nodeName={nodeName}
+                homeOwnerName={ownerName}
                 avatarDefault={avatarDefault}
                 receiverPostingId={receiverPostingId}
                 comment={null}

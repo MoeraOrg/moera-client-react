@@ -8,7 +8,10 @@ export type OpenLightboxAction = ActionWithPayload<"OPEN_LIGHTBOX", {
     mediaId: string | null;
 }>;
 export const openLightbox = (
-    nodeName: RelNodeName | string, postingId: string, commentId: string | null, mediaId: string | null
+    nodeName: RelNodeName | string,
+    postingId: string,
+    commentId: string | null,
+    mediaId: string | null
 ): OpenLightboxAction =>
     actionWithPayload("OPEN_LIGHTBOX", {nodeName, postingId, commentId, mediaId});
 

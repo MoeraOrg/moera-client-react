@@ -1,14 +1,14 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
-import { MediaFileWithCaption } from "ui/control/richtexteditor";
+import { MediaWithCaption } from "util/media-with-caption";
 import { RelNodeName } from "util/rel-node-name";
 
 export type OpenImageEditDialogAction = ActionWithPayload<"OPEN_IMAGE_EDIT_DIALOG", {
     nodeName: RelNodeName | string;
-    media: MediaFileWithCaption;
+    media: MediaWithCaption;
     parentOverlayId: string | undefined;
 }>;
 export const openImageEditDialog = (
-    nodeName: RelNodeName | string, media: MediaFileWithCaption, parentOverlayId: string | undefined
+    nodeName: RelNodeName | string, media: MediaWithCaption, parentOverlayId: string | undefined
 ): OpenImageEditDialogAction =>
     actionWithPayload("OPEN_IMAGE_EDIT_DIALOG", {nodeName, media, parentOverlayId});
 

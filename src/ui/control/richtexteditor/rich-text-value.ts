@@ -2,28 +2,26 @@ import {
     MediaAttachment,
     MediaCaption,
     MediaCaptionText,
-    MediaWithDigest,
+    MediaToAttach,
     PrivateMediaFileInfo,
+    RemoteMedia,
+    RemoteMediaInfo,
     SourceFormat
 } from "api";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { htmlToScripture, scriptureToHtml } from "ui/control/richtexteditor/visual/scripture-html";
+import { LeasedRemoteMediaInfo, MediaWithCaption } from "util/media-with-caption";
 import { mediaHashesExtract } from "util/media-images";
 import { replaceSmileys } from "util/text";
 import { notNull } from "util/misc";
-
-export interface MediaFileWithCaption extends PrivateMediaFileInfo {
-    captionPostingId: string | null;
-    caption?: MediaCaption;
-}
 
 export class RichTextValue {
 
     readonly format: SourceFormat;
     readonly value: string | Scripture;
-    readonly media?: (MediaFileWithCaption | null)[] | null;
+    readonly media?: (MediaWithCaption | null)[] | null;
 
-    constructor(value: string | Scripture, format: SourceFormat, media?: (MediaFileWithCaption | null)[] | null) {
+    constructor(value: string | Scripture, format: SourceFormat, media?: (MediaWithCaption | null)[] | null) {
         if (format === "html/visual") {
             value = htmlToScripture(value, false, media?.filter(notNull));
         }
@@ -47,7 +45,7 @@ export class RichTextValue {
         return typeof value !== "string" ? scriptureToHtml(value) : value.trim();
     }
 
-    orderedMediaListWithDigests(): MediaWithDigest[] | null {
+    orderedMediaList(): MediaWithCaption[] | null {
         if (this.media == null) {
             return null;
         }
@@ -59,42 +57,174 @@ export class RichTextValue {
         return [...embeddedHashes]
             .map(hash => mediaMap.get(hash))
             .filter(notNull)
-            .concat(bodyMedia.filter(mf => !embeddedHashes.has(mf.hash)))
-            .map(media => ({id: media.id, digest: media.digest}));
-    }
-
-    orderedMediaList(): string[] | null {
-        const list = this.orderedMediaListWithDigests();
-        return list != null ? list.map(md => md.id) : null;
+            .concat(bodyMedia.filter(mf => !embeddedHashes.has(mf.hash ?? "")))
     }
 
 }
 
-export function attachmentsToMedia(
-    attachments: MediaAttachment[] | null | undefined,
-    captions?: MediaCaption[] | null
-): MediaFileWithCaption[] {
+function remoteMediaInfoToRemoteMedia(info: LeasedRemoteMediaInfo | null | undefined): RemoteMedia | undefined {
+    if (info == null) {
+        return undefined;
+    }
+
+    return {
+        nodeName: info.nodeName,
+        mediaId: info.mediaId,
+        hash: info.hash ?? "",
+        digest: info.digest ?? "",
+        mimeType: info.mimeType ?? "image/jpeg",
+        width: info.width,
+        height: info.height,
+        size: info.size ?? 0,
+        title: info.title,
+        attachment: info.attachment,
+        leaseId: info.leaseId,
+    };
+}
+
+function localMediaToRemoteMedia(
+    info: PrivateMediaFileInfo | null | undefined, nodeName: string, leaseId?: string | null
+): RemoteMedia | undefined {
+    if (info == null) {
+        return undefined;
+    }
+
+    return {
+        nodeName,
+        mediaId: info.id,
+        hash: info.hash,
+        digest: info.digest,
+        mimeType: info.mimeType,
+        width: info.width,
+        height: info.height,
+        size: info.size,
+        title: info.title,
+        attachment: info.attachment,
+        leaseId,
+    };
+}
+
+export function localMediaToLeasedRemoteMediaInfo(
+    info: PrivateMediaFileInfo | null | undefined, nodeName: string, leaseId: string | null | undefined
+): LeasedRemoteMediaInfo | undefined {
+    if (info == null) {
+        return undefined;
+    }
+
+    return {
+        nodeName,
+        mediaId: info.id,
+        hash: info.hash,
+        digest: info.digest,
+        mimeType: info.mimeType,
+        width: info.width,
+        height: info.height,
+        size: info.size,
+        title: info.title,
+        attachment: info.attachment,
+        leaseId: leaseId ?? undefined,
+    };
+}
+
+export function attachmentsToMedia(attachments: MediaAttachment[] | null | undefined): MediaWithCaption[] {
     if (attachments == null) {
         return [];
     }
 
-    const captionsByMediaId = captions != null ? new Map(captions.map(caption => [caption.mediaId, caption])) : null;
-
     return attachments
         .map(ma =>
-            ma.media?.id != null
-                ? {
-                    ...ma.media,
-                    captionPostingId: ma.postingId ?? null,
-                    caption: captionsByMediaId?.get(ma.media.id)
-                }
-                : null
+            new MediaWithCaption(
+                ma.media ?? undefined,
+                ma.remoteMedia ?? undefined,
+                ma.postingId ?? undefined
+            )
+        );
+}
+
+export function draftAttachmentsToMedia(
+    draftAttachments: MediaAttachment[] | null | undefined,
+    attachments: MediaAttachment[] | null | undefined,
+    captions: MediaCaption[] | null,
+    targetNodeName: string | null,
+    homeOwnerName: string
+): MediaWithCaption[] {
+    if (draftAttachments == null) {
+        return [];
+    }
+
+    const localMedia = attachments != null
+        ? new Map(attachments.map(a => a.media).filter(notNull).map(m => [m.id, m]))
+        : null;
+    const captionPostingIdsByMediaId = attachments != null
+        ? new Map(
+            attachments
+                .map(a => [a.media?.id ?? a.remoteMedia?.mediaId, a.postingId])
+                .filter((a): a is [string, string | null | undefined] => a[0] != null)
         )
-        .filter(notNull);
+        : null;
+    const captionsByMediaId = captions != null ? new Map(captions.map(caption => [caption.mediaId, caption])) : null;
+
+    const media = draftAttachments
+        .map((ma): [MediaAttachment, string] => [ma, ma.media?.id ?? ma.remoteMedia?.mediaId ?? ""])
+        .map(([ma, mediaId]): [
+            PrivateMediaFileInfo | undefined,
+            string | null | undefined,
+            RemoteMediaInfo | undefined,
+            string | undefined,
+            MediaCaption | undefined
+        ] => [
+            ma.media ?? undefined,
+            ma.mediaLeaseId,
+            ma.remoteMedia ?? undefined,
+            captionPostingIdsByMediaId?.get(mediaId) ?? undefined,
+            captionsByMediaId?.get(mediaId)
+        ]);
+
+    if (targetNodeName === homeOwnerName) {
+        return media
+            .map(([media, _, remoteMedia, captionPostingId, caption]) =>
+                new MediaWithCaption(media, remoteMedia, captionPostingId, caption)
+            );
+    } else {
+        return media
+            .map(([media, mediaLeaseId, remoteMedia, captionPostingId, caption]) =>
+                new MediaWithCaption(
+                    remoteMedia?.nodeName === targetNodeName
+                        ? localMedia?.get(remoteMedia.mediaId)
+                        : undefined,
+                    media != null
+                        ? localMediaToRemoteMedia(media, homeOwnerName, mediaLeaseId)
+                        : remoteMedia ?? undefined,
+                    captionPostingId,
+                    caption
+                )
+            );
+    }
+}
+
+export function mediaToAttachment(media: MediaWithCaption): MediaToAttach {
+    return {
+        localMediaId: media.localMedia?.id,
+        remoteMedia: remoteMediaInfoToRemoteMedia(media.remoteMedia)
+    };
+}
+
+export function mediaToDraftAttachment(
+    media: MediaWithCaption, targetNodeName: string, homeOwnerName: string
+): MediaToAttach {
+    if (targetNodeName === homeOwnerName) {
+        return mediaToAttachment(media);
+    }
+
+    return {
+        localMediaId: media.remoteMedia?.nodeName === homeOwnerName ? media.remoteMedia.mediaId : undefined,
+        localMediaLeaseId: media.remoteMedia?.nodeName === homeOwnerName ? media.remoteMedia.leaseId : undefined,
+        remoteMedia: localMediaToRemoteMedia(media.localMedia, targetNodeName)
+    };
 }
 
 export function mediaToCaptions(
-    media: (MediaFileWithCaption | null)[] | null | undefined
+    media: (MediaWithCaption | null)[] | null | undefined
 ): Record<string, MediaCaption> {
     if (media == null) {
         return {};
@@ -103,7 +233,7 @@ export function mediaToCaptions(
     const captions: Record<string, MediaCaption> = {};
     for (const mf of media) {
         if (mf?.caption != null) {
-            captions[mf.id] = {...mf.caption, mediaId: mf.caption.mediaId ?? mf.id};
+            captions[mf.caption.mediaId] = {...mf.caption, mediaId: mf.caption.mediaId};
         }
     }
 
@@ -124,4 +254,10 @@ export function mediaCaptionsToCaptionsText(
             captionSrcFormat: c.captionSrcFormat
         })
     );
+}
+
+export function mediaToCaptionsText(
+    media: (MediaWithCaption | null)[] | null | undefined
+): MediaCaptionText[] | undefined {
+    return mediaCaptionsToCaptionsText(Object.values(mediaToCaptions(media)));
 }

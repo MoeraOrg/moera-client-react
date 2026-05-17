@@ -6,11 +6,11 @@ import {
     AvatarImage,
     CLIENT_SETTINGS_PREFIX,
     FeedReference,
+    MediaToAttach,
     PostingFeatures,
     PostingInfo,
     PostingText,
     PrincipalValue,
-    PrivateMediaFileInfo,
     SourceFormat,
     StoryAttributes
 } from "api";
@@ -21,6 +21,8 @@ import { settingsUpdate } from "state/settings/actions";
 import {
     attachmentsToMedia,
     bodyToLinkPreviews,
+    draftAttachmentsToMedia,
+    mediaToAttachment,
     mediaToCaptions,
     RichTextLinkPreviewsValue,
     RichTextValue
@@ -31,6 +33,7 @@ import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html
 import { isScriptureEmpty } from "ui/control/richtexteditor/visual/scripture-editor";
 import { replaceSmileys } from "util/text";
 import { htmlToLinefeeds, isHtmlEmpty, plainTextToHtml, safeImportHtml } from "util/html";
+import { MediaWithCaption } from "util/media-with-caption";
 
 export interface ValuesToPostingTextProps {
     gender: string | null;
@@ -42,6 +45,8 @@ export interface ValuesToPostingTextProps {
 }
 
 export interface ComposePageProps extends ValuesToPostingTextProps {
+    nodeName: string | null;
+    homeOwnerName: string | null;
     avatarDefault: AvatarImage | null;
     fullNameDefault: string | null;
     posting: DraftPostingInfo | null;
@@ -155,7 +160,7 @@ export const valuesToPostingText = (values: ComposePageValues, props: ValuesToPo
         linkPreviews: values.linkPreviews.previews
     }),
     bodySrcFormat: values.bodyFormat,
-    media: (values.body.orderedMediaList() ?? []).concat(values.linkPreviews.media.map(vm => vm.id)),
+    media: (values.body.orderedMediaList() ?? []).concat(values.linkPreviews.media).map(mediaToAttachment),
     rejectedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
     publications: buildPublications(values, props),
     updateInfo: {
@@ -192,7 +197,7 @@ export const valuesToPostingText = (values: ComposePageValues, props: ValuesToPo
 function isPostingContentEmpty(
     subject: string | null | undefined,
     text: string | Scripture | null | undefined,
-    media: (PrivateMediaFileInfo | null)[] | string[] | null | undefined
+    media: (MediaWithCaption | null)[] | MediaToAttach[] | null | undefined
 ): boolean {
     const subjectEmpty = !subject || subject.trim() === "";
     const textEmpty = typeof text === "string" ? isHtmlEmpty(text) : isScriptureEmpty(text);
@@ -223,8 +228,18 @@ export function isPostingTextChanged(postingText: PostingText, posting: PostingI
     if (subject !== prevSubject || text !== prevText || !deepEqual(linkPreviews ?? [], prevLinkPreviews ?? [])) {
         return true;
     }
-    const media = postingText.media ?? [];
-    const prevMedia = posting.media != null ? posting.media.map(ma => ma.media?.id ?? ma.remoteMedia?.id) : [];
+    const media = postingText.media != null
+        ? postingText.media.map(ma => [
+            ma.localMediaId ?? ma.remoteMedia?.mediaId,
+            ma.localMediaId != null ? null : ma.remoteMedia?.title ?? null
+        ])
+        : [];
+    const prevMedia = posting.media != null
+        ? posting.media.map(ma => [
+            ma.media?.id ?? ma.remoteMedia?.id,
+            ma.media?.title ?? ma.remoteMedia?.title ?? null
+        ])
+        : [];
     if (!deepEqual(media, prevMedia)) {
         return true;
     }
@@ -258,8 +273,15 @@ export const composePageLogic = {
         const subject = props.draft != null
             ? props.draft.bodySrc?.subject ?? ""
             : props.posting != null ? props.posting.bodySrc?.subject ?? "" : "";
-        const attachments = props.draft != null ? props.draft.media : props.posting?.media;
-        let media = attachmentsToMedia(attachments, props.draft?.mediaCaptions);
+        let media = props.draft != null && props.homeOwnerName != null
+            ? draftAttachmentsToMedia(
+                props.draft.media,
+                props.posting?.media,
+                props.draft?.mediaCaptions ?? null,
+                props.nodeName,
+                props.homeOwnerName
+            )
+            : attachmentsToMedia(props.posting?.media);
         const bodyFormat = props.draft != null
             ? props.draft.bodySrcFormat ?? "markdown"
             : props.posting != null ? props.posting.bodySrcFormat ?? "markdown" : props.sourceFormatDefault;

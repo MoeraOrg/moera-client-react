@@ -10,9 +10,9 @@ import { mediaImageRect, mediaImageTagAttributes, MediaImageTagAttributes } from
 export function useMediaAttributes(
     nodeName: RelNodeName | string,
     mediaFile: PrivateMediaFileInfo | null,
-    remoteMedia: RemoteMediaInfo | null,
-    width?: string | null,
-    height?: string | null
+    remoteMedia: Omit<RemoteMediaInfo, "id"> | null,
+    width?: string | number | null,
+    height?: string | number | null
 ): Omit<MediaImageTagAttributes, "src"> & {src: string | null} {
     const actualNodeName = (mediaFile != null ? nodeName : remoteMedia?.nodeName) ?? nodeName;
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, actualNodeName));

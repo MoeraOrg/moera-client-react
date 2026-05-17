@@ -8,7 +8,11 @@ export type { RichTextLinkPreviewsValue } from "ui/control/richtexteditor/RichTe
 export {
     RichTextValue,
     attachmentsToMedia,
+    draftAttachmentsToMedia,
+    localMediaToLeasedRemoteMediaInfo,
+    mediaCaptionsToCaptionsText,
+    mediaToAttachment,
     mediaToCaptions,
-    mediaCaptionsToCaptionsText
+    mediaToCaptionsText,
+    mediaToDraftAttachment
 } from "ui/control/richtexteditor/rich-text-value";
-export type { MediaFileWithCaption } from "ui/control/richtexteditor/rich-text-value";

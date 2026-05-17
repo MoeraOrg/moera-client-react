@@ -5,7 +5,7 @@ import deepEqual from 'react-fast-compare';
 import * as immutable from 'object-path-immutable';
 import * as URI from 'uri-js';
 
-import { LinkPreview, MediaAttachment, PostingFeatures, PrivateMediaFileInfo } from "api";
+import { LinkPreview, PostingFeatures } from "api";
 import { ClientState } from "state/state";
 import { getRelNodeNameContext } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
@@ -14,9 +14,9 @@ import { LinkPreviewsState } from "state/linkpreviews/state";
 import { useDispatcher } from "ui/hook";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
 import EntryLinkSelector from "ui/entry/EntryLinkSelector";
-import { MediaFileWithCaption } from "ui/control/richtexteditor";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { scriptureExtractUrls } from "ui/control/richtexteditor/visual/scripture-editor";
+import { MediaWithCaption } from "util/media-with-caption";
 import { extractUrls } from "util/text";
 import { absoluteNodeName, RelNodeName } from "util/rel-node-name";
 import { notNull } from "util/misc";
@@ -36,13 +36,13 @@ export type RichTextLinkPreviewsStatus = Partial<Record<string, RichTextLinkPrev
 
 export interface RichTextLinkPreviewsValue {
     previews: LinkPreview[];
-    media: PrivateMediaFileInfo[];
+    media: MediaWithCaption[];
     status: RichTextLinkPreviewsStatus;
 }
 
 export function bodyToLinkPreviews(
-    body: string | Scripture, linkPreviewsInfo: LinkPreview[], media: MediaFileWithCaption[]
-): [RichTextLinkPreviewsValue, string[], MediaFileWithCaption[]] {
+    body: string | Scripture, linkPreviewsInfo: LinkPreview[], media: MediaWithCaption[]
+): [RichTextLinkPreviewsValue, string[], MediaWithCaption[]] {
     const bodyUrls = typeof body !== "string" ? scriptureExtractUrls(body) : extractUrls(body);
     const linkPreviewsUrls = new Set(linkPreviewsInfo.map(lp => lp.url));
     const linkPreviewsImages = new Set(
@@ -54,10 +54,10 @@ export function bodyToLinkPreviews(
     }
     const linkPreviews = {
         previews: linkPreviewsInfo,
-        media: media.filter(mf => linkPreviewsImages.has(mf.hash)),
+        media: media.filter(mf => linkPreviewsImages.has(mf.hash ?? "")),
         status: linkPreviewsStatus
     };
-    media = media.filter(mf => !linkPreviewsImages.has(mf.hash));
+    media = media.filter(mf => !linkPreviewsImages.has(mf.hash ?? ""));
     return [linkPreviews, bodyUrls, media];
 }
 
@@ -110,8 +110,6 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, feature
     const onRestore = (url: string) =>
         setValue(immutable.set(value, ["status", url], "loaded"));
 
-    const media: MediaAttachment[] = value.media.map(media => ({media, embedded: true}));
-
     return (
         <div className="mt-3">
             <EntryLinkSelector urls={urls.filter(url => value.status[url] === "deleted")} onSelect={onRestore}
@@ -128,7 +126,7 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, feature
                     imageUploading={isImageUploading(linkPreviewsState, preview.url, targetNodeName)}
                     imageHash={preview.imageHash}
                     siteName={preview.siteName}
-                    media={media}
+                    media={value.media}
                     small={small}
                     editing
                     disabled={disabled}
@@ -158,7 +156,7 @@ function buildValue(
     const loadUrls: string[] = [];
     const loadImages: string[] = [];
     const previews: LinkPreview[] = [];
-    const media: PrivateMediaFileInfo[] = [];
+    const media: MediaWithCaption[] = [];
     const addedUrls: string[] = [];
     let totalVisible = 0;
     for (const url of urlSet) {

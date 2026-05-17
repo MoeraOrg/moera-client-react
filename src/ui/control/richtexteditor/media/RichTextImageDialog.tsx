@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useField } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { PrivateMediaFileInfo } from "api";
 import { CheckboxField, InputField, NumberField, SelectField } from "ui/control/field";
 import { RichTextImageStandardSize, STANDARD_SIZES } from "ui/control/richtexteditor/media/rich-text-image";
 import UploadedImage from "ui/control/richtexteditor/media/UploadedImage";
@@ -12,12 +11,13 @@ import {
     RichTextEditorDialogProps
 } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
 import { SelectedImages } from "ui/control/richtexteditor/dialog/SelectedImages";
+import { MediaWithCaption } from "util/media-with-caption";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import "./RichTextImageDialog.css";
 
 export interface RichTextImageValues {
     files?: File[] | null;
-    mediaFiles?: PrivateMediaFileInfo[] | null;
+    mediaFiles?: MediaWithCaption[] | null;
     href?: string | null;
     compress?: boolean;
     standardSize?: RichTextImageStandardSize;
@@ -28,7 +28,7 @@ export interface RichTextImageValues {
 
 type Props = {
     files?: File[] | null;
-    mediaFiles?: PrivateMediaFileInfo[] | null;
+    mediaFiles?: MediaWithCaption[] | null;
     href?: string | null;
     insert?: boolean;
     nodeName?: RelNodeName | string;
@@ -95,12 +95,14 @@ function RichTextImageDialog({
             }
             {mediaFiles != null &&
                 <div className="rich-text-editor-image-list pt-0 mb-3">
-                    {mediaFiles
-                        .map(mediaFile => ({...mediaFile, captionPostingId: null}))
-                        .map(mediaFile =>
-                            <UploadedImage key={mediaFile.id} media={mediaFile} nodeName={nodeName} showMenu={false}/>
-                        )
-                    }
+                    {mediaFiles.map(mediaFile =>
+                        <UploadedImage
+                            key={mediaFile.mediaId}
+                            media={mediaFile}
+                            nodeName={nodeName}
+                            showMenu={false}
+                        />
+                    )}
                 </div>
             }
             {files == null && mediaFiles == null &&

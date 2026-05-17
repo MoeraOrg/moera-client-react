@@ -21,7 +21,7 @@ export default function RichTextEditorDropzoneTabs({value}: Props) {
         const embedded = mediaHashesExtract(value.value);
         const mediaList = value.media?.filter(notNull);
         return [
-            mediaList?.filter(media => !media.attachment).filter(media => !embedded.has(media.hash)).length,
+            mediaList?.filter(media => !media.attachment).filter(media => !embedded.has(media.hash ?? "")).length,
             mediaList?.filter(media => media.attachment).length
         ];
     }, [value]);

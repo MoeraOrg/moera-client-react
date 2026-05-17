@@ -9,15 +9,15 @@ import { openImageEditDialog } from "state/imageeditdialog/actions";
 import { useParent, useDispatcher } from "ui/hook";
 import { Icon, msMoreVert12 } from "ui/material-symbols";
 import { DropdownMenu } from "ui/control";
-import { MediaFileWithCaption } from "ui/control/richtexteditor/rich-text-value";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import AttachedImage from "ui/control/richtexteditor/media/AttachedImage";
+import { MediaWithCaption } from "util/media-with-caption";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import "./UploadedImage.css";
 
 interface Props {
-    media: MediaFileWithCaption;
+    media: MediaWithCaption;
     nodeName: RelNodeName | string;
     dragged?: boolean | null;
     showMenu?: boolean | null;
@@ -25,7 +25,7 @@ interface Props {
 }
 
 export default function UploadedImage({media, nodeName, dragged = false, showMenu = true, noEmbeddedMedia}: Props) {
-    const sortable = useSortable({id: media.id});
+    const sortable = useSortable({id: media.mediaId ?? ""});
     const sortableStyle = {
         transform: CSS.Transform.toString(sortable.transform),
         transition: sortable.transition ?? undefined,
@@ -68,7 +68,7 @@ export default function UploadedImage({media, nodeName, dragged = false, showMen
                         title: t("delete"),
                         nodeName: REL_CURRENT,
                         href: "/",
-                        onClick: () => deleteMedia(media.id),
+                        onClick: () => media.mediaId && deleteMedia(media.mediaId),
                         show: true
                     }
                 ]} menuContainer={document.getElementById("modal-root")}>

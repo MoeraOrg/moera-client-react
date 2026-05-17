@@ -1,6 +1,4 @@
 import { Descendant } from 'slate';
-
-import { PrivateMediaFileInfo } from "api";
 import { detailsSummaryClassNameToStyle, detailsSummaryStyleToClassName } from "ui/control";
 import {
     createBlockquoteElement,
@@ -40,11 +38,12 @@ import {
 } from "ui/control/richtexteditor/visual/scripture";
 import { findStandardSize, getImageDimensions } from "ui/control/richtexteditor/media/rich-text-image";
 import { htmlEntities, htmlToEmoji, linefeedsToHtml, safeImportHtml, unhtmlEntities } from "util/html";
+import { MediaWithCaption } from "util/media-with-caption";
 import { isNumericString, notNull } from "util/misc";
 import { universalLocation } from "util/universal-url";
 
 export function htmlToScripture(
-    text?: string | Scripture | null | undefined, cleanup?: boolean, media?: PrivateMediaFileInfo[] | null
+    text?: string | Scripture | null | undefined, cleanup?: boolean, media?: MediaWithCaption[] | null
 ): Scripture {
     if (!text) { // null, undefined, "", []
         return [createParagraphElement([createScriptureText("")])];
@@ -72,7 +71,7 @@ interface DomToScriptureContext {
     attributes: ScriptureMarks;
     listOrdered: boolean;
     listLevel: number;
-    media: PrivateMediaFileInfo[];
+    media: MediaWithCaption[];
 }
 
 function domToScripture(node: Node, context: DomToScriptureContext): Scripture | ScriptureDescendant | null {
@@ -223,7 +222,7 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
         case "PRE":
             return createCodeBlockElement(children);
         case "IMG": {
-            let src: string | PrivateMediaFileInfo = element.getAttribute("src") ?? "";
+            let src: string | MediaWithCaption = element.getAttribute("src") ?? "";
             if (src.startsWith("hash:")) {
                 const hash = src.substring(5);
                 src = media.find(mf => mf.hash === hash) ?? src;

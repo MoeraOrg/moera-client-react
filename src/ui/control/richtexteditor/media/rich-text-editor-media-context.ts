@@ -1,11 +1,11 @@
 import { createContext, useContext } from 'react';
 import { DropzoneRootProps } from 'react-dropzone';
 
-import { MediaCaption, PrivateMediaFileInfo } from "api";
+import { MediaCaption } from "api";
 import { RichTextImageStandardSize } from "ui/control/richtexteditor/media/rich-text-image";
 import { RichTextImageValues } from "ui/control/richtexteditor/media/RichTextImageDialog";
 import { RichTextEditorDialogSubmit } from "ui/control/richtexteditor/dialog/rich-text-editor-dialog";
-import { MediaFileWithCaption } from "ui/control/richtexteditor/rich-text-value";
+import { MediaWithCaption } from "util/media-with-caption";
 
 export type UploadStatus = "loading" | "success" | "failure";
 
@@ -16,7 +16,7 @@ export interface UploadProgress {
 }
 
 export type OnInsertHandler = (
-    media: MediaFileWithCaption[],
+    media: MediaWithCaption[],
     standardSize: RichTextImageStandardSize,
     customWidth?: number | null,
     customHeight?: number | null,
@@ -35,7 +35,7 @@ export interface RichTextEditorMediaInterface {
     reorderMedia: (moveId: string, overId: string) => void;
     pasteMedia: (data: DataTransfer) => boolean;
     showImageDialog: (
-        show: boolean, files?: File[] | null, mediaFiles?: PrivateMediaFileInfo[] | null, href?: string | null,
+        show: boolean, files?: File[] | null, mediaFiles?: MediaWithCaption[] | null, href?: string | null,
         insert?: boolean, prevValues?: RichTextImageValues | null,
         onSubmit?: RichTextEditorDialogSubmit<RichTextImageValues>
     ) => void;

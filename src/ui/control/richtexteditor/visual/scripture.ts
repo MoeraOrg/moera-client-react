@@ -1,9 +1,8 @@
 import { Element as SlateElement, Text as SlateText } from 'slate';
-
-import { PrivateMediaFileInfo } from "api";
 import { DetailsSummaryStyle } from "ui/control";
 import { RichTextImageStandardSize } from "ui/control/richtexteditor/media/rich-text-image";
 import { randomId } from "util/ui";
+import { MediaWithCaption } from "util/media-with-caption";
 
 /* P */
 
@@ -193,7 +192,7 @@ export const createFormulaBlockElement = (content: string): FormulaBlockElement 
 export interface ImageElement extends SlateElement {
     type: "image";
     href?: string;
-    mediaFile?: PrivateMediaFileInfo;
+    mediaFile?: MediaWithCaption;
     standardSize?: RichTextImageStandardSize;
     customWidth?: number | null;
     customHeight?: number | null;
@@ -203,7 +202,7 @@ export const isImageElement = (value: any): value is ImageElement =>
     isScriptureElement(value) && value.type === "image";
 
 export const createImageElement = (
-    src: string | PrivateMediaFileInfo, standardSize?: RichTextImageStandardSize,
+    src: string | MediaWithCaption, standardSize?: RichTextImageStandardSize,
     customWidth?: number | null, customHeight?: number | null
 ): ImageElement =>
     ({
@@ -221,7 +220,7 @@ export const createImageElement = (
 export interface FigureImageElement extends SlateElement {
     type: "figure-image";
     href?: string;
-    mediaFile?: PrivateMediaFileInfo;
+    mediaFile?: MediaWithCaption;
     caption: string;
     standardSize?: RichTextImageStandardSize;
     customWidth?: number | null;
@@ -232,7 +231,7 @@ export const isFigureImageElement = (value: any): value is FigureImageElement =>
     isScriptureElement(value) && value.type === "figure-image";
 
 export const createFigureImageElement = (
-    src: string | PrivateMediaFileInfo, caption: string, standardSize?: RichTextImageStandardSize,
+    src: string | MediaWithCaption, caption: string, standardSize?: RichTextImageStandardSize,
     customWidth?: number | null, customHeight?: number | null
 ): FigureImageElement =>
     ({

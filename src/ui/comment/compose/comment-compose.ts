@@ -8,7 +8,7 @@ import {
     CommentSourceText,
     CommentText,
     DraftInfo,
-    PrivateMediaFileInfo,
+    MediaToAttach,
     SourceFormat
 } from "api";
 import { dispatch } from "state/store-sagas";
@@ -16,7 +16,10 @@ import { commentPost } from "state/detailedposting/actions";
 import {
     attachmentsToMedia,
     bodyToLinkPreviews,
+    draftAttachmentsToMedia,
+    mediaToAttachment,
     mediaToCaptions,
+    mediaToCaptionsText,
     RichTextLinkPreviewsValue,
     RichTextValue
 } from "ui/control/richtexteditor";
@@ -25,10 +28,13 @@ import { isScriptureEmpty } from "ui/control/richtexteditor/visual/scripture-edi
 import { htmlToScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import { toAvatarDescription } from "util/avatar";
 import { isHtmlEmpty } from "util/html";
+import { MediaWithCaption } from "util/media-with-caption";
 
 interface PropsToValuesProps {
     comment: CommentInfo | null;
     draft: DraftInfo | null;
+    nodeName: string | null;
+    homeOwnerName: string | null;
     avatarDefault: AvatarImage | null;
     ownerFullNameDefault: string | null;
     sourceFormatDefault: SourceFormat;
@@ -64,13 +70,14 @@ export function valuesToCommentText(values: CommentComposeValues, props: ValuesT
             linkPreviews: values.linkPreviews.previews
         }),
         bodySrcFormat: props.sourceFormatDefault,
-        media: (values.body.orderedMediaList() ?? []).concat(values.linkPreviews.media.map(vm => vm.id)),
+        media: (values.body.orderedMediaList() ?? []).concat(values.linkPreviews.media).map(mediaToAttachment),
         rejectedReactions: {positive: props.reactionsPositiveDefault, negative: props.reactionsNegativeDefault},
         repliedToId: props.repliedToId
     };
 }
 
 function valuesToCommentSourceText(values: CommentComposeValues, props: ValuesToCommentTextProps): CommentSourceText {
+    const media = (values.body.orderedMediaList() ?? []).concat(values.linkPreviews.media);
     return {
         ownerAvatar: toAvatarDescription(values.avatar),
         bodySrc: JSON.stringify({
@@ -78,8 +85,8 @@ function valuesToCommentSourceText(values: CommentComposeValues, props: ValuesTo
             linkPreviews: values.linkPreviews.previews
         }),
         bodySrcFormat: props.sourceFormatDefault,
-        media: (values.body.orderedMediaListWithDigests() ?? [])
-            .concat(values.linkPreviews.media.map(vm => ({id: vm.id, digest: vm.digest}))),
+        media: media.map(mediaToAttachment),
+        mediaCaptions: mediaToCaptionsText(media),
         rejectedReactions: {positive: props.reactionsPositiveDefault, negative: props.reactionsNegativeDefault},
         repliedToId: props.repliedToId
     };
@@ -87,7 +94,7 @@ function valuesToCommentSourceText(values: CommentComposeValues, props: ValuesTo
 
 function isCommentContentEmpty(
     text: string | Scripture | null | undefined,
-    media: (PrivateMediaFileInfo | null)[] | string[] | null | undefined
+    media: (MediaWithCaption | null)[] | MediaToAttach[] | null | undefined
 ): boolean {
     const textEmpty = typeof text === "string" ? isHtmlEmpty(text) : isScriptureEmpty(text);
     const mediaEmpty = media == null || media.length === 0;
@@ -119,8 +126,18 @@ export function isCommentTextChanged(commentText: CommentText, comment: CommentI
     if (text !== prevText || !deepEqual(linkPreviews ?? [], prevLinkPreviews ?? [])) {
         return true;
     }
-    const media = commentText.media ?? [];
-    const prevMedia = comment.media != null ? comment.media.map(ma => ma.media?.id ?? ma.remoteMedia?.id) : [];
+    const media = commentText.media != null
+        ? commentText.media.map(ma => [
+            ma.localMediaId ?? ma.remoteMedia?.mediaId,
+            ma.localMediaId != null ? null : ma.remoteMedia?.title ?? null
+        ])
+        : [];
+    const prevMedia = comment.media != null
+        ? comment.media.map(ma => [
+            ma.media?.id ?? ma.remoteMedia?.id,
+            ma.media?.title ?? ma.remoteMedia?.title ?? null
+        ])
+        : [];
     return !deepEqual(media, prevMedia);
 }
 
@@ -139,8 +156,15 @@ export const commentComposeLogic = {
         const ownerFullName = props.draft != null
             ? props.draft.ownerFullName ?? ""
             : props.comment?.ownerFullName ?? props.ownerFullNameDefault ?? "";
-        const attachments = props.draft != null ? props.draft.media : props.comment?.media;
-        let media = attachmentsToMedia(attachments, props.draft?.mediaCaptions);
+        let media = props.draft != null && props.homeOwnerName != null
+            ? draftAttachmentsToMedia(
+                props.draft.media,
+                props.comment?.media,
+                props.draft?.mediaCaptions ?? null,
+                props.nodeName,
+                props.homeOwnerName
+            )
+            : attachmentsToMedia(props.comment?.media);
         const bodyFormat = props.draft != null
                 ? props.draft.bodySrcFormat ?? "markdown"
                 : props.comment != null ? props.comment.bodySrcFormat ?? "markdown" : props.sourceFormatDefault;

@@ -11,9 +11,13 @@ import {
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { saga } from "state/saga";
+import { remoteMediaLoaded } from "state/remotemedia/actions";
 import { getLinkPreviewInfo } from "state/linkpreviews/selectors";
+import { getSettingNode } from "state/settings/selectors";
+import { localMediaToLeasedRemoteMediaInfo } from "ui/control/richtexteditor";
 import { randomId } from "util/ui";
 import { REL_HOME } from "util/rel-node-name";
+import { MediaWithCaption } from "util/media-with-caption";
 
 export default [
     saga("LINK_PREVIEW_LOAD", payload => payload.url, linkPreviewLoadSaga),
@@ -52,7 +56,7 @@ function resolveImageUrl(imageUrl: string | null | undefined, pageUrl: string): 
 
 async function linkPreviewImageUploadSaga(action: WithContext<LinkPreviewImageUploadAction>): Promise<void> {
     const {url, nodeName, features} = action.payload;
-    const {homeOwnerName} = action.context;
+    const {ownerName, homeOwnerName} = action.context;
 
     if (homeOwnerName == null) {
         dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
@@ -65,12 +69,27 @@ async function linkPreviewImageUploadSaga(action: WithContext<LinkPreviewImageUp
         return;
     }
 
+    const mediaMaxSize = select(state => getSettingNode(state, "media.max-size") as number);
+
     try {
         const blob = await Node.proxyMedia(action, REL_HOME, imageUrl);
         const file = new File([blob], `moera-lp-${randomId()}.img`, {type: blob.type});
-        const mediaFile = await mediaUpload(action, features, nodeName, homeOwnerName, file, true);
+        const mediaFile = await mediaUpload(action, features, mediaMaxSize, homeOwnerName, file, true);
         if (mediaFile != null) {
-            dispatch(linkPreviewImageUploaded(url, nodeName, mediaFile).causedBy(action));
+            let mediaFileWithCaption: MediaWithCaption;
+            if (ownerName === homeOwnerName || ownerName == null) {
+                mediaFileWithCaption = new MediaWithCaption(mediaFile);
+            } else {
+                const lease = await Node.createMediaLease(
+                    action, REL_HOME, {nodeName: ownerName, mediaId: mediaFile.id}
+                );
+                const remoteMedia = localMediaToLeasedRemoteMediaInfo(mediaFile, homeOwnerName, lease.id);
+                if (remoteMedia != null) {
+                    dispatch(remoteMediaLoaded(remoteMedia.nodeName, remoteMedia.mediaId, mediaFile).causedBy(action));
+                }
+                mediaFileWithCaption = new MediaWithCaption(undefined, remoteMedia);
+            }
+            dispatch(linkPreviewImageUploaded(url, nodeName, mediaFileWithCaption).causedBy(action));
         } else {
             dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
         }

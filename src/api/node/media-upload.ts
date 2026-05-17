@@ -17,8 +17,13 @@ import { formatMib } from "util/info-quantity";
 type MediaUploadProgressHandler = (loaded: number, total: number) => void;
 
 export async function mediaUpload(
-    caller: WithContext<ClientAction>, features: PostingFeatures | null, nodeName: RelNodeName | string,
-    clientNodeName: string, file: File, compress: boolean, onProgress?: MediaUploadProgressHandler
+    caller: WithContext<ClientAction>,
+    features: PostingFeatures | null,
+    mediaMaxSize: number,
+    clientNodeName: string,
+    file: File,
+    compress: boolean,
+    onProgress?: MediaUploadProgressHandler
 ): Promise<PrivateMediaFileInfo | null> {
     try {
         if (features != null) {
@@ -31,11 +36,11 @@ export async function mediaUpload(
                     });
                 }
             } else {
-                if (file.size > features.mediaMaxSize) {
+                if (file.size > mediaMaxSize) {
                     dispatch(messageBox(i18n.t("upload-too-large", {
                         name: file.name,
                         size: formatMib(file.size),
-                        maxSize: formatMib(features.mediaMaxSize)
+                        maxSize: formatMib(mediaMaxSize)
                     })));
                     return null;
                 }
@@ -48,7 +53,7 @@ export async function mediaUpload(
             digest = Base64js.fromByteArray(new Uint8Array(await window.crypto.subtle.digest("SHA-256", fileContent)));
         }
 
-        const mediaFile = await Node.uploadPrivateMedia(caller, nodeName, clientNodeName, file, onProgress);
+        const mediaFile = await Node.uploadPrivateMedia(caller, REL_HOME, clientNodeName, file, onProgress);
         return {...mediaFile, digest};
     } catch (e) {
         dispatch(errorThrown(e));

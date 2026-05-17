@@ -234,6 +234,7 @@
   "do-want-allow-android-google-play": "<0>Czy chcesz, aby niepubliczna treść Twojego bloga była dostępna w aplikacji Moera na Androida, zainstalowanej z Google Play?</0> W tym celu musisz pozwolić Szeryfowi na odczytywanie niepublicznych treści Twojego bloga i decydowanie (zgodnie z zasadami Google Play), które posty lub komentarze powinny być ukryte w Moera na Androida.",
   "download": "Pobierz",
   "download-attachment": "Pobierz załącznik",
+  "downloading": "Pobieranie",
   "downloading-image": "Pobieranie obrazu...",
   "do-you-have-blog": "Czy masz bloga Moera?",
   "draft-not-found": "Nie znaleziono szkicu",

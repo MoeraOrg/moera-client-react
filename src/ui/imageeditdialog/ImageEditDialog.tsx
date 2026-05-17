@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { MediaCaption } from "api";
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
-import { getNamingNameRoot } from "state/naming/selectors";
 import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ExtPostingInfo } from "state/postings/state";
@@ -14,15 +13,17 @@ import { getPosting } from "state/postings/selectors";
 import { closeImageEditDialog } from "state/imageeditdialog/actions";
 import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
-import { MediaFileWithCaption, RichTextField, RichTextValue } from "ui/control/richtexteditor";
+import { RichTextField, RichTextValue } from "ui/control/richtexteditor";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
-import { mediaImageTagAttributes } from "util/media-images";
+import { useMediaAttributes } from "ui/entry/media";
+import ImagePlaceholder from "ui/entry/ImagePlaceholder";
+import { MediaWithCaption } from "util/media-with-caption";
 import "./ImageEditDialog.css";
 
 interface OuterProps {
     homeOwnerName: string | null;
     homeOwnerFullName: string | null;
-    media: MediaFileWithCaption | null;
+    media: MediaWithCaption | null;
     posting: ExtPostingInfo | null;
     smileysEnabled: boolean;
     setMediaCaption: (mediaId: string, caption?: MediaCaption | null) => void;
@@ -39,7 +40,7 @@ function ImageEditDialogInner(props: Props) {
 
     const parentOverlayId = useSelector((state: ClientState) => state.imageEditDialog.parentOverlayId);
     const media = useSelector((state: ClientState) => state.imageEditDialog.media);
-    const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, state.imageEditDialog.nodeName));
+    const nodeName = useSelector((state: ClientState) => state.imageEditDialog.nodeName);
     const loading = useSelector((state: ClientState) => state.imageEditDialog.loading);
     const saving = useSelector((state: ClientState) => state.imageEditDialog.saving);
     const dispatch = useDispatcher();
@@ -51,22 +52,26 @@ function ImageEditDialogInner(props: Props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [posting, resetForm]); // 'props' are missing on purpose
 
+    const {
+        src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
+    } = useMediaAttributes(nodeName, media?.media ?? null, media?.remoteMedia ?? null, 800);
+
     if (media == null) {
         return null;
     }
 
     const onClose = () => dispatch(closeImageEditDialog());
 
-    const {
-        src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
-    } = mediaImageTagAttributes(rootPage, media, 800);
-
     return (
         <ModalDialog title={t("edit-image")} parentOverlayId={parentOverlayId} loading={loading} onClose={onClose}>
             <Form>
                 <div className="modal-body image-edit-dialog">
-                    <img className="preview" alt={alt ?? ""} src={src} srcSet={srcSet} sizes={sizes}
-                         width={imageWidth} height={imageHeight}/>
+                    {src != null ?
+                        <img className="preview" alt={alt ?? ""} src={src} srcSet={srcSet} sizes={sizes}
+                             width={imageWidth} height={imageHeight}/>
+                    :
+                        <ImagePlaceholder width={imageWidth} height={imageHeight}/>
+                    }
                     <RichTextField
                         name="caption"
                         placeholder={t("description-optional")}
@@ -103,11 +108,11 @@ const logic = {
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.setStatus("submitted");
-        if (formik.props.media?.id != null) {
+        if (formik.props.media?.mediaId != null) {
             formik.props.setMediaCaption(
-                formik.props.media?.id,
+                formik.props.media?.mediaId,
                 {
-                    mediaId: formik.props.media.id,
+                    mediaId: formik.props.media.mediaId,
                     captionSrc: {
                         text: values.caption.toText(formik.props.smileysEnabled)
                     },

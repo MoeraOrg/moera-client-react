@@ -37,6 +37,7 @@ import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { flashBox } from "state/flashbox/actions";
 import { mutuallyIntroduced } from "state/init-barriers";
+import { loadRemoteMediaInDraftAttachments } from "state/remotemedia/sagas";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
@@ -114,6 +115,7 @@ async function composeDraftLoadSaga(action: WithContext<ComposeDraftLoadAction>)
         const draft = await Node.getDraft(action, REL_HOME, id, ["draft.not-found"]);
         dispatch(composeDraftLoaded(draft).causedBy(action));
         dispatch(composeDraftListItemSet(id, draft).causedBy(action));
+        loadRemoteMediaInDraftAttachments(action, draft.media);
     } catch (e) {
         dispatch(composeDraftLoadFailed().causedBy(action));
         if (e instanceof NodeApiError) {

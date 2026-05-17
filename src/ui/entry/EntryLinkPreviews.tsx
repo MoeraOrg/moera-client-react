@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { LinkPreview, MediaAttachment } from "api";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
-import "./EntryLinkPreviews.css";
 import { RelNodeName } from "util/rel-node-name";
+import "./EntryLinkPreviews.css";
 
 interface Props {
     nodeName: RelNodeName | string;

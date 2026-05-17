@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react';
 
-import { PrivateMediaFileInfo } from "api";
 import { RICH_TEXT_EDITOR_KEYS } from "ui/control/richtexteditor/rich-text-editor-keys";
+import { MediaWithCaption } from "util/media-with-caption";
 
 export interface RichTextEditorCommandsInterface {
     enableHeading: boolean;
@@ -63,7 +63,7 @@ export interface RichTextEditorCommandsInterface {
     formatMark: () => void;
     formatClear: () => void;
     formatImage: (embedded?: boolean) => void;
-    embedImage: (mediaFile: PrivateMediaFileInfo) => void;
+    embedImage: (mediaFile: MediaWithCaption) => void;
     undo: () => void;
     redo: () => void;
     enterText: (text: string) => void;

@@ -4,7 +4,7 @@ import { Editor, Element, Node, Path, PathRef, Range, Transforms } from 'slate';
 import { ReactEditor, useSlateSelector, useSlateStatic } from 'slate-react';
 import { HistoryEditor } from 'slate-history';
 
-import { NodeName, PrivateMediaFileInfo } from "api";
+import { NodeName } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import {
@@ -71,6 +71,7 @@ import { RichTextVideoValues } from "ui/control/richtexteditor/dialog/RichTextVi
 import { RichTextFoldValues } from "ui/control/richtexteditor/dialog/RichTextFoldDialog";
 import { RichTextFormulaValues } from "ui/control/richtexteditor/dialog/RichTextFormulaDialog";
 import { RichTextImageValues } from "ui/control/richtexteditor/media/RichTextImageDialog";
+import { MediaWithCaption } from "util/media-with-caption";
 import { NameListItem } from "util/names-list";
 import { mentionName } from "util/names";
 import noTracking from "util/no-tracking";
@@ -584,7 +585,7 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
         );
     }
 
-    const embedImage = (mediaFile: PrivateMediaFileInfo) => {
+    const embedImage = (mediaFile: MediaWithCaption) => {
         showImageDialog(
             true,
             null,

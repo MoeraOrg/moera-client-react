@@ -8,6 +8,7 @@ const ADDITIONAL_MIME_TYPES: Record<string, string> = {
 
 export function extension(mimeType: null | undefined): undefined;
 export function extension(mimeType: string): string;
+export function extension(mimeType: string | null | undefined): string | undefined;
 export function extension(mimeType: string | null | undefined): string | undefined {
     if (mimeType == null) {
         return undefined;

@@ -1,30 +1,29 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
-import { PrivateMediaFileInfo } from "api";
-import { ClientState } from "state/state";
-import { getNamingNameRoot } from "state/naming/selectors";
-import { mediaImageTagAttributes } from "util/media-images";
+import { useMediaAttributes } from "ui/entry/media";
+import ImagePlaceholder from "ui/entry/ImagePlaceholder";
+import { MediaWithCaption } from "util/media-with-caption";
 import { RelNodeName } from "util/rel-node-name";
 
 interface Props {
-    media: PrivateMediaFileInfo;
+    media: MediaWithCaption;
     nodeName: RelNodeName | string;
     dragging?: boolean;
     onClick?: React.MouseEventHandler<HTMLImageElement>;
 }
 
 export default function AttachedImage({media, nodeName, dragging = false, onClick}: Props) {
-    const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, nodeName));
-
     const {
         src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
-    } = mediaImageTagAttributes(rootPage, media, 150, 150, 150);
+    } = useMediaAttributes(nodeName, media.media ?? null, media.remoteMedia ?? null, 150, 150);
 
     const cursor: React.CSSProperties["cursor"] = dragging ? "grabbing" : (onClick ? "pointer" : "default");
 
     return (
-        <img className="thumbnail" alt={alt ?? ""} src={src} srcSet={srcSet} sizes={sizes}
-             width={imageWidth} height={imageHeight} draggable={false} style={{cursor}} onClick={onClick}/>
+        src != null ?
+            <img className="thumbnail" alt={alt ?? ""} src={src} srcSet={srcSet} sizes={sizes}
+                 width={imageWidth} height={imageHeight} draggable={false} style={{cursor}} onClick={onClick}/>
+        :
+            <ImagePlaceholder width={imageWidth} height={imageHeight}/>
     );
 }

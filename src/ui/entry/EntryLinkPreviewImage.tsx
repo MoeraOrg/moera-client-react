@@ -8,12 +8,13 @@ import { useMediaAttributes } from "ui/entry/media";
 import ImagePlaceholder from "ui/entry/ImagePlaceholder";
 import PreloadedImage from "ui/entry/PreloadedImage";
 import { RelNodeName } from "util/rel-node-name";
+import { LeasedRemoteMediaInfo } from "util/media-with-caption";
 import "./EntryLinkPreviewImage.css";
 
 interface Props {
     nodeName: RelNodeName | string;
     mediaFile: PrivateMediaFileInfo | null;
-    remoteMedia: RemoteMediaInfo | null;
+    remoteMedia: RemoteMediaInfo | LeasedRemoteMediaInfo | null;
     loading: boolean;
 }
 

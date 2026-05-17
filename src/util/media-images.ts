@@ -9,6 +9,7 @@ import {
 } from "ui/control/richtexteditor/visual/scripture";
 import { urlWithParameters } from "util/url";
 import { extension } from "util/mime-type";
+import { MediaWithCaption } from "util/media-with-caption";
 import { isNumber } from "util/misc";
 
 function toInt(s: number | string | null | undefined): number {
@@ -171,12 +172,12 @@ export function isMediaDirectPathExpiring(media: PrivateMediaFileInfo | null | u
 }
 
 export function mediaFileName(media: null | undefined): undefined;
-export function mediaFileName(media: PrivateMediaFileInfo): string;
-export function mediaFileName(media: PrivateMediaFileInfo | null | undefined): string | undefined {
+export function mediaFileName(media: PrivateMediaFileInfo | MediaWithCaption): string;
+export function mediaFileName(media: PrivateMediaFileInfo | MediaWithCaption | null | undefined): string | undefined {
     if (media == null) {
         return undefined;
     }
-    return media.title ? media.title + "." + extension(media.mimeType) : media.path.split("/").pop();
+    return media.title ? media.title + "." + extension(media.mimeType) : media.path?.split("/").pop();
 }
 
 export function mediaDownloadUrl(rootPage: string | null, media: PrivateMediaFileInfo): string {

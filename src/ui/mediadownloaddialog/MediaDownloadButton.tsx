@@ -11,19 +11,20 @@ import "./MediaDownloadButton.css";
 
 interface Props {
     loading: boolean;
+    onClose: () => void;
 }
 
-export default function MediaDownloadButton({loading}: Props) {
+export default function MediaDownloadButton({loading, onClose}: Props) {
     const media = useSelector((state: ClientState) => state.mediaDownloadDialog.media);
     const homeRootPage = useSelector(getHomeRootPage);
     const {t} = useTranslation();
 
     if (media == null || media.malware) {
-        return (
-            <Button variant="primary" disabled loading={loading}>
-                <Icon icon={msDownload} size="1.3em" className="download-icon"/>{t("download")}
-            </Button>
-        );
+        if (loading) {
+            return <Button variant="secondary" disabled loading={true}>{t("downloading")}</Button>;
+        } else {
+            return <Button variant="primary" onClick={onClose}>{t("close")}</Button>;
+        }
     }
 
     const fileName = mediaFileName(media);

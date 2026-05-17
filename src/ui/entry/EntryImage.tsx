@@ -34,7 +34,7 @@ export default function EntryImage({
     } = useMediaAttributes(nodeName, mediaFile, remoteMedia, width, height);
     const dispatch = useDispatcher();
 
-    const mediaId = mediaFile?.id ?? remoteMedia?.id;
+    const mediaId = mediaFile?.id ?? remoteMedia?.mediaId;
     const href = urlWithParameters(ut`/post/${postingId}`, {comment: commentId, media: mediaId});
 
     const onNear = () => {

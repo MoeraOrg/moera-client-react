@@ -2,18 +2,19 @@ import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
-import { DraftText, MediaCaption, PostingText, PrivateMediaFileInfo, StoryAttributes } from "api";
+import { DraftText, MediaCaption, MediaToAttach, PostingText, StoryAttributes } from "api";
 import { ClientState } from "state/state";
-import { getHomeOwnerGender } from "state/home/selectors";
+import { getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import { getOwnerName } from "state/node/selectors";
 import { composeDraftListItemDelete, composeDraftSave, composeUpdateDraftDelete } from "state/compose/actions";
 import { getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
 import { useDispatcher } from "ui/hook";
 import { Icon, msCloudDone, msCloudUpload } from "ui/material-symbols";
-import { mediaCaptionsToCaptionsText, MediaFileWithCaption } from "ui/control/richtexteditor";
+import { mediaCaptionsToCaptionsText, mediaToDraftAttachment } from "ui/control/richtexteditor";
 import { ComposePageValues, isPostingTextChanged, valuesToPostingText } from "ui/compose/posting-compose";
 import { useDraftSaver } from "ui/draft/draft-saver";
+import { MediaWithCaption } from "util/media-with-caption";
 import { notNull } from "util/misc";
 
 const getPublishAt = (publications: StoryAttributes[] | null | undefined): number | null | undefined =>
@@ -23,17 +24,11 @@ const toDraftText = (
     ownerName: string,
     postingId: string | null,
     postingText: PostingText,
-    media: Map<string, PrivateMediaFileInfo>,
+    media: MediaToAttach[],
     mediaCaptions: MediaCaption[] | undefined
 ): DraftText => ({
     ...cloneDeep(postingText),
-    media: postingText.media?.filter(notNull).map(id => ({
-        id,
-        hash: media.get(id)?.hash,
-        digest: media.get(id)?.digest,
-        mimeType: media.get(id)?.mimeType ?? "image/jpeg",
-        attachment: media.get(id)?.attachment
-    })),
+    media,
     mediaCaptions: mediaCaptionsToCaptionsText(mediaCaptions),
     publications: undefined,
     receiverName: ownerName,
@@ -42,7 +37,7 @@ const toDraftText = (
     publishAt: getPublishAt(postingText.publications)
 } as DraftText);
 
-const toCaptionsList = (media: (MediaFileWithCaption | null)[] | null | undefined): MediaCaption[] | undefined =>
+const toCaptionsList = (media: (MediaWithCaption | null)[] | null | undefined): MediaCaption[] | undefined =>
     media?.filter(notNull).map(m => m.caption).filter(notNull);
 
 const areCaptionsEmpty = (captions: MediaCaption[] | undefined): boolean => captions == null || captions.length === 0;
@@ -51,6 +46,7 @@ type ComposeValue = [PostingText, MediaCaption[] | undefined];
 
 export default function ComposeDraftSaver() {
     const ownerName = useSelector(getOwnerName);
+    const homeOwnerName = useSelector(getHomeOwnerName);
     const gender = useSelector(getHomeOwnerGender);
     const features = useSelector(getPostingFeatures);
     const postingId = useSelector((state: ClientState) => state.compose.postingId);
@@ -86,17 +82,15 @@ export default function ComposeDraftSaver() {
 
     const save = useCallback(
         ([text, mediaCaptions]: ComposeValue, values: ComposePageValues): void => {
-            if (ownerName != null) {
-                const media = new Map(
-                    ((values.body.media ?? []) as (PrivateMediaFileInfo | null)[])
-                        .concat(values.linkPreviews.media)
-                        .filter(notNull)
-                        .map(rm => [rm.id, rm])
-                );
+            if (ownerName != null && homeOwnerName != null) {
+                const media = (values.body.media ?? [])
+                    .concat(values.linkPreviews.media)
+                    .filter(notNull)
+                    .map(m => mediaToDraftAttachment(m, ownerName, homeOwnerName))
                 dispatch(composeDraftSave(draftId, toDraftText(ownerName, postingId, text, media, mediaCaptions)));
             }
         },
-        [ownerName, draftId, postingId, dispatch]
+        [ownerName, homeOwnerName, dispatch, draftId, postingId]
     );
 
     const drop = useCallback(
