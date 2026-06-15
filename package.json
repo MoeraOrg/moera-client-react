@@ -87,7 +87,7 @@
     "workerpool": "^10.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.0",
+    "@babel/core": "^7.29.6",
     "@babel/plugin-syntax-flow": "^7.28.6",
     "@babel/plugin-transform-react-jsx": "^7.28.6",
     "@babel/preset-react": "^7.28.5",
