@@ -101,7 +101,6 @@ function CommentDialogInner(props: Props) {
                         maxHeight="max(100vh - 45rem)"
                         features={features}
                         nodeName={receiverName ?? REL_CURRENT}
-                        forceImageCompress
                         noEmbeddedMedia
                         anyValue
                         autoFocus

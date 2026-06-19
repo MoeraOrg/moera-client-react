@@ -4,7 +4,11 @@
     clear: both;
 }
 
-.entry A:hover {
+.entry > .content A:visited {
+    color: var(--violet-500);
+}
+
+.entry > .content A:hover {
     text-decoration: underline;
 }
 

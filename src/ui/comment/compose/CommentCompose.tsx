@@ -80,7 +80,6 @@ function CommentCompose(props: Props) {
                         maxHeight="max(100vh - 26rem, 7.2em)"
                         features={features}
                         nodeName={receiverName ?? REL_CURRENT}
-                        forceImageCompress
                         noMedia={!connectedToHome}
                         noEmbeddedMedia
                         anyValue

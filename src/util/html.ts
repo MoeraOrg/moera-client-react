@@ -199,7 +199,7 @@ export function replaceEmojis(html: string | null | undefined): string {
     let shift = 0;
     let current = html;
     for (let entity of entities) {
-        const img = createEmojiElement(entity);
+        const img = entity.text !== "\ufe0e" && entity.text !== "\ufe0f" ? createEmojiElement(entity) : "";
         current = current.substring(0, entity.indices[0] + shift) + img + current.substring(entity.indices[1] + shift);
         shift += img.length - (entity.indices[1] - entity.indices[0]);
     }
@@ -283,6 +283,16 @@ export function htmlToLinefeeds(html: string | null | undefined): string {
         .replace(/\n*<p(\s[^>]*)?>\n*/gi, "\n\n")
         .replace(/<\/p>/gi, "")
         .replace(/\n*<br\s*\/?>\n*/gi, "\n");
+}
+
+export function doubleLinefeedsToParagraphs(html: string | null | undefined): string {
+    if (!html) {
+        return "";
+    }
+    if (html.includes("<p>") || html.includes("<p ")) {
+        return html;
+    }
+    return html.replace(/<br\s*\/?>(\s*<br\s*\/?>)+/gi, "<p>");
 }
 
 export function prettyHtml(html: string): string {

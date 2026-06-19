@@ -14,12 +14,13 @@ export function isRemoteMediaToBeLoaded(state: ClientState, nodeName: string, me
 export function getRemoteMedia(
     state: ClientState,
     nodeName: string | null | undefined,
-    mediaId: string | null | undefined
+    mediaId: string | null | undefined,
+    digest: string | null | undefined
 ): PrivateMediaFileInfo | null {
     if (nodeName == null || mediaId == null) {
         return null;
     }
 
     const status = getRemoteMediaStatus(state, nodeName, mediaId);
-    return status?.loaded ? status.media : null;
+    return status?.loaded && (digest == null || status.media?.digest === digest) ? status.media : null;
 }

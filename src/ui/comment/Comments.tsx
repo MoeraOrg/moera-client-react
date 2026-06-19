@@ -18,6 +18,7 @@ import {
     getDetailedPosting,
     getVisibleComments,
     isCommentComposerFocused,
+    isCommentDialogReady,
     isCommentsFocused,
     isCommentsShowInvisible,
     isDetailedPostingCached,
@@ -54,7 +55,9 @@ export default function Comments() {
     const focusedCommentId = useSelector((state: ClientState) => getCommentsState(state).focusedCommentId);
     const focused = useSelector(isCommentsFocused);
     const composerFocused = useSelector(isCommentComposerFocused);
-    const showCommentDialog = useSelector((state: ClientState) => state.detailedPosting.commentDialog.show);
+    const showCommentDialog = useSelector((state: ClientState) =>
+        state.detailedPosting.commentDialog.show && isCommentDialogReady(state)
+    );
     const commentsVisible = useSelector((state: ClientState) =>
         isPermitted("viewComments", getDetailedPosting(state), "public", state)
     );

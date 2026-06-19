@@ -52,6 +52,10 @@ A.link-preview:hover {
     text-decoration: none;
 }
 
+.entry A.link-preview:visited {
+    color: unset;
+}
+
 .link-preview .details {
     flex: auto;
     padding: .5rem 1rem;

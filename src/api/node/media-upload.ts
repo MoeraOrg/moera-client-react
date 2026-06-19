@@ -20,7 +20,6 @@ export async function mediaUpload(
     caller: WithContext<ClientAction>,
     features: PostingFeatures | null,
     mediaMaxSize: number,
-    clientNodeName: string,
     file: File,
     compress: boolean,
     onProgress?: MediaUploadProgressHandler
@@ -53,7 +52,7 @@ export async function mediaUpload(
             digest = Base64js.fromByteArray(new Uint8Array(await window.crypto.subtle.digest("SHA-256", fileContent)));
         }
 
-        const mediaFile = await Node.uploadPrivateMedia(caller, REL_HOME, clientNodeName, file, onProgress);
+        const mediaFile = await Node.uploadPrivateMedia(caller, REL_HOME, file, onProgress);
         return {...mediaFile, digest};
     } catch (e) {
         dispatch(errorThrown(e));

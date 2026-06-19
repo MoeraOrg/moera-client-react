@@ -17,7 +17,7 @@ export function useMediaAttributes(
     const actualNodeName = (mediaFile != null ? nodeName : remoteMedia?.nodeName) ?? nodeName;
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, actualNodeName));
     const remoteMediaFile = useSelector((state: ClientState) =>
-        getRemoteMedia(state, remoteMedia?.nodeName, remoteMedia?.mediaId)
+        getRemoteMedia(state, remoteMedia?.nodeName, remoteMedia?.mediaId, remoteMedia?.digest)
     );
 
     const actualMediaFile = mediaFile ?? remoteMediaFile;

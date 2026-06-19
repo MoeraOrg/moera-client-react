@@ -74,7 +74,7 @@ async function linkPreviewImageUploadSaga(action: WithContext<LinkPreviewImageUp
     try {
         const blob = await Node.proxyMedia(action, REL_HOME, imageUrl);
         const file = new File([blob], `moera-lp-${randomId()}.img`, {type: blob.type});
-        const mediaFile = await mediaUpload(action, features, mediaMaxSize, homeOwnerName, file, true);
+        const mediaFile = await mediaUpload(action, features, mediaMaxSize, file, true);
         if (mediaFile != null) {
             let mediaFileWithCaption: MediaWithCaption;
             if (ownerName === homeOwnerName || ownerName == null) {

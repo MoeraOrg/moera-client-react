@@ -1002,24 +1002,12 @@ export async function revokeAll(
     });
 }
 
-export async function uploadAdminMedia(
+export async function uploadPrivateMedia(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, file: File,
     onProgress?: ProgressHandler, errorFilter: ErrorFilter = false, auth: true | string = true
 ): Promise<API.PrivateMediaFileInfo> {
 
     const location = "/media/private";
-    return callApi<API.PrivateMediaFileInfo>({
-        caller, nodeName, method: "POST", location, body: file, onProgress, auth, schema: "PrivateMediaFileInfo",
-        errorFilter
-    });
-}
-
-export async function uploadPrivateMedia(
-    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, clientName: string, file: File,
-    onProgress?: ProgressHandler, errorFilter: ErrorFilter = false, auth: true | string = true
-): Promise<API.PrivateMediaFileInfo> {
-
-    const location = ut`/media/private/${clientName}`;
     return callApi<API.PrivateMediaFileInfo>({
         caller, nodeName, method: "POST", location, body: file, onProgress, auth, schema: "PrivateMediaFileInfo",
         errorFilter

@@ -32,7 +32,7 @@ export default function EntryFile({nodeName, mediaFile, remoteMedia}: Props) {
     const actualNodeName = (mediaFile != null ? targetNodeName : remoteMedia?.nodeName) ?? targetNodeName;
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, actualNodeName));
     const remoteMediaFile = useSelector((state: ClientState) =>
-        getRemoteMedia(state, remoteMedia?.nodeName, remoteMedia?.mediaId)
+        getRemoteMedia(state, remoteMedia?.nodeName, remoteMedia?.mediaId, remoteMedia?.digest)
     );
     const file = mediaFile ?? remoteMediaFile;
     const tinyScreen = useIsTinyScreen();

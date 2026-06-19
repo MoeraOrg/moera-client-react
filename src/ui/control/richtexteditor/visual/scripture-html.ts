@@ -37,7 +37,14 @@ import {
     ScriptureText
 } from "ui/control/richtexteditor/visual/scripture";
 import { findStandardSize, getImageDimensions } from "ui/control/richtexteditor/media/rich-text-image";
-import { htmlEntities, htmlToEmoji, linefeedsToHtml, safeImportHtml, unhtmlEntities } from "util/html";
+import {
+    doubleLinefeedsToParagraphs,
+    htmlEntities,
+    htmlToEmoji,
+    linefeedsToHtml,
+    safeImportHtml,
+    unhtmlEntities
+} from "util/html";
 import { MediaWithCaption } from "util/media-with-caption";
 import { isNumericString, notNull } from "util/misc";
 import { universalLocation } from "util/universal-url";
@@ -256,7 +263,10 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
 }
 
 export const safeImportScripture = (html: string | null | undefined): Scripture =>
-    htmlToScripture(htmlToEmoji(linefeedsToHtml(safeImportHtml(html?.replaceAll("\n", " ")))), true);
+    htmlToScripture(
+        htmlToEmoji(doubleLinefeedsToParagraphs(linefeedsToHtml(safeImportHtml(html?.replaceAll("\n", " "))))),
+        true
+    );
 
 export function scriptureToHtml(scripture?: Scripture | null | undefined): string {
     if (!scripture) { // null, undefined, "", []

@@ -4,6 +4,8 @@ const ADDITIONAL_MIME_TYPES: Record<string, string> = {
     "image/x-png": "png",
     "image/x-webp": "webp",
     "text/markdown": "md",
+    "application/cdr": "cdr",
+    "application/vnd.corel-draw": "cdr",
 };
 
 export function extension(mimeType: null | undefined): undefined;

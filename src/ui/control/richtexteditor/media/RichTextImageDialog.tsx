@@ -32,7 +32,6 @@ type Props = {
     href?: string | null;
     insert?: boolean;
     nodeName?: RelNodeName | string;
-    forceCompress?: boolean;
     compressDefault?: boolean;
     mediaMaxSize?: number;
 } & RichTextEditorDialogProps<RichTextImageValues>;
@@ -51,7 +50,7 @@ const mapPropsToValues = (props: Props): RichTextImageValues => ({
 });
 
 function RichTextImageDialog({
-    mediaFiles, insert, nodeName = REL_CURRENT, forceCompress, mediaMaxSize, onSubmit, okButtonRef
+    mediaFiles, insert, nodeName = REL_CURRENT, mediaMaxSize, onSubmit, okButtonRef
 }: BodyProps) {
     const [, {value: files}, {setValue: setFiles}] = useField<File[] | null>("files");
     const [, {value: standardSize}] = useField<RichTextImageStandardSize>("standardSize");
@@ -108,7 +107,7 @@ function RichTextImageDialog({
             {files == null && mediaFiles == null &&
                 <InputField type="url" name="href" title={t("link")} anyValue autoFocus/>
             }
-            {files != null && !forceCompress &&
+            {files != null &&
                 <CheckboxField title={t("compress-images")} name="compress" groupClassName="mt-3 mb-0" anyValue/>
             }
             {insert &&

@@ -74,11 +74,7 @@ export default [
             isAtDetailedPostingPage(state) && isDetailedPostingId(state, signal.payload.posting.id),
         updateLocation
     ),
-    trigger(
-        "GO_TO_PAGE",
-        conj(isAtDetailedPostingPage, isDetailedPostingGalleryExpanded),
-        detailedPostingLoadAttached
-    ),
+    trigger("DETAILED_POSTING_LOADED", isDetailedPostingGalleryExpanded, detailedPostingLoadAttached),
     trigger(
         ["GO_TO_PAGE", "POSTING_SET", "NODE_READY"],
         conj(isAtNode, isAtDetailedPostingPage, isCommentsReceiverToBeSwitched),

@@ -13,7 +13,6 @@ export interface RichTextCopyImageValues {
 }
 
 type Props = {
-    forceCompress?: boolean;
     compressDefault?: boolean;
 } & RichTextEditorDialogProps<RichTextCopyImageValues>;
 
@@ -22,15 +21,13 @@ const mapPropsToValues = (props: Props): RichTextCopyImageValues => ({
     compress: props.compressDefault ?? true,
 });
 
-const RichTextCopyImageDialog = ({forceCompress}: Props) => {
+const RichTextCopyImageDialog = () => {
     const {t} = useTranslation();
 
     return (
         <>
             <InputField type="url" name="url" title={t("link")} anyValue autoFocus/>
-            {!forceCompress &&
-                <CheckboxField title={t("compress-images")} name="compress" anyValue/>
-            }
+            <CheckboxField title={t("compress-images")} name="compress" anyValue/>
         </>
     );
 }

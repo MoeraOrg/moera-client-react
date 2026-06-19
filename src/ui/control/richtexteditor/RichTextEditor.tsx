@@ -22,15 +22,14 @@ import "./RichTextEditor.css";
 type Props = {
     className?: string;
     features: PostingFeatures | null;
-    forceImageCompress?: boolean;
     onChange?: (value: RichTextValue, converted: boolean) => void;
     children?: ReactNode;
 } & Omit<MarkdownEditorProps, "onChange"> & Omit<VisualEditorProps, "onChange">;
 
 export function RichTextEditor({
     name, value, touched, features, rows, minHeight, maxHeight, placeholder, className, autoFocus, autoComplete,
-    disabled, smileysEnabled = true, commentQuote, panelMode, format, nodeName = REL_CURRENT, forceImageCompress,
-    onChange, submitKey, onSubmit, onBlur, onUrls, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, children
+    disabled, smileysEnabled = true, commentQuote, panelMode, format, nodeName = REL_CURRENT, onChange, submitKey,
+    onSubmit, onBlur, onUrls, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, children
 }: Props) {
     const textRef = React.useRef<string | Scripture>(null);
     textRef.current = value.value;
@@ -63,7 +62,6 @@ export function RichTextEditor({
                     value={value.media ?? []}
                     features={features}
                     nodeName={nodeName}
-                    forceCompress={forceImageCompress}
                     noMedia={noMedia}
                     srcFormat={format}
                     onChange={onMediaChange}

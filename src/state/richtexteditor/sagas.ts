@@ -37,7 +37,7 @@ async function richTextEditorMediaUpload(
     const mediaMaxSize = select(state => getSettingNode(state, "media.max-size") as number);
 
     const mediaFile = await mediaUpload(
-        action, features, mediaMaxSize, homeOwnerName, files[index], compress,
+        action, features, mediaMaxSize, files[index], compress,
         (loaded: number, total: number) => onProgress(index, loaded, total)
     );
     if (mediaFile != null) {

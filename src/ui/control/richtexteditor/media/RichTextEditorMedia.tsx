@@ -50,7 +50,6 @@ interface Props {
     value: (MediaWithCaption | null)[];
     features: PostingFeatures | null;
     nodeName: RelNodeName | string;
-    forceCompress?: boolean;
     noMedia?: boolean | null;
     srcFormat: SourceFormat;
     onChange?: ChangeHandler;
@@ -58,7 +57,7 @@ interface Props {
 }
 
 export default function RichTextEditorMedia({
-    value, features, nodeName, forceCompress = false, noMedia, srcFormat, onChange, children
+    value, features, nodeName, noMedia, srcFormat, onChange, children
 }: Props) {
     const mediaMaxSize = useSelector((state: ClientState) => getSettingNode(state, "media.max-size") as number);
     const compressImages = useSelector((state: ClientState) =>
@@ -139,21 +138,16 @@ export default function RichTextEditorMedia({
         }
     }, [dispatch, features, nodeName, srcFormat]);
 
-    const compressDefault = useRef<boolean>(forceCompress || compressImages);
+    const compressDefault = useRef<boolean>(compressImages);
     const onInsertRef = useRef<OnInsertHandler | undefined>(undefined);
 
-    const openUploadImages = (files: File[]) => {
+    const openUploadImages = useCallback((files: File[]) => {
         if (files.length === 0) {
             return;
         }
 
-        if (attachmentType === "file") {
+        if (attachmentType === "file" && onInsertRef.current == null) {
             uploadImages(files, false);
-            return;
-        }
-
-        if (forceCompress && onInsertRef.current == null) {
-            uploadImages(files, true);
             return;
         }
 
@@ -170,6 +164,9 @@ export default function RichTextEditorMedia({
             ) => {
                 showImageDialog(false);
 
+                const onInsert = onInsertRef.current;
+                onInsertRef.current = undefined;
+
                 if (!ok || !files || files.length === 0) {
                     return;
                 }
@@ -178,12 +175,12 @@ export default function RichTextEditorMedia({
                     compressDefault.current = compress;
                 }
                 uploadImages(
-                    files, compress ?? compressDefault.current, onInsertRef.current, standardSize,
-                    customWidth, customHeight, caption
+                    files, compress ?? compressDefault.current, onInsert, standardSize, customWidth, customHeight,
+                    caption
                 );
             }
         );
-    }
+    }, [attachmentType, uploadImages]);
 
     const onAndroidMessage = useCallback((message: AndroidMessage) => {
         if (message.action === "content-selected" && message.uris != null) {
@@ -196,9 +193,9 @@ export default function RichTextEditorMedia({
                     {type: mimeType}
                 );
             });
-            uploadImages(files, false);
+            openUploadImages(files);
         }
-    }, [uploadImages]);
+    }, [openUploadImages]);
 
     useAndroidMessages(onAndroidMessage);
 
@@ -213,7 +210,7 @@ export default function RichTextEditorMedia({
         useDropzone({
             noClick: true,
             noKeyboard: true,
-            accept: attachmentType === "image"
+            accept: attachmentType === "image" || onInsertRef.current != null
                 ? {
                     "image/*": imageExtensions
                 }
@@ -375,7 +372,6 @@ export default function RichTextEditorMedia({
                     href={imageDialogHref}
                     insert={imageDialogInsert}
                     nodeName={nodeName}
-                    forceCompress={forceCompress}
                     compressDefault={compressDefault.current}
                     mediaMaxSize={mediaMaxSize}
                     prevValues={imageDialogPrevValues}
@@ -384,7 +380,6 @@ export default function RichTextEditorMedia({
             }
             {copyImageShow &&
                 <RichTextCopyImageDialog
-                    forceCompress={forceCompress}
                     compressDefault={compressDefault.current}
                     onSubmit={submitCopyImage}
                 />
