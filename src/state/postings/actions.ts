@@ -61,6 +61,20 @@ export type PostingLoadFailedAction = ActionWithPayload<"POSTING_LOAD_FAILED", {
 export const postingLoadFailed = (id: string, nodeName: RelNodeName | string): PostingLoadFailedAction =>
     actionWithPayload("POSTING_LOAD_FAILED", {id, nodeName});
 
+export type PostingVisitedAction = ActionWithPayload<"POSTING_VISITED", {
+    id: string;
+    nodeName: RelNodeName | string;
+}>;
+export const postingVisited = (id: string, nodeName: RelNodeName | string): PostingVisitedAction =>
+    actionWithPayload("POSTING_VISITED", {id, nodeName});
+
+export type PostingVisitRecordedAction = ActionWithPayload<"POSTING_VISIT_RECORDED", {
+    id: string;
+    nodeName: RelNodeName | string;
+}>;
+export const postingVisitRecorded = (id: string, nodeName: RelNodeName | string): PostingVisitRecordedAction =>
+    actionWithPayload("POSTING_VISIT_RECORDED", {id, nodeName});
+
 export type PostingVerifyAction = ActionWithPayload<"POSTING_VERIFY", {
     id: string;
     nodeName: RelNodeName | string;
@@ -316,6 +330,8 @@ export type PostingsAnyAction =
     | PostingDeleteFailedAction
     | PostingLoadAction
     | PostingLoadFailedAction
+    | PostingVisitedAction
+    | PostingVisitRecordedAction
     | PostingVerifyAction
     | PostingVerifyFailedAction
     | PostingOperationsUpdateAction

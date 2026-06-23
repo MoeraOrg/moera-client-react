@@ -1347,6 +1347,13 @@ export interface VerificationInfo {
     errorMessage?: string | null;
 }
 
+export interface VisitDetails {
+    postingId: string;
+    commentId?: string | null;
+    mediaId?: string | null;
+    referrer?: string | null;
+}
+
 export interface WhoAmI {
     nodeName?: string | null;
     nodeNameChanging?: boolean | null;
@@ -1538,6 +1545,7 @@ export interface PostingInfoBase<B> {
     reactions?: ReactionTotalsInfo | null;
     sources?: PostingSourceInfo[] | null;
     totalComments?: number | null;
+    viewCount?: number | null;
     recommended?: boolean | null;
     externalSourceUri?: string | null;
 }

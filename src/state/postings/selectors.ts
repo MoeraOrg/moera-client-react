@@ -18,6 +18,12 @@ function getPostingState(
     return state.postings[nodeName]?.[id];
 }
 
+export function isPostingVisitRecorded(
+    state: ClientState, id: string | null, nodeName: RelNodeName | string
+): boolean | undefined {
+    return getPostingState(state, id, nodeName)?.visitRecorded;
+}
+
 export function getPosting(
     state: ClientState, id: string | null, nodeName: RelNodeName | string
 ): ExtPostingInfo | null {

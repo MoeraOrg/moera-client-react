@@ -4215,6 +4215,10 @@ export const NODE_API_SCHEMAS = {
                     type: "integer",
                     nullable: true
                 },
+                "viewCount": {
+                    type: "integer",
+                    nullable: true
+                },
                 "recommended": {
                     type: "boolean",
                     nullable: true

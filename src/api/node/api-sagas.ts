@@ -2311,6 +2311,17 @@ export async function deleteUserListItem(
     });
 }
 
+export async function recordVisit(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, visit: API.VisitDetails,
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
+): Promise<API.Result> {
+
+    const location = "/visits";
+    return callApi<API.Result>({
+        caller, nodeName, method: "POST", location, body: visit, auth, schema: "Result", errorFilter
+    });
+}
+
 export async function whoAmI(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false
 ): Promise<API.WhoAmI> {

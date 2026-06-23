@@ -25,6 +25,7 @@ import EntryGallery from "ui/entry/EntryGallery";
 import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
 import PostingReactions from "ui/posting/PostingReactions";
 import PostingComments from "ui/posting/PostingComments";
+import PostingViews from "ui/posting/PostingViews";
 import PostingButtons from "ui/posting/PostingButtons";
 import Jump from "ui/navigation/Jump";
 import { RelNodeName } from "util/rel-node-name";
@@ -122,7 +123,10 @@ export default function FeedPosting({nodeName, posting, story, hideRecommended}:
             />
             <div className="reactions-line">
                 <PostingReactions nodeName={nodeName} postingId={posting.id} reactions={posting.reactions}/>
-                <PostingComments postingId={posting.id} totalComments={posting.totalComments}/>
+                <div className="right-group">
+                    <PostingViews viewCount={posting.viewCount}/>
+                    <PostingComments postingId={posting.id} totalComments={posting.totalComments}/>
+                </div>
             </div>
             <PostingButtons posting={posting} story={story}/>
         </>

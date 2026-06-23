@@ -25,6 +25,7 @@ import PostingSheriffVisibility from "ui/posting/PostingSheriffVisibility";
 import PostingSubject from "ui/posting/PostingSubject";
 import PostingReactions from "ui/posting/PostingReactions";
 import PostingButtons from "ui/posting/PostingButtons";
+import PostingViews from "ui/posting/PostingViews";
 import EntryHtml from "ui/entry/EntryHtml";
 import EntryGallery from "ui/entry/EntryGallery";
 import EntryGalleryExpanded from "ui/entry/EntryGalleryExpanded";
@@ -120,7 +121,10 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
             />
             <div className="reactions-line">
                 <PostingReactions nodeName={REL_CURRENT} postingId={posting.id} reactions={posting.reactions}/>
-                <PostingComments postingId={posting.id} totalComments={posting.totalComments}/>
+                <div className="right-group">
+                    <PostingViews viewCount={posting.viewCount}/>
+                    <PostingComments postingId={posting.id} totalComments={posting.totalComments}/>
+                </div>
             </div>
             <PostingButtons posting={posting} story={story} menu/>
             {expanded &&

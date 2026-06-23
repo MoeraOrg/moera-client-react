@@ -41,6 +41,7 @@ import {
     PostingReactionsChangedEvent,
     PostingRestoredEvent,
     PostingUpdatedEvent,
+    PostingViewedEvent,
     ProfileUpdatedEvent,
     RegisteredNameOperationStatusEvent,
     RemoteCommentAddedEvent,
@@ -132,6 +133,7 @@ export type ClientEventAction =
     | EventAction<PostingReactionsChangedEvent>
     | EventAction<PostingRestoredEvent>
     | EventAction<PostingUpdatedEvent>
+    | EventAction<PostingViewedEvent>
     | EventAction<ProfileUpdatedEvent>
     | EventAction<RegisteredNameOperationStatusEvent>
     | EventAction<RemoteCommentAddedEvent>

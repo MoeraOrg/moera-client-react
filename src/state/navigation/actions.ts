@@ -244,6 +244,12 @@ export type BottomMenuShowAction = ActionWithoutPayload<"BOTTOM_MENU_SHOW">;
 export const bottomMenuShow = (): BottomMenuShowAction =>
     actionWithoutPayload("BOTTOM_MENU_SHOW");
 
+export type RecordExternalVisitAction = ActionWithPayload<"RECORD_EXTERNAL_VISIT", {
+    referrer: string;
+}>;
+export const recordExternalVisit = (referrer: string): RecordExternalVisitAction =>
+    actionWithPayload("RECORD_EXTERNAL_VISIT", {referrer});
+
 export type NavigationAnyAction =
     BootAction
     | WakeUpAction
@@ -256,4 +262,5 @@ export type NavigationAnyAction =
     | RestoreFarAction
     | RestoreNearAction
     | BottomMenuHideAction
-    | BottomMenuShowAction;
+    | BottomMenuShowAction
+    | RecordExternalVisitAction;

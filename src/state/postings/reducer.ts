@@ -1,10 +1,11 @@
 import * as immutable from 'object-path-immutable';
+import { isAfter, subDays } from 'date-fns';
 
 import { BlockedEntryOperation, FeedReference, PostingInfo, StoryInfo, SubscriptionType } from "api";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { findPostingIdsByRemote } from "state/postings/selectors";
-import { ExtPostingInfo, NodePostingsState, PostingsState } from "state/postings/state";
+import { ExtPostingInfo, NodePostingsState, PostingsState, PostingState } from "state/postings/state";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
 import { ellipsize } from "util/text";
 import { absoluteNodeName } from "util/rel-node-name";
@@ -68,6 +69,19 @@ function mergePreviousFeedReferences(posting: PostingInfo, state: NodePostingsSt
     return posting;
 }
 
+function updatePostingState(posting: PostingInfo, previous: PostingState | undefined): PostingState {
+    return {
+        posting: safeguard(posting),
+        deleting: false,
+        verificationStatus: "none",
+        visitedAt: previous?.visitedAt ?? null,
+        visitRecorded: previous?.visitRecorded ?? false,
+        subscriptions: {
+            comments: null
+        }
+    };
+}
+
 function immutableSetSubscriptionId(
     state: PostingsState, nodeName: string, id: string, type: SubscriptionType, subscriptionId: string | null
 ) {
@@ -98,14 +112,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                 .map(s => outsideIn(s))
                 .filter(notNull)
                 .map(p => mergePreviousFeedReferences(p, state[nodeName]))
-                .forEach(p => istate.assign([nodeName, p.id], {
-                    posting: safeguard(p),
-                    deleting: false,
-                    verificationStatus: "none",
-                    subscriptions: {
-                        comments: null
-                    }
-                }));
+                .forEach(p => istate.assign([nodeName, p.id], updatePostingState(p, state[nodeName]?.[p.id])));
             return istate.value();
         }
 
@@ -113,14 +120,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             const istate = immutable.wrap(state);
             const nodeName = action.context.ownerNameOrUrl;
             action.payload.postings
-                .forEach(p => istate.assign([nodeName, p.id], {
-                    posting: safeguard(p),
-                    deleting: false,
-                    verificationStatus: "none",
-                    subscriptions: {
-                        comments: null
-                    }
-                }));
+                .forEach(p => istate.assign([nodeName, p.id], updatePostingState(p, state[nodeName]?.[p.id])));
             return istate.value();
         }
 
@@ -155,14 +155,40 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         case "POSTING_SET": {
             let {posting, nodeName} = action.payload;
             nodeName = absoluteNodeName(nodeName, action.context);
-            return immutable.wrap(state).assign([nodeName, posting.id], {
-                posting: safeguard(posting),
-                deleting: false,
-                verificationStatus: "none",
-                subscriptions: {
-                    comments: null
-                }
-            }).value();
+            return immutable.wrap(state)
+                .assign([nodeName, posting.id], updatePostingState(posting, state[nodeName]?.[posting.id]))
+                .value();
+        }
+
+        case "POSTING_VISITED": {
+            let {id, nodeName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
+
+            const postingState = state[nodeName]?.[id];
+            if (postingState == null) {
+                return state;
+            }
+            if (
+                postingState.visitRecorded
+                && postingState.visitedAt != null
+                && isAfter(postingState.visitedAt, subDays(new Date(), 1))
+            ) {
+                return state;
+            }
+
+            return immutable.wrap(state)
+                .set([nodeName, id, "visitedAt"], new Date())
+                .set([nodeName, id, "visitRecorded"], nodeName === action.context.homeOwnerName)
+                .value();
+        }
+
+        case "POSTING_VISIT_RECORDED": {
+            let {id, nodeName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
+            if (state[nodeName]?.[id]) {
+                return immutable.set(state, [nodeName, id, "visitRecorded"], true);
+            }
+            return state;
         }
 
         case "POSTING_DELETE":
@@ -289,6 +315,16 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                 }
             }
             return istate.value();
+        }
+
+        case "EVENT_HOME_POSTING_VIEWED": {
+            const {id, viewCount} = action.payload;
+            const {homeOwnerName: nodeName} = action.context;
+
+            if (nodeName != null && state[nodeName]?.[id]) {
+                return immutable.set(state, [nodeName, id, "posting", "viewCount"], viewCount);
+            }
+            return state;
         }
 
         case "EVENT_HOME_REMOTE_REACTION_ADDED": {

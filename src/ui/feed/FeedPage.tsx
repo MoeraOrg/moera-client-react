@@ -14,7 +14,9 @@ import {
     feedStatusUpdate
 } from "state/feeds/actions";
 import { getFeedState } from "state/feeds/selectors";
+import { PostingState } from "state/postings/state";
 import { isPostingSheriffProhibited } from "state/postings/selectors";
+import { postingVisited } from "state/postings/actions";
 import { useDebounce, useDispatcher } from "ui/hook";
 import { FeedTopBox } from "ui/control";
 import FeedTopButton from "ui/feed/FeedTopButton";
@@ -25,7 +27,6 @@ import FeedNoContent from "ui/feed/nocontent/FeedNoContent";
 import { REL_HOME, RelNodeName } from "util/rel-node-name";
 import { getPageHeaderHeight } from "util/ui";
 import "./FeedPage.css";
-import { PostingState } from "state/postings/state";
 
 type NavigationUpdateHandler = (navigable: boolean, atBottom: boolean) => void;
 
@@ -136,6 +137,23 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
     useEffect(() => {
         dispatch(feedScrolled(nodeName, feedName, at));
     }, [at, dispatch, feedName, nodeName]);
+
+    const [momentToVisit] = useDebounce(topmostMoment, 2000);
+    const postingToVisit = useMemo(() => {
+        if (!visible || momentToVisit >= Number.MAX_SAFE_INTEGER) {
+            return null;
+        }
+        return stories.find(({story}) => story.moment === momentToVisit)?.posting;
+    }, [momentToVisit, stories, visible]);
+    useEffect(() => {
+        if (postingToVisit != null) {
+            if (postingToVisit.receiverName != null && postingToVisit.receiverPostingId != null) {
+                dispatch(postingVisited(postingToVisit.receiverPostingId, postingToVisit.receiverName));
+            } else {
+                dispatch(postingVisited(postingToVisit.id, nodeName));
+            }
+        }
+    }, [dispatch, nodeName, postingToVisit]);
 
     const [momentToView] = useDebounce(getNotViewedMoment(), 1000);
     useEffect(() => {

@@ -36,14 +36,17 @@ import {
     postingSet,
     postingsReactionSet,
     PostingVerifyAction,
-    postingVerifyFailed
+    postingVerifyFailed,
+    PostingVisitedAction,
+    postingVisitRecorded
 } from "state/postings/actions";
 import { WithContext } from "state/action-types";
 import { flashBox } from "state/flashbox/actions";
 import {
     getPosting,
     getPostingCommentAddedInstantBlockId,
-    getPostingCommentsSubscriptionId
+    getPostingCommentsSubscriptionId,
+    isPostingVisitRecorded
 } from "state/postings/selectors";
 import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
@@ -63,6 +66,11 @@ import { ut } from "util/url";
 export default [
     saga("POSTING_DELETE", payload => payload.id, postingDeleteSaga),
     saga("POSTING_LOAD", payload => payload.id, postingLoadSaga),
+    saga(
+        "POSTING_VISITED",
+        payload => `${payload.nodeName.valueOf()}:${payload.id}`,
+        postingVisitedSaga
+    ),
     saga("POSTING_VERIFY", payload => payload.id, postingVerifySaga),
     saga("POSTING_OPERATIONS_UPDATE", payload => payload.id, postingOperationsUpdateSaga),
     saga("POSTING_REACT", null, postingReactSaga),
@@ -104,6 +112,22 @@ async function postingLoadSaga(action: WithContext<PostingLoadAction>): Promise<
     } catch (e) {
         dispatch(postingLoadFailed(id, nodeName).causedBy(action));
         dispatch(errorThrown(e));
+    }
+}
+
+async function postingVisitedSaga(action: WithContext<PostingVisitedAction>): Promise<void> {
+    const {id, nodeName} = action.payload;
+    const visitRecorded = select(state => isPostingVisitRecorded(state, id, nodeName));
+    if (visitRecorded !== false) {
+        return;
+    }
+
+    const connectedToHome = select(isConnectedToHome);
+    try {
+        await Node.recordVisit(action, nodeName, {postingId: id}, undefined, connectedToHome);
+        dispatch(postingVisitRecorded(id, nodeName).causedBy(action));
+    } catch {
+        // Visit recording is not critical; keep visitRecorded false so a later visit can retry.
     }
 }
 

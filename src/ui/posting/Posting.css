@@ -108,3 +108,13 @@
     align-items: baseline;
     margin-top: .75rem;
 }
+
+.posting > .reactions-line > .right-group {
+    display: flex;
+    align-items: baseline;
+    gap: .25rem;
+}
+
+.posting > .reactions-line > .right-group:empty {
+    display: none;
+}

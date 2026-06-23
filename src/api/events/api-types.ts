@@ -205,6 +205,11 @@ export interface PostingUpdatedEvent extends BaseEvent<"POSTING_UPDATED"> {
     id: string;
 }
 
+export interface PostingViewedEvent extends BaseEvent<"POSTING_VIEWED"> {
+    id: string;
+    viewCount: number;
+}
+
 export type ProfileUpdatedEvent = BaseEvent<"PROFILE_UPDATED">;
 
 export type RegisteredNameOperationStatusEvent = BaseEvent<"REGISTERED_NAME_OPERATION_STATUS">;

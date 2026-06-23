@@ -2,11 +2,15 @@ import i18n from 'i18next';
 import * as URI from 'uri-js';
 
 import { Storage } from "storage";
+import { Node, VisitDetails } from "api";
 import { locationBuild, LocationInfo, locationTransform } from "location";
 import { clearSettingsCache } from "api/setting-types";
 import { saga } from "state/saga";
 import { ClientAction } from "state/action";
+import { WithContext } from "state/action-types";
+import { ClientState } from "state/state";
 import { dispatch, select } from "state/store-sagas";
+import { homeIntroduced, nodeIntroduced } from "state/init-barriers";
 import {
     BootAction,
     JumpFarAction,
@@ -14,25 +18,35 @@ import {
     JumpNearAction,
     locationSet,
     NewLocationAction,
+    recordExternalVisit,
+    RecordExternalVisitAction,
     restoreFar,
     RestoreFarAction,
     RestoreNearAction,
     UpdateLocationAction
 } from "state/navigation/actions";
-import { homeIntroduced } from "state/init-barriers";
+import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import { nodeReady, ownerSwitch } from "state/node/actions";
 import { getNodeRootLocation, getOwnerName, isAtHomeNode, isAtNode } from "state/node/selectors";
 import { getHomeOwnerName, getHomeRootLocation } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { storyReadingUpdate } from "state/stories/actions";
+import { getDetailedPostingId, getFocusedCommentId } from "state/detailedposting/selectors";
+import {
+    getLightboxCommentId,
+    getLightboxMediaId,
+    getLightboxPostingId,
+    isLightboxShown
+} from "state/lightbox/selectors";
 import { messageBox } from "state/messagebox/actions";
 import * as Browser from "ui/browser";
 import { rootUrl } from "util/url";
-import { REL_HOME } from "util/rel-node-name";
+import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { universalLocation } from "util/universal-url";
 
 export default [
     saga("BOOT", "", bootSaga),
+    saga("RECORD_EXTERNAL_VISIT", "", recordExternalVisitSaga),
     saga("JUMP_FAR", "", navigateFarSaga),
     saga("JUMP_NEAR", payload => `${payload.path}:${payload.query}:${payload.hash}`, navigateNearSaga),
     saga("RESTORE_FAR", "", navigateFarSaga),
@@ -55,6 +69,48 @@ function bootSaga(action: BootAction): void {
     if (readId) {
         dispatch(storyReadingUpdate(REL_HOME, "instant", readId, true).causedBy(action));
     }
+
+    if (document.referrer) {
+        dispatch(recordExternalVisit(document.referrer).causedBy(action));
+    }
+}
+
+async function recordExternalVisitSaga(action: WithContext<RecordExternalVisitAction>): Promise<void> {
+    await nodeIntroduced();
+
+    const details = select(state => getExternalVisitDetails(state, action.payload.referrer));
+    if (details == null) {
+        return;
+    }
+
+    try {
+        await Node.recordVisit(action, REL_CURRENT, details, undefined, false);
+    } catch {
+        // Ignore failures; external visit tracking is not critical
+    }
+}
+
+function getExternalVisitDetails(state: ClientState, referrer: string): VisitDetails | null {
+    if (isLightboxShown(state)) {
+        const postingId = getLightboxPostingId(state);
+        return postingId != null ? {
+            postingId,
+            commentId: getLightboxCommentId(state),
+            mediaId: getLightboxMediaId(state),
+            referrer
+        } : null;
+    }
+
+    if (isAtDetailedPostingPage(state)) {
+        const postingId = getDetailedPostingId(state);
+        return postingId != null ? {
+            postingId,
+            commentId: getFocusedCommentId(state),
+            referrer
+        } : null;
+    }
+
+    return null;
 }
 
 async function navigateFarSaga(action: JumpFarAction | RestoreFarAction): Promise<void> {

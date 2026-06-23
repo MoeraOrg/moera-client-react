@@ -1,0 +1,14 @@
+.posting .posting-views {
+    color: var(--bs-gray-600);
+    text-wrap: nowrap;
+    padding: .4rem .75rem 0;
+}
+
+.posting .posting-views svg {
+    vertical-align: -.25rem;
+}
+
+.posting .posting-views .caption {
+    margin-inline-start: .5em;
+    font-weight: 600;
+}

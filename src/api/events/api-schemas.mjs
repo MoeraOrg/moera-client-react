@@ -777,6 +777,27 @@ export const EVENT_SCHEMAS = {
             additionalProperties: false
         },
 
+        PostingViewedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+                "viewCount": {
+                    type: "integer"
+                },
+            },
+            required: [
+                "type",
+                "id",
+                "viewCount",
+            ],
+            additionalProperties: false
+        },
+
         ProfileUpdatedEvent: {
             type: "object",
             properties: {

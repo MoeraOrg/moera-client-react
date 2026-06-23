@@ -1,5 +1,5 @@
 import { conj, inv, trigger } from "state/trigger";
-import { bottomMenuShow, jumpNear, updateLocation } from "state/navigation/actions";
+import { bottomMenuShow, GoToPostingAction, jumpNear, updateLocation } from "state/navigation/actions";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import {
     commentDialogCommentLoad,
@@ -40,6 +40,7 @@ import {
     isCommentsReceiverFeaturesToBeLoaded,
     isCommentsReceiverPostingId,
     isCommentsReceiverToBeSwitched,
+    isDetailedPostingCached,
     isDetailedPostingDefined,
     isDetailedPostingGalleryExpanded,
     isDetailedPostingId,
@@ -50,7 +51,7 @@ import {
     isGlanceCommentToBeLoaded,
     isPastCommentsToBeLoaded
 } from "state/detailedposting/selectors";
-import { PostingDeletedAction, postingSet, PostingSetAction } from "state/postings/actions";
+import { PostingDeletedAction, postingSet, PostingSetAction, postingVisited } from "state/postings/actions";
 import { getPostingMoment } from "state/postings/selectors";
 import { isAtNode } from "state/node/selectors";
 import { CommentAddedEvent, CommentReactionsChangedEvent, CommentUpdatedEvent, EventAction } from "api/events";
@@ -67,6 +68,16 @@ export default [
         "DETAILED_POSTING_LOADED",
         true,
         (signal: DetailedPostingLoadedAction) => postingSet(signal.payload.posting, REL_CURRENT)
+    ),
+    trigger(
+        "DETAILED_POSTING_LOADED",
+        true,
+        (signal: DetailedPostingLoadedAction) => postingVisited(signal.payload.posting.id, REL_CURRENT)
+    ),
+    trigger(
+        "GO_TO_PAGE",
+        conj(isAtDetailedPostingPage, isDetailedPostingCached),
+        (signal: GoToPostingAction) => postingVisited(signal.payload.details.id, REL_CURRENT)
     ),
     trigger(
         "POSTING_SET",
