@@ -24,11 +24,11 @@ export type PushContentType = "story-added" | "story-deleted" | "feed-updated";
 
 export type PushRelayType = "fcm";
 
-export type Scope = "none" | "identify" | "other" | "view-media" | "view-content" | "add-post" | "update-post"
-    | "add-comment" | "update-comment" | "react" | "delete-own-content" | "delete-others-content" | "view-people"
-    | "block" | "friend" | "remote-identify" | "drafts" | "view-feeds" | "update-feeds" | "name" | "plugins"
-    | "view-profile" | "update-profile" | "sheriff" | "view-settings" | "update-settings" | "subscribe" | "tokens"
-    | "user-lists" | "grant" | "upload-public-media" | "upload-private-media" | "lease-media" | "view-all" | "all";
+export type Scope = "none" | "identify" | "other" | "view-content" | "add-post" | "update-post" | "add-comment"
+    | "update-comment" | "react" | "delete-own-content" | "delete-others-content" | "view-people" | "block" | "friend"
+    | "remote-identify" | "drafts" | "view-feeds" | "update-feeds" | "name" | "plugins" | "view-profile"
+    | "update-profile" | "sheriff" | "view-settings" | "update-settings" | "subscribe" | "tokens" | "user-lists"
+    | "grant" | "upload-public-media" | "upload-private-media" | "lease-media" | "view-all" | "all";
 
 export type SearchContentUpdateType = "block" | "comment-add" | "comment-update" | "comment-update-heading"
     | "comment-update-media-text" | "comment-delete" | "friend" | "profile" | "posting-add" | "posting-update"

@@ -1,11 +1,10 @@
 import { Scope } from "api";
 
 export const SCOPES: Scope[] = [
-    "view-media",
+    "view-content",
     "upload-public-media",
     "upload-private-media",
     "lease-media",
-    "view-content",
     "add-post",
     "update-post",
     "add-comment",
@@ -35,7 +34,6 @@ export const SCOPES: Scope[] = [
 ];
 
 export const SCOPES_VIEW_ALL: Scope[] = [
-    "view-media",
     "view-content",
     "view-people",
     "view-feeds",
