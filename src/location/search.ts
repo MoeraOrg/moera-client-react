@@ -18,9 +18,6 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (dstInfo.parameters["entry"] != null) {
         filter.entryType = dstInfo.parameters["entry"] as SearchEntryType;
     }
-    if (dstInfo.parameters["news"] != null) {
-        filter.inNewsfeed = toBoolean(dstInfo.parameters["news"]);
-    }
     if (dstInfo.parameters["my"] != null) {
         filter.ownedByMe = toBoolean(dstInfo.parameters["my"]);
     }
@@ -62,9 +59,6 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     }
     if (filter.entryType !== emptySearchFilter.entryType) {
         info = info.withParameter("entry", filter.entryType);
-    }
-    if (filter.inNewsfeed) {
-        info = info.withParameter("news", "true");
     }
     if (filter.ownedByMe) {
         info = info.withParameter("my", "true");

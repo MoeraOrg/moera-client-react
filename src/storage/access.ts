@@ -83,10 +83,14 @@ export function storeData(data: StoredData): Data.RootInfo[] {
         roots = Data.setRoot(roots, homeRoot, nodeName);
         Data.setStorageItem("roots", null, roots);
     }
-    if (!homeRoot) {
-        return roots;
+    if (homeRoot) {
+        storeDataForRoot(homeRoot, data);
     }
 
+    return roots;
+}
+
+export function storeDataForRoot(homeRoot: string, data: StoredData): void {
     let clientData = Data.getStorageItem("clientData", homeRoot);
     clientData = {
         ...clientData,
@@ -97,8 +101,6 @@ export function storeData(data: StoredData): Data.RootInfo[] {
     const storedClientData = {...clientData};
     ObjectPath.del(storedClientData, "home.nodeName");
     Data.setStorageItem("clientData", homeRoot, storedClientData);
-
-    return roots;
 }
 
 export function deleteData(location: string | null): boolean {

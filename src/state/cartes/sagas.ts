@@ -17,25 +17,30 @@ export default [
 ];
 
 async function cartesLoadSaga(action: WithContext<CartesLoadAction>): Promise<void> {
-    do {
-        const homeLocation = select(getHomeRootLocation);
-        try {
-            const {cartesIp, cartes, createdAt} = await Node.createCartes(
-                action, REL_HOME, {clientScope: ["all"]}, ["node-name-not-set"]
-            );
-            const currentHomeLocation = select(getHomeRootLocation);
-            if (currentHomeLocation !== homeLocation) {
-                continue;
+    try {
+        do {
+            const homeLocation = select(getHomeRootLocation);
+            try {
+                const {cartesIp, cartes, createdAt} = await Node.createCartes(
+                    action, REL_HOME, {clientScope: ["all"]}, ["node-name-not-set"]
+                );
+                if (select(getHomeRootLocation) === homeLocation) {
+                    Storage.storeCartesData(homeLocation, cartesIp ?? null, cartes);
+                    dispatch(cartesSet(cartesIp ?? null, cartes, createdAt - now()).causedBy(action));
+                    break;
+                }
+            } catch (e) {
+                if (select(getHomeRootLocation) === homeLocation) {
+                    if (e instanceof NodeApiError) {
+                        dispatch(cartesSet(null, [], 0).causedBy(action));
+                    }
+                    break;
+                }
             }
-            Storage.storeCartesData(cartesIp ?? null, cartes);
-            dispatch(cartesSet(cartesIp ?? null, cartes, createdAt - now()).causedBy(action));
-        } catch (e) {
-            if (e instanceof NodeApiError) {
-                dispatch(cartesSet(null, [], 0).causedBy(action));
-            }
-        }
+        } while (true);
+    } finally {
         dispatch(cartesLoaded().causedBy(action));
-    } while (false);
+    }
 }
 
 function clockOffsetWarnSaga(action: ClockOffsetWarnAction): void {

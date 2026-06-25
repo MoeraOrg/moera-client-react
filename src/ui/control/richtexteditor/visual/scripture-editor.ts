@@ -34,6 +34,7 @@ import {
     isScriptureElement,
     isScriptureInline,
     isScriptureKnown,
+    isScriptureRegularInline,
     isScriptureSimpleBlock,
     isScriptureSuperBlock,
     isScriptureText,
@@ -93,6 +94,30 @@ export const isSelectionInElement = (
     editor: BaseEditor, type: ScriptureElementType | ScriptureElementType[]
 ): boolean =>
     findWrappingElement(editor, type) != null;
+
+export function unwrapEmptyInlines(editor: BaseEditor, at?: Path): void {
+    const path = at ?? editor.selection?.anchor.path;
+    if (path == null) {
+        return;
+    }
+
+    const node = SlateNode.get(editor, path);
+    if (isScriptureElement(node) && isScriptureRegularInline(node)) {
+        if (SlateNode.string(node) === "") {
+            Transforms.unwrapNodes(editor, {at: path});
+        }
+        return;
+    }
+
+    if (SlateText.isText(node) && node.text === "") {
+        const [, inlinePath] = findWrappingElement(
+            editor, SCRIPTURE_REGULAR_INLINE_TYPES, {at: path}
+        ) ?? [null, null];
+        if (inlinePath != null) {
+            Transforms.unwrapNodes(editor, {at: inlinePath});
+        }
+    }
+}
 
 export interface ScriptureEditorOptions {
     removeTracking: boolean;
@@ -186,20 +211,6 @@ export function withScripture<T extends DOMEditor>(
         }
     }
 
-    const unwrapEmptyInlines = (): void => {
-        if (editor.selection != null) {
-            const [leaf, leafPath] = editor.leaf(editor.selection);
-            if (leaf.text === "") {
-                const [inline, inlinePath] = findWrappingElement(
-                    editor, SCRIPTURE_REGULAR_INLINE_TYPES, {at: leafPath}
-                ) ?? [null, null];
-                if (inline != null) {
-                    Transforms.unwrapNodes(editor, {at: inlinePath});
-                }
-            }
-        }
-    }
-
     scriptureEditor.deleteBackward = (unit: TextUnit): void => {
         if (unit === "character" && editor.selection != null && Range.isCollapsed(editor.selection)) {
             const [, blockPath] = findWrappingElement(editor, [
@@ -231,17 +242,17 @@ export function withScripture<T extends DOMEditor>(
         }
 
         deleteBackward(unit);
-        unwrapEmptyInlines();
+        unwrapEmptyInlines(editor);
     }
 
     scriptureEditor.deleteForward = (...args: Parameters<typeof deleteForward>): void => {
         deleteForward(...args);
-        unwrapEmptyInlines();
+        unwrapEmptyInlines(editor);
     }
 
     scriptureEditor.deleteFragment = (...args: Parameters<typeof deleteFragment>): void => {
         deleteFragment(...args);
-        unwrapEmptyInlines();
+        unwrapEmptyInlines(editor);
     }
 
     scriptureEditor.normalizeNode = (entry: NodeEntry, options?: { operation?: Operation }) => {

@@ -15,7 +15,6 @@ export type SearchFilterDatePeriod = "any" | "today" | "yesterday" | "week" | "m
 
 export interface SearchFilter {
     entryType: SearchEntryType;
-    inNewsfeed: boolean;
     ownedByMe: boolean;
     repliedToMe: boolean;
     minImageCount: number | null;

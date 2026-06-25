@@ -31,9 +31,10 @@ export type Scope = "none" | "identify" | "other" | "view-content" | "add-post" 
     | "grant" | "upload-public-media" | "upload-private-media" | "lease-media" | "view-all" | "all";
 
 export type SearchContentUpdateType = "block" | "comment-add" | "comment-update" | "comment-update-heading"
-    | "comment-update-media-text" | "comment-delete" | "friend" | "profile" | "posting-add" | "posting-update"
-    | "posting-update-heading" | "posting-update-media-text" | "posting-delete" | "reaction-add" | "reaction-delete"
-    | "reactions-delete-all" | "subscribe" | "unblock" | "unfriend" | "unsubscribe";
+    | "comment-update-media" | "comment-update-media-text" | "comment-delete" | "friend" | "profile" | "posting-add"
+    | "posting-update" | "posting-update-heading" | "posting-update-media" | "posting-update-media-text"
+    | "posting-delete" | "reaction-add" | "reaction-delete" | "reactions-delete-all" | "subscribe" | "unblock"
+    | "unfriend" | "unsubscribe";
 
 export type SearchEngine = "google" | "bing" | "yandex";
 
@@ -897,6 +898,16 @@ export interface SearchCommentHeadingUpdate {
     heading: string;
 }
 
+export interface SearchCommentMediaUpdate {
+    postingId: string;
+    commentId: string;
+    mediaId: string;
+    remoteMediaNodeName: string;
+    remoteMediaId: string;
+    title?: string | null;
+    textContent?: string | null;
+}
+
 export interface SearchCommentMediaTextUpdate {
     postingId: string;
     commentId: string;
@@ -963,6 +974,15 @@ export interface SearchNodePageInfo {
 export interface SearchPostingHeadingUpdate {
     postingId: string;
     heading: string;
+}
+
+export interface SearchPostingMediaUpdate {
+    postingId: string;
+    mediaId: string;
+    remoteMediaNodeName: string;
+    remoteMediaId: string;
+    title?: string | null;
+    textContent?: string | null;
 }
 
 export interface SearchPostingMediaTextUpdate {
@@ -1637,6 +1657,7 @@ export interface SearchEntryInfoBase<B> {
     videoPresent?: boolean | null;
     attachmentCount?: number | null;
     mediaPreview?: PublicMediaFileInfo | null;
+    mediaPreviewNodeName?: string | null;
     mediaPreviewId?: string | null;
     repliedTo?: SearchRepliedTo | null;
     createdAt: number;

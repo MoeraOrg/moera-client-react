@@ -2,7 +2,6 @@ import { SearchFilter, SearchHistoryQueryState } from "state/search/state";
 
 export const emptySearchFilter: SearchFilter = {
     entryType: "posting",
-    inNewsfeed: false,
     ownedByMe: false,
     repliedToMe: false,
     minImageCount: null,

@@ -177,7 +177,7 @@ export function mediaFileName(media: PrivateMediaFileInfo | MediaWithCaption | n
     if (media == null) {
         return undefined;
     }
-    return media.title ? media.title + "." + extension(media.mimeType) : media.path?.split("/").pop();
+    return media.title ? media.title + "." + extension(media.mimeType) : media.path?.split("/").pop()?.split("?")[0];
 }
 
 export function mediaDownloadUrl(rootPage: string | null, media: PrivateMediaFileInfo): string {

@@ -145,7 +145,7 @@ async function load(
     const publisherName = tab === "own-blog"
         ? action.context.homeOwnerName
         : (tab === "current-blog" ? action.context.ownerName : null);
-    const inNewsfeed = tab === "own-blog" ? filter.inNewsfeed : undefined;
+    const inNewsfeed = tab === "own-blog" ? false : undefined;
     const owners = action.context.homeOwnerName && filter.ownedByMe ? [action.context.homeOwnerName] : undefined;
     const repliedTo = action.context.homeOwnerName && filter.repliedToMe && entryType !== "posting"
         ? [action.context.homeOwnerName]

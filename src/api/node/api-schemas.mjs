@@ -4463,6 +4463,10 @@ export const NODE_API_SCHEMAS = {
                         }
                     ]
                 },
+                "mediaPreviewNodeName": {
+                    type: "string",
+                    nullable: true
+                },
                 "mediaPreviewId": {
                     type: "string",
                     nullable: true

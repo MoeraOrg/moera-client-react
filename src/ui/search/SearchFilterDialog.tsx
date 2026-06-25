@@ -26,7 +26,7 @@ import { BooleanOrNullString, BooleanString, toBoolean, toBooleanOrNull, toBoole
 import "./SearchFilterDialog.css";
 
 type FilterField =
-    "entryType" | "inNewsfeed" | "ownedByMe" | "repliedToMe" | "minImageCount" | "videoPresent"
+    "entryType" | "ownedByMe" | "repliedToMe" | "minImageCount" | "videoPresent"
     | "attachmentPresent" | "safeSearch" | "period";
 
 const ENABLED_FIELDS: Record<SearchTab, FilterField[]> = {
@@ -39,8 +39,8 @@ const ENABLED_FIELDS: Record<SearchTab, FilterField[]> = {
         "safeSearch", "period"
     ],
     "own-blog": [
-        "entryType", "inNewsfeed", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent",
-        "attachmentPresent", "safeSearch", "period"
+        "entryType", "ownedByMe", "repliedToMe", "minImageCount", "videoPresent", "attachmentPresent",
+        "safeSearch", "period"
     ]
 }
 
@@ -57,11 +57,6 @@ const ENTRY_TYPES: SelectFieldChoiceBase<SearchEntryType>[] = [
     {title: "any", value: "all"},
     {title: "postings", value: "posting"},
     {title: "comments", value: "comment"}
-];
-
-const WHERE: SelectFieldChoiceBase<BooleanString>[] = [
-    {title: "in-blog", value: "false"},
-    {title: "in-newsfeed", value: "true"}
 ];
 
 const AUTHOR: SelectFieldChoiceBase<BooleanString>[] = [
@@ -115,7 +110,6 @@ interface OuterProps {
 
 interface Values {
     entryType: SearchEntryType;
-    inNewsfeed: BooleanString;
     ownedByMe: BooleanString;
     repliedToMe: boolean;
     minImageCount: string;
@@ -160,16 +154,6 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     name="entryType"
                                     title={t("type-content")}
                                     choices={ENTRY_TYPES}
-                                    labelClassName="col-4 col-lg-3"
-                                    horizontal
-                                    anyValue
-                                />
-                            }
-                            {fieldName === "inNewsfeed" &&
-                                <SelectField
-                                    name="inNewsfeed"
-                                    title={t("where-look")}
-                                    choices={WHERE}
                                     labelClassName="col-4 col-lg-3"
                                     horizontal
                                     anyValue
@@ -267,7 +251,6 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
 
 const filterToValues = (filter: SearchFilter, safeSearchDefault: boolean): Values => ({
     entryType: filter.entryType,
-    inNewsfeed: toBooleanString(filter.inNewsfeed),
     ownedByMe: toBooleanString(filter.ownedByMe),
     repliedToMe: filter.repliedToMe,
     minImageCount: (filter.minImageCount ?? 0).toString(),
@@ -280,7 +263,6 @@ const filterToValues = (filter: SearchFilter, safeSearchDefault: boolean): Value
 
 const valuesTofilter = (values: Values, safeSearchDefault: boolean): SearchFilter => ({
     entryType: values.entryType,
-    inNewsfeed: toBoolean(values.inNewsfeed),
     ownedByMe: toBoolean(values.ownedByMe),
     repliedToMe: values.repliedToMe,
     minImageCount: values.minImageCount === "0" ? null : parseInt(values.minImageCount),

@@ -63,7 +63,8 @@ import {
     findFirstElement,
     findWrappingElement,
     isSelectionInElement,
-    ScriptureEditor
+    ScriptureEditor,
+    unwrapEmptyInlines
 } from "ui/control/richtexteditor/visual/scripture-editor";
 import { RichTextLinkValues } from "ui/control/richtexteditor/dialog/RichTextLinkDialog";
 import { RichTextSpoilerValues } from "ui/control/richtexteditor/dialog/RichTextSpoilerDialog";
@@ -517,6 +518,9 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
 
     const formatImage = (embedded?: boolean) => {
         const [element, path] = findWrappingElement(editor, ["image", "figure-image"]) ?? [null, null];
+        const [, linkPath] = path != null
+            ? findWrappingElement(editor, ["link", "mention"], {at: path}) ?? [null, null]
+            : [null, null];
         const prevType = element?.type;
         let prevValues: RichTextImageValues | null = null;
         if (isImageElement(element) || isFigureImageElement(element)) {
@@ -578,7 +582,12 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
                         editor.insertNode(node);
                     }
                 } else if (ok == null && path != null) {
-                    editor.removeNodes({at: path});
+                    Editor.withoutNormalizing(editor, () => {
+                        editor.removeNodes({at: path});
+                        if (linkPath != null) {
+                            unwrapEmptyInlines(editor, linkPath);
+                        }
+                    });
                 }
                 focus();
             }

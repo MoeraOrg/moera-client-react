@@ -118,8 +118,13 @@ export function storeConnectionData(location: string, nodeName: string | null, f
     dispatch(connectionsSet(roots));
 }
 
-export function storeCartesData(cartesIp: string | null, cartes: CarteInfo[] | null): void {
-    Access.storeData({cartesIp, cartes});
+export function storeCartesData(
+    rootLocation: string | null, cartesIp: string | null, cartes: CarteInfo[] | null
+): void {
+    if (rootLocation == null) {
+        return;
+    }
+    Access.storeDataForRoot(rootLocation, {cartesIp, cartes});
 }
 
 export function storeSettings(settings: Map<string, string | null>): void {

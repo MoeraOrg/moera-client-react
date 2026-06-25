@@ -73,9 +73,17 @@ async function linkPreviewImageUploadSaga(action: WithContext<LinkPreviewImageUp
 
     try {
         const blob = await Node.proxyMedia(action, REL_HOME, imageUrl);
+        if (!isSupportedImage(blob.type, features?.imageFormats)) {
+            dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
+            return;
+        }
         const file = new File([blob], `moera-lp-${randomId()}.img`, {type: blob.type});
         const mediaFile = await mediaUpload(action, features, mediaMaxSize, file, true);
         if (mediaFile != null) {
+            if (mediaFile.attachment) {
+                dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
+                return;
+            }
             let mediaFileWithCaption: MediaWithCaption;
             if (ownerName === homeOwnerName || ownerName == null) {
                 mediaFileWithCaption = new MediaWithCaption(mediaFile);
@@ -96,4 +104,12 @@ async function linkPreviewImageUploadSaga(action: WithContext<LinkPreviewImageUp
     } catch {
         dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
     }
+}
+
+function isSupportedImage(mimeType: string, supportedTypes: string[] | null | undefined): boolean {
+    const basicMimeType = mimeType.split(";")[0].trim().toLowerCase();
+    if (supportedTypes == null) {
+        return basicMimeType.startsWith("image/");
+    }
+    return supportedTypes.some(type => type.toLowerCase() === basicMimeType);
 }
