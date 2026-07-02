@@ -176,19 +176,13 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                 return state;
             }
 
-            return immutable.wrap(state)
-                .set([nodeName, id, "visitedAt"], new Date())
-                .set([nodeName, id, "visitRecorded"], nodeName === action.context.homeOwnerName)
-                .value();
+            return immutable.set(state, [nodeName, id, "visitRecorded"], nodeName === action.context.homeOwnerName);
         }
 
         case "POSTING_VISIT_RECORDED": {
             let {id, nodeName} = action.payload;
             nodeName = absoluteNodeName(nodeName, action.context);
-            if (state[nodeName]?.[id]) {
-                return immutable.set(state, [nodeName, id, "visitRecorded"], true);
-            }
-            return state;
+            return immutable.assign(state, [nodeName, id], {visitedAt: new Date(), visitRecorded: true});
         }
 
         case "POSTING_DELETE":

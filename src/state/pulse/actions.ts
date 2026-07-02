@@ -16,6 +16,10 @@ export type Pulse10MinAction = ActionWithoutPayload<"PULSE_10MIN">;
 export const pulse10Min = (): Pulse10MinAction =>
     actionWithoutPayload("PULSE_10MIN");
 
+export type Pulse30MinAction = ActionWithoutPayload<"PULSE_30MIN">;
+export const pulse30Min = (): Pulse30MinAction =>
+    actionWithoutPayload("PULSE_30MIN");
+
 export type Pulse6HAction = ActionWithoutPayload<"PULSE_6H">;
 export const pulse6H = (): Pulse6HAction =>
     actionWithoutPayload("PULSE_6H");
@@ -25,4 +29,5 @@ export type PulseAnyAction =
     | PostInitDelayedAction
     | Pulse1MinAction
     | Pulse10MinAction
+    | Pulse30MinAction
     | Pulse6HAction;

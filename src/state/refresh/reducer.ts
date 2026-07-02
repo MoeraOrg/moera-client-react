@@ -2,7 +2,8 @@ import { RefreshState } from "state/refresh/state";
 import { ClientAction } from "state/action";
 
 const initialState: RefreshState = {
-    active: false
+    active: false,
+    confirmingReload: false
 };
 
 export default (state: RefreshState = initialState, action: ClientAction): RefreshState => {
@@ -17,6 +18,18 @@ export default (state: RefreshState = initialState, action: ClientAction): Refre
             return {
                 ...state,
                 active: false
+            }
+
+        case "REFRESH_CONFIRMING_RELOAD":
+            return {
+                ...state,
+                confirmingReload: true
+            }
+
+        case "REFRESH_RELOAD_CANCELLED":
+            return {
+                ...state,
+                confirmingReload: false
             }
 
         default:

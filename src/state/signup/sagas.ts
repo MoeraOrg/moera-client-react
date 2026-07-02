@@ -24,7 +24,8 @@ import {
     SignUpDomainVerifyAction,
     signUpFailed,
     SignUpFindDomainAction,
-    SignUpNameVerifyAction
+    SignUpNameVerifyAction,
+    signUpSucceeded
 } from "state/signup/actions";
 import { getHomeRootLocation } from "state/home/selectors";
 import { serializeSheriffs } from "util/sheriff";
@@ -185,6 +186,11 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
             } else {
                 dispatch(jumpNear("/mnemonic", null, null).causedBy(action));
             }
+            await barrier(
+                "GO_TO_PAGE",
+                (_, signal) => signal.type === "GO_TO_PAGE" && signal.payload.page !== "signup"
+            ); // ensure the page is switched
+            dispatch(signUpSucceeded().causedBy(action));
         } catch (e) {
             dispatch(signUpFailed(SIGN_UP_STAGE_NAME).causedBy(action));
             dispatch(errorThrown(e));

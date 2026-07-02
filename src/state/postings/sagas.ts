@@ -118,7 +118,7 @@ async function postingLoadSaga(action: WithContext<PostingLoadAction>): Promise<
 async function postingVisitedSaga(action: WithContext<PostingVisitedAction>): Promise<void> {
     const {id, nodeName} = action.payload;
     const visitRecorded = select(state => isPostingVisitRecorded(state, id, nodeName));
-    if (visitRecorded !== false) {
+    if (visitRecorded) {
         return;
     }
 

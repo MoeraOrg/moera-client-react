@@ -17,7 +17,7 @@ const initialState: SignUpState = {
 export default (state: SignUpState = initialState, action: ClientAction): SignUpState => {
     switch (action.type) {
         case "GO_TO_PAGE":
-            if (action.payload.page === "signup") {
+            if (action.payload.page === "signup" && !state.processing) {
                 return {
                     ...initialState,
                     backHref: action.payload.details.backHref
@@ -34,6 +34,12 @@ export default (state: SignUpState = initialState, action: ClientAction): SignUp
                 domain: action.payload.domain,
                 password: action.payload.password,
                 email: action.payload.email
+            };
+
+        case "SIGN_UP_SUCCEEDED":
+            return {
+                ...state,
+                processing: false
             };
 
         case "SIGN_UP_FAILED":

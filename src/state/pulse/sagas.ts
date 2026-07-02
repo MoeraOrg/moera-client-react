@@ -1,4 +1,4 @@
-import { postInit, postInitDelayed, pulse10Min, pulse1Min, pulse6H } from "state/pulse/actions";
+import { postInit, postInitDelayed, pulse10Min, pulse1Min, pulse30Min, pulse6H } from "state/pulse/actions";
 import { barrier, dispatch } from "state/store-sagas";
 import { delay } from "util/misc";
 
@@ -26,6 +26,9 @@ export async function pulseSaga(): Promise<void> {
         dispatch(pulse1Min());
         if (count % 10 === 0) {
             dispatch(pulse10Min());
+        }
+        if (count % 30 === 0) {
+            dispatch(pulse30Min());
         }
         if (count % 360 === 0) {
             dispatch(pulse6H());

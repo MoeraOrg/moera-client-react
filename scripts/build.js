@@ -26,7 +26,7 @@ const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const printHostingInstructions = require('react-dev-utils/printHostingInstructions');
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
 const printBuildError = require('react-dev-utils/printBuildError');
-const {writeBuildRevision} = require('./moera-utils');
+const {writeBuildRevision, writeBuildMark} = require('./moera-utils');
 
 const measureFileSizesBeforeBuild =
   FileSizeReporter.measureFileSizesBeforeBuild;
@@ -193,20 +193,24 @@ function build(previousFileSizes) {
         }
       }
 
-      const resolveArgs = {
-        stats,
-        previousFileSizes,
-        warnings: messages.warnings,
-      };
+      return writeBuildMark()
+        .then(() => {
+          const resolveArgs = {
+            stats,
+            previousFileSizes,
+            warnings: messages.warnings,
+          };
 
-      if (writeStatsJson) {
-        return bfj
-          .write(paths.appBuild + '/bundle-stats.json', stats.toJson())
-          .then(() => resolve(resolveArgs))
-          .catch(error => reject(new Error(error)));
-      }
+          if (writeStatsJson) {
+            return bfj
+                .write(paths.appBuild + '/bundle-stats.json', stats.toJson())
+                .then(() => resolve(resolveArgs))
+                .catch(error => reject(new Error(error)));
+          }
 
-      return resolve(resolveArgs);
+          return resolve(resolveArgs);
+        })
+        .catch(error => reject(new Error(error)));
     });
   });
 }
