@@ -237,10 +237,10 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
                 <FeedStory
                     key={story.moment}
                     nodeName={nodeName}
-                    posting={posting}
+                    posting={posting ?? null}
                     feedName={feedName}
                     story={story}
-                    deleting={deleting}
+                    deleting={deleting ?? false}
                     hideRecommended={recommendations}
                 />
             )}
@@ -272,7 +272,7 @@ const getStories = createSelector(
     isGooglePlayHiding,
     (stories, postings, hiding) =>
         stories
-            .filter(t => t.postingId == null || postings[t.postingId])
+            .filter(t => t.postingId == null || postings[t.postingId]?.posting)
             .map(t =>
                 ({story: t, ...(t.postingId != null ? postings[t.postingId]! : {posting: null, deleting: false})})
             )

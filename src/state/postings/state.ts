@@ -12,12 +12,12 @@ export interface ExtPostingInfo extends PostingInfo {
 }
 
 export interface PostingState {
-    posting: ExtPostingInfo;
-    deleting: boolean;
-    verificationStatus: VerificationStatus;
-    visitedAt: Date | null;
-    visitRecorded: boolean;
-    subscriptions: {
+    posting?: ExtPostingInfo;
+    deleting?: boolean;
+    verificationStatus?: VerificationStatus;
+    visitedAt?: Date | null;
+    visitRecorded?: boolean;
+    subscriptions?: {
         comments: string | null;
     }
 }

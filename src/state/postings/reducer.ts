@@ -65,7 +65,7 @@ function mergeFeedReferences(
 }
 
 function mergePreviousFeedReferences(posting: PostingInfo, state: NodePostingsState | undefined): PostingInfo {
-    posting.feedReferences = mergeFeedReferences(posting.feedReferences, state?.[posting.id]?.posting.feedReferences);
+    posting.feedReferences = mergeFeedReferences(posting.feedReferences, state?.[posting.id]?.posting?.feedReferences);
     return posting;
 }
 
@@ -131,7 +131,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             if (posting) {
                 const postingState = state[nodeName]?.[posting.id];
                 if (postingState != null) {
-                    const refs = (postingState.posting.feedReferences ?? []).filter(r => r.storyId !== id);
+                    const refs = (postingState.posting?.feedReferences ?? []).filter(r => r.storyId !== id);
                     refs.push(toFeedReference(action.payload.story));
                     return immutable.set(state, [nodeName, posting.id, "posting", "feedReferences"], refs);
                 }
@@ -145,7 +145,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             if (posting) {
                 const postingState = state[nodeName]?.[posting.id];
                 if (postingState != null) {
-                    const refs = (postingState.posting.feedReferences ?? []).filter(r => r.storyId !== id);
+                    const refs = (postingState.posting?.feedReferences ?? []).filter(r => r.storyId !== id);
                     return immutable.set(state, [nodeName, posting.id, "posting", "feedReferences"], refs);
                 }
             }
@@ -258,10 +258,10 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         case "POSTING_REACTION_SET": {
             let {id, reaction, totals, nodeName} = action.payload;
             nodeName = absoluteNodeName(nodeName, action.context);
-            const postingState = state[nodeName]?.[id];
-            if (postingState) {
+            const posting = state[nodeName]?.[id]?.posting;
+            if (posting) {
                 const istate = immutable.wrap(state).set([nodeName, id, "posting", "reactions"], totals);
-                if (postingState.posting.receiverName == null) {
+                if (posting.receiverName == null) {
                     istate.set([nodeName, id, "posting", "clientReaction"], reaction);
                 }
                 return istate.value();
@@ -278,8 +278,8 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                     .filter(ts => nodeState[ts.entryId] != null)
                     .forEach(ts => istate.set([nodeName, ts.entryId, "posting", "reactions"], ts));
                 reactions
-                    .filter(r => nodeState[r.entryId] != null)
-                    .filter(r => nodeState[r.entryId]?.posting.receiverName == null)
+                    .filter(r => nodeState[r.entryId]?.posting != null)
+                    .filter(r => nodeState[r.entryId]?.posting?.receiverName == null)
                     .forEach(r => istate.set([nodeName, r.entryId, "posting", "clientReaction"], r));
                 return istate.value();
             }
@@ -302,7 +302,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                 for (const postingId of Object.keys(state[postingNode] ?? {})) {
                     const posting = state[postingNode]![postingId]!.posting;
                     if ((postingNode === nodeName && postingId === id)
-                        || (posting.receiverName === nodeName && posting.receiverPostingId === id)
+                        || (posting?.receiverName === nodeName && posting.receiverPostingId === id)
                     ) {
                         istate.update([postingNode, postingId, "posting", "totalComments"], total => total + delta);
                     }
@@ -372,7 +372,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             const postingState = state[nodeName]?.[id];
             if (postingState != null) {
                 const blockedInstants = [
-                    ...(postingState.posting.blockedInstants ?? []),
+                    ...(postingState.posting?.blockedInstants ?? []),
                     {id: blockedInstantId, storyType: "comment-added" as const}
                 ];
                 return immutable.set(state, [nodeName, id, "posting", "blockedInstants"], blockedInstants);
@@ -385,7 +385,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
 
             nodeName = absoluteNodeName(nodeName, action.context);
             const postingState = state[nodeName]?.[id];
-            if (postingState?.posting.blockedInstants != null) {
+            if (postingState?.posting?.blockedInstants != null) {
                 const blockedInstants = postingState.posting.blockedInstants
                     .filter(bi => bi.storyType !== "comment-added");
                 return immutable.set(state, [nodeName, id, "posting", "blockedInstants"], blockedInstants);
@@ -403,7 +403,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
 
             const postingState = state[nodeName]?.[entryId];
             if (postingState != null) {
-                const blockedInstants = [...(postingState.posting.blockedInstants ?? []), {id, storyType}];
+                const blockedInstants = [...(postingState.posting?.blockedInstants ?? []), {id, storyType}];
                 return immutable.set(state, [nodeName, entryId, "posting", "blockedInstants"], blockedInstants);
             }
             return state;
@@ -418,7 +418,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             }
 
             const postingState = state[nodeName]?.[entryId];
-            if (postingState?.posting.blockedInstants != null) {
+            if (postingState?.posting?.blockedInstants != null) {
                 const blockedInstants = postingState.posting.blockedInstants.filter(bi => bi.id !== id);
                 return immutable.set(state, [nodeName, entryId, "posting", "blockedInstants"], blockedInstants);
             }
@@ -504,7 +504,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                 return state;
             }
             const postingState = state[nodeName]?.[postingId];
-            const ids = postingState && postingState.posting.ownerName === nodeName
+            const ids = postingState && postingState.posting?.ownerName === nodeName
                 ? [{nodeName, postingId}]
                 : findPostingIdsByRemote(state, nodeName, postingId);
             if (ids.length > 0) {

@@ -161,7 +161,7 @@ function getUsedNames(): Set<string> {
                 used.add(story.remoteNodeName);
             }
             const posting = story.postingId != null ? postings[story.postingId] : null;
-            if (posting) {
+            if (posting?.posting) {
                 used.add(posting.posting.ownerName);
                 if (posting.posting.receiverName) {
                     used.add(posting.posting.receiverName);

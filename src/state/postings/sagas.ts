@@ -218,7 +218,7 @@ async function postingReactionsReloadSaga(action: WithContext<PostingReactionsRe
             dispatch(postingsReactionSet(reactions, totals, nodeName).causedBy(action));
         } else {
             const totals = ids
-                .map(id => postingsState[nodeName]![id]!.posting.reactions)
+                .map(id => postingsState[nodeName]![id]!.posting?.reactions)
                 .filter(notNull);
             dispatch(postingsReactionSet([], totals, nodeName).causedBy(action))
         }

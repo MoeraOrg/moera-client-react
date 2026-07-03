@@ -47,7 +47,7 @@ export function getPostingVerificationStatus(
 export function getPostingCommentsSubscriptionId(
     state: ClientState, id: string, nodeName: RelNodeName | string
 ): string | null {
-    return getPostingState(state, id, nodeName)?.subscriptions.comments ?? null;
+    return getPostingState(state, id, nodeName)?.subscriptions?.comments ?? null;
 }
 
 export function getPostingFeedReference(
@@ -65,7 +65,7 @@ export function hasPostingFeedReference(
 export function getPostingCommentAddedInstantBlockId(
     state: ClientState, id: string, nodeName: RelNodeName | string
 ): string | null {
-    return getPostingState(state, id, nodeName)?.posting.blockedInstants
+    return getPostingState(state, id, nodeName)?.posting?.blockedInstants
         ?.find(bi => bi.storyType === "comment-added")?.id ?? null;
 }
 
@@ -105,7 +105,10 @@ export function findPostingIdsByRemote(
             continue;
         }
         for (let [id, entry] of Object.entries(nodePostings)) {
-            if (entry?.posting.receiverName === remoteNodeName && entry.posting.receiverPostingId === remotePostingId) {
+            if (
+                entry?.posting?.receiverName === remoteNodeName
+                && entry.posting.receiverPostingId === remotePostingId
+            ) {
                 ids.push({nodeName, postingId: id});
             }
         }
@@ -136,7 +139,7 @@ export function isPostingsMediaExpiring(state: ClientState): boolean {
             continue;
         }
         for (const posting of Object.values(postings)) {
-            const expiring = posting?.posting.media?.find(m => isMediaDirectPathExpiring(m.media));
+            const expiring = posting?.posting?.media?.find(m => isMediaDirectPathExpiring(m.media));
             if (expiring) {
                 return true;
             }
