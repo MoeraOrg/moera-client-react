@@ -87,6 +87,11 @@ export default [
     ),
     trigger("DETAILED_POSTING_LOADED", isDetailedPostingGalleryExpanded, detailedPostingLoadAttached),
     trigger(
+        "GO_TO_PAGE",
+        conj(isAtDetailedPostingPage, inv(isDetailedPostingToBeLoaded), isDetailedPostingGalleryExpanded),
+        detailedPostingLoad
+    ),
+    trigger(
         ["GO_TO_PAGE", "POSTING_SET", "NODE_READY"],
         conj(isAtNode, isAtDetailedPostingPage, isCommentsReceiverToBeSwitched),
         commentsReceiverSwitch

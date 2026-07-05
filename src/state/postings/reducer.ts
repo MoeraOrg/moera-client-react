@@ -289,7 +289,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         case "POSTING_COMMENTS_SET": {
             let {id, total, nodeName} = action.payload;
             nodeName = absoluteNodeName(nodeName, action.context);
-            if (state[nodeName]?.[id]) {
+            if (state[nodeName]?.[id]?.posting) {
                 return immutable.set(state, [nodeName, id, "posting", "totalComments"], total);
             }
             return state;
@@ -503,8 +503,8 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             if (total == null) {
                 return state;
             }
-            const postingState = state[nodeName]?.[postingId];
-            const ids = postingState && postingState.posting?.ownerName === nodeName
+            const posting = state[nodeName]?.[postingId]?.posting;
+            const ids = posting && posting.ownerName === nodeName
                 ? [{nodeName, postingId}]
                 : findPostingIdsByRemote(state, nodeName, postingId);
             if (ids.length > 0) {

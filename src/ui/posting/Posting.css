@@ -90,6 +90,10 @@
     padding-top: 0;
 }
 
+.posting > .content A.read-more:visited {
+    color: rgb(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
+}
+
 .posting > .menu {
     top: 1.2rem;
     right: 1.2rem;

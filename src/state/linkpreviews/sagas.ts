@@ -56,7 +56,7 @@ function resolveImageUrl(imageUrl: string | null | undefined, pageUrl: string): 
 
 async function linkPreviewImageUploadSaga(action: WithContext<LinkPreviewImageUploadAction>): Promise<void> {
     const {url, nodeName, features} = action.payload;
-    const {ownerName, homeOwnerName} = action.context;
+    const {homeOwnerName} = action.context;
 
     if (homeOwnerName == null) {
         dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
@@ -85,12 +85,10 @@ async function linkPreviewImageUploadSaga(action: WithContext<LinkPreviewImageUp
                 return;
             }
             let mediaFileWithCaption: MediaWithCaption;
-            if (ownerName === homeOwnerName || ownerName == null) {
+            if (nodeName === homeOwnerName) {
                 mediaFileWithCaption = new MediaWithCaption(mediaFile);
             } else {
-                const lease = await Node.createMediaLease(
-                    action, REL_HOME, {nodeName: ownerName, mediaId: mediaFile.id}
-                );
+                const lease = await Node.createMediaLease(action, REL_HOME, {nodeName, mediaId: mediaFile.id});
                 const remoteMedia = localMediaToLeasedRemoteMediaInfo(mediaFile, homeOwnerName, lease.id);
                 if (remoteMedia != null) {
                     dispatch(remoteMediaLoaded(remoteMedia.nodeName, remoteMedia.mediaId, mediaFile).causedBy(action));

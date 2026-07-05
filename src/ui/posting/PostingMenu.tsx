@@ -79,8 +79,16 @@ function PostingMenuItems({posting, story, detailed}: Props) {
     const onCopyText = () =>
         dispatch(entryCopyText(posting.body, "ask", posting.receiverName ?? REL_CURRENT, posting.media ?? null));
 
+    const ownerName = posting.receiverName ?? posting.ownerName;
+    const fullName = (posting.receiverName != null ? posting.receiverFullName : posting.ownerFullName) ?? null;
+    const gender = (posting.receiverName != null ? posting.receiverGender : posting.ownerGender) ?? null;
+    const postingId = posting.receiverPostingId ?? posting.id;
+
+    const ownPosting = ownerName === homeOwnerName;
+    const followingComments = ownPosting ? commentAddedInstantBlockId == null : commentsSubscriptionId != null;
+    const originalDeleted = posting.receiverDeletedAt != null;
+
     const onShare = () => {
-        const originalDeleted = posting.receiverDeletedAt != null;
         const nodeName = originalDeleted ? REL_CURRENT : (posting.receiverName ?? posting.ownerName);
         const postingId = originalDeleted ? posting.id : (posting.receiverPostingId ?? posting.id);
         const href = ut`/post/${postingId}`;
@@ -89,14 +97,6 @@ function PostingMenuItems({posting, story, detailed}: Props) {
     };
 
     const onReply = () => dispatch(postingReply(posting.id));
-
-    const ownerName = posting.receiverName ?? posting.ownerName;
-    const fullName = (posting.receiverName != null ? posting.receiverFullName : posting.ownerFullName) ?? null;
-    const gender = (posting.receiverName != null ? posting.receiverGender : posting.ownerGender) ?? null;
-    const postingId = posting.receiverPostingId ?? posting.id;
-
-    const ownPosting = ownerName === homeOwnerName;
-    const followingComments = ownPosting ? commentAddedInstantBlockId == null : commentsSubscriptionId != null;
 
     const onFollowComments = () => {
         if (ownPosting) {
@@ -191,7 +191,7 @@ function PostingMenuItems({posting, story, detailed}: Props) {
                 nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onCopyLink,
-                show: true
+                show: !originalDeleted
             },
             {
                 title: t("copy-text"),
@@ -205,28 +205,28 @@ function PostingMenuItems({posting, story, detailed}: Props) {
                 nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onShare,
-                show: true
+                show: !originalDeleted
             },
             {
                 title: t("reply"),
                 nodeName: REL_HOME,
                 href: "/compose",
                 onClick: onReply,
-                show: homeOwnerName != null
+                show: homeOwnerName != null && !originalDeleted
             },
             {
                 title: t("follow-comments"),
                 nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onFollowComments,
-                show: homeOwnerName != null && !followingComments
+                show: homeOwnerName != null && !followingComments && !originalDeleted
             },
             {
                 title: t("unfollow-comments"),
                 nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onUnfollowComments,
-                show: followingComments
+                show: followingComments && !originalDeleted
             },
             {
                 divider: true
@@ -275,7 +275,7 @@ function PostingMenuItems({posting, story, detailed}: Props) {
                 nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onViewSource,
-                show: true
+                show: !originalDeleted
             },
             {
                 title: t("delete"),
