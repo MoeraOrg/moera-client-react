@@ -1357,6 +1357,50 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
+        MediaUploadInfo: {
+            type: "object",
+            properties: {
+                "id": {
+                    type: "string"
+                },
+                "mimeType": {
+                    type: "string",
+                    nullable: true
+                },
+                "title": {
+                    type: "string",
+                    nullable: true
+                },
+                "fileSize": {
+                    type: "integer"
+                },
+                "chunkSize": {
+                    type: "integer"
+                },
+                "uploadedChunks": {
+                    type: "array",
+                    items: {
+                        type: "integer"
+                    }
+                },
+                "deadline": {
+                    type: "integer"
+                },
+                "completedAt": {
+                    type: "integer",
+                    nullable: true
+                },
+            },
+            required: [
+                "id",
+                "fileSize",
+                "chunkSize",
+                "uploadedChunks",
+                "deadline",
+            ],
+            additionalProperties: false
+        },
+
         NodeNameInfo: {
             type: "object",
             properties: {

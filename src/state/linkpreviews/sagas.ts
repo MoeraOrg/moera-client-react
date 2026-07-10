@@ -70,6 +70,7 @@ async function linkPreviewImageUploadSaga(action: WithContext<LinkPreviewImageUp
     }
 
     const mediaMaxSize = select(state => getSettingNode(state, "media.max-size") as number);
+    const uploadChunkSize = select(state => getSettingNode(state, "media.upload.max-chunk-size") as number);
 
     try {
         const blob = await Node.proxyMedia(action, REL_HOME, imageUrl);
@@ -78,7 +79,7 @@ async function linkPreviewImageUploadSaga(action: WithContext<LinkPreviewImageUp
             return;
         }
         const file = new File([blob], `moera-lp-${randomId()}.img`, {type: blob.type});
-        const mediaFile = await mediaUpload(action, features, mediaMaxSize, file, true);
+        const mediaFile = await mediaUpload(action, features, mediaMaxSize, file, true, uploadChunkSize);
         if (mediaFile != null) {
             if (mediaFile.attachment) {
                 dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));

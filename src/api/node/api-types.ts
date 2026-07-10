@@ -550,6 +550,24 @@ export interface MediaLeaseAttributes {
     commentId?: string | null;
 }
 
+export interface MediaUploadAttributes {
+    mimeType: string;
+    title?: string | null;
+    fileSize: number;
+    chunkSize?: number | null;
+}
+
+export interface MediaUploadInfo {
+    id: string;
+    mimeType?: string | null;
+    title?: string | null;
+    fileSize: number;
+    chunkSize: number;
+    uploadedChunks: number[];
+    deadline: number;
+    completedAt?: number | null;
+}
+
 export interface NameToRegister {
     name: string;
 }

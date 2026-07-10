@@ -1003,11 +1003,12 @@ export async function revokeAll(
 }
 
 export async function uploadPrivateMedia(
-    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, file: File,
-    onProgress?: ProgressHandler, errorFilter: ErrorFilter = false, auth: true | string = true
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, file: File | null = null,
+    onProgress?: ProgressHandler, upload: string | null = null, errorFilter: ErrorFilter = false,
+    auth: true | string = true
 ): Promise<API.PrivateMediaFileInfo> {
 
-    const location = "/media/private";
+    const location = urlWithParameters(ut`/media/private`, {upload});
     return callApi<API.PrivateMediaFileInfo>({
         caller, nodeName, method: "POST", location, body: file, onProgress, auth, schema: "PrivateMediaFileInfo",
         errorFilter
@@ -1104,6 +1105,52 @@ export async function deleteMediaLease(
 ): Promise<API.Result> {
 
     const location = ut`/media/leases/${id}`;
+    return callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
+    });
+}
+
+export async function createMediaUpload(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, attributes: API.MediaUploadAttributes,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.MediaUploadInfo> {
+
+    const location = "/media/upload";
+    return callApi<API.MediaUploadInfo>({
+        caller, nodeName, method: "POST", location, body: attributes, auth, schema: "MediaUploadInfo",
+        errorFilter
+    });
+}
+
+export async function getMediaUpload(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.MediaUploadInfo> {
+
+    const location = ut`/media/upload/${id}`;
+    return callApi<API.MediaUploadInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "MediaUploadInfo", errorFilter
+    });
+}
+
+export async function uploadMediaChunk(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string, chunk: number, file: File,
+    onProgress?: ProgressHandler, errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.MediaUploadInfo> {
+
+    const location = ut`/media/upload/${id}/${chunk}`;
+    return callApi<API.MediaUploadInfo>({
+        caller, nodeName, method: "PUT", location, body: file, onProgress, auth, schema: "MediaUploadInfo",
+        errorFilter
+    });
+}
+
+export async function deleteMediaUpload(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.Result> {
+
+    const location = ut`/media/upload/${id}`;
     return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });

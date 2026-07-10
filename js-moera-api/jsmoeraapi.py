@@ -133,6 +133,7 @@ def generate_operations(operations: Any, tfile: TextIO, sfile: TextIO) -> None:
 JS_TYPES = {
     'String': 'string',
     'String[]': 'string[]',
+    'int[]': 'number[]',
     'short': 'number',
     'int': 'number',
     'long': 'number',
@@ -156,6 +157,7 @@ def to_js_type(api_type: str) -> str:
 SCHEMA_TYPES = {
     'String': ('string', False),
     'String[]': ('string', True),
+    'int[]': ('integer', True),
     'short': ('integer', False),
     'int': ('integer', False),
     'long': ('integer', False),
@@ -457,7 +459,10 @@ def generate_sagas(api: Any, structs: dict[str, Structure], afile: TextIO) -> No
                               .format(type=request['in']['type'], method=request['type'], url=request['url']))
                         exit(1)
                     body = ', body: file, onProgress'
-                    params += ', file: File, onProgress?: ProgressHandler'
+                    if request['in'].get('optional', False):
+                        params += ', file: File | null = null, onProgress?: ProgressHandler'
+                    else:
+                        params += ', file: File, onProgress?: ProgressHandler'
                 else:
                     if 'name' not in request['in']:
                         print('Missing name of body of the request "{method} {url}"'
@@ -468,7 +473,10 @@ def generate_sagas(api: Any, structs: dict[str, Structure], afile: TextIO) -> No
                     if request['in'].get('array', False):
                         js_type += '[]'
                     body = f', body: {name}'
-                    params += f', {name}: {js_type}'
+                    if request['in'].get('optional', False):
+                        params += f', {name}: {js_type} | null = null'
+                    else:
+                        params += f', {name}: {js_type}'
             params += tail_params
             params += ', errorFilter: ErrorFilter = false'
             auth_t = auth_type(request.get('auth', 'none'))
