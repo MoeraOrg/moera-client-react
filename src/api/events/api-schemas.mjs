@@ -1082,6 +1082,10 @@ export const EVENT_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "title": {
+                    type: "string",
+                    nullable: true
+                },
             },
             required: [
                 "type",

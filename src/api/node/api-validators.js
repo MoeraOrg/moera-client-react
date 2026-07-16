@@ -6991,7 +6991,7 @@ return errors === 0;
 }
 
 export const ContactInfo = validate41;
-const schema46 = {"type":"object","properties":{"nodeName":{"type":"string"},"fullName":{"type":"string","nullable":true},"gender":{"type":"string","nullable":true},"avatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"distance":{"type":"number"},"hasFeedSubscriber":{"type":"boolean","nullable":true},"hasFeedSubscription":{"type":"boolean","nullable":true},"hasFriend":{"type":"boolean","nullable":true},"hasFriendOf":{"type":"boolean","nullable":true},"hasBlock":{"type":"boolean","nullable":true},"hasBlockBy":{"type":"boolean","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]},"ownerOperations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]},"adminOperations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]}},"required":["nodeName","distance"],"additionalProperties":false};
+const schema46 = {"type":"object","properties":{"nodeName":{"type":"string"},"fullName":{"type":"string","nullable":true},"gender":{"type":"string","nullable":true},"title":{"type":"string","nullable":true},"avatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"distance":{"type":"number"},"hasFeedSubscriber":{"type":"boolean","nullable":true},"hasFeedSubscription":{"type":"boolean","nullable":true},"hasFriend":{"type":"boolean","nullable":true},"hasFriendOf":{"type":"boolean","nullable":true},"hasBlock":{"type":"boolean","nullable":true},"hasBlockBy":{"type":"boolean","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]},"ownerOperations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]},"adminOperations":{"anyOf":[{"$ref":"node#/definitions/ContactOperations","type":"object","nullable":true},{"type":"null"}]}},"required":["nodeName","distance"],"additionalProperties":false};
 
 function validate41(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
 let vErrors = null;
@@ -7131,25 +7131,66 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.avatar !== undefined){
-let data3 = data.avatar;
+if(data.title !== undefined){
+let data3 = data.title;
 const _errs10 = errors;
-const _errs11 = errors;
-let valid1 = false;
-const _errs12 = errors;
-if((!(data3 && typeof data3 == "object" && !Array.isArray(data3))) && (data3 !== null)){
+if((typeof data3 !== "string") && (data3 !== null)){
 let dataType3 = typeof data3;
 let coerced3 = undefined;
 if(dataType3 == 'object' && Array.isArray(data3) && data3.length == 1){
 data3 = data3[0];
 dataType3 = typeof data3;
-if((data3 && typeof data3 == "object" && !Array.isArray(data3)) && (data3 === null)){
+if((typeof data3 === "string") && (data3 === null)){
 coerced3 = data3;
 }
 }
 if(!(coerced3 !== undefined)){
-if(data3 === "" || data3 === 0 || data3 === false){
+if(dataType3 == "number" || dataType3 == "boolean"){
+coerced3 = "" + data3;
+}
+else if(data3 === null){
+coerced3 = "";
+}
+else if(data3 === "" || data3 === 0 || data3 === false){
 coerced3 = null;
+}
+else {
+validate41.errors = [{instancePath:instancePath+"/title",schemaPath:"#/properties/title/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+return false;
+}
+}
+if(coerced3 !== undefined){
+data3 = coerced3;
+if(data !== undefined){
+data["title"] = coerced3;
+}
+}
+}
+var valid0 = _errs10 === errors;
+}
+else {
+var valid0 = true;
+}
+if(valid0){
+if(data.avatar !== undefined){
+let data4 = data.avatar;
+const _errs13 = errors;
+const _errs14 = errors;
+let valid1 = false;
+const _errs15 = errors;
+if((!(data4 && typeof data4 == "object" && !Array.isArray(data4))) && (data4 !== null)){
+let dataType4 = typeof data4;
+let coerced4 = undefined;
+if(dataType4 == 'object' && Array.isArray(data4) && data4.length == 1){
+data4 = data4[0];
+dataType4 = typeof data4;
+if((data4 && typeof data4 == "object" && !Array.isArray(data4)) && (data4 === null)){
+coerced4 = data4;
+}
+}
+if(!(coerced4 !== undefined)){
+if(data4 === "" || data4 === 0 || data4 === false){
+coerced4 = null;
 }
 else {
 const err0 = {instancePath:instancePath+"/avatar",schemaPath:"#/properties/avatar/anyOf/0/type",keyword:"type",params:{type: "object"},message:"must be object"};
@@ -7162,18 +7203,18 @@ vErrors.push(err0);
 errors++;
 }
 }
-if(coerced3 !== undefined){
-data3 = coerced3;
+if(coerced4 !== undefined){
+data4 = coerced4;
 if(data !== undefined){
-data["avatar"] = coerced3;
+data["avatar"] = coerced4;
 }
 }
 }
-const _errs13 = errors;
-if(errors === _errs13){
-if(data3 && typeof data3 == "object" && !Array.isArray(data3)){
+const _errs16 = errors;
+if(errors === _errs16){
+if(data4 && typeof data4 == "object" && !Array.isArray(data4)){
 let missing1;
-if(((data3.mediaId === undefined) && (missing1 = "mediaId")) || ((data3.path === undefined) && (missing1 = "path"))){
+if(((data4.mediaId === undefined) && (missing1 = "mediaId")) || ((data4.path === undefined) && (missing1 = "path"))){
 const err1 = {instancePath:instancePath+"/avatar",schemaPath:"node#/definitions/AvatarImage/required",keyword:"required",params:{missingProperty: missing1},message:"must have required property '"+missing1+"'"};
 if(vErrors === null){
 vErrors = [err1];
@@ -7184,60 +7225,16 @@ vErrors.push(err1);
 errors++;
 }
 else {
-const _errs15 = errors;
-for(const key1 in data3){
-if(!((((((((key1 === "mediaId") || (key1 === "path")) || (key1 === "directPath")) || (key1 === "directPathExpiresAt")) || (key1 === "mimeType")) || (key1 === "width")) || (key1 === "height")) || (key1 === "shape"))){
-delete data3[key1];
-}
-}
-if(_errs15 === errors){
-if(data3.mediaId !== undefined){
-let data4 = data3.mediaId;
-const _errs16 = errors;
-if(typeof data4 !== "string"){
-let dataType4 = typeof data4;
-let coerced4 = undefined;
-if(dataType4 == 'object' && Array.isArray(data4) && data4.length == 1){
-data4 = data4[0];
-dataType4 = typeof data4;
-if(typeof data4 === "string"){
-coerced4 = data4;
-}
-}
-if(!(coerced4 !== undefined)){
-if(dataType4 == "number" || dataType4 == "boolean"){
-coerced4 = "" + data4;
-}
-else if(data4 === null){
-coerced4 = "";
-}
-else {
-const err2 = {instancePath:instancePath+"/avatar/mediaId",schemaPath:"node#/definitions/AvatarImage/properties/mediaId/type",keyword:"type",params:{type: "string"},message:"must be string"};
-if(vErrors === null){
-vErrors = [err2];
-}
-else {
-vErrors.push(err2);
-}
-errors++;
-}
-}
-if(coerced4 !== undefined){
-data4 = coerced4;
-if(data3 !== undefined){
-data3["mediaId"] = coerced4;
-}
-}
-}
-var valid3 = _errs16 === errors;
-}
-else {
-var valid3 = true;
-}
-if(valid3){
-if(data3.path !== undefined){
-let data5 = data3.path;
 const _errs18 = errors;
+for(const key1 in data4){
+if(!((((((((key1 === "mediaId") || (key1 === "path")) || (key1 === "directPath")) || (key1 === "directPathExpiresAt")) || (key1 === "mimeType")) || (key1 === "width")) || (key1 === "height")) || (key1 === "shape"))){
+delete data4[key1];
+}
+}
+if(_errs18 === errors){
+if(data4.mediaId !== undefined){
+let data5 = data4.mediaId;
+const _errs19 = errors;
 if(typeof data5 !== "string"){
 let dataType5 = typeof data5;
 let coerced5 = undefined;
@@ -7256,39 +7253,39 @@ else if(data5 === null){
 coerced5 = "";
 }
 else {
-const err3 = {instancePath:instancePath+"/avatar/path",schemaPath:"node#/definitions/AvatarImage/properties/path/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err2 = {instancePath:instancePath+"/avatar/mediaId",schemaPath:"node#/definitions/AvatarImage/properties/mediaId/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err3];
+vErrors = [err2];
 }
 else {
-vErrors.push(err3);
+vErrors.push(err2);
 }
 errors++;
 }
 }
 if(coerced5 !== undefined){
 data5 = coerced5;
-if(data3 !== undefined){
-data3["path"] = coerced5;
+if(data4 !== undefined){
+data4["mediaId"] = coerced5;
 }
 }
 }
-var valid3 = _errs18 === errors;
+var valid3 = _errs19 === errors;
 }
 else {
 var valid3 = true;
 }
 if(valid3){
-if(data3.directPath !== undefined){
-let data6 = data3.directPath;
-const _errs20 = errors;
-if((typeof data6 !== "string") && (data6 !== null)){
+if(data4.path !== undefined){
+let data6 = data4.path;
+const _errs21 = errors;
+if(typeof data6 !== "string"){
 let dataType6 = typeof data6;
 let coerced6 = undefined;
 if(dataType6 == 'object' && Array.isArray(data6) && data6.length == 1){
 data6 = data6[0];
 dataType6 = typeof data6;
-if((typeof data6 === "string") && (data6 === null)){
+if(typeof data6 === "string"){
 coerced6 = data6;
 }
 }
@@ -7299,8 +7296,52 @@ coerced6 = "" + data6;
 else if(data6 === null){
 coerced6 = "";
 }
-else if(data6 === "" || data6 === 0 || data6 === false){
-coerced6 = null;
+else {
+const err3 = {instancePath:instancePath+"/avatar/path",schemaPath:"node#/definitions/AvatarImage/properties/path/type",keyword:"type",params:{type: "string"},message:"must be string"};
+if(vErrors === null){
+vErrors = [err3];
+}
+else {
+vErrors.push(err3);
+}
+errors++;
+}
+}
+if(coerced6 !== undefined){
+data6 = coerced6;
+if(data4 !== undefined){
+data4["path"] = coerced6;
+}
+}
+}
+var valid3 = _errs21 === errors;
+}
+else {
+var valid3 = true;
+}
+if(valid3){
+if(data4.directPath !== undefined){
+let data7 = data4.directPath;
+const _errs23 = errors;
+if((typeof data7 !== "string") && (data7 !== null)){
+let dataType7 = typeof data7;
+let coerced7 = undefined;
+if(dataType7 == 'object' && Array.isArray(data7) && data7.length == 1){
+data7 = data7[0];
+dataType7 = typeof data7;
+if((typeof data7 === "string") && (data7 === null)){
+coerced7 = data7;
+}
+}
+if(!(coerced7 !== undefined)){
+if(dataType7 == "number" || dataType7 == "boolean"){
+coerced7 = "" + data7;
+}
+else if(data7 === null){
+coerced7 = "";
+}
+else if(data7 === "" || data7 === 0 || data7 === false){
+coerced7 = null;
 }
 else {
 const err4 = {instancePath:instancePath+"/avatar/directPath",schemaPath:"node#/definitions/AvatarImage/properties/directPath/type",keyword:"type",params:{type: "string"},message:"must be string"};
@@ -7313,39 +7354,39 @@ vErrors.push(err4);
 errors++;
 }
 }
-if(coerced6 !== undefined){
-data6 = coerced6;
-if(data3 !== undefined){
-data3["directPath"] = coerced6;
+if(coerced7 !== undefined){
+data7 = coerced7;
+if(data4 !== undefined){
+data4["directPath"] = coerced7;
 }
 }
 }
-var valid3 = _errs20 === errors;
+var valid3 = _errs23 === errors;
 }
 else {
 var valid3 = true;
 }
 if(valid3){
-if(data3.directPathExpiresAt !== undefined){
-let data7 = data3.directPathExpiresAt;
-const _errs23 = errors;
-if((!(((typeof data7 == "number") && (!(data7 % 1) && !isNaN(data7))) && (isFinite(data7)))) && (data7 !== null)){
-let dataType7 = typeof data7;
-let coerced7 = undefined;
-if(dataType7 == 'object' && Array.isArray(data7) && data7.length == 1){
-data7 = data7[0];
-dataType7 = typeof data7;
-if((((typeof data7 == "number") && (!(data7 % 1) && !isNaN(data7))) && (isFinite(data7))) && (data7 === null)){
-coerced7 = data7;
+if(data4.directPathExpiresAt !== undefined){
+let data8 = data4.directPathExpiresAt;
+const _errs26 = errors;
+if((!(((typeof data8 == "number") && (!(data8 % 1) && !isNaN(data8))) && (isFinite(data8)))) && (data8 !== null)){
+let dataType8 = typeof data8;
+let coerced8 = undefined;
+if(dataType8 == 'object' && Array.isArray(data8) && data8.length == 1){
+data8 = data8[0];
+dataType8 = typeof data8;
+if((((typeof data8 == "number") && (!(data8 % 1) && !isNaN(data8))) && (isFinite(data8))) && (data8 === null)){
+coerced8 = data8;
 }
 }
-if(!(coerced7 !== undefined)){
-if(dataType7 === "boolean" || data7 === null
-              || (dataType7 === "string" && data7 && data7 == +data7 && !(data7 % 1))){
-coerced7 = +data7;
+if(!(coerced8 !== undefined)){
+if(dataType8 === "boolean" || data8 === null
+              || (dataType8 === "string" && data8 && data8 == +data8 && !(data8 % 1))){
+coerced8 = +data8;
 }
-else if(data7 === "" || data7 === 0 || data7 === false){
-coerced7 = null;
+else if(data8 === "" || data8 === 0 || data8 === false){
+coerced8 = null;
 }
 else {
 const err5 = {instancePath:instancePath+"/avatar/directPathExpiresAt",schemaPath:"node#/definitions/AvatarImage/properties/directPathExpiresAt/type",keyword:"type",params:{type: "integer"},message:"must be integer"};
@@ -7358,41 +7399,41 @@ vErrors.push(err5);
 errors++;
 }
 }
-if(coerced7 !== undefined){
-data7 = coerced7;
-if(data3 !== undefined){
-data3["directPathExpiresAt"] = coerced7;
+if(coerced8 !== undefined){
+data8 = coerced8;
+if(data4 !== undefined){
+data4["directPathExpiresAt"] = coerced8;
 }
 }
 }
-var valid3 = _errs23 === errors;
+var valid3 = _errs26 === errors;
 }
 else {
 var valid3 = true;
 }
 if(valid3){
-if(data3.mimeType !== undefined){
-let data8 = data3.mimeType;
-const _errs26 = errors;
-if((typeof data8 !== "string") && (data8 !== null)){
-let dataType8 = typeof data8;
-let coerced8 = undefined;
-if(dataType8 == 'object' && Array.isArray(data8) && data8.length == 1){
-data8 = data8[0];
-dataType8 = typeof data8;
-if((typeof data8 === "string") && (data8 === null)){
-coerced8 = data8;
+if(data4.mimeType !== undefined){
+let data9 = data4.mimeType;
+const _errs29 = errors;
+if((typeof data9 !== "string") && (data9 !== null)){
+let dataType9 = typeof data9;
+let coerced9 = undefined;
+if(dataType9 == 'object' && Array.isArray(data9) && data9.length == 1){
+data9 = data9[0];
+dataType9 = typeof data9;
+if((typeof data9 === "string") && (data9 === null)){
+coerced9 = data9;
 }
 }
-if(!(coerced8 !== undefined)){
-if(dataType8 == "number" || dataType8 == "boolean"){
-coerced8 = "" + data8;
+if(!(coerced9 !== undefined)){
+if(dataType9 == "number" || dataType9 == "boolean"){
+coerced9 = "" + data9;
 }
-else if(data8 === null){
-coerced8 = "";
+else if(data9 === null){
+coerced9 = "";
 }
-else if(data8 === "" || data8 === 0 || data8 === false){
-coerced8 = null;
+else if(data9 === "" || data9 === 0 || data9 === false){
+coerced9 = null;
 }
 else {
 const err6 = {instancePath:instancePath+"/avatar/mimeType",schemaPath:"node#/definitions/AvatarImage/properties/mimeType/type",keyword:"type",params:{type: "string"},message:"must be string"};
@@ -7405,55 +7446,10 @@ vErrors.push(err6);
 errors++;
 }
 }
-if(coerced8 !== undefined){
-data8 = coerced8;
-if(data3 !== undefined){
-data3["mimeType"] = coerced8;
-}
-}
-}
-var valid3 = _errs26 === errors;
-}
-else {
-var valid3 = true;
-}
-if(valid3){
-if(data3.width !== undefined){
-let data9 = data3.width;
-const _errs29 = errors;
-if((!(((typeof data9 == "number") && (!(data9 % 1) && !isNaN(data9))) && (isFinite(data9)))) && (data9 !== null)){
-let dataType9 = typeof data9;
-let coerced9 = undefined;
-if(dataType9 == 'object' && Array.isArray(data9) && data9.length == 1){
-data9 = data9[0];
-dataType9 = typeof data9;
-if((((typeof data9 == "number") && (!(data9 % 1) && !isNaN(data9))) && (isFinite(data9))) && (data9 === null)){
-coerced9 = data9;
-}
-}
-if(!(coerced9 !== undefined)){
-if(dataType9 === "boolean" || data9 === null
-              || (dataType9 === "string" && data9 && data9 == +data9 && !(data9 % 1))){
-coerced9 = +data9;
-}
-else if(data9 === "" || data9 === 0 || data9 === false){
-coerced9 = null;
-}
-else {
-const err7 = {instancePath:instancePath+"/avatar/width",schemaPath:"node#/definitions/AvatarImage/properties/width/type",keyword:"type",params:{type: "integer"},message:"must be integer"};
-if(vErrors === null){
-vErrors = [err7];
-}
-else {
-vErrors.push(err7);
-}
-errors++;
-}
-}
 if(coerced9 !== undefined){
 data9 = coerced9;
-if(data3 !== undefined){
-data3["width"] = coerced9;
+if(data4 !== undefined){
+data4["mimeType"] = coerced9;
 }
 }
 }
@@ -7463,8 +7459,8 @@ else {
 var valid3 = true;
 }
 if(valid3){
-if(data3.height !== undefined){
-let data10 = data3.height;
+if(data4.width !== undefined){
+let data10 = data4.width;
 const _errs32 = errors;
 if((!(((typeof data10 == "number") && (!(data10 % 1) && !isNaN(data10))) && (isFinite(data10)))) && (data10 !== null)){
 let dataType10 = typeof data10;
@@ -7485,6 +7481,51 @@ else if(data10 === "" || data10 === 0 || data10 === false){
 coerced10 = null;
 }
 else {
+const err7 = {instancePath:instancePath+"/avatar/width",schemaPath:"node#/definitions/AvatarImage/properties/width/type",keyword:"type",params:{type: "integer"},message:"must be integer"};
+if(vErrors === null){
+vErrors = [err7];
+}
+else {
+vErrors.push(err7);
+}
+errors++;
+}
+}
+if(coerced10 !== undefined){
+data10 = coerced10;
+if(data4 !== undefined){
+data4["width"] = coerced10;
+}
+}
+}
+var valid3 = _errs32 === errors;
+}
+else {
+var valid3 = true;
+}
+if(valid3){
+if(data4.height !== undefined){
+let data11 = data4.height;
+const _errs35 = errors;
+if((!(((typeof data11 == "number") && (!(data11 % 1) && !isNaN(data11))) && (isFinite(data11)))) && (data11 !== null)){
+let dataType11 = typeof data11;
+let coerced11 = undefined;
+if(dataType11 == 'object' && Array.isArray(data11) && data11.length == 1){
+data11 = data11[0];
+dataType11 = typeof data11;
+if((((typeof data11 == "number") && (!(data11 % 1) && !isNaN(data11))) && (isFinite(data11))) && (data11 === null)){
+coerced11 = data11;
+}
+}
+if(!(coerced11 !== undefined)){
+if(dataType11 === "boolean" || data11 === null
+              || (dataType11 === "string" && data11 && data11 == +data11 && !(data11 % 1))){
+coerced11 = +data11;
+}
+else if(data11 === "" || data11 === 0 || data11 === false){
+coerced11 = null;
+}
+else {
 const err8 = {instancePath:instancePath+"/avatar/height",schemaPath:"node#/definitions/AvatarImage/properties/height/type",keyword:"type",params:{type: "integer"},message:"must be integer"};
 if(vErrors === null){
 vErrors = [err8];
@@ -7495,41 +7536,41 @@ vErrors.push(err8);
 errors++;
 }
 }
-if(coerced10 !== undefined){
-data10 = coerced10;
-if(data3 !== undefined){
-data3["height"] = coerced10;
+if(coerced11 !== undefined){
+data11 = coerced11;
+if(data4 !== undefined){
+data4["height"] = coerced11;
 }
 }
 }
-var valid3 = _errs32 === errors;
+var valid3 = _errs35 === errors;
 }
 else {
 var valid3 = true;
 }
 if(valid3){
-if(data3.shape !== undefined){
-let data11 = data3.shape;
-const _errs35 = errors;
-if((typeof data11 !== "string") && (data11 !== null)){
-let dataType11 = typeof data11;
-let coerced11 = undefined;
-if(dataType11 == 'object' && Array.isArray(data11) && data11.length == 1){
-data11 = data11[0];
-dataType11 = typeof data11;
-if((typeof data11 === "string") && (data11 === null)){
-coerced11 = data11;
+if(data4.shape !== undefined){
+let data12 = data4.shape;
+const _errs38 = errors;
+if((typeof data12 !== "string") && (data12 !== null)){
+let dataType12 = typeof data12;
+let coerced12 = undefined;
+if(dataType12 == 'object' && Array.isArray(data12) && data12.length == 1){
+data12 = data12[0];
+dataType12 = typeof data12;
+if((typeof data12 === "string") && (data12 === null)){
+coerced12 = data12;
 }
 }
-if(!(coerced11 !== undefined)){
-if(dataType11 == "number" || dataType11 == "boolean"){
-coerced11 = "" + data11;
+if(!(coerced12 !== undefined)){
+if(dataType12 == "number" || dataType12 == "boolean"){
+coerced12 = "" + data12;
 }
-else if(data11 === null){
-coerced11 = "";
+else if(data12 === null){
+coerced12 = "";
 }
-else if(data11 === "" || data11 === 0 || data11 === false){
-coerced11 = null;
+else if(data12 === "" || data12 === 0 || data12 === false){
+coerced12 = null;
 }
 else {
 const err9 = {instancePath:instancePath+"/avatar/shape",schemaPath:"node#/definitions/AvatarImage/properties/shape/type",keyword:"type",params:{type: "string"},message:"must be string"};
@@ -7542,14 +7583,14 @@ vErrors.push(err9);
 errors++;
 }
 }
-if(coerced11 !== undefined){
-data11 = coerced11;
-if(data3 !== undefined){
-data3["shape"] = coerced11;
+if(coerced12 !== undefined){
+data12 = coerced12;
+if(data4 !== undefined){
+data4["shape"] = coerced12;
 }
 }
 }
-var valid3 = _errs35 === errors;
+var valid3 = _errs38 === errors;
 }
 else {
 var valid3 = true;
@@ -7575,23 +7616,23 @@ vErrors.push(err10);
 errors++;
 }
 }
-var _valid0 = _errs12 === errors;
+var _valid0 = _errs15 === errors;
 valid1 = valid1 || _valid0;
 if(!valid1){
-const _errs40 = errors;
-if(data3 !== null){
-let dataType12 = typeof data3;
-let coerced12 = undefined;
-if(dataType12 == 'object' && Array.isArray(data3) && data3.length == 1){
-data3 = data3[0];
-dataType12 = typeof data3;
-if(data3 === null){
-coerced12 = data3;
+const _errs43 = errors;
+if(data4 !== null){
+let dataType13 = typeof data4;
+let coerced13 = undefined;
+if(dataType13 == 'object' && Array.isArray(data4) && data4.length == 1){
+data4 = data4[0];
+dataType13 = typeof data4;
+if(data4 === null){
+coerced13 = data4;
 }
 }
-if(!(coerced12 !== undefined)){
-if(data3 === "" || data3 === 0 || data3 === false){
-coerced12 = null;
+if(!(coerced13 !== undefined)){
+if(data4 === "" || data4 === 0 || data4 === false){
+coerced13 = null;
 }
 else {
 const err11 = {instancePath:instancePath+"/avatar",schemaPath:"#/properties/avatar/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
@@ -7604,14 +7645,14 @@ vErrors.push(err11);
 errors++;
 }
 }
-if(coerced12 !== undefined){
-data3 = coerced12;
+if(coerced13 !== undefined){
+data4 = coerced13;
 if(data !== undefined){
-data["avatar"] = coerced12;
+data["avatar"] = coerced13;
 }
 }
 }
-var _valid0 = _errs40 === errors;
+var _valid0 = _errs43 === errors;
 valid1 = valid1 || _valid0;
 }
 if(!valid1){
@@ -7627,101 +7668,60 @@ validate41.errors = vErrors;
 return false;
 }
 else {
-errors = _errs11;
+errors = _errs14;
 if(vErrors !== null){
-if(_errs11){
-vErrors.length = _errs11;
+if(_errs14){
+vErrors.length = _errs14;
 }
 else {
 vErrors = null;
 }
 }
 }
-var valid0 = _errs10 === errors;
+var valid0 = _errs13 === errors;
 }
 else {
 var valid0 = true;
 }
 if(valid0){
 if(data.distance !== undefined){
-let data12 = data.distance;
-const _errs42 = errors;
-if(!((typeof data12 == "number") && (isFinite(data12)))){
-let dataType13 = typeof data12;
-let coerced13 = undefined;
-if(dataType13 == 'object' && Array.isArray(data12) && data12.length == 1){
-data12 = data12[0];
-dataType13 = typeof data12;
-if((typeof data12 == "number") && (isFinite(data12))){
-coerced13 = data12;
+let data13 = data.distance;
+const _errs45 = errors;
+if(!((typeof data13 == "number") && (isFinite(data13)))){
+let dataType14 = typeof data13;
+let coerced14 = undefined;
+if(dataType14 == 'object' && Array.isArray(data13) && data13.length == 1){
+data13 = data13[0];
+dataType14 = typeof data13;
+if((typeof data13 == "number") && (isFinite(data13))){
+coerced14 = data13;
 }
 }
-if(!(coerced13 !== undefined)){
-if(dataType13 == "boolean" || data12 === null
-              || (dataType13 == "string" && data12 && data12 == +data12)){
-coerced13 = +data12;
+if(!(coerced14 !== undefined)){
+if(dataType14 == "boolean" || data13 === null
+              || (dataType14 == "string" && data13 && data13 == +data13)){
+coerced14 = +data13;
 }
 else {
 validate41.errors = [{instancePath:instancePath+"/distance",schemaPath:"#/properties/distance/type",keyword:"type",params:{type: "number"},message:"must be number"}];
 return false;
 }
 }
-if(coerced13 !== undefined){
-data12 = coerced13;
+if(coerced14 !== undefined){
+data13 = coerced14;
 if(data !== undefined){
-data["distance"] = coerced13;
+data["distance"] = coerced14;
 }
 }
 }
-var valid0 = _errs42 === errors;
+var valid0 = _errs45 === errors;
 }
 else {
 var valid0 = true;
 }
 if(valid0){
 if(data.hasFeedSubscriber !== undefined){
-let data13 = data.hasFeedSubscriber;
-const _errs44 = errors;
-if((typeof data13 !== "boolean") && (data13 !== null)){
-let dataType14 = typeof data13;
-let coerced14 = undefined;
-if(dataType14 == 'object' && Array.isArray(data13) && data13.length == 1){
-data13 = data13[0];
-dataType14 = typeof data13;
-if((typeof data13 === "boolean") && (data13 === null)){
-coerced14 = data13;
-}
-}
-if(!(coerced14 !== undefined)){
-if(data13 === "false" || data13 === 0 || data13 === null){
-coerced14 = false;
-}
-else if(data13 === "true" || data13 === 1){
-coerced14 = true;
-}
-else if(data13 === "" || data13 === 0 || data13 === false){
-coerced14 = null;
-}
-else {
-validate41.errors = [{instancePath:instancePath+"/hasFeedSubscriber",schemaPath:"#/properties/hasFeedSubscriber/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
-return false;
-}
-}
-if(coerced14 !== undefined){
-data13 = coerced14;
-if(data !== undefined){
-data["hasFeedSubscriber"] = coerced14;
-}
-}
-}
-var valid0 = _errs44 === errors;
-}
-else {
-var valid0 = true;
-}
-if(valid0){
-if(data.hasFeedSubscription !== undefined){
-let data14 = data.hasFeedSubscription;
+let data14 = data.hasFeedSubscriber;
 const _errs47 = errors;
 if((typeof data14 !== "boolean") && (data14 !== null)){
 let dataType15 = typeof data14;
@@ -7744,14 +7744,14 @@ else if(data14 === "" || data14 === 0 || data14 === false){
 coerced15 = null;
 }
 else {
-validate41.errors = [{instancePath:instancePath+"/hasFeedSubscription",schemaPath:"#/properties/hasFeedSubscription/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
+validate41.errors = [{instancePath:instancePath+"/hasFeedSubscriber",schemaPath:"#/properties/hasFeedSubscriber/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
 return false;
 }
 }
 if(coerced15 !== undefined){
 data14 = coerced15;
 if(data !== undefined){
-data["hasFeedSubscription"] = coerced15;
+data["hasFeedSubscriber"] = coerced15;
 }
 }
 }
@@ -7761,8 +7761,8 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.hasFriend !== undefined){
-let data15 = data.hasFriend;
+if(data.hasFeedSubscription !== undefined){
+let data15 = data.hasFeedSubscription;
 const _errs50 = errors;
 if((typeof data15 !== "boolean") && (data15 !== null)){
 let dataType16 = typeof data15;
@@ -7785,14 +7785,14 @@ else if(data15 === "" || data15 === 0 || data15 === false){
 coerced16 = null;
 }
 else {
-validate41.errors = [{instancePath:instancePath+"/hasFriend",schemaPath:"#/properties/hasFriend/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
+validate41.errors = [{instancePath:instancePath+"/hasFeedSubscription",schemaPath:"#/properties/hasFeedSubscription/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
 return false;
 }
 }
 if(coerced16 !== undefined){
 data15 = coerced16;
 if(data !== undefined){
-data["hasFriend"] = coerced16;
+data["hasFeedSubscription"] = coerced16;
 }
 }
 }
@@ -7802,8 +7802,8 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.hasFriendOf !== undefined){
-let data16 = data.hasFriendOf;
+if(data.hasFriend !== undefined){
+let data16 = data.hasFriend;
 const _errs53 = errors;
 if((typeof data16 !== "boolean") && (data16 !== null)){
 let dataType17 = typeof data16;
@@ -7826,14 +7826,14 @@ else if(data16 === "" || data16 === 0 || data16 === false){
 coerced17 = null;
 }
 else {
-validate41.errors = [{instancePath:instancePath+"/hasFriendOf",schemaPath:"#/properties/hasFriendOf/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
+validate41.errors = [{instancePath:instancePath+"/hasFriend",schemaPath:"#/properties/hasFriend/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
 return false;
 }
 }
 if(coerced17 !== undefined){
 data16 = coerced17;
 if(data !== undefined){
-data["hasFriendOf"] = coerced17;
+data["hasFriend"] = coerced17;
 }
 }
 }
@@ -7843,8 +7843,8 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.hasBlock !== undefined){
-let data17 = data.hasBlock;
+if(data.hasFriendOf !== undefined){
+let data17 = data.hasFriendOf;
 const _errs56 = errors;
 if((typeof data17 !== "boolean") && (data17 !== null)){
 let dataType18 = typeof data17;
@@ -7867,14 +7867,14 @@ else if(data17 === "" || data17 === 0 || data17 === false){
 coerced18 = null;
 }
 else {
-validate41.errors = [{instancePath:instancePath+"/hasBlock",schemaPath:"#/properties/hasBlock/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
+validate41.errors = [{instancePath:instancePath+"/hasFriendOf",schemaPath:"#/properties/hasFriendOf/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
 return false;
 }
 }
 if(coerced18 !== undefined){
 data17 = coerced18;
 if(data !== undefined){
-data["hasBlock"] = coerced18;
+data["hasFriendOf"] = coerced18;
 }
 }
 }
@@ -7884,8 +7884,8 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.hasBlockBy !== undefined){
-let data18 = data.hasBlockBy;
+if(data.hasBlock !== undefined){
+let data18 = data.hasBlock;
 const _errs59 = errors;
 if((typeof data18 !== "boolean") && (data18 !== null)){
 let dataType19 = typeof data18;
@@ -7908,14 +7908,14 @@ else if(data18 === "" || data18 === 0 || data18 === false){
 coerced19 = null;
 }
 else {
-validate41.errors = [{instancePath:instancePath+"/hasBlockBy",schemaPath:"#/properties/hasBlockBy/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
+validate41.errors = [{instancePath:instancePath+"/hasBlock",schemaPath:"#/properties/hasBlock/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
 return false;
 }
 }
 if(coerced19 !== undefined){
 data18 = coerced19;
 if(data !== undefined){
-data["hasBlockBy"] = coerced19;
+data["hasBlock"] = coerced19;
 }
 }
 }
@@ -7925,25 +7925,66 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.operations !== undefined){
-let data19 = data.operations;
+if(data.hasBlockBy !== undefined){
+let data19 = data.hasBlockBy;
 const _errs62 = errors;
-const _errs63 = errors;
-let valid4 = false;
-const _errs64 = errors;
-if((!(data19 && typeof data19 == "object" && !Array.isArray(data19))) && (data19 !== null)){
+if((typeof data19 !== "boolean") && (data19 !== null)){
 let dataType20 = typeof data19;
 let coerced20 = undefined;
 if(dataType20 == 'object' && Array.isArray(data19) && data19.length == 1){
 data19 = data19[0];
 dataType20 = typeof data19;
-if((data19 && typeof data19 == "object" && !Array.isArray(data19)) && (data19 === null)){
+if((typeof data19 === "boolean") && (data19 === null)){
 coerced20 = data19;
 }
 }
 if(!(coerced20 !== undefined)){
-if(data19 === "" || data19 === 0 || data19 === false){
+if(data19 === "false" || data19 === 0 || data19 === null){
+coerced20 = false;
+}
+else if(data19 === "true" || data19 === 1){
+coerced20 = true;
+}
+else if(data19 === "" || data19 === 0 || data19 === false){
 coerced20 = null;
+}
+else {
+validate41.errors = [{instancePath:instancePath+"/hasBlockBy",schemaPath:"#/properties/hasBlockBy/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
+return false;
+}
+}
+if(coerced20 !== undefined){
+data19 = coerced20;
+if(data !== undefined){
+data["hasBlockBy"] = coerced20;
+}
+}
+}
+var valid0 = _errs62 === errors;
+}
+else {
+var valid0 = true;
+}
+if(valid0){
+if(data.operations !== undefined){
+let data20 = data.operations;
+const _errs65 = errors;
+const _errs66 = errors;
+let valid4 = false;
+const _errs67 = errors;
+if((!(data20 && typeof data20 == "object" && !Array.isArray(data20))) && (data20 !== null)){
+let dataType21 = typeof data20;
+let coerced21 = undefined;
+if(dataType21 == 'object' && Array.isArray(data20) && data20.length == 1){
+data20 = data20[0];
+dataType21 = typeof data20;
+if((data20 && typeof data20 == "object" && !Array.isArray(data20)) && (data20 === null)){
+coerced21 = data20;
+}
+}
+if(!(coerced21 !== undefined)){
+if(data20 === "" || data20 === 0 || data20 === false){
+coerced21 = null;
 }
 else {
 const err13 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf/0/type",keyword:"type",params:{type: "object"},message:"must be object"};
@@ -7956,72 +7997,25 @@ vErrors.push(err13);
 errors++;
 }
 }
-if(coerced20 !== undefined){
-data19 = coerced20;
-if(data !== undefined){
-data["operations"] = coerced20;
-}
-}
-}
-const _errs65 = errors;
-if(errors === _errs65){
-if(data19 && typeof data19 == "object" && !Array.isArray(data19)){
-const _errs67 = errors;
-for(const key2 in data19){
-if(!((((((key2 === "viewFeedSubscriber") || (key2 === "viewFeedSubscription")) || (key2 === "viewFriend")) || (key2 === "viewFriendOf")) || (key2 === "viewBlock")) || (key2 === "viewBlockBy"))){
-delete data19[key2];
-}
-}
-if(_errs67 === errors){
-if(data19.viewFeedSubscriber !== undefined){
-let data20 = data19.viewFeedSubscriber;
-const _errs68 = errors;
-if((typeof data20 !== "string") && (data20 !== null)){
-let dataType21 = typeof data20;
-let coerced21 = undefined;
-if(dataType21 == 'object' && Array.isArray(data20) && data20.length == 1){
-data20 = data20[0];
-dataType21 = typeof data20;
-if((typeof data20 === "string") && (data20 === null)){
-coerced21 = data20;
-}
-}
-if(!(coerced21 !== undefined)){
-if(dataType21 == "number" || dataType21 == "boolean"){
-coerced21 = "" + data20;
-}
-else if(data20 === null){
-coerced21 = "";
-}
-else if(data20 === "" || data20 === 0 || data20 === false){
-coerced21 = null;
-}
-else {
-const err14 = {instancePath:instancePath+"/operations/viewFeedSubscriber",schemaPath:"node#/definitions/ContactOperations/properties/viewFeedSubscriber/type",keyword:"type",params:{type: "string"},message:"must be string"};
-if(vErrors === null){
-vErrors = [err14];
-}
-else {
-vErrors.push(err14);
-}
-errors++;
-}
-}
 if(coerced21 !== undefined){
 data20 = coerced21;
-if(data19 !== undefined){
-data19["viewFeedSubscriber"] = coerced21;
+if(data !== undefined){
+data["operations"] = coerced21;
 }
 }
 }
-var valid6 = _errs68 === errors;
+const _errs68 = errors;
+if(errors === _errs68){
+if(data20 && typeof data20 == "object" && !Array.isArray(data20)){
+const _errs70 = errors;
+for(const key2 in data20){
+if(!((((((key2 === "viewFeedSubscriber") || (key2 === "viewFeedSubscription")) || (key2 === "viewFriend")) || (key2 === "viewFriendOf")) || (key2 === "viewBlock")) || (key2 === "viewBlockBy"))){
+delete data20[key2];
 }
-else {
-var valid6 = true;
 }
-if(valid6){
-if(data19.viewFeedSubscription !== undefined){
-let data21 = data19.viewFeedSubscription;
+if(_errs70 === errors){
+if(data20.viewFeedSubscriber !== undefined){
+let data21 = data20.viewFeedSubscriber;
 const _errs71 = errors;
 if((typeof data21 !== "string") && (data21 !== null)){
 let dataType22 = typeof data21;
@@ -8044,20 +8038,20 @@ else if(data21 === "" || data21 === 0 || data21 === false){
 coerced22 = null;
 }
 else {
-const err15 = {instancePath:instancePath+"/operations/viewFeedSubscription",schemaPath:"node#/definitions/ContactOperations/properties/viewFeedSubscription/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err14 = {instancePath:instancePath+"/operations/viewFeedSubscriber",schemaPath:"node#/definitions/ContactOperations/properties/viewFeedSubscriber/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err15];
+vErrors = [err14];
 }
 else {
-vErrors.push(err15);
+vErrors.push(err14);
 }
 errors++;
 }
 }
 if(coerced22 !== undefined){
 data21 = coerced22;
-if(data19 !== undefined){
-data19["viewFeedSubscription"] = coerced22;
+if(data20 !== undefined){
+data20["viewFeedSubscriber"] = coerced22;
 }
 }
 }
@@ -8067,8 +8061,8 @@ else {
 var valid6 = true;
 }
 if(valid6){
-if(data19.viewFriend !== undefined){
-let data22 = data19.viewFriend;
+if(data20.viewFeedSubscription !== undefined){
+let data22 = data20.viewFeedSubscription;
 const _errs74 = errors;
 if((typeof data22 !== "string") && (data22 !== null)){
 let dataType23 = typeof data22;
@@ -8091,20 +8085,20 @@ else if(data22 === "" || data22 === 0 || data22 === false){
 coerced23 = null;
 }
 else {
-const err16 = {instancePath:instancePath+"/operations/viewFriend",schemaPath:"node#/definitions/ContactOperations/properties/viewFriend/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err15 = {instancePath:instancePath+"/operations/viewFeedSubscription",schemaPath:"node#/definitions/ContactOperations/properties/viewFeedSubscription/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err16];
+vErrors = [err15];
 }
 else {
-vErrors.push(err16);
+vErrors.push(err15);
 }
 errors++;
 }
 }
 if(coerced23 !== undefined){
 data22 = coerced23;
-if(data19 !== undefined){
-data19["viewFriend"] = coerced23;
+if(data20 !== undefined){
+data20["viewFeedSubscription"] = coerced23;
 }
 }
 }
@@ -8114,8 +8108,8 @@ else {
 var valid6 = true;
 }
 if(valid6){
-if(data19.viewFriendOf !== undefined){
-let data23 = data19.viewFriendOf;
+if(data20.viewFriend !== undefined){
+let data23 = data20.viewFriend;
 const _errs77 = errors;
 if((typeof data23 !== "string") && (data23 !== null)){
 let dataType24 = typeof data23;
@@ -8138,20 +8132,20 @@ else if(data23 === "" || data23 === 0 || data23 === false){
 coerced24 = null;
 }
 else {
-const err17 = {instancePath:instancePath+"/operations/viewFriendOf",schemaPath:"node#/definitions/ContactOperations/properties/viewFriendOf/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err16 = {instancePath:instancePath+"/operations/viewFriend",schemaPath:"node#/definitions/ContactOperations/properties/viewFriend/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err17];
+vErrors = [err16];
 }
 else {
-vErrors.push(err17);
+vErrors.push(err16);
 }
 errors++;
 }
 }
 if(coerced24 !== undefined){
 data23 = coerced24;
-if(data19 !== undefined){
-data19["viewFriendOf"] = coerced24;
+if(data20 !== undefined){
+data20["viewFriend"] = coerced24;
 }
 }
 }
@@ -8161,8 +8155,8 @@ else {
 var valid6 = true;
 }
 if(valid6){
-if(data19.viewBlock !== undefined){
-let data24 = data19.viewBlock;
+if(data20.viewFriendOf !== undefined){
+let data24 = data20.viewFriendOf;
 const _errs80 = errors;
 if((typeof data24 !== "string") && (data24 !== null)){
 let dataType25 = typeof data24;
@@ -8185,20 +8179,20 @@ else if(data24 === "" || data24 === 0 || data24 === false){
 coerced25 = null;
 }
 else {
-const err18 = {instancePath:instancePath+"/operations/viewBlock",schemaPath:"node#/definitions/ContactOperations/properties/viewBlock/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err17 = {instancePath:instancePath+"/operations/viewFriendOf",schemaPath:"node#/definitions/ContactOperations/properties/viewFriendOf/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err18];
+vErrors = [err17];
 }
 else {
-vErrors.push(err18);
+vErrors.push(err17);
 }
 errors++;
 }
 }
 if(coerced25 !== undefined){
 data24 = coerced25;
-if(data19 !== undefined){
-data19["viewBlock"] = coerced25;
+if(data20 !== undefined){
+data20["viewFriendOf"] = coerced25;
 }
 }
 }
@@ -8208,8 +8202,8 @@ else {
 var valid6 = true;
 }
 if(valid6){
-if(data19.viewBlockBy !== undefined){
-let data25 = data19.viewBlockBy;
+if(data20.viewBlock !== undefined){
+let data25 = data20.viewBlock;
 const _errs83 = errors;
 if((typeof data25 !== "string") && (data25 !== null)){
 let dataType26 = typeof data25;
@@ -8232,6 +8226,53 @@ else if(data25 === "" || data25 === 0 || data25 === false){
 coerced26 = null;
 }
 else {
+const err18 = {instancePath:instancePath+"/operations/viewBlock",schemaPath:"node#/definitions/ContactOperations/properties/viewBlock/type",keyword:"type",params:{type: "string"},message:"must be string"};
+if(vErrors === null){
+vErrors = [err18];
+}
+else {
+vErrors.push(err18);
+}
+errors++;
+}
+}
+if(coerced26 !== undefined){
+data25 = coerced26;
+if(data20 !== undefined){
+data20["viewBlock"] = coerced26;
+}
+}
+}
+var valid6 = _errs83 === errors;
+}
+else {
+var valid6 = true;
+}
+if(valid6){
+if(data20.viewBlockBy !== undefined){
+let data26 = data20.viewBlockBy;
+const _errs86 = errors;
+if((typeof data26 !== "string") && (data26 !== null)){
+let dataType27 = typeof data26;
+let coerced27 = undefined;
+if(dataType27 == 'object' && Array.isArray(data26) && data26.length == 1){
+data26 = data26[0];
+dataType27 = typeof data26;
+if((typeof data26 === "string") && (data26 === null)){
+coerced27 = data26;
+}
+}
+if(!(coerced27 !== undefined)){
+if(dataType27 == "number" || dataType27 == "boolean"){
+coerced27 = "" + data26;
+}
+else if(data26 === null){
+coerced27 = "";
+}
+else if(data26 === "" || data26 === 0 || data26 === false){
+coerced27 = null;
+}
+else {
 const err19 = {instancePath:instancePath+"/operations/viewBlockBy",schemaPath:"node#/definitions/ContactOperations/properties/viewBlockBy/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
 vErrors = [err19];
@@ -8242,14 +8283,14 @@ vErrors.push(err19);
 errors++;
 }
 }
-if(coerced26 !== undefined){
-data25 = coerced26;
-if(data19 !== undefined){
-data19["viewBlockBy"] = coerced26;
+if(coerced27 !== undefined){
+data26 = coerced27;
+if(data20 !== undefined){
+data20["viewBlockBy"] = coerced27;
 }
 }
 }
-var valid6 = _errs83 === errors;
+var valid6 = _errs86 === errors;
 }
 else {
 var valid6 = true;
@@ -8272,23 +8313,23 @@ vErrors.push(err20);
 errors++;
 }
 }
-var _valid1 = _errs64 === errors;
+var _valid1 = _errs67 === errors;
 valid4 = valid4 || _valid1;
 if(!valid4){
-const _errs88 = errors;
-if(data19 !== null){
-let dataType27 = typeof data19;
-let coerced27 = undefined;
-if(dataType27 == 'object' && Array.isArray(data19) && data19.length == 1){
-data19 = data19[0];
-dataType27 = typeof data19;
-if(data19 === null){
-coerced27 = data19;
+const _errs91 = errors;
+if(data20 !== null){
+let dataType28 = typeof data20;
+let coerced28 = undefined;
+if(dataType28 == 'object' && Array.isArray(data20) && data20.length == 1){
+data20 = data20[0];
+dataType28 = typeof data20;
+if(data20 === null){
+coerced28 = data20;
 }
 }
-if(!(coerced27 !== undefined)){
-if(data19 === "" || data19 === 0 || data19 === false){
-coerced27 = null;
+if(!(coerced28 !== undefined)){
+if(data20 === "" || data20 === 0 || data20 === false){
+coerced28 = null;
 }
 else {
 const err21 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
@@ -8301,14 +8342,14 @@ vErrors.push(err21);
 errors++;
 }
 }
-if(coerced27 !== undefined){
-data19 = coerced27;
+if(coerced28 !== undefined){
+data20 = coerced28;
 if(data !== undefined){
-data["operations"] = coerced27;
+data["operations"] = coerced28;
 }
 }
 }
-var _valid1 = _errs88 === errors;
+var _valid1 = _errs91 === errors;
 valid4 = valid4 || _valid1;
 }
 if(!valid4){
@@ -8324,41 +8365,41 @@ validate41.errors = vErrors;
 return false;
 }
 else {
-errors = _errs63;
+errors = _errs66;
 if(vErrors !== null){
-if(_errs63){
-vErrors.length = _errs63;
+if(_errs66){
+vErrors.length = _errs66;
 }
 else {
 vErrors = null;
 }
 }
 }
-var valid0 = _errs62 === errors;
+var valid0 = _errs65 === errors;
 }
 else {
 var valid0 = true;
 }
 if(valid0){
 if(data.ownerOperations !== undefined){
-let data26 = data.ownerOperations;
-const _errs90 = errors;
-const _errs91 = errors;
+let data27 = data.ownerOperations;
+const _errs93 = errors;
+const _errs94 = errors;
 let valid7 = false;
-const _errs92 = errors;
-if((!(data26 && typeof data26 == "object" && !Array.isArray(data26))) && (data26 !== null)){
-let dataType28 = typeof data26;
-let coerced28 = undefined;
-if(dataType28 == 'object' && Array.isArray(data26) && data26.length == 1){
-data26 = data26[0];
-dataType28 = typeof data26;
-if((data26 && typeof data26 == "object" && !Array.isArray(data26)) && (data26 === null)){
-coerced28 = data26;
+const _errs95 = errors;
+if((!(data27 && typeof data27 == "object" && !Array.isArray(data27))) && (data27 !== null)){
+let dataType29 = typeof data27;
+let coerced29 = undefined;
+if(dataType29 == 'object' && Array.isArray(data27) && data27.length == 1){
+data27 = data27[0];
+dataType29 = typeof data27;
+if((data27 && typeof data27 == "object" && !Array.isArray(data27)) && (data27 === null)){
+coerced29 = data27;
 }
 }
-if(!(coerced28 !== undefined)){
-if(data26 === "" || data26 === 0 || data26 === false){
-coerced28 = null;
+if(!(coerced29 !== undefined)){
+if(data27 === "" || data27 === 0 || data27 === false){
+coerced29 = null;
 }
 else {
 const err23 = {instancePath:instancePath+"/ownerOperations",schemaPath:"#/properties/ownerOperations/anyOf/0/type",keyword:"type",params:{type: "object"},message:"must be object"};
@@ -8371,72 +8412,25 @@ vErrors.push(err23);
 errors++;
 }
 }
-if(coerced28 !== undefined){
-data26 = coerced28;
-if(data !== undefined){
-data["ownerOperations"] = coerced28;
-}
-}
-}
-const _errs93 = errors;
-if(errors === _errs93){
-if(data26 && typeof data26 == "object" && !Array.isArray(data26)){
-const _errs95 = errors;
-for(const key3 in data26){
-if(!((((((key3 === "viewFeedSubscriber") || (key3 === "viewFeedSubscription")) || (key3 === "viewFriend")) || (key3 === "viewFriendOf")) || (key3 === "viewBlock")) || (key3 === "viewBlockBy"))){
-delete data26[key3];
-}
-}
-if(_errs95 === errors){
-if(data26.viewFeedSubscriber !== undefined){
-let data27 = data26.viewFeedSubscriber;
-const _errs96 = errors;
-if((typeof data27 !== "string") && (data27 !== null)){
-let dataType29 = typeof data27;
-let coerced29 = undefined;
-if(dataType29 == 'object' && Array.isArray(data27) && data27.length == 1){
-data27 = data27[0];
-dataType29 = typeof data27;
-if((typeof data27 === "string") && (data27 === null)){
-coerced29 = data27;
-}
-}
-if(!(coerced29 !== undefined)){
-if(dataType29 == "number" || dataType29 == "boolean"){
-coerced29 = "" + data27;
-}
-else if(data27 === null){
-coerced29 = "";
-}
-else if(data27 === "" || data27 === 0 || data27 === false){
-coerced29 = null;
-}
-else {
-const err24 = {instancePath:instancePath+"/ownerOperations/viewFeedSubscriber",schemaPath:"node#/definitions/ContactOperations/properties/viewFeedSubscriber/type",keyword:"type",params:{type: "string"},message:"must be string"};
-if(vErrors === null){
-vErrors = [err24];
-}
-else {
-vErrors.push(err24);
-}
-errors++;
-}
-}
 if(coerced29 !== undefined){
 data27 = coerced29;
-if(data26 !== undefined){
-data26["viewFeedSubscriber"] = coerced29;
+if(data !== undefined){
+data["ownerOperations"] = coerced29;
 }
 }
 }
-var valid9 = _errs96 === errors;
+const _errs96 = errors;
+if(errors === _errs96){
+if(data27 && typeof data27 == "object" && !Array.isArray(data27)){
+const _errs98 = errors;
+for(const key3 in data27){
+if(!((((((key3 === "viewFeedSubscriber") || (key3 === "viewFeedSubscription")) || (key3 === "viewFriend")) || (key3 === "viewFriendOf")) || (key3 === "viewBlock")) || (key3 === "viewBlockBy"))){
+delete data27[key3];
 }
-else {
-var valid9 = true;
 }
-if(valid9){
-if(data26.viewFeedSubscription !== undefined){
-let data28 = data26.viewFeedSubscription;
+if(_errs98 === errors){
+if(data27.viewFeedSubscriber !== undefined){
+let data28 = data27.viewFeedSubscriber;
 const _errs99 = errors;
 if((typeof data28 !== "string") && (data28 !== null)){
 let dataType30 = typeof data28;
@@ -8459,20 +8453,20 @@ else if(data28 === "" || data28 === 0 || data28 === false){
 coerced30 = null;
 }
 else {
-const err25 = {instancePath:instancePath+"/ownerOperations/viewFeedSubscription",schemaPath:"node#/definitions/ContactOperations/properties/viewFeedSubscription/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err24 = {instancePath:instancePath+"/ownerOperations/viewFeedSubscriber",schemaPath:"node#/definitions/ContactOperations/properties/viewFeedSubscriber/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err25];
+vErrors = [err24];
 }
 else {
-vErrors.push(err25);
+vErrors.push(err24);
 }
 errors++;
 }
 }
 if(coerced30 !== undefined){
 data28 = coerced30;
-if(data26 !== undefined){
-data26["viewFeedSubscription"] = coerced30;
+if(data27 !== undefined){
+data27["viewFeedSubscriber"] = coerced30;
 }
 }
 }
@@ -8482,8 +8476,8 @@ else {
 var valid9 = true;
 }
 if(valid9){
-if(data26.viewFriend !== undefined){
-let data29 = data26.viewFriend;
+if(data27.viewFeedSubscription !== undefined){
+let data29 = data27.viewFeedSubscription;
 const _errs102 = errors;
 if((typeof data29 !== "string") && (data29 !== null)){
 let dataType31 = typeof data29;
@@ -8506,20 +8500,20 @@ else if(data29 === "" || data29 === 0 || data29 === false){
 coerced31 = null;
 }
 else {
-const err26 = {instancePath:instancePath+"/ownerOperations/viewFriend",schemaPath:"node#/definitions/ContactOperations/properties/viewFriend/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err25 = {instancePath:instancePath+"/ownerOperations/viewFeedSubscription",schemaPath:"node#/definitions/ContactOperations/properties/viewFeedSubscription/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err26];
+vErrors = [err25];
 }
 else {
-vErrors.push(err26);
+vErrors.push(err25);
 }
 errors++;
 }
 }
 if(coerced31 !== undefined){
 data29 = coerced31;
-if(data26 !== undefined){
-data26["viewFriend"] = coerced31;
+if(data27 !== undefined){
+data27["viewFeedSubscription"] = coerced31;
 }
 }
 }
@@ -8529,8 +8523,8 @@ else {
 var valid9 = true;
 }
 if(valid9){
-if(data26.viewFriendOf !== undefined){
-let data30 = data26.viewFriendOf;
+if(data27.viewFriend !== undefined){
+let data30 = data27.viewFriend;
 const _errs105 = errors;
 if((typeof data30 !== "string") && (data30 !== null)){
 let dataType32 = typeof data30;
@@ -8553,20 +8547,20 @@ else if(data30 === "" || data30 === 0 || data30 === false){
 coerced32 = null;
 }
 else {
-const err27 = {instancePath:instancePath+"/ownerOperations/viewFriendOf",schemaPath:"node#/definitions/ContactOperations/properties/viewFriendOf/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err26 = {instancePath:instancePath+"/ownerOperations/viewFriend",schemaPath:"node#/definitions/ContactOperations/properties/viewFriend/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err27];
+vErrors = [err26];
 }
 else {
-vErrors.push(err27);
+vErrors.push(err26);
 }
 errors++;
 }
 }
 if(coerced32 !== undefined){
 data30 = coerced32;
-if(data26 !== undefined){
-data26["viewFriendOf"] = coerced32;
+if(data27 !== undefined){
+data27["viewFriend"] = coerced32;
 }
 }
 }
@@ -8576,8 +8570,8 @@ else {
 var valid9 = true;
 }
 if(valid9){
-if(data26.viewBlock !== undefined){
-let data31 = data26.viewBlock;
+if(data27.viewFriendOf !== undefined){
+let data31 = data27.viewFriendOf;
 const _errs108 = errors;
 if((typeof data31 !== "string") && (data31 !== null)){
 let dataType33 = typeof data31;
@@ -8600,20 +8594,20 @@ else if(data31 === "" || data31 === 0 || data31 === false){
 coerced33 = null;
 }
 else {
-const err28 = {instancePath:instancePath+"/ownerOperations/viewBlock",schemaPath:"node#/definitions/ContactOperations/properties/viewBlock/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err27 = {instancePath:instancePath+"/ownerOperations/viewFriendOf",schemaPath:"node#/definitions/ContactOperations/properties/viewFriendOf/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err28];
+vErrors = [err27];
 }
 else {
-vErrors.push(err28);
+vErrors.push(err27);
 }
 errors++;
 }
 }
 if(coerced33 !== undefined){
 data31 = coerced33;
-if(data26 !== undefined){
-data26["viewBlock"] = coerced33;
+if(data27 !== undefined){
+data27["viewFriendOf"] = coerced33;
 }
 }
 }
@@ -8623,8 +8617,8 @@ else {
 var valid9 = true;
 }
 if(valid9){
-if(data26.viewBlockBy !== undefined){
-let data32 = data26.viewBlockBy;
+if(data27.viewBlock !== undefined){
+let data32 = data27.viewBlock;
 const _errs111 = errors;
 if((typeof data32 !== "string") && (data32 !== null)){
 let dataType34 = typeof data32;
@@ -8647,6 +8641,53 @@ else if(data32 === "" || data32 === 0 || data32 === false){
 coerced34 = null;
 }
 else {
+const err28 = {instancePath:instancePath+"/ownerOperations/viewBlock",schemaPath:"node#/definitions/ContactOperations/properties/viewBlock/type",keyword:"type",params:{type: "string"},message:"must be string"};
+if(vErrors === null){
+vErrors = [err28];
+}
+else {
+vErrors.push(err28);
+}
+errors++;
+}
+}
+if(coerced34 !== undefined){
+data32 = coerced34;
+if(data27 !== undefined){
+data27["viewBlock"] = coerced34;
+}
+}
+}
+var valid9 = _errs111 === errors;
+}
+else {
+var valid9 = true;
+}
+if(valid9){
+if(data27.viewBlockBy !== undefined){
+let data33 = data27.viewBlockBy;
+const _errs114 = errors;
+if((typeof data33 !== "string") && (data33 !== null)){
+let dataType35 = typeof data33;
+let coerced35 = undefined;
+if(dataType35 == 'object' && Array.isArray(data33) && data33.length == 1){
+data33 = data33[0];
+dataType35 = typeof data33;
+if((typeof data33 === "string") && (data33 === null)){
+coerced35 = data33;
+}
+}
+if(!(coerced35 !== undefined)){
+if(dataType35 == "number" || dataType35 == "boolean"){
+coerced35 = "" + data33;
+}
+else if(data33 === null){
+coerced35 = "";
+}
+else if(data33 === "" || data33 === 0 || data33 === false){
+coerced35 = null;
+}
+else {
 const err29 = {instancePath:instancePath+"/ownerOperations/viewBlockBy",schemaPath:"node#/definitions/ContactOperations/properties/viewBlockBy/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
 vErrors = [err29];
@@ -8657,14 +8698,14 @@ vErrors.push(err29);
 errors++;
 }
 }
-if(coerced34 !== undefined){
-data32 = coerced34;
-if(data26 !== undefined){
-data26["viewBlockBy"] = coerced34;
+if(coerced35 !== undefined){
+data33 = coerced35;
+if(data27 !== undefined){
+data27["viewBlockBy"] = coerced35;
 }
 }
 }
-var valid9 = _errs111 === errors;
+var valid9 = _errs114 === errors;
 }
 else {
 var valid9 = true;
@@ -8687,23 +8728,23 @@ vErrors.push(err30);
 errors++;
 }
 }
-var _valid2 = _errs92 === errors;
+var _valid2 = _errs95 === errors;
 valid7 = valid7 || _valid2;
 if(!valid7){
-const _errs116 = errors;
-if(data26 !== null){
-let dataType35 = typeof data26;
-let coerced35 = undefined;
-if(dataType35 == 'object' && Array.isArray(data26) && data26.length == 1){
-data26 = data26[0];
-dataType35 = typeof data26;
-if(data26 === null){
-coerced35 = data26;
+const _errs119 = errors;
+if(data27 !== null){
+let dataType36 = typeof data27;
+let coerced36 = undefined;
+if(dataType36 == 'object' && Array.isArray(data27) && data27.length == 1){
+data27 = data27[0];
+dataType36 = typeof data27;
+if(data27 === null){
+coerced36 = data27;
 }
 }
-if(!(coerced35 !== undefined)){
-if(data26 === "" || data26 === 0 || data26 === false){
-coerced35 = null;
+if(!(coerced36 !== undefined)){
+if(data27 === "" || data27 === 0 || data27 === false){
+coerced36 = null;
 }
 else {
 const err31 = {instancePath:instancePath+"/ownerOperations",schemaPath:"#/properties/ownerOperations/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
@@ -8716,14 +8757,14 @@ vErrors.push(err31);
 errors++;
 }
 }
-if(coerced35 !== undefined){
-data26 = coerced35;
+if(coerced36 !== undefined){
+data27 = coerced36;
 if(data !== undefined){
-data["ownerOperations"] = coerced35;
+data["ownerOperations"] = coerced36;
 }
 }
 }
-var _valid2 = _errs116 === errors;
+var _valid2 = _errs119 === errors;
 valid7 = valid7 || _valid2;
 }
 if(!valid7){
@@ -8739,41 +8780,41 @@ validate41.errors = vErrors;
 return false;
 }
 else {
-errors = _errs91;
+errors = _errs94;
 if(vErrors !== null){
-if(_errs91){
-vErrors.length = _errs91;
+if(_errs94){
+vErrors.length = _errs94;
 }
 else {
 vErrors = null;
 }
 }
 }
-var valid0 = _errs90 === errors;
+var valid0 = _errs93 === errors;
 }
 else {
 var valid0 = true;
 }
 if(valid0){
 if(data.adminOperations !== undefined){
-let data33 = data.adminOperations;
-const _errs118 = errors;
-const _errs119 = errors;
+let data34 = data.adminOperations;
+const _errs121 = errors;
+const _errs122 = errors;
 let valid10 = false;
-const _errs120 = errors;
-if((!(data33 && typeof data33 == "object" && !Array.isArray(data33))) && (data33 !== null)){
-let dataType36 = typeof data33;
-let coerced36 = undefined;
-if(dataType36 == 'object' && Array.isArray(data33) && data33.length == 1){
-data33 = data33[0];
-dataType36 = typeof data33;
-if((data33 && typeof data33 == "object" && !Array.isArray(data33)) && (data33 === null)){
-coerced36 = data33;
+const _errs123 = errors;
+if((!(data34 && typeof data34 == "object" && !Array.isArray(data34))) && (data34 !== null)){
+let dataType37 = typeof data34;
+let coerced37 = undefined;
+if(dataType37 == 'object' && Array.isArray(data34) && data34.length == 1){
+data34 = data34[0];
+dataType37 = typeof data34;
+if((data34 && typeof data34 == "object" && !Array.isArray(data34)) && (data34 === null)){
+coerced37 = data34;
 }
 }
-if(!(coerced36 !== undefined)){
-if(data33 === "" || data33 === 0 || data33 === false){
-coerced36 = null;
+if(!(coerced37 !== undefined)){
+if(data34 === "" || data34 === 0 || data34 === false){
+coerced37 = null;
 }
 else {
 const err33 = {instancePath:instancePath+"/adminOperations",schemaPath:"#/properties/adminOperations/anyOf/0/type",keyword:"type",params:{type: "object"},message:"must be object"};
@@ -8786,72 +8827,25 @@ vErrors.push(err33);
 errors++;
 }
 }
-if(coerced36 !== undefined){
-data33 = coerced36;
-if(data !== undefined){
-data["adminOperations"] = coerced36;
-}
-}
-}
-const _errs121 = errors;
-if(errors === _errs121){
-if(data33 && typeof data33 == "object" && !Array.isArray(data33)){
-const _errs123 = errors;
-for(const key4 in data33){
-if(!((((((key4 === "viewFeedSubscriber") || (key4 === "viewFeedSubscription")) || (key4 === "viewFriend")) || (key4 === "viewFriendOf")) || (key4 === "viewBlock")) || (key4 === "viewBlockBy"))){
-delete data33[key4];
-}
-}
-if(_errs123 === errors){
-if(data33.viewFeedSubscriber !== undefined){
-let data34 = data33.viewFeedSubscriber;
-const _errs124 = errors;
-if((typeof data34 !== "string") && (data34 !== null)){
-let dataType37 = typeof data34;
-let coerced37 = undefined;
-if(dataType37 == 'object' && Array.isArray(data34) && data34.length == 1){
-data34 = data34[0];
-dataType37 = typeof data34;
-if((typeof data34 === "string") && (data34 === null)){
-coerced37 = data34;
-}
-}
-if(!(coerced37 !== undefined)){
-if(dataType37 == "number" || dataType37 == "boolean"){
-coerced37 = "" + data34;
-}
-else if(data34 === null){
-coerced37 = "";
-}
-else if(data34 === "" || data34 === 0 || data34 === false){
-coerced37 = null;
-}
-else {
-const err34 = {instancePath:instancePath+"/adminOperations/viewFeedSubscriber",schemaPath:"node#/definitions/ContactOperations/properties/viewFeedSubscriber/type",keyword:"type",params:{type: "string"},message:"must be string"};
-if(vErrors === null){
-vErrors = [err34];
-}
-else {
-vErrors.push(err34);
-}
-errors++;
-}
-}
 if(coerced37 !== undefined){
 data34 = coerced37;
-if(data33 !== undefined){
-data33["viewFeedSubscriber"] = coerced37;
+if(data !== undefined){
+data["adminOperations"] = coerced37;
 }
 }
 }
-var valid12 = _errs124 === errors;
+const _errs124 = errors;
+if(errors === _errs124){
+if(data34 && typeof data34 == "object" && !Array.isArray(data34)){
+const _errs126 = errors;
+for(const key4 in data34){
+if(!((((((key4 === "viewFeedSubscriber") || (key4 === "viewFeedSubscription")) || (key4 === "viewFriend")) || (key4 === "viewFriendOf")) || (key4 === "viewBlock")) || (key4 === "viewBlockBy"))){
+delete data34[key4];
 }
-else {
-var valid12 = true;
 }
-if(valid12){
-if(data33.viewFeedSubscription !== undefined){
-let data35 = data33.viewFeedSubscription;
+if(_errs126 === errors){
+if(data34.viewFeedSubscriber !== undefined){
+let data35 = data34.viewFeedSubscriber;
 const _errs127 = errors;
 if((typeof data35 !== "string") && (data35 !== null)){
 let dataType38 = typeof data35;
@@ -8874,20 +8868,20 @@ else if(data35 === "" || data35 === 0 || data35 === false){
 coerced38 = null;
 }
 else {
-const err35 = {instancePath:instancePath+"/adminOperations/viewFeedSubscription",schemaPath:"node#/definitions/ContactOperations/properties/viewFeedSubscription/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err34 = {instancePath:instancePath+"/adminOperations/viewFeedSubscriber",schemaPath:"node#/definitions/ContactOperations/properties/viewFeedSubscriber/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err35];
+vErrors = [err34];
 }
 else {
-vErrors.push(err35);
+vErrors.push(err34);
 }
 errors++;
 }
 }
 if(coerced38 !== undefined){
 data35 = coerced38;
-if(data33 !== undefined){
-data33["viewFeedSubscription"] = coerced38;
+if(data34 !== undefined){
+data34["viewFeedSubscriber"] = coerced38;
 }
 }
 }
@@ -8897,8 +8891,8 @@ else {
 var valid12 = true;
 }
 if(valid12){
-if(data33.viewFriend !== undefined){
-let data36 = data33.viewFriend;
+if(data34.viewFeedSubscription !== undefined){
+let data36 = data34.viewFeedSubscription;
 const _errs130 = errors;
 if((typeof data36 !== "string") && (data36 !== null)){
 let dataType39 = typeof data36;
@@ -8921,20 +8915,20 @@ else if(data36 === "" || data36 === 0 || data36 === false){
 coerced39 = null;
 }
 else {
-const err36 = {instancePath:instancePath+"/adminOperations/viewFriend",schemaPath:"node#/definitions/ContactOperations/properties/viewFriend/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err35 = {instancePath:instancePath+"/adminOperations/viewFeedSubscription",schemaPath:"node#/definitions/ContactOperations/properties/viewFeedSubscription/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err36];
+vErrors = [err35];
 }
 else {
-vErrors.push(err36);
+vErrors.push(err35);
 }
 errors++;
 }
 }
 if(coerced39 !== undefined){
 data36 = coerced39;
-if(data33 !== undefined){
-data33["viewFriend"] = coerced39;
+if(data34 !== undefined){
+data34["viewFeedSubscription"] = coerced39;
 }
 }
 }
@@ -8944,8 +8938,8 @@ else {
 var valid12 = true;
 }
 if(valid12){
-if(data33.viewFriendOf !== undefined){
-let data37 = data33.viewFriendOf;
+if(data34.viewFriend !== undefined){
+let data37 = data34.viewFriend;
 const _errs133 = errors;
 if((typeof data37 !== "string") && (data37 !== null)){
 let dataType40 = typeof data37;
@@ -8968,20 +8962,20 @@ else if(data37 === "" || data37 === 0 || data37 === false){
 coerced40 = null;
 }
 else {
-const err37 = {instancePath:instancePath+"/adminOperations/viewFriendOf",schemaPath:"node#/definitions/ContactOperations/properties/viewFriendOf/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err36 = {instancePath:instancePath+"/adminOperations/viewFriend",schemaPath:"node#/definitions/ContactOperations/properties/viewFriend/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err37];
+vErrors = [err36];
 }
 else {
-vErrors.push(err37);
+vErrors.push(err36);
 }
 errors++;
 }
 }
 if(coerced40 !== undefined){
 data37 = coerced40;
-if(data33 !== undefined){
-data33["viewFriendOf"] = coerced40;
+if(data34 !== undefined){
+data34["viewFriend"] = coerced40;
 }
 }
 }
@@ -8991,8 +8985,8 @@ else {
 var valid12 = true;
 }
 if(valid12){
-if(data33.viewBlock !== undefined){
-let data38 = data33.viewBlock;
+if(data34.viewFriendOf !== undefined){
+let data38 = data34.viewFriendOf;
 const _errs136 = errors;
 if((typeof data38 !== "string") && (data38 !== null)){
 let dataType41 = typeof data38;
@@ -9015,20 +9009,20 @@ else if(data38 === "" || data38 === 0 || data38 === false){
 coerced41 = null;
 }
 else {
-const err38 = {instancePath:instancePath+"/adminOperations/viewBlock",schemaPath:"node#/definitions/ContactOperations/properties/viewBlock/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err37 = {instancePath:instancePath+"/adminOperations/viewFriendOf",schemaPath:"node#/definitions/ContactOperations/properties/viewFriendOf/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
-vErrors = [err38];
+vErrors = [err37];
 }
 else {
-vErrors.push(err38);
+vErrors.push(err37);
 }
 errors++;
 }
 }
 if(coerced41 !== undefined){
 data38 = coerced41;
-if(data33 !== undefined){
-data33["viewBlock"] = coerced41;
+if(data34 !== undefined){
+data34["viewFriendOf"] = coerced41;
 }
 }
 }
@@ -9038,8 +9032,8 @@ else {
 var valid12 = true;
 }
 if(valid12){
-if(data33.viewBlockBy !== undefined){
-let data39 = data33.viewBlockBy;
+if(data34.viewBlock !== undefined){
+let data39 = data34.viewBlock;
 const _errs139 = errors;
 if((typeof data39 !== "string") && (data39 !== null)){
 let dataType42 = typeof data39;
@@ -9062,6 +9056,53 @@ else if(data39 === "" || data39 === 0 || data39 === false){
 coerced42 = null;
 }
 else {
+const err38 = {instancePath:instancePath+"/adminOperations/viewBlock",schemaPath:"node#/definitions/ContactOperations/properties/viewBlock/type",keyword:"type",params:{type: "string"},message:"must be string"};
+if(vErrors === null){
+vErrors = [err38];
+}
+else {
+vErrors.push(err38);
+}
+errors++;
+}
+}
+if(coerced42 !== undefined){
+data39 = coerced42;
+if(data34 !== undefined){
+data34["viewBlock"] = coerced42;
+}
+}
+}
+var valid12 = _errs139 === errors;
+}
+else {
+var valid12 = true;
+}
+if(valid12){
+if(data34.viewBlockBy !== undefined){
+let data40 = data34.viewBlockBy;
+const _errs142 = errors;
+if((typeof data40 !== "string") && (data40 !== null)){
+let dataType43 = typeof data40;
+let coerced43 = undefined;
+if(dataType43 == 'object' && Array.isArray(data40) && data40.length == 1){
+data40 = data40[0];
+dataType43 = typeof data40;
+if((typeof data40 === "string") && (data40 === null)){
+coerced43 = data40;
+}
+}
+if(!(coerced43 !== undefined)){
+if(dataType43 == "number" || dataType43 == "boolean"){
+coerced43 = "" + data40;
+}
+else if(data40 === null){
+coerced43 = "";
+}
+else if(data40 === "" || data40 === 0 || data40 === false){
+coerced43 = null;
+}
+else {
 const err39 = {instancePath:instancePath+"/adminOperations/viewBlockBy",schemaPath:"node#/definitions/ContactOperations/properties/viewBlockBy/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
 vErrors = [err39];
@@ -9072,14 +9113,14 @@ vErrors.push(err39);
 errors++;
 }
 }
-if(coerced42 !== undefined){
-data39 = coerced42;
-if(data33 !== undefined){
-data33["viewBlockBy"] = coerced42;
+if(coerced43 !== undefined){
+data40 = coerced43;
+if(data34 !== undefined){
+data34["viewBlockBy"] = coerced43;
 }
 }
 }
-var valid12 = _errs139 === errors;
+var valid12 = _errs142 === errors;
 }
 else {
 var valid12 = true;
@@ -9102,23 +9143,23 @@ vErrors.push(err40);
 errors++;
 }
 }
-var _valid3 = _errs120 === errors;
+var _valid3 = _errs123 === errors;
 valid10 = valid10 || _valid3;
 if(!valid10){
-const _errs144 = errors;
-if(data33 !== null){
-let dataType43 = typeof data33;
-let coerced43 = undefined;
-if(dataType43 == 'object' && Array.isArray(data33) && data33.length == 1){
-data33 = data33[0];
-dataType43 = typeof data33;
-if(data33 === null){
-coerced43 = data33;
+const _errs147 = errors;
+if(data34 !== null){
+let dataType44 = typeof data34;
+let coerced44 = undefined;
+if(dataType44 == 'object' && Array.isArray(data34) && data34.length == 1){
+data34 = data34[0];
+dataType44 = typeof data34;
+if(data34 === null){
+coerced44 = data34;
 }
 }
-if(!(coerced43 !== undefined)){
-if(data33 === "" || data33 === 0 || data33 === false){
-coerced43 = null;
+if(!(coerced44 !== undefined)){
+if(data34 === "" || data34 === 0 || data34 === false){
+coerced44 = null;
 }
 else {
 const err41 = {instancePath:instancePath+"/adminOperations",schemaPath:"#/properties/adminOperations/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
@@ -9131,14 +9172,14 @@ vErrors.push(err41);
 errors++;
 }
 }
-if(coerced43 !== undefined){
-data33 = coerced43;
+if(coerced44 !== undefined){
+data34 = coerced44;
 if(data !== undefined){
-data["adminOperations"] = coerced43;
+data["adminOperations"] = coerced44;
 }
 }
 }
-var _valid3 = _errs144 === errors;
+var _valid3 = _errs147 === errors;
 valid10 = valid10 || _valid3;
 }
 if(!valid10){
@@ -9154,20 +9195,21 @@ validate41.errors = vErrors;
 return false;
 }
 else {
-errors = _errs119;
+errors = _errs122;
 if(vErrors !== null){
-if(_errs119){
-vErrors.length = _errs119;
+if(_errs122){
+vErrors.length = _errs122;
 }
 else {
 vErrors = null;
 }
 }
 }
-var valid0 = _errs118 === errors;
+var valid0 = _errs121 === errors;
 }
 else {
 var valid0 = true;
+}
 }
 }
 }

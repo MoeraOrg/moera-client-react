@@ -31,6 +31,9 @@ async function refreshCheckBuildSaga(action: RefreshCheckBuildAction): Promise<v
             return;
         }
         const buildNumber = (await response.text()).trim();
+        if (!buildNumber.match(/^[0-9a-f+]+$/)) {
+            return;
+        }
         if (buildNumber !== BUILD_NUMBER) {
             dispatch(refreshConfirmingReload().causedBy(action));
             dispatch(confirmBox({

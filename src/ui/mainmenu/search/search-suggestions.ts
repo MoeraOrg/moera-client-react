@@ -4,7 +4,7 @@ import deepEqual from "react-fast-compare";
 
 import { ClientState } from "state/state";
 import { isAtNode } from "state/node/selectors";
-import { contactsPrepare, visitedContactsPrepare } from "state/contacts/actions";
+import { contactsPrepare, visitedContactsDelete, visitedContactsPrepare } from "state/contacts/actions";
 import { getContacts, getVisitedContacts } from "state/contacts/selectors";
 import { jumpFar, jumpNear } from "state/navigation/actions";
 import { isAtSearchPage } from "state/navigation/selectors";
@@ -70,6 +70,7 @@ export function useSearchSuggestions(
                 case "name":
                     inputDom.current?.blur();
                     if (item.nodeName != null) {
+                        setQuery("");
                         dispatch(jumpFar(item.nodeName, null, "/timeline", null, null));
                     }
                     break;
@@ -122,6 +123,9 @@ export function useSearchSuggestions(
         const item = searchList[index];
         if (item.type === "history") {
             dispatch(searchHistoryDelete(item.query));
+            setSearchList(list => list.toSpliced(index, 1));
+        } else if (item.type === "name" && item.nodeName != null) {
+            dispatch(visitedContactsDelete(item.nodeName));
             setSearchList(list => list.toSpliced(index, 1));
         }
         event.stopPropagation();

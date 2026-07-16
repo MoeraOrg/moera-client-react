@@ -1,5 +1,6 @@
 import * as immutable from 'object-path-immutable';
 
+import { SearchNodeInfo } from "api";
 import { ContactsQueryState, ContactsState } from "state/contacts/state";
 import { ClientAction } from "state/action";
 
@@ -13,6 +14,19 @@ const initialState: ContactsState = {
     visitedQueries: {},
     contacts: [],
     visitedContacts: []
+}
+
+function updateNameInfo(
+    contacts: SearchNodeInfo[],
+    name: string,
+    fullName: string | null | undefined,
+    title: string | null | undefined
+): SearchNodeInfo[] {
+    const index = contacts.findIndex(c => c.nodeName === name);
+    if (index < 0) {
+        return contacts;
+    }
+    return immutable.assign(contacts, [index], {fullName, title});
 }
 
 export default (state: ContactsState = initialState, action: ClientAction): ContactsState => {
@@ -64,6 +78,13 @@ export default (state: ContactsState = initialState, action: ClientAction): Cont
         case "VISITED_CONTACTS_LOAD_FAILED":
             return immutable.set(state, ["visitedQueries", action.payload.query, "loading"], false);
 
+        case "VISITED_CONTACTS_DELETE":
+            return immutable.set(
+                state,
+                "visitedContacts",
+                state.visitedContacts.filter(c => c.nodeName !== action.payload.nodeName)
+            );
+
         case "CONTACTS_NAME_FOUND": {
             const {nodeName} = action.payload;
             const hasName =
@@ -73,6 +94,15 @@ export default (state: ContactsState = initialState, action: ClientAction): Cont
                 return immutable.set(state, "contacts", [...state.contacts, {nodeName, distance: 3}]);
             }
             return state;
+        }
+
+        case "EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED": {
+            const {name, fullName, title} = action.payload;
+            const contacts = updateNameInfo(state.contacts, name, fullName, title);
+            const visitedContacts = updateNameInfo(state.visitedContacts, name, fullName, title);
+            return contacts !== state.contacts || visitedContacts !== state.visitedContacts
+                ? {...state, contacts, visitedContacts}
+                : state;
         }
 
         default:

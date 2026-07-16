@@ -354,6 +354,7 @@ export interface ContactInfo {
     nodeName: string;
     fullName?: string | null;
     gender?: string | null;
+    title?: string | null;
     avatar?: AvatarImage | null;
     distance: number;
     hasFeedSubscriber?: boolean | null;

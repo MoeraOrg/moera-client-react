@@ -376,7 +376,7 @@ export default function LightboxWindow({
         pointerListRef.current.some(({id}) => id === pointer.id);
 
     const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>): void => {
-        if (isTargetMainImage(event.target)) {
+        if (event.button === 0 && isTargetMainImage(event.target)) {
             addPointer(parsePointerEvent(event));
             multiPointerStart(event);
         }
@@ -384,6 +384,13 @@ export default function LightboxWindow({
 
     const handlePointerMove = useEffectEvent((event: PointerEvent): void => {
         const pointer = parsePointerEvent(event);
+
+        // reset the gesture if mouse is moved with no buttons pressed
+        if (event.pointerType === "mouse" && event.buttons === 0 && hasPointer(pointer)) {
+            removePointer(pointer);
+            handleEnd(null);
+            return;
+        }
 
         if (updatePointer(pointer)) {
             multiPointerMove(event, [pointer]);

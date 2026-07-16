@@ -510,7 +510,9 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             if (ids.length > 0) {
                 const istate = immutable.wrap(state);
                 for (const {nodeName, postingId} of ids) {
-                    istate.set([nodeName, postingId, "posting", "totalComments"], total);
+                    if (state[nodeName]?.[postingId]?.posting) {
+                        istate.set([nodeName, postingId, "posting", "totalComments"], total);
+                    }
                 }
                 return istate.value();
             }

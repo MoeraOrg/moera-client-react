@@ -35,7 +35,7 @@
     }
 
     DIV.link-preview.large IMG {
-        width: calc(99.5vw - 1rem);
+        width: calc(99.5vw - 2rem);
         max-height: calc(67vw - .6rem);
     }
 }

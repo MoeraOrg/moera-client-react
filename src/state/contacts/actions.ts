@@ -51,6 +51,12 @@ export type VisitedContactsLoadFailedAction = ActionWithPayload<"VISITED_CONTACT
 export const visitedContactsLoadFailed = (query: string): VisitedContactsLoadFailedAction =>
     actionWithPayload("VISITED_CONTACTS_LOAD_FAILED", {query});
 
+export type VisitedContactsDeleteAction = ActionWithPayload<"VISITED_CONTACTS_DELETE", {
+    nodeName: string;
+}>;
+export const visitedContactsDelete = (nodeName: string): VisitedContactsDeleteAction =>
+    actionWithPayload("VISITED_CONTACTS_DELETE", {nodeName});
+
 export type ContactsNameFoundAction = ActionWithPayload<"CONTACTS_NAME_FOUND", {
     nodeName: string;
 }>;
@@ -66,4 +72,5 @@ export type ContactsAnyAction =
     | VisitedContactsLoadAction
     | VisitedContactsLoadedAction
     | VisitedContactsLoadFailedAction
+    | VisitedContactsDeleteAction
     | ContactsNameFoundAction;

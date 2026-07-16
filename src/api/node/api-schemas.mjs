@@ -731,6 +731,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "title": {
+                    type: "string",
+                    nullable: true
+                },
                 "avatar": {
                     anyOf: [
                         {

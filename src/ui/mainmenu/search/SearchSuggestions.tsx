@@ -10,6 +10,7 @@ import { NameSuggestion } from "ui/control";
 import { NameListItem } from "util/names-list";
 import { ut } from "util/url";
 import "./SearchSuggestions.css";
+import { ellipsize } from "util/text";
 
 export type SearchListItem = {type: "name"} & NameListItem | {type: "search"} | {type: "history", query: string};
 
@@ -46,7 +47,7 @@ export default function SearchSuggestions(
                                     <Icon icon={msHistory} size={20}/>
                                 </div>
                                 <div className="body">
-                                    {item.query}
+                                    {ellipsize(item.query, 100)}
                                 </div>
                                 <div className="icon-cell" title={t("delete")} onClick={onHistoryDelete(index)}>
                                     <Icon icon={msCancel} size={16}/>
@@ -79,7 +80,7 @@ export default function SearchSuggestions(
                                     <Icon icon={msSearch} size={20}/>
                                 </div>
                                 <div className="body">
-                                    {t("search")}: {query}
+                                    {t("search")}: {ellipsize(query, 100)}
                                 </div>
                             </Jump>
                         </>

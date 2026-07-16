@@ -5,6 +5,7 @@ import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
 import {
     ContactsLoadAction,
+    VisitedContactsDeleteAction,
     VisitedContactsLoadAction,
     contactsLoaded,
     contactsLoadFailed,
@@ -20,7 +21,8 @@ import { REL_HOME, REL_SEARCH } from "util/rel-node-name";
 
 export default [
     saga("CONTACTS_LOAD", payload => payload.query, contactsLoadSaga),
-    saga("VISITED_CONTACTS_LOAD", payload => payload.query, visitedContactsLoadSaga)
+    saga("VISITED_CONTACTS_LOAD", payload => payload.query, visitedContactsLoadSaga),
+    saga("VISITED_CONTACTS_DELETE", payload => payload.nodeName, visitedContactsDeleteSaga)
 ];
 
 async function contactsLoadSaga(action: WithContext<ContactsLoadAction>): Promise<void> {
@@ -48,6 +50,14 @@ async function visitedContactsLoadSaga(action: WithContext<VisitedContactsLoadAc
         dispatch(visitedContactsLoaded(query, contacts).causedBy(action));
     } catch {
         dispatch(visitedContactsLoadFailed(query).causedBy(action));
+    }
+}
+
+async function visitedContactsDeleteSaga(action: WithContext<VisitedContactsDeleteAction>): Promise<void> {
+    try {
+        await Node.deleteVisitedNode(action, REL_HOME, action.payload.nodeName);
+    } catch (e) {
+        dispatch(errorThrown(e));
     }
 }
 

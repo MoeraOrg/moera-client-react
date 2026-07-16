@@ -274,6 +274,7 @@ export interface RemoteNodeAvatarChangedEvent extends BaseEvent<"REMOTE_NODE_AVA
 export interface RemoteNodeFullNameChangedEvent extends BaseEvent<"REMOTE_NODE_FULL_NAME_CHANGED"> {
     name: string;
     fullName?: string | null;
+    title?: string | null;
 }
 
 export interface RemotePostingAddedEvent extends BaseEvent<"REMOTE_POSTING_ADDED"> {

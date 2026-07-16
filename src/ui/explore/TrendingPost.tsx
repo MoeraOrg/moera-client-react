@@ -25,7 +25,7 @@ export default function TrendingPost({trending, small, counters}: Props) {
             <Jump nodeName={trending.nodeName} href={ut`/post/${trending.postingId}`} className="heading">
                 {trending.heading}
             </Jump>
-            <div className="counters">
+            <Jump nodeName={trending.nodeName} href={ut`/post/${trending.postingId}`} className="counters">
                 {counters.map(counter =>
                     <>
                         {counter === "reactions" &&
@@ -63,7 +63,7 @@ export default function TrendingPost({trending, small, counters}: Props) {
                         }
                     </>
                 )}
-            </div>
+            </Jump>
         </div>
     );
 }

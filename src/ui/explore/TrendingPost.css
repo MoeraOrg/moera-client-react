@@ -25,6 +25,9 @@
     grid-area: owner;
     color: var(--bs-gray-900);
     font-size: 1rem;
+    overflow: hidden;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
 }
 
 .trending-post .heading {
@@ -37,11 +40,16 @@
     text-decoration: underline;
 }
 
-.trending-post .counters {
+.trending-post A.counters {
     grid-area: counters;
+    display: block;
     margin-top: .15rem;
     color: var(--bs-gray-600);
     font-size: .875em;
+}
+
+.trending-post A.counters:hover {
+    text-decoration: underline;
 }
 
 .trending-post .counters SPAN + SPAN {

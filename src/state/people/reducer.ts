@@ -641,11 +641,12 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return updateBlockedBy(state, action.payload.blockedByUser, false);
 
         case "EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED": {
-            const {name, fullName} = action.payload;
+            const {name, fullName, title} = action.payload;
 
             const istate = immutable.wrap(state);
             prepareContact(state, istate, name);
             istate.set(["contacts", name, "contact", "fullName"], fullName);
+            istate.set(["contacts", name, "contact", "title"], title);
             return istate.value();
         }
 

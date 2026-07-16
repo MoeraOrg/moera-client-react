@@ -521,9 +521,10 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         }
 
         case "EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED": {
-            const {name, fullName} = action.payload;
+            const {name, fullName, title} = action.payload;
             return getCard(state, name).istate
                 .set(["cards", name, "details", "profile", "fullName"], fullName)
+                .set(["cards", name, "details", "profile", "title"], title)
                 .value();
         }
 
