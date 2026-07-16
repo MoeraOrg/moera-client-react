@@ -5,11 +5,11 @@ import deepEqual from 'react-fast-compare';
 import * as immutable from 'object-path-immutable';
 import * as URI from 'uri-js';
 
-import { LinkPreview, PostingFeatures } from "api";
+import { LinkPreview } from "api";
 import { ClientState } from "state/state";
 import { getRelNodeNameContext } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
-import { linkPreviewImageUpload, linkPreviewLoad } from "state/linkpreviews/actions";
+import { linkPreviewImageLease, linkPreviewLoad } from "state/linkpreviews/actions";
 import { LinkPreviewsState } from "state/linkpreviews/state";
 import { useDispatcher } from "ui/hook";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
@@ -25,7 +25,6 @@ interface Props {
     name: string;
     urlsField: string;
     nodeName: RelNodeName | string;
-    features?: PostingFeatures | null;
     small?: boolean | null;
     disabled?: boolean;
 }
@@ -61,7 +60,7 @@ export function bodyToLinkPreviews(
     return [linkPreviews, bodyUrls, media];
 }
 
-export default function RichTextLinkPreviews({name, urlsField, nodeName, features, small, disabled}: Props) {
+export default function RichTextLinkPreviews({name, urlsField, nodeName, small, disabled}: Props) {
     const nodeNameContext = useSelector(getRelNodeNameContext);
     const linkPreviewsState = useSelector((state: ClientState) => state.linkPreviews);
     const maxAutomatic = useSelector((state: ClientState) =>
@@ -73,19 +72,19 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, feature
 
     const targetNodeName = absoluteNodeName(nodeName, nodeNameContext);
 
-    const {urlsToLoad, imagesToLoad, value: newValue} = useMemo<ValueChange>(
+    const {urlsToLoad, imagesToLease, value: newValue} = useMemo<ValueChange>(
         () => buildValue(urls, targetNodeName, linkPreviewsState, value, maxAutomatic),
         [urls, targetNodeName, linkPreviewsState, value, maxAutomatic]
     );
     useEffect(() => {
         urlsToLoad.forEach(url => dispatch(linkPreviewLoad(url)));
         if (targetNodeName != null) {
-            imagesToLoad.forEach(url => dispatch(linkPreviewImageUpload(url, targetNodeName, features ?? null)));
+            imagesToLease.forEach(url => dispatch(linkPreviewImageLease(url, targetNodeName)));
         }
         if (!deepEqual(value, newValue)) {
             setValue(newValue)
         }
-    }, [urlsToLoad, imagesToLoad, newValue, value, setValue, targetNodeName, dispatch, features]);
+    }, [urlsToLoad, imagesToLease, newValue, value, setValue, targetNodeName, dispatch]);
 
     const onUpdate = (url: string | null | undefined) => (title: string, description: string) => {
         if (url == null) {
@@ -123,7 +122,6 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, feature
                     title={preview.title}
                     description={preview.description}
                     publishedAt={preview.publishedAt}
-                    imageUploading={isImageUploading(linkPreviewsState, preview.url, targetNodeName)}
                     imageHash={preview.imageHash}
                     siteName={preview.siteName}
                     media={value.media}
@@ -140,21 +138,24 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, feature
 
 interface ValueChange {
     urlsToLoad: string[];
-    imagesToLoad: string[];
+    imagesToLease: string[];
     value: RichTextLinkPreviewsValue;
 }
 
 function buildValue(
-    urls: string[], nodeName: string | null, linkPreviewsState: LinkPreviewsState, value: RichTextLinkPreviewsValue,
+    urls: string[],
+    nodeName: string | null,
+    linkPreviewsState: LinkPreviewsState,
+    value: RichTextLinkPreviewsValue,
     maxAutomatic: number
 ): ValueChange {
     if (nodeName == null || urls.length === 0) {
-        return {urlsToLoad: [], imagesToLoad: [], value: {previews: [], media: [], status: value.status}};
+        return {urlsToLoad: [], imagesToLease: [], value: {previews: [], media: [], status: value.status}};
     }
 
     const urlSet = new Set(urls).values();
     const loadUrls: string[] = [];
-    const loadImages: string[] = [];
+    const leaseImages: string[] = [];
     const previews: LinkPreview[] = [];
     const media: MediaWithCaption[] = [];
     const addedUrls: string[] = [];
@@ -186,11 +187,12 @@ function buildValue(
                     if (lpState.info == null) {
                         break;
                     }
-                    if (!lpState.info.title && !lpState.info.description && !lpState.info.imageUrl) {
+                    if (!lpState.info.title && !lpState.info.description && lpState.info.image == null) {
                         break;
                     }
-                    if (lpState.info.imageUrl != null && lpState.images?.[nodeName] == null) {
-                        loadImages.push(url);
+                    const imageState = lpState.images?.[nodeName];
+                    if (lpState.info.image != null && imageState == null) {
+                        leaseImages.push(url);
                     }
                 }
                 const imageState = lpState != null ? lpState.images?.[nodeName] : null;
@@ -221,7 +223,7 @@ function buildValue(
         istatus.set([url], index < more && !isUrlPreviewBanned(url) ? "loaded" : "deleted")
     );
 
-    return {urlsToLoad: loadUrls, imagesToLoad: loadImages, value: {previews, media, status: istatus.value()}};
+    return {urlsToLoad: loadUrls, imagesToLease: leaseImages, value: {previews, media, status: istatus.value()}};
 }
 
 const BANNED_PREVIEW_DOMAINS: string[] = ["facebook.com", "instagram.com"];
@@ -236,13 +238,4 @@ function isUrlPreviewBanned(url: string) {
         }
     }
     return false;
-}
-
-function isImageUploading(
-    linkPreviewsState: LinkPreviewsState, url: string | null | undefined, nodeName: string | null
-): boolean {
-    if (url == null || nodeName == null) {
-        return false;
-    }
-    return linkPreviewsState[url]?.images[nodeName]?.uploading ?? false;
 }

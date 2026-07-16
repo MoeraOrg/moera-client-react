@@ -39,7 +39,6 @@ export interface RichTextEditorMediaInterface {
         insert?: boolean, prevValues?: RichTextImageValues | null,
         onSubmit?: RichTextEditorDialogSubmit<RichTextImageValues>
     ) => void;
-    downloading: boolean;
     copyImage: () => void;
     attachmentType: AttachmentType;
     setAttachmentType: (type: AttachmentType) => void;
@@ -57,7 +56,6 @@ export const RichTextEditorMediaContext = createContext<RichTextEditorMediaInter
     reorderMedia: () => {},
     pasteMedia: () => false,
     showImageDialog: () => {},
-    downloading: false,
     copyImage: () => {},
     attachmentType: "image",
     setAttachmentType: () => {},

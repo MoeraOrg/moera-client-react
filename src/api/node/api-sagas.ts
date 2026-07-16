@@ -1002,13 +1002,24 @@ export async function revokeAll(
     });
 }
 
+export async function createLinkPreview(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, url: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.LinkPreviewInfo> {
+
+    const location = urlWithParameters(ut`/link-preview`, {url});
+    return callApi<API.LinkPreviewInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "LinkPreviewInfo", errorFilter
+    });
+}
+
 export async function uploadPrivateMedia(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, file: File | null = null,
-    onProgress?: ProgressHandler, upload: string | null = null, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    onProgress?: ProgressHandler, upload: string | null = null, url: string | null = null,
+    downsize: boolean | null = null, errorFilter: ErrorFilter = false, auth: true | string = true
 ): Promise<API.PrivateMediaFileInfo> {
 
-    const location = urlWithParameters(ut`/media/private`, {upload});
+    const location = urlWithParameters(ut`/media/private`, {upload, url, downsize});
     return callApi<API.PrivateMediaFileInfo>({
         caller, nodeName, method: "POST", location, body: file, onProgress, auth, schema: "PrivateMediaFileInfo",
         errorFilter
@@ -1578,28 +1589,6 @@ export async function cancelDeleteNodeRequest(
     const location = "/provider/delete-node";
     return callApi<API.DeleteNodeStatus>({
         caller, nodeName, method: "DELETE", location, auth, schema: "DeleteNodeStatus", errorFilter
-    });
-}
-
-export async function proxyMedia(
-    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, url: string,
-    errorFilter: ErrorFilter = false, auth: true | string = true
-): Promise<Blob> {
-
-    const location = urlWithParameters(ut`/proxy/media`, {url});
-    return callApi<Blob>({
-        caller, nodeName, method: "GET", location, auth, schema: "blob", errorFilter
-    });
-}
-
-export async function proxyLinkPreview(
-    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, url: string,
-    errorFilter: ErrorFilter = false, auth: true | string = true
-): Promise<API.LinkPreviewInfo> {
-
-    const location = urlWithParameters(ut`/proxy/link-preview`, {url});
-    return callApi<API.LinkPreviewInfo>({
-        caller, nodeName, method: "GET", location, auth, schema: "LinkPreviewInfo", errorFilter
     });
 }
 

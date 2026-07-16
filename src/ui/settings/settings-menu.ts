@@ -84,9 +84,8 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             ]),
             chapter("media", null, [
                 option("media.max-size"),
+                option("media.image.recommended-size"),
                 option("posting.media.max-size"),
-                option("posting.image.recommended-size"),
-                option("posting.image.recommended-pixels"),
             ]),
         ]),
         sheet("news", [

@@ -518,15 +518,6 @@ export interface LinkPreview {
     publishedAt?: number | null;
 }
 
-export interface LinkPreviewInfo {
-    siteName?: string | null;
-    url?: string | null;
-    title?: string | null;
-    description?: string | null;
-    imageUrl?: string | null;
-    publishedAt?: number | null;
-}
-
 export interface MediaDownloadAttributes {
     grant: string;
 }
@@ -630,8 +621,6 @@ export interface PostingFeatures {
     post?: boolean | null;
     subjectPresent: boolean;
     sourceFormats: SourceFormat[];
-    imageRecommendedSize: number;
-    imageRecommendedPixels: number;
     imageFormats: string[];
 }
 
@@ -1493,6 +1482,15 @@ export interface FeedInfo {
 export interface FriendDescription {
     nodeName: string;
     groups?: FriendGroupAssignment[] | null;
+}
+
+export interface LinkPreviewInfo {
+    siteName?: string | null;
+    url?: string | null;
+    title?: string | null;
+    description?: string | null;
+    image?: PrivateMediaFileInfo | null;
+    publishedAt?: number | null;
 }
 
 export interface MediaAttachment {

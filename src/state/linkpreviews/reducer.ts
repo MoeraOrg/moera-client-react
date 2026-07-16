@@ -15,7 +15,7 @@ const emptyLinkPreview: LinkPreviewState = {
 }
 
 const emptyLinkImage: LinkImageState = {
-    uploading: false,
+    loading: false,
     info: null
 }
 
@@ -41,20 +41,20 @@ export default (state: LinkPreviewsState = initialState, action: WithContext<Cli
                 info: null
             });
 
-        case "LINK_PREVIEW_IMAGE_UPLOAD":
+        case "LINK_PREVIEW_IMAGE_LEASE":
             return immutable.set(state, [action.payload.url, "images", action.payload.nodeName], {
                 ...emptyLinkImage,
-                uploading: true
+                loading: true
             });
 
-        case "LINK_PREVIEW_IMAGE_UPLOADED":
+        case "LINK_PREVIEW_IMAGE_LEASED":
             return immutable.assign(state, [action.payload.url, "images", action.payload.nodeName], {
-                uploading: false,
+                loading: false,
                 info: action.payload.info
             });
 
-        case "LINK_PREVIEW_IMAGE_UPLOAD_FAILED":
-            return immutable.set(state, [action.payload.url, "images", action.payload.nodeName, "uploading"], false);
+        case "LINK_PREVIEW_IMAGE_LEASE_FAILED":
+            return immutable.set(state, [action.payload.url, "images", action.payload.nodeName, "loading"], false);
 
         default:
             return state;

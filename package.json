@@ -20,7 +20,6 @@
     "autosize": "^6.0.1",
     "base64-js": "^1.5.1",
     "bootstrap": "^5.3.8",
-    "browser-image-compression": "^2.0.2",
     "buffer": "^6.0.3",
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",

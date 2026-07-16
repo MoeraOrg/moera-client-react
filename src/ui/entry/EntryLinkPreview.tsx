@@ -27,7 +27,6 @@ interface Props {
     title?: string | null;
     description?: string | null;
     publishedAt?: number | null;
-    imageUploading?: boolean;
     imageHash?: string | null;
     media: (MediaAttachment | MediaWithCaption)[] | null;
     small?: boolean | null;
@@ -38,8 +37,8 @@ interface Props {
 }
 
 export function EntryLinkPreview({
-    nodeName, siteName, url, noFollow, title, description, publishedAt, imageUploading, imageHash, media, small = false,
-    editing, disabled, onUpdate, onDelete
+    nodeName, siteName, url, noFollow, title, description, publishedAt, imageHash, media, small = false, editing,
+    disabled, onUpdate, onDelete
 }: Props) {
     const timeRelative = useSelector((state: ClientState) => getSetting(state, "posting.time.relative") as boolean);
     useSelector((state: ClientState) =>
@@ -59,14 +58,12 @@ export function EntryLinkPreview({
     }
     const metaLabel = formatMetaLabel(host, publishedAt, timeRelative, t);
 
-    let large;
+    let large = false;
     let attachment: MediaAttachment | MediaWithCaption | null = null;
     if (imageHash != null && media != null) {
         attachment = media.find(ma => ma.media?.hash === imageHash || ma.remoteMedia?.hash === imageHash) ?? null;
         const width = attachment?.media?.width ?? attachment?.remoteMedia?.width ?? 0;
         large = !small && width > 450;
-    } else {
-        large = imageUploading;
     }
 
     const onEdit = (e: React.MouseEvent) => {
@@ -88,7 +85,6 @@ export function EntryLinkPreview({
                 nodeName={nodeName}
                 mediaFile={attachment?.media ?? null}
                 remoteMedia={attachment?.remoteMedia ?? null}
-                loading={imageUploading ?? false}
             />
             <div className="details">
                 {title &&
@@ -110,8 +106,11 @@ export function EntryLinkPreview({
                 }
             </div>
             {edit &&
-                <EntryLinkPreviewEditDialog title={title ?? ""} description={description ?? ""}
-                                            onSubmit={onEditSubmit}/>
+                <EntryLinkPreviewEditDialog
+                    title={title ?? ""}
+                    description={description ?? ""}
+                    onSubmit={onEditSubmit}
+                />
             }
         </Frame>
     );

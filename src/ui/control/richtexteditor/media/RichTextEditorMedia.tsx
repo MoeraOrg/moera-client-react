@@ -7,11 +7,7 @@ import * as Base64js from 'base64-js';
 import { MediaCaption, PostingFeatures, PrivateMediaFileInfo, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getSetting, getSettingNode } from "state/settings/selectors";
-import {
-    richTextEditorImageCopy,
-    richTextEditorMediaRename,
-    richTextEditorMediaUpload
-} from "state/richtexteditor/actions";
+import { richTextEditorMediaRename, richTextEditorMediaUpload } from "state/richtexteditor/actions";
 import { useAndroidMessages, useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
 import {
@@ -113,7 +109,7 @@ export default function RichTextEditorMedia({
     }
 
     const uploadImages = useCallback((
-        files: File[],
+        files: (File | string)[],
         compress: boolean,
         onInsert?: OnInsertHandler,
         standardSize?: RichTextImageStandardSize,
@@ -122,12 +118,13 @@ export default function RichTextEditorMedia({
         caption?: string
     ) => {
         if (files.length > 0) {
-            setUploadProgress(files.map(file => ({status: "loading", loaded: 0, total: file.size})));
+            setUploadProgress(files.map(file =>
+                ({status: "loading", loaded: 0, total: typeof file === "string" ? 100 : file.size})
+            ));
             imageUploadStarted(files.length);
             dispatch(richTextEditorMediaUpload(
                 nodeName,
                 files,
-                features,
                 compress,
                 onImageUploadSuccess(onInsert, standardSize, customWidth, customHeight, caption),
                 onImageUploadFailure,
@@ -136,7 +133,7 @@ export default function RichTextEditorMedia({
                 srcFormat
             ));
         }
-    }, [dispatch, features, nodeName, srcFormat]);
+    }, [dispatch, nodeName, srcFormat]);
 
     const compressDefault = useRef<boolean>(compressImages);
     const onInsertRef = useRef<OnInsertHandler | undefined>(undefined);
@@ -290,19 +287,9 @@ export default function RichTextEditorMedia({
     }
 
     const [copyImageShow, setCopyImageShow] = useState<boolean>(false);
-    const [downloading, setDownloading] = useState<boolean>(false);
 
     const copyImage = () => {
         setCopyImageShow(true);
-    }
-
-    const onImageDownloadSuccess = (file: File) => {
-        setDownloading(false);
-        uploadImages([file], compressDefault.current);
-    }
-
-    const onImageDownloadFailure = () => {
-        setDownloading(false);
     }
 
     const submitCopyImage = (ok: boolean | null, values: Partial<RichTextCopyImageValues>) => {
@@ -313,10 +300,7 @@ export default function RichTextEditorMedia({
         if (values.compress != null) {
             compressDefault.current = values.compress;
         }
-        setDownloading(true);
-        dispatch(
-            richTextEditorImageCopy(values.url, onImageDownloadSuccess, onImageDownloadFailure)
-        );
+        uploadImages([values.url], compressDefault.current);
     }
 
     const [renameMediaShow, setRenameMediaShow] = useState<boolean>(false);
@@ -360,8 +344,7 @@ export default function RichTextEditorMedia({
     return (
         <RichTextEditorMediaContext.Provider value={{
             getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, deleteMedia, reorderMedia,
-            pasteMedia, showImageDialog, downloading, copyImage, attachmentType, setAttachmentType, renameMedia,
-            setMediaCaption
+            pasteMedia, showImageDialog, copyImage, attachmentType, setAttachmentType, renameMedia, setMediaCaption
         }}>
             {children}
             <input {...getInputProps()}/>

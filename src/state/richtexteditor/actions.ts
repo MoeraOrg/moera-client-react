@@ -1,5 +1,5 @@
 import { actionWithPayload, ActionWithPayload } from "state/action-types";
-import { Body, PostingFeatures, PrivateMediaFileInfo, SourceFormat } from "api";
+import { Body, PrivateMediaFileInfo, SourceFormat } from "api";
 import { MediaWithCaption } from "util/media-with-caption";
 import { RelNodeName } from "util/rel-node-name";
 
@@ -9,8 +9,7 @@ type MediaUploadProgressHandler = (index: number, loaded: number, total: number)
 
 export type RichTextEditorMediaUploadAction = ActionWithPayload<"RICH_TEXT_EDITOR_MEDIA_UPLOAD", {
     nodeName: RelNodeName | string;
-    files: File[];
-    features: PostingFeatures | null;
+    files: (File | string)[];
     compress: boolean;
     onSuccess: MediaUploadSuccessHandler;
     onFailure: MediaUploadFailureHandler;
@@ -20,8 +19,7 @@ export type RichTextEditorMediaUploadAction = ActionWithPayload<"RICH_TEXT_EDITO
 }>;
 export const richTextEditorMediaUpload = (
     nodeName: RelNodeName | string,
-    files: File[],
-    features: PostingFeatures | null,
+    files: (File | string)[],
     compress: boolean,
     onSuccess: MediaUploadSuccessHandler,
     onFailure: MediaUploadFailureHandler,
@@ -31,23 +29,8 @@ export const richTextEditorMediaUpload = (
 ): RichTextEditorMediaUploadAction =>
     actionWithPayload(
         "RICH_TEXT_EDITOR_MEDIA_UPLOAD",
-        {nodeName, files, features, compress, onSuccess, onFailure, onProgress, captionSrc, captionSrcFormat}
+        {nodeName, files, compress, onSuccess, onFailure, onProgress, captionSrc, captionSrcFormat}
     );
-
-type ImageDownloadSuccessHandler = (file: File) => void;
-type ImageDownloadFailureHandler = () => void;
-
-export type RichTextEditorImageCopyAction = ActionWithPayload<"RICH_TEXT_EDITOR_IMAGE_COPY", {
-    url: string;
-    onSuccess: ImageDownloadSuccessHandler;
-    onFailure: ImageDownloadFailureHandler;
-}>;
-export const richTextEditorImageCopy = (
-    url: string,
-    onSuccess: ImageDownloadSuccessHandler,
-    onFailure: ImageDownloadFailureHandler
-): RichTextEditorImageCopyAction =>
-    actionWithPayload("RICH_TEXT_EDITOR_IMAGE_COPY", {url, onSuccess, onFailure});
 
 type MediaRenameSuccessHandler = (media: PrivateMediaFileInfo) => void;
 type MediaRenameFailureHandler = () => void;
@@ -68,5 +51,4 @@ export const richTextEditorMediaRename = (
 
 export type RichTextEditorAnyAction =
     RichTextEditorMediaUploadAction
-    | RichTextEditorImageCopyAction
     | RichTextEditorMediaRenameAction;

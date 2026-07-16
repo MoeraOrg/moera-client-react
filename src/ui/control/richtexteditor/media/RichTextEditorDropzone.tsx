@@ -49,7 +49,7 @@ interface Props {
 export default function RichTextEditorDropzone({value, compact = false, nodeName, noEmbeddedMedia}: Props) {
     const tinyScreen = useIsTinyScreen();
     const {
-        getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, downloading, copyImage, attachmentType
+        getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, copyImage, attachmentType
     } = useRichTextEditorMedia();
     const {t} = useTranslation();
 
@@ -68,8 +68,7 @@ export default function RichTextEditorDropzone({value, compact = false, nodeName
     const hidden =
         compact
         && (value.media == null || value.media.length === 0)
-        && uploadProgress.length === 0
-        && !downloading;
+        && uploadProgress.length === 0;
     const progressSummary = useMemo(() => calcProgressSummary(uploadProgress), [uploadProgress])
     const buttonsTitle = attachmentType === "image"
         ? (!tinyScreen ? "upload-or-copy-or-drop-images" : "upload-images")
@@ -93,17 +92,14 @@ export default function RichTextEditorDropzone({value, compact = false, nodeName
                     {uploadProgress.length > 0 ?
                         t("uploading-files", {...progressSummary})
                     :
-                        downloading ?
-                            t("downloading-image")
-                        :
-                            !compact &&
-                                <div className="upload-button" role="button" tabIndex={0} onClick={onSelectImages}>
-                                    <Trans i18nKey={buttonsTitle}>
-                                        <b/>
-                                        <button className="copy-image" onClick={onCopyImage}/>
-                                        <br/>
-                                    </Trans>
-                                </div>
+                        !compact &&
+                            <div className="upload-button" role="button" tabIndex={0} onClick={onSelectImages}>
+                                <Trans i18nKey={buttonsTitle}>
+                                    <b/>
+                                    <button className="copy-image" onClick={onCopyImage}/>
+                                    <br/>
+                                </Trans>
+                            </div>
                     }
                 </div>
             </div>

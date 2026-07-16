@@ -1,5 +1,5 @@
 import { actionWithPayload, ActionWithPayload } from "state/action-types";
-import { LinkPreviewInfo, PostingFeatures } from "api";
+import { LinkPreviewInfo } from "api";
 import { MediaWithCaption } from "util/media-with-caption";
 
 export type LinkPreviewLoadAction = ActionWithPayload<"LINK_PREVIEW_LOAD", {
@@ -21,37 +21,34 @@ export type LinkPreviewLoadFailedAction = ActionWithPayload<"LINK_PREVIEW_LOAD_F
 export const linkPreviewLoadFailed = (url: string): LinkPreviewLoadFailedAction =>
     actionWithPayload("LINK_PREVIEW_LOAD_FAILED", {url});
 
-export type LinkPreviewImageUploadAction = ActionWithPayload<"LINK_PREVIEW_IMAGE_UPLOAD", {
+export type LinkPreviewImageLeaseAction = ActionWithPayload<"LINK_PREVIEW_IMAGE_LEASE", {
     url: string;
     nodeName: string;
-    features: PostingFeatures | null;
 }>;
-export const linkPreviewImageUpload = (
-    url: string, nodeName: string, features: PostingFeatures | null
-): LinkPreviewImageUploadAction =>
-    actionWithPayload("LINK_PREVIEW_IMAGE_UPLOAD", {url, nodeName, features});
+export const linkPreviewImageLease = (url: string, nodeName: string): LinkPreviewImageLeaseAction =>
+    actionWithPayload("LINK_PREVIEW_IMAGE_LEASE", {url, nodeName});
 
-export type LinkPreviewImageUploadedAction = ActionWithPayload<"LINK_PREVIEW_IMAGE_UPLOADED", {
+export type LinkPreviewImageLeasedAction = ActionWithPayload<"LINK_PREVIEW_IMAGE_LEASED", {
     url: string;
     nodeName: string;
     info: MediaWithCaption;
 }>;
-export const linkPreviewImageUploaded = (
+export const linkPreviewImageLeased = (
     url: string, nodeName: string, info: MediaWithCaption
-): LinkPreviewImageUploadedAction =>
-    actionWithPayload("LINK_PREVIEW_IMAGE_UPLOADED", {url, nodeName, info});
+): LinkPreviewImageLeasedAction =>
+    actionWithPayload("LINK_PREVIEW_IMAGE_LEASED", {url, nodeName, info});
 
-export type LinkPreviewImageUploadFailedAction = ActionWithPayload<"LINK_PREVIEW_IMAGE_UPLOAD_FAILED", {
+export type LinkPreviewImageLeaseFailedAction = ActionWithPayload<"LINK_PREVIEW_IMAGE_LEASE_FAILED", {
     url: string;
     nodeName: string;
 }>;
-export const linkPreviewImageUploadFailed = (url: string, nodeName: string): LinkPreviewImageUploadFailedAction =>
-    actionWithPayload("LINK_PREVIEW_IMAGE_UPLOAD_FAILED", {url, nodeName});
+export const linkPreviewImageLeaseFailed = (url: string, nodeName: string): LinkPreviewImageLeaseFailedAction =>
+    actionWithPayload("LINK_PREVIEW_IMAGE_LEASE_FAILED", {url, nodeName});
 
 export type LinkPreviewsAnyAction =
     LinkPreviewLoadAction
     | LinkPreviewLoadedAction
     | LinkPreviewLoadFailedAction
-    | LinkPreviewImageUploadAction
-    | LinkPreviewImageUploadedAction
-    | LinkPreviewImageUploadFailedAction;
+    | LinkPreviewImageLeaseAction
+    | LinkPreviewImageLeasedAction
+    | LinkPreviewImageLeaseFailedAction;

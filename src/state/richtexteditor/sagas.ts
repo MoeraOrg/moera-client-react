@@ -3,11 +3,7 @@ import { mediaUpload } from "api/node/media-upload";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { remoteMediaLoaded } from "state/remotemedia/actions";
-import {
-    RichTextEditorImageCopyAction,
-    RichTextEditorMediaRenameAction,
-    RichTextEditorMediaUploadAction
-} from "state/richtexteditor/actions";
+import { RichTextEditorMediaRenameAction, RichTextEditorMediaUploadAction } from "state/richtexteditor/actions";
 import { errorThrown } from "state/error/actions";
 import { saga } from "state/saga";
 import { getSettingNode } from "state/settings/selectors";
@@ -17,16 +13,13 @@ import { MediaWithCaption } from "util/media-with-caption";
 
 export default [
     saga("RICH_TEXT_EDITOR_MEDIA_UPLOAD", null, richTextEditorMediaUploadSaga),
-    saga("RICH_TEXT_EDITOR_IMAGE_COPY", null, richTextEditorImageCopySaga),
     saga("RICH_TEXT_EDITOR_MEDIA_RENAME", null, richTextEditorMediaRenameSaga),
 ];
 
 async function richTextEditorMediaUpload(
     action: WithContext<RichTextEditorMediaUploadAction>, index: number
 ): Promise<void> {
-    const {
-        features, nodeName, files, compress, onSuccess, onProgress, onFailure, captionSrc, captionSrcFormat
-    } = action.payload;
+    const {nodeName, files, compress, onSuccess, onProgress, onFailure, captionSrc, captionSrcFormat} = action.payload;
     const {homeOwnerName} = action.context;
 
     if (homeOwnerName == null) {
@@ -38,7 +31,7 @@ async function richTextEditorMediaUpload(
     const uploadChunkSize = select(state => getSettingNode(state, "media.upload.max-chunk-size") as number);
 
     const mediaFile = await mediaUpload(
-        action, features, mediaMaxSize, files[index], compress, uploadChunkSize,
+        action, mediaMaxSize, files[index], compress, uploadChunkSize,
         (loaded: number, total: number) => onProgress(index, loaded, total)
     );
     if (mediaFile != null) {
@@ -72,17 +65,6 @@ async function richTextEditorMediaUpload(
 function richTextEditorMediaUploadSaga(action: WithContext<RichTextEditorMediaUploadAction>): void {
     for (let i = 0; i < action.payload.files.length; i++) {
         richTextEditorMediaUpload(action, i);
-    }
-}
-
-async function richTextEditorImageCopySaga(action: WithContext<RichTextEditorImageCopyAction>): Promise<void> {
-    const {url, onSuccess, onFailure} = action.payload;
-    try {
-        const blob = await Node.proxyMedia(action, REL_HOME, url);
-        onSuccess(new File([blob], "moera-editor.img", {type: blob.type}));
-    } catch (e) {
-        onFailure();
-        dispatch(errorThrown(e));
     }
 }
 

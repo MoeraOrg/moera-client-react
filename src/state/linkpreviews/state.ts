@@ -2,7 +2,7 @@ import { LinkPreviewInfo } from "api";
 import { MediaWithCaption } from "util/media-with-caption";
 
 export interface LinkImageState {
-    uploading: boolean;
+    loading: boolean;
     info: MediaWithCaption | null;
 }
 

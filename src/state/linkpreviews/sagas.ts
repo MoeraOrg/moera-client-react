@@ -1,9 +1,8 @@
 import { Node } from "api";
-import { mediaUpload } from "api/node/media-upload";
 import {
-    LinkPreviewImageUploadAction,
-    linkPreviewImageUploaded,
-    linkPreviewImageUploadFailed,
+    LinkPreviewImageLeaseAction,
+    linkPreviewImageLeased,
+    linkPreviewImageLeaseFailed,
     LinkPreviewLoadAction,
     linkPreviewLoaded,
     linkPreviewLoadFailed
@@ -13,22 +12,19 @@ import { dispatch, select } from "state/store-sagas";
 import { saga } from "state/saga";
 import { remoteMediaLoaded } from "state/remotemedia/actions";
 import { getLinkPreviewInfo } from "state/linkpreviews/selectors";
-import { getSettingNode } from "state/settings/selectors";
 import { localMediaToLeasedRemoteMediaInfo } from "ui/control/richtexteditor";
-import { randomId } from "util/ui";
 import { REL_HOME } from "util/rel-node-name";
 import { MediaWithCaption } from "util/media-with-caption";
 
 export default [
     saga("LINK_PREVIEW_LOAD", payload => payload.url, linkPreviewLoadSaga),
-    saga("LINK_PREVIEW_IMAGE_UPLOAD", payload => payload.url, linkPreviewImageUploadSaga)
+    saga("LINK_PREVIEW_IMAGE_LEASE", payload => payload.url, linkPreviewImageLeaseSaga)
 ];
 
 async function linkPreviewLoadSaga(action: WithContext<LinkPreviewLoadAction>): Promise<void> {
     const {url} = action.payload;
     try {
-        const info = await Node.proxyLinkPreview(action, REL_HOME, url);
-        info.imageUrl = resolveImageUrl(info.imageUrl, info.url ?? url);
+        const info = await Node.createLinkPreview(action, REL_HOME, url);
         info.url = url; // canonical URL may differ, so we should force consistency throughout the app
         dispatch(linkPreviewLoaded(url, info).causedBy(action));
     } catch {
@@ -36,79 +32,35 @@ async function linkPreviewLoadSaga(action: WithContext<LinkPreviewLoadAction>): 
     }
 }
 
-function resolveImageUrl(imageUrl: string | null | undefined, pageUrl: string): string | null {
-    if (imageUrl == null) {
-        return null;
-    }
-
-    try {
-        return new URL(imageUrl).toString();
-    } catch {
-        // Image URL is not absolute
-    }
-
-    try {
-        return new URL(imageUrl, pageUrl).toString();
-    } catch {
-        return imageUrl;
-    }
-}
-
-async function linkPreviewImageUploadSaga(action: WithContext<LinkPreviewImageUploadAction>): Promise<void> {
-    const {url, nodeName, features} = action.payload;
+async function linkPreviewImageLeaseSaga(action: WithContext<LinkPreviewImageLeaseAction>): Promise<void> {
+    const {url, nodeName} = action.payload;
     const {homeOwnerName} = action.context;
 
     if (homeOwnerName == null) {
-        dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
+        dispatch(linkPreviewImageLeaseFailed(url, nodeName).causedBy(action));
         return;
     }
 
-    const imageUrl = select(state => getLinkPreviewInfo(state, url)?.imageUrl);
-    if (imageUrl == null) {
-        dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
+    const mediaFile = select(state => getLinkPreviewInfo(state, url)?.image);
+    if (mediaFile == null) {
+        dispatch(linkPreviewImageLeaseFailed(url, nodeName).causedBy(action));
         return;
     }
-
-    const mediaMaxSize = select(state => getSettingNode(state, "media.max-size") as number);
-    const uploadChunkSize = select(state => getSettingNode(state, "media.upload.max-chunk-size") as number);
 
     try {
-        const blob = await Node.proxyMedia(action, REL_HOME, imageUrl);
-        if (!isSupportedImage(blob.type, features?.imageFormats)) {
-            dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
-            return;
-        }
-        const file = new File([blob], `moera-lp-${randomId()}.img`, {type: blob.type});
-        const mediaFile = await mediaUpload(action, features, mediaMaxSize, file, true, uploadChunkSize);
-        if (mediaFile != null) {
-            if (mediaFile.attachment) {
-                dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
-                return;
-            }
-            let mediaFileWithCaption: MediaWithCaption;
-            if (nodeName === homeOwnerName) {
-                mediaFileWithCaption = new MediaWithCaption(mediaFile);
-            } else {
-                const lease = await Node.createMediaLease(action, REL_HOME, {nodeName, mediaId: mediaFile.id});
-                const remoteMedia = localMediaToLeasedRemoteMediaInfo(mediaFile, homeOwnerName, lease.id);
-                if (remoteMedia != null) {
-                    dispatch(remoteMediaLoaded(remoteMedia.nodeName, remoteMedia.mediaId, mediaFile).causedBy(action));
-                }
-                mediaFileWithCaption = new MediaWithCaption(undefined, remoteMedia);
-            }
-            dispatch(linkPreviewImageUploaded(url, nodeName, mediaFileWithCaption).causedBy(action));
+        let mediaFileWithCaption: MediaWithCaption;
+        if (nodeName === homeOwnerName) {
+            mediaFileWithCaption = new MediaWithCaption(mediaFile);
         } else {
-            dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
+            const lease = await Node.createMediaLease(action, REL_HOME, {nodeName, mediaId: mediaFile.id});
+            const remoteMedia = localMediaToLeasedRemoteMediaInfo(mediaFile, homeOwnerName, lease.id);
+            if (remoteMedia != null) {
+                dispatch(remoteMediaLoaded(remoteMedia.nodeName, remoteMedia.mediaId, mediaFile).causedBy(action));
+            }
+            mediaFileWithCaption = new MediaWithCaption(undefined, remoteMedia);
         }
+        dispatch(linkPreviewImageLeased(url, nodeName, mediaFileWithCaption).causedBy(action));
     } catch {
-        dispatch(linkPreviewImageUploadFailed(url, nodeName).causedBy(action));
+        dispatch(linkPreviewImageLeaseFailed(url, nodeName).causedBy(action));
     }
-}
-
-function isSupportedImage(mimeType: string, supportedTypes: string[] | null | undefined): boolean {
-    const basicMimeType = mimeType.split(";")[0].trim().toLowerCase();
-    if (supportedTypes == null) {
-        return basicMimeType.startsWith("image/");
-    }
-    return supportedTypes.some(type => type.toLowerCase() === basicMimeType);
 }

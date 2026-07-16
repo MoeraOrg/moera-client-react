@@ -119,7 +119,6 @@ export function RichTextField({
                     name={linkPreviewsField}
                     urlsField={urlsField}
                     nodeName={nodeName}
-                    features={features}
                     small={linkPreviewsSmall}
                     disabled={disabled}
                 />

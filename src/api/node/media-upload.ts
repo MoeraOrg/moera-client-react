@@ -1,7 +1,6 @@
-import imageCompression from 'browser-image-compression';
 import i18n from 'i18next';
 
-import { MediaAttachment, MediaCaption, Node, PostingFeatures, PostingText, PrivateMediaFileInfo } from "api";
+import { MediaAttachment, MediaCaption, Node, PostingText, PrivateMediaFileInfo } from "api";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { dispatch } from "state/store-sagas";
@@ -18,39 +17,33 @@ const UPLOAD_STREAMS_COUNT = 4;
 
 export async function mediaUpload(
     caller: WithContext<ClientAction>,
-    features: PostingFeatures | null,
     mediaMaxSize: number,
-    file: File,
+    file: File | string,
     compress: boolean,
     uploadChunkSize: number,
     onProgress?: MediaUploadProgressHandler
 ): Promise<PrivateMediaFileInfo | null> {
     try {
-        if (features != null) {
-            if (compress) {
-                if (file.size > features.imageRecommendedSize) {
-                    file = await imageCompression(file, {
-                        maxSizeMB: features.imageRecommendedSize / 1024 / 1024,
-                        maxWidthOrHeight: features.imageRecommendedPixels,
-                        preserveExif: true
-                    });
-                }
-            } else {
-                if (file.size > mediaMaxSize) {
-                    dispatch(messageBox(i18n.t("upload-too-large", {
-                        name: file.name,
-                        size: formatMib(file.size),
-                        maxSize: formatMib(mediaMaxSize)
-                    })));
-                    return null;
-                }
-            }
-        }
-
-        if (file.size <= uploadChunkSize) {
-            return await Node.uploadPrivateMedia(caller, REL_HOME, file, onProgress);
+        if (typeof file === "string") {
+            onProgress && onProgress(0, 100);
+            const media = await Node.uploadPrivateMedia(caller, REL_HOME, null, undefined, null, file, compress);
+            onProgress && onProgress(100, 100);
+            return media;
         } else {
-            return await mediaUploadChunked(caller, file, onProgress);
+            if (!compress && file.size > mediaMaxSize) {
+                dispatch(messageBox(i18n.t("upload-too-large", {
+                    name: file.name,
+                    size: formatMib(file.size),
+                    maxSize: formatMib(mediaMaxSize)
+                })));
+                return null;
+            }
+
+            if (file.size <= uploadChunkSize) {
+                return await Node.uploadPrivateMedia(caller, REL_HOME, file, onProgress, null, null, compress);
+            } else {
+                return await mediaUploadChunked(caller, file, compress, onProgress);
+            }
         }
     } catch (e) {
         dispatch(errorThrown(e));
@@ -61,6 +54,7 @@ export async function mediaUpload(
 async function mediaUploadChunked(
     caller: WithContext<ClientAction>,
     file: File,
+    compress: boolean,
     onProgress?: MediaUploadProgressHandler
 ): Promise<PrivateMediaFileInfo> {
     const mediaUpload = await Node.createMediaUpload(
@@ -86,7 +80,7 @@ async function mediaUploadChunked(
             )
         )
     );
-    return await Node.uploadPrivateMedia(caller, REL_HOME, undefined, undefined, mediaUpload.id);
+    return await Node.uploadPrivateMedia(caller, REL_HOME, undefined, undefined, mediaUpload.id, null, compress);
 }
 
 async function mediaUploadChunkedStream(

@@ -54,7 +54,6 @@ function RichTextImageDialog({
 }: BodyProps) {
     const [, {value: files}, {setValue: setFiles}] = useField<File[] | null>("files");
     const [, {value: standardSize}] = useField<RichTextImageStandardSize>("standardSize");
-    const [, {value: compress}] = useField<boolean>("compress");
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -70,11 +69,10 @@ function RichTextImageDialog({
 
     useEffect(() => {
         if (okButtonRef.current != null) {
-            const valid = compress || mediaMaxSize == null || files == null
-                || files.every(file => file.size <= mediaMaxSize);
+            const valid = mediaMaxSize == null || files == null || files.every(file => file.size <= mediaMaxSize);
             okButtonRef.current.disabled = !valid;
         }
-    }, [compress, files, mediaMaxSize, okButtonRef]);
+    }, [files, mediaMaxSize, okButtonRef]);
 
     const onDelete = (index: number, e: React.MouseEvent) => {
         if (files != null) {
@@ -90,7 +88,7 @@ function RichTextImageDialog({
     return (
         <>
             {files != null &&
-                <SelectedImages files={files} maxSize={compress ? undefined : mediaMaxSize} onDelete={onDelete}/>
+                <SelectedImages files={files} maxSize={mediaMaxSize} onDelete={onDelete}/>
             }
             {mediaFiles != null &&
                 <div className="rich-text-editor-image-list pt-0 mb-3">
