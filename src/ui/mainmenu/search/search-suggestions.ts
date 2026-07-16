@@ -4,8 +4,8 @@ import deepEqual from "react-fast-compare";
 
 import { ClientState } from "state/state";
 import { isAtNode } from "state/node/selectors";
-import { contactsPrepare } from "state/contacts/actions";
-import { getContacts } from "state/contacts/selectors";
+import { contactsPrepare, visitedContactsPrepare } from "state/contacts/actions";
+import { getContacts, getVisitedContacts } from "state/contacts/selectors";
 import { jumpFar, jumpNear } from "state/navigation/actions";
 import { isAtSearchPage } from "state/navigation/selectors";
 import { SearchTab } from "state/search/state";
@@ -41,6 +41,7 @@ export function useSearchSuggestions(
     {onSubmit: onSubmitCallback}: UseSearchSuggestionsProps = {}
 ): UseSearchSuggestionsResult {
     const contactNames = useSelector(getContacts);
+    const visitedContactNames = useSelector(getVisitedContacts);
     const history = useSelector((state: ClientState) => state.search.history);
     const atNode = useSelector(isAtNode);
     const atSearch = useSelector(isAtSearchPage);
@@ -98,6 +99,7 @@ export function useSearchSuggestions(
     } = useSuggestions<SearchListItem>({
         defaultQuery: atSearch ? defaultQuery : "",
         runQuery: query => {
+            dispatch(visitedContactsPrepare(query));
             dispatch(contactsPrepare(query));
             dispatch(searchHistoryPrepare(query));
         },
@@ -139,11 +141,21 @@ export function useSearchSuggestions(
             }
             newList.push(...historical);
 
-            const names: SearchListItem[] = namesListQuery(
-                contactNames.sort((c1, c2) => c1.distance - c2.distance),
+            const visitedNames = namesListQuery(
+                visitedContactNames.toSorted((c1, c2) => c1.distance - c2.distance),
                 query
             )
                 .map(item => ({type: "name" as const, ...item}));
+            const visitedNodeNames = new Set(visitedNames.map(item => item.nodeName));
+            const names: SearchListItem[] = [
+                ...visitedNames,
+                ...namesListQuery(
+                    contactNames.toSorted((c1, c2) => c1.distance - c2.distance),
+                    query
+                )
+                    .filter(item => !visitedNodeNames.has(item.nodeName))
+                    .map(item => ({type: "name" as const, ...item}))
+            ];
             if (query && names.length > 5) {
                 names.splice(5);
             }
@@ -155,7 +167,7 @@ export function useSearchSuggestions(
 
             return deepEqual(list, newList) ? list : newList;
         });
-    }, [contactNames, history, query, setSearchList]);
+    }, [contactNames, history, query, setSearchList, visitedContactNames]);
 
     return {
         query, searchList, selectedIndex, focused, handleKeyDown, handleChange,

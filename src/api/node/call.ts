@@ -1,9 +1,17 @@
 import i18n from 'i18next';
 
-import { formatSchemaErrors, HomeNotConnectedError, NameResolvingError, NodeApiError, NodeError } from "api";
+import {
+    CausedError,
+    formatSchemaErrors,
+    HomeNotConnectedError,
+    NameResolvingError,
+    NodeApiError,
+    NodeConnectionError,
+    NodeError,
+    TooManyRequestsError
+} from "api";
 import { validateSchema } from "api/node/safe";
 import { fetcher, ProgressHandler, XhrResponse } from "api/fetcher";
-import { CausedError, NodeConnectionError, TooManyRequestsError } from "api/error";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { errorAuthInvalid } from "state/error/actions";

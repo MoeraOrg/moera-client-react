@@ -10,7 +10,9 @@ const emptyQuery: ContactsQueryState = {
 
 const initialState: ContactsState = {
     queries: {},
-    contacts: []
+    visitedQueries: {},
+    contacts: [],
+    visitedContacts: []
 }
 
 export default (state: ContactsState = initialState, action: ClientAction): ContactsState => {
@@ -34,17 +36,44 @@ export default (state: ContactsState = initialState, action: ClientAction): Cont
             return istate.value();
         }
 
+        case "CONTACTS_LOAD_FAILED":
+            return immutable.set(state, ["queries", action.payload.query, "loading"], false);
+
+        case "VISITED_CONTACTS_LOAD":
+            if (state.visitedQueries[action.payload.query]) {
+                return immutable.set(state, ["visitedQueries", action.payload.query, "loading"], true);
+            } else {
+                return immutable.assign(
+                    state,
+                    ["visitedQueries", action.payload.query],
+                    {...emptyQuery, loading: true}
+                );
+            }
+
+        case "VISITED_CONTACTS_LOADED": {
+            const istate = immutable.wrap(state);
+            istate.assign(["visitedQueries", action.payload.query], {loading: false, loaded: true});
+            const names = new Set(action.payload.contacts.map(c => c.nodeName));
+            istate.set(
+                "visitedContacts",
+                state.visitedContacts.filter(c => !names.has(c.nodeName)).concat(action.payload.contacts)
+            );
+            return istate.value();
+        }
+
+        case "VISITED_CONTACTS_LOAD_FAILED":
+            return immutable.set(state, ["visitedQueries", action.payload.query, "loading"], false);
+
         case "CONTACTS_NAME_FOUND": {
             const {nodeName} = action.payload;
-            const hasName = state.contacts.find(c => c.nodeName === nodeName) != null;
+            const hasName =
+                state.contacts.find(c => c.nodeName === nodeName) != null
+                || state.visitedContacts.find(c => c.nodeName === nodeName) != null;
             if (!hasName) {
                 return immutable.set(state, "contacts", [...state.contacts, {nodeName, distance: 3}]);
             }
             return state;
         }
-
-        case "CONTACTS_LOAD_FAILED":
-            return immutable.set(state, ["queries", action.payload.query, "loading"], false);
 
         default:
             return state;

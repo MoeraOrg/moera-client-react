@@ -7,5 +7,7 @@ export interface ContactsQueryState {
 
 export interface ContactsState {
     queries: Partial<Record<string, ContactsQueryState>>;
+    visitedQueries: Partial<Record<string, ContactsQueryState>>;
     contacts: SearchNodeInfo[];
+    visitedContacts: SearchNodeInfo[];
 }

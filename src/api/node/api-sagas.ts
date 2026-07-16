@@ -2347,6 +2347,39 @@ export async function deleteUserListItem(
     });
 }
 
+export async function getVisitedNodes(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, query: string | null = null,
+    limit: number | null = null, errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.SearchNodeInfo[]> {
+
+    const location = urlWithParameters(ut`/people/visited`, {query, limit});
+    return callApi<API.SearchNodeInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "SearchNodeInfoArray", errorFilter
+    });
+}
+
+export async function recordVisitedNode(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, node: API.VisitedNodeAttributes,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.Result> {
+
+    const location = "/people/visited";
+    return callApi<API.Result>({
+        caller, nodeName, method: "POST", location, body: node, auth, schema: "Result", errorFilter
+    });
+}
+
+export async function deleteVisitedNode(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.Result> {
+
+    const location = ut`/people/visited/${remoteNodeName}`;
+    return callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
+    });
+}
+
 export async function recordVisit(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, visit: API.VisitDetails,
     errorFilter: ErrorFilter = false, auth: boolean | string = true

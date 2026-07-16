@@ -367,6 +367,10 @@ export interface ContactInfo {
     adminOperations?: ContactOperations | null;
 }
 
+export interface VisitedNodeAttributes {
+    nodeName: string;
+}
+
 export interface Credentials {
     login: string;
     password: string;

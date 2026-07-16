@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 
-import { NameResolvingError, Node, NodeApiError, PrincipalValue, StoryInfo } from "api";
+import { NameResolvingError, Node, NodeApiError, NodeConnectionError, PrincipalValue, StoryInfo } from "api";
 import { ClientAction } from "state/action";
 import {
     feedCannotBeLoaded,
@@ -35,13 +35,16 @@ import {
     FeedUnsubscribeAction,
     feedUnsubscribed,
     feedUnsubscribeFailed,
+    FeedVisitRecordAction,
     RecommendationDontAction
 } from "state/feeds/actions";
 import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
-import { homeIntroduced } from "state/init-barriers";
+import { homeIntroduced, mutuallyIntroduced } from "state/init-barriers";
 import { saga } from "state/saga";
+import { getHomeOwnerName } from "state/home/selectors";
+import { getOwnerName } from "state/node/selectors";
 import { getSettingNode } from "state/settings/selectors";
 import { StoryAddedAction, storySatisfy, StoryUpdatedAction } from "state/stories/actions";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
@@ -53,7 +56,6 @@ import { loadRemoteMediaInStories } from "state/remotemedia/sagas";
 import { getInstantTypeDetails } from "ui/instant/instant-types";
 import { absoluteNodeName, REL_HOME } from "util/rel-node-name";
 import { delay } from "util/misc";
-import { NodeConnectionError } from "api/error";
 
 export default [
     saga(
@@ -76,6 +78,7 @@ export default [
     saga("FEED_SLICE_UPDATE", null, feedExecuteSliceButtonsActions),
     saga("STORY_ADDED", null, feedExecuteButtonsActions),
     saga("STORY_UPDATED", null, feedExecuteButtonsActions),
+    saga("FEED_VISIT_RECORD", "", feedVisitRecordSaga),
     saga("RECOMMENDATION_DONT", null, recommendationDontSaga)
 ];
 
@@ -316,6 +319,22 @@ async function feedsUpdateSaga(action: WithContext<FeedsUpdateAction>): Promise<
         }
         let {before, after} = select(state => getFeedState(state, nodeName, feedName));
         await feedUpdateSlice(action, nodeName, feedName, before, after);
+    }
+}
+
+async function feedVisitRecordSaga(action: WithContext<FeedVisitRecordAction>): Promise<void> {
+    await mutuallyIntroduced();
+    const homeName = select(getHomeOwnerName);
+    const nodeName = select(getOwnerName);
+
+    if (homeName == null || nodeName == null || nodeName === homeName) {
+        return;
+    }
+
+    try {
+        await Node.recordVisitedNode(action, REL_HOME, {nodeName});
+    } catch {
+        // Ignore failures; visited-node history is not critical.
     }
 }
 

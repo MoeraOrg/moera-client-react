@@ -271,6 +271,10 @@ export type FeedScrolledToAnchorAction = ActionWithPayload<"FEED_SCROLLED_TO_ANC
 export const feedScrolledToAnchor = (nodeName: RelNodeName | string, feedName: string): FeedScrolledToAnchorAction =>
     actionWithPayload("FEED_SCROLLED_TO_ANCHOR", {nodeName, feedName});
 
+export type FeedVisitRecordAction = ActionWithoutPayload<"FEED_VISIT_RECORD">;
+export const feedVisitRecord = (): FeedVisitRecordAction =>
+    actionWithoutPayload("FEED_VISIT_RECORD");
+
 export type RecommendationDontAction = ActionWithPayload<"RECOMMENDATION_DONT", {
     receiverName: string;
     deleteAll: boolean;
@@ -311,4 +315,5 @@ export type FeedsAnyAction =
     | FeedScrolledAction
     | FeedScrollToAnchorAction
     | FeedScrolledToAnchorAction
+    | FeedVisitRecordAction
     | RecommendationDontAction;

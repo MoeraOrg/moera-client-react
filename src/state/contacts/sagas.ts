@@ -1,17 +1,26 @@
 import { saga } from "state/saga";
-import { Node, NodeName } from "api";
+import { Node, NodeName, SearchNodeInfo } from "api";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
-import { ContactsLoadAction, contactsLoaded, contactsLoadFailed, contactsNameFound } from "state/contacts/actions";
+import {
+    ContactsLoadAction,
+    VisitedContactsLoadAction,
+    contactsLoaded,
+    contactsLoadFailed,
+    contactsNameFound,
+    visitedContactsLoaded,
+    visitedContactsLoadFailed
+} from "state/contacts/actions";
 import { getNameDetails } from "state/naming/sagas";
 import { hasContactsName } from "state/contacts/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getSafeSearchDefault } from "state/search/selectors";
-import { REL_SEARCH } from "util/rel-node-name";
+import { REL_HOME, REL_SEARCH } from "util/rel-node-name";
 
 export default [
-    saga("CONTACTS_LOAD", payload => payload.query, contactsLoadSaga)
+    saga("CONTACTS_LOAD", payload => payload.query, contactsLoadSaga),
+    saga("VISITED_CONTACTS_LOAD", payload => payload.query, visitedContactsLoadSaga)
 ];
 
 async function contactsLoadSaga(action: WithContext<ContactsLoadAction>): Promise<void> {
@@ -28,6 +37,17 @@ async function contactsLoadSaga(action: WithContext<ContactsLoadAction>): Promis
     } catch (e) {
         dispatch(contactsLoadFailed(query).causedBy(action));
         dispatch(errorThrown(e));
+    }
+}
+
+async function visitedContactsLoadSaga(action: WithContext<VisitedContactsLoadAction>): Promise<void> {
+    const {query} = action.payload;
+
+    try {
+        const contacts: SearchNodeInfo[] = await Node.getVisitedNodes(action, REL_HOME, query, 4);
+        dispatch(visitedContactsLoaded(query, contacts).causedBy(action));
+    } catch {
+        dispatch(visitedContactsLoadFailed(query).causedBy(action));
     }
 }
 

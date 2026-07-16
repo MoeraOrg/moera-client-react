@@ -18,7 +18,8 @@ import {
     feedSubscriberUpdated,
     feedSubscriptionUpdated,
     feedsUpdate,
-    feedUnsubscribed
+    feedUnsubscribed,
+    feedVisitRecord
 } from "state/feeds/actions";
 import {
     isFeedFutureToBeLoaded,
@@ -107,6 +108,7 @@ export default [
         state => isAtExplorePage(state) && isFeedPastToBeLoaded(state, REL_CURRENT, "explore"),
         feedPastSliceLoad(REL_CURRENT, "explore")
     ),
+    trigger("GO_TO_PAGE", state => isAtTimelinePage(state), feedVisitRecord),
     trigger("FEED_SCROLLED", true, updateLocation),
     trigger(
         "HOME_READY",

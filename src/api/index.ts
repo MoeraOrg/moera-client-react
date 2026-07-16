@@ -9,11 +9,13 @@ export { selectApi } from "api/node/call";
 // mediaUpload from "api/node/media-upload" is not included here, because it drags all sagas as dependencies
 // into web workers
 export {
+    CausedError,
     HomeNotConnectedError,
     NameResolvingError,
     NamingError,
     NodeError,
     NodeApiError,
+    NodeConnectionError,
     TooManyRequestsError,
     VerboseError,
     formatSchemaErrors

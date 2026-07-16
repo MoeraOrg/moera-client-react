@@ -1,8 +1,7 @@
 import i18n from 'i18next';
 import * as URI from 'uri-js';
 
-import { NameResolvingError, NodeApiError, VerboseError } from "api";
-import { CausedError, NodeConnectionError } from "api/error";
+import { CausedError, NameResolvingError, NodeApiError, NodeConnectionError, VerboseError } from "api";
 import { Storage } from "storage";
 import { errorDismiss, errorShow, ErrorThrownAction } from "state/error/actions";
 import { jumpNear } from "state/navigation/actions";
