@@ -1585,6 +1585,14 @@ export const NODE_API_SCHEMAS = {
                     type: "integer",
                     nullable: true
                 },
+                "directDownloadPath": {
+                    type: "string",
+                    nullable: true
+                },
+                "directDownloadPathExpiresAt": {
+                    type: "integer",
+                    nullable: true
+                },
                 "mimeType": {
                     type: "string"
                 },

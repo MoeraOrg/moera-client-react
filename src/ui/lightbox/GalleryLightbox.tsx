@@ -20,6 +20,7 @@ import LightboxCopyTextButton from "ui/lightbox/LightboxCopyTextButton";
 import LightboxShareButton from "ui/lightbox/LightboxShareButton";
 import LightboxDownloadButton from "ui/lightbox/LightboxDownloadButton";
 import { useOverlay } from "ui/overlays/overlays";
+import { mediaDownloadUrl, resolveMediaUrl } from "util/media-url";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 
 export default function GalleryLightbox() {
@@ -52,7 +53,11 @@ export default function GalleryLightbox() {
     }
 
     const {
-        href: mainHref, src: mainSrc, mimeType: mainMimeType, textContent: mainTextContent
+        href: mainHref,
+        src: mainSrc,
+        downloadUrl: mainDownloadUrl,
+        mimeType: mainMimeType,
+        textContent: mainTextContent
     } = useLightboxMedia(mediaNodeName, media != null ? media[index] : undefined);
 
     const prevIndex = index > 0
@@ -92,7 +97,7 @@ export default function GalleryLightbox() {
                 toolbarButtons={[
                     mainTextContent && <LightboxCopyTextButton text={mainTextContent}/>,
                     <LightboxShareButton mediaNodeName={mediaNodeName} mediaHref={mainHref ?? ""}/>,
-                    <LightboxDownloadButton mediaUrl={mainSrc ?? ""} mediaMimeType={mainMimeType}/>,
+                    <LightboxDownloadButton mediaUrl={mainDownloadUrl ?? ""} mediaMimeType={mainMimeType}/>,
                 ]}
                 controls={[
                     <LightboxReactions/>,
@@ -126,6 +131,7 @@ interface LightboxMediaAttributes {
     mediaId: string | undefined;
     href: string | undefined;
     src: string | undefined;
+    downloadUrl: string | undefined;
     mimeType: string;
     textContent: string | undefined;
 }
@@ -143,14 +149,22 @@ function useLightboxMedia(
     const actualMediaFile = mediaFile ?? remoteMediaFile;
 
     if (actualMediaFile == null) {
-        return {mediaId: undefined, href: undefined, src: undefined, mimeType: "image/jpeg", textContent: undefined};
+        return {
+            mediaId: undefined,
+            href: undefined,
+            src: undefined,
+            downloadUrl: undefined,
+            mimeType: "image/jpeg",
+            textContent: undefined
+        };
     }
 
     const mediaId = mediaFile?.id ?? remoteMedia?.mediaId;
-    const href = "/media/" + (actualMediaFile.directPath || actualMediaFile.path);
-    const src = rootPage + href;
+    const href = "/media/" + actualMediaFile.path;
+    const src = resolveMediaUrl(rootPage, actualMediaFile.directPath ?? actualMediaFile.path);
+    const downloadUrl = mediaDownloadUrl(rootPage, actualMediaFile);
     const mimeType = actualMediaFile.mimeType;
     const textContent = actualMediaFile.textContent ?? undefined;
 
-    return {mediaId, href, src, mimeType, textContent};
+    return {mediaId, href, src, downloadUrl, mimeType, textContent};
 }

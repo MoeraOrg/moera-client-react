@@ -649,6 +649,8 @@ export interface PrivateMediaFileInfo {
     path: string;
     directPath?: string | null;
     directPathExpiresAt?: number | null;
+    directDownloadPath?: string | null;
+    directDownloadPathExpiresAt?: number | null;
     mimeType: string;
     width: number;
     height: number;

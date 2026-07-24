@@ -8,6 +8,7 @@ import {
     Scripture
 } from "ui/control/richtexteditor/visual/scripture";
 import { urlWithParameters } from "util/url";
+import { resolveMediaUrl } from "util/media-url";
 import { extension } from "util/mime-type";
 import { MediaWithCaption } from "util/media-with-caption";
 import { isNumber } from "util/misc";
@@ -44,7 +45,7 @@ export function mediaImageFindLargerPreview(
 }
 
 export function mediaSources(
-    originalLocation: string, mediaPrefix: string, previews: MediaFilePreviewInfo[] | null | undefined
+    originalLocation: string, rootPage: string | null, previews: MediaFilePreviewInfo[] | null | undefined
 ): string {
     if (previews == null) {
         return "";
@@ -52,7 +53,7 @@ export function mediaSources(
     return previews.map(preview => {
         const url = preview.original
             ? originalLocation
-            : preview.directPath ? mediaPrefix + preview.directPath : mediaPrefix + preview.path;
+            : resolveMediaUrl(rootPage, preview.directPath ?? preview.path);
         return `${url} ${preview.width}w`;
     }).join(",");
 }
@@ -121,18 +122,19 @@ export function mediaImageTagAttributes(
     width?: string | number | null,
     height?: string | number | null
 ): MediaImageTagAttributes {
-    const mediaPrefix = rootPage + "/media/";
     let mediaLocation: string;
     let src: string;
     const preview = mediaImageFindLargerPreview(mediaFile.previews, targetWidth);
     if (mediaFile.directPath) {
-        mediaLocation = mediaPrefix + mediaFile.directPath;
-        src = rootPage + "/media/" + (preview?.directPath ?? mediaFile.directPath);
+        mediaLocation = resolveMediaUrl(rootPage, mediaFile.directPath);
+        src = resolveMediaUrl(rootPage, preview?.directPath ?? mediaFile.directPath);
     } else {
-        mediaLocation = mediaPrefix + mediaFile.path;
-        src = rootPage + "/media/" + (preview?.path ?? mediaImagePreview(mediaLocation, targetWidth));
+        mediaLocation = resolveMediaUrl(rootPage, mediaFile.path);
+        src = preview != null
+            ? resolveMediaUrl(rootPage, preview.path)
+            : mediaImagePreview(mediaLocation, targetWidth);
     }
-    const srcSet = mediaSources(mediaLocation, mediaPrefix, mediaFile.previews);
+    const srcSet = mediaSources(mediaLocation, rootPage, mediaFile.previews);
     const sizes = mediaSizes(mediaFile.previews ?? []);
     const [imageWidth, imageHeight] = mediaImageSize(targetWidth, width, height, mediaFile, false);
     const alt = mediaFile.textContent || undefined;
@@ -178,8 +180,4 @@ export function mediaFileName(media: PrivateMediaFileInfo | MediaWithCaption | n
         return undefined;
     }
     return media.title ? media.title + "." + extension(media.mimeType) : media.path?.split("/").pop()?.split("?")[0];
-}
-
-export function mediaDownloadUrl(rootPage: string | null, media: PrivateMediaFileInfo): string {
-    return urlWithParameters((rootPage ?? "") + "/media/" + (media.directPath || media.path), {download: true});
 }

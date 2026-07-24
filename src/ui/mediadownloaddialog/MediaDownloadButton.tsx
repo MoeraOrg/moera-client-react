@@ -6,7 +6,8 @@ import { ClientState } from "state/state";
 import { getHomeRootPage } from "state/home/selectors";
 import { Button } from "ui/control";
 import { Icon, msDownload } from "ui/material-symbols";
-import { mediaDownloadUrl, mediaFileName } from "util/media-images";
+import { mediaFileName } from "util/media-images";
+import { mediaDownloadUrl } from "util/media-url";
 import "./MediaDownloadButton.css";
 
 interface Props {

@@ -11,6 +11,7 @@ import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html
 import { clipboardCopy } from "util/clipboard";
 import { clearHtml, containsTags, htmlEntities } from "util/html";
 import { mediaImagePreview } from "util/media-images";
+import { resolveMediaUrl } from "util/media-url";
 import { notNull } from "util/misc";
 
 export default [
@@ -70,8 +71,8 @@ function mediaUrl(rootPage: string, mediaFile: PrivateMediaFileInfo | undefined)
         return "";
     }
     if (mediaFile.directPath) {
-        return htmlEntities(rootPage + "/media/" + mediaFile.directPath)
+        return htmlEntities(resolveMediaUrl(rootPage, mediaFile.directPath))
     } else {
-        return htmlEntities(mediaImagePreview(rootPage + "/media/" + mediaFile.path, 900));
+        return htmlEntities(mediaImagePreview(resolveMediaUrl(rootPage, mediaFile.path), 900));
     }
 }

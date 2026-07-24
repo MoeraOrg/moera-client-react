@@ -7,6 +7,7 @@ import { ANONYMOUS_NODE_NAME, AvatarImage, NodeName } from "api";
 import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { getSetting } from "state/settings/selectors";
+import { resolveMediaUrl } from "util/media-url";
 import { REL_CURRENT, REL_SEARCH, RelNodeName } from "util/rel-node-name";
 import "./Avatar.css";
 
@@ -62,7 +63,7 @@ export function Avatar(
     let src: string, alt: string, shape: string | null, style: React.CSSProperties | undefined;
     if (avatar != null) {
         const path = avatar.directPath ?? avatar.path;
-        src = window.loadedAvatars.get(path) ?? `${rootPage}/media/${path}`;
+        src = window.loadedAvatars.get(path) ?? resolveMediaUrl(rootPage, path);
         window.loadedAvatars.set(path, src);
         alt = t("avatar");
         shape = effectiveShape(avatar.shape ?? null, shapeLocal, shapeGlobal);

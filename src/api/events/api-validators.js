@@ -13121,7 +13121,7 @@ return errors === 0;
 
 export const RemoteMediaDownloadedEvent = validate81;
 const schema81 = {"type":"object","properties":{"type":{"type":"string"},"nodeName":{"type":"string"},"mediaId":{"type":"string"},"media":{"$ref":"node#/definitions/PrivateMediaFileInfo"}},"required":["type","nodeName","mediaId","media"],"additionalProperties":false};
-const schema82 = {"type":"object","properties":{"id":{"type":"string"},"hash":{"type":"string"},"digest":{"type":"string"},"path":{"type":"string"},"directPath":{"type":"string","nullable":true},"directPathExpiresAt":{"type":"integer","nullable":true},"mimeType":{"type":"string"},"width":{"type":"integer","default":0},"height":{"type":"integer","default":0},"orientation":{"type":"integer","default":1},"size":{"type":"integer"},"title":{"type":"string","nullable":true},"textContent":{"type":"string","nullable":true},"previews":{"type":"array","items":{"$ref":"node#/definitions/MediaFilePreviewInfo"},"nullable":true},"attachment":{"type":"boolean","nullable":true},"malware":{"type":"boolean","nullable":true},"grant":{"type":"string","nullable":true},"grantExpiresAt":{"type":"integer","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/PrivateMediaFileOperations","type":"object","nullable":true},{"type":"null"}]}},"required":["id","hash","digest","path","mimeType","width","height","orientation","size"],"additionalProperties":false};
+const schema82 = {"type":"object","properties":{"id":{"type":"string"},"hash":{"type":"string"},"digest":{"type":"string"},"path":{"type":"string"},"directPath":{"type":"string","nullable":true},"directPathExpiresAt":{"type":"integer","nullable":true},"directDownloadPath":{"type":"string","nullable":true},"directDownloadPathExpiresAt":{"type":"integer","nullable":true},"mimeType":{"type":"string"},"width":{"type":"integer","default":0},"height":{"type":"integer","default":0},"orientation":{"type":"integer","default":1},"size":{"type":"integer"},"title":{"type":"string","nullable":true},"textContent":{"type":"string","nullable":true},"previews":{"type":"array","items":{"$ref":"node#/definitions/MediaFilePreviewInfo"},"nullable":true},"attachment":{"type":"boolean","nullable":true},"malware":{"type":"boolean","nullable":true},"grant":{"type":"string","nullable":true},"grantExpiresAt":{"type":"integer","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/PrivateMediaFileOperations","type":"object","nullable":true},{"type":"null"}]}},"required":["id","hash","digest","path","mimeType","width","height","orientation","size"],"additionalProperties":false};
 const schema83 = {"type":"object","properties":{"targetWidth":{"type":"integer"},"hash":{"type":"string"},"path":{"type":"string"},"directPath":{"type":"string","nullable":true},"directPathExpiresAt":{"type":"integer","nullable":true},"mimeType":{"type":"string"},"width":{"type":"integer"},"height":{"type":"integer"},"original":{"type":"boolean","nullable":true}},"required":["targetWidth","hash","path","mimeType","width","height"],"additionalProperties":false};
 const schema84 = {"type":"object","properties":{"view":{"type":"string","nullable":true},"edit":{"type":"string","nullable":true}},"additionalProperties":false};
 
@@ -13384,16 +13384,16 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.mimeType !== undefined){
-let data6 = data.mimeType;
+if(data.directDownloadPath !== undefined){
+let data6 = data.directDownloadPath;
 const _errs16 = errors;
-if(typeof data6 !== "string"){
+if((typeof data6 !== "string") && (data6 !== null)){
 let dataType6 = typeof data6;
 let coerced6 = undefined;
 if(dataType6 == 'object' && Array.isArray(data6) && data6.length == 1){
 data6 = data6[0];
 dataType6 = typeof data6;
-if(typeof data6 === "string"){
+if((typeof data6 === "string") && (data6 === null)){
 coerced6 = data6;
 }
 }
@@ -13404,15 +13404,18 @@ coerced6 = "" + data6;
 else if(data6 === null){
 coerced6 = "";
 }
+else if(data6 === "" || data6 === 0 || data6 === false){
+coerced6 = null;
+}
 else {
-validate82.errors = [{instancePath:instancePath+"/mimeType",schemaPath:"#/properties/mimeType/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+validate82.errors = [{instancePath:instancePath+"/directDownloadPath",schemaPath:"#/properties/directDownloadPath/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
 if(coerced6 !== undefined){
 data6 = coerced6;
 if(data !== undefined){
-data["mimeType"] = coerced6;
+data["directDownloadPath"] = coerced6;
 }
 }
 }
@@ -13422,15 +13425,16 @@ else {
 var valid0 = true;
 }
 if(valid0){
-let data7 = data.width;
-const _errs18 = errors;
-if(!(((typeof data7 == "number") && (!(data7 % 1) && !isNaN(data7))) && (isFinite(data7)))){
+if(data.directDownloadPathExpiresAt !== undefined){
+let data7 = data.directDownloadPathExpiresAt;
+const _errs19 = errors;
+if((!(((typeof data7 == "number") && (!(data7 % 1) && !isNaN(data7))) && (isFinite(data7)))) && (data7 !== null)){
 let dataType7 = typeof data7;
 let coerced7 = undefined;
 if(dataType7 == 'object' && Array.isArray(data7) && data7.length == 1){
 data7 = data7[0];
 dataType7 = typeof data7;
-if(((typeof data7 == "number") && (!(data7 % 1) && !isNaN(data7))) && (isFinite(data7))){
+if((((typeof data7 == "number") && (!(data7 % 1) && !isNaN(data7))) && (isFinite(data7))) && (data7 === null)){
 coerced7 = data7;
 }
 }
@@ -13439,53 +13443,67 @@ if(dataType7 === "boolean" || data7 === null
               || (dataType7 === "string" && data7 && data7 == +data7 && !(data7 % 1))){
 coerced7 = +data7;
 }
+else if(data7 === "" || data7 === 0 || data7 === false){
+coerced7 = null;
+}
 else {
-validate82.errors = [{instancePath:instancePath+"/width",schemaPath:"#/properties/width/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate82.errors = [{instancePath:instancePath+"/directDownloadPathExpiresAt",schemaPath:"#/properties/directDownloadPathExpiresAt/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced7 !== undefined){
 data7 = coerced7;
 if(data !== undefined){
-data["width"] = coerced7;
+data["directDownloadPathExpiresAt"] = coerced7;
 }
 }
 }
-var valid0 = _errs18 === errors;
+var valid0 = _errs19 === errors;
+}
+else {
+var valid0 = true;
+}
 if(valid0){
-let data8 = data.height;
-const _errs20 = errors;
-if(!(((typeof data8 == "number") && (!(data8 % 1) && !isNaN(data8))) && (isFinite(data8)))){
+if(data.mimeType !== undefined){
+let data8 = data.mimeType;
+const _errs22 = errors;
+if(typeof data8 !== "string"){
 let dataType8 = typeof data8;
 let coerced8 = undefined;
 if(dataType8 == 'object' && Array.isArray(data8) && data8.length == 1){
 data8 = data8[0];
 dataType8 = typeof data8;
-if(((typeof data8 == "number") && (!(data8 % 1) && !isNaN(data8))) && (isFinite(data8))){
+if(typeof data8 === "string"){
 coerced8 = data8;
 }
 }
 if(!(coerced8 !== undefined)){
-if(dataType8 === "boolean" || data8 === null
-              || (dataType8 === "string" && data8 && data8 == +data8 && !(data8 % 1))){
-coerced8 = +data8;
+if(dataType8 == "number" || dataType8 == "boolean"){
+coerced8 = "" + data8;
+}
+else if(data8 === null){
+coerced8 = "";
 }
 else {
-validate82.errors = [{instancePath:instancePath+"/height",schemaPath:"#/properties/height/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate82.errors = [{instancePath:instancePath+"/mimeType",schemaPath:"#/properties/mimeType/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
 if(coerced8 !== undefined){
 data8 = coerced8;
 if(data !== undefined){
-data["height"] = coerced8;
+data["mimeType"] = coerced8;
 }
 }
 }
-var valid0 = _errs20 === errors;
+var valid0 = _errs22 === errors;
+}
+else {
+var valid0 = true;
+}
 if(valid0){
-let data9 = data.orientation;
-const _errs22 = errors;
+let data9 = data.width;
+const _errs24 = errors;
 if(!(((typeof data9 == "number") && (!(data9 % 1) && !isNaN(data9))) && (isFinite(data9)))){
 let dataType9 = typeof data9;
 let coerced9 = undefined;
@@ -13502,22 +13520,21 @@ if(dataType9 === "boolean" || data9 === null
 coerced9 = +data9;
 }
 else {
-validate82.errors = [{instancePath:instancePath+"/orientation",schemaPath:"#/properties/orientation/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate82.errors = [{instancePath:instancePath+"/width",schemaPath:"#/properties/width/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced9 !== undefined){
 data9 = coerced9;
 if(data !== undefined){
-data["orientation"] = coerced9;
+data["width"] = coerced9;
 }
 }
 }
-var valid0 = _errs22 === errors;
+var valid0 = _errs24 === errors;
 if(valid0){
-if(data.size !== undefined){
-let data10 = data.size;
-const _errs24 = errors;
+let data10 = data.height;
+const _errs26 = errors;
 if(!(((typeof data10 == "number") && (!(data10 % 1) && !isNaN(data10))) && (isFinite(data10)))){
 let dataType10 = typeof data10;
 let coerced10 = undefined;
@@ -13534,283 +13551,270 @@ if(dataType10 === "boolean" || data10 === null
 coerced10 = +data10;
 }
 else {
-validate82.errors = [{instancePath:instancePath+"/size",schemaPath:"#/properties/size/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate82.errors = [{instancePath:instancePath+"/height",schemaPath:"#/properties/height/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced10 !== undefined){
 data10 = coerced10;
 if(data !== undefined){
-data["size"] = coerced10;
+data["height"] = coerced10;
 }
 }
 }
-var valid0 = _errs24 === errors;
-}
-else {
-var valid0 = true;
-}
+var valid0 = _errs26 === errors;
 if(valid0){
-if(data.title !== undefined){
-let data11 = data.title;
-const _errs26 = errors;
-if((typeof data11 !== "string") && (data11 !== null)){
+let data11 = data.orientation;
+const _errs28 = errors;
+if(!(((typeof data11 == "number") && (!(data11 % 1) && !isNaN(data11))) && (isFinite(data11)))){
 let dataType11 = typeof data11;
 let coerced11 = undefined;
 if(dataType11 == 'object' && Array.isArray(data11) && data11.length == 1){
 data11 = data11[0];
 dataType11 = typeof data11;
-if((typeof data11 === "string") && (data11 === null)){
+if(((typeof data11 == "number") && (!(data11 % 1) && !isNaN(data11))) && (isFinite(data11))){
 coerced11 = data11;
 }
 }
 if(!(coerced11 !== undefined)){
-if(dataType11 == "number" || dataType11 == "boolean"){
-coerced11 = "" + data11;
-}
-else if(data11 === null){
-coerced11 = "";
-}
-else if(data11 === "" || data11 === 0 || data11 === false){
-coerced11 = null;
+if(dataType11 === "boolean" || data11 === null
+              || (dataType11 === "string" && data11 && data11 == +data11 && !(data11 % 1))){
+coerced11 = +data11;
 }
 else {
-validate82.errors = [{instancePath:instancePath+"/title",schemaPath:"#/properties/title/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+validate82.errors = [{instancePath:instancePath+"/orientation",schemaPath:"#/properties/orientation/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced11 !== undefined){
 data11 = coerced11;
 if(data !== undefined){
-data["title"] = coerced11;
+data["orientation"] = coerced11;
 }
 }
 }
-var valid0 = _errs26 === errors;
-}
-else {
-var valid0 = true;
-}
+var valid0 = _errs28 === errors;
 if(valid0){
-if(data.textContent !== undefined){
-let data12 = data.textContent;
-const _errs29 = errors;
-if((typeof data12 !== "string") && (data12 !== null)){
+if(data.size !== undefined){
+let data12 = data.size;
+const _errs30 = errors;
+if(!(((typeof data12 == "number") && (!(data12 % 1) && !isNaN(data12))) && (isFinite(data12)))){
 let dataType12 = typeof data12;
 let coerced12 = undefined;
 if(dataType12 == 'object' && Array.isArray(data12) && data12.length == 1){
 data12 = data12[0];
 dataType12 = typeof data12;
-if((typeof data12 === "string") && (data12 === null)){
+if(((typeof data12 == "number") && (!(data12 % 1) && !isNaN(data12))) && (isFinite(data12))){
 coerced12 = data12;
 }
 }
 if(!(coerced12 !== undefined)){
-if(dataType12 == "number" || dataType12 == "boolean"){
-coerced12 = "" + data12;
-}
-else if(data12 === null){
-coerced12 = "";
-}
-else if(data12 === "" || data12 === 0 || data12 === false){
-coerced12 = null;
+if(dataType12 === "boolean" || data12 === null
+              || (dataType12 === "string" && data12 && data12 == +data12 && !(data12 % 1))){
+coerced12 = +data12;
 }
 else {
-validate82.errors = [{instancePath:instancePath+"/textContent",schemaPath:"#/properties/textContent/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+validate82.errors = [{instancePath:instancePath+"/size",schemaPath:"#/properties/size/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced12 !== undefined){
 data12 = coerced12;
 if(data !== undefined){
-data["textContent"] = coerced12;
+data["size"] = coerced12;
 }
 }
 }
-var valid0 = _errs29 === errors;
+var valid0 = _errs30 === errors;
 }
 else {
 var valid0 = true;
 }
 if(valid0){
-if(data.previews !== undefined){
-let data13 = data.previews;
+if(data.title !== undefined){
+let data13 = data.title;
 const _errs32 = errors;
-if((!(Array.isArray(data13))) && (data13 !== null)){
+if((typeof data13 !== "string") && (data13 !== null)){
 let dataType13 = typeof data13;
 let coerced13 = undefined;
 if(dataType13 == 'object' && Array.isArray(data13) && data13.length == 1){
 data13 = data13[0];
 dataType13 = typeof data13;
-if((Array.isArray(data13)) && (data13 === null)){
+if((typeof data13 === "string") && (data13 === null)){
 coerced13 = data13;
 }
 }
 if(!(coerced13 !== undefined)){
-if(dataType13 === "string" || dataType13 === "number"
-              || dataType13 === "boolean" || data13 === null){
-coerced13 = [data13];
+if(dataType13 == "number" || dataType13 == "boolean"){
+coerced13 = "" + data13;
+}
+else if(data13 === null){
+coerced13 = "";
 }
 else if(data13 === "" || data13 === 0 || data13 === false){
 coerced13 = null;
 }
 else {
-validate82.errors = [{instancePath:instancePath+"/previews",schemaPath:"#/properties/previews/type",keyword:"type",params:{type: "array"},message:"must be array"}];
+validate82.errors = [{instancePath:instancePath+"/title",schemaPath:"#/properties/title/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
 if(coerced13 !== undefined){
 data13 = coerced13;
 if(data !== undefined){
-data["previews"] = coerced13;
+data["title"] = coerced13;
 }
 }
 }
-if(errors === _errs32){
-if(Array.isArray(data13)){
-var valid1 = true;
-const len0 = data13.length;
-for(let i0=0; i0<len0; i0++){
-let data14 = data13[i0];
+var valid0 = _errs32 === errors;
+}
+else {
+var valid0 = true;
+}
+if(valid0){
+if(data.textContent !== undefined){
+let data14 = data.textContent;
 const _errs35 = errors;
-const _errs36 = errors;
-if(errors === _errs36){
-if(data14 && typeof data14 == "object" && !Array.isArray(data14)){
+if((typeof data14 !== "string") && (data14 !== null)){
+let dataType14 = typeof data14;
+let coerced14 = undefined;
+if(dataType14 == 'object' && Array.isArray(data14) && data14.length == 1){
+data14 = data14[0];
+dataType14 = typeof data14;
+if((typeof data14 === "string") && (data14 === null)){
+coerced14 = data14;
+}
+}
+if(!(coerced14 !== undefined)){
+if(dataType14 == "number" || dataType14 == "boolean"){
+coerced14 = "" + data14;
+}
+else if(data14 === null){
+coerced14 = "";
+}
+else if(data14 === "" || data14 === 0 || data14 === false){
+coerced14 = null;
+}
+else {
+validate82.errors = [{instancePath:instancePath+"/textContent",schemaPath:"#/properties/textContent/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+return false;
+}
+}
+if(coerced14 !== undefined){
+data14 = coerced14;
+if(data !== undefined){
+data["textContent"] = coerced14;
+}
+}
+}
+var valid0 = _errs35 === errors;
+}
+else {
+var valid0 = true;
+}
+if(valid0){
+if(data.previews !== undefined){
+let data15 = data.previews;
+const _errs38 = errors;
+if((!(Array.isArray(data15))) && (data15 !== null)){
+let dataType15 = typeof data15;
+let coerced15 = undefined;
+if(dataType15 == 'object' && Array.isArray(data15) && data15.length == 1){
+data15 = data15[0];
+dataType15 = typeof data15;
+if((Array.isArray(data15)) && (data15 === null)){
+coerced15 = data15;
+}
+}
+if(!(coerced15 !== undefined)){
+if(dataType15 === "string" || dataType15 === "number"
+              || dataType15 === "boolean" || data15 === null){
+coerced15 = [data15];
+}
+else if(data15 === "" || data15 === 0 || data15 === false){
+coerced15 = null;
+}
+else {
+validate82.errors = [{instancePath:instancePath+"/previews",schemaPath:"#/properties/previews/type",keyword:"type",params:{type: "array"},message:"must be array"}];
+return false;
+}
+}
+if(coerced15 !== undefined){
+data15 = coerced15;
+if(data !== undefined){
+data["previews"] = coerced15;
+}
+}
+}
+if(errors === _errs38){
+if(Array.isArray(data15)){
+var valid1 = true;
+const len0 = data15.length;
+for(let i0=0; i0<len0; i0++){
+let data16 = data15[i0];
+const _errs41 = errors;
+const _errs42 = errors;
+if(errors === _errs42){
+if(data16 && typeof data16 == "object" && !Array.isArray(data16)){
 let missing1;
-if(((((((data14.targetWidth === undefined) && (missing1 = "targetWidth")) || ((data14.hash === undefined) && (missing1 = "hash"))) || ((data14.path === undefined) && (missing1 = "path"))) || ((data14.mimeType === undefined) && (missing1 = "mimeType"))) || ((data14.width === undefined) && (missing1 = "width"))) || ((data14.height === undefined) && (missing1 = "height"))){
+if(((((((data16.targetWidth === undefined) && (missing1 = "targetWidth")) || ((data16.hash === undefined) && (missing1 = "hash"))) || ((data16.path === undefined) && (missing1 = "path"))) || ((data16.mimeType === undefined) && (missing1 = "mimeType"))) || ((data16.width === undefined) && (missing1 = "width"))) || ((data16.height === undefined) && (missing1 = "height"))){
 validate82.errors = [{instancePath:instancePath+"/previews/" + i0,schemaPath:"node#/definitions/MediaFilePreviewInfo/required",keyword:"required",params:{missingProperty: missing1},message:"must have required property '"+missing1+"'"}];
 return false;
 }
 else {
-const _errs38 = errors;
-for(const key1 in data14){
+const _errs44 = errors;
+for(const key1 in data16){
 if(!(func2.call(schema83.properties, key1))){
-delete data14[key1];
+delete data16[key1];
 }
 }
-if(_errs38 === errors){
-if(data14.targetWidth !== undefined){
-let data15 = data14.targetWidth;
-const _errs39 = errors;
-if(!(((typeof data15 == "number") && (!(data15 % 1) && !isNaN(data15))) && (isFinite(data15)))){
-let dataType14 = typeof data15;
-let coerced14 = undefined;
-if(dataType14 == 'object' && Array.isArray(data15) && data15.length == 1){
-data15 = data15[0];
-dataType14 = typeof data15;
-if(((typeof data15 == "number") && (!(data15 % 1) && !isNaN(data15))) && (isFinite(data15))){
-coerced14 = data15;
+if(_errs44 === errors){
+if(data16.targetWidth !== undefined){
+let data17 = data16.targetWidth;
+const _errs45 = errors;
+if(!(((typeof data17 == "number") && (!(data17 % 1) && !isNaN(data17))) && (isFinite(data17)))){
+let dataType16 = typeof data17;
+let coerced16 = undefined;
+if(dataType16 == 'object' && Array.isArray(data17) && data17.length == 1){
+data17 = data17[0];
+dataType16 = typeof data17;
+if(((typeof data17 == "number") && (!(data17 % 1) && !isNaN(data17))) && (isFinite(data17))){
+coerced16 = data17;
 }
 }
-if(!(coerced14 !== undefined)){
-if(dataType14 === "boolean" || data15 === null
-              || (dataType14 === "string" && data15 && data15 == +data15 && !(data15 % 1))){
-coerced14 = +data15;
+if(!(coerced16 !== undefined)){
+if(dataType16 === "boolean" || data17 === null
+              || (dataType16 === "string" && data17 && data17 == +data17 && !(data17 % 1))){
+coerced16 = +data17;
 }
 else {
 validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/targetWidth",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/targetWidth/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
-if(coerced14 !== undefined){
-data15 = coerced14;
-if(data14 !== undefined){
-data14["targetWidth"] = coerced14;
-}
-}
-}
-var valid3 = _errs39 === errors;
-}
-else {
-var valid3 = true;
-}
-if(valid3){
-if(data14.hash !== undefined){
-let data16 = data14.hash;
-const _errs41 = errors;
-if(typeof data16 !== "string"){
-let dataType15 = typeof data16;
-let coerced15 = undefined;
-if(dataType15 == 'object' && Array.isArray(data16) && data16.length == 1){
-data16 = data16[0];
-dataType15 = typeof data16;
-if(typeof data16 === "string"){
-coerced15 = data16;
-}
-}
-if(!(coerced15 !== undefined)){
-if(dataType15 == "number" || dataType15 == "boolean"){
-coerced15 = "" + data16;
-}
-else if(data16 === null){
-coerced15 = "";
-}
-else {
-validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/hash",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/hash/type",keyword:"type",params:{type: "string"},message:"must be string"}];
-return false;
-}
-}
-if(coerced15 !== undefined){
-data16 = coerced15;
-if(data14 !== undefined){
-data14["hash"] = coerced15;
-}
-}
-}
-var valid3 = _errs41 === errors;
-}
-else {
-var valid3 = true;
-}
-if(valid3){
-if(data14.path !== undefined){
-let data17 = data14.path;
-const _errs43 = errors;
-if(typeof data17 !== "string"){
-let dataType16 = typeof data17;
-let coerced16 = undefined;
-if(dataType16 == 'object' && Array.isArray(data17) && data17.length == 1){
-data17 = data17[0];
-dataType16 = typeof data17;
-if(typeof data17 === "string"){
-coerced16 = data17;
-}
-}
-if(!(coerced16 !== undefined)){
-if(dataType16 == "number" || dataType16 == "boolean"){
-coerced16 = "" + data17;
-}
-else if(data17 === null){
-coerced16 = "";
-}
-else {
-validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/path",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/path/type",keyword:"type",params:{type: "string"},message:"must be string"}];
-return false;
-}
-}
 if(coerced16 !== undefined){
 data17 = coerced16;
-if(data14 !== undefined){
-data14["path"] = coerced16;
+if(data16 !== undefined){
+data16["targetWidth"] = coerced16;
 }
 }
 }
-var valid3 = _errs43 === errors;
+var valid3 = _errs45 === errors;
 }
 else {
 var valid3 = true;
 }
 if(valid3){
-if(data14.directPath !== undefined){
-let data18 = data14.directPath;
-const _errs45 = errors;
-if((typeof data18 !== "string") && (data18 !== null)){
+if(data16.hash !== undefined){
+let data18 = data16.hash;
+const _errs47 = errors;
+if(typeof data18 !== "string"){
 let dataType17 = typeof data18;
 let coerced17 = undefined;
 if(dataType17 == 'object' && Array.isArray(data18) && data18.length == 1){
 data18 = data18[0];
 dataType17 = typeof data18;
-if((typeof data18 === "string") && (data18 === null)){
+if(typeof data18 === "string"){
 coerced17 = data18;
 }
 }
@@ -13821,76 +13825,72 @@ coerced17 = "" + data18;
 else if(data18 === null){
 coerced17 = "";
 }
-else if(data18 === "" || data18 === 0 || data18 === false){
-coerced17 = null;
-}
 else {
-validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/directPath",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/directPath/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/hash",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/hash/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
 if(coerced17 !== undefined){
 data18 = coerced17;
-if(data14 !== undefined){
-data14["directPath"] = coerced17;
+if(data16 !== undefined){
+data16["hash"] = coerced17;
 }
 }
 }
-var valid3 = _errs45 === errors;
+var valid3 = _errs47 === errors;
 }
 else {
 var valid3 = true;
 }
 if(valid3){
-if(data14.directPathExpiresAt !== undefined){
-let data19 = data14.directPathExpiresAt;
-const _errs48 = errors;
-if((!(((typeof data19 == "number") && (!(data19 % 1) && !isNaN(data19))) && (isFinite(data19)))) && (data19 !== null)){
+if(data16.path !== undefined){
+let data19 = data16.path;
+const _errs49 = errors;
+if(typeof data19 !== "string"){
 let dataType18 = typeof data19;
 let coerced18 = undefined;
 if(dataType18 == 'object' && Array.isArray(data19) && data19.length == 1){
 data19 = data19[0];
 dataType18 = typeof data19;
-if((((typeof data19 == "number") && (!(data19 % 1) && !isNaN(data19))) && (isFinite(data19))) && (data19 === null)){
+if(typeof data19 === "string"){
 coerced18 = data19;
 }
 }
 if(!(coerced18 !== undefined)){
-if(dataType18 === "boolean" || data19 === null
-              || (dataType18 === "string" && data19 && data19 == +data19 && !(data19 % 1))){
-coerced18 = +data19;
+if(dataType18 == "number" || dataType18 == "boolean"){
+coerced18 = "" + data19;
 }
-else if(data19 === "" || data19 === 0 || data19 === false){
-coerced18 = null;
+else if(data19 === null){
+coerced18 = "";
 }
 else {
-validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/directPathExpiresAt",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/directPathExpiresAt/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/path",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/path/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
 if(coerced18 !== undefined){
 data19 = coerced18;
-if(data14 !== undefined){
-data14["directPathExpiresAt"] = coerced18;
+if(data16 !== undefined){
+data16["path"] = coerced18;
 }
 }
 }
-var valid3 = _errs48 === errors;
+var valid3 = _errs49 === errors;
 }
 else {
 var valid3 = true;
 }
 if(valid3){
-if(data14.mimeType !== undefined){
-let data20 = data14.mimeType;
+if(data16.directPath !== undefined){
+let data20 = data16.directPath;
 const _errs51 = errors;
-if(typeof data20 !== "string"){
+if((typeof data20 !== "string") && (data20 !== null)){
 let dataType19 = typeof data20;
 let coerced19 = undefined;
 if(dataType19 == 'object' && Array.isArray(data20) && data20.length == 1){
 data20 = data20[0];
 dataType19 = typeof data20;
-if(typeof data20 === "string"){
+if((typeof data20 === "string") && (data20 === null)){
 coerced19 = data20;
 }
 }
@@ -13901,15 +13901,18 @@ coerced19 = "" + data20;
 else if(data20 === null){
 coerced19 = "";
 }
+else if(data20 === "" || data20 === 0 || data20 === false){
+coerced19 = null;
+}
 else {
-validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/mimeType",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/mimeType/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/directPath",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/directPath/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
 if(coerced19 !== undefined){
 data20 = coerced19;
-if(data14 !== undefined){
-data14["mimeType"] = coerced19;
+if(data16 !== undefined){
+data16["directPath"] = coerced19;
 }
 }
 }
@@ -13919,16 +13922,16 @@ else {
 var valid3 = true;
 }
 if(valid3){
-if(data14.width !== undefined){
-let data21 = data14.width;
-const _errs53 = errors;
-if(!(((typeof data21 == "number") && (!(data21 % 1) && !isNaN(data21))) && (isFinite(data21)))){
+if(data16.directPathExpiresAt !== undefined){
+let data21 = data16.directPathExpiresAt;
+const _errs54 = errors;
+if((!(((typeof data21 == "number") && (!(data21 % 1) && !isNaN(data21))) && (isFinite(data21)))) && (data21 !== null)){
 let dataType20 = typeof data21;
 let coerced20 = undefined;
 if(dataType20 == 'object' && Array.isArray(data21) && data21.length == 1){
 data21 = data21[0];
 dataType20 = typeof data21;
-if(((typeof data21 == "number") && (!(data21 % 1) && !isNaN(data21))) && (isFinite(data21))){
+if((((typeof data21 == "number") && (!(data21 % 1) && !isNaN(data21))) && (isFinite(data21))) && (data21 === null)){
 coerced20 = data21;
 }
 }
@@ -13937,92 +13940,56 @@ if(dataType20 === "boolean" || data21 === null
               || (dataType20 === "string" && data21 && data21 == +data21 && !(data21 % 1))){
 coerced20 = +data21;
 }
+else if(data21 === "" || data21 === 0 || data21 === false){
+coerced20 = null;
+}
 else {
-validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/width",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/width/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/directPathExpiresAt",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/directPathExpiresAt/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced20 !== undefined){
 data21 = coerced20;
-if(data14 !== undefined){
-data14["width"] = coerced20;
+if(data16 !== undefined){
+data16["directPathExpiresAt"] = coerced20;
 }
 }
 }
-var valid3 = _errs53 === errors;
+var valid3 = _errs54 === errors;
 }
 else {
 var valid3 = true;
 }
 if(valid3){
-if(data14.height !== undefined){
-let data22 = data14.height;
-const _errs55 = errors;
-if(!(((typeof data22 == "number") && (!(data22 % 1) && !isNaN(data22))) && (isFinite(data22)))){
+if(data16.mimeType !== undefined){
+let data22 = data16.mimeType;
+const _errs57 = errors;
+if(typeof data22 !== "string"){
 let dataType21 = typeof data22;
 let coerced21 = undefined;
 if(dataType21 == 'object' && Array.isArray(data22) && data22.length == 1){
 data22 = data22[0];
 dataType21 = typeof data22;
-if(((typeof data22 == "number") && (!(data22 % 1) && !isNaN(data22))) && (isFinite(data22))){
+if(typeof data22 === "string"){
 coerced21 = data22;
 }
 }
 if(!(coerced21 !== undefined)){
-if(dataType21 === "boolean" || data22 === null
-              || (dataType21 === "string" && data22 && data22 == +data22 && !(data22 % 1))){
-coerced21 = +data22;
+if(dataType21 == "number" || dataType21 == "boolean"){
+coerced21 = "" + data22;
+}
+else if(data22 === null){
+coerced21 = "";
 }
 else {
-validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/height",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/height/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/mimeType",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/mimeType/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
 if(coerced21 !== undefined){
 data22 = coerced21;
-if(data14 !== undefined){
-data14["height"] = coerced21;
-}
-}
-}
-var valid3 = _errs55 === errors;
-}
-else {
-var valid3 = true;
-}
-if(valid3){
-if(data14.original !== undefined){
-let data23 = data14.original;
-const _errs57 = errors;
-if((typeof data23 !== "boolean") && (data23 !== null)){
-let dataType22 = typeof data23;
-let coerced22 = undefined;
-if(dataType22 == 'object' && Array.isArray(data23) && data23.length == 1){
-data23 = data23[0];
-dataType22 = typeof data23;
-if((typeof data23 === "boolean") && (data23 === null)){
-coerced22 = data23;
-}
-}
-if(!(coerced22 !== undefined)){
-if(data23 === "false" || data23 === 0 || data23 === null){
-coerced22 = false;
-}
-else if(data23 === "true" || data23 === 1){
-coerced22 = true;
-}
-else if(data23 === "" || data23 === 0 || data23 === false){
-coerced22 = null;
-}
-else {
-validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/original",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/original/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
-return false;
-}
-}
-if(coerced22 !== undefined){
-data23 = coerced22;
-if(data14 !== undefined){
-data14["original"] = coerced22;
+if(data16 !== undefined){
+data16["mimeType"] = coerced21;
 }
 }
 }
@@ -14031,78 +13998,81 @@ var valid3 = _errs57 === errors;
 else {
 var valid3 = true;
 }
+if(valid3){
+if(data16.width !== undefined){
+let data23 = data16.width;
+const _errs59 = errors;
+if(!(((typeof data23 == "number") && (!(data23 % 1) && !isNaN(data23))) && (isFinite(data23)))){
+let dataType22 = typeof data23;
+let coerced22 = undefined;
+if(dataType22 == 'object' && Array.isArray(data23) && data23.length == 1){
+data23 = data23[0];
+dataType22 = typeof data23;
+if(((typeof data23 == "number") && (!(data23 % 1) && !isNaN(data23))) && (isFinite(data23))){
+coerced22 = data23;
 }
 }
-}
-}
-}
-}
-}
-}
-}
-}
+if(!(coerced22 !== undefined)){
+if(dataType22 === "boolean" || data23 === null
+              || (dataType22 === "string" && data23 && data23 == +data23 && !(data23 % 1))){
+coerced22 = +data23;
 }
 else {
-validate82.errors = [{instancePath:instancePath+"/previews/" + i0,schemaPath:"node#/definitions/MediaFilePreviewInfo/type",keyword:"type",params:{type: "object"},message:"must be object"}];
+validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/width",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/width/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
-var valid1 = _errs35 === errors;
-if(!valid1){
-break;
+if(coerced22 !== undefined){
+data23 = coerced22;
+if(data16 !== undefined){
+data16["width"] = coerced22;
 }
 }
 }
-}
-var valid0 = _errs32 === errors;
+var valid3 = _errs59 === errors;
 }
 else {
-var valid0 = true;
+var valid3 = true;
 }
-if(valid0){
-if(data.attachment !== undefined){
-let data24 = data.attachment;
-const _errs60 = errors;
-if((typeof data24 !== "boolean") && (data24 !== null)){
+if(valid3){
+if(data16.height !== undefined){
+let data24 = data16.height;
+const _errs61 = errors;
+if(!(((typeof data24 == "number") && (!(data24 % 1) && !isNaN(data24))) && (isFinite(data24)))){
 let dataType23 = typeof data24;
 let coerced23 = undefined;
 if(dataType23 == 'object' && Array.isArray(data24) && data24.length == 1){
 data24 = data24[0];
 dataType23 = typeof data24;
-if((typeof data24 === "boolean") && (data24 === null)){
+if(((typeof data24 == "number") && (!(data24 % 1) && !isNaN(data24))) && (isFinite(data24))){
 coerced23 = data24;
 }
 }
 if(!(coerced23 !== undefined)){
-if(data24 === "false" || data24 === 0 || data24 === null){
-coerced23 = false;
-}
-else if(data24 === "true" || data24 === 1){
-coerced23 = true;
-}
-else if(data24 === "" || data24 === 0 || data24 === false){
-coerced23 = null;
+if(dataType23 === "boolean" || data24 === null
+              || (dataType23 === "string" && data24 && data24 == +data24 && !(data24 % 1))){
+coerced23 = +data24;
 }
 else {
-validate82.errors = [{instancePath:instancePath+"/attachment",schemaPath:"#/properties/attachment/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
+validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/height",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/height/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced23 !== undefined){
 data24 = coerced23;
-if(data !== undefined){
-data["attachment"] = coerced23;
+if(data16 !== undefined){
+data16["height"] = coerced23;
 }
 }
 }
-var valid0 = _errs60 === errors;
+var valid3 = _errs61 === errors;
 }
 else {
-var valid0 = true;
+var valid3 = true;
 }
-if(valid0){
-if(data.malware !== undefined){
-let data25 = data.malware;
+if(valid3){
+if(data16.original !== undefined){
+let data25 = data16.original;
 const _errs63 = errors;
 if((typeof data25 !== "boolean") && (data25 !== null)){
 let dataType24 = typeof data25;
@@ -14125,55 +14095,83 @@ else if(data25 === "" || data25 === 0 || data25 === false){
 coerced24 = null;
 }
 else {
-validate82.errors = [{instancePath:instancePath+"/malware",schemaPath:"#/properties/malware/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
+validate82.errors = [{instancePath:instancePath+"/previews/" + i0+"/original",schemaPath:"node#/definitions/MediaFilePreviewInfo/properties/original/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
 return false;
 }
 }
 if(coerced24 !== undefined){
 data25 = coerced24;
-if(data !== undefined){
-data["malware"] = coerced24;
+if(data16 !== undefined){
+data16["original"] = coerced24;
 }
 }
 }
-var valid0 = _errs63 === errors;
+var valid3 = _errs63 === errors;
+}
+else {
+var valid3 = true;
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+else {
+validate82.errors = [{instancePath:instancePath+"/previews/" + i0,schemaPath:"node#/definitions/MediaFilePreviewInfo/type",keyword:"type",params:{type: "object"},message:"must be object"}];
+return false;
+}
+}
+var valid1 = _errs41 === errors;
+if(!valid1){
+break;
+}
+}
+}
+}
+var valid0 = _errs38 === errors;
 }
 else {
 var valid0 = true;
 }
 if(valid0){
-if(data.grant !== undefined){
-let data26 = data.grant;
+if(data.attachment !== undefined){
+let data26 = data.attachment;
 const _errs66 = errors;
-if((typeof data26 !== "string") && (data26 !== null)){
+if((typeof data26 !== "boolean") && (data26 !== null)){
 let dataType25 = typeof data26;
 let coerced25 = undefined;
 if(dataType25 == 'object' && Array.isArray(data26) && data26.length == 1){
 data26 = data26[0];
 dataType25 = typeof data26;
-if((typeof data26 === "string") && (data26 === null)){
+if((typeof data26 === "boolean") && (data26 === null)){
 coerced25 = data26;
 }
 }
 if(!(coerced25 !== undefined)){
-if(dataType25 == "number" || dataType25 == "boolean"){
-coerced25 = "" + data26;
+if(data26 === "false" || data26 === 0 || data26 === null){
+coerced25 = false;
 }
-else if(data26 === null){
-coerced25 = "";
+else if(data26 === "true" || data26 === 1){
+coerced25 = true;
 }
 else if(data26 === "" || data26 === 0 || data26 === false){
 coerced25 = null;
 }
 else {
-validate82.errors = [{instancePath:instancePath+"/grant",schemaPath:"#/properties/grant/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+validate82.errors = [{instancePath:instancePath+"/attachment",schemaPath:"#/properties/attachment/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
 return false;
 }
 }
 if(coerced25 !== undefined){
 data26 = coerced25;
 if(data !== undefined){
-data["grant"] = coerced25;
+data["attachment"] = coerced25;
 }
 }
 }
@@ -14183,36 +14181,38 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.grantExpiresAt !== undefined){
-let data27 = data.grantExpiresAt;
+if(data.malware !== undefined){
+let data27 = data.malware;
 const _errs69 = errors;
-if((!(((typeof data27 == "number") && (!(data27 % 1) && !isNaN(data27))) && (isFinite(data27)))) && (data27 !== null)){
+if((typeof data27 !== "boolean") && (data27 !== null)){
 let dataType26 = typeof data27;
 let coerced26 = undefined;
 if(dataType26 == 'object' && Array.isArray(data27) && data27.length == 1){
 data27 = data27[0];
 dataType26 = typeof data27;
-if((((typeof data27 == "number") && (!(data27 % 1) && !isNaN(data27))) && (isFinite(data27))) && (data27 === null)){
+if((typeof data27 === "boolean") && (data27 === null)){
 coerced26 = data27;
 }
 }
 if(!(coerced26 !== undefined)){
-if(dataType26 === "boolean" || data27 === null
-              || (dataType26 === "string" && data27 && data27 == +data27 && !(data27 % 1))){
-coerced26 = +data27;
+if(data27 === "false" || data27 === 0 || data27 === null){
+coerced26 = false;
+}
+else if(data27 === "true" || data27 === 1){
+coerced26 = true;
 }
 else if(data27 === "" || data27 === 0 || data27 === false){
 coerced26 = null;
 }
 else {
-validate82.errors = [{instancePath:instancePath+"/grantExpiresAt",schemaPath:"#/properties/grantExpiresAt/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+validate82.errors = [{instancePath:instancePath+"/malware",schemaPath:"#/properties/malware/type",keyword:"type",params:{type: "boolean"},message:"must be boolean"}];
 return false;
 }
 }
 if(coerced26 !== undefined){
 data27 = coerced26;
 if(data !== undefined){
-data["grantExpiresAt"] = coerced26;
+data["malware"] = coerced26;
 }
 }
 }
@@ -14222,25 +14222,105 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.operations !== undefined){
-let data28 = data.operations;
+if(data.grant !== undefined){
+let data28 = data.grant;
 const _errs72 = errors;
-const _errs73 = errors;
-let valid4 = false;
-const _errs74 = errors;
-if((!(data28 && typeof data28 == "object" && !Array.isArray(data28))) && (data28 !== null)){
+if((typeof data28 !== "string") && (data28 !== null)){
 let dataType27 = typeof data28;
 let coerced27 = undefined;
 if(dataType27 == 'object' && Array.isArray(data28) && data28.length == 1){
 data28 = data28[0];
 dataType27 = typeof data28;
-if((data28 && typeof data28 == "object" && !Array.isArray(data28)) && (data28 === null)){
+if((typeof data28 === "string") && (data28 === null)){
 coerced27 = data28;
 }
 }
 if(!(coerced27 !== undefined)){
-if(data28 === "" || data28 === 0 || data28 === false){
+if(dataType27 == "number" || dataType27 == "boolean"){
+coerced27 = "" + data28;
+}
+else if(data28 === null){
+coerced27 = "";
+}
+else if(data28 === "" || data28 === 0 || data28 === false){
 coerced27 = null;
+}
+else {
+validate82.errors = [{instancePath:instancePath+"/grant",schemaPath:"#/properties/grant/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+return false;
+}
+}
+if(coerced27 !== undefined){
+data28 = coerced27;
+if(data !== undefined){
+data["grant"] = coerced27;
+}
+}
+}
+var valid0 = _errs72 === errors;
+}
+else {
+var valid0 = true;
+}
+if(valid0){
+if(data.grantExpiresAt !== undefined){
+let data29 = data.grantExpiresAt;
+const _errs75 = errors;
+if((!(((typeof data29 == "number") && (!(data29 % 1) && !isNaN(data29))) && (isFinite(data29)))) && (data29 !== null)){
+let dataType28 = typeof data29;
+let coerced28 = undefined;
+if(dataType28 == 'object' && Array.isArray(data29) && data29.length == 1){
+data29 = data29[0];
+dataType28 = typeof data29;
+if((((typeof data29 == "number") && (!(data29 % 1) && !isNaN(data29))) && (isFinite(data29))) && (data29 === null)){
+coerced28 = data29;
+}
+}
+if(!(coerced28 !== undefined)){
+if(dataType28 === "boolean" || data29 === null
+              || (dataType28 === "string" && data29 && data29 == +data29 && !(data29 % 1))){
+coerced28 = +data29;
+}
+else if(data29 === "" || data29 === 0 || data29 === false){
+coerced28 = null;
+}
+else {
+validate82.errors = [{instancePath:instancePath+"/grantExpiresAt",schemaPath:"#/properties/grantExpiresAt/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+return false;
+}
+}
+if(coerced28 !== undefined){
+data29 = coerced28;
+if(data !== undefined){
+data["grantExpiresAt"] = coerced28;
+}
+}
+}
+var valid0 = _errs75 === errors;
+}
+else {
+var valid0 = true;
+}
+if(valid0){
+if(data.operations !== undefined){
+let data30 = data.operations;
+const _errs78 = errors;
+const _errs79 = errors;
+let valid4 = false;
+const _errs80 = errors;
+if((!(data30 && typeof data30 == "object" && !Array.isArray(data30))) && (data30 !== null)){
+let dataType29 = typeof data30;
+let coerced29 = undefined;
+if(dataType29 == 'object' && Array.isArray(data30) && data30.length == 1){
+data30 = data30[0];
+dataType29 = typeof data30;
+if((data30 && typeof data30 == "object" && !Array.isArray(data30)) && (data30 === null)){
+coerced29 = data30;
+}
+}
+if(!(coerced29 !== undefined)){
+if(data30 === "" || data30 === 0 || data30 === false){
+coerced29 = null;
 }
 else {
 const err0 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf/0/type",keyword:"type",params:{type: "object"},message:"must be object"};
@@ -14253,45 +14333,45 @@ vErrors.push(err0);
 errors++;
 }
 }
-if(coerced27 !== undefined){
-data28 = coerced27;
+if(coerced29 !== undefined){
+data30 = coerced29;
 if(data !== undefined){
-data["operations"] = coerced27;
+data["operations"] = coerced29;
 }
 }
 }
-const _errs75 = errors;
-if(errors === _errs75){
-if(data28 && typeof data28 == "object" && !Array.isArray(data28)){
-const _errs77 = errors;
-for(const key2 in data28){
+const _errs81 = errors;
+if(errors === _errs81){
+if(data30 && typeof data30 == "object" && !Array.isArray(data30)){
+const _errs83 = errors;
+for(const key2 in data30){
 if(!((key2 === "view") || (key2 === "edit"))){
-delete data28[key2];
+delete data30[key2];
 }
 }
-if(_errs77 === errors){
-if(data28.view !== undefined){
-let data29 = data28.view;
-const _errs78 = errors;
-if((typeof data29 !== "string") && (data29 !== null)){
-let dataType28 = typeof data29;
-let coerced28 = undefined;
-if(dataType28 == 'object' && Array.isArray(data29) && data29.length == 1){
-data29 = data29[0];
-dataType28 = typeof data29;
-if((typeof data29 === "string") && (data29 === null)){
-coerced28 = data29;
+if(_errs83 === errors){
+if(data30.view !== undefined){
+let data31 = data30.view;
+const _errs84 = errors;
+if((typeof data31 !== "string") && (data31 !== null)){
+let dataType30 = typeof data31;
+let coerced30 = undefined;
+if(dataType30 == 'object' && Array.isArray(data31) && data31.length == 1){
+data31 = data31[0];
+dataType30 = typeof data31;
+if((typeof data31 === "string") && (data31 === null)){
+coerced30 = data31;
 }
 }
-if(!(coerced28 !== undefined)){
-if(dataType28 == "number" || dataType28 == "boolean"){
-coerced28 = "" + data29;
+if(!(coerced30 !== undefined)){
+if(dataType30 == "number" || dataType30 == "boolean"){
+coerced30 = "" + data31;
 }
-else if(data29 === null){
-coerced28 = "";
+else if(data31 === null){
+coerced30 = "";
 }
-else if(data29 === "" || data29 === 0 || data29 === false){
-coerced28 = null;
+else if(data31 === "" || data31 === 0 || data31 === false){
+coerced30 = null;
 }
 else {
 const err1 = {instancePath:instancePath+"/operations/view",schemaPath:"node#/definitions/PrivateMediaFileOperations/properties/view/type",keyword:"type",params:{type: "string"},message:"must be string"};
@@ -14304,41 +14384,41 @@ vErrors.push(err1);
 errors++;
 }
 }
-if(coerced28 !== undefined){
-data29 = coerced28;
-if(data28 !== undefined){
-data28["view"] = coerced28;
+if(coerced30 !== undefined){
+data31 = coerced30;
+if(data30 !== undefined){
+data30["view"] = coerced30;
 }
 }
 }
-var valid6 = _errs78 === errors;
+var valid6 = _errs84 === errors;
 }
 else {
 var valid6 = true;
 }
 if(valid6){
-if(data28.edit !== undefined){
-let data30 = data28.edit;
-const _errs81 = errors;
-if((typeof data30 !== "string") && (data30 !== null)){
-let dataType29 = typeof data30;
-let coerced29 = undefined;
-if(dataType29 == 'object' && Array.isArray(data30) && data30.length == 1){
-data30 = data30[0];
-dataType29 = typeof data30;
-if((typeof data30 === "string") && (data30 === null)){
-coerced29 = data30;
+if(data30.edit !== undefined){
+let data32 = data30.edit;
+const _errs87 = errors;
+if((typeof data32 !== "string") && (data32 !== null)){
+let dataType31 = typeof data32;
+let coerced31 = undefined;
+if(dataType31 == 'object' && Array.isArray(data32) && data32.length == 1){
+data32 = data32[0];
+dataType31 = typeof data32;
+if((typeof data32 === "string") && (data32 === null)){
+coerced31 = data32;
 }
 }
-if(!(coerced29 !== undefined)){
-if(dataType29 == "number" || dataType29 == "boolean"){
-coerced29 = "" + data30;
+if(!(coerced31 !== undefined)){
+if(dataType31 == "number" || dataType31 == "boolean"){
+coerced31 = "" + data32;
 }
-else if(data30 === null){
-coerced29 = "";
+else if(data32 === null){
+coerced31 = "";
 }
-else if(data30 === "" || data30 === 0 || data30 === false){
-coerced29 = null;
+else if(data32 === "" || data32 === 0 || data32 === false){
+coerced31 = null;
 }
 else {
 const err2 = {instancePath:instancePath+"/operations/edit",schemaPath:"node#/definitions/PrivateMediaFileOperations/properties/edit/type",keyword:"type",params:{type: "string"},message:"must be string"};
@@ -14351,14 +14431,14 @@ vErrors.push(err2);
 errors++;
 }
 }
-if(coerced29 !== undefined){
-data30 = coerced29;
-if(data28 !== undefined){
-data28["edit"] = coerced29;
+if(coerced31 !== undefined){
+data32 = coerced31;
+if(data30 !== undefined){
+data30["edit"] = coerced31;
 }
 }
 }
-var valid6 = _errs81 === errors;
+var valid6 = _errs87 === errors;
 }
 else {
 var valid6 = true;
@@ -14377,23 +14457,23 @@ vErrors.push(err3);
 errors++;
 }
 }
-var _valid0 = _errs74 === errors;
+var _valid0 = _errs80 === errors;
 valid4 = valid4 || _valid0;
 if(!valid4){
-const _errs86 = errors;
-if(data28 !== null){
-let dataType30 = typeof data28;
-let coerced30 = undefined;
-if(dataType30 == 'object' && Array.isArray(data28) && data28.length == 1){
-data28 = data28[0];
-dataType30 = typeof data28;
-if(data28 === null){
-coerced30 = data28;
+const _errs92 = errors;
+if(data30 !== null){
+let dataType32 = typeof data30;
+let coerced32 = undefined;
+if(dataType32 == 'object' && Array.isArray(data30) && data30.length == 1){
+data30 = data30[0];
+dataType32 = typeof data30;
+if(data30 === null){
+coerced32 = data30;
 }
 }
-if(!(coerced30 !== undefined)){
-if(data28 === "" || data28 === 0 || data28 === false){
-coerced30 = null;
+if(!(coerced32 !== undefined)){
+if(data30 === "" || data30 === 0 || data30 === false){
+coerced32 = null;
 }
 else {
 const err4 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
@@ -14406,14 +14486,14 @@ vErrors.push(err4);
 errors++;
 }
 }
-if(coerced30 !== undefined){
-data28 = coerced30;
+if(coerced32 !== undefined){
+data30 = coerced32;
 if(data !== undefined){
-data["operations"] = coerced30;
+data["operations"] = coerced32;
 }
 }
 }
-var _valid0 = _errs86 === errors;
+var _valid0 = _errs92 === errors;
 valid4 = valid4 || _valid0;
 }
 if(!valid4){
@@ -14429,20 +14509,22 @@ validate82.errors = vErrors;
 return false;
 }
 else {
-errors = _errs73;
+errors = _errs79;
 if(vErrors !== null){
-if(_errs73){
-vErrors.length = _errs73;
+if(_errs79){
+vErrors.length = _errs79;
 }
 else {
 vErrors = null;
 }
 }
 }
-var valid0 = _errs72 === errors;
+var valid0 = _errs78 === errors;
 }
 else {
 var valid0 = true;
+}
+}
 }
 }
 }
