@@ -170,7 +170,7 @@ function scriptureMediaHashesExtract(scripture: Scripture, hashes: Set<string>):
 export function isMediaDirectPathExpiring(media: PrivateMediaFileInfo | null | undefined): boolean {
     return media?.directPath != null
         && media.directPathExpiresAt != null
-        && (Date.now() / 1000 - media.directPathExpiresAt) < 24 * 60 * 60;
+        && (media.directPathExpiresAt - Date.now() / 1000) < 24 * 60 * 60;
 }
 
 export function mediaFileName(media: null | undefined): undefined;

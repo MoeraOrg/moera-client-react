@@ -1,11 +1,10 @@
 .link-preview IMG {
     flex: none;
-    object-fit: contain;
+    object-fit: cover;
     object-position: top;
 }
 
 .link-preview IMG.vertical {
-    object-fit: cover;
     object-position: center;
 }
 
