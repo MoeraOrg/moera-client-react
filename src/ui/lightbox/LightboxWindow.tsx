@@ -1,11 +1,11 @@
 // Based on react-image-lightbox 5.1.4 by Chris Fritz (MIT License).
 
 import React, { useEffect, useEffectEvent, useRef } from 'react';
-import Modal from 'react-modal';
+import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { useManagedTimeout } from "ui/hook";
+import { useFocusTrap, useManagedTimeout } from "ui/hook";
 import { msChevronLeft, msChevronRight } from "ui/material-symbols";
 import { useLightbox } from "ui/lightbox/lightbox-context";
 import { LightboxWindowContext } from "ui/lightbox/lightbox-window-context";
@@ -114,6 +114,8 @@ export default function LightboxWindow({
     const ignoreImageClickTimeout = useManagedTimeout();
     const resetScrollTimeout = useManagedTimeout();
     const wheelActionTimeout = useManagedTimeout();
+
+    useFocusTrap(ref);
 
     const setPreventInnerClose = (): void => {
         preventInnerCloseTimeout.clear();
@@ -442,11 +444,15 @@ export default function LightboxWindow({
 
     const handleKeyInput = (event: React.KeyboardEvent<HTMLDivElement>): void => {
         if (event.key === "Escape") {
-            // will be handled by react-modal
+            // Will be handled by the overlay manager.
             return;
         }
 
         event.stopPropagation();
+
+        if (event.key === "Tab") {
+            return;
+        }
 
         if (animating) {
             return;
@@ -522,77 +528,56 @@ export default function LightboxWindow({
         }
     };
 
-    return (
-        <Modal
-            isOpen
-            shouldCloseOnEsc={false}
-            onAfterOpen={() => {
-                if (ref.current) {
-                    ref.current.focus();
-                }
-            }}
-            style={{
-                overlay: {
+    return ReactDOM.createPortal(
+        <LightboxWindowContext.Provider value={{resetWheelScroll}}>
+            <div
+                role="dialog"
+                aria-modal="true"
+                aria-label={t("lightbox")}
+                className={cx("lightbox-outer", "lightbox-outer-animating", {
+                    "lightbox-outer-closing": isClosing,
+                    "transparent": dyed
+                })}
+                style={{
                     zIndex: zIndex ?? 1000,
-                    backgroundColor: "transparent",
-                },
-                content: {
-                    backgroundColor: "transparent",
-                    overflow: "hidden",
-                    border: "none",
-                    borderRadius: 0,
-                    padding: 0,
-                    inset: 0,
-                }
-            }}
-            contentLabel={t("lightbox")}
-            appElement={document.body}
-        >
-            <LightboxWindowContext.Provider value={{resetWheelScroll}}>
-                <div
-                    className={cx("lightbox-outer", "lightbox-outer-animating", {
-                        "lightbox-outer-closing": isClosing,
-                        "transparent": dyed
-                    })}
-                    style={{
-                        transition: `opacity ${ANIMATION_DURATION_MS}ms`,
-                        animationDuration: `${ANIMATION_DURATION_MS}ms`,
-                        animationDirection: isClosing ? "normal" : "reverse"
-                    }}
-                    ref={ref}
-                    onWheel={handleWheel}
-                    onPointerDown={handlePointerDown}
-                    tabIndex={-1}
-                    onKeyDown={handleKeyInput}
-                    onKeyUp={handleKeyInput}
-                >
-                    <div className="lightbox-inner" onClick={handleInnerClick}>
-                        {children}
-                    </div>
-
-                    {hasPrev &&
-                        <LightboxNavButton
-                            className="lightbox-nav-button-prev"
-                            key="prev"
-                            title={t("previous-image")}
-                            icon={msChevronLeft}
-                            onClick={() => requestMove("prev")}
-                        />
-                    }
-
-                    {hasNext &&
-                        <LightboxNavButton
-                            className="lightbox-nav-button-next"
-                            key="next"
-                            title={t("next-image")}
-                            icon={msChevronRight}
-                            onClick={() => requestMove("next")}
-                        />
-                    }
-
-                    {controls}
+                    transition: `opacity ${ANIMATION_DURATION_MS}ms`,
+                    animationDuration: `${ANIMATION_DURATION_MS}ms`,
+                    animationDirection: isClosing ? "normal" : "reverse"
+                }}
+                ref={ref}
+                onWheel={handleWheel}
+                onPointerDown={handlePointerDown}
+                tabIndex={-1}
+                onKeyDown={handleKeyInput}
+                onKeyUp={handleKeyInput}
+            >
+                <div className="lightbox-inner" onClick={handleInnerClick}>
+                    {children}
                 </div>
-            </LightboxWindowContext.Provider>
-        </Modal>
+
+                {hasPrev &&
+                    <LightboxNavButton
+                        className="lightbox-nav-button-prev"
+                        key="prev"
+                        title={t("previous-image")}
+                        icon={msChevronLeft}
+                        onClick={() => requestMove("prev")}
+                    />
+                }
+
+                {hasNext &&
+                    <LightboxNavButton
+                        className="lightbox-nav-button-next"
+                        key="next"
+                        title={t("next-image")}
+                        icon={msChevronRight}
+                        onClick={() => requestMove("next")}
+                    />
+                }
+
+                {controls}
+            </div>
+        </LightboxWindowContext.Provider>,
+        document.getElementById("modal-root")!
     );
 }

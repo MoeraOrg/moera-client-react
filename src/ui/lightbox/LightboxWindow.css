@@ -15,7 +15,7 @@
     --lightbox-toolbar-padding: 20px;
     --lightbox-nav-width: 60px;
 
-    position: relative;
+    position: fixed;
     background-color: rgb(0 0 0 / 85%);
     outline: none;
     inset: 0;

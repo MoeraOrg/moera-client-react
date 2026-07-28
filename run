@@ -11,4 +11,4 @@ if [ -d .ssl ]; then
     done
 fi
 
-PORT=3000 yarn start
+PORT=3000 npm start

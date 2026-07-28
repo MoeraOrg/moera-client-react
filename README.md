@@ -10,9 +10,9 @@ http://moera.org/development/development-environment.html
 
 ## Installation instructions
 
-1. As prerequisites, you need to have Node.js 8.12+ and Yarn installed.
+1. As a prerequisite, you need to have Node.js 20+ installed.
 2. Go to the source directory.
-3. Install project dependencies with `yarn install`.
+3. Install project dependencies with `npm install`.
 4. By default, the web server that serves the client runs on port 3000. If you
    want it to run on a different port, change the value of `PORT` variable in
    `./run` script.

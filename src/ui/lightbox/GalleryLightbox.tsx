@@ -62,7 +62,7 @@ export default function GalleryLightbox() {
 
     const prevIndex = index > 0
         ? index - 1
-        : (media != null && index === 0 ? media.length - 1 : null);
+        : (media != null && index === 0 && loop ? media.length - 1 : null);
     const prevSequence: LightboxMediaSequence = prevIndex != null && prevIndex > index ? "prev-loop" : "normal";
 
     const {

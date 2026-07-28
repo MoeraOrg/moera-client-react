@@ -13,4 +13,4 @@ if exist .ssl (
 )
 
 set PORT=3000
-yarn start
+npm start

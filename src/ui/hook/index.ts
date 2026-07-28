@@ -1,6 +1,7 @@
 export { useActiveElement } from "ui/hook/active-element";
 export { useAndroidMessages } from "ui/hook/android-messages";
 export { useButtonPopper } from "ui/hook/button-popper";
+export { useFocusTrap } from "ui/hook/focus-trap";
 export { useIntersect } from "ui/hook/intersect";
 export { useManagedTimeout } from "ui/hook/managed-timeout";
 export type { ManagedTimeout } from "ui/hook/managed-timeout";
