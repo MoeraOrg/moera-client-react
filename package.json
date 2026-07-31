@@ -153,7 +153,7 @@
     "webpack": "^5.105.4",
     "webpack-dev-server": "^5.2.6",
     "webpack-manifest-plugin": "^6.0.1",
-    "workbox-webpack-plugin": "^7.4.0"
+    "workbox-webpack-plugin": "^7.4.1"
   },
   "scripts": {
     "start": "node scripts/start.js",
