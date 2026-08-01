@@ -132,7 +132,7 @@ function getTitle({mediaFiles, insert}: Props): string {
     if (insert) {
         return mediaFiles != null ? "edit-inserted-image" : "insert-images";
     } else {
-        return "add-images";
+        return "add-images-or-video";
     }
 }
 

@@ -14,7 +14,8 @@ import { getComment } from "state/detailedposting/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ParentContext, useDispatcher } from "ui/hook";
 import EntryHtml from "ui/entry/EntryHtml";
-import Lightbox from 'ui/lightbox/Lightbox';
+import Lightbox from "ui/lightbox/Lightbox";
+import { lightboxSource } from "ui/lightbox/lightbox-source";
 import LightboxReactions from "ui/lightbox/LightboxReactions";
 import LightboxCopyTextButton from "ui/lightbox/LightboxCopyTextButton";
 import LightboxShareButton from "ui/lightbox/LightboxShareButton";
@@ -32,6 +33,7 @@ export default function GalleryLightbox() {
     );
     const mediaId = useSelector(getLightboxMediaId);
     const mediaNodeName = useSelector((state: ClientState) => state.lightbox.nodeName);
+    const autoPlay = useSelector((state: ClientState) => state.lightbox.autoPlay);
     const mediaPosting = useSelector((state: ClientState) =>
         getPosting(state, getLightboxMediaPostingId(state), mediaNodeName)
     );
@@ -66,7 +68,7 @@ export default function GalleryLightbox() {
     const prevSequence: LightboxMediaSequence = prevIndex != null && prevIndex > index ? "prev-loop" : "normal";
 
     const {
-        src: prevSrc, mediaId: prevMediaId
+        src: prevSrc, mediaId: prevMediaId, mimeType: prevMimeType
     } = useLightboxMedia(mediaNodeName, media != null && prevIndex != null ? media[prevIndex] : undefined);
 
     const nextIndex = media != null && index < media.length - 1
@@ -75,10 +77,13 @@ export default function GalleryLightbox() {
     const nextSequence: LightboxMediaSequence = nextIndex != null && nextIndex < index ? "next-loop" : "normal";
 
     const {
-        src: nextSrc, mediaId: nextMediaId
+        src: nextSrc, mediaId: nextMediaId, mimeType: nextMimeType
     } = useLightboxMedia(mediaNodeName, media != null && nextIndex != null ? media[nextIndex] : undefined);
 
     const statusText = media != null && media.length > 0 ? `${index + 1} / ${media.length}` : "";
+    const mainSource = lightboxSource(mainSrc, mainMimeType) ?? {url: "", type: "image"};
+    const prevSource = lightboxSource(prevSrc, prevMimeType);
+    const nextSource = lightboxSource(nextSrc, nextMimeType);
 
     const onMovePrev = () => prevMediaId != null ? dispatch(lightboxMediaSet(prevMediaId, prevSequence)) : null;
 
@@ -87,9 +92,10 @@ export default function GalleryLightbox() {
     return (
         <ParentContext.Provider value={{hide: onCloseRequest, overlayId}}>
             <Lightbox
-                mainSrc={mainSrc ?? ""}
-                prevSrc={prevSrc}
-                nextSrc={nextSrc}
+                mainSrc={mainSource}
+                prevSrc={prevSource}
+                nextSrc={nextSource}
+                autoPlay={autoPlay}
                 statusText={statusText}
                 onMovePrev={onMovePrev}
                 onMoveNext={onMoveNext}

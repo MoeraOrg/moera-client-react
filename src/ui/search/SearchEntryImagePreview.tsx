@@ -26,7 +26,7 @@ export default function SearchEntryImagePreview({nodeName, postingId, commentId,
 
     const onNear = () => {
         if (postingId != null) {
-            dispatch(openLightbox(nodeName, postingId, commentId ?? null, mediaId));
+            dispatch(openLightbox(nodeName, postingId, commentId ?? null, mediaId, false));
         }
     }
 

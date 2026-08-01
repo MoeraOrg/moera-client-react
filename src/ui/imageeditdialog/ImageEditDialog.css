@@ -1,3 +1,9 @@
+.image-edit-dialog .preview-block {
+    position: relative;
+    display: grid;
+    place-items: center;
+}
+
 .image-edit-dialog .preview {
     width: 20rem;
     height: 20rem;
@@ -7,4 +13,8 @@
     margin-left: auto;
     margin-right: auto;
     margin-bottom: .5rem;
+}
+
+.image-edit-dialog .preview-block .video-duration {
+    position: absolute;
 }

@@ -21,7 +21,8 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     const actions: ClientAction[] = [goToPosting(postingId, commentId, expanded)];
     const mediaId = dstInfo.parameters["media"];
     if (mediaId != null) {
-        actions.push(openLightbox(REL_CURRENT, postingId, commentId ?? null, mediaId));
+        const autoPlay = dstInfo.parameters["play"] === "true";
+        actions.push(openLightbox(REL_CURRENT, postingId, commentId ?? null, mediaId, autoPlay));
     }
     return actions;
 }

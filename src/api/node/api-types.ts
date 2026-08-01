@@ -368,10 +368,6 @@ export interface ContactInfo {
     adminOperations?: ContactOperations | null;
 }
 
-export interface VisitedNodeAttributes {
-    nodeName: string;
-}
-
 export interface Credentials {
     login: string;
     password: string;
@@ -627,6 +623,7 @@ export interface PostingFeatures {
     subjectPresent: boolean;
     sourceFormats: SourceFormat[];
     imageFormats: string[];
+    videoFormats: string[];
 }
 
 export interface PostingSourceInfo {
@@ -656,6 +653,7 @@ export interface PrivateMediaFileInfo {
     height: number;
     orientation: number;
     size: number;
+    duration?: number | null;
     title?: string | null;
     textContent?: string | null;
     previews?: MediaFilePreviewInfo[] | null;
@@ -1386,6 +1384,10 @@ export interface VisitDetails {
     commentId?: string | null;
     mediaId?: string | null;
     referrer?: string | null;
+}
+
+export interface VisitedNodeAttributes {
+    nodeName: string;
 }
 
 export interface WhoAmI {

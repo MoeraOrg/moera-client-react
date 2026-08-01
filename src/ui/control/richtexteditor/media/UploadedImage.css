@@ -14,6 +14,19 @@
     visibility: hidden;
 }
 
+.rich-text-editor-uploaded-image .play-icon {
+    position: absolute;
+    inset: 0;
+    color: white;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+}
+
+.rich-text-editor-uploaded-image .play-icon svg {
+    filter: drop-shadow(0 0 1px rgb(0 0 0 / 75%));
+}
+
 .rich-text-editor-uploaded-image .menu {
     position: absolute;
     right: .25rem;

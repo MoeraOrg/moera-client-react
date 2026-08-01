@@ -2,7 +2,9 @@ import React from 'react';
 
 import { useMediaAttributes } from "ui/entry/media";
 import ImagePlaceholder from "ui/entry/ImagePlaceholder";
+import { Icon, msPlayArrowFilled } from "ui/material-symbols";
 import { MediaWithCaption } from "util/media-with-caption";
+import { isVideoType } from "util/mime-type";
 import { RelNodeName } from "util/rel-node-name";
 
 interface Props {
@@ -21,8 +23,13 @@ export default function AttachedImage({media, nodeName, dragging = false, onClic
 
     return (
         src != null ?
-            <img className="thumbnail" alt={alt ?? ""} src={src} srcSet={srcSet} sizes={sizes}
-                 width={imageWidth} height={imageHeight} draggable={false} style={{cursor}} onClick={onClick}/>
+            <>
+                <img className="thumbnail" alt={alt ?? ""} src={src} srcSet={srcSet} sizes={sizes}
+                     width={imageWidth} height={imageHeight} draggable={false} style={{cursor}} onClick={onClick}/>
+                {isVideoType(media.media?.mimeType) &&
+                    <div className="play-icon"><Icon icon={msPlayArrowFilled} size={48}/></div>
+                }
+            </>
         :
             <ImagePlaceholder width={imageWidth} height={imageHeight}/>
     );

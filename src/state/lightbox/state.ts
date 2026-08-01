@@ -6,4 +6,5 @@ export interface LightboxState {
     postingId: string | null;
     commentId: string | null;
     mediaId: string | null;
+    autoPlay: boolean;
 }

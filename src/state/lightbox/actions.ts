@@ -6,14 +6,16 @@ export type OpenLightboxAction = ActionWithPayload<"OPEN_LIGHTBOX", {
     postingId: string;
     commentId: string | null;
     mediaId: string | null;
+    autoPlay: boolean;
 }>;
 export const openLightbox = (
     nodeName: RelNodeName | string,
     postingId: string,
     commentId: string | null,
-    mediaId: string | null
+    mediaId: string | null,
+    autoPlay: boolean
 ): OpenLightboxAction =>
-    actionWithPayload("OPEN_LIGHTBOX", {nodeName, postingId, commentId, mediaId});
+    actionWithPayload("OPEN_LIGHTBOX", {nodeName, postingId, commentId, mediaId, autoPlay});
 
 export type CloseLightboxAction = ActionWithoutPayload<"CLOSE_LIGHTBOX">;
 export const closeLightbox = (): CloseLightboxAction =>

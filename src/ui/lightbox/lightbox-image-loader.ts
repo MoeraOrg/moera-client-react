@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useSyncExternalStore } from 'react';
 
 import { LightboxCachedImage, LightboxImageCache } from "ui/lightbox/lightbox-image-cache";
+import { type LightboxSource } from "ui/lightbox/lightbox-source";
 import { ElementSize } from "ui/hook";
 
 const IMAGE_PADDING_PX = 10;
@@ -24,10 +25,12 @@ export type ImageInfo = {
 }
 
 export function useLightboxImageLoader(
-    src: string | null | undefined,
+    source: LightboxSource | null | undefined,
     imageCache: LightboxImageCache,
     boxSize: ElementSize
 ): ImageInfo | null {
+    const src = source?.type === "image" ? source.url : null;
+
     useEffect(() => {
         if (src == null || imageCache.get(src)?.loaded) {
             return;

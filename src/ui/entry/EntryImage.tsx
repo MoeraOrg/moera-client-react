@@ -11,6 +11,8 @@ import PreloadedImage from "ui/entry/PreloadedImage";
 import { RelNodeName } from "util/rel-node-name";
 import { urlWithParameters, ut } from "util/url";
 import "./EntryImage.css";
+import { isVideoType } from "util/mime-type";
+import { VideoDuration } from "ui/control";
 
 interface Props {
     postingId?: string | null;
@@ -35,11 +37,11 @@ export default function EntryImage({
     const dispatch = useDispatcher();
 
     const mediaId = mediaFile?.id ?? remoteMedia?.mediaId;
-    const href = urlWithParameters(ut`/post/${postingId}`, {comment: commentId, media: mediaId});
+    const href = urlWithParameters(ut`/post/${postingId}`, {comment: commentId, media: mediaId, play: true});
 
     const onNear = () => {
         if (postingId != null && mediaId != null) {
-            dispatch(openLightbox(nodeName, postingId, commentId ?? null, mediaId));
+            dispatch(openLightbox(nodeName, postingId, commentId ?? null, mediaId, true));
         }
     }
 
@@ -54,6 +56,9 @@ export default function EntryImage({
         <Jump nodeName={nodeName} href={href} onNear={onNear}
               className={cx("entry-image", {"counted": count != null && count > 0})} style={style}>
             {(count != null && count > 0) && <div className="count">+{count}</div>}
+            {isVideoType(mediaFile?.mimeType) &&
+                <VideoDuration duration={mediaFile?.duration}/>
+            }
             {src != null ?
                 <PreloadedImage src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}
                                 alt={alt ?? imageAlt ?? undefined} title={title ?? undefined}/>

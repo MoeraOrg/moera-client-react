@@ -100,6 +100,8 @@ import { ReactComponent as msPersonCheck } from "ui/material-symbols/person_chec
 import { ReactComponent as msPersonOff } from "ui/material-symbols/person_off.isvg";
 import { ReactComponent as msPersonSearch } from "ui/material-symbols/person_search.isvg";
 import { ReactComponent as msPhotoLibrary } from "ui/material-symbols/photo_library.isvg";
+import { ReactComponent as msPlayArrowFilled } from "ui/material-symbols/play_arrow_filled.isvg";
+import { ReactComponent as msPlayCircleFilled } from "ui/material-symbols/play_circle_filled.isvg";
 import { ReactComponent as msPreview } from "ui/material-symbols/preview.isvg";
 import { ReactComponent as msPrint } from "ui/material-symbols/print.isvg";
 import { ReactComponent as msPublic } from "ui/material-symbols/public.isvg";
@@ -250,6 +252,8 @@ export {
     msPersonOff,
     msPersonSearch,
     msPhotoLibrary,
+    msPlayArrowFilled,
+    msPlayCircleFilled,
     msPreview,
     msPublic,
     msPrint,

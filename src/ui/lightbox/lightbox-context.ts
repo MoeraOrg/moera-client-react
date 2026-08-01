@@ -8,6 +8,7 @@ export interface LightboxInterface {
     dyed: boolean;
     zoomLevel: number;
     changeZoom(nextLevel: number, clientX?: number, clientY?: number, options?: LightboxChangeZoomOptions): void;
+    setDyed(dyed: boolean): void;
     toggleDyed(): void;
 }
 
@@ -24,6 +25,7 @@ export const LightboxContext = createContext<LightboxInterface>({
     dyed: false,
     zoomLevel: 0,
     changeZoom: () => {},
+    setDyed: () => {},
     toggleDyed: () => {},
 });
 

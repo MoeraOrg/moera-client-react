@@ -203,13 +203,21 @@ export default function RichTextEditorMedia({
         [features]
     );
 
+    const videoExtensions = useMemo(
+        () => features?.videoFormats
+            ? features.videoFormats.flatMap(format => extension(format)).map(ext => "." + ext)
+            : [],
+        [features]
+    );
+
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open: openDropzone} =
         useDropzone({
             noClick: true,
             noKeyboard: true,
             accept: attachmentType === "image" || onInsertRef.current != null
                 ? {
-                    "image/*": imageExtensions
+                    "image/*": imageExtensions,
+                    "video/*": videoExtensions
                 }
                 : undefined,
             useFsAccessApi: !Browser.isDevMode(),

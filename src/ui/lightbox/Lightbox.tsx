@@ -6,8 +6,9 @@ import { useElementSize, useManagedTimeout, useParent, useWindowSize } from "ui/
 import { type LightboxChangeZoomOptions, LightboxContext } from "ui/lightbox/lightbox-context";
 import { useLightboxImageCache } from "ui/lightbox/lightbox-image-cache";
 import { useLightboxImageLoader } from "ui/lightbox/lightbox-image-loader";
+import { type LightboxSource } from "ui/lightbox/lightbox-source";
 import LightboxWindow, { MoveDirection, type OffsetBounds } from "ui/lightbox/LightboxWindow";
-import LightboxImage from "ui/lightbox/LightboxImage";
+import LightboxMedia from "ui/lightbox/LightboxMedia";
 import LightboxToolbar from "ui/lightbox/LightboxToolbar";
 import LightboxCaption from "ui/lightbox/LightboxCaption";
 import { ANIMATION_DURATION_MS, MAX_ZOOM_LEVEL, MIN_ZOOM_LEVEL } from "ui/lightbox/util";
@@ -15,34 +16,25 @@ import { ANIMATION_DURATION_MS, MAX_ZOOM_LEVEL, MIN_ZOOM_LEVEL } from "ui/lightb
 export type LightboxTriggerEvent = Event | React.SyntheticEvent;
 
 export interface LightboxProps {
-    caption?: React.ReactNode;
-    mainSrc: string;
-    nextSrc?: string | null;
-    onMoveNext(): void;
-    onMovePrev(): void;
-    prevSrc?: string | null;
+    mainSrc: LightboxSource;
+    prevSrc?: LightboxSource | null;
+    nextSrc?: LightboxSource | null;
+    autoPlay?: boolean;
     statusText?: string;
     toolbarButtons: React.ReactNode[];
     controls: React.ReactNode[];
+    caption?: React.ReactNode;
     zIndex?: number;
+    onMoveNext(): void;
+    onMovePrev(): void;
 }
 
 // Size ratio between previous and next zoom levels
 const ZOOM_RATIO = 1.007;
 
-export default function Lightbox(props: LightboxProps) {
-    const {
-        nextSrc,
-        mainSrc,
-        prevSrc,
-        statusText,
-        toolbarButtons,
-        controls,
-        caption,
-        zIndex,
-        onMovePrev,
-        onMoveNext,
-    } = props;
+export default function Lightbox({
+    mainSrc, prevSrc, nextSrc, autoPlay, statusText, toolbarButtons, controls, caption, zIndex, onMovePrev, onMoveNext
+}: LightboxProps) {
     const {hide} = useParent();
 
     // Lightbox is closing
@@ -231,7 +223,7 @@ export default function Lightbox(props: LightboxProps) {
 
     return (
         <LightboxContext.Provider
-            value={{animating, boxSize, dyed, zoomLevel, changeZoom, toggleDyed}}
+            value={{animating, boxSize, dyed, zoomLevel, changeZoom, setDyed, toggleDyed}}
         >
             <LightboxWindow
                 hasNext={!!nextSrc}
@@ -250,6 +242,7 @@ export default function Lightbox(props: LightboxProps) {
                     <LightboxToolbar
                         statusText={statusText}
                         toolbarButtons={toolbarButtons}
+                        zoomEnabled={mainSrc.type === "image"}
                         onClose={requestClose}
                     />,
                     caption && <LightboxCaption>{caption}</LightboxCaption>,
@@ -257,35 +250,39 @@ export default function Lightbox(props: LightboxProps) {
                 ]}
             >
                 {nextSrc &&
-                    <LightboxImage
+                    <LightboxMedia
+                        source={nextSrc}
                         imageInfo={nextImageInfo}
-                        className="lightbox-image-next"
+                        section="next"
                         transforms={{
                             x: boxSize.width
                         }}
-                        key={`${nextSrc}i${keyCounter + 1}`}
+                        key={`${nextSrc.url}i${keyCounter + 1}`}
                     />
                 }
-                {mainSrc &&
-                    <LightboxImage
+                {mainSrc.url &&
+                    <LightboxMedia
+                        source={mainSrc}
                         imageInfo={mainImageInfo}
-                        className="lightbox-image-main"
+                        section="main"
+                        autoPlay={autoPlay}
                         transforms={{
                             x: -1 * offsetX,
                             y: -1 * offsetY,
                             zoom: getZoomMultiplier()
                         }}
-                        key={`${mainSrc}i${keyCounter}`}
+                        key={`${mainSrc.url}i${keyCounter}`}
                     />
                 }
                 {prevSrc &&
-                    <LightboxImage
+                    <LightboxMedia
+                        source={prevSrc}
                         imageInfo={prevImageInfo}
-                        className="lightbox-image-prev"
+                        section="prev"
                         transforms={{
                             x: -1 * boxSize.width
                         }}
-                        key={`${prevSrc}i${keyCounter - 1}`}
+                        key={`${prevSrc.url}i${keyCounter - 1}`}
                     />
                 }
             </LightboxWindow>

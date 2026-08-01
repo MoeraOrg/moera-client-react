@@ -12,12 +12,13 @@ import { ExtPostingInfo } from "state/postings/state";
 import { getPosting } from "state/postings/selectors";
 import { closeImageEditDialog } from "state/imageeditdialog/actions";
 import { useDispatcher } from "ui/hook";
-import { Button, ModalDialog } from "ui/control";
+import { Button, ModalDialog, VideoDuration } from "ui/control";
 import { RichTextField, RichTextValue } from "ui/control/richtexteditor";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import { useMediaAttributes } from "ui/entry/media";
 import ImagePlaceholder from "ui/entry/ImagePlaceholder";
 import { MediaWithCaption } from "util/media-with-caption";
+import { isVideoType } from "util/mime-type";
 import "./ImageEditDialog.css";
 
 interface OuterProps {
@@ -67,8 +68,13 @@ function ImageEditDialogInner(props: Props) {
             <Form>
                 <div className="modal-body image-edit-dialog">
                     {src != null ?
-                        <img className="preview" alt={alt ?? ""} src={src} srcSet={srcSet} sizes={sizes}
-                             width={imageWidth} height={imageHeight}/>
+                        <div className="preview-block">
+                            <img className="preview" alt={alt ?? ""} src={src} srcSet={srcSet} sizes={sizes}
+                                 width={imageWidth} height={imageHeight}/>
+                            {isVideoType(media.media?.mimeType) &&
+                                <VideoDuration duration={media.media?.duration}/>
+                            }
+                        </div>
                     :
                         <ImagePlaceholder width={imageWidth} height={imageHeight}/>
                     }

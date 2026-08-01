@@ -1512,11 +1512,18 @@ export const NODE_API_SCHEMAS = {
                         type: "string"
                     }
                 },
+                "videoFormats": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    }
+                },
             },
             required: [
                 "subjectPresent",
                 "sourceFormats",
                 "imageFormats",
+                "videoFormats",
             ],
             additionalProperties: false
         },
@@ -1610,6 +1617,10 @@ export const NODE_API_SCHEMAS = {
                 },
                 "size": {
                     type: "integer"
+                },
+                "duration": {
+                    type: "number",
+                    nullable: true
                 },
                 "title": {
                     type: "string",

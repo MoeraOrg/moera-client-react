@@ -1,0 +1,118 @@
+# Video.js v10 — React Documentation
+
+## Getting started
+
+Installation, project setup, and introductory guides.
+
+- [Installation](https://videojs.org/docs/framework/react/how-to/installation.md): Install Video.js and build your first player with streaming support and accessible controls
+- [Why Video.js?](https://videojs.org/docs/framework/react/concepts/why-videojs.md): The open-source video player for React and HTML. Lightweight, accessible components built for performance and streaming.
+- [Overview](https://videojs.org/docs/framework/react/concepts/overview.md): How Video.js players are structured — state, UI, and media
+- [Build with AI](https://videojs.org/docs/framework/react/how-to/build-with-ai.md): How to give AI tools the context they need to build Video.js players alongside you
+- [v10 Roadmap](https://videojs.org/docs/framework/react/concepts/v10-roadmap.md): Timeline and milestones for Video.js v10 rebuild and the future of v8
+- [Browser Support](https://videojs.org/docs/framework/react/concepts/browser-support.md): Which browsers Video.js 10 supports and how it handles newer platform features
+
+## Concepts
+
+Understanding-oriented pages that explain how and why things work. Read these to build a mental model of the library.
+
+- [Features](https://videojs.org/docs/framework/react/concepts/features.md): The state and actions each feature adds to the player
+- [Skins](https://videojs.org/docs/framework/react/concepts/skins.md): Packaged player designs that include both UI components and their styles.
+- [Presets](https://videojs.org/docs/framework/react/concepts/presets.md): Pre-packaged player configurations that bundle state management, skins, and media elements for specific use cases.
+- [UI components](https://videojs.org/docs/framework/react/concepts/ui-components.md): How Video.js UI components work — one element per component, data attributes for state, and compound composition.
+- [Accessibility](https://videojs.org/docs/framework/react/concepts/accessibility.md): How Video.js approaches accessibility, and what you should consider if you're deeply customizing your player
+- [Google Cast](https://videojs.org/docs/framework/react/concepts/cast.md): Cast playback to Chromecast devices with built-in Google Cast support, and configure the receiver and load request
+
+## How to
+
+Task-oriented guides with step-by-step instructions to achieve a specific outcome by applying one or more concepts. Each guide may assume you already understand the relevant concepts.
+
+- [Customize skins](https://videojs.org/docs/framework/react/how-to/customize-skins.md): Learn how to customize Video.js v10 skins by copying and modifying them
+- [Build your own UI component](https://videojs.org/docs/framework/react/how-to/build-your-own-component.md): Create custom player controls that read state, dispatch actions, and stay accessible.
+
+## Components
+
+API Reference for UI components for building media player interfaces.
+
+- [Player.Provider](https://videojs.org/docs/framework/react/reference/player-provider.md): The state boundary — creates a store and broadcasts it to all descendants.
+- [Player.Container](https://videojs.org/docs/framework/react/reference/player-container.md): The player's interaction surface — handles layout, fullscreen, media attachment, and user activity detection.
+- [AirPlayButton](https://videojs.org/docs/framework/react/reference/airplay-button.md): Accessible AirPlay toggle button that opens the WebKit playback target picker and reflects session state
+- [AudioTrackRadioGroup](https://videojs.org/docs/framework/react/reference/audio-track-radio-group.md): A menu radio group for selecting an audio track
+- [BufferingIndicator](https://videojs.org/docs/framework/react/reference/buffering-indicator.md): Loading indicator that displays when the video player is buffering or waiting for data
+- [CaptionsButton](https://videojs.org/docs/framework/react/reference/captions-button.md): Accessible captions toggle button with availability detection and state reflection
+- [CastButton](https://videojs.org/docs/framework/react/reference/cast-button.md): Accessible Cast toggle button with state reflection and keyboard support
+- [Controls](https://videojs.org/docs/framework/react/reference/controls.md): Container component for composing and auto-hiding video player controls on user interaction
+- [FullscreenButton](https://videojs.org/docs/framework/react/reference/fullscreen-button.md): Accessible fullscreen toggle button with keyboard support and state reflection
+- [Menu](https://videojs.org/docs/framework/react/reference/menu.md): A composable menu component for settings, option selection, and actions
+- [MuteButton](https://videojs.org/docs/framework/react/reference/mute-button.md): Accessible mute/unmute button with keyboard support and volume state reflection
+- [PiPButton](https://videojs.org/docs/framework/react/reference/pip-button.md): Accessible picture-in-picture toggle button with keyboard support and state reflection
+- [PlayButton](https://videojs.org/docs/framework/react/reference/play-button.md): Accessible play/pause button with keyboard support and customizable rendering
+- [PlaybackRateButton](https://videojs.org/docs/framework/react/reference/playback-rate-button.md): A button that cycles through playback speed rates
+- [Popover](https://videojs.org/docs/framework/react/reference/popover.md): A popover component for displaying contextual content anchored to a trigger
+- [Poster](https://videojs.org/docs/framework/react/reference/poster.md): Poster image component that displays a thumbnail until video playback starts
+- [QualityRadioGroup](https://videojs.org/docs/framework/react/reference/quality-radio-group.md): A menu radio group for selecting video quality
+- [SeekButton](https://videojs.org/docs/framework/react/reference/seek-button.md): Accessible seek button for skipping forward or backward by a configurable number of seconds
+- [Slider](https://videojs.org/docs/framework/react/reference/slider.md): A composable slider component with track, fill, thumb, preview, and value parts
+- [Thumbnail](https://videojs.org/docs/framework/react/reference/thumbnail.md): Time-based thumbnail preview component for timeline scrubbing and hover previews
+- [Time](https://videojs.org/docs/framework/react/reference/time.md): Time display components for showing current time, duration, and remaining time in a video player
+- [TimeSlider](https://videojs.org/docs/framework/react/reference/time-slider.md): A slider component for seeking through media playback time
+- [Tooltip](https://videojs.org/docs/framework/react/reference/tooltip.md): A tooltip component for displaying contextual labels on hover and focus
+- [VolumeSlider](https://videojs.org/docs/framework/react/reference/volume-slider.md): A slider component for controlling media playback volume
+
+## Media Elements
+
+API Reference for media elements that handle streaming protocols and media playback.
+
+- [BackgroundVideo](https://videojs.org/docs/framework/react/reference/background-video.md): Decorative background video element with automatic muting and looping
+- [DashVideo](https://videojs.org/docs/framework/react/reference/dash-video.md): DASH video element powered by dash.js for adaptive bitrate streaming
+- [HlsJsVideo](https://videojs.org/docs/framework/react/reference/hlsjs-video.md): HLS video element powered by hls.js for adaptive bitrate streaming
+- [MuxAudio](https://videojs.org/docs/framework/react/reference/mux-audio.md): Audio element for Mux-hosted HLS streams
+- [MuxVideo](https://videojs.org/docs/framework/react/reference/mux-video.md): Video element for Mux-hosted HLS streams
+- [NativeHlsVideo](https://videojs.org/docs/framework/react/reference/native-hls-video.md): HLS video element using the browser's built-in HLS support
+- [SimpleHlsAudioOnly](https://videojs.org/docs/framework/react/reference/simple-hls-audio-only.md): Audio-only HLS element that plays the audio rendition of an HLS stream
+- [SimpleHlsVideo](https://videojs.org/docs/framework/react/reference/simple-hls-video.md): Lightweight HLS video element with minimal bundle size
+
+## Hooks & Utilities
+
+API Reference for React hooks and utilities for player integration.
+
+- [createPlayer](https://videojs.org/docs/framework/react/reference/create-player.md): Factory function that creates a player instance with typed store, Provider component, Container, and hooks
+- [Player.usePlayer](https://videojs.org/docs/framework/react/reference/use-player.md): Hook to access the player store from within a Player.Provider
+- [Player.useMedia](https://videojs.org/docs/framework/react/reference/use-media.md): Hook to access the media object from within a Player.Provider
+- [useStore](https://videojs.org/docs/framework/react/reference/use-store.md): Hook to access store state and actions with optional selector-based subscriptions
+### Advanced
+
+- [renderElement](https://videojs.org/docs/framework/react/reference/render-element.md): Utility for rendering UI component elements with state-driven props and render prop support
+- [useButton](https://videojs.org/docs/framework/react/reference/use-button.md): Hook for creating accessible button components with keyboard and pointer interaction
+- [useContainerAttach](https://videojs.org/docs/framework/react/reference/use-container-attach.md): Hook to register a custom container element with the player context
+- [useMediaAttach](https://videojs.org/docs/framework/react/reference/use-media-attach.md): Hook to register a custom media element with the player context
+- [usePlayerContext](https://videojs.org/docs/framework/react/reference/use-player-context.md): Hook to access the full player context including store, media element, and media setter
+- [useSelector](https://videojs.org/docs/framework/react/reference/use-selector.md): Low-level hook for subscribing to derived state with customizable equality checks
+- [useSnapshot](https://videojs.org/docs/framework/react/reference/use-snapshot.md): Hook to subscribe to a State container's current value
+
+## Features
+
+API reference for feature modules that provide player capabilities and state.
+
+- [createSelector](https://videojs.org/docs/framework/react/reference/create-selector.md): Create a type-safe selector for a store slice's state
+- [Buffer](https://videojs.org/docs/framework/react/reference/feature-buffer.md): Buffered and seekable time range state for the player store
+- [Controls](https://videojs.org/docs/framework/react/reference/feature-controls.md): User activity and controls visibility state for the player store
+- [Error](https://videojs.org/docs/framework/react/reference/feature-error.md): Media error state and actions for the player store
+- [Fullscreen](https://videojs.org/docs/framework/react/reference/feature-fullscreen.md): Fullscreen state and actions for the player store
+- [Live](https://videojs.org/docs/framework/react/reference/feature-live.md): Live edge state for the player store
+- [Orientation lock](https://videojs.org/docs/framework/react/reference/feature-orientation-lock.md): Screen orientation locking while fullscreen is active
+- [Picture-in-picture](https://videojs.org/docs/framework/react/reference/feature-pip.md): Picture-in-picture state and actions for the player store
+- [Playback](https://videojs.org/docs/framework/react/reference/feature-playback.md): Play/pause state and actions for the player store
+- [Playback rate](https://videojs.org/docs/framework/react/reference/feature-playback-rate.md): Playback speed state and actions for the player store
+- [Quality](https://videojs.org/docs/framework/react/reference/feature-quality.md): Video rendition state and actions for the player store
+- [Audio track](https://videojs.org/docs/framework/react/reference/feature-audio-track.md): Audio track state and actions for the player store
+- [Remote Playback](https://videojs.org/docs/framework/react/reference/feature-remote-playback.md): Remote playback state and actions for the player store
+- [Source](https://videojs.org/docs/framework/react/reference/feature-source.md): Media source state and actions for the player store
+- [Stream type](https://videojs.org/docs/framework/react/reference/feature-stream-type.md): Stream delivery type (live / on-demand) state for the player store
+- [Text tracks](https://videojs.org/docs/framework/react/reference/feature-text-tracks.md): Subtitles, captions, and chapter track state for the player store
+- [Time](https://videojs.org/docs/framework/react/reference/feature-time.md): Playback position and duration state for the player store
+- [Volume](https://videojs.org/docs/framework/react/reference/feature-volume.md): Volume level and mute state for the player store
+
+
+---
+
+All documentation: https://videojs.org/llms.txt

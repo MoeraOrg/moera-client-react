@@ -1,3 +1,7 @@
+.entry .entry-image {
+    position: relative;
+}
+
 .entry .entry-image IMG {
     transition: filter .15s ease-in-out;
 }
@@ -30,4 +34,9 @@
     font-size: 200%;
     text-shadow: -2px 2px 4px rgb(0 0 0 / 75%);
     z-index: var(--zindex-text-overlay);
+}
+
+.entry .entry-image .video-duration {
+    position: absolute;
+    inset: 0;
 }

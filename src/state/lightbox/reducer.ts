@@ -7,7 +7,8 @@ const initialState: LightboxState = {
     nodeName: REL_CURRENT,
     postingId: null,
     commentId: null,
-    mediaId: null
+    mediaId: null,
+    autoPlay: false
 }
 
 export default (state: LightboxState = initialState, action: ClientAction): LightboxState => {
@@ -19,7 +20,8 @@ export default (state: LightboxState = initialState, action: ClientAction): Ligh
                 nodeName: action.payload.nodeName,
                 postingId: action.payload.postingId,
                 commentId: action.payload.commentId,
-                mediaId: action.payload.mediaId
+                mediaId: action.payload.mediaId,
+                autoPlay: action.payload.autoPlay
             }
 
         case "CLOSE_LIGHTBOX":
@@ -31,7 +33,8 @@ export default (state: LightboxState = initialState, action: ClientAction): Ligh
         case "LIGHTBOX_MEDIA_SET":
             return {
                 ...state,
-                mediaId: action.payload.mediaId
+                mediaId: action.payload.mediaId,
+                autoPlay: false
             }
 
         default:

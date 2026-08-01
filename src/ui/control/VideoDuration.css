@@ -1,0 +1,24 @@
+.video-duration {
+    color: white;
+    display: flex;
+    align-items: center;
+    place-content: center;
+    z-index: var(--zindex-text-overlay);
+}
+
+.video-duration SPAN {
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-shadow: 0 0 2px rgb(0 0 0 / 75%);
+    margin-left: .5rem;
+}
+
+@media only screen and (max-width: 991px) {
+    .video-duration SPAN {
+        font-size: 1rem;
+    }
+}
+
+.video-duration svg {
+    filter: drop-shadow(0 0 2px rgb(0 0 0 / 75%));
+}

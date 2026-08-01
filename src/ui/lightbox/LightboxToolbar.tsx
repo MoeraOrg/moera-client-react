@@ -10,10 +10,11 @@ import "./LightboxToolbar.css";
 interface Props {
     statusText?: string;
     toolbarButtons?: React.ReactNode[];
+    zoomEnabled?: boolean;
     onClose(event: React.MouseEvent<HTMLButtonElement>): void;
 }
 
-export default function LightboxToolbar({statusText, toolbarButtons, onClose}: Props) {
+export default function LightboxToolbar({statusText, toolbarButtons, zoomEnabled = true, onClose}: Props) {
     const {zoomLevel, changeZoom} = useLightbox();
     const {t} = useTranslation();
 
@@ -53,27 +54,31 @@ export default function LightboxToolbar({statusText, toolbarButtons, onClose}: P
                     </li>
                 )}
 
-                <li className="lightbox-toolbar-item">
-                    <LightboxButton
-                        title={t("zoom-in")}
-                        icon={msZoomIn}
-                        className="lightbox-zoom-button"
-                        disabled={zoomLevel === MAX_ZOOM_LEVEL}
-                        onClick={handleZoomInButtonClick}
-                        ref={zoomInBtn}
-                    />
-                </li>
+                {zoomEnabled &&
+                    <li className="lightbox-toolbar-item">
+                        <LightboxButton
+                            title={t("zoom-in")}
+                            icon={msZoomIn}
+                            className="lightbox-zoom-button"
+                            disabled={zoomLevel === MAX_ZOOM_LEVEL}
+                            onClick={handleZoomInButtonClick}
+                            ref={zoomInBtn}
+                        />
+                    </li>
+                }
 
-                <li className="lightbox-toolbar-item">
-                    <LightboxButton
-                        title={t("zoom-out")}
-                        icon={msZoomOut}
-                        className="lightbox-zoom-button"
-                        disabled={zoomLevel === MIN_ZOOM_LEVEL}
-                        onClick={handleZoomOutButtonClick}
-                        ref={zoomOutBtn}
-                    />
-                </li>
+                {zoomEnabled &&
+                    <li className="lightbox-toolbar-item">
+                        <LightboxButton
+                            title={t("zoom-out")}
+                            icon={msZoomOut}
+                            className="lightbox-zoom-button"
+                            disabled={zoomLevel === MIN_ZOOM_LEVEL}
+                            onClick={handleZoomOutButtonClick}
+                            ref={zoomOutBtn}
+                        />
+                    </li>
+                }
 
                 <li className="lightbox-toolbar-item">
                     <LightboxButton
