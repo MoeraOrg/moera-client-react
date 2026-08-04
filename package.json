@@ -1,6 +1,6 @@
 {
   "name": "moera-client-react",
-  "version": "0.18.9-SNAPSHOT",
+  "version": "0.18.9",
   "private": true,
   "packageManager": "npm@10.8.2",
   "homepage": "/",
@@ -160,7 +160,9 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "analyze": "source-map-explorer --gzip 'build/static/js/*.js'"
+    "analyze": "source-map-explorer --gzip 'build/static/js/*.js'",
+    "push-translations": "tolgee push",
+    "pull-translations": "tolgee pull"
   },
   "eslintConfig": {
     "extends": "react-app",
@@ -234,5 +236,20 @@
     "presets": [
       "@babel/preset-react"
     ]
+  },
+  "tolgee": {
+    "$schema": "https://docs.tolgee.io/cli-schema.json",
+    "projectId": 1120,
+    "format": "JSON_TOLGEE",
+    "push": {
+      "filesTemplate": "./src/i18n/locales/{languageTag}/message.json",
+      "language": ["en", "pl", "ru", "uk"],
+      "forceMode": "OVERRIDE",
+      "removeOtherKeys": true
+    },
+    "pull": {
+      "path": "./src/i18n/locales",
+      "fileStructureTemplate": "{languageTag}/message.json"
+    }
   }
 }

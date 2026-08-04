@@ -81,7 +81,7 @@ function CommentComposePanel() {
                     <DropdownMenu items={[
                         {
                             icon: msImage,
-                            title: t("images"),
+                            title: t("images-video"),
                             nodeName: REL_CURRENT,
                             href: "/",
                             onClick: onAttach("image"),
@@ -104,7 +104,7 @@ function CommentComposePanel() {
                 }
                 {supportsMedia &&
                     <OnlyDesktop>
-                        <RichTextEditorButton icon={msFileSave} title={t("copy-image-from-internet")}
+                        <RichTextEditorButton icon={msFileSave} title={t("copy-image-video-from-internet")}
                                               command={copyImage}/>
                     </OnlyDesktop>
                 }

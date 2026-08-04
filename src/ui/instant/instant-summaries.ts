@@ -537,3 +537,17 @@ export function buildPremoderatedCommentRejectedSummary(
         postingHeading: formatHeading(data.posting)
     });
 }
+
+export function buildVideoCommentPublishedSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.video-comment-published", {
+        commentHeading: formatHeading(data.comment),
+        node: formatNodeName(data.posting),
+        postingHeading: formatHeading(data.posting)
+    });
+}
+
+export function buildVideoPostingPublishedSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.video-posting-published", {
+        heading: formatHeading(data.posting)
+    });
+}

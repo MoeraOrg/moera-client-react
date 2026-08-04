@@ -217,3 +217,8 @@
     font-size: 1.5em;
     top: -.25em;
 }
+
+.visual-text-area :is(.image-attached, .figure-image-attached) {
+    position: relative;
+    display: inline-block;
+}

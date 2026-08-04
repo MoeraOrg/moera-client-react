@@ -31,7 +31,7 @@ export default function RichTextEditorDropzoneTabs({value}: Props) {
             tabs={[
                 {
                     icon: msImage,
-                    title: t("images"),
+                    title: t("images-video"),
                     value: "image",
                     count: totalImages !== 0 ? totalImages : undefined,
                 },

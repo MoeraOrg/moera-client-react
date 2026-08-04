@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useMemo, useRef, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import * as immutable from 'object-path-immutable';
@@ -10,6 +10,7 @@ import { getSetting, getSettingNode } from "state/settings/selectors";
 import { richTextEditorMediaRename, richTextEditorMediaUpload } from "state/richtexteditor/actions";
 import { useAndroidMessages, useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
+import { UI_EVENT_MEDIA_COMPRESSED, UiEventMediaCompressed } from "ui/ui-events";
 import {
     AttachmentType,
     OnInsertHandler,
@@ -57,7 +58,7 @@ export default function RichTextEditorMedia({
 }: Props) {
     const mediaMaxSize = useSelector((state: ClientState) => getSettingNode(state, "media.max-size") as number);
     const compressImages = useSelector((state: ClientState) =>
-        getSetting(state, "posting.media.compress.default") as boolean
+        getSetting(state, "media.compress.default") as boolean
     );
     const imageEditDialogShow = useSelector((state: ClientState) => state.imageEditDialog.show);
     const dispatch = useDispatcher();
@@ -70,6 +71,28 @@ export default function RichTextEditorMedia({
     valueRef.current = value;
     const onChangeRef = useRef<ChangeHandler | undefined>(undefined);
     onChangeRef.current = onChange;
+
+    const onMediaCompressed = useCallback((event: UiEventMediaCompressed) => {
+        const replaceMedia = (media: MediaWithCaption | null): MediaWithCaption | null => {
+            if (media?.localMedia?.id !== event.detail.originalMediaId) {
+                return media;
+            }
+            const caption = media.caption != null ? {...media.caption, mediaId: event.detail.media.id} : undefined;
+            return new MediaWithCaption(event.detail.media, media.remoteMedia, undefined, caption);
+        };
+
+        uploadedImagesRef.current = uploadedImagesRef.current.map(replaceMedia);
+        onChangeRef.current?.((valueRef.current ?? []).map(replaceMedia));
+    }, []);
+
+    useEffect(() => {
+        // @ts-ignore
+        document.addEventListener(UI_EVENT_MEDIA_COMPRESSED, onMediaCompressed);
+        return () => {
+            // @ts-ignore
+            document.removeEventListener(UI_EVENT_MEDIA_COMPRESSED, onMediaCompressed);
+        }
+    }, [onMediaCompressed]);
 
     const onImageUploadSuccess = (
         onInsert?: OnInsertHandler,

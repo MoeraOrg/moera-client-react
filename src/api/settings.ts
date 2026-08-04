@@ -376,13 +376,13 @@ const META: ClientSettingMetaInfo[] = [
         modifiers: {}
     },
     {
-        name: "posting.media.compress.default",
+        name: "posting.delete.confirm",
         type: "bool",
         defaultValue: "true",
         modifiers: {}
     },
     {
-        name: "posting.delete.confirm",
+        name: "media.compress.default",
         type: "bool",
         defaultValue: "true",
         modifiers: {}

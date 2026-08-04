@@ -12,8 +12,22 @@
 .search-images .preview {
     display: inline-block;
     margin-right: .5rem;
+    position: relative;
 }
 
 .search-images .preview IMG {
     object-fit: contain;
+}
+
+.search-images .preview .play-icon {
+    position: absolute;
+    inset: 0;
+    color: white;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+}
+
+.search-images .preview .play-icon svg {
+    filter: drop-shadow(0 0 1px rgb(0 0 0 / 75%));
 }

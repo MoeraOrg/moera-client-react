@@ -468,7 +468,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                 focusedMoment: Number.MIN_SAFE_INTEGER
             });
 
-            if (action.payload.commentId === state.commentDialog.commentId) {
+            if (state.commentDialog.commentId != null && action.payload.commentId === state.commentDialog.commentId) {
                 istate.assign("commentDialog", {
                     show: false,
                     posted: true

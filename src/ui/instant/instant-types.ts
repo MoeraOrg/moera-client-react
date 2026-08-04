@@ -20,6 +20,7 @@ import { // material-symbols
     msReplySolid,
     msRule,
     msShieldPerson,
+    msVideocam,
     msVisibility,
     msVisibilityOff
 } from "ui/material-symbols";
@@ -61,7 +62,9 @@ import {
     buildSubscriberAddedSummary,
     buildSubscriberDeletedSummary,
     buildUnblockedUserInPostingSummary,
-    buildUnblockedUserSummary
+    buildUnblockedUserSummary,
+    buildVideoCommentPublishedSummary,
+    buildVideoPostingPublishedSummary
 } from "ui/instant/instant-summaries";
 import { InstantStoryButtonsProps } from "ui/instant/buttons/InstantStoryButtons";
 import InstantStorySubscribeButtons, {
@@ -465,6 +468,26 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
             nodeName: story.summaryNodeName ?? REL_HOME,
             href: ut`/post/${story.remotePostingId}`
         })
+    },
+    "video-comment-published": {
+        color: "var(--bs-green)",
+        icon: msVideocam,
+        summary: (data, homeOwnerName, t) => buildVideoCommentPublishedSummary(data, t),
+        target: story => ({
+            nodeName: story.remoteNodeName ?? REL_HOME,
+            href: ut`/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
+        }),
+        sheriffFields: ["posting", "comment"]
+    },
+    "video-posting-published": {
+        color: "var(--bs-green)",
+        icon: msVideocam,
+        summary: (data, homeOwnerName, t) => buildVideoPostingPublishedSummary(data, t),
+        target: story => ({
+            nodeName: story.remoteNodeName ?? REL_HOME,
+            href: ut`/post/${story.remotePostingId}`
+        }),
+        sheriffFields: ["posting"]
     },
 };
 

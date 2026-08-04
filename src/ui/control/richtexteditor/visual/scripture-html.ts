@@ -241,7 +241,8 @@ function domToScripture(node: Node, context: DomToScriptureContext): Scripture |
             const standardSize = findStandardSize(width, height);
             const customWidth = standardSize === "custom" ? width : undefined;
             const customHeight = standardSize === "custom" ? height : undefined;
-            return createImageElement(src, standardSize, customWidth, customHeight);
+            const play = element.getAttribute("data-play") === "true";
+            return createImageElement(src, standardSize, customWidth, customHeight, play);
         }
         case "FIGURE": {
             const captionElement = element.querySelector(":scope > figcaption");
@@ -387,7 +388,8 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 );
                 const widthAttr = width != null ? ` width="${width}"` : "";
                 const heightAttr = height != null ? ` height="${height}"` : "";
-                context.output += `<img${widthAttr}${heightAttr} src="${htmlEntities(src)}">`;
+                const playAttr = node.play ? " data-play='true'" : "";
+                context.output += `<img${widthAttr}${heightAttr}${playAttr} src="${htmlEntities(src)}">`;
                 return;
             }
             case "figure-image": {
@@ -398,7 +400,8 @@ function scriptureNodeToHtml(node: ScriptureDescendant, context: ScriptureToHtml
                 );
                 const widthAttr = width != null ? ` width="${width}"` : "";
                 const heightAttr = height != null ? ` height="${height}"` : "";
-                context.output += `<img${widthAttr}${heightAttr} src="${htmlEntities(src)}">`;
+                const playAttr = node.play ? " data-play='true'" : "";
+                context.output += `<img${widthAttr}${heightAttr}${playAttr} src="${htmlEntities(src)}">`;
                 context.output += `<figcaption>${htmlEntities(node.caption)}</figcaption></figure>`;
                 return;
             }

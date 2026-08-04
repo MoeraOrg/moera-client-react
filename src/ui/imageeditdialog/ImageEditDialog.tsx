@@ -63,15 +63,18 @@ function ImageEditDialogInner(props: Props) {
 
     const onClose = () => dispatch(closeImageEditDialog());
 
+    const isVideo = isVideoType(media.media?.mimeType ?? media.remoteMedia?.mimeType);
+
     return (
-        <ModalDialog title={t("edit-image")} parentOverlayId={parentOverlayId} loading={loading} onClose={onClose}>
+        <ModalDialog title={isVideo ? t("edit-video") : t("edit-image")} parentOverlayId={parentOverlayId}
+                     loading={loading} onClose={onClose}>
             <Form>
                 <div className="modal-body image-edit-dialog">
                     {src != null ?
                         <div className="preview-block">
                             <img className="preview" alt={alt ?? ""} src={src} srcSet={srcSet} sizes={sizes}
                                  width={imageWidth} height={imageHeight}/>
-                            {isVideoType(media.media?.mimeType) &&
+                            {isVideo &&
                                 <VideoDuration duration={media.media?.duration}/>
                             }
                         </div>

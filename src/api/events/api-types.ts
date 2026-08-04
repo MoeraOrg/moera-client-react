@@ -164,6 +164,12 @@ export interface GrantUpdatedEvent extends BaseEvent<"GRANT_UPDATED"> {
     grant: GrantInfo;
 }
 
+export interface MediaCompressedEvent extends BaseEvent<"MEDIA_COMPRESSED"> {
+    originalMediaId: string;
+    originalMediaHash: string;
+    media: PrivateMediaFileInfo;
+}
+
 export interface NodeNameChangedEvent extends BaseEvent<"NODE_NAME_CHANGED"> {
     name: string;
     fullName?: string | null;

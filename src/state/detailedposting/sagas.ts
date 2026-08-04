@@ -394,7 +394,7 @@ async function commentLoadSaga(action: WithContext<CommentLoadAction>): Promise<
 }
 
 async function commentPostSaga(action: WithContext<CommentPostAction>): Promise<void> {
-    const {commentId, postingId, commentText, commentSourceText, captions, formId} = action.payload;
+    const {commentId, postingId, commentText, commentSourceText, captions, compressionPending, formId} = action.payload;
 
     if (commentText.ownerName === ANONYMOUS_NODE_NAME) {
         const fullName = commentText.ownerFullName?.trim() || null;
@@ -406,43 +406,60 @@ async function commentPostSaga(action: WithContext<CommentPostAction>): Promise<
     if (receiverName == null || receiverPostingId == null) {
         return;
     }
+
+    const draftId = select(state =>
+        (commentId == null ? state.detailedPosting.compose.draft : state.detailedPosting.commentDialog.draft)?.id
+    );
+
     try {
-        let comment;
-        if (commentId == null) {
-            dispatch(postingCommentCountUpdate(receiverPostingId, receiverName, 1).causedBy(action));
-            const created = await Node.createComment(action, receiverName, receiverPostingId, commentText);
-            dispatch(postingCommentsSet(postingId, created.total, REL_CURRENT).causedBy(action));
-            comment = created.comment;
-            if (comment.premoderating) {
-                dispatch(flashBox(i18n.t("your-comment-published-once-approved")).causedBy(action));
+        if (!compressionPending) {
+            let comment: CommentInfo;
+            if (commentId == null) {
+                dispatch(postingCommentCountUpdate(receiverPostingId, receiverName, 1).causedBy(action));
+                const created = await Node.createComment(action, receiverName, receiverPostingId, commentText);
+                dispatch(postingCommentsSet(postingId, created.total, REL_CURRENT).causedBy(action));
+                comment = created.comment;
+                if (comment.premoderating) {
+                    dispatch(flashBox(i18n.t("your-comment-published-once-approved")).causedBy(action));
+                }
+            } else {
+                comment = await Node.updateComment(action, receiverName, receiverPostingId, commentId, commentText);
+            }
+            await updateMediaCaptions(action, receiverName, comment.media, captions);
+            dispatch(commentSet(receiverName, comment).causedBy(action));
+            loadRemoteMediaInEntry(action, comment);
+
+            dispatch(
+                commentPosted(receiverName, receiverPostingId, comment.id, comment.moment, formId).causedBy(action)
+            );
+
+            if (receiverName !== commentText.ownerName && commentText.ownerName !== ANONYMOUS_NODE_NAME) {
+                await Node.updateRemoteComment(
+                    action, REL_HOME, receiverName, receiverPostingId, comment.id, commentSourceText
+                );
+            }
+
+            if (comment.signature == null) {
+                refreshComment(receiverName, receiverPostingId, comment.id);
             }
         } else {
-            comment = await Node.updateComment(action, receiverName, receiverPostingId, commentId, commentText);
+            if (commentId == null) {
+                await Node.createRemoteComment(action, REL_HOME, receiverName, receiverPostingId, commentSourceText);
+            } else {
+                await Node.updateRemoteComment(
+                    action, REL_HOME, receiverName, receiverPostingId, commentId, commentSourceText
+                );
+            }
+            dispatch(
+                commentPosted(receiverName, receiverPostingId, commentId, null, formId).causedBy(action)
+            );
+            dispatch(flashBox(i18n.t("video-comment-being-processed")).causedBy(action));
         }
-        await updateMediaCaptions(action, receiverName, comment.media, captions);
-        dispatch(commentSet(receiverName, comment).causedBy(action));
-        loadRemoteMediaInEntry(action, comment);
-
-        const draftId = select(state =>
-            (commentId == null ? state.detailedPosting.compose.draft : state.detailedPosting.commentDialog.draft)?.id
-        );
-
-        dispatch(commentPosted(receiverName, receiverPostingId, comment.id, comment.moment, formId).causedBy(action));
 
         if (draftId != null) {
             await Node.deleteDraft(action, REL_HOME, draftId, ["draft.not-found"]);
         } else {
             deleteObsoleteDraft(receiverName, receiverPostingId, commentId, formId);
-        }
-
-        if (receiverName !== commentText.ownerName && commentText.ownerName !== ANONYMOUS_NODE_NAME) {
-            await Node.updateRemoteComment(
-                action, REL_HOME, receiverName, receiverPostingId, comment.id, commentSourceText
-            );
-        }
-
-        if (comment.signature == null) {
-            refreshComment(receiverName, receiverPostingId, comment.id);
         }
     } catch (e) {
         dispatch(commentPostFailed(receiverName, receiverPostingId).causedBy(action));

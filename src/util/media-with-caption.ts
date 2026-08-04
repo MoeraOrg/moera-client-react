@@ -53,6 +53,10 @@ export class MediaWithCaption {
         return this.localMedia?.size ?? this.remoteMedia?.size ?? undefined;
     }
 
+    get duration(): number | undefined {
+        return this.localMedia?.duration ?? this.remoteMedia?.duration ?? undefined;
+    }
+
     get title(): string | undefined {
         return this.localMedia?.title ?? this.remoteMedia?.title ?? undefined;
     }

@@ -12,6 +12,7 @@ import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { htmlToScripture, scriptureToHtml } from "ui/control/richtexteditor/visual/scripture-html";
 import { LeasedRemoteMediaInfo, MediaWithCaption } from "util/media-with-caption";
 import { mediaHashesExtract } from "util/media-images";
+import { isVideoType } from "util/mime-type";
 import { replaceSmileys } from "util/text";
 import { notNull } from "util/misc";
 
@@ -76,6 +77,7 @@ function remoteMediaInfoToRemoteMedia(info: LeasedRemoteMediaInfo | null | undef
         width: info.width,
         height: info.height,
         size: info.size ?? 0,
+        duration: info.duration,
         title: info.title,
         attachment: info.attachment,
         leaseId: info.leaseId,
@@ -98,6 +100,7 @@ function localMediaToRemoteMedia(
         width: info.width,
         height: info.height,
         size: info.size,
+        duration: info.duration,
         title: info.title,
         attachment: info.attachment,
         leaseId,
@@ -120,6 +123,7 @@ export function localMediaToLeasedRemoteMediaInfo(
         width: info.width,
         height: info.height,
         size: info.size,
+        duration: info.duration,
         title: info.title,
         attachment: info.attachment,
         leaseId: leaseId ?? undefined,
@@ -260,4 +264,25 @@ export function mediaToCaptionsText(
     media: (MediaWithCaption | null)[] | null | undefined
 ): MediaCaptionText[] | undefined {
     return mediaCaptionsToCaptionsText(Object.values(mediaToCaptions(media)));
+}
+
+export function mediaIsCompressionPending(
+    media: (MediaWithCaption | null)[] | null | undefined,
+    prevMedia: MediaAttachment[] | null | undefined
+): boolean {
+    if (media == null) {
+        return false;
+    }
+
+    const prevMediaSet = new Set(
+        prevMedia?.map(m => m.remoteMedia).filter(notNull).map(rm => `${rm.nodeName} ${rm.mediaId}`)
+    );
+
+    return media.some(m =>
+        m?.media != null
+            ? m.media.uncompressed
+            : m?.remoteMedia != null
+                && !prevMediaSet.has(`${m.remoteMedia.nodeName} ${m.remoteMedia.mediaId}`)
+                && isVideoType(m.remoteMedia.mimeType)
+    );
 }

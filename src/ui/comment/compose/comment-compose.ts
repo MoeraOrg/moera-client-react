@@ -17,6 +17,7 @@ import {
     attachmentsToMedia,
     bodyToLinkPreviews,
     draftAttachmentsToMedia,
+    mediaIsCompressionPending,
     mediaToAttachment,
     mediaToCaptions,
     mediaToCaptionsText,
@@ -79,6 +80,7 @@ export function valuesToCommentText(values: CommentComposeValues, props: ValuesT
 function valuesToCommentSourceText(values: CommentComposeValues, props: ValuesToCommentTextProps): CommentSourceText {
     const media = (values.body.orderedMediaList() ?? []).concat(values.linkPreviews.media);
     return {
+        ownerFullName: values.ownerFullName || props.ownerFullName,
         ownerAvatar: toAvatarDescription(values.avatar),
         bodySrc: JSON.stringify({
             text: values.body.toText(props.smileysEnabled),
@@ -212,6 +214,7 @@ export const commentComposeLogic = {
                 commentText,
                 commentSourceText,
                 mediaToCaptions(values.body.media),
+                mediaIsCompressionPending(values.body.media, formik.props.comment?.media),
                 formik.props.formId
             ));
         }

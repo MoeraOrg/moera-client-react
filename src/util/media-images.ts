@@ -9,7 +9,7 @@ import {
 } from "ui/control/richtexteditor/visual/scripture";
 import { urlWithParameters } from "util/url";
 import { resolveMediaUrl } from "util/media-url";
-import { extension } from "util/mime-type";
+import { extension, isImageType } from "util/mime-type";
 import { MediaWithCaption } from "util/media-with-caption";
 import { isNumber } from "util/misc";
 
@@ -29,22 +29,26 @@ export const mediaHashStrip = (hash: string): string => hash.endsWith("=") ? has
 
 export const mediaImagePreview = (location: string, width: number): string => urlWithParameters(location, {width});
 
-export function mediaImageFindLargerPreview(
-    previews: MediaFilePreviewInfo[] | null | undefined, width: number
+function mediaImageFindLargerPreview(
+    previews: MediaFilePreviewInfo[] | null | undefined, width: number, isImage: boolean
 ): MediaFilePreviewInfo | null {
     if (previews == null) {
         return null;
     }
-    let larger: MediaFilePreviewInfo | null = null;
+    let smallest: MediaFilePreviewInfo | null = null;
+    let largest: MediaFilePreviewInfo | null = null;
     previews.forEach(preview => {
-        if (preview.targetWidth >= width && (larger == null || larger.targetWidth > preview.targetWidth)) {
-            larger = preview;
+        if (preview.targetWidth >= width && (smallest == null || smallest.targetWidth > preview.targetWidth)) {
+            smallest = preview;
+        }
+        if (largest == null || largest.targetWidth < preview.targetWidth) {
+            largest = preview;
         }
     });
-    return larger;
+    return smallest != null ? smallest : (isImage ? null : largest);
 }
 
-export function mediaSources(
+function mediaSources(
     originalLocation: string, rootPage: string | null, previews: MediaFilePreviewInfo[] | null | undefined
 ): string {
     if (previews == null) {
@@ -58,9 +62,9 @@ export function mediaSources(
     }).join(",");
 }
 
-export function mediaSizes(previews: MediaFilePreviewInfo[] | null | undefined): string {
-    const mobile = Math.min(350, mediaImageFindLargerPreview(previews, 350)?.width ?? 350);
-    const regular = Math.min(900, mediaImageFindLargerPreview(previews, 900)?.width ?? 900);
+function mediaSizes(previews: MediaFilePreviewInfo[] | null | undefined, isImage: boolean): string {
+    const mobile = Math.min(350, mediaImageFindLargerPreview(previews, 350, isImage)?.width ?? 350);
+    const regular = Math.min(900, mediaImageFindLargerPreview(previews, 900, isImage)?.width ?? 900);
     return `(max-width: 400px) ${mobile}px, ${regular}px`;
 }
 
@@ -71,7 +75,7 @@ export function mediaImageSize(
     mediaFile: PrivateMediaFileInfo,
     enlarge: boolean = true
 ): number[] {
-    const preview = mediaImageFindLargerPreview(mediaFile.previews, targetWidth);
+    const preview = mediaImageFindLargerPreview(mediaFile.previews, targetWidth, isImageType(mediaFile.mimeType));
     const sizeX = preview != null ? preview.width : mediaFile.width;
     const sizeY = preview != null ? preview.height : mediaFile.height;
     return mediaImageRect(width, height, sizeX, sizeY, enlarge);
@@ -124,7 +128,7 @@ export function mediaImageTagAttributes(
 ): MediaImageTagAttributes {
     let mediaLocation: string;
     let src: string;
-    const preview = mediaImageFindLargerPreview(mediaFile.previews, targetWidth);
+    const preview = mediaImageFindLargerPreview(mediaFile.previews, targetWidth, isImageType(mediaFile.mimeType));
     if (mediaFile.directPath) {
         mediaLocation = resolveMediaUrl(rootPage, mediaFile.directPath);
         src = resolveMediaUrl(rootPage, preview?.directPath ?? mediaFile.directPath);
@@ -135,7 +139,7 @@ export function mediaImageTagAttributes(
             : mediaImagePreview(mediaLocation, targetWidth);
     }
     const srcSet = mediaSources(mediaLocation, rootPage, mediaFile.previews);
-    const sizes = mediaSizes(mediaFile.previews ?? []);
+    const sizes = mediaSizes(mediaFile.previews ?? [], isImageType(mediaFile.mimeType));
     const [imageWidth, imageHeight] = mediaImageSize(targetWidth, width, height, mediaFile, false);
     const alt = mediaFile.textContent || undefined;
 

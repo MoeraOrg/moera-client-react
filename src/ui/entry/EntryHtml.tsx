@@ -13,6 +13,7 @@ import Jump from "ui/navigation/Jump";
 import { interceptLinkClick } from "ui/entry/link-click-intercept";
 import { wrapHashtags } from "ui/entry/wrap-hashtags";
 import EntryImage from "ui/entry/EntryImage";
+import EntryVideo from "ui/entry/EntryVideo";
 import EntryExpandAllDetailsButton from "ui/entry/EntryExpandAllDetailsButton";
 import MrSpoiler from "ui/entry/MrSpoiler";
 import { isNumericString } from "util/misc";
@@ -101,12 +102,29 @@ export default function EntryHtml({
                     const alt = node.attribs.alt;
                     const title = node.attribs.title;
                     const style = node.attribs.style;
+                    const play = node.attribs["data-play"] === "true";
 
                     return (
                         <span className="preload-placeholder" {...attributesToProps({style})}>
-                            <EntryImage postingId={postingId} commentId={commentId} nodeName={nodeName ?? null}
-                                        mediaFile={media.media ?? null} remoteMedia={media.remoteMedia ?? null}
-                                        width={width} height={height} alt={alt} title={title}/>
+                            {!play ?
+                                <EntryImage
+                                    postingId={postingId}
+                                    commentId={commentId}
+                                    nodeName={nodeName ?? null}
+                                    mediaFile={media.media ?? null}
+                                    remoteMedia={media.remoteMedia ?? null}
+                                    width={width}
+                                    height={height}
+                                    alt={alt}
+                                    title={title}
+                                />
+                            :
+                                <EntryVideo
+                                    nodeName={nodeName ?? null}
+                                    mediaFile={media.media ?? null}
+                                    remoteMedia={media.remoteMedia ?? null}
+                                />
+                            }
                         </span>
                     );
                 } else if (src?.startsWith("hash:")) {

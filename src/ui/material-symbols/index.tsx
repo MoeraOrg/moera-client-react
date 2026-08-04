@@ -144,6 +144,7 @@ import { ReactComponent as msTune } from "ui/material-symbols/tune.isvg";
 import { ReactComponent as msUndo } from "ui/material-symbols/undo.isvg";
 import { ReactComponent as msUpload } from "ui/material-symbols/upload.isvg";
 import { ReactComponent as msVerifiedUser } from "ui/material-symbols/verified_user.isvg";
+import { ReactComponent as msVideocam } from "ui/material-symbols/videocam.isvg";
 import { ReactComponent as msVideoLibrary } from "ui/material-symbols/video_library.isvg";
 import { ReactComponent as msVisibility } from "ui/material-symbols/visibility.isvg";
 import { ReactComponent as msVisibilityOff } from "ui/material-symbols/visibility_off.isvg";
@@ -296,6 +297,7 @@ export {
     msUndo,
     msUpload,
     msVerifiedUser,
+    msVideocam,
     msVideoLibrary,
     msVisibility,
     msVisibilityOff,

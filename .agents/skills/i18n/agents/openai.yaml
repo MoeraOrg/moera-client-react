@@ -1,0 +1,4 @@
+interface:
+  display_name: "I18n"
+  short_description: "Keep localization keys and translations consistent"
+  default_prompt: "Use $i18n to add or update localized interface text."

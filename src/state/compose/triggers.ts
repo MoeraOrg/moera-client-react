@@ -44,13 +44,18 @@ export default [
     ),
     trigger("CONNECTED_TO_HOME", isAtComposePage, composeDraftListLoad),
     trigger("GO_TO_PAGE", conj(isAtComposePage, isComposeSharedTextToBeLoaded), composeSharedTextLoad),
-    trigger("COMPOSE_POST_SUCCEEDED", state => getComposeDraftId(state) != null, composeDraftDelete),
+    trigger(
+        ["COMPOSE_POST_SUCCEEDED", "COMPOSE_POSTED_ASYNC"],
+        state => getComposeDraftId(state) != null,
+        composeDraftDelete
+    ),
     trigger("COMPOSE_DRAFT_SAVED", isComposePosted, composeDraftDelete),
     trigger(
         "COMPOSE_POST_SUCCEEDED",
         true,
         (signal: ComposePostSucceededAction) => jumpNear(ut`/post/${signal.payload.posting.id}`, null, null)
     ),
+    trigger("COMPOSE_POSTED_ASYNC", true, jumpNear("/timeline", null, null)),
     trigger(
         "COMPOSE_POST_SUCCEEDED",
         true,

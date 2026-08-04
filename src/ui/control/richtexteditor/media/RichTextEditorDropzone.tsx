@@ -71,7 +71,7 @@ export default function RichTextEditorDropzone({value, compact = false, nodeName
         && uploadProgress.length === 0;
     const progressSummary = useMemo(() => calcProgressSummary(uploadProgress), [uploadProgress])
     const buttonsTitle = attachmentType === "image"
-        ? (!tinyScreen ? "upload-or-copy-or-drop-images" : "upload-images")
+        ? (!tinyScreen ? "upload-or-copy-or-drop-images-or-video" : "upload-images-or-video")
         : (!tinyScreen ? "upload-or-drop-files" : "upload-files");
 
     return (

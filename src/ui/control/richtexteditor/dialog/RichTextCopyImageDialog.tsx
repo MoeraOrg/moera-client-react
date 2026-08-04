@@ -27,11 +27,11 @@ const RichTextCopyImageDialog = () => {
     return (
         <>
             <InputField type="url" name="url" title={t("link")} anyValue autoFocus/>
-            <CheckboxField title={t("compress-images")} name="compress" anyValue/>
+            <CheckboxField title={t("compress-images-video")} name="compress" anyValue/>
         </>
     );
 }
 
 export default richTextEditorDialog<Props, RichTextCopyImageValues>(
-    "copy-image-from-internet", mapPropsToValues, RichTextCopyImageDialog
+    "copy-image-video-from-internet", mapPropsToValues, RichTextCopyImageDialog
 );

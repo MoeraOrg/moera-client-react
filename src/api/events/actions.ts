@@ -30,6 +30,7 @@ import {
     FriendGroupUpdatedEvent,
     FriendshipUpdatedEvent,
     GrantUpdatedEvent,
+    MediaCompressedEvent,
     NodeNameChangedEvent,
     NodeSettingsChangedEvent,
     NodeSettingsMetaChangedEvent,
@@ -122,6 +123,7 @@ export type ClientEventAction =
     | EventAction<FriendGroupUpdatedEvent>
     | EventAction<FriendshipUpdatedEvent>
     | EventAction<GrantUpdatedEvent>
+    | EventAction<MediaCompressedEvent>
     | EventAction<NodeNameChangedEvent>
     | EventAction<NodeSettingsChangedEvent>
     | EventAction<NodeSettingsMetaChangedEvent>

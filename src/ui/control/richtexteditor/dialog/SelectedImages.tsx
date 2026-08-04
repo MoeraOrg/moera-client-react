@@ -65,7 +65,11 @@ export function SelectedImages({files, maxSize, onDelete}: Props) {
                             <button type="button" className="menu" onClick={e => onDelete(index, e)}>
                                 <Icon icon={msClose12} size={12}/>
                             </button>
-                            {tooLarge && <div className="too-large">{t("large-image")}</div>}
+                            {tooLarge &&
+                                <div className="too-large">
+                                    {isImageType(file.type) ? t("large-image") : t("large-video")}
+                                </div>
+                            }
                             <img className="thumbnail" src={urls[index]} alt=""/>
                             {isVideoType(file.type) &&
                                 <div className="play-icon"><Icon icon={msPlayArrowFilled} size={48}/></div>

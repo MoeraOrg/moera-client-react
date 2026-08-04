@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useField } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -13,6 +13,7 @@ import {
 import { SelectedImages } from "ui/control/richtexteditor/dialog/SelectedImages";
 import { MediaWithCaption } from "util/media-with-caption";
 import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
+import { isVideoType } from "util/mime-type";
 import "./RichTextImageDialog.css";
 
 export interface RichTextImageValues {
@@ -24,6 +25,7 @@ export interface RichTextImageValues {
     customWidth?: number | null;
     customHeight?: number | null;
     caption?: string;
+    play?: boolean;
 }
 
 type Props = {
@@ -47,6 +49,7 @@ const mapPropsToValues = (props: Props): RichTextImageValues => ({
     customWidth: props.prevValues?.customWidth,
     customHeight: props.prevValues?.customHeight,
     caption: props.prevValues?.caption ?? "",
+    play: props.prevValues?.play ?? false,
 });
 
 function RichTextImageDialog({
@@ -85,6 +88,11 @@ function RichTextImageDialog({
         e.preventDefault();
     }
 
+    const hasVideo = useMemo(() =>
+        files?.some(file => isVideoType(file.type)) || mediaFiles?.some(mediaFile => isVideoType(mediaFile.mimeType)),
+        [files, mediaFiles]
+    );
+
     return (
         <>
             {files != null &&
@@ -106,7 +114,7 @@ function RichTextImageDialog({
                 <InputField type="url" name="href" title={t("link")} anyValue autoFocus/>
             }
             {files != null &&
-                <CheckboxField title={t("compress-images")} name="compress" groupClassName="mt-3 mb-0" anyValue/>
+                <CheckboxField title={t("compress-images-video")} name="compress" groupClassName="mt-3 mb-0" anyValue/>
             }
             {insert &&
                 <>
@@ -119,8 +127,15 @@ function RichTextImageDialog({
                                          format={{useGrouping: false}}/>
                         </div>
                     }
+                    {hasVideo &&
+                        <CheckboxField title={t("play-video-inline")} name="play" groupClassName="ps-2" anyValue/>
+                    }
                     {((files == null && mediaFiles == null) || files?.length === 1 || mediaFiles?.length === 1) &&
-                        <InputField name="caption" title={t("caption-optional")} anyValue/>
+                        <InputField
+                            name="caption"
+                            title={!hasVideo ? t("caption-image-optional") : t("caption-video-optional")}
+                            anyValue
+                        />
                     }
                 </>
             }
@@ -129,8 +144,11 @@ function RichTextImageDialog({
 }
 
 function getTitle({mediaFiles, insert}: Props): string {
+    const hasVideo = mediaFiles?.some(mediaFile => isVideoType(mediaFile.mimeType));
     if (insert) {
-        return mediaFiles != null ? "edit-inserted-image" : "insert-images";
+        return mediaFiles != null
+            ? (!hasVideo ? "edit-inserted-image" : "edit-inserted-video")
+            : "insert-images-or-video";
     } else {
         return "add-images-or-video";
     }

@@ -5,7 +5,14 @@ import isHotkey from 'is-hotkey';
 
 import { NodeName } from "api";
 import * as Browser from "ui/browser";
-import { UI_EVENT_COMMENT_QUOTE, UI_EVENT_OPEN_MENTION, UiEventCommentQuote, UiEventOpenMention } from "ui/ui-events";
+import {
+    UI_EVENT_COMMENT_QUOTE,
+    UI_EVENT_MEDIA_COMPRESSED,
+    UI_EVENT_OPEN_MENTION,
+    UiEventCommentQuote,
+    UiEventMediaCompressed,
+    UiEventOpenMention
+} from "ui/ui-events";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
 import { safeImportScripture } from "ui/control/richtexteditor/visual/scripture-html";
 import VisualRenderElement from "ui/control/richtexteditor/visual/VisualRenderElement";
@@ -49,7 +56,7 @@ export default function VisualTextArea({
     const textArea = useRef<HTMLDivElement>(null);
     const {
         inBlockquote, inList, headingLevel, inVoid, inCodeBlock, inFormula, inImageEmbedded, inImageAttached,
-        focus, formatMention, formatFormula, formatImage, handleHotKeys,
+        focus, formatMention, formatFormula, formatImage, replaceMedia, handleHotKeys,
     } = useRichTextEditorCommands();
 
     const [isSubmitKey, isHardEnter, isSoftEnter] = useMemo(() => {
@@ -250,6 +257,19 @@ export default function VisualTextArea({
             document.removeEventListener(UI_EVENT_OPEN_MENTION, onOpenMention);
         }
     }, [onOpenMention]);
+
+    const onMediaCompressed = useCallback((event: UiEventMediaCompressed) => {
+        replaceMedia(event.detail.originalMediaId, event.detail.originalMediaHash, event.detail.media);
+    }, [replaceMedia]);
+
+    useEffect(() => {
+        // @ts-ignore
+        document.addEventListener(UI_EVENT_MEDIA_COMPRESSED, onMediaCompressed);
+        return () => {
+            // @ts-ignore
+            document.removeEventListener(UI_EVENT_MEDIA_COMPRESSED, onMediaCompressed);
+        }
+    }, [onMediaCompressed]);
 
     return (
         <Editable

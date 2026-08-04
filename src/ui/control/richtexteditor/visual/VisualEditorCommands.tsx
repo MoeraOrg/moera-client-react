@@ -4,7 +4,7 @@ import { Editor, Element, Node, Path, PathRef, Range, Transforms } from 'slate';
 import { ReactEditor, useSlateSelector, useSlateStatic } from 'slate-react';
 import { HistoryEditor } from 'slate-history';
 
-import { NodeName } from "api";
+import { NodeName, PrivateMediaFileInfo } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import {
@@ -531,6 +531,7 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
                 customWidth: element.customWidth,
                 customHeight: element.customHeight,
                 caption: "caption" in element ? element.caption : undefined,
+                play: element.play,
             }
         } else if (!embedded) {
             openLocalFiles((images, standardSize, customWidth, customHeight, caption) => {
@@ -554,7 +555,7 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
             prevValues,
             (
                 ok: boolean | null,
-                {mediaFiles, href, standardSize, customWidth, customHeight, caption}: Partial<RichTextImageValues>
+                {mediaFiles, href, standardSize, customWidth, customHeight, caption, play}: Partial<RichTextImageValues>
             ) => {
                 showImageDialog(false);
 
@@ -565,8 +566,8 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
 
                 if (ok && src) {
                     const node = caption
-                        ? createFigureImageElement(src, caption, standardSize, customWidth, customHeight)
-                        : createImageElement(src, standardSize, customWidth, customHeight);
+                        ? createFigureImageElement(src, caption, standardSize, customWidth, customHeight, play)
+                        : createImageElement(src, standardSize, customWidth, customHeight, play);
                     if (path != null) {
                         Editor.withoutNormalizing(editor, () => {
                             editor.setNodes<ImageElement | FigureImageElement>(node, {at: path});
@@ -621,6 +622,33 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
         );
     }
 
+    const replaceMedia = (
+        originalMediaId: string, _originalMediaHash: string, mediaFile: PrivateMediaFileInfo
+    ) => {
+        const elements = Array.from(Editor.nodes<ImageElement | FigureImageElement>(editor, {
+            at: [],
+            match: node =>
+                (isImageElement(node) || isFigureImageElement(node))
+                && node.mediaFile?.localMedia?.id === originalMediaId
+        }));
+
+        Editor.withoutNormalizing(editor, () => {
+            for (const [element, path] of elements) {
+                const original = element.mediaFile!;
+                const caption = original.caption != null
+                    ? {...original.caption, mediaId: mediaFile.id}
+                    : undefined;
+                const replacement = new MediaWithCaption(
+                    mediaFile,
+                    original.remoteMedia,
+                    original.captionPostingId,
+                    caption
+                );
+                editor.setNodes<ImageElement | FigureImageElement>({mediaFile: replacement}, {at: path});
+            }
+        });
+    }
+
     const undo = () => editor.undo();
 
     const redo = () => editor.redo();
@@ -640,7 +668,7 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
             focus, resetSelection, formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention,
             formatHorizontalRule, formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent,
             formatHeading, formatVideo, formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock,
-            formatFormula, formatMark, formatClear, formatImage, embedImage, undo, redo, enterText
+            formatFormula, formatMark, formatClear, formatImage, embedImage, replaceMedia, undo, redo, enterText
         }}>
             {children}
         </RichTextEditorCommandsContext.Provider>

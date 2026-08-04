@@ -7,6 +7,7 @@
     color: white;
     border-radius: .35rem;
     padding: .5rem .7rem;
+    max-width: min(40rem, 90vw);
     z-index: var(--zindex-tooltip);
 }
 

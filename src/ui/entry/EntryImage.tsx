@@ -29,7 +29,7 @@ interface Props {
 }
 
 export default function EntryImage({
-    postingId, commentId, nodeName, mediaFile, remoteMedia, width, height, alt, title, flex, count
+    postingId, commentId, nodeName, mediaFile, remoteMedia, width, height, alt, title, flex, count = 0
 }: Props) {
     const {
         src, srcSet, sizes, width: imageWidth, height: imageHeight, alt: imageAlt
@@ -37,11 +37,14 @@ export default function EntryImage({
     const dispatch = useDispatcher();
 
     const mediaId = mediaFile?.id ?? remoteMedia?.mediaId;
-    const href = urlWithParameters(ut`/post/${postingId}`, {comment: commentId, media: mediaId, play: true});
+    const href = urlWithParameters(
+        ut`/post/${postingId}`,
+        {comment: commentId, media: mediaId, play: count === 0}
+    );
 
     const onNear = () => {
         if (postingId != null && mediaId != null) {
-            dispatch(openLightbox(nodeName, postingId, commentId ?? null, mediaId, true));
+            dispatch(openLightbox(nodeName, postingId, commentId ?? null, mediaId, count === 0));
         }
     }
 
@@ -54,10 +57,10 @@ export default function EntryImage({
 
     return (
         <Jump nodeName={nodeName} href={href} onNear={onNear}
-              className={cx("entry-image", {"counted": count != null && count > 0})} style={style}>
-            {(count != null && count > 0) && <div className="count">+{count}</div>}
-            {isVideoType(mediaFile?.mimeType) &&
-                <VideoDuration duration={mediaFile?.duration}/>
+              className={cx("entry-image", {"counted": count > 0})} style={style}>
+            {count > 0 && <div className="count">+{count}</div>}
+            {isVideoType(mediaFile?.mimeType ?? remoteMedia?.mimeType) && count === 0 &&
+                <VideoDuration duration={mediaFile?.duration ?? remoteMedia?.duration}/>
             }
             {src != null ?
                 <PreloadedImage src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}

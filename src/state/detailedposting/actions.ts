@@ -319,6 +319,7 @@ export type CommentPostAction = ActionWithPayload<"COMMENT_POST", {
     commentText: CommentText;
     commentSourceText: CommentSourceText;
     captions: Record<string, MediaCaption>;
+    compressionPending: boolean;
     formId: number | null;
 }>;
 export const commentPost = (
@@ -327,19 +328,23 @@ export const commentPost = (
     commentText: CommentText,
     commentSourceText: CommentSourceText,
     captions: Record<string, MediaCaption>,
+    compressionPending: boolean,
     formId: number | null
 ): CommentPostAction =>
-    actionWithPayload("COMMENT_POST", {postingId, commentId, commentText, commentSourceText, captions, formId});
+    actionWithPayload(
+        "COMMENT_POST",
+        {postingId, commentId, commentText, commentSourceText, captions, compressionPending, formId}
+    );
 
 export type CommentPostedAction = ActionWithPayload<"COMMENT_POSTED", {
     nodeName: string;
     postingId: string;
-    commentId: string;
-    moment: number;
+    commentId: string | null;
+    moment: number | null;
     formId: number | null;
 }>;
 export const commentPosted = (
-    nodeName: string, postingId: string, commentId: string, moment: number, formId: number | null
+    nodeName: string, postingId: string, commentId: string | null, moment: number | null, formId: number | null
 ): CommentPostedAction =>
     actionWithPayload("COMMENT_POSTED", {nodeName, postingId, commentId, moment, formId});
 

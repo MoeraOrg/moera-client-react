@@ -65,7 +65,7 @@ export type StoryType = "asked-to-friend" | "asked-to-subscribe" | "blocked-user
     | "reaction-added-positive" | "reminder-avatar" | "reminder-email" | "reminder-full-name" | "reminder-sheriff-allow"
     | "remote-comment-added" | "reply-comment" | "search-report" | "sheriff-complaint-added"
     | "sheriff-complaint-decided" | "sheriff-marked" | "sheriff-unmarked" | "subscriber-added" | "subscriber-deleted"
-    | "unblocked-user" | "unblocked-user-in-posting";
+    | "unblocked-user" | "unblocked-user-in-posting" | "video-comment-published" | "video-posting-published";
 
 export type SubscriptionReason = "user" | "mention" | "comment" | "auto";
 
@@ -654,6 +654,8 @@ export interface PrivateMediaFileInfo {
     orientation: number;
     size: number;
     duration?: number | null;
+    uncompressed?: boolean | null;
+    compressedMediaId?: string | null;
     title?: string | null;
     textContent?: string | null;
     previews?: MediaFilePreviewInfo[] | null;
@@ -829,6 +831,7 @@ export interface RemoteMedia {
     width?: number | null;
     height?: number | null;
     size: number;
+    duration?: number | null;
     title?: string | null;
     attachment?: boolean | null;
     leaseId?: string | null;
@@ -844,7 +847,9 @@ export interface RemoteMediaInfo {
     width?: number | null;
     height?: number | null;
     size?: number | null;
+    duration?: number | null;
     title?: string | null;
+    textContent?: string | null;
     attachment?: boolean | null;
     grant?: string | null;
 }
@@ -924,6 +929,7 @@ export interface SearchCommentMediaTextUpdate {
     postingId: string;
     commentId: string;
     mediaId: string;
+    mediaNodeName?: string | null;
     title?: string | null;
     textContent?: string | null;
 }
@@ -1000,6 +1006,7 @@ export interface SearchPostingMediaUpdate {
 export interface SearchPostingMediaTextUpdate {
     postingId: string;
     mediaId: string;
+    mediaNodeName?: string | null;
     title?: string | null;
     textContent?: string | null;
 }
@@ -1625,6 +1632,7 @@ export type EncodedPostingRevisionInfo = PostingRevisionInfoBase<string>;
 export type PostingRevisionInfo = PostingRevisionInfoBase<Body>;
 
 export interface PostingSourceText {
+    ownerFullName?: string | null;
     ownerAvatar?: AvatarDescription | null;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
@@ -1632,6 +1640,7 @@ export interface PostingSourceText {
     mediaCaptions?: MediaCaptionText[] | null;
     rejectedReactions?: RejectedReactions | null;
     commentRejectedReactions?: RejectedReactions | null;
+    publications?: StoryAttributes[] | null;
     operations?: PostingOperations | null;
     commentOperations?: CommentOperations | null;
     reactionOperations?: ReactionOperations | null;
@@ -1684,6 +1693,7 @@ export interface SearchEntryInfoBase<B> {
     mediaPreview?: PublicMediaFileInfo | null;
     mediaPreviewNodeName?: string | null;
     mediaPreviewId?: string | null;
+    mediaPreviewMimeType?: string | null;
     repliedTo?: SearchRepliedTo | null;
     createdAt: number;
     operations?: SearchEntryOperations | null;
@@ -1826,6 +1836,7 @@ export type EncodedCommentsSliceInfo = CommentsSliceInfoBase<string>;
 export type CommentsSliceInfo = CommentsSliceInfoBase<Body>;
 
 export interface CommentSourceText {
+    ownerFullName?: string | null;
     ownerAvatar?: AvatarDescription | null;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;

@@ -123,6 +123,7 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
             };
 
         case "COMPOSE_POST_SUCCEEDED":
+        case "COMPOSE_POSTED_ASYNC":
             return {
                 ...state,
                 beingPosted: false,

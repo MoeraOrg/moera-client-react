@@ -196,6 +196,7 @@ export interface ImageElement extends SlateElement {
     standardSize?: RichTextImageStandardSize;
     customWidth?: number | null;
     customHeight?: number | null;
+    play?: boolean;
 }
 
 export const isImageElement = (value: any): value is ImageElement =>
@@ -203,7 +204,7 @@ export const isImageElement = (value: any): value is ImageElement =>
 
 export const createImageElement = (
     src: string | MediaWithCaption, standardSize?: RichTextImageStandardSize,
-    customWidth?: number | null, customHeight?: number | null
+    customWidth?: number | null, customHeight?: number | null, play?: boolean
 ): ImageElement =>
     ({
         type: "image",
@@ -212,6 +213,7 @@ export const createImageElement = (
         standardSize,
         customWidth,
         customHeight,
+        play,
         children: [createScriptureText("")]
     });
 
@@ -225,6 +227,7 @@ export interface FigureImageElement extends SlateElement {
     standardSize?: RichTextImageStandardSize;
     customWidth?: number | null;
     customHeight?: number | null;
+    play?: boolean;
 }
 
 export const isFigureImageElement = (value: any): value is FigureImageElement =>
@@ -232,7 +235,7 @@ export const isFigureImageElement = (value: any): value is FigureImageElement =>
 
 export const createFigureImageElement = (
     src: string | MediaWithCaption, caption: string, standardSize?: RichTextImageStandardSize,
-    customWidth?: number | null, customHeight?: number | null
+    customWidth?: number | null, customHeight?: number | null, play?: boolean
 ): FigureImageElement =>
     ({
         type: "figure-image",
@@ -242,6 +245,7 @@ export const createFigureImageElement = (
         customWidth,
         customHeight,
         caption,
+        play,
         children: [createScriptureText("")]
     });
 

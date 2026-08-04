@@ -578,6 +578,31 @@ export const EVENT_SCHEMAS = {
             additionalProperties: false
         },
 
+        MediaCompressedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "originalMediaId": {
+                    type: "string"
+                },
+                "originalMediaHash": {
+                    type: "string"
+                },
+                "media": {
+                    $ref: "node#/definitions/PrivateMediaFileInfo"
+                },
+            },
+            required: [
+                "type",
+                "originalMediaId",
+                "originalMediaHash",
+                "media",
+            ],
+            additionalProperties: false
+        },
+
         NodeNameChangedEvent: {
             type: "object",
             properties: {

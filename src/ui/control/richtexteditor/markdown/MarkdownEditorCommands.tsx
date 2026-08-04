@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 
-import { NodeName, SourceFormat } from "api";
+import { NodeName, PrivateMediaFileInfo, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { detailsSummaryStyleToClassName } from "ui/control";
@@ -450,6 +450,36 @@ export default function MarkdownEditorCommands({
         );
     }
 
+    const replaceMedia = (
+        _originalMediaId: string, originalMediaHash: string, mediaFile: PrivateMediaFileInfo
+    ) => {
+        const field = textArea.current;
+        if (field == null) {
+            return;
+        }
+
+        const original = "hash:" + originalMediaHash;
+        const replacement = "hash:" + mediaFile.hash;
+        const positions: number[] = [];
+        let position = field.value.indexOf(original);
+        while (position >= 0) {
+            positions.push(position);
+            position = field.value.indexOf(original, position + original.length);
+        }
+        if (positions.length === 0) {
+            return;
+        }
+
+        for (let i = positions.length - 1; i >= 0; i--) {
+            field.setRangeText(replacement, positions[i], positions[i] + original.length, "preserve");
+        }
+        field.dispatchEvent(new InputEvent("input", {
+            data: replacement,
+            inputType: "insertReplacementText",
+            bubbles: true
+        }));
+    }
+
     const undo = () => {};
 
     const redo = () => {};
@@ -473,7 +503,7 @@ export default function MarkdownEditorCommands({
             focus, resetSelection, formatBold, formatItalic, formatStrikeout, formatLink, formatSpoiler, formatMention,
             formatHorizontalRule, formatEmoji, formatBlockquote, formatBlockunquote, formatList, formatIndent,
             formatHeading, formatVideo, formatFold, formatCode, formatSubscript, formatSuperscript, formatCodeBlock,
-            formatFormula, formatMark, formatClear, formatImage, embedImage, undo, redo, enterText
+            formatFormula, formatMark, formatClear, formatImage, embedImage, replaceMedia, undo, redo, enterText
         }}>
             {children}
         </RichTextEditorCommandsContext.Provider>

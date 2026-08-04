@@ -9,6 +9,7 @@ import {
     MediaToAttach,
     PostingFeatures,
     PostingInfo,
+    PostingSourceText,
     PostingText,
     PrincipalValue,
     SourceFormat,
@@ -21,9 +22,10 @@ import { settingsUpdate } from "state/settings/actions";
 import {
     attachmentsToMedia,
     bodyToLinkPreviews,
-    draftAttachmentsToMedia,
+    draftAttachmentsToMedia, mediaIsCompressionPending,
     mediaToAttachment,
     mediaToCaptions,
+    mediaToCaptionsText,
     RichTextLinkPreviewsValue,
     RichTextValue
 } from "ui/control/richtexteditor";
@@ -167,31 +169,60 @@ export const valuesToPostingText = (values: ComposePageValues, props: ValuesToPo
         important: values.updateImportant,
         description: values.updateDescription
     },
-    operations: {
-        view: values.viewPrincipal,
-        viewComments: values.viewCommentsPrincipal,
-        addComment: values.addCommentPrincipal,
-        trustComment: values.trustCommentPrincipal,
-        viewReactions: values.reactionsEnabled ? (values.reactionsVisible ? "public" : "private") : "none",
-        viewNegativeReactions: values.reactionsEnabled && values.reactionsNegativeEnabled
-            ? (values.reactionsVisible ? "public" : "private")
-            : "none",
-        viewReactionTotals: values.reactionsEnabled
-            ? (values.reactionsVisible || values.reactionTotalsVisible ? "public" : "private")
-            : "none",
-        viewNegativeReactionTotals: values.reactionsEnabled && values.reactionsNegativeEnabled
-            ? (values.reactionsVisible || values.reactionTotalsVisible ? "public" : "private")
-            : "none",
-        viewReactionRatios: values.reactionsEnabled ? "public" : "none",
-        viewNegativeReactionRatios: values.reactionsEnabled && values.reactionsNegativeEnabled
-            ? "public"
-            : "none",
-        addReaction: values.reactionsEnabled ? "signed" : "none",
-        addNegativeReaction: values.reactionsEnabled && values.reactionsNegativeEnabled ? "signed" : "none"
-    },
+    operations: valuesToPostingOperations(values),
     commentOperations: {
         view: values.hideComments ? "private" : "unset"
     }
+});
+
+const valuesToPostingSourceText = (values: ComposePageValues, props: ValuesToPostingTextProps): PostingSourceText => {
+    const media = (values.body.orderedMediaList() ?? []).concat(values.linkPreviews.media);
+    return ({
+        ownerFullName: values.fullName,
+        ownerAvatar: values.avatar ? {
+            mediaId: values.avatar.mediaId,
+            shape: values.avatar.shape ?? props.avatarShapeDefault
+        } : null,
+        bodySrc: JSON.stringify({
+            subject: props.features?.subjectPresent
+                ? replaceSmileysIfNeeded(props.smileysEnabled, values.subject ?? "")
+                : null,
+            text: values.body.toText(props.smileysEnabled),
+            linkPreviews: values.linkPreviews.previews
+        }),
+        bodySrcFormat: values.bodyFormat,
+        media: media.map(mediaToAttachment),
+        mediaCaptions: mediaToCaptionsText(media),
+        rejectedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
+        publications: buildPublications(values, props),
+        operations: valuesToPostingOperations(values),
+        commentOperations: {
+            view: values.hideComments ? "private" : "unset"
+        }
+    });
+};
+
+const valuesToPostingOperations = (values: ComposePageValues) => ({
+    view: values.viewPrincipal,
+    viewComments: values.viewCommentsPrincipal,
+    addComment: values.addCommentPrincipal,
+    trustComment: values.trustCommentPrincipal,
+    viewReactions: values.reactionsEnabled ? (values.reactionsVisible ? "public" : "private") : "none",
+    viewNegativeReactions: values.reactionsEnabled && values.reactionsNegativeEnabled
+        ? (values.reactionsVisible ? "public" : "private")
+        : "none",
+    viewReactionTotals: values.reactionsEnabled
+        ? (values.reactionsVisible || values.reactionTotalsVisible ? "public" : "private")
+        : "none",
+    viewNegativeReactionTotals: values.reactionsEnabled && values.reactionsNegativeEnabled
+        ? (values.reactionsVisible || values.reactionTotalsVisible ? "public" : "private")
+        : "none",
+    viewReactionRatios: values.reactionsEnabled ? "public" : "none",
+    viewNegativeReactionRatios: values.reactionsEnabled && values.reactionsNegativeEnabled
+        ? "public"
+        : "none",
+    addReaction: values.reactionsEnabled ? "signed" : "none",
+    addNegativeReaction: values.reactionsEnabled && values.reactionsNegativeEnabled ? "signed" : "none"
 });
 
 function isPostingContentEmpty(
@@ -402,7 +433,9 @@ export const composePageLogic = {
         dispatch(composePost(
             formik.props.postingId,
             valuesToPostingText(values, formik.props),
+            valuesToPostingSourceText(values, formik.props),
             mediaToCaptions(values.body.media),
+            mediaIsCompressionPending(values.body.media, formik.props.posting?.media),
             {hideComments: values.hideCommentsDefault}
         ));
         let settings = [];

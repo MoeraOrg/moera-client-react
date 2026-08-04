@@ -21,6 +21,7 @@ import {
     composeDraftSelect,
     composeDraftUnset,
     ComposePostAction,
+    composePostedAsync,
     composePostFailed,
     ComposePostingLoadAction,
     composePostingLoaded,
@@ -35,6 +36,7 @@ import { getComposeDraftId, getComposePostingId, isComposePostingEditing } from 
 import { saga } from "state/saga";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
+import { getOwnerName } from "state/node/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { mutuallyIntroduced } from "state/init-barriers";
 import { loadRemoteMediaInDraftAttachments } from "state/remotemedia/sagas";
@@ -75,17 +77,32 @@ async function composePostingLoadSaga(action: WithContext<ComposePostingLoadActi
 }
 
 async function composePostSaga(action: WithContext<ComposePostAction>): Promise<void> {
-    const {id, postingText, captions, prevState} = action.payload;
+    const {id, postingText, postingSourceText, captions, compressionPending, prevState} = action.payload;
+
+    const ownerName = select(getOwnerName);
+    if (ownerName == null) {
+        return;
+    }
 
     try {
-        let posting;
-        if (id == null) {
-            posting = await Node.createPosting(action, REL_CURRENT, postingText);
+        if (!compressionPending) {
+            let posting;
+            if (id == null) {
+                posting = await Node.createPosting(action, REL_CURRENT, postingText);
+            } else {
+                posting = await Node.updatePosting(action, REL_CURRENT, id, postingText);
+            }
+            await updateMediaCaptions(action, REL_CURRENT, posting.media, captions);
+            dispatch(composePostSucceeded(posting).causedBy(action));
         } else {
-            posting = await Node.updatePosting(action, REL_CURRENT, id, postingText);
+            if (id == null) {
+                await Node.createRemotePosting(action, REL_HOME, ownerName, postingSourceText);
+            } else {
+                await Node.updateRemotePosting(action, REL_HOME, ownerName, id, postingText);
+            }
+            dispatch(composePostedAsync().causedBy(action));
+            dispatch(flashBox(i18n.t("video-post-being-processed")).causedBy(action));
         }
-        await updateMediaCaptions(action, REL_CURRENT, posting.media, captions);
-        dispatch(composePostSucceeded(posting).causedBy(action));
 
         if (id != null) {
             const hideComments = postingText.commentOperations?.view === "private";

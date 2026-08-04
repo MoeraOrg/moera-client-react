@@ -172,8 +172,10 @@ export default [
     trigger(
         "COMMENT_POSTED",
         (state, signal: CommentPostedAction) =>
-            isAtDetailedPostingPage(state) && isCommentsReceiverPostingId(state, signal.payload.postingId),
-        signal => commentsScrollToAnchor(signal.payload.moment)
+            isAtDetailedPostingPage(state)
+            && isCommentsReceiverPostingId(state, signal.payload.postingId)
+            && signal.payload.moment != null,
+        signal => commentsScrollToAnchor(signal.payload.moment!)
     ),
     trigger(["COMMENT_POSTED", "COMMENT_COMPOSE_CANCEL"], true, bottomMenuShow),
     trigger(

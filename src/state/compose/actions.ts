@@ -1,4 +1,4 @@
-import { DraftInfo, DraftText, MediaCaption, PostingInfo, PostingText } from "api";
+import { DraftInfo, DraftText, MediaCaption, PostingInfo, PostingSourceText, PostingText } from "api";
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 
 export type ComposePostingLoadAction = ActionWithoutPayload<"COMPOSE_POSTING_LOAD">;
@@ -29,19 +29,30 @@ interface ComposePostPrevState {
 export type ComposePostAction = ActionWithPayload<"COMPOSE_POST", {
     id: string | null;
     postingText: PostingText;
+    postingSourceText: PostingSourceText;
     captions: Record<string, MediaCaption>;
+    compressionPending: boolean;
     prevState: ComposePostPrevState;
 }>;
 export const composePost = (
-    id: string | null, postingText: PostingText, captions: Record<string, MediaCaption>, prevState: ComposePostPrevState
+    id: string | null,
+    postingText: PostingText,
+    postingSourceText: PostingSourceText,
+    captions: Record<string, MediaCaption>,
+    compressionPending: boolean,
+    prevState: ComposePostPrevState
 ): ComposePostAction =>
-    actionWithPayload("COMPOSE_POST", {id, postingText, captions, prevState});
+    actionWithPayload("COMPOSE_POST", {id, postingText, postingSourceText, captions, compressionPending, prevState});
 
 export type ComposePostSucceededAction = ActionWithPayload<"COMPOSE_POST_SUCCEEDED", {
     posting: PostingInfo;
 }>;
 export const composePostSucceeded = (posting: PostingInfo): ComposePostSucceededAction =>
     actionWithPayload("COMPOSE_POST_SUCCEEDED", {posting});
+
+export type ComposePostedAsyncAction = ActionWithoutPayload<"COMPOSE_POSTED_ASYNC">;
+export const composePostedAsync = (): ComposePostedAsyncAction =>
+    actionWithoutPayload("COMPOSE_POSTED_ASYNC");
 
 export type ComposePostFailedAction = ActionWithoutPayload<"COMPOSE_POST_FAILED">;
 export const composePostFailed = (): ComposePostFailedAction =>
@@ -177,6 +188,7 @@ export type ComposeAnyAction =
     | ComposeConflictCloseAction
     | ComposePostAction
     | ComposePostSucceededAction
+    | ComposePostedAsyncAction
     | ComposePostFailedAction
     | ComposeDraftLoadAction
     | ComposeDraftLoadedAction

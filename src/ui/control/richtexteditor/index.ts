@@ -11,6 +11,7 @@ export {
     draftAttachmentsToMedia,
     localMediaToLeasedRemoteMediaInfo,
     mediaCaptionsToCaptionsText,
+    mediaIsCompressionPending,
     mediaToAttachment,
     mediaToCaptions,
     mediaToCaptionsText,

@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Icon, msPlayCircleFilled } from "ui/material-symbols";
-import "./VideoDuration.css";
 import { useIsTinyScreen } from "ui/hook";
+import "./VideoDuration.css";
 
 interface Props {
     duration?: number | null;

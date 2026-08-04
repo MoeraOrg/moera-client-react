@@ -118,6 +118,7 @@ export default function SearchEntry({entry}: Props) {
                                     commentId={entry.commentId}
                                     mediaId={entry.mediaPreviewId}
                                     mediaFile={entry.mediaPreview}
+                                    mediaMimeType={entry.mediaPreviewMimeType ?? "image/jpeg"}
                                 />
                                 {entry.imageCount > 1 ? t("count-images", {count: entry.imageCount}) : ""}
                             </>

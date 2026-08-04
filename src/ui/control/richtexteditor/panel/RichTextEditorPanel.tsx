@@ -103,7 +103,7 @@ export default function RichTextEditorPanel() {
                 <RichTextEditorButton icon={msAddLink} title={t("link")} hotkey={RICH_TEXT_EDITOR_KEYS.LINK.title}
                                       active={inLink} command={formatLink}/>
                 {supportsEmbeddedMedia && supportsMedia &&
-                    <RichTextEditorButton icon={msPhotoLibrary} title={t("image")} active={inImageAttached}
+                    <RichTextEditorButton icon={msPhotoLibrary} title={t("image-or-video")} active={inImageAttached}
                                           command={() => formatImage(false)}/>
                 }
                 {supportsVideo &&

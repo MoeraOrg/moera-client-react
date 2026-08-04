@@ -1,5 +1,6 @@
 import { Node } from "api";
 import { mediaUpload } from "api/node/media-upload";
+import { EventAction, MediaCompressedEvent } from "api/events";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { remoteMediaLoaded } from "state/remotemedia/actions";
@@ -7,6 +8,7 @@ import { RichTextEditorMediaRenameAction, RichTextEditorMediaUploadAction } from
 import { errorThrown } from "state/error/actions";
 import { saga } from "state/saga";
 import { getSettingNode } from "state/settings/selectors";
+import { uiEventMediaCompressed } from "ui/ui-events";
 import { localMediaToLeasedRemoteMediaInfo } from "ui/control/richtexteditor";
 import { absoluteNodeName, REL_HOME } from "util/rel-node-name";
 import { MediaWithCaption } from "util/media-with-caption";
@@ -14,7 +16,14 @@ import { MediaWithCaption } from "util/media-with-caption";
 export default [
     saga("RICH_TEXT_EDITOR_MEDIA_UPLOAD", null, richTextEditorMediaUploadSaga),
     saga("RICH_TEXT_EDITOR_MEDIA_RENAME", null, richTextEditorMediaRenameSaga),
+    saga("EVENT_HOME_MEDIA_COMPRESSED", null, eventHomeMediaCompressedSaga),
 ];
+
+async function eventHomeMediaCompressedSaga(action: WithContext<EventAction<MediaCompressedEvent>>): Promise<void> {
+    const {originalMediaId, originalMediaHash, media} = action.payload;
+
+    document.dispatchEvent(uiEventMediaCompressed(originalMediaId, originalMediaHash, media));
+}
 
 async function richTextEditorMediaUpload(
     action: WithContext<RichTextEditorMediaUploadAction>, index: number

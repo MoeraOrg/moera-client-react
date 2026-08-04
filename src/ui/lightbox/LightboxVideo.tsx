@@ -2,7 +2,6 @@ import React, { type CSSProperties, useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
 import { createPlayer } from '@videojs/react';
 import { MinimalVideoSkin, Video, videoFeatures } from '@videojs/react/video';
-import '@videojs/react/video/minimal-skin.css';
 
 import { Loading } from "ui/control";
 import { useIsTinyScreen } from "ui/hook";

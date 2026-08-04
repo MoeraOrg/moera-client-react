@@ -6,10 +6,12 @@ import { ClientState } from "state/state";
 import { getNamingNameRoot } from "state/naming/selectors";
 import { openLightbox } from "state/lightbox/actions";
 import { useDispatcher } from "ui/hook";
+import { Icon, msPlayArrowFilled } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
 import { resolveMediaUrl } from "util/media-url";
 import { REL_SEARCH, RelNodeName } from "util/rel-node-name";
 import { urlWithParameters, ut } from "util/url";
+import { isVideoType } from "util/mime-type";
 import "./SearchEntryImagePreview.css";
 
 interface Props {
@@ -18,9 +20,12 @@ interface Props {
     commentId?: string | null;
     mediaId: string;
     mediaFile: PublicMediaFileInfo;
+    mediaMimeType: string;
 }
 
-export default function SearchEntryImagePreview({nodeName, postingId, commentId, mediaId, mediaFile}: Props) {
+export default function SearchEntryImagePreview({
+    nodeName, postingId, commentId, mediaId, mediaFile, mediaMimeType
+}: Props) {
     const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, REL_SEARCH));
     const dispatch = useDispatcher();
 
@@ -45,6 +50,9 @@ export default function SearchEntryImagePreview({nodeName, postingId, commentId,
     return (
         <Jump nodeName={nodeName} href={href} onNear={onNear} className="preview">
             <img src={resolveMediaUrl(rootPage, imagePath)} style={style} alt=""/>
+            {isVideoType(mediaMimeType) &&
+                <div className="play-icon"><Icon icon={msPlayArrowFilled} size={48}/></div>
+            }
         </Jump>
     );
 }

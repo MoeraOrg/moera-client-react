@@ -7,11 +7,6 @@
 3. Put third-party imports at the top of the file and local imports below. Put
    a blank line between them.
 
-# I18n
-
-1. Do not touch files under src/i18n/locales.
-2. Do not write texts verbatim, just use `t()` function with an identifier.
-
 # Actions
 
 1. Literal names of actions should correspond to their function names and type
