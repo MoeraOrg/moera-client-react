@@ -244,8 +244,9 @@ export default function Lightbox({
                         toolbarButtons={toolbarButtons}
                         zoomEnabled={mainSrc.type === "image"}
                         onClose={requestClose}
+                        key="toolbar"
                     />,
-                    caption && <LightboxCaption>{caption}</LightboxCaption>,
+                    caption && <LightboxCaption key="caption">{caption}</LightboxCaption>,
                     ...(controls ?? [])
                 ]}
             >

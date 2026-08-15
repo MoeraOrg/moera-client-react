@@ -2,6 +2,8 @@
     position: relative;
     display: grid;
     place-items: center;
+    container-type: inline-size;
+    container-name: image-block;
 }
 
 .image-edit-dialog .preview {

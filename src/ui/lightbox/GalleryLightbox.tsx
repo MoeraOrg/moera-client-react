@@ -3,8 +3,6 @@ import { useSelector } from 'react-redux';
 
 import { MediaAttachment } from "api";
 import { ClientState } from "state/state";
-import { getNamingNameRoot } from "state/naming/selectors";
-import { getRemoteMedia } from "state/remotemedia/selectors";
 import { closeLightbox, LightboxMediaSequence, lightboxMediaSet } from "state/lightbox/actions";
 import { getLightboxMediaId, getLightboxMediaPostingId } from "state/lightbox/selectors";
 import { ExtPostingInfo } from "state/postings/state";
@@ -13,6 +11,7 @@ import { ExtCommentInfo } from "state/detailedposting/state";
 import { getComment } from "state/detailedposting/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ParentContext, useDispatcher } from "ui/hook";
+import { useActualMedia, useMediaPreviewAttributes } from "ui/entry/media";
 import EntryHtml from "ui/entry/EntryHtml";
 import Lightbox from "ui/lightbox/Lightbox";
 import { lightboxSource } from "ui/lightbox/lightbox-source";
@@ -57,6 +56,9 @@ export default function GalleryLightbox() {
     const {
         href: mainHref,
         src: mainSrc,
+        previewSrc: mainPreviewSrc,
+        width: mainWidth,
+        height: mainHeight,
         downloadUrl: mainDownloadUrl,
         mimeType: mainMimeType,
         textContent: mainTextContent
@@ -68,7 +70,8 @@ export default function GalleryLightbox() {
     const prevSequence: LightboxMediaSequence = prevIndex != null && prevIndex > index ? "prev-loop" : "normal";
 
     const {
-        src: prevSrc, mediaId: prevMediaId, mimeType: prevMimeType
+        src: prevSrc, previewSrc: prevPreviewSrc, width: prevWidth, height: prevHeight,
+        mediaId: prevMediaId, mimeType: prevMimeType
     } = useLightboxMedia(mediaNodeName, media != null && prevIndex != null ? media[prevIndex] : undefined);
 
     const nextIndex = media != null && index < media.length - 1
@@ -77,13 +80,15 @@ export default function GalleryLightbox() {
     const nextSequence: LightboxMediaSequence = nextIndex != null && nextIndex < index ? "next-loop" : "normal";
 
     const {
-        src: nextSrc, mediaId: nextMediaId, mimeType: nextMimeType
+        src: nextSrc, previewSrc: nextPreviewSrc, width: nextWidth, height: nextHeight,
+        mediaId: nextMediaId, mimeType: nextMimeType
     } = useLightboxMedia(mediaNodeName, media != null && nextIndex != null ? media[nextIndex] : undefined);
 
     const statusText = media != null && media.length > 0 ? `${index + 1} / ${media.length}` : "";
-    const mainSource = lightboxSource(mainSrc, mainMimeType) ?? {url: "", type: "image"};
-    const prevSource = lightboxSource(prevSrc, prevMimeType);
-    const nextSource = lightboxSource(nextSrc, nextMimeType);
+    const mainSource = lightboxSource(mainSrc, mainPreviewSrc, mainWidth, mainHeight, mainMimeType)
+        ?? {url: "", previewUrl: undefined, width: undefined, height: undefined, type: "image"};
+    const prevSource = lightboxSource(prevSrc, prevPreviewSrc, prevWidth, prevHeight, prevMimeType);
+    const nextSource = lightboxSource(nextSrc, nextPreviewSrc, nextWidth, nextHeight, nextMimeType);
 
     const onMovePrev = () => prevMediaId != null ? dispatch(lightboxMediaSet(prevMediaId, prevSequence)) : null;
 
@@ -106,7 +111,7 @@ export default function GalleryLightbox() {
                     <LightboxDownloadButton mediaUrl={mainDownloadUrl ?? ""} mediaMimeType={mainMimeType}/>,
                 ]}
                 controls={[
-                    <LightboxReactions/>,
+                    <LightboxReactions key="reactions"/>,
                 ]}
                 caption={mediaPosting?.body.text &&
                     <EntryHtml postingId={mediaPosting.id} html={mediaPosting.body.text}/>
@@ -137,6 +142,9 @@ interface LightboxMediaAttributes {
     mediaId: string | undefined;
     href: string | undefined;
     src: string | undefined;
+    previewSrc: string | undefined;
+    width: number | undefined;
+    height: number | undefined;
     downloadUrl: string | undefined;
     mimeType: string;
     textContent: string | undefined;
@@ -145,32 +153,33 @@ interface LightboxMediaAttributes {
 function useLightboxMedia(
     nodeName: string | RelNodeName, media: MediaAttachment | null | undefined
 ): LightboxMediaAttributes {
-    const mediaFile = media?.media;
-    const remoteMedia = media?.remoteMedia;
-    const remoteMediaFile = useSelector((state: ClientState) =>
-        getRemoteMedia(state, remoteMedia?.nodeName, remoteMedia?.mediaId, remoteMedia?.digest)
-    );
-    const actualNodeName = (mediaFile != null ? nodeName : remoteMedia?.nodeName) ?? nodeName;
-    const rootPage = useSelector((state: ClientState) => getNamingNameRoot(state, actualNodeName));
-    const actualMediaFile = mediaFile ?? remoteMediaFile;
+    const {
+        mediaId, actualRootPage, actualMediaFile
+    } = useActualMedia(nodeName, media?.media ?? null, media?.remoteMedia ?? null);
+    const {src: previewSrc} = useMediaPreviewAttributes(nodeName, media?.media ?? null, media?.remoteMedia ?? null);
 
     if (actualMediaFile == null) {
         return {
             mediaId: undefined,
             href: undefined,
             src: undefined,
+            previewSrc: undefined,
+            width: undefined,
+            height: undefined,
             downloadUrl: undefined,
-            mimeType: "image/jpeg",
+            // try to avoid showing LightboxImage instead of LightboxVideo
+            mimeType: media?.media?.mimeType ?? media?.remoteMedia?.mimeType ?? "image/jpeg",
             textContent: undefined
         };
     }
 
-    const mediaId = mediaFile?.id ?? remoteMedia?.mediaId;
     const href = "/media/" + actualMediaFile.path;
-    const src = resolveMediaUrl(rootPage, actualMediaFile.directPath ?? actualMediaFile.path);
-    const downloadUrl = mediaDownloadUrl(rootPage, actualMediaFile);
+    const src = resolveMediaUrl(actualRootPage, actualMediaFile.directPath ?? actualMediaFile.path);
+    const downloadUrl = mediaDownloadUrl(actualRootPage, actualMediaFile);
     const mimeType = actualMediaFile.mimeType;
     const textContent = actualMediaFile.textContent ?? undefined;
+    const width = actualMediaFile.width;
+    const height = actualMediaFile.height;
 
-    return {mediaId, href, src, downloadUrl, mimeType, textContent};
+    return {mediaId, href, src, previewSrc: previewSrc ?? undefined, width, height, downloadUrl, mimeType, textContent};
 }

@@ -199,11 +199,18 @@ function buildValue(
                 if (imageState?.info != null) {
                     media.push(imageState.info);
                 }
+
+                const title = lpState?.info?.title;
+                let description = lpState?.info?.description;
+                if (title != null && title === description) {
+                    description = null;
+                }
+
                 previews.push({
                     siteName: lpState?.info?.siteName,
                     url: lpState?.info?.url,
-                    title: lpState?.info?.title,
-                    description: lpState?.info?.description,
+                    title,
+                    description,
                     imageHash: imageState?.info?.hash,
                     publishedAt: lpState?.info?.publishedAt
                 });

@@ -21,6 +21,7 @@ import {
     composeDraftSelect,
     composeDraftUnset,
     ComposePostAction,
+    ComposePostedAsyncAction,
     composePostedAsync,
     composePostFailed,
     ComposePostingLoadAction,
@@ -38,13 +39,17 @@ import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { getOwnerName } from "state/node/selectors";
 import { flashBox } from "state/flashbox/actions";
+import { getFeedState } from "state/feeds/selectors";
 import { mutuallyIntroduced } from "state/init-barriers";
+import { jumpNear } from "state/navigation/actions";
 import { loadRemoteMediaInDraftAttachments } from "state/remotemedia/sagas";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
+import { ut } from "util/url";
 
 export default [
     saga("COMPOSE_POSTING_LOAD", "", composePostingLoadSaga),
     saga("COMPOSE_POST", null, composePostSaga),
+    saga("COMPOSE_POSTED_ASYNC", "", composePostedAsyncSaga),
     saga("COMPOSE_DRAFT_LOAD", "", composeDraftLoadSaga),
     saga("COMPOSE_DRAFT_SAVE", null, composeDraftSaveSaga),
     saga("COMPOSE_DRAFT_DELETE", "", composeDraftDeleteSaga),
@@ -100,7 +105,7 @@ async function composePostSaga(action: WithContext<ComposePostAction>): Promise<
             } else {
                 await Node.updateRemotePosting(action, REL_HOME, ownerName, id, postingText);
             }
-            dispatch(composePostedAsync().causedBy(action));
+            dispatch(composePostedAsync(id).causedBy(action));
             dispatch(flashBox(i18n.t("video-post-being-processed")).causedBy(action));
         }
 
@@ -118,6 +123,18 @@ async function composePostSaga(action: WithContext<ComposePostAction>): Promise<
         dispatch(composePostFailed().causedBy(action));
         dispatch(errorThrown(e));
     }
+}
+
+async function composePostedAsyncSaga(action: WithContext<ComposePostedAsyncAction>): Promise<void> {
+    const {postingId} = action.payload;
+    if (postingId != null) {
+        dispatch(jumpNear(ut`/post/${postingId}`, null, null).causedBy(action));
+        return;
+    }
+
+    const anchor = select(state => getFeedState(state, REL_CURRENT, "timeline").anchor);
+    const href = anchor != null ? `/timeline?before=${anchor}` : "/timeline";
+    dispatch(jumpNear(href, null, null).causedBy(action));
 }
 
 async function composeDraftLoadSaga(action: WithContext<ComposeDraftLoadAction>): Promise<void> {

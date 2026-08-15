@@ -19,6 +19,16 @@ export default function LightboxMedia({source, imageInfo, section, autoPlay, tra
     if (source.type === "image") {
         return <LightboxImage imageInfo={imageInfo} className={`lightbox-image-${section}`} transforms={transforms}/>;
     } else {
-        return <LightboxVideo src={source.url} className={`lightbox-video-${section}`} autoPlay={autoPlay}/>;
+        return (
+            <LightboxVideo
+                src={source.url}
+                posterSrc={source.previewUrl}
+                width={source.width}
+                height={source.height}
+                className={`lightbox-video-${section}`}
+                autoPlay={autoPlay}
+                transforms={transforms}
+            />
+        );
     }
 }

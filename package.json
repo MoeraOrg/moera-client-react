@@ -1,6 +1,6 @@
 {
   "name": "moera-client-react",
-  "version": "0.18.9",
+  "version": "0.18.10-SNAPSHOT",
   "private": true,
   "packageManager": "npm@10.8.2",
   "homepage": "/",
@@ -243,7 +243,12 @@
     "format": "JSON_TOLGEE",
     "push": {
       "filesTemplate": "./src/i18n/locales/{languageTag}/message.json",
-      "language": ["en", "pl", "ru", "uk"],
+      "language": [
+        "en",
+        "pl",
+        "ru",
+        "uk"
+      ],
       "forceMode": "OVERRIDE",
       "removeOtherKeys": true
     },

@@ -12,11 +12,22 @@ export function range(length: number): number[] {
 }
 
 export function parseBool(val: boolean | string): boolean {
-    if (typeof val === "boolean") {
+    if (isBoolean(val)) {
         return val;
     }
     const ival = val.toLowerCase();
     return ival === "yes" || ival === "true" || ival === "1";
+}
+
+export function toInt(s: number | string | null | undefined): number {
+    if (s == null) {
+        return 0;
+    }
+    if (isNumber(s)) {
+        return s;
+    }
+    const val = parseInt(s);
+    return isFinite(val) ? val : 0;
 }
 
 export function isNumericString(value: string | null): boolean {

@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Icon, msPlayCircleFilled } from "ui/material-symbols";
-import { useIsTinyScreen } from "ui/hook";
 import "./VideoDuration.css";
 
 interface Props {
@@ -22,13 +21,9 @@ function formatDuration(duration: number): string {
     return `${hours}:${minutes}:${seconds}`;
 }
 
-export function VideoDuration({duration}: Props) {
-    const tinyScreen = useIsTinyScreen();
-
-    return (
-        <div className="video-duration">
-            <Icon icon={msPlayCircleFilled} size={!tinyScreen ? 20 : 16}/>
-            <span>{formatDuration(duration ?? 0)}</span>
-        </div>
-    );
-}
+export const VideoDuration = ({duration}: Props) => (
+    <span className="video-duration">
+        <Icon icon={msPlayCircleFilled} size="1em"/>
+        <span>{formatDuration(duration ?? 0)}</span>
+    </span>
+);

@@ -4,31 +4,30 @@
     inset-inline: 0;
     block-size: var(--lightbox-toolbar-size);
     display: grid;
-    grid-template-columns: minmax(0, 1fr) max-content;
+    grid-template-columns: max-content minmax(0, 1fr) max-content;
     align-items: center;
-    background-color: rgb(0 0 0 / 50%);
 }
 
 .lightbox-toolbar-side {
     block-size: var(--lightbox-toolbar-size);
     margin: 0;
-    padding: 0;
+    padding: 0 var(--lightbox-toolbar-padding);
+    background-color: rgb(0 0 0 / 50%);
+    border-radius: 2rem;
     list-style: none;
     display: grid;
     align-items: center;
 }
 
-.lightbox-toolbar-left-side {
+.lightbox-toolbar-side.left-side {
     min-inline-size: 0;
-    padding-inline: var(--lightbox-toolbar-padding) 0;
     overflow: hidden;
 }
 
-.lightbox-toolbar-right-side {
+.lightbox-toolbar-side.right-side {
     grid-auto-flow: column;
     grid-auto-columns: max-content;
     justify-content: end;
-    padding-inline: 0 var(--lightbox-toolbar-padding);
 }
 
 .lightbox-toolbar-item {

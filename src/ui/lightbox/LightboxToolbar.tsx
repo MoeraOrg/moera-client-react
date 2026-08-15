@@ -39,7 +39,7 @@ export default function LightboxToolbar({statusText, toolbarButtons, zoomEnabled
 
     return (
         <div className="lightbox-toolbar">
-            <ul className="lightbox-toolbar-side lightbox-toolbar-left-side">
+            <ul className="lightbox-toolbar-side left-side">
                 <li className="lightbox-toolbar-item">
                     <span className="lightbox-toolbar-item-child">
                         {statusText}
@@ -47,7 +47,9 @@ export default function LightboxToolbar({statusText, toolbarButtons, zoomEnabled
                 </li>
             </ul>
 
-            <ul className="lightbox-toolbar-side lightbox-toolbar-right-side">
+            <div></div>
+
+            <ul className="lightbox-toolbar-side right-side">
                 {toolbarButtons && toolbarButtons.map((button, i) =>
                     <li key={i} className="lightbox-toolbar-item">
                         {button}

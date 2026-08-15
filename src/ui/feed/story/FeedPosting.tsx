@@ -106,7 +106,7 @@ export default function FeedPosting({nodeName, posting, story, hideRecommended}:
             <PostingSubject posting={posting} preview={true}/>
             <Content nodeName={nodeName} posting={posting}/>
             {!posting.bodyPreview?.text &&
-                <EntryAttachments nodeName={nodeName} media={posting.media ?? null}/>
+                <EntryAttachments nodeName={nodeName} media={posting.media ?? null} limit={2}/>
             }
             <EntryGallery
                 postingId={posting.id}

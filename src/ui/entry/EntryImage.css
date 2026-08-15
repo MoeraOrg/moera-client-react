@@ -1,5 +1,7 @@
 .entry .entry-image {
     position: relative;
+    container-type: inline-size;
+    container-name: image-block;
 }
 
 .entry .entry-image IMG {
@@ -23,12 +25,10 @@
 }
 
 .entry .entry-image .count {
-    display: block;
+    display: grid;
     position: absolute;
-    top: calc(50% - 1ex);
-    left: 0;
-    width: 100%;
-    text-align: center;
+    inset: 0;
+    place-items: center;
     color: white;
     font-weight: bold;
     font-size: 200%;

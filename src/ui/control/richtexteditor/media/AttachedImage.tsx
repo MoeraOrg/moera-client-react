@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useMediaAttributes } from "ui/entry/media";
+import { useMediaPreviewAttributes } from "ui/entry/media";
 import ImagePlaceholder from "ui/entry/ImagePlaceholder";
 import { Icon, msPlayArrowFilled } from "ui/material-symbols";
 import { MediaWithCaption } from "util/media-with-caption";
@@ -17,7 +17,7 @@ interface Props {
 export default function AttachedImage({media, nodeName, dragging = false, onClick}: Props) {
     const {
         src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
-    } = useMediaAttributes(nodeName, media.media ?? null, media.remoteMedia ?? null, 150, 150);
+    } = useMediaPreviewAttributes(nodeName, media.media ?? null, media.remoteMedia ?? null, 150, 150);
 
     const cursor: React.CSSProperties["cursor"] = dragging ? "grabbing" : (onClick ? "pointer" : "default");
 

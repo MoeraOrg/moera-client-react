@@ -13,10 +13,6 @@
     block-size: 100%;
 }
 
-:is(.lightbox-video-prev, .lightbox-video-next) {
-    display: none;
-}
-
 .lightbox-video-loading {
     position: absolute;
     inset: 0;

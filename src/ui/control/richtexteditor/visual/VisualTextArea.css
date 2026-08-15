@@ -221,4 +221,10 @@
 .visual-text-area :is(.image-attached, .figure-image-attached) {
     position: relative;
     display: inline-block;
+    container-type: inline-size;
+    container-name: image-block;
+    width: var(--width);
+    aspect-ratio: var(--aspect-ratio);
+    max-width: min(100vw - 4rem, 100cqw - 3.5rem, var(--width, 100vw));
+    max-height: var(--height, 200vh);
 }

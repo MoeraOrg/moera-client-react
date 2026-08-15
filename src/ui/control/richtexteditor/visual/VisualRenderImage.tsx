@@ -3,7 +3,7 @@ import { RenderElementProps } from 'slate-react';
 import deepEqual from 'react-fast-compare';
 
 import { VideoDuration } from "ui/control";
-import { useMediaAttributes } from "ui/entry/media";
+import { useMediaPreviewAttributes } from "ui/entry/media";
 import ImagePlaceholder from "ui/entry/ImagePlaceholder";
 import PreloadedImage from "ui/entry/PreloadedImage";
 import { RelNodeName } from "util/rel-node-name";
@@ -23,9 +23,16 @@ interface Props {
 function VisualRenderImageImpl({attributes, media, nodeName, width, height, onClick, children}: Props) {
     const {
         src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
-    } = useMediaAttributes(nodeName, media.localMedia ?? null, media.remoteMedia ?? null, width, height);
+    } = useMediaPreviewAttributes(nodeName, media.localMedia ?? null, media.remoteMedia ?? null, width, height);
+
+    const style: React.CSSProperties = {
+        "--width": `${imageWidth}px`,
+        "--height": `${imageHeight}px`,
+        "--aspect-ratio": `${imageWidth / imageHeight}`
+    } as any;
+
     return (
-        <span className="image-attached" {...attributes} contentEditable={false} onClick={onClick}>
+        <span className="image-attached" {...attributes} contentEditable={false} onClick={onClick} style={style}>
             {children}
             {isVideoType(media.mimeType) &&
                 <VideoDuration duration={media.duration}/>

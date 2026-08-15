@@ -1,26 +1,34 @@
 import React, { type CSSProperties, useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
-import { createPlayer } from '@videojs/react';
+import { createPlayer, Gesture, selectControls } from '@videojs/react';
 import { MinimalVideoSkin, Video, videoFeatures } from '@videojs/react/video';
 
 import { Loading } from "ui/control";
-import { useIsTinyScreen } from "ui/hook";
 import { useLightbox } from "ui/lightbox/lightbox-context";
+import { ANIMATION_DURATION_MS } from "ui/lightbox/util";
 import "./LightboxVideo.css";
 
 const Player = createPlayer({features: videoFeatures});
 
 interface Props {
     src: string;
+    posterSrc: string | undefined;
+    width: number | undefined;
+    height: number | undefined;
     className?: string;
     autoPlay?: boolean;
+    transforms: {
+        x?: number;
+        y?: number;
+    };
 }
 
-export default function LightboxVideo({src, className, autoPlay}: Props) {
-    const {boxSize, setDyed} = useLightbox();
+export default function LightboxVideo({src, posterSrc, width, height, className, autoPlay, transforms}: Props) {
+    const {animating, boxSize, setDyed} = useLightbox();
     const videoRef = useRef<HTMLVideoElement | null>(null);
-    const [naturalSize, setNaturalSize] = useState<VideoSize | null>(null);
-    const tinyScreen = useIsTinyScreen();
+    const [naturalSize, setNaturalSize] = useState<VideoSize | null>(
+        width != null && height != null ? {width, height} : null
+    );
 
     const isMain = className?.includes("lightbox-video-main");
 
@@ -33,7 +41,7 @@ export default function LightboxVideo({src, className, autoPlay}: Props) {
         return () => setDyed(false);
     }, [isMain, setDyed]);
 
-    const handleLoadedMetadata = (event: React.SyntheticEvent<HTMLVideoElement>): void => {
+    const onLoadedMetadata = (event: React.SyntheticEvent<HTMLVideoElement>): void => {
         const video = event.currentTarget;
         if (video.videoWidth > 0 && video.videoHeight > 0) {
             setNaturalSize({width: video.videoWidth, height: video.videoHeight});
@@ -41,11 +49,13 @@ export default function LightboxVideo({src, className, autoPlay}: Props) {
     };
 
     const size = naturalSize != null
-        ? getFitSize(boxSize.width, boxSize.height, naturalSize, tinyScreen)
+        ? getFitSize(boxSize.width, boxSize.height, naturalSize)
         : {width: 0, height: 0};
     const style: CSSProperties = {
         width: size.width,
-        height: size.height
+        height: size.height,
+        transform: `translate3d(${transforms.x ?? 0}px,${transforms.y ?? 0}px,0)`,
+        ...(animating ? {transition: `transform ${ANIMATION_DURATION_MS}ms`} : {})
     };
 
     return (
@@ -65,15 +75,17 @@ export default function LightboxVideo({src, className, autoPlay}: Props) {
                     <MinimalVideoSkin className="lightbox-video-player">
                         <Video
                             src={src}
+                            poster={posterSrc}
                             autoPlay={autoPlay}
                             playsInline
                             preload="metadata"
-                            onLoadedMetadata={handleLoadedMetadata}
+                            onLoadedMetadata={onLoadedMetadata}
                             onPlay={() => setDyed(true)}
                             onPause={() => setDyed(false)}
                             onEnded={() => setDyed(false)}
                             ref={videoRef}
                         />
+                        <TouchPlaybackGesture/>
                     </MinimalVideoSkin>
                 </Player.Provider>
             </div>
@@ -86,16 +98,27 @@ interface VideoSize {
     height: number;
 }
 
-function getFitSize(
-    containerWidth: number, containerHeight: number, naturalSize: VideoSize, tinyScreen: boolean
-): VideoSize {
-    const padding = !tinyScreen ? 60 : 10;
-    const maxWidth = Math.max(0, containerWidth - padding * 2);
-    const maxHeight = Math.max(0, containerHeight - padding * 2);
+function getFitSize(containerWidth: number, containerHeight: number, naturalSize: VideoSize): VideoSize {
+    const maxWidth = Math.max(0, containerWidth - 20);
+    const maxHeight = Math.max(0, containerHeight - 20);
     const scale = Math.min(1, maxWidth / naturalSize.width, maxHeight / naturalSize.height);
 
     return {
         width: naturalSize.width * scale,
         height: naturalSize.height * scale
     };
+}
+
+function TouchPlaybackGesture() {
+    const controlsVisible = Player.usePlayer(selectControls)?.controlsVisible ?? false;
+
+    return (
+        <Gesture
+            type="tap"
+            action="togglePaused"
+            pointer="touch"
+            region="center"
+            disabled={!controlsVisible}
+        />
+    );
 }

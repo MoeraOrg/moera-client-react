@@ -442,19 +442,36 @@ export default function LightboxWindow({
         }
     };
 
-    const handleKeyInput = (event: React.KeyboardEvent<HTMLDivElement>): void => {
-        if (event.key === "Escape") {
-            // Will be handled by the overlay manager.
+    const handleKeyInput = useEffectEvent((event: KeyboardEvent): void => {
+        const navigationKey = event.key === "ArrowLeft" || event.key === "ArrowRight";
+        const playbackKey = event.key === " " || event.key === "Spacebar";
+        const video = ref.current?.querySelector<HTMLVideoElement>(".lightbox-video-main video");
+
+        if (!navigationKey && !playbackKey) {
             return;
         }
 
         event.stopPropagation();
 
-        if (event.key === "Tab") {
+        if (animating) {
             return;
         }
 
-        if (animating) {
+        if (playbackKey) {
+            if (video == null) {
+                return;
+            }
+
+            event.preventDefault();
+            if (event.type === "keyup" || event.repeat) {
+                return;
+            }
+
+            if (video.paused) {
+                void video.play();
+            } else {
+                video.pause();
+            }
             return;
         }
 
@@ -490,7 +507,16 @@ export default function LightboxWindow({
                 break;
             default:
         }
-    };
+    });
+
+    useEffect(() => {
+        window.addEventListener("keydown", handleKeyInput, true);
+        window.addEventListener("keyup", handleKeyInput, true);
+        return () => {
+            window.removeEventListener("keydown", handleKeyInput, true);
+            window.removeEventListener("keyup", handleKeyInput, true);
+        };
+    }, [handleKeyInput]);
 
     const handleWheel = (event: React.WheelEvent<HTMLDivElement>): void => {
         event.stopPropagation();
@@ -548,8 +574,6 @@ export default function LightboxWindow({
                 onWheel={handleWheel}
                 onPointerDown={handlePointerDown}
                 tabIndex={-1}
-                onKeyDown={handleKeyInput}
-                onKeyUp={handleKeyInput}
             >
                 <div className="lightbox-inner" onClick={handleInnerClick}>
                     {children}

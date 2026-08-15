@@ -55,7 +55,6 @@ export default [
         true,
         (signal: ComposePostSucceededAction) => jumpNear(ut`/post/${signal.payload.posting.id}`, null, null)
     ),
-    trigger("COMPOSE_POSTED_ASYNC", true, jumpNear("/timeline", null, null)),
     trigger(
         "COMPOSE_POST_SUCCEEDED",
         true,

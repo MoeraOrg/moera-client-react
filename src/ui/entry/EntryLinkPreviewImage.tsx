@@ -2,7 +2,7 @@ import React from 'react';
 
 import { PrivateMediaFileInfo, RemoteMediaInfo } from "api";
 import { useIsTinyScreen } from "ui/hook";
-import { useMediaAttributes } from "ui/entry/media";
+import { useMediaPreviewAttributes } from "ui/entry/media";
 import ImagePlaceholder from "ui/entry/ImagePlaceholder";
 import PreloadedImage from "ui/entry/PreloadedImage";
 import { RelNodeName } from "util/rel-node-name";
@@ -18,7 +18,7 @@ interface Props {
 export default function EntryLinkPreviewImage({nodeName, mediaFile, remoteMedia}: Props) {
     const {
         src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
-    } = useMediaAttributes(nodeName, mediaFile, remoteMedia);
+    } = useMediaPreviewAttributes(nodeName, mediaFile, remoteMedia);
     const tinyScreen = useIsTinyScreen();
 
     if (mediaFile == null && remoteMedia == null) {

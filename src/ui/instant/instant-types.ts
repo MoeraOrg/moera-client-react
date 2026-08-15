@@ -476,8 +476,7 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         target: story => ({
             nodeName: story.remoteNodeName ?? REL_HOME,
             href: ut`/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
-        }),
-        sheriffFields: ["posting", "comment"]
+        })
     },
     "video-posting-published": {
         color: "var(--bs-green)",
@@ -486,8 +485,7 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         target: story => ({
             nodeName: story.remoteNodeName ?? REL_HOME,
             href: ut`/post/${story.remotePostingId}`
-        }),
-        sheriffFields: ["posting"]
+        })
     },
 };
 

@@ -50,9 +50,11 @@ export type ComposePostSucceededAction = ActionWithPayload<"COMPOSE_POST_SUCCEED
 export const composePostSucceeded = (posting: PostingInfo): ComposePostSucceededAction =>
     actionWithPayload("COMPOSE_POST_SUCCEEDED", {posting});
 
-export type ComposePostedAsyncAction = ActionWithoutPayload<"COMPOSE_POSTED_ASYNC">;
-export const composePostedAsync = (): ComposePostedAsyncAction =>
-    actionWithoutPayload("COMPOSE_POSTED_ASYNC");
+export type ComposePostedAsyncAction = ActionWithPayload<"COMPOSE_POSTED_ASYNC", {
+    postingId: string | null;
+}>;
+export const composePostedAsync = (postingId: string | null): ComposePostedAsyncAction =>
+    actionWithPayload("COMPOSE_POSTED_ASYNC", {postingId});
 
 export type ComposePostFailedAction = ActionWithoutPayload<"COMPOSE_POST_FAILED">;
 export const composePostFailed = (): ComposePostFailedAction =>

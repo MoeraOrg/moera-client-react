@@ -4,15 +4,15 @@ import cx from 'classnames';
 import { PrivateMediaFileInfo, RemoteMediaInfo } from "api";
 import { openLightbox } from "state/lightbox/actions";
 import { useDispatcher } from "ui/hook";
+import { VideoDuration } from "ui/control";
 import Jump from "ui/navigation/Jump";
-import { useMediaAttributes } from "ui/entry/media";
+import { useMediaPreviewAttributes } from "ui/entry/media";
 import ImagePlaceholder from "ui/entry/ImagePlaceholder";
 import PreloadedImage from "ui/entry/PreloadedImage";
 import { RelNodeName } from "util/rel-node-name";
 import { urlWithParameters, ut } from "util/url";
-import "./EntryImage.css";
 import { isVideoType } from "util/mime-type";
-import { VideoDuration } from "ui/control";
+import "./EntryImage.css";
 
 interface Props {
     postingId?: string | null;
@@ -33,7 +33,7 @@ export default function EntryImage({
 }: Props) {
     const {
         src, srcSet, sizes, width: imageWidth, height: imageHeight, alt: imageAlt
-    } = useMediaAttributes(nodeName, mediaFile, remoteMedia, width, height);
+    } = useMediaPreviewAttributes(nodeName, mediaFile, remoteMedia, width, height);
     const dispatch = useDispatcher();
 
     const mediaId = mediaFile?.id ?? remoteMedia?.mediaId;

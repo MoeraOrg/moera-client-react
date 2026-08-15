@@ -11,18 +11,7 @@ import { urlWithParameters } from "util/url";
 import { resolveMediaUrl } from "util/media-url";
 import { extension, isImageType } from "util/mime-type";
 import { MediaWithCaption } from "util/media-with-caption";
-import { isNumber } from "util/misc";
-
-function toInt(s: number | string | null | undefined): number {
-    if (s == null) {
-        return 0;
-    }
-    if (isNumber(s)) {
-        return s;
-    }
-    const val = parseInt(s);
-    return isFinite(val) ? val : 0;
-}
+import { toInt } from "util/misc";
 
 // For backward compatibility with padded media file IDs
 export const mediaHashStrip = (hash: string): string => hash.endsWith("=") ? hash.substring(0, hash.length - 1) : hash;

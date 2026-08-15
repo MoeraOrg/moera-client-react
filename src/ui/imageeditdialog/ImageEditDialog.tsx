@@ -15,7 +15,7 @@ import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog, VideoDuration } from "ui/control";
 import { RichTextField, RichTextValue } from "ui/control/richtexteditor";
 import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
-import { useMediaAttributes } from "ui/entry/media";
+import { useMediaPreviewAttributes } from "ui/entry/media";
 import ImagePlaceholder from "ui/entry/ImagePlaceholder";
 import { MediaWithCaption } from "util/media-with-caption";
 import { isVideoType } from "util/mime-type";
@@ -55,7 +55,7 @@ function ImageEditDialogInner(props: Props) {
 
     const {
         src, srcSet, sizes, width: imageWidth, height: imageHeight, alt
-    } = useMediaAttributes(nodeName, media?.media ?? null, media?.remoteMedia ?? null, 800);
+    } = useMediaPreviewAttributes(nodeName, media?.media ?? null, media?.remoteMedia ?? null, 800);
 
     if (media == null) {
         return null;
