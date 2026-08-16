@@ -52,4 +52,5 @@ export { Tooltip } from "ui/control/Tooltip";
 export { UnderlinedTabs } from "ui/control/UnderlinedTabs";
 export type { UnderlinedTabDescription } from "ui/control/UnderlinedTabs";
 export { VideoDuration } from "ui/control/VideoDuration";
+export { VideoPlayer } from "ui/control/VideoPlayer";
 export { Wrapper } from "ui/control/Wrapper";

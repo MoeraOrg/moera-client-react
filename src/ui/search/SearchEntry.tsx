@@ -108,7 +108,10 @@ export default function SearchEntry({entry}: Props) {
             <div className="content pb-0">
                 <EntryHtml html={entry.bodyPreview.text}/>
                 <SearchEntryAttachments count={entry.attachmentCount ?? 0}/>
-                {entry.imageCount != null && entry.imageCount > 0 &&
+                {(
+                    (entry.imageCount != null && entry.imageCount > 0)
+                    || (entry.videoPresent && entry.mediaPreviewId != null)
+                ) &&
                     <p className="search-images" dir="auto">
                         {entry.mediaPreviewId != null && entry.mediaPreview != null ?
                             <>
@@ -120,12 +123,16 @@ export default function SearchEntry({entry}: Props) {
                                     mediaFile={entry.mediaPreview}
                                     mediaMimeType={entry.mediaPreviewMimeType ?? "image/jpeg"}
                                 />
-                                {entry.imageCount > 1 ? t("count-images", {count: entry.imageCount}) : ""}
+                                {entry.imageCount != null && entry.imageCount > 1
+                                    ? t("count-images", {count: entry.imageCount})
+                                    : ""
+                                }
                             </>
                         :
-                            <span dangerouslySetInnerHTML={{
-                                __html: replaceEmojis("\uD83D\uDDBC️" + t("count-images", {count: entry.imageCount}))
-                            }}/>
+                            entry.imageCount != null &&
+                                <span dangerouslySetInnerHTML={{
+                                    __html: replaceEmojis("\uD83D\uDDBC️" + t("count-images", {count: entry.imageCount}))
+                                }}/>
                         }
                     </p>
                 }

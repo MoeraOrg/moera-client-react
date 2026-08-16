@@ -39,7 +39,7 @@ export function useLightboxImageLoader(
         const inMemoryImage = new Image();
 
         const onError = (): void =>
-            imageCache.put(src, {error: true});
+            imageCache.put(src, {loaded: true, error: true});
 
         const onLoad = (): void =>
             imageCache.put(src, {

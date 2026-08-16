@@ -1,14 +1,10 @@
 import React, { type CSSProperties, useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
-import { createPlayer, Gesture, selectControls } from '@videojs/react';
-import { MinimalVideoSkin, Video, videoFeatures } from '@videojs/react/video';
 
-import { Loading } from "ui/control";
+import { Loading, VideoPlayer } from "ui/control";
 import { useLightbox } from "ui/lightbox/lightbox-context";
 import { ANIMATION_DURATION_MS } from "ui/lightbox/util";
 import "./LightboxVideo.css";
-
-const Player = createPlayer({features: videoFeatures});
 
 interface Props {
     src: string;
@@ -71,23 +67,17 @@ export default function LightboxVideo({src, posterSrc, width, height, className,
                 aria-hidden={!isMain}
                 inert={!isMain}
             >
-                <Player.Provider>
-                    <MinimalVideoSkin className="lightbox-video-player">
-                        <Video
-                            src={src}
-                            poster={posterSrc}
-                            autoPlay={autoPlay}
-                            playsInline
-                            preload="metadata"
-                            onLoadedMetadata={onLoadedMetadata}
-                            onPlay={() => setDyed(true)}
-                            onPause={() => setDyed(false)}
-                            onEnded={() => setDyed(false)}
-                            ref={videoRef}
-                        />
-                        <TouchPlaybackGesture/>
-                    </MinimalVideoSkin>
-                </Player.Provider>
+                <VideoPlayer
+                    className="lightbox-video-player"
+                    src={src}
+                    poster={posterSrc}
+                    autoPlay={autoPlay}
+                    onLoadedMetadata={onLoadedMetadata}
+                    onPlay={() => setDyed(true)}
+                    onPause={() => setDyed(false)}
+                    onEnded={() => setDyed(false)}
+                    ref={videoRef}
+                />
             </div>
         </>
     );
@@ -107,18 +97,4 @@ function getFitSize(containerWidth: number, containerHeight: number, naturalSize
         width: naturalSize.width * scale,
         height: naturalSize.height * scale
     };
-}
-
-function TouchPlaybackGesture() {
-    const controlsVisible = Player.usePlayer(selectControls)?.controlsVisible ?? false;
-
-    return (
-        <Gesture
-            type="tap"
-            action="togglePaused"
-            pointer="touch"
-            region="center"
-            disabled={!controlsVisible}
-        />
-    );
 }

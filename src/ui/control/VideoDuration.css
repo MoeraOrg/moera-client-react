@@ -1,7 +1,7 @@
 .video-duration {
     position: absolute;
     inset: 0;
-    color: white;
+    color: rgb(255 255 255 / 90%);
     display: flex;
     align-items: center;
     place-content: center;

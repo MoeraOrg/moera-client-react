@@ -7,6 +7,11 @@
 3. Put third-party imports at the top of the file and local imports below. Put
    a blank line between them.
 
+# React
+
+1. Pass `ref` as a regular component prop. Do not use `forwardRef`; modern
+   React supports `ref` as a prop.
+
 # Actions
 
 1. Literal names of actions should correspond to their function names and type

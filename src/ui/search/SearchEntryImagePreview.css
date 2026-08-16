@@ -22,7 +22,7 @@
 .search-images .preview .play-icon {
     position: absolute;
     inset: 0;
-    color: white;
+    color: rgb(255 255 255 / 90%);
     display: grid;
     place-items: center;
     pointer-events: none;

@@ -530,7 +530,7 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
                 standardSize: element.standardSize,
                 customWidth: element.customWidth,
                 customHeight: element.customHeight,
-                caption: "caption" in element ? element.caption : undefined,
+                caption: isFigureImageElement(element) ? element.caption : undefined,
                 play: element.play,
             }
         } else if (!embedded) {
@@ -575,6 +575,7 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
                                 if (prevType === "image") {
                                     editor.liftNodes({at: path});
                                 } else {
+                                    editor.unsetNodes("caption", {at: path});
                                     editor.wrapNodes(createParagraphElement([]), {at: path});
                                 }
                             }

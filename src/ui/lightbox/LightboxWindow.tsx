@@ -97,6 +97,7 @@ export default function LightboxWindow({
     const preventInnerCloseRef = useRef(false);
     const keyPressedRef = useRef(false);
     const lastKeyDownTimeRef = useRef(0);
+    const lastPlaybackEventRef = useRef<KeyboardEvent | null>(null);
     const scrollXRef = useRef(0);
     const moveStartXRef = useRef(0);
     const moveStartYRef = useRef(0);
@@ -444,10 +445,22 @@ export default function LightboxWindow({
 
     const handleKeyInput = useEffectEvent((event: KeyboardEvent): void => {
         const navigationKey = event.key === "ArrowLeft" || event.key === "ArrowRight";
-        const playbackKey = event.key === " " || event.key === "Spacebar";
-        const video = ref.current?.querySelector<HTMLVideoElement>(".lightbox-video-main video");
+        const playbackKey =
+            event.key === " "
+            || event.key === "Spacebar"
+            || event.key === "k"
+            || event.key === "j"
+            || event.key === "l"
+            || event.key === "f";
+        const videoPlayer = ref.current?.querySelector<HTMLElement>(
+            ".lightbox-video-main .lightbox-video-player"
+        );
 
         if (!navigationKey && !playbackKey) {
+            return;
+        }
+
+        if (playbackKey && lastPlaybackEventRef.current === event) {
             return;
         }
 
@@ -458,7 +471,7 @@ export default function LightboxWindow({
         }
 
         if (playbackKey) {
-            if (video == null) {
+            if (videoPlayer == null) {
                 return;
             }
 
@@ -467,11 +480,14 @@ export default function LightboxWindow({
                 return;
             }
 
-            if (video.paused) {
-                void video.play();
-            } else {
-                video.pause();
-            }
+            const playbackEvent = new KeyboardEvent("keydown", {
+                key: event.key,
+                code: event.code,
+                bubbles: true,
+                cancelable: true
+            });
+            lastPlaybackEventRef.current = playbackEvent;
+            videoPlayer.dispatchEvent(playbackEvent);
             return;
         }
 

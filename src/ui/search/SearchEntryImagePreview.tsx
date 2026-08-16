@@ -51,7 +51,7 @@ export default function SearchEntryImagePreview({
         <Jump nodeName={nodeName} href={href} onNear={onNear} className="preview">
             <img src={resolveMediaUrl(rootPage, imagePath)} style={style} alt=""/>
             {isVideoType(mediaMimeType) &&
-                <div className="play-icon"><Icon icon={msPlayArrowFilled} size={48}/></div>
+                <div className="play-icon"><Icon icon={msPlayArrowFilled} size={64}/></div>
             }
         </Jump>
     );

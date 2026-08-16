@@ -12,6 +12,10 @@
     overscroll-behavior-y: none;
 }
 
+.modal-footer .btn {
+    min-width: 5.5rem;
+}
+
 .modal-empty {
     color: var(--bs-gray-500);
     text-align: center;
