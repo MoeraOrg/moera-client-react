@@ -2,6 +2,8 @@ import { actionWithPayload, ActionWithPayload } from "state/action-types";
 import { Body, PrivateMediaFileInfo, SourceFormat } from "api";
 import { MediaWithCaption } from "util/media-with-caption";
 import { RelNodeName } from "util/rel-node-name";
+import { AndroidMediaUploadHandler } from "api/android/media-upload";
+import { MediaUploadSource } from "state/mediaupload/media-source";
 
 type MediaUploadSuccessHandler = (index: number, mediaFile: MediaWithCaption) => void;
 type MediaUploadFailureHandler = (index: number) => void;
@@ -9,7 +11,8 @@ type MediaUploadProgressHandler = (index: number, loaded: number, total: number)
 
 export type RichTextEditorMediaUploadAction = ActionWithPayload<"RICH_TEXT_EDITOR_MEDIA_UPLOAD", {
     nodeName: RelNodeName | string;
-    files: (File | string)[];
+    files: MediaUploadSource[];
+    androidUpload?: AndroidMediaUploadHandler;
     compress: boolean;
     onSuccess: MediaUploadSuccessHandler;
     onFailure: MediaUploadFailureHandler;
@@ -19,7 +22,8 @@ export type RichTextEditorMediaUploadAction = ActionWithPayload<"RICH_TEXT_EDITO
 }>;
 export const richTextEditorMediaUpload = (
     nodeName: RelNodeName | string,
-    files: (File | string)[],
+    files: MediaUploadSource[],
+    androidUpload: AndroidMediaUploadHandler | undefined,
     compress: boolean,
     onSuccess: MediaUploadSuccessHandler,
     onFailure: MediaUploadFailureHandler,
@@ -29,7 +33,7 @@ export const richTextEditorMediaUpload = (
 ): RichTextEditorMediaUploadAction =>
     actionWithPayload(
         "RICH_TEXT_EDITOR_MEDIA_UPLOAD",
-        {nodeName, files, compress, onSuccess, onFailure, onProgress, captionSrc, captionSrcFormat}
+        {nodeName, files, androidUpload, compress, onSuccess, onFailure, onProgress, captionSrc, captionSrcFormat}
     );
 
 type MediaRenameSuccessHandler = (media: PrivateMediaFileInfo) => void;

@@ -102,6 +102,9 @@ function CommentDialogInner(props: Props) {
                         features={features}
                         nodeName={receiverName ?? REL_CURRENT}
                         noEmbeddedMedia
+                        draftId={draft?.id ?? null}
+                        draftReady={ready}
+                        draftMedia={draft?.media}
                         anyValue
                         autoFocus
                         disabled={!ready || beingPosted}

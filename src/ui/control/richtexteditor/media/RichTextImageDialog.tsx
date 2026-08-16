@@ -3,7 +3,9 @@ import { useField } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { CheckboxField, InputField, NumberField, SelectField } from "ui/control/field";
+import { isAndroidMedia, LocalMediaUploadSource } from "state/mediaupload/media-source";
 import { RichTextImageStandardSize, STANDARD_SIZES } from "ui/control/richtexteditor/media/rich-text-image";
+import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-text-editor-media-context";
 import UploadedImage from "ui/control/richtexteditor/media/UploadedImage";
 import {
     richTextEditorDialog,
@@ -17,7 +19,7 @@ import { isVideoType } from "util/mime-type";
 import "./RichTextImageDialog.css";
 
 export interface RichTextImageValues {
-    files?: File[] | null;
+    files?: LocalMediaUploadSource[] | null;
     mediaFiles?: MediaWithCaption[] | null;
     href?: string | null;
     compress?: boolean;
@@ -29,7 +31,7 @@ export interface RichTextImageValues {
 }
 
 type Props = {
-    files?: File[] | null;
+    files?: LocalMediaUploadSource[] | null;
     mediaFiles?: MediaWithCaption[] | null;
     href?: string | null;
     insert?: boolean;
@@ -55,9 +57,11 @@ const mapPropsToValues = (props: Props): RichTextImageValues => ({
 function RichTextImageDialog({
     mediaFiles, insert, nodeName = REL_CURRENT, mediaMaxSize, onSubmit, okButtonRef
 }: BodyProps) {
-    const [, {value: files}, {setValue: setFiles}] = useField<File[] | null>("files");
+    const [, {value: files}, {setValue: setFiles}] = useField<LocalMediaUploadSource[] | null>("files");
     const [, {value: standardSize}] = useField<RichTextImageStandardSize>("standardSize");
     const {t} = useTranslation();
+
+    const {discardOpenFiles} = useRichTextEditorMedia();
 
     useEffect(() => {
         // If there is no other field that should receive focus
@@ -79,10 +83,14 @@ function RichTextImageDialog({
 
     const onDelete = (index: number, e: React.MouseEvent) => {
         if (files != null) {
+            const file = files[index];
+            if (isAndroidMedia(file)) {
+                discardOpenFiles(file.id);
+            }
             if (files.length === 1 && index === 0) {
                 onSubmit(false, {});
             } else {
-                setFiles(files.toSpliced(index, 1));
+                void setFiles(files.toSpliced(index, 1));
             }
         }
         e.preventDefault();

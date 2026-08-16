@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
+import type { AndroidMessage } from "api/android/types";
 import { ClientState } from "state/state";
 import { restoreFar, restoreNear } from "state/navigation/actions";
 import { cartesLoad } from "state/cartes/actions";

@@ -2,13 +2,17 @@ import React, { ReactNode, useCallback, useEffect, useMemo, useRef, useState } f
 import { useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import * as immutable from 'object-path-immutable';
-import * as Base64js from 'base64-js';
 
-import { MediaCaption, PostingFeatures, PrivateMediaFileInfo, SourceFormat } from "api";
+import { MediaAttachment, MediaCaption, PostingFeatures, PrivateMediaFileInfo, SourceFormat } from "api";
+import {
+    isAndroidMedia,
+    LocalMediaUploadSource,
+    MediaUploadSource
+} from "state/mediaupload/media-source";
 import { ClientState } from "state/state";
 import { getSetting, getSettingNode } from "state/settings/selectors";
 import { richTextEditorMediaRename, richTextEditorMediaUpload } from "state/richtexteditor/actions";
-import { useAndroidMessages, useDispatcher } from "ui/hook";
+import { useAndroidUploader, useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
 import { UI_EVENT_MEDIA_COMPRESSED, UiEventMediaCompressed } from "ui/ui-events";
 import {
@@ -31,7 +35,7 @@ import ImageEditDialog from "ui/imageeditdialog/ImageEditDialog";
 import { MediaWithCaption } from "util/media-with-caption";
 import { RelNodeName } from "util/rel-node-name";
 import { extension } from "util/mime-type";
-import { arrayMove } from "util/misc";
+import { arrayMove, notNull } from "util/misc";
 
 function updateStatus(progress: UploadProgress[], index: number, status: UploadStatus): UploadProgress[] {
     const updated = immutable.set(progress, [index, "status"], status);
@@ -49,12 +53,15 @@ interface Props {
     nodeName: RelNodeName | string;
     noMedia?: boolean | null;
     srcFormat: SourceFormat;
+    draftId?: string | null;
+    draftReady?: boolean;
+    draftMedia?: MediaAttachment[] | null;
     onChange?: ChangeHandler;
     children: ReactNode;
 }
 
 export default function RichTextEditorMedia({
-    value, features, nodeName, noMedia, srcFormat, onChange, children
+    value, features, nodeName, noMedia, srcFormat, draftId = null, draftReady = false, draftMedia, onChange, children
 }: Props) {
     const mediaMaxSize = useSelector((state: ClientState) => getSettingNode(state, "media.max-size") as number);
     const compressImages = useSelector((state: ClientState) =>
@@ -71,6 +78,21 @@ export default function RichTextEditorMedia({
     valueRef.current = value;
     const onChangeRef = useRef<ChangeHandler | undefined>(undefined);
     onChangeRef.current = onChange;
+
+    const draftMediaIds = useMemo(
+        () => draftMedia
+            ?.map(attachment => attachment.media?.id ?? attachment.remoteMedia?.mediaId)
+            .filter(notNull)
+            ?? [],
+        [draftMedia]
+    );
+    const androidUploader = useAndroidUploader({
+        draftId,
+        draftReady,
+        draftMediaIds,
+        onSelectedMedia: openUploadImages,
+        onRestoreMedia: files => uploadImages(files, false)
+    });
 
     const onMediaCompressed = useCallback((event: UiEventMediaCompressed) => {
         const replaceMedia = (media: MediaWithCaption | null): MediaWithCaption | null => {
@@ -94,7 +116,7 @@ export default function RichTextEditorMedia({
         }
     }, [onMediaCompressed]);
 
-    const onImageUploadSuccess = (
+    const onImageUploadSuccess = useCallback((
         onInsert?: OnInsertHandler,
         standardSize?: RichTextImageStandardSize,
         customWidth?: number | null,
@@ -103,36 +125,39 @@ export default function RichTextEditorMedia({
     ) => (index: number, mediaFile: MediaWithCaption) => {
         setUploadProgress(progress => updateStatus(progress, index, "success"));
 
-        if (uploadedImagesRef.current.some(v => v != null && v.mediaId === mediaFile.mediaId)) {
-            return;
-        }
         uploadedImagesRef.current[index] = mediaFile;
 
         if (isAllUploaded(uploadedImagesRef.current)) {
-            const media = (valueRef.current ?? []).concat(uploadedImagesRef.current);
-            onChangeRef.current?.(media);
-            if (onInsert != null && uploadedImagesRef.current.length > 0) {
-                onInsert(uploadedImagesRef.current, standardSize ?? "large", customWidth, customHeight, caption);
+            const existing = new Set((valueRef.current ?? []).map(media => media?.mediaId));
+            const additions = uploadedImagesRef.current.filter(media => {
+                if (existing.has(media.mediaId)) {
+                    return false;
+                }
+                existing.add(media.mediaId);
+                return true;
+            });
+            if (additions.length > 0) {
+                onChangeRef.current?.((valueRef.current ?? []).concat(additions));
+            }
+            if (onInsert != null && additions.length > 0) {
+                onInsert(additions, standardSize ?? "large", customWidth, customHeight, caption);
             }
         }
-    }
+    }, []);
 
-    const onImageUploadFailure = (index: number) => {
+    const onImageUploadFailure = useCallback(() => (index: number) => {
         setUploadProgress(progress => updateStatus(progress, index, "failure"));
-    }
+    }, []);
 
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
 
-    const onImageUploadProgress = (index: number, loaded: number, total: number) => {
-        setUploadProgress(progress => immutable.assign(progress, [index], {loaded, total}));
-    }
-
-    const imageUploadStarted = (count: number) => {
-        uploadedImagesRef.current = new Array(count).fill(null);
-    }
+    const onImageUploadProgress = useCallback(() =>
+        (index: number, loaded: number, total: number) => {
+            setUploadProgress(progress => immutable.assign(progress, [index], {loaded, total}));
+        }, []);
 
     const uploadImages = useCallback((
-        files: (File | string)[],
+        files: MediaUploadSource[],
         compress: boolean,
         onInsert?: OnInsertHandler,
         standardSize?: RichTextImageStandardSize,
@@ -144,36 +169,38 @@ export default function RichTextEditorMedia({
             setUploadProgress(files.map(file =>
                 ({status: "loading", loaded: 0, total: typeof file === "string" ? 100 : file.size})
             ));
-            imageUploadStarted(files.length);
+            uploadedImagesRef.current = new Array(files.length).fill(null);
             dispatch(richTextEditorMediaUpload(
                 nodeName,
                 files,
+                androidUploader.upload,
                 compress,
                 onImageUploadSuccess(onInsert, standardSize, customWidth, customHeight, caption),
-                onImageUploadFailure,
-                onImageUploadProgress,
+                onImageUploadFailure(),
+                onImageUploadProgress(),
                 null,
                 srcFormat
             ));
         }
-    }, [dispatch, nodeName, srcFormat]);
+    }, [androidUploader.upload, dispatch, nodeName, onImageUploadFailure, onImageUploadProgress,
+        onImageUploadSuccess, srcFormat]);
 
     const compressDefault = useRef<boolean>(compressImages);
     const onInsertRef = useRef<OnInsertHandler | undefined>(undefined);
 
-    const openUploadImages = useCallback((files: File[]) => {
-        if (files.length === 0) {
+    function openUploadImages(selectedFiles: LocalMediaUploadSource[]) {
+        if (selectedFiles.length === 0) {
             return;
         }
 
         if (attachmentType === "file" && onInsertRef.current == null) {
-            uploadImages(files, false);
+            uploadImages(selectedFiles, false);
             return;
         }
 
         showImageDialog(
             true,
-            files,
+            selectedFiles,
             null,
             null,
             onInsertRef.current != null,
@@ -188,6 +215,8 @@ export default function RichTextEditorMedia({
                 onInsertRef.current = undefined;
 
                 if (!ok || !files || files.length === 0) {
+                    selectedFiles.filter(isAndroidMedia)
+                        .forEach(file => androidUploader.discard(file.id));
                     return;
                 }
 
@@ -200,24 +229,7 @@ export default function RichTextEditorMedia({
                 );
             }
         );
-    }, [attachmentType, uploadImages]);
-
-    const onAndroidMessage = useCallback((message: AndroidMessage) => {
-        if (message.action === "content-selected" && message.uris != null) {
-            const files: File[] = message.uris.map(uri => {
-                const mimeType = window.Android?.getContentUriMimeType(uri) ?? "application/octet-stream";
-                const content = Uint8Array.from(Base64js.toByteArray(window.Android?.readContentUri(uri) ?? ""));
-                return new File(
-                    [content],
-                    window.Android?.getContentUriFileName(uri) ?? "moera-upload.bin",
-                    {type: mimeType}
-                );
-            });
-            openUploadImages(files);
-        }
-    }, [openUploadImages]);
-
-    useAndroidMessages(onAndroidMessage);
+    }
 
     const imageExtensions = useMemo(
         () => features?.imageFormats
@@ -247,8 +259,14 @@ export default function RichTextEditorMedia({
             onDrop: openUploadImages
         });
 
+    const currentlyExpectingSelectionRef = useRef<(() => void) | null>(null);
+
+    useEffect(() => () => currentlyExpectingSelectionRef.current?.(), []);
+
     const openLocalFiles = (onInsert?: OnInsertHandler) => {
         onInsertRef.current = onInsert;
+        currentlyExpectingSelectionRef.current?.();
+        currentlyExpectingSelectionRef.current = androidUploader.expectSelection();
         openDropzone();
     }
 
@@ -291,7 +309,7 @@ export default function RichTextEditorMedia({
     }
 
     const [imageDialog, setImageDialog] = useState<boolean>(false);
-    const [imageDialogFiles, setImageDialogFiles] = useState<File[] | null>(null);
+    const [imageDialogFiles, setImageDialogFiles] = useState<LocalMediaUploadSource[] | null>(null);
     const [imageDialogMediaFiles, setImageDialogMediaFiles] = useState<MediaWithCaption[] | null>(null);
     const [imageDialogHref, setImageDialogHref] = useState<string | null>(null);
     const [imageDialogInsert, setImageDialogInsert] = useState<boolean>(false);
@@ -300,7 +318,7 @@ export default function RichTextEditorMedia({
         useState<RichTextEditorDialogSubmit<RichTextImageValues>>(() => () => {});
 
     const showImageDialog = (
-        show: boolean, files: File[] | null = null, mediaFiles: MediaWithCaption[] | null = null,
+        show: boolean, files: LocalMediaUploadSource[] | null = null, mediaFiles: MediaWithCaption[] | null = null,
         href: string | null = null, insert: boolean = false, prevValues: RichTextImageValues | null = null,
         onSubmit?: RichTextEditorDialogSubmit<RichTextImageValues>
     ) => {
@@ -375,7 +393,8 @@ export default function RichTextEditorMedia({
     return (
         <RichTextEditorMediaContext.Provider value={{
             getRootProps, isDragAccept, isDragReject, openLocalFiles, uploadProgress, deleteMedia, reorderMedia,
-            pasteMedia, showImageDialog, copyImage, attachmentType, setAttachmentType, renameMedia, setMediaCaption
+            pasteMedia, showImageDialog, copyImage, attachmentType, setAttachmentType, renameMedia, setMediaCaption,
+            discardOpenFiles: androidUploader.discard
         }}>
             {children}
             <input {...getInputProps()}/>

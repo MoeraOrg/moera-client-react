@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 
 import { MediaAttachment, MediaCaption, Node, PostingText, PrivateMediaFileInfo } from "api";
+import { AndroidMediaUploadError, AndroidMediaUploadHandler } from "api/android/media-upload";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { dispatch } from "state/store-sagas";
@@ -8,6 +9,7 @@ import { messageBox } from "state/messagebox/actions";
 import { errorThrown } from "state/error/actions";
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { postingSet } from "state/postings/actions";
+import { isAndroidMedia, MediaUploadSource } from "state/mediaupload/media-source";
 import { absoluteNodeName, REL_HOME, RelNodeName } from "util/rel-node-name";
 import { formatMib } from "util/info-quantity";
 
@@ -18,9 +20,10 @@ const UPLOAD_STREAMS_COUNT = 4;
 export async function mediaUpload(
     caller: WithContext<ClientAction>,
     mediaMaxSize: number,
-    file: File | string,
+    file: MediaUploadSource,
     compress: boolean,
     uploadChunkSize: number,
+    androidUpload?: AndroidMediaUploadHandler,
     onProgress?: MediaUploadProgressHandler
 ): Promise<PrivateMediaFileInfo | null> {
     try {
@@ -39,6 +42,13 @@ export async function mediaUpload(
                 return null;
             }
 
+            if (isAndroidMedia(file)) {
+                if (androidUpload == null) {
+                    throw new AndroidMediaUploadError("unsupported", "Android media upload is not available");
+                }
+                return await androidUpload(file, compress, onProgress);
+            }
+
             if (file.size <= uploadChunkSize) {
                 return await Node.uploadPrivateMedia(caller, REL_HOME, file, onProgress, null, null, compress);
             } else {
@@ -46,7 +56,9 @@ export async function mediaUpload(
             }
         }
     } catch (e) {
-        dispatch(errorThrown(e));
+        if (!(e instanceof AndroidMediaUploadError && e.code === "cancelled")) {
+            dispatch(errorThrown(e));
+        }
         return null;
     }
 }

@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { PostingFeatures, SourceFormat } from "api";
+import { MediaAttachment, PostingFeatures, SourceFormat } from "api";
 import { FormGroup } from "ui/control";
 import {
     RichTextEditor,
@@ -27,6 +27,9 @@ interface Props {
     noMedia?: boolean | null;
     noVideo?: boolean | null;
     nodeName?: RelNodeName | string;
+    draftId?: string | null;
+    draftReady?: boolean;
+    draftMedia?: MediaAttachment[] | null;
     placeholder?: string | null;
     autoFocus?: boolean;
     anyValue?: boolean;
@@ -50,9 +53,9 @@ interface Props {
 
 export function RichTextField({
     name, title, rows = 3, minHeight, maxHeight, features, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo,
-    nodeName = REL_CURRENT, placeholder, autoFocus, anyValue, className, autoComplete, noFeedback = false,
-    disabled = false, initialValue, defaultValue, smileysEnabled, commentQuote, panelMode, format, submitKey, onSubmit,
-    urlsField, linkPreviewsField, linkPreviewsSmall, children
+    nodeName = REL_CURRENT, draftId, draftReady, draftMedia, placeholder, autoFocus, anyValue, className, autoComplete,
+    noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled, commentQuote, panelMode, format,
+    submitKey, onSubmit, urlsField, linkPreviewsField, linkPreviewsSmall, children
 }: Props) {
     const [{value, onBlur}, {touched, error}, {setTouched}, {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
@@ -111,6 +114,9 @@ export function RichTextField({
                 noMedia={noMedia}
                 noVideo={noVideo}
                 nodeName={nodeName}
+                draftId={draftId}
+                draftReady={draftReady}
+                draftMedia={draftMedia}
                 children={children}
             />
             {!noFeedback && touched && <FieldError error={(error as any)?.text}/>}

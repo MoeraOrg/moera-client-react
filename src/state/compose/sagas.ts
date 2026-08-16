@@ -2,7 +2,7 @@ import i18n from 'i18next';
 
 import { errorThrown } from "state/error/actions";
 import { Node, NodeApiError } from "api";
-import { updateMediaCaptions } from "api/node/media-upload";
+import { updateMediaCaptions } from "state/mediaupload/media-upload";
 import {
     ComposeDraftDeleteAction,
     ComposeDraftListItemDeleteAction,
@@ -193,9 +193,15 @@ async function composeDraftDeleteSaga(action: WithContext<ComposeDraftDeleteActi
     }
     if (!editing) {
         await Node.deleteDraft(action, REL_HOME, draftId, ["draft.not-found"]);
+        if (window.Android != null && window.Android.getApiVersion() >= 3) {
+            window.Android.abandonDraft(draftId);
+        }
         dispatch(composeDraftListItemDeleted(draftId, true).causedBy(action));
     } else {
         await Node.deleteDraft(action, REL_HOME, draftId, ["draft.not-found"]);
+        if (window.Android != null && window.Android.getApiVersion() >= 3) {
+            window.Android.abandonDraft(draftId);
+        }
     }
 
 }
@@ -230,9 +236,15 @@ async function composeDraftListItemDeleteSaga(action: WithContext<ComposeDraftLi
 
     try {
         await Node.deleteDraft(action, REL_HOME, id, ["draft.not-found"]);
+        if (window.Android != null && window.Android.getApiVersion() >= 3) {
+            window.Android.abandonDraft(id);
+        }
         dispatch(composeDraftListItemDeleted(id, resetForm).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError) {
+            if (window.Android != null && window.Android.getApiVersion() >= 3) {
+                window.Android.abandonDraft(id);
+            }
             dispatch(composeDraftListItemDeleted(id, resetForm).causedBy(action));
         } else {
             dispatch(errorThrown(e));
@@ -248,6 +260,9 @@ async function composeUpdateDraftDeleteSaga(action: WithContext<ComposeUpdateDra
 
     try {
         await Node.deleteDraft(action, REL_HOME, id, ["draft.not-found"]);
+        if (window.Android != null && window.Android.getApiVersion() >= 3) {
+            window.Android.abandonDraft(id);
+        }
         dispatch(composeDraftUnset(action.payload.resetForm).causedBy(action));
     } catch (e) {
         dispatch(errorThrown(e));

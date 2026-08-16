@@ -15,6 +15,7 @@ import {
     SourceFormat,
     StoryAttributes
 } from "api";
+import type { SharedTextType } from "api/android/types";
 import { dispatch } from "state/store-sagas";
 import { composePost } from "state/compose/actions";
 import { DraftPostingInfo, ExtDraftInfo } from "state/compose/state";

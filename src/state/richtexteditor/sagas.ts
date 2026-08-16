@@ -1,5 +1,5 @@
 import { Node } from "api";
-import { mediaUpload } from "api/node/media-upload";
+import { mediaUpload } from "state/mediaupload/media-upload";
 import { EventAction, MediaCompressedEvent } from "api/events";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
@@ -28,7 +28,9 @@ async function eventHomeMediaCompressedSaga(action: WithContext<EventAction<Medi
 async function richTextEditorMediaUpload(
     action: WithContext<RichTextEditorMediaUploadAction>, index: number
 ): Promise<void> {
-    const {nodeName, files, compress, onSuccess, onProgress, onFailure, captionSrc, captionSrcFormat} = action.payload;
+    const {
+        nodeName, files, compress, onSuccess, onProgress, onFailure, androidUpload, captionSrc, captionSrcFormat
+    } = action.payload;
     const {homeOwnerName} = action.context;
 
     if (homeOwnerName == null) {
@@ -40,7 +42,7 @@ async function richTextEditorMediaUpload(
     const uploadChunkSize = select(state => getSettingNode(state, "media.upload.max-chunk-size") as number);
 
     const mediaFile = await mediaUpload(
-        action, mediaMaxSize, files[index], compress, uploadChunkSize,
+        action, mediaMaxSize, files[index], compress, uploadChunkSize, androidUpload,
         (loaded: number, total: number) => onProgress(index, loaded, total)
     );
     if (mediaFile != null) {
@@ -73,7 +75,7 @@ async function richTextEditorMediaUpload(
 
 function richTextEditorMediaUploadSaga(action: WithContext<RichTextEditorMediaUploadAction>): void {
     for (let i = 0; i < action.payload.files.length; i++) {
-        richTextEditorMediaUpload(action, i);
+        void richTextEditorMediaUpload(action, i);
     }
 }
 

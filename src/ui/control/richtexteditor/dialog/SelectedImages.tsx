@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, msClose12, msPlayArrowFilled } from "ui/material-symbols";
 import { Loading } from "ui/control/Loading";
+import { isAndroidMedia, LocalMediaUploadSource } from "state/mediaupload/media-source";
 import { formatMib } from "util/info-quantity";
 import { createVideoThumbnail } from "util/video-thumbnail";
 import { isImageType, isVideoType } from "util/mime-type";
 
 interface Props {
-    files: File[];
+    files: LocalMediaUploadSource[];
     maxSize?: number;
     onDelete: (index: number, e: React.MouseEvent) => void;
 }
@@ -24,19 +25,23 @@ export function SelectedImages({files, maxSize, onDelete}: Props) {
         setUrls(Array(files.length).fill(undefined));
 
         files.forEach((file, index) => {
-            const thumbnail = !file.type || isImageType(file.type)
-                ? Promise.resolve(file)
-                : createVideoThumbnail(file, 100, 100);
+            if (isAndroidMedia(file)) {
+                setUrls(urls => urls.toSpliced(index, 1, file.thumbnail ?? undefined));
+            } else {
+                const thumbnail = !file.type || isImageType(file.type)
+                    ? Promise.resolve(file)
+                    : createVideoThumbnail(file, 100, 100);
 
-            thumbnail.then(blob => {
-                if (cancelled) {
-                    return;
-                }
+                thumbnail.then(blob => {
+                    if (cancelled) {
+                        return;
+                    }
 
-                const url = URL.createObjectURL(blob);
-                objectUrls.push(url);
-                setUrls(urls => urls.toSpliced(index, 1, url));
-            });
+                    const url = URL.createObjectURL(blob);
+                    objectUrls.push(url);
+                    setUrls(urls => urls.toSpliced(index, 1, url));
+                });
+            }
         });
 
         return () => {

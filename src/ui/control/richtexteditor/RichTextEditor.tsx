@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect } from 'react';
 import cx from 'classnames';
 
-import { PostingFeatures, SourceFormat } from "api";
+import { MediaAttachment, PostingFeatures, SourceFormat } from "api";
 import { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 import { htmlToMarkdown, markdownToHtml } from "ui/control/richtexteditor/markdown/markdown-html";
 import { MarkdownEditor, MarkdownEditorProps } from "ui/control/richtexteditor/markdown/MarkdownEditor";
@@ -22,6 +22,9 @@ import "./RichTextEditor.css";
 type Props = {
     className?: string;
     features: PostingFeatures | null;
+    draftId?: string | null;
+    draftReady?: boolean;
+    draftMedia?: MediaAttachment[] | null;
     onChange?: (value: RichTextValue, converted: boolean) => void;
     children?: ReactNode;
 } & Omit<MarkdownEditorProps, "onChange"> & Omit<VisualEditorProps, "onChange">;
@@ -29,7 +32,8 @@ type Props = {
 export function RichTextEditor({
     name, value, touched, features, rows, minHeight, maxHeight, placeholder, className, autoFocus, autoComplete,
     disabled, smileysEnabled = true, commentQuote, panelMode, format, nodeName = REL_CURRENT, onChange, submitKey,
-    onSubmit, onBlur, onUrls, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, children
+    onSubmit, onBlur, onUrls, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo, draftId, draftReady, draftMedia,
+    children
 }: Props) {
     const textRef = React.useRef<string | Scripture>(null);
     textRef.current = value.value;
@@ -64,6 +68,9 @@ export function RichTextEditor({
                     nodeName={nodeName}
                     noMedia={noMedia}
                     srcFormat={format}
+                    draftId={draftId}
+                    draftReady={draftReady}
+                    draftMedia={draftMedia}
                     onChange={onMediaChange}
                 >
                     {format.endsWith("/visual") ?

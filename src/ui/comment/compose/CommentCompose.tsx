@@ -36,6 +36,8 @@ function CommentCompose(props: Props) {
     const receiverName = useSelector(getCommentsReceiverName);
     const receiverPostingId = useSelector(getCommentsReceiverPostingId);
     const loadedDraft = useSelector((state: ClientState) => state.detailedPosting.compose.loadedDraft);
+    const draft = useSelector((state: ClientState) => state.detailedPosting.compose.draft);
+    const commentDialogShow = useSelector((state: ClientState) => state.detailedPosting.commentDialog.show);
     const beingPosted = useSelector((state: ClientState) => state.detailedPosting.compose.beingPosted);
     const submitKey = useSelector((state: ClientState) => getSetting(state, "comment.submit-key") as string);
     const features = useSelector(getPostingFeatures);
@@ -82,6 +84,9 @@ function CommentCompose(props: Props) {
                         nodeName={receiverName ?? REL_CURRENT}
                         noMedia={!connectedToHome}
                         noEmbeddedMedia
+                        draftId={draft?.id ?? null}
+                        draftReady={ready && !commentDialogShow}
+                        draftMedia={draft?.media}
                         anyValue
                         placeholder={t("write-comment")}
                         disabled={!ready || beingPosted}

@@ -1,4 +1,5 @@
 import { DraftInfo, DraftText, MediaCaption, PostingInfo, PostingSourceText, PostingText } from "api";
+import type { SharedTextType } from "api/android/types";
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 
 export type ComposePostingLoadAction = ActionWithoutPayload<"COMPOSE_POSTING_LOAD">;

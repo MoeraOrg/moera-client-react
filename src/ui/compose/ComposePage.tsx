@@ -42,6 +42,8 @@ function ComposePageInner(props: Props) {
     const {postingId, features, avatarDefault, posting, sharedText, smileysEnabled, values, resetForm} = props;
 
     const ready = useSelector(isComposeReady);
+    const draftId = useSelector((state: ClientState) => state.compose.draftId);
+    const draft = useSelector((state: ClientState) => state.compose.draft);
     const formId = useSelector((state: ClientState) => state.compose.formId);
     const loadingContent = useSelector((state: ClientState) =>
         state.compose.loadingPosting || state.compose.loadingDraft
@@ -124,6 +126,9 @@ function ComposePageInner(props: Props) {
                             smileysEnabled={smileysEnabled}
                             features={features}
                             nodeName={REL_CURRENT}
+                            draftId={draftId}
+                            draftReady={ready}
+                            draftMedia={draft?.media}
                             urlsField="bodyUrls"
                             linkPreviewsField="linkPreviews"
                             anyValue

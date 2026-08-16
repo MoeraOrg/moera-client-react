@@ -1,4 +1,5 @@
 import { DraftInfo, PostingInfo } from "api";
+import type { SharedTextType } from "api/android/types";
 
 export interface ExtDraftInfo extends DraftInfo {
     subject: string | null;

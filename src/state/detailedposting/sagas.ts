@@ -13,7 +13,7 @@ import {
     ReactionInfo,
     RepliedTo
 } from "api";
-import { updateMediaCaptions } from "api/node/media-upload";
+import { updateMediaCaptions } from "state/mediaupload/media-upload";
 import { Storage } from "storage";
 import { WithContext } from "state/action-types";
 import { saga } from "state/saga";
@@ -409,7 +409,7 @@ async function commentPostSaga(action: WithContext<CommentPostAction>): Promise<
 
     const draftId = select(state =>
         (commentId == null ? state.detailedPosting.compose.draft : state.detailedPosting.commentDialog.draft)?.id
-    );
+    ) ?? null;
 
     try {
         if (!compressionPending) {
@@ -481,6 +481,9 @@ async function deleteObsoleteDraft(
         return;
     }
     await Node.deleteDraft(action, REL_HOME, action.payload.draft.id, ["draft.not-found"]);
+    if (window.Android != null && window.Android.getApiVersion() >= 3) {
+        window.Android.abandonDraft(action.payload.draft.id);
+    }
 }
 
 async function refreshComment(commentReceiverName: string, commentPostingId: string, commentId: string): Promise<void> {
@@ -650,6 +653,9 @@ async function commentDraftDeleteSaga(action: WithContext<CommentDraftDeleteActi
     }
 
     await Node.deleteDraft(action, REL_HOME, draft.id, ["draft.not-found"]);
+    if (window.Android != null && window.Android.getApiVersion() >= 3) {
+        window.Android.abandonDraft(draft.id);
+    }
     if (draft.receiverPostingId != null) {
         dispatch(commentDraftDeleted(draft.receiverName, draft.receiverPostingId).causedBy(action));
     }
@@ -660,6 +666,9 @@ async function commentComposeCancelSaga(action: WithContext<CommentComposeCancel
 
     if (draftId != null) {
         await Node.deleteDraft(action, REL_HOME, draftId, ["draft.not-found"]);
+        if (window.Android != null && window.Android.getApiVersion() >= 3) {
+            window.Android.abandonDraft(draftId);
+        }
     }
     dispatch(commentComposeCancelled().causedBy(action));
 }
@@ -793,6 +802,9 @@ async function commentDialogCommentResetSaga(action: WithContext<CommentDialogCo
     }
     if (draftId != null) {
         await Node.deleteDraft(action, REL_HOME, draftId, ["draft.not-found"]);
+        if (window.Android != null && window.Android.getApiVersion() >= 3) {
+            window.Android.abandonDraft(draftId);
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react';
 
+import type { AndroidMessage } from "api/android/types";
 import * as Browser from "ui/browser";
 
 export type OnAndroidMessage = (message: AndroidMessage) => void;

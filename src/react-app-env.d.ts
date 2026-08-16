@@ -92,65 +92,8 @@ declare module '*.module.sass' {
   export default classes;
 }
 
-type SharedTextType = "html" | "text";
-
-type AndroidAppFlavor = "google-play" | "apk";
-
-interface AndroidJsInterface {
-    back(): void;
-    changeLanguage(lang: string | null): void;
-    connectedToHome(url: string | null, token: string | null, ownerName: string | null): void;
-    getApiVersion(): number;
-    getContentUriFileName(uriString: string): string | null;
-    getContentUriMimeType(uriString: string): string | null;
-    getFlavor(): AndroidAppFlavor;
-    getSharedText(): string;
-    getSharedTextType(): SharedTextType;
-    isDonationsEnabled(): boolean; // deprecated
-    loadSettings(): string;
-    loadSettingsMeta(): string;
-    locationChanged(url: string, location: string): void;
-    log(text: string): void;
-    readContentUri(uriString: string): string | null;
-    saveFile(url: string, fileName: string, mimeType: string): void
-    saveImage(url: string, mimeType: string): void;
-    setSwipeRefreshEnabled(enabled: boolean): void;
-    share(url: string, title: string): void;
-    storeSettings(data: string): void;
-    toast(text: string): void;
-}
-
-interface AndroidMessageBack {
-    source: string;
-    action: "back";
-}
-
-interface AndroidMessageCallReturn {
-    source: string;
-    action: "call-return";
-    callId: number;
-    value: string | number | null;
-}
-
-interface AndroidMessageNetworkChanged {
-    source: string;
-    action: "network-changed";
-}
-
-interface AndroidMessageContentSelected {
-    source: string;
-    action: "content-selected";
-    uris: string[];
-}
-
-type AndroidMessage =
-    AndroidMessageBack
-    | AndroidMessageCallReturn
-    | AndroidMessageNetworkChanged
-    | AndroidMessageContentSelected;
-
 interface Window {
-    Android?: AndroidJsInterface;
+    Android?: import("api/android/types").AndroidJsInterface;
     loadedImages?: Set<string>;
     loadedAvatars?: Map<string, string>;
     overlays: import("ui/overlays/overlays").OverlaysManager;

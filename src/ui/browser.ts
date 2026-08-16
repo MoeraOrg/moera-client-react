@@ -1,6 +1,7 @@
 import * as URI from 'uri-js';
 import i18n from 'i18next';
 
+import type { AndroidAppFlavor } from "api/android/types";
 import { findPreferredLanguage } from "i18n";
 import { rootUrl, urlWithParameters } from "util/url";
 import { randomId } from "util/ui";
