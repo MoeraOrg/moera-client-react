@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import re
 import sys
 from enum import Enum
@@ -583,9 +584,15 @@ import { commaSeparatedFlags } from "util/misc";
 
 def generate_types(api: Any, outdir: str) -> None:
     structs = scan_structures(api)
+    outdir = os.path.realpath(outdir)
+    types_path = os.path.realpath(os.path.join(outdir, 'node', 'api-types.ts'))
+    schemas_path = os.path.realpath(os.path.join(outdir, 'node', 'api-schemas.mjs'))
+    sagas_path = os.path.realpath(os.path.join(outdir, 'node', 'api-sagas.ts'))
+    if not types_path.startswith(outdir) or not schemas_path.startswith(outdir) or not sagas_path.startswith(outdir):
+        raise ValueError("Path traversal detected in outdir")
 
-    with open(outdir + '/node/api-types.ts', 'w+') as tfile:
-        with open(outdir + '/node/api-schemas.mjs', 'w+') as sfile:
+    with open(types_path, 'w+') as tfile:
+        with open(schemas_path, 'w+') as sfile:
             tfile.write(PREAMBLE_TYPES)
             sfile.write(PREAMBLE_SCHEMAS)
             for enum in api['enums']:
@@ -596,7 +603,7 @@ def generate_types(api: Any, outdir: str) -> None:
             sfile.write('\n    }\n')
             sfile.write('}\n')
 
-    with open(outdir + '/node/api-sagas.ts', 'w+') as afile:
+    with open(sagas_path, 'w+') as afile:
         afile.write(PREAMBLE_SAGAS)
         generate_sagas(api, structs, afile)
 
@@ -801,5 +808,5 @@ if len(sys.argv) < 3 or sys.argv[1] == '':
     print("Usage: js-moera-api <node_api.yml file path> <events.yml file path> <output directory>")
     exit(1)
 
-outdir = sys.argv[3] if len(sys.argv) >= 4 else '.'
+outdir = os.path.realpath(os.path.abspath(sys.argv[3] if len(sys.argv) >= 4 else '.'))
 generate_code(outdir)
