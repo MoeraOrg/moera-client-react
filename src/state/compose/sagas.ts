@@ -42,6 +42,7 @@ import { flashBox } from "state/flashbox/actions";
 import { getFeedState } from "state/feeds/selectors";
 import { mutuallyIntroduced } from "state/init-barriers";
 import { jumpNear } from "state/navigation/actions";
+import { deleteDraft } from "state/drafts/sagas";
 import { loadRemoteMediaInDraftAttachments } from "state/remotemedia/sagas";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { ut } from "util/url";
@@ -191,17 +192,9 @@ async function composeDraftDeleteSaga(action: WithContext<ComposeDraftDeleteActi
     if (draftId == null) {
         return;
     }
+    await deleteDraft(action, draftId);
     if (!editing) {
-        await Node.deleteDraft(action, REL_HOME, draftId, ["draft.not-found"]);
-        if (window.Android != null && window.Android.getApiVersion() >= 3) {
-            window.Android.abandonDraft(draftId);
-        }
         dispatch(composeDraftListItemDeleted(draftId, true).causedBy(action));
-    } else {
-        await Node.deleteDraft(action, REL_HOME, draftId, ["draft.not-found"]);
-        if (window.Android != null && window.Android.getApiVersion() >= 3) {
-            window.Android.abandonDraft(draftId);
-        }
     }
 
 }
@@ -235,16 +228,10 @@ async function composeDraftListItemDeleteSaga(action: WithContext<ComposeDraftLi
     const {id, resetForm} = action.payload;
 
     try {
-        await Node.deleteDraft(action, REL_HOME, id, ["draft.not-found"]);
-        if (window.Android != null && window.Android.getApiVersion() >= 3) {
-            window.Android.abandonDraft(id);
-        }
+        await deleteDraft(action, id);
         dispatch(composeDraftListItemDeleted(id, resetForm).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError) {
-            if (window.Android != null && window.Android.getApiVersion() >= 3) {
-                window.Android.abandonDraft(id);
-            }
             dispatch(composeDraftListItemDeleted(id, resetForm).causedBy(action));
         } else {
             dispatch(errorThrown(e));
@@ -259,12 +246,12 @@ async function composeUpdateDraftDeleteSaga(action: WithContext<ComposeUpdateDra
     }
 
     try {
-        await Node.deleteDraft(action, REL_HOME, id, ["draft.not-found"]);
-        if (window.Android != null && window.Android.getApiVersion() >= 3) {
-            window.Android.abandonDraft(id);
-        }
+        await deleteDraft(action, id);
         dispatch(composeDraftUnset(action.payload.resetForm).causedBy(action));
     } catch (e) {
+        if (e instanceof NodeApiError) {
+            dispatch(composeDraftUnset(action.payload.resetForm).causedBy(action));
+        }
         dispatch(errorThrown(e));
     }
 }

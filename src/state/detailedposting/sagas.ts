@@ -121,6 +121,7 @@ import {
     loadRemoteMediaInEntries,
     loadRemoteMediaInEntry
 } from "state/remotemedia/sagas";
+import { deleteDraft } from "state/drafts/sagas";
 import * as Browser from "ui/browser";
 import { uiEventCommentQuote } from "ui/ui-events";
 import { toAvatarDescription } from "util/avatar";
@@ -480,10 +481,7 @@ async function deleteObsoleteDraft(
     ) {
         return;
     }
-    await Node.deleteDraft(action, REL_HOME, action.payload.draft.id, ["draft.not-found"]);
-    if (window.Android != null && window.Android.getApiVersion() >= 3) {
-        window.Android.abandonDraft(action.payload.draft.id);
-    }
+    await deleteDraft(action, action.payload.draft.id);
 }
 
 async function refreshComment(commentReceiverName: string, commentPostingId: string, commentId: string): Promise<void> {
@@ -652,10 +650,7 @@ async function commentDraftDeleteSaga(action: WithContext<CommentDraftDeleteActi
         return;
     }
 
-    await Node.deleteDraft(action, REL_HOME, draft.id, ["draft.not-found"]);
-    if (window.Android != null && window.Android.getApiVersion() >= 3) {
-        window.Android.abandonDraft(draft.id);
-    }
+    await deleteDraft(action, draft.id);
     if (draft.receiverPostingId != null) {
         dispatch(commentDraftDeleted(draft.receiverName, draft.receiverPostingId).causedBy(action));
     }
@@ -665,10 +660,7 @@ async function commentComposeCancelSaga(action: WithContext<CommentComposeCancel
     const draftId = select(state => state.detailedPosting.compose.draft?.id);
 
     if (draftId != null) {
-        await Node.deleteDraft(action, REL_HOME, draftId, ["draft.not-found"]);
-        if (window.Android != null && window.Android.getApiVersion() >= 3) {
-            window.Android.abandonDraft(draftId);
-        }
+        await deleteDraft(action, draftId);
     }
     dispatch(commentComposeCancelled().causedBy(action));
 }
@@ -801,10 +793,7 @@ async function commentDialogCommentResetSaga(action: WithContext<CommentDialogCo
         dispatch(closeCommentDialog().causedBy(action));
     }
     if (draftId != null) {
-        await Node.deleteDraft(action, REL_HOME, draftId, ["draft.not-found"]);
-        if (window.Android != null && window.Android.getApiVersion() >= 3) {
-            window.Android.abandonDraft(draftId);
-        }
+        await deleteDraft(action, draftId);
     }
 }
 

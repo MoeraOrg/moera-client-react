@@ -95,7 +95,7 @@ function CommentComposePanel() {
                             onClick: onAttach("file"),
                             show: true
                         },
-                    ]} className="rich-text-editor-button">
+                    ]} className="rich-text-editor-button" dropdownClassName="comment-compose-attach-menu">
                         <Icon icon={msAttachFile} title={t("attach")}/>
                     </DropdownMenu>
                 }

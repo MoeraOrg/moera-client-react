@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { MediaAttachment } from "api";
@@ -7,6 +7,24 @@ import EntryImage from "ui/entry/EntryImage";
 import EntryGalleryExpandButton from "ui/entry/EntryGalleryExpandButton";
 import { RelNodeName } from "util/rel-node-name";
 import "./EntryGallery.css";
+
+interface EntryData {
+    postingId?: string;
+    commentId?: string | null;
+    nodeName: RelNodeName | string;
+}
+
+interface ImageProps {
+    entry: EntryData;
+    image: MediaAttachment;
+    flex?: "row" | "column";
+    count?: number;
+}
+
+const Image = ({entry, image, flex, count}: ImageProps) => (
+    <EntryImage postingId={entry.postingId} commentId={entry.commentId} nodeName={entry.nodeName}
+                mediaFile={image.media ?? null} remoteMedia={image.remoteMedia ?? null} flex={flex} count={count}/>
+);
 
 interface Props {
     postingId?: string;
@@ -36,6 +54,7 @@ function majorOrientation(images: MediaAttachment[]) {
 }
 
 export default function EntryGallery({postingId, commentId, nodeName, media, onCollapse, onExpand}: Props) {
+    const entry: EntryData = useMemo(() => ({postingId, commentId, nodeName}), [postingId, commentId, nodeName]);
     const feedWidth = useSelector(getFeedWidth);
 
     if (media == null || media.length === 0) {
@@ -50,17 +69,6 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
         return null;
     }
 
-    interface ImageProps {
-        image: MediaAttachment;
-        flex?: "row" | "column";
-        count?: number;
-    }
-
-    const Image = ({image, flex, count}: ImageProps) => (
-        <EntryImage postingId={postingId} commentId={commentId} nodeName={nodeName} mediaFile={image.media ?? null}
-                    remoteMedia={image.remoteMedia ?? null} flex={flex} count={count}/>
-    );
-
     const orientation = majorOrientation(images);
 
     switch (images.length) {
@@ -70,7 +78,7 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
                 <div className={`gallery single ${orientation}`}
                      style={{"--image-height": singleImageHeight(images[0], feedWidth, commentId != null) + "px"} as any}>
                     {onCollapse && <EntryGalleryExpandButton onClick={onCollapse} collapse/>}
-                    <Image image={images[0]}/>
+                    <Image entry={entry} image={images[0]} key={1}/>
                 </div>
             );
 
@@ -78,8 +86,8 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
             return (
                 <div className={`gallery ${orientation}`}>
                     {onExpand && <EntryGalleryExpandButton onClick={onExpand}/>}
-                    <Image image={images[0]} flex="row"/>
-                    <Image image={images[1]} flex="row"/>
+                    <Image entry={entry} image={images[0]} flex="row"/>
+                    <Image entry={entry} image={images[1]} flex="row"/>
                 </div>
             );
 
@@ -88,11 +96,11 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
                 <div className={`gallery ${orientation}`}>
                     {onExpand && <EntryGalleryExpandButton onClick={onExpand}/>}
                     <div className="gallery-row">
-                        <Image image={images[0]}/>
+                        <Image entry={entry} image={images[0]}/>
                     </div>
                     <div className="gallery-row">
-                        <Image image={images[1]} flex="row"/>
-                        <Image image={images[2]} flex="row"/>
+                        <Image entry={entry} image={images[1]} flex="row"/>
+                        <Image entry={entry} image={images[2]} flex="row"/>
                     </div>
                 </div>
             );
@@ -102,12 +110,12 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
                 <div className={`gallery ${orientation}`}>
                     {onExpand && <EntryGalleryExpandButton onClick={onExpand}/>}
                     <div className="gallery-row">
-                        <Image image={images[0]} flex="row"/>
-                        <Image image={images[1]} flex="row"/>
+                        <Image entry={entry} image={images[0]} flex="row"/>
+                        <Image entry={entry} image={images[1]} flex="row"/>
                     </div>
                     <div className="gallery-row">
-                        <Image image={images[2]} flex="row"/>
-                        <Image image={images[3]} flex="row"/>
+                        <Image entry={entry} image={images[2]} flex="row"/>
+                        <Image entry={entry} image={images[3]} flex="row"/>
                     </div>
                 </div>
             );
@@ -117,13 +125,13 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
                 <div className={`gallery ${orientation}`}>
                     {onExpand && <EntryGalleryExpandButton onClick={onExpand}/>}
                     <div className="gallery-row">
-                        <Image image={images[0]} flex="row"/>
-                        <Image image={images[1]} flex="row"/>
+                        <Image entry={entry} image={images[0]} flex="row"/>
+                        <Image entry={entry} image={images[1]} flex="row"/>
                     </div>
                     <div className="gallery-row">
-                        <Image image={images[2]} flex="row"/>
-                        <Image image={images[3]} flex="row"/>
-                        <Image image={images[4]} flex="row"/>
+                        <Image entry={entry} image={images[2]} flex="row"/>
+                        <Image entry={entry} image={images[3]} flex="row"/>
+                        <Image entry={entry} image={images[4]} flex="row"/>
                     </div>
                 </div>
             );
@@ -133,16 +141,16 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
                 <div className={`gallery ${orientation}`}>
                     {onExpand && <EntryGalleryExpandButton onClick={onExpand}/>}
                     <div className="gallery-row">
-                        <Image image={images[0]} flex="row"/>
-                        <Image image={images[1]} flex="row"/>
+                        <Image entry={entry} image={images[0]} flex="row"/>
+                        <Image entry={entry} image={images[1]} flex="row"/>
                     </div>
                     <div className="gallery-row">
-                        <Image image={images[2]} flex="row"/>
-                        <Image image={images[3]} flex="row"/>
+                        <Image entry={entry} image={images[2]} flex="row"/>
+                        <Image entry={entry} image={images[3]} flex="row"/>
                     </div>
                     <div className="gallery-row">
-                        <Image image={images[4]} flex="row"/>
-                        <Image image={images[5]} flex="row" count={images.length - 6}/>
+                        <Image entry={entry} image={images[4]} flex="row"/>
+                        <Image entry={entry} image={images[5]} flex="row" count={images.length - 6}/>
                     </div>
                 </div>
             );

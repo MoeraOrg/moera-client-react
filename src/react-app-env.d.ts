@@ -94,7 +94,8 @@ declare module '*.module.sass' {
 
 interface Window {
     Android?: import("api/android/types").AndroidJsInterface;
-    loadedImages?: Set<string>;
+    loadedImages?: Map<string, string>;
+    loadedImageUrls?: Set<string>;
     loadedAvatars?: Map<string, string>;
     overlays: import("ui/overlays/overlays").OverlaysManager;
     store: Store<ClientState, ClientAction>;

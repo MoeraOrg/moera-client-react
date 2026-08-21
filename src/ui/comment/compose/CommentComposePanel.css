@@ -53,3 +53,7 @@
     color: var(--bs-gray-400);
     margin-inline-end: .75em;
 }
+
+.comment-compose-attach-menu {
+    --bs-dropdown-item-padding-y: .4rem;
+}
