@@ -64,7 +64,7 @@
     "react-widgets": "^5.8.6",
     "redux": "^5.0.1",
     "reselect": "^5.1.1",
-    "sanitize-html": "^2.17.5",
+    "sanitize-html": "^2.17.7",
     "scroll-into-view-if-needed": "^3.0.10",
     "shorten-url": "^1.1.0",
     "slate": "^0.123.0",
