@@ -50,7 +50,8 @@ export default function StartReadingPage() {
                             <Avatar ownerName={node.nodeName} avatar={node.avatar} size={48}/>
                             <div className="details">
                                 <NodeName className="full-name" name={node.nodeName} fullName={node.fullName}
-                                          display="full-name" linked={false} popup={false}/>
+                                          sourceUri={node.nodeSourceUri} display="full-name" linked={false}
+                                          popup={false}/>
                                 <span className="name">
                                     <Trans i18nKey="count-posts" values={{count: node.postingsTotal}}>
                                         <span/>

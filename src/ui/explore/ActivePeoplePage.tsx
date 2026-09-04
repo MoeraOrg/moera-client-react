@@ -37,10 +37,11 @@ export default function ActivePeoplePage() {
                         {people.map(node =>
                             <div className="person" key={node.nodeName}>
                                 <AvatarWithPopup ownerName={node.nodeName} ownerFullName={node.fullName}
+                                                 ownerSourceUri={node.nodeSourceUri}
                                                  avatar={node.avatar} size={40}/>
                                 <div className="details">
                                     <NodeName className="full-name" name={node.nodeName} fullName={node.fullName}
-                                              display="full-name"/>
+                                              sourceUri={node.nodeSourceUri} display="full-name"/>
                                     <span className="name">{NodeNameFormat.shorten(node.nodeName)}</span>
                                 </div>
                                 {homeOwnerName && node.nodeName !== homeOwnerName &&

@@ -2,13 +2,14 @@ import { AvatarImage } from "api";
 import { ClientState } from "state/state";
 import { ActionContext } from "state/action-types";
 import { select } from "state/store-sagas";
-import { getOwnerFullName, getOwnerName, getOwnerNameOrUrl } from "state/node/selectors";
+import { getOwnerFullName, getOwnerName, getOwnerNameOrUrl, getOwnerSourceUri } from "state/node/selectors";
 import {
     getHomeOwnerAvatar,
     getHomeOwnerFullName,
     getHomeOwnerGender,
     getHomeOwnerName,
-    getHomeOwnerNameOrUrl
+    getHomeOwnerNameOrUrl,
+    getHomeOwnerSourceUri
 } from "state/home/selectors";
 import { getSearchNodeName } from "state/search/selectors";
 
@@ -26,6 +27,10 @@ export class DynamicActionContext implements ActionContext {
         return select(getOwnerFullName);
     }
 
+    get ownerSourceUri(): string | null {
+        return select(getOwnerSourceUri);
+    }
+
     get homeOwnerName(): string | null {
         return select(getHomeOwnerName);
     }
@@ -36,6 +41,10 @@ export class DynamicActionContext implements ActionContext {
 
     get homeOwnerFullName(): string | null {
         return select(getHomeOwnerFullName);
+    }
+
+    get homeOwnerSourceUri(): string | null {
+        return select(getHomeOwnerSourceUri);
     }
 
     get homeOwnerGender(): string | null {
@@ -58,9 +67,11 @@ export default function getContext(state?: ClientState | null): ActionContext {
             ownerName: null,
             ownerNameOrUrl: "",
             ownerFullName: null,
+            ownerSourceUri: null,
             homeOwnerName: null,
             homeOwnerNameOrUrl: "",
             homeOwnerFullName: null,
+            homeOwnerSourceUri: null,
             homeOwnerGender: null,
             homeOwnerAvatar: null,
             searchName: ""
@@ -71,9 +82,11 @@ export default function getContext(state?: ClientState | null): ActionContext {
         ownerName: getOwnerName(state),
         ownerNameOrUrl: getOwnerNameOrUrl(state),
         ownerFullName: getOwnerFullName(state),
+        ownerSourceUri: getOwnerSourceUri(state),
         homeOwnerName: getHomeOwnerName(state),
         homeOwnerNameOrUrl: getHomeOwnerNameOrUrl(state),
         homeOwnerFullName: getHomeOwnerFullName(state),
+        homeOwnerSourceUri: getHomeOwnerSourceUri(state),
         homeOwnerGender: getHomeOwnerGender(state),
         homeOwnerAvatar: getHomeOwnerAvatar(state),
         searchName: getSearchNodeName(state)

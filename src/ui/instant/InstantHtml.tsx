@@ -19,12 +19,15 @@ export default function InstantHtml({story}: Props) {
         replace: (node: DOMNode) => {
             if (isTag(node) && node.name === "span" && "data-nodename" in node.attribs) {
                 const name = node.attribs["data-nodename"];
+                const sourceUri = node.attribs["data-source-uri"]
+                    ?? (name === story.summaryNodeName ? story.summarySourceUri : undefined)
+                    ?? (name === story.remoteNodeName ? story.remoteSourceUri : undefined);
                 const fullName = textContent(node);
 
-                return <InstantMention name={name} fullName={fullName} mode={mode}/>
+                return <InstantMention name={name} fullName={fullName} sourceUri={sourceUri} mode={mode}/>
             }
         }
-    }), [mode]);
+    }), [mode, story.remoteNodeName, story.remoteSourceUri, story.summaryNodeName, story.summarySourceUri]);
 
     const content = useMemo(() => htmlToReact(story.summary ?? "", options), [story.summary, options]);
 

@@ -15,9 +15,11 @@ export default function SearchNode({node}: Props) {
     const homeOwnerName = useSelector(getHomeOwnerName);
     return (
         <div className="person">
-            <AvatarWithPopup ownerName={node.nodeName} ownerFullName={node.fullName} avatar={node.avatar} size={40}/>
+            <AvatarWithPopup ownerName={node.nodeName} ownerFullName={node.fullName}
+                             ownerSourceUri={node.nodeSourceUri} avatar={node.avatar} size={40}/>
             <div className="details">
-                <NodeName className="full-name" name={node.nodeName} fullName={node.fullName} display="full-name"/>
+                <NodeName className="full-name" name={node.nodeName} fullName={node.fullName}
+                          sourceUri={node.nodeSourceUri} display="full-name"/>
                 <span className="name">{NodeNameFormat.shorten(node.nodeName)}</span>
             </div>
             {node.nodeName !== homeOwnerName &&

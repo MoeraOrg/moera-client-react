@@ -727,6 +727,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "nodeSourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "gender": {
                     type: "string",
                     nullable: true
@@ -1538,6 +1542,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "nodeSourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "avatar": {
                     anyOf: [
                         {
@@ -1695,6 +1703,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "sourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "gender": {
                     type: "string",
                     nullable: true
@@ -1811,6 +1823,10 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "ownerFullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "ownerSourceUri": {
                     type: "string",
                     nullable: true
                 },
@@ -2036,6 +2052,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "ownerSourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "ownerAvatar": {
                     anyOf: [
                         {
@@ -2132,6 +2152,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "fullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "nodeSourceUri": {
                     type: "string",
                     nullable: true
                 },
@@ -2329,6 +2353,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "sourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "gender": {
                     type: "string",
                     nullable: true
@@ -2426,6 +2454,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "nodeSourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "title": {
                     type: "string",
                     nullable: true
@@ -2498,6 +2530,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "fullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "sourceUri": {
                     type: "string",
                     nullable: true
                 },
@@ -2579,6 +2615,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "remoteNodeSourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "remoteFeedName": {
                     type: "string"
                 },
@@ -2595,6 +2635,10 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "remotePostingOwnerFullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "remotePostingOwnerSourceUri": {
                     type: "string",
                     nullable: true
                 },
@@ -2619,6 +2663,10 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "remoteCommentOwnerFullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "remoteCommentOwnerSourceUri": {
                     type: "string",
                     nullable: true
                 },
@@ -2716,6 +2764,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "ownerSourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "ownerGender": {
                     type: "string",
                     nullable: true
@@ -2783,6 +2835,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "nodeSourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "feedName": {
                     type: "string"
                 },
@@ -2799,6 +2855,10 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "postingOwnerFullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "postingOwnerSourceUri": {
                     type: "string",
                     nullable: true
                 },
@@ -2823,6 +2883,10 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "commentOwnerFullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "commentOwnerSourceUri": {
                     type: "string",
                     nullable: true
                 },
@@ -2958,6 +3022,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "ownerSourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "ownerGender": {
                     type: "string",
                     nullable: true
@@ -2992,6 +3060,10 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "ownerFullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "ownerSourceUri": {
                     type: "string",
                     nullable: true
                 },
@@ -3032,6 +3104,10 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "ownerFullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "ownerSourceUri": {
                     type: "string",
                     nullable: true
                 },
@@ -3417,6 +3493,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "sourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "gender": {
                     type: "string",
                     nullable: true
@@ -3456,6 +3536,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "remoteFullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "remoteSourceUri": {
                     type: "string",
                     nullable: true
                 },
@@ -3988,6 +4072,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "receiverSourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "receiverGender": {
                     type: "string",
                     nullable: true
@@ -4024,6 +4112,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "ownerFullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "ownerSourceUri": {
                     type: "string",
                     nullable: true
                 },
@@ -4503,6 +4595,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "ownerSourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "ownerAvatar": {
                     anyOf: [
                         {
@@ -4863,6 +4959,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string"
                 },
                 "ownerFullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "ownerSourceUri": {
                     type: "string",
                     nullable: true
                 },
@@ -5313,6 +5413,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "ownerSourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "ownerAvatar": {
                     anyOf: [
                         {
@@ -5533,6 +5637,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "summarySourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "summaryAvatar": {
                     anyOf: [
                         {
@@ -5598,6 +5706,10 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "remoteFullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "remoteSourceUri": {
                     type: "string",
                     nullable: true
                 },

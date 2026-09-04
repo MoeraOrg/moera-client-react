@@ -40,11 +40,12 @@ export default function PeoplePerson({contact}: Props) {
                 </div>
             :
                 <AvatarWithPopup ownerName={contact.contact.nodeName} ownerFullName={contact.contact.fullName}
-                                 avatar={contact.contact.avatar} size={40}/>
+                                 ownerSourceUri={contact.contact.nodeSourceUri} avatar={contact.contact.avatar} size={40}/>
             }
             <div className="details">
                 <Jump className="full-name" nodeName={contact.contact.nodeName} href="/">
-                    <NodeFullName nodeName={contact.contact.nodeName} fullName={contact.contact.fullName}/>
+                    <NodeFullName nodeName={contact.contact.nodeName} fullName={contact.contact.fullName}
+                                  sourceUri={contact.contact.nodeSourceUri}/>
                     {tab === "subscribers" && contact.subscriber != null &&
                         <SubscriberVisibility subscriber={contact.subscriber}/>
                     }

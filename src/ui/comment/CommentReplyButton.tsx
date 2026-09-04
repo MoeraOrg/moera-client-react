@@ -10,14 +10,15 @@ interface Props {
     id: string;
     ownerName: string;
     ownerFullName: string | null;
+    ownerSourceUri: string | null;
     heading: string;
 }
 
-export default function CommentReplyButton({id, ownerName, ownerFullName, heading}: Props) {
+export default function CommentReplyButton({id, ownerName, ownerFullName, ownerSourceUri, heading}: Props) {
     const dispatch = useDispatcher();
     const {t} = useTranslation();
 
-    const onClick = () => dispatch(commentReply(id, ownerName, ownerFullName, heading));
+    const onClick = () => dispatch(commentReply(id, ownerName, ownerFullName, ownerSourceUri, heading));
 
     return (
         <button className="comment-button" onClick={onClick}>

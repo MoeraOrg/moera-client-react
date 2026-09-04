@@ -5,7 +5,13 @@ import { useTranslation } from 'react-i18next';
 
 import { PrincipalValue, SourceFormat } from "api";
 import { ClientState } from "state/state";
-import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
+import {
+    getHomeOwnerAvatar,
+    getHomeOwnerFullName,
+    getHomeOwnerGender,
+    getHomeOwnerName,
+    getHomeOwnerSourceUri
+} from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getOwnerName, isAtHomeNode } from "state/node/selectors";
 import { composeConflictClose } from "state/compose/actions";
@@ -39,7 +45,9 @@ import "./ComposePage.css";
 type Props = ComposePageProps & FormikProps<ComposePageValues>;
 
 function ComposePageInner(props: Props) {
-    const {postingId, features, avatarDefault, posting, sharedText, smileysEnabled, values, resetForm} = props;
+    const {
+        postingId, features, avatarDefault, ownerSourceUri, posting, sharedText, smileysEnabled, values, resetForm
+    } = props;
 
     const ready = useSelector(isComposeReady);
     const draftId = useSelector((state: ClientState) => state.compose.draftId);
@@ -108,8 +116,8 @@ function ComposePageInner(props: Props) {
                             <div className="info">
                                 <AvatarField name="avatar" size={56} disabled={!ready}/>
                                 <div className="body">
-                                    <NodeName name={ownerName} fullName={values.fullName} linked={false} popup={false}
-                                              className="ms-2"/>
+                                    <NodeName name={ownerName} fullName={values.fullName} sourceUri={ownerSourceUri}
+                                              linked={false} popup={false} className="ms-2"/>
                                     <ComposeViewPrincipal/>
                                 </div>
                             </div>
@@ -156,6 +164,7 @@ export default function ComposePage() {
     const homeOwnerName = useSelector(getHomeOwnerName);
     const gender = useSelector(getHomeOwnerGender);
     const fullNameDefault = useSelector(getHomeOwnerFullName);
+    const ownerSourceUriDefault = useSelector(getHomeOwnerSourceUri);
     const avatarDefault = useSelector(getHomeOwnerAvatar);
     const postingId = useSelector((state: ClientState) => state.compose.postingId);
     const features = useSelector(getPostingFeatures);
@@ -214,6 +223,7 @@ export default function ComposePage() {
             nodeName={nodeName}
             homeOwnerName={homeOwnerName}
             gender={gender}
+            ownerSourceUri={ownerSourceUriDefault}
             fullNameDefault={fullNameDefault}
             avatarDefault={avatarDefault}
             postingId={postingId}

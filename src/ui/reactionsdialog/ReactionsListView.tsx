@@ -72,7 +72,8 @@ export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
                         </Jump>
                         <div className="details">
                             <div className="owner-name">
-                                <NodeName name={r.ownerName} fullName={r.ownerFullName} avatar={r.ownerAvatar}
+                                <NodeName name={r.ownerName} fullName={r.ownerFullName}
+                                          sourceUri={r.ownerSourceUri} avatar={r.ownerAvatar}
                                           avatarNodeName={reactionsNodeName} popup={false} onJump={onJump}/>
                                 {r.ownerName != null && r.signature != null && postingId != null &&
                                     <ReactionVerifyButton postingId={postingId} commentId={commentId}

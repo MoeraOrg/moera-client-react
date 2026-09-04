@@ -28,7 +28,8 @@ export default function PostingSources({posting}: Props) {
                     <span className={cx("icon", {"original": line.original})}>
                         <Icon icon={line.original ? msStar : msRepeat} size="1.2em"/>
                     </span>
-                    <NodeName name={line.nodeName} fullName={line.fullName} linked={false} popup={false}/>
+                    <NodeName name={line.nodeName} fullName={line.fullName} sourceUri={line.sourceUri}
+                              linked={false} popup={false}/>
                 </Jump>
             )}
         </div>
@@ -38,6 +39,7 @@ export default function PostingSources({posting}: Props) {
 interface SourcesLine {
     nodeName: string;
     fullName: string | null;
+    sourceUri: string | null;
     feedTitle: string;
     postingId: string | null;
     original: boolean;
@@ -54,6 +56,7 @@ function sourcesList(posting: PostingInfo, t: TFunction): SourcesLine[] {
         .map(sr => ({
             nodeName: sr.nodeName,
             fullName: sr.fullName ?? null,
+            sourceUri: sr.nodeSourceUri ?? null,
             feedTitle: getFeedTitle(sr.feedName, t),
             postingId: sr.postingId,
             original: false
@@ -66,6 +69,7 @@ function sourcesList(posting: PostingInfo, t: TFunction): SourcesLine[] {
         list.unshift({
             nodeName: posting.receiverName,
             fullName: posting.receiverFullName ?? null,
+            sourceUri: posting.receiverSourceUri ?? null,
             feedTitle: getFeedTitle(receiverFeedName, t),
             postingId: posting.receiverPostingId ?? null,
             original: true

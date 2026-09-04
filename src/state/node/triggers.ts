@@ -28,8 +28,9 @@ export default [
         true,
         (signal: EventAction<NodeNameChangedEvent>) =>
             ownerSet(
-                null, signal.payload.name, false, signal.payload.fullName ?? null, signal.payload.gender ?? null,
-                signal.payload.title ?? null, signal.payload.avatar ?? null, null
+                null, signal.payload.name, false, signal.payload.fullName ?? null,
+                signal.payload.nodeSourceUri ?? null, signal.payload.gender ?? null, signal.payload.title ?? null,
+                signal.payload.avatar ?? null, null
             )
     ),
     trigger(

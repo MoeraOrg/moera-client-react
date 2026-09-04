@@ -616,6 +616,10 @@ export const EVENT_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "nodeSourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "gender": {
                     type: "string",
                     nullable: true
@@ -1107,6 +1111,10 @@ export const EVENT_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "nodeSourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "title": {
                     type: "string",
                     nullable: true
@@ -1528,6 +1536,10 @@ export const EVENT_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "summarySourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "summaryAvatar": {
                     anyOf: [
                         {
@@ -1561,6 +1573,10 @@ export const EVENT_SCHEMAS = {
                     nullable: true
                 },
                 "remoteFullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "remoteSourceUri": {
                     type: "string",
                     nullable: true
                 },
@@ -1686,6 +1702,10 @@ export const EVENT_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "summarySourceUri": {
+                    type: "string",
+                    nullable: true
+                },
                 "summaryAvatar": {
                     anyOf: [
                         {
@@ -1719,6 +1739,10 @@ export const EVENT_SCHEMAS = {
                     nullable: true
                 },
                 "remoteFullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "remoteSourceUri": {
                     type: "string",
                     nullable: true
                 },

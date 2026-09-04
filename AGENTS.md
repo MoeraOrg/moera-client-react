@@ -6,6 +6,9 @@
    the project. Use single quotes when importing a third-party module.
 3. Put third-party imports at the top of the file and local imports below. Put
    a blank line between them.
+4. Do not use `enum` or `namespace`. Represent string-valued enumerations as
+   string literal union types, adding new values with `|`. For example:
+   `type NodeSourceUriService = "telegram" | "rss" | "livejournal"`.
 
 # React
 

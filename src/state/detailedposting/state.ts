@@ -21,6 +21,7 @@ export interface ExtCommentInfo extends CommentInfo {
 export interface CommentsState {
     receiverName: string | null;
     receiverFullName: string | null;
+    receiverSourceUri: string | null;
     receiverPostingId: string | null;
     receiverFeatures: Features | null;
     loadingFuture: boolean;
@@ -53,6 +54,7 @@ export interface CommentComposeState {
     repliedToId: string | null;
     repliedToName: string | null;
     repliedToFullName: string | null;
+    repliedToSourceUri: string | null;
     repliedToHeading: string | null;
     loadingDraft: boolean;
     loadedDraft: boolean;

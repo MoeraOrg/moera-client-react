@@ -14,8 +14,8 @@ interface Props {
 
 const CommentOwner = ({comment, nodeName, popup = true, verify = true}: Props) => (
     <span className="owner">
-        <NodeName name={comment.ownerName} fullName={comment.ownerFullName} avatar={comment.ownerAvatar}
-                  avatarNodeName={nodeName} popup={popup}/>
+        <NodeName name={comment.ownerName} fullName={comment.ownerFullName} sourceUri={comment.ownerSourceUri}
+                  avatar={comment.ownerAvatar} avatarNodeName={nodeName} popup={popup}/>
         {" "}{verify && <CommentVerifyButton comment={comment}/>}
     </span>
 );

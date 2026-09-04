@@ -109,7 +109,7 @@ import { fillBlockedOperations, fillBlockedOperationsInPostings } from "state/bl
 import { postingCommentCountUpdate, postingCommentsSet, postingsSet } from "state/postings/actions";
 import { getPosting, isPostingCached } from "state/postings/selectors";
 import { postingGetLink } from "state/postings/sagas";
-import { getOwnerFullName, getOwnerName, isPermitted, isPrincipalIn } from "state/node/selectors";
+import { getOwnerFullName, getOwnerName, getOwnerSourceUri, isPermitted, isPrincipalIn } from "state/node/selectors";
 import { anonymousFullNameSet } from "state/home/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { flashBox } from "state/flashbox/actions";
@@ -219,9 +219,10 @@ async function detailedPostingLoadAttachedSaga(action: WithContext<DetailedPosti
 
 async function commentsReceiverSwitchSaga(action: CommentsReceiverSwitchAction): Promise<void> {
     await homeIntroduced();
-    const {ownerName, ownerFullName, posting} = select(state => ({
+    const {ownerName, ownerFullName, ownerSourceUri, posting} = select(state => ({
         ownerName: getOwnerName(state),
         ownerFullName: getOwnerFullName(state),
+        ownerSourceUri: getOwnerSourceUri(state),
         posting: getDetailedPosting(state)
     }));
     if (posting == null || ownerName == null) {
@@ -229,8 +230,11 @@ async function commentsReceiverSwitchSaga(action: CommentsReceiverSwitchAction):
     }
     const receiverName = posting.receiverName ?? ownerName;
     const receiverFullName = posting.receiverFullName ?? ownerFullName;
+    const receiverSourceUri = posting.receiverName != null ? posting.receiverSourceUri ?? null : ownerSourceUri;
     const receiverPostingId = posting.receiverPostingId ?? posting.id;
-    dispatch(commentsReceiverSwitched(receiverName, receiverFullName, receiverPostingId).causedBy(action));
+    dispatch(
+        commentsReceiverSwitched(receiverName, receiverFullName, receiverSourceUri, receiverPostingId).causedBy(action)
+    );
 }
 
 async function commentsReceiverFeaturesLoadSaga(
@@ -526,6 +530,7 @@ async function loadRepliedTo(
             id: repliedToComment.id,
             name: repliedToComment.ownerName,
             fullName: repliedToComment.ownerFullName,
+            sourceUri: repliedToComment.ownerSourceUri,
             avatar: repliedToComment.ownerAvatar,
             heading: repliedToComment.heading,
             digest: repliedToComment.digest
@@ -605,7 +610,8 @@ async function commentDraftCompleteLoadingSaga(action: WithContext<CommentDraftC
         }
         if (repliedTo != null) {
             dispatch(commentRepliedToSet(
-                repliedTo.id, repliedTo.name, repliedTo.fullName ?? null, repliedTo.heading ?? ""
+                repliedTo.id, repliedTo.name, repliedTo.fullName ?? null, repliedTo.sourceUri ?? null,
+                repliedTo.heading ?? ""
             ).causedBy(action));
         } else {
             dispatch(commentRepliedToUnset().causedBy(action));
@@ -813,7 +819,7 @@ async function commentVerifySaga(action: WithContext<CommentVerifyAction>): Prom
 async function commentReactSaga(action: WithContext<CommentReactAction>): Promise<void> {
     await homeIntroduced();
     const {id, negative, emoji} = action.payload;
-    const {homeOwnerName, homeOwnerFullName, homeOwnerGender, homeOwnerAvatar} = action.context;
+    const {homeOwnerName, homeOwnerFullName, homeOwnerSourceUri, homeOwnerGender, homeOwnerAvatar} = action.context;
 
     const {seniorName, comments: {receiverName, receiverPostingId}, seniorReaction} = select(state => ({
         seniorName: getDetailedPosting(state)?.ownerName,
@@ -826,7 +832,8 @@ async function commentReactSaga(action: WithContext<CommentReactAction>): Promis
     try {
         const created = await Node.createCommentReaction(
             action, receiverName, receiverPostingId, id, {
-                ownerName: homeOwnerName, ownerFullName: homeOwnerFullName, ownerGender: homeOwnerGender,
+                ownerName: homeOwnerName, ownerFullName: homeOwnerFullName, ownerSourceUri: homeOwnerSourceUri,
+                ownerGender: homeOwnerGender,
                 ownerAvatar: toAvatarDescription(homeOwnerAvatar), negative, emoji
             }
         );
@@ -909,7 +916,7 @@ function extractAttributes(reactionInfo: ReactionInfo | null | undefined): React
 }
 
 function commentReplySaga(action: CommentReplyAction): void {
-    const {commentId, ownerName, ownerFullName, heading} = action.payload;
+    const {commentId, ownerName, ownerFullName, ownerSourceUri, heading} = action.payload;
 
     const {replied, repliedToName} = select(state => ({
         replied: isCommentComposerReplied(state),
@@ -919,7 +926,7 @@ function commentReplySaga(action: CommentReplyAction): void {
     const html = getWindowSelectionHtml();
 
     if (!replied) {
-        dispatch(commentRepliedToSet(commentId, ownerName, ownerFullName, heading).causedBy(action));
+        dispatch(commentRepliedToSet(commentId, ownerName, ownerFullName, ownerSourceUri, heading).causedBy(action));
         document.dispatchEvent(uiEventCommentQuote(html || undefined));
     } else {
         if (html) {

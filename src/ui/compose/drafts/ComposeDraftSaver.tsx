@@ -4,7 +4,7 @@ import cloneDeep from 'lodash.clonedeep';
 
 import { DraftText, MediaCaption, MediaToAttach, PostingText, StoryAttributes } from "api";
 import { ClientState } from "state/state";
-import { getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
+import { getHomeOwnerGender, getHomeOwnerName, getHomeOwnerSourceUri } from "state/home/selectors";
 import { getOwnerName } from "state/node/selectors";
 import { composeDraftListItemDelete, composeDraftSave, composeUpdateDraftDelete } from "state/compose/actions";
 import { getPostingFeatures } from "state/compose/selectors";
@@ -48,6 +48,7 @@ export default function ComposeDraftSaver() {
     const ownerName = useSelector(getOwnerName);
     const homeOwnerName = useSelector(getHomeOwnerName);
     const gender = useSelector(getHomeOwnerGender);
+    const ownerSourceUri = useSelector(getHomeOwnerSourceUri);
     const features = useSelector(getPostingFeatures);
     const postingId = useSelector((state: ClientState) => state.compose.postingId);
     const posting = useSelector((state: ClientState) => state.compose.posting);
@@ -67,11 +68,11 @@ export default function ComposeDraftSaver() {
         (values: ComposePageValues): ComposeValue => ([
             valuesToPostingText(
                 values,
-                {gender, postingId, features, smileysEnabled, newsFeedEnabled, avatarShapeDefault}
+                {gender, ownerSourceUri, postingId, features, smileysEnabled, newsFeedEnabled, avatarShapeDefault}
             ),
             toCaptionsList(values.body.media)
         ]),
-        [avatarShapeDefault, features, gender, newsFeedEnabled, postingId, smileysEnabled]
+        [avatarShapeDefault, features, gender, newsFeedEnabled, ownerSourceUri, postingId, smileysEnabled]
     );
 
     const isChanged = useCallback(

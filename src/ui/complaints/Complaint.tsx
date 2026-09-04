@@ -22,7 +22,8 @@ export default function Complaint({complaint}: Props) {
     return (
         <div className="user-complaint">
             <span className="owner">
-                <NodeName name={complaint.ownerName} fullName={complaint.ownerFullName}/>
+                <NodeName name={complaint.ownerName} fullName={complaint.ownerFullName}
+                          sourceUri={complaint.ownerSourceUri}/>
             </span>
             <span className="date">
                 <time dateTime={formatISO(date)} title={tDistanceToNow(date, t)}>

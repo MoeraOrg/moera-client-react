@@ -353,6 +353,7 @@ export interface ContactFilter {
 export interface ContactInfo {
     nodeName: string;
     fullName?: string | null;
+    nodeSourceUri?: string | null;
     gender?: string | null;
     title?: string | null;
     avatar?: AvatarImage | null;
@@ -568,6 +569,7 @@ export interface NotificationPacket {
     id: string;
     nodeName: string;
     fullName?: string | null;
+    nodeSourceUri?: string | null;
     gender?: string | null;
     avatar?: AvatarImage | null;
     createdAt: number;
@@ -629,6 +631,7 @@ export interface PostingFeatures {
 export interface PostingSourceInfo {
     nodeName: string;
     fullName?: string | null;
+    nodeSourceUri?: string | null;
     avatar?: AvatarImage | null;
     feedName: string;
     postingId: string;
@@ -668,6 +671,7 @@ export interface PrivateMediaFileInfo {
 
 export interface ProfileAttributes {
     fullName?: string | null;
+    sourceUri?: string | null;
     gender?: string | null;
     email?: string | null;
     title?: string | null;
@@ -680,6 +684,7 @@ export interface ProfileAttributes {
 
 export interface ProfileInfo {
     fullName?: string | null;
+    sourceUri?: string | null;
     gender?: string | null;
     email?: string | null;
     emailVerified?: boolean | null;
@@ -719,6 +724,7 @@ export interface ReactionAttributes {
 export interface ReactionDescription {
     ownerName?: string | null;
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerGender?: string | null;
     ownerAvatar?: AvatarDescription | null;
     negative: boolean;
@@ -736,6 +742,7 @@ export interface ReactionsFilter {
 export interface ReactionInfo {
     ownerName?: string | null;
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerGender?: string | null;
     ownerAvatar?: AvatarImage | null;
     postingId?: string | null;
@@ -789,6 +796,7 @@ export interface RecommendedPostingInfo {
     postingId: string;
     ownerName: string;
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerAvatar?: AvatarImage | null;
     heading: string;
     totalPositiveReactions: number;
@@ -811,6 +819,7 @@ export interface RejectedReactions {
 export interface RecommendedNodeInfo {
     nodeName: string;
     fullName?: string | null;
+    nodeSourceUri?: string | null;
     title?: string | null;
     avatar?: AvatarImage | null;
     subscribersTotal: number;
@@ -889,6 +898,7 @@ export interface RepliedTo {
     revisionId?: string | null;
     name: string;
     fullName?: string | null;
+    sourceUri?: string | null;
     gender?: string | null;
     avatar?: AvatarImage | null;
     heading?: string | null;
@@ -978,6 +988,7 @@ export interface SearchNodeFilter {
 export interface SearchNodeInfo {
     nodeName: string;
     fullName?: string | null;
+    nodeSourceUri?: string | null;
     title?: string | null;
     avatar?: AvatarImage | null;
     distance: number;
@@ -1030,6 +1041,7 @@ export interface SearchRepliedTo {
     revisionId?: string | null;
     name: string;
     fullName?: string | null;
+    sourceUri?: string | null;
     avatar?: AvatarImage | null;
     heading?: string | null;
 }
@@ -1085,17 +1097,20 @@ export interface SheriffComplaintGroupInfo {
     id: string;
     remoteNodeName: string;
     remoteNodeFullName?: string | null;
+    remoteNodeSourceUri?: string | null;
     remoteFeedName: string;
     remotePostingId?: string | null;
     remotePostingRevisionId?: string | null;
     remotePostingOwnerName?: string | null;
     remotePostingOwnerFullName?: string | null;
+    remotePostingOwnerSourceUri?: string | null;
     remotePostingOwnerGender?: string | null;
     remotePostingHeading?: string | null;
     remoteCommentId?: string | null;
     remoteCommentRevisionId?: string | null;
     remoteCommentOwnerName?: string | null;
     remoteCommentOwnerFullName?: string | null;
+    remoteCommentOwnerSourceUri?: string | null;
     remoteCommentOwnerGender?: string | null;
     remoteCommentHeading?: string | null;
     createdAt: number;
@@ -1120,6 +1135,7 @@ export interface SheriffComplaintInfo {
     id: string;
     ownerName: string;
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerGender?: string | null;
     group?: SheriffComplaintGroupInfo | null;
     reasonCode: SheriffOrderReason;
@@ -1130,18 +1146,22 @@ export interface SheriffComplaintInfo {
 
 export interface SheriffComplaintText {
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerGender?: string | null;
     nodeName: string;
     fullName?: string | null;
+    nodeSourceUri?: string | null;
     feedName: string;
     postingId?: string | null;
     postingOwnerName?: string | null;
     postingOwnerFullName?: string | null;
+    postingOwnerSourceUri?: string | null;
     postingOwnerGender?: string | null;
     postingHeading?: string | null;
     commentId?: string | null;
     commentOwnerName?: string | null;
     commentOwnerFullName?: string | null;
+    commentOwnerSourceUri?: string | null;
     commentOwnerGender?: string | null;
     commentHeading?: string | null;
     reasonCode?: SheriffOrderReason | null;
@@ -1181,17 +1201,20 @@ export interface SheriffOrderInfo {
     sheriffName: string;
     nodeName: string;
     nodeFullName?: string | null;
+    nodeSourceUri?: string | null;
     feedName: string;
     postingId?: string | null;
     postingRevisionId?: string | null;
     postingOwnerName?: string | null;
     postingOwnerFullName?: string | null;
+    postingOwnerSourceUri?: string | null;
     postingOwnerGender?: string | null;
     postingHeading?: string | null;
     commentId?: string | null;
     commentRevisionId?: string | null;
     commentOwnerName?: string | null;
     commentOwnerFullName?: string | null;
+    commentOwnerSourceUri?: string | null;
     commentOwnerGender?: string | null;
     commentHeading?: string | null;
     category: SheriffOrderCategory;
@@ -1235,6 +1258,7 @@ export interface StorySummaryFriendGroup {
 export interface StorySummaryEntry {
     ownerName?: string | null;
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerGender?: string | null;
     heading?: string | null;
     sheriffs?: string[] | null;
@@ -1244,6 +1268,7 @@ export interface StorySummaryEntry {
 export interface StorySummaryNode {
     ownerName?: string | null;
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerGender?: string | null;
 }
 
@@ -1256,6 +1281,7 @@ export interface StorySummaryPageClicks {
 export interface StorySummaryReaction {
     ownerName?: string | null;
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerGender?: string | null;
     emoji?: number | null;
 }
@@ -1401,6 +1427,7 @@ export interface WhoAmI {
     nodeName?: string | null;
     nodeNameChanging?: boolean | null;
     fullName?: string | null;
+    sourceUri?: string | null;
     gender?: string | null;
     title?: string | null;
     avatar?: AvatarImage | null;
@@ -1415,6 +1442,7 @@ export interface ActivityReactionFilter {
 export interface ActivityReactionInfo {
     remoteNodeName: string;
     remoteFullName?: string | null;
+    remoteSourceUri?: string | null;
     remoteAvatar?: AvatarImage | null;
     remotePostingId: string;
     negative: boolean;
@@ -1550,12 +1578,14 @@ export interface PostingInfoBase<B> {
     totalRevisions: number;
     receiverName?: string | null;
     receiverFullName?: string | null;
+    receiverSourceUri?: string | null;
     receiverGender?: string | null;
     receiverAvatar?: AvatarImage | null;
     receiverPostingId?: string | null;
     parentMedia?: ParentMediaInfo | null;
     ownerName: string;
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerGender?: string | null;
     ownerAvatar?: AvatarImage | null;
     bodyPreview?: B | null;
@@ -1633,6 +1663,7 @@ export type PostingRevisionInfo = PostingRevisionInfoBase<Body>;
 
 export interface PostingSourceText {
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerAvatar?: AvatarDescription | null;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
@@ -1650,6 +1681,7 @@ export interface PostingSourceText {
 export interface PostingText {
     ownerName?: string | null;
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerGender?: string | null;
     ownerAvatar?: AvatarDescription | null;
     bodyPreview?: string | null;
@@ -1683,6 +1715,7 @@ export interface SearchEntryInfoBase<B> {
     commentId?: string | null;
     ownerName: string;
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerAvatar?: AvatarImage | null;
     bodyPreview: B;
     bodyFormat?: BodyFormat | null;
@@ -1756,6 +1789,7 @@ export interface CommentInfoBase<B> {
     id: string;
     ownerName: string;
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerGender?: string | null;
     ownerAvatar?: AvatarImage | null;
     postingId: string;
@@ -1837,6 +1871,7 @@ export type CommentsSliceInfo = CommentsSliceInfoBase<Body>;
 
 export interface CommentSourceText {
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerAvatar?: AvatarDescription | null;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
@@ -1853,6 +1888,7 @@ export interface CommentSourceText {
 export interface CommentText {
     ownerName?: string | null;
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerGender?: string | null;
     ownerAvatar?: AvatarDescription | null;
     bodyPreview?: string | null;
@@ -1884,6 +1920,7 @@ export interface DraftInfoBase<B> {
     editedAt?: number | null;
     deadline?: number | null;
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerAvatar?: AvatarImage | null;
     rejectedReactions?: RejectedReactions | null;
     commentRejectedReactions?: RejectedReactions | null;
@@ -1910,6 +1947,7 @@ export interface DraftText {
     receiverCommentId?: string | null;
     repliedToId?: string | null;
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     ownerAvatar?: AvatarDescription | null;
     rejectedReactions?: RejectedReactions | null;
     commentRejectedReactions?: RejectedReactions | null;
@@ -1956,6 +1994,7 @@ export interface StoryInfoBase<B> {
     satisfied?: boolean | null;
     summaryNodeName?: string | null;
     summaryFullName?: string | null;
+    summarySourceUri?: string | null;
     summaryAvatar?: AvatarImage | null;
     summary?: string | null;
     summaryData?: StorySummaryData | null;
@@ -1965,6 +2004,7 @@ export interface StoryInfoBase<B> {
     commentId?: string | null;
     remoteNodeName?: string | null;
     remoteFullName?: string | null;
+    remoteSourceUri?: string | null;
     remotePostingId?: string | null;
     remoteCommentId?: string | null;
     remoteMediaId?: string | null;

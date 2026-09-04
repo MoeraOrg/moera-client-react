@@ -32,6 +32,7 @@ export default [
                 signal.payload.name || null, // may be ""
                 false,
                 signal.payload.fullName ?? null,
+                signal.payload.nodeSourceUri ?? null,
                 signal.payload.avatar ?? null
             )
     ),

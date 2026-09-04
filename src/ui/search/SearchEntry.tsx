@@ -30,13 +30,15 @@ const PostingOwnerLine = ({entry, href}: PostingOwnerLineProps) => (
         <AvatarWithPopup
             ownerName={entry.ownerName}
             ownerFullName={entry.ownerFullName}
+            ownerSourceUri={entry.ownerSourceUri}
             nodeName={REL_SEARCH}
             avatar={entry.ownerAvatar}
             size={40}
         />
         <div className="owner-info">
             <span className="owner">
-                <NodeName name={entry.ownerName} fullName={entry.ownerFullName} avatar={entry.ownerAvatar}/>
+                <NodeName name={entry.ownerName} fullName={entry.ownerFullName} sourceUri={entry.ownerSourceUri}
+                          avatar={entry.ownerAvatar}/>
             </span>
             <br/>
             <StoryDate publishedAt={entry.createdAt} nodeName={entry.nodeName} href={href}/>
@@ -58,12 +60,14 @@ const CommentOwnerLine = ({entry}: CommentOwnerLineProps) => (
             <AvatarWithPopup
                 ownerName={entry.ownerName}
                 ownerFullName={entry.ownerFullName}
+                ownerSourceUri={entry.ownerSourceUri}
                 nodeName={REL_SEARCH}
                 avatar={entry.ownerAvatar}
                 size={32}
             />
             <span className="owner">
-                <NodeName name={entry.ownerName} fullName={entry.ownerFullName} avatar={entry.ownerAvatar}/>
+                <NodeName name={entry.ownerName} fullName={entry.ownerFullName} sourceUri={entry.ownerSourceUri}
+                          avatar={entry.ownerAvatar}/>
             </span>
         </span>
         <span>

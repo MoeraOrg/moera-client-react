@@ -7,6 +7,7 @@ import {
     getCommentComposerRepliedToHeading,
     getCommentComposerRepliedToId,
     getCommentComposerRepliedToName,
+    getCommentComposerRepliedToSourceUri,
     getDetailedPostingId
 } from "state/detailedposting/selectors";
 import { useDispatcher } from "ui/hook";
@@ -22,6 +23,7 @@ export default function CommentComposeRepliedTo({disabled}: Props) {
     const commentId = useSelector(getCommentComposerRepliedToId);
     const ownerName = useSelector(getCommentComposerRepliedToName);
     const ownerFullName = useSelector(getCommentComposerRepliedToFullName);
+    const ownerSourceUri = useSelector(getCommentComposerRepliedToSourceUri);
     const heading = useSelector(getCommentComposerRepliedToHeading);
     const dispatch = useDispatcher();
 
@@ -33,7 +35,7 @@ export default function CommentComposeRepliedTo({disabled}: Props) {
 
     return (
         <RepliedTo postingId={postingId} commentId={commentId} ownerName={ownerName} ownerFullName={ownerFullName}
-                   headingHtml={replaceEmojis(htmlEntities(heading ?? ""))} disabled={disabled} unset={true}
-                   onUnset={onUnset}/>
+                   ownerSourceUri={ownerSourceUri} headingHtml={replaceEmojis(htmlEntities(heading ?? ""))}
+                   disabled={disabled} unset={true} onUnset={onUnset}/>
     );
 }

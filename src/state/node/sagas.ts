@@ -34,11 +34,13 @@ async function ownerLoadSaga(action: WithContext<OwnerLoadAction>): Promise<void
     const rootLocation = select(getNodeRootLocation);
     try {
         const {
-            nodeName = null, nodeNameChanging = false, fullName = null, gender = null, title = null, avatar = null,
-            type
+            nodeName = null, nodeNameChanging = false, fullName = null, sourceUri = null, gender = null, title = null,
+            avatar = null, type
         } = await Node.whoAmI(action, REL_CURRENT, ["not-found"]);
         dispatch(
-            ownerSet(rootLocation, nodeName, nodeNameChanging, fullName, gender, title, avatar, type ?? "regular")
+            ownerSet(
+                rootLocation, nodeName, nodeNameChanging, fullName, sourceUri, gender, title, avatar, type ?? "regular"
+            )
                 .causedBy(action)
         );
         if (ownerName == null) { // NODE_READY was not sent by OWNER_SWITCH

@@ -9,6 +9,7 @@ import { arrayMove } from "util/misc";
 
 const emptyProfileInfo = {
     fullName: null,
+    sourceUri: null,
     gender: null,
     email: null,
     title: null,

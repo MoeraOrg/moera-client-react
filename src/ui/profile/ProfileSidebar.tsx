@@ -8,6 +8,7 @@ import {
     getOwnerCard,
     getOwnerFullName,
     getOwnerName,
+    getOwnerSourceUri,
     getOwnerTitle,
     isAtHomeNode,
     isRegularNode
@@ -15,16 +16,20 @@ import {
 import { profileEmailVerify } from "state/profile/actions";
 import { sharePageCopyLink } from "state/sharedialog/actions";
 import { useDispatcher } from "ui/hook";
+import { Icon, msLink } from "ui/material-symbols";
 import { Button, DonateButton, OnlyDesktop } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import NodeFullName from "ui/nodename/NodeFullName";
 import { useTimeline } from "ui/feed/feeds";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import ProfileAvatar from "ui/profile/ProfileAvatar";
+import ProfileSourceDisclaimer from "ui/profile/ProfileSourceDisclaimer";
 import ManagementMenu from "ui/profile/manage/ManagementMenu";
 import OperationStatus from "ui/profile/manage/OperationStatus";
 import EntryHtml from "ui/entry/EntryHtml";
 import { REL_CURRENT } from "util/rel-node-name";
+import { NodeSourceUri } from "util/node-source-uri";
+import { formatFullName } from "util/names";
 import "./ProfileSidebar.css";
 
 export default function ProfileSidebar() {
@@ -32,6 +37,8 @@ export default function ProfileSidebar() {
     const regularNode = useSelector(isRegularNode);
     const nodeName = useSelector(getOwnerName);
     const fullName = useSelector(getOwnerFullName);
+    const sourceUri = useSelector(getOwnerSourceUri);
+    const sourceUriTarget = sourceUri ? NodeSourceUri.parse(sourceUri).uri : null;
     const title = useSelector(getOwnerTitle);
     const avatar = useSelector(getOwnerAvatar);
     const card = useSelector(getOwnerCard);
@@ -62,10 +69,15 @@ export default function ProfileSidebar() {
                     }
                 </div>
                 <div className="full-name">
-                    <NodeFullName nodeName={nodeName} fullName={fullName}/>
+                    <NodeFullName nodeName={nodeName} fullName={fullName} sourceUri={sourceUri}/>
                 </div>
                 <div className="mention" onClick={onCopyLink}>@{NodeName.shorten(nodeName)}</div>
                 <OperationStatus/>
+                {sourceUriTarget &&
+                    <div className="source-uri">
+                        <Icon icon={msLink} size="1.2em"/><a href={sourceUriTarget}>{sourceUriTarget}</a>
+                    </div>
+                }
                 {title && <div className="title">{title}</div>}
                 {!atHome &&
                     <FeedSubscribeButton
@@ -88,6 +100,8 @@ export default function ProfileSidebar() {
                         {profile?.bioHtml &&
                             <div className="bio">
                                 <EntryHtml html={profile.bioHtml} nodeName={REL_CURRENT}/>
+                                <ProfileSourceDisclaimer nodeSourceUri={sourceUri}
+                                                         title={formatFullName(nodeName, fullName)}/>
                             </div>
                         }
                         {profile?.email &&

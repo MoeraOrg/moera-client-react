@@ -6,14 +6,15 @@ import { Avatar, AvatarWithPopup } from "ui/control";
 interface Props {
     ownerName: string;
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     avatar?: AvatarImage | null;
     nodeName?: string;
 }
 
-const CommentAvatar = ({ownerName, ownerFullName, avatar, nodeName}: Props) => (
+const CommentAvatar = ({ownerName, ownerFullName, ownerSourceUri, avatar, nodeName}: Props) => (
     ownerName !== ANONYMOUS_NODE_NAME ?
-        <AvatarWithPopup ownerName={ownerName} ownerFullName={ownerFullName} avatar={avatar} nodeName={nodeName}
-                         size={32}/>
+        <AvatarWithPopup ownerName={ownerName} ownerFullName={ownerFullName} ownerSourceUri={ownerSourceUri}
+                         avatar={avatar} nodeName={nodeName} size={32}/>
     :
         <Avatar ownerName={ownerName} avatar={avatar} nodeName={nodeName} size={32}/>
 );

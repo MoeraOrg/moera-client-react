@@ -10,13 +10,14 @@ import { RelNodeName } from "util/rel-node-name";
 interface Props {
     nodeName: string;
     fullName?: string | null;
+    sourceUri?: string | null;
     avatar?: AvatarImage | null;
     avatarNodeName?: RelNodeName | string;
     disabled?: boolean;
     children: DelayedPopoverElement;
 }
 
-export default function NodeNamePopup({nodeName, fullName, avatar, avatarNodeName, disabled, children}: Props) {
+export default function NodeNamePopup({nodeName, fullName, sourceUri, avatar, avatarNodeName, disabled, children}: Props) {
     const anonymous = nodeName === ANONYMOUS_NODE_NAME;
     const dispatch = useDispatcher();
 
@@ -32,7 +33,8 @@ export default function NodeNamePopup({nodeName, fullName, avatar, avatarNodeNam
             element={children}
             popoverContainer={document.getElementById("hovercard-root")}
         >
-            <NodeCard nodeName={nodeName} fullName={fullName} avatar={avatar} avatarNodeName={avatarNodeName}/>
+            <NodeCard nodeName={nodeName} fullName={fullName} sourceUri={sourceUri} avatar={avatar}
+                      avatarNodeName={avatarNodeName}/>
         </DelayedPopover>
     );
 }

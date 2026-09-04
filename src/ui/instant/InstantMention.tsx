@@ -6,12 +6,13 @@ import { NameDisplayMode } from "ui/types";
 interface Props {
     name?: string | null;
     fullName?: string | null;
+    sourceUri?: string | null;
     mode?: NameDisplayMode | null;
 }
 
-const InstantMention = ({name, fullName, mode}: Props) => (
+const InstantMention = ({name, fullName, sourceUri, mode}: Props) => (
     <span className="node-name">
-        <NodeNameText nodeName={name} fullName={fullName} mode={mode ?? undefined}/>
+        <NodeNameText nodeName={name} fullName={fullName} sourceUri={sourceUri} mode={mode ?? undefined}/>
     </span>
 );
 

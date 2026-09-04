@@ -44,6 +44,7 @@ interface PropsToValuesProps {
 interface ValuesToCommentTextProps {
     ownerName: string | null;
     ownerFullName: string | null;
+    ownerSourceUri: string | null;
     ownerGender: string | null;
     smileysEnabled: boolean;
     sourceFormatDefault: SourceFormat;
@@ -64,6 +65,7 @@ export function valuesToCommentText(values: CommentComposeValues, props: ValuesT
     return {
         ownerName: props.ownerName ?? ANONYMOUS_NODE_NAME,
         ownerFullName: values.ownerFullName || props.ownerFullName,
+        ownerSourceUri: props.ownerName != null ? props.ownerSourceUri : null,
         ownerGender: props.ownerGender,
         ownerAvatar: toAvatarDescription(values.avatar),
         bodySrc: JSON.stringify({
@@ -81,6 +83,7 @@ function valuesToCommentSourceText(values: CommentComposeValues, props: ValuesTo
     const media = (values.body.orderedMediaList() ?? []).concat(values.linkPreviews.media);
     return {
         ownerFullName: values.ownerFullName || props.ownerFullName,
+        ownerSourceUri: props.ownerName != null ? props.ownerSourceUri : null,
         ownerAvatar: toAvatarDescription(values.avatar),
         bodySrc: JSON.stringify({
             text: values.body.toText(props.smileysEnabled),

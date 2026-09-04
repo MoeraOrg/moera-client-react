@@ -69,6 +69,10 @@ export function getCommentsReceiverFullName(state: ClientState): string | null {
     return getCommentsState(state).receiverFullName;
 }
 
+export function getCommentsReceiverSourceUri(state: ClientState): string | null {
+    return getCommentsState(state).receiverSourceUri;
+}
+
 export function getCommentsReceiverPostingId(state: ClientState): string | null {
     return getCommentsState(state).receiverPostingId;
 }
@@ -226,6 +230,10 @@ export function getCommentComposerRepliedToFullName(state: ClientState): string 
     return state.detailedPosting.compose.repliedToFullName;
 }
 
+export function getCommentComposerRepliedToSourceUri(state: ClientState): string | null {
+    return state.detailedPosting.compose.repliedToSourceUri;
+}
+
 export function getCommentComposerRepliedToHeading(state: ClientState): string | null {
     return state.detailedPosting.compose.repliedToHeading;
 }
@@ -334,6 +342,7 @@ export function isCommentSheriffProhibited(
 export interface NameUsage {
     nodeName: string;
     fullName: string | null;
+    sourceUri: string | null;
     avatar: AvatarImage | null;
     count: number;
 }
@@ -342,10 +351,13 @@ function putName(
     names: Map<string, NameUsage>,
     nodeName: string,
     fullName: string | null | undefined,
+    sourceUri: string | null | undefined,
     avatar: AvatarImage | null | undefined
 ): void {
     if (!names.has(nodeName)) {
-        names.set(nodeName, {nodeName, fullName: fullName ?? null, avatar: avatar ?? null, count: 1});
+        names.set(nodeName, {
+            nodeName, fullName: fullName ?? null, sourceUri: sourceUri ?? null, avatar: avatar ?? null, count: 1
+        });
     } else {
         const name = names.get(nodeName)!;
         if (!name.avatar || !name.avatar.mediaId) {
@@ -360,9 +372,12 @@ export const getNamesInComments = createSelector(
     comments => {
         const names = new Map<string, NameUsage>();
         for (const comment of comments) {
-            putName(names, comment.ownerName, comment.ownerFullName, comment.ownerAvatar);
+            putName(names, comment.ownerName, comment.ownerFullName, comment.ownerSourceUri, comment.ownerAvatar);
             if (comment.repliedTo) {
-                putName(names, comment.repliedTo.name, comment.repliedTo.fullName, comment.repliedTo.avatar);
+                putName(
+                    names, comment.repliedTo.name, comment.repliedTo.fullName, comment.repliedTo.sourceUri,
+                    comment.repliedTo.avatar
+                );
             }
         }
         return [...names.values()];

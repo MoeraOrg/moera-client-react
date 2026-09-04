@@ -63,6 +63,7 @@ export default function SearchSuggestions(
                             index={index}
                             nodeName={item.nodeName}
                             fullName={item.fullName}
+                            sourceUri={item.sourceUri}
                             avatar={item.nodeName !== homeName ? item.avatar : homeAvatar}
                             onClick={handleClick}
                         />

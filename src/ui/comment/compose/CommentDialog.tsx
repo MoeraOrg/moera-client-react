@@ -11,6 +11,7 @@ import {
     getHomeOwnerFullName,
     getHomeOwnerGender,
     getHomeOwnerName,
+    getHomeOwnerSourceUri,
     isConnectedToHome
 } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
@@ -43,7 +44,8 @@ type Props = CommentComposeProps & FormikProps<CommentComposeValues>;
 
 function CommentDialogInner(props: Props) {
     const {
-        ownerName, ownerFullName, draft, comment, smileysEnabled, sourceFormatDefault, resetForm, submitForm
+        ownerName, ownerFullName, ownerSourceUri, draft, comment, smileysEnabled, sourceFormatDefault, resetForm,
+        submitForm
     } = props;
 
     const commentId = comment?.id ?? null;
@@ -93,7 +95,8 @@ function CommentDialogInner(props: Props) {
                 <div className="modal-body">
                     <div className="owner-line">
                         <AvatarField name="avatar" size={36} disabled={!ready || beingPosted}/>
-                        <NodeName name={ownerName} fullName={ownerFullName} linked={false} popup={false}/>
+                        <NodeName name={ownerName} fullName={ownerFullName} sourceUri={ownerSourceUri}
+                                  linked={false} popup={false}/>
                     </div>
                     <RichTextField
                         name="body"
@@ -143,6 +146,7 @@ export default function CommentDialog() {
     const nodeName = useSelector(getOwnerName);
     const ownerName = useSelector(getHomeOwnerName);
     const ownerFullName = useSelector(getHomeOwnerFullName);
+    const ownerSourceUri = useSelector(getHomeOwnerSourceUri);
     const ownerGender = useSelector(getHomeOwnerGender);
     const avatarDefault = useSelector(getHomeOwnerAvatar);
     const receiverPostingId = useSelector(getCommentsReceiverPostingId);
@@ -168,6 +172,7 @@ export default function CommentDialog() {
             connectedToHome={connectedToHome}
             ownerName={ownerName}
             ownerFullName={ownerFullName}
+            ownerSourceUri={ownerSourceUri}
             ownerFullNameDefault={null}
             ownerGender={ownerGender}
             smileysEnabled={smileysEnabled}

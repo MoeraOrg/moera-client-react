@@ -17,6 +17,7 @@ import "./NodeName.css";
 interface Props {
     name?: string | null;
     fullName?: string | null;
+    sourceUri?: string | null;
     avatar?: AvatarImage | null;
     avatarNodeName?: RelNodeName | string;
     className?: string;
@@ -29,7 +30,8 @@ interface Props {
 }
 
 export default function NodeName({
-    name, fullName, avatar, avatarNodeName, className, verified = false, correct = false, linked = true, popup = true,
+    name, fullName, sourceUri, avatar, avatarNodeName, className, verified = false, correct = false, linked = true,
+    popup = true,
     display, onJump
 }: Props) {
     const details = useSelector((state: ClientState) => getNamingNameDetails(state, name));
@@ -51,16 +53,19 @@ export default function NodeName({
     const anonymous = name === ANONYMOUS_NODE_NAME;
     linked = linked && !anonymous && (!details.loaded || details.nodeUri != null);
     return (
-        <NodeNamePopup nodeName={name} fullName={fullName} avatar={avatar} avatarNodeName={avatarNodeName}
+        <NodeNamePopup nodeName={name} fullName={fullName} sourceUri={sourceUri} avatar={avatar}
+                       avatarNodeName={avatarNodeName}
                        disabled={!popup}>
             {ref =>
                 linked ?
                     <Jump className={klass} nodeName={name} href="/" onNear={onJump} onFar={onJump} ref={ref}>
-                        <NodeNameText nodeName={name} fullName={fullName} mode={display ?? mode}/>
+                        <NodeNameText nodeName={name} fullName={fullName} sourceUri={sourceUri}
+                                      mode={display ?? mode}/>
                     </Jump>
                 :
                     <span className={klass} title={anonymous ? t("anonymous-user") : undefined} ref={ref}>
-                        <NodeNameText nodeName={name} fullName={fullName} mode={display ?? mode}/>
+                        <NodeNameText nodeName={name} fullName={fullName} sourceUri={sourceUri}
+                                      mode={display ?? mode}/>
                     </span>
             }
         </NodeNamePopup>

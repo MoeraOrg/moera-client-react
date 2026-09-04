@@ -79,7 +79,7 @@ async function connectToHomeSaga(action: WithContext<ConnectToHomeAction>): Prom
         connectToHomeFailure(action, "node-url-not-found");
         return;
     }
-    Storage.storeConnectionData(nodeUrl, null, null, null, login, info.token, info.permissions);
+        Storage.storeConnectionData(nodeUrl, null, null, null, null, login, info.token, info.permissions);
     const atNode = select(isAtNode);
     const backHref = select(state => state.connectPage.backHref);
     dispatch(boot(!atNode || !backHref ? {} : toDocumentLocation({href: backHref})));
@@ -87,8 +87,10 @@ async function connectToHomeSaga(action: WithContext<ConnectToHomeAction>): Prom
 
 async function homeOwnerVerifySaga(action: WithContext<HomeOwnerVerifyAction>): Promise<void> {
     try {
-        const {nodeName = null, nodeNameChanging, fullName = null, avatar = null} = await Node.whoAmI(action, REL_HOME);
-        dispatch(homeOwnerSet(nodeName, nodeNameChanging ?? false, fullName, avatar).causedBy(action));
+        const {
+            nodeName = null, nodeNameChanging, fullName = null, sourceUri = null, avatar = null
+        } = await Node.whoAmI(action, REL_HOME);
+        dispatch(homeOwnerSet(nodeName, nodeNameChanging ?? false, fullName, sourceUri, avatar).causedBy(action));
 
         const {
             connection: {location, login, token, permissions},
@@ -98,7 +100,7 @@ async function homeOwnerVerifySaga(action: WithContext<HomeOwnerVerifyAction>): 
             homeRootPage: getHomeRootPage(state)
         }));
         if (location != null) {
-            Storage.storeConnectionData(location, nodeName, fullName, avatar, login, token, permissions);
+            Storage.storeConnectionData(location, nodeName, fullName, sourceUri, avatar, login, token, permissions);
         }
 
         if (nodeName == null) {

@@ -12,11 +12,12 @@ interface Props {
     index: number;
     nodeName?: string | null;
     fullName?: string | null;
+    sourceUri?: string | null;
     avatar?: AvatarImage | null;
     onClick?: (index: number) => () => void;
 }
 
-export const NameSuggestion = ({className, index, nodeName, fullName, avatar, onClick}: Props) => (
+export const NameSuggestion = ({className, index, nodeName, fullName, sourceUri, avatar, onClick}: Props) => (
     <Jump
         dataIndex={index}
         className={cx("name-suggestion", className)}
@@ -29,7 +30,9 @@ export const NameSuggestion = ({className, index, nodeName, fullName, avatar, on
             <Avatar avatar={avatar} ownerName={nodeName} size={40}/>
         </div>
         <div className="body">
-            <span className="full-name"><NodeFullName nodeName={nodeName} fullName={fullName}/></span><br/>
+            <span className="full-name">
+                <NodeFullName nodeName={nodeName} fullName={fullName} sourceUri={sourceUri}/>
+            </span><br/>
             <span className="name">{NodeName.shorten(nodeName)}</span>
         </div>
     </Jump>

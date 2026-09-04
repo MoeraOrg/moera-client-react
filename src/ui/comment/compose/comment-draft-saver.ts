@@ -6,7 +6,13 @@ import { CommentText, DraftText, MediaCaption, MediaToAttach, SourceFormat } fro
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
-import { getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
+import {
+    getHomeOwnerFullName,
+    getHomeOwnerGender,
+    getHomeOwnerName,
+    getHomeOwnerSourceUri,
+    isConnectedToHome
+} from "state/home/selectors";
 import {
     getCommentComposerRepliedToId,
     getCommentDialogComment,
@@ -51,6 +57,7 @@ export function useCommentDraftSaver(commentId: string | null): DraftSavingState
     const ownerName = useSelector(getOwnerName);
     const homeOwnerName = useSelector(getHomeOwnerName);
     const ownerFullName = useSelector(getHomeOwnerFullName);
+    const ownerSourceUri = useSelector(getHomeOwnerSourceUri);
     const ownerGender = useSelector(getHomeOwnerGender);
     const receiverName = useSelector((state: ClientState) => getCommentsState(state).receiverName);
     const receiverPostingId = useSelector((state: ClientState) => getCommentsState(state).receiverPostingId);
@@ -84,14 +91,15 @@ export function useCommentDraftSaver(commentId: string | null): DraftSavingState
             const text = valuesToCommentText(
                 values,
                 {
-                    ownerName, ownerFullName, ownerGender, smileysEnabled, sourceFormatDefault,
+                    ownerName, ownerFullName, ownerSourceUri, ownerGender, smileysEnabled, sourceFormatDefault,
                     reactionsPositiveDefault, reactionsNegativeDefault, repliedToId
                 }
             );
             return text != null ? [text, toCaptionsList(values.body.media)] : null;
         },
         [
-            ownerName, ownerFullName, ownerGender, smileysEnabled, sourceFormatDefault, reactionsPositiveDefault,
+            ownerName, ownerFullName, ownerSourceUri, ownerGender, smileysEnabled, sourceFormatDefault,
+            reactionsPositiveDefault,
             reactionsNegativeDefault, repliedToId
         ]
     );

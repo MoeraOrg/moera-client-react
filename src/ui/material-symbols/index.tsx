@@ -133,6 +133,7 @@ import { ReactComponent as msSuperscript } from "ui/material-symbols/superscript
 import { ReactComponent as msSwapHoriz } from "ui/material-symbols/swap_horiz.isvg";
 import { ReactComponent as msSync } from "ui/material-symbols/sync.isvg";
 import { ReactComponent as msTable } from "ui/material-symbols/table.isvg";
+import { ReactComponent as msTelegram } from "ui/material-symbols/telegram.isvg";
 import { ReactComponent as msThumbDown } from "ui/material-symbols/thumb_down.isvg";
 import { ReactComponent as msThumbUp } from "ui/material-symbols/thumb_up.isvg";
 import { ReactComponent as msThumbsDownSolid } from "ui/material-symbols/thumbs-down-solid.isvg"; // FontAwesome
@@ -286,6 +287,7 @@ export {
     msSwapHoriz,
     msSync,
     msTable,
+    msTelegram,
     msThumbDown,
     msThumbUp,
     msThumbsDownSolid,

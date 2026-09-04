@@ -119,6 +119,10 @@ export function getOwnerFullName(state: ClientState): string | null {
     return getOwnerCard(state)?.details.profile.fullName ?? null;
 }
 
+export function getOwnerSourceUri(state: ClientState): string | null {
+    return getOwnerCard(state)?.details.profile.sourceUri ?? null;
+}
+
 export function getOwnerTitle(state: ClientState): string | null {
     return getOwnerCard(state)?.details.profile.title ?? null;
 }

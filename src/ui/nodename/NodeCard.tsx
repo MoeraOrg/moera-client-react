@@ -8,22 +8,25 @@ import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
 import { getNodeCard, isNodeCardAnyLoaded, isNodeCardAnyLoading } from "state/nodecards/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
+import { Icon, msLink } from "ui/material-symbols";
 import { Avatar, DonateButton, SubscribeButton } from "ui/control";
 import { useIsTinyScreen, useParent } from "ui/hook";
 import NodeFullName from "ui/nodename/NodeFullName";
 import Jump from "ui/navigation/Jump";
 import { shortGender } from "util/names";
 import { RelNodeName } from "util/rel-node-name";
+import { NodeSourceUri } from "util/node-source-uri";
 import "./NodeCard.css";
 
 interface Props {
     nodeName: string;
     fullName?: string | null;
+    sourceUri?: string | null;
     avatar?: AvatarImage | null;
     avatarNodeName?: RelNodeName | string;
 }
 
-export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: Props) {
+export default function NodeCard({nodeName, fullName, sourceUri, avatar, avatarNodeName}: Props) {
     const card = useSelector((state: ClientState) => getNodeCard(state, nodeName));
     const anyLoaded = useSelector((state: ClientState) => isNodeCardAnyLoaded(state, nodeName));
     const anyLoading = useSelector((state: ClientState) => isNodeCardAnyLoading(state, nodeName));
@@ -43,6 +46,8 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
 
     const shortNodeName = NodeName.shorten(nodeName);
     const realFullName = card.details.profile.fullName ?? fullName;
+    const realSourceUri = card.details.profile.sourceUri ?? sourceUri;
+    const sourceUriTarget = realSourceUri ? NodeSourceUri.parse(realSourceUri).uri : null;
     const realAvatar =  card.details.profile.avatar ?? avatar ?? null;
     const realAvatarNodeName = card.details.profile.avatar != null ? nodeName : avatarNodeName;
     const gender = shortGender(card.details.profile.gender ?? "male", t);
@@ -63,13 +68,18 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
                 <div className="body">
                     <div>
                         <Jump className="full-name" nodeName={nodeName} href="/">
-                            <NodeFullName nodeName={nodeName} fullName={realFullName}/>
+                            <NodeFullName nodeName={nodeName} fullName={realFullName} sourceUri={realSourceUri}/>
                         </Jump>
                         {gender && <span className="gender">{gender}</span>}
                     </div>
                     <div>
                         <Jump className="name" nodeName={nodeName} href="/">{shortNodeName}</Jump>
                     </div>
+                    {sourceUriTarget &&
+                        <div className="source-uri">
+                            <Icon icon={msLink} size="1.2em"/><a href={sourceUriTarget}>{sourceUriTarget}</a>
+                        </div>
+                    }
                     {title && <div className="title">{title}</div>}
                 </div>
             </div>

@@ -11,13 +11,14 @@ interface Props {
 
 const PostingOwner = ({posting}: Props) => (
     <span className="owner">
-        <NodeName name={posting.ownerName} fullName={posting.ownerFullName} avatar={posting.ownerAvatar}/>
+        <NodeName name={posting.ownerName} fullName={posting.ownerFullName} sourceUri={posting.ownerSourceUri}
+                  avatar={posting.ownerAvatar}/>
         {" "}<PostingVerifyButton id={posting.id}/>
         {posting.receiverName && posting.receiverName !== posting.ownerName &&
             <>
                 <span className="arrow">{" "}&#x25b8;{" "}</span>
                 <NodeName name={posting.receiverName} fullName={posting.receiverFullName}
-                          avatar={posting.receiverAvatar}/>
+                          sourceUri={posting.receiverSourceUri} avatar={posting.receiverAvatar}/>
             </>
         }
     </span>

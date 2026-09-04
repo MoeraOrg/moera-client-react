@@ -20,6 +20,7 @@ interface Props {
     commentId: string | null;
     ownerName: string;
     ownerFullName: string | null;
+    ownerSourceUri: string | null;
     headingHtml: string;
     disabled?: boolean;
     unset: boolean;
@@ -27,7 +28,7 @@ interface Props {
 }
 
 export default function RepliedTo({
-    postingId, commentId, ownerName, ownerFullName, headingHtml, disabled, unset, onUnset
+    postingId, commentId, ownerName, ownerFullName, ownerSourceUri, headingHtml, disabled, unset, onUnset
 }: Props) {
     const popperEnabled = useSelector(
         (state: ClientState) => getSetting(state, "comment.replied-to.glance.enabled")
@@ -52,7 +53,7 @@ export default function RepliedTo({
             {unset && <button className="unset" disabled={disabled} onClick={onUnsetClick}>&times;</button>}
             <Jump href={ut`/post/${postingId}?comment=${commentId}`}>
                 <span className="icon"><Icon icon={msReplySolid} size="1.2em"/></span>
-                <NodeName name={ownerName} fullName={ownerFullName} linked={false}/>
+                <NodeName name={ownerName} fullName={ownerFullName} sourceUri={ownerSourceUri} linked={false}/>
             </Jump>
             <DelayedPopover placement="top" className="glance-comment-popover" onPreparePopper={onPreparePopper}
                             disabled={!popperEnabled} element={

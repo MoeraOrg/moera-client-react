@@ -8,8 +8,8 @@ interface Props {
 }
 
 const PostingAvatar = ({posting}: Props) => (
-    <AvatarWithPopup ownerName={posting.ownerName} ownerFullName={posting.ownerFullName} avatar={posting.ownerAvatar}
-                     size={40}/>
+    <AvatarWithPopup ownerName={posting.ownerName} ownerFullName={posting.ownerFullName}
+                     ownerSourceUri={posting.ownerSourceUri} avatar={posting.ownerAvatar} size={40}/>
 );
 
 export default PostingAvatar;

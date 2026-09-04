@@ -9,6 +9,7 @@ import {
     getOwnerCard,
     getOwnerFullName,
     getOwnerName,
+    getOwnerSourceUri,
     getOwnerTitle,
     isAtHomeNode,
     isRegularNode
@@ -36,6 +37,7 @@ export default function ProfileTitle() {
     const regularNode = useSelector(isRegularNode);
     const nodeName = useSelector(getOwnerName);
     const fullName = useSelector(getOwnerFullName);
+    const sourceUri = useSelector(getOwnerSourceUri);
     const title = useSelector(getOwnerTitle);
     const avatar = useSelector(getOwnerAvatar);
     const card = useSelector(getOwnerCard);
@@ -74,7 +76,7 @@ export default function ProfileTitle() {
                     </div>
                     {!connectedToHome &&
                         <div className="full-name" onClick={onCopyLink}>
-                            <NodeFullName nodeName={nodeName} fullName={fullName}/>
+                            <NodeFullName nodeName={nodeName} fullName={fullName} sourceUri={sourceUri}/>
                         </div>
                     }
                     <div className="mention" onClick={onCopyLink}>@{NodeName.shorten(nodeName)}</div>

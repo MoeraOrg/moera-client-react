@@ -7,6 +7,7 @@ const ARRANGEMENT_DEPTH = 5;
 export interface NameListItem {
     nodeName: string | null;
     fullName?: string | null | undefined;
+    sourceUri?: string | null | undefined;
     avatar?: AvatarImage | null;
 }
 

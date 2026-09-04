@@ -20,13 +20,14 @@ function updateNameInfo(
     contacts: SearchNodeInfo[],
     name: string,
     fullName: string | null | undefined,
+    sourceUri: string | null | undefined,
     title: string | null | undefined
 ): SearchNodeInfo[] {
     const index = contacts.findIndex(c => c.nodeName === name);
     if (index < 0) {
         return contacts;
     }
-    return immutable.assign(contacts, [index], {fullName, title});
+    return immutable.assign(contacts, [index], {fullName, nodeSourceUri: sourceUri, title});
 }
 
 export default (state: ContactsState = initialState, action: ClientAction): ContactsState => {
@@ -97,9 +98,9 @@ export default (state: ContactsState = initialState, action: ClientAction): Cont
         }
 
         case "EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED": {
-            const {name, fullName, title} = action.payload;
-            const contacts = updateNameInfo(state.contacts, name, fullName, title);
-            const visitedContacts = updateNameInfo(state.visitedContacts, name, fullName, title);
+            const {name, fullName, nodeSourceUri, title} = action.payload;
+            const contacts = updateNameInfo(state.contacts, name, fullName, nodeSourceUri, title);
+            const visitedContacts = updateNameInfo(state.visitedContacts, name, fullName, nodeSourceUri, title);
             return contacts !== state.contacts || visitedContacts !== state.visitedContacts
                 ? {...state, contacts, visitedContacts}
                 : state;

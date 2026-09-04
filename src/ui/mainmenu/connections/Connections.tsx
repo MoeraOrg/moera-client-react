@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Storage } from "storage";
 import { ClientState } from "state/state";
-import { getHomeRootLocation } from "state/home/selectors";
+import { getHomeOwnerSourceUri, getHomeRootLocation } from "state/home/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { useParent, useDispatcher } from "ui/hook";
 import * as Browser from "ui/browser";
@@ -22,6 +22,7 @@ export default function Connections({noActiveRoot}: Props) {
     const location = useSelector(getHomeRootLocation);
     const login = useSelector((state: ClientState) => state.home.login);
     const owner = useSelector((state: ClientState) => state.home.owner);
+    const ownerSourceUri = useSelector(getHomeOwnerSourceUri);
     const roots = useSelector((state: ClientState) => state.home.roots);
     const activeRoot = roots.find(root => root.url === location);
     const dispatch = useDispatcher();
@@ -68,7 +69,8 @@ export default function Connections({noActiveRoot}: Props) {
                 <div className="connection-item active">
                     <Jump className="connection" nodeName={REL_HOME} href="/"
                           onNear={onActiveItemClick} onFar={onActiveItemClick}>
-                        <NodeName name={owner.name} verified={owner.verified} correct={owner.correct}
+                        <NodeName name={owner.name} sourceUri={ownerSourceUri} verified={owner.verified}
+                                  correct={owner.correct}
                                   linked={false} popup={false}/>
                         <div className="location">{location}</div>
                         <div className="connected">{t("connected")}</div>

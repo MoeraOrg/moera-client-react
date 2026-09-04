@@ -9,14 +9,18 @@ import { RelNodeName } from "util/rel-node-name";
 interface Props {
     ownerName: string;
     ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
     avatar?: AvatarImage | null;
     nodeName?: RelNodeName | string;
     size: number;
     className?: string;
 }
 
-export const AvatarWithPopup = ({ownerName, ownerFullName, avatar = null, nodeName, size, className}: Props) => (
-    <NodeNamePopup nodeName={ownerName} fullName={ownerFullName} avatar={avatar} avatarNodeName={nodeName}>
+export const AvatarWithPopup = ({
+    ownerName, ownerFullName, ownerSourceUri, avatar = null, nodeName, size, className
+}: Props) => (
+    <NodeNamePopup nodeName={ownerName} fullName={ownerFullName} sourceUri={ownerSourceUri} avatar={avatar}
+                   avatarNodeName={nodeName}>
         {ref =>
             <Jump nodeName={ownerName} href="/" className={className}>
                 <Avatar avatar={avatar} ownerName={ownerName} size={size} nodeName={nodeName} ref={ref}/>

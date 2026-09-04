@@ -18,6 +18,7 @@ import { twemojiUrl } from "util/twemoji";
 const emptyComments: CommentsState = {
     receiverName: null,
     receiverFullName: null,
+    receiverSourceUri: null,
     receiverPostingId: null,
     receiverFeatures: null,
     loadingFuture: false,
@@ -49,6 +50,7 @@ const emptyCompose: Omit<CommentComposeState, "formId"> = {
     repliedToId: null,
     repliedToName: null,
     repliedToFullName: null,
+    repliedToSourceUri: null,
     repliedToHeading: null,
     loadingDraft: false,
     loadedDraft: false,
@@ -237,6 +239,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                     ...cloneDeep(emptyComments),
                     receiverName: action.payload.nodeName,
                     receiverFullName: action.payload.fullName,
+                    receiverSourceUri: action.payload.sourceUri,
                     receiverPostingId: action.payload.postingId,
                     focused: state.comments.focused,
                     focusedCommentId: state.comments.focusedCommentId
@@ -862,6 +865,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                 repliedToId: action.payload.commentId,
                 repliedToName: action.payload.ownerName,
                 repliedToFullName: action.payload.ownerFullName,
+                repliedToSourceUri: action.payload.ownerSourceUri,
                 repliedToHeading: action.payload.heading
             });
 
@@ -870,6 +874,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                 repliedToId: null,
                 repliedToName: null,
                 repliedToFullName: null,
+                repliedToSourceUri: null,
                 repliedToHeading: null
             });
 

@@ -30,6 +30,7 @@ export default function CommentRepliedTo({repliedTo, previousId}: Props) {
     }
     return (
         <RepliedTo postingId={postingId} commentId={repliedTo.id} ownerName={repliedTo.name}
-                   ownerFullName={repliedTo.fullName ?? null} headingHtml={repliedTo.headingHtml ?? ""} unset={false}/>
+                   ownerFullName={repliedTo.fullName ?? null} ownerSourceUri={repliedTo.sourceUri ?? null}
+                   headingHtml={repliedTo.headingHtml ?? ""} unset={false}/>
     );
 }

@@ -29,6 +29,7 @@ interface ConnectedToHomePayload {
     permissions: string[];
     name?: string | null;
     fullName?: string | null;
+    sourceUri?: string | null;
     avatar?: AvatarImage | null;
     cartesIp?: string | null;
     cartes?: CarteInfo[] | null;
@@ -55,12 +56,14 @@ export type HomeOwnerSetAction = ActionWithPayload<"HOME_OWNER_SET", {
     name: string | null;
     changing: boolean | null;
     fullName: string | null;
+    sourceUri: string | null;
     avatar: AvatarImage | null;
 }>;
 export const homeOwnerSet = (
-    name: string | null, changing: boolean | null, fullName: string | null, avatar: AvatarImage | null
+    name: string | null, changing: boolean | null, fullName: string | null, sourceUri: string | null,
+    avatar: AvatarImage | null
 ): HomeOwnerSetAction =>
-    actionWithPayload("HOME_OWNER_SET", {name, changing, fullName, avatar});
+    actionWithPayload("HOME_OWNER_SET", {name, changing, fullName, sourceUri, avatar});
 
 export type HomeOwnerVerifiedAction = ActionWithPayload<"HOME_OWNER_VERIFIED", {
     name: string;

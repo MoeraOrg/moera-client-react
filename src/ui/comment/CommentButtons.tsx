@@ -65,7 +65,8 @@ export default function CommentButtons({nodeName, postingId, comment}: Props) {
             />
             {commentingAllowed &&
                 <CommentReplyButton id={comment.id} ownerName={comment.ownerName}
-                                    ownerFullName={comment.ownerFullName ?? null} heading={comment.heading}/>
+                                    ownerFullName={comment.ownerFullName ?? null}
+                                    ownerSourceUri={comment.ownerSourceUri ?? null} heading={comment.heading}/>
             }
             <CommentShareButton nodeName={nodeName} postingId={postingId} commentId={comment.id}/>
         </div>

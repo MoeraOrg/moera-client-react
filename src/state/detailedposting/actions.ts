@@ -54,12 +54,13 @@ export const commentsReceiverSwitch = (): CommentsReceiverSwitchAction =>
 export type CommentsReceiverSwitchedAction = ActionWithPayload<"COMMENTS_RECEIVER_SWITCHED", {
     nodeName: string;
     fullName: string | null;
+    sourceUri: string | null;
     postingId: string;
 }>;
 export const commentsReceiverSwitched = (
-    nodeName: string, fullName: string | null, postingId: string
+    nodeName: string, fullName: string | null, sourceUri: string | null, postingId: string
 ): CommentsReceiverSwitchedAction =>
-    actionWithPayload("COMMENTS_RECEIVER_SWITCHED", {nodeName, fullName, postingId});
+    actionWithPayload("COMMENTS_RECEIVER_SWITCHED", {nodeName, fullName, sourceUri, postingId});
 
 export type CommentsReceiverFeaturesLoadAction = ActionWithoutPayload<"COMMENTS_RECEIVER_FEATURES_LOAD">;
 export const commentsReceiverFeaturesLoad = (): CommentsReceiverFeaturesLoadAction =>
@@ -545,23 +546,25 @@ export type CommentReplyAction = ActionWithPayload<"COMMENT_REPLY", {
     commentId: string;
     ownerName: string;
     ownerFullName: string | null;
+    ownerSourceUri: string | null;
     heading: string;
 }>;
 export const commentReply = (
-    commentId: string, ownerName: string, ownerFullName: string | null, heading: string
+    commentId: string, ownerName: string, ownerFullName: string | null, ownerSourceUri: string | null, heading: string
 ): CommentReplyAction =>
-    actionWithPayload("COMMENT_REPLY", {commentId, ownerName, ownerFullName, heading});
+    actionWithPayload("COMMENT_REPLY", {commentId, ownerName, ownerFullName, ownerSourceUri, heading});
 
 export type CommentRepliedToSetAction = ActionWithPayload<"COMMENT_REPLIED_TO_SET", {
     commentId: string;
     ownerName: string;
     ownerFullName: string | null;
+    ownerSourceUri: string | null;
     heading: string;
 }>;
 export const commentRepliedToSet = (
-    commentId: string, ownerName: string, ownerFullName: string | null, heading: string
+    commentId: string, ownerName: string, ownerFullName: string | null, ownerSourceUri: string | null, heading: string
 ): CommentRepliedToSetAction =>
-    actionWithPayload("COMMENT_REPLIED_TO_SET", {commentId, ownerName, ownerFullName, heading});
+    actionWithPayload("COMMENT_REPLIED_TO_SET", {commentId, ownerName, ownerFullName, ownerSourceUri, heading});
 
 export type CommentRepliedToUnsetAction = ActionWithoutPayload<"COMMENT_REPLIED_TO_UNSET">;
 export const commentRepliedToUnset = (): CommentRepliedToUnsetAction =>

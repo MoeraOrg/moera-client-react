@@ -67,6 +67,7 @@ export default function Comment({comment, previousId, focused, index}: Props) {
                             <CommentAvatar
                                 ownerName={comment.ownerName}
                                 ownerFullName={comment.ownerFullName}
+                                ownerSourceUri={comment.ownerSourceUri}
                                 avatar={comment.ownerAvatar}
                                 nodeName={realOwnerName}
                             />

@@ -20,8 +20,9 @@ export default function TrendingPost({trending, small, counters}: Props) {
     return (
         <div className={cx("trending-post", {small})}>
             <AvatarWithPopup ownerName={trending.ownerName} ownerFullName={trending.ownerFullName}
-                             avatar={trending.ownerAvatar} size={24}/>
-            <NodeName className="owner" name={trending.ownerName} fullName={trending.ownerFullName}/>
+                             ownerSourceUri={trending.ownerSourceUri} avatar={trending.ownerAvatar} size={24}/>
+            <NodeName className="owner" name={trending.ownerName} fullName={trending.ownerFullName}
+                      sourceUri={trending.ownerSourceUri}/>
             <Jump nodeName={trending.nodeName} href={ut`/post/${trending.postingId}`} className="heading">
                 {trending.heading}
             </Jump>

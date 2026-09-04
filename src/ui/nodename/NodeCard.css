@@ -64,6 +64,17 @@
     line-height: 143%;
 }
 
+.node-card .source-uri {
+    font-size: 1rem;
+    line-height: 175%;
+}
+
+.node-card .source-uri svg {
+    color: var(--bs-gray-600);
+    margin-right: .5em;
+    vertical-align: -.25em;
+}
+
 .node-card .title {
     font-size: 1rem;
     line-height: 143%;

@@ -69,6 +69,7 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit}: Props) {
                         index={index}
                         nodeName={item.nodeName}
                         fullName={item.fullName}
+                        sourceUri={item.sourceUri}
                         avatar={item.nodeName !== homeName ? item.avatar : homeAvatar}
                         onClick={handleClick}
                     />
@@ -90,7 +91,10 @@ const getNames = createSelector(
     (contacts, usedNames) => {
         const contactNames = new Set(contacts.map(c => c.nodeName));
         const usedNamesMap = new Map(usedNames.map(c => [c.nodeName, c]));
-        const result = cloneDeep(contacts);
+        const result = cloneDeep(contacts).map(contact => ({
+            ...contact,
+            sourceUri: contact.nodeSourceUri
+        }));
         for (const c of result) {
             if (usedNamesMap.has(c.nodeName)) {
                 c.distance -= usedNamesMap.get(c.nodeName)!.count / 100;
@@ -98,7 +102,9 @@ const getNames = createSelector(
         }
         usedNames
             .filter(c => !contactNames.has(c.nodeName))
-            .map(({nodeName, fullName, avatar, count}) => ({nodeName, fullName, avatar, distance: 3 - count / 100}))
+            .map(({nodeName, fullName, sourceUri, avatar, count}) => ({
+                nodeName, fullName, sourceUri, avatar, distance: 3 - count / 100
+            }))
             .forEach(c => result.push(c));
         result.sort((c1, c2) => c1.distance - c2.distance);
         return result;

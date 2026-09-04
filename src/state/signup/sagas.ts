@@ -139,7 +139,7 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
             return;
         }
 
-        Storage.storeConnectionData(rootLocation, null, null, null, login, info.token, info.permissions);
+        Storage.storeConnectionData(rootLocation, null, null, null, null, login, info.token, info.permissions);
         const signUp = select().signUp;
         dispatch(boot({rootLocation, path: "/signup"}, {signUp}).causedBy(action));
     }
@@ -177,7 +177,7 @@ async function signUpSaga(action: WithContext<SignUpAction>): Promise<void> {
                 return;
             }
             const secret = await Node.createNodeName(action, rootLocation, {name});
-            dispatch(homeOwnerSet(null, true, null, null).causedBy(action));
+            dispatch(homeOwnerSet(null, true, null, null, null).causedBy(action));
             dispatch(registerNameSucceeded().causedBy(action));
             dispatch(mnemonicSet(secret.name, secret.mnemonic!).causedBy(action));
             const quick = select(state => state.signUp.mode === "quick");

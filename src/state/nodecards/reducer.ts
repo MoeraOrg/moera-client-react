@@ -9,6 +9,7 @@ import { safeHtml } from "util/html";
 
 const emptyProfileInfo: ProfileInfo = {
     fullName: null,
+    sourceUri: null,
     gender: null,
     email: null,
     title: null,
@@ -156,7 +157,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         }
 
         case "OWNER_SET": {
-            let {name, fullName, gender, title, avatar} = action.payload;
+            let {name, fullName, sourceUri, gender, title, avatar} = action.payload;
             const {ownerNameOrUrl} = action.context;
 
             name = name ?? ownerNameOrUrl;
@@ -165,6 +166,9 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             migrateCard(istate, name, urlCard);
             if (fullName !== false) {
                 istate.set(["cards", name, "details", "profile", "fullName"], action.payload.fullName);
+            }
+            if (sourceUri !== false) {
+                istate.set(["cards", name, "details", "profile", "sourceUri"], action.payload.sourceUri);
             }
             if (gender !== false) {
                 istate.set(["cards", name, "details", "profile", "gender"], action.payload.gender);
@@ -179,15 +183,18 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         }
 
         case "CONNECTED_TO_HOME": {
-            const {name, fullName, avatar} = action.payload;
+            const {name, fullName, sourceUri, avatar} = action.payload;
 
-            if (name == null || (fullName == null && avatar == null)) {
+            if (name == null || (fullName == null && sourceUri == null && avatar == null)) {
                 return state;
             }
 
             const istate = getCard(state, name).istate;
             if (fullName != null) {
                 istate.set(["cards", name, "details", "profile", "fullName"], fullName);
+            }
+            if (sourceUri != null) {
+                istate.set(["cards", name, "details", "profile", "sourceUri"], sourceUri);
             }
             if (avatar != null) {
                 istate.set(["cards", name, "details", "profile", "avatar"], avatar);
@@ -196,7 +203,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         }
 
         case "HOME_OWNER_SET": {
-            let {name, fullName, avatar} = action.payload;
+            let {name, fullName, sourceUri, avatar} = action.payload;
             const {homeOwnerNameOrUrl} = action.context;
 
             name = name ?? homeOwnerNameOrUrl;
@@ -205,6 +212,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             migrateCard(istate, name, urlCard);
             istate.assign(["cards", name, "details", "profile"], {
                 fullName,
+                sourceUri,
                 avatar
             });
             return istate.value();
@@ -521,9 +529,10 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         }
 
         case "EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED": {
-            const {name, fullName, title} = action.payload;
+            const {name, fullName, nodeSourceUri, title} = action.payload;
             return getCard(state, name).istate
                 .set(["cards", name, "details", "profile", "fullName"], fullName)
+                .set(["cards", name, "details", "profile", "sourceUri"], nodeSourceUri)
                 .set(["cards", name, "details", "profile", "title"], title)
                 .value();
         }

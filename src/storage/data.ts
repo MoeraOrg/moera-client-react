@@ -17,6 +17,7 @@ export type RemoteMediaData = Partial<Record<string, Partial<Record<string, Priv
 
 export interface ClientHomeData {
     fullName?: string | null;
+    sourceUri?: string | null;
     avatar?: AvatarImage | null;
     login?: string | null;
     token?: string | null;

@@ -40,6 +40,7 @@ import { MediaWithCaption } from "util/media-with-caption";
 
 export interface ValuesToPostingTextProps {
     gender: string | null;
+    ownerSourceUri: string | null;
     postingId: string | null;
     features: PostingFeatures | null;
     smileysEnabled: boolean;
@@ -150,6 +151,7 @@ function buildPublications(values: ComposePageValues, props: ValuesToPostingText
 
 export const valuesToPostingText = (values: ComposePageValues, props: ValuesToPostingTextProps): PostingText => ({
     ownerFullName: values.fullName,
+    ownerSourceUri: props.ownerSourceUri,
     ownerGender: props.gender,
     ownerAvatar: values.avatar ? {
         mediaId: values.avatar.mediaId,
@@ -180,6 +182,7 @@ const valuesToPostingSourceText = (values: ComposePageValues, props: ValuesToPos
     const media = (values.body.orderedMediaList() ?? []).concat(values.linkPreviews.media);
     return ({
         ownerFullName: values.fullName,
+        ownerSourceUri: props.ownerSourceUri,
         ownerAvatar: values.avatar ? {
             mediaId: values.avatar.mediaId,
             shape: values.avatar.shape ?? props.avatarShapeDefault

@@ -63,6 +63,10 @@ export function getHomeOwnerFullName(state: ClientState): string | null {
     return getHomeOwnerCard(state)?.details.profile.fullName ?? null;
 }
 
+export function getHomeOwnerSourceUri(state: ClientState): string | null {
+    return getHomeOwnerCard(state)?.details.profile.sourceUri ?? null;
+}
+
 export function getHomeOwnerAvatar(state: ClientState): AvatarImage | null {
     return getHomeOwnerCard(state)?.details.profile.avatar ?? null;
 }

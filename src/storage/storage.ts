@@ -72,7 +72,7 @@ function loadedData(data: Access.StoredData): void {
     }
 
     const {
-        location, nodeName, fullName = null, avatar = null, login = null, token = null, permissions
+        location, nodeName, fullName = null, sourceUri = null, avatar = null, login = null, token = null, permissions
     } = data.home || {};
     const home = select(getHomeConnectionData);
     if (location != null && token != null) {
@@ -84,6 +84,7 @@ function loadedData(data: Access.StoredData): void {
                 permissions: permissions ?? [],
                 name: nodeName,
                 fullName,
+                sourceUri,
                 avatar,
                 cartesIp: data.cartesIp,
                 cartes: data.cartes ?? [],
@@ -110,11 +111,12 @@ export function loadData(): void {
     }
 }
 
-export function storeConnectionData(location: string, nodeName: string | null, fullName: string | null,
+export function storeConnectionData(
+    location: string, nodeName: string | null, fullName: string | null, sourceUri: string | null,
     avatar: AvatarImage | null, login: string | null, token: string | null, permissions: string[] | null
 ): void {
     window.Android?.connectedToHome(location + "/moera", token, nodeName);
-    const roots = Access.storeData({home: {location, nodeName, fullName, avatar, login, token, permissions}});
+    const roots = Access.storeData({home: {location, nodeName, fullName, sourceUri, avatar, login, token, permissions}});
     dispatch(connectionsSet(roots));
 }
 

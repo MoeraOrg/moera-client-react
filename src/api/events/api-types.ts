@@ -173,6 +173,7 @@ export interface MediaCompressedEvent extends BaseEvent<"MEDIA_COMPRESSED"> {
 export interface NodeNameChangedEvent extends BaseEvent<"NODE_NAME_CHANGED"> {
     name: string;
     fullName?: string | null;
+    nodeSourceUri?: string | null;
     gender?: string | null;
     title?: string | null;
     avatar?: AvatarImage | null;
@@ -280,6 +281,7 @@ export interface RemoteNodeAvatarChangedEvent extends BaseEvent<"REMOTE_NODE_AVA
 export interface RemoteNodeFullNameChangedEvent extends BaseEvent<"REMOTE_NODE_FULL_NAME_CHANGED"> {
     name: string;
     fullName?: string | null;
+    nodeSourceUri?: string | null;
     title?: string | null;
 }
 
@@ -383,11 +385,13 @@ export interface StoryAddedEvent extends BaseEvent<"STORY_ADDED"> {
     satisfied?: boolean | null;
     summaryNodeName?: string | null;
     summaryFullName?: string | null;
+    summarySourceUri?: string | null;
     summaryAvatar?: AvatarImage | null;
     summary?: string | null;
     summaryData?: StorySummaryData | null;
     remoteNodeName?: string | null;
     remoteFullName?: string | null;
+    remoteSourceUri?: string | null;
     remotePostingId?: string | null;
     remoteCommentId?: string | null;
     operations?: StoryOperations | null;
@@ -416,11 +420,13 @@ export interface StoryUpdatedEvent extends BaseEvent<"STORY_UPDATED"> {
     satisfied?: boolean | null;
     summaryNodeName?: string | null;
     summaryFullName?: string | null;
+    summarySourceUri?: string | null;
     summaryAvatar?: AvatarImage | null;
     summary?: string | null;
     summaryData?: StorySummaryData | null;
     remoteNodeName?: string | null;
     remoteFullName?: string | null;
+    remoteSourceUri?: string | null;
     remotePostingId?: string | null;
     remoteCommentId?: string | null;
     operations?: StoryOperations | null;

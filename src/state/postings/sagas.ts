@@ -161,10 +161,13 @@ async function postingOperationsUpdateSaga(action: WithContext<PostingOperations
 async function postingReactSaga(action: WithContext<PostingReactAction>): Promise<void> {
     await homeIntroduced();
     const {id, negative, emoji, nodeName} = action.payload;
-    const {ownerName, homeOwnerName, homeOwnerFullName, homeOwnerGender, homeOwnerAvatar} = action.context;
+    const {
+        ownerName, homeOwnerName, homeOwnerFullName, homeOwnerSourceUri, homeOwnerGender, homeOwnerAvatar
+    } = action.context;
     try {
         const created = await Node.createPostingReaction(action, nodeName, id, {
-            ownerName: homeOwnerName, ownerFullName: homeOwnerFullName, ownerGender: homeOwnerGender,
+            ownerName: homeOwnerName, ownerFullName: homeOwnerFullName, ownerSourceUri: homeOwnerSourceUri,
+            ownerGender: homeOwnerGender,
             ownerAvatar: toAvatarDescription(homeOwnerAvatar), negative, emoji
         });
         dispatch(postingReactionSet(id, {negative, emoji}, created.totals, nodeName).causedBy(action));

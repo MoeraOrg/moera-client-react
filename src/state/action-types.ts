@@ -17,9 +17,11 @@ export interface ActionContext {
     ownerName: string | null;
     ownerNameOrUrl: string;
     ownerFullName: string | null;
+    ownerSourceUri: string | null;
     homeOwnerName: string | null;
     homeOwnerNameOrUrl: string;
     homeOwnerFullName: string | null;
+    homeOwnerSourceUri: string | null;
     homeOwnerGender: string | null;
     homeOwnerAvatar: AvatarImage | null;
     searchName: string;

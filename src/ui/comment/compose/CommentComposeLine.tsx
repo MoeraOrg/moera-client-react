@@ -12,6 +12,7 @@ import {
     getHomeOwnerFullName,
     getHomeOwnerGender,
     getHomeOwnerName,
+    getHomeOwnerSourceUri,
     isConnectedToHome
 } from "state/home/selectors";
 import { getOwnerName, isPermitted, isPrincipalIn } from "state/node/selectors";
@@ -35,6 +36,7 @@ export default function CommentComposeLine() {
     const nodeName = useSelector(getOwnerName);
     const ownerName = useSelector(getHomeOwnerName);
     const ownerFullName = useSelector(getHomeOwnerFullName);
+    const ownerSourceUri = useSelector(getHomeOwnerSourceUri);
     const ownerFullNameDefault = useSelector(getAnonymousFullName);
     const ownerGender = useSelector(getHomeOwnerGender);
     const avatarDefault = useSelector(getHomeOwnerAvatar);
@@ -102,6 +104,7 @@ export default function CommentComposeLine() {
                 connectedToHome={connectedToHome}
                 ownerName={ownerName}
                 ownerFullName={ownerFullName}
+                ownerSourceUri={ownerSourceUri}
                 ownerFullNameDefault={ownerFullNameDefault}
                 ownerGender={ownerGender}
                 smileysEnabled={smileysEnabled}

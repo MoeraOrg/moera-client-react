@@ -13,7 +13,8 @@ export default function DraftOwner({draft}: Props) {
 
     return (
         <span className="owner">
-            <NodeName name={ownerName} fullName={draft.ownerFullName} avatar={draft.ownerAvatar} popup={false}/>
+            <NodeName name={ownerName} fullName={draft.ownerFullName} sourceUri={draft.ownerSourceUri}
+                      avatar={draft.ownerAvatar} popup={false}/>
                 {draft.receiverName && draft.receiverName !== ownerName &&
                     <>
                         <span className="arrow">{" "}&#x25b8;{" "}</span>

@@ -62,6 +62,17 @@
     cursor: pointer;
 }
 
+#profile-sidebar .source-uri {
+    font-size: .88rem;
+    line-height: 175%;
+}
+
+#profile-sidebar .source-uri svg {
+    color: var(--bs-gray-600);
+    margin-right: .5em;
+    vertical-align: -.3em;
+}
+
 #profile-sidebar .title {
     color: var(--bs-gray-900);
     font-size: .88rem;
