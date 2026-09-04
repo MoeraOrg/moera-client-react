@@ -4307,7 +4307,10 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "externalSourceUri": {
-                    type: "string",
+                    type: "array",
+                    items: {
+                        type: "string"
+                    },
                     nullable: true
                 },
             },

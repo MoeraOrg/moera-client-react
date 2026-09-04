@@ -128,13 +128,17 @@ async function composePostSaga(action: WithContext<ComposePostAction>): Promise<
 
 async function composePostedAsyncSaga(action: WithContext<ComposePostedAsyncAction>): Promise<void> {
     const {postingId} = action.payload;
+
+    let href = "/timeline";
     if (postingId != null) {
-        dispatch(jumpNear(ut`/post/${postingId}`, null, null).causedBy(action));
-        return;
+        href = ut`/post/${postingId}`;
+    } else {
+        const anchor = select(state => getFeedState(state, REL_CURRENT, "timeline").anchor);
+        if (anchor != null) {
+            href = `/timeline?before=${anchor}`;
+        }
     }
 
-    const anchor = select(state => getFeedState(state, REL_CURRENT, "timeline").anchor);
-    const href = anchor != null ? `/timeline?before=${anchor}` : "/timeline";
     dispatch(jumpNear(href, null, null).causedBy(action));
 }
 

@@ -108,7 +108,8 @@ function xhrFetch(url: string, options: FetcherOptions): Promise<XhrResponse> {
 }
 
 const FETCH_TIMEOUT = 10000; // ms
-const UPDATE_TIMEOUT = 60000; // ms
+const SMALL_UPDATE_TIMEOUT = 30000; // ms
+const LARGE_UPDATE_TIMEOUT = 60000; // ms
 const RETRY_DELAY = 1000; // ms
 const RETRY_LIMIT = 3;
 const LARGE_BODY_MIN = 65536;
@@ -121,7 +122,7 @@ async function retryFetch(url: string, options: FetcherOptions): Promise<Respons
         limit = 1;
         const largeBody = options.body instanceof Blob
             || (typeof (options.body) === "string" && options.body.length > LARGE_BODY_MIN);
-        timeout = largeBody ? UPDATE_TIMEOUT : FETCH_TIMEOUT;
+        timeout = largeBody ? LARGE_UPDATE_TIMEOUT : SMALL_UPDATE_TIMEOUT;
     } else {
         limit = RETRY_LIMIT;
         timeout = FETCH_TIMEOUT;

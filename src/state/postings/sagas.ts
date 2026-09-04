@@ -91,7 +91,7 @@ async function postingDeleteSaga(action: WithContext<PostingDeleteAction>): Prom
         return;
     }
     try {
-        await Node.deletePosting(action, nodeName, id);
+        await Node.deletePosting(action, nodeName, id, ["posting.not-found"]);
         dispatch(postingDeleted(posting.id, posting.feedReferences ?? [], nodeName).causedBy(action));
     } catch (e) {
         dispatch(postingDeleteFailed(id, nodeName).causedBy(action));

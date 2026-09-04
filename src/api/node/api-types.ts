@@ -1599,7 +1599,7 @@ export interface PostingInfoBase<B> {
     totalComments?: number | null;
     viewCount?: number | null;
     recommended?: boolean | null;
-    externalSourceUri?: string | null;
+    externalSourceUri?: string[] | null;
 }
 
 export type EncodedPostingInfo = PostingInfoBase<string>;
@@ -1669,7 +1669,7 @@ export interface PostingText {
     commentOperations?: CommentOperations | null;
     reactionOperations?: ReactionOperations | null;
     commentReactionOperations?: ReactionOperations | null;
-    externalSourceUri?: string | null;
+    externalSourceUri?: string[] | null;
 }
 
 export interface ReactionCreated {
