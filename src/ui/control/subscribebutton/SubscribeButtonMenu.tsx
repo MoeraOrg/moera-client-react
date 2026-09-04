@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { NodeName } from "api";
 import { tGender } from "i18n";
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
@@ -23,6 +22,7 @@ import { useDispatcher } from "ui/hook";
 import { Button, DropdownMenuItems } from "ui/control";
 import { MenuItem } from "ui/control/dropdownmenu/dropdown-menu-types";
 import { REL_CURRENT } from "util/rel-node-name";
+import { formatFullName } from "util/names";
 
 interface Props {
     nodeName: string;
@@ -48,7 +48,7 @@ export default function SubscribeButtonMenu({nodeName, feedName, addon, buttonOn
     const dispatch = useDispatcher();
 
     const fullName = card?.details.profile.fullName ?? null;
-    const blogName = fullName || NodeName.shorten(nodeName);
+    const blogName = formatFullName(nodeName, fullName);
     const subscribing = card?.subscription.subscribing ?? false;
     const unsubscribing = card?.subscription.unsubscribing ?? false;
     const subscriber = card?.subscription.subscriber;

@@ -10,6 +10,7 @@ import { getNodeCard, isNodeCardAnyLoaded, isNodeCardAnyLoading } from "state/no
 import { getHomeOwnerName } from "state/home/selectors";
 import { Avatar, DonateButton, SubscribeButton } from "ui/control";
 import { useIsTinyScreen, useParent } from "ui/hook";
+import NodeFullName from "ui/nodename/NodeFullName";
 import Jump from "ui/navigation/Jump";
 import { shortGender } from "util/names";
 import { RelNodeName } from "util/rel-node-name";
@@ -41,7 +42,7 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
     }
 
     const shortNodeName = NodeName.shorten(nodeName);
-    const realFullName = card.details.profile.fullName ?? (fullName || shortNodeName);
+    const realFullName = card.details.profile.fullName ?? fullName;
     const realAvatar =  card.details.profile.avatar ?? avatar ?? null;
     const realAvatarNodeName = card.details.profile.avatar != null ? nodeName : avatarNodeName;
     const gender = shortGender(card.details.profile.gender ?? "male", t);
@@ -60,12 +61,12 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: P
                     <Avatar avatar={realAvatar} ownerName={nodeName} size={72} nodeName={realAvatarNodeName}/>
                 </Jump>
                 <div className="body">
-                    {realFullName &&
-                        <div>
-                            <Jump className="full-name" nodeName={nodeName} href="/">{realFullName}</Jump>
-                            {gender && <span className="gender">{gender}</span>}
-                        </div>
-                    }
+                    <div>
+                        <Jump className="full-name" nodeName={nodeName} href="/">
+                            <NodeFullName nodeName={nodeName} fullName={realFullName}/>
+                        </Jump>
+                        {gender && <span className="gender">{gender}</span>}
+                    </div>
                     <div>
                         <Jump className="name" nodeName={nodeName} href="/">{shortNodeName}</Jump>
                     </div>

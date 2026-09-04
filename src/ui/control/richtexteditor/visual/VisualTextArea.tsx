@@ -3,7 +3,6 @@ import { Path, Range } from 'slate';
 import { Editable, ReactEditor, useSlateStatic } from 'slate-react';
 import isHotkey from 'is-hotkey';
 
-import { NodeName } from "api";
 import * as Browser from "ui/browser";
 import {
     UI_EVENT_COMMENT_QUOTE,
@@ -31,6 +30,7 @@ import {
     scriptureReplaceUrl
 } from "ui/control/richtexteditor/visual/scripture-editor";
 import { htmlEntities } from "util/html";
+import { formatFullName } from "util/names";
 import "./VisualTextArea.css";
 
 export interface VisualTextAreaProps {
@@ -211,7 +211,7 @@ export default function VisualTextArea({
 
         let insertHtml = "";
         if (ownerName) {
-            const name = ownerFullName || NodeName.shorten(ownerName);
+            const name = formatFullName(ownerName, ownerFullName);
             const mention = `<a data-nodename="${htmlEntities(ownerName)}">${htmlEntities(name)}</a>`;
             if (html) {
                 insertHtml = `<p>${mention}:</p><blockquote>${html}</blockquote>`;

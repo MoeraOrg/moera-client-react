@@ -5,9 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
-import { getSetting } from "state/settings/selectors";
 import { getActiveComplaintGroup } from "state/complaints/selectors";
-import { NameDisplayMode } from "ui/types";
 import { Loading } from "ui/control";
 import { Icon } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
@@ -20,6 +18,7 @@ import { getComplaintHeadingHtml, getComplaintStatusDetails } from "ui/complaint
 import Complaint from "ui/complaints/Complaint";
 import ComplaintDecisionEditor from "ui/complaints/ComplaintDecisionEditor";
 import ComplaintDecisionView from "ui/complaints/ComplaintDecisionView";
+import { useNameDisplayMode } from "ui/nodename/hooks";
 import { ut } from "util/url";
 import "./ComplaintDetailsPage.css";
 
@@ -29,9 +28,7 @@ export default function ComplaintsListPage() {
     const complaints = useSelector((state: ClientState) => state.complaints.complaints);
     const loadingComplaints = useSelector((state: ClientState) => state.complaints.loadingComplaints);
     const atHomeNode = useSelector(isAtHomeNode);
-    const nameDisplayMode = useSelector((state: ClientState) =>
-        getSetting(state, "full-name.display") as NameDisplayMode
-    );
+    const nameDisplayMode = useNameDisplayMode();
     const {t} = useTranslation();
 
     const {icon: statusIcon, className: statusClass} = getComplaintStatusDetails(complaintGroup?.status);

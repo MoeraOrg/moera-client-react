@@ -15,6 +15,7 @@ import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, NumberField, RadioField } from "ui/control/field";
 import { RichTextValue, RichTextField } from "ui/control/richtexteditor";
+import { useNameDisplayMode } from "ui/nodename/hooks";
 import { formatFullName } from "util/names";
 import "./BlockDialog.css";
 
@@ -207,10 +208,10 @@ export default function BlockDialog() {
     const entryNodeName = useSelector((state: ClientState) => state.blockDialog.entryNodeName);
     const entryPostingId = useSelector((state: ClientState) => state.blockDialog.entryPostingId);
     const prevBlocked = useSelector((state: ClientState) => state.blockDialog.prevBlocked);
-    const nameDisplayMode = useSelector((state: ClientState) =>
-        getSetting(state, "full-name.display")) as NameDisplayMode;
+    const nameDisplayMode = useNameDisplayMode();
     const srcFormatDefault = useSelector((state: ClientState) =>
-        getSetting(state, "src-format.default") as SourceFormat);
+        getSetting(state, "src-format.default") as SourceFormat
+    );
 
     return <BlockDialogOuter nodeName={nodeName} fullName={fullName} entryNodeName={entryNodeName}
                              entryPostingId={entryPostingId} prevBlocked={prevBlocked}

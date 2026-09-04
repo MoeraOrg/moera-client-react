@@ -18,6 +18,7 @@ import { sharePageCopyLink } from "state/sharedialog/actions";
 import { useDispatcher } from "ui/hook";
 import { DonateButton, OnlyMobile } from "ui/control";
 import Jump from "ui/navigation/Jump";
+import NodeFullName from "ui/nodename/NodeFullName";
 import MobileMainMenu from "ui/mainmenu/MobileMainMenu";
 import MobileBack from "ui/page/MobileBack";
 import ProfileAvatar from "ui/profile/ProfileAvatar";
@@ -25,7 +26,7 @@ import ManagementMenuItems from "ui/profile/manage/ManagementMenuItems";
 import OperationStatus from "ui/profile/manage/OperationStatus";
 import { useHomeNews, useTimeline } from "ui/feed/feeds";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
-import { mentionName } from "util/names";
+import { formatFullName } from "util/names";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import "./ProfileTitle.css";
 
@@ -35,7 +36,6 @@ export default function ProfileTitle() {
     const regularNode = useSelector(isRegularNode);
     const nodeName = useSelector(getOwnerName);
     const fullName = useSelector(getOwnerFullName);
-    const name = fullName || NodeName.shorten(nodeName);
     const title = useSelector(getOwnerTitle);
     const avatar = useSelector(getOwnerAvatar);
     const card = useSelector(getOwnerCard);
@@ -52,7 +52,7 @@ export default function ProfileTitle() {
         <>
             {connectedToHome && !atHomeNode ?
                 <MobileBack nodeName={REL_HOME} href={newsHref} menuContent={<ManagementMenuItems/>} sticky>
-                    {name}
+                    {formatFullName(nodeName, fullName)}
                 </MobileBack>
             :
                 <MobileMainMenu/>
@@ -72,8 +72,12 @@ export default function ProfileTitle() {
                             </>
                         }
                     </div>
-                    {!connectedToHome && <div className="full-name" onClick={onCopyLink}>{name}</div>}
-                    <div className="mention" onClick={onCopyLink}>{mentionName(nodeName)}</div>
+                    {!connectedToHome &&
+                        <div className="full-name" onClick={onCopyLink}>
+                            <NodeFullName nodeName={nodeName} fullName={fullName}/>
+                        </div>
+                    }
+                    <div className="mention" onClick={onCopyLink}>@{NodeName.shorten(nodeName)}</div>
                     <OperationStatus/>
                     {title && <div className="title">{title}</div>}
                     <div className="subscribe-line">

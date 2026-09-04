@@ -4,13 +4,12 @@ import { format, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import { getSetting } from "state/settings/selectors";
 import { closeBlockingDetailsDialog } from "state/blockingdetailsdialog/actions";
 import { useDispatcher } from "ui/hook";
-import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog } from "ui/control";
 import EntryHtml from "ui/entry/EntryHtml";
 import Jump from "ui/navigation/Jump";
+import { useNameDisplayMode } from "ui/nodename/hooks";
 import { formatFullName } from "util/names";
 import { htmlEntities, replaceEmojis } from "util/html";
 import { ut } from "util/url";
@@ -24,9 +23,7 @@ export default function BlockingDetailsDialog() {
     const remotePostingHeading = useSelector((state: ClientState) => state.blockingDetailsDialog.remotePostingHeading);
     const by = useSelector((state: ClientState) => state.blockingDetailsDialog.by);
     const blocked = useSelector((state: ClientState) => state.blockingDetailsDialog.blocked);
-    const nameDisplayMode = useSelector(
-        (state: ClientState) => getSetting(state, "full-name.display") as NameDisplayMode
-    );
+    const nameDisplayMode = useNameDisplayMode();
     const dispatch = useDispatcher();
     const {t} = useTranslation();
 

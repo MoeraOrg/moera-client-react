@@ -6,12 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { getNodeCard } from "state/nodecards/selectors";
-import { getSetting } from "state/settings/selectors";
 import { askDialogSend, closeAskDialog } from "state/askdialog/actions";
 import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { InputField, SelectField, SelectFieldChoice } from "ui/control/field";
-import { NameDisplayMode } from "ui/types";
+import { useNameDisplayMode } from "ui/nodename/hooks";
 import { formatFullName } from "util/names";
 
 interface OuterProps {
@@ -31,9 +30,7 @@ function AskDialogInner({nodeName}: Props) {
     const allGroups = useSelector((state: ClientState) => state.askDialog.friendGroups);
     const subjectsAllowed = useSelector((state: ClientState) => state.askDialog.subjectsAllowed);
     const sending = useSelector((state: ClientState) => state.askDialog.sending);
-    const nameDisplayMode = useSelector(
-        (state: ClientState) => getSetting(state, "full-name.display")
-    ) as NameDisplayMode;
+    const nameDisplayMode = useNameDisplayMode();
     const dispatch = useDispatcher();
     const {t} = useTranslation();
 

@@ -18,7 +18,7 @@ import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html
 import { extractUrls, replaceSmileys } from "util/text";
 import { containsTags, safeImportHtml, strikeoutToHtml } from "util/html";
 import { insertText } from "util/ui";
-import { mentionName } from "util/names";
+import { mentionName } from "util/markdown";
 import { importQuirks } from "util/import-quirks";
 
 const MENTION_START = /(^|[\s(])@$/;

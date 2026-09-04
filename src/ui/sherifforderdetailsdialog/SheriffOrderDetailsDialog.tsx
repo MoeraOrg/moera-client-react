@@ -4,12 +4,11 @@ import { Trans, useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
-import { getSetting } from "state/settings/selectors";
 import { closeSheriffOrderDetailsDialog } from "state/sherifforderdetailsdialog/actions";
 import { useDispatcher } from "ui/hook";
-import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog } from "ui/control";
 import Jump from "ui/navigation/Jump";
+import { useNameDisplayMode } from "ui/nodename/hooks";
 import { formatFullName } from "util/names";
 import { htmlEntities, replaceEmojis } from "util/html";
 import { ut } from "util/url";
@@ -18,8 +17,7 @@ export default function SheriffOrderDetailsDialog() {
     const loaded = useSelector((state: ClientState) => state.sheriffOrderDetailsDialog.loaded);
     const loading = useSelector((state: ClientState) => state.sheriffOrderDetailsDialog.loading);
     const info = useSelector((state: ClientState) => state.sheriffOrderDetailsDialog.info);
-    const nameDisplayMode = useSelector((state: ClientState) =>
-        getSetting(state, "full-name.display") as NameDisplayMode);
+    const nameDisplayMode = useNameDisplayMode();
     const dispatch = useDispatcher();
     const {t} = useTranslation();
 

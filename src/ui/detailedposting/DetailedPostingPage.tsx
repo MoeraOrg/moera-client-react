@@ -5,14 +5,14 @@ import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { tTitle } from "i18n";
-import { NodeName, PostingInfo } from "api";
+import { PostingInfo } from "api";
 import { ClientState } from "state/state";
 import { getOwnerFullName, getOwnerName, isAtHomeNode, isGooglePlayHiding } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { detailedPostingLoad } from "state/detailedposting/actions";
 import { getDetailedPosting, isDetailedPostingBeingDeleted } from "state/detailedposting/selectors";
 import { getPostingFeedReference, isPostingSheriffProhibited } from "state/postings/selectors";
-import { useIsTinyScreen, useDispatcher } from "ui/hook";
+import { useDispatcher, useIsTinyScreen } from "ui/hook";
 import { Button, Loading, OnlyDesktop } from "ui/control";
 import { MinimalStoryInfo } from "ui/types";
 import { useHomeNews } from "ui/feed/feeds";
@@ -28,6 +28,7 @@ import ExploreBox from "ui/explore/ExploreBox";
 import DetailedPosting from "ui/detailedposting/DetailedPosting";
 import { ReactComponent as NotFound } from "ui/detailedposting/NotFound.isvg";
 import { REL_CURRENT, REL_HOME, RelNodeName } from "util/rel-node-name";
+import { formatFullName } from "util/names";
 import "./DetailedPostingPage.css";
 
 function getStory(posting: PostingInfo, feedName: string): MinimalStoryInfo | null {
@@ -54,7 +55,7 @@ function getBackFeedAndStory(
     let story = getStory(posting, "timeline");
     let backNodeName = REL_CURRENT;
     let backHref = "/timeline";
-    let backTitle = atHome ? t("back-your-posts") : t("back-posts", {name: nodeFullName || NodeName.shorten(nodeName)});
+    let backTitle = atHome ? t("back-your-posts") : t("back-posts", {name: formatFullName(nodeName, nodeFullName)});
     if (story == null && atHome) {
         story = getStory(posting, "news");
         backNodeName = REL_HOME;

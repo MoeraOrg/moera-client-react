@@ -1,8 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { NodeName } from "api";
 import { ClientReactionInfo, ReactionTotalInfo, ReactionTotalsInfo } from "api";
 import Twemoji from "ui/twemoji/Twemoji";
+import { formatFullName } from "util/names";
 import { notNull } from "util/misc";
 import "./ReactionTotals.css";
 
@@ -57,6 +58,8 @@ interface ReactionTotalsProps {
 }
 
 export function ReactionTotals({reactions, seniorReaction, seniorName, seniorFullName, onClick}: ReactionTotalsProps) {
+    const {t} = useTranslation();
+
     let positive = reactions?.positive ?? [];
     let negative = reactions?.negative ?? [];
     if (seniorReaction != null && seniorName != null) {
@@ -81,7 +84,7 @@ export function ReactionTotals({reactions, seniorReaction, seniorName, seniorFul
         <div className="reactions">
             {seniorReaction &&
                 <span className={!seniorReaction.negative ? "senior-positive" : "senior-negative"}
-                      title={`Post author (${seniorFullName || NodeName.shorten(seniorName ?? null)})`}
+                      title={t("post-author", {name: formatFullName(seniorName, seniorFullName)})}
                       onClick={() => onClick(seniorReaction?.negative ?? false)}>
                     <Twemoji code={seniorReaction.emoji}/>
                 </span>

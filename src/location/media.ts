@@ -1,9 +1,9 @@
+import { atOwner } from "location/util";
 import { ClientState } from "state/state";
 import { LocationInfo } from "location/LocationInfo";
 import { getNodeRootLocation } from "state/node/selectors";
 import { getLightboxCommentId, getLightboxMediaId, getLightboxPostingId } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
-import { atOwner } from "util/names";
 import { REL_CURRENT } from "util/rel-node-name";
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {

@@ -1,4 +1,4 @@
-import { DraftText, Node, NodeName, PostingInfo, PrincipalValue, SourceFormat } from "api";
+import { DraftText, Node, PostingInfo, PrincipalValue, SourceFormat } from "api";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
 import { errorThrown } from "state/error/actions";
@@ -12,9 +12,10 @@ import { getNodeRootPage } from "state/node/selectors";
 import { saga } from "state/saga";
 import { htmlToMarkdown } from "ui/control/richtexteditor/markdown/markdown-html";
 import { getWindowSelectionHtml } from "util/ui";
-import { mentionName } from "util/names";
+import { mentionName } from "util/markdown";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { ht } from "util/html";
+import { formatFullName } from "util/names";
 import { universalLocation } from "util/universal-url";
 import { ut } from "util/url";
 
@@ -64,7 +65,7 @@ async function postingReplySaga(action: WithContext<PostingReplyAction>): Promis
         switch (sourceFormatDefault) {
             case "html":
             case "html/visual": {
-                const name = posting.ownerFullName || NodeName.shorten(posting.ownerName);
+                const name = formatFullName(posting.ownerName, posting.ownerFullName);
                 const href = universalLocation(null, posting.ownerName, null, "/");
                 const mention = ht`<a href="${href}" data-nodename="${posting.ownerName}" data-href="/">${name}</a>`;
                 const preamble = preambleTemplateHtml

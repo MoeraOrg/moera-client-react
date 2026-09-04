@@ -15,6 +15,7 @@ import { Avatar } from "ui/control";
 import { Icon, msComment, msExplore, msLogout, msSwapHoriz, msTrendingUp } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
 import { REL_HOME, REL_SEARCH } from "util/rel-node-name";
+import { formatFullName } from "util/names";
 import "./SandwichMenu.css";
 
 interface Props {
@@ -66,7 +67,7 @@ export default function SandwichMenu({ref}: Props) {
                     <Jump nodeName={REL_HOME} href="/" className="profile" onNear={onJump} onFar={onJump}>
                         <Avatar avatar={avatar} ownerName={nodeName} size={40}/>
                         <div className="full-name">
-                            {fullName || NodeName.shorten(nodeName)}
+                            {formatFullName(nodeName, fullName)}
                         </div>
                         <div className="name">{NodeName.shorten(nodeName)}</div>
                     </Jump>

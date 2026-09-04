@@ -1,12 +1,12 @@
 import i18n from 'i18next';
 
+import { atOwner } from "location/util";
 import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import { goToSettings } from "state/navigation/actions";
 import { settingsGoToSheet, settingsGoToTab } from "state/settings/actions";
 import { SettingsTabId } from "state/settings/state";
 import { LocationInfo } from "location/LocationInfo";
-import { atOwner } from "util/names";
 
 // Do not forget to update SettingsTabId
 const SETTINGS_TABS: string[] = ["profile", "client", "node"];

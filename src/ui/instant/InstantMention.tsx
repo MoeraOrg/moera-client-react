@@ -11,7 +11,7 @@ interface Props {
 
 const InstantMention = ({name, fullName, mode}: Props) => (
     <span className="node-name">
-        <NodeNameText name={name || fullName} fullName={fullName} mode={mode}/>
+        <NodeNameText nodeName={name} fullName={fullName} mode={mode ?? undefined}/>
     </span>
 );
 

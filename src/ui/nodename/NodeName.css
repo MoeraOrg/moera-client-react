@@ -15,12 +15,6 @@
     text-decoration: line-through;
 }
 
-.node-name .generation {
-    font-size: 60%;
-    position: relative;
-    bottom: -0.25em;
-}
-
 .node-name .mention {
     color: var(--bs-gray-600);
     font-weight: normal;

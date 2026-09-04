@@ -8,14 +8,13 @@ import { SHERIFF_ORDER_REASON_CODES, SheriffOrderReason } from "api";
 import { ClientState } from "state/state";
 import { dispatch } from "state/store-sagas";
 import { getHomeOwnerName } from "state/home/selectors";
-import { getSetting } from "state/settings/selectors";
 import { closeSheriffOrderDialog, sheriffOrderDialogSubmit } from "state/sherifforderdialog/actions";
 import { SheriffOrderTarget } from "state/sherifforderdialog/state";
 import { useDispatcher } from "ui/hook";
-import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, SelectField, SelectFieldChoice } from "ui/control/field";
 import { RichTextField, RichTextValue } from "ui/control/richtexteditor";
+import { useNameDisplayMode } from "ui/nodename/hooks";
 import { formatFullName } from "util/names";
 
 const REASON_CODES: SelectFieldChoice[] = SHERIFF_ORDER_REASON_CODES.map(code => ({
@@ -38,9 +37,7 @@ type Props = OuterProps & FormikProps<Values>;
 function SheriffOrderDialogInner({target}: Props) {
     const submitting = useSelector((state: ClientState) => state.sheriffOrderDialog.submitting);
     const isSheriff = useSelector((state: ClientState) => getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE);
-    const nameDisplayMode = useSelector((state: ClientState) =>
-        getSetting(state, "full-name.display") as NameDisplayMode
-    );
+    const nameDisplayMode = useNameDisplayMode();
     const dispatch = useDispatcher();
     const {t} = useTranslation();
 

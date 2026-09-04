@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
-import { NodeName } from "api";
 import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
@@ -14,6 +13,7 @@ import Jump from "ui/navigation/Jump";
 import NewsCounter from "ui/mainmenu/NewsCounter";
 import { getFeedTitle, useHomeNews } from "ui/feed/feeds";
 import { REL_HOME, REL_SEARCH, RelNodeName } from "util/rel-node-name";
+import { formatFullName } from "util/names";
 import "./MainMenuSidebar.css";
 
 type MainMenuSidebarItem = "news" | "explore" | "settings";
@@ -79,7 +79,7 @@ export default function MainMenuSidebar() {
                                 <Jump className="nav-link" nodeName={REL_HOME} href="/">
                                     <Avatar className="icon" avatar={avatar} ownerName={ownerName} size={24}
                                             nodeName={REL_HOME}/>
-                                    {ownerFullName || NodeName.shorten(ownerName)}
+                                    {formatFullName(ownerName, ownerFullName)}
                                 </Jump>
                             </li>
                             <hr/>

@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 
+import { atOwner } from "location/util";
 import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import { getNodeRootLocation } from "state/node/selectors";
@@ -8,7 +9,6 @@ import { isAtEmailVerifiedPage, isAtVerifyEmailPage } from "state/navigation/sel
 import { LocationInfo } from "location/LocationInfo";
 import { build as emailVerifiedBuild, transform as emailVerifiedTransform } from "location/email-verified";
 import { build as verifyEmailBuild, transform as verifyEmailTransform } from "location/verify-email";
-import { atOwner } from "util/names";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     if (dstInfo.directories.length > 1) {

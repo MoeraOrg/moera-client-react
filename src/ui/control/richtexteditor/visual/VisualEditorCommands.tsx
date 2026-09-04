@@ -74,7 +74,6 @@ import { RichTextFormulaValues } from "ui/control/richtexteditor/dialog/RichText
 import { RichTextImageValues } from "ui/control/richtexteditor/media/RichTextImageDialog";
 import { MediaWithCaption } from "util/media-with-caption";
 import { NameListItem } from "util/names-list";
-import { mentionName } from "util/names";
 import noTracking from "util/no-tracking";
 
 interface Props {
@@ -240,7 +239,7 @@ export default function VisualEditorCommands({noComplexBlocks, noEmbeddedMedia, 
                 }
                 editor.insertText(" ");
             } else if (typeOnCancel) {
-                editor.insertText(nodeName ? mentionName(nodeName) : "@", {noHotKeys: true});
+                editor.insertText("@" + (nodeName ?? ""), {noHotKeys: true});
             }
             focus();
         });

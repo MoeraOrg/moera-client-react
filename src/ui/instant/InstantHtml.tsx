@@ -1,14 +1,11 @@
 import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import htmlToReact, { DOMNode } from 'html-react-parser';
 import { isTag } from 'domhandler';
 
-import { ClientState } from "state/state";
-import { getSetting } from "state/settings/selectors";
 import { ExtStoryInfo } from "state/feeds/state";
 import InstantMention from "ui/instant/InstantMention";
-import { NameDisplayMode } from "ui/types";
 import InstantIcon from "ui/instant/InstantIcon";
+import { useNameDisplayMode } from "ui/nodename/hooks";
 import { textContent } from "util/domhandler";
 
 interface Props {
@@ -16,7 +13,7 @@ interface Props {
 }
 
 export default function InstantHtml({story}: Props) {
-    const mode = useSelector((state: ClientState) => getSetting(state, "full-name.display") as NameDisplayMode);
+    const mode = useNameDisplayMode();
 
     const options = useMemo(() => ({
         replace: (node: DOMNode) => {

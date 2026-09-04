@@ -4,7 +4,7 @@ import cx from 'classnames';
 import QRCode from 'react-qr-code';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { CLIENT_SETTINGS_PREFIX, FundraiserInfo, NodeName } from "api";
+import { CLIENT_SETTINGS_PREFIX, FundraiserInfo } from "api";
 import { ClientState } from "state/state";
 import { closeDonateDialog } from "state/donatedialog/actions";
 import { settingsUpdate } from "state/settings/actions";
@@ -14,6 +14,7 @@ import { Button, ModalDialog } from "ui/control";
 import FundraiserIcon from "ui/donatedialog/FundraiserIcon";
 import { getFundraiserAutoHref } from "ui/donatedialog/fundraiser-util";
 import * as Browser from "ui/browser";
+import { formatFullName } from "util/names";
 import { getSchemeOrDomain, hasSchemeOrDomain } from "util/url";
 import "./DonateDialog.css";
 
@@ -71,8 +72,7 @@ export default function DonateDialog() {
         );
     }
 
-    const shortName = NodeName.shorten(name);
-    const recipientName = fullName ? `${fullName} (@${shortName})` : `@${shortName}`;
+    const recipientName = formatFullName(name, fullName, "both", "@");
     const fundraiser = fundraisers[fundraiserIndex];
 
     const onClick = (index: number) => () => {

@@ -49,8 +49,11 @@ export function getComplaintStatusDetails(status: SheriffComplaintStatus | null 
     return details;
 }
 
-export function getComplaintHeadingHtml(group: ExtComplaintGroupInfo, nameDisplayMode: NameDisplayMode,
-                                        t: TFunction): string {
+export function getComplaintHeadingHtml(
+    group: ExtComplaintGroupInfo,
+    nameDisplayMode: NameDisplayMode,
+    t: TFunction
+): string {
     let subjectKey: string;
     let subjectValues;
     if (group.remotePostingId == null) {

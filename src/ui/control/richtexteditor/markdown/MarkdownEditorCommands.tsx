@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 
-import { NodeName, PrivateMediaFileInfo, SourceFormat } from "api";
+import { PrivateMediaFileInfo, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { detailsSummaryStyleToClassName } from "ui/control";
@@ -27,8 +27,9 @@ import { useRichTextEditorMedia } from "ui/control/richtexteditor/media/rich-tex
 import { MediaWithCaption } from "util/media-with-caption";
 import { htmlEntities } from "util/html";
 import { NameListItem } from "util/names-list";
-import { mentionName } from "util/names";
+import { mentionName } from "util/markdown";
 import { universalLocation } from "util/universal-url";
+import { formatFullName } from "util/names";
 import noTracking from "util/no-tracking";
 
 interface Props {
@@ -204,14 +205,14 @@ export default function MarkdownEditorCommands({
                 if (isMarkdown()) {
                     insertText(textArea.current, mentionName(nodeName, fullName))
                 } else {
-                    const text = (fullName || NodeName.shorten(nodeName)) ?? nodeName ?? "";
+                    const text = formatFullName(nodeName, fullName);
                     const href = universalLocation(null, nodeName, null, "/");
                     insertText(textArea.current,
                         `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(nodeName ?? "")}" data-href="/">`
                         + `${htmlEntities(text)}</a>`);
                 }
             } else {
-                insertText(textArea.current, nodeName ? "\\" + mentionName(nodeName) : "\\@");
+                insertText(textArea.current, "\\@" + (nodeName ?? ""));
             }
             focus();
         });

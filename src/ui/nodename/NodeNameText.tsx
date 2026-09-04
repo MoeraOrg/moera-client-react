@@ -1,36 +1,24 @@
 import React from 'react';
 
-import { NodeName as NodeNameParser } from "api";
+import { NodeName } from "api";
 import { NameDisplayMode } from "ui/types";
-import { mentionName } from "util/names";
 
 interface Props {
-    name?: string | null;
+    nodeName?: string | null;
     fullName?: string | null;
-    mode?: NameDisplayMode | null;
+    mode?: NameDisplayMode;
 }
 
-export default function NodeNameText({name = null, fullName, mode}: Props) {
-    let namePart = null;
-    let generationPart = null;
-    if (mode !== "name") {
-        namePart = fullName;
+export default function NodeNameText({nodeName, fullName, mode = "full-name"}: Props) {
+    const name = NodeName.shorten(nodeName) || "?";
+    switch (mode) {
+        case "name":
+            return <>{name}</>;
+        case "full-name":
+            return <>{fullName || name}</>;
+        case "both":
+            return <>{(fullName || name) + " "}<span className="mention">@{name}</span></>;
+        default:
+            return <>?</>;
     }
-    const parts = NodeNameParser.parse(name);
-    if (!namePart) {
-        namePart = parts.name;
-        generationPart = parts.generation;
-    }
-    return (
-        <>
-            {namePart}
-            {generationPart ? <span className="generation">{generationPart}</span> : ""}
-            {mode === "both" &&
-                <>
-                    {" "}
-                    <span className="mention">{mentionName(name)}</span>
-                </>
-            }
-        </>
-    );
 }

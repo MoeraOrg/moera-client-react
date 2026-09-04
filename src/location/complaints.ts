@@ -1,12 +1,12 @@
 import i18n from 'i18next';
 
 import { LocationInfo } from "location/LocationInfo";
+import { atOwner } from "location/util";
 import { ClientAction } from "state/action";
 import { ClientState } from "state/state";
 import { goToComplaints } from "state/navigation/actions";
 import { complaintsGroupClose, complaintsGroupOpen } from "state/complaints/actions";
 import { getActiveComplaintGroupId } from "state/complaints/selectors";
-import { atOwner } from "util/names";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     const actions: ClientAction[] = [goToComplaints()];

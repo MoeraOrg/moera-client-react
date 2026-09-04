@@ -1,12 +1,12 @@
 import i18n from 'i18next';
 
 import { LocationInfo } from "location/LocationInfo";
+import { atOwner } from "location/util";
 import { ClientAction } from "state/action";
 import { ClientState } from "state/state";
 import { getNodeRootLocation } from "state/node/selectors";
 import { getFeedAt } from "state/feeds/selectors";
 import { goToTimeline } from "state/navigation/actions";
-import { atOwner } from "util/names";
 import { REL_CURRENT } from "util/rel-node-name";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {

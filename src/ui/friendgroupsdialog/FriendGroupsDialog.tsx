@@ -10,13 +10,12 @@ import { dispatch } from "state/store-sagas";
 import { getHomeFriendGroups } from "state/home/selectors";
 import { NodeCardState } from "state/nodecards/state";
 import { getNodeCard } from "state/nodecards/selectors";
-import { getSetting } from "state/settings/selectors";
 import { closeFriendGroupsDialog, nodeChangeFriendGroups } from "state/friendgroupsdialog/actions";
 import { peopleSelectedChangeFriendGroups } from "state/people/actions";
 import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, InputField, PrincipalField } from "ui/control/field";
-import { NameDisplayMode } from "ui/types";
+import { useNameDisplayMode } from "ui/nodename/hooks";
 import { formatFullName } from "util/names";
 import "./FriendGroupsDialog.css";
 
@@ -41,8 +40,7 @@ type Props = OuterProps & FormikProps<Values>;
 
 function FriendGroupsDialogInner({nodeName, nodeCard, values, setFieldValue}: Props) {
     const changing = useSelector((state: ClientState) => state.friendGroupsDialog.changing);
-    const nameDisplayMode = useSelector((state: ClientState) =>
-        getSetting(state, "full-name.display") as NameDisplayMode);
+    const nameDisplayMode = useNameDisplayMode();
     const dispatch = useDispatcher();
     const {t} = useTranslation();
 

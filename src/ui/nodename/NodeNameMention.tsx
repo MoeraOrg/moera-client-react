@@ -1,12 +1,9 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
-import { ClientState } from "state/state";
-import { getSetting } from "state/settings/selectors";
+import { NodeName } from "api";
 import NodeNamePopup from "ui/nodename/NodeNamePopup";
-import { NameDisplayMode } from "ui/types";
+import { useNameDisplayMode } from "ui/nodename/hooks";
 import Jump from "ui/navigation/Jump";
-import { mentionName } from "util/names";
 
 interface Props {
     name: string | null;
@@ -15,15 +12,15 @@ interface Props {
 }
 
 export default function NodeNameMention({name, fullName, text}: Props) {
-    const mode = useSelector((state: ClientState) => getSetting(state, "full-name.display") as NameDisplayMode);
+    const mode = useNameDisplayMode();
 
     if (!name) {
         return null;
     }
 
     let content: string;
-    const mention = mentionName(name);
-    if (text !== mention) {
+    const mention = "@" + NodeName.shorten(name);
+    if (text && text !== mention) {
         switch (mode) {
             case "name":
                 content = mention;
@@ -38,7 +35,7 @@ export default function NodeNameMention({name, fullName, text}: Props) {
                 content = "?";
         }
     } else {
-        content = text;
+        content = mention;
     }
 
     return (

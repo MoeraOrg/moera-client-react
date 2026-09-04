@@ -1,27 +1,22 @@
 import { TFunction } from 'i18next';
 
 import { NodeName } from "api";
-import { ClientState } from "state/state";
-import { getOwnerName } from "state/node/selectors";
 import { NameDisplayMode } from "ui/types";
 
-export function mentionName(name: string | null | undefined, fullName?: string | null): string {
-    if (!name) {
-        return "";
-    }
-    return "@" + NodeName.shorten(name) + (fullName ? `[${fullName}]` : "");
-}
-
-export function formatFullName(nodeName: string | null | undefined, fullName: string | null | undefined,
-                               mode: NameDisplayMode): string {
-    const name = nodeName != null ? NodeName.shorten(nodeName) : null;
+export function formatFullName(
+    nodeName: string | null | undefined,
+    fullName: string | null | undefined,
+    mode: NameDisplayMode = "full-name",
+    nodeNamePrefix: string = ""
+): string {
+    const name = nodeNamePrefix + (NodeName.shorten(nodeName) || "?");
     switch (mode) {
         case "name":
-            return name || "?";
+            return name;
         case "full-name":
-            return fullName || name || "?";
+            return fullName || name;
         case "both":
-            return fullName ? `${fullName} (${name || "?"})` : (name || "?");
+            return fullName ? `${fullName} (${name})` : name;
         default:
             return "?";
     }
@@ -47,9 +42,4 @@ export function shortGender(gender: string | null, t: TFunction): string | null 
         default:
             return gender;
     }
-}
-
-export function atOwner(state: ClientState): string {
-    const ownerName = getOwnerName(state);
-    return ownerName ? " @ " + NodeName.shorten(ownerName) : "";
 }

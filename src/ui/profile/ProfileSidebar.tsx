@@ -13,16 +13,17 @@ import {
     isRegularNode
 } from "state/node/selectors";
 import { profileEmailVerify } from "state/profile/actions";
+import { sharePageCopyLink } from "state/sharedialog/actions";
 import { useDispatcher } from "ui/hook";
 import { Button, DonateButton, OnlyDesktop } from "ui/control";
 import Jump from "ui/navigation/Jump";
+import NodeFullName from "ui/nodename/NodeFullName";
 import { useTimeline } from "ui/feed/feeds";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import ProfileAvatar from "ui/profile/ProfileAvatar";
 import ManagementMenu from "ui/profile/manage/ManagementMenu";
 import OperationStatus from "ui/profile/manage/OperationStatus";
 import EntryHtml from "ui/entry/EntryHtml";
-import { mentionName } from "util/names";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./ProfileSidebar.css";
 
@@ -42,6 +43,8 @@ export default function ProfileSidebar() {
     const dispatch = useDispatcher();
     const {t} = useTranslation();
 
+    const onCopyLink = () => dispatch(sharePageCopyLink(REL_CURRENT, "/"));
+
     return (
         <OnlyDesktop>
             <aside id="profile-sidebar">
@@ -59,9 +62,9 @@ export default function ProfileSidebar() {
                     }
                 </div>
                 <div className="full-name">
-                    {fullName || NodeName.shorten(nodeName)}
+                    <NodeFullName nodeName={nodeName} fullName={fullName}/>
                 </div>
-                <div className="mention">{mentionName(nodeName)}</div>
+                <div className="mention" onClick={onCopyLink}>@{NodeName.shorten(nodeName)}</div>
                 <OperationStatus/>
                 {title && <div className="title">{title}</div>}
                 {!atHome &&

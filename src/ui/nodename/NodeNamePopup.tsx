@@ -23,9 +23,15 @@ export default function NodeNamePopup({nodeName, fullName, avatar, avatarNodeNam
     const onPreparePopper = () => dispatch(nodeCardPrepare(nodeName));
 
     return (
-        <DelayedPopover placement="top" className="node-name-popover" onPreparePopper={onPreparePopper}
-                        disabled={disabled || anonymous} clickable element={children}
-                        popoverContainer={document.getElementById("hovercard-root")}>
+        <DelayedPopover
+            placement="top"
+            className="node-name-popover"
+            onPreparePopper={onPreparePopper}
+            disabled={disabled || anonymous}
+            clickable
+            element={children}
+            popoverContainer={document.getElementById("hovercard-root")}
+        >
             <NodeCard nodeName={nodeName} fullName={fullName} avatar={avatar} avatarNodeName={avatarNodeName}/>
         </DelayedPopover>
     );

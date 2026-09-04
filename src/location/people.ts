@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 
+import { atOwner } from "location/util";
 import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import { goToPeople } from "state/navigation/actions";
@@ -8,7 +9,6 @@ import { getPeopleTab } from "state/people/selectors";
 import { getNodeFriendGroups, getNodeRootLocation } from "state/node/selectors";
 import { LocationInfo } from "location/LocationInfo";
 import { getPeopleTabTitle } from "ui/people/people-tabs";
-import { atOwner } from "util/names";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     let actions: ClientAction[] = [];

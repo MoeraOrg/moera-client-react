@@ -5,11 +5,11 @@ import cx from 'classnames';
 
 import { ANONYMOUS_NODE_NAME, AvatarImage } from "api";
 import { getNamingNameDetails } from "state/naming/selectors";
-import { getSetting } from "state/settings/selectors";
 import { ClientState } from "state/state";
 import Jump, { JumpCallback } from "ui/navigation/Jump";
 import NodeNameText from "ui/nodename/NodeNameText";
 import NodeNamePopup from "ui/nodename/NodeNamePopup";
+import { useNameDisplayMode } from "ui/nodename/hooks";
 import { NameDisplayMode } from "ui/types";
 import { RelNodeName } from "util/rel-node-name";
 import "./NodeName.css";
@@ -33,7 +33,7 @@ export default function NodeName({
     display, onJump
 }: Props) {
     const details = useSelector((state: ClientState) => getNamingNameDetails(state, name));
-    const mode = useSelector((state: ClientState) => getSetting(state, "full-name.display") as NameDisplayMode);
+    const mode = useNameDisplayMode();
     const {t} = useTranslation();
 
     if (!name) {
@@ -56,11 +56,11 @@ export default function NodeName({
             {ref =>
                 linked ?
                     <Jump className={klass} nodeName={name} href="/" onNear={onJump} onFar={onJump} ref={ref}>
-                        <NodeNameText name={name} fullName={fullName} mode={display ?? mode}/>
+                        <NodeNameText nodeName={name} fullName={fullName} mode={display ?? mode}/>
                     </Jump>
                 :
                     <span className={klass} title={anonymous ? t("anonymous-user") : undefined} ref={ref}>
-                        <NodeNameText name={name} fullName={fullName} mode={display ?? mode}/>
+                        <NodeNameText nodeName={name} fullName={fullName} mode={display ?? mode}/>
                     </span>
             }
         </NodeNamePopup>

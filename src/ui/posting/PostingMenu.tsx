@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
-import { NodeName, PostingInfo } from "api";
+import { PostingInfo } from "api";
 import { ClientState } from "state/state";
 import { confirmBox } from "state/confirmbox/actions";
 import {
@@ -37,6 +37,7 @@ import { useDispatcher } from "ui/hook";
 import { MinimalStoryInfo } from "ui/types";
 import { DropdownMenu, DropdownMenuItems } from "ui/control";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
+import { formatFullName } from "util/names";
 import { ut } from "util/url";
 import "ui/entry/EntryMenu.css";
 
@@ -136,7 +137,7 @@ function PostingMenuItems({posting, story, detailed}: Props) {
         dispatch(confirmBox({
             message: t(
                 "dont-recommend-user",
-                {name: posting.receiverFullName || NodeName.shorten(posting.receiverName)}
+                {name: formatFullName(posting.receiverName, posting.receiverFullName)}
             ),
             yes: t("dont-recommend"),
             no: t("cancel"),

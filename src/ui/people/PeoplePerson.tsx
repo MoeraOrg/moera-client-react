@@ -11,6 +11,7 @@ import { useDispatcher } from "ui/hook";
 import { Avatar, AvatarWithPopup, OnlyDesktop, OnlyMobile, Principal, SubscribeButton } from "ui/control";
 import { Icon, msCheck16 } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
+import NodeFullName from "ui/nodename/NodeFullName";
 import SubscriberVisibility from "ui/people/SubscriberVisibility";
 import PeopleContactStatuses from "ui/people/PeopleContactStatuses";
 import "./PeoplePerson.css";
@@ -28,8 +29,6 @@ export default function PeoplePerson({contact}: Props) {
 
     const onSelectClick = () => dispatch(peopleSelectToggle(contact.contact.nodeName));
 
-    const shortNodeName = NodeName.shorten(contact.contact.nodeName);
-
     return (
         <div className="person">
             {selecting ?
@@ -45,7 +44,7 @@ export default function PeoplePerson({contact}: Props) {
             }
             <div className="details">
                 <Jump className="full-name" nodeName={contact.contact.nodeName} href="/">
-                    {contact.contact.fullName || shortNodeName}
+                    <NodeFullName nodeName={contact.contact.nodeName} fullName={contact.contact.fullName}/>
                     {tab === "subscribers" && contact.subscriber != null &&
                         <SubscriberVisibility subscriber={contact.subscriber}/>
                     }
@@ -55,7 +54,7 @@ export default function PeoplePerson({contact}: Props) {
                     {!atHome && <OnlyDesktop><PeopleContactStatuses contact={contact}/></OnlyDesktop>}
                 </Jump>
                 <Jump className="name" nodeName={contact.contact.nodeName} href="/">
-                    {shortNodeName}
+                    {NodeName.shorten(contact.contact.nodeName)}
                 </Jump>
             </div>
             <SubscribeButton nodeName={contact.contact.nodeName} feedName="timeline"/>

@@ -1,3 +1,4 @@
+import { atOwner } from "location/util";
 import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import { getNodeRootLocation } from "state/node/selectors";
@@ -10,7 +11,6 @@ import {
     isDetailedPostingGalleryExpanded
 } from "state/detailedposting/selectors";
 import { LocationInfo } from "location/LocationInfo";
-import { atOwner } from "util/names";
 import { REL_CURRENT } from "util/rel-node-name";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
