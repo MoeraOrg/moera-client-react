@@ -1,5 +1,5 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
-import { GrantInfo, PluginInfo, Scope, SettingInfo, SettingMetaInfo, TokenInfo } from "api";
+import { GrantInfo, Scope, SettingInfo, SettingMetaInfo, TokenInfo } from "api";
 import { SettingsTabId } from "state/settings/state";
 
 export type SettingsGoToTabAction = ActionWithPayload<"SETTINGS_GO_TO_TAB", {
@@ -237,41 +237,6 @@ export type SettingsTokensNewTokenCopyAction = ActionWithoutPayload<"SETTINGS_TO
 export const settingsTokensNewTokenCopy = (): SettingsTokensNewTokenCopyAction =>
     actionWithoutPayload("SETTINGS_TOKENS_NEW_TOKEN_COPY");
 
-export type SettingsPluginsLoadAction = ActionWithoutPayload<"SETTINGS_PLUGINS_LOAD">;
-export const settingsPluginsLoad = (): SettingsPluginsLoadAction =>
-    actionWithoutPayload("SETTINGS_PLUGINS_LOAD");
-
-export type SettingsPluginsLoadedAction = ActionWithPayload<"SETTINGS_PLUGINS_LOADED", {
-    plugins: PluginInfo[];
-}>;
-export const settingsPluginsLoaded = (plugins: PluginInfo[]): SettingsPluginsLoadedAction =>
-    actionWithPayload("SETTINGS_PLUGINS_LOADED", {plugins});
-
-export type SettingsPluginsLoadFailedAction = ActionWithoutPayload<"SETTINGS_PLUGINS_LOAD_FAILED">;
-export const settingsPluginsLoadFailed = (): SettingsPluginsLoadFailedAction =>
-    actionWithoutPayload("SETTINGS_PLUGINS_LOAD_FAILED");
-
-export type SettingsPluginsDeleteAction = ActionWithPayload<"SETTINGS_PLUGINS_DELETE", {
-    name: string;
-    tokenId: string;
-}>;
-export const settingsPluginsDelete = (name: string, tokenId: string): SettingsPluginsDeleteAction =>
-    actionWithPayload("SETTINGS_PLUGINS_DELETE", {name, tokenId});
-
-export type SettingsPluginsDeletedAction = ActionWithPayload<"SETTINGS_PLUGINS_DELETED", {
-    name: string;
-}>;
-export const settingsPluginsDeleted = (name: string): SettingsPluginsDeletedAction =>
-    actionWithPayload("SETTINGS_PLUGINS_DELETED", {name});
-
-export type SettingsPluginsConflictAction = ActionWithoutPayload<"SETTINGS_PLUGINS_CONFLICT">;
-export const settingsPluginsConflict = (): SettingsPluginsConflictAction =>
-    actionWithoutPayload("SETTINGS_PLUGINS_CONFLICT");
-
-export type SettingsPluginsConflictCloseAction = ActionWithoutPayload<"SETTINGS_PLUGINS_CONFLICT_CLOSE">;
-export const settingsPluginsConflictClose = (): SettingsPluginsConflictCloseAction =>
-    actionWithoutPayload("SETTINGS_PLUGINS_CONFLICT_CLOSE");
-
 export type SettingsLanguageChangedAction = ActionWithoutPayload<"SETTINGS_LANGUAGE_CHANGED">;
 export const settingsLanguageChanged = (): SettingsLanguageChangedAction =>
     actionWithoutPayload("SETTINGS_LANGUAGE_CHANGED");
@@ -357,13 +322,6 @@ export type SettingsAnyAction =
     | SettingsTokensDeletedAction
     | SettingsTokensNewTokenCloseAction
     | SettingsTokensNewTokenCopyAction
-    | SettingsPluginsLoadAction
-    | SettingsPluginsLoadedAction
-    | SettingsPluginsLoadFailedAction
-    | SettingsPluginsDeleteAction
-    | SettingsPluginsDeletedAction
-    | SettingsPluginsConflictAction
-    | SettingsPluginsConflictCloseAction
     | SettingsLanguageChangedAction
     | SettingsDeleteNodeRequestLoadAction
     | SettingsDeleteNodeRequestLoadedAction

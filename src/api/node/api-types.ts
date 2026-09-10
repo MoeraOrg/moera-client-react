@@ -26,9 +26,9 @@ export type PushRelayType = "fcm";
 
 export type Scope = "none" | "identify" | "other" | "view-content" | "add-post" | "update-post" | "add-comment"
     | "update-comment" | "react" | "delete-own-content" | "delete-others-content" | "view-people" | "block" | "friend"
-    | "remote-identify" | "drafts" | "view-feeds" | "update-feeds" | "name" | "plugins" | "view-profile"
-    | "update-profile" | "sheriff" | "view-settings" | "update-settings" | "subscribe" | "tokens" | "user-lists"
-    | "grant" | "upload-public-media" | "upload-private-media" | "lease-media" | "view-all" | "all";
+    | "remote-identify" | "drafts" | "view-feeds" | "update-feeds" | "name" | "view-profile" | "update-profile"
+    | "sheriff" | "view-settings" | "update-settings" | "subscribe" | "tokens" | "user-lists" | "grant"
+    | "upload-public-media" | "upload-private-media" | "lease-media" | "view-all" | "all";
 
 export type SearchContentUpdateType = "block" | "comment-add" | "comment-update" | "comment-update-heading"
     | "comment-update-media" | "comment-update-media-text" | "comment-delete" | "friend" | "profile" | "posting-add"
@@ -370,8 +370,9 @@ export interface ContactInfo {
 }
 
 export interface Credentials {
-    login: string;
-    password: string;
+    login?: string | null;
+    password?: string | null;
+    loginDisabled?: boolean | null;
 }
 
 export interface CredentialsChange {
@@ -383,6 +384,7 @@ export interface CredentialsChange {
 
 export interface CredentialsCreated {
     created: boolean;
+    loginDisabled?: boolean | null;
 }
 
 export interface CredentialsResetToken {
@@ -604,20 +606,6 @@ export interface PeopleGeneralInfo {
     blockedTotal?: number | null;
     blockedByTotal?: number | null;
     operations?: PeopleOperations | null;
-}
-
-export interface PluginContext {
-    rootAdmin: boolean;
-    admin: boolean;
-    authCategories: string[];
-    clientName: string;
-    remoteAddress: string;
-    userAgent: string;
-    userAgentOs: string;
-    nodeId: string;
-    nodeName: string;
-    domainName: string;
-    originUrl: string;
 }
 
 export interface PostingFeatures {
@@ -1363,7 +1351,6 @@ export interface TokenInfo {
     token: string;
     name?: string | null;
     permissions: Scope[];
-    pluginName?: string | null;
     createdAt: number;
     deadline?: number | null;
     lastUsedAt?: number | null;
@@ -1505,7 +1492,6 @@ export interface ContactWithRelationships {
 
 export interface Features {
     posting: PostingFeatures;
-    plugins?: string[] | null;
     feedWidth: number;
     friendGroups?: FriendGroupsFeatures | null;
     ask?: AskSubject[] | null;
@@ -2032,27 +2018,6 @@ export interface FeedSliceInfoBase<B> {
 
 export type EncodedFeedSliceInfo = FeedSliceInfoBase<string>;
 export type FeedSliceInfo = FeedSliceInfoBase<Body>;
-
-export interface PluginDescription {
-    name: string;
-    title?: string | null;
-    description?: string | null;
-    location?: string | null;
-    acceptedEvents?: string[] | null;
-    options?: SettingDescriptor[] | null;
-}
-
-export interface PluginInfo {
-    nodeId: string;
-    local: boolean;
-    name: string;
-    title?: string | null;
-    description?: string | null;
-    location?: string | null;
-    acceptedEvents?: string[] | null;
-    settings?: SettingMetaInfo[] | null;
-    tokenId?: string | null;
-}
 
 export interface PushContentBase<B> {
     type: PushContentType;

@@ -835,6 +835,10 @@ export const NODE_API_SCHEMAS = {
                 "created": {
                     type: "boolean"
                 },
+                "loginDisabled": {
+                    type: "boolean",
+                    nullable: true
+                },
             },
             required: [
                 "created",
@@ -3324,10 +3328,6 @@ export const NODE_API_SCHEMAS = {
                     },
                     default: []
                 },
-                "pluginName": {
-                    type: "string",
-                    nullable: true
-                },
                 "createdAt": {
                     type: "integer"
                 },
@@ -3822,13 +3822,6 @@ export const NODE_API_SCHEMAS = {
             properties: {
                 "posting": {
                     $ref: "node#/definitions/PostingFeatures"
-                },
-                "plugins": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
                 },
                 "feedWidth": {
                     type: "integer"
@@ -5796,64 +5789,6 @@ export const NODE_API_SCHEMAS = {
                 "totalInFuture",
             ],
             additionalProperties: false
-        },
-
-        PluginInfo: {
-            type: "object",
-            properties: {
-                "nodeId": {
-                    type: "string"
-                },
-                "local": {
-                    type: "boolean"
-                },
-                "name": {
-                    type: "string"
-                },
-                "title": {
-                    type: "string",
-                    nullable: true
-                },
-                "description": {
-                    type: "string",
-                    nullable: true
-                },
-                "location": {
-                    type: "string",
-                    nullable: true
-                },
-                "acceptedEvents": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
-                },
-                "settings": {
-                    type: "array",
-                    items: {
-                        $ref: "node#/definitions/SettingMetaInfo"
-                    },
-                    nullable: true
-                },
-                "tokenId": {
-                    type: "string",
-                    nullable: true
-                },
-            },
-            required: [
-                "nodeId",
-                "local",
-                "name",
-            ],
-            additionalProperties: false
-        },
-
-        PluginInfoArray: {
-            type: "array",
-            items: {
-                $ref: "node#/definitions/PluginInfo"
-            }
         },
 
         PushContent: {

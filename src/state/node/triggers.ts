@@ -38,12 +38,11 @@ export default [
             "EVENT_NODE_FRIEND_GROUP_ADDED",
             "EVENT_NODE_FRIEND_GROUP_UPDATED",
             "EVENT_NODE_FRIEND_GROUP_DELETED",
-            "EVENT_NODE_PLUGINS_UPDATED",
             "EVENT_NODE_NODE_SETTINGS_CHANGED"
         ],
         true,
         nodeFeaturesLoad
     ),
     trigger(["EVENT_NODE_FRIENDSHIP_UPDATED", "EVENT_NODE_ASK_SUBJECTS_CHANGED"], inv(isAtHomeNode), nodeFeaturesLoad),
-    trigger(["SETTINGS_PLUGINS_DELETED", "SETTINGS_UPDATE_SUCCEEDED"], isAtHomeNode, nodeFeaturesLoad)
+    trigger("SETTINGS_UPDATE_SUCCEEDED", isAtHomeNode, nodeFeaturesLoad)
 ]

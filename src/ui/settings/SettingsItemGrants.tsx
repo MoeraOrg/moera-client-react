@@ -43,7 +43,7 @@ export default function SettingsItemGrants() {
             {(loaded && grants.length === 0) && <i>{t("no-applications")}</i>}
             {grants.map(g =>
                 <div className="token-info" key={g.nodeName}>
-                    <Icon icon={msPublic} className="icon me-2"/>
+                    <Icon icon={msPublic} size="1.2em" className="icon me-2"/>
                     <NodeName name={g.nodeName} popup={false}/>
                     <Button variant="silent" className="token-button ms-3" title={t("change")} onClick={onEdit(g)}>
                         <Icon icon={msEdit} size="1.2em"/>

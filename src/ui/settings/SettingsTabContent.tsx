@@ -5,16 +5,12 @@ import { createSelector } from 'reselect';
 import { ClientState } from "state/state";
 import { SettingsTabId } from "state/settings/state";
 import {
-    component,
     getActualSheetName,
     getOtherOptions,
-    getPluginsItems,
     getSheet,
     Item
 } from "ui/settings/settings-menu";
 import SettingsSheet from "ui/settings/SettingsSheet";
-import SettingsItemAddonsEmpty from "ui/settings/SettingsItemAddonsEmpty";
-import SettingsPluginControls from "ui/settings/SettingsPluginControls";
 import SettingsModerationSheet from "ui/settings/SettingsModerationSheet";
 import SettingsRemovalSheet from "ui/settings/SettingsRemovalSheet";
 import SettingsProfileSheet from "ui/settings/profile/SettingsProfileSheet";
@@ -26,7 +22,6 @@ interface Props {
 export default function SettingsTabContent({tab}: Props) {
     const sheet = useSelector((state: ClientState) => getSheet(tab, getActualSheetName(tab, state.settings.sheet)));
     const otherItems = useSelector((state: ClientState) => getOtherItems(state, tab));
-    const addonsItems = useSelector(getAddonsItems);
     const clientValues = useSelector((state: ClientState) =>
         tab === "node" ? state.settings.node.values : state.settings.client.values
     );
@@ -42,9 +37,6 @@ export default function SettingsTabContent({tab}: Props) {
     switch (sheet.name) {
         case "other":
             items = otherItems;
-            break;
-        case "addons":
-            items = addonsItems;
             break;
         case "moderation":
             return <SettingsModerationSheet valuesMap={clientValues}/>;
@@ -64,11 +56,4 @@ const getOtherItems = createSelector(
     (state: ClientState, tab: SettingsTabId) => tab,
     (state: ClientState, tab: SettingsTabId) => tab === "node" ? state.settings.node.meta : state.settings.client.meta,
     (tab, meta) => getOtherOptions(tab, meta.keys())
-);
-
-const getAddonsItems = createSelector(
-    (state: ClientState) => state.settings.plugins.plugins,
-    plugins => plugins != null && plugins.length > 0
-        ? getPluginsItems(plugins, SettingsPluginControls)
-        : [component(SettingsItemAddonsEmpty)]
 );

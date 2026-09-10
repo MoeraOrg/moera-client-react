@@ -44,12 +44,6 @@ const emptySettings = {
             newToken: null
         }
     },
-    plugins: {
-        loading: false,
-        loaded: false,
-        conflict: false,
-        plugins: []
-    },
     deleteNode: {
         loading: false,
         loaded: false,
@@ -73,7 +67,6 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 .set("sheet", "profile")
                 .set("node.conflict", false)
                 .set("client.conflict", false)
-                .set("plugins.conflict", false)
                 .update("formId", formId => formId + 1)
                 .value();
 
@@ -82,7 +75,6 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 .set("sheet", action.payload.sheet)
                 .set("node.conflict", false)
                 .set("client.conflict", false)
-                .set("plugins.conflict", false)
                 .value();
 
         case "DISCONNECTED_FROM_HOME":
@@ -190,7 +182,6 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
             return immutable.wrap(state)
                 .set("node.conflict", false)
                 .set("client.conflict", false)
-                .set("plugins.conflict", false)
                 .set("node.values", nodeValues)
                 .set("client.values", clientValues)
                 .set("updating", false)
@@ -343,29 +334,6 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
 
         case "SETTINGS_TOKENS_NEW_TOKEN_CLOSE":
             return immutable.set(state, "tokens.dialog.newToken", null);
-
-        case "SETTINGS_PLUGINS_LOAD":
-            return immutable.set(state, "plugins.loading", true);
-
-        case "SETTINGS_PLUGINS_LOADED":
-            return immutable.assign(state, "plugins", {
-                loading: false,
-                loaded: true,
-                plugins: action.payload.plugins
-            });
-
-        case "SETTINGS_PLUGINS_LOAD_FAILED":
-            return immutable.set(state, "plugins.loading", false);
-
-        case "SETTINGS_PLUGINS_DELETED":
-            return immutable.set(state, "plugins.plugins",
-                state.plugins.plugins.filter(p => p.name !== action.payload.name));
-
-        case "SETTINGS_PLUGINS_CONFLICT":
-            return immutable.set(state, "plugins.conflict", true);
-
-        case "SETTINGS_PLUGINS_CONFLICT_CLOSE":
-            return immutable.set(state, "plugins.conflict", false);
 
         case "SETTINGS_DELETE_NODE_REQUEST_LOAD":
             return immutable.set(state, "deleteNode.loading", true);

@@ -1,4 +1,4 @@
-import { ClientSettingMetaInfo, GrantInfo, PluginInfo, SettingMetaInfo, TokenInfo } from "api";
+import { ClientSettingMetaInfo, GrantInfo, SettingMetaInfo, TokenInfo } from "api";
 
 // Do not forget to update SETTINGS_TABS in location/settings.ts
 export type SettingsTabId = "profile" | "node" | "client";
@@ -45,12 +45,6 @@ export interface SettingsState {
             updating: boolean;
             newToken: TokenInfo | null;
         }
-    },
-    plugins: {
-        loading: boolean;
-        loaded: boolean;
-        conflict: boolean;
-        plugins: PluginInfo[];
     },
     deleteNode: {
         loading: boolean;

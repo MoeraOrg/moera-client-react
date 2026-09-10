@@ -1,6 +1,6 @@
 import { ComponentType } from 'react';
 
-import { CLIENT_SETTINGS_PLUGIN_PREFIX, CLIENT_SETTINGS_PREFIX, PluginInfo } from "api";
+import { CLIENT_SETTINGS_PREFIX } from "api";
 import { SettingsTabId } from "state/settings/state";
 import SettingsItemPassword from "ui/settings/SettingsItemPassword";
 import SettingsItemMnemonic from "ui/settings/SettingsItemMnemonic";
@@ -142,7 +142,6 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
                 component(SettingsItemTokens),
             ]),
         ]),
-        sheet("addons"),
         sheet("other"),
         sheet("removal", undefined, "nav-danger mt-4"),
     ],
@@ -256,25 +255,9 @@ export function getOtherOptions(tab: SettingsTabId, allNames: Iterable<string>):
     collectUsedOptions(getSheets("profile"), used);
     const other = [];
     for (const name of allNames) {
-        if (!used.has(name) && !name.startsWith(CLIENT_SETTINGS_PLUGIN_PREFIX)) {
+        if (!used.has(name)) {
             other.push(option(name));
         }
     }
     return other.sort();
-}
-
-export interface PluginProps {
-    plugin: PluginInfo;
-}
-
-export function getPluginsItems(plugins: PluginInfo[], controls: ComponentType<PluginProps>): Item[] {
-    return plugins.map(p =>
-        chapter(
-            p.title ?? p.name,
-            p.description ?? null,
-            p.settings?.map(st => option(st.name)) ?? [],
-            controls,
-            {plugin: p}
-        )
-    );
 }

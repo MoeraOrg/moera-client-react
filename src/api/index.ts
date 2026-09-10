@@ -22,7 +22,6 @@ export { NodeName, RegisteredName } from "api/node-name";
 export type { ClientSettingMetaInfo, ClientSettingTypeModifiers } from "api/settings";
 export {
     PREFIX as CLIENT_SETTINGS_PREFIX,
-    PLUGIN_PREFIX as CLIENT_SETTINGS_PLUGIN_PREFIX,
     buildMetaMap as clientSettingsBuildMetaMap
 } from "api/settings";
 export type { SettingValue } from "api/setting-types";

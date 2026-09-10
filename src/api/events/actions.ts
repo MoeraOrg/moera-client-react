@@ -35,7 +35,6 @@ import {
     NodeSettingsChangedEvent,
     NodeSettingsMetaChangedEvent,
     PingEvent,
-    PluginsUpdatedEvent,
     PostingAddedEvent,
     PostingCommentsChangedEvent,
     PostingDeletedEvent,
@@ -128,7 +127,6 @@ export type ClientEventAction =
     | EventAction<NodeSettingsChangedEvent>
     | EventAction<NodeSettingsMetaChangedEvent>
     | EventAction<PingEvent>
-    | EventAction<PluginsUpdatedEvent>
     | EventAction<PostingAddedEvent>
     | EventAction<PostingCommentsChangedEvent>
     | EventAction<PostingDeletedEvent>

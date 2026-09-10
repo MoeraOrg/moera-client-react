@@ -7,8 +7,7 @@ import { profileEditConflictClose } from "state/profile/actions";
 import { useDispatcher } from "ui/hook";
 import {
     settingsClientConflictClose,
-    settingsNodeConflictClose,
-    settingsPluginsConflictClose
+    settingsNodeConflictClose
 } from "state/settings/actions";
 import { ConflictWarning } from "ui/control";
 
@@ -17,7 +16,6 @@ export default function SettingsConflicts() {
     const profileConflict = useSelector((state: ClientState) => state.profile.conflict);
     const nodeConflict = useSelector((state: ClientState) => state.settings.node.conflict);
     const clientConflict = useSelector((state: ClientState) => state.settings.client.conflict);
-    const pluginsConflict = useSelector((state: ClientState) => state.settings.plugins.conflict);
     const dispatch = useDispatcher();
     const {t} = useTranslation();
 
@@ -34,10 +32,6 @@ export default function SettingsConflicts() {
             {(tab === "client" && clientConflict) &&
                 <ConflictWarning text={t("client-settings-changed-conflict")}
                                  onClose={() => dispatch(settingsClientConflictClose())}/>
-            }
-            {(tab === "node" && pluginsConflict) &&
-                <ConflictWarning text={t("addons-changed-conflict")}
-                                 onClose={() => dispatch(settingsPluginsConflictClose())}/>
             }
         </>
     );

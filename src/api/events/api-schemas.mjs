@@ -687,19 +687,6 @@ export const EVENT_SCHEMAS = {
             additionalProperties: false
         },
 
-        PluginsUpdatedEvent: {
-            type: "object",
-            properties: {
-                "type": {
-                    type: "string"
-                },
-            },
-            required: [
-                "type",
-            ],
-            additionalProperties: false
-        },
-
         PostingAddedEvent: {
             type: "object",
             properties: {

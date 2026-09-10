@@ -39,10 +39,6 @@ export function isSettingsAtApplicationsSheet(state: ClientState): boolean {
     return state.settings.tab === "node" && state.settings.sheet === "applications";
 }
 
-export function isSettingsAtAddonsSheet(state: ClientState): boolean {
-    return state.settings.tab === "node" && state.settings.sheet === "addons";
-}
-
 export function isSettingsAtRemovalSheet(state: ClientState): boolean {
     return state.settings.tab === "node" && state.settings.sheet === "removal";
 }
@@ -57,14 +53,6 @@ export function isSettingsGrantsToBeLoaded(state: ClientState): boolean {
 
 export function isSettingsTokensToBeLoaded(state: ClientState): boolean {
     return !state.settings.tokens.loaded && !state.settings.tokens.loading;
-}
-
-export function isSettingsPluginsToBeLoaded(state: ClientState): boolean {
-    return !state.settings.plugins.loaded && !state.settings.plugins.loading;
-}
-
-export function isSettingsPluginsLoaded(state: ClientState): boolean {
-    return state.settings.plugins.loaded;
 }
 
 export function isSettingsDeleteNodeRequestToBeLoaded(state: ClientState): boolean {

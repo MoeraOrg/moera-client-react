@@ -2,7 +2,6 @@ import { PrincipalFlag, SettingType } from "api/node/api-types";
 import * as Browser from "ui/browser";
 
 export const PREFIX = "client.mercy.";
-export const PLUGIN_PREFIX = "plugin.";
 
 interface Choice {
     value: string;

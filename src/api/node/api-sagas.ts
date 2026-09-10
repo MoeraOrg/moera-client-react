@@ -1267,50 +1267,6 @@ export async function getPeopleGeneral(
     });
 }
 
-export async function registerPlugin(
-    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, plugin: API.PluginDescription,
-    errorFilter: ErrorFilter = false, auth: true | string = true
-): Promise<API.PluginInfo> {
-
-    const location = "/plugins";
-    return callApi<API.PluginInfo>({
-        caller, nodeName, method: "POST", location, body: plugin, auth, schema: "PluginInfo", errorFilter
-    });
-}
-
-export async function getPlugins(
-    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, errorFilter: ErrorFilter = false,
-    auth: boolean | string = true
-): Promise<API.PluginInfo[]> {
-
-    const location = "/plugins";
-    return callApi<API.PluginInfo[]>({
-        caller, nodeName, method: "GET", location, auth, schema: "PluginInfoArray", errorFilter
-    });
-}
-
-export async function getPlugin(
-    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, pluginName: string,
-    errorFilter: ErrorFilter = false, auth: boolean | string = true
-): Promise<API.PluginInfo> {
-
-    const location = ut`/plugins/${pluginName}`;
-    return callApi<API.PluginInfo>({
-        caller, nodeName, method: "GET", location, auth, schema: "PluginInfo", errorFilter
-    });
-}
-
-export async function unregisterPlugin(
-    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, pluginName: string,
-    errorFilter: ErrorFilter = false, auth: true | string = true
-): Promise<API.Result> {
-
-    const location = ut`/plugins/${pluginName}`;
-    return callApi<API.Result>({
-        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
-    });
-}
-
 export async function createPosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, posting: API.PostingText,
     errorFilter: ErrorFilter = false, auth: boolean | string = true

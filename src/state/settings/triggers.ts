@@ -3,7 +3,6 @@ import { isAtRemovalPage, isAtSettingsPage } from "state/navigation/selectors";
 import {
     isAtSettingsClientTab,
     isAtSettingsNodeTab,
-    isSettingsAtAddonsSheet,
     isSettingsAtApplicationsSheet,
     isSettingsAtProfileSheet,
     isSettingsAtRemovalSheet,
@@ -12,8 +11,6 @@ import {
     isSettingsGrantsToBeLoaded,
     isSettingsNodeMetaToBeLoaded,
     isSettingsNodeValuesToBeLoaded,
-    isSettingsPluginsLoaded,
-    isSettingsPluginsToBeLoaded,
     isSettingsTokensToBeLoaded
 } from "state/settings/selectors";
 import {
@@ -26,8 +23,6 @@ import {
     settingsNodeConflict,
     settingsNodeMetaLoad,
     settingsNodeValuesLoad,
-    settingsPluginsConflict,
-    settingsPluginsLoad,
     settingsTokensLoad
 } from "state/settings/actions";
 import { isConnectedToHome } from "state/home/selectors";
@@ -59,22 +54,11 @@ export default [
         conj(isConnectedToHome, isAtSettingsPage, isSettingsAtApplicationsSheet, isSettingsTokensToBeLoaded),
         settingsTokensLoad
     ),
-    trigger(
-        ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_SHEET"],
-        conj(isConnectedToHome, isAtSettingsPage, isSettingsAtAddonsSheet, isSettingsPluginsToBeLoaded),
-        settingsPluginsLoad
-    ),
     trigger("EVENT_HOME_NODE_SETTINGS_CHANGED", true, settingsNodeValuesLoad),
     trigger("EVENT_HOME_NODE_SETTINGS_CHANGED", conj(isAtSettingsPage, isAtSettingsNodeTab), settingsNodeConflict),
     trigger("EVENT_HOME_CLIENT_SETTINGS_CHANGED", true, settingsClientValuesLoad),
     trigger("EVENT_HOME_CLIENT_SETTINGS_CHANGED", conj(isAtSettingsPage, isAtSettingsClientTab), settingsClientConflict),
     trigger("MNEMONIC_DIALOG_OPEN", true, settingsMnemonicLoad),
-    trigger("EVENT_HOME_PLUGINS_UPDATED", isSettingsPluginsLoaded, settingsPluginsLoad),
-    trigger(
-        "EVENT_HOME_PLUGINS_UPDATED",
-        conj(isAtSettingsPage, isAtSettingsNodeTab, isSettingsPluginsLoaded),
-        settingsPluginsConflict
-    ),
     trigger(
         ["HOME_READY", "GO_TO_PAGE", "SETTINGS_GO_TO_SHEET"],
         conj(

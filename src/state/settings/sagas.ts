@@ -44,11 +44,6 @@ import {
     settingsNodeValuesLoaded,
     SettingsNodeValuesLoadedAction,
     settingsNodeValuesLoadFailed,
-    SettingsPluginsDeleteAction,
-    settingsPluginsDeleted,
-    SettingsPluginsLoadAction,
-    settingsPluginsLoaded,
-    settingsPluginsLoadFailed,
     SettingsTokensCreateAction,
     settingsTokensCreated,
     settingsTokensCreateFailed,
@@ -101,8 +96,6 @@ export default [
     saga("SETTINGS_TOKENS_UPDATE", payload => payload.id, settingsTokensUpdateSaga),
     saga("SETTINGS_TOKENS_DELETE", payload => payload.id, settingsTokensDeleteSaga),
     saga("SETTINGS_TOKENS_NEW_TOKEN_COPY", null, settingsTokensNewTokenCopySaga),
-    saga("SETTINGS_PLUGINS_LOAD", "", settingsPluginsLoadSaga),
-    saga("SETTINGS_PLUGINS_DELETE", payload => payload.name, settingsPluginsDeleteSaga),
     saga("SETTINGS_DELETE_NODE_REQUEST_LOAD", "", settingsDeleteNodeRequestLoadSaga),
     saga("SETTINGS_DELETE_NODE_REQUEST_SEND", "", settingsDeleteNodeRequestSendSaga),
     saga("SETTINGS_DELETE_NODE_REQUEST_CANCEL", "", settingsDeleteNodeRequestCancelSaga)
@@ -348,30 +341,6 @@ async function settingsTokensNewTokenCopySaga(action: SettingsTokensNewTokenCopy
     await clipboardCopy(token.token);
     if (!Browser.isAndroidBrowser()) {
         dispatch(flashBox(i18n.t("token-copied")).causedBy(action));
-    }
-}
-
-async function settingsPluginsLoadSaga(action: WithContext<SettingsPluginsLoadAction>): Promise<void> {
-    await homeIntroduced();
-    try {
-        const plugins = await Node.getPlugins(action, REL_HOME);
-        dispatch(settingsPluginsLoaded(plugins).causedBy(action));
-    } catch (e) {
-        dispatch(settingsPluginsLoadFailed().causedBy(action));
-        dispatch(errorThrown(e));
-    }
-}
-
-async function settingsPluginsDeleteSaga(action: WithContext<SettingsPluginsDeleteAction>): Promise<void> {
-    const {name, tokenId} = action.payload;
-
-    try {
-        await Node.deleteToken(action, REL_HOME, tokenId);
-        dispatch(settingsTokensDeleted(tokenId).causedBy(action));
-        await Node.unregisterPlugin(action, REL_HOME, name);
-        dispatch(settingsPluginsDeleted(name).causedBy(action));
-    } catch (e) {
-        dispatch(errorThrown(e));
     }
 }
 

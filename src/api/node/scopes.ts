@@ -21,7 +21,6 @@ export const SCOPES: Scope[] = [
     "view-feeds",
     "update-feeds",
     "name",
-    "plugins",
     "view-profile",
     "update-profile",
     "sheriff",

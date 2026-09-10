@@ -77,11 +77,6 @@ export default function SettingsItemTokens() {
                     }
                     {expanded === tk.id &&
                         <div className="details">
-                            {tk.pluginName != null &&
-                                <span className="item">
-                                    <em>{t("used-by-addon")}</em>{tk.pluginName}
-                                </span>
-                            }
                             {(tk.lastUsedAt != null || tk.lastUsedBrowser != null || tk.lastUsedIp != null) &&
                                 <span className="item">
                                     <em>{t("last-used")}</em>
@@ -110,7 +105,7 @@ export default function SettingsItemTokens() {
 }
 
 function getName(info: TokenInfo): string {
-    return info.name ?? info.pluginName ?? info.token;
+    return info.name ?? info.token;
 }
 
 function isHomeToken(info: TokenInfo, homeToken: string | null): boolean {

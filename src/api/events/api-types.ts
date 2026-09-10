@@ -185,8 +185,6 @@ export type NodeSettingsMetaChangedEvent = BaseEvent<"NODE_SETTINGS_META_CHANGED
 
 export type PingEvent = BaseEvent<"PING">;
 
-export type PluginsUpdatedEvent = BaseEvent<"PLUGINS_UPDATED">;
-
 export interface PostingAddedEvent extends BaseEvent<"POSTING_ADDED"> {
     id: string;
 }
