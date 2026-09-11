@@ -17,7 +17,8 @@ interface Props<V> {
     labelClassName?: string;
     autoFocus?: boolean;
     single?: boolean;
-    anyValue?: boolean;
+    showOk?: boolean;
+    showWrong?: boolean;
     initialValue?: V | null;
     defaultValue?: V | null;
     setting?: string;
@@ -25,7 +26,7 @@ interface Props<V> {
 
 export function RadioField<V = boolean>({
     id, name, title, isChecked, onChange: onInputChange, value: inputValue, disabled, groupClassName, labelClassName,
-    autoFocus, single, anyValue, initialValue, defaultValue, setting
+    autoFocus, single, showOk = false, showWrong = false, initialValue, defaultValue, setting
 }: Props<V>) {
     const [{value, onChange, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<V>(name, initialValue, defaultValue);
@@ -60,8 +61,8 @@ export function RadioField<V = boolean>({
                 className={cx({
                     "form-check-input": !single,
                     "form-control": single,
-                    "is-valid": !anyValue && touched && !error,
-                    "is-invalid": !anyValue && touched && error
+                    "is-valid": showOk && touched && !error,
+                    "is-invalid": showWrong && touched && error
                 })}
             />
         </FormGroup>

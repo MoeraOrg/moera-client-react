@@ -17,6 +17,7 @@ import { mediaFileName } from "util/media-images";
 import { mediaDownloadUrl } from "util/media-url";
 import { formatFileSize } from "util/info-quantity";
 import { MediaWithCaption } from "util/media-with-caption";
+import { isImageType } from "util/mime-type";
 import { urlWithParameters } from "util/url";
 
 interface Props {
@@ -43,7 +44,8 @@ export default function EntryFile({nodeName, mediaFile, remoteMedia}: Props) {
     const url = file != null ? mediaDownloadUrl(rootPage, file) : undefined;
     const media = new MediaWithCaption(mediaFile ?? undefined, remoteMedia ?? undefined);
     const fileName = mediaFileName(media);
-    const fileLabel = media.size != null ? `${fileName}, ${formatFileSize(media.size)}` : fileName;
+    const displayName = isImageType(media.mimeType) && !media.title ? t("large-image-file") : fileName;
+    const fileLabel = media.size != null ? `${displayName}, ${formatFileSize(media.size)}` : displayName;
 
     const onCopyLink = () => file != null && dispatch(attachmentCopyLink(actualNodeName, file));
 

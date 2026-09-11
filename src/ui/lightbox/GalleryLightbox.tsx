@@ -84,7 +84,7 @@ export default function GalleryLightbox() {
         mediaId: nextMediaId, mimeType: nextMimeType
     } = useLightboxMedia(mediaNodeName, media != null && nextIndex != null ? media[nextIndex] : undefined);
 
-    const statusText = media != null && media.length > 0 ? `${index + 1} / ${media.length}` : "";
+    const statusText = media != null && media.length > 1 ? `${index + 1} / ${media.length}` : "";
     const mainSource = lightboxSource(mainSrc, mainPreviewSrc, mainWidth, mainHeight, mainMimeType)
         ?? {url: "", previewUrl: undefined, width: undefined, height: undefined, type: "image"};
     const prevSource = lightboxSource(prevSrc, prevPreviewSrc, prevWidth, prevHeight, prevMimeType);

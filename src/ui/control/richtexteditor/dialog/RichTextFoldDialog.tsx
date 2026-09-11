@@ -35,8 +35,8 @@ function RichTextFoldDialog() {
 
     return (
         <>
-            <InputField name="summary" title={t("summary")} placeholder={t("summary")} anyValue autoFocus/>
-            <SelectField name="style" title={t("style")} choices={STYLES} anyValue/>
+            <InputField name="summary" title={t("summary")} placeholder={t("summary")} autoFocus/>
+            <SelectField name="style" title={t("style")} choices={STYLES}/>
         </>
     );
 }

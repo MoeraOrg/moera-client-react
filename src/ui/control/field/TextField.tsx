@@ -14,11 +14,11 @@ interface Props {
     maxLength?: number;
     placeholder?: string;
     autoFocus?: boolean;
-    anyValue?: boolean;
-    errorsOnly?: boolean;
+    showOk?: boolean;
+    showWrong?: boolean;
+    showError?: boolean;
     className?: string;
     autoComplete?: string;
-    noFeedback?: boolean;
     disabled?: boolean;
     groupClassName?: string;
     initialValue?: string | null;
@@ -27,8 +27,8 @@ interface Props {
 }
 
 export function TextField({
-    name, title, rows = 3, maxHeight, maxLength, placeholder, autoFocus, anyValue, errorsOnly, className, autoComplete,
-    noFeedback = false, disabled = false, groupClassName, initialValue, defaultValue, onKeyDown
+    name, title, rows = 3, maxHeight, maxLength, placeholder, autoFocus, showOk = false, showWrong = false,
+    showError = false, className, autoComplete, disabled = false, groupClassName, initialValue, defaultValue, onKeyDown
 }: Props) {
 
     const {t} = useTranslation();
@@ -62,8 +62,8 @@ export function TextField({
                     id={name}
                     className={cx(
                         "form-control", {
-                            "is-valid": !anyValue && !errorsOnly && touched && !error,
-                            "is-invalid": !anyValue && touched && error,
+                            "is-valid": showOk && touched && !error,
+                            "is-invalid": showWrong && touched && error,
                             [className!]: !!className
                         })}
                     autoComplete={autoComplete}
@@ -75,7 +75,7 @@ export function TextField({
                     onKeyDown={onKeyDown}
                     ref={inputDom}
                 />
-                {!noFeedback && touched && <FieldError error={error}/>}
+                {showError && touched && <FieldError error={error}/>}
             </>
         </FormGroup>
     );

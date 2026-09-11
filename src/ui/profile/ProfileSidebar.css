@@ -54,6 +54,10 @@
     line-height: 133%;
 }
 
+#profile-sidebar .full-name A {
+    color: var(--bs-gray-900);
+}
+
 #profile-sidebar .mention {
     color: var(--bs-gray-600);
     font-size: .88rem;

@@ -67,19 +67,18 @@ function SheriffOrderDialogInner({target}: Props) {
             <Form>
                 <div className="modal-body">
                     <p dangerouslySetInnerHTML={{__html: t(messageKey, messageValues)}}/>
-                    <SelectField name="reasonCode" title={t("reason")} choices={REASON_CODES} anyValue/>
+                    <SelectField name="reasonCode" title={t("reason")} choices={REASON_CODES}/>
                     <RichTextField
                         name="reasonDetails"
                         title={t("comment-optional")}
                         format="plain-text"
-                        anyValue
                         noMedia
                         panelMode="bottom"
                     />
                     {!isSheriff &&
                         <div className="alert alert-warning">
-                            <CheckboxField name="anonymous" title={t("not-publish-my-complaint")} groupClassName="mb-0"
-                                           anyValue/>
+                            <CheckboxField name="anonymous" title={t("not-publish-my-complaint")}
+                                           groupClassName="mb-0"/>
                             <span dangerouslySetInnerHTML={{__html: t("note-complaints-public")}}/>
                         </div>
                     }

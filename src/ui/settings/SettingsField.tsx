@@ -116,7 +116,7 @@ export default function SettingsField({name, fieldName, titleName, meta, initial
         case "bool":
             return <CheckboxField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}
                                   initialValue={deserializeBool(initialValue)}
-                                  defaultValue={deserializeBool(defaultValue)} anyValue/>;
+                                  defaultValue={deserializeBool(defaultValue)}/>;
 
         case "int":
             if (modifiers.format) {
@@ -127,7 +127,7 @@ export default function SettingsField({name, fieldName, titleName, meta, initial
                                                   min={deserializeInt(modifiers.min)}
                                                   max={deserializeInt(modifiers.max)}
                                                   initialValue={deserializeInt(initialValue)}
-                                                  defaultValue={deserializeInt(defaultValue)}/>;
+                                                  defaultValue={deserializeInt(defaultValue)} showError/>;
                     default:
                         // continue
                 }
@@ -138,7 +138,7 @@ export default function SettingsField({name, fieldName, titleName, meta, initial
                                 step={"step" in modifiers ? deserializeInt(modifiers.step) : undefined}
                                 format={convertFormat(modifiers.format)}
                                 initialValue={deserializeInt(initialValue)}
-                                defaultValue={deserializeInt(defaultValue)}/>;
+                                defaultValue={deserializeInt(defaultValue)} showError/>;
 
         case "string":
             if (modifiers.format) {
@@ -146,7 +146,7 @@ export default function SettingsField({name, fieldName, titleName, meta, initial
                     default:
                         return <InputField name={fieldName} title={title} disabled={disabled}
                                            groupClassName={groupClassName} initialValue={initialValue}
-                                           defaultValue={defaultValue} anyValue/>;
+                                           defaultValue={defaultValue} showError/>;
                     case "select": {
                         let items = undefined;
                         if ("items" in modifiers && modifiers.items != null) {
@@ -160,38 +160,39 @@ export default function SettingsField({name, fieldName, titleName, meta, initial
                         }
                         return <SelectField name={fieldName} title={title} disabled={disabled}
                                             groupClassName={groupClassName} choices={items}
-                                            initialValue={initialValue} defaultValue={defaultValue} anyValue/>
+                                            initialValue={initialValue} defaultValue={defaultValue} showError/>
                     }
                     case "emoji-list-positive":
                         return <EmojiListInputField name={fieldName} title={title} disabled={disabled}
                                                     groupClassName={groupClassName} negative={false}
-                                                    initialValue={initialValue} defaultValue={defaultValue}/>;
+                                                    initialValue={initialValue} defaultValue={defaultValue} showError/>;
                     case "emoji-list-negative":
                         return <EmojiListInputField name={fieldName} title={title} disabled={disabled}
                                                     groupClassName={groupClassName} negative={true}
-                                                    initialValue={initialValue} defaultValue={defaultValue}/>;
+                                                    initialValue={initialValue} defaultValue={defaultValue} showError/>;
                 }
             } else if (modifiers.multiline) {
                 return <TextField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}
-                                  initialValue={initialValue} defaultValue={defaultValue} anyValue/>;
+                                  initialValue={initialValue} defaultValue={defaultValue} showError/>;
             } else {
                 return <InputField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}
-                                   initialValue={initialValue} defaultValue={defaultValue} anyValue/>;
+                                   initialValue={initialValue} defaultValue={defaultValue} showError/>;
             }
 
         case "Duration":
             return <DurationField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}
                                   min={modifiers.min} max={modifiers.max} never={modifiers.never}
-                                  always={modifiers.always} initialValue={initialValue} defaultValue={defaultValue}/>;
+                                  always={modifiers.always} initialValue={initialValue} defaultValue={defaultValue}
+                                  showError/>;
 
         case "Principal":
             return <PrincipalField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}
                                    values={modifiers.principals}
                                    initialValue={deserializePrincipal(initialValue)}
-                                   defaultValue={deserializePrincipal(defaultValue)} long/>;
+                                   defaultValue={deserializePrincipal(defaultValue)} long showError/>;
 
         default:
             return <InputField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}
-                               initialValue={initialValue} defaultValue={defaultValue} anyValue/>;
+                               initialValue={initialValue} defaultValue={defaultValue} showError/>;
     }
 }

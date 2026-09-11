@@ -17,7 +17,6 @@ export default function ComposeReactions() {
                 name="reactionsEnabled"
                 groupClassName="ps-2"
                 setting="posting.reactions.enabled.default"
-                anyValue
             />
             {reactionsEnabled &&
                 <>
@@ -37,7 +36,6 @@ export default function ComposeReactions() {
                         name="reactionsNegativeEnabled"
                         groupClassName="ps-2"
                         setting="posting.reactions.negative.enabled.default"
-                        anyValue
                     />
                     {reactionsNegativeEnabled &&
                         <EmojiListInputField
@@ -57,14 +55,12 @@ export default function ComposeReactions() {
                         name="reactionsVisible"
                         groupClassName="ps-2 mb-0"
                         setting="posting.reactions.visible.default"
-                        anyValue
                     />
                     <CheckboxField
                         title={t("show-number-reactions")}
                         name="reactionTotalsVisible"
                         groupClassName="ps-2"
                         setting="posting.reactions.totals-visible.default"
-                        anyValue
                     />
                 </>
             }

@@ -26,8 +26,8 @@ const RichTextCopyImageDialog = () => {
 
     return (
         <>
-            <InputField type="url" name="url" title={t("link")} anyValue autoFocus/>
-            <CheckboxField title={t("compress-images-video")} name="compress" anyValue/>
+            <InputField type="url" name="url" title={t("link")} autoFocus/>
+            <CheckboxField title={t("compress-images-video")} name="compress"/>
         </>
     );
 }

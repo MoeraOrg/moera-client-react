@@ -11,9 +11,9 @@ export default function ComposeUpdateInfo() {
 
     return (
         <>
-            <CheckboxField title={t("notify-about-update")} name="updateImportant" groupClassName="ps-2" anyValue/>
+            <CheckboxField title={t("notify-about-update")} name="updateImportant" groupClassName="ps-2"/>
             {updateImportant &&
-                <InputField title={t("update-description")} name="updateDescription" maxLength={128} anyValue/>
+                <InputField title={t("update-description")} name="updateDescription" maxLength={128}/>
             }
         </>
     );

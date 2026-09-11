@@ -40,11 +40,13 @@ export default function LightboxToolbar({statusText, toolbarButtons, zoomEnabled
     return (
         <div className="lightbox-toolbar">
             <ul className="lightbox-toolbar-side left-side">
-                <li className="lightbox-toolbar-item">
-                    <span className="lightbox-toolbar-item-child">
-                        {statusText}
-                    </span>
-                </li>
+                {statusText &&
+                    <li className="lightbox-toolbar-item">
+                        <span className="lightbox-toolbar-item-child">
+                            {statusText}
+                        </span>
+                    </li>
+                }
             </ul>
 
             <div></div>

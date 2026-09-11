@@ -25,8 +25,8 @@ const Column = ({start, end, autoFocus = false}: ColumnProps) => (
         <ol start={start + 1}>
             {range(end - start).map(index => (
                 <li key={index}>
-                    <InputField name={`mnemonic[${start + index}]`} className="mnemonic-input"
-                                autoFocus={index === 0 && autoFocus} autoComplete="secret" noFeedback/>
+                    <InputField name={`mnemonic[${start + index}]`} className="mnemonic-input" showOk
+                                autoFocus={index === 0 && autoFocus} autoComplete="secret" showWrong/>
                 </li>
             ))}
         </ol>
@@ -60,7 +60,7 @@ function NodeNameUpdateDialogInner({showChangeName}: Props) {
                     {showChangeName &&
                         <div className="row">
                             <div className="col-sm-6">
-                                <InputField name="name" title={t("name")} autoFocus/>
+                                <InputField name="name" title={t("name")} showOk autoFocus showWrong showError/>
                             </div>
                         </div>
                     }

@@ -13,7 +13,7 @@ interface Props {
     groupClassName?: string;
     labelClassName?: string;
     col?: string;
-    noFeedback?: boolean;
+    showError?: boolean;
     initialValue?: string | null;
     defaultValue?: string | null;
     negative: boolean;
@@ -21,7 +21,7 @@ interface Props {
 }
 
 export function EmojiListInputField({
-    name, title, disabled, horizontal = false, layout, groupClassName, labelClassName, col, noFeedback = false,
+    name, title, disabled, horizontal = false, layout, groupClassName, labelClassName, col, showError = false,
     initialValue, defaultValue, negative, setting
 }: Props) {
     const [{value}, {touched, error}, {setValue}, {undo, reset, onUndo, onReset}] =
@@ -49,7 +49,7 @@ export function EmojiListInputField({
                     disabled={disabled}
                     onChange={v => setValue(v)}
                 />
-                {!noFeedback && touched && <FieldError error={error}/>}
+                {showError && touched && <FieldError error={error}/>}
             </Wrapper>
         </FormGroup>
     );

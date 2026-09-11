@@ -27,8 +27,8 @@ function MnemonicPage() {
             <main className="mnemonic-page global-page">
                 <MnemonicDocument/>
                 <Form>
-                    <CheckboxField title={t("written-down-words")} name="writtenDown" groupClassName="written-down"
-                                   errorsOnly/>
+                    <CheckboxField title={t("written-down-words")} name="writtenDown"
+                                   groupClassName="written-down" showWrong/>
                     <Button type="submit" variant="primary" className="submit-button">{t("continue")}</Button>
                 </Form>
                 <Button variant="link" className="skip" onClick={onSkip}>{t("skip-for-now")}</Button>

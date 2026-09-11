@@ -18,17 +18,17 @@ interface Props {
     col?: string;
     autoFocus?: boolean;
     disabled?: boolean;
-    noFeedback?: boolean;
+    showError?: boolean;
     min?: number | null;
     max?: number | null;
     initialValue?: number | null;
     defaultValue?: number | null;
 }
 
-export function InfoQuantityField({name, title, horizontal = false, groupClassName, labelClassName, col,
-                                   noFeedback = false, autoFocus, disabled, initialValue, defaultValue,
-                                   min, max}: Props) {
-
+export function InfoQuantityField({
+    name, title, horizontal = false, groupClassName, labelClassName, col, showError = false, autoFocus, disabled,
+    initialValue, defaultValue, min, max
+}: Props) {
     const dmin = min != null ? InfoQuantity.ofBytes(min) : InfoQuantity.MIN;
     const dmax = max != null ? InfoQuantity.ofBytes(max) : InfoQuantity.MAX;
 
@@ -92,7 +92,7 @@ export function InfoQuantityField({name, title, horizontal = false, groupClassNa
                         ))}
                     </select>
                 </div>
-                {!noFeedback && touched && <FieldError error={error}/>}
+                {showError && touched && <FieldError error={error}/>}
             </Wrapper>
         </FormGroup>
     );

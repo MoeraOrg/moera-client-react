@@ -47,10 +47,10 @@ function ComplaintDecisionEditor({group, values}: Props) {
         <div className="complaint-decision-editor">
             <h4>{t("decision")}</h4>
             <Form>
-                <SelectField name="decisionCode" choices={DECISION_CODES} anyValue/>
+                <SelectField name="decisionCode" choices={DECISION_CODES}/>
                 <div className={cx({"d-none": values.decisionCode === "choose"})}>
-                    <RichTextField name="decisionDetails" format="plain-text" anyValue noMedia/>
-                    <CheckboxField name="anonymous" title={t("not-show-complaints")} anyValue/>
+                    <RichTextField name="decisionDetails" format="plain-text" noMedia/>
+                    <CheckboxField name="anonymous" title={t("not-show-complaints")}/>
                 </div>
                 <Button variant="primary" type="submit" loading={submitting} disabled={!submitEnabled}
                         className={cx({"d-none": !submitEnabled})}>

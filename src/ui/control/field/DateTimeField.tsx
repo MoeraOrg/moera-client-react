@@ -17,13 +17,14 @@ interface Props {
     inputClassName?: string;
     col?: string;
     autoFocus?: boolean;
+    showError?: boolean;
     initialValue?: Date | null;
     defaultValue?: Date | null;
 }
 
 export const DateTimeField = ({
     name, title, horizontal = false, layout, groupClassName, labelClassName, inputClassName, col, autoFocus,
-    initialValue, defaultValue
+    showError = false, initialValue, defaultValue
 }: Props) => {
     const [
         {onBlur}, {value, touched, error}, {setValue}, {undo, reset, onUndo, onReset}
@@ -65,7 +66,7 @@ export const DateTimeField = ({
                         portalId={!tinyScreen ? "modal-root" : undefined}
                         withPortal={tinyScreen}
                     />
-                    {touched && <FieldError error={error}/>}
+                    {showError && touched && <FieldError error={error}/>}
                 </Suspense>
             </Wrapper>
         </FormGroup>

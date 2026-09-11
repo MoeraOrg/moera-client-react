@@ -56,8 +56,7 @@ export default function PermissionSelector({title, name, enabledPermissions}: Pr
                     <CheckboxField<Scope[]> key={sc} id={`${name}_${sc}`} name={name} value={sc}
                                             title={t(`scope.${sc}`)} groupClassName="mb-0"
                                             isChecked={(v: string[]) => v.includes(sc)}
-                                            disabled={enabledPermissions != null && !enabledPermissions.includes(sc)}
-                                            anyValue/>
+                                            disabled={enabledPermissions != null && !enabledPermissions.includes(sc)}/>
                 )}
             </fieldset>
         </>

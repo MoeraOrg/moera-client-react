@@ -53,8 +53,7 @@ function SettingsRemovalSheet() {
                         </p>
                         {connectedToHome ?
                             <>
-                                <TextField name="message" title={t("why-delete-blog")} maxHeight="5em" maxLength={1024}
-                                           anyValue/>
+                                <TextField name="message" title={t("why-delete-blog")} maxHeight="5em" maxLength={1024}/>
                                 <Button variant="danger" type="submit" loading={updating}>
                                     {t("delete-blog")}
                                 </Button>

@@ -13,6 +13,7 @@ interface Props {
     autoFocus?: boolean;
     disabled?: boolean;
     groupClassName?: string;
+    showError?: boolean;
     format?: any; // FIXME hack due to bug in react-widgets type definition
     min?: number | null;
     max?: number | null;
@@ -21,8 +22,10 @@ interface Props {
     defaultValue?: number | null;
 }
 
-export const NumberField = ({name, title, horizontal, autoFocus, disabled, groupClassName, format, min, max, step,
-                             initialValue, defaultValue}: Props) => {
+export const NumberField = ({
+    name, title, horizontal, autoFocus, disabled, groupClassName, format, min, max, step, showError = false,
+    initialValue, defaultValue
+}: Props) => {
     const [{value}, {touched, error}, {setValue}, {undo, reset, onUndo, onReset}] =
         useUndoableField<number>(name, initialValue, defaultValue);
 
@@ -52,7 +55,7 @@ export const NumberField = ({name, title, horizontal, autoFocus, disabled, group
                         step={step ?? 1}
                     />
                 </div>
-                {touched && <FieldError error={error}/>}
+                {showError && touched && <FieldError error={error}/>}
             </>
         </FormGroup>
     );

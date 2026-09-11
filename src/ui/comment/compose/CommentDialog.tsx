@@ -108,7 +108,6 @@ function CommentDialogInner(props: Props) {
                         draftId={draft?.id ?? null}
                         draftReady={ready}
                         draftMedia={draft?.media}
-                        anyValue
                         autoFocus
                         disabled={!ready || beingPosted}
                         smileysEnabled={smileysEnabled}

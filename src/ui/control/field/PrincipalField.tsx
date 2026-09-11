@@ -18,14 +18,15 @@ interface Props {
     disabled?: boolean;
     groupClassName?: string;
     labelClassName?: string;
+    showError?: boolean;
     initialValue?: PrincipalValue | null;
     defaultValue?: PrincipalValue | null;
     setting?: string;
 }
 
 export function PrincipalField({
-    name, values, icons, titles, caption, long, title, disabled, groupClassName, labelClassName, initialValue,
-    defaultValue, setting
+    name, values, icons, titles, caption, long, title, disabled, groupClassName, labelClassName, showError = false,
+    initialValue, defaultValue, setting
 }: Props) {
     const [{value}, {touched, error}, {setValue}, {undo, reset, onUndo, onReset}] =
         useUndoableField<PrincipalValue>(name, initialValue, defaultValue);
@@ -46,7 +47,7 @@ export function PrincipalField({
         >
             <PrincipalSelect value={value} values={values} icons={icons} titles={titles} caption={caption} long={long}
                              className={cx({"me-2": undo || reset})} disabled={disabled} onChange={v => setValue(v)}/>
-            {touched && <FieldError error={error}/>}
+            {showError && touched && <FieldError error={error}/>}
         </FormGroup>
     );
 }

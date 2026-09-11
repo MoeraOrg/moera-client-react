@@ -25,13 +25,13 @@ interface Props {
     inputClassName?: string;
     col?: string;
     autoFocus?: boolean;
-    anyValue?: boolean;
-    errorsOnly?: boolean;
+    showOk?: boolean;
+    showWrong?: boolean;
+    showError?: boolean;
     error?: string | null;
     note?: string | null;
     className?: string;
     autoComplete?: string;
-    noFeedback?: boolean;
     initialValue?: string | null;
     defaultValue?: string | null;
     ref?: React.Ref<HTMLInputElement>;
@@ -40,8 +40,8 @@ interface Props {
 export function InputField(
     {
         name, title, placeholder, tooltip, type = "text", disabled, maxLength, horizontal = false, layout,
-        groupClassName, labelClassName, inputClassName, col, autoFocus, anyValue, errorsOnly, error: externalError,
-        note, className, autoComplete, noFeedback = false, initialValue, defaultValue, ref
+        groupClassName, labelClassName, inputClassName, col, autoFocus, showOk = false, showWrong = false,
+        showError = false, error: externalError, note, className, autoComplete, initialValue, defaultValue, ref
     }: Props
 ) {
     const [showPassword, setShowPassword] = React.useState<boolean>(false);
@@ -81,8 +81,8 @@ export function InputField(
                         type={type === "password" && showPassword ? "text" : type}
                         className={cx(
                             "form-control", {
-                                "is-valid": !anyValue && !errorsOnly && !error,
-                                "is-invalid": !anyValue && error,
+                                "is-valid": showOk && !error,
+                                "is-invalid": showWrong && error,
                                 [className!]: !!className
                             },
                             inputClassName
@@ -93,12 +93,12 @@ export function InputField(
                         maxLength={maxLength}
                         ref={composeRefs(ref, inputRef)}
                     />
-                    {!noFeedback && error ?
+                    {showError && error ?
                         <FieldError error={error}/>
                     :
                         note && <small className="form-text">{note}</small>
                     }
-                    {type === "password" && (anyValue || (!error && errorsOnly)) &&
+                    {type === "password" && ((!error && !showOk) || (error && !showWrong)) &&
                         <button
                             className="show-password"
                             type="button"

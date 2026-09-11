@@ -22,7 +22,7 @@ export default function ComposeComments() {
                             title={t("commenting-without-approval-allowed-to")} long
                             setting="posting.comments.trust.default"/>
             <CheckboxField name="hideComments" title={t("auto-hide-comments")}
-                           setting="posting.comments.hide.default" anyValue labelClassName="mb-0"
+                           setting="posting.comments.hide.default" labelClassName="mb-0"
                            groupClassName="mb-0"/>
         </div>
     );

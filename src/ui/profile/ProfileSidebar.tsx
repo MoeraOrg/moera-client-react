@@ -69,7 +69,9 @@ export default function ProfileSidebar() {
                     }
                 </div>
                 <div className="full-name">
-                    <NodeFullName nodeName={nodeName} fullName={fullName} sourceUri={sourceUri}/>
+                    <Jump nodeName={nodeName ?? undefined} href="/">
+                        <NodeFullName nodeName={nodeName} fullName={fullName} sourceUri={sourceUri}/>
+                    </Jump>
                 </div>
                 <div className="mention" onClick={onCopyLink}>@{NodeName.shorten(nodeName)}</div>
                 <OperationStatus/>

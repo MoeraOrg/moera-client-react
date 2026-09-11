@@ -14,18 +14,20 @@ interface Props<T> {
     labelClassName?: string;
     col?: string;
     autoFocus?: boolean;
+    showError?: boolean;
     data?: T[];
     textField?: TextAccessor;
 }
 
-export function ComboboxField<T>({name, title, horizontal = false, groupClassName, labelClassName, col, autoFocus,
-                                  data, textField}: Props<T>) {
+export function ComboboxField<T>({
+    name, title, horizontal = false, groupClassName, labelClassName, col, autoFocus, showError = false, data, textField
+}: Props<T>) {
     const [{onBlur}, {value, touched, error}, {setValue}] = useField<T | string>(name);
 
     return (
         <FormGroup title={title} name={name} horizontal={horizontal} labelClassName={labelClassName}
                    groupClassName={groupClassName}>
-            {/* <label> is not functional, because Combobox doesn't allow to set id */}
+            {/* <label> is not functional because Combobox doesn't allow setting id */}
             <Wrapper className={col}>
                 <Combobox
                     name={name}
@@ -36,7 +38,7 @@ export function ComboboxField<T>({name, title, horizontal = false, groupClassNam
                     data={data}
                     textField={textField}
                 />
-                {touched && <FieldError error={error}/>}
+                {showError && touched && <FieldError error={error}/>}
             </Wrapper>
         </FormGroup>
     );

@@ -26,7 +26,7 @@ function RegisterNameDialog() {
         <ModalDialog title={t("register-new-name")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
-                    <InputField name="name" title={t("name")} tooltip="name-help" autoFocus/>
+                    <InputField name="name" title={t("name")} tooltip="name-help" showOk autoFocus showWrong showError/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={onClose}

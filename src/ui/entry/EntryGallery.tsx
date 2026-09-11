@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { MediaAttachment } from "api";
 import { getFeedWidth } from "state/settings/selectors";
+import { useIsTinyScreen } from "ui/hook";
 import EntryImage from "ui/entry/EntryImage";
 import EntryGalleryExpandButton from "ui/entry/EntryGalleryExpandButton";
 import { RelNodeName } from "util/rel-node-name";
@@ -35,8 +36,8 @@ interface Props {
     onExpand?: () => void;
 }
 
-function singleImageHeight(image: MediaAttachment, feedWidth: number, isComment: boolean): number {
-    const maxWidth = isComment ? (feedWidth - 65) / 2 : feedWidth - 25;
+function singleImageHeight(image: MediaAttachment, feedWidth: number, isComment: boolean, tinyScreen: boolean): number {
+    const maxWidth = isComment ? (feedWidth - 65) / 2 : feedWidth + (!tinyScreen ? 20 : 15);
     const width = image.media?.width ?? image.remoteMedia?.width ?? 0;
     const height = image.media?.height ?? image.remoteMedia?.height ?? 0;
     return width <= maxWidth ? height : Math.round(height * maxWidth / width);
@@ -56,6 +57,7 @@ function majorOrientation(images: MediaAttachment[]) {
 export default function EntryGallery({postingId, commentId, nodeName, media, onCollapse, onExpand}: Props) {
     const entry: EntryData = useMemo(() => ({postingId, commentId, nodeName}), [postingId, commentId, nodeName]);
     const feedWidth = useSelector(getFeedWidth);
+    const tinyScreen = useIsTinyScreen();
 
     if (media == null || media.length === 0) {
         return null;
@@ -76,7 +78,9 @@ export default function EntryGallery({postingId, commentId, nodeName, media, onC
             return (
                 // FIXME React.CSSProperties does not include CSS variables
                 <div className={`gallery single ${orientation}`}
-                     style={{"--image-height": singleImageHeight(images[0], feedWidth, commentId != null) + "px"} as any}>
+                     style={{
+                         "--image-height": singleImageHeight(images[0], feedWidth, commentId != null, tinyScreen) + "px"
+                    } as React.CSSProperties}>
                     {onCollapse && <EntryGalleryExpandButton onClick={onCollapse} collapse/>}
                     <Image entry={entry} image={images[0]} key={1}/>
                 </div>

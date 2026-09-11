@@ -11,9 +11,10 @@ interface Props {
     title?: string;
     groupClassName?: string;
     labelClassName?: string;
+    showError?: boolean;
 }
 
-export default function DonateField({name, title, groupClassName, labelClassName}: Props) {
+export default function DonateField({name, title, groupClassName, labelClassName, showError = false}: Props) {
     const [{value}, {touched, error}, {setValue}] = useField<FundraiserInfo[]>(name);
 
     return (
@@ -25,7 +26,7 @@ export default function DonateField({name, title, groupClassName, labelClassName
         >
             <>
                 <DonateEditor value={value} setValue={setValue}/>
-                {touched && <FieldError error={error}/>}
+                {showError && touched && <FieldError error={error}/>}
             </>
         </FormGroup>
     );

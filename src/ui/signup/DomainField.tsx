@@ -12,12 +12,16 @@ interface Props {
     name: string;
     title?: string;
     disabled?: boolean;
+    showWrong?: boolean;
+    showError?: boolean;
     onDomainInput?: (value: string) => void;
     onDomainBlur?: (value: string) => void;
     onAutoChange?: (value: boolean) => void;
 }
 
-export default function DomainField({name, title, disabled, onDomainInput, onDomainBlur, onAutoChange}: Props) {
+export default function DomainField({
+    name, title, disabled, showWrong = false, showError = false, onDomainInput, onDomainBlur, onAutoChange
+}: Props) {
     const inputDom = useRef<HTMLInputElement>(null);
     const {t} = useTranslation();
 
@@ -70,7 +74,7 @@ export default function DomainField({name, title, disabled, onDomainInput, onDom
     return (
         <FormGroup title={title} name={name} groupClassName="position-relative">
             <>
-                <div className={cx("domain-field", {"is-invalid": touched && error})}>
+                <div className={cx("domain-field", {"is-invalid": showWrong && touched && error})}>
                     {autoDomainValue ?
                         value && <div className="hostname">{value}</div>
                     :
@@ -80,7 +84,7 @@ export default function DomainField({name, title, disabled, onDomainInput, onDom
                             className={cx(
                                 "domain",
                                 "form-control", {
-                                    "is-invalid": touched && error,
+                                    "is-invalid": showWrong && touched && error,
                                 })}
                             disabled={disabled}
                             ref={setInputRef}
@@ -91,7 +95,7 @@ export default function DomainField({name, title, disabled, onDomainInput, onDom
                         {autoDomainValue ? t("change") : t("auto")}
                     </Button>
                 </div>
-                {touched && <FieldError error={error}/>}
+                {showError && touched && <FieldError error={error}/>}
             </>
         </FormGroup>
     );

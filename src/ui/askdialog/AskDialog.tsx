@@ -65,8 +65,8 @@ function AskDialogInner({nodeName}: Props) {
             {loading || subjects.length > 1 ?
                 <Form>
                     <div className="modal-body">
-                        <SelectField name="subject" choices={subjects}/>
-                        <InputField name="message" title={t("message")} maxLength={70} anyValue/>
+                        <SelectField name="subject" choices={subjects} showWrong showError/>
+                        <InputField name="message" title={t("message")} maxLength={70}/>
                     </div>
                     <div className="modal-footer">
                         <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>

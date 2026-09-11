@@ -53,7 +53,7 @@ function VerifyForm({location, values, dirty, resetForm}: Props) {
                 <Trans i18nKey="reset-password-hint-instructions" values={{emailHint}}><b/></Trans>
             </div>
             <InputField name="resetToken" title={tTitle(t("verification-code"))} autoComplete="one-time-code"
-                        placeholder={t("enter-verification-code")} errorsOnly noFeedback autoFocus/>
+                        placeholder={t("enter-verification-code")} autoFocus showWrong/>
             {formError && <div className="form-error">{t(formError)}</div>}
             <Button type="submit" variant="primary" className="submit-button" disabled={disabled} loading={processing}>
                 {t("reset-password")}

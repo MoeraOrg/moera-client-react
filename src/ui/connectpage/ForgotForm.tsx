@@ -36,8 +36,8 @@ function ForgotForm({location, values, dirty}: Props) {
         <Form>
             <div className="title">{tTitle(t("password-recovery"))}</div>
             <div className="instructions"><Trans i18nKey="reset-password-instructions"/></div>
-            <InputField name="location" title={tTitle(t("blog-name"))} placeholder={t("enter-blog-name")} errorsOnly
-                        noFeedback note={t("case-sensitive")} autoFocus/>
+            <InputField name="location" title={tTitle(t("blog-name"))} placeholder={t("enter-blog-name")}
+                        note={t("case-sensitive")} autoFocus showWrong/>
             {formError && <div className="form-error">{t(formError, {location})}</div>}
             <Button type="submit" variant="primary" className="submit-button" disabled={disabled} loading={processing}>
                 {`${t("reset-password")} ${waitMail}`}

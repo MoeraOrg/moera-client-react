@@ -50,15 +50,15 @@ function PeopleHideDialogInner({nodeName, card, subscribersHidden, subscriptions
                 <div className="modal-body">
                     {card?.subscription.subscription != null &&
                         <CheckboxField title={t("hide-my-subscription")} name="hideMySubscription"
-                                       disabled={subscriptionsHidden} anyValue/>
+                                       disabled={subscriptionsHidden}/>
                     }
                     {card?.subscription.subscriber != null &&
                         <CheckboxField title={t("hide-subscription-to-me")} name="hideSubscriptionToMe"
-                                       disabled={subscribersHidden} anyValue/>
+                                       disabled={subscribersHidden}/>
                     }
                     {(card?.friendship.groups != null && card.friendship.groups.length > 0) &&
                         <CheckboxField title={t("hide-friendship")} name="hideFriend"
-                                       disabled={friendsHidden} anyValue/>
+                                       disabled={friendsHidden}/>
                     }
                 </div>
                 <div className="modal-footer">

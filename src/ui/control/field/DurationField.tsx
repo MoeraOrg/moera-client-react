@@ -18,7 +18,7 @@ interface Props {
     col?: string;
     autoFocus?: boolean;
     disabled?: boolean;
-    noFeedback?: boolean;
+    showError?: boolean;
     min?: string | number | null;
     max?: string | number | null;
     never?: boolean | null;
@@ -27,9 +27,10 @@ interface Props {
     defaultValue?: string | null;
 }
 
-export function DurationField({name, title, horizontal = false, groupClassName, labelClassName, col, noFeedback = false,
-                               autoFocus, disabled, initialValue, defaultValue, min, max, never, always}: Props) {
-
+export function DurationField({
+    name, title, horizontal = false, groupClassName, labelClassName, col, autoFocus, disabled, showError = false,
+    initialValue, defaultValue, min, max, never, always
+}: Props) {
     const {t} = useTranslation();
 
     const dmin = min != null ? Duration.parse(min) : Duration.MIN;
@@ -98,7 +99,7 @@ export function DurationField({name, title, horizontal = false, groupClassName, 
                         {always && <option value="always">{t("duration-unit.name.always")}</option>}
                     </select>
                 </div>
-                {!noFeedback && touched && <FieldError error={error}/>}
+                {showError && touched && <FieldError error={error}/>}
             </Wrapper>
         </FormGroup>
     );

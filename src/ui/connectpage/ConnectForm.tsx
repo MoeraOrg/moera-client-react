@@ -59,10 +59,10 @@ function ConnectForm(props: Props) {
     return (
         <Form>
             <div className="title">{t("connect")}</div>
-            <InputField name="location" title={tTitle(t("blog-name"))} placeholder={t("enter-blog-name")} errorsOnly
-                        noFeedback note={t("case-sensitive")} error={formError} autoFocus/>
-            <InputField type="password" name="password" title={t("password")} placeholder={t("password")} errorsOnly
-                        noFeedback error={formError}/>
+            <InputField name="location" title={tTitle(t("blog-name"))} placeholder={t("enter-blog-name")}
+                        note={t("case-sensitive")} error={formError} autoFocus showWrong/>
+            <InputField type="password" name="password" title={t("password")} placeholder={t("password")}
+                        error={formError} showWrong/>
             {formError && <div className="form-error">{t(formError)}</div>}
             <Button type="submit" variant="primary" className="submit-button" disabled={disabled} loading={connecting}>
                 {`${t("connect")} ${waitConnect}`}

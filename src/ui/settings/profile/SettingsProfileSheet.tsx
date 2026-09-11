@@ -56,21 +56,20 @@ function SettingsProfileSheetInner(props: Props) {
         <Form className="settings-sheet-form">
             <div className="settings-sheet" style={{maxHeight: sheetMaxHeight}}>
                 <AvatarEditor name="avatar"/>
-                <InputField title={t("full-name")} name="fullName" maxLength={96} anyValue autoFocus/>
-                <InputField title={t("title")} name="title" maxLength={120} errorsOnly/>
+                <InputField title={t("full-name")} name="fullName" maxLength={96} autoFocus showError/>
+                <InputField title={t("title")} name="title" maxLength={120} showWrong showError/>
                 <RichTextField
                     title={t("bio")}
                     name="bioSrc"
                     placeholder={t("write-anything")}
                     format={props.srcFormatDefault}
-                    anyValue
-                    noMedia
+                    noMedia showError
                 />
                 <ComboboxField title={t("gender")} name="gender" col="col-sm-6" data={["Male", "Female"]}
-                               textField={g => longGender(g, t)}/>
+                               textField={g => longGender(g, t)} showError/>
                 <div className="row">
-                    <InputField type="email" title={t("e-mail")} name="email" maxLength={63} errorsOnly
-                                groupClassName="col-sm-6 col-10 pe-0"/>
+                    <InputField type="email" title={t("e-mail")} name="email" maxLength={63}
+                                groupClassName="col-sm-6 col-10 pe-0" showWrong showError/>
                     <PrincipalField name="viewEmail"
                                     values={["public", "signed", "subscribed", "friends", "admin"]}
                                     long={!tinyScreen}

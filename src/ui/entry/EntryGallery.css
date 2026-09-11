@@ -1,10 +1,25 @@
 .entry .gallery {
     display: flex;
     position: relative;
+    aspect-ratio: 9 / 7.65;
 }
 
-.posting .gallery {
-    width: 100%;
+@media only screen and (min-width: 992px) {
+    .posting .gallery {
+        width: calc(100% + 3rem);
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
+    }
+
+}
+
+@media only screen and (max-width: 991px) {
+    .posting .gallery {
+        width: calc(100% + 2rem);
+        margin-left: -1rem;
+        margin-right: -1rem;
+    }
+
 }
 
 .comment .gallery {
@@ -25,12 +40,10 @@
 
 .entry .gallery.horizontal {
     flex-direction: row;
-    aspect-ratio: 9 / 6;
 }
 
 .entry .gallery.vertical {
     flex-direction: column;
-    aspect-ratio: 9 / 7;
 }
 
 .entry .gallery .gallery-row {
@@ -66,7 +79,8 @@
 
 .entry .gallery.single {
     display: block;
-    border: 1px solid var(--bs-gray-200);
+    border-top: 1px solid var(--bs-gray-200);
+    border-bottom: 1px solid var(--bs-gray-200);
     width: unset;
     height: unset;
     aspect-ratio: unset;
@@ -83,22 +97,23 @@
     margin-right: auto;
 }
 
-.posting .gallery.single .entry-image IMG {
-    max-width: calc(min(var(--feed-width), 100vw - 10px));
-}
-
 @media only screen and (min-width: 992px) {
     .posting .gallery.single .entry-image IMG {
-        max-height: min(560px, var(--image-height));
+        max-width: var(--feed-width) + 3rem;
+        max-height: min(680px, var(--image-height));
     }
 
     .comment .gallery.single .entry-image IMG {
         max-width: calc(min(var(--feed-width), 100vw) * 0.5);
-        max-height: min(250px, var(--image-height));
+        max-height: min(300px, var(--image-height));
     }
 }
 
 @media only screen and (max-width: 991px) {
+    .posting .gallery.single .entry-image IMG {
+        max-width: calc(min(var(--feed-width) + 2rem, 100vw - 5px));
+    }
+
     .comment .gallery.single .entry-image IMG {
         max-width: calc(min(var(--feed-width), 100vw - 55px));
     }

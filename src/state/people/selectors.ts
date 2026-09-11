@@ -117,47 +117,56 @@ export function isFriendOfsTotalVisible(state: ClientState): boolean {
 
 type SubscriberContactState = ContactWithRelationships & { subscriber: SubscriberInfo };
 
-export function getPeopleSubscribers(state: ClientState): SubscriberContactState[] {
-    return Object.values(state.people.contacts)
-        .filter((contact): contact is SubscriberContactState => contact?.subscriber != null);
-}
+export const getPeopleSubscribers = createSelector(
+    (state: ClientState) => state.people.contacts,
+    contacts => Object.values(contacts)
+        .filter((contact): contact is SubscriberContactState => contact?.subscriber != null)
+);
 
 type SubscriptionContactState = ContactWithRelationships & { subscription: SubscriptionInfo };
 
-export function getPeopleSubscriptions(state: ClientState): SubscriptionContactState[] {
-    return Object.values(state.people.contacts)
-        .filter((contact): contact is SubscriptionContactState => contact?.subscription != null);
-}
+export const getPeopleSubscriptions = createSelector(
+    (state: ClientState) => state.people.contacts,
+    contacts => Object.values(contacts)
+        .filter((contact): contact is SubscriptionContactState => contact?.subscription != null)
+);
 
 type FriendContactState = ContactWithRelationships & { friend: FriendInfo };
 
-export function getPeopleFriends(state: ClientState, friendGroupId: string): FriendContactState[] {
-    return Object.values(state.people.contacts)
-        .filter((contact): contact is FriendContactState => contact?.friend != null
-            && contact.friend.groups?.find(fg => fg.id === friendGroupId) != null);
-}
+export const getPeopleFriends = createSelector(
+    (state: ClientState) => state.people.contacts,
+    (_state: ClientState, friendGroupId: string) => friendGroupId,
+    (contacts, friendGroupId) => Object.values(contacts)
+        .filter((contact): contact is FriendContactState =>
+            contact?.friend != null && contact.friend.groups?.find(fg => fg.id === friendGroupId) != null
+        )
+);
 
 type FriendOfContactState = ContactWithRelationships & { friendOf: FriendOfInfo };
 
-export function getPeopleFriendOfs(state: ClientState): FriendOfContactState[] {
-    return Object.values(state.people.contacts)
-        .filter((contact): contact is FriendOfContactState => contact?.friendOf != null);
-}
+export const getPeopleFriendOfs = createSelector(
+    (state: ClientState) => state.people.contacts,
+    contacts => Object.values(contacts)
+        .filter((contact): contact is FriendOfContactState => contact?.friendOf != null)
+);
 
 type BlockedContactState = ContactWithRelationships & { blocked: BlockedUserInfo[] };
 
-export function getPeopleBlocked(state: ClientState): BlockedContactState[] {
-    return Object.values(state.people.contacts)
-        .filter((contact): contact is BlockedContactState => contact?.blocked != null && contact.blocked.length > 0);
-}
+export const getPeopleBlocked = createSelector(
+    (state: ClientState) => state.people.contacts,
+    contacts => Object.values(contacts)
+        .filter((contact): contact is BlockedContactState => contact?.blocked != null && contact.blocked.length > 0)
+);
 
 type BlockedByContactState = ContactWithRelationships & { blockedBy: BlockedByUserInfo[] };
 
-export function getPeopleBlockedBy(state: ClientState): BlockedByContactState[] {
-    return Object.values(state.people.contacts)
+export const getPeopleBlockedBy = createSelector(
+    (state: ClientState) => state.people.contacts,
+    contacts => Object.values(contacts)
         .filter((contact): contact is BlockedByContactState =>
-            contact?.blockedBy != null && contact.blockedBy.length > 0);
-}
+            contact?.blockedBy != null && contact.blockedBy.length > 0
+        )
+);
 
 export function isPeopleContactsLoading(state: ClientState): boolean {
     switch (getPeopleTab(state)) {
@@ -196,13 +205,13 @@ export function getPeopleContacts(state: ClientState): ContactWithRelationships[
 
 export const getPeopleContactsByDistance = createSelector(
     getPeopleContacts,
-    contacts => contacts.sort((sr1, sr2) => sr1.contact.distance - sr2.contact.distance)
+    contacts => contacts.toSorted((sr1, sr2) => sr1.contact.distance - sr2.contact.distance)
 );
 
 export const getPeopleContactsByAlpha = createSelector(
     getPeopleContacts,
     contacts =>
-        contacts.sort((sr1, sr2) => {
+        contacts.toSorted((sr1, sr2) => {
             const sr1name = sr1.contact.fullName || sr1.contact.nodeName;
             const sr2name = sr2.contact.fullName || sr2.contact.nodeName;
             return sr1name.localeCompare(sr2name);

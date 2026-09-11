@@ -124,7 +124,7 @@ function ComposePageInner(props: Props) {
                             <OnlyDesktop><ComposeDrafts ready={ready}/></OnlyDesktop>
                         </div>
                         {features?.subjectPresent &&
-                            <InputField name="subject" title="Title" anyValue disabled={!ready}/>
+                            <InputField name="subject" title="Title" disabled={!ready}/>
                         }
                         <RichTextField
                             name="body"
@@ -139,7 +139,6 @@ function ComposePageInner(props: Props) {
                             draftMedia={draft?.media}
                             urlsField="bodyUrls"
                             linkPreviewsField="linkPreviews"
-                            anyValue
                             autoFocus
                             maxHeight="max(100vh - 26rem, 10.8em)"
                         >

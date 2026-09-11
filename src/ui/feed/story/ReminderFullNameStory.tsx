@@ -45,7 +45,7 @@ function ReminderFullNameStoryInner({feedName, story, values, isSubmitting}: Pro
                 <p>{t("want-set-right-now")}</p>
                 <Form className="row gx-2 ms-2 me-2">
                     <InputField name="fullName" maxLength={96} placeholder={t("full-name")}
-                                groupClassName="col-lg-10 col-8 mb-0" anyValue autoFocus/>
+                                groupClassName="col-lg-10 col-8 mb-0" autoFocus/>
                     <div className="col-lg-2 col-4">
                         <Button variant="primary" type="submit" loading={isSubmitting}
                                 disabled={values.fullName.trim() === ''}>{t("update")}</Button>

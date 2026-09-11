@@ -22,7 +22,7 @@ const mapPropsToValues = (props: Props): RichTextRenameMediaValues => ({
 const RichTextRenameMediaDialog = () => {
     const {t} = useTranslation();
 
-    return <InputField name="title" title={t("file-name")} anyValue autoFocus/>;
+    return <InputField name="title" title={t("file-name")} autoFocus/>;
 }
 
 export default richTextEditorDialog<Props, RichTextRenameMediaValues>(

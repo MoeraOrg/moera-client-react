@@ -91,7 +91,6 @@ function ImageEditDialogInner(props: Props) {
                         noEmbeddedMedia
                         noMedia
                         noVideo
-                        anyValue
                         autoFocus
                         submitKey="enter"
                         onSubmit={submitForm}

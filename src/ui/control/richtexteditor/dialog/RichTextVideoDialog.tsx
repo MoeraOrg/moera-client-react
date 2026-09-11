@@ -18,7 +18,7 @@ function RichTextVideoDialog() {
     const {t} = useTranslation();
 
     return <TextField name="code" title={t("copy-embedding-video-code")} placeholder="" maxHeight="10em" rows={6}
-                      anyValue autoFocus/>;
+                      autoFocus/>;
 }
 
 export default richTextEditorDialog<Props, RichTextVideoValues>("video-internet", mapPropsToValues, RichTextVideoDialog);

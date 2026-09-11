@@ -73,14 +73,14 @@ function FriendGroupsDialogInner({nodeName, nodeCard, values, setFieldValue}: Pr
                     {values.availableGroups.map(fg =>
                         <CheckboxField<string[]> key={fg.id} id={`groups_${fg.id}`} name="groups" title={fg.title}
                                                  value={fg.id} isChecked={isGroupChecked(fg.id)}
-                                                 onChange={onGroupChecked(fg.id)} anyValue/>
+                                                 onChange={onGroupChecked(fg.id)}/>
                     )}
                     {values.addedGroupTitles.map((title, index) =>
                         <div key={index} className="d-flex">
                             <CheckboxField<string[]> name="addedGroups" value={String(index)}
-                                                     isChecked={(v: string[]) => v.includes(String(index))} anyValue/>
+                                                     isChecked={(v: string[]) => v.includes(String(index))}/>
                             <InputField name={`addedGroupTitles[${index}]`} maxLength={63}
-                                        groupClassName="add-group-name" errorsOnly/>
+                                        groupClassName="add-group-name" showWrong showError/>
                             <PrincipalField name={`addedGroupView[${index}]`} values={["public", "private", "admin"]}
                                             titles={{
                                                 "public": t("friend-group-visibility.public"),

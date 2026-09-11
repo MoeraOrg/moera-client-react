@@ -32,10 +32,11 @@ interface Props {
     draftMedia?: MediaAttachment[] | null;
     placeholder?: string | null;
     autoFocus?: boolean;
-    anyValue?: boolean;
+    showOk?: boolean;
+    showWrong?: boolean;
+    showError?: boolean;
     className?: string;
     autoComplete?: string;
-    noFeedback?: boolean;
     disabled?: boolean;
     initialValue?: RichTextValue;
     defaultValue?: RichTextValue;
@@ -53,9 +54,9 @@ interface Props {
 
 export function RichTextField({
     name, title, rows = 3, minHeight, maxHeight, features, noComplexBlocks, noEmbeddedMedia, noMedia, noVideo,
-    nodeName = REL_CURRENT, draftId, draftReady, draftMedia, placeholder, autoFocus, anyValue, className, autoComplete,
-    noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled, commentQuote, panelMode, format,
-    submitKey, onSubmit, urlsField, linkPreviewsField, linkPreviewsSmall, children
+    nodeName = REL_CURRENT, draftId, draftReady, draftMedia, placeholder, autoFocus, showOk = false, showWrong = false,
+    showError = false, className, autoComplete, disabled = false, initialValue, defaultValue, smileysEnabled,
+    commentQuote, panelMode, format, submitKey, onSubmit, urlsField, linkPreviewsField, linkPreviewsSmall, children
 }: Props) {
     const [{value, onBlur}, {touched, error}, {setTouched}, {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
@@ -89,8 +90,8 @@ export function RichTextField({
                 onBlur={onBlur}
                 className={cx(
                     "form-control", {
-                        "is-valid": !anyValue && touched && !error,
-                        "is-invalid": !anyValue && touched && error,
+                        "is-valid": showOk && touched && !error,
+                        "is-invalid": showWrong && touched && error,
                         [className!]: !!className
                     }
                 )}
@@ -119,7 +120,7 @@ export function RichTextField({
                 draftMedia={draftMedia}
                 children={children}
             />
-            {!noFeedback && touched && <FieldError error={(error as any)?.text}/>}
+            {showError && touched && <FieldError error={(error as any)?.text}/>}
             {urlsField != null && linkPreviewsField != null &&
                 <RichTextLinkPreviews
                     name={linkPreviewsField}

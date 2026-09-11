@@ -197,23 +197,23 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
                 <Form>
                     <SignUpTabs/>
                     <InputField name="name" title={t("blog-name")} tooltip="name-help" ref={nameInputRef}
-                                disabled={processing || stage > SIGN_UP_STAGE_NAME} errorsOnly autoFocus/>
+                                disabled={processing || stage > SIGN_UP_STAGE_NAME} autoFocus showWrong showError/>
                     {advanced &&
                         <DomainField name="domain" title={t("domain")}
                                      disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
-                                     onDomainInput={onDomainInput} onDomainBlur={onDomainBlur}/>
+                                     onDomainInput={onDomainInput} onDomainBlur={onDomainBlur} showWrong showError/>
                     }
                     <InputField type="password" name="password" title={t("password")}
-                                disabled={processing || stage > SIGN_UP_STAGE_PASSWORD} errorsOnly/>
+                                disabled={processing || stage > SIGN_UP_STAGE_PASSWORD} showWrong showError/>
                     <InputField type="password" name="confirmPassword" title={t("confirm-password")}
-                                disabled={processing || stage > SIGN_UP_STAGE_PASSWORD} errorsOnly/>
+                                disabled={processing || stage > SIGN_UP_STAGE_PASSWORD} showWrong showError/>
                     <InputField type="email" name="email" title={t("e-mail")}
-                                disabled={processing || stage > SIGN_UP_STAGE_PROFILE} errorsOnly/>
+                                disabled={processing || stage > SIGN_UP_STAGE_PROFILE} showWrong showError/>
                     {advanced &&
                         <>
-                            <SelectField name="provider" title={t("provider")} choices={PROVIDER_CHOICES} anyValue
+                            <SelectField name="provider" title={t("provider")} choices={PROVIDER_CHOICES}
                                          disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}/>
-                            <SelectField name="language" title={t("language")} choices={languageChoices} anyValue
+                            <SelectField name="language" title={t("language")} choices={languageChoices}
                                          disabled={processing || stage > SIGN_UP_STAGE_PROFILE}
                                          ref={languageSelectRef}/>
                             <CheckboxField
@@ -229,7 +229,7 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
                                 }
                                 name="termsAgree"
                                 groupClassName="mb-0"
-                                errorsOnly
+                                showWrong
                             />
                             <CheckboxField
                                 title={
@@ -240,7 +240,6 @@ function SignUpPageInner({stage, values, setFieldValue, touched, setFieldTouched
                                     </Trans>
                                 }
                                 name="googlePlayAllowed"
-                                anyValue
                             />
                         </>
                     }

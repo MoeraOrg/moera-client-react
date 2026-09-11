@@ -40,8 +40,8 @@ function AskSelectedDialog() {
         <ModalDialog title={t("ask-count", {count: nodeCount})} onClose={onClose}>
             <Form>
                 <div className="modal-body">
-                    <SelectField name="subject" choices={SUBJECTS}/>
-                    <InputField name="message" title={t("message")} maxLength={70} anyValue/>
+                    <SelectField name="subject" choices={SUBJECTS} showWrong showError/>
+                    <InputField name="message" title={t("message")} maxLength={70}/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>

@@ -35,9 +35,9 @@ function TokenDialogInner({token}: Props) {
         <ModalDialog title={token == null ? t("create-token") : t("rename-token")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
-                    <InputField name="name" title={t("token-name")} autoFocus errorsOnly/>
+                    <InputField name="name" title={t("token-name")} autoFocus/>
                     {token == null &&
-                        <InputField type="password" name="password" title={t("your-password")} errorsOnly/>
+                        <InputField type="password" name="password" title={t("your-password")} showWrong showError/>
                     }
                     <PermissionSelector title={t("permissions")} name="scopes" enabledPermissions={token?.permissions}/>
                 </div>

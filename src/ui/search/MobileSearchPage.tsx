@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import cx from 'classnames';
 
-import { isConnectedToHome } from "state/home/selectors";
+import { isAtHomeNode } from "state/node/selectors";
 import { getSearchQuery } from "state/search/selectors";
 import { Page } from "ui/page/Page";
 import MobileBack from "ui/page/MobileBack";
@@ -16,17 +16,16 @@ import BottomMenu from "ui/mainmenu/BottomMenu";
 import { useOverlay } from "ui/overlays/overlays";
 import SearchTabs from "ui/search/SearchTabs";
 import SearchFeed from "ui/search/SearchFeed";
-import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
+import { REL_CURRENT } from "util/rel-node-name";
 
 export default function MobileSearchPage() {
-    const connectedToHome = useSelector(isConnectedToHome);
+    const atHomeNode = useSelector(isAtHomeNode);
     const searchQuery = useSelector(getSearchQuery);
     const newsHref = useHomeNews();
     const pageRef = useRef(null);
     const [suggestions, setSuggestions] = useState<boolean>(!searchQuery);
 
-    const backNode = connectedToHome ? REL_HOME : REL_CURRENT;
-    const backHref = suggestions ? (connectedToHome ? newsHref : "/") : "";
+    const backHref = suggestions ? (atHomeNode ? newsHref : "/") : "";
 
     const onSubmit = useCallback(() => setSuggestions(false), [setSuggestions]);
 
@@ -66,7 +65,7 @@ export default function MobileSearchPage() {
         <>
             <Page className={cx("search-page", {"tabbed-page": results})}>
                 <main className="page-central-pane" ref={pageRef}>
-                    <MobileBack nodeName={backNode} href={backHref} sticky>
+                    <MobileBack nodeName={REL_CURRENT} href={backHref} sticky>
                         <div id="search-box">
                             <SearchInput
                                 query={query}

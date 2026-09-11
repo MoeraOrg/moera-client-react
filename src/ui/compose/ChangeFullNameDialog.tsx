@@ -25,7 +25,7 @@ function ChangeFullNameDialog({fullName, defaultFullName, onSubmit}: Props) {
             <Form>
                 <div className="modal-body">
                     <InputField name="fullName" title=" " initialValue={fullName} defaultValue={defaultFullName}
-                                layout="follow-end" inputClassName="mt-2" anyValue autoFocus autoComplete="off"/>
+                                layout="follow-end" inputClassName="mt-2" autoFocus autoComplete="off"/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>

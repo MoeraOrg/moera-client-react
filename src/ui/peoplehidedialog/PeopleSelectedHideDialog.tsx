@@ -47,11 +47,11 @@ function PeopleSelectedHideDialogInner({nodeName, subscribersHidden, subscriptio
             <Form>
                 <div className="modal-body">
                     <CheckboxField title={t("hide-my-subscription")} name="hideMySubscription"
-                                   disabled={subscriptionsHidden} anyValue/>
+                                   disabled={subscriptionsHidden}/>
                     <CheckboxField title={t("hide-subscription-to-me")} name="hideSubscriptionToMe"
-                                   disabled={subscribersHidden} anyValue/>
+                                   disabled={subscribersHidden}/>
                     <CheckboxField title={t("hide-friendship")} name="hideFriend"
-                                   disabled={friendsHidden} anyValue/>
+                                   disabled={friendsHidden}/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>

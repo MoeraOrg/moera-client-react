@@ -26,8 +26,8 @@ function MnemonicDialog() {
             <Form>
                 <div className="modal-body">
                     <MnemonicDocument/>
-                    <CheckboxField title={t("written-down-words")} name="writtenDown" groupClassName="written-down"
-                                   errorsOnly/>
+                    <CheckboxField title={t("written-down-words")} name="writtenDown"
+                                   groupClassName="written-down" showWrong/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="primary" type="submit">{t("done")}</Button>

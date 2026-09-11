@@ -23,9 +23,9 @@ function RichTextLinkDialog({noText = false, prevValues}: Props) {
 
     return (
         <>
-            <InputField type="url" name="href" title={t("link")} anyValue autoFocus/>
+            <InputField type="url" name="href" title={t("link")} autoFocus/>
             {(!noText && prevValues == null) &&
-                <InputField name="text" title={t("text-optional")} anyValue/>
+                <InputField name="text" title={t("text-optional")}/>
             }
         </>
     );

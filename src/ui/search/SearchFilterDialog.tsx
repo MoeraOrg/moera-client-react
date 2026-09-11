@@ -156,7 +156,6 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     choices={ENTRY_TYPES}
                                     labelClassName="col-4 col-lg-3"
                                     horizontal
-                                    anyValue
                                 />
                             }
                             {fieldName === "ownedByMe" &&
@@ -166,14 +165,12 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     choices={AUTHOR}
                                     labelClassName="col-4 col-lg-3"
                                     horizontal
-                                    anyValue
                                 />
                             }
                             {fieldName === "repliedToMe" && includesComments &&
                                 <CheckboxField
                                     name="repliedToMe"
                                     title={t("reply-my-comment")}
-                                    anyValue
                                 />
                             }
                             {fieldName === "minImageCount" &&
@@ -183,7 +180,6 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     choices={IMAGE_NUMBER}
                                     labelClassName="col-4 col-lg-3"
                                     horizontal
-                                    anyValue
                                 />
                             }
                             {fieldName === "videoPresent" &&
@@ -193,7 +189,6 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     choices={VIDEO}
                                     labelClassName="col-4 col-lg-3"
                                     horizontal
-                                    anyValue
                                 />
                             }
                             {fieldName === "attachmentPresent" &&
@@ -203,7 +198,6 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     choices={ATTACHMENTS}
                                     labelClassName="col-4 col-lg-3"
                                     horizontal
-                                    anyValue
                                 />
                             }
                             {fieldName === "safeSearch" && sheriffName &&
@@ -211,7 +205,6 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     name="safeSearch"
                                     title={t("safe-search")}
                                     setting="search.safe-search.default"
-                                    anyValue
                                 />
                             }
                             {fieldName === "period" && mode === "hashtag" &&
@@ -221,7 +214,6 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     choices={BEFORE_DATE}
                                     labelClassName="col-4 col-lg-3"
                                     horizontal
-                                    anyValue
                                 />
                             }
                             {fieldName === "period" && mode === "fulltext" &&
@@ -231,7 +223,6 @@ function SearchFilterDialogInner({tab, safeSearchDefault}: Props) {
                                     choices={DATE_PERIOD}
                                     labelClassName="col-4 col-lg-3"
                                     horizontal
-                                    anyValue
                                 />
                             }
                         </React.Fragment>

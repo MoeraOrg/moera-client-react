@@ -119,14 +119,14 @@ function RichTextImageDialog({
                 </div>
             }
             {files == null && mediaFiles == null &&
-                <InputField type="url" name="href" title={t("link")} anyValue autoFocus/>
+                <InputField type="url" name="href" title={t("link")} autoFocus/>
             }
             {files != null &&
-                <CheckboxField title={t("compress-images-video")} name="compress" groupClassName="mt-3 mb-0" anyValue/>
+                <CheckboxField title={t("compress-images-video")} name="compress" groupClassName="mt-3 mb-0"/>
             }
             {insert &&
                 <>
-                    <SelectField name="standardSize" title={t("size")} choices={STANDARD_SIZES} horizontal anyValue/>
+                    <SelectField name="standardSize" title={t("size")} choices={STANDARD_SIZES} horizontal/>
                     {standardSize === "custom" &&
                         <div className="rich-text-image-dialog-size">
                             <NumberField name="customWidth" title={t("width")} horizontal min={0}
@@ -136,13 +136,12 @@ function RichTextImageDialog({
                         </div>
                     }
                     {hasVideo &&
-                        <CheckboxField title={t("play-video-inline")} name="play" groupClassName="ps-2" anyValue/>
+                        <CheckboxField title={t("play-video-inline")} name="play" groupClassName="ps-2"/>
                     }
                     {((files == null && mediaFiles == null) || files?.length === 1 || mediaFiles?.length === 1) &&
                         <InputField
                             name="caption"
                             title={!hasVideo ? t("caption-image-optional") : t("caption-video-optional")}
-                            anyValue
                         />
                     }
                 </>

@@ -12,5 +12,5 @@ export default function FieldError({error}: Props) {
         return null;
     }
 
-    return <div className="invalid-feedback">{t(error)}</div>
+    return <div className="invalid-feedback d-block">{t(error)}</div>
 }

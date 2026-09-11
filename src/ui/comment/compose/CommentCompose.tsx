@@ -24,7 +24,6 @@ import { commentComposeLogic, CommentComposeProps, CommentComposeValues } from "
 import CommentComposePanel from "ui/comment/compose/CommentComposePanel";
 import { REL_CURRENT } from "util/rel-node-name";
 import { isHtmlEmpty } from "util/html";
-import "./CommentCompose.css";
 
 type Props = CommentComposeProps & FormikProps<CommentComposeValues>;
 
@@ -72,7 +71,7 @@ function CommentCompose(props: Props) {
                 <div className="content">
                     {!props.connectedToHome &&
                         <InputField name="ownerFullName" placeholder={t("your-name")} maxLength={96} className="mb-3"
-                                    errorsOnly noFeedback/>
+                                    showWrong/>
                     }
                     <CommentComposeRepliedTo disabled={!ready || beingPosted}/>
                     <RichTextField
@@ -87,7 +86,6 @@ function CommentCompose(props: Props) {
                         draftId={draft?.id ?? null}
                         draftReady={ready && !commentDialogShow}
                         draftMedia={draft?.media}
-                        anyValue
                         placeholder={t("write-comment")}
                         disabled={!ready || beingPosted}
                         smileysEnabled={smileysEnabled}

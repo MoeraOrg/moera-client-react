@@ -1,3 +1,54 @@
+#comments:empty ~ #comment-compose {
+    margin-top: 2rem;
+}
+
+@media only screen and (max-width: 991px) {
+    #comment-compose {
+        margin-bottom: calc(var(--page-footer-height) + .25rem);
+    }
+}
+
+#comment-compose FORM {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#comment-compose .content {
+    margin-left: .75rem;
+    margin-bottom: .5rem;
+    flex: 1 1 0;
+    max-width: calc(100% - 32px - 1.25rem);
+}
+
+#comment-compose .content .form-group {
+    margin-bottom: 0;
+}
+
+#comment-compose .content INPUT::placeholder {
+    color: var(--bs-gray-400);
+}
+
+#comment-compose .buttons {
+    flex: 100%;
+}
+
+#comment-compose.disabled {
+    text-align: center;
+    border-top: solid 1px var(--bs-gray-300);
+    border-bottom: solid 1px var(--bs-gray-300);
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    color: var(--bs-gray-600);
+}
+
+@media only screen and (max-width: 991px) {
+    #comment-compose DIV.link-preview {
+        width: calc(99.6vw - 5rem);
+        margin-left: -.5rem;
+        margin-right: -.5rem;
+    }
+}
+
 @media only screen and (min-width: 992px) {
     #comment-compose.nologin .btn {
         width: 10.25rem;

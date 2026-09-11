@@ -38,9 +38,9 @@ function RichTextFormulaDialog({prevValues}: Props) {
                 }
             ]} className="mb-3" value={block} onChange={setBlock}/>
             {!block ?
-                <InputField name="math" anyValue autoFocus/>
+                <InputField name="math" autoFocus/>
             :
-                <TextField name="math" placeholder="" maxHeight="10em" rows={6} anyValue autoFocus/>
+                <TextField name="math" placeholder="" maxHeight="10em" rows={6} autoFocus/>
             }
         </>
     );

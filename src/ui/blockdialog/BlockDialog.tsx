@@ -89,7 +89,7 @@ function BlockDialogInner({entryNodeName, srcFormatDefault}: Props) {
                     <RadioField<BlockingLevel> id="level-none" name="level"
                                                title={entryNodeName == null ? t("no-block") : t("no-kick")}
                                                groupClassName="mb-0" isChecked={isChecked("none")}
-                                               value="none" anyValue/>
+                                               value="none"/>
                     <RadioField<BlockingLevel> id="level-ignore" name="level"
                                                title={
                                                    entryNodeName == null
@@ -97,22 +97,22 @@ function BlockDialogInner({entryNodeName, srcFormatDefault}: Props) {
                                                        : t("hide-in-discussion")
                                                }
                                                groupClassName="mb-0" isChecked={isChecked("ignore")}
-                                               value="ignore" anyValue/>
+                                               value="ignore"/>
                     {(entryNodeName == null || entryNodeName === homeOwnerName) &&
                         <>
                             <RadioField<BlockingLevel> id="level-comments" name="level"
                                                        title={t("deny-comments")} groupClassName="mb-0"
-                                                       isChecked={isChecked("comments")} value="comments" anyValue/>
+                                                       isChecked={isChecked("comments")} value="comments"/>
                             <RadioField<BlockingLevel> id="level-reactions" name="level"
                                                        title={t("deny-comments-reactions")} groupClassName="mb-0"
-                                                       isChecked={isChecked("reactions")} value="reactions" anyValue/>
+                                                       isChecked={isChecked("reactions")} value="reactions"/>
                             <RadioField<BlockingLevel> id="level-hide" name="level"
                                                        title={
                                                            entryNodeName == null
                                                                ? t("deny-everything-hide")
                                                                : t("deny-everything-hide-in-discussion")
                                                        }
-                                                       isChecked={isChecked("hide")} value="hide" anyValue/>
+                                                       isChecked={isChecked("hide")} value="hide"/>
                         </>
                     }
                     {values.level !== "none" &&
@@ -121,8 +121,7 @@ function BlockDialogInner({entryNodeName, srcFormatDefault}: Props) {
                             {entryNodeName == null &&
                                 <div className="unblock-days">
                                     <CheckboxField name="temporary" groupClassName="mb-0"
-                                                   title={values.temporary ? undefined : t("unblock-after-time")}
-                                                   anyValue/>
+                                                   title={values.temporary ? undefined : t("unblock-after-time")}/>
                                     {values.temporary &&
                                         <Trans i18nKey="unblock-after-days" values={{count: values.days}}>
                                             <NumberField name="days" horizontal min={1} max={1000}/>
@@ -135,7 +134,6 @@ function BlockDialogInner({entryNodeName, srcFormatDefault}: Props) {
                                 <RichTextField
                                     name="reason"
                                     format={srcFormatDefault}
-                                    anyValue
                                     noMedia
                                     panelMode="bottom"
                                 />

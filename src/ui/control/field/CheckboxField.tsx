@@ -16,8 +16,8 @@ interface Props<V> {
     groupClassName?: string;
     labelClassName?: string;
     autoFocus?: boolean;
-    anyValue?: boolean;
-    errorsOnly?: boolean;
+    showOk?: boolean;
+    showWrong?: boolean;
     initialValue?: V | null;
     defaultValue?: V | null;
     setting?: string;
@@ -25,7 +25,7 @@ interface Props<V> {
 
 export function CheckboxField<V = boolean>({
     id, name, title, isChecked, onChange: onInputChange, value: inputValue, disabled, groupClassName, labelClassName,
-    autoFocus, anyValue, errorsOnly, initialValue, defaultValue, setting
+    autoFocus, showOk = false, showWrong = false, initialValue, defaultValue, setting
 }: Props<V>) {
     const [{value, onChange, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<V>(name, initialValue, defaultValue);
@@ -59,8 +59,8 @@ export function CheckboxField<V = boolean>({
                 className={cx(
                     "form-check-input",
                     {
-                        "is-valid": !anyValue && !errorsOnly && touched && !error,
-                        "is-invalid": !anyValue && touched && error
+                        "is-valid": showOk && touched && !error,
+                        "is-invalid": showWrong && touched && error
                     }
                 )}
             />

@@ -92,7 +92,7 @@ export default function CommentComposeLine() {
     }
 
     return (
-        <Suspense fallback={null}>
+        <Suspense fallback={<div id="comment-compose"/>}>
             <CommentCompose
                 nodeName={nodeName}
                 homeOwnerName={ownerName}
