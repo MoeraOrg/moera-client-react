@@ -25,6 +25,7 @@ import settings from "state/settings/reducer";
 import complaints from "state/complaints/reducer";
 import cartes from "state/cartes/reducer";
 import reactionsDialog from "state/reactionsdialog/reducer";
+import repostDialog from "state/repostdialog/reducer";
 import changeDateDialog from "state/changedatedialog/reducer";
 import people from "state/people/reducer";
 import nodeCards from "state/nodecards/reducer";
@@ -97,6 +98,7 @@ import friendGroupAddDialogSagas from "state/friendgroupadddialog/sagas";
 import friendGroupsDialogSagas from "state/friendgroupsdialog/sagas";
 import askDialogSagas from "state/askdialog/sagas";
 import blockDialogSagas from "state/blockdialog/sagas";
+import repostDialogSagas from "state/repostdialog/sagas";
 import blockingDetailsDialogSagas from "state/blockingdetailsdialog/sagas";
 import sheriffOrderDialogSagas from "state/sherifforderdialog/sagas";
 import sheriffOrderDetailsDialogSagas from "state/sherifforderdetailsdialog/sagas";
@@ -158,6 +160,7 @@ const reducers = combineReducers({
     complaints,
     cartes,
     reactionsDialog,
+    repostDialog,
     changeDateDialog,
     people,
     nodeCards,
@@ -274,6 +277,7 @@ const sagas = collectSagas(
     friendGroupsDialogSagas,
     askDialogSagas,
     blockDialogSagas,
+    repostDialogSagas,
     blockingDetailsDialogSagas,
     sheriffOrderDialogSagas,
     sheriffOrderDetailsDialogSagas,

@@ -29,7 +29,7 @@
     }
 }
 
-.posting-button:hover, A.posting-button:hover {
+.posting-button:hover, A.posting-button:hover, .posting-button.active {
     background-color: var(--gray-100-transparent);
     color: var(--bs-gray-800);
     transition: background-color, color .15s ease-in;

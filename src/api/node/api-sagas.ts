@@ -1326,6 +1326,17 @@ export async function deletePosting(
     });
 }
 
+export async function republishPosting(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
+    attributes: API.PostingRepublishAttributes, errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.Result> {
+
+    const location = ut`/postings/${id}/republish`;
+    return callApi<API.Result>({
+        caller, nodeName, method: "POST", location, body: attributes, auth, schema: "Result", errorFilter
+    });
+}
+
 export async function getPostingsAttachedToPosting(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
@@ -1787,6 +1798,17 @@ export async function deleteRemotePosting(
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}`;
     return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
+    });
+}
+
+export async function republishRemotePosting(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, remoteNodeName: string, id: string,
+    attributes: API.RemotePostingRepublishAttributes, errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.Result> {
+
+    const location = ut`/nodes/${remoteNodeName}/postings/${id}/republish`;
+    return callApi<API.Result>({
+        caller, nodeName, method: "POST", location, body: attributes, auth, schema: "Result", errorFilter
     });
 }
 

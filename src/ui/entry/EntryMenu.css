@@ -1,4 +1,4 @@
-.entry > .menu, .entry .posting-buttons > .menu {
+.entry > .menu, .entry .posting-buttons > .menu.posting-menu {
     position: absolute;
     top: -.2rem;
     right: .4rem;

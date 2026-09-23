@@ -18,7 +18,6 @@ import { postingReply } from "state/postingreply/actions";
 import { storyPinningUpdate } from "state/stories/actions";
 import { openChangeDateDialog } from "state/changedatedialog/actions";
 import { openSourceDialog } from "state/sourcedialog/actions";
-import { shareDialogPrepare } from "state/sharedialog/actions";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { getHomeOwnerName } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
@@ -88,14 +87,6 @@ function PostingMenuItems({posting, story, detailed}: Props) {
     const ownPosting = ownerName === homeOwnerName;
     const followingComments = ownPosting ? commentAddedInstantBlockId == null : commentsSubscriptionId != null;
     const originalDeleted = posting.receiverDeletedAt != null;
-
-    const onShare = () => {
-        const nodeName = originalDeleted ? REL_CURRENT : (posting.receiverName ?? posting.ownerName);
-        const postingId = originalDeleted ? posting.id : (posting.receiverPostingId ?? posting.id);
-        const href = ut`/post/${postingId}`;
-
-        dispatch(shareDialogPrepare(nodeName, href));
-    };
 
     const onReply = () => dispatch(postingReply(posting.id));
 
@@ -200,13 +191,6 @@ function PostingMenuItems({posting, story, detailed}: Props) {
                 href: postingHref,
                 onClick: onCopyText,
                 show: true
-            },
-            {
-                title: t("share"),
-                nodeName: REL_CURRENT,
-                href: postingHref,
-                onClick: onShare,
-                show: !originalDeleted
             },
             {
                 title: t("reply"),
@@ -333,6 +317,6 @@ function PostingMenuItems({posting, story, detailed}: Props) {
 const PostingMenu = ({posting, story, detailed}: Props) =>
     <DropdownMenu content={
         <PostingMenuItems posting={posting} story={story} detailed={detailed}/>
-    }/>;
+    } className="posting-menu"/>;
 
 export default PostingMenu;

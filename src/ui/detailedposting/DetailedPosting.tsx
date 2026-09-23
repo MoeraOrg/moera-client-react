@@ -98,7 +98,7 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
             <EntryHtml
                 className="content"
                 postingId={posting.id}
-                html={posting.body.text}
+                html={posting.body?.text}
                 nodeName={REL_CURRENT}
                 media={posting.media}
             />
@@ -115,7 +115,7 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
             }
             <EntryLinkPreviews
                 nodeName={REL_CURRENT}
-                linkPreviews={posting.body.linkPreviews}
+                linkPreviews={posting.body?.linkPreviews}
                 noFollow={false}
                 media={posting.media ?? null}
             />

@@ -12,12 +12,12 @@
     }
 }
 
-.posting-buttons:has(.menu) {
+.posting-buttons:has(.posting-menu) {
     padding-right: 1.15rem;
     min-height: 1.5em;
 }
 
-.posting-buttons > .menu {
+.posting-buttons > .posting-menu {
     right: -.25rem;
 }
 

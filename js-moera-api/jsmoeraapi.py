@@ -142,6 +142,7 @@ JS_TYPES = {
     'timestamp': 'number',
     'byte[]': 'string',
     'UUID': 'string',
+    'principal': 'PrincipalValue',
     'String -> int': 'Partial<Record<string, number>>'
 }
 
@@ -166,6 +167,7 @@ SCHEMA_TYPES = {
     'timestamp': ('integer', False),
     'byte[]': ('string', False),
     'UUID': ('string', False),
+    'principal': ('string', False),
     'String -> int': schema_map_string_int
 }
 

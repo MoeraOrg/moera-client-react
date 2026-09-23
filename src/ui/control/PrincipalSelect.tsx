@@ -12,6 +12,7 @@ import { Button, Principal } from "ui/control";
 import { getPrincipalDisplay, PrincipalDisplay } from "ui/control/principal-display";
 import { Icon, MaterialSymbol } from "ui/material-symbols";
 import { useButtonPopper, useParent } from "ui/hook";
+import { createPortalIfNeeded } from "util/ui";
 import "./PrincipalSelect.css";
 
 interface Props {
@@ -23,10 +24,13 @@ interface Props {
     long?: boolean | null;
     className?: string;
     disabled?: boolean | null;
+    dropdownContainer?: Element | DocumentFragment | null;
     onChange?: (value: PrincipalValue) => void;
 }
 
-export function PrincipalSelect({value, values, icons, titles, caption, long, className, disabled, onChange}: Props) {
+export function PrincipalSelect({
+    value, values, icons, titles, caption, long, className, disabled, dropdownContainer, onChange
+}: Props) {
     const friendGroups = useSelector(getNodeFriendGroups);
     const publicDisabled = useSelector((state: ClientState) =>
         getSetting(state, "principal.public.disabled") as boolean);
@@ -48,7 +52,7 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
                     onClick={onToggle}>
                 <Principal value={value} long={long} icons={icons} titles={titles}/>
             </Button>
-            {visible &&
+            {visible && createPortalIfNeeded(
                 <div
                     ref={setPopperRef}
                     style={{...popperStyles, zIndex: zIndex?.widget}}
@@ -60,8 +64,9 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
                             <Icon icon={icons?.[v] ?? icon} size="1em"/>&nbsp;&nbsp;{titles?.[v] ?? title}
                         </div>
                     )}
-                </div>
-            }
+                </div>,
+                dropdownContainer
+            )}
         </div>
     );
 }

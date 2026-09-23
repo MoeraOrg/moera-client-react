@@ -39,6 +39,7 @@ import { ProfileAnyAction } from "state/profile/actions";
 import { ProgressBoxAnyAction } from "state/progressbox/actions";
 import { PulseAnyAction } from "state/pulse/actions";
 import { ReactionsDialogAnyAction } from "state/reactionsdialog/actions";
+import { RepostDialogAnyAction } from "state/repostdialog/actions";
 import { RefreshAnyAction } from "state/refresh/actions";
 import { RemoteMediaAnyAction } from "state/remotemedia/actions";
 import { RichTextEditorAnyAction } from "state/richtexteditor/actions";
@@ -95,6 +96,7 @@ export type ClientAction =
     | ProgressBoxAnyAction
     | PulseAnyAction
     | ReactionsDialogAnyAction
+    | RepostDialogAnyAction
     | RefreshAnyAction
     | RemoteMediaAnyAction
     | RichTextEditorAnyAction

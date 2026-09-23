@@ -1647,6 +1647,11 @@ export interface PostingRevisionInfoBase<B> {
 export type EncodedPostingRevisionInfo = PostingRevisionInfoBase<string>;
 export type PostingRevisionInfo = PostingRevisionInfoBase<Body>;
 
+export interface PostingRepublishAttributes {
+    postingView?: PrincipalValue | null;
+    publications: StoryAttributes[];
+}
+
 export interface PostingSourceText {
     ownerFullName?: string | null;
     ownerSourceUri?: string | null;
@@ -1693,6 +1698,12 @@ export interface PostingText {
 export interface ReactionCreated {
     reaction?: ReactionInfo | null;
     totals: ReactionTotalsInfo;
+}
+
+export interface RemotePostingRepublishAttributes {
+    remoteFeedName: string;
+    postingView?: PrincipalValue | null;
+    publications: StoryAttributes[];
 }
 
 export interface SearchEntryInfoBase<B> {

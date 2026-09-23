@@ -16,6 +16,7 @@ interface Props {
     long?: boolean | null;
     title?: string;
     disabled?: boolean;
+    dropdownContainer?: Element | DocumentFragment | null;
     groupClassName?: string;
     labelClassName?: string;
     showError?: boolean;
@@ -25,8 +26,8 @@ interface Props {
 }
 
 export function PrincipalField({
-    name, values, icons, titles, caption, long, title, disabled, groupClassName, labelClassName, showError = false,
-    initialValue, defaultValue, setting
+    name, values, icons, titles, caption, long, title, disabled, dropdownContainer, groupClassName, labelClassName,
+    showError = false, initialValue, defaultValue, setting
 }: Props) {
     const [{value}, {touched, error}, {setValue}, {undo, reset, onUndo, onReset}] =
         useUndoableField<PrincipalValue>(name, initialValue, defaultValue);
@@ -45,8 +46,18 @@ export function PrincipalField({
             onUndo={onUndo}
             onReset={onReset}
         >
-            <PrincipalSelect value={value} values={values} icons={icons} titles={titles} caption={caption} long={long}
-                             className={cx({"me-2": undo || reset})} disabled={disabled} onChange={v => setValue(v)}/>
+            <PrincipalSelect
+                value={value}
+                values={values}
+                icons={icons}
+                titles={titles}
+                caption={caption}
+                long={long}
+                className={cx({"me-2": undo || reset})}
+                disabled={disabled}
+                dropdownContainer={dropdownContainer}
+                onChange={v => setValue(v)}
+            />
             {showError && touched && <FieldError error={error}/>}
         </FormGroup>
     );
