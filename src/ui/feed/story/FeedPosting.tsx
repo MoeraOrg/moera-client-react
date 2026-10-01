@@ -92,7 +92,7 @@ export default function FeedPosting({nodeName, posting, story, hideRecommended}:
                         <PostingSheriffVisibility posting={posting}/>
                     }
                     <br/>
-                    <PostingDate posting={posting} publishedAt={story.publishedAt}/>
+                    <PostingDate posting={posting}/>
                     {posting.totalRevisions > 1 &&
                         <PostingUpdated
                             createdAt={posting.createdAt}

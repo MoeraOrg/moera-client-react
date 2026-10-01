@@ -41,7 +41,8 @@ const PostingOwnerLine = ({entry, href}: PostingOwnerLineProps) => (
                           avatar={entry.ownerAvatar}/>
             </span>
             <br/>
-            <StoryDate publishedAt={entry.createdAt} nodeName={entry.nodeName} href={href}/>
+            <StoryDate publishedAt={entry.earliestPublishedAt ?? entry.createdAt} nodeName={entry.nodeName}
+                       href={href}/>
             <span className="visibility">
                 &middot;
                 <Principal value={entry.operations?.view ?? "public"}/>

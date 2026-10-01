@@ -77,6 +77,7 @@ export interface CommentOperations {
     view?: PrincipalValue | null;
     edit?: PrincipalValue | null;
     delete?: PrincipalValue | null;
+    viewExternalSource?: PrincipalValue | null;
     viewReactions?: PrincipalValue | null;
     viewNegativeReactions?: PrincipalValue | null;
     viewReactionTotals?: PrincipalValue | null;
@@ -130,6 +131,7 @@ export interface PostingOperations {
     view?: PrincipalValue | null;
     edit?: PrincipalValue | null;
     delete?: PrincipalValue | null;
+    viewExternalSource?: PrincipalValue | null;
     viewComments?: PrincipalValue | null;
     addComment?: PrincipalValue | null;
     trustComment?: PrincipalValue | null;
@@ -1587,9 +1589,11 @@ export interface PostingInfoBase<B> {
     createdAt: number;
     editedAt?: number | null;
     deletedAt?: number | null;
+    earliestPublishedAt?: number | null;
     receiverCreatedAt?: number | null;
     receiverEditedAt?: number | null;
     receiverDeletedAt?: number | null;
+    receiverPublishedAt?: number | null;
     revisionCreatedAt: number;
     receiverRevisionCreatedAt?: number | null;
     deadline?: number | null;
@@ -1726,6 +1730,7 @@ export interface SearchEntryInfoBase<B> {
     mediaPreviewMimeType?: string | null;
     repliedTo?: SearchRepliedTo | null;
     createdAt: number;
+    earliestPublishedAt?: number | null;
     operations?: SearchEntryOperations | null;
     moment: number;
 }
@@ -1825,6 +1830,7 @@ export interface CommentInfoBase<B> {
     clientReaction?: ClientReactionInfo | null;
     seniorReaction?: ClientReactionInfo | null;
     reactions?: ReactionTotalsInfo | null;
+    externalSourceUri?: string[] | null;
 }
 
 export type EncodedCommentInfo = CommentInfoBase<string>;
@@ -1904,6 +1910,7 @@ export interface CommentText {
     operations?: CommentOperations | null;
     reactionOperations?: ReactionOperations | null;
     seniorOperations?: CommentOperations | null;
+    externalSourceUri?: string[] | null;
 }
 
 export interface DraftInfoBase<B> {

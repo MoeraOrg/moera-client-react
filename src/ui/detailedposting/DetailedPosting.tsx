@@ -83,7 +83,7 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
                         <PostingSheriffVisibility posting={posting}/>
                     }
                     <br/>
-                    <PostingDate posting={posting} publishedAt={story != null ? story.publishedAt : posting.createdAt}/>
+                    <PostingDate posting={posting}/>
                     {posting.totalRevisions > 1 &&
                         <PostingUpdated
                             createdAt={posting.createdAt}

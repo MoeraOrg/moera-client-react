@@ -41,3 +41,7 @@
 .posting-sources .source .node-name:hover {
     text-decoration: none;
 }
+
+.posting-sources .source .external-source-url:hover {
+    text-decoration: underline;
+}

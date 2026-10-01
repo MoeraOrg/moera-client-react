@@ -19,6 +19,10 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "viewExternalSource": {
+                    type: "string",
+                    nullable: true
+                },
                 "viewReactions": {
                     type: "string",
                     nullable: true
@@ -193,6 +197,10 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "delete": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewExternalSource": {
                     type: "string",
                     nullable: true
                 },
@@ -4187,6 +4195,10 @@ export const NODE_API_SCHEMAS = {
                     type: "integer",
                     nullable: true
                 },
+                "earliestPublishedAt": {
+                    type: "integer",
+                    nullable: true
+                },
                 "receiverCreatedAt": {
                     type: "integer",
                     nullable: true
@@ -4196,6 +4208,10 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "receiverDeletedAt": {
+                    type: "integer",
+                    nullable: true
+                },
+                "receiverPublishedAt": {
                     type: "integer",
                     nullable: true
                 },
@@ -4664,6 +4680,10 @@ export const NODE_API_SCHEMAS = {
                 },
                 "createdAt": {
                     type: "integer"
+                },
+                "earliestPublishedAt": {
+                    type: "integer",
+                    nullable: true
                 },
                 "operations": {
                     anyOf: [
@@ -5205,6 +5225,13 @@ export const NODE_API_SCHEMAS = {
                             type: "null"
                         }
                     ]
+                },
+                "externalSourceUri": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    },
+                    nullable: true
                 },
             },
             required: [

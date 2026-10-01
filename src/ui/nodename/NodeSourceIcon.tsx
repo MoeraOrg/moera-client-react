@@ -1,5 +1,5 @@
-import { Icon, MaterialSymbol, msTelegram } from "ui/material-symbols";
-import { NodeSourceUri } from "util/node-source-uri";
+import { Icon, MaterialSymbol } from "ui/material-symbols";
+import { getNodeSourceIcon } from "util/node-source-icons";
 import "./NodeSourceIcon.css";
 
 interface Props {
@@ -7,15 +7,7 @@ interface Props {
 }
 
 export default function NodeSourceIcon({sourceUri}: Props) {
-    if (!sourceUri) {
-        return null;
-    }
-
-    const uri = NodeSourceUri.parse(sourceUri);
-    let icon: MaterialSymbol | null = null;
-    if (uri.uri.startsWith("https://t.me/")) {
-        icon = msTelegram;
-    }
+    const icon: MaterialSymbol | null = getNodeSourceIcon(sourceUri);
 
     if (icon == null) {
         return null;

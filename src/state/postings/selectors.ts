@@ -53,7 +53,8 @@ export function getPostingCommentsSubscriptionId(
 export function getPostingFeedReference(
     posting: Pick<PostingInfo, "feedReferences"> | null, feedName: string
 ): FeedReference | null {
-    return posting?.feedReferences?.find(r => r.feedName === feedName) ?? null;
+    return posting?.feedReferences?.filter(r => r.feedName === feedName)
+        .toSorted((a, b) => b.moment - a.moment)[0] ?? null;
 }
 
 export function hasPostingFeedReference(

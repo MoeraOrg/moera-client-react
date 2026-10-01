@@ -3,3 +3,14 @@
     color: var(--bs-gray-600);
     line-height: 133%;
 }
+
+.posting > .owner-line .date .note-old {
+    background-color: var(--bs-gray-600);
+    border-radius: .5em;
+    color: white;
+    font-size: 105%;
+    font-weight: 600;
+    margin-left: 1em;
+    white-space: nowrap;
+    padding: .2em .75em;
+}
