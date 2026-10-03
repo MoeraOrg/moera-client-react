@@ -4,11 +4,7 @@ import { useSelector } from 'react-redux';
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { PostingInfo } from "api";
 import { ClientState } from "state/state";
-import {
-    detailedPostingExpandGallery,
-    detailedPostingLoadAttached
-} from "state/detailedposting/actions";
-import { isPermitted } from "state/node/selectors";
+import { detailedPostingExpandGallery, detailedPostingLoadAttached } from "state/detailedposting/actions";
 import { getHomeOwnerName } from "state/home/selectors";
 import { MinimalStoryInfo } from "ui/types";
 import { useDispatcher } from "ui/hook";
@@ -24,28 +20,29 @@ import PostingOwner from "ui/posting/PostingOwner";
 import PostingSheriffVisibility from "ui/posting/PostingSheriffVisibility";
 import PostingSubject from "ui/posting/PostingSubject";
 import PostingReactions from "ui/posting/PostingReactions";
+import PostingSharings from "ui/posting/PostingSharings";
 import PostingButtons from "ui/posting/PostingButtons";
 import PostingViews from "ui/posting/PostingViews";
 import EntryHtml from "ui/entry/EntryHtml";
 import EntryGallery from "ui/entry/EntryGallery";
 import EntryGalleryExpanded from "ui/entry/EntryGalleryExpanded";
+import EntryAttachments from "ui/entry/EntryAttachments";
 import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
 import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
 import { REL_CURRENT } from "util/rel-node-name";
 import { getPageHeaderHeight } from "util/ui";
-import EntryAttachments from "ui/entry/EntryAttachments";
 
 interface Props {
+    feedName: string | null;
     story: MinimalStoryInfo | null;
     posting: PostingInfo;
     deleting?: boolean | null;
 }
 
-export default function DetailedPosting({story, posting, deleting}: Props) {
+export default function DetailedPosting({feedName, story, posting, deleting}: Props) {
     const loadedAttached = useSelector((state: ClientState) => state.detailedPosting.loadedAttached);
     const expanded = useSelector((state: ClientState) => state.detailedPosting.galleryExpanded);
-    const postingEditable = useSelector((state: ClientState) => isPermitted("edit", posting, "owner", state));
     const isSheriff = useSelector((state: ClientState) => getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE);
     const dispatch = useDispatcher();
 
@@ -72,7 +69,7 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
 
     return (
         <main className="posting entry mt-2">
-            <PostingMenu posting={posting} story={story} detailed/>
+            <PostingMenu posting={posting} feedName={feedName} story={story} detailed/>
             <StoryBadges pinned={story != null && story.pinned} recommended={posting.recommended}/>
             <div className="owner-line">
                 <PostingAvatar posting={posting}/>
@@ -91,7 +88,7 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
                             publishedAt={story != null ? story.publishedAt : posting.createdAt}
                         />
                     }
-                    <PostingVisibility posting={posting} editable={postingEditable}/>
+                    <PostingVisibility posting={posting}/>
                 </div>
             </div>
             <PostingSubject posting={posting} preview={false}/>
@@ -120,13 +117,16 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
                 media={posting.media ?? null}
             />
             <div className="reactions-line">
-                <PostingReactions nodeName={REL_CURRENT} postingId={posting.id} reactions={posting.reactions}/>
+                <div className="left-group">
+                    <PostingReactions nodeName={REL_CURRENT} postingId={posting.id} reactions={posting.reactions}/>
+                    <PostingSharings nodeName={REL_CURRENT} posting={posting}/>
+                </div>
                 <div className="right-group">
                     <PostingViews viewCount={posting.viewCount}/>
                     <PostingComments postingId={posting.id} totalComments={posting.totalComments}/>
                 </div>
             </div>
-            <PostingButtons posting={posting} story={story} menu/>
+            <PostingButtons posting={posting} feedName={feedName} story={story} menu/>
             {expanded &&
                 <EntryGalleryExpanded
                     postingId={posting.id}

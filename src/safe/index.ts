@@ -90,21 +90,21 @@ function decodeBodies(data: EncodedEntities[]): Entities[];
 function decodeBodies(data: EncodedEntities): Entities;
 function decodeBodies(data: EncodedEntities | EncodedEntities[]): Entities | Entities[] {
     if (Array.isArray(data)) {
-        return data.map(p => decodeBodies(p));
+        return data.map(decodeBodies);
     }
 
     const decoded: any = {...data};
     if ("stories" in data && data.stories != null) {
-        decoded.stories = data.stories.map(p => decodeBodies(p));
+        decoded.stories = data.stories.map(decodeBodies);
     }
     if ("comments" in data && data.comments != null) {
-        decoded.comments = data.comments.map(c => decodeBodies(c));
+        decoded.comments = data.comments.map(decodeBodies);
     }
     if ("entries" in data && data.entries != null) {
-        decoded.entries = data.entries.map(e => decodeBodies(e));
+        decoded.entries = data.entries.map(decodeBodies);
     }
     if ("mediaCaptions" in data && data.mediaCaptions != null) {
-        decoded.mediaCaptions = data.mediaCaptions.map(e => decodeBodies(e));
+        decoded.mediaCaptions = data.mediaCaptions.map(decodeBodies);
     }
     if ("comment" in data && data.comment != null) {
         decoded.comment = decodeBodies(data.comment);

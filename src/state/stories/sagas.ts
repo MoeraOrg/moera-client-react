@@ -84,10 +84,10 @@ async function storySatisfySaga(action: WithContext<StorySatisfyAction>): Promis
 }
 
 async function storyDeleteSaga(action: WithContext<StoryDeleteAction>): Promise<void> {
-    const {nodeName, story} = action.payload;
+    const {nodeName, story, feedName, postingId} = action.payload;
     try {
         await Node.deleteStory(action, nodeName, story.id);
-        dispatch(storyDeleted(nodeName, story).causedBy(action));
+        dispatch(storyDeleted(nodeName, story, feedName, postingId).causedBy(action));
     } catch (e) {
         dispatch(errorThrown(e));
     }

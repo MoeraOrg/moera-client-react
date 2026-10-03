@@ -1,0 +1,26 @@
+.posting .posting-sharings {
+    background-color: var(--bs-gray-200);
+    color: var(--bs-gray-800);
+    font-size: .9rem;
+    text-wrap: nowrap;
+    border-radius: .9em;
+    padding: .26em 1.1em;
+    border: none;
+}
+
+.posting .posting-sharings:disabled {
+    cursor: default;
+}
+
+.posting .posting-sharings:enabled:hover {
+    background-color: var(--bs-gray-300);
+}
+
+.posting .posting-sharings svg {
+    vertical-align: -.25rem;
+}
+
+.posting .posting-sharings .caption {
+    margin-inline-start: .5em;
+    font-weight: 600;
+}

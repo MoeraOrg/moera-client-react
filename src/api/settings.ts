@@ -271,6 +271,18 @@ const META: ClientSettingMetaInfo[] = [
         modifiers: {}
     },
     {
+        name: "posting.sharings.visible.default",
+        type: "bool",
+        defaultValue: "true",
+        modifiers: {}
+    },
+    {
+        name: "posting.sharings.totals-visible.default",
+        type: "bool",
+        defaultValue: "true",
+        modifiers: {}
+    },
+    {
         name: "posting.visibility.default",
         type: "Principal",
         defaultValue: "public",

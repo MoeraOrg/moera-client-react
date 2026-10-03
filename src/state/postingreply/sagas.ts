@@ -28,7 +28,8 @@ async function postingReplySaga(action: WithContext<PostingReplyAction>): Promis
         posting, nodeRootPage, homeOwnerName, homeRootPage, homeRootLocation, subjectPrefix, preambleTemplate,
         preambleTemplateHtml, quoteAll, visibilityDefault, sourceFormatDefault, commentsVisibilityDefault,
         commentAdditionDefault, commentTrustDefault, reactionsEnabledDefault, reactionsNegativeEnabledDefault,
-        reactionsPositiveDefault, reactionsNegativeDefault, reactionsVisibleDefault, reactionTotalsVisibleDefault
+        reactionsPositiveDefault, reactionsNegativeDefault, reactionsVisibleDefault, reactionTotalsVisibleDefault,
+        sharingsVisibleDefault, totalSharingsVisibleDefault
     } = select(state => ({
             posting: getPosting(state, action.payload.id, REL_CURRENT),
             nodeRootPage: getNodeRootPage(state),
@@ -49,7 +50,9 @@ async function postingReplySaga(action: WithContext<PostingReplyAction>): Promis
             reactionsPositiveDefault: getSetting(state, "posting.reactions-disabled.positive.default") as string,
             reactionsNegativeDefault: getSetting(state, "posting.reactions-disabled.negative.default") as string,
             reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default") as boolean,
-            reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default") as boolean
+            reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default") as boolean,
+            sharingsVisibleDefault: getSetting(state, "posting.sharings.visible.default") as boolean,
+            totalSharingsVisibleDefault: getSetting(state, "posting.sharings.totals-visible.default") as boolean
         }));
     if (posting == null || homeOwnerName == null || nodeRootPage == null) {
         return;
@@ -102,6 +105,8 @@ async function postingReplySaga(action: WithContext<PostingReplyAction>): Promis
             operations: {
                 view: visibilityDefault,
                 viewComments: commentsVisibilityDefault,
+                viewSharings: sharingsVisibleDefault ? "public" : "private",
+                viewTotalSharings: sharingsVisibleDefault || totalSharingsVisibleDefault ? "public" : "private",
                 addComment: commentAdditionDefault,
                 trustComment: commentTrustDefault,
                 viewReactions: reactionsVisibleDefault ? "public" : "private",

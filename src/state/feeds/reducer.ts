@@ -426,7 +426,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
         }
 
         case "STORY_DELETED": {
-            let {nodeName, story: {feedName, moment, id}} = action.payload;
+            let {nodeName, feedName, story: {moment, id}} = action.payload;
             nodeName = absoluteNodeName(nodeName, action.context);
             const {istate, feed} = getFeed(state, nodeName, feedName);
             istate.set([nodeName, feedName, "status", "total"], feed.status.total - 1);

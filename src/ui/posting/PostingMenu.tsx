@@ -15,7 +15,7 @@ import {
     postingDelete
 } from "state/postings/actions";
 import { postingReply } from "state/postingreply/actions";
-import { storyPinningUpdate } from "state/stories/actions";
+import { storyDelete, storyPinningUpdate } from "state/stories/actions";
 import { openChangeDateDialog } from "state/changedatedialog/actions";
 import { openSourceDialog } from "state/sourcedialog/actions";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
@@ -42,11 +42,12 @@ import "ui/entry/EntryMenu.css";
 
 interface Props {
     posting: PostingInfo;
+    feedName: string | null;
     story: MinimalStoryInfo | null;
     detailed?: boolean;
 }
 
-function PostingMenuItems({posting, story, detailed}: Props) {
+function PostingMenuItems({posting, feedName, story, detailed}: Props) {
     const homeOwnerName = useSelector(getHomeOwnerName);
     const commentsSubscriptionId = useSelector((state: ClientState) =>
         getPostingCommentsSubscriptionId(state, posting.id, REL_CURRENT)
@@ -108,11 +109,22 @@ function PostingMenuItems({posting, story, detailed}: Props) {
 
     const onDelete = () => {
         if (confirmDelete) {
+            const repostsLeft = (posting.feedReferences?.filter(r => r.feedName === "timeline") ?? []).length
+                - (feedName == null || feedName === "timeline" ? 1 : 0);
             dispatch(confirmBox({
-                message: t("delete-post", {heading: posting.heading}),
+                message: feedName == null && repostsLeft > 0
+                    ? t("delete-post-with-reposts", {heading: posting.heading, count: repostsLeft})
+                    : t("delete-post", {heading: posting.heading}),
                 yes: t("delete"),
                 no: t("cancel"),
-                onYes: postingDelete(posting.id, REL_CURRENT),
+                dontShowAgain: feedName != null && repostsLeft > 0
+                    ? t("delete-more-reposts", {count: repostsLeft})
+                    : undefined,
+                dontShowAgainBox: feedName != null && repostsLeft > 0,
+                onYes: (deleteAll: boolean) =>
+                    feedName == null || story == null || repostsLeft <= 0 || deleteAll
+                        ? postingDelete(posting.id, REL_CURRENT)
+                        : storyDelete(REL_CURRENT, story, feedName, posting.id),
                 variant: "danger"
             }));
         } else {
@@ -314,9 +326,9 @@ function PostingMenuItems({posting, story, detailed}: Props) {
     );
 }
 
-const PostingMenu = ({posting, story, detailed}: Props) =>
+const PostingMenu = ({posting, feedName, story, detailed}: Props) =>
     <DropdownMenu content={
-        <PostingMenuItems posting={posting} story={story} detailed={detailed}/>
+        <PostingMenuItems posting={posting} feedName={feedName} story={story} detailed={detailed}/>
     } className="posting-menu"/>;
 
 export default PostingMenu;

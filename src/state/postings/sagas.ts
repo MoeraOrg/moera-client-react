@@ -149,10 +149,8 @@ async function postingOperationsUpdateSaga(action: WithContext<PostingOperations
         if (posting == null) {
             return;
         }
-        const originName = posting.receiverName ?? absoluteNodeName(nodeName, action.context);
-        const originId = posting.receiverPostingId ?? id;
-        posting = await Node.updatePosting(action, originName, originId, {operations});
-        dispatch(postingOperationsUpdated(originId, originName, posting.operations ?? {}).causedBy(action));
+        posting = await Node.updatePosting(action, nodeName, id, {operations});
+        dispatch(postingOperationsUpdated(id, nodeName, posting.operations ?? {}).causedBy(action));
     } catch (e) {
         dispatch(errorThrown(e));
     }

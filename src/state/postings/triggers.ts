@@ -5,6 +5,7 @@ import {
     EventAction,
     PostingCommentsChangedEvent,
     PostingReactionsChangedEvent,
+    PostingTotalSharingsChangedEvent,
     PostingUpdatedEvent
 } from "api/events";
 import {
@@ -12,7 +13,8 @@ import {
     postingLoad,
     PostingOperationsUpdatedAction,
     postingReactionLoad,
-    postingReactionsReload
+    postingReactionsReload,
+    postingSharingsSet
 } from "state/postings/actions";
 import { WithContext } from "state/action-types";
 import { isPostingCached } from "state/postings/selectors";
@@ -20,7 +22,7 @@ import { StoryAddedAction, StoryUpdatedAction } from "state/stories/actions";
 import { isFeedMomentLoaded } from "state/feeds/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { flashBox } from "state/flashbox/actions";
-import { REL_CURRENT } from "util/rel-node-name";
+import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
     trigger(
@@ -55,9 +57,33 @@ export default [
         signal => postingReactionLoad(signal.payload.id, REL_CURRENT)
     ),
     trigger(
+        "EVENT_HOME_POSTING_REACTIONS_CHANGED",
+        (state, signal: EventAction<PostingReactionsChangedEvent>) =>
+            isPostingCached(state, signal.payload.id, REL_HOME) && isConnectedToHome(state),
+        signal => postingReactionLoad(signal.payload.id, REL_HOME)
+    ),
+    trigger(
+        "EVENT_NODE_POSTING_TOTAL_SHARINGS_CHANGED",
+        (state, signal: EventAction<PostingTotalSharingsChangedEvent>) =>
+            isPostingCached(state, signal.payload.id, REL_CURRENT),
+        signal => postingSharingsSet(signal.payload.id, signal.payload.total, REL_CURRENT)
+    ),
+    trigger(
+        "EVENT_HOME_POSTING_TOTAL_SHARINGS_CHANGED",
+        (state, signal: EventAction<PostingTotalSharingsChangedEvent>) =>
+            isPostingCached(state, signal.payload.id, REL_HOME),
+        signal => postingSharingsSet(signal.payload.id, signal.payload.total, REL_HOME)
+    ),
+    trigger(
         "EVENT_NODE_POSTING_COMMENTS_CHANGED",
         (state, signal: EventAction<PostingCommentsChangedEvent>) =>
             isPostingCached(state, signal.payload.id, REL_CURRENT),
         signal => postingCommentsSet(signal.payload.id, signal.payload.total, REL_CURRENT)
+    ),
+    trigger(
+        "EVENT_HOME_POSTING_COMMENTS_CHANGED",
+        (state, signal: EventAction<PostingCommentsChangedEvent>) =>
+            isPostingCached(state, signal.payload.id, REL_HOME),
+        signal => postingCommentsSet(signal.payload.id, signal.payload.total, REL_HOME)
     )
 ];

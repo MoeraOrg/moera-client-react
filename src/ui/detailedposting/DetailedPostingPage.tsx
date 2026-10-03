@@ -31,7 +31,7 @@ import { REL_CURRENT, REL_HOME, RelNodeName } from "util/rel-node-name";
 import { formatFullName } from "util/names";
 import "./DetailedPostingPage.css";
 
-function getStory(posting: PostingInfo, feedName: string): MinimalStoryInfo | null {
+function getStory(posting: PostingInfo, feedName: string): MinimalStoryInfo & {feedName: string} | null {
     const feedReference = getPostingFeedReference(posting, feedName);
     if (feedReference == null) {
         return null;
@@ -43,13 +43,21 @@ function getStory(posting: PostingInfo, feedName: string): MinimalStoryInfo | nu
 }
 
 function getBackFeedAndStory(
-    atHome: boolean, nodeName: string | null, nodeFullName: string | null, posting: PostingInfo | null, t: TFunction,
+    atHome: boolean,
+    nodeName: string | null,
+    nodeFullName: string | null,
+    posting: PostingInfo | null,
+    t: TFunction,
     newsHref: string
 ): {
-    story: MinimalStoryInfo | null, backNodeName: RelNodeName | string, backHref: string, backTitle: string
+    feedName: string | null,
+    story: MinimalStoryInfo | null,
+    backNodeName: RelNodeName | string,
+    backHref: string,
+    backTitle: string
 } {
     if (posting == null) {
-        return {story: null, backNodeName: REL_HOME, backHref: newsHref, backTitle: t("back-news")};
+        return {feedName: null, story: null, backNodeName: REL_HOME, backHref: newsHref, backTitle: t("back-news")};
     }
 
     let story = getStory(posting, "timeline");
@@ -76,7 +84,7 @@ function getBackFeedAndStory(
         backHref = `${backHref}?before=${story.moment}`;
     }
 
-    return {story, backNodeName, backHref, backTitle};
+    return {feedName: story?.feedName ?? null, story, backNodeName, backHref, backTitle};
 }
 
 export default function DetailedPostingPage() {
@@ -93,7 +101,7 @@ export default function DetailedPostingPage() {
     const dispatch = useDispatcher();
     const {t} = useTranslation();
 
-    const {story = null, backNodeName, backHref, backTitle} = useMemo(
+    const {feedName, story, backNodeName, backHref, backTitle} = useMemo(
         () => getBackFeedAndStory(atHome, nodeName, nodeFullName, posting, t, newsHref),
         [atHome, newsHref, nodeFullName, nodeName, posting, t]
     );
@@ -120,7 +128,7 @@ export default function DetailedPostingPage() {
                     </BackBoxInner>
                 </BackBox>
                 {postingReady &&
-                    <DetailedPosting posting={posting} story={story} deleting={deleting}/>
+                    <DetailedPosting posting={posting} feedName={feedName} story={story} deleting={deleting}/>
                 }
                 {!postingReady && loading &&
                     <main className="posting">

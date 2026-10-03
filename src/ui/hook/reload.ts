@@ -1,4 +1,4 @@
-import { useDrag } from '@use-gesture/react';
+import { FullGestureState, useDrag } from '@use-gesture/react';
 
 import { boot } from "state/navigation/actions";
 import { useDispatcher } from "ui/hook";
@@ -13,7 +13,7 @@ export function useReload() {
     const tinyScreen = useIsTinyScreen();
 
     useDrag(
-        ({first, last, movement: [, my], initial: [, iy], cancel, tap, elapsedTime}) => {
+        ({first, last, movement: [, my], initial: [, iy], cancel, tap, elapsedTime}: FullGestureState<"drag">) => {
             if (!tinyScreen) {
                 cancel();
                 return;

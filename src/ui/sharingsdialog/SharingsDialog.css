@@ -1,0 +1,69 @@
+.sharings-dialog .items {
+    min-height: 30vh;
+    font-size: 1rem;
+}
+
+.sharings-dialog .item {
+    padding: .5rem .15rem;
+    border-radius: .5rem;
+    margin-bottom: .55rem;
+    display: grid;
+    grid-template-columns: min-content minmax(0, 1fr) 2.075rem;
+    gap: .75rem;
+}
+
+.sharings-dialog .item:last-child {
+    margin-bottom: 0;
+}
+
+.sharings-dialog .item:hover {
+    background-color: var(--bs-gray-100);
+}
+
+.sharings-dialog .item .details {
+    display: block;
+    overflow-x: hidden;
+}
+
+.sharings-dialog .item .node-name {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--bs-gray-900);
+    font-weight: 600;
+    line-height: 150%;
+}
+
+.sharings-dialog .item .status {
+    color: var(--bs-gray-600);
+    font-size: .88rem;
+    font-weight: 400;
+    line-height: 133%;
+}
+
+.sharings-dialog .item .subscribe-button .menu {
+    padding: 0;
+}
+
+.sharings-dialog .more {
+    width: 100%;
+    margin-top: 1rem;
+    padding: .3rem;
+}
+
+.sharings-dialog DIV.more {
+    text-align: center;
+    color: var(--bs-gray-500);
+    border-top: solid 1px var(--bs-gray-400);
+}
+
+.sharings-dialog BUTTON.more {
+    color: var(--bs-primary);
+    background-color: transparent;
+    border: solid 1px var(--bs-primary);
+}
+
+.sharings-dialog BUTTON.more:hover {
+    background-color: var(--bs-gray-100);
+}

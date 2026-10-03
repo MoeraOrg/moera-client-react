@@ -16,6 +16,12 @@
     line-height: 150%;
 }
 
+.posting > .owner-line .owner > .shared {
+    font-weight: normal;
+    margin-left: .5em;
+    margin-right: .5em;
+}
+
 .posting > .owner-line .owner .arrow {
     color: var(--bs-gray-500);
 }

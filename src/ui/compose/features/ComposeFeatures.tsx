@@ -8,6 +8,7 @@ import { Button, Tabs } from "ui/control";
 import ComposeBodyFormat from "ui/compose/features/ComposeBodyFormat";
 import ComposeComments from "ui/compose/features/ComposeComments";
 import ComposeReactions from "ui/compose/features/ComposeReactions";
+import ComposeSharings from "ui/compose/features/ComposeSharings";
 import ComposeUpdateInfo from "ui/compose/features/ComposeUpdateInfo";
 import "./ComposeFeatures.css";
 
@@ -16,7 +17,7 @@ interface Props {
     updateInfo: boolean;
 }
 
-type FeatureTab = "format" | "comments" | "reactions" | "updated";
+type FeatureTab = "format" | "comments" | "reactions" | "sharings" | "updated";
 
 export default function ComposeFeatures({sourceFormats, updateInfo}: Props) {
     const ready = useSelector(isComposeReady);
@@ -56,6 +57,10 @@ export default function ComposeFeatures({sourceFormats, updateInfo}: Props) {
                             value: "reactions"
                         },
                         {
+                            title: t("sharings"),
+                            value: "sharings"
+                        },
+                        {
                             title: t("notify-followers"),
                             value: "updated",
                             visible: updateInfo
@@ -65,6 +70,7 @@ export default function ComposeFeatures({sourceFormats, updateInfo}: Props) {
                     {tab === "format" && <ComposeBodyFormat sourceFormats={sourceFormats}/>}
                     {tab === "comments" && <ComposeComments/>}
                     {tab === "reactions" && <ComposeReactions/>}
+                    {tab === "sharings" && <ComposeSharings/>}
                     {tab === "updated" && <ComposeUpdateInfo/>}
                 </div>
             }

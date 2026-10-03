@@ -68,6 +68,8 @@ export interface ComposePageProps extends ValuesToPostingTextProps {
     reactionsNegativeDefault: string,
     reactionsVisibleDefault: boolean,
     reactionTotalsVisibleDefault: boolean,
+    sharingsVisibleDefault: boolean,
+    totalSharingsVisibleDefault: boolean,
     sourceFormatDefault: SourceFormat
 }
 
@@ -102,6 +104,10 @@ export interface ComposePageValues {
     reactionsVisible: boolean;
     reactionTotalsVisibleDefault: boolean;
     reactionTotalsVisible: boolean;
+    sharingsVisibleDefault: boolean;
+    sharingsVisible: boolean;
+    totalSharingsVisibleDefault: boolean;
+    totalSharingsVisible: boolean;
     updateImportant: boolean;
     updateDescription: string;
 }
@@ -209,6 +215,8 @@ const valuesToPostingSourceText = (values: ComposePageValues, props: ValuesToPos
 const valuesToPostingOperations = (values: ComposePageValues) => ({
     view: values.viewPrincipal,
     viewComments: values.viewCommentsPrincipal,
+    viewSharings: values.sharingsVisible ? "public" : "private",
+    viewTotalSharings: values.sharingsVisible || values.totalSharingsVisible ? "public" : "private",
     addComment: values.addCommentPrincipal,
     trustComment: values.trustCommentPrincipal,
     viewReactions: values.reactionsEnabled ? (values.reactionsVisible ? "public" : "private") : "none",
@@ -281,6 +289,8 @@ export function isPostingTextChanged(postingText: PostingText, posting: PostingI
     const prevOperations = {
         view: posting.operations?.view ?? "public",
         viewComments: posting.operations?.viewComments ?? "public",
+        viewSharings: posting.operations?.viewSharings ?? "public",
+        viewTotalSharings: posting.operations?.viewTotalSharings ?? "public",
         addComment: posting.operations?.addComment ?? "signed",
         trustComment: posting.operations?.trustComment ?? "signed",
         viewReactions: posting.operations?.viewReactions ?? "public",
@@ -393,6 +403,16 @@ export const composePageLogic = {
             : props.posting != null
                 ? (props.posting.operations?.viewReactionTotals ?? "public") === "public"
                 : props.reactionTotalsVisibleDefault;
+        const sharingsVisible = props.draft != null
+            ? (props.draft.operations?.viewSharings ?? "public") === "public"
+            : props.posting != null
+                ? (props.posting.operations?.viewSharings ?? "public") === "public"
+                : props.sharingsVisibleDefault;
+        const totalSharingsVisible = props.draft != null
+            ? (props.draft.operations?.viewTotalSharings ?? "public") === "public"
+            : props.posting != null
+                ? (props.posting.operations?.viewTotalSharings ?? "public") === "public"
+                : props.totalSharingsVisibleDefault;
         const updateImportant = props.draft != null ? props.draft.updateInfo?.important ?? false : false;
         const updateDescription = props.draft != null ? props.draft.updateInfo?.description ?? "" : "";
 
@@ -427,6 +447,10 @@ export const composePageLogic = {
             reactionsVisible,
             reactionTotalsVisibleDefault: reactionTotalsVisible,
             reactionTotalsVisible,
+            sharingsVisibleDefault: sharingsVisible,
+            sharingsVisible,
+            totalSharingsVisibleDefault: totalSharingsVisible,
+            totalSharingsVisible,
             updateImportant,
             updateDescription
         };

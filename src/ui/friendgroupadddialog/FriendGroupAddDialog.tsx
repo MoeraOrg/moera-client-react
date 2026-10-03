@@ -28,12 +28,17 @@ function FriendGroupAddDialog() {
             <Form>
                 <div className="modal-body">
                     <InputField name="title" title={t("name")} maxLength={63} showWrong showError/>
-                    <PrincipalField name="view" title={t("visibility")} values={["public", "private", "admin"]}
-                                    titles={{
-                                        "public": t("friend-group-visibility.public"),
-                                        "private": t("friend-group-visibility.private"),
-                                        "admin": t("friend-group-visibility.admin")
-                                    }} long/>
+                    <PrincipalField
+                        name="view"
+                        title={t("visibility")}
+                        values={["public", "private", "admin"]}
+                        titles={{
+                            "public": t("friend-group-visibility.public"),
+                            "private": t("friend-group-visibility.private"),
+                            "admin": t("friend-group-visibility.admin")
+                        }}
+                        long
+                    />
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>

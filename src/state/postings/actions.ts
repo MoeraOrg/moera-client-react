@@ -169,6 +169,16 @@ export type PostingCopyLinkAction = ActionWithPayload<"POSTING_COPY_LINK", {
 export const postingCopyLink = (id: string, nodeName: RelNodeName | string): PostingCopyLinkAction =>
     actionWithPayload("POSTING_COPY_LINK", {id, nodeName});
 
+export type PostingSharingsSetAction = ActionWithPayload<"POSTING_SHARINGS_SET", {
+    id: string;
+    total: number;
+    nodeName: RelNodeName | string;
+}>;
+export const postingSharingsSet = (
+    id: string, total: number, nodeName: RelNodeName | string
+): PostingSharingsSetAction =>
+    actionWithPayload("POSTING_SHARINGS_SET", {id, total, nodeName});
+
 export type PostingCommentsSetAction = ActionWithPayload<"POSTING_COMMENTS_SET", {
     id: string;
     total: number;
@@ -343,6 +353,7 @@ export type PostingsAnyAction =
     | PostingReactionSetAction
     | PostingsReactionSetAction
     | PostingCopyLinkAction
+    | PostingSharingsSetAction
     | PostingCommentsSetAction
     | PostingCommentCountUpdateAction
     | PostingCommentsSubscribeAction

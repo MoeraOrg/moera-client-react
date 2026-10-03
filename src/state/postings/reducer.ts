@@ -140,13 +140,13 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         }
 
         case "STORY_DELETED": {
-            const {id, posting} = action.payload.story;
+            const {story: {id}, postingId} = action.payload;
             const nodeName = action.context.ownerNameOrUrl;
-            if (posting) {
-                const postingState = state[nodeName]?.[posting.id];
+            if (postingId != null) {
+                const postingState = state[nodeName]?.[postingId];
                 if (postingState != null) {
                     const refs = (postingState.posting?.feedReferences ?? []).filter(r => r.storyId !== id);
-                    return immutable.set(state, [nodeName, posting.id, "posting", "feedReferences"], refs);
+                    return immutable.set(state, [nodeName, postingId, "posting", "feedReferences"], refs);
                 }
             }
             return state;
@@ -282,6 +282,15 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                     .filter(r => nodeState[r.entryId]?.posting?.receiverName == null)
                     .forEach(r => istate.set([nodeName, r.entryId, "posting", "clientReaction"], r));
                 return istate.value();
+            }
+            return state;
+        }
+
+        case "POSTING_SHARINGS_SET": {
+            let {id, total, nodeName} = action.payload;
+            nodeName = absoluteNodeName(nodeName, action.context);
+            if (state[nodeName]?.[id]?.posting) {
+                return immutable.set(state, [nodeName, id, "posting", "totalSharings"], total);
             }
             return state;
         }

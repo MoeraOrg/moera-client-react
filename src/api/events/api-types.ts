@@ -13,6 +13,7 @@ import {
     FriendOfInfo,
     GrantInfo,
     PrivateMediaFileInfo,
+    SharingInfo,
     SheriffComplaintGroupInfo,
     SheriffComplaintInfo,
     SheriffMark,
@@ -204,6 +205,21 @@ export interface PostingReactionsChangedEvent extends BaseEvent<"POSTING_REACTIO
 
 export interface PostingRestoredEvent extends BaseEvent<"POSTING_RESTORED"> {
     id: string;
+}
+
+export interface PostingSharingAddedEvent extends BaseEvent<"POSTING_SHARING_ADDED"> {
+    postingId: string;
+    sharing: SharingInfo;
+}
+
+export interface PostingSharingDeletedEvent extends BaseEvent<"POSTING_SHARING_DELETED"> {
+    postingId: string;
+    sharingId: string;
+}
+
+export interface PostingTotalSharingsChangedEvent extends BaseEvent<"POSTING_TOTAL_SHARINGS_CHANGED"> {
+    id: string;
+    total: number;
 }
 
 export interface PostingUpdatedEvent extends BaseEvent<"POSTING_UPDATED"> {

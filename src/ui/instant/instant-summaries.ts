@@ -168,6 +168,15 @@ export function formatSheriffTarget(data: StorySummaryData, homeOwnerName: strin
 
 /* * */
 
+export function buildPostingSharedSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.posting-shared", {
+        sharings: formatList(data.sharings, data.totalSharings, formatNodeName, t),
+        count: data.totalSharings ?? 1,
+        gender: firstGender(data.sharings),
+        heading: formatHeading(data.posting)
+    });
+}
+
 export function buildReactionAddedSummary(data: StorySummaryData, negative: boolean, t: TFunction): string {
     return t("instant-summary.story.reaction-added", {
         reactions: formatListOfReactions(data, negative, t),

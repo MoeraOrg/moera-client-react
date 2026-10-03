@@ -9,6 +9,7 @@ import { dispatch } from "state/store-sagas";
 import { getHomeOwnerName, getRelNodeNameContext } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { closeRepostDialog, repostPosting } from "state/repostdialog/actions";
+import { msLock } from "ui/material-symbols";
 import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { PrincipalField } from "ui/control/field";
@@ -48,7 +49,7 @@ function RepostDialogInner({homeOwnerName, nodeName, postingView: originalPostin
     const unethical = nodeName !== homeOwnerName && (
         originalPostingView === "signed"
             ? postingView === "public"
-            : originalPostingView !== "public" && postingView !== "private"
+            : originalPostingView !== "public" && postingView !== "admin"
     );
 
     return (
@@ -63,7 +64,13 @@ function RepostDialogInner({homeOwnerName, nodeName, postingView: originalPostin
                     <PrincipalField
                         name="postingView"
                         title={t("repost-visible-to")}
-                        values={["public", "signed", "subscribed", "friends", "private"]}
+                        values={["public", "signed", "subscribed", "friends", "admin"]}
+                        icons={{
+                            "admin": msLock
+                        }}
+                        titles={{
+                            "admin": t("principal-title.only-me")
+                        }}
                         long
                         dropdownContainer={document.getElementById("modal-root")}
                     />
@@ -103,7 +110,7 @@ function repostVisibility(originalVisibility: PrincipalValue, defaultVisibility:
     if (originalVisibility === "signed") {
         return defaultVisibility === "public" ? "signed" : defaultVisibility;
     }
-    return "private";
+    return "admin";
 }
 
 const RepostDialogOuter = withFormik(repostDialogLogic)(RepostDialogInner);

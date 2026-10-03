@@ -10,6 +10,7 @@ import BlockingDetailsDialog from "ui/blockingdetailsdialog/BlockingDetailsDialo
 import MediaDownloadDialog from "ui/mediadownloaddialog/MediaDownloadDialog";
 
 const ReactionsDialog = React.lazy(() => import("ui/reactionsdialog/ReactionsDialog"));
+const SharingsDialog = React.lazy(() => import("ui/sharingsdialog/SharingsDialog"));
 const GalleryLightbox = React.lazy(() => import("ui/lightbox/GalleryLightbox"));
 const DonateDialog = React.lazy(() => import("ui/donatedialog/DonateDialog"));
 const PeopleHideDialog = React.lazy(() => import("ui/peoplehidedialog/PeopleHideDialog"));
@@ -19,6 +20,7 @@ const SheriffDialogs = React.lazy(() => import("ui/page/SheriffDialogs"));
 
 export default function NodeDialogs() {
     const showReactionsDialog = useSelector((state: ClientState) => state.reactionsDialog.show);
+    const showSharingsDialog = useSelector((state: ClientState) => state.sharingsDialog.show);
     const showChangeDateDialog = useSelector((state: ClientState) => state.changeDateDialog.show);
     const showSourceDialog = useSelector((state: ClientState) => state.sourceDialog.show);
     const showLightbox = useSelector(isLightboxShown);
@@ -38,6 +40,9 @@ export default function NodeDialogs() {
         <>
             <Suspense fallback={null}>
                 {showReactionsDialog && <ReactionsDialog/>}
+            </Suspense>
+            <Suspense fallback={null}>
+                {showSharingsDialog && <SharingsDialog/>}
             </Suspense>
             {showChangeDateDialog && <ChangeDateDialog/>}
             {showSourceDialog && <SourceDialog/>}

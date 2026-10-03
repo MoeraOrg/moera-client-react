@@ -27,7 +27,7 @@ export default function StoryMenu({story}: Props) {
             message: t("delete-message"),
             yes: t("delete"),
             no: t("cancel"),
-            onYes: storyDelete(REL_CURRENT, story),
+            onYes: storyDelete(REL_CURRENT, story, story.feedName, story.posting?.id ?? story.postingId ?? null),
             variant: "danger"
         }));
 

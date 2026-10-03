@@ -31,8 +31,7 @@ interface Props {
 
 export default function NodeName({
     name, fullName, sourceUri, avatar, avatarNodeName, className, verified = false, correct = false, linked = true,
-    popup = true,
-    display, onJump
+    popup = true, display, onJump
 }: Props) {
     const details = useSelector((state: ClientState) => getNamingNameDetails(state, name));
     const mode = useNameDisplayMode();
@@ -54,8 +53,7 @@ export default function NodeName({
     linked = linked && !anonymous && (!details.loaded || details.nodeUri != null);
     return (
         <NodeNamePopup nodeName={name} fullName={fullName} sourceUri={sourceUri} avatar={avatar}
-                       avatarNodeName={avatarNodeName}
-                       disabled={!popup}>
+                       avatarNodeName={avatarNodeName} disabled={!popup}>
             {ref =>
                 linked ?
                     <Jump className={klass} nodeName={name} href="/" onNear={onJump} onFar={onJump} ref={ref}>

@@ -51,6 +51,8 @@ export type SheriffOrderCategory = "visibility";
 export type SheriffOrderReason = "unlawful" | "defamatory" | "threat" | "spam" | "scam" | "malware" | "copyright"
     | "impersonating" | "privacy" | "other";
 
+export type SharingType = "republish";
+
 export type SourceFormat = "plain-text" | "html" | "markdown" | "html/visual" | "application";
 
 export type StoryType = "asked-to-friend" | "asked-to-subscribe" | "blocked-user" | "blocked-user-in-posting"
@@ -60,7 +62,7 @@ export type StoryType = "asked-to-friend" | "asked-to-subscribe" | "blocked-user
     | "comment-update-task-failed" | "defrosting" | "friend-added" | "friend-deleted" | "friend-group-deleted"
     | "mention-comment" | "mention-posting" | "posting-added" | "posting-media-reaction-added-negative"
     | "posting-media-reaction-added-positive" | "posting-media-reaction-failed" | "posting-post-task-failed"
-    | "posting-reaction-task-failed" | "posting-subscribe-task-failed" | "posting-update-task-failed"
+    | "posting-reaction-task-failed" | "posting-shared" | "posting-subscribe-task-failed" | "posting-update-task-failed"
     | "posting-updated" | "premoderated-comment-accepted" | "premoderated-comment-rejected" | "reaction-added-negative"
     | "reaction-added-positive" | "reminder-avatar" | "reminder-email" | "reminder-full-name" | "reminder-sheriff-allow"
     | "remote-comment-added" | "reply-comment" | "search-report" | "sheriff-complaint-added"
@@ -133,6 +135,8 @@ export interface PostingOperations {
     delete?: PrincipalValue | null;
     viewExternalSource?: PrincipalValue | null;
     viewComments?: PrincipalValue | null;
+    viewSharings?: PrincipalValue | null;
+    viewTotalSharings?: PrincipalValue | null;
     addComment?: PrincipalValue | null;
     trustComment?: PrincipalValue | null;
     overrideComment?: PrincipalValue | null;
@@ -1076,6 +1080,31 @@ export interface SettingValueChoice {
     value: string;
 }
 
+export interface SharingInfo {
+    id: string;
+    sharingType: SharingType;
+    remoteNodeName: string;
+    remoteFullName?: string | null;
+    remoteSourceUri?: string | null;
+    remoteGender?: string | null;
+    remoteAvatar?: AvatarImage | null;
+    remoteFeedName?: string | null;
+    remoteStoryId?: string | null;
+    remoteStoryMoment?: number | null;
+    remotePostingId?: string | null;
+    postingId: string;
+    postingRevisionId?: string | null;
+    moment: number;
+    createdAt: number;
+}
+
+export interface SharingsSliceInfo {
+    before: number;
+    after: number;
+    total: number;
+    sharings: SharingInfo[];
+}
+
 export interface SheriffComplaintDecisionText {
     reject: boolean;
     decisionCode?: SheriffOrderReason | null;
@@ -1617,6 +1646,7 @@ export interface PostingInfoBase<B> {
     reactions?: ReactionTotalsInfo | null;
     sources?: PostingSourceInfo[] | null;
     totalComments?: number | null;
+    totalSharings?: number | null;
     viewCount?: number | null;
     recommended?: boolean | null;
     externalSourceUri?: string[] | null;
@@ -1778,6 +1808,8 @@ export interface StorySummaryData {
     reaction?: StorySummaryReaction | null;
     reactions?: StorySummaryReaction[] | null;
     totalReactions?: number | null;
+    sharings?: StorySummaryNode[] | null;
+    totalSharings?: number | null;
     feedName?: string | null;
     subscriptionReason?: SubscriptionReason | null;
     friendGroup?: StorySummaryFriendGroup | null;
@@ -2009,6 +2041,7 @@ export interface StoryInfoBase<B> {
     remoteNodeName?: string | null;
     remoteFullName?: string | null;
     remoteSourceUri?: string | null;
+    remoteStoryMoment?: number | null;
     remotePostingId?: string | null;
     remoteCommentId?: string | null;
     remoteMediaId?: string | null;

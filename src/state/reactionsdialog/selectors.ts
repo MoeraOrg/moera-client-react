@@ -67,8 +67,9 @@ export function getReactionVerificationStatus(state: ClientState, ownerName: str
     return state.reactionsDialog.verificationStatus[ownerName] ?? "none";
 }
 
-export function isReactionsDialogPermitted(operation: string, defaultValue: PrincipalValue,
-                                           state: ClientState): boolean {
+export function isReactionsDialogPermitted(
+    operation: string, defaultValue: PrincipalValue, state: ClientState
+): boolean {
     if (state.reactionsDialog.commentId != null) {
         const comment = getComment(state, state.reactionsDialog.commentId);
         return isPermitted(operation, comment, defaultValue, state, {

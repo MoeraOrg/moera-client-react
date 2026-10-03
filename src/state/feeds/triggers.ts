@@ -133,7 +133,9 @@ export default [
     trigger(
         "EVENT_NODE_STORY_DELETED",
         true,
-        (signal: EventAction<StoryDeletedEvent>) => storyDeleted(REL_CURRENT, toStory(signal.payload))
+        (signal: EventAction<StoryDeletedEvent>) => storyDeleted(
+            REL_CURRENT, toStory(signal.payload), signal.payload.feedName, signal.payload.postingId ?? null
+        )
     ),
     trigger(
         "EVENT_NODE_STORY_UPDATED",
@@ -148,7 +150,9 @@ export default [
     trigger(
         "EVENT_HOME_STORY_DELETED",
         true,
-        (signal: EventAction<StoryDeletedEvent>) => storyDeleted(REL_HOME, toStory(signal.payload))
+        (signal: EventAction<StoryDeletedEvent>) => storyDeleted(
+            REL_HOME, toStory(signal.payload), signal.payload.feedName, signal.payload.postingId ?? null
+        )
     ),
     trigger(
         "EVENT_HOME_STORY_UPDATED",

@@ -49,8 +49,9 @@ export function getNodeFriendGroupsMemberOf(state: ClientState): FriendGroupDeta
     return getNodeFeatures(state)?.friendGroups?.memberOf ?? EMPTY_ARRAY;
 }
 
-export function getReceiverFriendGroupsMemberOf(state: ClientState,
-                                                receiverFeatures: Features | null): FriendGroupDetails[] {
+export function getReceiverFriendGroupsMemberOf(
+    receiverFeatures: Pick<Features, "friendGroups"> | null
+): FriendGroupDetails[] {
     return receiverFeatures?.friendGroups?.memberOf ?? EMPTY_ARRAY;
 }
 
@@ -58,7 +59,7 @@ export function isNodeSubscribedToHome(state: ClientState): boolean {
     return getNodeFeatures(state)?.subscribed ?? false;
 }
 
-export function isReceiverSubscribedToHome(state: ClientState, receiverFeatures: Features | null): boolean {
+export function isReceiverSubscribedToHome(receiverFeatures: Pick<Features, "subscribed"> | null): boolean {
     return receiverFeatures?.subscribed ?? false;
 }
 
@@ -140,7 +141,9 @@ export function isOwnerNameRecentlyChanged(state: ClientState): boolean {
         && (state.node.owner.verifiedAt === 0
             || (getOwnerName(state) === state.nodeName.name
                 && isNodeNameOperationFinished(state)
-                && state.node.owner.verifiedAt < (state.nodeName.operationStatusUpdated ?? 0)));
+                && state.node.owner.verifiedAt < (state.nodeName.operationStatusUpdated ?? 0)
+            )
+        );
 }
 
 export function isGooglePlayHiding(state: ClientState): boolean {
@@ -184,7 +187,7 @@ function getOperations(object: ProtectedObject, useOperations: ObjectOperations)
 
 export interface IsPermittedOptions {
     objectSourceName: string | null;
-    objectSourceFeatures: Features | null;
+    objectSourceFeatures: Pick<Features, "subscribed" | "friendGroups"> | null;
     useOperations: ObjectOperations;
 }
 
@@ -222,10 +225,10 @@ export function isPermitted(
     const isOwner = state.home.owner.name === ownerName;
     const isAdmin = op.objectSourceName != null ? isReceiverAdmin(state, op.objectSourceName) : isNodeAdmin(state);
     const isSubscribed = op.objectSourceFeatures != null
-        ? isReceiverSubscribedToHome(state, op.objectSourceFeatures)
+        ? isReceiverSubscribedToHome(op.objectSourceFeatures)
         : isNodeSubscribedToHome(state);
     const friendGroups = op.objectSourceFeatures != null
-        ? getReceiverFriendGroupsMemberOf(state, op.objectSourceFeatures)
+        ? getReceiverFriendGroupsMemberOf(op.objectSourceFeatures)
         : getNodeFriendGroupsMemberOf(state);
     switch (principal) {
         case "none":

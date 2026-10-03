@@ -43,6 +43,7 @@ import { RemoteMediaState } from "state/remotemedia/state";
 import { SearchState } from "state/search/state";
 import { SettingsState } from "state/settings/state";
 import { ShareDialogState } from "state/sharedialog/state";
+import { SharingsDialogState } from "state/sharingsdialog/state";
 import { SheriffOrderDialogState } from "state/sherifforderdialog/state";
 import { SheriffOrderDetailsDialogState } from "state/sherifforderdetailsdialog/state";
 import { SignUpState } from "state/signup/state";
@@ -95,6 +96,7 @@ export interface ClientState {
     search: SearchState;
     settings: SettingsState;
     shareDialog: ShareDialogState;
+    sharingsDialog: SharingsDialogState;
     sheriffOrderDialog: SheriffOrderDialogState;
     sheriffOrderDetailsDialog: SheriffOrderDetailsDialogState;
     signUp: SignUpState;

@@ -16,12 +16,12 @@ export default [
 async function repostPostingSaga(action: WithContext<RepostPostingAction>): Promise<void> {
     const {nodeName, postingId, postingView} = action.payload;
 
+    const remoteNodeName = absoluteNodeName(nodeName, action.context);
+    const publications = [
+        {feedName: "timeline", viewed: true, read: true}
+    ];
+
     try {
-        const remoteNodeName = absoluteNodeName(nodeName, action.context);
-        const publications = [
-            {feedName: "timeline", viewed: true, read: true},
-            {feedName: "news", viewed: true, read: true}
-        ];
         if (remoteNodeName === action.context.homeOwnerName) {
             await Node.republishPosting(action, REL_HOME, postingId, {postingView, publications});
         } else {

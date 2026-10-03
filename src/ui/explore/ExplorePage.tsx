@@ -33,7 +33,6 @@ export default function ExplorePage() {
                         nodeName={REL_CURRENT}
                         feedName="explore"
                         visible={visible}
-                        recommendations
                     />
                 </main>
             </Page>

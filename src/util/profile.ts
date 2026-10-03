@@ -44,6 +44,6 @@ export function traceRender(...tracedValues: TracedValue<any>[]): ProfilerOnRend
         startTime: number, commitTime: number
     ) => {
         console.log(id, phase, actualDuration, baseDuration, startTime, commitTime);
-        tracedValues.forEach(tv => traceValue(tv.name, tv.value, tv.prevValue));
+        tracedValues.forEach((tv: TracedValue<any>) => traceValue(tv.name, tv.value, tv.prevValue));
     }
 }

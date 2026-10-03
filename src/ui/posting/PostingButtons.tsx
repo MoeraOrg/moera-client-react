@@ -18,11 +18,12 @@ import "./PostingButtons.css";
 
 interface Props {
     posting: PostingInfo;
+    feedName: string | null;
     story: MinimalStoryInfo | null;
     menu?: boolean;
 }
 
-export default function PostingButtons({posting, story, menu = false}: Props) {
+export default function PostingButtons({posting, feedName, story, menu = false}: Props) {
     const options: Partial<IsPermittedOptions> = {
         objectSourceName: useSelector(getCommentsReceiverName),
         objectSourceFeatures: useSelector(getCommentsReceiverFeatures)
@@ -90,7 +91,7 @@ export default function PostingButtons({posting, story, menu = false}: Props) {
                     <PostingCommentButton postingId={posting.id} invisible={!commentsVisible}/>
                 </>
             }
-            {menu && <PostingMenu posting={posting} story={story} detailed/>}
+            {menu && <PostingMenu posting={posting} feedName={feedName} story={story} detailed/>}
         </div>
     );
 }

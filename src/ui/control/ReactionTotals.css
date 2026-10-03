@@ -7,6 +7,10 @@
     text-wrap: nowrap;
 }
 
+.reactions:empty {
+    display: none;
+}
+
 .reactions .emojis {
     font-family: sans-serif;
     font-size: 1.1em;
@@ -19,9 +23,20 @@
 }
 
 .reactions .positive {
-    margin-right: 1.45em;
     color: var(--correct);
     background-color: var(--reactions-positive);
+}
+
+@media only screen and (max-width: 991px) {
+    .reactions .positive {
+        margin-right: .9em;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .reactions .positive {
+        margin-right: 1.45em;
+    }
 }
 
 .reactions .negative {

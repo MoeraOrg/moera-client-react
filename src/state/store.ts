@@ -25,6 +25,7 @@ import settings from "state/settings/reducer";
 import complaints from "state/complaints/reducer";
 import cartes from "state/cartes/reducer";
 import reactionsDialog from "state/reactionsdialog/reducer";
+import sharingsDialog from "state/sharingsdialog/reducer";
 import repostDialog from "state/repostdialog/reducer";
 import changeDateDialog from "state/changedatedialog/reducer";
 import people from "state/people/reducer";
@@ -77,6 +78,7 @@ import settingsSagas from "state/settings/sagas";
 import complaintsSagas from "state/complaints/sagas";
 import namingSagas from "state/naming/sagas";
 import reactionsDialogSagas from "state/reactionsdialog/sagas";
+import sharingsDialogSagas from "state/sharingsdialog/sagas";
 import postingReplySagas from "state/postingreply/sagas";
 import storiesSagas from "state/stories/sagas";
 import changeDateDialogSagas from "state/changedatedialog/sagas";
@@ -124,6 +126,7 @@ import settingsTriggers from "state/settings/triggers";
 import complaintsTriggers from "state/complaints/triggers";
 import namingTriggers from "state/naming/triggers";
 import reactionsDialogTriggers from "state/reactionsdialog/triggers";
+import sharingsDialogTriggers from "state/sharingsdialog/triggers";
 import peopleTriggers from "state/people/triggers";
 import nodeCardsTriggers from "state/nodecards/triggers";
 import contactsTriggers from "state/contacts/triggers";
@@ -160,6 +163,7 @@ const reducers = combineReducers({
     complaints,
     cartes,
     reactionsDialog,
+    sharingsDialog,
     repostDialog,
     changeDateDialog,
     people,
@@ -220,6 +224,7 @@ const triggers = collectTriggers(
     complaintsTriggers,
     namingTriggers,
     reactionsDialogTriggers,
+    sharingsDialogTriggers,
     peopleTriggers,
     nodeCardsTriggers,
     contactsTriggers,
@@ -256,6 +261,7 @@ const sagas = collectSagas(
     complaintsSagas,
     namingSagas,
     reactionsDialogSagas,
+    sharingsDialogSagas,
     postingReplySagas,
     storiesSagas,
     changeDateDialogSagas,

@@ -17,6 +17,7 @@ import { // material-symbols
     msPartlyCloudyDay,
     msPerson,
     msPersonOff,
+    msRepeat,
     msReplySolid,
     msRule,
     msShieldPerson,
@@ -47,6 +48,7 @@ import {
     buildPostingMediaReactionFailedSummary,
     buildPostingPostTaskFailedSummary,
     buildPostingReactionTaskFailedSummary,
+    buildPostingSharedSummary,
     buildPostingSubscribeTaskFailedSummary,
     buildPostingUpdatedSummary,
     buildPostingUpdateTaskFailedSummary,
@@ -111,6 +113,12 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         icon: msInkPen,
         summary: () => "",
         target: story => ({nodeName: REL_HOME, href: ut`/post/${getStoryPostingId(story)}`})
+    },
+    "posting-shared": {
+        color: "var(--bs-blue-600)",
+        icon: msRepeat,
+        summary: (data, homeOwnerName, t) => buildPostingSharedSummary(data, t),
+        target: story => ({nodeName: story.summaryNodeName ?? REL_HOME, href: ut`/?before=${story.remoteStoryMoment}`})
     },
     "reaction-added-positive": {
         summary: (data, homeOwnerName, t) => buildReactionAddedSummary(data, false, t),

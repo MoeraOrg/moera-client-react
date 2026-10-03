@@ -8,6 +8,33 @@ import { getSetting } from "state/settings/selectors";
 import { getFeedAt, getFeedNotViewedMoment, getFeedState } from "state/feeds/selectors";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
+interface FeedProperties {
+    recommendedOnly: boolean;
+    markNotViewed: boolean;
+}
+
+const FEED_PROPERTIES: Record<string, FeedProperties> = {
+    "": {
+        recommendedOnly: false,
+        markNotViewed: false
+    },
+    "timeline": {
+        recommendedOnly: false,
+        markNotViewed: false
+    },
+    "news": {
+        recommendedOnly: false,
+        markNotViewed: true
+    },
+    "explore": {
+        recommendedOnly: true,
+        markNotViewed: false
+    },
+};
+
+export const getFeedProperties = (feedName: string | null | undefined): FeedProperties =>
+    FEED_PROPERTIES[feedName ?? ""];
+
 export function getFeedTitle(feedName: string | null | undefined, t?: TFunction): string {
     const te = t ?? ((text: string) => text);
     switch (feedName) {

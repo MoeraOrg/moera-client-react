@@ -1,5 +1,6 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { StoryInfo, StoryType } from "api";
+import { MinimalStoryInfo } from "ui/types";
 import { RelNodeName } from "util/rel-node-name";
 
 export type StoryPinningUpdateAction = ActionWithPayload<"STORY_PINNING_UPDATE", {
@@ -48,17 +49,25 @@ export const storyAdded = (nodeName: RelNodeName | string, story: StoryInfo): St
 
 export type StoryDeleteAction = ActionWithPayload<"STORY_DELETE", {
     nodeName: RelNodeName | string;
-    story: StoryInfo;
+    story: MinimalStoryInfo;
+    feedName: string;
+    postingId: string | null;
 }>;
-export const storyDelete = (nodeName: RelNodeName | string, story: StoryInfo): StoryDeleteAction =>
-    actionWithPayload("STORY_DELETE", {nodeName, story});
+export const storyDelete = (
+    nodeName: RelNodeName | string, story: MinimalStoryInfo, feedName: string, postingId: string | null
+): StoryDeleteAction =>
+    actionWithPayload("STORY_DELETE", {nodeName, story, feedName, postingId});
 
 export type StoryDeletedAction = ActionWithPayload<"STORY_DELETED", {
     nodeName: RelNodeName | string;
-    story: StoryInfo;
+    story: MinimalStoryInfo;
+    feedName: string;
+    postingId: string | null;
 }>;
-export const storyDeleted = (nodeName: RelNodeName | string, story: StoryInfo): StoryDeletedAction =>
-    actionWithPayload("STORY_DELETED", {nodeName, story});
+export const storyDeleted = (
+    nodeName: RelNodeName | string, story: MinimalStoryInfo, feedName: string, postingId: string | null
+): StoryDeletedAction =>
+    actionWithPayload("STORY_DELETED", {nodeName, story, feedName, postingId});
 
 export type StoryUpdatedAction = ActionWithPayload<"STORY_UPDATED", {
     nodeName: RelNodeName | string;

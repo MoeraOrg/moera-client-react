@@ -213,6 +213,12 @@ export default function ComposePage() {
     const reactionTotalsVisibleDefault = useSelector((state: ClientState) =>
         getSetting(state, "posting.reactions.totals-visible.default") as boolean
     );
+    const sharingsVisibleDefault = useSelector((state: ClientState) =>
+        getSetting(state, "posting.sharings.visible.default") as boolean
+    );
+    const totalSharingsVisibleDefault = useSelector((state: ClientState) =>
+        getSetting(state, "posting.sharings.totals-visible.default") as boolean
+    );
     const sourceFormatDefault = useSelector((state: ClientState) =>
         getSetting(state, "posting.body-src-format.default") as SourceFormat
     );
@@ -245,6 +251,8 @@ export default function ComposePage() {
             reactionsNegativeDefault={reactionsNegativeDefault}
             reactionsVisibleDefault={reactionsVisibleDefault}
             reactionTotalsVisibleDefault={reactionTotalsVisibleDefault}
+            sharingsVisibleDefault={sharingsVisibleDefault}
+            totalSharingsVisibleDefault={totalSharingsVisibleDefault}
             sourceFormatDefault={sourceFormatDefault}
         />
     );

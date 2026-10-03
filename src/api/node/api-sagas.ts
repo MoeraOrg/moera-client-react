@@ -1491,6 +1491,18 @@ export async function searchPostingReactionTotals(
     });
 }
 
+export async function getPostingSharings(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, postingId: string,
+    before: number | null = null, limit: number | null = null, errorFilter: ErrorFilter = false,
+    auth: boolean | string = true
+): Promise<API.SharingsSliceInfo> {
+
+    const location = urlWithParameters(ut`/postings/${postingId}/sharings`, {before, limit});
+    return callApi<API.SharingsSliceInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "SharingsSliceInfo", errorFilter
+    });
+}
+
 export async function getProfile(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, withSource: boolean = false,
     errorFilter: ErrorFilter = false, auth: boolean | string = true

@@ -113,6 +113,23 @@
     margin-top: .75rem;
 }
 
+.posting > .reactions-line > .left-group {
+    display: flex;
+    align-items: baseline;
+}
+
+@media only screen and (max-width: 991px) {
+    .posting > .reactions-line > .left-group {
+        gap: .9rem;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .posting > .reactions-line > .left-group {
+        gap: 1.45rem;
+    }
+}
+
 .posting > .reactions-line > .right-group {
     display: flex;
     align-items: baseline;

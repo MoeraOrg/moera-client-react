@@ -46,6 +46,7 @@ import { RichTextEditorAnyAction } from "state/richtexteditor/actions";
 import { SearchAnyAction } from "state/search/actions";
 import { SettingsAnyAction } from "state/settings/actions";
 import { ShareDialogAnyAction } from "state/sharedialog/actions";
+import { SharingsDialogAnyAction } from "state/sharingsdialog/actions";
 import { SheriffOrderDialogAnyAction } from "state/sherifforderdialog/actions";
 import { SheriffOrderDetailsDialogAnyAction } from "state/sherifforderdetailsdialog/actions";
 import { SignUpAnyAction } from "state/signup/actions";
@@ -103,6 +104,7 @@ export type ClientAction =
     | SearchAnyAction
     | SettingsAnyAction
     | ShareDialogAnyAction
+    | SharingsDialogAnyAction
     | SheriffOrderDialogAnyAction
     | SheriffOrderDetailsDialogAnyAction
     | SignUpAnyAction

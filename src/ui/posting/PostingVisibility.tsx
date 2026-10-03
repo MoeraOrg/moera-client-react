@@ -6,20 +6,23 @@ import { useTranslation } from 'react-i18next';
 import { PostingInfo, PrincipalValue } from "api";
 import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
+import { isNodeAdmin, isPermitted } from "state/node/selectors";
 import { postingOperationsUpdate } from "state/postings/actions";
+import { hasPostingFeedReference } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
 import { useDispatcher } from "ui/hook";
 import { Principal, PrincipalSelect } from "ui/control";
-import { Icon, msDelete } from "ui/material-symbols";
+import { Icon, msDelete, msLock } from "ui/material-symbols";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./PostingVisibility.css";
 
 interface Props {
     posting: PostingInfo;
-    editable: boolean;
 }
 
-export default function PostingVisibility({posting, editable}: Props) {
+export default function PostingVisibility({posting}: Props) {
+    const isAdmin = useSelector(isNodeAdmin);
+    const originalEditable = useSelector((state: ClientState) => isPermitted("edit", posting, "owner", state));
     const timeRelative = useSelector((state: ClientState) => getSetting(state, "posting.time.relative") as boolean);
     const dispatch = useDispatcher();
     const {t} = useTranslation();
@@ -35,16 +38,27 @@ export default function PostingVisibility({posting, editable}: Props) {
             ? tDistanceToNow(date, t)
             : format(date, "dd-MM-yyyy HH:mm")
     }
+    const editable = posting.receiverName != null
+        ? isAdmin && hasPostingFeedReference(posting, "timeline")
+        : originalEditable;
+    const privatePrincipal = posting.receiverName != null ? "admin" : "private";
+    const icons = posting.receiverName != null ? {"admin": msLock} : null;
+    const titles = posting.receiverName != null ? {"admin": t("principal-title.only-me")} : null;
 
     return (
         <span className="visibility">
             &middot;
             {editable ?
-                <PrincipalSelect value={value} values={["public", "signed", "subscribed", "friends", "private"]}
-                                 onChange={onChange}/>
+                <PrincipalSelect
+                    value={value}
+                    values={["public", "signed", "subscribed", "friends", privatePrincipal]}
+                    icons={icons}
+                    titles={titles}
+                    onChange={onChange}
+                />
             :
                 (posting.receiverDeletedAt == null ?
-                    <Principal value={value}/>
+                    <Principal value={value} icons={icons} titles={titles}/>
                 :
                     <span className="principal text-danger opacity-75"
                           title={t("original-deleted", {date: deletionDate})}>

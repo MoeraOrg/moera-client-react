@@ -40,6 +40,9 @@ import {
     PostingDeletedEvent,
     PostingReactionsChangedEvent,
     PostingRestoredEvent,
+    PostingSharingAddedEvent,
+    PostingSharingDeletedEvent,
+    PostingTotalSharingsChangedEvent,
     PostingUpdatedEvent,
     PostingViewedEvent,
     ProfileUpdatedEvent,
@@ -132,6 +135,9 @@ export type ClientEventAction =
     | EventAction<PostingDeletedEvent>
     | EventAction<PostingReactionsChangedEvent>
     | EventAction<PostingRestoredEvent>
+    | EventAction<PostingSharingAddedEvent>
+    | EventAction<PostingSharingDeletedEvent>
+    | EventAction<PostingTotalSharingsChangedEvent>
     | EventAction<PostingUpdatedEvent>
     | EventAction<PostingViewedEvent>
     | EventAction<ProfileUpdatedEvent>

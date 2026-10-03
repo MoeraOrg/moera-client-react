@@ -1,0 +1,9 @@
+en: repost
+pl: repost
+ru: репост
+uk: репост
+
+en: share
+pl: udostępnić
+ru: поделиться
+uk: поділитися

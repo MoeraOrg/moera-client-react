@@ -35,10 +35,9 @@ interface Props {
     feedName: string;
     visible: boolean;
     onNavigationUpdate?: NavigationUpdateHandler;
-    recommendations?: boolean;
 }
 
-export default function FeedPage({nodeName, feedName, visible, onNavigationUpdate, recommendations}: Props) {
+export default function FeedPage({nodeName, feedName, visible, onNavigationUpdate}: Props) {
     const loadingFuture = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).loadingFuture);
     const loadingPast = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).loadingPast);
     const before = useSelector((state: ClientState) => getFeedState(state, nodeName, feedName).before);
@@ -241,7 +240,6 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
                     feedName={feedName}
                     story={story}
                     deleting={deleting ?? false}
-                    hideRecommended={recommendations}
                 />
             )}
             <FeedSentinel

@@ -208,6 +208,14 @@ export const NODE_API_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "viewSharings": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewTotalSharings": {
+                    type: "string",
+                    nullable: true
+                },
                 "addComment": {
                     type: "string",
                     nullable: true
@@ -2614,6 +2622,111 @@ export const NODE_API_SCHEMAS = {
             additionalProperties: false
         },
 
+        SharingInfo: {
+            type: "object",
+            properties: {
+                "id": {
+                    type: "string"
+                },
+                "sharingType": {
+                    type: "string"
+                },
+                "remoteNodeName": {
+                    type: "string"
+                },
+                "remoteFullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "remoteSourceUri": {
+                    type: "string",
+                    nullable: true
+                },
+                "remoteGender": {
+                    type: "string",
+                    nullable: true
+                },
+                "remoteAvatar": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+                "remoteFeedName": {
+                    type: "string",
+                    nullable: true
+                },
+                "remoteStoryId": {
+                    type: "string",
+                    nullable: true
+                },
+                "remoteStoryMoment": {
+                    type: "integer",
+                    nullable: true
+                },
+                "remotePostingId": {
+                    type: "string",
+                    nullable: true
+                },
+                "postingId": {
+                    type: "string"
+                },
+                "postingRevisionId": {
+                    type: "string",
+                    nullable: true
+                },
+                "moment": {
+                    type: "integer"
+                },
+                "createdAt": {
+                    type: "integer"
+                },
+            },
+            required: [
+                "id",
+                "sharingType",
+                "remoteNodeName",
+                "postingId",
+                "moment",
+                "createdAt",
+            ],
+            additionalProperties: false
+        },
+
+        SharingsSliceInfo: {
+            type: "object",
+            properties: {
+                "before": {
+                    type: "integer"
+                },
+                "after": {
+                    type: "integer"
+                },
+                "total": {
+                    type: "integer"
+                },
+                "sharings": {
+                    type: "array",
+                    items: {
+                        $ref: "node#/definitions/SharingInfo"
+                    }
+                },
+            },
+            required: [
+                "before",
+                "after",
+                "total",
+                "sharings",
+            ],
+            additionalProperties: false
+        },
+
         SheriffComplaintGroupInfo: {
             type: "object",
             properties: {
@@ -4399,6 +4512,10 @@ export const NODE_API_SCHEMAS = {
                     type: "integer",
                     nullable: true
                 },
+                "totalSharings": {
+                    type: "integer",
+                    nullable: true
+                },
                 "viewCount": {
                     type: "integer",
                     nullable: true
@@ -4900,6 +5017,17 @@ export const NODE_API_SCHEMAS = {
                     nullable: true
                 },
                 "totalReactions": {
+                    type: "integer",
+                    nullable: true
+                },
+                "sharings": {
+                    type: "array",
+                    items: {
+                        $ref: "node#/definitions/StorySummaryNode"
+                    },
+                    nullable: true
+                },
+                "totalSharings": {
                     type: "integer",
                     nullable: true
                 },
@@ -5731,6 +5859,10 @@ export const NODE_API_SCHEMAS = {
                 },
                 "remoteSourceUri": {
                     type: "string",
+                    nullable: true
+                },
+                "remoteStoryMoment": {
+                    type: "integer",
                     nullable: true
                 },
                 "remotePostingId": {

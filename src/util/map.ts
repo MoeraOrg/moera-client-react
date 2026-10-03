@@ -6,8 +6,8 @@ export function mapWithKeysOnly<Key, Value>(map: Map<Key, Value> | null,
     if (Array.isArray(keys)) {
         keys = new Set(keys);
     }
-    let result = new Map();
-    keys.forEach(key => {
+    let result = new Map<Key, Value>();
+    keys.forEach((key: Key) => {
         const value = map.get(key);
         if (value != null) {
             result.set(key, value)
@@ -24,8 +24,8 @@ export function mapWithoutKeys<Key, Value>(map: Map<Key, Value> | null,
     if (Array.isArray(keys)) {
         keys = new Set(keys);
     }
-    let result = new Map();
-    map.forEach((value, key) => {
+    let result = new Map<Key, Value>();
+    map.forEach((value: Value, key: Key) => {
         if (!(keys as Set<Key>).has(key)) {
             result.set(key, value)
         }
@@ -40,8 +40,8 @@ export function mapFilter<Key, Value>(map: Map<Key, Value> | null,
     if (map == null) {
         return map;
     }
-    let result = new Map();
-    map.forEach((value, key) => {
+    let result = new Map<Key, Value>();
+    map.forEach((value: Value, key: Key) => {
         if (filter(value, key)) {
             result.set(key, value)
         }

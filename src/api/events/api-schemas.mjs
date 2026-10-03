@@ -776,6 +776,69 @@ export const EVENT_SCHEMAS = {
             additionalProperties: false
         },
 
+        PostingSharingAddedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "postingId": {
+                    type: "string"
+                },
+                "sharing": {
+                    $ref: "node#/definitions/SharingInfo"
+                },
+            },
+            required: [
+                "type",
+                "postingId",
+                "sharing",
+            ],
+            additionalProperties: false
+        },
+
+        PostingSharingDeletedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "postingId": {
+                    type: "string"
+                },
+                "sharingId": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+                "postingId",
+                "sharingId",
+            ],
+            additionalProperties: false
+        },
+
+        PostingTotalSharingsChangedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+                "total": {
+                    type: "integer"
+                },
+            },
+            required: [
+                "type",
+                "id",
+                "total",
+            ],
+            additionalProperties: false
+        },
+
         PostingUpdatedEvent: {
             type: "object",
             properties: {
