@@ -9,7 +9,7 @@ import { useUndoableField } from "ui/control/field/undoable-field";
 import FieldError from "ui/control/field/FieldError";
 
 export interface SelectFieldChoiceBase<T> {
-    title: string | [string, TOptions];
+    title: string | [string, TOptions & {context?: string}];
     value: T;
 }
 

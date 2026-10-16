@@ -226,5 +226,8 @@
     width: var(--width);
     aspect-ratio: var(--aspect-ratio);
     max-width: min(100vw - 4rem, 100cqw - 3.5rem, var(--width, 100vw));
+}
+
+.visual-text-area .image-attached {
     max-height: var(--height, 200vh);
 }

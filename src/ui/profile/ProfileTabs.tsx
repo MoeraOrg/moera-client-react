@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { tTitle } from "i18n";
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
-import { getOwnerCard, getOwnerName, isRegularNode } from "state/node/selectors";
+import { getOwnerCard, getOwnerName, getOwnerSourceUri, isRegularNode } from "state/node/selectors";
 import { UnderlinedTabs } from "ui/control";
 import { useIsTinyScreen } from "ui/hook";
 import { useTimeline } from "ui/feed/feeds";
@@ -18,6 +18,7 @@ interface Props {
 export default function ProfileTabs({value, children}: Props) {
     const regularNode = useSelector(isRegularNode);
     const ownerName = useSelector(getOwnerName);
+    const sourceUri = useSelector(getOwnerSourceUri);
     const profile = useSelector((state: ClientState) => getOwnerCard(state)?.details?.profile);
     const timelineHref = useTimeline();
     const tinyScreen = useIsTinyScreen();
@@ -29,7 +30,7 @@ export default function ProfileTabs({value, children}: Props) {
                 value: "about",
                 title: tTitle(t("about-me")),
                 href: "/profile",
-                visible: tinyScreen && (profile?.bioHtml != null || profile?.email != null),
+                visible: tinyScreen && (profile?.bioHtml != null || profile?.email != null || sourceUri != null),
             },
             {
                 value: "posts",

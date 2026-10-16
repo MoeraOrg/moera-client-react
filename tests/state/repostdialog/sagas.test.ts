@@ -32,8 +32,7 @@ describe("repost posting saga", () => {
             remoteFeedName: "timeline",
             postingView: "private",
             publications: [
-                {feedName: "timeline", viewed: true, read: true},
-                {feedName: "news", viewed: true, read: true}
+                {feedName: "timeline", viewed: true, read: true}
             ]
         });
         expect(republishLocal).not.toHaveBeenCalled();
@@ -54,8 +53,7 @@ describe("repost posting saga", () => {
         expect(republishLocal).toHaveBeenCalledWith(action, REL_HOME, "post-1", {
             postingView: "signed",
             publications: [
-                {feedName: "timeline", viewed: true, read: true},
-                {feedName: "news", viewed: true, read: true}
+                {feedName: "timeline", viewed: true, read: true}
             ]
         });
         expect(republish).not.toHaveBeenCalled();

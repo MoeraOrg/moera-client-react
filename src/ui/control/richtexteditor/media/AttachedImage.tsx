@@ -26,7 +26,7 @@ export default function AttachedImage({media, nodeName, dragging = false, onClic
             <>
                 <img className="thumbnail" alt={alt ?? ""} src={src} srcSet={srcSet} sizes={sizes}
                      width={imageWidth} height={imageHeight} draggable={false} style={{cursor}} onClick={onClick}/>
-                {isVideoType(media.media?.mimeType) &&
+                {isVideoType(media.mimeType) &&
                     <div className="play-icon"><Icon icon={msPlayArrowFilled} size={48}/></div>
                 }
             </>

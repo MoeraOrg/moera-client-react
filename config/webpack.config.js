@@ -787,7 +787,7 @@ module.exports = function (webpackEnv) {
           },
         }),
       new webpack.ProvidePlugin({
-        process: "process/browser",
+        process: require.resolve("process/browser"),
         Buffer: ["buffer", "Buffer"],
       }),
       new StylelintPlugin({

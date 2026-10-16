@@ -17,6 +17,7 @@ import {
 import { isConnectedToHome } from "state/home/selectors";
 import { sharePageCopyLink } from "state/sharedialog/actions";
 import { useDispatcher } from "ui/hook";
+import { Icon, msLink } from "ui/material-symbols";
 import { DonateButton, OnlyMobile } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import NodeFullName from "ui/nodename/NodeFullName";
@@ -28,6 +29,7 @@ import OperationStatus from "ui/profile/manage/OperationStatus";
 import { useHomeNews, useTimeline } from "ui/feed/feeds";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import { formatFullName } from "util/names";
+import { NodeSourceUri } from "util/node-source-uri";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import "./ProfileTitle.css";
 
@@ -38,6 +40,7 @@ export default function ProfileTitle() {
     const nodeName = useSelector(getOwnerName);
     const fullName = useSelector(getOwnerFullName);
     const sourceUri = useSelector(getOwnerSourceUri);
+    const sourceUriTarget = sourceUri ? NodeSourceUri.parse(sourceUri).uri : null;
     const title = useSelector(getOwnerTitle);
     const avatar = useSelector(getOwnerAvatar);
     const card = useSelector(getOwnerCard);
@@ -81,6 +84,11 @@ export default function ProfileTitle() {
                     }
                     <div className="mention" onClick={onCopyLink}>@{NodeName.shorten(nodeName)}</div>
                     <OperationStatus/>
+                    {sourceUriTarget &&
+                        <div className="source-uri">
+                            <Icon icon={msLink} size="1.2em"/><a href={sourceUriTarget}>{sourceUriTarget}</a>
+                        </div>
+                    }
                     {title && <div className="title">{title}</div>}
                     <div className="subscribe-line">
                         <FeedSubscribeButton nodeName={nodeName ?? REL_CURRENT} feedName="timeline"/>

@@ -544,6 +544,28 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 .value();
         }
 
+        case "EVENT_NODE_FEED_STATUS_UPDATED": {
+            const {feedName, status} = action.payload;
+            const {ownerName} = action.context;
+            if (feedName !== "timeline" || ownerName == null) {
+                return state;
+            }
+            return getCard(state, ownerName).istate
+                .set(["cards", ownerName, "stories", "storiesTotal"], status.total)
+                .value();
+        }
+
+        case "EVENT_HOME_FEED_STATUS_UPDATED": {
+            const {feedName, status} = action.payload;
+            const {homeOwnerName} = action.context;
+            if (feedName !== "timeline" || homeOwnerName == null) {
+                return state;
+            }
+            return getCard(state, homeOwnerName).istate
+                .set(["cards", homeOwnerName, "stories", "storiesTotal"], status.total)
+                .value();
+        }
+
         case "EVENT_NODE_SUBSCRIBERS_TOTAL_CHANGED": {
             const {feedSubscribersTotal} = action.payload;
             const {ownerName} = action.context;

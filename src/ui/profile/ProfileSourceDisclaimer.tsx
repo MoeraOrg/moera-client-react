@@ -22,7 +22,6 @@ export default function ProfileSourceDisclaimer({nodeSourceUri, title}: Props) {
     const sourceText = t("profile-mirrors.source" + (service ? "." + service : ""));
     const channelText = t("profile-mirrors.channel" + (service ? "." + service : ""));
 
-    console.log(nodeSourceUri, source.uri)
     return (
         <p>
             <b>

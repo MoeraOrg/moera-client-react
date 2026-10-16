@@ -44,7 +44,7 @@ export function isSettingsAtRemovalSheet(state: ClientState): boolean {
 }
 
 export function isSettingsAtProfileSheet(state: ClientState): boolean {
-    return state.settings.tab === "profile" && state.settings.sheet === "profile";
+    return state.settings.tab === "profile" && (state.settings.sheet === "" || state.settings.sheet === "profile");
 }
 
 export function isSettingsGrantsToBeLoaded(state: ClientState): boolean {

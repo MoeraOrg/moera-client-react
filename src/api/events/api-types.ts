@@ -409,6 +409,7 @@ export interface StoryAddedEvent extends BaseEvent<"STORY_ADDED"> {
     remotePostingId?: string | null;
     remoteCommentId?: string | null;
     operations?: StoryOperations | null;
+    externalSourceUri?: string[] | null;
 }
 
 export interface StoryDeletedEvent extends BaseEvent<"STORY_DELETED"> {
@@ -444,6 +445,7 @@ export interface StoryUpdatedEvent extends BaseEvent<"STORY_UPDATED"> {
     remotePostingId?: string | null;
     remoteCommentId?: string | null;
     operations?: StoryOperations | null;
+    externalSourceUri?: string[] | null;
 }
 
 export interface SubscribedEvent extends BaseEvent<"SUBSCRIBED"> {

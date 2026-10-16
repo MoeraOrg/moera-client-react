@@ -61,23 +61,23 @@ ABBR[title] {
 
 BLOCKQUOTE {
     border-left: 3px solid var(--bs-primary);
-    padding: .2rem .2rem .2rem 2.7rem;
+    padding: .2rem .2rem .2rem 2.1rem;
     position: relative;
     overflow: hidden;
 }
 
 BLOCKQUOTE BLOCKQUOTE {
-    padding-left: 1.5rem;
+    padding-left: 1rem;
 }
 
 BLOCKQUOTE:not(BLOCKQUOTE BLOCKQUOTE)::before {
     content: "\201C";
     font-family: serif;
-    font-size: 4rem;
+    font-size: 3rem;
     color: var(--bs-primary);
     position: absolute;
-    left: .5rem;
-    top: -1.5rem;
+    left: .45rem;
+    top: -1.2rem;
 }
 
 BLOCKQUOTE :is(BLOCKQUOTE, P):last-child {
@@ -87,17 +87,6 @@ BLOCKQUOTE :is(BLOCKQUOTE, P):last-child {
 @media only screen and (max-width: 991px) {
     BLOCKQUOTE {
         border-left-width: 2px;
-        padding-left: 2.4rem;
-    }
-
-    BLOCKQUOTE BLOCKQUOTE {
-        padding-left: 1.2rem;
-    }
-
-    BLOCKQUOTE:not(BLOCKQUOTE BLOCKQUOTE)::before {
-        font-size: 3.5rem;
-        left: .45rem;
-        top: -1.4rem;
     }
 }
 

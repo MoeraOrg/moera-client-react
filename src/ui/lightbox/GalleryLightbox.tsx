@@ -134,7 +134,7 @@ function getGallery(
     if (linkPreviews.length === 0) {
         return media;
     }
-    const linkPreviewImages = new Set(linkPreviews.map(lp => lp.imageHash));
+    const linkPreviewImages = new Set(linkPreviews.filter(lp => lp.imageHash != null).map(lp => lp.imageHash));
     return media.filter(mf => !linkPreviewImages.has(mf.media?.hash) && !linkPreviewImages.has(mf.remoteMedia?.hash));
 }
 

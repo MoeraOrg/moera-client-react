@@ -1650,6 +1650,13 @@ export const EVENT_SCHEMAS = {
                         }
                     ]
                 },
+                "externalSourceUri": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    },
+                    nullable: true
+                },
             },
             required: [
                 "type",
@@ -1815,6 +1822,13 @@ export const EVENT_SCHEMAS = {
                             type: "null"
                         }
                     ]
+                },
+                "externalSourceUri": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    },
+                    nullable: true
                 },
             },
             required: [

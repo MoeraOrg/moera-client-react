@@ -27,13 +27,13 @@ export default function EntryGalleryExpanded({nodeName, postingId, media, onColl
     return (
         <div id="posting-gallery" className="gallery-expanded">
             {media?.map(media => {
-                const mediaFile = media.media;
-                if (mediaFile == null) {
+                const mediaId = media.media?.id ?? media.remoteMedia?.mediaId;
+                if (mediaId == null) {
                     return null;
                 }
-                const posting = mediaPostings.get(mediaFile.id);
+                const posting = mediaPostings.get(mediaId);
                 return (
-                    <div key={mediaFile.id} className="mt-4 mb-4">
+                    <div key={mediaId} className="mt-4 mb-4">
                         <EntryGallery postingId={postingId} nodeName={nodeName} media={[media]}
                                       onCollapse={onCollapse}/>
                         {posting &&
@@ -44,7 +44,7 @@ export default function EntryGalleryExpanded({nodeName, postingId, media, onColl
                                     <PostingReactions nodeName={nodeName} postingId={posting.id}
                                                       reactions={posting.reactions}/>
                                 </div>
-                                {connectedToHome && <EntryGalleryButtons posting={posting} mediaId={mediaFile.id}/>}
+                                {connectedToHome && <EntryGalleryButtons posting={posting} mediaId={mediaId}/>}
                             </>
                         }
                     </div>
@@ -62,7 +62,7 @@ function getMediaPostings(
     }
     return new Map(media
         .filter(ma => !ma.embedded)
-        .map(ma => [ma.media?.id, getPosting(state, ma.postingId ?? null, nodeName)])
+        .map(ma => [ma.media?.id ?? ma.remoteMedia?.mediaId, getPosting(state, ma.postingId ?? null, nodeName)])
         .filter((r): r is [string, PostingInfo] => r[0] != null && r[1] != null)
     );
 }

@@ -130,7 +130,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             const nodeName = action.context.ownerNameOrUrl;
             if (posting) {
                 const postingState = state[nodeName]?.[posting.id];
-                if (postingState != null) {
+                if (postingState?.posting != null) {
                     const refs = (postingState.posting?.feedReferences ?? []).filter(r => r.storyId !== id);
                     refs.push(toFeedReference(action.payload.story));
                     return immutable.set(state, [nodeName, posting.id, "posting", "feedReferences"], refs);
@@ -144,7 +144,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             const nodeName = action.context.ownerNameOrUrl;
             if (postingId != null) {
                 const postingState = state[nodeName]?.[postingId];
-                if (postingState != null) {
+                if (postingState?.posting != null) {
                     const refs = (postingState.posting?.feedReferences ?? []).filter(r => r.storyId !== id);
                     return immutable.set(state, [nodeName, postingId, "posting", "feedReferences"], refs);
                 }
@@ -215,7 +215,10 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         case "POSTING_OPERATIONS_UPDATED": {
             let {id, nodeName, operations} = action.payload;
             nodeName = absoluteNodeName(nodeName, action.context);
-            return immutable.set(state, [nodeName, id, "posting", "operations"], operations);
+            if (state[nodeName]?.[id]?.posting) {
+                return immutable.set(state, [nodeName, id, "posting", "operations"], operations);
+            }
+            return state;
         }
 
         case "EVENT_HOME_REMOTE_POSTING_VERIFIED": {
@@ -240,7 +243,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         case "POSTING_REACT": {
             let {id, negative, emoji, nodeName} = action.payload;
             nodeName = absoluteNodeName(nodeName, action.context);
-            if (state[nodeName]?.[id]) {
+            if (state[nodeName]?.[id]?.posting) {
                 return immutable.set(state, [nodeName, id, "posting", "clientReaction"], {negative, emoji});
             }
             return state;
@@ -249,7 +252,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         case "POSTING_REACTION_DELETE": {
             let {id, nodeName} = action.payload;
             nodeName = absoluteNodeName(nodeName, action.context);
-            if (state[nodeName]?.[id]) {
+            if (state[nodeName]?.[id]?.posting) {
                 return immutable.del(state, [nodeName, id, "posting", "clientReaction"]);
             }
             return state;
@@ -275,7 +278,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             if (nodeState) {
                 const istate = immutable.wrap(state);
                 totals
-                    .filter(ts => nodeState[ts.entryId] != null)
+                    .filter(ts => nodeState[ts.entryId]?.posting != null)
                     .forEach(ts => istate.set([nodeName, ts.entryId, "posting", "reactions"], ts));
                 reactions
                     .filter(r => nodeState[r.entryId]?.posting != null)
@@ -310,9 +313,10 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             for (const postingNode of Object.keys(state)) {
                 for (const postingId of Object.keys(state[postingNode] ?? {})) {
                     const posting = state[postingNode]![postingId]!.posting;
-                    if ((postingNode === nodeName && postingId === id)
-                        || (posting?.receiverName === nodeName && posting.receiverPostingId === id)
-                    ) {
+                    if (posting != null && (
+                        (postingNode === nodeName && postingId === id)
+                        || (posting.receiverName === nodeName && posting.receiverPostingId === id)
+                    )) {
                         istate.update([postingNode, postingId, "posting", "totalComments"], total => total + delta);
                     }
                 }
@@ -324,7 +328,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             const {id, viewCount} = action.payload;
             const {homeOwnerName: nodeName} = action.context;
 
-            if (nodeName != null && state[nodeName]?.[id]) {
+            if (nodeName != null && state[nodeName]?.[id]?.posting) {
                 return immutable.set(state, [nodeName, id, "posting", "viewCount"], viewCount);
             }
             return state;
@@ -336,7 +340,9 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             if (ids.length > 0) {
                 const istate = immutable.wrap(state);
                 for (const {nodeName, postingId} of ids) {
-                    istate.set([nodeName, postingId, "posting", "clientReaction"], {negative, emoji});
+                    if (state[nodeName]?.[postingId]?.posting) {
+                        istate.set([nodeName, postingId, "posting", "clientReaction"], {negative, emoji});
+                    }
                 }
                 return istate.value();
             }
@@ -349,7 +355,9 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             if (ids.length > 0) {
                 const istate = immutable.wrap(state);
                 for (const {nodeName, postingId} of ids) {
-                    istate.del([nodeName, postingId, "posting", "clientReaction"]);
+                    if (state[nodeName]?.[postingId]?.posting) {
+                        istate.del([nodeName, postingId, "posting", "clientReaction"]);
+                    }
                 }
                 return istate.value();
             }
@@ -379,7 +387,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
 
             nodeName = absoluteNodeName(nodeName, action.context);
             const postingState = state[nodeName]?.[id];
-            if (postingState != null) {
+            if (postingState?.posting != null) {
                 const blockedInstants = [
                     ...(postingState.posting?.blockedInstants ?? []),
                     {id: blockedInstantId, storyType: "comment-added" as const}
@@ -411,7 +419,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             }
 
             const postingState = state[nodeName]?.[entryId];
-            if (postingState != null) {
+            if (postingState?.posting != null) {
                 const blockedInstants = [...(postingState.posting?.blockedInstants ?? []), {id, storyType}];
                 return immutable.set(state, [nodeName, entryId, "posting", "blockedInstants"], blockedInstants);
             }
@@ -446,6 +454,9 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             const nodeState = state[nodeName] ?? {};
             const postingIds = blockedByUser.postingId != null ? [blockedByUser.postingId] : Object.keys(nodeState);
             for (const postingId of postingIds) {
+                if (nodeState[postingId]?.posting == null) {
+                    continue;
+                }
                 switch (blockedByUser.blockedOperation) {
                     case "comment":
                         istate.push([nodeName, postingId, "posting", "blockedOperations"], "addComment");
@@ -471,16 +482,28 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             const nodeState = state[nodeName] ?? {};
             const postingIds = blockedByUser.postingId != null ? [blockedByUser.postingId] : Object.keys(nodeState);
             for (const postingId of postingIds) {
+                if (nodeState[postingId]?.posting == null) {
+                    continue;
+                }
                 switch (blockedByUser.blockedOperation) {
                     case "comment":
-                        istate.update([nodeName, postingId, "posting", "blockedOperations"],
-                            (ops: BlockedEntryOperation[]) => ops.filter(op => op !== "addComment"));
+                        istate.update(
+                            [nodeName, postingId, "posting", "blockedOperations"],
+                            (ops: BlockedEntryOperation[] | null | undefined) =>
+                                (ops ?? []).filter(op => op !== "addComment")
+                        );
                         break;
                     case "reaction":
-                        istate.update([nodeName, postingId, "posting", "blockedOperations"],
-                            (ops: BlockedEntryOperation[]) => ops.filter(op => op !== "addReaction"));
-                        istate.update([nodeName, postingId, "posting", "blockedCommentOperations"],
-                            (ops: BlockedEntryOperation[]) => ops.filter(op => op !== "addReaction"));
+                        istate.update(
+                            [nodeName, postingId, "posting", "blockedOperations"],
+                            (ops: BlockedEntryOperation[] | null | undefined) =>
+                                (ops ?? []).filter(op => op !== "addReaction")
+                        );
+                        istate.update(
+                            [nodeName, postingId, "posting", "blockedCommentOperations"],
+                            (ops: BlockedEntryOperation[] | null | undefined) =>
+                                (ops ?? []).filter(op => op !== "addReaction")
+                        );
                         break;
                 }
             }

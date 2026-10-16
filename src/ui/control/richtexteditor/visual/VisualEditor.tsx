@@ -107,7 +107,7 @@ export default function VisualEditor({
                 }
                 break;
             case "set_node":
-                if (isLinkElement(operation.properties)) {
+                if (isLinkElement(editor.node(operation.path)[0])) {
                     setTimeout(() => updateUrls());
                 }
                 break;
@@ -122,7 +122,7 @@ export default function VisualEditor({
                 onChange(editor.children as Scripture);
             }
         }, 200);
-    }, [delayedUpdateUrls, editor.children, onChange, updateUrls]);
+    }, [delayedUpdateUrls, editor, onChange, updateUrls]);
 
     useEffect(() => {
         editor.addChangeListener(onEditorChange);

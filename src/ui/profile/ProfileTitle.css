@@ -42,6 +42,20 @@
     white-space: nowrap;
 }
 
+#profile-title .source-uri {
+    font-size: .88rem;
+    line-height: 175%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#profile-title .source-uri svg {
+    color: var(--bs-gray-600);
+    margin-right: .5em;
+    vertical-align: -.3em;
+}
+
 #profile-title .title {
     color: var(--bs-gray-900);
     font-size: .88rem;

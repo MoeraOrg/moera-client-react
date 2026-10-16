@@ -87,7 +87,7 @@ export default function RichTextEditorImageList({value, className, nodeName, noE
                 }
             </SortableContext>
             {ReactDOM.createPortal(
-                <DragOverlay zIndex={1080} dropAnimation={null}>
+                <DragOverlay className="rich-text-editor-uploaded-image" zIndex={1080} dropAnimation={null}>
                     {dragged &&
                         <AttachedImage media={dragged} nodeName={nodeName} dragging/>
                     }

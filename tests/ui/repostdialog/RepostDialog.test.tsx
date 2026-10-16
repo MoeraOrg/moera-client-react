@@ -39,7 +39,16 @@ jest.mock("ui/hook", () => ({
 }));
 
 jest.mock("state/home/selectors", () => ({
-    getHomeOwnerName: () => mockHomeOwnerName
+    getHomeOwnerName: () => mockHomeOwnerName,
+    getRelNodeNameContext: () => ({
+        ownerNameOrUrl: mockState.repostDialog.nodeName,
+        homeOwnerNameOrUrl: mockHomeOwnerName,
+        searchName: ""
+    })
+}));
+
+jest.mock("state/settings/selectors", () => ({
+    getSetting: () => "public"
 }));
 
 jest.mock("ui/nodename/hooks", () => ({

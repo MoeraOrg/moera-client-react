@@ -99,9 +99,9 @@ export default function ProfileSidebar() {
                                 <Trans i18nKey="count-subscribers" values={{count: subscribersTotal}}><em/></Trans>
                             </Jump>
                         </div>
-                        {profile?.bioHtml &&
+                        {(profile?.bioHtml || sourceUri) &&
                             <div className="bio">
-                                <EntryHtml html={profile.bioHtml} nodeName={REL_CURRENT}/>
+                                <EntryHtml html={profile?.bioHtml} nodeName={REL_CURRENT}/>
                                 <ProfileSourceDisclaimer nodeSourceUri={sourceUri}
                                                          title={formatFullName(nodeName, fullName)}/>
                             </div>

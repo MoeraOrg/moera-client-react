@@ -62,19 +62,21 @@ function getDraftText(draft: ExtDraftInfo): string {
         const linkMedia = new Set(draft.body.linkPreviews?.map(lp => lp.imageHash));
         let hasGallery = false;
         let hasFiles = false;
-        for (const media of draft.media) {
-            if (media.media?.hash == null || linkMedia.has(media.media.hash)) {
+        for (const attachment of draft.media) {
+            const media = attachment.media ?? attachment.remoteMedia;
+            if (media == null || (media.hash != null && linkMedia.has(media.hash))) {
                 continue;
             }
-            if (media.media.attachment) {
-                if (media.media.title) {
-                    text += " " + media.media.title + "." + extension(media.media.mimeType);
+            if (media.attachment) {
+                if (media.title) {
+                    const ext = extension(media.mimeType);
+                    text += " " + media.title + (ext != null ? "." + ext : "");
                 } else {
                     hasFiles = true;
                 }
             } else {
-                if (media.media.textContent) {
-                    text += " " + media.media.textContent;
+                if (media.textContent) {
+                    text += " " + media.textContent;
                 } else {
                     hasGallery = true;
                 }

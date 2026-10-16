@@ -10,7 +10,9 @@ http://moera.org/development/development-environment.html
 
 ## Installation instructions
 
-1. As a prerequisite, you need to have Node.js 20+ installed.
+1. As a prerequisite, you need to have Node.js 22.12.0+ installed. Node.js 24
+   is recommended; if you use nvm, run `nvm install` and `nvm use` in the source
+   directory to select the version from `.nvmrc`.
 2. Go to the source directory.
 3. Install project dependencies with `npm install`.
 4. By default, the web server that serves the client runs on port 3000. If you
@@ -22,6 +24,8 @@ http://moera.org/development/development-environment.html
 7. A new browser tab with the client in it is opened automatically.
 
 ## Note for WebStorm/IntelliJ users
+
+Select Node.js 22.12.0+ as the project's Node.js runtime in the IDE settings.
 
 The project uses absolute paths for imports. If your IDE complains about
 non-installed modules, you may do the following (or read [the full

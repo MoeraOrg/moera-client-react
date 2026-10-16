@@ -23999,7 +23999,7 @@ return errors === 0;
 }
 
 export const StoryAddedEvent = validate107;
-const schema110 = {"type":"object","properties":{"type":{"type":"string"},"id":{"type":"string"},"storyType":{"type":"string"},"feedName":{"type":"string"},"publishedAt":{"type":"integer"},"pinned":{"type":"boolean"},"moment":{"type":"integer"},"postingId":{"type":"string","nullable":true},"commentId":{"type":"string","nullable":true},"viewed":{"type":"boolean","nullable":true},"read":{"type":"boolean","nullable":true},"satisfied":{"type":"boolean","nullable":true},"summaryNodeName":{"type":"string","nullable":true},"summaryFullName":{"type":"string","nullable":true},"summarySourceUri":{"type":"string","nullable":true},"summaryAvatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"summary":{"type":"string","nullable":true},"summaryData":{"anyOf":[{"$ref":"node#/definitions/StorySummaryData","type":"object","nullable":true},{"type":"null"}]},"remoteNodeName":{"type":"string","nullable":true},"remoteFullName":{"type":"string","nullable":true},"remoteSourceUri":{"type":"string","nullable":true},"remotePostingId":{"type":"string","nullable":true},"remoteCommentId":{"type":"string","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/StoryOperations","type":"object","nullable":true},{"type":"null"}]}},"required":["type","id","storyType","feedName","publishedAt","pinned","moment"],"additionalProperties":false};
+const schema110 = {"type":"object","properties":{"type":{"type":"string"},"id":{"type":"string"},"storyType":{"type":"string"},"feedName":{"type":"string"},"publishedAt":{"type":"integer"},"pinned":{"type":"boolean"},"moment":{"type":"integer"},"postingId":{"type":"string","nullable":true},"commentId":{"type":"string","nullable":true},"viewed":{"type":"boolean","nullable":true},"read":{"type":"boolean","nullable":true},"satisfied":{"type":"boolean","nullable":true},"summaryNodeName":{"type":"string","nullable":true},"summaryFullName":{"type":"string","nullable":true},"summarySourceUri":{"type":"string","nullable":true},"summaryAvatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"summary":{"type":"string","nullable":true},"summaryData":{"anyOf":[{"$ref":"node#/definitions/StorySummaryData","type":"object","nullable":true},{"type":"null"}]},"remoteNodeName":{"type":"string","nullable":true},"remoteFullName":{"type":"string","nullable":true},"remoteSourceUri":{"type":"string","nullable":true},"remotePostingId":{"type":"string","nullable":true},"remoteCommentId":{"type":"string","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/StoryOperations","type":"object","nullable":true},{"type":"null"}]},"externalSourceUri":{"type":"array","items":{"type":"string"},"nullable":true}},"required":["type","id","storyType","feedName","publishedAt","pinned","moment"],"additionalProperties":false};
 const schema123 = {"type":"object","properties":{"edit":{"type":"string","nullable":true},"delete":{"type":"string","nullable":true}},"additionalProperties":false};
 const schema112 = {"type":"object","properties":{"node":{"anyOf":[{"$ref":"node#/definitions/StorySummaryNode","type":"object","nullable":true},{"type":"null"}]},"posting":{"anyOf":[{"$ref":"node#/definitions/StorySummaryEntry","type":"object","nullable":true},{"type":"null"}]},"comment":{"anyOf":[{"$ref":"node#/definitions/StorySummaryEntry","type":"object","nullable":true},{"type":"null"}]},"comments":{"type":"array","items":{"$ref":"node#/definitions/StorySummaryEntry"},"nullable":true},"totalComments":{"type":"integer","nullable":true},"repliedTo":{"anyOf":[{"$ref":"node#/definitions/StorySummaryEntry","type":"object","nullable":true},{"type":"null"}]},"parentPosting":{"anyOf":[{"$ref":"node#/definitions/StorySummaryEntry","type":"object","nullable":true},{"type":"null"}]},"reaction":{"anyOf":[{"$ref":"node#/definitions/StorySummaryReaction","type":"object","nullable":true},{"type":"null"}]},"reactions":{"type":"array","items":{"$ref":"node#/definitions/StorySummaryReaction"},"nullable":true},"totalReactions":{"type":"integer","nullable":true},"sharings":{"type":"array","items":{"$ref":"node#/definitions/StorySummaryNode"},"nullable":true},"totalSharings":{"type":"integer","nullable":true},"feedName":{"type":"string","nullable":true},"subscriptionReason":{"type":"string","nullable":true},"friendGroup":{"anyOf":[{"$ref":"node#/definitions/StorySummaryFriendGroup","type":"object","nullable":true},{"type":"null"}]},"blocked":{"anyOf":[{"$ref":"node#/definitions/StorySummaryBlocked","type":"object","nullable":true},{"type":"null"}]},"sheriff":{"anyOf":[{"$ref":"node#/definitions/StorySummarySheriff","type":"object","nullable":true},{"type":"null"}]},"description":{"type":"string","nullable":true},"clicks":{"type":"array","items":{"$ref":"node#/definitions/StorySummaryPageClicks"},"nullable":true}},"additionalProperties":false};
 const schema113 = {"type":"object","properties":{"ownerName":{"type":"string","nullable":true},"ownerFullName":{"type":"string","nullable":true},"ownerSourceUri":{"type":"string","nullable":true},"ownerGender":{"type":"string","nullable":true}},"additionalProperties":false};
@@ -29081,6 +29081,89 @@ var valid0 = _errs97 === errors;
 else {
 var valid0 = true;
 }
+if(valid0){
+if(data.externalSourceUri !== undefined){
+let data34 = data.externalSourceUri;
+const _errs113 = errors;
+if((!(Array.isArray(data34))) && (data34 !== null)){
+let dataType37 = typeof data34;
+let coerced37 = undefined;
+if(dataType37 == 'object' && Array.isArray(data34) && data34.length == 1){
+data34 = data34[0];
+dataType37 = typeof data34;
+if((Array.isArray(data34)) && (data34 === null)){
+coerced37 = data34;
+}
+}
+if(!(coerced37 !== undefined)){
+if(dataType37 === "string" || dataType37 === "number"
+              || dataType37 === "boolean" || data34 === null){
+coerced37 = [data34];
+}
+else if(data34 === "" || data34 === 0 || data34 === false){
+coerced37 = null;
+}
+else {
+validate107.errors = [{instancePath:instancePath+"/externalSourceUri",schemaPath:"#/properties/externalSourceUri/type",keyword:"type",params:{type: "array"},message:"must be array"}];
+return false;
+}
+}
+if(coerced37 !== undefined){
+data34 = coerced37;
+if(data !== undefined){
+data["externalSourceUri"] = coerced37;
+}
+}
+}
+if(errors === _errs113){
+if(Array.isArray(data34)){
+var valid8 = true;
+const len0 = data34.length;
+for(let i0=0; i0<len0; i0++){
+let data35 = data34[i0];
+const _errs116 = errors;
+if(typeof data35 !== "string"){
+let dataType38 = typeof data35;
+let coerced38 = undefined;
+if(dataType38 == 'object' && Array.isArray(data35) && data35.length == 1){
+data35 = data35[0];
+dataType38 = typeof data35;
+if(typeof data35 === "string"){
+coerced38 = data35;
+}
+}
+if(!(coerced38 !== undefined)){
+if(dataType38 == "number" || dataType38 == "boolean"){
+coerced38 = "" + data35;
+}
+else if(data35 === null){
+coerced38 = "";
+}
+else {
+validate107.errors = [{instancePath:instancePath+"/externalSourceUri/" + i0,schemaPath:"#/properties/externalSourceUri/items/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+return false;
+}
+}
+if(coerced38 !== undefined){
+data35 = coerced38;
+if(data34 !== undefined){
+data34[i0] = coerced38;
+}
+}
+}
+var valid8 = _errs116 === errors;
+if(!valid8){
+break;
+}
+}
+}
+}
+var valid0 = _errs113 === errors;
+}
+else {
+var valid0 = true;
+}
+}
 }
 }
 }
@@ -29425,7 +29508,7 @@ return errors === 0;
 }
 
 export const StoryUpdatedEvent = validate117;
-const schema125 = {"type":"object","properties":{"type":{"type":"string"},"id":{"type":"string"},"storyType":{"type":"string"},"feedName":{"type":"string"},"publishedAt":{"type":"integer"},"pinned":{"type":"boolean"},"moment":{"type":"integer"},"postingId":{"type":"string","nullable":true},"commentId":{"type":"string","nullable":true},"viewed":{"type":"boolean","nullable":true},"read":{"type":"boolean","nullable":true},"satisfied":{"type":"boolean","nullable":true},"summaryNodeName":{"type":"string","nullable":true},"summaryFullName":{"type":"string","nullable":true},"summarySourceUri":{"type":"string","nullable":true},"summaryAvatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"summary":{"type":"string","nullable":true},"summaryData":{"anyOf":[{"$ref":"node#/definitions/StorySummaryData","type":"object","nullable":true},{"type":"null"}]},"remoteNodeName":{"type":"string","nullable":true},"remoteFullName":{"type":"string","nullable":true},"remoteSourceUri":{"type":"string","nullable":true},"remotePostingId":{"type":"string","nullable":true},"remoteCommentId":{"type":"string","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/StoryOperations","type":"object","nullable":true},{"type":"null"}]}},"required":["type","id","storyType","feedName","publishedAt","pinned","moment"],"additionalProperties":false};
+const schema125 = {"type":"object","properties":{"type":{"type":"string"},"id":{"type":"string"},"storyType":{"type":"string"},"feedName":{"type":"string"},"publishedAt":{"type":"integer"},"pinned":{"type":"boolean"},"moment":{"type":"integer"},"postingId":{"type":"string","nullable":true},"commentId":{"type":"string","nullable":true},"viewed":{"type":"boolean","nullable":true},"read":{"type":"boolean","nullable":true},"satisfied":{"type":"boolean","nullable":true},"summaryNodeName":{"type":"string","nullable":true},"summaryFullName":{"type":"string","nullable":true},"summarySourceUri":{"type":"string","nullable":true},"summaryAvatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"summary":{"type":"string","nullable":true},"summaryData":{"anyOf":[{"$ref":"node#/definitions/StorySummaryData","type":"object","nullable":true},{"type":"null"}]},"remoteNodeName":{"type":"string","nullable":true},"remoteFullName":{"type":"string","nullable":true},"remoteSourceUri":{"type":"string","nullable":true},"remotePostingId":{"type":"string","nullable":true},"remoteCommentId":{"type":"string","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/StoryOperations","type":"object","nullable":true},{"type":"null"}]},"externalSourceUri":{"type":"array","items":{"type":"string"},"nullable":true}},"required":["type","id","storyType","feedName","publishedAt","pinned","moment"],"additionalProperties":false};
 
 function validate117(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
 let vErrors = null;
@@ -31124,6 +31207,89 @@ var valid0 = _errs97 === errors;
 }
 else {
 var valid0 = true;
+}
+if(valid0){
+if(data.externalSourceUri !== undefined){
+let data34 = data.externalSourceUri;
+const _errs113 = errors;
+if((!(Array.isArray(data34))) && (data34 !== null)){
+let dataType37 = typeof data34;
+let coerced37 = undefined;
+if(dataType37 == 'object' && Array.isArray(data34) && data34.length == 1){
+data34 = data34[0];
+dataType37 = typeof data34;
+if((Array.isArray(data34)) && (data34 === null)){
+coerced37 = data34;
+}
+}
+if(!(coerced37 !== undefined)){
+if(dataType37 === "string" || dataType37 === "number"
+              || dataType37 === "boolean" || data34 === null){
+coerced37 = [data34];
+}
+else if(data34 === "" || data34 === 0 || data34 === false){
+coerced37 = null;
+}
+else {
+validate117.errors = [{instancePath:instancePath+"/externalSourceUri",schemaPath:"#/properties/externalSourceUri/type",keyword:"type",params:{type: "array"},message:"must be array"}];
+return false;
+}
+}
+if(coerced37 !== undefined){
+data34 = coerced37;
+if(data !== undefined){
+data["externalSourceUri"] = coerced37;
+}
+}
+}
+if(errors === _errs113){
+if(Array.isArray(data34)){
+var valid8 = true;
+const len0 = data34.length;
+for(let i0=0; i0<len0; i0++){
+let data35 = data34[i0];
+const _errs116 = errors;
+if(typeof data35 !== "string"){
+let dataType38 = typeof data35;
+let coerced38 = undefined;
+if(dataType38 == 'object' && Array.isArray(data35) && data35.length == 1){
+data35 = data35[0];
+dataType38 = typeof data35;
+if(typeof data35 === "string"){
+coerced38 = data35;
+}
+}
+if(!(coerced38 !== undefined)){
+if(dataType38 == "number" || dataType38 == "boolean"){
+coerced38 = "" + data35;
+}
+else if(data35 === null){
+coerced38 = "";
+}
+else {
+validate117.errors = [{instancePath:instancePath+"/externalSourceUri/" + i0,schemaPath:"#/properties/externalSourceUri/items/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+return false;
+}
+}
+if(coerced38 !== undefined){
+data35 = coerced38;
+if(data34 !== undefined){
+data34[i0] = coerced38;
+}
+}
+}
+var valid8 = _errs116 === errors;
+if(!valid8){
+break;
+}
+}
+}
+}
+var valid0 = _errs113 === errors;
+}
+else {
+var valid0 = true;
+}
 }
 }
 }

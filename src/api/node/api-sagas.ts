@@ -2073,6 +2073,18 @@ export async function createSheriffOrder(
     });
 }
 
+export async function getStoriesByExternalSource(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, external: string,
+    errorFilter: ErrorFilter = false, auth: true | string = true
+): Promise<API.StoryInfo[]> {
+
+    const location = urlWithParameters(ut`/stories`, {external});
+    return callApi<API.StoryInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "StoryInfoArray", decodeBodies: true,
+        errorFilter
+    });
+}
+
 export async function getStory(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, id: string,
     errorFilter: ErrorFilter = false, auth: boolean | string = true

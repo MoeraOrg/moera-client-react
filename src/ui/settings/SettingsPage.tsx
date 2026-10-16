@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -25,8 +25,12 @@ type NotebookSide = "menu" | "sheet";
 export default function SettingsPage() {
     const connectedToHome = useSelector(isConnectedToHome);
     const tab = useSelector((state: ClientState) => state.settings.tab);
+    const sheet = useSelector((state: ClientState) => state.settings.sheet);
     const newsHref = useHomeNews();
-    const [side, setSide] = React.useState<NotebookSide>("menu");
+    const [side, setSide] = React.useState<NotebookSide>(sheet ? "sheet" : "menu");
+
+    useEffect(() => setSide(sheet ? "sheet" : "menu"), [tab, sheet]);
+
     const switcherRef = useRef<HTMLDivElement>(null);
     useOverlay(
         switcherRef,

@@ -4,5 +4,7 @@
     font-weight: 600;
     border: none;
     border-radius: .25em;
+    padding-top: 0;
+    padding-bottom: 0;
     cursor: pointer;
 }

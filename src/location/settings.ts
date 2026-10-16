@@ -25,7 +25,7 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (srcTab !== dstTab) {
         actions.push(settingsGoToTab(dstTab));
     }
-    if (srcInfo.hash !== dstInfo.hash) {
+    if (srcTab !== dstTab || srcInfo.hash !== dstInfo.hash) {
         actions.push(settingsGoToSheet(dstInfo.hash));
     }
     return actions;

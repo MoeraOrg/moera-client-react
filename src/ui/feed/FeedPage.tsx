@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
@@ -56,18 +56,23 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
     const [atTop, setAtTop] = useState<boolean>(true);
     const [atBottom, setAtBottom] = useState<boolean>(false);
     const [topmostMoment, setTopmostMoment] = useState<number>(Number.MAX_SAFE_INTEGER);
-    const currentTopmostMoment = useRef<number>(Number.MAX_SAFE_INTEGER);
+    const scrollPosition = useRef<{element: HTMLElement; top: number} | null>(null);
 
     const {t} = useTranslation();
 
-    const onScroll = useCallback(() => {
+    const rememberScrollPosition = useCallback(() => {
         const moment = getTopmostMoment();
-        currentTopmostMoment.current = moment;
-        setTopmostMoment(moment);
+        const element = getPostingAt(moment);
+        scrollPosition.current = element != null ? {element, top: element.getBoundingClientRect().top} : null;
+        return moment;
     }, []);
 
+    const onScroll = useCallback(() => {
+        setTopmostMoment(rememberScrollPosition());
+    }, [rememberScrollPosition]);
+
     const beginning = stories.length > 0 ? stories[0].story.moment : null;
-    const prevBeginning = useRef<number | null>(null)
+    const prevBeginning = useRef<number | null>(null);
 
     const mostRecentMoment = before >= Number.MAX_SAFE_INTEGER
         ? beginning ?? Number.MAX_SAFE_INTEGER // we know what the last story in the feed is
@@ -87,10 +92,18 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
         }
     }, [mostRecentMoment]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (anchor == null) {
-            if (beginning !== prevBeginning.current) {
-                scrollTo(currentTopmostMoment.current);
+            if (prevBeginning.current == null && beginning != null) {
+                scrollTo(Number.MAX_SAFE_INTEGER);
+            } else if (beginning !== prevBeginning.current && window.scrollY > 0) {
+                const position = scrollPosition.current;
+                if (position != null && position.element.isConnected) {
+                    const delta = position.element.getBoundingClientRect().top - position.top;
+                    if (delta !== 0) {
+                        window.scrollBy(0, delta);
+                    }
+                }
             }
             prevBeginning.current = beginning;
             return;
@@ -110,6 +123,11 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
             dispatch(feedScrolledToAnchor(nodeName, feedName));
         }
     }, [after, anchor, before, beginning, dispatch, feedName, nodeName, onScroll, scrollTo]);
+
+    // Refresh after every commit, including updates that do not produce a scroll event.
+    useLayoutEffect(() => {
+        rememberScrollPosition();
+    });
 
     const loadFuture = useCallback(() => {
         if (loadingFuture || before >= Number.MAX_SAFE_INTEGER) {

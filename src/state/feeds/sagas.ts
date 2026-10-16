@@ -311,6 +311,9 @@ async function feedsUpdateSaga(action: WithContext<FeedsUpdateAction>): Promise<
     await homeIntroduced();
     const feeds = select(getAllFeeds);
     for (const {nodeName, feedName} of feeds) {
+        if (nodeName !== action.context.homeOwnerNameOrUrl && feedName !== "timeline") {
+            continue;
+        }
         try {
             const status = await Node.getFeedStatus(action, nodeName, feedName);
             dispatch(feedStatusSet(nodeName, feedName, status).causedBy(action));
@@ -398,7 +401,10 @@ async function recommendationDontSaga(action: WithContext<RecommendationDontActi
         await Node.excludeNodeFromRecommendations(action, sourceName, receiverName);
         dispatch(flashBox(i18n.t("recommendation-settings-updated")).causedBy(action));
         if (deleteAll) {
-            Node.deleteFeedStories(action, REL_HOME, "news", "posting-added", receiverName, true);
+            await Promise.all([
+                Node.deleteFeedStories(action, REL_HOME, "news", "posting-added", receiverName, true),
+                Node.deleteFeedStories(action, REL_HOME, "explore", "posting-added", receiverName, true)
+            ]);
         }
     } catch (e) {
         dispatch(errorThrown(e));

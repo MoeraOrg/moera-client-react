@@ -95,7 +95,7 @@ export default function DetailedPosting({feedName, story, posting, deleting}: Pr
             <EntryHtml
                 className="content"
                 postingId={posting.id}
-                html={posting.body?.text}
+                html={posting.body.text}
                 nodeName={REL_CURRENT}
                 media={posting.media}
             />
@@ -112,7 +112,7 @@ export default function DetailedPosting({feedName, story, posting, deleting}: Pr
             }
             <EntryLinkPreviews
                 nodeName={REL_CURRENT}
-                linkPreviews={posting.body?.linkPreviews}
+                linkPreviews={posting.body.linkPreviews}
                 noFollow={false}
                 media={posting.media ?? null}
             />

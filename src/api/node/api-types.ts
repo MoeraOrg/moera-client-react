@@ -1262,6 +1262,7 @@ export interface StoryAttributes {
     viewed?: boolean | null;
     read?: boolean | null;
     satisfied?: boolean | null;
+    externalSourceUri?: string[] | null;
 }
 
 export interface StorySummaryBlocked {
@@ -2046,6 +2047,7 @@ export interface StoryInfoBase<B> {
     remoteCommentId?: string | null;
     remoteMediaId?: string | null;
     operations?: StoryOperations | null;
+    externalSourceUri?: string[] | null;
 }
 
 export type EncodedStoryInfo = StoryInfoBase<string>;

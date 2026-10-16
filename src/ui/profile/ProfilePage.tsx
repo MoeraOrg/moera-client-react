@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import { getOwnerCard } from "state/node/selectors";
+import { getOwnerCard, getOwnerFullName, getOwnerName, getOwnerSourceUri } from "state/node/selectors";
 import { useHomeNews } from "ui/feed/feeds";
 import MainMenuSidebar from "ui/mainmenu/MainMenuSidebar";
 import BottomMenu from "ui/mainmenu/BottomMenu";
@@ -14,12 +14,17 @@ import BackBoxInner from "ui/page/BackBoxInner";
 import ProfileSidebar from "ui/profile/ProfileSidebar";
 import ProfileTitle from "ui/profile/ProfileTitle";
 import ProfileTabs from "ui/profile/ProfileTabs";
+import ProfileSourceDisclaimer from "ui/profile/ProfileSourceDisclaimer";
 import EntryHtml from "ui/entry/EntryHtml";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
+import { formatFullName } from "util/names";
 import "./ProfilePage.css";
 
 export default function ProfilePage() {
     const profile = useSelector((state: ClientState) => getOwnerCard(state)?.details?.profile);
+    const nodeName = useSelector(getOwnerName);
+    const fullName = useSelector(getOwnerFullName);
+    const sourceUri = useSelector(getOwnerSourceUri);
     const newsHref = useHomeNews();
     const {t} = useTranslation();
 
@@ -39,7 +44,13 @@ export default function ProfilePage() {
                     </BackBoxInner>
                 </BackBox>
                 <main className="content-panel">
-                    {profile?.bioHtml && <EntryHtml className="bio" html={profile.bioHtml} nodeName={REL_CURRENT}/>}
+                    {(profile?.bioHtml || sourceUri) &&
+                        <>
+                            <EntryHtml className="bio" html={profile?.bioHtml} nodeName={REL_CURRENT}/>
+                            <ProfileSourceDisclaimer nodeSourceUri={sourceUri}
+                                                     title={formatFullName(nodeName, fullName)}/>
+                        </>
+                    }
                     {profile?.email &&
                         <p>
                             <b>{t("e-mail")}:</b>{" "}

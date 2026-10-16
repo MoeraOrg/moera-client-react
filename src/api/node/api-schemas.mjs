@@ -5889,6 +5889,13 @@ export const NODE_API_SCHEMAS = {
                         }
                     ]
                 },
+                "externalSourceUri": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    },
+                    nullable: true
+                },
             },
             required: [
                 "id",
@@ -5899,6 +5906,13 @@ export const NODE_API_SCHEMAS = {
                 "moment",
             ],
             additionalProperties: false
+        },
+
+        StoryInfoArray: {
+            type: "array",
+            items: {
+                $ref: "node#/definitions/StoryInfo"
+            }
         },
 
         CommentCreated: {
