@@ -694,10 +694,11 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
         }
 
         case "EVENT_RECEIVER_COMMENT_DELETED": {
-            const {id, postingId, moment} = action.payload;
+            const {id, postingId, moment, sourceNode} = action.payload;
 
             if (
-                state.comments.receiverPostingId !== postingId
+                state.comments.receiverName !== sourceNode
+                || state.comments.receiverPostingId !== postingId
                 || moment > state.comments.before
                 || moment <= state.comments.after
             ) {

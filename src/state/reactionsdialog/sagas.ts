@@ -19,8 +19,8 @@ import { REL_HOME } from "util/rel-node-name";
 import { notNull } from "util/misc";
 
 export default [
-    saga("REACTIONS_DIALOG_PAST_REACTIONS_LOAD", "", reactionsDialogPastReactionsLoadSaga),
-    saga("REACTIONS_DIALOG_TOTALS_LOAD", "", reactionsDialogTotalsLoadSaga),
+    saga("REACTIONS_DIALOG_PAST_REACTIONS_LOAD", null, reactionsDialogPastReactionsLoadSaga),
+    saga("REACTIONS_DIALOG_TOTALS_LOAD", null, reactionsDialogTotalsLoadSaga),
     saga(
         "REACTION_VERIFY",
         payload => `${payload.postingId}:${payload.commentId}:${payload.ownerName}`,
@@ -31,7 +31,8 @@ export default [
 async function reactionsDialogPastReactionsLoadSaga(
     action: WithContext<ReactionsDialogPastReactionsLoadAction>
 ): Promise<void> {
-    const {nodeName, posting, commentId, negative, before, emoji} = select(state => ({
+    const {generation, nodeName, posting, commentId, negative, before, emoji} = select(state => ({
+        generation: state.reactionsDialog.generation,
         nodeName: state.reactionsDialog.nodeName,
         posting: getReactionsDialogPosting(state),
         commentId: state.reactionsDialog.commentId,
@@ -48,18 +49,26 @@ async function reactionsDialogPastReactionsLoadSaga(
         const slice = commentId == null
             ? await Node.getPostingReactionsSlice(action, rNodeName, rPostingId, negative, emoji, before, 40)
             : await Node.getCommentReactionsSlice(action, rNodeName, rPostingId, commentId, negative, emoji, before, 40);
+        if (select(state => state.reactionsDialog.generation) !== generation) {
+            return;
+        }
         dispatch(reactionsDialogPastReactionsLoaded(
             slice.reactions, posting.id, commentId, negative, emoji, slice.before, slice.after, slice.total
         ).causedBy(action));
         dispatch(nodeCardsPreload(slice.reactions.map(sr => sr.ownerName).filter(notNull)).causedBy(action));
     } catch (e) {
-        dispatch(reactionsDialogPastReactionsLoadFailed(posting.id, null, negative, emoji).causedBy(action));
+        if (select(state => state.reactionsDialog.generation) !== generation) {
+            return;
+        }
+        dispatch(reactionsDialogPastReactionsLoadFailed(posting.id, commentId, negative, emoji).causedBy(action));
         dispatch(errorThrown(e));
     }
 }
 
 async function reactionsDialogTotalsLoadSaga(action: WithContext<ReactionsDialogTotalsLoadAction>): Promise<void> {
-    const {nodeName, posting, commentId} = select(state => ({
+    const {generation, totalsGeneration, nodeName, posting, commentId} = select(state => ({
+        generation: state.reactionsDialog.generation,
+        totalsGeneration: state.reactionsDialog.totals.generation,
         nodeName: state.reactionsDialog.nodeName,
         posting: getReactionsDialogPosting(state),
         commentId: state.reactionsDialog.commentId
@@ -73,8 +82,20 @@ async function reactionsDialogTotalsLoadSaga(action: WithContext<ReactionsDialog
         const totals = commentId == null
             ? await Node.getPostingReactionTotals(action, rNodeName, rPostingId)
             : await Node.getCommentReactionTotals(action, rNodeName, rPostingId, commentId)
+        if (select(state => state.reactionsDialog.generation) !== generation) {
+            return;
+        }
+        if (select(state => state.reactionsDialog.totals.generation) !== totalsGeneration) {
+            return;
+        }
         dispatch(reactionsDialogTotalsLoaded(totals.positive, totals.negative).causedBy(action));
     } catch (e) {
+        if (select(state => state.reactionsDialog.generation) !== generation) {
+            return;
+        }
+        if (select(state => state.reactionsDialog.totals.generation) !== totalsGeneration) {
+            return;
+        }
         dispatch(reactionsDialogTotalsLoadFailed().causedBy(action));
         dispatch(errorThrown(e));
     }

@@ -12,23 +12,24 @@ import { now } from "util/misc";
 
 export default class EventsBackend {
 
-    private clientId: string = '';
+    private clientId: string = "";
     private stomp: Client | null = null;
     private location: string | null = null;
     private token: string | null = null;
     private carte: string | null = null;
-    private prefix: EventSource[] | EventSource = "HOME";
+    private prefix: EventSource[] = [];
     private sourceNode: string | null = null;
     private queueStartedAt: number | null = null;
     private lastEvent: number | null = null;
     private lastEventSentAt: number | null = null;
     private lastWakeUp: Date = new Date();
     private pingReceived: boolean = true;
-    private readonly wakingUp: boolean = false;
+    private readonly pingTimer: ReturnType<typeof setInterval>;
+    private restarting: Promise<void> = Promise.resolve();
+    private connectionGeneration: number = 0;
 
-    public constructor(wakingUp: boolean = false) {
-        this.wakingUp = wakingUp;
-        setInterval(this.onPingCheck, 65000);
+    public constructor() {
+        this.pingTimer = setInterval(this.onPingCheck, 65000);
     }
 
     public setClientId(clientId: string) {
@@ -67,19 +68,15 @@ export default class EventsBackend {
                 ...packet.event,
                 sourceNode: this.sourceNode
             }
-            if (Array.isArray(this.prefix)) {
-                this.prefix.forEach(px => this.dispatch(eventAction(event, px)));
-            } else {
-                this.dispatch(eventAction(event, this.prefix));
-            }
+            this.prefix.forEach(prefix => this.dispatch(eventAction(event, prefix)));
         }
         this.queueStartedAt = packet.queueStartedAt;
         this.lastEvent = packet.ordinal;
         this.lastEventSentAt = packet.sentAt ?? null;
     };
 
-    private onConnect = () => {
-        if (this.stomp == null) {
+    private onConnect(stomp: Client) {
+        if (this.stomp !== stomp) {
             return;
         }
 
@@ -89,13 +86,15 @@ export default class EventsBackend {
         if (this.queueStartedAt != null) {
             headers.seen = `${this.queueStartedAt},${this.lastEvent}`;
         }
-        this.stomp.subscribe("/user/queue", this.onMessage, headers);
-    };
+        stomp.subscribe("/user/queue", message => {
+            if (this.stomp === stomp) {
+                this.onMessage(message);
+            }
+        }, headers);
+    }
 
-    private connect(
-        location: string | null, token: string | null, carte: string | null, prefix: EventSource[] | EventSource,
-        sourceNode: string | null
-    ) {
+    private connect() {
+        const {location, token, carte} = this;
         if (location == null) {
             return;
         }
@@ -103,16 +102,6 @@ export default class EventsBackend {
         if (host == null) {
             return;
         }
-        if (location !== this.location) {
-            this.location = location;
-            this.queueStartedAt = null;
-            this.lastEvent = null;
-            this.lastEventSentAt = null;
-        }
-        this.token = token;
-        this.carte = carte;
-        this.prefix = prefix;
-        this.sourceNode = sourceNode;
         this.pingReceived = true;
 
         const connectHeaders: StompHeaders = {
@@ -123,44 +112,70 @@ export default class EventsBackend {
         } else if (carte != null) {
             connectHeaders["token"] = "carte:" + carte;
         }
-        this.stomp = new Client({
+        const stomp = new Client({
             brokerURL: location,
-            onConnect: this.onConnect,
+            onConnect: () => this.onConnect(stomp),
             connectHeaders
         });
-        this.stomp.activate();
+        this.stomp = stomp;
+        stomp.activate();
     }
 
-    private disconnect() {
-        if (this.stomp != null) {
-            this.stomp.deactivate();
-            this.stomp = null;
-        }
-    }
-
-    private reconnect() {
-        this.connect(this.location, this.token, this.carte, this.prefix, this.sourceNode);
+    private restart(): Promise<void> {
+        const generation = ++this.connectionGeneration;
+        const stomp = this.stomp;
+        this.stomp = null;
+        this.restarting = this.restarting.then(async () => {
+            if (stomp != null) {
+                // A lost DISCONNECT receipt must not prevent closing the old socket.
+                const timeout = setTimeout(() => stomp.forceDisconnect(), 5000);
+                try {
+                    await stomp.deactivate();
+                } finally {
+                    clearTimeout(timeout);
+                }
+            }
+            if (generation === this.connectionGeneration) {
+                this.connect();
+            }
+        });
+        return this.restarting;
     }
 
     public setup(
-        location: string | null, token: string | null, carte: string | null, prefix: EventSource[] | EventSource,
+        location: string | null,
+        token: string | null,
+        carte: string | null,
+        prefix: EventSource[] | EventSource,
         sourceNode: string | null
-    ) {
+    ): Promise<void> {
         const connectionChanged = this.location !== location
+            || (location != null && this.stomp == null)
             || this.token !== token
-            || (this.token == null && this.carte == null && carte != null);
-        if (connectionChanged) {
-            this.disconnect();
-            this.connect(location, token, carte, prefix, sourceNode);
-        } else {
-            this.carte = carte;
-            this.prefix = prefix;
-            this.sourceNode = sourceNode;
+            || (this.token == null && (this.carte == null) !== (carte == null));
+        if (location !== this.location && (sourceNode == null || sourceNode !== this.sourceNode)) {
+            this.queueStartedAt = null;
+            this.lastEvent = null;
+            this.lastEventSentAt = null;
         }
+        this.location = location;
+        this.token = token;
+        this.carte = carte;
+        this.prefix = Array.isArray(prefix) ? prefix : [prefix];
+        this.sourceNode = sourceNode;
+        if (connectionChanged) {
+            return this.restart();
+        }
+        return this.restarting;
+    }
+
+    public dispose(): Promise<void> {
+        clearInterval(this.pingTimer);
+        return this.setup(null, null, null, [], null);
     }
 
     public wakeUp() {
-        if (!navigator.onLine || this.lastEventSentAt == null || !this.wakingUp) {
+        if (!navigator.onLine || this.lastEventSentAt == null || !this.prefix.includes("HOME")) {
             return;
         }
 
@@ -180,8 +195,7 @@ export default class EventsBackend {
         if (this.pingReceived) {
             this.pingReceived = false;
         } else {
-            this.disconnect();
-            this.reconnect();
+            void this.restart();
         }
     }
 

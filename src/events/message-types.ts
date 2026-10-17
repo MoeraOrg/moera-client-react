@@ -1,7 +1,5 @@
 import { EventSource } from "api/events";
 
-export type EventsBackendInstance = "home" | "node" | "receiver";
-
 export interface EventsSetClientIdMessage {
     type: "SET_CLIENT_ID";
     payload: {
@@ -13,23 +11,23 @@ export const eventsSetClientIdMessage = (clientId: string): EventsSetClientIdMes
     type: "SET_CLIENT_ID", payload: {clientId}
 });
 
-export interface EventsSetupConnectionMessage {
-    type: "SETUP_CONNECTION";
+export interface EventsConnection {
+    location: string | null;
+    token: string | null;
+    carte: string | null;
+    prefix: EventSource[] | EventSource;
+    sourceNode: string | null;
+}
+
+export interface EventsSetupConnectionsMessage {
+    type: "SETUP_CONNECTIONS";
     payload: {
-        backend: EventsBackendInstance;
-        location: string | null;
-        token: string | null;
-        carte: string | null;
-        prefix: EventSource[] | EventSource;
-        sourceNode: string | null;
+        connections: EventsConnection[];
     }
 }
 
-export const eventsSetupConnectionMessage = (
-    backend: EventsBackendInstance, location: string | null, token: string | null, carte: string | null,
-    prefix: EventSource[] | EventSource, sourceNode: string | null
-): EventsSetupConnectionMessage => ({
-    type: "SETUP_CONNECTION", payload: {backend, location, token, carte, prefix, sourceNode}
+export const eventsSetupConnectionsMessage = (connections: EventsConnection[]): EventsSetupConnectionsMessage => ({
+    type: "SETUP_CONNECTIONS", payload: {connections}
 });
 
 export interface EventsWakeUpMessage {
@@ -42,5 +40,5 @@ export const eventsWakeUpMessage = (): EventsWakeUpMessage => ({
 
 export type EventsWorkerMessage =
     EventsSetClientIdMessage
-    | EventsSetupConnectionMessage
+    | EventsSetupConnectionsMessage
     | EventsWakeUpMessage;

@@ -300,6 +300,72 @@ export const EVENT_SCHEMAS = {
             additionalProperties: false
         },
 
+        CommentReactionAddedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+                "postingId": {
+                    type: "string"
+                },
+                "moment": {
+                    type: "integer"
+                },
+                "reaction": {
+                    $ref: "node#/definitions/ReactionInfo"
+                },
+            },
+            required: [
+                "type",
+                "id",
+                "postingId",
+                "moment",
+                "reaction",
+            ],
+            additionalProperties: false
+        },
+
+        CommentReactionDeletedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+                "postingId": {
+                    type: "string"
+                },
+                "moment": {
+                    type: "integer"
+                },
+                "reaction": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ReactionInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
+            },
+            required: [
+                "type",
+                "id",
+                "postingId",
+                "moment",
+            ],
+            additionalProperties: false
+        },
+
         CommentUpdatedEvent: {
             type: "object",
             properties: {
@@ -750,6 +816,56 @@ export const EVENT_SCHEMAS = {
                 },
                 "id": {
                     type: "string"
+                },
+            },
+            required: [
+                "type",
+                "id",
+            ],
+            additionalProperties: false
+        },
+
+        PostingReactionAddedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+                "reaction": {
+                    $ref: "node#/definitions/ReactionInfo"
+                },
+            },
+            required: [
+                "type",
+                "id",
+                "reaction",
+            ],
+            additionalProperties: false
+        },
+
+        PostingReactionDeletedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+                "reaction": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/ReactionInfo",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
                 },
             },
             required: [

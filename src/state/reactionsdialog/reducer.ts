@@ -1,7 +1,11 @@
 import * as immutable from 'object-path-immutable';
 
-import { ReactionsDialogState, ReactionsDialogTabsState } from "state/reactionsdialog/state";
 import { ClientAction } from "state/action";
+import {
+    ReactionsDialogReactionUpdate,
+    ReactionsDialogState,
+    ReactionsDialogTabsState
+} from "state/reactionsdialog/state";
 import { REL_CURRENT } from "util/rel-node-name";
 import { notNull } from "util/misc";
 
@@ -13,6 +17,7 @@ const emptyReactions: ReactionsDialogTabsState = {
 };
 
 const initialState: ReactionsDialogState = {
+    generation: 0,
     show: false,
     nodeName: REL_CURRENT,
     postingId: null,
@@ -21,6 +26,7 @@ const initialState: ReactionsDialogState = {
     activeTab: null,
     reactions: {},
     totals: {
+        generation: 0,
         loading: false,
         loaded: false,
         total: 0,
@@ -29,12 +35,52 @@ const initialState: ReactionsDialogState = {
     verificationStatus: {}
 };
 
+function updateReactions(
+    state: ReactionsDialogTabsState,
+    update: ReactionsDialogReactionUpdate,
+    negative: boolean,
+    emoji: number
+): ReactionsDialogTabsState {
+    const {reaction} = update;
+
+    if (reaction == null) {
+        return {...state, items: [], total: 0, after: Number.MIN_SAFE_INTEGER};
+    }
+
+    const items = state.items.filter(item => {
+        if (update.type === "deleted" && reaction.moment != null) {
+            return item.moment !== reaction.moment;
+        }
+        return (reaction.ownerName == null || item.ownerName !== reaction.ownerName)
+            && (reaction.moment == null || item.moment !== reaction.moment);
+    });
+
+    // Reaction slices include the reaction at their lower boundary.
+    if (
+        update.type === "added"
+        && reaction.negative === negative
+        && (emoji === 0 || reaction.emoji === emoji)
+        && state.after < Number.MAX_SAFE_INTEGER
+        && reaction.moment != null && reaction.moment >= state.after
+    ) {
+        items.push(reaction);
+        items.sort((a, b) => b.moment! - a.moment!);
+    }
+
+    return {...state, items};
+}
+
 export default (state: ReactionsDialogState = initialState, action: ClientAction): ReactionsDialogState => {
     switch (action.type) {
         case "OPEN_REACTIONS_DIALOG": {
             const {nodeName, postingId, commentId, negative} = action.payload;
 
-            if (state.postingId === postingId && state.commentId === commentId && state.negative === negative) {
+            if (
+                state.nodeName === nodeName
+                && state.postingId === postingId
+                && state.commentId === commentId
+                && state.negative === negative
+            ) {
                 return {
                     ...state,
                     show: true
@@ -42,6 +88,7 @@ export default (state: ReactionsDialogState = initialState, action: ClientAction
             }
             return {
                 ...initialState,
+                generation: state.generation + 1,
                 show: true,
                 nodeName,
                 postingId,
@@ -58,16 +105,40 @@ export default (state: ReactionsDialogState = initialState, action: ClientAction
 
         case "REACTIONS_DIALOG_UNSET":
             return {
-                ...initialState
+                ...initialState,
+                generation: state.generation + 1
             };
+
+        case "REACTIONS_DIALOG_REACTION_ADDED":
+        case "REACTIONS_DIALOG_REACTION_DELETED": {
+            const update: ReactionsDialogReactionUpdate = action.type === "REACTIONS_DIALOG_REACTION_ADDED"
+                ? {type: "added", reaction: action.payload.reaction}
+                : {type: "deleted", reaction: action.payload.reaction};
+            const reactions = {...state.reactions};
+            for (const [emoji, tab] of Object.entries(reactions)) {
+                if (tab != null) {
+                    reactions[Number(emoji)] = {
+                        ...updateReactions(tab, update, state.negative, Number(emoji)),
+                        pendingUpdates: tab.loading ? [...(tab.pendingUpdates ?? []), update] : undefined
+                    };
+                }
+            }
+            const verificationStatus = {...state.verificationStatus};
+            if (update.reaction?.ownerName != null) {
+                delete verificationStatus[update.reaction.ownerName];
+            }
+            return {
+                ...state,
+                reactions,
+                verificationStatus: update.reaction != null ? verificationStatus : {}
+            };
+        }
 
         case "REACTIONS_DIALOG_PAST_REACTIONS_LOAD": {
             const tab = state.activeTab ?? 0;
-            if (state.reactions[tab] == null) {
-                return immutable.set(state, ["reactions", tab], emptyReactions);
-            } else {
-                return immutable.set(state, ["reactions", tab, "loading"], true);
-            }
+            return immutable.set(state, ["reactions", tab], {
+                ...(state.reactions[tab] ?? emptyReactions), loading: true, pendingUpdates: []
+            });
         }
 
         case "REACTIONS_DIALOG_PAST_REACTIONS_LOADED": {
@@ -82,50 +153,69 @@ export default (state: ReactionsDialogState = initialState, action: ClientAction
                 return state;
             }
             if (before >= tabReactions.after && after < tabReactions.after) {
-                let reactions = tabReactions.items.slice();
+                const reactions = tabReactions.items.slice();
+                const moments = new Set(reactions.map(reaction => reaction.moment));
                 action.payload.reactions
-                    .filter(p => p.moment != null && p.moment <= tabReactions.after)
+                    .filter(p => p.moment != null && p.moment <= tabReactions.after && !moments.has(p.moment))
                     .forEach(p => reactions.push(p));
                 reactions.sort((a, b) => b.moment! - a.moment!);
-                return immutable.assign(state, ["reactions", tab], {
+                let updated: ReactionsDialogTabsState = {
                     loading: false,
-                    total,
+                    total: tabReactions.pendingUpdates?.length ? tabReactions.total : (total ?? tabReactions.total),
                     after,
                     items: reactions
-                });
+                };
+                // Events received during the request also apply to the newly loaded range.
+                for (const update of tabReactions.pendingUpdates ?? []) {
+                    updated = updateReactions(updated, update, negative, tab);
+                }
+                return immutable.set(state, ["reactions", tab], updated);
             }
-            return immutable.set(state, ["reactions", tab, "loading"], false);
+            return immutable.assign(state, ["reactions", tab], {loading: false, pendingUpdates: undefined});
         }
 
         case "REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED": {
-            const {postingId, commentId, negative} = action.payload;
+            const {postingId, commentId, negative, emoji} = action.payload;
             if (state.postingId !== postingId || state.commentId !== commentId || state.negative !== negative) {
                 return state;
             }
-            const tab = state.activeTab ?? 0;
+            const tab = emoji ?? 0;
             if (state.reactions[tab] == null) {
                 return state;
             }
-            return immutable.set(state, ["reactions", tab, "loading"], false);
+            return immutable.assign(state, ["reactions", tab], {loading: false, pendingUpdates: undefined});
         }
 
         case "REACTIONS_DIALOG_TOTALS_LOAD":
-            return immutable.set(state, "totals.loading", true);
+            return immutable.assign(state, "totals", {loading: true, generation: state.totals.generation + 1});
 
         case "REACTIONS_DIALOG_TOTALS_LOADED": {
             let totals = !state.negative ? action.payload.positive : action.payload.negative;
             totals = totals.slice().filter(rt => rt.total == null || rt.total > 0);
             totals.sort((rt1, rt2) =>
-                rt1.total != null && rt2.total != null ? rt2.total - rt1.total : (rt2.share ?? 0) - (rt1.share ?? 0));
+                rt1.total != null && rt2.total != null ? rt2.total - rt1.total : (rt2.share ?? 0) - (rt1.share ?? 0)
+            );
             const total = totals.map(rt => rt.total)
                 .filter(notNull)
                 .reduce((sum, v) => sum! + v!, 0);
-            return immutable.assign(state, "totals", {
-                loading: false,
-                loaded: true,
-                total,
-                emojis: totals
-            });
+            const reactions = {...state.reactions};
+            for (const [emoji, tab] of Object.entries(reactions)) {
+                if (tab == null) {
+                    continue;
+                }
+                const emojiTotal = totals.find(rt => rt.emoji === Number(emoji));
+                const tabTotal = Number(emoji) === 0
+                    ? (totals.every(rt => rt.total != null) ? total : null)
+                    : (emojiTotal == null ? 0 : emojiTotal.total);
+                if (tabTotal != null) {
+                    reactions[Number(emoji)] = {...tab, total: tabTotal};
+                }
+            }
+            return {
+                ...state,
+                reactions,
+                totals: {...state.totals, loading: false, loaded: true, total, emojis: totals}
+            };
         }
 
         case "REACTIONS_DIALOG_TOTALS_LOAD_FAILED":

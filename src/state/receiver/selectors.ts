@@ -1,8 +1,11 @@
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import { getCommentsState } from "state/detailedposting/selectors";
-import { getOwnerName } from "state/node/selectors";
+import { getHomeOwnerNameOrUrl, getRelNodeNameContext } from "state/home/selectors";
+import { getOwnerName, getOwnerNameOrUrl } from "state/node/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
+import { getReactionsDialogNodeName, getReactionsDialogPosting } from "state/reactionsdialog/selectors";
 import { ClientState } from "state/state";
+import { absoluteNodeName } from "util/rel-node-name";
 
 export function getReceiverNodeName(state: ClientState): string | null {
     if (isAtDetailedPostingPage(state)) {
@@ -14,9 +17,23 @@ export function getReceiverNodeName(state: ClientState): string | null {
 }
 
 export function getReceiverNodeUri(state: ClientState): string | null {
-    const receiverName = getReceiverNodeName(state);
-    if (receiverName == null) {
+    return getNamingNameNodeUri(state, getReceiverNodeName(state));
+}
+
+export function getReactionsReceiverNodeName(state: ClientState): string | null {
+    const posting = getReactionsDialogPosting(state);
+    if (posting == null) {
         return null;
     }
-    return getNamingNameNodeUri(state, receiverName);
+    const nodeName = posting.receiverName
+        ?? absoluteNodeName(getReactionsDialogNodeName(state), getRelNodeNameContext(state));
+    return nodeName !== getHomeOwnerNameOrUrl(state)
+            && nodeName !== getOwnerNameOrUrl(state)
+            && nodeName !== getReceiverNodeName(state)
+        ? nodeName
+        : null;
+}
+
+export function getReactionsReceiverNodeUri(state: ClientState): string | null {
+    return getNamingNameNodeUri(state, getReactionsReceiverNodeName(state));
 }

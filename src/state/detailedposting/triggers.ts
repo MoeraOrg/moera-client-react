@@ -30,6 +30,7 @@ import {
 } from "state/detailedposting/actions";
 import {
     getCommentDialogCommentId,
+    getCommentsReceiverName,
     getCommentsReceiverPostingId,
     isCommentComposeDraftToBeLoaded,
     isCommentDialogDraftToBeLoaded,
@@ -189,7 +190,8 @@ export default [
     trigger(
         ["EVENT_RECEIVER_COMMENT_ADDED", "EVENT_RECEIVER_COMMENT_UPDATED"],
         (state, signal: EventAction<CommentAddedEvent> | EventAction<CommentUpdatedEvent>) =>
-            getCommentsReceiverPostingId(state) === signal.payload.postingId
+            getCommentsReceiverName(state) === signal.payload.sourceNode
+            && getCommentsReceiverPostingId(state) === signal.payload.postingId
             && isCommentMomentInLoadedRange(state, signal.payload.moment),
         signal => commentLoad(signal.payload.id)
     ),
@@ -197,6 +199,7 @@ export default [
         "EVENT_RECEIVER_COMMENT_REACTIONS_CHANGED",
         (state, signal: EventAction<CommentReactionsChangedEvent>) =>
             isAtDetailedPostingPage(state)
+            && getCommentsReceiverName(state) === signal.payload.sourceNode
             && getCommentsReceiverPostingId(state) === signal.payload.postingId
             && isCommentMomentInLoadedRange(state, signal.payload.moment),
         signal => commentReactionLoad(signal.payload.id, signal.payload.postingId)
@@ -206,6 +209,7 @@ export default [
         "EVENT_RECEIVER_COMMENT_UPDATED",
         (state, signal: EventAction<CommentUpdatedEvent>) =>
             isAtDetailedPostingPage(state) && isCommentDialogShown(state)
+            && getCommentsReceiverName(state) === signal.payload.sourceNode
             && getCommentsReceiverPostingId(state) === signal.payload.postingId
             && getCommentDialogCommentId(state) === signal.payload.id,
         commentDialogConflict

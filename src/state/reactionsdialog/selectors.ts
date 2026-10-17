@@ -36,12 +36,14 @@ function getReactions(state: ClientState): ReactionsDialogTabsState | null {
 }
 
 export function isReactionsDialogReactionsToBeLoaded(state: ClientState): boolean {
-    return !isReactionsDialogReactionsAllLoaded(state) && getReactionsDialogItems(state).length === 0;
+    const reactions = getReactions(state);
+    return reactions == null || (!reactions.loading && reactions.after === Number.MAX_SAFE_INTEGER);
 }
 
 export function isReactionsDialogLoading(state: ClientState): boolean {
     const reactions = getReactions(state);
-    return (reactions != null && reactions.loading) || state.reactionsDialog.totals.loading;
+    return (reactions != null && reactions.loading)
+        || (!state.reactionsDialog.totals.loaded && state.reactionsDialog.totals.loading);
 }
 
 export function getReactionsDialogItems(state: ClientState): ReactionInfo[] {

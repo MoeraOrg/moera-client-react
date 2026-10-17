@@ -17,6 +17,8 @@ import {
     ClientSettingsChangedEvent,
     CommentAddedEvent,
     CommentDeletedEvent,
+    CommentReactionAddedEvent,
+    CommentReactionDeletedEvent,
     CommentReactionsChangedEvent,
     CommentUpdatedEvent,
     DeleteNodeStatusUpdatedEvent,
@@ -38,6 +40,8 @@ import {
     PostingAddedEvent,
     PostingCommentsChangedEvent,
     PostingDeletedEvent,
+    PostingReactionAddedEvent,
+    PostingReactionDeletedEvent,
     PostingReactionsChangedEvent,
     PostingRestoredEvent,
     PostingSharingAddedEvent,
@@ -113,6 +117,8 @@ export type ClientEventAction =
     | EventAction<CommentAddedEvent>
     | EventAction<CommentDeletedEvent>
     | EventAction<CommentReactionsChangedEvent>
+    | EventAction<CommentReactionAddedEvent>
+    | EventAction<CommentReactionDeletedEvent>
     | EventAction<CommentUpdatedEvent>
     | EventAction<DeleteNodeStatusUpdatedEvent>
     | EventAction<DraftAddedEvent>
@@ -134,6 +140,8 @@ export type ClientEventAction =
     | EventAction<PostingCommentsChangedEvent>
     | EventAction<PostingDeletedEvent>
     | EventAction<PostingReactionsChangedEvent>
+    | EventAction<PostingReactionAddedEvent>
+    | EventAction<PostingReactionDeletedEvent>
     | EventAction<PostingRestoredEvent>
     | EventAction<PostingSharingAddedEvent>
     | EventAction<PostingSharingDeletedEvent>

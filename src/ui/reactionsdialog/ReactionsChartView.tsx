@@ -19,7 +19,7 @@ export default function ReactionsChartView({itemsRef, onSwitchView}: Props) {
     const {t} = useTranslation();
 
     if (!loaded) {
-        return null;
+        return loading ? <Loading overlay large/> : null;
     }
 
     return (
@@ -56,7 +56,6 @@ export default function ReactionsChartView({itemsRef, onSwitchView}: Props) {
                     )
                 }
             </div>
-            {loading && <Loading overlay large/>}
         </>
     );
 }

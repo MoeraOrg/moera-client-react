@@ -21,6 +21,18 @@ export type ReactionsDialogUnsetAction = ActionWithoutPayload<"REACTIONS_DIALOG_
 export const reactionsDialogUnset = (): ReactionsDialogUnsetAction =>
     actionWithoutPayload("REACTIONS_DIALOG_UNSET");
 
+export type ReactionsDialogReactionAddedAction = ActionWithPayload<"REACTIONS_DIALOG_REACTION_ADDED", {
+    reaction: ReactionInfo;
+}>;
+export const reactionsDialogReactionAdded = (reaction: ReactionInfo): ReactionsDialogReactionAddedAction =>
+    actionWithPayload("REACTIONS_DIALOG_REACTION_ADDED", {reaction});
+
+export type ReactionsDialogReactionDeletedAction = ActionWithPayload<"REACTIONS_DIALOG_REACTION_DELETED", {
+    reaction: ReactionInfo | null;
+}>;
+export const reactionsDialogReactionDeleted = (reaction: ReactionInfo | null): ReactionsDialogReactionDeletedAction =>
+    actionWithPayload("REACTIONS_DIALOG_REACTION_DELETED", {reaction});
+
 export type ReactionsDialogPastReactionsLoadAction = ActionWithoutPayload<"REACTIONS_DIALOG_PAST_REACTIONS_LOAD">;
 export const reactionsDialogPastReactionsLoad = (): ReactionsDialogPastReactionsLoadAction =>
     actionWithoutPayload("REACTIONS_DIALOG_PAST_REACTIONS_LOAD");
@@ -103,6 +115,8 @@ export type ReactionsDialogAnyAction =
     OpenReactionsDialogAction
     | CloseReactionsDialogAction
     | ReactionsDialogUnsetAction
+    | ReactionsDialogReactionAddedAction
+    | ReactionsDialogReactionDeletedAction
     | ReactionsDialogPastReactionsLoadAction
     | ReactionsDialogPastReactionsLoadedAction
     | ReactionsDialogPastReactionsLoadFailedAction

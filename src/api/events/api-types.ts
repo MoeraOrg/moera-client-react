@@ -13,6 +13,7 @@ import {
     FriendOfInfo,
     GrantInfo,
     PrivateMediaFileInfo,
+    ReactionInfo,
     SharingInfo,
     SheriffComplaintGroupInfo,
     SheriffComplaintInfo,
@@ -98,6 +99,20 @@ export interface CommentReactionsChangedEvent extends BaseEvent<"COMMENT_REACTIO
     id: string;
     postingId: string;
     moment: number;
+}
+
+export interface CommentReactionAddedEvent extends BaseEvent<"COMMENT_REACTION_ADDED"> {
+    id: string;
+    postingId: string;
+    moment: number;
+    reaction: ReactionInfo;
+}
+
+export interface CommentReactionDeletedEvent extends BaseEvent<"COMMENT_REACTION_DELETED"> {
+    id: string;
+    postingId: string;
+    moment: number;
+    reaction?: ReactionInfo | null;
 }
 
 export interface CommentUpdatedEvent extends BaseEvent<"COMMENT_UPDATED"> {
@@ -201,6 +216,16 @@ export interface PostingDeletedEvent extends BaseEvent<"POSTING_DELETED"> {
 
 export interface PostingReactionsChangedEvent extends BaseEvent<"POSTING_REACTIONS_CHANGED"> {
     id: string;
+}
+
+export interface PostingReactionAddedEvent extends BaseEvent<"POSTING_REACTION_ADDED"> {
+    id: string;
+    reaction: ReactionInfo;
+}
+
+export interface PostingReactionDeletedEvent extends BaseEvent<"POSTING_REACTION_DELETED"> {
+    id: string;
+    reaction?: ReactionInfo | null;
 }
 
 export interface PostingRestoredEvent extends BaseEvent<"POSTING_RESTORED"> {
