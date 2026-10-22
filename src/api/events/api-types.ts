@@ -431,6 +431,7 @@ export interface StoryAddedEvent extends BaseEvent<"STORY_ADDED"> {
     remoteNodeName?: string | null;
     remoteFullName?: string | null;
     remoteSourceUri?: string | null;
+    remoteStoryMoment?: number | null;
     remotePostingId?: string | null;
     remoteCommentId?: string | null;
     operations?: StoryOperations | null;
@@ -467,6 +468,7 @@ export interface StoryUpdatedEvent extends BaseEvent<"STORY_UPDATED"> {
     remoteNodeName?: string | null;
     remoteFullName?: string | null;
     remoteSourceUri?: string | null;
+    remoteStoryMoment?: number | null;
     remotePostingId?: string | null;
     remoteCommentId?: string | null;
     operations?: StoryOperations | null;

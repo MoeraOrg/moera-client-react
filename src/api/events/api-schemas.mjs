@@ -1746,6 +1746,10 @@ export const EVENT_SCHEMAS = {
                     type: "string",
                     nullable: true
                 },
+                "remoteStoryMoment": {
+                    type: "integer",
+                    nullable: true
+                },
                 "remotePostingId": {
                     type: "string",
                     nullable: true
@@ -1917,6 +1921,10 @@ export const EVENT_SCHEMAS = {
                 },
                 "remoteSourceUri": {
                     type: "string",
+                    nullable: true
+                },
+                "remoteStoryMoment": {
+                    type: "integer",
                     nullable: true
                 },
                 "remotePostingId": {

@@ -26888,7 +26888,7 @@ return errors === 0;
 }
 
 export const StoryAddedEvent = validate116;
-const schema120 = {"type":"object","properties":{"type":{"type":"string"},"id":{"type":"string"},"storyType":{"type":"string"},"feedName":{"type":"string"},"publishedAt":{"type":"integer"},"pinned":{"type":"boolean"},"moment":{"type":"integer"},"postingId":{"type":"string","nullable":true},"commentId":{"type":"string","nullable":true},"viewed":{"type":"boolean","nullable":true},"read":{"type":"boolean","nullable":true},"satisfied":{"type":"boolean","nullable":true},"summaryNodeName":{"type":"string","nullable":true},"summaryFullName":{"type":"string","nullable":true},"summarySourceUri":{"type":"string","nullable":true},"summaryAvatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"summary":{"type":"string","nullable":true},"summaryData":{"anyOf":[{"$ref":"node#/definitions/StorySummaryData","type":"object","nullable":true},{"type":"null"}]},"remoteNodeName":{"type":"string","nullable":true},"remoteFullName":{"type":"string","nullable":true},"remoteSourceUri":{"type":"string","nullable":true},"remotePostingId":{"type":"string","nullable":true},"remoteCommentId":{"type":"string","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/StoryOperations","type":"object","nullable":true},{"type":"null"}]},"externalSourceUri":{"type":"array","items":{"type":"string"},"nullable":true}},"required":["type","id","storyType","feedName","publishedAt","pinned","moment"],"additionalProperties":false};
+const schema120 = {"type":"object","properties":{"type":{"type":"string"},"id":{"type":"string"},"storyType":{"type":"string"},"feedName":{"type":"string"},"publishedAt":{"type":"integer"},"pinned":{"type":"boolean"},"moment":{"type":"integer"},"postingId":{"type":"string","nullable":true},"commentId":{"type":"string","nullable":true},"viewed":{"type":"boolean","nullable":true},"read":{"type":"boolean","nullable":true},"satisfied":{"type":"boolean","nullable":true},"summaryNodeName":{"type":"string","nullable":true},"summaryFullName":{"type":"string","nullable":true},"summarySourceUri":{"type":"string","nullable":true},"summaryAvatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"summary":{"type":"string","nullable":true},"summaryData":{"anyOf":[{"$ref":"node#/definitions/StorySummaryData","type":"object","nullable":true},{"type":"null"}]},"remoteNodeName":{"type":"string","nullable":true},"remoteFullName":{"type":"string","nullable":true},"remoteSourceUri":{"type":"string","nullable":true},"remoteStoryMoment":{"type":"integer","nullable":true},"remotePostingId":{"type":"string","nullable":true},"remoteCommentId":{"type":"string","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/StoryOperations","type":"object","nullable":true},{"type":"null"}]},"externalSourceUri":{"type":"array","items":{"type":"string"},"nullable":true}},"required":["type","id","storyType","feedName","publishedAt","pinned","moment"],"additionalProperties":false};
 const schema133 = {"type":"object","properties":{"edit":{"type":"string","nullable":true},"delete":{"type":"string","nullable":true}},"additionalProperties":false};
 const schema122 = {"type":"object","properties":{"node":{"anyOf":[{"$ref":"node#/definitions/StorySummaryNode","type":"object","nullable":true},{"type":"null"}]},"posting":{"anyOf":[{"$ref":"node#/definitions/StorySummaryEntry","type":"object","nullable":true},{"type":"null"}]},"comment":{"anyOf":[{"$ref":"node#/definitions/StorySummaryEntry","type":"object","nullable":true},{"type":"null"}]},"comments":{"type":"array","items":{"$ref":"node#/definitions/StorySummaryEntry"},"nullable":true},"totalComments":{"type":"integer","nullable":true},"repliedTo":{"anyOf":[{"$ref":"node#/definitions/StorySummaryEntry","type":"object","nullable":true},{"type":"null"}]},"parentPosting":{"anyOf":[{"$ref":"node#/definitions/StorySummaryEntry","type":"object","nullable":true},{"type":"null"}]},"reaction":{"anyOf":[{"$ref":"node#/definitions/StorySummaryReaction","type":"object","nullable":true},{"type":"null"}]},"reactions":{"type":"array","items":{"$ref":"node#/definitions/StorySummaryReaction"},"nullable":true},"totalReactions":{"type":"integer","nullable":true},"sharings":{"type":"array","items":{"$ref":"node#/definitions/StorySummaryNode"},"nullable":true},"totalSharings":{"type":"integer","nullable":true},"feedName":{"type":"string","nullable":true},"subscriptionReason":{"type":"string","nullable":true},"friendGroup":{"anyOf":[{"$ref":"node#/definitions/StorySummaryFriendGroup","type":"object","nullable":true},{"type":"null"}]},"blocked":{"anyOf":[{"$ref":"node#/definitions/StorySummaryBlocked","type":"object","nullable":true},{"type":"null"}]},"sheriff":{"anyOf":[{"$ref":"node#/definitions/StorySummarySheriff","type":"object","nullable":true},{"type":"null"}]},"description":{"type":"string","nullable":true},"clicks":{"type":"array","items":{"$ref":"node#/definitions/StorySummaryPageClicks"},"nullable":true}},"additionalProperties":false};
 const schema123 = {"type":"object","properties":{"ownerName":{"type":"string","nullable":true},"ownerFullName":{"type":"string","nullable":true},"ownerSourceUri":{"type":"string","nullable":true},"ownerGender":{"type":"string","nullable":true}},"additionalProperties":false};
@@ -31666,38 +31666,36 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.remotePostingId !== undefined){
-let data29 = data.remotePostingId;
+if(data.remoteStoryMoment !== undefined){
+let data29 = data.remoteStoryMoment;
 const _errs91 = errors;
-if((typeof data29 !== "string") && (data29 !== null)){
+if((!(((typeof data29 == "number") && (!(data29 % 1) && !isNaN(data29))) && (isFinite(data29)))) && (data29 !== null)){
 let dataType31 = typeof data29;
 let coerced31 = undefined;
 if(dataType31 == 'object' && Array.isArray(data29) && data29.length == 1){
 data29 = data29[0];
 dataType31 = typeof data29;
-if((typeof data29 === "string") && (data29 === null)){
+if((((typeof data29 == "number") && (!(data29 % 1) && !isNaN(data29))) && (isFinite(data29))) && (data29 === null)){
 coerced31 = data29;
 }
 }
 if(!(coerced31 !== undefined)){
-if(dataType31 == "number" || dataType31 == "boolean"){
-coerced31 = "" + data29;
-}
-else if(data29 === null){
-coerced31 = "";
+if(dataType31 === "boolean" || data29 === null
+              || (dataType31 === "string" && data29 && data29 == +data29 && !(data29 % 1))){
+coerced31 = +data29;
 }
 else if(data29 === "" || data29 === 0 || data29 === false){
 coerced31 = null;
 }
 else {
-validate116.errors = [{instancePath:instancePath+"/remotePostingId",schemaPath:"#/properties/remotePostingId/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+validate116.errors = [{instancePath:instancePath+"/remoteStoryMoment",schemaPath:"#/properties/remoteStoryMoment/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced31 !== undefined){
 data29 = coerced31;
 if(data !== undefined){
-data["remotePostingId"] = coerced31;
+data["remoteStoryMoment"] = coerced31;
 }
 }
 }
@@ -31707,8 +31705,8 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.remoteCommentId !== undefined){
-let data30 = data.remoteCommentId;
+if(data.remotePostingId !== undefined){
+let data30 = data.remotePostingId;
 const _errs94 = errors;
 if((typeof data30 !== "string") && (data30 !== null)){
 let dataType32 = typeof data30;
@@ -31731,14 +31729,14 @@ else if(data30 === "" || data30 === 0 || data30 === false){
 coerced32 = null;
 }
 else {
-validate116.errors = [{instancePath:instancePath+"/remoteCommentId",schemaPath:"#/properties/remoteCommentId/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+validate116.errors = [{instancePath:instancePath+"/remotePostingId",schemaPath:"#/properties/remotePostingId/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
 if(coerced32 !== undefined){
 data30 = coerced32;
 if(data !== undefined){
-data["remoteCommentId"] = coerced32;
+data["remotePostingId"] = coerced32;
 }
 }
 }
@@ -31748,25 +31746,66 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.operations !== undefined){
-let data31 = data.operations;
+if(data.remoteCommentId !== undefined){
+let data31 = data.remoteCommentId;
 const _errs97 = errors;
-const _errs98 = errors;
-let valid5 = false;
-const _errs99 = errors;
-if((!(data31 && typeof data31 == "object" && !Array.isArray(data31))) && (data31 !== null)){
+if((typeof data31 !== "string") && (data31 !== null)){
 let dataType33 = typeof data31;
 let coerced33 = undefined;
 if(dataType33 == 'object' && Array.isArray(data31) && data31.length == 1){
 data31 = data31[0];
 dataType33 = typeof data31;
-if((data31 && typeof data31 == "object" && !Array.isArray(data31)) && (data31 === null)){
+if((typeof data31 === "string") && (data31 === null)){
 coerced33 = data31;
 }
 }
 if(!(coerced33 !== undefined)){
-if(data31 === "" || data31 === 0 || data31 === false){
+if(dataType33 == "number" || dataType33 == "boolean"){
+coerced33 = "" + data31;
+}
+else if(data31 === null){
+coerced33 = "";
+}
+else if(data31 === "" || data31 === 0 || data31 === false){
 coerced33 = null;
+}
+else {
+validate116.errors = [{instancePath:instancePath+"/remoteCommentId",schemaPath:"#/properties/remoteCommentId/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+return false;
+}
+}
+if(coerced33 !== undefined){
+data31 = coerced33;
+if(data !== undefined){
+data["remoteCommentId"] = coerced33;
+}
+}
+}
+var valid0 = _errs97 === errors;
+}
+else {
+var valid0 = true;
+}
+if(valid0){
+if(data.operations !== undefined){
+let data32 = data.operations;
+const _errs100 = errors;
+const _errs101 = errors;
+let valid5 = false;
+const _errs102 = errors;
+if((!(data32 && typeof data32 == "object" && !Array.isArray(data32))) && (data32 !== null)){
+let dataType34 = typeof data32;
+let coerced34 = undefined;
+if(dataType34 == 'object' && Array.isArray(data32) && data32.length == 1){
+data32 = data32[0];
+dataType34 = typeof data32;
+if((data32 && typeof data32 == "object" && !Array.isArray(data32)) && (data32 === null)){
+coerced34 = data32;
+}
+}
+if(!(coerced34 !== undefined)){
+if(data32 === "" || data32 === 0 || data32 === false){
+coerced34 = null;
 }
 else {
 const err16 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf/0/type",keyword:"type",params:{type: "object"},message:"must be object"};
@@ -31779,72 +31818,25 @@ vErrors.push(err16);
 errors++;
 }
 }
-if(coerced33 !== undefined){
-data31 = coerced33;
-if(data !== undefined){
-data["operations"] = coerced33;
-}
-}
-}
-const _errs100 = errors;
-if(errors === _errs100){
-if(data31 && typeof data31 == "object" && !Array.isArray(data31)){
-const _errs102 = errors;
-for(const key2 in data31){
-if(!((key2 === "edit") || (key2 === "delete"))){
-delete data31[key2];
-}
-}
-if(_errs102 === errors){
-if(data31.edit !== undefined){
-let data32 = data31.edit;
-const _errs103 = errors;
-if((typeof data32 !== "string") && (data32 !== null)){
-let dataType34 = typeof data32;
-let coerced34 = undefined;
-if(dataType34 == 'object' && Array.isArray(data32) && data32.length == 1){
-data32 = data32[0];
-dataType34 = typeof data32;
-if((typeof data32 === "string") && (data32 === null)){
-coerced34 = data32;
-}
-}
-if(!(coerced34 !== undefined)){
-if(dataType34 == "number" || dataType34 == "boolean"){
-coerced34 = "" + data32;
-}
-else if(data32 === null){
-coerced34 = "";
-}
-else if(data32 === "" || data32 === 0 || data32 === false){
-coerced34 = null;
-}
-else {
-const err17 = {instancePath:instancePath+"/operations/edit",schemaPath:"node#/definitions/StoryOperations/properties/edit/type",keyword:"type",params:{type: "string"},message:"must be string"};
-if(vErrors === null){
-vErrors = [err17];
-}
-else {
-vErrors.push(err17);
-}
-errors++;
-}
-}
 if(coerced34 !== undefined){
 data32 = coerced34;
-if(data31 !== undefined){
-data31["edit"] = coerced34;
+if(data !== undefined){
+data["operations"] = coerced34;
 }
 }
 }
-var valid7 = _errs103 === errors;
+const _errs103 = errors;
+if(errors === _errs103){
+if(data32 && typeof data32 == "object" && !Array.isArray(data32)){
+const _errs105 = errors;
+for(const key2 in data32){
+if(!((key2 === "edit") || (key2 === "delete"))){
+delete data32[key2];
 }
-else {
-var valid7 = true;
 }
-if(valid7){
-if(data31.delete !== undefined){
-let data33 = data31.delete;
+if(_errs105 === errors){
+if(data32.edit !== undefined){
+let data33 = data32.edit;
 const _errs106 = errors;
 if((typeof data33 !== "string") && (data33 !== null)){
 let dataType35 = typeof data33;
@@ -31867,6 +31859,53 @@ else if(data33 === "" || data33 === 0 || data33 === false){
 coerced35 = null;
 }
 else {
+const err17 = {instancePath:instancePath+"/operations/edit",schemaPath:"node#/definitions/StoryOperations/properties/edit/type",keyword:"type",params:{type: "string"},message:"must be string"};
+if(vErrors === null){
+vErrors = [err17];
+}
+else {
+vErrors.push(err17);
+}
+errors++;
+}
+}
+if(coerced35 !== undefined){
+data33 = coerced35;
+if(data32 !== undefined){
+data32["edit"] = coerced35;
+}
+}
+}
+var valid7 = _errs106 === errors;
+}
+else {
+var valid7 = true;
+}
+if(valid7){
+if(data32.delete !== undefined){
+let data34 = data32.delete;
+const _errs109 = errors;
+if((typeof data34 !== "string") && (data34 !== null)){
+let dataType36 = typeof data34;
+let coerced36 = undefined;
+if(dataType36 == 'object' && Array.isArray(data34) && data34.length == 1){
+data34 = data34[0];
+dataType36 = typeof data34;
+if((typeof data34 === "string") && (data34 === null)){
+coerced36 = data34;
+}
+}
+if(!(coerced36 !== undefined)){
+if(dataType36 == "number" || dataType36 == "boolean"){
+coerced36 = "" + data34;
+}
+else if(data34 === null){
+coerced36 = "";
+}
+else if(data34 === "" || data34 === 0 || data34 === false){
+coerced36 = null;
+}
+else {
 const err18 = {instancePath:instancePath+"/operations/delete",schemaPath:"node#/definitions/StoryOperations/properties/delete/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
 vErrors = [err18];
@@ -31877,14 +31916,14 @@ vErrors.push(err18);
 errors++;
 }
 }
-if(coerced35 !== undefined){
-data33 = coerced35;
-if(data31 !== undefined){
-data31["delete"] = coerced35;
+if(coerced36 !== undefined){
+data34 = coerced36;
+if(data32 !== undefined){
+data32["delete"] = coerced36;
 }
 }
 }
-var valid7 = _errs106 === errors;
+var valid7 = _errs109 === errors;
 }
 else {
 var valid7 = true;
@@ -31903,23 +31942,23 @@ vErrors.push(err19);
 errors++;
 }
 }
-var _valid2 = _errs99 === errors;
+var _valid2 = _errs102 === errors;
 valid5 = valid5 || _valid2;
 if(!valid5){
-const _errs111 = errors;
-if(data31 !== null){
-let dataType36 = typeof data31;
-let coerced36 = undefined;
-if(dataType36 == 'object' && Array.isArray(data31) && data31.length == 1){
-data31 = data31[0];
-dataType36 = typeof data31;
-if(data31 === null){
-coerced36 = data31;
+const _errs114 = errors;
+if(data32 !== null){
+let dataType37 = typeof data32;
+let coerced37 = undefined;
+if(dataType37 == 'object' && Array.isArray(data32) && data32.length == 1){
+data32 = data32[0];
+dataType37 = typeof data32;
+if(data32 === null){
+coerced37 = data32;
 }
 }
-if(!(coerced36 !== undefined)){
-if(data31 === "" || data31 === 0 || data31 === false){
-coerced36 = null;
+if(!(coerced37 !== undefined)){
+if(data32 === "" || data32 === 0 || data32 === false){
+coerced37 = null;
 }
 else {
 const err20 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
@@ -31932,14 +31971,14 @@ vErrors.push(err20);
 errors++;
 }
 }
-if(coerced36 !== undefined){
-data31 = coerced36;
+if(coerced37 !== undefined){
+data32 = coerced37;
 if(data !== undefined){
-data["operations"] = coerced36;
+data["operations"] = coerced37;
 }
 }
 }
-var _valid2 = _errs111 === errors;
+var _valid2 = _errs114 === errors;
 valid5 = valid5 || _valid2;
 }
 if(!valid5){
@@ -31955,102 +31994,103 @@ validate116.errors = vErrors;
 return false;
 }
 else {
-errors = _errs98;
+errors = _errs101;
 if(vErrors !== null){
-if(_errs98){
-vErrors.length = _errs98;
+if(_errs101){
+vErrors.length = _errs101;
 }
 else {
 vErrors = null;
 }
 }
 }
-var valid0 = _errs97 === errors;
+var valid0 = _errs100 === errors;
 }
 else {
 var valid0 = true;
 }
 if(valid0){
 if(data.externalSourceUri !== undefined){
-let data34 = data.externalSourceUri;
-const _errs113 = errors;
-if((!(Array.isArray(data34))) && (data34 !== null)){
-let dataType37 = typeof data34;
-let coerced37 = undefined;
-if(dataType37 == 'object' && Array.isArray(data34) && data34.length == 1){
-data34 = data34[0];
-dataType37 = typeof data34;
-if((Array.isArray(data34)) && (data34 === null)){
-coerced37 = data34;
+let data35 = data.externalSourceUri;
+const _errs116 = errors;
+if((!(Array.isArray(data35))) && (data35 !== null)){
+let dataType38 = typeof data35;
+let coerced38 = undefined;
+if(dataType38 == 'object' && Array.isArray(data35) && data35.length == 1){
+data35 = data35[0];
+dataType38 = typeof data35;
+if((Array.isArray(data35)) && (data35 === null)){
+coerced38 = data35;
 }
 }
-if(!(coerced37 !== undefined)){
-if(dataType37 === "string" || dataType37 === "number"
-              || dataType37 === "boolean" || data34 === null){
-coerced37 = [data34];
+if(!(coerced38 !== undefined)){
+if(dataType38 === "string" || dataType38 === "number"
+              || dataType38 === "boolean" || data35 === null){
+coerced38 = [data35];
 }
-else if(data34 === "" || data34 === 0 || data34 === false){
-coerced37 = null;
+else if(data35 === "" || data35 === 0 || data35 === false){
+coerced38 = null;
 }
 else {
 validate116.errors = [{instancePath:instancePath+"/externalSourceUri",schemaPath:"#/properties/externalSourceUri/type",keyword:"type",params:{type: "array"},message:"must be array"}];
 return false;
 }
 }
-if(coerced37 !== undefined){
-data34 = coerced37;
+if(coerced38 !== undefined){
+data35 = coerced38;
 if(data !== undefined){
-data["externalSourceUri"] = coerced37;
+data["externalSourceUri"] = coerced38;
 }
 }
 }
-if(errors === _errs113){
-if(Array.isArray(data34)){
+if(errors === _errs116){
+if(Array.isArray(data35)){
 var valid8 = true;
-const len0 = data34.length;
+const len0 = data35.length;
 for(let i0=0; i0<len0; i0++){
-let data35 = data34[i0];
-const _errs116 = errors;
-if(typeof data35 !== "string"){
-let dataType38 = typeof data35;
-let coerced38 = undefined;
-if(dataType38 == 'object' && Array.isArray(data35) && data35.length == 1){
-data35 = data35[0];
-dataType38 = typeof data35;
-if(typeof data35 === "string"){
-coerced38 = data35;
+let data36 = data35[i0];
+const _errs119 = errors;
+if(typeof data36 !== "string"){
+let dataType39 = typeof data36;
+let coerced39 = undefined;
+if(dataType39 == 'object' && Array.isArray(data36) && data36.length == 1){
+data36 = data36[0];
+dataType39 = typeof data36;
+if(typeof data36 === "string"){
+coerced39 = data36;
 }
 }
-if(!(coerced38 !== undefined)){
-if(dataType38 == "number" || dataType38 == "boolean"){
-coerced38 = "" + data35;
+if(!(coerced39 !== undefined)){
+if(dataType39 == "number" || dataType39 == "boolean"){
+coerced39 = "" + data36;
 }
-else if(data35 === null){
-coerced38 = "";
+else if(data36 === null){
+coerced39 = "";
 }
 else {
 validate116.errors = [{instancePath:instancePath+"/externalSourceUri/" + i0,schemaPath:"#/properties/externalSourceUri/items/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
-if(coerced38 !== undefined){
-data35 = coerced38;
-if(data34 !== undefined){
-data34[i0] = coerced38;
+if(coerced39 !== undefined){
+data36 = coerced39;
+if(data35 !== undefined){
+data35[i0] = coerced39;
 }
 }
 }
-var valid8 = _errs116 === errors;
+var valid8 = _errs119 === errors;
 if(!valid8){
 break;
 }
 }
 }
 }
-var valid0 = _errs113 === errors;
+var valid0 = _errs116 === errors;
 }
 else {
 var valid0 = true;
+}
 }
 }
 }
@@ -32397,7 +32437,7 @@ return errors === 0;
 }
 
 export const StoryUpdatedEvent = validate126;
-const schema135 = {"type":"object","properties":{"type":{"type":"string"},"id":{"type":"string"},"storyType":{"type":"string"},"feedName":{"type":"string"},"publishedAt":{"type":"integer"},"pinned":{"type":"boolean"},"moment":{"type":"integer"},"postingId":{"type":"string","nullable":true},"commentId":{"type":"string","nullable":true},"viewed":{"type":"boolean","nullable":true},"read":{"type":"boolean","nullable":true},"satisfied":{"type":"boolean","nullable":true},"summaryNodeName":{"type":"string","nullable":true},"summaryFullName":{"type":"string","nullable":true},"summarySourceUri":{"type":"string","nullable":true},"summaryAvatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"summary":{"type":"string","nullable":true},"summaryData":{"anyOf":[{"$ref":"node#/definitions/StorySummaryData","type":"object","nullable":true},{"type":"null"}]},"remoteNodeName":{"type":"string","nullable":true},"remoteFullName":{"type":"string","nullable":true},"remoteSourceUri":{"type":"string","nullable":true},"remotePostingId":{"type":"string","nullable":true},"remoteCommentId":{"type":"string","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/StoryOperations","type":"object","nullable":true},{"type":"null"}]},"externalSourceUri":{"type":"array","items":{"type":"string"},"nullable":true}},"required":["type","id","storyType","feedName","publishedAt","pinned","moment"],"additionalProperties":false};
+const schema135 = {"type":"object","properties":{"type":{"type":"string"},"id":{"type":"string"},"storyType":{"type":"string"},"feedName":{"type":"string"},"publishedAt":{"type":"integer"},"pinned":{"type":"boolean"},"moment":{"type":"integer"},"postingId":{"type":"string","nullable":true},"commentId":{"type":"string","nullable":true},"viewed":{"type":"boolean","nullable":true},"read":{"type":"boolean","nullable":true},"satisfied":{"type":"boolean","nullable":true},"summaryNodeName":{"type":"string","nullable":true},"summaryFullName":{"type":"string","nullable":true},"summarySourceUri":{"type":"string","nullable":true},"summaryAvatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"summary":{"type":"string","nullable":true},"summaryData":{"anyOf":[{"$ref":"node#/definitions/StorySummaryData","type":"object","nullable":true},{"type":"null"}]},"remoteNodeName":{"type":"string","nullable":true},"remoteFullName":{"type":"string","nullable":true},"remoteSourceUri":{"type":"string","nullable":true},"remoteStoryMoment":{"type":"integer","nullable":true},"remotePostingId":{"type":"string","nullable":true},"remoteCommentId":{"type":"string","nullable":true},"operations":{"anyOf":[{"$ref":"node#/definitions/StoryOperations","type":"object","nullable":true},{"type":"null"}]},"externalSourceUri":{"type":"array","items":{"type":"string"},"nullable":true}},"required":["type","id","storyType","feedName","publishedAt","pinned","moment"],"additionalProperties":false};
 
 function validate126(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
 let vErrors = null;
@@ -33793,38 +33833,36 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.remotePostingId !== undefined){
-let data29 = data.remotePostingId;
+if(data.remoteStoryMoment !== undefined){
+let data29 = data.remoteStoryMoment;
 const _errs91 = errors;
-if((typeof data29 !== "string") && (data29 !== null)){
+if((!(((typeof data29 == "number") && (!(data29 % 1) && !isNaN(data29))) && (isFinite(data29)))) && (data29 !== null)){
 let dataType31 = typeof data29;
 let coerced31 = undefined;
 if(dataType31 == 'object' && Array.isArray(data29) && data29.length == 1){
 data29 = data29[0];
 dataType31 = typeof data29;
-if((typeof data29 === "string") && (data29 === null)){
+if((((typeof data29 == "number") && (!(data29 % 1) && !isNaN(data29))) && (isFinite(data29))) && (data29 === null)){
 coerced31 = data29;
 }
 }
 if(!(coerced31 !== undefined)){
-if(dataType31 == "number" || dataType31 == "boolean"){
-coerced31 = "" + data29;
-}
-else if(data29 === null){
-coerced31 = "";
+if(dataType31 === "boolean" || data29 === null
+              || (dataType31 === "string" && data29 && data29 == +data29 && !(data29 % 1))){
+coerced31 = +data29;
 }
 else if(data29 === "" || data29 === 0 || data29 === false){
 coerced31 = null;
 }
 else {
-validate126.errors = [{instancePath:instancePath+"/remotePostingId",schemaPath:"#/properties/remotePostingId/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+validate126.errors = [{instancePath:instancePath+"/remoteStoryMoment",schemaPath:"#/properties/remoteStoryMoment/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
 return false;
 }
 }
 if(coerced31 !== undefined){
 data29 = coerced31;
 if(data !== undefined){
-data["remotePostingId"] = coerced31;
+data["remoteStoryMoment"] = coerced31;
 }
 }
 }
@@ -33834,8 +33872,8 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.remoteCommentId !== undefined){
-let data30 = data.remoteCommentId;
+if(data.remotePostingId !== undefined){
+let data30 = data.remotePostingId;
 const _errs94 = errors;
 if((typeof data30 !== "string") && (data30 !== null)){
 let dataType32 = typeof data30;
@@ -33858,14 +33896,14 @@ else if(data30 === "" || data30 === 0 || data30 === false){
 coerced32 = null;
 }
 else {
-validate126.errors = [{instancePath:instancePath+"/remoteCommentId",schemaPath:"#/properties/remoteCommentId/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+validate126.errors = [{instancePath:instancePath+"/remotePostingId",schemaPath:"#/properties/remotePostingId/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
 if(coerced32 !== undefined){
 data30 = coerced32;
 if(data !== undefined){
-data["remoteCommentId"] = coerced32;
+data["remotePostingId"] = coerced32;
 }
 }
 }
@@ -33875,25 +33913,66 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.operations !== undefined){
-let data31 = data.operations;
+if(data.remoteCommentId !== undefined){
+let data31 = data.remoteCommentId;
 const _errs97 = errors;
-const _errs98 = errors;
-let valid5 = false;
-const _errs99 = errors;
-if((!(data31 && typeof data31 == "object" && !Array.isArray(data31))) && (data31 !== null)){
+if((typeof data31 !== "string") && (data31 !== null)){
 let dataType33 = typeof data31;
 let coerced33 = undefined;
 if(dataType33 == 'object' && Array.isArray(data31) && data31.length == 1){
 data31 = data31[0];
 dataType33 = typeof data31;
-if((data31 && typeof data31 == "object" && !Array.isArray(data31)) && (data31 === null)){
+if((typeof data31 === "string") && (data31 === null)){
 coerced33 = data31;
 }
 }
 if(!(coerced33 !== undefined)){
-if(data31 === "" || data31 === 0 || data31 === false){
+if(dataType33 == "number" || dataType33 == "boolean"){
+coerced33 = "" + data31;
+}
+else if(data31 === null){
+coerced33 = "";
+}
+else if(data31 === "" || data31 === 0 || data31 === false){
 coerced33 = null;
+}
+else {
+validate126.errors = [{instancePath:instancePath+"/remoteCommentId",schemaPath:"#/properties/remoteCommentId/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+return false;
+}
+}
+if(coerced33 !== undefined){
+data31 = coerced33;
+if(data !== undefined){
+data["remoteCommentId"] = coerced33;
+}
+}
+}
+var valid0 = _errs97 === errors;
+}
+else {
+var valid0 = true;
+}
+if(valid0){
+if(data.operations !== undefined){
+let data32 = data.operations;
+const _errs100 = errors;
+const _errs101 = errors;
+let valid5 = false;
+const _errs102 = errors;
+if((!(data32 && typeof data32 == "object" && !Array.isArray(data32))) && (data32 !== null)){
+let dataType34 = typeof data32;
+let coerced34 = undefined;
+if(dataType34 == 'object' && Array.isArray(data32) && data32.length == 1){
+data32 = data32[0];
+dataType34 = typeof data32;
+if((data32 && typeof data32 == "object" && !Array.isArray(data32)) && (data32 === null)){
+coerced34 = data32;
+}
+}
+if(!(coerced34 !== undefined)){
+if(data32 === "" || data32 === 0 || data32 === false){
+coerced34 = null;
 }
 else {
 const err16 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf/0/type",keyword:"type",params:{type: "object"},message:"must be object"};
@@ -33906,72 +33985,25 @@ vErrors.push(err16);
 errors++;
 }
 }
-if(coerced33 !== undefined){
-data31 = coerced33;
-if(data !== undefined){
-data["operations"] = coerced33;
-}
-}
-}
-const _errs100 = errors;
-if(errors === _errs100){
-if(data31 && typeof data31 == "object" && !Array.isArray(data31)){
-const _errs102 = errors;
-for(const key2 in data31){
-if(!((key2 === "edit") || (key2 === "delete"))){
-delete data31[key2];
-}
-}
-if(_errs102 === errors){
-if(data31.edit !== undefined){
-let data32 = data31.edit;
-const _errs103 = errors;
-if((typeof data32 !== "string") && (data32 !== null)){
-let dataType34 = typeof data32;
-let coerced34 = undefined;
-if(dataType34 == 'object' && Array.isArray(data32) && data32.length == 1){
-data32 = data32[0];
-dataType34 = typeof data32;
-if((typeof data32 === "string") && (data32 === null)){
-coerced34 = data32;
-}
-}
-if(!(coerced34 !== undefined)){
-if(dataType34 == "number" || dataType34 == "boolean"){
-coerced34 = "" + data32;
-}
-else if(data32 === null){
-coerced34 = "";
-}
-else if(data32 === "" || data32 === 0 || data32 === false){
-coerced34 = null;
-}
-else {
-const err17 = {instancePath:instancePath+"/operations/edit",schemaPath:"node#/definitions/StoryOperations/properties/edit/type",keyword:"type",params:{type: "string"},message:"must be string"};
-if(vErrors === null){
-vErrors = [err17];
-}
-else {
-vErrors.push(err17);
-}
-errors++;
-}
-}
 if(coerced34 !== undefined){
 data32 = coerced34;
-if(data31 !== undefined){
-data31["edit"] = coerced34;
+if(data !== undefined){
+data["operations"] = coerced34;
 }
 }
 }
-var valid7 = _errs103 === errors;
+const _errs103 = errors;
+if(errors === _errs103){
+if(data32 && typeof data32 == "object" && !Array.isArray(data32)){
+const _errs105 = errors;
+for(const key2 in data32){
+if(!((key2 === "edit") || (key2 === "delete"))){
+delete data32[key2];
 }
-else {
-var valid7 = true;
 }
-if(valid7){
-if(data31.delete !== undefined){
-let data33 = data31.delete;
+if(_errs105 === errors){
+if(data32.edit !== undefined){
+let data33 = data32.edit;
 const _errs106 = errors;
 if((typeof data33 !== "string") && (data33 !== null)){
 let dataType35 = typeof data33;
@@ -33994,6 +34026,53 @@ else if(data33 === "" || data33 === 0 || data33 === false){
 coerced35 = null;
 }
 else {
+const err17 = {instancePath:instancePath+"/operations/edit",schemaPath:"node#/definitions/StoryOperations/properties/edit/type",keyword:"type",params:{type: "string"},message:"must be string"};
+if(vErrors === null){
+vErrors = [err17];
+}
+else {
+vErrors.push(err17);
+}
+errors++;
+}
+}
+if(coerced35 !== undefined){
+data33 = coerced35;
+if(data32 !== undefined){
+data32["edit"] = coerced35;
+}
+}
+}
+var valid7 = _errs106 === errors;
+}
+else {
+var valid7 = true;
+}
+if(valid7){
+if(data32.delete !== undefined){
+let data34 = data32.delete;
+const _errs109 = errors;
+if((typeof data34 !== "string") && (data34 !== null)){
+let dataType36 = typeof data34;
+let coerced36 = undefined;
+if(dataType36 == 'object' && Array.isArray(data34) && data34.length == 1){
+data34 = data34[0];
+dataType36 = typeof data34;
+if((typeof data34 === "string") && (data34 === null)){
+coerced36 = data34;
+}
+}
+if(!(coerced36 !== undefined)){
+if(dataType36 == "number" || dataType36 == "boolean"){
+coerced36 = "" + data34;
+}
+else if(data34 === null){
+coerced36 = "";
+}
+else if(data34 === "" || data34 === 0 || data34 === false){
+coerced36 = null;
+}
+else {
 const err18 = {instancePath:instancePath+"/operations/delete",schemaPath:"node#/definitions/StoryOperations/properties/delete/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
 vErrors = [err18];
@@ -34004,14 +34083,14 @@ vErrors.push(err18);
 errors++;
 }
 }
-if(coerced35 !== undefined){
-data33 = coerced35;
-if(data31 !== undefined){
-data31["delete"] = coerced35;
+if(coerced36 !== undefined){
+data34 = coerced36;
+if(data32 !== undefined){
+data32["delete"] = coerced36;
 }
 }
 }
-var valid7 = _errs106 === errors;
+var valid7 = _errs109 === errors;
 }
 else {
 var valid7 = true;
@@ -34030,23 +34109,23 @@ vErrors.push(err19);
 errors++;
 }
 }
-var _valid2 = _errs99 === errors;
+var _valid2 = _errs102 === errors;
 valid5 = valid5 || _valid2;
 if(!valid5){
-const _errs111 = errors;
-if(data31 !== null){
-let dataType36 = typeof data31;
-let coerced36 = undefined;
-if(dataType36 == 'object' && Array.isArray(data31) && data31.length == 1){
-data31 = data31[0];
-dataType36 = typeof data31;
-if(data31 === null){
-coerced36 = data31;
+const _errs114 = errors;
+if(data32 !== null){
+let dataType37 = typeof data32;
+let coerced37 = undefined;
+if(dataType37 == 'object' && Array.isArray(data32) && data32.length == 1){
+data32 = data32[0];
+dataType37 = typeof data32;
+if(data32 === null){
+coerced37 = data32;
 }
 }
-if(!(coerced36 !== undefined)){
-if(data31 === "" || data31 === 0 || data31 === false){
-coerced36 = null;
+if(!(coerced37 !== undefined)){
+if(data32 === "" || data32 === 0 || data32 === false){
+coerced37 = null;
 }
 else {
 const err20 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
@@ -34059,14 +34138,14 @@ vErrors.push(err20);
 errors++;
 }
 }
-if(coerced36 !== undefined){
-data31 = coerced36;
+if(coerced37 !== undefined){
+data32 = coerced37;
 if(data !== undefined){
-data["operations"] = coerced36;
+data["operations"] = coerced37;
 }
 }
 }
-var _valid2 = _errs111 === errors;
+var _valid2 = _errs114 === errors;
 valid5 = valid5 || _valid2;
 }
 if(!valid5){
@@ -34082,102 +34161,103 @@ validate126.errors = vErrors;
 return false;
 }
 else {
-errors = _errs98;
+errors = _errs101;
 if(vErrors !== null){
-if(_errs98){
-vErrors.length = _errs98;
+if(_errs101){
+vErrors.length = _errs101;
 }
 else {
 vErrors = null;
 }
 }
 }
-var valid0 = _errs97 === errors;
+var valid0 = _errs100 === errors;
 }
 else {
 var valid0 = true;
 }
 if(valid0){
 if(data.externalSourceUri !== undefined){
-let data34 = data.externalSourceUri;
-const _errs113 = errors;
-if((!(Array.isArray(data34))) && (data34 !== null)){
-let dataType37 = typeof data34;
-let coerced37 = undefined;
-if(dataType37 == 'object' && Array.isArray(data34) && data34.length == 1){
-data34 = data34[0];
-dataType37 = typeof data34;
-if((Array.isArray(data34)) && (data34 === null)){
-coerced37 = data34;
+let data35 = data.externalSourceUri;
+const _errs116 = errors;
+if((!(Array.isArray(data35))) && (data35 !== null)){
+let dataType38 = typeof data35;
+let coerced38 = undefined;
+if(dataType38 == 'object' && Array.isArray(data35) && data35.length == 1){
+data35 = data35[0];
+dataType38 = typeof data35;
+if((Array.isArray(data35)) && (data35 === null)){
+coerced38 = data35;
 }
 }
-if(!(coerced37 !== undefined)){
-if(dataType37 === "string" || dataType37 === "number"
-              || dataType37 === "boolean" || data34 === null){
-coerced37 = [data34];
+if(!(coerced38 !== undefined)){
+if(dataType38 === "string" || dataType38 === "number"
+              || dataType38 === "boolean" || data35 === null){
+coerced38 = [data35];
 }
-else if(data34 === "" || data34 === 0 || data34 === false){
-coerced37 = null;
+else if(data35 === "" || data35 === 0 || data35 === false){
+coerced38 = null;
 }
 else {
 validate126.errors = [{instancePath:instancePath+"/externalSourceUri",schemaPath:"#/properties/externalSourceUri/type",keyword:"type",params:{type: "array"},message:"must be array"}];
 return false;
 }
 }
-if(coerced37 !== undefined){
-data34 = coerced37;
+if(coerced38 !== undefined){
+data35 = coerced38;
 if(data !== undefined){
-data["externalSourceUri"] = coerced37;
+data["externalSourceUri"] = coerced38;
 }
 }
 }
-if(errors === _errs113){
-if(Array.isArray(data34)){
+if(errors === _errs116){
+if(Array.isArray(data35)){
 var valid8 = true;
-const len0 = data34.length;
+const len0 = data35.length;
 for(let i0=0; i0<len0; i0++){
-let data35 = data34[i0];
-const _errs116 = errors;
-if(typeof data35 !== "string"){
-let dataType38 = typeof data35;
-let coerced38 = undefined;
-if(dataType38 == 'object' && Array.isArray(data35) && data35.length == 1){
-data35 = data35[0];
-dataType38 = typeof data35;
-if(typeof data35 === "string"){
-coerced38 = data35;
+let data36 = data35[i0];
+const _errs119 = errors;
+if(typeof data36 !== "string"){
+let dataType39 = typeof data36;
+let coerced39 = undefined;
+if(dataType39 == 'object' && Array.isArray(data36) && data36.length == 1){
+data36 = data36[0];
+dataType39 = typeof data36;
+if(typeof data36 === "string"){
+coerced39 = data36;
 }
 }
-if(!(coerced38 !== undefined)){
-if(dataType38 == "number" || dataType38 == "boolean"){
-coerced38 = "" + data35;
+if(!(coerced39 !== undefined)){
+if(dataType39 == "number" || dataType39 == "boolean"){
+coerced39 = "" + data36;
 }
-else if(data35 === null){
-coerced38 = "";
+else if(data36 === null){
+coerced39 = "";
 }
 else {
 validate126.errors = [{instancePath:instancePath+"/externalSourceUri/" + i0,schemaPath:"#/properties/externalSourceUri/items/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
-if(coerced38 !== undefined){
-data35 = coerced38;
-if(data34 !== undefined){
-data34[i0] = coerced38;
+if(coerced39 !== undefined){
+data36 = coerced39;
+if(data35 !== undefined){
+data35[i0] = coerced39;
 }
 }
 }
-var valid8 = _errs116 === errors;
+var valid8 = _errs119 === errors;
 if(!valid8){
 break;
 }
 }
 }
 }
-var valid0 = _errs113 === errors;
+var valid0 = _errs116 === errors;
 }
 else {
 var valid0 = true;
+}
 }
 }
 }
