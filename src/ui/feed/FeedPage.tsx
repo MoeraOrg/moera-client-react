@@ -96,7 +96,7 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
         if (anchor == null) {
             if (prevBeginning.current == null && beginning != null) {
                 scrollTo(Number.MAX_SAFE_INTEGER);
-            } else if (beginning !== prevBeginning.current && window.scrollY > 0) {
+            } else if (beginning !== prevBeginning.current) {
                 const position = scrollPosition.current;
                 if (position != null && position.element.isConnected) {
                     const delta = position.element.getBoundingClientRect().top - position.top;
