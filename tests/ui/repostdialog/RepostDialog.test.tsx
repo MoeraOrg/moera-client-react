@@ -115,7 +115,9 @@ describe("repost dialog", () => {
         expect(container.querySelector(".form-text b")?.textContent).toBe("Receiver Blog (receiver)");
         expect(container.querySelector(".form-text")?.textContent).toContain("A post heading");
 
-        act(() => (Array.from(container.querySelectorAll("button")).find(button => button.textContent === "cancel"))?.click());
+        const cancel = Array.from(container.querySelectorAll("button"))
+            .find((button: HTMLButtonElement) => button.textContent === "cancel");
+        act(() => cancel?.click());
         expect(mockDispatch).toHaveBeenCalledWith(expect.objectContaining({type: "CLOSE_REPOST_DIALOG"}));
     });
 

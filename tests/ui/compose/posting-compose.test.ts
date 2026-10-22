@@ -42,7 +42,9 @@ describe("compose sharing permissions", () => {
         [false, true, "private", "public"],
         [true, false, "public", "public"],
         [true, true, "public", "public"]
-    ])("list %s, total %s produce permissions %s, %s", (list, total, viewSharings, viewTotalSharings) => {
+    ])("list %s, total %s produce permissions %s, %s", (
+        list: boolean, total: boolean, viewSharings: string, viewTotalSharings: string
+    ) => {
         const values = composePageLogic.mapPropsToValues({
             ...props, sharingsVisibleDefault: list, totalSharingsVisibleDefault: total
         });

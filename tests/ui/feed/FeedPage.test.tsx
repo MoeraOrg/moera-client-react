@@ -116,19 +116,21 @@ describe("feed scrolling", () => {
         expect(window.scrollBy).toHaveBeenCalledWith(0, 501);
     });
 
-    test("keeps new stories visible when the page is already at the top", () => {
-        render();
+    test("preserves the posting with 25 pixels of extra space when prepending at the page top", () => {
         jest.replaceProperty(window, "scrollY", 0);
+        positions = {300: 50, 200: 350, 100: 650};
+        render();
         act(() => window.dispatchEvent(new Event("scroll")));
         jest.mocked(window.scrollTo).mockClear();
         jest.mocked(window.scrollBy).mockClear();
 
-        positions[100] += 501;
+        positions = {400: 50, 300: 350, 200: 650, 100: 950};
         feed.stories = [story(400), ...feed.stories];
         render();
 
         expect(window.scrollTo).not.toHaveBeenCalled();
-        expect(window.scrollBy).not.toHaveBeenCalled();
+        expect(window.scrollBy).toHaveBeenCalledTimes(1);
+        expect(window.scrollBy).toHaveBeenCalledWith(0, 275);
     });
 
     test("refreshes the saved offset between consecutive prepends without a scroll event", () => {

@@ -1,3 +1,4 @@
+import { ContactWithRelationships } from "api";
 import { ClientState } from "state/state";
 import {
     getPeopleBlocked,
@@ -14,19 +15,21 @@ jest.mock("state/node/selectors", () => ({
     isPermitted: jest.fn()
 }));
 
+type ContactsSelector = (state: ClientState) => ContactWithRelationships[];
+
 describe("people contact selectors", () => {
     const contacts = {};
     const state = {people: {contacts}} as ClientState;
     const updatedState = {people: {contacts}} as ClientState;
 
-    test.each([
+    test.each<[string, ContactsSelector]>([
         ["subscribers", getPeopleSubscribers],
         ["subscriptions", getPeopleSubscriptions],
         ["friends", (currentState: ClientState) => getPeopleFriends(currentState, "group")],
         ["friend-ofs", getPeopleFriendOfs],
         ["blocked", getPeopleBlocked],
         ["blocked-by", getPeopleBlockedBy]
-    ])("keeps the %s result stable while contacts do not change", (_name, selector) => {
+    ])("keeps the %s result stable while contacts do not change", (_name: string, selector: ContactsSelector) => {
         expect(selector(state)).toBe(selector(updatedState));
     });
 
@@ -44,7 +47,8 @@ describe("people contact selectors", () => {
         getPeopleContactsByDistance(sortingState);
         getPeopleContactsByAlpha(sortingState);
 
-        expect(getPeopleContactsByDistance(sortingState).map(contact => contact.contact.nodeName))
-            .toStrictEqual(["close", "far"]);
+        expect(getPeopleContactsByDistance(sortingState).map(
+            (contact: ContactWithRelationships) => contact.contact.nodeName
+        )).toStrictEqual(["close", "far"]);
     });
 });

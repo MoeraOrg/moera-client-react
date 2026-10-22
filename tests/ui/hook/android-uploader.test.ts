@@ -6,6 +6,7 @@ import { PrivateMediaFileInfo } from "api";
 import { AndroidMedia } from "api/android/media-upload";
 import type { AndroidJsInterface, AndroidMessageMediaUploadState } from "api/android/types";
 import { validateSchema } from "api/node/safe";
+import { SafeValidateResult } from "safe/types";
 import { LocalMediaUploadSource } from "state/mediaupload/media-source";
 import { AndroidUploaderHandle, useAndroidUploader } from "ui/hook/android-uploader";
 
@@ -127,7 +128,7 @@ describe("useAndroidUploader", () => {
     beforeEach(() => {
         (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
         jest.mocked(validateSchema).mockImplementation(
-            async (_schema, data) => ({valid: true, data}) as any
+            async (_schema: string, data: unknown): Promise<SafeValidateResult> => ({valid: true, data})
         );
         container = document.createElement("div");
         document.body.appendChild(container);
@@ -222,8 +223,10 @@ describe("useAndroidUploader", () => {
         const android = createAndroid();
         window.Android = android;
         let finishValidation!: () => void;
-        jest.mocked(validateSchema).mockImplementation((_schema, data) => new Promise(resolve => {
-            finishValidation = () => resolve({valid: true, data} as any);
+        jest.mocked(validateSchema).mockImplementation((_schema: string, data: unknown) => new Promise<SafeValidateResult>((
+            resolve: (result: SafeValidateResult) => void
+        ) => {
+            finishValidation = () => resolve({valid: true, data});
         }));
         const {getHandle, render} = renderUploader(null);
         const promise = getHandle().upload(source, false);
@@ -260,13 +263,13 @@ describe("useAndroidUploader", () => {
                     draftId: "draft-1",
                     onSelectedMedia: onSelectedMedia1,
                     onRestoreMedia: onRestoreMedia1,
-                    onHandle: uploader => handle1 = uploader
+                    onHandle: (uploader: AndroidUploaderHandle) => handle1 = uploader
                 }),
                 React.createElement(Harness, {
                     draftId: "draft-2",
                     onSelectedMedia: onSelectedMedia2,
                     onRestoreMedia: onRestoreMedia2,
-                    onHandle: uploader => handle2 = uploader
+                    onHandle: (uploader: AndroidUploaderHandle) => handle2 = uploader
                 })
             ));
         });

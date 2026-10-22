@@ -73,14 +73,16 @@ describe("field success feedback", () => {
         ));
     }
 
-    test.each([
+    test.each<[string, React.ReactElement<{showOk?: boolean}>]>([
         ["input", <InputField name="value"/>],
         ["text", <TextField name="value"/>],
         ["checkbox", <CheckboxField name="value"/>],
         ["radio", <RadioField name="value"/>],
         ["select", <SelectField name="value"/>],
         ["rich text", <RichTextField name="value" format="plain-text"/>]
-    ])("%s field shows success feedback only when showOk is enabled", (_name, field) => {
+    ])("%s field shows success feedback only when showOk is enabled", (
+        _name: string, field: React.ReactElement<{showOk?: boolean}>
+    ) => {
         render(field);
         expect(container.querySelector(".is-valid")).toBeNull();
 

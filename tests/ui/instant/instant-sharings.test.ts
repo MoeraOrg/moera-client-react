@@ -1,5 +1,5 @@
 import { describe, expect, jest, test } from '@jest/globals';
-import { createInstance } from 'i18next';
+import { createInstance, ResourceLanguage } from 'i18next';
 import ICU from 'i18next-icu';
 
 import { buildPostingSharedSummary } from "ui/instant/instant-summaries";
@@ -14,7 +14,9 @@ jest.mock("util/html", () => ({htmlEntities: (value: string | null | undefined) 
 jest.mock("api", () => ({NodeName: {shorten: (value: string | null | undefined) => value}}));
 
 describe("sharing instant summary", () => {
-    test.each(Object.entries({en, pl, ru, uk}))("renders groups in %s", async (language, messages) => {
+    test.each(Object.entries({en, pl, ru, uk}))("renders groups in %s", async (
+        language: string, messages: ResourceLanguage
+    ) => {
         const i18n = createInstance();
         await i18n.use(ICU).init({
             resources: {[language]: {translation: messages}},

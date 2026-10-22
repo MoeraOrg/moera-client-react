@@ -1,10 +1,12 @@
 import { Node } from "api";
+import { ClientAction } from "state/action";
 import { ActionContext } from "state/action-types";
 import { recommendationDont } from "state/feeds/actions";
 import { emptyFeed } from "state/feeds/empty";
 import sagas from "state/feeds/sagas";
 import triggers from "state/feeds/triggers";
 import { wakeUp } from "state/navigation/actions";
+import { Saga } from "state/saga";
 import { ClientState } from "state/state";
 import { dispatch, select } from "state/store-sagas";
 import { collectTriggers, invokeTriggers } from "state/trigger";
@@ -23,11 +25,11 @@ jest.mock("i18n", () => ({}));
 jest.mock("util/media-images", () => ({}));
 jest.mock("state/store-sagas", () => ({dispatch: jest.fn(), select: jest.fn()}));
 
-const getStatus = Node.getFeedStatus as jest.Mock;
-const getSlice = Node.getFeedSlice as jest.Mock;
-const dispatched = dispatch as jest.Mock;
+const getStatus = jest.mocked(Node.getFeedStatus);
+const getSlice = jest.mocked(Node.getFeedSlice);
+const dispatched = jest.mocked(dispatch);
 const selected = select as jest.Mock;
-const updateSaga = sagas.find(entry => entry.action === "FEEDS_UPDATE")!;
+const updateSaga = sagas.find((entry: Saga) => entry.action === "FEEDS_UPDATE")!;
 let state: ClientState;
 
 async function wakeUpFeeds(): Promise<void> {
@@ -38,8 +40,14 @@ async function wakeUpFeeds(): Promise<void> {
         homeOwnerNameOrUrl: state.home.owner.name ?? state.home.root.location
     } as ActionContext;
     const action = Object.assign(wakeUp(), {context});
-    invokeTriggers(collectTriggers(triggers), action, {getState: () => state, dispatch});
-    const update = dispatched.mock.calls.find(([signal]) => signal.type === "FEEDS_UPDATE")![0];
+    invokeTriggers(collectTriggers(triggers), action, {
+        getState: () => state,
+        dispatch: <T extends ClientAction>(signal: T): T => {
+            dispatch(signal);
+            return signal;
+        }
+    });
+    const update = dispatched.mock.calls.find(([signal]: [ClientAction]) => signal.type === "FEEDS_UPDATE")![0];
     await updateSaga.saga(Object.assign(update, {context}));
 }
 
@@ -70,11 +78,15 @@ describe("feed refresh after waking up", () => {
     test("refreshes home feeds and remote timelines without requesting remote private feeds", async () => {
         await wakeUpFeeds();
 
-        expect(getStatus.mock.calls.map(([, nodeName, feedName]) => [nodeName, feedName])).toEqual([
+        expect(getStatus.mock.calls.map(
+            ([, nodeName, feedName]: Parameters<typeof Node.getFeedStatus>) => [nodeName, feedName]
+        )).toEqual([
             ["alice", "timeline"], ["alice", "news"], ["alice", "explore"], ["alice", "instant"],
             ["bob", "timeline"]
         ]);
-        expect(getSlice.mock.calls.map(([, nodeName, feedName]) => [nodeName, feedName])).toEqual([
+        expect(getSlice.mock.calls.map(
+            ([, nodeName, feedName]: Parameters<typeof Node.getFeedSlice>) => [nodeName, feedName]
+        )).toEqual([
             ["alice", "news"], ["bob", "timeline"]
         ]);
         expect(dispatched).not.toHaveBeenCalledWith(expect.objectContaining({type: "ERROR_THROWN"}));
@@ -86,7 +98,9 @@ describe("feed refresh after waking up", () => {
 
         await wakeUpFeeds();
 
-        expect(getStatus.mock.calls.map(([, nodeName, feedName]) => [nodeName, feedName])).toEqual([
+        expect(getStatus.mock.calls.map(
+            ([, nodeName, feedName]: Parameters<typeof Node.getFeedStatus>) => [nodeName, feedName]
+        )).toEqual([
             ["https://alice.example", "news"]
         ]);
     });
@@ -97,10 +111,14 @@ describe("feed refresh after waking up", () => {
 
         await wakeUpFeeds();
 
-        expect(getStatus.mock.calls.map(([, nodeName, feedName]) => [nodeName, feedName])).toEqual([
+        expect(getStatus.mock.calls.map(
+            ([, nodeName, feedName]: Parameters<typeof Node.getFeedStatus>) => [nodeName, feedName]
+        )).toEqual([
             ["alice", "timeline"], ["bob", "timeline"]
         ]);
-        expect(getSlice.mock.calls.map(([, nodeName, feedName]) => [nodeName, feedName])).toEqual([
+        expect(getSlice.mock.calls.map(
+            ([, nodeName, feedName]: Parameters<typeof Node.getFeedSlice>) => [nodeName, feedName]
+        )).toEqual([
             ["bob", "timeline"]
         ]);
     });

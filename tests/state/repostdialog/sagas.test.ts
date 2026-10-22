@@ -1,17 +1,18 @@
 import { Node } from "api";
+import { ClientAction } from "state/action";
 import { ActionContext } from "state/action-types";
 import { repostPosting } from "state/repostdialog/actions";
 import sagas from "state/repostdialog/sagas";
 import { dispatch } from "state/store-sagas";
 import { REL_HOME } from "util/rel-node-name";
 
-jest.mock('i18next', () => ({t: (key: string) => key}));
+jest.mock("i18next", () => ({t: (key: string) => key}));
 jest.mock("api", () => ({Node: {republishPosting: jest.fn(), republishRemotePosting: jest.fn()}}));
 jest.mock("state/store-sagas", () => ({dispatch: jest.fn()}));
 
 const republish = Node.republishRemotePosting as jest.Mock;
 const republishLocal = Node.republishPosting as jest.Mock;
-const dispatched = dispatch as jest.Mock;
+const dispatched = jest.mocked(dispatch);
 
 describe("repost posting saga", () => {
     beforeEach(() => {
@@ -36,10 +37,10 @@ describe("repost posting saga", () => {
             ]
         });
         expect(republishLocal).not.toHaveBeenCalled();
-        expect(dispatched.mock.calls.map(([signal]) => signal.type)).toEqual([
+        expect(dispatched.mock.calls.map(([signal]: [ClientAction]) => signal.type)).toEqual([
             "FLASH_BOX", "REPOST_POSTING_SUCCEEDED"
         ]);
-        expect(dispatched.mock.calls[0][0].payload.message).toBe("you-shared-post");
+        expect(dispatched.mock.calls[0][0]).toMatchObject({payload: {message: "you-shared-post"}});
     });
 
     test("uses the local republish endpoint for a posting on the home node", async () => {
@@ -57,7 +58,7 @@ describe("repost posting saga", () => {
             ]
         });
         expect(republish).not.toHaveBeenCalled();
-        expect(dispatched.mock.calls.map(([signal]) => signal.type)).toEqual([
+        expect(dispatched.mock.calls.map(([signal]: [ClientAction]) => signal.type)).toEqual([
             "FLASH_BOX", "REPOST_POSTING_SUCCEEDED"
         ]);
     });
@@ -71,9 +72,10 @@ describe("repost posting saga", () => {
 
         await sagas[0].saga(action);
 
-        expect(dispatched.mock.calls.map(([signal]) => signal.type)).toEqual([
+        expect(dispatched.mock.calls.map(([signal]: [ClientAction]) => signal.type)).toEqual([
             "REPOST_POSTING_FAILED", "ERROR_THROWN"
         ]);
-        expect(dispatched.mock.calls[1][0].payload.e).toBe(error);
+        const failure = dispatched.mock.calls[1][0];
+        expect(failure.type === "ERROR_THROWN" ? failure.payload.e : undefined).toBe(error);
     });
 });

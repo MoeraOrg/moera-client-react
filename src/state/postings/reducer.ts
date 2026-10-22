@@ -126,14 +126,15 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
 
         case "STORY_ADDED":
         case "STORY_UPDATED": {
-            const {id, posting} = action.payload.story;
-            const nodeName = action.context.ownerNameOrUrl;
-            if (posting) {
-                const postingState = state[nodeName]?.[posting.id];
+            const {story} = action.payload;
+            const postingId = story.postingId ?? story.posting?.id;
+            const nodeName = absoluteNodeName(action.payload.nodeName, action.context);
+            if (postingId != null) {
+                const postingState = state[nodeName]?.[postingId];
                 if (postingState?.posting != null) {
-                    const refs = (postingState.posting?.feedReferences ?? []).filter(r => r.storyId !== id);
-                    refs.push(toFeedReference(action.payload.story));
-                    return immutable.set(state, [nodeName, posting.id, "posting", "feedReferences"], refs);
+                    const refs = (postingState.posting?.feedReferences ?? []).filter(r => r.storyId !== story.id);
+                    refs.push(toFeedReference(story));
+                    return immutable.set(state, [nodeName, postingId, "posting", "feedReferences"], refs);
                 }
             }
             return state;
@@ -141,7 +142,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
 
         case "STORY_DELETED": {
             const {story: {id}, postingId} = action.payload;
-            const nodeName = action.context.ownerNameOrUrl;
+            const nodeName = absoluteNodeName(action.payload.nodeName, action.context);
             if (postingId != null) {
                 const postingState = state[nodeName]?.[postingId];
                 if (postingState?.posting != null) {

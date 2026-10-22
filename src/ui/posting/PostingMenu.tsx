@@ -108,9 +108,15 @@ function PostingMenuItems({posting, feedName, story, detailed}: Props) {
     }
 
     const onDelete = () => {
+        const repostsLeft = (posting.feedReferences?.filter(r => r.feedName === "timeline") ?? []).length
+            - (feedName == null || feedName === "timeline" ? 1 : 0);
+
+        const onDelete = (deleteAll: boolean) =>
+            feedName == null || story == null || repostsLeft <= 0 || deleteAll
+                ? postingDelete(posting.id, REL_CURRENT)
+                : storyDelete(REL_CURRENT, story, feedName, posting.id);
+
         if (confirmDelete) {
-            const repostsLeft = (posting.feedReferences?.filter(r => r.feedName === "timeline") ?? []).length
-                - (feedName == null || feedName === "timeline" ? 1 : 0);
             dispatch(confirmBox({
                 message: feedName == null && repostsLeft > 0
                     ? t("delete-post-with-reposts", {heading: posting.heading, count: repostsLeft})
@@ -121,14 +127,11 @@ function PostingMenuItems({posting, feedName, story, detailed}: Props) {
                     ? t("delete-more-reposts", {count: repostsLeft})
                     : undefined,
                 dontShowAgainBox: feedName != null && repostsLeft > 0,
-                onYes: (deleteAll: boolean) =>
-                    feedName == null || story == null || repostsLeft <= 0 || deleteAll
-                        ? postingDelete(posting.id, REL_CURRENT)
-                        : storyDelete(REL_CURRENT, story, feedName, posting.id),
+                onYes: onDelete,
                 variant: "danger"
             }));
         } else {
-            dispatch(postingDelete(posting.id, REL_CURRENT));
+            dispatch(onDelete(repostsLeft <= 0));
         }
     };
 
@@ -246,7 +249,7 @@ function PostingMenuItems({posting, feedName, story, detailed}: Props) {
                 nodeName: REL_CURRENT,
                 href: postingHref,
                 onClick: onChangeDate,
-                show: posting.receiverName == null && storyEditable
+                show: (posting.receiverName == null || feedName === "timeline") && storyEditable
             },
             {
                 divider: true

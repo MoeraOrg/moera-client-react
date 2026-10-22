@@ -99,7 +99,10 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
             } else if (beginning !== prevBeginning.current) {
                 const position = scrollPosition.current;
                 if (position != null && position.element.isConnected) {
-                    const delta = position.element.getBoundingClientRect().top - position.top;
+                    let delta = position.element.getBoundingClientRect().top - position.top;
+                    if (window.scrollY === 0) {
+                        delta -= 25;
+                    }
                     if (delta !== 0) {
                         window.scrollBy(0, delta);
                     }

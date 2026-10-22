@@ -45,17 +45,20 @@ describe("visual editor link URLs", () => {
         container = document.createElement("div");
         document.body.appendChild(container);
         root = createRoot(container);
+        const link: LinkElement = {
+            type: "link", href: "https://example.com/old", children: [{text: "Link"}]
+        };
         const scripture: Scripture = [{
             type: "paragraph",
             children: [
                 {text: ""},
-                {type: "link", href: "https://example.com/old", children: [{text: "Link"}]},
+                link,
                 {text: ""}
             ]
         }];
         const value = {scripture} as RichTextValue;
         await act(async () => root.render(
-            <VisualEditor value={value} touched={false} nodeName="alice" panelMode="none" noMedia onUrls={onUrls}>
+            <VisualEditor name="body" value={value} touched={false} nodeName="alice" panelMode="none" noMedia onUrls={onUrls}>
                 <EditorProbe/>
             </VisualEditor>
         ));

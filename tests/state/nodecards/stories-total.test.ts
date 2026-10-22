@@ -24,7 +24,7 @@ const context: ActionContext = {
 describe.each<[EventSource, string, string]>([
     ["NODE", "alice", "bob"],
     ["HOME", "bob", "alice"]
-])("node card post count from %s events", (source, nodeName, otherNodeName) => {
+])("node card post count from %s events", (source: EventSource, nodeName: string, otherNodeName: string) => {
     const statusEvent = (feedName: string, total: number) => ({
         ...eventAction({
             type: "FEED_STATUS_UPDATED" as const,
