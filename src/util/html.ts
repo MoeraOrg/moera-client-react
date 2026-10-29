@@ -1,10 +1,9 @@
 import sanitizeHtml, { Attributes, IOptions, Tag, Transformer } from 'sanitize-html';
-import { EmojiEntity, parse as parseEmojis } from 'twemoji-parser';
 import * as HtmlEntities from 'html-entities';
 import * as immutable from 'object-path-immutable';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
-import { twemojiUrl } from "util/twemoji";
+import { EmojiEntity, parseEmojis } from "util/emoji-parser";
 import { mediaHashStrip, mediaImageSize } from "util/media-images";
 import { isNumericString, notNull } from "util/misc";
 import { URL_PATTERN } from "util/url";
@@ -186,8 +185,12 @@ const SAFE_IMPORT_HTML_SETTINGS: IOptions = {
     transformTags: {}
 };
 
-function createEmojiElement(entity: EmojiEntity): string {
-    return `<b style="background-image: url('${entity.url}')" class="emoji">${entity.text}</b>`;
+function createEmojiElement(entity: EmojiEntity): HTMLElement {
+    const element = document.createElement("b");
+    element.setAttribute("style", `background-image: url('${entity.url}')`);
+    element.className = "emoji";
+    element.textContent = entity.text;
+    return element;
 }
 
 export function replaceEmojis(html: string | null | undefined): string {
@@ -195,16 +198,36 @@ export function replaceEmojis(html: string | null | undefined): string {
         return "";
     }
 
-    const entities = parseEmojis(html, {buildUrl: twemojiUrl});
-    let shift = 0;
-    let current = html;
-    for (let entity of entities) {
-        const img = entity.text !== "\ufe0e" && entity.text !== "\ufe0f" ? createEmojiElement(entity) : "";
-        current = current.substring(0, entity.indices[0] + shift) + img + current.substring(entity.indices[1] + shift);
-        shift += img.length - (entity.indices[1] - entity.indices[0]);
+    // Parse text nodes so entities are decoded before matching and attributes are left intact.
+    const template = document.createElement("template");
+    template.innerHTML = html;
+    const walker = document.createTreeWalker(template.content, NodeFilter.SHOW_TEXT);
+    const textNodes: Text[] = [];
+    while (walker.nextNode()) {
+        const node = walker.currentNode as Text;
+        if (!node.parentElement?.closest(".emoji, script, style, textarea, title")) {
+            textNodes.push(node);
+        }
     }
 
-    return current;
+    let changed = false;
+    for (const node of textNodes) {
+        const entities = parseEmojis(node.data);
+        if (entities.length === 0) {
+            continue;
+        }
+        const fragment = document.createDocumentFragment();
+        let offset = 0;
+        for (const entity of entities) {
+            fragment.append(node.data.substring(offset, entity.indices[0]), createEmojiElement(entity));
+            offset = entity.indices[1];
+        }
+        fragment.append(node.data.substring(offset));
+        node.replaceWith(fragment);
+        changed = true;
+    }
+
+    return changed ? template.innerHTML : html;
 }
 
 export function safePreviewHtml(
@@ -259,7 +282,7 @@ export function safeImportHtml(html: string | null | undefined): string {
 
 export function htmlToEmoji(html: string): string {
     return html
-        .replace(/<b\s[^>]*class="emoji"[^>]*>(..?)<\/b>/gi, "$1")
+        .replace(/<b\s[^>]*class="emoji"[^>]*>([^<]*)<\/b>/gi, "$1")
         .replace(/<img\s+src="https:\/\/twemoji\.[^"]*\/([0-9a-f]+).svg"[^>]*>/gi,
             (g0, g1) => String.fromCodePoint(parseInt(g1, 16)))
         .replace(/<img\s[^>]*src="https:\/\/static.[a-z]+.fbcdn.net\/images\/emoji.php\/[^"]*\/([0-9a-f_]+).png"[^>]*>/gi,

@@ -1,6 +1,5 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
-import { parse as parseEmojis } from 'twemoji-parser';
 
 import { BlockedUserInfo, CommentInfo } from "api";
 import { ClientAction } from "state/action";
@@ -12,8 +11,8 @@ import {
     DetailedPostingState,
     ExtCommentInfo
 } from "state/detailedposting/state";
-import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
-import { twemojiUrl } from "util/twemoji";
+import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml, unhtmlEntities } from "util/html";
+import { parseEmojis } from "util/emoji-parser";
 
 const emptyComments: CommentsState = {
     receiverName: null,
@@ -94,12 +93,12 @@ const initialState: DetailedPostingState = {
 const SINGLE_EMOJI_COMMENT_ALLOWED_TAGS = ["mr-spoiler", "a", "del", "strike"];
 const SINGLE_EMOJI_COMMENT_ALLOWED_TAGS_REGEX = `(?:${SINGLE_EMOJI_COMMENT_ALLOWED_TAGS.join("|")})`
 const SINGLE_EMOJI_COMMENT_REGEX = new RegExp(
-    `^\\s*(?:<\\s*p\\s*>\\s*)?`+ // Optional opening <p>
-    `(?:<\\s*${SINGLE_EMOJI_COMMENT_ALLOWED_TAGS_REGEX}(?:\\s+[^>]+\\s+)?\\s*>\\s*)?` + // Optional opening tag
-    `([^<]{1,6})\\s*` + // Up to six chars (emojis may be long)
+    `^(?:<\\s*p\\s*>)?`+ // Optional opening <p>
+    `(?:\\s*<\\s*${SINGLE_EMOJI_COMMENT_ALLOWED_TAGS_REGEX}(?:\\s+[^>]+\\s+)?\\s*>)?` + // Optional opening tag
+    `([^<]+)` + // A composed emoji can contain many code points or HTML entities.
     `(?:<\\s*\\/${SINGLE_EMOJI_COMMENT_ALLOWED_TAGS_REGEX}\\s*>\\s*)?` + // Optional closing tag
-    `(?:<\\/\\s*p\\s*>\\s*)?$`, // Optional closing <p>
-    'gi'
+    `(?:<\\/\\s*p\\s*>)?$`, // Optional closing <p>
+    "gi"
 );
 
 function isSingleEmojiComment(comment: CommentInfo) {
@@ -107,13 +106,13 @@ function isSingleEmojiComment(comment: CommentInfo) {
         return false;
     }
 
-    const match = comment.body.text.matchAll(SINGLE_EMOJI_COMMENT_REGEX).next().value;
+    const match = comment.body.text.trim().matchAll(SINGLE_EMOJI_COMMENT_REGEX).next().value;
     if (!match) {
         return false;
     }
 
-    const innerText = match[1];
-    const emojis = parseEmojis(innerText, {buildUrl: twemojiUrl});
+    const innerText = unhtmlEntities(match[1]).trim();
+    const emojis = parseEmojis(innerText);
     if (emojis.length !== 1) {
         return false;
     }
