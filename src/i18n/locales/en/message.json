@@ -423,6 +423,7 @@
       "posting-media-reaction-failed": "Failed to sign a reaction to a media in {node} post {heading}",
       "posting-post-task-failed": "Failed to add your post to {node} blog",
       "posting-reaction-task-failed": "Failed to sign a reaction to {node} post {heading}",
+      "posting-referred": "{sharings} mentioned your post {heading} in their {count, plural, =1 {post {referenceHeading}} other {posts}}",
       "posting-shared": "{sharings} shared your post {heading}",
       "posting-subscribe-task-failed": "Failed to subscribe to comments to {node} post {heading}",
       "posting-updated": "{node} updated their post {heading}",

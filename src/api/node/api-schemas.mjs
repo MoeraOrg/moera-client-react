@@ -1305,6 +1305,34 @@ export const NODE_API_SCHEMAS = {
                     type: "integer",
                     nullable: true
                 },
+                "ownerName": {
+                    type: "string",
+                    nullable: true
+                },
+                "ownerFullName": {
+                    type: "string",
+                    nullable: true
+                },
+                "ownerSourceUri": {
+                    type: "string",
+                    nullable: true
+                },
+                "ownerGender": {
+                    type: "string",
+                    nullable: true
+                },
+                "ownerAvatar": {
+                    anyOf: [
+                        {
+                            $ref: "node#/definitions/AvatarImage",
+                            type: "object",
+                            nullable: true
+                        },
+                        {
+                            type: "null"
+                        }
+                    ]
+                },
             },
             additionalProperties: false
         },
@@ -5024,6 +5052,13 @@ export const NODE_API_SCHEMAS = {
                     type: "array",
                     items: {
                         $ref: "node#/definitions/StorySummaryNode"
+                    },
+                    nullable: true
+                },
+                "references": {
+                    type: "array",
+                    items: {
+                        $ref: "node#/definitions/StorySummaryEntry"
                     },
                     nullable: true
                 },

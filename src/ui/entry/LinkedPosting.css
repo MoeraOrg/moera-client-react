@@ -1,0 +1,26 @@
+.linked-posting {
+    border: 1px solid var(--bs-gray-200);
+}
+
+.linked-posting .delete-button {
+    position: absolute;
+    right: .5rem;
+    top: .5rem;
+    color: var(--bs-gray-500);
+    height: 1.5rem;
+    width: 1.5rem;
+    border: solid 1px var(--bs-gray-400);
+    border-radius: .75rem;
+    background-color: white;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    transition: background-color, border-color .15s ease-in;
+}
+
+.linked-posting .delete-button:hover {
+    border-color: transparent;
+    color: white;
+    background-color: var(--bs-danger);
+    transition: background-color, border-color .15s ease-in;
+}

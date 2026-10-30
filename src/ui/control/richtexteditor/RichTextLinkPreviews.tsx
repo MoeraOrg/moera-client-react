@@ -14,6 +14,7 @@ import { LinkPreviewsState } from "state/linkpreviews/state";
 import { useDispatcher } from "ui/hook";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
 import EntryLinkSelector from "ui/entry/EntryLinkSelector";
+import LinkedPosting from "ui/entry/LinkedPosting";
 import { Scripture } from "ui/control/richtexteditor/visual/scripture";
 import { scriptureExtractUrls } from "ui/control/richtexteditor/visual/scripture-editor";
 import { MediaWithCaption } from "util/media-with-caption";
@@ -82,7 +83,7 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, small, 
             imagesToLease.forEach(url => dispatch(linkPreviewImageLease(url, targetNodeName)));
         }
         if (!deepEqual(value, newValue)) {
-            setValue(newValue)
+            void setValue(newValue)
         }
     }, [urlsToLoad, imagesToLease, newValue, value, setValue, targetNodeName, dispatch]);
 
@@ -94,7 +95,7 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, small, 
         if (index < 0) {
             return;
         }
-        setValue(immutable.wrap(value)
+        void setValue(immutable.wrap(value)
             .set(["status", url], "edited")
             .assign(["previews", index], {title, description})
             .value());
@@ -102,7 +103,7 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, small, 
 
     const onDelete = (url: string | null | undefined) => () => {
         if (url != null) {
-            setValue(immutable.set(value, ["status", url], "deleted"));
+            void setValue(immutable.set(value, ["status", url], "deleted"));
         }
     }
 
@@ -113,22 +114,27 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, small, 
         <div className="mt-3">
             <EntryLinkSelector urls={urls.filter(url => value.status[url] === "deleted")} onSelect={onRestore}
                                disabled={disabled}/>
-            {value.previews.map((preview, index) =>
+            {value.previews.filter(preview => preview.ownerName == null).map((preview, index) =>
                 <EntryLinkPreview
                     key={index}
                     nodeName={targetNodeName}
-                    url={preview.url}
+                    preview={preview}
                     noFollow={false}
-                    title={preview.title}
-                    description={preview.description}
-                    publishedAt={preview.publishedAt}
-                    imageHash={preview.imageHash}
-                    siteName={preview.siteName}
                     media={value.media}
                     small={small}
                     editing
                     disabled={disabled}
                     onUpdate={onUpdate(preview.url)}
+                    onDelete={onDelete(preview.url)}
+                />
+            )}
+            {value.previews.filter(preview => preview.ownerName != null).map((preview, index) =>
+                <LinkedPosting
+                    key={index}
+                    preview={preview}
+                    compact
+                    editing
+                    disabled={disabled}
                     onDelete={onDelete(preview.url)}
                 />
             )}
@@ -187,7 +193,12 @@ function buildValue(
                     if (lpState.info == null) {
                         break;
                     }
-                    if (!lpState.info.title && !lpState.info.description && lpState.info.image == null) {
+                    if (
+                        !lpState.info.ownerName
+                        && !lpState.info.title
+                        && !lpState.info.description
+                        && lpState.info.image == null
+                    ) {
                         break;
                     }
                     const imageState = lpState.images?.[nodeName];
@@ -212,7 +223,12 @@ function buildValue(
                     title,
                     description,
                     imageHash: imageState?.info?.hash,
-                    publishedAt: lpState?.info?.publishedAt
+                    publishedAt: lpState?.info?.publishedAt,
+                    ownerName: lpState?.info?.ownerName,
+                    ownerFullName: lpState?.info?.ownerFullName,
+                    ownerSourceUri: lpState?.info?.ownerSourceUri,
+                    ownerGender: lpState?.info?.ownerGender,
+                    ownerAvatar: lpState?.info?.ownerAvatar
                 });
                 totalVisible++;
                 break;

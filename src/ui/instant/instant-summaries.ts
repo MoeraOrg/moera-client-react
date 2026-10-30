@@ -168,6 +168,16 @@ export function formatSheriffTarget(data: StorySummaryData, homeOwnerName: strin
 
 /* * */
 
+export function buildPostingReferredSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.posting-referred", {
+        sharings: formatList(data.sharings, data.totalSharings, formatNodeName, t),
+        count: data.totalSharings ?? 1,
+        gender: firstGender(data.sharings),
+        heading: formatHeading(data.posting),
+        referenceHeading: formatHeading(data.references?.[0])
+    });
+}
+
 export function buildPostingSharedSummary(data: StorySummaryData, t: TFunction): string {
     return t("instant-summary.story.posting-shared", {
         sharings: formatList(data.sharings, data.totalSharings, formatNodeName, t),

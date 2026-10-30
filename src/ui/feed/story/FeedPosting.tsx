@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ExtPostingInfo } from "state/postings/state";
@@ -19,7 +18,7 @@ import PostingSource from "ui/posting/PostingSource";
 import PostingOwner from "ui/posting/PostingOwner";
 import PostingSheriffVisibility from "ui/posting/PostingSheriffVisibility";
 import PostingSubject from "ui/posting/PostingSubject";
-import EntryHtml from "ui/entry/EntryHtml";
+import PostingPreviewContent from "ui/posting/PostingPreviewContent";
 import EntryGallery from "ui/entry/EntryGallery";
 import EntryAttachments from "ui/entry/EntryAttachments";
 import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
@@ -28,44 +27,10 @@ import PostingSharings from "ui/posting/PostingSharings";
 import PostingComments from "ui/posting/PostingComments";
 import PostingViews from "ui/posting/PostingViews";
 import PostingButtons from "ui/posting/PostingButtons";
-import Jump from "ui/navigation/Jump";
 import { RelNodeName } from "util/rel-node-name";
 import { ut } from "util/url";
 import "ui/posting/Posting.css";
 import "ui/entry/Entry.css";
-
-interface ContentProps {
-    nodeName: RelNodeName | string;
-    posting: ExtPostingInfo;
-}
-
-function Content({nodeName, posting}: ContentProps) {
-    const {t} = useTranslation();
-
-    if (posting.bodyPreview?.text) {
-        return (
-            <div className="content">
-                <EntryHtml
-                    postingId={posting.id}
-                    html={posting.bodyPreview.text}
-                    nodeName={nodeName}
-                    media={posting.media}
-                />
-                <Jump href={ut`/post/${posting.id}`} className="btn btn-link read-more">{t("continue-reading")}</Jump>
-            </div>
-        );
-    } else {
-        return (
-            <EntryHtml
-                className="content"
-                postingId={posting.id}
-                html={posting.body.previewText}
-                nodeName={nodeName}
-                media={posting.media}
-            />
-        );
-    }
-}
 
 interface FeedPostingProps {
     nodeName: RelNodeName | string;
@@ -105,7 +70,7 @@ export default function FeedPosting({nodeName, posting, feedName, story}: FeedPo
                 </div>
             </div>
             <PostingSubject posting={posting} preview={true}/>
-            <Content nodeName={nodeName} posting={posting}/>
+            <PostingPreviewContent nodeName={nodeName} posting={posting}/>
             {!posting.bodyPreview?.text &&
                 <EntryAttachments nodeName={nodeName} media={posting.media ?? null} limit={2}/>
             }

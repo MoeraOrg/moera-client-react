@@ -87,24 +87,38 @@ A.link-preview:hover {
 
 .link-preview .control-button {
     position: absolute;
-    color: white;
+    color: var(--bs-gray-500);
     height: 1.5rem;
     width: 1.5rem;
-    border: none;
+    border: solid 1px var(--bs-gray-400);
     border-radius: .75rem;
+    background-color: white;
     padding: 0;
     display: grid;
     place-items: center;
+    transition: background-color, border-color .15s ease-in;
+}
+
+.link-preview .control-button:hover {
+    border-color: transparent;
+    color: white;
+    transition: background-color, border-color .15s ease-in;
 }
 
 .link-preview .control-button.edit {
     right: 2rem;
     top: -.25rem;
+}
+
+.link-preview .control-button.edit:hover {
     background-color: var(--bs-primary);
 }
 
 .link-preview .control-button.delete {
     right: -.1rem;
     top: -.25rem;
+}
+
+.link-preview .control-button.delete:hover {
     background-color: var(--bs-danger);
 }

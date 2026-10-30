@@ -1,7 +1,9 @@
 import * as URI from 'uri-js';
 
-import { NodeName } from "api";
+import { NodeName, RemotePosting } from "api";
 import { rootUrl, urlWithParameters } from "util/url";
+
+export const UNIVERSAL_URL_DOMAINS: readonly string[] = ["moera.page", "web.moera.org"];
 
 export interface DocumentLocation {
     name?: string | null;
@@ -107,6 +109,31 @@ export function parseUniversalLocation(
     components.hash = hash;
 
     return components;
+}
+
+export function parseUniversalPostingUrl(url: string | null | undefined): RemotePosting | null {
+    if (url == null) {
+        return null;
+    }
+
+    try {
+        const {scheme, host, path, query, fragment} = URI.parse(url);
+        if (
+            (scheme !== "http" && scheme !== "https")
+            || host == null
+            || !UNIVERSAL_URL_DOMAINS.includes(host.toLowerCase())
+        ) {
+            return null;
+        }
+
+        const location = parseUniversalLocation(path, query, fragment);
+        const match = location?.path?.match(/^post\/([^/]+)$/);
+        return location?.name && match
+            ? {nodeName: location.name, postingId: decodeURIComponent(match[1])}
+            : null;
+    } catch {
+        return null;
+    }
 }
 
 export function universalLocation(

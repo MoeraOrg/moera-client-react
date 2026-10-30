@@ -1,5 +1,5 @@
 import { actionWithPayload, ActionWithPayload } from "state/action-types";
-import { LinkPreviewInfo } from "api";
+import { ExtLinkPreviewInfo } from "state/linkpreviews/state";
 import { MediaWithCaption } from "util/media-with-caption";
 
 export type LinkPreviewLoadAction = ActionWithPayload<"LINK_PREVIEW_LOAD", {
@@ -10,9 +10,9 @@ export const linkPreviewLoad = (url: string): LinkPreviewLoadAction =>
 
 export type LinkPreviewLoadedAction = ActionWithPayload<"LINK_PREVIEW_LOADED", {
     url: string;
-    info: LinkPreviewInfo;
+    info: ExtLinkPreviewInfo;
 }>;
-export const linkPreviewLoaded = (url: string, info: LinkPreviewInfo): LinkPreviewLoadedAction =>
+export const linkPreviewLoaded = (url: string, info: ExtLinkPreviewInfo): LinkPreviewLoadedAction =>
     actionWithPayload("LINK_PREVIEW_LOADED", {url, info});
 
 export type LinkPreviewLoadFailedAction = ActionWithPayload<"LINK_PREVIEW_LOAD_FAILED", {

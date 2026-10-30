@@ -11,6 +11,7 @@ import {
     getSharingsDialogRemainingCount,
     isSharingsDialogAllLoaded
 } from "state/sharingsdialog/selectors";
+import { Icon, msComment } from "ui/material-symbols";
 import { useDispatcher } from "ui/hook";
 import { Avatar, ModalDialog, SubscribeButton } from "ui/control";
 import { getSubscriptionStatus } from "ui/control/subscribebutton/subscription-status";
@@ -75,6 +76,9 @@ export default function SharingsDialog() {
                                     }
                                 </div>
                             </Jump>
+                            <div className="type">
+                                {sharing.sharingType === "refer" && <Icon icon={msComment} size="1.5rem"/>}
+                            </div>
                             {connectedToHome ?
                                 <SubscribeButton nodeName={sharing.remoteNodeName} feedName="timeline" buttonOnly/>
                             :
@@ -99,5 +103,10 @@ export default function SharingsDialog() {
 }
 
 function sharingHref(sharing: SharingInfo): string {
-    return ut`/?before=${sharing.remoteStoryMoment}`;
+    switch (sharing.sharingType) {
+        case "refer":
+            return ut`/post/${sharing.remotePostingId}`;
+        case "republish":
+            return ut`/?before=${sharing.remoteStoryMoment}`;
+    }
 }

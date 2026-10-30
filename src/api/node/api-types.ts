@@ -51,7 +51,7 @@ export type SheriffOrderCategory = "visibility";
 export type SheriffOrderReason = "unlawful" | "defamatory" | "threat" | "spam" | "scam" | "malware" | "copyright"
     | "impersonating" | "privacy" | "other";
 
-export type SharingType = "republish";
+export type SharingType = "refer" | "republish";
 
 export type SourceFormat = "plain-text" | "html" | "markdown" | "html/visual" | "application";
 
@@ -62,12 +62,13 @@ export type StoryType = "asked-to-friend" | "asked-to-subscribe" | "blocked-user
     | "comment-update-task-failed" | "defrosting" | "friend-added" | "friend-deleted" | "friend-group-deleted"
     | "mention-comment" | "mention-posting" | "posting-added" | "posting-media-reaction-added-negative"
     | "posting-media-reaction-added-positive" | "posting-media-reaction-failed" | "posting-post-task-failed"
-    | "posting-reaction-task-failed" | "posting-shared" | "posting-subscribe-task-failed" | "posting-update-task-failed"
-    | "posting-updated" | "premoderated-comment-accepted" | "premoderated-comment-rejected" | "reaction-added-negative"
-    | "reaction-added-positive" | "reminder-avatar" | "reminder-email" | "reminder-full-name" | "reminder-sheriff-allow"
-    | "remote-comment-added" | "reply-comment" | "search-report" | "sheriff-complaint-added"
-    | "sheriff-complaint-decided" | "sheriff-marked" | "sheriff-unmarked" | "subscriber-added" | "subscriber-deleted"
-    | "unblocked-user" | "unblocked-user-in-posting" | "video-comment-published" | "video-posting-published";
+    | "posting-reaction-task-failed" | "posting-referred" | "posting-shared" | "posting-subscribe-task-failed"
+    | "posting-update-task-failed" | "posting-updated" | "premoderated-comment-accepted"
+    | "premoderated-comment-rejected" | "reaction-added-negative" | "reaction-added-positive" | "reminder-avatar"
+    | "reminder-email" | "reminder-full-name" | "reminder-sheriff-allow" | "remote-comment-added" | "reply-comment"
+    | "search-report" | "sheriff-complaint-added" | "sheriff-complaint-decided" | "sheriff-marked" | "sheriff-unmarked"
+    | "subscriber-added" | "subscriber-deleted" | "unblocked-user" | "unblocked-user-in-posting"
+    | "video-comment-published" | "video-posting-published";
 
 export type SubscriptionReason = "user" | "mention" | "comment" | "auto";
 
@@ -526,6 +527,11 @@ export interface LinkPreview {
     description?: string | null;
     imageHash?: string | null;
     publishedAt?: number | null;
+    ownerName?: string | null;
+    ownerFullName?: string | null;
+    ownerSourceUri?: string | null;
+    ownerGender?: string | null;
+    ownerAvatar?: AvatarImage | null;
 }
 
 export interface MediaDownloadAttributes {
@@ -1810,6 +1816,7 @@ export interface StorySummaryData {
     reactions?: StorySummaryReaction[] | null;
     totalReactions?: number | null;
     sharings?: StorySummaryNode[] | null;
+    references?: StorySummaryEntry[] | null;
     totalSharings?: number | null;
     feedName?: string | null;
     subscriptionReason?: SubscriptionReason | null;

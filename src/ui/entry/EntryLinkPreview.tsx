@@ -6,7 +6,7 @@ import { format, fromUnixTime } from 'date-fns';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
-import { MediaAttachment } from "api";
+import { LinkPreview, MediaAttachment } from "api";
 import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
@@ -21,13 +21,8 @@ import "./EntryLinkPreview.css";
 
 interface Props {
     nodeName: RelNodeName | string;
-    siteName?: string | null;
-    url?: string | null;
+    preview: LinkPreview;
     noFollow: boolean;
-    title?: string | null;
-    description?: string | null;
-    publishedAt?: number | null;
-    imageHash?: string | null;
     media: (MediaAttachment | MediaWithCaption)[] | null;
     small?: boolean | null;
     editing?: boolean;
@@ -37,8 +32,8 @@ interface Props {
 }
 
 export function EntryLinkPreview({
-    nodeName, siteName, url, noFollow, title, description, publishedAt, imageHash, media, small = false, editing,
-    disabled, onUpdate, onDelete
+    nodeName, preview: {siteName, url, title, description, publishedAt, imageHash}, noFollow, media, small = false,
+    editing, disabled, onUpdate, onDelete
 }: Props) {
     const timeRelative = useSelector((state: ClientState) => getSetting(state, "posting.time.relative") as boolean);
     useSelector((state: ClientState) =>

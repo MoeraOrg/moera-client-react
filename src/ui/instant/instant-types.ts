@@ -48,6 +48,7 @@ import {
     buildPostingMediaReactionFailedSummary,
     buildPostingPostTaskFailedSummary,
     buildPostingReactionTaskFailedSummary,
+    buildPostingReferredSummary,
     buildPostingSharedSummary,
     buildPostingSubscribeTaskFailedSummary,
     buildPostingUpdatedSummary,
@@ -95,7 +96,7 @@ export type InstantStoryButtonsActionSupplier = (
     story: StoryInfo, context: ActionContext
 ) => ClientAction | ClientAction[] | null | undefined;
 
-type SheriffField = "posting" | "comment" | "comments";
+type SheriffField = "posting" | "references" | "comment" | "comments";
 
 interface InstantTypeDetails {
     color?: string;
@@ -113,12 +114,6 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         icon: msInkPen,
         summary: () => "",
         target: story => ({nodeName: REL_HOME, href: ut`/post/${getStoryPostingId(story)}`})
-    },
-    "posting-shared": {
-        color: "var(--bs-blue-600)",
-        icon: msRepeat,
-        summary: (data, homeOwnerName, t) => buildPostingSharedSummary(data, t),
-        target: story => ({nodeName: story.summaryNodeName ?? REL_HOME, href: ut`/?before=${story.remoteStoryMoment}`})
     },
     "reaction-added-positive": {
         summary: (data, homeOwnerName, t) => buildReactionAddedSummary(data, false, t),
@@ -494,6 +489,19 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
             nodeName: story.remoteNodeName ?? REL_HOME,
             href: ut`/post/${story.remotePostingId}`
         })
+    },
+    "posting-shared": {
+        color: "var(--bs-blue-600)",
+        icon: msRepeat,
+        summary: (data, homeOwnerName, t) => buildPostingSharedSummary(data, t),
+        target: story => ({nodeName: story.summaryNodeName ?? REL_HOME, href: ut`/?before=${story.remoteStoryMoment}`})
+    },
+    "posting-referred": {
+        color: "var(--bs-blue-600)",
+        icon: msRepeat,
+        summary: (data, homeOwnerName, t) => buildPostingReferredSummary(data, t),
+        target: story => ({nodeName: story.remoteNodeName ?? REL_HOME, href: ut`/post/${story.remotePostingId}`}),
+        sheriffFields: ["posting", "references"]
     },
 };
 

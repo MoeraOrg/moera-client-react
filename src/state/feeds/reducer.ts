@@ -53,10 +53,7 @@ function extractStory(story: StoryInfo, homeOwnerName: string | null): ExtStoryI
         t.commentId = story.comment.id;
     }
     sheriffMarkStory(t);
-    if (story.summary == null) {
-        story.summary = getInstantSummary(story, homeOwnerName);
-    }
-    t.summary = replaceEmojis(story.summary);
+    t.summary = replaceEmojis(story.summary ?? getInstantSummary(story, homeOwnerName));
     return t;
 }
 
@@ -73,6 +70,18 @@ function sheriffMarkStory(story: ExtStoryInfo): void {
                 if (
                     !isSheriffGoverned(data.posting, SHERIFF_GOOGLE_PLAY_TIMELINE)
                     || isSheriffMarked(data.posting, SHERIFF_GOOGLE_PLAY_TIMELINE)
+                ) {
+                    story.hideSheriffMarked = true;
+                    return;
+                }
+                break;
+            case "references":
+                if (
+                    (data.totalSharings ?? 1) === 1
+                    && (
+                        !isSheriffGoverned(data.references?.[0], SHERIFF_GOOGLE_PLAY_TIMELINE)
+                        || isSheriffMarked(data.references?.[0], SHERIFF_GOOGLE_PLAY_TIMELINE)
+                    )
                 ) {
                     story.hideSheriffMarked = true;
                     return;

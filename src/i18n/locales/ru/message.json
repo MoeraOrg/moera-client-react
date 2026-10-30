@@ -423,6 +423,7 @@
       "posting-media-reaction-failed": "Не удалось подписать реакцию на медиа в посте {node} {heading}",
       "posting-post-task-failed": "Не удалось добавить ваш пост в блог {node}",
       "posting-reaction-task-failed": "Не удалось подписать реакцию на пост {node} {heading}",
+      "posting-referred": "{sharings} {count, plural, =1 {{gender, select, female {упомянула} other {упомянул}}} other {упомянули}} ваш пост {heading} {count, plural, =1 {в своём посте {referenceHeading}} other {в своих постах}}",
       "posting-shared": "{sharings} {count, plural, =1 {{gender, select, female {поделилась} other {поделился}}} other {поделились}} вашим постом {heading}",
       "posting-subscribe-task-failed": "Не удалось подписаться на комментарии к посту {node} {heading}",
       "posting-updated": "{node} {nodeGender, select, female {обновила} other {обновил}} свой пост {heading}",

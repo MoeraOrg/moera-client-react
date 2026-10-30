@@ -1,6 +1,6 @@
 .posting .posting-sharings {
     background-color: var(--bs-gray-200);
-    color: var(--bs-gray-800);
+    color: var(--bs-gray-700);
     font-size: .9rem;
     text-wrap: nowrap;
     border-radius: .9em;

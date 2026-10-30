@@ -33,3 +33,15 @@ describe("sharing instant target", () => {
         });
     });
 });
+
+describe("reference instant target", () => {
+    test("opens the referring post on its node", () => {
+        expect(getInstantTarget({
+            ...story,
+            storyType: "posting-referred",
+            remoteNodeName: "alice_0",
+            remotePostingId: "source-post",
+            summaryNodeName: "alice_0"
+        })).toEqual({nodeName: "alice_0", href: "/post/source-post"});
+    });
+});

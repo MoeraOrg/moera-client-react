@@ -423,6 +423,7 @@
       "posting-media-reaction-failed": "Nie udało się zareagować na media w poście {node} {heading}",
       "posting-post-task-failed": "Nie udało się dodać Twojego posta do bloga {node}",
       "posting-reaction-task-failed": "Nie udało się zareagować na post {node} {heading}",
+      "posting-referred": "{sharings} {count, plural, =1 {{gender, select, female {wspomniała} other {wspomniał}}} other {wspomnieli}} o twoim wpisie {heading} {count, plural, =1 {w swoim wpisie {referenceHeading}} other {w swoich wpisach}}",
       "posting-shared": "{sharings} {count, plural, =1 {{gender, select, female {udostępniła} other {udostępnił}}} other {udostępnili}} twój wpis {heading}",
       "posting-subscribe-task-failed": "Nie udało się zapisać subskrypcji komentarzy do posta {heading} w {node}",
       "posting-updated": "{node} zaktualizował swój post {heading}",
