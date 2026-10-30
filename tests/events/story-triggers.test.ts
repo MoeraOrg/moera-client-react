@@ -1,9 +1,11 @@
 import { describe, expect, jest, test } from '@jest/globals';
 
-import { FeedReference, PostingInfo } from "api";
+import { FeedReference, PostingInfo, StoryInfo } from "api";
 import { eventAction } from "api/events";
 import { ClientAction } from "state/action";
 import { ActionContext } from "state/action-types";
+import { emptyFeed } from "state/feeds/empty";
+import feedReducer from "state/feeds/reducer";
 import feedTriggers from "state/feeds/triggers";
 import reducer from "state/postings/reducer";
 import { PostingsState } from "state/postings/state";
@@ -14,8 +16,9 @@ jest.mock("api", () => ({}));
 jest.mock("ui/browser", () => ({}));
 jest.mock("i18n", () => ({}));
 jest.mock("util/media-images", () => ({}));
-jest.mock("util/html", () => ({}));
+jest.mock("util/html", () => ({replaceEmojis: (text: string) => text}));
 jest.mock("util/text", () => ({}));
+jest.mock("ui/instant/instant-types", () => ({getInstantSummary: () => "", getInstantTypeDetails: () => null}));
 
 const triggers = collectTriggers(feedTriggers);
 const context: ActionContext = {
@@ -113,7 +116,9 @@ describe.each([
         const state = initialState([reference, otherReference]);
         const result = applyEvent(state, deleted);
 
-        expect(result[nodeName]?.["post-1"]?.posting).toEqual({...posting, feedReferences: [otherReference]});
+        expect(result[nodeName]?.["post-1"]?.posting).toEqual({
+            ...posting, feedReferences: [otherReference], earliestPublishedAt: 90
+        });
         expect(result[nodeName]?.["other-post"]).toBe(state[nodeName]?.["other-post"]);
         expect(result[otherNodeName]).toBe(state[otherNodeName]);
         expect(state[nodeName]?.["post-1"]?.posting?.feedReferences).toEqual([reference, otherReference]);
@@ -126,6 +131,124 @@ describe.each([
         expect(result[nodeName]?.["post-1"]?.posting?.feedReferences).toEqual([
             otherReference, expect.objectContaining({...reference, pinned: true, moment: 200})
         ]);
+    });
+
+    test("an earlier publication changes the earliest timeline date", () => {
+        const state = initialState([reference]);
+        state[nodeName]!["post-1"]!.posting!.earliestPublishedAt = 100;
+
+        const result = applyEvent(state, eventAction({
+            ...added.payload, type: "STORY_ADDED" as const, id: "earlier", publishedAt: 50
+        }, source));
+
+        expect(result[nodeName]?.["post-1"]?.posting?.earliestPublishedAt).toBe(50);
+    });
+
+    test("deleting the last timeline publication clears the earliest date", () => {
+        const news = {...otherReference, feedName: "news", publishedAt: 10};
+        const state = initialState([reference, news]);
+        state[nodeName]!["post-1"]!.posting!.earliestPublishedAt = 100;
+
+        const result = applyEvent(state, deleted);
+
+        expect(result[nodeName]?.["post-1"]?.posting).toMatchObject({
+            earliestPublishedAt: null, feedReferences: [news]
+        });
+    });
+
+    test.each([
+        {id: "original", publishedAt: 50, earliestPublishedAt: 50, order: ["repost", "original"]},
+        {id: "original", publishedAt: 250, earliestPublishedAt: 200, order: ["original", "repost"]},
+        {id: "repost", publishedAt: 300, earliestPublishedAt: 100, order: ["repost", "original"]},
+        {id: "repost", publishedAt: 50, earliestPublishedAt: 50, order: ["original", "repost"]}
+    ])("changing $id to $publishedAt updates the publication date and feed order", ({
+        id, publishedAt, earliestPublishedAt, order
+    }) => {
+        const original: StoryInfo = {
+            ...added.payload, id: "original", createdAt: 100, publishedAt: 100, moment: 100000
+        };
+        const repost: StoryInfo = {...original, id: "repost", publishedAt: 200, moment: 200000};
+        const post = {
+            ...posting, earliestPublishedAt: 100,
+            feedReferences: [
+                {feedName: "timeline", storyId: "original", publishedAt: 100, moment: 100000},
+                {feedName: "timeline", storyId: "repost", publishedAt: 200, moment: 200000}
+            ]
+        };
+        let state = {
+            postings: initialState(post.feedReferences),
+            feeds: {
+                [nodeName]: {
+                    timeline: {...emptyFeed, before: 400000, after: 0, stories: [repost, original]}
+                }
+            }
+        } as ClientState;
+        state.postings[nodeName]!["post-1"]!.posting = post;
+        const otherPostings = state.postings[otherNodeName];
+        const event = eventAction({
+            ...updated.payload, type: "STORY_UPDATED" as const, id, publishedAt,
+            moment: publishedAt * 1000, pinned: false
+        }, source);
+        invokeTriggers(triggers, {...event, context}, {
+            getState: () => state,
+            dispatch: <T extends ClientAction>(action: T): T => {
+                state = {
+                    ...state,
+                    postings: reducer(state.postings, {...action, context}),
+                    feeds: feedReducer(state.feeds, {...action, context})
+                };
+                return action;
+            }
+        });
+
+        const result = state.postings[nodeName]?.["post-1"]?.posting;
+        expect(result?.earliestPublishedAt).toBe(earliestPublishedAt);
+        expect(result?.feedReferences?.find(r => r.storyId === id)).toMatchObject({
+            publishedAt, moment: publishedAt * 1000
+        });
+        expect(state.feeds[nodeName]?.timeline?.stories.map(story => story.id)).toEqual(order);
+        expect(state.feeds[nodeName]?.timeline?.stories.find(story => story.id === id)?.publishedAt).toBe(publishedAt);
+        expect(state.postings[otherNodeName]).toBe(otherPostings);
+        expect(post.earliestPublishedAt).toBe(100);
+    });
+
+    test("changing a remote posting's local publication leaves the original date intact", () => {
+        const state = initialState([reference]);
+        state[nodeName]!["post-1"]!.posting = {
+            ...posting, earliestPublishedAt: 100, receiverName: "remote-author", receiverPostingId: "remote-post",
+            receiverPublishedAt: 10, feedReferences: [reference]
+        };
+
+        const result = applyEvent(state, eventAction({
+            ...updated.payload, type: "STORY_UPDATED" as const, publishedAt: 200
+        }, source));
+
+        expect(result[nodeName]?.["post-1"]?.posting).toMatchObject({
+            earliestPublishedAt: 200, receiverPublishedAt: 10
+        });
+    });
+
+    test("news dates do not become the earliest timeline publication", () => {
+        const state = initialState([reference]);
+        state[nodeName]!["post-1"]!.posting!.earliestPublishedAt = 100;
+
+        const result = applyEvent(state, eventAction({
+            ...updated.payload, type: "STORY_UPDATED" as const, id: "news-story", feedName: "news", publishedAt: 10
+        }, source));
+
+        expect(result[nodeName]?.["post-1"]?.posting?.earliestPublishedAt).toBe(100);
+    });
+
+    test("pinning does not change the earliest publication date", () => {
+        const state = initialState([reference, otherReference]);
+        state[nodeName]!["post-1"]!.posting!.earliestPublishedAt = 90;
+
+        const result = applyEvent(state, eventAction({
+            ...updated.payload, type: "STORY_UPDATED" as const, id: "story-2", publishedAt: 90,
+            pinned: true, moment: Number.MAX_SAFE_INTEGER
+        }, source));
+
+        expect(result[nodeName]?.["post-1"]?.posting?.earliestPublishedAt).toBe(90);
     });
 
     test.each([added, deleted, updated])("$type ignores missing postings and visit-only entries", (action: ClientAction) => {

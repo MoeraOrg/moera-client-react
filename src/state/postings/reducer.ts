@@ -45,6 +45,16 @@ function toFeedReference(story: StoryInfo): FeedReference {
     return ref;
 }
 
+function setFeedReferences(
+    state: PostingsState, nodeName: string, postingId: string, feedReferences: FeedReference[]
+): PostingsState {
+    const timelineReferences = feedReferences.filter(r => r.feedName === "timeline");
+    const earliestPublishedAt = timelineReferences.length > 0
+        ? Math.min(...timelineReferences.map(r => r.publishedAt))
+        : null;
+    return immutable.assign(state, [nodeName, postingId, "posting"], {feedReferences, earliestPublishedAt});
+}
+
 function outsideIn(story: StoryInfo): PostingInfo | null {
     const posting = story.posting as PostingInfo; // Assertion
     if (posting == null || posting.body == null) {
@@ -140,7 +150,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                 if (postingState?.posting != null) {
                     const refs = (postingState.posting?.feedReferences ?? []).filter(r => r.storyId !== story.id);
                     refs.push(toFeedReference(story));
-                    return immutable.set(state, [nodeName, postingId, "posting", "feedReferences"], refs);
+                    return setFeedReferences(state, nodeName, postingId, refs);
                 }
             }
             return state;
@@ -153,7 +163,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                 const postingState = state[nodeName]?.[postingId];
                 if (postingState?.posting != null) {
                     const refs = (postingState.posting?.feedReferences ?? []).filter(r => r.storyId !== id);
-                    return immutable.set(state, [nodeName, postingId, "posting", "feedReferences"], refs);
+                    return setFeedReferences(state, nodeName, postingId, refs);
                 }
             }
             return state;
