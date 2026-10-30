@@ -22,3 +22,15 @@
    type: DoSmthAction.
 2. Action functions are for creating action objects only. Do not add any
    additional logic to these functions.
+
+# State
+
+1. When adding or changing posting references in a state branch, update that branch's
+   `src/state/<branch>/references.ts`. If needed, also update its collector's import and call in
+   `getReferencedPostings` in `src/state/postings/cache.ts`.
+
+## Documents
+
+1. Keep all project documentation under `doc/`. Do not create documentation files in `docs/` or elsewhere.
+2. Use directories like `doc/plans/` or `doc/specs/`. Do not use `doc/superpowers/`, because this is plugin-specific.
+3. Format all documents with a maximum line length of 120 characters.

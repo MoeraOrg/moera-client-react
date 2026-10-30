@@ -1,7 +1,7 @@
 import { ClientAction, ClientActionType } from "state/action";
 import { ActionContext, WithContext } from "state/action-types";
 
-type PayloadExtractor<T> = (payload: T, context: ActionContext | null) => string;
+type PayloadExtractor<T> = (payload: T, context: ActionContext) => string;
 
 type PayloadToKey = PayloadExtractor<any> | string | null;
 

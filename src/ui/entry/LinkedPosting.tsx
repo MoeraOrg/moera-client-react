@@ -1,11 +1,11 @@
 import React, { MouseEventHandler } from 'react';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 import { LinkPreview } from "api";
-import { ClientState } from "state/state";
 import { ExtPostingInfo } from "state/postings/state";
 import { getPosting } from "state/postings/selectors";
+import { ClientState } from "state/state";
 import { Icon, msClose } from "ui/material-symbols";
 import PostingAvatar from "ui/posting/PostingAvatar";
 import PostingOwner from "ui/posting/PostingOwner";
@@ -31,7 +31,7 @@ interface Props {
 export default function LinkedPosting({preview, compact, editing, disabled, onDelete}: Props) {
     const remotePosting = parseUniversalPostingUrl(preview.url);
     const cachedPosting = useSelector((state: ClientState) =>
-        remotePosting != null ? getPosting(state, remotePosting.postingId, remotePosting.nodeName) : null
+        !compact && remotePosting != null ? getPosting(state, remotePosting.postingId, remotePosting.nodeName) : null
     );
     const {t} = useTranslation();
 

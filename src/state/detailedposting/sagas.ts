@@ -108,7 +108,7 @@ import { fillActivityReaction, fillActivityReactionsInPostings } from "state/act
 import { fillBlockedOperations, fillBlockedOperationsInPostings } from "state/blockedoperations/sagas";
 import { postingCommentCountUpdate, postingCommentsSet, postingsSet } from "state/postings/actions";
 import { getPosting, isPostingCached } from "state/postings/selectors";
-import { postingGetLink } from "state/postings/sagas";
+import { loadPostingReferences, postingGetLink } from "state/postings/sagas";
 import { getOwnerFullName, getOwnerName, getOwnerSourceUri, isPermitted, isPrincipalIn } from "state/node/selectors";
 import { anonymousFullNameSet } from "state/home/actions";
 import { isConnectedToHome } from "state/home/selectors";
@@ -178,6 +178,7 @@ async function detailedPostingLoadSaga(action: WithContext<DetailedPostingLoadAc
         await fillBlockedOperations(action, posting);
         dispatch(detailedPostingLoaded(posting).causedBy(action));
         loadRemoteMediaInEntry(action, posting);
+        loadPostingReferences(action, posting, REL_CURRENT);
         await fillSubscription(action, posting);
     } catch (e) {
         dispatch(detailedPostingLoadFailed().causedBy(action));

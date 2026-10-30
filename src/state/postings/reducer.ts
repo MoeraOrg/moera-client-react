@@ -5,11 +5,12 @@ import { BlockedEntryOperation, FeedReference, PostingInfo, StoryInfo, Subscript
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { findPostingIdsByRemote } from "state/postings/selectors";
+import { prunePostings } from "state/postings/cache";
 import { ExtPostingInfo, NodePostingsState, PostingsState, PostingState } from "state/postings/state";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
 import { ellipsize } from "util/text";
 import { absoluteNodeName } from "util/rel-node-name";
-import { notNull } from "util/misc";
+import { notNull, now } from "util/misc";
 
 const MAX_SHORT_TITLE = 120;
 
@@ -72,6 +73,8 @@ function mergePreviousFeedReferences(posting: PostingInfo, state: NodePostingsSt
 function updatePostingState(posting: PostingInfo, previous: PostingState | undefined): PostingState {
     return {
         posting: safeguard(posting),
+        references: [],
+        lastUsedAt: now(),
         deleting: false,
         verificationStatus: "none",
         visitedAt: previous?.visitedAt ?? null,
@@ -95,19 +98,22 @@ function immutableSetSubscriptionId(
 
 export default (state: PostingsState = initialState, action: WithContext<ClientAction>): PostingsState => {
     switch (action.type) {
-        case "OWNER_SWITCH": {
-            const istate = immutable.wrap(state);
-            Object.keys(state)
-                .filter(name => name !== action.payload.nodeName && name !== action.context.homeOwnerNameOrUrl)
-                .forEach(name => istate.del([name]));
-            return istate.value();
+        case "POSTING_REFERENCES_SET": {
+            const {id, nodeName, references} = action.payload;
+            if (state[nodeName]?.[id]?.posting == null) {
+                return state;
+            }
+            return immutable.set(state, [nodeName, id, "references"], references);
         }
+
+        case "POSTINGS_PRUNE":
+            return prunePostings(state, action.payload.references, action.payload.at);
 
         case "FEED_PAST_SLICE_SET":
         case "FEED_FUTURE_SLICE_SET":
         case "FEED_SLICE_UPDATE": {
             const istate = immutable.wrap(state);
-            const nodeName = action.context.ownerNameOrUrl;
+            const nodeName = action.payload.nodeName;
             action.payload.stories
                 .map(s => outsideIn(s))
                 .filter(notNull)
@@ -118,7 +124,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
 
         case "POSTINGS_SET": {
             const istate = immutable.wrap(state);
-            const nodeName = action.context.ownerNameOrUrl;
+            const nodeName = absoluteNodeName(action.payload.nodeName, action.context);
             action.payload.postings
                 .forEach(p => istate.assign([nodeName, p.id], updatePostingState(p, state[nodeName]?.[p.id])));
             return istate.value();

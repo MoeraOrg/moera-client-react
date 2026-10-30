@@ -20,8 +20,18 @@ export interface PostingState {
     subscriptions?: {
         comments: string | null;
     }
+    references?: PostingReference[];
+    /** Unix time of the last load or change in state references. */
+    lastUsedAt?: number;
+    /** Whether the last cache maintenance found a reference to this entry. */
+    referenced?: boolean;
 }
 
 export type NodePostingsState = Partial<Record<string, PostingState>>;
 
 export type PostingsState = Partial<Record<string, NodePostingsState>>;
+
+export interface PostingReference {
+    nodeName: string;
+    postingId: string;
+}

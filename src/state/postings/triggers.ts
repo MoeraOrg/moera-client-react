@@ -14,6 +14,7 @@ import {
     PostingOperationsUpdatedAction,
     postingReactionLoad,
     postingReactionsReload,
+    postingsMaintenance,
     postingSharingsSet
 } from "state/postings/actions";
 import { WithContext } from "state/action-types";
@@ -25,6 +26,14 @@ import { flashBox } from "state/flashbox/actions";
 import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 
 export default [
+    trigger(
+        [
+            "FEED_PAST_SLICE_SET", "FEED_FUTURE_SLICE_SET", "FEED_SLICE_UPDATE", "FEED_UNSET",
+            "OWNER_SWITCH", "PULSE_10MIN", "WAKE_UP"
+        ],
+        true,
+        postingsMaintenance
+    ),
     trigger(
         ["STORY_ADDED", "STORY_UPDATED"],
         (state, signal: (WithContext<StoryAddedAction> | WithContext<StoryUpdatedAction>)) =>

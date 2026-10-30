@@ -12,6 +12,7 @@ jest.mock("state/home/selectors", () => ({getRelNodeNameContext: () => ({})}));
 jest.mock("state/settings/selectors", () => ({getSetting: () => 3}));
 jest.mock("ui/hook", () => ({useDispatcher: () => jest.fn()}));
 jest.mock("ui/entry/EntryLinkPreview", () => ({EntryLinkPreview: () => null}));
+jest.mock("ui/entry/LinkedPosting", () => () => null);
 jest.mock("ui/entry/EntryLinkSelector", () => () => null);
 jest.mock("ui/control/richtexteditor/visual/scripture-editor", () => ({}));
 jest.mock("util/text", () => ({}));

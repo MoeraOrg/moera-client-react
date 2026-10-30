@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 
-import { Node, ReactionTotalsInfo } from "api";
+import { Node, PostingInfo, ReactionTotalsInfo, StoryInfo } from "api";
 import { errorThrown } from "state/error/actions";
 import { ClientAction } from "state/action";
 import { dispatch, select } from "state/store-sagas";
@@ -25,6 +25,8 @@ import {
     postingDeleted,
     postingDeleteFailed,
     PostingLoadAction,
+    postingLoad,
+    postingReferencesSet,
     postingLoadFailed,
     PostingOperationsUpdateAction,
     postingOperationsUpdated,
@@ -33,6 +35,8 @@ import {
     PostingReactionLoadAction,
     postingReactionSet,
     PostingReactionsReloadAction,
+    PostingsMaintenanceAction,
+    postingsPrune,
     postingSet,
     postingsReactionSet,
     PostingVerifyAction,
@@ -41,11 +45,13 @@ import {
     postingVisitRecorded
 } from "state/postings/actions";
 import { WithContext } from "state/action-types";
+import { getReferencedPostings } from "state/postings/cache";
 import { flashBox } from "state/flashbox/actions";
 import {
     getPosting,
     getPostingCommentAddedInstantBlockId,
     getPostingCommentsSubscriptionId,
+    isPostingCached,
     isPostingVisitRecorded
 } from "state/postings/selectors";
 import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
@@ -59,13 +65,18 @@ import * as Browser from "ui/browser";
 import { toAvatarDescription } from "util/avatar";
 import { absoluteNodeName, REL_HOME, RelNodeName } from "util/rel-node-name";
 import { clipboardCopy } from "util/clipboard";
-import { notNull } from "util/misc";
-import { universalLocation } from "util/universal-url";
+import { notNull, now } from "util/misc";
+import { parseUniversalPostingUrl, universalLocation } from "util/universal-url";
 import { ut } from "util/url";
 
 export default [
+    saga("POSTINGS_MAINTENANCE", "", postingsMaintenanceSaga),
     saga("POSTING_DELETE", payload => payload.id, postingDeleteSaga),
-    saga("POSTING_LOAD", payload => payload.id, postingLoadSaga),
+    saga(
+        "POSTING_LOAD",
+        (payload, context) => `${absoluteNodeName(payload.nodeName, context)}:${payload.id}`,
+        postingLoadSaga
+    ),
     saga(
         "POSTING_VISITED",
         payload => `${payload.nodeName.valueOf()}:${payload.id}`,
@@ -83,6 +94,38 @@ export default [
     saga("POSTING_COMMENT_ADDED_BLOCK", payload => payload.id, postingCommentAddedBlockSaga),
     saga("POSTING_COMMENT_ADDED_UNBLOCK", payload => payload.id, postingCommentAddedUnblockSaga)
 ];
+
+export function loadPostingReferences(
+    action: WithContext<ClientAction>, posting: PostingInfo, nodeName: RelNodeName | string
+): void {
+    const name = absoluteNodeName(nodeName, action.context);
+    const references = (posting.body.linkPreviews ?? [])
+        .map(preview => parseUniversalPostingUrl(preview.url))
+        .filter(notNull);
+    dispatch(postingReferencesSet(posting.id, name, references).causedBy(action));
+    for (const {nodeName, postingId} of references) {
+        if (!select(state => isPostingCached(state, postingId, nodeName))) {
+            dispatch(postingLoad(postingId, nodeName).causedBy(action));
+        }
+    }
+}
+
+export function loadPostingReferencesInStories(
+    action: WithContext<ClientAction>, stories: StoryInfo[] | null | undefined, nodeName: RelNodeName | string
+): void {
+    for (const story of stories ?? []) {
+        if (story.posting?.body != null) {
+            loadPostingReferences(action, story.posting, nodeName);
+        }
+    }
+}
+
+async function postingsMaintenanceSaga(action: WithContext<PostingsMaintenanceAction>): Promise<void> {
+    // Coalesce a synchronous batch of loads before scanning references.
+    await Promise.resolve();
+    const references = getReferencedPostings(select());
+    dispatch(postingsPrune(references, now()).causedBy(action));
+}
 
 async function postingDeleteSaga(action: WithContext<PostingDeleteAction>): Promise<void> {
     const {id, nodeName} = action.payload;
@@ -108,6 +151,7 @@ async function postingLoadSaga(action: WithContext<PostingLoadAction>): Promise<
         await fillBlockedOperations(action, posting);
         dispatch(postingSet(posting, nodeName).causedBy(action));
         loadRemoteMediaInEntry(action, posting);
+        loadPostingReferences(action, posting, nodeName);
         await fillSubscription(action, posting);
     } catch (e) {
         dispatch(postingLoadFailed(id, nodeName).causedBy(action));

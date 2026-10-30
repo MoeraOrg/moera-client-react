@@ -1,6 +1,7 @@
 import * as URI from 'uri-js';
 
-import { NodeName, RemotePosting } from "api";
+import { NodeName } from "api";
+import { PostingReference } from "state/postings/state";
 import { rootUrl, urlWithParameters } from "util/url";
 
 export const UNIVERSAL_URL_DOMAINS: readonly string[] = ["moera.page", "web.moera.org"];
@@ -111,7 +112,7 @@ export function parseUniversalLocation(
     return components;
 }
 
-export function parseUniversalPostingUrl(url: string | null | undefined): RemotePosting | null {
+export function parseUniversalPostingUrl(url: string | null | undefined): PostingReference | null {
     if (url == null) {
         return null;
     }

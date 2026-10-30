@@ -7,7 +7,18 @@ import {
     ReactionTotalsInfo,
     SubscriptionType
 } from "api";
+import { PostingReference } from "state/postings/state";
 import { RelNodeName } from "util/rel-node-name";
+
+export type PostingsMaintenanceAction = ActionWithoutPayload<"POSTINGS_MAINTENANCE">;
+export const postingsMaintenance = (): PostingsMaintenanceAction => actionWithoutPayload("POSTINGS_MAINTENANCE");
+
+export type PostingsPruneAction = ActionWithPayload<"POSTINGS_PRUNE", {
+    references: PostingReference[];
+    at: number;
+}>;
+export const postingsPrune = (references: PostingReference[], at: number): PostingsPruneAction =>
+    actionWithPayload("POSTINGS_PRUNE", {references, at});
 
 export type PostingSetAction = ActionWithPayload<"POSTING_SET", {
     posting: PostingInfo;
@@ -15,6 +26,15 @@ export type PostingSetAction = ActionWithPayload<"POSTING_SET", {
 }>;
 export const postingSet = (posting: PostingInfo, nodeName: RelNodeName | string): PostingSetAction =>
     actionWithPayload("POSTING_SET", {posting, nodeName});
+
+export type PostingReferencesSetAction = ActionWithPayload<"POSTING_REFERENCES_SET", {
+    id: string;
+    nodeName: string;
+    references: PostingReference[];
+}>;
+export const postingReferencesSet = (
+    id: string, nodeName: string, references: PostingReference[]
+): PostingReferencesSetAction => actionWithPayload("POSTING_REFERENCES_SET", {id, nodeName, references});
 
 export type PostingsSetAction = ActionWithPayload<"POSTINGS_SET", {
     postings: PostingInfo[];
@@ -333,7 +353,10 @@ export const postingCommentAddedUnblockFailed = (
     actionWithPayload("POSTING_COMMENT_ADDED_UNBLOCK_FAILED", {id, nodeName});
 
 export type PostingsAnyAction =
-    PostingSetAction
+    PostingsMaintenanceAction
+    | PostingsPruneAction
+    | PostingSetAction
+    | PostingReferencesSetAction
     | PostingsSetAction
     | PostingDeleteAction
     | PostingDeletedAction

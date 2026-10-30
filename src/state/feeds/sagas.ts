@@ -52,6 +52,7 @@ import { fillActivityReactionsInStories } from "state/activityreactions/sagas";
 import { fillBlockedOperationsInStories } from "state/blockedoperations/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
 import { flashBox } from "state/flashbox/actions";
+import { loadPostingReferencesInStories } from "state/postings/sagas";
 import { loadRemoteMediaInStories } from "state/remotemedia/sagas";
 import { getInstantTypeDetails } from "ui/instant/instant-types";
 import { absoluteNodeName, REL_HOME } from "util/rel-node-name";
@@ -60,7 +61,7 @@ import { delay } from "util/misc";
 export default [
     saga(
         "FEED_GENERAL_LOAD",
-        (payload, context) => `${context?.homeOwnerName}:${payload.nodeName}:${payload.feedName}`,
+        (payload, context) => `${context.homeOwnerName}:${payload.nodeName}:${payload.feedName}`,
         feedGeneralLoadSaga
     ),
     saga("FEED_SUBSCRIBE", payload => `${payload.nodeName}:${payload.feedName}`, feedSubscribeSaga),
@@ -257,6 +258,7 @@ async function feedPastSliceLoadSaga(action: WithContext<FeedPastSliceLoadAction
             nodeName, feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
         ).causedBy(action));
         loadRemoteMediaInStories(action, slice.stories);
+        loadPostingReferencesInStories(action, slice.stories, nodeName);
         await fillSubscriptions(action, slice.stories);
     } catch (e) {
         if (e instanceof NodeApiError || e instanceof NodeConnectionError || e instanceof NameResolvingError) {
@@ -283,6 +285,7 @@ async function feedFutureSliceLoadSaga(action: WithContext<FeedFutureSliceLoadAc
             nodeName, feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
         ).causedBy(action));
         loadRemoteMediaInStories(action, slice.stories);
+        loadPostingReferencesInStories(action, slice.stories, nodeName);
         await fillSubscriptions(action, slice.stories);
     } catch (e) {
         if (e instanceof NodeApiError || e instanceof NodeConnectionError || e instanceof NameResolvingError) {
@@ -352,6 +355,7 @@ async function feedUpdateSlice(
                 nodeName, feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
             ).causedBy(action));
             loadRemoteMediaInStories(action, slice.stories);
+            loadPostingReferencesInStories(action, slice.stories, nodeName);
             await fillSubscriptions(action, slice.stories);
             if (after === slice.before) {
                 break;
