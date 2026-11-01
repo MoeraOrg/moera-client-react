@@ -40,6 +40,7 @@ import { dispatch, select } from "state/store-sagas";
 import { getOwnerName } from "state/node/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { getFeedState } from "state/feeds/selectors";
+import { loadPostingReferences } from "state/postings/sagas";
 import { mutuallyIntroduced } from "state/init-barriers";
 import { jumpNear } from "state/navigation/actions";
 import { deleteDraft } from "state/drafts/sagas";
@@ -100,6 +101,7 @@ async function composePostSaga(action: WithContext<ComposePostAction>): Promise<
             }
             await updateMediaCaptions(action, REL_CURRENT, posting.media, captions);
             dispatch(composePostSucceeded(posting).causedBy(action));
+            loadPostingReferences(action, posting, REL_CURRENT);
         } else {
             if (id == null) {
                 await Node.createRemotePosting(action, REL_HOME, ownerName, postingSourceText);

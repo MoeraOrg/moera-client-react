@@ -28,6 +28,8 @@
 1. When adding or changing posting references in a state branch, update that branch's
    `src/state/<branch>/references.ts`. If needed, also update its collector's import and call in
    `getReferencedPostings` in `src/state/postings/cache.ts`.
+2. In `src/state/<branch>/references.ts`, the only exported function must be the default export
+   `getReferencedPostings`. Keep helper functions private or in other modules.
 
 ## Documents
 

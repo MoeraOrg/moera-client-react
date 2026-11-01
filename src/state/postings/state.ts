@@ -21,6 +21,7 @@ export interface PostingState {
         comments: string | null;
     }
     references?: PostingReference[];
+    picked?: PostingReference[];
     /** Unix time of the last load or change in state references. */
     lastUsedAt?: number;
     /** Whether the last cache maintenance found a reference to this entry. */

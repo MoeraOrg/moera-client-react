@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { LinkPreview, MediaAttachment } from "api";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
+import LinkedPosting from "ui/entry/LinkedPosting";
 import { RelNodeName } from "util/rel-node-name";
 import "./EntryLinkPreviews.css";
-import LinkedPosting from "ui/entry/LinkedPosting";
 
 interface Props {
     nodeName: RelNodeName | string;
@@ -57,10 +57,7 @@ export default function EntryLinkPreviews({nodeName, linkPreviews, noFollow, lim
             )}
             {postings.map((linkPreview, index) =>
                 (max == null || (index + links.length) < max) &&
-                    <LinkedPosting
-                        key={index}
-                        preview={linkPreview}
-                    />
+                    <LinkedPosting key={index} preview={linkPreview} parentNodeName={nodeName}/>
             )}
             {(limit != null && total > limit) &&
                 <>

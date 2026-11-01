@@ -15,6 +15,7 @@ import { getLinkPreviewInfo } from "state/linkpreviews/selectors";
 import { ExtLinkPreviewInfo } from "state/linkpreviews/state";
 import { postingSet } from "state/postings/actions";
 import { getPosting } from "state/postings/selectors";
+import { loadPostingReferences } from "state/postings/sagas";
 import { localMediaToLeasedRemoteMediaInfo } from "ui/control/richtexteditor";
 import { REL_HOME } from "util/rel-node-name";
 import { MediaWithCaption } from "util/media-with-caption";
@@ -36,6 +37,7 @@ async function linkPreviewLoadSaga(action: WithContext<LinkPreviewLoadAction>): 
             if (posting == null) {
                 posting = await Node.getPosting(action, nodeName, postingId, false);
                 dispatch(postingSet(posting, nodeName).causedBy(action));
+                loadPostingReferences(action, posting, nodeName);
             }
             const ownerAvatar = posting.ownerAvatar != null ? {...posting.ownerAvatar} : posting.ownerAvatar;
             if (ownerAvatar != null) {

@@ -375,7 +375,8 @@ def generate_structures(structs: dict[str, Structure], tfile: TextIO, sfile: Tex
         for struct in structs.values():
             if struct.generated:
                 continue
-            if any(not structs[d].generated for d in struct.depends if d in structs):
+            if any(not structs[d].generated for d in struct.depends
+                   if d in structs and d != struct.get_name()):
                 continue
             struct.generate(tfile, sfile, structs)
             gen = True

@@ -34,7 +34,8 @@ export type PostingReferencesSetAction = ActionWithPayload<"POSTING_REFERENCES_S
 }>;
 export const postingReferencesSet = (
     id: string, nodeName: string, references: PostingReference[]
-): PostingReferencesSetAction => actionWithPayload("POSTING_REFERENCES_SET", {id, nodeName, references});
+): PostingReferencesSetAction =>
+    actionWithPayload("POSTING_REFERENCES_SET", {id, nodeName, references});
 
 export type PostingsSetAction = ActionWithPayload<"POSTINGS_SET", {
     postings: PostingInfo[];

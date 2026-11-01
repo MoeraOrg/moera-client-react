@@ -1,7 +1,7 @@
 import { FeedReference, PostingInfo, StoryInfo } from "api";
 import { ClientState } from "state/state";
 import { VerificationStatus } from "state/state-types";
-import { getRelNodeNameContext } from "state/home/selectors";
+import { getHomeOwnerName, getRelNodeNameContext } from "state/home/selectors";
 import { ExtPostingInfo, PostingsState, PostingState } from "state/postings/state";
 import { isSheriffGoverned, isSheriffMarked } from "util/sheriff";
 import { now } from "util/misc";
@@ -28,6 +28,36 @@ export function getPosting(
     state: ClientState, id: string | null, nodeName: RelNodeName | string
 ): ExtPostingInfo | null {
     return getPostingState(state, id, nodeName)?.posting ?? null;
+}
+
+export function getPickedPosting(
+    state: ClientState, id: string, nodeName: RelNodeName | string, alternativeNodeName?: RelNodeName | string
+): {posting: ExtPostingInfo; nodeName: string} | null {
+    nodeName = absoluteNodeName(nodeName, getRelNodeNameContext(state));
+    const postingState = state.postings[nodeName]?.[id];
+
+    if (postingState?.posting != null) {
+        return {posting: postingState.posting, nodeName};
+    }
+
+    const alternativeName = alternativeNodeName != null
+        ? absoluteNodeName(alternativeNodeName, getRelNodeNameContext(state))
+        : null;
+    for (const name of [getHomeOwnerName(state), alternativeName]) {
+        if (name == null) {
+            continue;
+        }
+        for (const reference of postingState?.picked ?? []) {
+            if (reference.nodeName === name) {
+                const posting = getPosting(state, reference.postingId, name);
+                if (posting != null) {
+                    return {posting, nodeName: name};
+                }
+            }
+        }
+    }
+
+    return null;
 }
 
 export function isPostingCached(state: ClientState, id: string | null, nodeName: RelNodeName | string): boolean {

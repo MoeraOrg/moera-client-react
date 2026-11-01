@@ -177,6 +177,49 @@ describe("posting references", () => {
         ]);
     });
 
+    test("follows a retained original to all its copies and media without retaining unused copies", () => {
+        const state = {
+            node: {owner: {name: "remote"}}, detailedPosting: {id: "original"}, feeds: {},
+            postings: {
+                remote: {
+                    original: {picked: [
+                        {nodeName: "home", postingId: "picked"},
+                        {nodeName: "other", postingId: "picked"}
+                    ]},
+                    unused: {picked: [{nodeName: "home", postingId: "unused-copy"}]}
+                },
+                home: {
+                    picked: {
+                        posting: {...posting, id: "picked", media: [{postingId: "caption"}]},
+                        references: [{nodeName: "remote", postingId: "original"}]
+                    },
+                    "unused-copy": {posting}
+                },
+                other: {picked: {posting}}
+            }
+        } as unknown as ClientState;
+
+        expect(collectReferences(state)).toEqual([
+            {nodeName: "remote", postingId: "original"},
+            {nodeName: "home", postingId: "picked"},
+            {nodeName: "other", postingId: "picked"},
+            {nodeName: "home", postingId: "caption"}
+        ]);
+    });
+
+    test("follows picked copies without a home owner", () => {
+        const state = {
+            home: {owner: {name: null}, root: {location: null}},
+            detailedPosting: {id: "original"}, feeds: {},
+            postings: {current: {original: {picked: [{nodeName: "other", postingId: "picked"}]}}}
+        } as unknown as ClientState;
+
+        expect(collectReferences(state)).toEqual([
+            {nodeName: "current", postingId: "original"},
+            {nodeName: "other", postingId: "picked"}
+        ]);
+    });
+
     test("protects the caption of comment media shown in the lightbox", () => {
         const state = {
             postings: {}, feeds: {},

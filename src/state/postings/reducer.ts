@@ -6,7 +6,7 @@ import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { findPostingIdsByRemote } from "state/postings/selectors";
 import { prunePostings } from "state/postings/cache";
-import { ExtPostingInfo, NodePostingsState, PostingsState, PostingState } from "state/postings/state";
+import { ExtPostingInfo, NodePostingsState, PostingReference, PostingsState } from "state/postings/state";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
 import { ellipsize } from "util/text";
 import { absoluteNodeName } from "util/rel-node-name";
@@ -18,7 +18,7 @@ const initialState: PostingsState = {
 };
 
 function safeguard(posting: PostingInfo): ExtPostingInfo {
-    const iposting = immutable.wrap(posting);
+    const iposting = immutable.wrap(posting).del("linkedPostings");
     if (posting.bodyPreview == null || !posting.bodyPreview.text) {
         iposting.set("body.previewText", safePreviewHtml(posting.body.text, posting.media, false));
     }
@@ -33,6 +33,57 @@ function safeguard(posting: PostingInfo): ExtPostingInfo {
         .update("bodyPreview.text", text => safePreviewHtml(text, posting.media, false))
         .update("body.text", text => safeHtml(text, posting.media, false))
         .value();
+}
+
+function outsideIn(story: StoryInfo): PostingInfo | null {
+    const posting = story.posting as PostingInfo; // Assertion
+    if (posting == null || posting.body == null) {
+        return null;
+    }
+
+    if (posting.feedReferences == null || posting.feedReferences.length === 0) {
+        posting.feedReferences = [toFeedReference(story)];
+    }
+
+    return posting;
+}
+
+function updatePostingState(
+    state: PostingsState,
+    istate: WrappedObject<PostingsState>,
+    posting: PostingInfo,
+    nodeName: string
+): void {
+    istate.assign([nodeName, posting.id], {
+        posting: safeguard(posting),
+        references: [],
+        lastUsedAt: now(),
+        deleting: false,
+        verificationStatus: "none",
+        visitedAt: state[nodeName]?.[posting.id]?.visitedAt ?? null,
+        visitRecorded: state[nodeName]?.[posting.id]?.visitRecorded ?? false,
+        subscriptions: {
+            comments: null
+        }
+    });
+    if (posting.receiverName != null && posting.receiverPostingId != null) {
+        istate.update([posting.receiverName, posting.receiverPostingId, "picked"], (picked: PostingReference[] = []) =>
+            picked.some(reference => reference.nodeName === nodeName && reference.postingId === posting.id)
+                ? picked
+                : [...picked, {nodeName, postingId: posting.id}]
+        );
+    }
+}
+
+function immutableSetSubscriptionId(
+    state: PostingsState, nodeName: string, id: string, type: SubscriptionType, subscriptionId: string | null
+) {
+    switch (type) {
+        case "posting-comments":
+            return immutable.set(state, [nodeName, id, "subscriptions", "comments"], subscriptionId);
+        default:
+            return state;
+    }
 }
 
 function toFeedReference(story: StoryInfo): FeedReference {
@@ -55,19 +106,6 @@ function setFeedReferences(
     return immutable.assign(state, [nodeName, postingId, "posting"], {feedReferences, earliestPublishedAt});
 }
 
-function outsideIn(story: StoryInfo): PostingInfo | null {
-    const posting = story.posting as PostingInfo; // Assertion
-    if (posting == null || posting.body == null) {
-        return null;
-    }
-
-    if (posting.feedReferences == null || posting.feedReferences.length === 0) {
-        posting.feedReferences = [toFeedReference(story)];
-    }
-
-    return posting;
-}
-
 function mergeFeedReferences(
     fr1: FeedReference[] | null | undefined, fr2: FeedReference[] | null | undefined
 ): FeedReference[] {
@@ -80,32 +118,6 @@ function mergePreviousFeedReferences(posting: PostingInfo, state: NodePostingsSt
     return posting;
 }
 
-function updatePostingState(posting: PostingInfo, previous: PostingState | undefined): PostingState {
-    return {
-        posting: safeguard(posting),
-        references: [],
-        lastUsedAt: now(),
-        deleting: false,
-        verificationStatus: "none",
-        visitedAt: previous?.visitedAt ?? null,
-        visitRecorded: previous?.visitRecorded ?? false,
-        subscriptions: {
-            comments: null
-        }
-    };
-}
-
-function immutableSetSubscriptionId(
-    state: PostingsState, nodeName: string, id: string, type: SubscriptionType, subscriptionId: string | null
-) {
-    switch (type) {
-        case "posting-comments":
-            return immutable.set(state, [nodeName, id, "subscriptions", "comments"], subscriptionId);
-        default:
-            return state;
-    }
-}
-
 export default (state: PostingsState = initialState, action: WithContext<ClientAction>): PostingsState => {
     switch (action.type) {
         case "POSTING_REFERENCES_SET": {
@@ -113,7 +125,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             if (state[nodeName]?.[id]?.posting == null) {
                 return state;
             }
-            return immutable.set(state, [nodeName, id, "references"], references);
+            return immutable.assign(state, [nodeName, id], {references});
         }
 
         case "POSTINGS_PRUNE":
@@ -128,7 +140,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                 .map(s => outsideIn(s))
                 .filter(notNull)
                 .map(p => mergePreviousFeedReferences(p, state[nodeName]))
-                .forEach(p => istate.assign([nodeName, p.id], updatePostingState(p, state[nodeName]?.[p.id])));
+                .forEach(p => updatePostingState(state, istate, p, nodeName));
             return istate.value();
         }
 
@@ -136,7 +148,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             const istate = immutable.wrap(state);
             const nodeName = absoluteNodeName(action.payload.nodeName, action.context);
             action.payload.postings
-                .forEach(p => istate.assign([nodeName, p.id], updatePostingState(p, state[nodeName]?.[p.id])));
+                .forEach(p => updatePostingState(state, istate, p, nodeName));
             return istate.value();
         }
 
@@ -171,10 +183,10 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
 
         case "POSTING_SET": {
             let {posting, nodeName} = action.payload;
+            const istate = immutable.wrap(state);
             nodeName = absoluteNodeName(nodeName, action.context);
-            return immutable.wrap(state)
-                .assign([nodeName, posting.id], updatePostingState(posting, state[nodeName]?.[posting.id]))
-                .value();
+            updatePostingState(state, istate, posting, nodeName);
+            return istate.value();
         }
 
         case "POSTING_VISITED": {

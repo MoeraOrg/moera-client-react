@@ -1619,6 +1619,7 @@ export interface PostingInfoBase<B> {
     body: B;
     bodyFormat?: BodyFormat | null;
     media?: MediaAttachment[] | null;
+    linkedPostings?: PostingInfoBase<B>[] | null;
     heading: string;
     description?: string | null;
     updateInfo?: UpdateInfo | null;

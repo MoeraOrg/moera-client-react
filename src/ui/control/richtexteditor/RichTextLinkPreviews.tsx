@@ -132,6 +132,7 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, small, 
                 <LinkedPosting
                     key={index}
                     preview={preview}
+                    parentNodeName={targetNodeName}
                     compact
                     editing
                     disabled={disabled}

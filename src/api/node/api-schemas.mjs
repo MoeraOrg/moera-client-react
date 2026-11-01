@@ -4306,6 +4306,13 @@ export const NODE_API_SCHEMAS = {
                     },
                     nullable: true
                 },
+                "linkedPostings": {
+                    type: "array",
+                    items: {
+                        $ref: "node#/definitions/PostingInfo"
+                    },
+                    nullable: true
+                },
                 "heading": {
                     type: "string"
                 },

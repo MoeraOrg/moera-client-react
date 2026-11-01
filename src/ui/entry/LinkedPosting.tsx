@@ -1,10 +1,10 @@
 import React, { MouseEventHandler } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux';
 
 import { LinkPreview } from "api";
 import { ExtPostingInfo } from "state/postings/state";
-import { getPosting } from "state/postings/selectors";
+import { getPickedPosting } from "state/postings/selectors";
 import { ClientState } from "state/state";
 import { Icon, msClose } from "ui/material-symbols";
 import PostingAvatar from "ui/posting/PostingAvatar";
@@ -18,20 +18,25 @@ import EntryAttachments from "ui/entry/EntryAttachments";
 import EntryGallery from "ui/entry/EntryGallery";
 import { parseUniversalPostingUrl } from "util/universal-url";
 import { now } from "util/misc";
+import { RelNodeName } from "util/rel-node-name";
 import "./LinkedPosting.css";
 
 interface Props {
     preview: LinkPreview;
+    parentNodeName?: RelNodeName | string;
     compact?: boolean;
     editing?: boolean;
     disabled?: boolean;
     onDelete?: MouseEventHandler;
 }
 
-export default function LinkedPosting({preview, compact, editing, disabled, onDelete}: Props) {
+export default function LinkedPosting({preview, parentNodeName, compact, editing, disabled, onDelete}: Props) {
     const remotePosting = parseUniversalPostingUrl(preview.url);
-    const cachedPosting = useSelector((state: ClientState) =>
-        !compact && remotePosting != null ? getPosting(state, remotePosting.postingId, remotePosting.nodeName) : null
+    const cachedPosting = useSelector(
+        (state: ClientState) => !compact && remotePosting != null
+            ? getPickedPosting(state, remotePosting.postingId, remotePosting.nodeName, parentNodeName)
+            : null,
+        shallowEqual
     );
     const {t} = useTranslation();
 
@@ -39,8 +44,8 @@ export default function LinkedPosting({preview, compact, editing, disabled, onDe
         return null;
     }
 
-    const {nodeName, postingId} = remotePosting;
-    const posting = cachedPosting == null || compact ? previewToPosting(postingId, preview) : cachedPosting;
+    const posting = cachedPosting?.posting ?? previewToPosting(remotePosting.postingId, preview);
+    const nodeName = cachedPosting?.nodeName ?? remotePosting.nodeName;
 
     if (posting == null) {
         return null;

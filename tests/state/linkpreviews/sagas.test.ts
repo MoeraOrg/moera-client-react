@@ -12,8 +12,8 @@ jest.mock("api", () => ({
     NodeName: jest.requireActual("api/node-name").NodeName
 }));
 jest.mock("state/store-sagas", () => ({dispatch: jest.fn(), select: jest.fn()}));
-jest.mock("state/home/selectors", () => ({getRelNodeNameContext: () => ({})}));
 jest.mock("ui/control/richtexteditor", () => ({}));
+jest.mock("ui/browser", () => ({}));
 jest.mock("util/media-images", () => ({}));
 jest.mock("util/media-with-caption", () => ({}));
 jest.mock("i18n", () => ({}));
@@ -32,7 +32,10 @@ function load(url: string) {
 }
 
 beforeEach(() => {
-    state = {postings: {}} as ClientState;
+    state = {
+        postings: {}, node: {owner: {name: "current"}}, home: {owner: {name: "home"}},
+        settings: {client: {meta: new Map(), values: new Map()}}
+    } as unknown as ClientState;
     selected.mockImplementation((selector?: (value: ClientState) => unknown) => selector ? selector(state) : state);
     posting = {
         id: "post-1",
@@ -45,6 +48,7 @@ beforeEach(() => {
             shape: "circle", directPath: "https://cdn.example/temporary", directPathExpiresAt: 12345
         },
         heading: "Posting heading",
+        body: {text: "Posting body"},
         createdAt: 1234
     } as PostingInfo;
     getPosting.mockResolvedValue(posting);

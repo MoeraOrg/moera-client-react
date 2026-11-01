@@ -46,6 +46,7 @@ import {
 } from "state/postings/actions";
 import { WithContext } from "state/action-types";
 import { getReferencedPostings } from "state/postings/cache";
+import { PostingReference } from "state/postings/state";
 import { flashBox } from "state/flashbox/actions";
 import {
     getPosting,
@@ -95,17 +96,77 @@ export default [
     saga("POSTING_COMMENT_ADDED_UNBLOCK", payload => payload.id, postingCommentAddedUnblockSaga)
 ];
 
+function getPostingReferences(posting: PostingInfo, nodeName: string) {
+    const bodyReferences = (posting.body.linkPreviews ?? [])
+        .map(preview => parseUniversalPostingUrl(preview.url))
+        .filter(notNull);
+
+    const references = new Map<string, PostingReference>();
+    const add = (reference: PostingReference) =>
+        references.set(JSON.stringify([reference.nodeName, reference.postingId]), reference);
+
+    bodyReferences.forEach(add);
+
+    for (const linked of posting.linkedPostings ?? []) {
+        add({nodeName, postingId: linked.id});
+        if (linked.receiverName != null && linked.receiverPostingId != null) {
+            add({nodeName: linked.receiverName, postingId: linked.receiverPostingId});
+        }
+    }
+
+    return {bodyReferences, references: [...references.values()]};
+}
+
 export function loadPostingReferences(
     action: WithContext<ClientAction>, posting: PostingInfo, nodeName: RelNodeName | string
 ): void {
+    loadPostingReferencesInPostings(action, [posting], nodeName);
+}
+
+export function loadPostingReferencesInPostings(
+    action: WithContext<ClientAction>, postings: PostingInfo[], nodeName: RelNodeName | string
+): void {
     const name = absoluteNodeName(nodeName, action.context);
-    const references = (posting.body.linkPreviews ?? [])
-        .map(preview => parseUniversalPostingUrl(preview.url))
-        .filter(notNull);
-    dispatch(postingReferencesSet(posting.id, name, references).causedBy(action));
-    for (const {nodeName, postingId} of references) {
-        if (!select(state => isPostingCached(state, postingId, nodeName))) {
-            dispatch(postingLoad(postingId, nodeName).causedBy(action));
+    const saved = new Map(postings.map(posting => [posting.id, posting]));
+    const primaryIds = new Set(saved.keys());
+    const checked = new Set(primaryIds);
+    const queue = [...saved.values()].flatMap(posting => posting.linkedPostings ?? []);
+
+    for (const posting of queue) {
+        if (checked.has(posting.id)) {
+            continue;
+        }
+        checked.add(posting.id);
+        if (select(state => isPostingCached(state, posting.id, name))) {
+            continue;
+        }
+
+        const {linkedPostings, ...content} = posting;
+        queue.push(...(linkedPostings ?? []));
+        dispatch(postingSet(content, name).causedBy(action));
+        saved.set(posting.id, posting);
+    }
+
+    // Every received posting is cached before following links, including backlinks and sibling links.
+    const requested = new Set<string>();
+    for (const posting of saved.values()) {
+        if (!primaryIds.has(posting.id)) {
+            loadRemoteMediaInEntry(action, posting);
+        }
+        const {bodyReferences, references} = getPostingReferences(posting, name);
+        dispatch(postingReferencesSet(posting.id, name, references).causedBy(action));
+        for (const {nodeName, postingId} of bodyReferences) {
+            const key = JSON.stringify([nodeName, postingId]);
+            const hasPickedPosting = posting.linkedPostings?.some(
+                linked => linked.receiverName === nodeName && linked.receiverPostingId === postingId
+            );
+            if (hasPickedPosting || requested.has(key) || (nodeName === name && saved.has(postingId))) {
+                continue;
+            }
+            requested.add(key);
+            if (!select(state => isPostingCached(state, postingId, nodeName))) {
+                dispatch(postingLoad(postingId, nodeName).causedBy(action));
+            }
         }
     }
 }
@@ -113,11 +174,8 @@ export function loadPostingReferences(
 export function loadPostingReferencesInStories(
     action: WithContext<ClientAction>, stories: StoryInfo[] | null | undefined, nodeName: RelNodeName | string
 ): void {
-    for (const story of stories ?? []) {
-        if (story.posting?.body != null) {
-            loadPostingReferences(action, story.posting, nodeName);
-        }
-    }
+    const postings = (stories ?? []).map(story => story.posting).filter(notNull).filter(posting => posting.body != null);
+    loadPostingReferencesInPostings(action, postings, nodeName);
 }
 
 async function postingsMaintenanceSaga(action: WithContext<PostingsMaintenanceAction>): Promise<void> {

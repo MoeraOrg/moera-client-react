@@ -16,7 +16,7 @@ const UNUSED_POSTINGS_LIMIT = 300;
 const POSTING_RETENTION_SECONDS = 60;
 
 export function getReferencedPostings(state: ClientState): PostingReference[] {
-    return expandPostingReferences(state, [
+    return postingsReferences(state, [
         ...feedsReferences(state),
         ...detailedPostingReferences(state),
         ...composeReferences(state),
@@ -24,42 +24,8 @@ export function getReferencedPostings(state: ClientState): PostingReference[] {
         ...sharingsDialogReferences(state),
         ...repostDialogReferences(state),
         ...imageEditDialogReferences(state),
-        ...lightboxReferences(state),
-        ...postingsReferences(state)
+        ...lightboxReferences(state)
     ]);
-}
-
-function expandPostingReferences(state: ClientState, roots: PostingReference[]): PostingReference[] {
-    const references: PostingReference[] = [];
-    const seen = new Map<string, Set<string>>();
-
-    const add = (reference: PostingReference): void => {
-        const {nodeName, postingId} = reference;
-        if (!seen.has(nodeName)) {
-            seen.set(nodeName, new Set());
-        }
-        const ids = seen.get(nodeName)!;
-        if (!ids.has(postingId)) {
-            ids.add(postingId);
-            references.push(reference);
-        }
-    };
-
-    roots.forEach(add);
-
-    // Traverse only from retained roots, deduplicating to terminate cycles.
-    for (const {nodeName, postingId} of references) {
-        for (const reference of state.postings[nodeName]?.[postingId]?.references ?? []) {
-            add(reference);
-        }
-        for (const attachment of state.postings[nodeName]?.[postingId]?.posting?.media ?? []) {
-            if (attachment.postingId != null) {
-                add({nodeName, postingId: attachment.postingId});
-            }
-        }
-    }
-
-    return references;
 }
 
 export function prunePostings(state: PostingsState, references: PostingReference[], at: number): PostingsState {

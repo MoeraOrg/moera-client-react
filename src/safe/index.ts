@@ -106,6 +106,9 @@ function decodeBodies(data: EncodedEntities | EncodedEntities[]): Entities | Ent
     if ("mediaCaptions" in data && data.mediaCaptions != null) {
         decoded.mediaCaptions = data.mediaCaptions.map(decodeBodies);
     }
+    if ("linkedPostings" in data && data.linkedPostings != null) {
+        decoded.linkedPostings = data.linkedPostings.map(decodeBodies);
+    }
     if ("comment" in data && data.comment != null) {
         decoded.comment = decodeBodies(data.comment);
     }
