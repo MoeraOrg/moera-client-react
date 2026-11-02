@@ -21,8 +21,27 @@ export function extension(mimeType: string | null | undefined): string | undefin
     return ext ?? ADDITIONAL_MIME_TYPES[mimeType] ?? (mimeType.startsWith("text/") ? "txt" : "bin");
 }
 
+const VECTOR_IMAGE_MIME_TYPES = [
+    "image/svg+xml",
+    "image/svg+xml-compressed",
+    "image/emf",
+    "image/x-emf",
+    "image/wmf",
+    "image/x-wmf",
+    "image/x-win-metafile",
+    "image/x-eps",
+    "image/cdr",
+    "image/x-cdr",
+    "image/cgm",
+    "image/vnd.dwg",
+    "image/vnd.dxf"
+];
+
+export const isVectorImageType = (mimeType: string | null | undefined): boolean =>
+    mimeType != null && VECTOR_IMAGE_MIME_TYPES.includes(mimeType);
+
 export const isImageType = (mimeType: string | null | undefined): boolean =>
-    mimeType != null && mimeType.startsWith("image/");
+    mimeType != null && mimeType.startsWith("image/") && !isVectorImageType(mimeType);
 
 const NON_STANDARD_VIDEO_MIME_TYPES = [
     "application/mp4",

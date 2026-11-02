@@ -34,7 +34,7 @@ import RichTextRenameMediaDialog, {
 import ImageEditDialog from "ui/imageeditdialog/ImageEditDialog";
 import { MediaWithCaption } from "util/media-with-caption";
 import { RelNodeName } from "util/rel-node-name";
-import { extension } from "util/mime-type";
+import { extension, isImageType } from "util/mime-type";
 import { arrayMove, notNull } from "util/misc";
 
 function updateStatus(progress: UploadProgress[], index: number, status: UploadStatus): UploadProgress[] {
@@ -231,30 +231,25 @@ export default function RichTextEditorMedia({
         );
     }
 
-    const imageExtensions = useMemo(
-        () => features?.imageFormats
-            ? features.imageFormats.flatMap(format => extension(format)).map(ext => "." + ext)
-            : [],
+    const imageFormats = useMemo(
+        () => features?.imageFormats.filter(isImageType) ?? [],
         [features]
     );
 
-    const videoExtensions = useMemo(
-        () => features?.videoFormats
-            ? features.videoFormats.flatMap(format => extension(format)).map(ext => "." + ext)
-            : [],
-        [features]
+    const mediaTypes = useMemo(
+        () => Object.fromEntries(
+            [...imageFormats, ...(features?.videoFormats ?? [])].map(format => [format, ["." + extension(format)]])
+        ),
+        [features, imageFormats]
     );
+    const imagesOnly = attachmentType === "image" || onInsertRef.current != null;
 
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open: openDropzone} =
         useDropzone({
             noClick: true,
             noKeyboard: true,
-            accept: attachmentType === "image" || onInsertRef.current != null
-                ? {
-                    "image/*": imageExtensions,
-                    "video/*": videoExtensions
-                }
-                : undefined,
+            accept: imagesOnly ? mediaTypes : undefined,
+            disabled: imagesOnly && Object.keys(mediaTypes).length === 0,
             useFsAccessApi: !Browser.isDevMode(),
             onDrop: openUploadImages
         });
@@ -267,7 +262,7 @@ export default function RichTextEditorMedia({
         onInsertRef.current = onInsert;
         currentlyExpectingSelectionRef.current?.();
         currentlyExpectingSelectionRef.current = androidUploader.expectSelection();
-        openDropzone();
+        openDropzone?.();
     }
 
     const deleteMedia = (id: string) => {
@@ -294,7 +289,7 @@ export default function RichTextEditorMedia({
         const imageItem: DataTransferItem = Array.prototype.find.call(
             data.items,
             ({kind, type}: DataTransferItem) =>
-                kind === "file" && (attachmentType === "file" || features?.imageFormats.includes(type))
+                kind === "file" && (attachmentType === "file" || imageFormats.includes(type))
         );
 
         if (imageItem) {
