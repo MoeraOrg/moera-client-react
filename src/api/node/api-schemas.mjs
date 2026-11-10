@@ -331,6 +331,10 @@ export const NODE_API_SCHEMAS = {
         StoryOperations: {
             type: "object",
             properties: {
+                "view": {
+                    type: "string",
+                    nullable: true
+                },
                 "edit": {
                     type: "string",
                     nullable: true

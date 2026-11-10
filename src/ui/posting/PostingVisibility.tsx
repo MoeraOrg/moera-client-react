@@ -8,29 +8,42 @@ import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
 import { isNodeAdmin, isPermitted } from "state/node/selectors";
 import { postingOperationsUpdate } from "state/postings/actions";
-import { hasPostingFeedReference } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
+import { storyOperationsUpdate } from "state/stories/actions";
 import { useDispatcher } from "ui/hook";
+import { MinimalStoryInfo } from "ui/types";
 import { Principal, PrincipalSelect } from "ui/control";
-import { Icon, msDelete, msLock } from "ui/material-symbols";
+import { Icon, msDelete } from "ui/material-symbols";
 import { REL_CURRENT } from "util/rel-node-name";
 import "./PostingVisibility.css";
 
 interface Props {
     posting: PostingInfo;
+    story: MinimalStoryInfo | null;
 }
 
-export default function PostingVisibility({posting}: Props) {
+export default function PostingVisibility({posting, story}: Props) {
     const isAdmin = useSelector(isNodeAdmin);
-    const originalEditable = useSelector((state: ClientState) => isPermitted("edit", posting, "owner", state));
+    const postingEditable = useSelector((state: ClientState) =>
+        posting.receiverName == null && isPermitted("edit", posting, "owner", state)
+    );
     const timeRelative = useSelector((state: ClientState) => getSetting(state, "posting.time.relative") as boolean);
     const dispatch = useDispatcher();
     const {t} = useTranslation();
 
-    const onChange = (value: PrincipalValue) =>
-        dispatch(postingOperationsUpdate(posting.id, REL_CURRENT, {view: value}));
+    const storyViewUnset = story?.operations?.view == null || story.operations.view === "unset";
 
-    const value = posting.receiverOperations?.view ?? posting.operations?.view ?? "public";
+    const onChange = (value: PrincipalValue) => {
+        if (!storyViewUnset) {
+            dispatch(storyOperationsUpdate(story.id, REL_CURRENT, {view: value}));
+        } else {
+            dispatch(postingOperationsUpdate(posting.id, REL_CURRENT, {view: value}));
+        }
+    };
+
+    const value = (!storyViewUnset ? story?.operations?.view : null)
+        ?? posting.receiverOperations?.view ?? posting.operations?.view ?? "public";
+
     let deletionDate = "";
     if (posting.receiverDeletedAt != null) {
         const date = fromUnixTime(posting.receiverDeletedAt);
@@ -38,12 +51,8 @@ export default function PostingVisibility({posting}: Props) {
             ? tDistanceToNow(date, t)
             : format(date, "dd-MM-yyyy HH:mm")
     }
-    const editable = posting.receiverName != null
-        ? isAdmin && hasPostingFeedReference(posting, "timeline")
-        : originalEditable;
-    const privatePrincipal = posting.receiverName != null ? "admin" : "private";
-    const icons = posting.receiverName != null ? {"admin": msLock} : null;
-    const titles = posting.receiverName != null ? {"admin": t("principal-title.only-me")} : null;
+
+    const editable = !storyViewUnset ? isAdmin : postingEditable;
 
     return (
         <span className="visibility">
@@ -51,14 +60,12 @@ export default function PostingVisibility({posting}: Props) {
             {editable ?
                 <PrincipalSelect
                     value={value}
-                    values={["public", "signed", "subscribed", "friends", privatePrincipal]}
-                    icons={icons}
-                    titles={titles}
+                    values={["public", "signed", "subscribed", "friends", "private"]}
                     onChange={onChange}
                 />
             :
                 (posting.receiverDeletedAt == null ?
-                    <Principal value={value} icons={icons} titles={titles}/>
+                    <Principal value={value}/>
                 :
                     <span className="principal text-danger opacity-75"
                           title={t("original-deleted", {date: deletionDate})}>

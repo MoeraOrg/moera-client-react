@@ -173,6 +173,7 @@ export interface SearchEntryOperations {
 }
 
 export interface StoryOperations {
+    view?: PrincipalValue | null;
     edit?: PrincipalValue | null;
     delete?: PrincipalValue | null;
 }
@@ -1269,6 +1270,7 @@ export interface StoryAttributes {
     read?: boolean | null;
     satisfied?: boolean | null;
     externalSourceUri?: string[] | null;
+    operations?: StoryOperations | null;
 }
 
 export interface StorySummaryBlocked {
@@ -1744,7 +1746,6 @@ export interface ReactionCreated {
 
 export interface RemotePostingRepublishAttributes {
     remoteFeedName: string;
-    postingView?: PrincipalValue | null;
     publications: StoryAttributes[];
 }
 

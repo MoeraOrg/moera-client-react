@@ -2786,7 +2786,7 @@ return errors === 0;
 }
 
 export const StoryOperations = validate23;
-const schema24 = {"type":"object","properties":{"edit":{"type":"string","nullable":true},"delete":{"type":"string","nullable":true}},"additionalProperties":false};
+const schema24 = {"type":"object","properties":{"view":{"type":"string","nullable":true},"edit":{"type":"string","nullable":true},"delete":{"type":"string","nullable":true}},"additionalProperties":false};
 
 function validate23(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
 let vErrors = null;
@@ -2795,13 +2795,13 @@ if(errors === 0){
 if(data && typeof data == "object" && !Array.isArray(data)){
 const _errs1 = errors;
 for(const key0 in data){
-if(!((key0 === "edit") || (key0 === "delete"))){
+if(!(((key0 === "view") || (key0 === "edit")) || (key0 === "delete"))){
 delete data[key0];
 }
 }
 if(_errs1 === errors){
-if(data.edit !== undefined){
-let data0 = data.edit;
+if(data.view !== undefined){
+let data0 = data.view;
 const _errs2 = errors;
 if((typeof data0 !== "string") && (data0 !== null)){
 let dataType0 = typeof data0;
@@ -2824,14 +2824,14 @@ else if(data0 === "" || data0 === 0 || data0 === false){
 coerced0 = null;
 }
 else {
-validate23.errors = [{instancePath:instancePath+"/edit",schemaPath:"#/properties/edit/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+validate23.errors = [{instancePath:instancePath+"/view",schemaPath:"#/properties/view/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
 if(coerced0 !== undefined){
 data0 = coerced0;
 if(data !== undefined){
-data["edit"] = coerced0;
+data["view"] = coerced0;
 }
 }
 }
@@ -2841,8 +2841,8 @@ else {
 var valid0 = true;
 }
 if(valid0){
-if(data.delete !== undefined){
-let data1 = data.delete;
+if(data.edit !== undefined){
+let data1 = data.edit;
 const _errs5 = errors;
 if((typeof data1 !== "string") && (data1 !== null)){
 let dataType1 = typeof data1;
@@ -2865,14 +2865,14 @@ else if(data1 === "" || data1 === 0 || data1 === false){
 coerced1 = null;
 }
 else {
-validate23.errors = [{instancePath:instancePath+"/delete",schemaPath:"#/properties/delete/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+validate23.errors = [{instancePath:instancePath+"/edit",schemaPath:"#/properties/edit/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
 if(coerced1 !== undefined){
 data1 = coerced1;
 if(data !== undefined){
-data["delete"] = coerced1;
+data["edit"] = coerced1;
 }
 }
 }
@@ -2880,6 +2880,48 @@ var valid0 = _errs5 === errors;
 }
 else {
 var valid0 = true;
+}
+if(valid0){
+if(data.delete !== undefined){
+let data2 = data.delete;
+const _errs8 = errors;
+if((typeof data2 !== "string") && (data2 !== null)){
+let dataType2 = typeof data2;
+let coerced2 = undefined;
+if(dataType2 == 'object' && Array.isArray(data2) && data2.length == 1){
+data2 = data2[0];
+dataType2 = typeof data2;
+if((typeof data2 === "string") && (data2 === null)){
+coerced2 = data2;
+}
+}
+if(!(coerced2 !== undefined)){
+if(dataType2 == "number" || dataType2 == "boolean"){
+coerced2 = "" + data2;
+}
+else if(data2 === null){
+coerced2 = "";
+}
+else if(data2 === "" || data2 === 0 || data2 === false){
+coerced2 = null;
+}
+else {
+validate23.errors = [{instancePath:instancePath+"/delete",schemaPath:"#/properties/delete/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+return false;
+}
+}
+if(coerced2 !== undefined){
+data2 = coerced2;
+if(data !== undefined){
+data["delete"] = coerced2;
+}
+}
+}
+var valid0 = _errs8 === errors;
+}
+else {
+var valid0 = true;
+}
 }
 }
 }
@@ -10394,13 +10436,13 @@ if(errors === _errs16){
 if(data5 && typeof data5 == "object" && !Array.isArray(data5)){
 const _errs18 = errors;
 for(const key1 in data5){
-if(!((key1 === "edit") || (key1 === "delete"))){
+if(!(((key1 === "view") || (key1 === "edit")) || (key1 === "delete"))){
 delete data5[key1];
 }
 }
 if(_errs18 === errors){
-if(data5.edit !== undefined){
-let data6 = data5.edit;
+if(data5.view !== undefined){
+let data6 = data5.view;
 const _errs19 = errors;
 if((typeof data6 !== "string") && (data6 !== null)){
 let dataType6 = typeof data6;
@@ -10423,7 +10465,7 @@ else if(data6 === "" || data6 === 0 || data6 === false){
 coerced6 = null;
 }
 else {
-const err1 = {instancePath:instancePath+"/operations/edit",schemaPath:"node#/definitions/StoryOperations/properties/edit/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err1 = {instancePath:instancePath+"/operations/view",schemaPath:"node#/definitions/StoryOperations/properties/view/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
 vErrors = [err1];
 }
@@ -10436,7 +10478,7 @@ errors++;
 if(coerced6 !== undefined){
 data6 = coerced6;
 if(data5 !== undefined){
-data5["edit"] = coerced6;
+data5["view"] = coerced6;
 }
 }
 }
@@ -10446,8 +10488,8 @@ else {
 var valid3 = true;
 }
 if(valid3){
-if(data5.delete !== undefined){
-let data7 = data5.delete;
+if(data5.edit !== undefined){
+let data7 = data5.edit;
 const _errs22 = errors;
 if((typeof data7 !== "string") && (data7 !== null)){
 let dataType7 = typeof data7;
@@ -10470,7 +10512,7 @@ else if(data7 === "" || data7 === 0 || data7 === false){
 coerced7 = null;
 }
 else {
-const err2 = {instancePath:instancePath+"/operations/delete",schemaPath:"node#/definitions/StoryOperations/properties/delete/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err2 = {instancePath:instancePath+"/operations/edit",schemaPath:"node#/definitions/StoryOperations/properties/edit/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
 vErrors = [err2];
 }
@@ -10483,7 +10525,7 @@ errors++;
 if(coerced7 !== undefined){
 data7 = coerced7;
 if(data5 !== undefined){
-data5["delete"] = coerced7;
+data5["edit"] = coerced7;
 }
 }
 }
@@ -10492,11 +10534,32 @@ var valid3 = _errs22 === errors;
 else {
 var valid3 = true;
 }
+if(valid3){
+if(data5.delete !== undefined){
+let data8 = data5.delete;
+const _errs25 = errors;
+if((typeof data8 !== "string") && (data8 !== null)){
+let dataType8 = typeof data8;
+let coerced8 = undefined;
+if(dataType8 == 'object' && Array.isArray(data8) && data8.length == 1){
+data8 = data8[0];
+dataType8 = typeof data8;
+if((typeof data8 === "string") && (data8 === null)){
+coerced8 = data8;
 }
 }
+if(!(coerced8 !== undefined)){
+if(dataType8 == "number" || dataType8 == "boolean"){
+coerced8 = "" + data8;
+}
+else if(data8 === null){
+coerced8 = "";
+}
+else if(data8 === "" || data8 === 0 || data8 === false){
+coerced8 = null;
 }
 else {
-const err3 = {instancePath:instancePath+"/operations",schemaPath:"node#/definitions/StoryOperations/type",keyword:"type",params:{type: "object"},message:"must be object"};
+const err3 = {instancePath:instancePath+"/operations/delete",schemaPath:"node#/definitions/StoryOperations/properties/delete/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
 vErrors = [err3];
 }
@@ -10506,26 +10569,24 @@ vErrors.push(err3);
 errors++;
 }
 }
-var _valid0 = _errs15 === errors;
-valid1 = valid1 || _valid0;
-if(!valid1){
-const _errs27 = errors;
-if(data5 !== null){
-let dataType8 = typeof data5;
-let coerced8 = undefined;
-if(dataType8 == 'object' && Array.isArray(data5) && data5.length == 1){
-data5 = data5[0];
-dataType8 = typeof data5;
-if(data5 === null){
-coerced8 = data5;
+if(coerced8 !== undefined){
+data8 = coerced8;
+if(data5 !== undefined){
+data5["delete"] = coerced8;
 }
 }
-if(!(coerced8 !== undefined)){
-if(data5 === "" || data5 === 0 || data5 === false){
-coerced8 = null;
+}
+var valid3 = _errs25 === errors;
 }
 else {
-const err4 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
+var valid3 = true;
+}
+}
+}
+}
+}
+else {
+const err4 = {instancePath:instancePath+"/operations",schemaPath:"node#/definitions/StoryOperations/type",keyword:"type",params:{type: "object"},message:"must be object"};
 if(vErrors === null){
 vErrors = [err4];
 }
@@ -10535,23 +10596,52 @@ vErrors.push(err4);
 errors++;
 }
 }
-if(coerced8 !== undefined){
-data5 = coerced8;
-if(data !== undefined){
-data["operations"] = coerced8;
-}
-}
-}
-var _valid0 = _errs27 === errors;
+var _valid0 = _errs15 === errors;
 valid1 = valid1 || _valid0;
-}
 if(!valid1){
-const err5 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf",keyword:"anyOf",params:{},message:"must match a schema in anyOf"};
+const _errs30 = errors;
+if(data5 !== null){
+let dataType9 = typeof data5;
+let coerced9 = undefined;
+if(dataType9 == 'object' && Array.isArray(data5) && data5.length == 1){
+data5 = data5[0];
+dataType9 = typeof data5;
+if(data5 === null){
+coerced9 = data5;
+}
+}
+if(!(coerced9 !== undefined)){
+if(data5 === "" || data5 === 0 || data5 === false){
+coerced9 = null;
+}
+else {
+const err5 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
 if(vErrors === null){
 vErrors = [err5];
 }
 else {
 vErrors.push(err5);
+}
+errors++;
+}
+}
+if(coerced9 !== undefined){
+data5 = coerced9;
+if(data !== undefined){
+data["operations"] = coerced9;
+}
+}
+}
+var _valid0 = _errs30 === errors;
+valid1 = valid1 || _valid0;
+}
+if(!valid1){
+const err6 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf",keyword:"anyOf",params:{},message:"must match a schema in anyOf"};
+if(vErrors === null){
+vErrors = [err6];
+}
+else {
+vErrors.push(err6);
 }
 errors++;
 validate50.errors = vErrors;
@@ -80424,13 +80514,13 @@ if(errors === _errs121){
 if(data35 && typeof data35 == "object" && !Array.isArray(data35)){
 const _errs123 = errors;
 for(const key2 in data35){
-if(!((key2 === "edit") || (key2 === "delete"))){
+if(!(((key2 === "view") || (key2 === "edit")) || (key2 === "delete"))){
 delete data35[key2];
 }
 }
 if(_errs123 === errors){
-if(data35.edit !== undefined){
-let data36 = data35.edit;
+if(data35.view !== undefined){
+let data36 = data35.view;
 const _errs124 = errors;
 if((typeof data36 !== "string") && (data36 !== null)){
 let dataType40 = typeof data36;
@@ -80453,7 +80543,7 @@ else if(data36 === "" || data36 === 0 || data36 === false){
 coerced40 = null;
 }
 else {
-const err23 = {instancePath:instancePath+"/operations/edit",schemaPath:"node#/definitions/StoryOperations/properties/edit/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err23 = {instancePath:instancePath+"/operations/view",schemaPath:"node#/definitions/StoryOperations/properties/view/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
 vErrors = [err23];
 }
@@ -80466,7 +80556,7 @@ errors++;
 if(coerced40 !== undefined){
 data36 = coerced40;
 if(data35 !== undefined){
-data35["edit"] = coerced40;
+data35["view"] = coerced40;
 }
 }
 }
@@ -80476,8 +80566,8 @@ else {
 var valid9 = true;
 }
 if(valid9){
-if(data35.delete !== undefined){
-let data37 = data35.delete;
+if(data35.edit !== undefined){
+let data37 = data35.edit;
 const _errs127 = errors;
 if((typeof data37 !== "string") && (data37 !== null)){
 let dataType41 = typeof data37;
@@ -80500,7 +80590,7 @@ else if(data37 === "" || data37 === 0 || data37 === false){
 coerced41 = null;
 }
 else {
-const err24 = {instancePath:instancePath+"/operations/delete",schemaPath:"node#/definitions/StoryOperations/properties/delete/type",keyword:"type",params:{type: "string"},message:"must be string"};
+const err24 = {instancePath:instancePath+"/operations/edit",schemaPath:"node#/definitions/StoryOperations/properties/edit/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
 vErrors = [err24];
 }
@@ -80513,7 +80603,7 @@ errors++;
 if(coerced41 !== undefined){
 data37 = coerced41;
 if(data35 !== undefined){
-data35["delete"] = coerced41;
+data35["edit"] = coerced41;
 }
 }
 }
@@ -80522,11 +80612,32 @@ var valid9 = _errs127 === errors;
 else {
 var valid9 = true;
 }
+if(valid9){
+if(data35.delete !== undefined){
+let data38 = data35.delete;
+const _errs130 = errors;
+if((typeof data38 !== "string") && (data38 !== null)){
+let dataType42 = typeof data38;
+let coerced42 = undefined;
+if(dataType42 == 'object' && Array.isArray(data38) && data38.length == 1){
+data38 = data38[0];
+dataType42 = typeof data38;
+if((typeof data38 === "string") && (data38 === null)){
+coerced42 = data38;
 }
 }
+if(!(coerced42 !== undefined)){
+if(dataType42 == "number" || dataType42 == "boolean"){
+coerced42 = "" + data38;
+}
+else if(data38 === null){
+coerced42 = "";
+}
+else if(data38 === "" || data38 === 0 || data38 === false){
+coerced42 = null;
 }
 else {
-const err25 = {instancePath:instancePath+"/operations",schemaPath:"node#/definitions/StoryOperations/type",keyword:"type",params:{type: "object"},message:"must be object"};
+const err25 = {instancePath:instancePath+"/operations/delete",schemaPath:"node#/definitions/StoryOperations/properties/delete/type",keyword:"type",params:{type: "string"},message:"must be string"};
 if(vErrors === null){
 vErrors = [err25];
 }
@@ -80536,26 +80647,24 @@ vErrors.push(err25);
 errors++;
 }
 }
-var _valid4 = _errs120 === errors;
-valid7 = valid7 || _valid4;
-if(!valid7){
-const _errs132 = errors;
-if(data35 !== null){
-let dataType42 = typeof data35;
-let coerced42 = undefined;
-if(dataType42 == 'object' && Array.isArray(data35) && data35.length == 1){
-data35 = data35[0];
-dataType42 = typeof data35;
-if(data35 === null){
-coerced42 = data35;
+if(coerced42 !== undefined){
+data38 = coerced42;
+if(data35 !== undefined){
+data35["delete"] = coerced42;
 }
 }
-if(!(coerced42 !== undefined)){
-if(data35 === "" || data35 === 0 || data35 === false){
-coerced42 = null;
+}
+var valid9 = _errs130 === errors;
 }
 else {
-const err26 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
+var valid9 = true;
+}
+}
+}
+}
+}
+else {
+const err26 = {instancePath:instancePath+"/operations",schemaPath:"node#/definitions/StoryOperations/type",keyword:"type",params:{type: "object"},message:"must be object"};
 if(vErrors === null){
 vErrors = [err26];
 }
@@ -80565,23 +80674,52 @@ vErrors.push(err26);
 errors++;
 }
 }
-if(coerced42 !== undefined){
-data35 = coerced42;
-if(data !== undefined){
-data["operations"] = coerced42;
-}
-}
-}
-var _valid4 = _errs132 === errors;
+var _valid4 = _errs120 === errors;
 valid7 = valid7 || _valid4;
-}
 if(!valid7){
-const err27 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf",keyword:"anyOf",params:{},message:"must match a schema in anyOf"};
+const _errs135 = errors;
+if(data35 !== null){
+let dataType43 = typeof data35;
+let coerced43 = undefined;
+if(dataType43 == 'object' && Array.isArray(data35) && data35.length == 1){
+data35 = data35[0];
+dataType43 = typeof data35;
+if(data35 === null){
+coerced43 = data35;
+}
+}
+if(!(coerced43 !== undefined)){
+if(data35 === "" || data35 === 0 || data35 === false){
+coerced43 = null;
+}
+else {
+const err27 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf/1/type",keyword:"type",params:{type: "null"},message:"must be null"};
 if(vErrors === null){
 vErrors = [err27];
 }
 else {
 vErrors.push(err27);
+}
+errors++;
+}
+}
+if(coerced43 !== undefined){
+data35 = coerced43;
+if(data !== undefined){
+data["operations"] = coerced43;
+}
+}
+}
+var _valid4 = _errs135 === errors;
+valid7 = valid7 || _valid4;
+}
+if(!valid7){
+const err28 = {instancePath:instancePath+"/operations",schemaPath:"#/properties/operations/anyOf",keyword:"anyOf",params:{},message:"must match a schema in anyOf"};
+if(vErrors === null){
+vErrors = [err28];
+}
+else {
+vErrors.push(err28);
 }
 errors++;
 validate235.errors = vErrors;
@@ -80605,82 +80743,82 @@ var valid0 = true;
 }
 if(valid0){
 if(data.externalSourceUri !== undefined){
-let data38 = data.externalSourceUri;
-const _errs134 = errors;
-if((!(Array.isArray(data38))) && (data38 !== null)){
-let dataType43 = typeof data38;
-let coerced43 = undefined;
-if(dataType43 == 'object' && Array.isArray(data38) && data38.length == 1){
-data38 = data38[0];
-dataType43 = typeof data38;
-if((Array.isArray(data38)) && (data38 === null)){
-coerced43 = data38;
+let data39 = data.externalSourceUri;
+const _errs137 = errors;
+if((!(Array.isArray(data39))) && (data39 !== null)){
+let dataType44 = typeof data39;
+let coerced44 = undefined;
+if(dataType44 == 'object' && Array.isArray(data39) && data39.length == 1){
+data39 = data39[0];
+dataType44 = typeof data39;
+if((Array.isArray(data39)) && (data39 === null)){
+coerced44 = data39;
 }
 }
-if(!(coerced43 !== undefined)){
-if(dataType43 === "string" || dataType43 === "number"
-              || dataType43 === "boolean" || data38 === null){
-coerced43 = [data38];
+if(!(coerced44 !== undefined)){
+if(dataType44 === "string" || dataType44 === "number"
+              || dataType44 === "boolean" || data39 === null){
+coerced44 = [data39];
 }
-else if(data38 === "" || data38 === 0 || data38 === false){
-coerced43 = null;
+else if(data39 === "" || data39 === 0 || data39 === false){
+coerced44 = null;
 }
 else {
 validate235.errors = [{instancePath:instancePath+"/externalSourceUri",schemaPath:"#/properties/externalSourceUri/type",keyword:"type",params:{type: "array"},message:"must be array"}];
 return false;
 }
 }
-if(coerced43 !== undefined){
-data38 = coerced43;
+if(coerced44 !== undefined){
+data39 = coerced44;
 if(data !== undefined){
-data["externalSourceUri"] = coerced43;
+data["externalSourceUri"] = coerced44;
 }
 }
 }
-if(errors === _errs134){
-if(Array.isArray(data38)){
+if(errors === _errs137){
+if(Array.isArray(data39)){
 var valid10 = true;
-const len0 = data38.length;
+const len0 = data39.length;
 for(let i0=0; i0<len0; i0++){
-let data39 = data38[i0];
-const _errs137 = errors;
-if(typeof data39 !== "string"){
-let dataType44 = typeof data39;
-let coerced44 = undefined;
-if(dataType44 == 'object' && Array.isArray(data39) && data39.length == 1){
-data39 = data39[0];
-dataType44 = typeof data39;
-if(typeof data39 === "string"){
-coerced44 = data39;
+let data40 = data39[i0];
+const _errs140 = errors;
+if(typeof data40 !== "string"){
+let dataType45 = typeof data40;
+let coerced45 = undefined;
+if(dataType45 == 'object' && Array.isArray(data40) && data40.length == 1){
+data40 = data40[0];
+dataType45 = typeof data40;
+if(typeof data40 === "string"){
+coerced45 = data40;
 }
 }
-if(!(coerced44 !== undefined)){
-if(dataType44 == "number" || dataType44 == "boolean"){
-coerced44 = "" + data39;
+if(!(coerced45 !== undefined)){
+if(dataType45 == "number" || dataType45 == "boolean"){
+coerced45 = "" + data40;
 }
-else if(data39 === null){
-coerced44 = "";
+else if(data40 === null){
+coerced45 = "";
 }
 else {
 validate235.errors = [{instancePath:instancePath+"/externalSourceUri/" + i0,schemaPath:"#/properties/externalSourceUri/items/type",keyword:"type",params:{type: "string"},message:"must be string"}];
 return false;
 }
 }
-if(coerced44 !== undefined){
-data39 = coerced44;
-if(data38 !== undefined){
-data38[i0] = coerced44;
+if(coerced45 !== undefined){
+data40 = coerced45;
+if(data39 !== undefined){
+data39[i0] = coerced45;
 }
 }
 }
-var valid10 = _errs137 === errors;
+var valid10 = _errs140 === errors;
 if(!valid10){
 break;
 }
 }
 }
 }
-var valid0 = _errs134 === errors;
+var valid0 = _errs137 === errors;
 }
 else {
 var valid0 = true;

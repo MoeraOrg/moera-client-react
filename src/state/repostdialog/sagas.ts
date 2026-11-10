@@ -26,7 +26,8 @@ async function repostPostingSaga(action: WithContext<RepostPostingAction>): Prom
             await Node.republishPosting(action, REL_HOME, postingId, {postingView, publications});
         } else {
             await Node.republishRemotePosting(action, REL_HOME, remoteNodeName, postingId, {
-                remoteFeedName: "timeline", postingView, publications
+                remoteFeedName: "timeline",
+                publications: publications.map(publication => ({...publication, operations: {view: postingView}}))
             });
         }
         dispatch(flashBox(i18n.t("you-shared-post")).causedBy(action));

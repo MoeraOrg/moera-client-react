@@ -31,9 +31,8 @@ describe("repost posting saga", () => {
 
         expect(republish).toHaveBeenCalledWith(action, REL_HOME, "alice", "post-1", {
             remoteFeedName: "timeline",
-            postingView: "private",
             publications: [
-                {feedName: "timeline", viewed: true, read: true}
+                {feedName: "timeline", viewed: true, read: true, operations: {view: "private"}}
             ]
         });
         expect(republishLocal).not.toHaveBeenCalled();

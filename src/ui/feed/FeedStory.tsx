@@ -30,7 +30,7 @@ export default function FeedStory({nodeName, feedName, story, posting, deleting}
                 <PostingDeleting/>
             :
                 <>
-                    {(story.storyType === "posting-added" && posting != null) &&
+                    {story.storyType === "posting-added" &&
                         <FeedPosting
                             nodeName={nodeName}
                             posting={posting}

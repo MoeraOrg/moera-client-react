@@ -136,6 +136,56 @@ describe("linked posting loading", () => {
         expect(Node.getPosting).toHaveBeenCalledTimes(1);
     });
 
+    test("loads missing story postings from their remote nodes and reuses cached postings", async () => {
+        store.dispatch(postingSet(posting("cached"), "cached.example"));
+        const stories = [
+            {id: "first", storyType: "posting-added", posting: null,
+                remoteNodeName: "first.example", remotePostingId: "remote"},
+            {id: "second", storyType: "posting-added",
+                remoteNodeName: "second.example", remotePostingId: "remote"},
+            {id: "duplicate", storyType: "posting-added",
+                remoteNodeName: "first.example", remotePostingId: "remote"},
+            {id: "cached", storyType: "posting-added",
+                remoteNodeName: "cached.example", remotePostingId: "cached"}
+        ] as StoryInfo[];
+        const action = {...feedPastSliceSet("feed.example", "news", stories, 100, 0, 0, 0), context};
+        store.dispatch(action);
+        loadPostingReferencesInStories(action, stories, "feed.example");
+        await tick();
+
+        expect(jest.mocked(Node.getPosting).mock.calls.map((call: PostingRequest) => [call[1], call[2]])).toEqual([
+            ["first.example", "remote"], ["second.example", "remote"]
+        ]);
+        expect(isPostingCached(store.getState(), "remote", "first.example")).toBe(true);
+        expect(isPostingCached(store.getState(), "remote", "second.example")).toBe(true);
+        expect(isPostingCached(store.getState(), "remote", "feed.example")).toBe(false);
+
+        loadPostingReferencesInStories(action, stories, "feed.example");
+        await tick();
+        expect(Node.getPosting).toHaveBeenCalledTimes(2);
+    });
+
+    test.each<Partial<StoryInfo>>([
+        {posting: posting("embedded")},
+        {storyType: "comment-added"},
+        {remoteNodeName: null},
+        {remoteNodeName: undefined},
+        {remotePostingId: null},
+        {remotePostingId: undefined}
+    ])("does not load a remote story posting when %o", async overrides => {
+        const stories = [{
+            id: "story", storyType: "posting-added", posting: null,
+            remoteNodeName: "remote.example", remotePostingId: "remote", ...overrides
+        }] as StoryInfo[];
+        const action = {...feedPastSliceSet("feed.example", "news", stories, 100, 0, 0, 0), context};
+        store.dispatch(action);
+        loadPostingReferencesInStories(action, stories, "feed.example");
+        await tick();
+
+        expect(Node.getPosting).not.toHaveBeenCalled();
+        expect(isPostingCached(store.getState(), "remote", "remote.example")).toBe(false);
+    });
+
     test("flattens nested picked postings before following body links and terminates cycles", async () => {
         const source = posting("source", [preview("original.example", "original"), preview("source.example", "leaf")]);
         const picked: PostingInfo = {

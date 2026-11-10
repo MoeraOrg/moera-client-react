@@ -1,5 +1,12 @@
+import { ExtStoryInfo } from "state/feeds/state";
 import { PostingReference } from "state/postings/state";
 import { ClientState } from "state/state";
+
+function addRemotePostingReference(references: PostingReference[], story: ExtStoryInfo): void {
+    if (story.storyType === "posting-added" && story.remotePostingId != null && story.remoteNodeName != null) {
+        references.push({nodeName: story.remoteNodeName, postingId: story.remotePostingId});
+    }
+}
 
 export default function getReferencedPostings(state: ClientState): PostingReference[] {
     const references: PostingReference[] = [];
@@ -9,6 +16,7 @@ export default function getReferencedPostings(state: ClientState): PostingRefere
                 if (story.postingId != null) {
                     references.push({nodeName, postingId: story.postingId});
                 }
+                addRemotePostingReference(references, story);
             }
             for (const slice of feed?.pending ?? []) {
                 for (const story of slice.stories) {
@@ -16,6 +24,7 @@ export default function getReferencedPostings(state: ClientState): PostingRefere
                     if (postingId != null) {
                         references.push({nodeName, postingId});
                     }
+                    addRemotePostingReference(references, story);
                 }
             }
         }

@@ -88,7 +88,7 @@ export default function DetailedPosting({feedName, story, posting, deleting}: Pr
                             publishedAt={story != null ? story.publishedAt : posting.createdAt}
                         />
                     }
-                    <PostingVisibility posting={posting}/>
+                    <PostingVisibility posting={posting} story={story}/>
                 </div>
             </div>
             <PostingSubject posting={posting} preview={false}/>

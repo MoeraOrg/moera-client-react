@@ -71,7 +71,7 @@ export default function LinkedPosting({preview, parentNodeName, compact, editing
                             publishedAt={posting.createdAt}
                         />
                     }
-                    <PostingVisibility posting={posting}/>
+                    <PostingVisibility posting={posting} story={null}/>
                 </div>
             </div>
             <PostingSubject posting={posting} preview={true}/>

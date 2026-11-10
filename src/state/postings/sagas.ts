@@ -176,6 +176,18 @@ export function loadPostingReferencesInStories(
 ): void {
     const postings = (stories ?? []).map(story => story.posting).filter(notNull).filter(posting => posting.body != null);
     loadPostingReferencesInPostings(action, postings, nodeName);
+
+    for (const {storyType, posting, remotePostingId, remoteNodeName} of stories ?? []) {
+        if (
+            storyType === "posting-added"
+            && posting == null
+            && remotePostingId != null
+            && remoteNodeName != null
+            && !select(state => isPostingCached(state, remotePostingId, remoteNodeName))
+        ) {
+            dispatch(postingLoad(remotePostingId, remoteNodeName).causedBy(action));
+        }
+    }
 }
 
 async function postingsMaintenanceSaga(action: WithContext<PostingsMaintenanceAction>): Promise<void> {

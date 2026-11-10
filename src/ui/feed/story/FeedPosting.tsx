@@ -1,12 +1,14 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
+import { ClientState } from "state/state";
+import { ExtStoryInfo } from "state/feeds/state";
 import { ExtPostingInfo } from "state/postings/state";
+import { getPickedPosting } from "state/postings/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import { jumpNear } from "state/navigation/actions";
 import { useDispatcher } from "ui/hook";
-import { MinimalStoryInfo } from "ui/types";
 import { getFeedProperties } from "ui/feed/feeds";
 import PostingMenu from "ui/posting/PostingMenu";
 import StoryBadges from "ui/story/StoryBadges";
@@ -34,14 +36,29 @@ import "ui/entry/Entry.css";
 
 interface FeedPostingProps {
     nodeName: RelNodeName | string;
-    posting: ExtPostingInfo;
+    posting?: ExtPostingInfo | null;
     feedName: string;
-    story: MinimalStoryInfo;
+    story: ExtStoryInfo;
 }
 
 export default function FeedPosting({nodeName, posting, feedName, story}: FeedPostingProps) {
     const isSheriff = useSelector(getHomeOwnerName) === SHERIFF_GOOGLE_PLAY_TIMELINE;
+    const cachedPosting = useSelector(
+        (state: ClientState) => story.remotePostingId != null && story.remoteNodeName != null
+            ? getPickedPosting(state, story.remotePostingId, story.remoteNodeName, nodeName)
+            : null,
+        shallowEqual
+    );
     const dispatch = useDispatcher();
+
+    if (posting == null) {
+        console.log(story, posting, cachedPosting);
+    }
+    posting = posting ?? cachedPosting?.posting;
+
+    if (posting == null) {
+        return null;
+    }
 
     const {recommendedOnly} = getFeedProperties(feedName);
 
@@ -66,7 +83,7 @@ export default function FeedPosting({nodeName, posting, feedName, story}: FeedPo
                             publishedAt={story.publishedAt}
                         />
                     }
-                    <PostingVisibility posting={posting}/>
+                    <PostingVisibility posting={posting} story={story}/>
                 </div>
             </div>
             <PostingSubject posting={posting} preview={true}/>

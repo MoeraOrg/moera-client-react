@@ -13,6 +13,7 @@ import {
     ReminderSheriffAllowAction,
     StoryDeleteAction,
     storyDeleted,
+    StoryOperationsUpdateAction,
     StoryPinningUpdateAction,
     StoryReadingUpdateAction,
     StorySatisfyAction,
@@ -30,6 +31,7 @@ import { deserializeSheriffs, serializeSheriffs } from "util/sheriff";
 
 export default [
     saga("STORY_PINNING_UPDATE", null, storyPinningUpdateSaga),
+    saga("STORY_OPERATIONS_UPDATE", payload => payload.id, storyOperationsUpdateSaga),
     saga("STORY_VIEWING_UPDATE", null, storyViewingUpdateSaga),
     saga("STORY_READING_UPDATE", null, storyReadingUpdateSaga),
     saga("STORY_SATISFY", null, storySatisfySaga),
@@ -46,6 +48,16 @@ async function storyPinningUpdateSaga(action: WithContext<StoryPinningUpdateActi
     try {
         const story = await Node.updateStory(action, REL_CURRENT, id, {pinned});
         dispatch(storyUpdated(REL_CURRENT, story).causedBy(action));
+    } catch (e) {
+        dispatch(errorThrown(e));
+    }
+}
+
+async function storyOperationsUpdateSaga(action: WithContext<StoryOperationsUpdateAction>): Promise<void> {
+    const {id, nodeName, operations} = action.payload;
+    try {
+        const story = await Node.updateStory(action, nodeName, id, {operations});
+        dispatch(storyUpdated(nodeName, story).causedBy(action));
     } catch (e) {
         dispatch(errorThrown(e));
     }

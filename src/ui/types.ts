@@ -9,6 +9,7 @@ export interface MinimalStoryInfo {
     viewed?: boolean | null;
     moment: number;
     operations?: {
+        view?: PrincipalValue | null;
         edit?: PrincipalValue | null;
         delete?: PrincipalValue | null;
     } | null;

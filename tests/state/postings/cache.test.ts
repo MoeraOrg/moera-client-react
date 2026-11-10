@@ -137,6 +137,40 @@ describe("posting references", () => {
         ]);
     });
 
+    test("retains remote postings referenced by feed stories and pending slices", () => {
+        const state = {
+            postings: {
+                ...reserve(300, 800),
+                "remote.example": {
+                    remote: {posting, lastUsedAt: 100}, pending: {posting, lastUsedAt: 100}
+                }
+            },
+            feeds: {"feed.example": {news: {
+                stories: [
+                    {storyType: "posting-added", postingId: "local",
+                        remoteNodeName: "remote.example", remotePostingId: "remote"},
+                    {storyType: "comment-added", remoteNodeName: "ignored.example", remotePostingId: "ignored"},
+                    {storyType: "posting-added", remoteNodeName: null, remotePostingId: "ignored"},
+                    {storyType: "posting-added", remoteNodeName: "ignored.example", remotePostingId: null}
+                ],
+                pending: [{stories: [{
+                    storyType: "posting-added", posting: null,
+                    remoteNodeName: "remote.example", remotePostingId: "pending"
+                }]}]
+            }}}
+        } as unknown as ClientState;
+
+        const references = collectReferences(state);
+        expect(references).toEqual([
+            {nodeName: "feed.example", postingId: "local"},
+            {nodeName: "remote.example", postingId: "remote"},
+            {nodeName: "remote.example", postingId: "pending"}
+        ]);
+        expect(prune(state.postings, 1000, references)["remote.example"]).toMatchObject({
+            remote: {posting}, pending: {posting}
+        });
+    });
+
     test("protects the detailed post and visible dialogs, resolving relative nodes", () => {
         const state = {
             postings: {}, feeds: {}, detailedPosting: {id: "detail"},

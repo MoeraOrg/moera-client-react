@@ -1,5 +1,5 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
-import { StoryInfo, StoryType } from "api";
+import { StoryInfo, StoryOperations, StoryType } from "api";
 import { MinimalStoryInfo } from "ui/types";
 import { RelNodeName } from "util/rel-node-name";
 
@@ -9,6 +9,16 @@ export type StoryPinningUpdateAction = ActionWithPayload<"STORY_PINNING_UPDATE",
 }>;
 export const storyPinningUpdate = (id: string, pinned: boolean): StoryPinningUpdateAction =>
     actionWithPayload("STORY_PINNING_UPDATE", {id, pinned});
+
+export type StoryOperationsUpdateAction = ActionWithPayload<"STORY_OPERATIONS_UPDATE", {
+    id: string;
+    nodeName: RelNodeName | string;
+    operations: StoryOperations;
+}>;
+export const storyOperationsUpdate = (
+    id: string, nodeName: RelNodeName | string, operations: StoryOperations
+): StoryOperationsUpdateAction =>
+    actionWithPayload("STORY_OPERATIONS_UPDATE", {id, nodeName, operations});
 
 export type StoryViewingUpdateAction = ActionWithPayload<"STORY_VIEWING_UPDATE", {
     nodeName: RelNodeName | string;
@@ -107,6 +117,7 @@ export const reminderSheriffAllow = (): ReminderSheriffAllowAction =>
 
 export type StoriesAnyAction =
     StoryPinningUpdateAction
+    | StoryOperationsUpdateAction
     | StoryViewingUpdateAction
     | StoryReadingUpdateAction
     | StorySatisfyAction

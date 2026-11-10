@@ -60,7 +60,7 @@ jest.mock("state/store-sagas", () => ({
 }));
 
 jest.mock("ui/control/field", () => ({
-    PrincipalField: () => <div/>
+    PrincipalField: ({values}: {values: string[]}) => <div data-principals={values.join(",")}/>
 }));
 
 jest.mock("ui/control", () => ({
@@ -95,6 +95,7 @@ describe("repost dialog", () => {
         mockHomeOwnerName = "bob";
         mockNameDisplayMode = "both";
         mockState.repostDialog.nodeName = "receiver";
+        mockState.repostDialog.visible = "signed";
         container = document.createElement("div");
         document.body.appendChild(container);
         root = createRoot(container);
@@ -119,6 +120,21 @@ describe("repost dialog", () => {
             .find((button: HTMLButtonElement) => button.textContent === "cancel");
         act(() => cancel?.click());
         expect(mockDispatch).toHaveBeenCalledWith(expect.objectContaining({type: "CLOSE_REPOST_DIALOG"}));
+    });
+
+    test("uses private for the only-me choice and restricted-post default", async () => {
+        mockState.repostDialog.visible = "subscribed";
+        await act(async () => root.render(<RepostDialog/>));
+
+        expect(container.querySelector("[data-principals]")?.getAttribute("data-principals"))
+            .toBe("public,signed,subscribed,friends,private");
+        await act(async () => {
+            container.querySelector("form")?.dispatchEvent(new Event("submit", {bubbles: true, cancelable: true}));
+        });
+        expect(mockDispatch).toHaveBeenCalledWith(expect.objectContaining({
+            type: "REPOST_POSTING",
+            payload: {nodeName: "receiver", postingId: "post-1", postingView: "private"}
+        }));
     });
 
     test("uses the repeat prompt for a post from the home node", () => {

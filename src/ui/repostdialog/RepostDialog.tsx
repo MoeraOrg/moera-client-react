@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Form, FormikBag, FormikProps, useField, withFormik } from 'formik';
+import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { PrincipalValue } from "api";
@@ -9,7 +9,6 @@ import { dispatch } from "state/store-sagas";
 import { getHomeOwnerName, getRelNodeNameContext } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { closeRepostDialog, repostPosting } from "state/repostdialog/actions";
-import { msLock } from "ui/material-symbols";
 import { useDispatcher } from "ui/hook";
 import { Button, ModalDialog } from "ui/control";
 import { PrincipalField } from "ui/control/field";
@@ -31,7 +30,7 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>
 
-function RepostDialogInner({homeOwnerName, nodeName, postingView: originalPostingView}: Props) {
+function RepostDialogInner({homeOwnerName, nodeName}: Props) {
     const nodeNameContext = useSelector(getRelNodeNameContext);
     const heading = useSelector((state: ClientState) => state.repostDialog.heading);
     const fullName = useSelector((state: ClientState) => state.repostDialog.fullName);
@@ -40,17 +39,9 @@ function RepostDialogInner({homeOwnerName, nodeName, postingView: originalPostin
     const dispatch = useDispatcher();
     const {t} = useTranslation();
 
-    const [, {value: postingView}] = useField<PrincipalValue>("postingView");
-
     const onClose = () => dispatch(closeRepostDialog());
 
     const name = formatFullName(absoluteNodeName(nodeName, nodeNameContext), fullName, nameDisplayMode);
-
-    const unethical = nodeName !== homeOwnerName && (
-        originalPostingView === "signed"
-            ? postingView === "public"
-            : originalPostingView !== "public" && postingView !== "admin"
-    );
 
     return (
         <ModalDialog title={t("repost")} onClose={onClose}>
@@ -64,17 +55,10 @@ function RepostDialogInner({homeOwnerName, nodeName, postingView: originalPostin
                     <PrincipalField
                         name="postingView"
                         title={t("repost-visible-to")}
-                        values={["public", "signed", "subscribed", "friends", "admin"]}
-                        icons={{
-                            "admin": msLock
-                        }}
-                        titles={{
-                            "admin": t("principal-title.only-me")
-                        }}
+                        values={["public", "signed", "subscribed", "friends", "private"]}
                         long
                         dropdownContainer={document.getElementById("modal-root")}
                     />
-                    {unethical && <div className="form-error">{t("sharing-post-unethical")}</div>}
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
@@ -110,7 +94,7 @@ function repostVisibility(originalVisibility: PrincipalValue, defaultVisibility:
     if (originalVisibility === "signed") {
         return defaultVisibility === "public" ? "signed" : defaultVisibility;
     }
-    return "admin";
+    return "private";
 }
 
 const RepostDialogOuter = withFormik(repostDialogLogic)(RepostDialogInner);
