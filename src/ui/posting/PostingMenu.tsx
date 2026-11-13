@@ -113,7 +113,7 @@ function PostingMenuItems({posting, feedName, story, detailed}: Props) {
 
         const onDelete = (deleteAll: boolean) =>
             feedName == null || story == null || repostsLeft <= 0 || deleteAll
-                ? postingDelete(posting.id, REL_CURRENT)
+                ? postingDelete(posting.id, REL_CURRENT, feedName, story)
                 : storyDelete(REL_CURRENT, story, feedName, posting.id);
 
         if (confirmDelete) {

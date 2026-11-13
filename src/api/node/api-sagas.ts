@@ -836,11 +836,15 @@ export async function getFeedSlice(
 
 export async function deleteFeedStories(
     caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, feedName: string,
-    type: API.StoryType | null = null, receiver: string | null = null, recommended: boolean | null = null,
+    type: API.StoryType | null = null, receiver: string | null = null, receiverid: string | null = null,
+    postingid: string | null = null, recommended: boolean | null = null, unrestricted: boolean | null = null,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): Promise<API.Result> {
 
-    const location = urlWithParameters(ut`/feeds/${feedName}/stories`, {type, receiver, recommended});
+    const location = urlWithParameters(
+        ut`/feeds/${feedName}/stories`,
+        {type, receiver, receiverid, postingid, recommended, unrestricted}
+    );
     return callApi<API.Result>({
         caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
@@ -2082,6 +2086,22 @@ export async function getStoriesByExternalSource(
     return callApi<API.StoryInfo[]>({
         caller, nodeName, method: "GET", location, auth, schema: "StoryInfoArray", decodeBodies: true,
         errorFilter
+    });
+}
+
+export async function deleteStories(
+    caller: WithContext<ClientAction> | null, nodeName: RelNodeName | string, type: API.StoryType | null = null,
+    receiver: string | null = null, receiverid: string | null = null, postingid: string | null = null,
+    recommended: boolean | null = null, unrestricted: boolean | null = null, errorFilter: ErrorFilter = false,
+    auth: true | string = true
+): Promise<API.Result> {
+
+    const location = urlWithParameters(
+        ut`/stories`,
+        {type, receiver, receiverid, postingid, recommended, unrestricted}
+    );
+    return callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 

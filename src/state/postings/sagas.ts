@@ -47,11 +47,13 @@ import {
 import { WithContext } from "state/action-types";
 import { getReferencedPostings } from "state/postings/cache";
 import { PostingReference } from "state/postings/state";
+import { storyDeleted } from "state/stories/actions";
 import { flashBox } from "state/flashbox/actions";
 import {
     getPosting,
     getPostingCommentAddedInstantBlockId,
     getPostingCommentsSubscriptionId,
+    getPostingMoment,
     isPostingCached,
     isPostingVisitRecorded
 } from "state/postings/selectors";
@@ -198,14 +200,31 @@ async function postingsMaintenanceSaga(action: WithContext<PostingsMaintenanceAc
 }
 
 async function postingDeleteSaga(action: WithContext<PostingDeleteAction>): Promise<void> {
-    const {id, nodeName} = action.payload;
+    const {id, nodeName, feedName, story} = action.payload;
     const posting = getPosting(select(), id, nodeName);
-    if (posting == null) {
-        return;
-    }
+    const feedReferences = posting?.feedReferences ?? [];
+    const moment = getPostingMoment({feedReferences}, "timeline");
     try {
-        await Node.deletePosting(action, nodeName, id, ["posting.not-found"]);
-        dispatch(postingDeleted(posting.id, posting.feedReferences ?? [], nodeName).causedBy(action));
+        if (story != null) {
+            await Node.deleteStory(action, nodeName, story.id);
+            if (feedName != null) {
+                dispatch(storyDeleted(nodeName, story, feedName, id).causedBy(action));
+            }
+        }
+
+        const feeds = posting != null && posting.receiverName == null ? ["timeline", "news"] : ["timeline"];
+        for (const deletedFeedName of feeds) {
+            await Node.deleteFeedStories(action, nodeName, deletedFeedName, null, null, null, id, null, false);
+            for (const ref of feedReferences) {
+                if (ref.feedName === deletedFeedName && ref.storyId !== story?.id) {
+                    dispatch(storyDeleted(nodeName, {...ref, id: ref.storyId}, ref.feedName, id).causedBy(action));
+                }
+            }
+        }
+        const remainingReferences = feedReferences.filter(
+            ref => ref.storyId !== story?.id && !feeds.includes(ref.feedName)
+        );
+        dispatch(postingDeleted(id, remainingReferences, nodeName, moment).causedBy(action));
     } catch (e) {
         dispatch(postingDeleteFailed(id, nodeName).causedBy(action));
         dispatch(errorThrown(e));

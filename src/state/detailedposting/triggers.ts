@@ -53,10 +53,10 @@ import {
     isPastCommentsToBeLoaded
 } from "state/detailedposting/selectors";
 import { PostingDeletedAction, postingSet, PostingSetAction, postingVisited } from "state/postings/actions";
-import { getPostingMoment } from "state/postings/selectors";
 import { isAtNode } from "state/node/selectors";
 import { CommentAddedEvent, CommentReactionsChangedEvent, CommentUpdatedEvent, EventAction } from "api/events";
 import { REL_CURRENT } from "util/rel-node-name";
+import { urlWithParameters } from "util/url";
 
 export default [
     trigger("GO_TO_PAGE", conj(isAtDetailedPostingPage, isDetailedPostingToBeLoaded), detailedPostingLoad),
@@ -162,7 +162,7 @@ export default [
         "POSTING_DELETED",
         (state, signal: PostingDeletedAction) =>
             isAtDetailedPostingPage(state) && isDetailedPostingId(state, signal.payload.id),
-        signal => jumpNear(`/timeline?before=${getPostingMoment(signal.payload, "timeline")}`, null, null)
+        signal => jumpNear(urlWithParameters("/timeline", {before: signal.payload.moment}), null, null)
     ),
     trigger(
         "COMMENT_POSTED",

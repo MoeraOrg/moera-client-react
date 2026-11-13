@@ -406,8 +406,8 @@ async function recommendationDontSaga(action: WithContext<RecommendationDontActi
         dispatch(flashBox(i18n.t("recommendation-settings-updated")).causedBy(action));
         if (deleteAll) {
             await Promise.all([
-                Node.deleteFeedStories(action, REL_HOME, "news", "posting-added", receiverName, true),
-                Node.deleteFeedStories(action, REL_HOME, "explore", "posting-added", receiverName, true)
+                Node.deleteFeedStories(action, REL_HOME, "news", "posting-added", receiverName, null, null, true),
+                Node.deleteFeedStories(action, REL_HOME, "explore", "posting-added", receiverName, null, null, true)
             ]);
         }
     } catch (e) {

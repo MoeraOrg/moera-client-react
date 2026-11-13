@@ -142,8 +142,10 @@ describe("do not recommend a node", () => {
 
         expect(Node.excludeNodeFromRecommendations).toHaveBeenCalledWith(action, "recommendations.example", "bob");
         if (deleteAll) {
-            expect(Node.deleteFeedStories).toHaveBeenCalledWith(action, REL_HOME, "news", "posting-added", "bob", true);
-            expect(Node.deleteFeedStories).toHaveBeenCalledWith(action, REL_HOME, "explore", "posting-added", "bob", true);
+            expect(Node.deleteFeedStories)
+                .toHaveBeenCalledWith(action, REL_HOME, "news", "posting-added", "bob", null, null, true);
+            expect(Node.deleteFeedStories)
+                .toHaveBeenCalledWith(action, REL_HOME, "explore", "posting-added", "bob", null, null, true);
             expect(Node.deleteFeedStories).toHaveBeenCalledTimes(2);
         } else {
             expect(Node.deleteFeedStories).not.toHaveBeenCalled();

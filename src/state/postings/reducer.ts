@@ -221,10 +221,21 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                 true
             );
 
-        case "POSTING_DELETED":
-            return immutable.del(
+        case "POSTING_DELETED": {
+            const {id, feedReferences} = action.payload;
+            const nodeName = absoluteNodeName(action.payload.nodeName, action.context);
+            if (feedReferences.length > 0) {
+                const updated = setFeedReferences(state, nodeName, id, feedReferences);
+                return immutable.set(updated, [nodeName, id, "deleting"], false);
+            }
+            return immutable.del(state, [nodeName, id]);
+        }
+
+        case "POSTING_DELETE_FAILED":
+            return immutable.set(
                 state,
-                [absoluteNodeName(action.payload.nodeName, action.context), action.payload.id]
+                [absoluteNodeName(action.payload.nodeName, action.context), action.payload.id, "deleting"],
+                false
             );
 
         case "POSTING_VERIFY":

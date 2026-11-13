@@ -129,13 +129,15 @@ describe("posting menu deletion", () => {
         });
     });
 
-    test("deletes the whole posting when deletion of all reposts is explicitly selected", () => {
-        mockConfirmDelete = true;
+    test.each(["timeline", "news", "explore"])(
+        "keeps the selected %s story when deletion of all reposts is explicitly selected", (feedName: string) => {
+            mockConfirmDelete = true;
 
-        expect(confirmDeletion(clickDelete(), true)).toMatchObject({
-            type: "POSTING_DELETE", payload: {id: "post-1", nodeName: REL_CURRENT}
-        });
-    });
+            expect(confirmDeletion(clickDelete(feedName), true)).toMatchObject({
+                type: "POSTING_DELETE", payload: {id: "post-1", nodeName: REL_CURRENT, feedName, story}
+            });
+        }
+    );
 
     test.each([false, true])("deletes the last publication with confirmation set to %s", (confirmDelete: boolean) => {
         mockConfirmDelete = confirmDelete;
@@ -144,7 +146,7 @@ describe("posting menu deletion", () => {
         const action = clickDelete();
 
         expect(confirmDelete ? confirmDeletion(action) : action).toMatchObject({
-            type: "POSTING_DELETE", payload: {id: "post-1", nodeName: REL_CURRENT}
+            type: "POSTING_DELETE", payload: {id: "post-1", nodeName: REL_CURRENT, feedName: "timeline", story}
         });
     });
 
@@ -159,7 +161,7 @@ describe("posting menu deletion", () => {
             }}});
         }
         expect(confirmDelete ? confirmDeletion(action) : action).toMatchObject({
-            type: "POSTING_DELETE", payload: {id: "post-1", nodeName: REL_CURRENT}
+            type: "POSTING_DELETE", payload: {id: "post-1", nodeName: REL_CURRENT, feedName: null, story: null}
         });
     });
 });

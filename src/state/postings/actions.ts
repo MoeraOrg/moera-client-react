@@ -8,6 +8,7 @@ import {
     SubscriptionType
 } from "api";
 import { PostingReference } from "state/postings/state";
+import { MinimalStoryInfo } from "ui/types";
 import { RelNodeName } from "util/rel-node-name";
 
 export type PostingsMaintenanceAction = ActionWithoutPayload<"POSTINGS_MAINTENANCE">;
@@ -47,19 +48,24 @@ export const postingsSet = (postings: PostingInfo[], nodeName: RelNodeName | str
 export type PostingDeleteAction = ActionWithPayload<"POSTING_DELETE", {
     id: string;
     nodeName: RelNodeName | string;
+    feedName: string | null;
+    story: MinimalStoryInfo | null;
 }>;
-export const postingDelete = (id: string, nodeName: RelNodeName | string): PostingDeleteAction =>
-    actionWithPayload("POSTING_DELETE", {id, nodeName});
+export const postingDelete = (
+    id: string, nodeName: RelNodeName | string, feedName: string | null, story: MinimalStoryInfo | null
+): PostingDeleteAction =>
+    actionWithPayload("POSTING_DELETE", {id, nodeName, feedName, story});
 
 export type PostingDeletedAction = ActionWithPayload<"POSTING_DELETED", {
     id: string;
     feedReferences: FeedReference[];
     nodeName: RelNodeName | string;
+    moment: number | null;
 }>;
 export const postingDeleted = (
-    id: string, feedReferences: FeedReference[], nodeName: RelNodeName | string
+    id: string, feedReferences: FeedReference[], nodeName: RelNodeName | string, moment: number | null
 ): PostingDeletedAction =>
-    actionWithPayload("POSTING_DELETED", {id, feedReferences, nodeName});
+    actionWithPayload("POSTING_DELETED", {id, feedReferences, nodeName, moment});
 
 export type PostingDeleteFailedAction = ActionWithPayload<"POSTING_DELETE_FAILED", {
     id: string;
