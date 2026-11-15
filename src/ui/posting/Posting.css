@@ -9,7 +9,7 @@
     display: none;
 }
 
-.posting:not(.not-viewed) {
+.posting:not(.not-viewed, .linked-posting) {
     background-color: white;
     transition: background-color 3s ease;
 }

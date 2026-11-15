@@ -1,9 +1,9 @@
-.comment .owner-line .visibility {
+.comment > .owner-line .visibility {
     color: var(--bs-gray-500);
     padding-right: .4rem;
 }
 
-.comment .owner-line .visibility .principal {
+.comment > .owner-line .visibility .principal {
     display: inline-flex;
     width: 1.7em;
     height: 1.7em;

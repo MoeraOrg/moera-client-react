@@ -94,6 +94,7 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
                 option("news.lifetime"),
                 option("news.purge-pinned"),
                 option("posting.picked.hide-on-delete"),
+                option("posting.referenced.hide-on-delete"),
             ]),
             chapter("recommendations", null, [
                 option("recommendations.frequency"),

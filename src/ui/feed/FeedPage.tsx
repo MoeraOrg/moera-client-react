@@ -316,7 +316,7 @@ function postingMoment(posting: HTMLElement | null): number {
 
 function getTopmostMoment(): number {
     const top = getPageHeaderHeight();
-    const postings = document.getElementsByClassName("posting");
+    const postings = document.querySelectorAll<HTMLElement>(".posting:not(.linked-posting)");
     for (let i = 0; i < postings.length; i++) {
         const posting = postings.item(i) as HTMLElement;
         if (posting == null) {
@@ -330,10 +330,10 @@ function getTopmostMoment(): number {
 }
 
 function getMomentAbove(moment: number): number | null {
-    const postings = document.getElementsByClassName("posting");
+    const postings = document.querySelectorAll<HTMLElement>(".posting:not(.linked-posting)");
     let momentAbove = null;
     for (let i = 0; i < postings.length; i++) {
-        const posting = postings.item(i) as HTMLElement;
+        const posting = postings.item(i);
         if (posting == null) {
             continue;
         }
@@ -347,9 +347,9 @@ function getMomentAbove(moment: number): number | null {
 }
 
 function getPostingAt(moment: number): HTMLElement | null {
-    const postings = document.getElementsByClassName("posting");
+    const postings = document.querySelectorAll<HTMLElement>(".posting:not(.linked-posting)");
     for (let i = 0; i < postings.length; i++) {
-        const posting = postings.item(i) as HTMLElement;
+        const posting = postings.item(i);
         if (postingMoment(posting) <= moment) {
             return posting;
         }
@@ -359,9 +359,9 @@ function getPostingAt(moment: number): HTMLElement | null {
 
 function getNotViewedMoment(): number | null {
     const top = getPageHeaderHeight();
-    const postings = document.getElementsByClassName("posting");
+    const postings = document.querySelectorAll<HTMLElement>(".posting:not(.linked-posting)");
     for (let i = 0; i < postings.length; i++) {
-        const posting = postings.item(i) as HTMLElement;
+        const posting = postings.item(i);
         if (posting == null) {
             continue;
         }
@@ -374,9 +374,9 @@ function getNotViewedMoment(): number | null {
 
 function markAllViewed(): void {
     const top = getPageHeaderHeight();
-    const postings = document.getElementsByClassName("posting");
+    const postings = document.querySelectorAll<HTMLElement>(".posting:not(.linked-posting)");
     for (let i = 0; i < postings.length; i++) {
-        const posting = postings.item(i) as HTMLElement;
+        const posting = postings.item(i);
         if (posting == null) {
             continue;
         }

@@ -2,9 +2,11 @@ import React, { act } from 'react';
 import { createRoot, Root } from 'react-dom/client';
 
 import { emptyFeed } from "state/feeds/empty";
+import { feedScrolled, feedStatusUpdate } from "state/feeds/actions";
 import { ExtStoryInfo, FeedState } from "state/feeds/state";
 import { ClientState } from "state/state";
 import FeedPage from "ui/feed/FeedPage";
+import { REL_HOME } from "util/rel-node-name";
 
 const mockDispatch = jest.fn();
 let mockState: ClientState;
@@ -76,6 +78,62 @@ describe("feed scrolling", () => {
         mockState = {...mockState};
         act(() => root.render(<FeedPage nodeName="alice" feedName="news" visible/>));
     }
+
+    function addLinkedPosting(): HTMLDivElement {
+        const linked = document.createElement("div");
+        linked.className = "linked-posting posting entry preview";
+        linked.getBoundingClientRect = () => ({top: 50, bottom: 150, height: 100}) as DOMRect;
+        container.querySelector('[data-moment="300"]')!.appendChild(linked);
+        return linked;
+    }
+
+    test("ignores linked postings when reporting the scroll moment", () => {
+        render();
+        addLinkedPosting();
+
+        act(() => window.dispatchEvent(new Event("scroll")));
+        act(() => jest.advanceTimersByTime(500));
+
+        expect(mockDispatch).toHaveBeenLastCalledWith(feedScrolled("alice", "news", 100));
+    });
+
+    test("ignores linked postings when scrolling to an anchor", () => {
+        render();
+        addLinkedPosting();
+        jest.mocked(window.scrollBy).mockClear();
+
+        feed.anchor = 100;
+        render();
+
+        expect(window.scrollBy).toHaveBeenCalledWith(0, 205);
+    });
+
+    test("ignores linked postings when reporting the not viewed moment", () => {
+        render();
+        const linked = addLinkedPosting();
+        linked.dataset.viewed = "false";
+        container.querySelector<HTMLElement>('[data-moment="100"]')!.dataset.viewed = "false";
+
+        render();
+        act(() => jest.advanceTimersByTime(1000));
+
+        expect(mockDispatch).toHaveBeenCalledWith(feedStatusUpdate(REL_HOME, "news", true, null, 100));
+    });
+
+    test("does not mark linked postings as viewed", () => {
+        render();
+        const linked = addLinkedPosting();
+        linked.classList.add("not-viewed");
+        linked.dataset.viewed = "false";
+        container.querySelector<HTMLElement>('[data-moment="100"]')!.dataset.viewed = "false";
+
+        render();
+        act(() => jest.advanceTimersByTime(1000));
+
+        expect(linked.dataset.viewed).toBe("false");
+        expect(linked.classList.contains("not-viewed")).toBe(true);
+        expect(container.querySelector<HTMLElement>('[data-moment="100"]')!.dataset.viewed).toBe("true");
+    });
 
     test("does not realign the current posting when a new story is prepended", () => {
         render();

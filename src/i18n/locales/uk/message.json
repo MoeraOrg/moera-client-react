@@ -955,6 +955,7 @@
       "posting_picked_hide-on-delete": "Не видаляти пости зі стрічки новин, коли видалено оригінал",
       "posting_picked_revision_lifetime": "Стирати старі версії завантажених постів через",
       "posting_published_notification_age": "Повідомляти підписників про публікацію поста, якщо дата його публікації припадає на останні",
+      "posting_referenced_hide-on-delete": "Не видаляти пости, на які є посилання, коли видалено оригінал",
       "posting_revealed_notification_age": "Повідомляти підписників про відкриття закритого поста, якщо він новіший, ніж",
       "posting_revision_lifetime": "Стирати старі версії постів через",
       "posting_subject_present": "Пости мають заголовки",

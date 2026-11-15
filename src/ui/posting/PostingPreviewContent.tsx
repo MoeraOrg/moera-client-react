@@ -24,7 +24,9 @@ export default function PostingPreviewContent({nodeName, posting}: Props) {
                     nodeName={nodeName}
                     media={posting.media}
                 />
-                <Jump href={ut`/post/${posting.id}`} className="btn btn-link read-more">{t("continue-reading")}</Jump>
+                <Jump nodeName={nodeName} href={ut`/post/${posting.id}`} className="btn btn-link read-more">
+                    {t("continue-reading")}
+                </Jump>
             </div>
         );
     } else {

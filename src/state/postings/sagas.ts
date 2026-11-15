@@ -205,6 +205,12 @@ async function postingDeleteSaga(action: WithContext<PostingDeleteAction>): Prom
     const feedReferences = posting?.feedReferences ?? [];
     const moment = getPostingMoment({feedReferences}, "timeline");
     try {
+        if (posting != null && posting.receiverName == null) {
+            await Node.deletePosting(action, nodeName, id);
+            dispatch(postingDeleted(id, [], nodeName, moment).causedBy(action));
+            return;
+        }
+
         if (story != null) {
             await Node.deleteStory(action, nodeName, story.id);
             if (feedName != null) {
@@ -212,17 +218,14 @@ async function postingDeleteSaga(action: WithContext<PostingDeleteAction>): Prom
             }
         }
 
-        const feeds = posting != null && posting.receiverName == null ? ["timeline", "news"] : ["timeline"];
-        for (const deletedFeedName of feeds) {
-            await Node.deleteFeedStories(action, nodeName, deletedFeedName, null, null, null, id, null, false);
-            for (const ref of feedReferences) {
-                if (ref.feedName === deletedFeedName && ref.storyId !== story?.id) {
-                    dispatch(storyDeleted(nodeName, {...ref, id: ref.storyId}, ref.feedName, id).causedBy(action));
-                }
+        await Node.deleteFeedStories(action, nodeName, "timeline", null, null, null, id, null, false);
+        for (const ref of feedReferences) {
+            if (ref.feedName === "timeline" && ref.storyId !== story?.id) {
+                dispatch(storyDeleted(nodeName, {...ref, id: ref.storyId}, ref.feedName, id).causedBy(action));
             }
         }
         const remainingReferences = feedReferences.filter(
-            ref => ref.storyId !== story?.id && !feeds.includes(ref.feedName)
+            ref => ref.feedName !== "timeline" && ref.storyId !== story?.id
         );
         dispatch(postingDeleted(id, remainingReferences, nodeName, moment).causedBy(action));
     } catch (e) {

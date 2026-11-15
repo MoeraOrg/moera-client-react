@@ -108,8 +108,7 @@ function PostingMenuItems({posting, feedName, story, detailed}: Props) {
     }
 
     const onDelete = () => {
-        const repostsLeft = (posting.feedReferences?.filter(r => r.feedName === "timeline") ?? []).length
-            - (feedName == null || feedName === "timeline" ? 1 : 0);
+        const repostsLeft = (posting.feedReferences?.filter(r => r.feedName === "timeline") ?? []).length - 1;
 
         const onDelete = (deleteAll: boolean) =>
             feedName == null || story == null || repostsLeft <= 0 || deleteAll
