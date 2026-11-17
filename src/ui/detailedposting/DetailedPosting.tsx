@@ -74,7 +74,7 @@ export default function DetailedPosting({feedName, story, posting, deleting}: Pr
             <div className="owner-line">
                 <PostingAvatar posting={posting}/>
                 <div className="owner-info">
-                    <PostingSource posting={posting}/>
+                    <PostingSource nodeName={REL_CURRENT} posting={posting}/>
                     <PostingOwner posting={posting}/>
                     {isSheriff &&
                         <PostingSheriffVisibility posting={posting}/>

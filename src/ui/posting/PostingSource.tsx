@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { PostingInfo } from "api";
@@ -8,21 +8,29 @@ import { Icon, msRepeat } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
 import { DelayedPopover } from "ui/control";
 import PostingSources from "ui/posting/PostingSources";
-import { ut } from "util/url";
+import { RelNodeName } from "util/rel-node-name";
+import { urlWithParameters, ut } from "util/url";
 import "./PostingSource.css";
 
 interface Props {
+    nodeName: RelNodeName | string;
     posting: PostingInfo;
 }
 
-export default function PostingSource({posting}: Props) {
+export default function PostingSource({nodeName, posting}: Props) {
     const openInNewWindow = useSelector((state: ClientState) => getSetting(state, "link.new-window") as boolean);
 
     const externalSourceUri = posting.externalSourceUri != null && posting.externalSourceUri.length > 0
         ? posting.externalSourceUri[0]
         : null;
 
-    if (posting.receiverName == null && externalSourceUri == null) {
+    const reposts = useMemo(
+        () => posting.feedReferences?.filter(r => r.feedName === "timeline").toSorted((a, b) => a.moment - b.moment)
+            ?? [],
+        [posting]
+    );
+
+    if (posting.receiverName == null && externalSourceUri == null && reposts.length <= 1) {
         return null;
     }
 
@@ -45,10 +53,18 @@ export default function PostingSource({posting}: Props) {
                         </a>
                     );
                 }
+                if (reposts.length > 1) {
+                    return (
+                        <Jump ref={ref} className="posting-source" nodeName={nodeName}
+                              href={urlWithParameters("/timeline", {before: reposts[0].moment})}>
+                            <Icon icon={msRepeat} size="1em"/>
+                        </Jump>
+                    );
+                }
                 return null;
             }
         }>
-            <PostingSources posting={posting}/>
+            <PostingSources nodeName={nodeName} posting={posting}/>
         </DelayedPopover>
     );
 }

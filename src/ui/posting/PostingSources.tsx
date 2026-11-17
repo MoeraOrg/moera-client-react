@@ -12,14 +12,18 @@ import Jump from "ui/navigation/Jump";
 import NodeName from "ui/nodename/NodeName";
 import { getFeedTitle } from "ui/feed/feeds";
 import { getNodeSourceIcon } from "util/node-source-icons";
-import { ut } from "util/url";
+import { RelNodeName } from "util/rel-node-name";
+import { urlWithParameters, ut } from "util/url";
 import "./PostingSources.css";
+import { format, formatISO, fromUnixTime } from "date-fns";
+import { tDistanceToNow } from "i18n/time";
 
 interface Props {
+    nodeName: RelNodeName | string;
     posting: PostingInfo;
 }
 
-export default function PostingSources({posting}: Props) {
+export default function PostingSources({nodeName, posting}: Props) {
     const openInNewWindow = useSelector((state: ClientState) => getSetting(state, "link.new-window") as boolean);
     const {t} = useTranslation();
 
@@ -30,6 +34,12 @@ export default function PostingSources({posting}: Props) {
 
     const list = useMemo(() => sourcesList(posting, t), [posting, t]);
 
+    const reposts = useMemo(
+        () => posting.feedReferences?.filter(r => r.feedName === "timeline").toSorted((a, b) => a.moment - b.moment)
+            ?? [],
+        [posting]
+    );
+
     return (
         <div className="posting-sources">
             <div className="title">{t("where-from")}</div>
@@ -37,7 +47,7 @@ export default function PostingSources({posting}: Props) {
                 <a className="source" href={externalSourceUri}
                    target={openInNewWindow ? "_blank" : undefined} rel="noreferrer">
                     {externalSourceIcon != null &&
-                        <span className="icon external-source">
+                        <span className="icon">
                             <Icon icon={externalSourceIcon} size="1.1em"/>
                         </span>
                     }
@@ -53,6 +63,20 @@ export default function PostingSources({posting}: Props) {
                               linked={false} popup={false}/>
                 </Jump>
             )}
+            {reposts
+                .map(repost => ({moment: repost.moment, publishedAt: fromUnixTime(repost.publishedAt)}))
+                .map(({moment, publishedAt}, index) =>
+                    <Jump nodeName={nodeName} href={urlWithParameters("/timeline", {before: moment})} className="source"
+                          key={index}>
+                        <span className="icon repost">
+                            <Icon icon={msRepeat} size="1.1em"/>
+                        </span>
+                        <time dateTime={formatISO(publishedAt)} title={tDistanceToNow(publishedAt, t)}>
+                            {format(publishedAt, "dd-MM-yyyy HH:mm")}
+                        </time>
+                    </Jump>
+                )
+            }
         </div>
     );
 }

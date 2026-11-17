@@ -69,7 +69,7 @@ export default function FeedPosting({nodeName, posting, feedName, story}: FeedPo
             <div className="owner-line">
                 <PostingAvatar posting={posting}/>
                 <div className="owner-info">
-                    <PostingSource posting={posting}/>
+                    <PostingSource nodeName={nodeName} posting={posting}/>
                     <PostingOwner posting={posting}/>
                     {isSheriff &&
                         <PostingSheriffVisibility posting={posting}/>
