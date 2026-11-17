@@ -56,30 +56,74 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
     const [atTop, setAtTop] = useState<boolean>(true);
     const [atBottom, setAtBottom] = useState<boolean>(false);
     const [topmostMoment, setTopmostMoment] = useState<number>(Number.MAX_SAFE_INTEGER);
-    const scrollPosition = useRef<{element: HTMLElement; top: number} | null>(null);
+    const feedRef = useRef<HTMLDivElement>(null);
+    const scrollPosition = useRef<{element: HTMLElement; top: number; scrollY: number} | null>(null);
 
     const {t} = useTranslation();
 
-    const rememberScrollPosition = useCallback(() => {
-        const moment = getTopmostMoment();
-        const element = getPostingAt(moment);
-        scrollPosition.current = element != null ? {element, top: element.getBoundingClientRect().top} : null;
+    const rememberScrollPosition = useCallback((posting?: HTMLElement) => {
+        const moment = getTopmostMoment(feedRef.current);
+        const element = posting ?? getPostingAt(feedRef.current, moment);
+        scrollPosition.current = element != null
+            ? {element, top: element.getBoundingClientRect().top, scrollY: window.scrollY}
+            : null;
         return moment;
     }, []);
 
+    const restoreScrollPosition = useCallback((prepended = false) => {
+        const position = scrollPosition.current;
+        if (
+            position == null || !position.element.isConnected || position.scrollY !== window.scrollY
+            || (!prepended && window.scrollY === 0)
+        ) {
+            // Adopt pending scrolling, and keep the page top fixed while its initial content appears.
+            rememberScrollPosition();
+            return;
+        }
+        let delta = position.element.getBoundingClientRect().top - position.top;
+        if (prepended && window.scrollY === 0) {
+            delta -= 25;
+        }
+        if (delta !== 0) {
+            window.scrollBy(0, delta);
+        }
+        scrollPosition.current = {
+            element: position.element,
+            top: position.element.getBoundingClientRect().top,
+            scrollY: window.scrollY
+        };
+    }, [rememberScrollPosition]);
+
     const onScroll = useCallback(() => {
-        setTopmostMoment(rememberScrollPosition());
+        // A queued event from our own correction must not discard a later layout change.
+        if (scrollPosition.current?.scrollY === window.scrollY) {
+            restoreScrollPosition();
+            setTopmostMoment(getTopmostMoment(feedRef.current));
+        } else {
+            setTopmostMoment(rememberScrollPosition());
+        }
+    }, [rememberScrollPosition, restoreScrollPosition]);
+
+    const onClickCapture = useCallback((event: React.MouseEvent) => {
+        if (event.target instanceof Element) {
+            const posting = event.target.closest<HTMLElement>(".posting:not(.linked-posting)");
+            if (posting != null && feedRef.current?.contains(posting)) {
+                // Expanding a posting must keep the clicked content in view, not pin the next posting below it.
+                rememberScrollPosition(posting);
+            }
+        }
     }, [rememberScrollPosition]);
 
     const beginning = stories.length > 0 ? stories[0].story.moment : null;
     const prevBeginning = useRef<number | null>(null);
+    const positionedAnchor = useRef<number | null>(null);
 
     const mostRecentMoment = before >= Number.MAX_SAFE_INTEGER
         ? beginning ?? Number.MAX_SAFE_INTEGER // we know what the last story in the feed is
         : Number.MAX_SAFE_INTEGER;             // we don't
 
     const scrollTo = useCallback((moment: number): void => {
-        const posting = getPostingAt(moment);
+        const posting = getPostingAt(feedRef.current, moment);
         if (posting != null) {
             if (moment >= mostRecentMoment) {
                 window.scrollTo(0, 0);
@@ -92,45 +136,71 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
         }
     }, [mostRecentMoment]);
 
-    useLayoutEffect(() => {
-        if (anchor == null) {
-            if (prevBeginning.current == null && beginning != null) {
-                scrollTo(Number.MAX_SAFE_INTEGER);
-            } else if (beginning !== prevBeginning.current) {
-                const position = scrollPosition.current;
-                if (position != null && position.element.isConnected) {
-                    let delta = position.element.getBoundingClientRect().top - position.top;
-                    if (window.scrollY === 0) {
-                        delta -= 25;
-                    }
-                    if (delta !== 0) {
-                        window.scrollBy(0, delta);
-                    }
-                }
-            }
-            prevBeginning.current = beginning;
+    const positionFeed = useCallback(() => {
+        if (!visible) {
+            scrollPosition.current = null;
             return;
         }
-        prevBeginning.current = beginning;
-
-        const sanchor = toSafeRange(anchor);
-        const sbefore = toSafeRange(before);
-        const safter = toSafeRange(after);
-        if (
-            sbefore > safter
-            && sanchor <= sbefore
-            && ((sanchor > safter) || (sanchor === safter && safter === Number.MIN_SAFE_INTEGER))
-        ) {
-            scrollTo(sanchor);
-            onScroll();
-            dispatch(feedScrolledToAnchor(nodeName, feedName));
+        if (anchor != null && anchor !== positionedAnchor.current) {
+            prevBeginning.current = beginning;
+            const sanchor = toSafeRange(anchor);
+            const sbefore = toSafeRange(before);
+            const safter = toSafeRange(after);
+            if (
+                sbefore > safter
+                && sanchor <= sbefore
+                && ((sanchor > safter) || (sanchor === safter && safter === Number.MIN_SAFE_INTEGER))
+            ) {
+                const posting = getPostingAt(feedRef.current, sanchor);
+                // Lazy stories may still be empty. ResizeObserver retries after their content appears.
+                if (posting != null && posting.getBoundingClientRect().height > 0) {
+                    scrollTo(sanchor);
+                    setTopmostMoment(rememberScrollPosition(posting));
+                    positionedAnchor.current = anchor;
+                    dispatch(feedScrolledToAnchor(nodeName, feedName));
+                }
+            }
+            return;
         }
-    }, [after, anchor, before, beginning, dispatch, feedName, nodeName, onScroll, scrollTo]);
+        if (anchor == null) {
+            positionedAnchor.current = null;
+        }
+        if (prevBeginning.current == null && beginning != null) {
+            scrollTo(Number.MAX_SAFE_INTEGER);
+            rememberScrollPosition();
+        } else {
+            restoreScrollPosition(beginning !== prevBeginning.current);
+        }
+        prevBeginning.current = beginning;
+    }, [
+        after, anchor, before, beginning, dispatch, feedName, nodeName, rememberScrollPosition,
+        restoreScrollPosition, scrollTo, visible
+    ]);
 
-    // Refresh after every commit, including updates that do not produce a scroll event.
+    // Compensate before refreshing the saved offset, even when the story list did not change.
     useLayoutEffect(() => {
-        rememberScrollPosition();
+        positionFeed();
     });
+
+    useLayoutEffect(() => {
+        const feed = feedRef.current;
+        if (!visible || feed == null || typeof ResizeObserver === "undefined") {
+            return;
+        }
+        let active = true;
+        const observer = new ResizeObserver(() => {
+            if (active) {
+                positionFeed();
+            }
+        });
+        observer.observe(feed);
+        // Individual observations also catch offset changes when the total feed height stays the same.
+        getPostingElements(feed).forEach(posting => observer.observe(posting));
+        return () => {
+            active = false;
+            observer.disconnect();
+        };
+    }, [positionFeed, stories, visible]);
 
     const loadFuture = useCallback(() => {
         if (loadingFuture || before >= Number.MAX_SAFE_INTEGER) {
@@ -175,13 +245,13 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
         }
     }, [dispatch, nodeName, postingToVisit]);
 
-    const [momentToView] = useDebounce(getNotViewedMoment(), 1000);
+    const [momentToView] = useDebounce(getNotViewedMoment(feedRef.current), 1000);
     useEffect(() => {
         if (!atHomeNode) {
             return;
         }
         if (momentToView != null) {
-            markAllViewed();
+            markAllViewed(feedRef.current);
             dispatch(feedStatusUpdate(REL_HOME, feedName, true, null, momentToView));
         }
     }, [atHomeNode, dispatch, feedName, momentToView]);
@@ -218,7 +288,7 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
         return total > 0 ? total : 0;
     }, [stories, topmostMoment, totalInFuture, totalPinned]);
 
-    const momentAbove = useMemo(() => getMomentAbove(topmostMoment), [topmostMoment]);
+    const momentAbove = useMemo(() => getMomentAbove(feedRef.current, topmostMoment), [topmostMoment]);
 
     if (
         stories.length === 0 && !loadingFuture && !loadingPast
@@ -230,7 +300,7 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
     }
 
     return (
-        <>
+        <div ref={feedRef} onClickCapture={onClickCapture}>
             <FeedTopBox>
                 <FeedTopButton
                     nodeName={nodeName}
@@ -278,7 +348,7 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
                     <div className="feed-after-end"/>
                 </>
             }
-        </>
+        </div>
     );
 }
 
@@ -314,14 +384,13 @@ function postingMoment(posting: HTMLElement | null): number {
     return posting?.dataset.moment != null ? parseInt(posting.dataset.moment) : 0;
 }
 
-function getTopmostMoment(): number {
+function getPostingElements(feed: HTMLElement | null): HTMLElement[] {
+    return Array.from(feed?.querySelectorAll<HTMLElement>(".posting:not(.linked-posting)") ?? []);
+}
+
+function getTopmostMoment(feed: HTMLElement | null): number {
     const top = getPageHeaderHeight();
-    const postings = document.querySelectorAll<HTMLElement>(".posting:not(.linked-posting)");
-    for (let i = 0; i < postings.length; i++) {
-        const posting = postings.item(i) as HTMLElement;
-        if (posting == null) {
-            continue;
-        }
+    for (const posting of getPostingElements(feed)) {
         if (posting.getBoundingClientRect().top >= top) {
             return postingMoment(posting);
         }
@@ -329,14 +398,9 @@ function getTopmostMoment(): number {
     return Number.MAX_SAFE_INTEGER;
 }
 
-function getMomentAbove(moment: number): number | null {
-    const postings = document.querySelectorAll<HTMLElement>(".posting:not(.linked-posting)");
+function getMomentAbove(feed: HTMLElement | null, moment: number): number | null {
     let momentAbove = null;
-    for (let i = 0; i < postings.length; i++) {
-        const posting = postings.item(i);
-        if (posting == null) {
-            continue;
-        }
+    for (const posting of getPostingElements(feed)) {
         const thisMoment = postingMoment(posting);
         if (thisMoment === moment) {
             break;
@@ -346,25 +410,19 @@ function getMomentAbove(moment: number): number | null {
     return momentAbove;
 }
 
-function getPostingAt(moment: number): HTMLElement | null {
-    const postings = document.querySelectorAll<HTMLElement>(".posting:not(.linked-posting)");
-    for (let i = 0; i < postings.length; i++) {
-        const posting = postings.item(i);
+function getPostingAt(feed: HTMLElement | null, moment: number): HTMLElement | null {
+    const postings = getPostingElements(feed);
+    for (const posting of postings) {
         if (postingMoment(posting) <= moment) {
             return posting;
         }
     }
-    return postings.length > 0 ? postings.item(postings.length - 1) as HTMLElement : null;
+    return postings.length > 0 ? postings[postings.length - 1] : null;
 }
 
-function getNotViewedMoment(): number | null {
+function getNotViewedMoment(feed: HTMLElement | null): number | null {
     const top = getPageHeaderHeight();
-    const postings = document.querySelectorAll<HTMLElement>(".posting:not(.linked-posting)");
-    for (let i = 0; i < postings.length; i++) {
-        const posting = postings.item(i);
-        if (posting == null) {
-            continue;
-        }
+    for (const posting of getPostingElements(feed)) {
         if (posting.getBoundingClientRect().top >= top && posting.dataset.viewed === "false") {
             return postingMoment(posting);
         }
@@ -372,14 +430,9 @@ function getNotViewedMoment(): number | null {
     return null;
 }
 
-function markAllViewed(): void {
+function markAllViewed(feed: HTMLElement | null): void {
     const top = getPageHeaderHeight();
-    const postings = document.querySelectorAll<HTMLElement>(".posting:not(.linked-posting)");
-    for (let i = 0; i < postings.length; i++) {
-        const posting = postings.item(i);
-        if (posting == null) {
-            continue;
-        }
+    for (const posting of getPostingElements(feed)) {
         if (posting.getBoundingClientRect().top >= top) {
             posting.dataset.viewed = "true";
             posting.classList.remove("not-viewed");
