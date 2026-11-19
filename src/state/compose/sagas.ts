@@ -21,8 +21,8 @@ import {
     composeDraftSelect,
     composeDraftUnset,
     ComposePostAction,
-    ComposePostedAsyncAction,
     composePostedAsync,
+    ComposePostedAsyncAction,
     composePostFailed,
     ComposePostingLoadAction,
     composePostingLoaded,
@@ -33,7 +33,12 @@ import {
     composeSharedTextSet,
     ComposeUpdateDraftDeleteAction
 } from "state/compose/actions";
-import { getComposeDraftId, getComposePostingId, isComposePostingEditing } from "state/compose/selectors";
+import {
+    getComposeDraftId,
+    getComposeFormId,
+    getComposePostingId,
+    isComposePostingEditing
+} from "state/compose/selectors";
 import { saga } from "state/saga";
 import { WithContext } from "state/action-types";
 import { dispatch, select } from "state/store-sagas";
@@ -49,10 +54,10 @@ import { REL_CURRENT, REL_HOME } from "util/rel-node-name";
 import { ut } from "util/url";
 
 export default [
-    saga("COMPOSE_POSTING_LOAD", "", composePostingLoadSaga),
+    saga("COMPOSE_POSTING_LOAD", null, composePostingLoadSaga),
     saga("COMPOSE_POST", null, composePostSaga),
     saga("COMPOSE_POSTED_ASYNC", "", composePostedAsyncSaga),
-    saga("COMPOSE_DRAFT_LOAD", "", composeDraftLoadSaga),
+    saga("COMPOSE_DRAFT_LOAD", null, composeDraftLoadSaga),
     saga("COMPOSE_DRAFT_SAVE", null, composeDraftSaveSaga),
     saga("COMPOSE_DRAFT_DELETE", "", composeDraftDeleteSaga),
     saga("COMPOSE_DRAFT_LIST_LOAD", "", composeDraftListLoadSaga),
@@ -63,8 +68,11 @@ export default [
 ];
 
 async function composePostingLoadSaga(action: WithContext<ComposePostingLoadAction>): Promise<void> {
-    await mutuallyIntroduced();
     const id = select(getComposePostingId);
+    await mutuallyIntroduced();
+    if (select(getComposePostingId) !== id) {
+        return;
+    }
     if (action.context.ownerName == null || id == null) {
         dispatch(composePostingLoadFailed().causedBy(action));
         return;
@@ -72,12 +80,20 @@ async function composePostingLoadSaga(action: WithContext<ComposePostingLoadActi
 
     try {
         const drafts = await Node.getDrafts(action, REL_HOME, "posting-update" as const, action.context.ownerName, id);
+        if (select(getComposePostingId) !== id) {
+            return;
+        }
         if (drafts.length > 0) {
             dispatch(composeDraftLoaded(drafts[0]).causedBy(action));
         }
         const posting = await Node.getPosting(action, REL_CURRENT, id, true, ["posting.not-found"]);
-        dispatch(composePostingLoaded(posting).causedBy(action));
+        if (select(getComposePostingId) === id) {
+            dispatch(composePostingLoaded(posting).causedBy(action));
+        }
     } catch (e) {
+        if (select(getComposePostingId) !== id) {
+            return;
+        }
         dispatch(composePostingLoadFailed().causedBy(action));
         dispatch(errorThrown(e));
     }
@@ -145,8 +161,11 @@ async function composePostedAsyncSaga(action: WithContext<ComposePostedAsyncActi
 }
 
 async function composeDraftLoadSaga(action: WithContext<ComposeDraftLoadAction>): Promise<void> {
-    await mutuallyIntroduced();
     const id = select(getComposeDraftId);
+    await mutuallyIntroduced();
+    if (select(getComposeDraftId) !== id) {
+        return;
+    }
     if (id == null) {
         dispatch(composeDraftLoadFailed().causedBy(action));
         return;
@@ -154,10 +173,15 @@ async function composeDraftLoadSaga(action: WithContext<ComposeDraftLoadAction>)
 
     try {
         const draft = await Node.getDraft(action, REL_HOME, id, ["draft.not-found"]);
-        dispatch(composeDraftLoaded(draft).causedBy(action));
+        if (select(getComposeDraftId) === id) {
+            dispatch(composeDraftLoaded(draft).causedBy(action));
+        }
         dispatch(composeDraftListItemSet(id, draft).causedBy(action));
         loadRemoteMediaInDraftAttachments(action, draft.media);
     } catch (e) {
+        if (select(getComposeDraftId) !== id) {
+            return;
+        }
         dispatch(composeDraftLoadFailed().causedBy(action));
         if (e instanceof NodeApiError) {
             dispatch(flashBox(i18n.t("draft-not-found")).causedBy(action));
@@ -170,6 +194,7 @@ async function composeDraftLoadSaga(action: WithContext<ComposeDraftLoadAction>)
 
 async function composeDraftSaveSaga(action: WithContext<ComposeDraftSaveAction>): Promise<void> {
     const {draftId, draftText} = action.payload;
+    const formId = select(getComposeFormId);
 
     try {
         let draft;
@@ -181,9 +206,13 @@ async function composeDraftSaveSaga(action: WithContext<ComposeDraftSaveAction>)
         if (draftText.receiverPostingId == null) {
             dispatch(composeDraftListItemSet(draft.id, draft).causedBy(action));
         }
-        dispatch(composeDraftSaved(draftText.receiverPostingId ?? null, draft).causedBy(action));
+        if (select(getComposeFormId) === formId) {
+            dispatch(composeDraftSaved(draftText.receiverPostingId ?? null, draft).causedBy(action));
+        }
     } catch (e) {
-        dispatch(composeDraftSaveFailed().causedBy(action));
+        if (select(getComposeFormId) === formId) {
+            dispatch(composeDraftSaveFailed().causedBy(action));
+        }
         if (!(e instanceof NodeApiError)) {
             dispatch(errorThrown(e));
         }

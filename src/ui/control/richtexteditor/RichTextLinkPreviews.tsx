@@ -41,19 +41,20 @@ export interface RichTextLinkPreviewsValue {
 }
 
 export function bodyToLinkPreviews(
-    body: string | Scripture, linkPreviewsInfo: LinkPreview[], media: MediaWithCaption[]
+    body: string | Scripture, savedPreviews: LinkPreview[] | null, media: MediaWithCaption[]
 ): [RichTextLinkPreviewsValue, string[], MediaWithCaption[]] {
     const bodyUrls = typeof body !== "string" ? scriptureExtractUrls(body) : extractUrls(body);
-    const linkPreviewsUrls = new Set(linkPreviewsInfo.map(lp => lp.url));
-    const linkPreviewsImages = new Set(
-        linkPreviewsInfo.map(lp => lp.imageHash).filter(notNull)
-    );
     const linkPreviewsStatus: RichTextLinkPreviewsStatus = {};
-    for (const url of bodyUrls) {
-        linkPreviewsStatus[url] = linkPreviewsUrls.has(url) ? "edited" : "deleted";
+    if (savedPreviews != null) {
+        const linkPreviewsUrls = new Set(savedPreviews.map(lp => lp.url));
+        for (const url of bodyUrls) {
+            linkPreviewsStatus[url] = linkPreviewsUrls.has(url) ? "edited" : "deleted";
+        }
     }
+    const previews = savedPreviews ?? [];
+    const linkPreviewsImages = new Set(previews.map(lp => lp.imageHash).filter(notNull));
     const linkPreviews = {
-        previews: linkPreviewsInfo,
+        previews,
         media: media.filter(mf => linkPreviewsImages.has(mf.hash ?? "")),
         status: linkPreviewsStatus
     };

@@ -7,7 +7,7 @@ import { ClientState } from "state/state";
 import { getHomeOwnerGender, getHomeOwnerName, getHomeOwnerSourceUri } from "state/home/selectors";
 import { getOwnerName } from "state/node/selectors";
 import { composeDraftListItemDelete, composeDraftSave, composeUpdateDraftDelete } from "state/compose/actions";
-import { getPostingFeatures } from "state/compose/selectors";
+import { getComposeDraftId, getComposePostingId, getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
 import { useDispatcher } from "ui/hook";
 import { Icon, msCloudDone, msCloudUpload } from "ui/material-symbols";
@@ -50,9 +50,9 @@ export default function ComposeDraftSaver() {
     const gender = useSelector(getHomeOwnerGender);
     const ownerSourceUri = useSelector(getHomeOwnerSourceUri);
     const features = useSelector(getPostingFeatures);
-    const postingId = useSelector((state: ClientState) => state.compose.postingId);
+    const postingId = useSelector(getComposePostingId);
     const posting = useSelector((state: ClientState) => state.compose.posting);
-    const draftId = useSelector((state: ClientState) => state.compose.draftId);
+    const draftId = useSelector(getComposeDraftId);
     const smileysEnabled = useSelector((state: ClientState) =>
         getSetting(state, "posting.smileys.enabled") as boolean
     );

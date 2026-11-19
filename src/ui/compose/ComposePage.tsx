@@ -15,7 +15,13 @@ import {
 import { getSetting } from "state/settings/selectors";
 import { getOwnerName, isAtHomeNode } from "state/node/selectors";
 import { composeConflictClose } from "state/compose/actions";
-import { getPostingFeatures, isComposeReady } from "state/compose/selectors";
+import {
+    getComposeDraftId,
+    getComposeFormId,
+    getComposePostingId,
+    getPostingFeatures,
+    isComposeReady
+} from "state/compose/selectors";
 import { useDispatcher } from "ui/hook";
 import {
     areImagesUploaded,
@@ -50,9 +56,9 @@ function ComposePageInner(props: Props) {
     } = props;
 
     const ready = useSelector(isComposeReady);
-    const draftId = useSelector((state: ClientState) => state.compose.draftId);
+    const draftId = useSelector(getComposeDraftId);
     const draft = useSelector((state: ClientState) => state.compose.draft);
-    const formId = useSelector((state: ClientState) => state.compose.formId);
+    const formId = useSelector(getComposeFormId);
     const loadingContent = useSelector((state: ClientState) =>
         state.compose.loadingPosting || state.compose.loadingDraft
     );
@@ -165,7 +171,7 @@ export default function ComposePage() {
     const fullNameDefault = useSelector(getHomeOwnerFullName);
     const ownerSourceUriDefault = useSelector(getHomeOwnerSourceUri);
     const avatarDefault = useSelector(getHomeOwnerAvatar);
-    const postingId = useSelector((state: ClientState) => state.compose.postingId);
+    const postingId = useSelector(getComposePostingId);
     const features = useSelector(getPostingFeatures);
     const posting = useSelector((state: ClientState) => state.compose.posting);
     const draft = useSelector((state: ClientState) => state.compose.draft);

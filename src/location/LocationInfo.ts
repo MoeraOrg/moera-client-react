@@ -57,12 +57,8 @@ export class LocationInfo {
     withQuery(query: string | null): LocationInfo {
         const info = this.clone();
         if (query) {
-            if (query.startsWith("?")) {
-                query = query.substring(1);
-            }
-            query.split("&").forEach(param => {
-                const [name, value] = param.split("=");
-                info.parameters[name] = decodeURIComponent(value);
+            new URLSearchParams(query).forEach((value, name) => {
+                info.parameters[name] = value;
             });
         }
         return info;

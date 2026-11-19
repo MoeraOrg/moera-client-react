@@ -73,16 +73,23 @@ function postingToDraftPosting(posting: PostingInfo): DraftPostingInfo {
 
 export default (state: ComposeState = initialState, action: ClientAction): ComposeState => {
     switch (action.type) {
-        case "GO_TO_PAGE":
-            if (action.payload.page === "compose") {
-                return {
-                    ...state,
-                    ...emptyPosting,
-                    postingId: action.payload.details.id,
-                    draftId: action.payload.details.draftId
-                }
+        case "GO_TO_PAGE": {
+            if (action.payload.page !== "compose") {
+                return state;
             }
-            return state;
+            const {id, draftId, text, textType} = action.payload.details;
+            const istate = immutable.wrap(state)
+                .assign("", emptyPosting)
+                .set("postingId", id)
+                .set("draftId", draftId)
+                .set("formId", state.formId + 1);
+            if (id == null && draftId == null && text != null) {
+                istate.set("sharedText", text)
+                    .set("sharedTextType", textType)
+                    .set("sharedTextLoaded", true);
+            }
+            return istate.value();
+        }
 
         case "COMPOSE_POSTING_LOAD":
             return {

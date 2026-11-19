@@ -1,8 +1,20 @@
-import { PostingInfo } from "api";
+import { act } from 'react';
+import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { combineReducers, createStore } from 'redux';
+import { Formik } from 'formik';
+
+import { PostingInfo, SourceFormat } from "api";
+import type { SharedTextType } from "api/android/types";
+import { transform } from "location/compose";
+import { LocationInfo } from "location/LocationInfo";
+import composeReducer from "state/compose/reducer";
 import { DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
+import linkPreviewsReducer from "state/linkpreviews/reducer";
 import {
     composePageLogic, ComposePageProps, isPostingTextChanged, valuesToPostingText
 } from "ui/compose/posting-compose";
+import RichTextLinkPreviews from "ui/control/richtexteditor/RichTextLinkPreviews";
 
 jest.mock("api", () => ({
     CLIENT_SETTINGS_PREFIX: "client.mercy.",
@@ -12,12 +24,15 @@ jest.mock("state/store-sagas", () => ({dispatch: jest.fn()}));
 jest.mock("ui/browser", () => ({}));
 jest.mock("i18n", () => ({}));
 jest.mock("ui/control", () => ({}));
-jest.mock("ui/hook", () => ({}));
-jest.mock("ui/entry/EntryLinkPreview", () => ({}));
-jest.mock("ui/entry/EntryLinkSelector", () => ({}));
-jest.mock("sanitize-html", () => Object.assign(jest.fn(), {
-    defaults: {allowedTags: [], allowedAttributes: {}, allowedSchemes: []}
-}));
+jest.mock("ui/hook", () => jest.requireActual("ui/hook/redux"));
+jest.mock("state/home/selectors", () => {
+    const context = {ownerNameOrUrl: "alice", homeOwnerNameOrUrl: "alice", searchName: "search"};
+    return {getRelNodeNameContext: () => context};
+});
+jest.mock("state/settings/selectors", () => ({getSetting: () => 2}));
+jest.mock("ui/entry/EntryLinkPreview", () => ({EntryLinkPreview: () => null}));
+jest.mock("ui/entry/EntryLinkSelector", () => () => null);
+jest.mock("ui/entry/LinkedPosting", () => () => null);
 jest.mock("mime", () => ({getExtension: jest.fn(), getType: jest.fn()}));
 jest.mock("ui/control/richtexteditor", () => ({
     ...jest.requireActual("ui/control/richtexteditor/rich-text-value"),
@@ -35,6 +50,49 @@ const props: ComposePageProps = {
     reactionsVisibleDefault: true, reactionTotalsVisibleDefault: true,
     sharingsVisibleDefault: false, totalSharingsVisibleDefault: false, sourceFormatDefault: "plain-text"
 };
+
+describe("link previews on opening the composer", () => {
+    const url = "https://example.org/story?a=1&b=2";
+    const text = `Read ${url}`;
+    const html = '<a href="https://example.org/story?a=1&amp;b=2">Read this</a>';
+
+    beforeAll(() => Object.assign(globalThis, {IS_REACT_ACT_ENVIRONMENT: true}));
+    afterAll(() => Object.assign(globalThis, {IS_REACT_ACT_ENVIRONMENT: false}));
+
+    test.each<[SourceFormat, SharedTextType, string, string]>([
+        ["plain-text", "text", text, text],
+        ["markdown", "text", text, text],
+        ["html/visual", "text", text, "Read"],
+        ["html/visual", "html", html, "Read this"]
+    ])("loads a preview on mount in %s for a %s URL parameter", async (
+        sourceFormatDefault: SourceFormat, type: SharedTextType, text: string, expectedBody: string
+    ) => {
+        const query = new URLSearchParams({text, type}).toString();
+        const [navigation] = transform(new LocationInfo(), LocationInfo.fromUrl("/compose", query, null));
+        const {sharedText, sharedTextType} = composeReducer(undefined, navigation);
+        const values = composePageLogic.mapPropsToValues({...props, sourceFormatDefault, sharedTextType, sharedText});
+        expect(values.body.text).toContain(expectedBody);
+        const store = createStore(combineReducers({linkPreviews: linkPreviewsReducer}));
+        const root = createRoot(document.createElement("div"));
+        try {
+            await act(async () => root.render(
+                <Provider store={store}>
+                    <Formik initialValues={values} onSubmit={() => {}}>
+                        <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" nodeName="alice"/>
+                    </Formik>
+                </Provider>
+            ));
+            expect(store.getState().linkPreviews).toEqual({[url]: expect.objectContaining({loading: true})});
+        } finally {
+            act(() => root.unmount());
+        }
+    });
+
+    test.each(["draft", "posting"])("keeps a dismissed preview hidden when opening a %s", (source: string) => {
+        const values = composePageLogic.mapPropsToValues({...props, [source]: {bodySrc: {text}}});
+        expect(values.linkPreviews.status[url]).toBe("deleted");
+    });
+});
 
 describe("compose sharing permissions", () => {
     test.each<[boolean, boolean, string, string]>([

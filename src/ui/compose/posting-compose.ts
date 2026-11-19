@@ -23,7 +23,8 @@ import { settingsUpdate } from "state/settings/actions";
 import {
     attachmentsToMedia,
     bodyToLinkPreviews,
-    draftAttachmentsToMedia, mediaIsCompressionPending,
+    draftAttachmentsToMedia,
+    mediaIsCompressionPending,
     mediaToAttachment,
     mediaToCaptions,
     mediaToCaptionsText,
@@ -327,22 +328,11 @@ export const composePageLogic = {
                 props.homeOwnerName
             )
             : attachmentsToMedia(props.posting?.media);
-        const bodyFormat = props.draft != null
-            ? props.draft.bodySrcFormat ?? "markdown"
-            : props.posting != null ? props.posting.bodySrcFormat ?? "markdown" : props.sourceFormatDefault;
-        let body: string | Scripture;
-        body = props.draft != null
-            ? props.draft.bodySrc?.text ?? ""
-            : props.posting != null
-                ? props.posting.bodySrc?.text ?? ""
-                : props.sharedText != null ? getSharedText(props, bodyFormat) : "";
-        if (bodyFormat === "html/visual") {
-            body = normalizeDocument(htmlToScripture(body, false, media));
-        }
-
-        const linkPreviewsInfo = props.draft != null
-            ? props.draft.bodySrc?.linkPreviews ?? []
-            : props.posting != null ? props.posting.bodySrc?.linkPreviews ?? [] : [];
+        const entry = props.draft ?? props.posting;
+        const bodyFormat = entry != null ? entry.bodySrcFormat ?? "markdown" : props.sourceFormatDefault;
+        const text = entry != null ? entry.bodySrc?.text ?? "" : getSharedText(props, bodyFormat);
+        const body = bodyFormat === "html/visual" ? normalizeDocument(htmlToScripture(text, false, media)) : text;
+        const linkPreviewsInfo = entry != null ? entry.bodySrc?.linkPreviews ?? [] : null;
         let linkPreviews, bodyUrls;
         [linkPreviews, bodyUrls, media] = bodyToLinkPreviews(body, linkPreviewsInfo, media);
 

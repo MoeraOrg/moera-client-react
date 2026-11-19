@@ -8,6 +8,11 @@ pl: udostępnić
 ru: поделиться
 uk: поділитися
 
+en: share & write
+pl: udostępnić i napisać
+ru: поделиться и написать
+uk: поділитися й написати
+
 en: mention
 pl: wspomnieć
 ru: упомянуть

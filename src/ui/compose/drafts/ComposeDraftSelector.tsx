@@ -5,7 +5,7 @@ import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { composeDraftListItemDelete, composeDraftSelect } from "state/compose/actions";
-import { isComposeReady } from "state/compose/selectors";
+import { getComposeDraftId, getComposePostingId, isComposeReady } from "state/compose/selectors";
 import { useButtonPopper, useDispatcher } from "ui/hook";
 import { Button, Loading, LoadingInline } from "ui/control";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
@@ -15,8 +15,8 @@ import "./ComposeDraftSelector.css";
 
 export default function ComposeDraftSelector() {
     const ready = useSelector(isComposeReady);
-    const postingId = useSelector((state: ClientState) => state.compose.postingId);
-    const draftId = useSelector((state: ClientState) => state.compose.draftId);
+    const postingId = useSelector(getComposePostingId);
+    const draftId = useSelector(getComposeDraftId);
     const draftList = useSelector((state: ClientState) => state.compose.draftList);
     const loadingDraftList = useSelector((state: ClientState) => state.compose.loadingDraftList);
     const loadedDraftList = useSelector((state: ClientState) => state.compose.loadedDraftList);

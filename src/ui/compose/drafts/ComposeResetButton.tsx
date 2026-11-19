@@ -2,10 +2,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import { composeDraftListItemDelete, composeUpdateDraftDelete } from "state/compose/actions";
-import { isComposeReady } from "state/compose/selectors";
+import { getComposeDraftId, getComposePostingId, isComposeReady } from "state/compose/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { useDispatcher } from "ui/hook";
 import { Icon, msDelete, msUndo } from "ui/material-symbols";
@@ -15,8 +14,8 @@ import "./ComposeResetButton.css";
 
 export default function ComposeResetButton() {
     const ready = useSelector(isComposeReady);
-    const postingId = useSelector((state: ClientState) => state.compose.postingId);
-    const draftId = useSelector((state: ClientState) => state.compose.draftId);
+    const postingId = useSelector(getComposePostingId);
+    const draftId = useSelector(getComposeDraftId);
     const {focus} = useRichTextEditorCommands();
     const dispatch = useDispatcher();
     const {t} = useTranslation();

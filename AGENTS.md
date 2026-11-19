@@ -9,6 +9,8 @@
 4. Do not use `enum` or `namespace`. Represent string-valued enumerations as
    string literal union types, adding new values with `|`. For example:
    `type NodeSourceUriService = "telegram" | "rss" | "livejournal"`.
+5. When adding an import or dependency, consider how it and its transitive dependencies affect bundle size.
+   Reuse existing lazy-loading entry points. Load large optional libraries with `import()` when the feature needs them.
 
 # React
 

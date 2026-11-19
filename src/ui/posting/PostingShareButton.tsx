@@ -1,14 +1,19 @@
 import React from 'react';
-
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { PrincipalValue } from "api";
+import { ClientState } from "state/state";
+import { getNamingNameNodeUri } from "state/naming/selectors";
 import { openRepostDialog } from "state/repostdialog/actions";
 import { shareDialogPrepare } from "state/sharedialog/actions";
 import { postingCopyLink } from "state/postings/actions";
 import { useDispatcher } from "ui/hook";
-import { Icon, msLink, msMoreHoriz, msRepeat, msShare } from "ui/material-symbols";
+import { Icon, msEdit, msLink, msMoreHoriz, msRepeat, msShare } from "ui/material-symbols";
 import { DropdownMenu } from "ui/control";
+import { ht } from "util/html";
+import { REL_HOME } from "util/rel-node-name";
+import { universalLocation } from "util/universal-url";
 import { ut } from "util/url";
 
 interface Props {
@@ -39,6 +44,9 @@ export default function PostingShareButton({
     const fullName = postingReceiverName == null ? postingOwnerFullName : postingReceiverFullName;
     const id = postingReceiverPostingId ?? postingId;
     const href = ut`/post/${id}`;
+    const nodeUri = useSelector((state: ClientState) => getNamingNameNodeUri(state, nodeName));
+    const url = universalLocation(null, nodeName, nodeUri, href);
+    const sharedText = ht`<p></p><p><a href="${url}">${url}</a></p>`;
 
     const onCopyLink = () => dispatch(postingCopyLink(id, nodeName));
 
@@ -65,6 +73,13 @@ export default function PostingShareButton({
                 nodeName,
                 href,
                 onClick: onRepost,
+                show: true
+            },
+            {
+                icon: msEdit,
+                title: t("share-and-write"),
+                nodeName: REL_HOME,
+                href: ut`/compose?type=html&text=${sharedText}`,
                 show: true
             },
             {

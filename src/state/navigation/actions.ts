@@ -1,5 +1,6 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { Scope } from "api";
+import type { SharedTextType } from "api/android/types";
 import { ClientState } from "state/state";
 import { Page } from "state/navigation/pages";
 import { SearchFilter, SearchTab } from "state/search/state";
@@ -47,9 +48,16 @@ export const goToPosting = (
 export type GoToComposeAction = GoToPageAction<"compose", {
     id: string | null;
     draftId: string | null;
+    text: string | null;
+    textType: SharedTextType;
 }>;
-export const goToCompose = (id: string | null = null, draftId: string | null = null): GoToComposeAction =>
-    goToPage("compose", {id, draftId}, true);
+export const goToCompose = (
+    id: string | null = null,
+    draftId: string | null = null,
+    text: string | null = null,
+    textType: SharedTextType = "text"
+): GoToComposeAction =>
+    goToPage("compose", {id, draftId, text, textType}, true);
 
 export type GoToSettingsAction = GoToPageAction<"settings", {}>;
 export const goToSettings = (): GoToSettingsAction =>

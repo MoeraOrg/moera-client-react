@@ -38,6 +38,10 @@ export function getComposeDraftId(state: ClientState): string | null {
     return state.compose.draftId;
 }
 
+export function getComposeFormId(state: ClientState): number {
+    return state.compose.formId;
+}
+
 export function isComposeDraftListToBeLoaded(state: ClientState): boolean {
     return isConnectedToHome(state) && state.compose.postingId == null && !state.compose.loadedDraftList
         && !state.compose.loadingDraftList;
