@@ -105,7 +105,7 @@ describe("posting menu deletion", () => {
         });
     });
 
-    test("preserves timeline publications when deleting a news story without confirmation", () => {
+    test("requests posting deletion from news without confirmation when there is one timeline publication", () => {
         const newsStory = {id: "news-story", publishedAt: 400, moment: 400};
         posting.feedReferences = [
             {feedName: "timeline", storyId: "original", publishedAt: 100, moment: 100},
@@ -113,8 +113,8 @@ describe("posting menu deletion", () => {
         ];
 
         expect(clickDelete("news", newsStory)).toMatchObject({
-            type: "STORY_DELETE",
-            payload: {nodeName: REL_CURRENT, story: newsStory, feedName: "news", postingId: "post-1"}
+            type: "POSTING_DELETE",
+            payload: {id: "post-1", nodeName: REL_CURRENT, feedName: "news", story: newsStory}
         });
     });
 

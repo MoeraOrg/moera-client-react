@@ -10,8 +10,8 @@ import { goToTimeline } from "state/navigation/actions";
 import { REL_CURRENT } from "util/rel-node-name";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
-    const before = dstInfo.parameters["before"];
-    return [goToTimeline(before != null ? parseInt(before) : null)];
+    const before = parseInt(dstInfo.parameters["before"] ?? "");
+    return [goToTimeline(Number.isFinite(before) ? before : null)];
 }
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {

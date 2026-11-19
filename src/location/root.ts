@@ -1,4 +1,3 @@
-import { goToTimeline } from "state/navigation/actions";
 import {
     isAtComplaintsPage,
     isAtComposePage,
@@ -44,10 +43,7 @@ import { ClientState } from "state/state";
 import { isLightboxShown } from "state/lightbox/selectors";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
-    if (dstInfo.directories.length === 0) {
-        return [goToTimeline()];
-    }
-    if (dstInfo.directories[0] === "timeline") {
+    if (dstInfo.directories.length === 0 || dstInfo.directories[0] === "timeline") {
         return timelineTransform(srcInfo, dstInfo);
     }
     if (dstInfo.directories[0] === "post") {
