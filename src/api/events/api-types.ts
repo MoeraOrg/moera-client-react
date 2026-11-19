@@ -228,6 +228,11 @@ export interface PostingReactionDeletedEvent extends BaseEvent<"POSTING_REACTION
     reaction?: ReactionInfo | null;
 }
 
+export interface PostingRecommendationUpdatedEvent extends BaseEvent<"POSTING_RECOMMENDATION_UPDATED"> {
+    id: string;
+    recommended: boolean;
+}
+
 export interface PostingRestoredEvent extends BaseEvent<"POSTING_RESTORED"> {
     id: string;
 }

@@ -75,6 +75,16 @@ function updatePostingState(
     }
 }
 
+function immutableSetRecommendation(
+    state: PostingsState, nodeName: string, id: string, recommended: boolean
+): PostingsState {
+    const posting = state[nodeName]?.[id]?.posting;
+    if (posting == null || posting.recommended === recommended) {
+        return state;
+    }
+    return immutable.set(state, [nodeName, id, "posting", "recommended"], recommended);
+}
+
 function immutableSetSubscriptionId(
     state: PostingsState, nodeName: string, id: string, type: SubscriptionType, subscriptionId: string | null
 ) {
@@ -362,6 +372,21 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                 }
             }
             return istate.value();
+        }
+
+        case "EVENT_HOME_POSTING_RECOMMENDATION_UPDATED": {
+            const {sourceNode, id, recommended} = action.payload;
+            return immutableSetRecommendation(state, sourceNode ?? action.context.homeOwnerNameOrUrl, id, recommended);
+        }
+
+        case "EVENT_NODE_POSTING_RECOMMENDATION_UPDATED": {
+            const {sourceNode, id, recommended} = action.payload;
+            return immutableSetRecommendation(state, sourceNode ?? action.context.ownerNameOrUrl, id, recommended);
+        }
+
+        case "EVENT_RECEIVER_POSTING_RECOMMENDATION_UPDATED": {
+            const {sourceNode, id, recommended} = action.payload;
+            return sourceNode == null ? state : immutableSetRecommendation(state, sourceNode, id, recommended);
         }
 
         case "EVENT_HOME_POSTING_VIEWED": {

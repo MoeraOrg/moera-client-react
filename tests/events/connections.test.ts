@@ -278,6 +278,19 @@ test("preserves self-event filtering for existing and newly created shared conne
     ]);
 });
 
+test("delivers a cleared recommendation to the client that subscribed", async () => {
+    await setup([connection("HOME", "reader"), connection("NODE", "author")]);
+    globalThis.onmessage!({data: eventsSetClientIdMessage("client-1")} as MessageEvent);
+
+    subscribe(clients[0])({type: "POSTING_RECOMMENDATION_UPDATED", id: "post-1", recommended: false}, 1, "client-1");
+
+    expect(globalThis.postMessage).toHaveBeenCalledTimes(1);
+    expect(globalThis.postMessage).toHaveBeenCalledWith(expect.objectContaining({
+        type: "EVENT_HOME_POSTING_RECOMMENDATION_UPDATED",
+        payload: {sourceNode: "reader", id: "post-1", recommended: false}
+    }));
+});
+
 test("wakes up only through a connection that currently serves HOME", async () => {
     await setup([connection("NODE")]);
     const send = subscribe(clients[0]);

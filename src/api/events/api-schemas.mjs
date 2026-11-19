@@ -875,6 +875,27 @@ export const EVENT_SCHEMAS = {
             additionalProperties: false
         },
 
+        PostingRecommendationUpdatedEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+                "id": {
+                    type: "string"
+                },
+                "recommended": {
+                    type: "boolean"
+                },
+            },
+            required: [
+                "type",
+                "id",
+                "recommended",
+            ],
+            additionalProperties: false
+        },
+
         PostingRestoredEvent: {
             type: "object",
             properties: {

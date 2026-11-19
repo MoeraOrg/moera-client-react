@@ -1,7 +1,7 @@
 import { describe, expect, jest, test } from '@jest/globals';
 
 import { PostingInfo, ReactionTotalsInfo, StoryInfo } from "api";
-import { eventAction } from "api/events";
+import { eventAction, EventSource } from "api/events";
 import { ClientAction } from "state/action";
 import { ActionContext } from "state/action-types";
 import { isDetailedPostingToBeLoaded } from "state/detailedposting/selectors";
@@ -58,6 +58,12 @@ interface PostingUpdate {
 }
 
 const updates: PostingUpdate[] = [
+    {
+        action: eventAction({
+            type: "POSTING_RECOMMENDATION_UPDATED" as const, sourceNode: "author", id: "post-1", recommended: false
+        }, "HOME"),
+        changes: {recommended: false}
+    },
     {
         action: postingOperationsUpdated("post-1", REL_CURRENT, {view: "public"}),
         changes: {operations: {view: "public"}}
@@ -130,6 +136,42 @@ describe.each(updates)("posting partial update $action.type", ({action, changes}
 });
 
 describe("posting updates with partially populated caches", () => {
+    test.each<[EventSource, string | null, string, boolean]>([
+        ["HOME", "reader", "reader", false],
+        ["HOME", null, "reader", false],
+        ["NODE", "reader", "reader", false],
+        ["NODE", null, "author", true],
+        ["RECEIVER", "peer", "peer", true]
+    ])("applies the %s recommendation from %s to %s", (source, sourceNode, node, flag) => {
+        const previous = {...posting, recommended: !flag};
+        const otherNode = node === "author" ? "reader" : "author";
+        const state: PostingsState = {
+            [node]: {"post-1": {posting: previous, visitRecorded: true}},
+            [otherNode]: {"post-1": {posting: previous}}
+        };
+        const action = {
+            ...eventAction({
+                type: "POSTING_RECOMMENDATION_UPDATED" as const, sourceNode, id: "post-1", recommended: flag
+            }, source),
+            context: {...context, homeOwnerNameOrUrl: "reader"}
+        };
+
+        const updated = reducer(state, action);
+
+        expect(updated[node]?.["post-1"]).toEqual({posting: {...previous, recommended: flag}, visitRecorded: true});
+        expect(updated[otherNode]).toBe(state[otherNode]);
+        expect(reducer(updated, action)).toBe(updated);
+    });
+
+    test("requires the receiver's identity to apply its recommendation", () => {
+        const state: PostingsState = {author: {"post-1": {posting}}};
+        const action = eventAction({
+            type: "POSTING_RECOMMENDATION_UPDATED" as const, sourceNode: null, id: "post-1", recommended: true
+        }, "RECEIVER");
+
+        expect(reducer(state, {...action, context})).toBe(state);
+    });
+
     test("a late visit confirmation and reaction refresh do not prevent loading the posting", () => {
         const visited = reducer(undefined, {...postingVisitRecorded("post-1", REL_CURRENT), context});
         const postings = reducer(visited, {...postingsReactionSet([], [totals], "author"), context});
