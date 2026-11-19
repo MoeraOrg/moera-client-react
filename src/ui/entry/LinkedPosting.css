@@ -2,6 +2,20 @@
     border: 1px solid var(--bs-gray-200);
 }
 
+.comment .linked-posting {
+    margin-bottom: .25rem;
+    font-size: .875rem;
+}
+
+@media only screen and (min-width: 992px) {
+    .comment .linked-posting {
+        display: inline-block;
+        width: calc(50% - .25rem);
+        margin-right: .25rem;
+        vertical-align: top;
+    }
+}
+
 .linked-posting .delete-button {
     position: absolute;
     right: .5rem;

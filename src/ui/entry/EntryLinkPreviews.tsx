@@ -57,7 +57,7 @@ export default function EntryLinkPreviews({nodeName, linkPreviews, noFollow, lim
             )}
             {postings.map((linkPreview, index) =>
                 (max == null || (index + links.length) < max) &&
-                    <LinkedPosting key={index} preview={linkPreview} parentNodeName={nodeName}/>
+                    <LinkedPosting key={index} preview={linkPreview} parentNodeName={nodeName} compact={small}/>
             )}
             {(limit != null && total > limit) &&
                 <>

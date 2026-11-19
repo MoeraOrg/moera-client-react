@@ -24,7 +24,7 @@ import "./LinkedPosting.css";
 interface Props {
     preview: LinkPreview;
     parentNodeName?: RelNodeName | string;
-    compact?: boolean;
+    compact?: boolean | null;
     editing?: boolean;
     disabled?: boolean;
     onDelete?: MouseEventHandler;
@@ -105,6 +105,9 @@ function previewToPosting(postingId: string, preview: LinkPreview): ExtPostingIn
         revisionCreatedAt: preview.publishedAt ?? now(),
         heading: preview.description ?? "",
         bodySrcHash: "",
+        bodyPreview: {
+            text: `<p>${preview.description}</p>`
+        },
         body: {
             previewText: `<p>${preview.description}</p>`
         }
