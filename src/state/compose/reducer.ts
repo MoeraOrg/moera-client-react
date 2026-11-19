@@ -17,8 +17,10 @@ const emptyPosting: ComposePostingState = {
     loadingDraft: false,
     savingDraft: false,
     savedDraft: false,
+    sharedSubject: null,
     sharedText: null,
     sharedTextType: null,
+    sharedTextNoLinkPreviews: false,
     sharedTextLoaded: false,
     ready: false
 };
@@ -77,16 +79,20 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
             if (action.payload.page !== "compose") {
                 return state;
             }
-            const {id, draftId, text, textType} = action.payload.details;
+            const {id, draftId, text, textType, subject, noLinkPreviews} = action.payload.details;
             const istate = immutable.wrap(state)
                 .assign("", emptyPosting)
                 .set("postingId", id)
                 .set("draftId", draftId)
                 .set("formId", state.formId + 1);
-            if (id == null && draftId == null && text != null) {
-                istate.set("sharedText", text)
-                    .set("sharedTextType", textType)
-                    .set("sharedTextLoaded", true);
+            if (id == null && draftId == null) {
+                istate.set("sharedSubject", subject);
+                if (text != null) {
+                    istate.set("sharedText", text)
+                        .set("sharedTextType", textType)
+                        .set("sharedTextNoLinkPreviews", noLinkPreviews)
+                        .set("sharedTextLoaded", true);
+                }
             }
             return istate.value();
         }

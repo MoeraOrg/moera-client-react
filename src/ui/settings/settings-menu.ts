@@ -194,12 +194,7 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             chapter("sharings", null, [
                 option(CLIENT_SETTINGS_PREFIX + "posting.sharings.totals-visible.default", 0),
                 option(CLIENT_SETTINGS_PREFIX + "posting.sharings.visible.default"),
-            ]),
-            chapter("replies", null, [
                 option(CLIENT_SETTINGS_PREFIX + "posting.reply.subject-prefix"),
-                option(CLIENT_SETTINGS_PREFIX + "posting.reply.preamble"),
-                option(CLIENT_SETTINGS_PREFIX + "posting.reply.preamble-html"),
-                option(CLIENT_SETTINGS_PREFIX + "posting.reply.quote-all"),
             ])
         ]),
         sheet("comment", [

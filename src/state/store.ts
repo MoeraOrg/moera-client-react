@@ -79,7 +79,6 @@ import complaintsSagas from "state/complaints/sagas";
 import namingSagas from "state/naming/sagas";
 import reactionsDialogSagas from "state/reactionsdialog/sagas";
 import sharingsDialogSagas from "state/sharingsdialog/sagas";
-import postingReplySagas from "state/postingreply/sagas";
 import storiesSagas from "state/stories/sagas";
 import changeDateDialogSagas from "state/changedatedialog/sagas";
 import peopleSagas from "state/people/sagas";
@@ -262,7 +261,6 @@ const sagas = collectSagas(
     namingSagas,
     reactionsDialogSagas,
     sharingsDialogSagas,
-    postingReplySagas,
     storiesSagas,
     changeDateDialogSagas,
     peopleSagas,

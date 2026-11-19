@@ -56,8 +56,10 @@ export interface ComposePageProps extends ValuesToPostingTextProps {
     fullNameDefault: string | null;
     posting: DraftPostingInfo | null;
     draft: ExtDraftInfo | null;
+    sharedSubject: string | null;
     sharedText: string | null;
-    sharedTextType: SharedTextType | null,
+    sharedTextType: SharedTextType | null;
+    sharedTextNoLinkPreviews: boolean;
     visibilityDefault: PrincipalValue,
     commentsVisibilityDefault: PrincipalValue,
     commentAdditionDefault: PrincipalValue,
@@ -249,8 +251,8 @@ function isPostingContentEmpty(
     return subjectEmpty && textEmpty && mediaEmpty;
 }
 
-export const areValuesEmpty = (values: ComposePageValues): boolean =>
-    isPostingContentEmpty(values.subject, values.body.value, values.body.media);
+export const areValuesEmpty = (values: ComposePageValues, features: PostingFeatures | null): boolean =>
+    isPostingContentEmpty(features?.subjectPresent ? values.subject : null, values.body.value, values.body.media);
 
 export const areImagesUploaded = (values: ComposePageValues): boolean =>
     values.body.media == null || values.body.media.every(media => media != null);
@@ -316,9 +318,8 @@ export const composePageLogic = {
         const fullName = props.draft != null
             ? props.draft.ownerFullName ?? null
             : props.posting != null ? props.posting.ownerFullName ?? null : props.fullNameDefault;
-        const subject = props.draft != null
-            ? props.draft.bodySrc?.subject ?? ""
-            : props.posting != null ? props.posting.bodySrc?.subject ?? "" : "";
+        const entry = props.draft ?? props.posting;
+        const subject = (entry != null ? entry.bodySrc?.subject : props.sharedSubject) ?? "";
         let media = props.draft != null && props.homeOwnerName != null
             ? draftAttachmentsToMedia(
                 props.draft.media,
@@ -328,11 +329,13 @@ export const composePageLogic = {
                 props.homeOwnerName
             )
             : attachmentsToMedia(props.posting?.media);
-        const entry = props.draft ?? props.posting;
         const bodyFormat = entry != null ? entry.bodySrcFormat ?? "markdown" : props.sourceFormatDefault;
         const text = entry != null ? entry.bodySrc?.text ?? "" : getSharedText(props, bodyFormat);
         const body = bodyFormat === "html/visual" ? normalizeDocument(htmlToScripture(text, false, media)) : text;
-        const linkPreviewsInfo = entry != null ? entry.bodySrc?.linkPreviews ?? [] : null;
+        // An empty list marks links already in the body as dismissed.
+        const linkPreviewsInfo = entry != null || props.sharedTextNoLinkPreviews
+            ? entry?.bodySrc?.linkPreviews ?? []
+            : null;
         let linkPreviews, bodyUrls;
         [linkPreviews, bodyUrls, media] = bodyToLinkPreviews(body, linkPreviewsInfo, media);
 

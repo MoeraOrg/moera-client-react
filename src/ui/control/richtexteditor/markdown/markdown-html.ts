@@ -9,7 +9,8 @@ export function htmlToMarkdown(html?: string | null): string | null {
     }
     return htmlToEmoji(html)
         .replace(/\n*<p(\s[^>]*)?>\n*/gi, "\n\n")
-        .replace(/<blockquote>\n+/gi, "<blockquote>\n")
+        .replace(/\n*<blockquote>\n+/gi, "\n\n>>>\n")
+        .replace(/\n*<\/blockquote>/gi, "\n>>>\n")
         .replace(/<\/p>/gi, "")
         .replace(/\n*<br\s*\/?>\n*/gi, "\n")
         .replace(/(?:<span>)?<a[^>]*data-nodename[^>]*>(@[^<]+)<\/a>(?:<\/span>)?/gi, "$1")

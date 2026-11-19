@@ -2,6 +2,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
+import { PostingInfo } from "api";
 import i18n from "i18n";
 import PostingShareButton from "ui/posting/PostingShareButton";
 
@@ -37,12 +38,18 @@ test.each<[string | null, string | null, string]>([
 ])("Share & Write opens the home composer with the original post link (receiver %s)", (
     receiver: string | null, id: string | null, url: string
 ) => {
+    const posting = {
+        id: "local",
+        ownerName: "author_0",
+        receiverName: receiver,
+        receiverPostingId: id,
+        heading: "Post",
+        body: {}
+    } as PostingInfo;
     const menu = document.createElement("div");
     menu.innerHTML = renderToStaticMarkup(
         <Provider store={store}>
-            <PostingShareButton postingId="local" postingOwnerName="author_0" postingOwnerFullName={null}
-                                postingReceiverName={receiver} postingReceiverFullName={null}
-                                postingReceiverPostingId={id} postingHeading="Post" postingVisible="public"/>
+            <PostingShareButton posting={posting}/>
         </Provider>
     );
 

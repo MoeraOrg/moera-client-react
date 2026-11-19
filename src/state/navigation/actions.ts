@@ -50,14 +50,18 @@ export type GoToComposeAction = GoToPageAction<"compose", {
     draftId: string | null;
     text: string | null;
     textType: SharedTextType;
+    subject: string | null;
+    noLinkPreviews: boolean;
 }>;
 export const goToCompose = (
     id: string | null = null,
     draftId: string | null = null,
     text: string | null = null,
-    textType: SharedTextType = "text"
+    textType: SharedTextType = "text",
+    subject: string | null = null,
+    noLinkPreviews: boolean = false
 ): GoToComposeAction =>
-    goToPage("compose", {id, draftId, text, textType}, true);
+    goToPage("compose", {id, draftId, text, textType, subject, noLinkPreviews}, true);
 
 export type GoToSettingsAction = GoToPageAction<"settings", {}>;
 export const goToSettings = (): GoToSettingsAction =>

@@ -1,8 +1,8 @@
-import { act } from 'react';
+import { act, createRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { combineReducers, createStore } from 'redux';
-import { Formik } from 'formik';
+import { Formik, FormikProps } from 'formik';
 
 import { PostingInfo, SourceFormat } from "api";
 import type { SharedTextType } from "api/android/types";
@@ -12,7 +12,7 @@ import composeReducer from "state/compose/reducer";
 import { DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import linkPreviewsReducer from "state/linkpreviews/reducer";
 import {
-    composePageLogic, ComposePageProps, isPostingTextChanged, valuesToPostingText
+    areValuesEmpty, composePageLogic, ComposePageProps, isPostingTextChanged, valuesToPostingText
 } from "ui/compose/posting-compose";
 import RichTextLinkPreviews from "ui/control/richtexteditor/RichTextLinkPreviews";
 
@@ -43,7 +43,8 @@ const props: ComposePageProps = {
     nodeName: "alice", homeOwnerName: "alice", postingId: null, posting: null, draft: null,
     avatarDefault: null, fullNameDefault: null, gender: null, ownerSourceUri: null,
     features: null, smileysEnabled: false, newsFeedEnabled: false, avatarShapeDefault: "circle",
-    sharedText: null, sharedTextType: null, visibilityDefault: "public", commentsVisibilityDefault: "public",
+    sharedSubject: null, sharedText: null, sharedTextType: null, sharedTextNoLinkPreviews: false,
+    visibilityDefault: "public", commentsVisibilityDefault: "public",
     commentAdditionDefault: "signed", commentTrustDefault: "signed", commentsHideDefault: false,
     reactionsEnabledDefault: true, reactionsNegativeEnabledDefault: true,
     reactionsPositiveDefault: "", reactionsNegativeDefault: "*",
@@ -55,34 +56,49 @@ describe("link previews on opening the composer", () => {
     const url = "https://example.org/story?a=1&b=2";
     const text = `Read ${url}`;
     const html = '<a href="https://example.org/story?a=1&amp;b=2">Read this</a>';
+    const relatedLink = '<a href="https://example.org/related">Related</a>';
 
     beforeAll(() => Object.assign(globalThis, {IS_REACT_ACT_ENVIRONMENT: true}));
     afterAll(() => Object.assign(globalThis, {IS_REACT_ACT_ENVIRONMENT: false}));
 
-    test.each<[SourceFormat, SharedTextType, string, string]>([
-        ["plain-text", "text", text, text],
-        ["markdown", "text", text, text],
-        ["html/visual", "text", text, "Read"],
-        ["html/visual", "html", html, "Read this"]
-    ])("loads a preview on mount in %s for a %s URL parameter", async (
-        sourceFormatDefault: SourceFormat, type: SharedTextType, text: string, expectedBody: string
+    test.each<[SourceFormat, SharedTextType, string, string, string]>([
+        ["plain-text", "text", "", text, text],
+        ["markdown", "text", "", text, text],
+        ["html/visual", "text", "", text, "Read"],
+        ["html/visual", "html", "", html, "Read this"],
+        ["plain-text", "text", "&nolinkpreviews", text, text],
+        ["html/visual", "html", "&nolinkpreviews=true", `${html} ${relatedLink}`, "Read this"]
+    ])("handles initial and newly added links in %s with type=%s%s", async (
+        sourceFormatDefault: SourceFormat, type: SharedTextType, flag: string, text: string, expectedBody: string
     ) => {
-        const query = new URLSearchParams({text, type}).toString();
+        const subject = "Read <b>this</b> & more";
+        const query = new URLSearchParams({subject, text, type}).toString() + flag;
         const [navigation] = transform(new LocationInfo(), LocationInfo.fromUrl("/compose", query, null));
-        const {sharedText, sharedTextType} = composeReducer(undefined, navigation);
-        const values = composePageLogic.mapPropsToValues({...props, sourceFormatDefault, sharedTextType, sharedText});
+        const compose = composeReducer(undefined, navigation);
+        const values = composePageLogic.mapPropsToValues({...props, ...compose, sourceFormatDefault});
+        expect(values.subject).toBe(subject);
         expect(values.body.text).toContain(expectedBody);
+        expect(values.bodyUrls).toContain(url);
         const store = createStore(combineReducers({linkPreviews: linkPreviewsReducer}));
         const root = createRoot(document.createElement("div"));
+        const form = createRef<FormikProps<typeof values>>();
         try {
             await act(async () => root.render(
                 <Provider store={store}>
-                    <Formik initialValues={values} onSubmit={() => {}}>
+                    <Formik initialValues={values} innerRef={form} onSubmit={() => {}}>
                         <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" nodeName="alice"/>
                     </Formik>
                 </Provider>
             ));
-            expect(store.getState().linkPreviews).toEqual({[url]: expect.objectContaining({loading: true})});
+            const loading = expect.objectContaining({loading: true});
+            const initialRequests = flag === "" ? {[url]: loading} : {};
+            expect(store.getState().linkPreviews).toEqual(initialRequests);
+
+            const addedUrl = "https://example.org/another";
+            await act(async () => {
+                await form.current!.setFieldValue("bodyUrls", [...values.bodyUrls, addedUrl]);
+            });
+            expect(store.getState().linkPreviews).toEqual({...initialRequests, [addedUrl]: loading});
         } finally {
             act(() => root.unmount());
         }
@@ -92,6 +108,17 @@ describe("link previews on opening the composer", () => {
         const values = composePageLogic.mapPropsToValues({...props, [source]: {bodySrc: {text}}});
         expect(values.linkPreviews.status[url]).toBe("deleted");
     });
+});
+
+test.each([true, false])("handles a subject-only post when subjectPresent is %s", (subjectPresent: boolean) => {
+    const [navigation] = transform(new LocationInfo(), LocationInfo.fromUrl("/compose", "?subject=Just+a+title", null));
+    const {sharedSubject, sharedText} = composeReducer(undefined, navigation);
+    const values = composePageLogic.mapPropsToValues({...props, sharedSubject, sharedText});
+    const features = {subjectPresent, sourceFormats: [], imageFormats: [], videoFormats: []};
+    expect(values.body.text).toBe("");
+    expect(areValuesEmpty(values, features)).toBe(!subjectPresent);
+    const posting = valuesToPostingText(values, {...props, features});
+    expect(JSON.parse(posting.bodySrc!).subject).toBe(subjectPresent ? "Just a title" : null);
 });
 
 describe("compose sharing permissions", () => {

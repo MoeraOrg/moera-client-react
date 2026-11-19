@@ -23,8 +23,10 @@ export interface ComposePostingState {
     loadingDraft: boolean;
     savingDraft: boolean;
     savedDraft: boolean;
+    sharedSubject: string | null;
     sharedText: string | null;
     sharedTextType: SharedTextType | null;
+    sharedTextNoLinkPreviews: boolean;
     sharedTextLoaded: boolean;
     ready: boolean;
 }

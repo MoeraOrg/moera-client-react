@@ -8,8 +8,9 @@ import { getComposeDraftId, getComposePostingId } from "state/compose/selectors"
 import { LocationInfo } from "location/LocationInfo";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
-    const {id, draft, text, type} = dstInfo.parameters;
-    return [goToCompose(id, draft, text, type === "html" ? "html" : "text")];
+    const {id, draft, text, type, subject, nolinkpreviews} = dstInfo.parameters;
+    const noLinkPreviews = nolinkpreviews === "" || nolinkpreviews === "true";
+    return [goToCompose(id, draft, text, type === "html" ? "html" : "text", subject, noLinkPreviews)];
 }
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {

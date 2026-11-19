@@ -18,30 +18,35 @@ function openComposer(query: string, previous?: ComposeState): ComposeState {
     return composeReducer(previous, navigation);
 }
 
-test("opens a new post with decoded text before checking the Android interface", () => {
+test("opens a new post with decoded subject and text before checking the Android interface", () => {
+    const subject = "Тема + планы & итоги #1";
     const text = "Привет + Moera!\nhttps://example.org/story?a=1&b=2#more";
-    const compose = openComposer(new URLSearchParams({text}).toString());
-    expect(compose).toMatchObject({sharedText: text, sharedTextType: "text"});
+    const compose = openComposer(new URLSearchParams({subject, text}).toString());
+    expect(compose).toMatchObject({sharedSubject: subject, sharedText: text, sharedTextType: "text"});
     expect(isComposeSharedTextToBeLoaded({compose} as ClientState)).toBe(false);
     expect(isComposeBecameReady({compose} as ClientState)).toBe(true);
 });
 
 test("reopening a prefilled composer initializes a fresh form even for the same text", () => {
     const query = "?text=%3Cb%3Ehello%3C%2Fb%3E&type=html";
-    const compose = openComposer(query);
-    expect(compose).toMatchObject({sharedText: "<b>hello</b>", sharedTextType: "html"});
-    expect(openComposer(query, compose).formId).not.toBe(compose.formId);
+    const compose = openComposer(query + "&nolinkpreviews=true");
+    expect(compose).toMatchObject({sharedText: "<b>hello</b>", sharedTextType: "html", sharedTextNoLinkPreviews: true});
+    const reopened = openComposer(query + "&nolinkpreviews=false", compose);
+    expect(reopened.formId).not.toBe(compose.formId);
+    expect(reopened.sharedTextNoLinkPreviews).toBe(false);
 });
 
 test.each<[string, string | null, string | null]>([
-    ["?id=post-1&text=ignored", "post-1", null],
-    ["?draft=draft-1&text=ignored", null, "draft-1"]
+    ["?id=post-1&subject=ignored&text=ignored&nolinkpreviews", "post-1", null],
+    ["?draft=draft-1&subject=ignored&text=ignored&nolinkpreviews", null, "draft-1"]
 ])("opens saved content for %s", (query: string, postingId: string | null, draftId: string | null) => {
-    expect(openComposer(query)).toMatchObject({postingId, draftId, sharedText: null});
+    expect(openComposer(query)).toMatchObject({
+        postingId, draftId, sharedSubject: null, sharedText: null, sharedTextNoLinkPreviews: false
+    });
 });
 
-test("omits shared text and its type from generated compose URLs", () => {
-    const query = "?text=%3Cb%3Ehello%3C%2Fb%3E&type=html";
+test("omits prefill parameters from generated compose URLs", () => {
+    const query = "?subject=Greeting&text=%3Cb%3Ehello%3C%2Fb%3E&type=html&nolinkpreviews";
     const compose = openComposer(query);
     const state = {compose, node: {owner: {name: null}}} as ClientState;
     expect(build(state, new LocationInfo()).toUrl()).toBe("/compose");
@@ -64,6 +69,11 @@ test("Android supplies text only when the URL omits it", () => {
     const compose = openComposer("?text=");
     expect(compose.sharedText).toBe("");
     expect(isComposeSharedTextToBeLoaded({compose} as ClientState)).toBe(false);
-    const nextCompose = openComposer("", compose);
+    const nextCompose = openComposer("?subject=Greeting&nolinkpreviews", compose);
     expect(isComposeSharedTextToBeLoaded({compose: nextCompose} as ClientState)).toBe(true);
+    const fromAndroid = composeReducer(nextCompose, composeSharedTextSet("Shared body", "text"));
+    expect(fromAndroid).toMatchObject({
+        sharedSubject: "Greeting", sharedText: "Shared body", sharedTextNoLinkPreviews: false
+    });
+    expect(openComposer("", fromAndroid).sharedSubject).toBeNull();
 });

@@ -52,7 +52,8 @@ type Props = ComposePageProps & FormikProps<ComposePageValues>;
 
 function ComposePageInner(props: Props) {
     const {
-        postingId, features, avatarDefault, ownerSourceUri, posting, sharedText, smileysEnabled, values, resetForm
+        postingId, features, avatarDefault, ownerSourceUri, posting, sharedSubject, sharedText, smileysEnabled, values,
+        resetForm
     } = props;
 
     const ready = useSelector(isComposeReady);
@@ -81,7 +82,7 @@ function ComposePageInner(props: Props) {
         resetForm({values});
         setPostWarningClosed(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [posting, avatarDefault, formId, sharedText, setPostWarningClosed]); // 'props' are missing on purpose
+    }, [posting, avatarDefault, formId, sharedSubject, sharedText, setPostWarningClosed]); // 'props' are missing on purpose
 
     let backNodeName = REL_HOME;
     let backHref = newsHref;
@@ -94,7 +95,7 @@ function ComposePageInner(props: Props) {
 
     const title = postingId == null ? t("new-post-title") : t("edit-post-title");
     const sourceFormats = features?.sourceFormats ?? [];
-    const submitDisabled = !ready || areValuesEmpty(values) || !areImagesUploaded(values);
+    const submitDisabled = !ready || areValuesEmpty(values, features) || !areImagesUploaded(values);
     return (
         <Page className="compose-page">
             <div className="page-left-pane">
@@ -175,8 +176,10 @@ export default function ComposePage() {
     const features = useSelector(getPostingFeatures);
     const posting = useSelector((state: ClientState) => state.compose.posting);
     const draft = useSelector((state: ClientState) => state.compose.draft);
+    const sharedSubject = useSelector((state: ClientState) => state.compose.sharedSubject);
     const sharedText = useSelector((state: ClientState) => state.compose.sharedText);
     const sharedTextType = useSelector((state: ClientState) => state.compose.sharedTextType);
+    const sharedTextNoLinkPreviews = useSelector((state: ClientState) => state.compose.sharedTextNoLinkPreviews);
     const smileysEnabled = useSelector((state: ClientState) =>
         getSetting(state, "posting.smileys.enabled") as boolean
     );
@@ -241,8 +244,10 @@ export default function ComposePage() {
             features={features}
             posting={posting}
             draft={draft}
+            sharedSubject={sharedSubject}
             sharedText={sharedText}
             sharedTextType={sharedTextType}
+            sharedTextNoLinkPreviews={sharedTextNoLinkPreviews}
             smileysEnabled={smileysEnabled}
             newsFeedEnabled={newsFeedEnabled}
             avatarShapeDefault={avatarShapeDefault}

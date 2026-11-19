@@ -14,7 +14,6 @@ import {
     postingCopyLink,
     postingDelete
 } from "state/postings/actions";
-import { postingReply } from "state/postingreply/actions";
 import { storyDelete, storyPinningUpdate } from "state/stories/actions";
 import { openChangeDateDialog } from "state/changedatedialog/actions";
 import { openSourceDialog } from "state/sourcedialog/actions";
@@ -88,8 +87,6 @@ function PostingMenuItems({posting, feedName, story, detailed}: Props) {
     const ownPosting = ownerName === homeOwnerName;
     const followingComments = ownPosting ? commentAddedInstantBlockId == null : commentsSubscriptionId != null;
     const originalDeleted = posting.receiverDeletedAt != null;
-
-    const onReply = () => dispatch(postingReply(posting.id));
 
     const onFollowComments = () => {
         if (ownPosting) {
@@ -205,13 +202,6 @@ function PostingMenuItems({posting, feedName, story, detailed}: Props) {
                 href: postingHref,
                 onClick: onCopyText,
                 show: true
-            },
-            {
-                title: t("reply"),
-                nodeName: REL_HOME,
-                href: "/compose",
-                onClick: onReply,
-                show: homeOwnerName != null && !originalDeleted
             },
             {
                 title: t("follow-comments"),

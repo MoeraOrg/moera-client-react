@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { ClientReactionInfo, PostingInfo, PrincipalValue } from "api";
+import { ClientReactionInfo, PostingInfo } from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
 import { isPermitted, IsPermittedOptions } from "state/node/selectors";
@@ -33,8 +33,6 @@ export default function PostingButtons({posting, feedName, story, menu = false}:
     const enableSelf = useSelector((state: ClientState) =>
         getSetting(state, "posting.reactions.self.enabled") as boolean
     );
-    const postingVisible: PrincipalValue =
-        (posting.receiverName != null ? posting.receiverOperations?.view : posting.operations?.view) ?? "public"
     const commentsVisible = useSelector((state: ClientState) =>
         isPermitted("viewComments", posting, "public", state, options)
     );
@@ -77,16 +75,7 @@ export default function PostingButtons({posting, feedName, story, menu = false}:
                         emoji={cr.negative ? cr.emoji : null}
                         rejected={posting.rejectedReactions?.negative}
                     />
-                    <PostingShareButton
-                        postingId={posting.id}
-                        postingOwnerName={posting.ownerName}
-                        postingOwnerFullName={posting.ownerFullName}
-                        postingReceiverName={posting.receiverName}
-                        postingReceiverFullName={posting.receiverFullName}
-                        postingReceiverPostingId={posting.receiverPostingId}
-                        postingHeading={posting.heading}
-                        postingVisible={postingVisible}
-                    />
+                    <PostingShareButton posting={posting}/>
                     <div className="divider"/>
                     <PostingCommentButton postingId={posting.id} invisible={!commentsVisible}/>
                 </>

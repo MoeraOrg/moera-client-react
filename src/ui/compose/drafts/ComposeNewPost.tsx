@@ -4,7 +4,7 @@ import { useFormikContext } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { composeDraftSelect } from "state/compose/actions";
-import { getComposePostingId } from "state/compose/selectors";
+import { getComposePostingId, getPostingFeatures } from "state/compose/selectors";
 import { useDispatcher } from "ui/hook";
 import { Icon, msAddBox } from "ui/material-symbols";
 import { useRichTextEditorCommands } from "ui/control/richtexteditor/rich-text-editor-commands-context";
@@ -13,6 +13,7 @@ import "./ComposeNewPost.css";
 
 export default function ComposeNewPost() {
     const postingId = useSelector(getComposePostingId);
+    const features = useSelector(getPostingFeatures);
     const dispatch = useDispatcher();
     const {values} = useFormikContext<ComposePageValues>();
     const {focus} = useRichTextEditorCommands();
@@ -23,7 +24,7 @@ export default function ComposeNewPost() {
         focus();
     }
 
-    if (postingId != null || areValuesEmpty(values)) {
+    if (postingId != null || areValuesEmpty(values, features)) {
         return null;
     }
     return (

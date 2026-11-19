@@ -17,3 +17,13 @@ en: mention
 pl: wspomnieć
 ru: упомянуть
 uk: згадати
+
+en: quote & reply
+pl: zacytować i odpowiedzieć
+ru: процитировать и ответить
+uk: процитувати й відповісти
+
+en: reply to the post
+pl: odpowiedź na post
+ru: ответ на пост
+uk: відповідь на пост
