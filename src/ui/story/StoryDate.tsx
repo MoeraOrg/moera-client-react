@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { differenceInMonths, format, formatISO, fromUnixTime } from 'date-fns';
+import { differenceInMonths, format, formatISO, fromUnixTime, startOfDay, startOfToday } from 'date-fns';
 
 import { tDistanceToNow } from "i18n/time";
 import { ClientState } from "state/state";
@@ -22,8 +22,6 @@ function StoryDateText({date, noteOld}: StoryDateTextProps) {
     ); // To force re-rendering only
     const {t} = useTranslation();
 
-    const months = differenceInMonths(new Date(), date);
-
     return (
         <>{
             timeRelative ?
@@ -35,19 +33,20 @@ function StoryDateText({date, noteOld}: StoryDateTextProps) {
                     <time dateTime={formatISO(date)} title={tDistanceToNow(date, t)}>
                         {format(date, "dd-MM-yyyy HH:mm")}
                     </time>
-                    {noteOld && <NoteOld months={months}/>}
+                    {noteOld && <NoteOld date={date}/>}
                 </>
         }</>
     );
 }
 
 interface NoteOldProps {
-    months: number;
+    date: Date;
 }
 
-function NoteOld({months}: NoteOldProps) {
+function NoteOld({date}: NoteOldProps) {
     const {i18n} = useTranslation();
 
+    const months = differenceInMonths(startOfToday(), startOfDay(date));
     if (months < 3) {
         return null;
     }
