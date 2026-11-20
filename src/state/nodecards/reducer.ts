@@ -419,14 +419,14 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         }
 
         case "FEED_SUBSCRIBED": {
-            const {nodeName, subscription} = action.payload;
+            const {nodeName, subscription, created} = action.payload;
             const {ownerName} = action.context;
             const istate = getCard(state, nodeName).istate;
             istate.assign(["cards", nodeName, "subscription"], {
                 subscribing: false,
                 subscription
             });
-            if (nodeName !== ownerName) {
+            if (created && nodeName !== ownerName) {
                 istate.update(["cards", nodeName, "people.subscribersTotal"], total => total + 1);
             }
             return istate.value();

@@ -1,6 +1,15 @@
 import i18n from 'i18next';
 
-import { NameResolvingError, Node, NodeApiError, NodeConnectionError, PrincipalValue, StoryInfo } from "api";
+import {
+    NameResolvingError,
+    Node,
+    NodeApiError,
+    NodeConnectionError,
+    NodeName,
+    PrincipalValue,
+    StoryInfo,
+    SubscriptionInfo
+} from "api";
 import { ClientAction } from "state/action";
 import {
     feedCannotBeLoaded,
@@ -100,18 +109,52 @@ async function feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>): 
     }
 }
 
+export async function nodeFeedSubscribe(
+    action: WithContext<ClientAction>, nodeName: string, feedName: string
+): Promise<{subscription: SubscriptionInfo, created: boolean} | null> {
+    const LOCAL_FEED_NAME = "news";
+    const ALREADY_EXISTS = "subscription.already-exists";
+
+    try {
+        const subscription = await Node.createSubscription(
+            action,
+            REL_HOME,
+            {
+                type: "feed",
+                feedName: LOCAL_FEED_NAME,
+                remoteNodeName: nodeName,
+                remoteFeedName: feedName
+            },
+            [ALREADY_EXISTS]
+        );
+        return {subscription, created: true};
+    } catch (e) {
+        if (!(e instanceof NodeApiError) || e.errorCode !== ALREADY_EXISTS) {
+            throw e;
+        }
+    }
+
+    const subscriptions = await Node.searchSubscriptions(
+        action, REL_HOME, {type: "feed", feeds: [{nodeName: NodeName.expand(nodeName), feedName}]}
+    );
+    const subscription = subscriptions.find(sub => sub.feedName === LOCAL_FEED_NAME);
+    return subscription != null ? {subscription, created: false} : null;
+}
+
 async function feedSubscribeSaga(action: WithContext<FeedSubscribeAction>): Promise<void> {
     await homeIntroduced();
     const {nodeName, feedName, storyId, silent = false} = action.payload;
     try {
-        const subscription = await Node.createSubscription(
-            action, REL_HOME,
-            {type: "feed" as const, feedName: "news", remoteNodeName: nodeName, remoteFeedName: feedName}
-        );
-        if (!silent) {
+        const result = await nodeFeedSubscribe(action, nodeName, feedName);
+        if (result == null) {
+            dispatch(feedSubscribeFailed(nodeName, feedName).causedBy(action));
+            return;
+        }
+        const {subscription, created} = result;
+        if (created && !silent) {
             dispatch(flashBox(i18n.t("you-subscribed")).causedBy(action));
         }
-        dispatch(feedSubscribed(nodeName, subscription).causedBy(action));
+        dispatch(feedSubscribed(nodeName, subscription, created).causedBy(action));
         if (storyId != null) {
             dispatch(storySatisfy(REL_HOME, "instant", storyId).causedBy(action));
         }

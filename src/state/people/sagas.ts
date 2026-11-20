@@ -75,7 +75,7 @@ import {
     isSubscriptionsVisible
 } from "state/people/selectors";
 import { feedSubscribe, feedSubscribed, feedUnsubscribed } from "state/feeds/actions";
-import { nodeFeedSubscriberSetVisibility, nodeFeedSubscriptionSetVisibility } from "state/feeds/sagas";
+import { nodeFeedSubscribe, nodeFeedSubscriberSetVisibility, nodeFeedSubscriptionSetVisibility } from "state/feeds/sagas";
 import { closeProgressBox, openProgressBox, updateProgressBox } from "state/progressbox/actions";
 import { PeopleTab } from "state/people/state";
 import { confirmBox } from "state/confirmbox/actions";
@@ -382,11 +382,11 @@ async function peopleSelectedSubscribeSaga(action: WithContext<PeopleSelectedSub
     let done = 0;
     for (const contact of contacts) {
         try {
-            const subscription = await Node.createSubscription(
-                action, REL_HOME,
-                {type: "feed" as const, feedName: "news", remoteNodeName: contact.nodeName, remoteFeedName: "timeline"}
-            );
-            dispatch(feedSubscribed(contact.nodeName, subscription).causedBy(action));
+            const result = await nodeFeedSubscribe(action, contact.nodeName, "timeline");
+            if (result == null) {
+                continue;
+            }
+            dispatch(feedSubscribed(contact.nodeName, result.subscription, result.created).causedBy(action));
             dispatch(updateProgressBox(++done, contacts.length).causedBy(action));
         } catch (e) {
             dispatch(errorThrown(e));

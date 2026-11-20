@@ -39,9 +39,12 @@ export const feedSubscribe = (
 export type FeedSubscribedAction = ActionWithPayload<"FEED_SUBSCRIBED", {
     nodeName: string;
     subscription: SubscriptionInfo;
+    created: boolean;
 }>;
-export const feedSubscribed = (nodeName: string, subscription: SubscriptionInfo): FeedSubscribedAction =>
-    actionWithPayload("FEED_SUBSCRIBED", {nodeName, subscription});
+export const feedSubscribed = (
+    nodeName: string, subscription: SubscriptionInfo, created: boolean = true
+): FeedSubscribedAction =>
+    actionWithPayload("FEED_SUBSCRIBED", {nodeName, subscription, created});
 
 export type FeedSubscribeFailedAction = ActionWithPayload<"FEED_SUBSCRIBE_FAILED", {
     nodeName: string;

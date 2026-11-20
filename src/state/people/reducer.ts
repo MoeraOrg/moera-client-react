@@ -389,7 +389,12 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 delete subscription.contact;
             }
             istate.set(["contacts", action.payload.nodeName, "subscription"], subscription);
-            if (state.loadedGeneral && state.loadedSubscriptions && contactState.subscription == null) {
+            if (
+                action.payload.created
+                && state.loadedGeneral
+                && state.loadedSubscriptions
+                && contactState.subscription == null
+            ) {
                 istate.set("subscriptionsTotal", (state.subscriptionsTotal ?? 0) + 1);
             }
             return istate.value();
