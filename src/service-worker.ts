@@ -4,7 +4,7 @@
 // for the list of available Workbox modules.
 
 import { BroadcastUpdatePlugin } from 'workbox-broadcast-update';
-import { clientsClaim } from 'workbox-core';
+import { clientsClaim, type RouteHandler, type RouteMatchCallback } from 'workbox-core';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
 import { ExpirationPlugin } from 'workbox-expiration';
@@ -27,7 +27,18 @@ clientsClaim();
 const ignored = self.__WB_MANIFEST;
 // precacheAndRoute(self.__WB _ MANIFEST);
 
-registerRoute(
+// Let the browser stream video and negotiate byte ranges directly with the server.
+function registerCacheRoute(match: RouteMatchCallback, handler: RouteHandler): void {
+    registerRoute(
+        options =>
+            options.request.destination !== "video"
+            && !options.request.headers.has("range")
+            && match(options),
+        handler
+    );
+}
+
+registerCacheRoute(
     ({request, url}) =>
         request.mode === "navigate"
         && (
@@ -44,7 +55,7 @@ registerRoute(
     })
 );
 
-registerRoute(
+registerCacheRoute(
     ({url}) => url.origin === self.location.origin && url.pathname.startsWith("/static/"),
     new StaleWhileRevalidate({
         cacheName: "client",
@@ -54,7 +65,7 @@ registerRoute(
     })
 );
 
-registerRoute(
+registerCacheRoute(
     ({url}) => url.origin === "https://cdnjs.cloudflare.com" && url.pathname.endsWith(".svg"),
     new StaleWhileRevalidate({
         cacheName: "twemoji",
@@ -64,7 +75,7 @@ registerRoute(
     })
 );
 
-registerRoute(
+registerCacheRoute(
     ({url}) => url.pathname.includes("/moera/media/public/"),
     new StaleWhileRevalidate({
         cacheName: "media-public",
@@ -78,7 +89,7 @@ registerRoute(
     })
 );
 
-registerRoute(
+registerCacheRoute(
     ({url}) => url.pathname.includes("/moera/media/private/"),
     new StaleWhileRevalidate({
         cacheName: "media-private",

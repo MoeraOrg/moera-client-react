@@ -32,7 +32,6 @@ import PostingButtons from "ui/posting/PostingButtons";
 import { RelNodeName } from "util/rel-node-name";
 import { ut } from "util/url";
 import "ui/posting/Posting.css";
-import "ui/entry/Entry.css";
 
 interface FeedPostingProps {
     nodeName: RelNodeName | string;

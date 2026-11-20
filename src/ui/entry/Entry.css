@@ -1,4 +1,9 @@
-.entry .content::after {
+.entry > .content {
+    overflow-wrap: break-word;
+    text-align: start;
+}
+
+.entry > .content::after {
     display: block;
     content: "";
     clear: both;
@@ -12,7 +17,59 @@
     text-decoration: underline;
 }
 
-.entry.single-emoji .content .emoji {
+.entry > .content P:not(:first-child) {
+    margin-top: 1em;
+}
+
+.entry > .content .read-more {
+    width: 100%;
+    font-size: var(--posting-font-magnitude);
+    text-align: left;
+    padding-left: 0;
+    padding-top: 0;
+}
+
+.entry > .content .preload-placeholder {
+    display: inline-block;
+    width: var(--width);
+    aspect-ratio: var(--aspect-ratio);
+}
+
+.entry-text :where(ADDRESS, BLOCKQUOTE, DL, FIGURE, OL, P, PRE, UL) {
+    margin-bottom: 1em;
+}
+
+.entry-text :where(OL, UL) :where(OL, UL) {
+    margin-bottom: 0;
+}
+
+.entry-text :where(DD, H1, H2, H3, H4, H5, H6) {
+    margin-bottom: .5em;
+}
+
+.entry-text HR {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.entry-text FIGURE {
+    display: inline-block;
+}
+
+.entry-text FIGCAPTION {
+    font-size: .875em;
+    line-height: 1.5;
+    margin-top: .5em;
+    color: var(--bs-secondary);
+    max-width: calc(var(--width) * 1.05);
+}
+
+:is(.entry > .content, .visual-text-area) IMG:not(.emoji) {
+    width: auto;
+    height: auto;
+}
+
+.single-emoji .entry-text .emoji {
     font-size: 3em;
 }
 
@@ -28,12 +85,6 @@
     }
 }
 
-.entry .footnotes LI P:last-of-type {
+.entry-text .footnotes LI P:last-of-type {
     margin-bottom: 0;
-}
-
-.entry > .content .preload-placeholder {
-    display: inline-block;
-    width: var(--width);
-    aspect-ratio: var(--aspect-ratio);
 }

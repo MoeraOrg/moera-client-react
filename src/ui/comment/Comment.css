@@ -23,16 +23,6 @@
     box-sizing: content-box;
     padding: .5rem 0;
     width: 100%;
-    overflow-wrap: break-word;
-    text-align: start;
-}
-
-.comment .content P {
-    margin-top: 1rem;
-}
-
-.comment .content P:first-child {
-    margin-top: 0;
 }
 
 .comment .content P:last-child {
@@ -62,31 +52,6 @@
 .comment .content :is(IMG, IFRAME), .comment .content .preload-placeholder {
     max-width: min(100vw - 7rem, var(--feed-width) - 6.5rem, var(--width, 100vw));
     max-height: min(16rem, var(--height, 200vh));
-}
-
-.comment .content IMG:not(.emoji) {
-    width: auto;
-    height: auto;
-}
-
-.comment .content FIGURE {
-    display: inline-block;
-}
-
-.comment .content FIGCAPTION {
-    font-size: .875em;
-    line-height: 1.5;
-    margin-top: .5em;
-    color: var(--bs-secondary);
-    max-width: calc(var(--width) * 1.05);
-}
-
-.comment .content .read-more {
-    width: 100%;
-    font-size: var(--posting-font-magnitude);
-    text-align: left;
-    padding-left: 0;
-    padding-top: 0;
 }
 
 @media only screen and (min-width: 992px) {

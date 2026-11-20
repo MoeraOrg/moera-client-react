@@ -47,7 +47,7 @@ function RepostDialogInner({homeOwnerName, nodeName}: Props) {
         <ModalDialog title={t("repost")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
-                    <p className="form-text">
+                    <p>
                         {nodeName === homeOwnerName
                             ? t("repeat-your-post", {heading})
                             : <Trans i18nKey="share-post-your-blog" values={{name, heading}} components={{b: <b/>}}/>}

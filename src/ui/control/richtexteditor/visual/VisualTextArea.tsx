@@ -31,6 +31,7 @@ import {
 } from "ui/control/richtexteditor/visual/scripture-editor";
 import { htmlEntities } from "util/html";
 import { formatFullName } from "util/names";
+import "ui/entry/Entry.css";
 import "./VisualTextArea.css";
 
 export interface VisualTextAreaProps {
@@ -274,7 +275,7 @@ export default function VisualTextArea({
     return (
         <Editable
             id={name}
-            className="visual-text-area"
+            className="visual-text-area entry-text"
             ref={textArea}
             style={{
                 minHeight: minHeight ?? (rows != null ? `${Math.ceil(rows * 18) / 10}em` : undefined),

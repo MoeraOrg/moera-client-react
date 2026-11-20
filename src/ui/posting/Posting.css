@@ -25,11 +25,6 @@
     }
 }
 
-.posting > .content {
-    overflow-wrap: break-word;
-    text-align: start;
-}
-
 .posting.preview > .content {
     overflow-y: auto;
 }
@@ -50,19 +45,6 @@
     max-height: unset;
 }
 
-.posting > .content P {
-    margin-top: 1rem;
-}
-
-.posting > .content P:first-child {
-    margin-top: 0;
-}
-
-.posting > .content IMG:not(.emoji) {
-    width: auto;
-    height: auto;
-}
-
 @container page-pane (width > 0) {
     .posting > .content :is(IMG, IFRAME), .posting > .content .preload-placeholder {
         max-width: min(100vw - 4rem, 100cqw - 3.5rem, var(--width, 100vw));
@@ -72,26 +54,6 @@
 
 .posting.preview > .content :is(IMG, IFRAME), .posting.preview > .content .preload-placeholder {
     max-height: min(35rem, var(--height, 200vh));
-}
-
-.posting > .content FIGURE {
-    display: inline-block;
-}
-
-.posting > .content FIGCAPTION {
-    font-size: .875em;
-    line-height: 1.5;
-    margin-top: .5em;
-    color: var(--bs-secondary);
-    max-width: calc(var(--width) * 1.05);
-}
-
-.posting > .content .read-more {
-    width: 100%;
-    font-size: var(--posting-font-magnitude);
-    text-align: left;
-    padding-left: 0;
-    padding-top: 0;
 }
 
 .posting > .content A.read-more:visited {

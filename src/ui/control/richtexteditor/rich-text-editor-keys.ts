@@ -34,6 +34,7 @@ export const RICH_TEXT_EDITOR_KEYS = {
     CLEAR:              new RichTextEditorKey("Mod-0"),
     EN_DASH:            new RichTextEditorKey(["Mod-1", "Mod-_"]),
     EM_DASH:            new RichTextEditorKey(["Mod-2", "Mod-Shift-_"]),
+    MINUS:              new RichTextEditorKey("Mod-3"),
     ANGLE_QUOTE_LEFT:   new RichTextEditorKey("Alt-,"),
     ANGLE_QUOTE_RIGHT:  new RichTextEditorKey("Alt-."),
     DOUBLE_QUOTE_LEFT:  new RichTextEditorKey("Alt-Shift-,"),

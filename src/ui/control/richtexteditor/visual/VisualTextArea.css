@@ -26,7 +26,7 @@
 }
 
 .visual-text-area DIV.spoiler {
-    margin-bottom: 1rem;
+    margin-bottom: 1em;
 }
 
 .visual-text-area .mention {
@@ -71,26 +71,9 @@
     cursor: pointer;
 }
 
-.visual-text-area FIGURE {
-    display: inline-block;
-}
-
-.visual-text-area FIGCAPTION {
-    font-size: .875em;
-    line-height: 1.5;
-    margin-top: .5em;
-    color: var(--bs-secondary);
-    max-width: calc(var(--width) * 1.05);
-}
-
 .visual-text-area IMG {
     max-width: min(100vw - 4rem, var(--feed-width) - 3.5rem, var(--width, 100vw));
     max-height: var(--height, 200vh);
-}
-
-.visual-text-area IMG:not(.emoji) {
-    width: auto;
-    height: auto;
 }
 
 .visual-text-area,
@@ -101,7 +84,7 @@
 .visual-text-area DIV.list-item + P,
 .visual-text-area DIV.list-item + .block-border,
 .visual-text-area DIV.list-item + DIV.formula {
-    margin-top: 1rem;
+    margin-top: 1em;
 }
 
 .visual-text-area DIV.list-item {

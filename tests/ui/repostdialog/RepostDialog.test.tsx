@@ -111,10 +111,10 @@ describe("repost dialog", () => {
 
         expect(container.querySelector("h1")?.textContent).toBe("repost");
         expect(container.querySelectorAll("form")).toHaveLength(1);
-        expect(container.querySelector(".form-text [data-i18n-key]")?.getAttribute("data-i18n-key"))
-            .toBe("share-post-your-blog");
-        expect(container.querySelector(".form-text b")?.textContent).toBe("Receiver Blog (receiver)");
-        expect(container.querySelector(".form-text")?.textContent).toContain("A post heading");
+        const prompt = container.querySelector('[data-i18n-key="share-post-your-blog"]');
+        expect(prompt).not.toBeNull();
+        expect(prompt?.querySelector("b")?.textContent).toBe("Receiver Blog (receiver)");
+        expect(prompt?.textContent).toContain("A post heading");
 
         const cancel = Array.from(container.querySelectorAll("button"))
             .find((button: HTMLButtonElement) => button.textContent === "cancel");
@@ -141,15 +141,16 @@ describe("repost dialog", () => {
         mockState.repostDialog.nodeName = "bob";
         act(() => root.render(<RepostDialog/>));
 
-        expect(container.querySelector(".form-text")?.textContent).toBe("repeat-your-post:A post heading");
-        expect(container.querySelector(".form-text b")).toBeNull();
+        const prompt = container.querySelector("form p");
+        expect(prompt?.textContent).toBe("repeat-your-post:A post heading");
+        expect(prompt?.querySelector("b")).toBeNull();
     });
 
     test("uses the configured display mode for the node name", () => {
         mockNameDisplayMode = "name";
         act(() => root.render(<RepostDialog/>));
 
-        expect(container.querySelector(".form-text b")?.textContent).toBe("receiver");
+        expect(container.querySelector('[data-i18n-key="share-post-your-blog"] b')?.textContent).toBe("receiver");
     });
 
     test("submits the source posting with the selected visibility", async () => {

@@ -21,6 +21,7 @@ import { REL_CURRENT, RelNodeName } from "util/rel-node-name";
 import { mediaHashStrip } from "util/media-images";
 import { hasClass, textContent } from "util/domhandler";
 import { ut } from "util/url";
+import "./Entry.css";
 
 interface Props {
     className?: string;
@@ -180,7 +181,7 @@ export default function EntryHtml({
             {totalDetails >= 3 &&
                 <EntryExpandAllDetailsButton contentRef={contentRef}/>
             }
-            <div ref={contentRef} onClick={onClick}>
+            <div className="entry-text" ref={contentRef} onClick={onClick}>
                 {content}
             </div>
         </div>

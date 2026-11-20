@@ -146,7 +146,7 @@ export function useRichTextEditorCommands(): RichTextEditorCommands {
     const context = useContext(RichTextEditorCommandsContext);
     
     const handleHotKeys = (event: React.KeyboardEvent) => {
-        if ((event.ctrlKey || event.altKey) && !event.metaKey) {
+        if (event.ctrlKey || event.altKey || event.metaKey) {
             if (RICH_TEXT_EDITOR_KEYS.BOLD.check(event)) {
                 context.formatBold();
                 return true;
@@ -182,6 +182,9 @@ export function useRichTextEditorCommands(): RichTextEditorCommands {
                 return true;
             } else if (RICH_TEXT_EDITOR_KEYS.EM_DASH.check(event)) {
                 context.enterText("\u2014");
+                return true;
+            } else if (RICH_TEXT_EDITOR_KEYS.MINUS.check(event)) {
+                context.enterText("\u2212");
                 return true;
             } else if (RICH_TEXT_EDITOR_KEYS.ANGLE_QUOTE_LEFT.check(event)) {
                 context.enterText("\u00AB");
