@@ -2,7 +2,7 @@
     margin-top: 2rem;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     #comment-compose {
         margin-bottom: calc(var(--page-footer-height) + .25rem);
     }
@@ -41,7 +41,7 @@
     color: var(--bs-gray-600);
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     #comment-compose DIV.link-preview {
         width: calc(99.6vw - 5rem);
         margin-left: -.5rem;
@@ -49,13 +49,13 @@
     }
 }
 
-@media only screen and (min-width: 992px) {
+@media only screen and (--desktop) {
     #comment-compose.nologin .btn {
         width: 10.25rem;
     }
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     #comment-compose.nologin {
         display: grid;
         margin-bottom: calc(var(--page-footer-height) + .25rem);

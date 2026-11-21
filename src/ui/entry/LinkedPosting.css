@@ -7,7 +7,7 @@
     font-size: .875rem;
 }
 
-@media only screen and (min-width: 992px) {
+@media only screen and (--desktop) {
     .comment .linked-posting {
         display: inline-block;
         width: calc(50% - .25rem);

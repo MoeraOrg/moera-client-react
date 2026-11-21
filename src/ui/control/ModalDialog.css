@@ -28,7 +28,7 @@
     --bs-modal-width: var(--feed-width);
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .modal-fullscreen-lg-down .modal-footer {
         --bs-modal-footer-border-color: transparent;
     }

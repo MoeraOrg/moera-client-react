@@ -4,7 +4,7 @@
     margin-top: .35rem;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .comment-compose-panel {
         margin-left: -3.25rem;
     }
@@ -25,7 +25,7 @@
     color: var(--bs-danger);
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .comment-compose-panel .rich-text-editor-button.delete {
         margin-inline-end: 1em;
     }

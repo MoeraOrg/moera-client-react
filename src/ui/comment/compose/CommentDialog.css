@@ -16,13 +16,13 @@
     margin-inline-end: 1em;
 }
 
-@media only screen and (min-width: 992px) {
+@media only screen and (--desktop) {
     .comment-dialog :is(A, DIV).link-preview {
         width: 400px;
     }
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .comment-dialog :is(A, DIV).link-preview {
         width: calc(100vw - 2rem);
     }

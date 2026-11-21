@@ -9,7 +9,7 @@
     transition: box-shadow .2s ease;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .back-box-inner {
         border-radius: 0;
     }

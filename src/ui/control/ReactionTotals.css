@@ -27,13 +27,13 @@
     background-color: var(--reactions-positive);
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .reactions .positive {
         margin-right: .9em;
     }
 }
 
-@media only screen and (min-width: 992px) {
+@media only screen and (--desktop) {
     .reactions .positive {
         margin-right: 1.45em;
     }

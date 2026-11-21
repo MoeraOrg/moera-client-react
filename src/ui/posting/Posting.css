@@ -18,7 +18,7 @@
     background-color: #fffee4;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .posting {
         margin-bottom: .75rem;
         padding: 1rem 1rem .5rem;
@@ -29,13 +29,13 @@
     overflow-y: auto;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .posting.preview > .content {
         max-height: 180vh;
     }
 }
 
-@media only screen and (min-width: 992px) {
+@media only screen and (--desktop) {
     .posting.preview > .content {
         max-height: 100vh;
     }
@@ -65,7 +65,7 @@
     right: 1.2rem;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .posting > .menu {
         top: .5rem;
         right: .5rem;
@@ -84,13 +84,13 @@
     align-items: baseline;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .posting > .reactions-line > .left-group {
         gap: .9rem;
     }
 }
 
-@media only screen and (min-width: 992px) {
+@media only screen and (--desktop) {
     .posting > .reactions-line > .left-group {
         gap: 1.45rem;
     }

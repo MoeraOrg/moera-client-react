@@ -14,7 +14,7 @@
     --underlined-tabs-tab-active-underline: var(--bs-primary);
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .underlined-tabs {
         margin-bottom: .75rem;
     }

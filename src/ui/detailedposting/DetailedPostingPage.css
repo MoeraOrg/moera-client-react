@@ -2,7 +2,7 @@
     top: calc(var(--page-header-height) + 4.5rem);
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .detailed-posting-page .feed-top-box {
         top: calc(var(--page-header-height) + .5rem);
     }

@@ -1,10 +1,10 @@
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .explore-page .feed-top-box {
         top: calc(var(--page-header-height) + 3.5rem);
     }
 }
 
-@media only screen and (min-width: 992px) {
+@media only screen and (--desktop) {
     .explore-page.tabbed-page #back-box .underlined-tabs {
         padding: .25rem 1.5rem 0;
     }

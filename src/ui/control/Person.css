@@ -8,7 +8,7 @@
         / min-content auto    auto;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .person {
         padding-right: 0;
         grid-template:
@@ -41,7 +41,7 @@
     text-overflow: ellipsis;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .person .details .full-name {
         font-size: 1rem;
     }

@@ -8,7 +8,7 @@
     object-position: center;
 }
 
-@media only screen and (min-width: 992px) {
+@media only screen and (--desktop) {
     .link-preview IMG {
         width: 150px;
         height: auto;
@@ -21,7 +21,7 @@
     }
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .link-preview IMG {
         width: 30vw;
         height: auto;

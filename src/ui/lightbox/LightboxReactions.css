@@ -41,7 +41,7 @@
     margin-right: 0;
 }
 
-@media only screen and (min-width: 992px) {
+@media only screen and (--desktop) {
     .lightbox-reactions {
         right: 1rem;
     }
@@ -69,7 +69,7 @@
     }
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .lightbox-reactions {
         left: 0;
         width: 100%;

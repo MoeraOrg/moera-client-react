@@ -1,4 +1,4 @@
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     #main-menu {
         height: 4rem;
         padding: .75rem 1rem;

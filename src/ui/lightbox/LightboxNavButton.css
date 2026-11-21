@@ -14,7 +14,7 @@
     opacity: .7;
 }
 
-@media (min-width: 992px) {
+@media (--desktop) {
     .lightbox-nav-buttons {
         block-size: calc(100dvh - 100px - 13rem);
     }

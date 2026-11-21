@@ -1,4 +1,4 @@
-@media only screen and (min-width: 1200px) {
+@media only screen and (width >= 1200px) {
     .page {
         max-width: calc(var(--feed-width) + 42.5rem);
         display: grid;
@@ -32,7 +32,7 @@
     }
 }
 
-@media only screen and (min-width: 992px) and (max-width: 1199px) {
+@media only screen and (--desktop) and (width < 1200px) {
     .page {
         display: grid;
         grid-template-columns: minmax(16.5rem, 20.25rem) minmax(600px, var(--feed-width));
@@ -64,7 +64,7 @@
     }
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .page {
         display: block;
         container-type: inline-size;

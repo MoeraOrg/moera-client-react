@@ -15,14 +15,14 @@
     background-color: var(--bs-gray-200);
 }
 
-@media only screen and (min-width: 992px) {
+@media only screen and (--desktop) {
     .attached-file {
         display: inline-grid;
         width: calc(50% - 1rem);
     }
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .attached-file {
         display: grid;
         width: calc(99.6vw - 3.5rem);

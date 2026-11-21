@@ -15,7 +15,7 @@
     cursor: pointer;
 }
 
-@media only screen and (min-width: 992px) {
+@media only screen and (--desktop) {
     #invitation-alert {
         position: sticky;
         top: calc(var(--page-header-height) - 3.5rem);
@@ -23,7 +23,7 @@
     }
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     #invitation-alert {
         position: fixed;
         bottom: 0;

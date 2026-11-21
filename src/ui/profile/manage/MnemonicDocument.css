@@ -51,7 +51,7 @@
     grid-area: print;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .mnemonic-document .words-panel .print-button {
         display: none;
     }

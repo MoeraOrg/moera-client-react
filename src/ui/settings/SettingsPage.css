@@ -20,7 +20,7 @@
     display: contents;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .settings-notebook-switcher {
         width: 100vw;
         height: min-content;
@@ -85,7 +85,7 @@
     align-self: end;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .settings-notebook #build-number {
         align-self: center;
         margin-left: 1rem;

@@ -2,7 +2,7 @@
     padding-bottom: 1rem;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .search-page {
         padding-bottom: calc(var(--page-footer-height) + .25rem);
     }

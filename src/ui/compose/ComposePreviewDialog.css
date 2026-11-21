@@ -10,7 +10,7 @@
     --feed-width: calc(var(--bs-modal-width) - var(--bs-modal-padding) * 2);
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .compose-preview-dialog .modal-body {
         --feed-width: calc(100vw + 1.5rem - var(--bs-modal-padding) * 2 - var(--bs-modal-margin) * 2);
     }

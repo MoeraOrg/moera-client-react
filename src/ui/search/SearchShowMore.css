@@ -6,7 +6,7 @@
     text-align: center;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .search-page .show-more BUTTON {
         width: 100%;
     }

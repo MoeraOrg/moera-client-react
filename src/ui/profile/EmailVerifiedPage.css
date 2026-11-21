@@ -1,4 +1,4 @@
-@media only screen and (min-width: 992px) {
+@media only screen and (--desktop) {
     .email-verified-page {
         width: 33.5rem;
     }

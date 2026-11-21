@@ -1,5 +1,7 @@
 import { useCallback, useSyncExternalStore } from 'react';
 
+const DESKTOP_WIDTH_QUERY = "(min-width: 992px)";
+
 export function useMediaQuery(query: string): boolean {
     const subscribe = useCallback(
         (onStoreChange: () => void) => {
@@ -19,9 +21,9 @@ export function useMediaQuery(query: string): boolean {
 }
 
 export function useIsTinyScreen(): boolean {
-    return useMediaQuery("(max-width: 991px)");
+    return !useMediaQuery(DESKTOP_WIDTH_QUERY);
 }
 
 export function isTinyScreen(): boolean {
-    return window.matchMedia("(max-width: 991px)").matches;
+    return !window.matchMedia(DESKTOP_WIDTH_QUERY).matches;
 }

@@ -4,7 +4,7 @@
     padding: .15em .15em 1.7em;
 }
 
-@media only screen and (max-width: 409px) {
+@media only screen and (width < 410px) {
     .comment-compose-panel .submit:not(:disabled) {
         background-color: transparent;
         border: none;
@@ -28,7 +28,7 @@
     padding-right: .325rem;
 }
 
-@media only screen and (min-width: 410px) {
+@media only screen and (width >= 410px) {
     .comment-compose-panel .submit:not(:disabled) {
         padding-right: .3em;
     }

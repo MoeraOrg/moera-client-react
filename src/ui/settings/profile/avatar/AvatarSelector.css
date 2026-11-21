@@ -10,13 +10,13 @@
     overscroll-behavior-y: none;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (--mobile) {
     .avatar-selector {
         max-width: min(calc(312px + 2.5rem), calc(100vw - 6rem));
     }
 }
 
-@media only screen and (min-width: 992px) {
+@media only screen and (--desktop) {
     .avatar-selector {
         max-width: min(calc(520px + 3.5rem), calc(100vw - 6rem));
     }
