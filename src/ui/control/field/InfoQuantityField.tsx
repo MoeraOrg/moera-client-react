@@ -1,5 +1,6 @@
 import React from 'react';
 import NumberPicker from 'react-widgets/NumberPicker';
+import { caretDown, caretUp } from 'react-widgets/cjs/Icon';
 
 import { FormGroup, Wrapper } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
@@ -79,8 +80,12 @@ export function InfoQuantityField({
                         onChange={v => onChange(null, v)}
                         autoFocus={autoFocus}
                         disabled={disabled}
-                        min={dmin.toUnitCeil(quantity.unit) ?? undefined}
-                        max={dmax.toUnitFloor(quantity.unit) ?? undefined}
+                        min={dmin.toUnitCeil(quantity.unit) ?? -Infinity}
+                        max={dmax.toUnitFloor(quantity.unit) ?? Infinity}
+                        step={1}
+                        precision="auto"
+                        incrementIcon={caretUp}
+                        decrementIcon={caretDown}
                     />
                     <select name={name + "_unit"} value={quantity.unit} disabled={disabled}
                             onChange={e => onChange(e.target.value as InfoQuantityUnit, null)}>

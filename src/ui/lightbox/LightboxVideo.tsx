@@ -2,6 +2,7 @@ import React, { type CSSProperties, useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
 
 import { Loading, VideoPlayer } from "ui/control";
+import { useIsTinyScreen } from "ui/hook/media-query";
 import { useLightbox } from "ui/lightbox/lightbox-context";
 import { ANIMATION_DURATION_MS } from "ui/lightbox/util";
 import "./LightboxVideo.css";
@@ -21,6 +22,7 @@ interface Props {
 
 export default function LightboxVideo({src, posterSrc, width, height, className, autoPlay, transforms}: Props) {
     const {animating, boxSize, setDyed} = useLightbox();
+    const tinyScreen = useIsTinyScreen();
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [naturalSize, setNaturalSize] = useState<VideoSize | null>(
         width != null && height != null ? {width, height} : null
@@ -45,7 +47,7 @@ export default function LightboxVideo({src, posterSrc, width, height, className,
     };
 
     const size = naturalSize != null
-        ? getFitSize(boxSize.width, boxSize.height, naturalSize)
+        ? getFitSize(boxSize.width, boxSize.height, naturalSize, tinyScreen)
         : {width: 0, height: 0};
     const style: CSSProperties = {
         width: size.width,
@@ -88,9 +90,12 @@ interface VideoSize {
     height: number;
 }
 
-function getFitSize(containerWidth: number, containerHeight: number, naturalSize: VideoSize): VideoSize {
-    const maxWidth = Math.max(0, containerWidth - 20);
-    const maxHeight = Math.max(0, containerHeight - 20);
+function getFitSize(
+    containerWidth: number, containerHeight: number, naturalSize: VideoSize, tinyScreen: boolean
+): VideoSize {
+    const padding = tinyScreen ? 0 : 10;
+    const maxWidth = Math.max(0, containerWidth - 2 * padding);
+    const maxHeight = Math.max(0, containerHeight - 2 * padding);
     const scale = Math.min(1, maxWidth / naturalSize.width, maxHeight / naturalSize.height);
 
     return {

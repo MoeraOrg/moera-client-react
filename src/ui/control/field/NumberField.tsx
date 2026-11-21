@@ -1,5 +1,6 @@
 import React from 'react';
 import NumberPicker from 'react-widgets/NumberPicker';
+import { caretDown, caretUp } from 'react-widgets/cjs/Icon';
 
 import { FormGroup } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
@@ -50,9 +51,12 @@ export const NumberField = ({
                         autoFocus={autoFocus}
                         disabled={disabled}
                         format={format}
-                        min={min ?? undefined}
-                        max={max ?? undefined}
+                        min={min ?? -Infinity}
+                        max={max ?? Infinity}
                         step={step ?? 1}
+                        precision="auto"
+                        incrementIcon={caretUp}
+                        decrementIcon={caretDown}
                     />
                 </div>
                 {showError && touched && <FieldError error={error}/>}

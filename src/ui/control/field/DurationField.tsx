@@ -1,5 +1,6 @@
 import React from 'react';
 import NumberPicker from 'react-widgets/NumberPicker';
+import { caretDown, caretUp } from 'react-widgets/cjs/Icon';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
@@ -83,8 +84,12 @@ export function DurationField({
                             onChange={v => onChange(null, v)}
                             autoFocus={autoFocus}
                             disabled={disabled}
-                            min={(isFixedUnit(duration.unit) ? dmin.toUnitCeil(duration.unit) : null) ?? undefined}
-                            max={(isFixedUnit(duration.unit) ? dmax.toUnitFloor(duration.unit) : null) ?? undefined}
+                            min={(isFixedUnit(duration.unit) ? dmin.toUnitCeil(duration.unit) : null) ?? -Infinity}
+                            max={(isFixedUnit(duration.unit) ? dmax.toUnitFloor(duration.unit) : null) ?? Infinity}
+                            step={1}
+                            precision="auto"
+                            incrementIcon={caretUp}
+                            decrementIcon={caretDown}
                         />
                     </span>
                     <select name={name + "_unit"} value={duration.unit} disabled={disabled}
