@@ -527,3 +527,5 @@ export interface TokenDeletedEvent extends BaseEvent<"TOKEN_DELETED"> {
 export interface TokenUpdatedEvent extends BaseEvent<"TOKEN_UPDATED"> {
     token: TokenInfo;
 }
+
+export type WakeUpEvent = BaseEvent<"WAKE_UP">;

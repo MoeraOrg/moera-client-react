@@ -43,7 +43,7 @@ test.each([
     backend.setClientId("client-1");
     await backend.setup("wss://author.example/moera/api/events", null, "carte", "RECEIVER", "author");
     const client = jest.mocked(Client).mock.results[0].value;
-    client.onConnect({} as IFrame);
+    client.onConnect({headers: {}} as IFrame);
     const onMessage = client.subscribe.mock.calls[0][1];
     const event = {
         type,

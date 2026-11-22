@@ -41,7 +41,7 @@ async function setup(connections: EventsConnection[]): Promise<void> {
 }
 
 function subscribe(client: Client) {
-    client.onConnect({} as IFrame);
+    client.onConnect({headers: {}} as IFrame);
     const onMessage = jest.mocked(client.subscribe).mock.calls[0][1];
     return (event: {type: string; [key: string]: unknown}, ordinal: number, cid?: string, sentAt?: number) => {
         onMessage({body: JSON.stringify({queueStartedAt: 1, ordinal, cid, sentAt, event})} as IMessage);
@@ -167,7 +167,7 @@ test("keeps the socket and event cursor when its last consumer changes role", as
     expect(clients).toHaveLength(1);
     expect(clients[0].deactivate).not.toHaveBeenCalled();
 
-    clients[0].onConnect({} as IFrame);
+    clients[0].onConnect({headers: {}} as IFrame);
     expect(clients[0].subscribe).toHaveBeenLastCalledWith("/user/queue", expect.any(Function), {seen: "1,10"});
     jest.mocked(globalThis.postMessage).mockClear();
     send(changed, 11);
@@ -179,7 +179,7 @@ test("closes unused sockets, clears their timers and ignores their late callback
     const send = subscribe(clients[0]);
     await setup([]);
     send(added, 1);
-    clients[0].onConnect({} as IFrame);
+    clients[0].onConnect({headers: {}} as IFrame);
 
     expect(clients[0].deactivate).toHaveBeenCalledTimes(1);
     expect(clients[0].subscribe).toHaveBeenCalledTimes(1);

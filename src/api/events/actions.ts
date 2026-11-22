@@ -90,6 +90,7 @@ import {
     TokenAddedEvent,
     TokenDeletedEvent,
     TokenUpdatedEvent,
+    WakeUpEvent,
 } from "api/events";
 
 export type EventSource = "HOME" | "NODE" | "RECEIVER";
@@ -189,4 +190,5 @@ export type ClientEventAction =
     | EventAction<SubscriptionsTotalChangedEvent>
     | EventAction<TokenAddedEvent>
     | EventAction<TokenDeletedEvent>
-    | EventAction<TokenUpdatedEvent>;
+    | EventAction<TokenUpdatedEvent>
+    | EventAction<WakeUpEvent>;

@@ -38266,6 +38266,71 @@ validate151.errors = vErrors;
 return errors === 0;
 }
 
+export const WakeUpEvent = validate152;
+const schema159 = {"type":"object","properties":{"type":{"type":"string"}},"required":["type"],"additionalProperties":false};
+
+function validate152(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
+let vErrors = null;
+let errors = 0;
+if(errors === 0){
+if(data && typeof data == "object" && !Array.isArray(data)){
+let missing0;
+if((data.type === undefined) && (missing0 = "type")){
+validate152.errors = [{instancePath,schemaPath:"#/required",keyword:"required",params:{missingProperty: missing0},message:"must have required property '"+missing0+"'"}];
+return false;
+}
+else {
+const _errs1 = errors;
+for(const key0 in data){
+if(!(key0 === "type")){
+delete data[key0];
+}
+}
+if(_errs1 === errors){
+if(data.type !== undefined){
+let data0 = data.type;
+if(typeof data0 !== "string"){
+let dataType0 = typeof data0;
+let coerced0 = undefined;
+if(dataType0 == 'object' && Array.isArray(data0) && data0.length == 1){
+data0 = data0[0];
+dataType0 = typeof data0;
+if(typeof data0 === "string"){
+coerced0 = data0;
+}
+}
+if(!(coerced0 !== undefined)){
+if(dataType0 == "number" || dataType0 == "boolean"){
+coerced0 = "" + data0;
+}
+else if(data0 === null){
+coerced0 = "";
+}
+else {
+validate152.errors = [{instancePath:instancePath+"/type",schemaPath:"#/properties/type/type",keyword:"type",params:{type: "string"},message:"must be string"}];
+return false;
+}
+}
+if(coerced0 !== undefined){
+data0 = coerced0;
+if(data !== undefined){
+data["type"] = coerced0;
+}
+}
+}
+}
+}
+}
+}
+else {
+validate152.errors = [{instancePath,schemaPath:"#/type",keyword:"type",params:{type: "object"},message:"must be object"}];
+return false;
+}
+}
+validate152.errors = vErrors;
+return errors === 0;
+}
+
 export const EVENT_VALIDATORS = {
     "EVENT_PACKET": EventPacket,
     "ASK_SUBJECTS_CHANGED": AskSubjectsChangedEvent,
@@ -38354,4 +38419,5 @@ export const EVENT_VALIDATORS = {
     "TOKEN_ADDED": TokenAddedEvent,
     "TOKEN_DELETED": TokenDeletedEvent,
     "TOKEN_UPDATED": TokenUpdatedEvent,
+    "WAKE_UP": WakeUpEvent,
 };

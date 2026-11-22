@@ -19,8 +19,7 @@ export default class EventsBackend {
     private carte: string | null = null;
     private prefix: EventSource[] = [];
     private sourceNode: string | null = null;
-    private queueStartedAt: number | null = null;
-    private lastEvent: number | null = null;
+    private seen: string | null = null;
     private lastEventSentAt: number | null = null;
     private lastWakeUp: Date = new Date();
     private pingReceived: boolean = true;
@@ -63,6 +62,8 @@ export default class EventsBackend {
         }
         if (packet.event.type === "PING") {
             this.pingReceived = true;
+        } else if (packet.event.type === "WAKE_UP") {
+            this.dispatchWakeUp();
         } else if (ALLOWED_SELF_EVENTS.has(packet.event.type) || packet.cid !== this.clientId) {
             const event = {
                 ...packet.event,
@@ -70,12 +71,11 @@ export default class EventsBackend {
             }
             this.prefix.forEach(prefix => this.dispatch(eventAction(event, prefix)));
         }
-        this.queueStartedAt = packet.queueStartedAt;
-        this.lastEvent = packet.ordinal;
+        this.seen = `${packet.queueStartedAt},${packet.ordinal}`;
         this.lastEventSentAt = packet.sentAt ?? null;
     };
 
-    private onConnect(stomp: Client) {
+    private onConnect(stomp: Client, serverSeen: string | undefined) {
         if (this.stomp !== stomp) {
             return;
         }
@@ -83,8 +83,11 @@ export default class EventsBackend {
         this.wakeUp();
 
         const headers: StompHeaders = {};
-        if (this.queueStartedAt != null) {
-            headers.seen = `${this.queueStartedAt},${this.lastEvent}`;
+        if (this.seen == null && serverSeen != null && /^\d+,\s*\d+$/.test(serverSeen)) {
+            this.seen = serverSeen;
+        }
+        if (this.seen != null) {
+            headers.seen = this.seen;
         }
         stomp.subscribe("/user/queue", message => {
             if (this.stomp === stomp) {
@@ -114,7 +117,7 @@ export default class EventsBackend {
         }
         const stomp = new Client({
             brokerURL: location,
-            onConnect: () => this.onConnect(stomp),
+            onConnect: frame => this.onConnect(stomp, frame.headers.seen),
             connectHeaders
         });
         this.stomp = stomp;
@@ -154,8 +157,7 @@ export default class EventsBackend {
             || this.token !== token
             || (this.token == null && (this.carte == null) !== (carte == null));
         if (location !== this.location && (sourceNode == null || sourceNode !== this.sourceNode)) {
-            this.queueStartedAt = null;
-            this.lastEvent = null;
+            this.seen = null;
             this.lastEventSentAt = null;
         }
         this.location = location;
@@ -182,10 +184,14 @@ export default class EventsBackend {
         const sleepTime = now() - this.lastEventSentAt; // we really were sleeping
         if (sleepTime > 10 * 60) { // 10 minutes
             if (isBefore(addMinutes(this.lastWakeUp, 10), new Date())) { // do not wake up too often
-                this.lastWakeUp = new Date();
-                this.dispatch(wakeUp());
+                this.dispatchWakeUp();
             }
         }
+    }
+
+    private dispatchWakeUp() {
+        this.lastWakeUp = new Date();
+        this.dispatch(wakeUp());
     }
 
     private onPingCheck = () => {

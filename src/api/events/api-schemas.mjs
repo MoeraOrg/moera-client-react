@@ -2192,5 +2192,18 @@ export const EVENT_SCHEMAS = {
             additionalProperties: false
         },
 
+        WakeUpEvent: {
+            type: "object",
+            properties: {
+                "type": {
+                    type: "string"
+                },
+            },
+            required: [
+                "type",
+            ],
+            additionalProperties: false
+        },
+
     }
 }

@@ -42,12 +42,42 @@ afterEach(() => {
     jest.useRealTimers();
 });
 
-async function connect(): Promise<EventsBackend> {
+async function connect(seen?: string, prefix: "HOME" | "NODE" = "HOME"): Promise<EventsBackend> {
     const backend = new EventsBackend();
-    await backend.setup("wss://author.example/moera/api/events", "token", null, "HOME", "author");
-    sockets[0].receive("CONNECTED\nversion:1.2\nheart-beat:0,0\n\n");
+    await backend.setup("wss://author.example/moera/api/events", "token", null, prefix, "author");
+    sockets[0].receive("CONNECTED\nversion:1.2\nheart-beat:0,0\n" + (seen ? `seen:${seen}\n` : "") + "\n");
     return backend;
 }
+
+test("resumes from CONNECTED if the socket closes before the first event", async () => {
+    await connect("100,0");
+    expect(sockets[0].send).toHaveBeenCalledWith(expect.stringContaining("seen:100,0\n"));
+
+    sockets[0].finishClosing();
+    await jest.advanceTimersByTimeAsync(5000);
+    sockets[1].receive("CONNECTED\nversion:1.2\nseen:100,12\n\n");
+    expect(sockets[1].send).toHaveBeenCalledWith(expect.stringContaining("seen:100,0\n"));
+});
+
+test.each([undefined, "invalid"])("can subscribe without a usable CONNECTED cursor (%s)", async seen => {
+    await connect(seen);
+    const [frame] = sockets[0].send.mock.calls.find(([frame]: [string]) => frame.startsWith("SUBSCRIBE\n"))!;
+    expect(frame).not.toContain("seen:");
+});
+
+test("immediately wakes the UI for a gap reported by a remote node and resumes from the marker", async () => {
+    await connect("100,4", "NODE");
+    sockets[0].receive("MESSAGE\nsubscription:sub-0\nmessage-id:1\n\n" + JSON.stringify({
+        queueStartedAt: 200, ordinal: 10, event: {type: "WAKE_UP"}
+    }));
+    expect(postMessage).toHaveBeenCalledTimes(1);
+    expect(postMessage).toHaveBeenCalledWith(expect.objectContaining({type: "WAKE_UP"}));
+
+    sockets[0].finishClosing();
+    await jest.advanceTimersByTimeAsync(5000);
+    sockets[1].receive("CONNECTED\nversion:1.2\nseen:200,20\n\n");
+    expect(sockets[1].send).toHaveBeenCalledWith(expect.stringContaining("seen:200,10\n"));
+});
 
 test("recovers after missing pings even when the broker never acknowledges DISCONNECT", async () => {
     const backend = await connect();
@@ -69,7 +99,7 @@ test("recovers after missing pings even when the broker never acknowledges DISCO
     await updating;
     expect(sockets).toHaveLength(2);
     expect(sockets[1].send).toHaveBeenCalledWith(expect.stringContaining("token:new-token\n"));
-    sockets[1].receive("CONNECTED\nversion:1.2\nheart-beat:0,0\n\n");
+    sockets[1].receive("CONNECTED\nversion:1.2\nheart-beat:0,0\nseen:1,20\n\n");
     expect(sockets[1].send).toHaveBeenCalledWith(expect.stringContaining("seen:1,10\n"));
 });
 
