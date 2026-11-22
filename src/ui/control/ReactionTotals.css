@@ -5,6 +5,7 @@
     padding-left: .2em;
     margin-top: .2em;
     text-wrap: nowrap;
+    display: contents;
 }
 
 .reactions:empty {
@@ -18,25 +19,15 @@
 }
 
 .reactions :is(.positive, .negative) {
+    font-weight: 600;
     border-radius: .9em;
-    padding: .44em 1.1em;
+    padding: .26em 1.1em;
+    border: none;
 }
 
 .reactions .positive {
     color: var(--correct);
     background-color: var(--reactions-positive);
-}
-
-@media only screen and (--mobile) {
-    .reactions .positive {
-        margin-right: .9em;
-    }
-}
-
-@media only screen and (--desktop) {
-    .reactions .positive {
-        margin-right: 1.45em;
-    }
 }
 
 .reactions .negative {

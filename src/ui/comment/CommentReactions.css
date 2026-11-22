@@ -4,15 +4,16 @@
     margin-right: .3rem;
     position: relative;
     top: -.9rem;
+    display: block;
 }
 
 .comment .reactions .positive {
     margin-right: 0;
     margin-left: .7em;
-    padding: .4em .9em;
+    padding: .2em .9em;
 }
 
 .comment .reactions .negative {
     margin-left: 1em;
-    padding: .4em .9em;
+    padding: .2em .9em;
 }

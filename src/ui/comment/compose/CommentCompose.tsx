@@ -65,44 +65,42 @@ function CommentCompose(props: Props) {
     }
 
     return (
-        <div id="comment-compose" onFocus={onFocus} onBlur={onBlur}>
-            <Form>
-                <AvatarField name="avatar" size={32} disabled={!ready || beingPosted}/>
-                <div className="content">
-                    {!props.connectedToHome &&
-                        <InputField name="ownerFullName" placeholder={t("your-name")} maxLength={96} className="mb-3"
-                                    showWrong/>
-                    }
-                    <CommentComposeRepliedTo disabled={!ready || beingPosted}/>
-                    <RichTextField
-                        name="body"
-                        rows={2}
-                        minHeight="4em"
-                        maxHeight="max(100vh - 26rem, 7.2em)"
-                        features={features}
-                        nodeName={receiverName ?? REL_CURRENT}
-                        noMedia={!connectedToHome}
-                        noEmbeddedMedia
-                        draftId={draft?.id ?? null}
-                        draftReady={ready && !commentDialogShow}
-                        draftMedia={draft?.media}
-                        placeholder={t("write-comment")}
-                        disabled={!ready || beingPosted}
-                        smileysEnabled={smileysEnabled}
-                        commentQuote
-                        panelMode="none"
-                        format={sourceFormatDefault}
-                        submitKey={submitKey}
-                        onSubmit={() => submitForm()}
-                        urlsField="bodyUrls"
-                        linkPreviewsField="linkPreviews"
-                        linkPreviewsSmall
-                    >
-                        <CommentComposePanel/>
-                    </RichTextField>
-                </div>
-            </Form>
-        </div>
+        <Form onFocus={onFocus} onBlur={onBlur}>
+            <AvatarField name="avatar" size={32} disabled={!ready || beingPosted}/>
+            <div className="content">
+                {!props.connectedToHome &&
+                    <InputField name="ownerFullName" placeholder={t("your-name")} maxLength={96} className="mb-3"
+                                showWrong/>
+                }
+                <CommentComposeRepliedTo disabled={!ready || beingPosted}/>
+                <RichTextField
+                    name="body"
+                    rows={2}
+                    minHeight="4em"
+                    maxHeight="max(100vh - 26rem, 7.2em)"
+                    features={features}
+                    nodeName={receiverName ?? REL_CURRENT}
+                    noMedia={!connectedToHome}
+                    noEmbeddedMedia
+                    draftId={draft?.id ?? null}
+                    draftReady={ready && !commentDialogShow}
+                    draftMedia={draft?.media}
+                    placeholder={t("write-comment")}
+                    disabled={!ready || beingPosted}
+                    smileysEnabled={smileysEnabled}
+                    commentQuote
+                    panelMode="none"
+                    format={sourceFormatDefault}
+                    submitKey={submitKey}
+                    onSubmit={() => submitForm()}
+                    urlsField="bodyUrls"
+                    linkPreviewsField="linkPreviews"
+                    linkPreviewsSmall
+                >
+                    <CommentComposePanel/>
+                </RichTextField>
+            </div>
+        </Form>
     );
 }
 

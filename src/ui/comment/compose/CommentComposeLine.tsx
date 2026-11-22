@@ -92,27 +92,29 @@ export default function CommentComposeLine() {
     }
 
     return (
-        <Suspense fallback={<div id="comment-compose"/>}>
-            <CommentCompose
-                nodeName={nodeName}
-                homeOwnerName={ownerName}
-                avatarDefault={avatarDefault}
-                receiverPostingId={receiverPostingId}
-                comment={null}
-                draft={draft}
-                formId={formId}
-                connectedToHome={connectedToHome}
-                ownerName={ownerName}
-                ownerFullName={ownerFullName}
-                ownerSourceUri={ownerSourceUri}
-                ownerFullNameDefault={ownerFullNameDefault}
-                ownerGender={ownerGender}
-                smileysEnabled={smileysEnabled}
-                sourceFormatDefault={sourceFormatDefault}
-                reactionsPositiveDefault={reactionsPositiveDefault}
-                reactionsNegativeDefault={reactionsNegativeDefault}
-                repliedToId={repliedToId}
-            />
-        </Suspense>
+        <div id="comment-compose">
+            <Suspense fallback={null}>
+                <CommentCompose
+                    nodeName={nodeName}
+                    homeOwnerName={ownerName}
+                    avatarDefault={avatarDefault}
+                    receiverPostingId={receiverPostingId}
+                    comment={null}
+                    draft={draft}
+                    formId={formId}
+                    connectedToHome={connectedToHome}
+                    ownerName={ownerName}
+                    ownerFullName={ownerFullName}
+                    ownerSourceUri={ownerSourceUri}
+                    ownerFullNameDefault={ownerFullNameDefault}
+                    ownerGender={ownerGender}
+                    smileysEnabled={smileysEnabled}
+                    sourceFormatDefault={sourceFormatDefault}
+                    reactionsPositiveDefault={reactionsPositiveDefault}
+                    reactionsNegativeDefault={reactionsNegativeDefault}
+                    repliedToId={repliedToId}
+                />
+            </Suspense>
+        </div>
     );
 }

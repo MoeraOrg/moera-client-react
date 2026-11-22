@@ -28,12 +28,12 @@ interface EmojisProps {
 
 const Emojis = ({className, emojis, total, onClick}: EmojisProps) => (
     (total !== 0 || emojis.length !== 0 ) ?
-        <span className={className} onClick={onClick}>
+        <button className={className} onClick={onClick}>
             <span className="emojis">
                 {emojis.map((code, i) => <Twemoji key={i} code={code}/>)}
             </span>
             {total > 0 ? total : null}
-        </span>
+        </button>
     :
         null
 );
