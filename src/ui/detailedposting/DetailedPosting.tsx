@@ -122,7 +122,7 @@ export default function DetailedPosting({feedName, story, posting, deleting}: Pr
                     <PostingSharings nodeName={REL_CURRENT} posting={posting}/>
                 </div>
                 <div className="right-group">
-                    <PostingViews viewCount={posting.viewCount}/>
+                    <PostingViews posting={posting}/>
                     <PostingComments postingId={posting.id} totalComments={posting.totalComments}/>
                 </div>
             </div>
