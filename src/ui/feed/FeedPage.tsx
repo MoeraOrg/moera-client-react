@@ -16,7 +16,6 @@ import {
 import { getFeedState } from "state/feeds/selectors";
 import { PostingState } from "state/postings/state";
 import { isPostingSheriffProhibited } from "state/postings/selectors";
-import { postingVisited } from "state/postings/actions";
 import { useDebounce, useDispatcher } from "ui/hook";
 import { FeedTopBox } from "ui/control";
 import FeedTopButton from "ui/feed/FeedTopButton";
@@ -24,6 +23,7 @@ import FeedSkipPinnedButton from "ui/feed/FeedSkipPinnedButton";
 import FeedStory from "ui/feed/FeedStory";
 import FeedSentinel from "ui/feed/FeedSentinel";
 import FeedNoContent from "ui/feed/nocontent/FeedNoContent";
+import { usePostingVisited } from "ui/posting/posting-visited";
 import { REL_HOME, RelNodeName } from "util/rel-node-name";
 import { getPageHeaderHeight } from "util/ui";
 import "./FeedPage.css";
@@ -235,15 +235,7 @@ export default function FeedPage({nodeName, feedName, visible, onNavigationUpdat
         }
         return stories.find(({story}) => story.moment === momentToVisit)?.posting;
     }, [momentToVisit, stories, visible]);
-    useEffect(() => {
-        if (postingToVisit != null) {
-            if (postingToVisit.receiverName != null && postingToVisit.receiverPostingId != null) {
-                dispatch(postingVisited(postingToVisit.receiverPostingId, postingToVisit.receiverName));
-            } else {
-                dispatch(postingVisited(postingToVisit.id, nodeName));
-            }
-        }
-    }, [dispatch, nodeName, postingToVisit]);
+    usePostingVisited(nodeName, postingToVisit);
 
     const [momentToView] = useDebounce(getNotViewedMoment(feedRef.current), 1000);
     useEffect(() => {

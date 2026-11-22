@@ -50,9 +50,6 @@ export default function FeedPosting({nodeName, posting, feedName, story}: FeedPo
     );
     const dispatch = useDispatcher();
 
-    if (posting == null) {
-        console.log(story, posting, cachedPosting);
-    }
     posting = posting ?? cachedPosting?.posting;
 
     if (posting == null) {

@@ -25,6 +25,7 @@ import DesktopBack from "ui/page/DesktopBack";
 import MobileBack from "ui/page/MobileBack";
 import { ReactComponent as GooglePlayProhibited } from "ui/page/GooglePlayProhibited.isvg";
 import ExploreBox from "ui/explore/ExploreBox";
+import { usePostingVisited } from "ui/posting/posting-visited";
 import DetailedPosting from "ui/detailedposting/DetailedPosting";
 import { ReactComponent as NotFound } from "ui/detailedposting/NotFound.isvg";
 import { REL_CURRENT, REL_HOME, RelNodeName } from "util/rel-node-name";
@@ -101,6 +102,7 @@ export default function DetailedPostingPage() {
     const dispatch = useDispatcher();
     const {t} = useTranslation();
 
+    usePostingVisited(REL_CURRENT, posting);
     const {feedName, story, backNodeName, backHref, backTitle} = useMemo(
         () => getBackFeedAndStory(atHome, nodeName, nodeFullName, posting, t, newsHref),
         [atHome, newsHref, nodeFullName, nodeName, posting, t]
