@@ -1,5 +1,6 @@
 import { type ImageInfo } from "ui/lightbox/lightbox-image-loader";
 import { type LightboxSource } from "ui/lightbox/lightbox-source";
+import { useLightboxWindow } from "ui/lightbox/lightbox-window-context";
 import LightboxImage from "ui/lightbox/LightboxImage";
 import LightboxVideo from "ui/lightbox/LightboxVideo";
 
@@ -16,8 +17,12 @@ interface Props {
 }
 
 export default function LightboxMedia({source, imageInfo, section, autoPlay, transforms}: Props) {
+    const {swipeOffsetX} = useLightboxWindow();
+    const slideTransforms = {...transforms, x: (transforms.x ?? 0) + swipeOffsetX};
     if (source.type === "image") {
-        return <LightboxImage imageInfo={imageInfo} className={`lightbox-image-${section}`} transforms={transforms}/>;
+        return (
+            <LightboxImage imageInfo={imageInfo} className={`lightbox-image-${section}`} transforms={slideTransforms}/>
+        );
     } else {
         return (
             <LightboxVideo
@@ -27,7 +32,7 @@ export default function LightboxMedia({source, imageInfo, section, autoPlay, tra
                 height={source.height}
                 className={`lightbox-video-${section}`}
                 autoPlay={autoPlay}
-                transforms={transforms}
+                transforms={slideTransforms}
             />
         );
     }

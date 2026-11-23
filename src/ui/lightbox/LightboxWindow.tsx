@@ -1,6 +1,6 @@
 // Based on react-image-lightbox 5.1.4 by Chris Fritz (MIT License).
 
-import React, { useEffect, useEffectEvent, useRef } from 'react';
+import React, { useEffect, useEffectEvent, useRef, useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -69,9 +69,14 @@ const ACTION_PINCH = 3;
 
 // Minimal swipe distance
 const MIN_SWIPE_DISTANCE = 200;
+const TAP_TOLERANCE = 5;
 
 const KEY_REPEAT_KEYUP_BONUS_MS = 40;
 const KEY_REPEAT_LIMIT_MS = 180;
+
+function exceedsTapTolerance(dx: number, dy: number): boolean {
+    return Math.abs(dx) > TAP_TOLERANCE || Math.abs(dy) > TAP_TOLERANCE;
+}
 
 export default function LightboxWindow({
     hasNext,
@@ -103,11 +108,9 @@ export default function LightboxWindow({
     const moveStartYRef = useRef(0);
     const moveStartOffsetXRef = useRef(0);
     const moveStartOffsetYRef = useRef(0);
-    const didPanImageRef = useRef(false);
-    const swipeStartXRef = useRef(0);
-    const swipeStartYRef = useRef(0);
-    const swipeEndXRef = useRef(0);
-    const swipeEndYRef = useRef(0);
+    const didDragRef = useRef(false);
+    const swipeStartRef = useRef<Point>({x: 0, y: 0});
+    const [swipeOffsetX, setSwipeOffsetX] = useState(0);
     const pinchPointerListRef = useRef<PinchPointer[] | null>(null);
     const pinchDistanceRef = useRef(0);
 
@@ -136,23 +139,18 @@ export default function LightboxWindow({
         moveStartYRef.current = clientY;
         moveStartOffsetXRef.current = offsetX;
         moveStartOffsetYRef.current = offsetY;
-        didPanImageRef.current = false;
     };
 
     const handleMove = ({x: clientX, y: clientY}: InputPointer): void => {
         const newOffsetX = moveStartXRef.current - clientX + moveStartOffsetXRef.current;
         const newOffsetY = moveStartYRef.current - clientY + moveStartOffsetYRef.current;
         if (offsetX !== newOffsetX || offsetY !== newOffsetY) {
-            didPanImageRef.current = true;
+            didDragRef.current = true;
             onOffsetChange(newOffsetX, newOffsetY);
         }
     };
 
     const handleMoveEnd = (): void => {
-        if (didPanImageRef.current) {
-            ignoreImageClickTimeout.set(noop, 100);
-        }
-        didPanImageRef.current = false;
         currentActionRef.current = ACTION_NONE;
         moveStartXRef.current = 0;
         moveStartYRef.current = 0;
@@ -168,53 +166,60 @@ export default function LightboxWindow({
         }
     };
 
-    const handleSwipeStart = ({x: clientX, y: clientY}: InputPointer): void => {
+    const handleSwipeStart = (pointer: InputPointer): void => {
         currentActionRef.current = ACTION_SWIPE;
-        swipeStartXRef.current = clientX;
-        swipeStartYRef.current = clientY;
-        swipeEndXRef.current = clientX;
-        swipeEndYRef.current = clientY;
+        swipeStartRef.current = pointer;
     };
 
-    const handleSwipe = ({x: clientX, y: clientY}: InputPointer): void => {
-        swipeEndXRef.current = clientX;
-        swipeEndYRef.current = clientY;
+    const handleSwipe = ({x, y}: InputPointer): void => {
+        const dx = x - swipeStartRef.current.x;
+        const dy = y - swipeStartRef.current.y;
+        if (!didDragRef.current && !exceedsTapTolerance(dx, dy)) {
+            return;
+        }
+        didDragRef.current = true;
+        if (animating) {
+            return;
+        }
+        const minX = hasNext ? -boxSize.width : 0;
+        const maxX = hasPrev ? boxSize.width : 0;
+        setSwipeOffsetX(Math.max(minX, Math.min(maxX, dx)));
     };
 
     const requestMove = (direction: MoveDirection): void => {
         const animate = !keyPressedRef.current;
         keyPressedRef.current = false;
-
+        currentActionRef.current = ACTION_NONE;
+        setSwipeOffsetX(0);
         onMove(direction, animate);
     };
 
-    const handleSwipeEnd = (event?: LightboxTriggerEvent | null): void => {
-        const xDiff = swipeEndXRef.current - swipeStartXRef.current;
-        const xDiffAbs = Math.abs(xDiff);
-        const yDiffAbs = Math.abs(swipeEndYRef.current - swipeStartYRef.current);
-
-        currentActionRef.current = ACTION_NONE;
-        swipeStartXRef.current = 0;
-        swipeStartYRef.current = 0;
-        swipeEndXRef.current = 0;
-        swipeEndYRef.current = 0;
-
-        if (!event || animating || xDiffAbs < yDiffAbs * 1.5) {
-            return;
-        }
-
-        if (xDiffAbs < MIN_SWIPE_DISTANCE) {
-            if (xDiffAbs < boxSize.width / 4) {
+    const handleSwipeEnd = (event: PointerEvent | null): void => {
+        if (event?.type === "pointerup") {
+            const dx = event.clientX - swipeStartRef.current.x;
+            const dy = event.clientY - swipeStartRef.current.y;
+            didDragRef.current ||= exceedsTapTolerance(dx, dy);
+            // Video.js treats a quick pointerup as a tap regardless of the distance traveled.
+            if (
+                didDragRef.current
+                && event.target instanceof Element
+                && event.target.closest(".lightbox-video-player") != null
+            ) {
+                event.stopPropagation();
+            }
+            const minDistance = Math.min(MIN_SWIPE_DISTANCE, boxSize.width / 4);
+            const hasNeighbor = (dx < 0 && hasNext) || (dx > 0 && hasPrev);
+            if (!animating && hasNeighbor && Math.abs(dx) >= minDistance && Math.abs(dx) >= Math.abs(dy) * 1.5) {
+                event.preventDefault();
+                requestMove(dx < 0 ? "next" : "prev");
                 return;
             }
         }
 
-        if (xDiff > 0 && hasPrev) {
-            event.preventDefault();
-            requestMove("prev");
-        } else if (xDiff < 0 && hasNext) {
-            event.preventDefault();
-            requestMove("next");
+        currentActionRef.current = ACTION_NONE;
+        setSwipeOffsetX(0);
+        if (event && swipeOffsetX !== 0) {
+            onAnimationRequest();
         }
     };
 
@@ -269,7 +274,7 @@ export default function LightboxWindow({
         pinchDistanceRef.current = 0;
     };
 
-    const handleEnd = (event?: LightboxTriggerEvent | null): void => {
+    const handleEnd = (event: PointerEvent | null): void => {
         switch (currentActionRef.current) {
             case ACTION_MOVE:
                 handleMoveEnd();
@@ -282,6 +287,10 @@ export default function LightboxWindow({
                 break;
             default:
                 break;
+        }
+        if (didDragRef.current) {
+            ignoreImageClickTimeout.set(noop, 100);
+            didDragRef.current = false;
         }
     };
 
@@ -328,7 +337,7 @@ export default function LightboxWindow({
         }
     };
 
-    const multiPointerEnd = (event: LightboxTriggerEvent): void => {
+    const multiPointerEnd = (event: PointerEvent): void => {
         if (currentActionRef.current !== ACTION_NONE) {
             setPreventInnerClose();
             handleEnd(event);
@@ -379,7 +388,12 @@ export default function LightboxWindow({
         pointerListRef.current.some(({id}) => id === pointer.id);
 
     const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>): void => {
-        if (event.button === 0 && isTargetMainImage(event.target)) {
+        const videoSurface = event.target instanceof Element
+            && event.target.matches(".lightbox-video-main :is(video, .lightbox-video-player)")
+            && document.fullscreenElement?.closest(".lightbox-video-main") == null;
+        if (event.button === 0
+            && (isTargetMainImage(event.target) || videoSurface || pointerListRef.current.length > 0)
+        ) {
             addPointer(parsePointerEvent(event));
             multiPointerStart(event);
         }
@@ -391,7 +405,7 @@ export default function LightboxWindow({
         // reset the gesture if mouse is moved with no buttons pressed
         if (event.pointerType === "mouse" && event.buttons === 0 && hasPointer(pointer)) {
             removePointer(pointer);
-            handleEnd(null);
+            handleEnd(event);
             return;
         }
 
@@ -411,11 +425,11 @@ export default function LightboxWindow({
 
     useEffect(() => {
         window.addEventListener("pointermove", handlePointerMove);
-        window.addEventListener("pointerup", handlePointerEnd);
+        window.addEventListener("pointerup", handlePointerEnd, true);
         window.addEventListener("pointercancel", handlePointerEnd);
         return () => {
             window.removeEventListener("pointermove", handlePointerMove);
-            window.removeEventListener("pointerup", handlePointerEnd);
+            window.removeEventListener("pointerup", handlePointerEnd, true);
             window.removeEventListener("pointercancel", handlePointerEnd);
         };
     }, [handlePointerMove, handlePointerEnd]);
@@ -571,7 +585,7 @@ export default function LightboxWindow({
     };
 
     return ReactDOM.createPortal(
-        <LightboxWindowContext.Provider value={{resetWheelScroll}}>
+        <LightboxWindowContext.Provider value={{swipeOffsetX, resetWheelScroll}}>
             <div
                 role="dialog"
                 aria-modal="true"
@@ -588,10 +602,9 @@ export default function LightboxWindow({
                 }}
                 ref={ref}
                 onWheel={handleWheel}
-                onPointerDown={handlePointerDown}
                 tabIndex={-1}
             >
-                <div className="lightbox-inner" onClick={handleInnerClick}>
+                <div className="lightbox-inner" onClick={handleInnerClick} onPointerDown={handlePointerDown}>
                     {children}
                 </div>
 
