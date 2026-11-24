@@ -30,7 +30,7 @@ export default function FeedTopButton({
     let title = " " + t("top");
     let news = 0;
     if (totalAfterTop > 0) {
-        if (notViewed > 0) {
+        if (notViewed > 0 && feedName !== "explore") {
             if (totalAfterTop > notViewed) {
                 title = " " + t("count-more", {count: totalAfterTop});
                 news = notViewed;
