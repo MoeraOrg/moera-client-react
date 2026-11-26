@@ -804,6 +804,8 @@ export interface RecommendedPostingInfo {
     lastDayPositiveReactions: number;
     totalComments: number;
     lastDayComments: number;
+    totalSharings: number;
+    lastDaySharings: number;
     benefit?: number | null;
 }
 
@@ -1801,6 +1803,8 @@ export interface SettingTypeModifiers {
     min?: string | null;
     max?: string | null;
     multiline?: boolean | null;
+    nodeName?: boolean | null;
+    separator?: string | null;
     never?: boolean | null;
     always?: boolean | null;
     items?: SettingValueChoice[] | null;

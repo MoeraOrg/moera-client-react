@@ -14,6 +14,8 @@ export interface ClientSettingTypeModifiers {
     max?: number;
     step?: number;
     multiline?: boolean;
+    nodeName?: boolean;
+    separator?: string;
     never?: boolean;
     always?: boolean;
     items?: Choice[];
@@ -620,12 +622,14 @@ const META: ClientSettingMetaInfo[] = [
     {
         name: "search.node-name",
         type: "string",
-        defaultValue: "search_0"
+        defaultValue: "search_0",
+        modifiers: {nodeName: true}
     },
     {
         name: "search.sheriff-name",
         type: "string",
-        defaultValue: "google-play-sheriff_0"
+        defaultValue: "google-play-sheriff_0",
+        modifiers: {nodeName: true}
     },
     {
         name: "search.safe-search.default",

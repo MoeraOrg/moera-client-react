@@ -2135,6 +2135,12 @@ export const NODE_API_SCHEMAS = {
                 "lastDayComments": {
                     type: "integer"
                 },
+                "totalSharings": {
+                    type: "integer"
+                },
+                "lastDaySharings": {
+                    type: "integer"
+                },
                 "benefit": {
                     type: "integer",
                     nullable: true
@@ -2149,6 +2155,8 @@ export const NODE_API_SCHEMAS = {
                 "lastDayPositiveReactions",
                 "totalComments",
                 "lastDayComments",
+                "totalSharings",
+                "lastDaySharings",
             ],
             additionalProperties: false
         },
@@ -4938,6 +4946,14 @@ export const NODE_API_SCHEMAS = {
                 },
                 "multiline": {
                     type: "boolean",
+                    nullable: true
+                },
+                "nodeName": {
+                    type: "boolean",
+                    nullable: true
+                },
+                "separator": {
+                    type: "string",
                     nullable: true
                 },
                 "never": {

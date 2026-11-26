@@ -1,7 +1,7 @@
 import { fromUnixTime, getUnixTime } from 'date-fns';
 import { isString } from 'formik';
 
-import { ClientSettingTypeModifiers, PrincipalValue, SettingType, SettingTypeModifiers } from "api";
+import { ClientSettingTypeModifiers, NodeName, PrincipalValue, SettingType, SettingTypeModifiers } from "api";
 import { Duration } from "util/duration";
 import { InfoQuantity } from "util/info-quantity";
 import { isNumber, parseBool } from "util/misc";
@@ -64,6 +64,21 @@ export function toFieldValue(
     }
 
     switch (type) {
+        case "string":
+            if (valueString && modifiers.nodeName) {
+                if (!modifiers.separator) {
+                    valueString = NodeName.expand(valueString.trim());
+                } else {
+                    valueString = valueString
+                        .split(modifiers.separator)
+                        .map(name => name.trim())
+                        .filter(name => name.length > 0)
+                        .map(name => NodeName.expand(name))
+                        .join(modifiers.separator);
+                }
+            }
+            return toValue(type, valueString);
+
         case "int":
             if (modifiers.format === "size") {
                 return InfoQuantity.ofBytes(parseInt(valueString) || 0).toString();
