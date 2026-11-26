@@ -4,7 +4,7 @@ import { attributesToProps, DOMNode, domToReact, htmlToDOM } from 'html-react-pa
 import { isTag } from 'domhandler';
 import 'katex/dist/katex.min.css';
 
-import { MediaAttachment } from "api";
+import { MediaAttachment, NodeName } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { BlockMath, InlineMath } from "ui/katex";
@@ -54,7 +54,7 @@ export default function EntryHtml({
 
             if (node.name === "a") {
                 if ("data-nodename" in node.attribs) {
-                    const name = node.attribs["data-nodename"];
+                    const name = NodeName.expand(node.attribs["data-nodename"]);
                     const href = node.attribs["data-href"];
 
                     if (!href || href === "/") {

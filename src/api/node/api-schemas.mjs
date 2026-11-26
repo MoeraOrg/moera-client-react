@@ -2135,6 +2135,10 @@ export const NODE_API_SCHEMAS = {
                 "lastDayComments": {
                     type: "integer"
                 },
+                "benefit": {
+                    type: "integer",
+                    nullable: true
+                },
             },
             required: [
                 "nodeName",

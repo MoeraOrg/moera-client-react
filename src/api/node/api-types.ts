@@ -804,6 +804,7 @@ export interface RecommendedPostingInfo {
     lastDayPositiveReactions: number;
     totalComments: number;
     lastDayComments: number;
+    benefit?: number | null;
 }
 
 export interface RegisteredNameSecret {

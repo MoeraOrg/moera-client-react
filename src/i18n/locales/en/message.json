@@ -925,6 +925,7 @@
       "credentials-reset_token_lifetime": "Invalidate code for resetting a password after",
       "email_language": "Language of e-mails",
       "explore_lifetime": "Purge Explore feed after",
+      "explore_next-update": "Next Explore feed update",
       "feed_width": "Feed width (in pixels)",
       "friend-ofs_view": "List of added me as a friend is visible to",
       "friend-ofs_view-total": "Number of added me as a friend is visible to",

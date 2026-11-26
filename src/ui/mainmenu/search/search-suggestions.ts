@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import deepEqual from "react-fast-compare";
 
+import { NodeName } from "api";
 import { ClientState } from "state/state";
 import { isAtNode } from "state/node/selectors";
 import { contactsPrepare, visitedContactsDelete, visitedContactsPrepare } from "state/contacts/actions";
@@ -71,7 +72,7 @@ export function useSearchSuggestions(
                     inputDom.current?.blur();
                     if (item.nodeName != null) {
                         setQuery("");
-                        dispatch(jumpFar(item.nodeName, null, "/timeline", null, null));
+                        dispatch(jumpFar(NodeName.expand(item.nodeName), null, "/timeline", null, null));
                     }
                     break;
                 case "search":

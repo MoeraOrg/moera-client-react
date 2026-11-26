@@ -24088,7 +24088,7 @@ return errors === 0;
 }
 
 export const RecommendedPostingInfo = validate94;
-const schema111 = {"type":"object","properties":{"nodeName":{"type":"string"},"postingId":{"type":"string"},"ownerName":{"type":"string"},"ownerFullName":{"type":"string","nullable":true},"ownerSourceUri":{"type":"string","nullable":true},"ownerAvatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"heading":{"type":"string"},"totalPositiveReactions":{"type":"integer"},"lastDayPositiveReactions":{"type":"integer"},"totalComments":{"type":"integer"},"lastDayComments":{"type":"integer"}},"required":["nodeName","postingId","ownerName","heading","totalPositiveReactions","lastDayPositiveReactions","totalComments","lastDayComments"],"additionalProperties":false};
+const schema111 = {"type":"object","properties":{"nodeName":{"type":"string"},"postingId":{"type":"string"},"ownerName":{"type":"string"},"ownerFullName":{"type":"string","nullable":true},"ownerSourceUri":{"type":"string","nullable":true},"ownerAvatar":{"anyOf":[{"$ref":"node#/definitions/AvatarImage","type":"object","nullable":true},{"type":"null"}]},"heading":{"type":"string"},"totalPositiveReactions":{"type":"integer"},"lastDayPositiveReactions":{"type":"integer"},"totalComments":{"type":"integer"},"lastDayComments":{"type":"integer"},"benefit":{"type":"integer","nullable":true}},"required":["nodeName","postingId","ownerName","heading","totalPositiveReactions","lastDayPositiveReactions","totalComments","lastDayComments"],"additionalProperties":false};
 
 function validate94(data, {instancePath="", parentData, parentDataProperty, rootData=data}={}){
 let vErrors = null;
@@ -24996,6 +24996,46 @@ var valid0 = _errs54 === errors;
 }
 else {
 var valid0 = true;
+}
+if(valid0){
+if(data.benefit !== undefined){
+let data19 = data.benefit;
+const _errs56 = errors;
+if((!(((typeof data19 == "number") && (!(data19 % 1) && !isNaN(data19))) && (isFinite(data19)))) && (data19 !== null)){
+let dataType20 = typeof data19;
+let coerced20 = undefined;
+if(dataType20 == 'object' && Array.isArray(data19) && data19.length == 1){
+data19 = data19[0];
+dataType20 = typeof data19;
+if((((typeof data19 == "number") && (!(data19 % 1) && !isNaN(data19))) && (isFinite(data19))) && (data19 === null)){
+coerced20 = data19;
+}
+}
+if(!(coerced20 !== undefined)){
+if(dataType20 === "boolean" || data19 === null
+              || (dataType20 === "string" && data19 && data19 == +data19 && !(data19 % 1))){
+coerced20 = +data19;
+}
+else if(data19 === "" || data19 === 0 || data19 === false){
+coerced20 = null;
+}
+else {
+validate94.errors = [{instancePath:instancePath+"/benefit",schemaPath:"#/properties/benefit/type",keyword:"type",params:{type: "integer"},message:"must be integer"}];
+return false;
+}
+}
+if(coerced20 !== undefined){
+data19 = coerced20;
+if(data !== undefined){
+data["benefit"] = coerced20;
+}
+}
+}
+var valid0 = _errs56 === errors;
+}
+else {
+var valid0 = true;
+}
 }
 }
 }

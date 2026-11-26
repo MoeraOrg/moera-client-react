@@ -33,6 +33,13 @@
 2. In `src/state/<branch>/references.ts`, the only exported function must be the default export
    `getReferencedPostings`. Keep helper functions private or in other modules.
 
+# Node names
+
+1. The Node API accepts and returns only expanded node names in node identifier fields, such as `alice_0`.
+2. Short node names, such as `alice`, may appear in URLs, search queries, and content such as post or comment
+   bodies. Expand short names as early as possible when extracting them as node identifiers from these sources,
+   so the rest of the code can rely on receiving expanded names.
+
 ## Documents
 
 1. Keep all project documentation under `doc/`. Do not create documentation files in `docs/` or elsewhere.

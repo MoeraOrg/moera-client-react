@@ -79,7 +79,7 @@ export function nameListInsertFirst(names: NameListItem[], nodeName: string | nu
     const expandedNodeName = NodeName.expand(nodeName);
     const index = names.findIndex(nm => nm.nodeName === expandedNodeName);
     if (index < 0) {
-        return [{nodeName}, ...names];
+        return [{nodeName: expandedNodeName}, ...names];
     }
     if (index === 0) { // Already at the first place
         return names;
