@@ -4791,6 +4791,10 @@ export const NODE_API_SCHEMAS = {
                 "bodyPreview": {
                     type: "string"
                 },
+                "body": {
+                    type: "string",
+                    nullable: true
+                },
                 "bodyFormat": {
                     type: "string",
                     nullable: true

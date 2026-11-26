@@ -1761,6 +1761,7 @@ export interface SearchEntryInfoBase<B> {
     ownerSourceUri?: string | null;
     ownerAvatar?: AvatarImage | null;
     bodyPreview: B;
+    body?: B | null;
     bodyFormat?: BodyFormat | null;
     heading: string;
     imageCount?: number | null;

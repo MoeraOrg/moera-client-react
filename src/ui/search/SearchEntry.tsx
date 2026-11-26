@@ -143,7 +143,7 @@ export default function SearchEntry({entry}: Props) {
                 }
                 <EntryLinkPreviews
                     nodeName={entry.nodeName}
-                    linkPreviews={entry.bodyPreview?.linkPreviews}
+                    linkPreviews={entry.bodyPreview?.linkPreviews ?? entry.body?.linkPreviews}
                     noFollow={false}
                     limit={2}
                     media={null}
