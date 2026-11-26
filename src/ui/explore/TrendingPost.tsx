@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 import { RecommendedPostingInfo } from "api";
 import { AvatarWithPopup } from "ui/control";
-import { Icon, MaterialSymbol, msComment, msThumbUp, msTrendingUp16 } from "ui/material-symbols";
+import { Icon, MaterialSymbol, msComment, msRepeat, msThumbUp, msTrendingUp16 } from "ui/material-symbols";
 import Jump from "ui/navigation/Jump";
 import NodeName from "ui/nodename/NodeName";
 import { ut } from "util/url";
@@ -13,7 +13,7 @@ import "./TrendingPost.css";
 interface Props {
     trending: RecommendedPostingInfo;
     small?: boolean;
-    counters: ("reactions" | "comments" | "reactions-icon" | "comments-icon")[];
+    counters: ("reactions" | "comments" | "reactions-icon" | "comments-icon" | "sharings-icon")[];
 }
 
 export default function TrendingPost({trending, small, counters}: Props) {
@@ -60,6 +60,13 @@ export default function TrendingPost({trending, small, counters}: Props) {
                                 total={trending.totalComments}
                                 lastDay={trending.lastDayComments}
                                 icon={msComment}
+                            />
+                        }
+                        {counter === "sharings-icon" &&
+                            <IconCounter
+                                total={trending.totalSharings}
+                                lastDay={trending.lastDaySharings}
+                                icon={msRepeat}
                             />
                         }
                     </>

@@ -27,8 +27,8 @@ export default function ExploreBox() {
     const posts = (activeTab === "discussions" ? discussions : trending).slice(0, MAX_ITEMS);
     const seeAllHref = activeTab === "discussions" ? "/explore/discussions" : "/explore/trending";
     const counters = activeTab === "discussions"
-        ? ["comments" as const, "reactions-icon" as const]
-        : ["reactions" as const, "comments-icon" as const];
+        ? ["comments" as const, "reactions-icon" as const, "sharings-icon" as const]
+        : ["reactions" as const, "comments-icon" as const, "sharings-icon" as const];
 
     return (
         <div id="explore-box">
